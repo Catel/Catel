@@ -58,5 +58,28 @@ namespace Catel.Test.Reflection
                 Assert.AreEqual(expectedType, type);
             }
         }
+
+        [TestFixture]
+        public class TheGetTypesImplementingInterfaceMethod
+        {
+            public interface IMySpecialInterface
+            {
+                
+            }
+
+            public class MySpecialClass : IMySpecialInterface
+            {
+                
+            }
+
+            [TestCase]
+            public void ReturnsRightTypes()
+            {
+                var interfaces = TypeCache.GetTypesImplementingInterface(typeof (IMySpecialInterface));
+
+                Assert.AreEqual(1, interfaces.Length);
+                Assert.AreEqual(typeof(MySpecialClass), interfaces[0]);
+            }
+        }
     }
 }

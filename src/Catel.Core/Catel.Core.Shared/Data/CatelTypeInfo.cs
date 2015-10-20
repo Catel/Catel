@@ -99,7 +99,8 @@ namespace Catel.Data
 
             if (!IsPropertyRegistered(name))
             {
-                throw new PropertyNotRegisteredException(name, Type);
+                throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, Type), 
+                    "Property '{0}' on type '{1}' is not registered", name, Type.FullName);
             }
 
             lock (_lockObject)
@@ -177,7 +178,8 @@ namespace Catel.Data
             {
                 if (_catelProperties.ContainsKey(name))
                 {
-                    throw new PropertyAlreadyRegisteredException(name, Type);
+                    throw Log.ErrorAndCreateException(msg => new PropertyAlreadyRegisteredException(name, Type),
+                        "Property '{0}' on type '{1}' is already registered", name, Type.FullName);
                 }
 
                 _catelProperties.Add(name, propertyData);
@@ -228,10 +230,7 @@ namespace Catel.Data
                                        select property).ToList();
             foreach (var nonStaticProperty in nonStaticProperties)
             {
-                string error = string.Format("The property '{0}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticProperty.Name);
-
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("The property '{0}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticProperty.Name);
             }
 
             // Properties - safety checks for non-public fields
@@ -240,10 +239,7 @@ namespace Catel.Data
                                        select property).ToList();
             foreach (var nonPublicProperty in nonPublicProperties)
             {
-                string error = string.Format("The property '{0}' of type 'PropertyData' declared as non-public, but they can only be used as public", nonPublicProperty.Name);
-
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("The property '{0}' of type 'PropertyData' declared as non-public, but they can only be used as public", nonPublicProperty.Name);
             }
 
             // Properties - actual addition
@@ -286,10 +282,7 @@ namespace Catel.Data
                                    select field).ToList();
             foreach (var nonStaticField in nonStaticFields)
             {
-                string error = string.Format("The field '{0}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticField.Name);
-
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("The field '{0}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticField.Name);
             }
 
             // Fields - safety checks for non-public fields
@@ -298,10 +291,7 @@ namespace Catel.Data
                                    select field).ToList();
             foreach (var nonPublicField in nonPublicFields)
             {
-                string error = string.Format("The field '{0}' of type 'PropertyData' declared as non-public, but they can only be used as public", nonPublicField.Name);
-
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("The field '{0}' of type 'PropertyData' declared as non-public, but they can only be used as public", nonPublicField.Name);
             }
 
             // Fields - actual addition

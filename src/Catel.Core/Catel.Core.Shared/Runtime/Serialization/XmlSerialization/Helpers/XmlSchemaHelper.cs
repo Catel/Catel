@@ -9,7 +9,6 @@
 namespace Catel.Runtime.Serialization.Xml
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
@@ -18,8 +17,8 @@ namespace Catel.Runtime.Serialization.Xml
     using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
-    using Catel.IoC;
     using Data;
+    using IoC;
     using Logging;
     using Reflection;
 
@@ -76,7 +75,7 @@ namespace Catel.Runtime.Serialization.Xml
                 return new XmlQualifiedName(existingType.Name, typeNs);
             }
 
-            var typeSchema = CreateSchemaComplexType(type, schema, schemaSet, serializationManager, generateFlatSchema);
+            var typeSchema = CreateSchemaComplexType(type, schema, schemaSet, serializationManager, generateFlatSchema, new HashSet<string>());
 
             var root = new XmlSchemaElement();
             root.Name = string.Format("{0}", typeSchema.Name);
@@ -94,8 +93,10 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="type">The type.</param>
         /// <param name="schemaSet">The schema set.</param>
         /// <param name="serializationManager">The serialization manager.</param>
+        /// <param name="exportedTypes">The exported types.</param>
         /// <returns>The xml qualified name.</returns>
-        private static XmlQualifiedName AddTypeToSchemaSet(Type type, XmlSchemaSet schemaSet, ISerializationManager serializationManager)
+        private static XmlQualifiedName AddTypeToSchemaSet(Type type, XmlSchemaSet schemaSet, ISerializationManager serializationManager,
+            HashSet<string> exportedTypes)
         {
             var attribute = (from x in type.GetCustomAttributesEx(typeof(XmlSchemaProviderAttribute), false)
                              select x as XmlSchemaProviderAttribute).FirstOrDefault();
@@ -127,8 +128,9 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="schema">The schema.</param>
         /// <param name="schemaSet">The schema set.</param>
         /// <param name="serializationManager">The serialization manager.</param>
+        /// <param name="exportedTypes">The exported types.</param>
         /// <returns>Sequence containing all properties.</returns>
-        private static XmlSchemaSequence GetPropertiesSequence(Type type, XmlSchema schema, XmlSchemaSet schemaSet, ISerializationManager serializationManager)
+        private static XmlSchemaSequence GetPropertiesSequence(Type type, XmlSchema schema, XmlSchemaSet schemaSet, ISerializationManager serializationManager, HashSet<string> exportedTypes)
         {
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("schema", schema);
@@ -138,75 +140,44 @@ namespace Catel.Runtime.Serialization.Xml
 
             if (typeof(ModelBase).IsAssignableFromEx(type))
             {
-                var members = new List<MemberInfo>();
+                var members = new List<MemberMetadata>();
                 members.AddRange(from field in serializationManager.GetFieldsToSerialize(type)
-                                 select type.GetFieldEx(field));
-                members.AddRange(from property in serializationManager.GetPropertiesToSerialize(type)
-                                 select type.GetPropertyEx(property));
+                                 select field.Value);
+                members.AddRange(from property in serializationManager.GetCatelPropertiesToSerialize(type)
+                                 select property.Value);
+                members.AddRange(from property in serializationManager.GetRegularPropertiesToSerialize(type)
+                                 select property.Value);
 
                 foreach (var member in members)
                 {
                     var propertySchemaElement = new XmlSchemaElement();
-                    propertySchemaElement.Name = member.Name;
+                    propertySchemaElement.Name = member.MemberName;
 
-                    var memberType = typeof(object);
-                    var fieldInfo = member as FieldInfo;
-                    if (fieldInfo != null)
-                    {
-                        memberType = fieldInfo.FieldType;
-                    }
-
-                    var propertyInfo = member as PropertyInfo;
-                    if (propertyInfo != null)
-                    {
-                        memberType = propertyInfo.PropertyType;
-                    }
+                    var memberType = member.MemberType;
 
                     propertySchemaElement.IsNillable = memberType.IsNullableType();
                     propertySchemaElement.MinOccurs = 0;
 
-                    var alreadyAdded = false;
-
-                    foreach (XmlSchema xmlSchema in schemaSet.Schemas())
-                    {
-                        foreach (var item in xmlSchema.Items)
-                        {
-                            var simpleType = item as XmlSchemaSimpleType;
-                            if (simpleType != null)
-                            {
-                                if (string.Equals(simpleType.Name, memberType.Name))
-                                {
-                                    alreadyAdded = true;
-                                }
-                            }
-
-                            var complexType = item as XmlSchemaComplexType;
-                            if (complexType != null)
-                            {
-                                if (string.Equals(complexType.Name, memberType.Name))
-                                {
-                                    alreadyAdded = true;
-                                }
-                            }
-
-                            var xmlSchemaElement = item as XmlSchemaElement;
-                            if (xmlSchemaElement != null)
-                            {
-                                if (string.Equals(xmlSchemaElement.Name, memberType.Name))
-                                {
-                                    alreadyAdded = true;
-                                }
-                            }
-                        }
-                    }
-
                     var exporter = new XsdDataContractExporter(schemaSet);
 
-                    if (!alreadyAdded)
+                    var alreadyExported = IsAlreadyExported(schemaSet, memberType, exporter, exportedTypes);
+                    if (!alreadyExported)
                     {
-                        if (exporter.CanExport(memberType))
+                        if (!exportedTypes.Contains(memberType.FullName))
                         {
-                            exporter.Export(memberType);
+                            exportedTypes.Add(memberType.FullName);
+                        }
+
+                        try
+                        {
+                            if (exporter.CanExport(memberType))
+                            {
+                                exporter.Export(memberType);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            // Ignore
                         }
                     }
 
@@ -221,6 +192,59 @@ namespace Catel.Runtime.Serialization.Xml
         }
 
         /// <summary>
+        /// Determines whether the specified member type is already exported to the schema set.
+        /// </summary>
+        /// <param name="schemaSet">The schema set.</param>
+        /// <param name="memberType">Type of the member.</param>
+        /// <param name="exporter">The exporter.</param>
+        /// <param name="exportedTypes">The exported types.</param>
+        /// <returns><c>true</c> if the specified member type is already exported to the schema set; otherwise, <c>false</c>.</returns>
+        private static bool IsAlreadyExported(XmlSchemaSet schemaSet, Type memberType, XsdDataContractExporter exporter, HashSet<string> exportedTypes)
+        {
+            if (exportedTypes.Contains(memberType.FullName))
+            {
+                return true;
+            }
+
+            var schemaTypeName = exporter.GetSchemaTypeName(memberType);
+
+            foreach (XmlSchema xmlSchema in schemaSet.Schemas())
+            {
+                foreach (var item in xmlSchema.Items)
+                {
+                    var simpleType = item as XmlSchemaSimpleType;
+                    if (simpleType != null)
+                    {
+                        if (string.Equals(simpleType.Name, memberType.Name) || string.Equals(simpleType.Name, schemaTypeName.Name))
+                        {
+                            return true;
+                        }
+                    }
+
+                    var complexType = item as XmlSchemaComplexType;
+                    if (complexType != null)
+                    {
+                        if (string.Equals(complexType.Name, memberType.Name) || string.Equals(complexType.Name, schemaTypeName.Name))
+                        {
+                            return true;
+                        }
+                    }
+
+                    var xmlSchemaElement = item as XmlSchemaElement;
+                    if (xmlSchemaElement != null)
+                    {
+                        if (string.Equals(xmlSchemaElement.Name, memberType.Name) || string.Equals(xmlSchemaElement.Name, schemaTypeName.Name))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Creates the an xml schema for a complex type. This method automatically takes care of
         /// any base classes that must be added.
         /// <para />
@@ -231,8 +255,9 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="schemaSet">The schema set.</param>
         /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="generateFlatSchema">A value indicating whether the schema should be generated as flat schema.</param>
+        /// <param name="exportedTypes">The exported types.</param>
         /// <returns>The complex schema for the specified type.</returns>
-        private static XmlSchemaComplexType CreateSchemaComplexType(Type type, XmlSchema schema, XmlSchemaSet schemaSet, ISerializationManager serializationManager, bool generateFlatSchema)
+        private static XmlSchemaComplexType CreateSchemaComplexType(Type type, XmlSchema schema, XmlSchemaSet schemaSet, ISerializationManager serializationManager, bool generateFlatSchema, HashSet<string> exportedTypes)
         {
             // Determine name, which is complex in generic types
             string typeName = GetTypeNameForSchema(type);
@@ -245,7 +270,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             schema.Items.Add(modelBaseType);
 
-            var propertiesSequence = GetPropertiesSequence(type, schema, schemaSet, serializationManager);
+            var propertiesSequence = GetPropertiesSequence(type, schema, schemaSet, serializationManager, exportedTypes);
 
             // If flat, don't generate base classes, just the type itself
             if (generateFlatSchema)
@@ -274,7 +299,7 @@ namespace Catel.Runtime.Serialization.Xml
 
                 foreach (var genericArgument in type.GetGenericArgumentsEx())
                 {
-                    var genericArgumentQualifiedName = AddTypeToSchemaSet(genericArgument, schemaSet, serializationManager);
+                    var genericArgumentQualifiedName = AddTypeToSchemaSet(genericArgument, schemaSet, serializationManager, exportedTypes);
                     var genericArgumentElement = new XElement("GenericParameter");
                     genericArgumentElement.Add(new XAttribute("Name", genericArgumentQualifiedName.Name));
                     genericArgumentElement.Add(new XAttribute("Namespace", genericArgumentQualifiedName.Namespace));
@@ -287,7 +312,7 @@ namespace Catel.Runtime.Serialization.Xml
                 annotation.Items.Add(appInfo);
             }
 
-            var baseTypeQualifiedName = AddTypeToSchemaSet(type.BaseType, schemaSet, serializationManager);
+            var baseTypeQualifiedName = AddTypeToSchemaSet(type.BaseType, schemaSet, serializationManager, exportedTypes);
             if (baseTypeQualifiedName != null)
             {
                 // <xs:extensions base="address">

@@ -10,6 +10,8 @@ namespace Catel
     /// <summary>
     /// The data types enum.
     /// </summary>
+    [ObsoleteEx(Message = "We are considering to remove Wcf.Server support. See https://catelproject.atlassian.net/browse/CTL-672",
+        TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public enum DataType
     {
         /// <summary>

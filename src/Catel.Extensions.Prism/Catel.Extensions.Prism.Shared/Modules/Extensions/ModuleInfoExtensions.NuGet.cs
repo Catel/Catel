@@ -9,6 +9,7 @@
 namespace Catel.Modules
 {
     using System;
+    using System.Globalization;
     using System.Linq;
     using System.Text.RegularExpressions;
 
@@ -51,7 +52,33 @@ namespace Catel.Modules
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         #endregion
 
+
+        /// <summary>
+        /// Assembly ref cache storage
+        /// </summary>
+        private readonly static CacheStorage<ModuleInfo, ModuleAssemblyRef> _assemblyRefCacheStorage = new CacheStorage<ModuleInfo, ModuleAssemblyRef>(storeNullValues: true);
+
         #region Methods
+
+        /// <summary>
+        /// Gets the module assembly ref
+        /// </summary>
+        /// <param name="moduleInfo">
+        /// The module info
+        /// </param>
+        /// <param name="outputDirectoryAbsoluteUri">
+        /// The output directory absotule uri.
+        /// </param>
+        /// <returns>
+        /// An instance of <see cref="ModuleAssemblyRef"/>.
+        /// </returns>
+        public static ModuleAssemblyRef GetModuleAssemblyRef(this ModuleInfo moduleInfo, string outputDirectoryAbsoluteUri)
+        {
+            Argument.IsNotNull(() => moduleInfo);
+
+            return _assemblyRefCacheStorage.GetFromCacheOrFetch(moduleInfo, () => new ModuleAssemblyRef(outputDirectoryAbsoluteUri, moduleInfo.GetPackageName().ToString().Replace(' ', '.'), moduleInfo.GetAssemblyName()));
+        }
+
         /// <summary>
         /// The get package name.
         /// </summary>
@@ -115,9 +142,7 @@ namespace Catel.Modules
             Match typeNameMatch = TypeNameRegex.Match(moduleInfo.ModuleType);
             if (!typeNameMatch.Success)
             {
-                Log.Error(ModuleTypeMustBeSpecifiedUsingQualifiedNamePatternErrorMessage);
-
-                throw new InvalidOperationException(ModuleTypeMustBeSpecifiedUsingQualifiedNamePatternErrorMessage);
+                throw Log.ErrorAndCreateException<InvalidOperationException>(ModuleTypeMustBeSpecifiedUsingQualifiedNamePatternErrorMessage);
             }
 
             var assemblyName = typeNameMatch.Groups[1].Value.Trim();

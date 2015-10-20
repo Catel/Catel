@@ -8,6 +8,7 @@ namespace Catel
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Text.RegularExpressions;
 
     using Tasks;
@@ -20,6 +21,11 @@ namespace Catel
     using Microsoft.Practices.Prism.Logging;
     using Microsoft.Practices.Prism.Modularity;
     using Microsoft.Practices.Prism.Regions;
+    using Modules;
+
+#if PRISM5
+    using Microsoft.Practices.Prism.PubSubEvents;
+#endif
 
     using MVVM;
     using Services;
@@ -324,15 +330,15 @@ namespace Catel
                 Logger.Log("Creating the shell", Category.Debug, Priority.Low);
                 var dispatcherService = Container.ResolveType<IDispatcherService>();
 
-                dispatcherService.Invoke(() => Shell = CreateShell());
+                dispatcherService.Invoke(() => Shell = CreateShell(), true);
 
                 if (Shell != null)
                 {
                     Logger.Log("Setting the RegionManager", Category.Debug, Priority.Low);
-                    dispatcherService.Invoke(() => RegionManager.SetRegionManager(Shell, Container.ResolveType<IRegionManager>()));
+                    dispatcherService.Invoke(() => RegionManager.SetRegionManager(Shell, Container.ResolveType<IRegionManager>()), true);
 
                     Logger.Log("Updating Regions", Category.Debug, Priority.Low);
-                    dispatcherService.Invoke(RegionManager.UpdateRegions);
+                    dispatcherService.Invoke(RegionManager.UpdateRegions, true);
 
                     CreatedShell.SafeInvoke(this);
                 }
@@ -365,7 +371,7 @@ namespace Catel
                     Logger.Log("Initializing the shell", Category.Debug, Priority.Low);
 
                     var dispatcherService = Container.ResolveType<IDispatcherService>();
-                    dispatcherService.Invoke(InitializeShell);
+                    dispatcherService.Invoke(InitializeShell, true);
 
                     InitializedShell.SafeInvoke(this);
                 }
@@ -437,7 +443,32 @@ namespace Catel
         {
             var moduleManager = Container.ResolveType<IModuleManager>();
 
-            int registeredModulesCount = 0;
+            var defaultModuleManager = moduleManager as ModuleManager;
+            if (defaultModuleManager != null)
+            {
+                var typeLoaders = new List<IModuleTypeLoader>();
+
+                var existingTypeLoaders = defaultModuleManager.ModuleTypeLoaders;
+                if (existingTypeLoaders != null)
+                {
+                    typeLoaders.AddRange(existingTypeLoaders);
+                }
+
+#if !SL5
+                // CTL-646
+                if (ModuleCatalog.IsCatalogType<INuGetBasedModuleCatalog>())
+                {
+                    if (!typeLoaders.Any(x => x is NuGetModuleTypeLoader))
+                    {
+                        typeLoaders.Add(new NuGetModuleTypeLoader(ModuleCatalog));
+                    }
+                }
+#endif
+
+                defaultModuleManager.ModuleTypeLoaders = typeLoaders;
+            }
+
+            var registeredModulesCount = 0;
             Logger.Log("Registering currently available modules automatically", Category.Debug, Priority.Low);
 
             foreach (var module in ModuleCatalog.Modules)
@@ -602,8 +633,9 @@ namespace Catel
             /// <param name="log">The log.</param>
             /// <param name="message">The message.</param>
             /// <param name="extraData">The additional data.</param>
+            /// <param name="logData">The log data.</param>
             /// <param name="time">The time.</param>
-            protected override void Debug(ILog log, string message, object extraData, DateTime time)
+            protected override void Debug(ILog log, string message, object extraData, LogData logData, DateTime time)
             {
                 RelayLogMessageToLoggerFacadeIfRequired(message, Category.Debug);
             }
@@ -614,8 +646,9 @@ namespace Catel
             /// <param name="log">The log.</param>
             /// <param name="message">The message.</param>
             /// <param name="extraData">The additional data.</param>
+            /// <param name="logData">The log data.</param>
             /// <param name="time">The time.</param>
-            protected override void Info(ILog log, string message, object extraData, DateTime time)
+            protected override void Info(ILog log, string message, object extraData, LogData logData, DateTime time)
             {
                 RelayLogMessageToLoggerFacadeIfRequired(message, Category.Info);
             }
@@ -626,8 +659,9 @@ namespace Catel
             /// <param name="log">The log.</param>
             /// <param name="message">The message.</param>
             /// <param name="extraData">The additional data.</param>
+            /// <param name="logData">The log data.</param>
             /// <param name="time">The time.</param>
-            protected override void Warning(ILog log, string message, object extraData, DateTime time)
+            protected override void Warning(ILog log, string message, object extraData, LogData logData, DateTime time)
             {
                 RelayLogMessageToLoggerFacadeIfRequired(message, Category.Warn);
             }
@@ -638,8 +672,9 @@ namespace Catel
             /// <param name="log">The log.</param>
             /// <param name="message">The message.</param>
             /// <param name="extraData">The additional data.</param>
+            /// <param name="logData">The log data.</param>
             /// <param name="time">The time.</param>
-            protected override void Error(ILog log, string message, object extraData, DateTime time)
+            protected override void Error(ILog log, string message, object extraData, LogData logData, DateTime time)
             {
                 RelayLogMessageToLoggerFacadeIfRequired(message, Category.Exception);
             }

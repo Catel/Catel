@@ -17,6 +17,7 @@ namespace Catel.MVVM.Providers
     using MVVM;
     using Views;
     using Reflection;
+    using Threading;
 
     /// <summary>
     /// Available unload behaviors.
@@ -130,6 +131,11 @@ namespace Catel.MVVM.Providers
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> does not implement interface <see cref="IViewModel"/>.</exception>
         protected LogicBase(IView targetView, Type viewModelType = null, IViewModel viewModel = null)
         {
+            if (CatelEnvironment.IsInDesignMode)
+            {
+                return;
+            }
+
             Argument.IsNotNull("targetView", targetView);
 
             if (viewModelType == null)
@@ -137,9 +143,7 @@ namespace Catel.MVVM.Providers
                 viewModelType = (viewModel != null) ? viewModel.GetType() : _viewModelLocator.ResolveViewModel(targetView.GetType());
                 if (viewModelType == null)
                 {
-                    var error = string.Format("The view model of the view '{0}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually", targetView.GetType().GetSafeFullName());
-                    Log.Error(error);
-                    throw new NotSupportedException(error);
+                    throw Log.ErrorAndCreateException<NotSupportedException>("The view model of the view '{0}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually", targetView.GetType().GetSafeFullName());
                 }
             }
 
@@ -171,10 +175,34 @@ namespace Catel.MVVM.Providers
             Log.Debug("Subscribing to view events");
 
             ViewLoadManager.AddView(this);
-            this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoading", OnViewLoadedManagerLoading);
-            this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoaded", OnViewLoadedManagerLoaded);
-            this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloading", OnViewLoadedManagerUnloading);
-            this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloaded", OnViewLoadedManagerUnloaded);
+
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoading", OnViewLoadedManagerLoading, false) == null)
+            {
+                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoading', going to subscribe without weak events");
+
+                ViewLoadManager.ViewLoading += OnViewLoadedManagerLoading;
+            }
+
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoaded", OnViewLoadedManagerLoaded, false) == null)
+            {
+                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoaded', going to subscribe without weak events");
+
+                ViewLoadManager.ViewLoaded += OnViewLoadedManagerLoaded;
+            }
+
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloading", OnViewLoadedManagerUnloading, false) == null)
+            {
+                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloading', going to subscribe without weak events");
+
+                ViewLoadManager.ViewUnloading += OnViewLoadedManagerUnloading;
+            }
+
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloaded", OnViewLoadedManagerUnloaded, false) == null)
+            {
+                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloaded', going to subscribe without weak events");
+
+                ViewLoadManager.ViewUnloaded += OnViewLoadedManagerUnloaded;
+            }
 
             // Required so the ViewLoadManager can handle the rest
             targetView.Loaded += (sender, e) => Loaded.SafeInvoke(this);
@@ -237,9 +265,9 @@ namespace Catel.MVVM.Providers
                 if (_viewModel != null)
                 {
                     _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
-                    _viewModel.Canceled -= OnViewModelCanceled;
-                    _viewModel.Saved -= OnViewModelSaved;
-                    _viewModel.Closed -= OnViewModelClosed;
+                    _viewModel.CanceledAsync -= OnViewModelCanceledAsync;
+                    _viewModel.SavedAsync -= OnViewModelSavedAsync;
+                    _viewModel.ClosedAsync -= OnViewModelClosedAsync;
                 }
 
                 _viewModel = value;
@@ -247,9 +275,9 @@ namespace Catel.MVVM.Providers
                 if (_viewModel != null)
                 {
                     _viewModel.PropertyChanged += OnViewModelPropertyChanged;
-                    _viewModel.Canceled += OnViewModelCanceled;
-                    _viewModel.Saved += OnViewModelSaved;
-                    _viewModel.Closed += OnViewModelClosed;
+                    _viewModel.CanceledAsync += OnViewModelCanceledAsync;
+                    _viewModel.SavedAsync += OnViewModelSavedAsync;
+                    _viewModel.ClosedAsync += OnViewModelClosedAsync;
 
                     // Must be in a try/catch because Silverlight sometimes throws out of range exceptions for bindings
                     try
@@ -270,7 +298,7 @@ namespace Catel.MVVM.Providers
 
                 if ((_viewModel != null) && IsTargetViewLoaded)
                 {
-                    _viewModel.InitializeViewModel();
+                    _viewModel.InitializeViewModelAsync();
                 }
             }
         }
@@ -433,17 +461,35 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> has been canceled.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelCanceledAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public event EventHandler<EventArgs> ViewModelCanceled;
+
+        /// <summary>
+        /// Occurs when the <see cref="ViewModel"/> has been canceled.
+        /// </summary>
+        public event AsyncEventHandler<EventArgs> ViewModelCanceledAsync;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> has been saved.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelSavedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public event EventHandler<EventArgs> ViewModelSaved;
+
+        /// <summary>
+        /// Occurs when the <see cref="ViewModel"/> has been saved.
+        /// </summary>
+        public event AsyncEventHandler<EventArgs> ViewModelSavedAsync;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> has been closed.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         public event EventHandler<ViewModelClosedEventArgs> ViewModelClosed;
+
+        /// <summary>
+        /// Occurs when the <see cref="ViewModel"/> has been closed.
+        /// </summary>
+        public event AsyncEventHandler<ViewModelClosedEventArgs> ViewModelClosedAsync;
 
         /// <summary>
         /// Occurs when a property on the <see cref="TargetView"/> has changed.
@@ -613,7 +659,7 @@ namespace Catel.MVVM.Providers
         /// This method will call the <see cref="OnTargetViewLoaded"/> which can be overriden for custom 
         /// behavior. This method is required to protect from duplicate loaded events.
         /// </remarks>
-        private async void OnTargetViewLoadedInternal(object sender, EventArgs e)
+        private void OnTargetViewLoadedInternal(object sender, EventArgs e)
         {
             if (!CanLoad)
             {
@@ -643,30 +689,32 @@ namespace Catel.MVVM.Providers
             TargetView.Dispatch(() =>
             {
 #pragma warning disable 4014
-                InitializeViewModel();
+                // No need to await
+                InitializeViewModelAsync();
 #pragma warning restore 4014
             });
 
             IsLoading = false;
         }
 
-        private async Task InitializeViewModel()
+        private async Task InitializeViewModelAsync()
         {
+            var viewModel = ViewModel;
             if (ViewModel != null)
             {
                 // Initialize the view model. The view model itself is responsible to prevent double initialization
-                await ViewModel.InitializeViewModel();
+                await viewModel.InitializeViewModelAsync();
 
                 // Revalidate since the control already initialized the view model before the control
                 // was visible, therefore the WPF engine does not show warnings and errors
-                var viewModelAsViewModelBase = ViewModel as ViewModelBase;
+                var viewModelAsViewModelBase = viewModel as ViewModelBase;
                 if (viewModelAsViewModelBase != null)
                 {
                     viewModelAsViewModelBase.Validate(true, false);
                 }
                 else
                 {
-                    ViewModel.ValidateViewModel(true, false);
+                    viewModel.ValidateViewModel(true, false);
                 }
 
                 _isFirstValidationAfterLoaded = true;
@@ -777,7 +825,7 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
-            if (ViewModel == dataContext)
+            if (ReferenceEquals(ViewModel, dataContext))
             {
                 return;
             }
@@ -824,9 +872,10 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public virtual void OnViewModelCanceled(object sender, EventArgs e)
+        public virtual Task OnViewModelCanceledAsync(object sender, EventArgs e)
         {
             ViewModelCanceled.SafeInvoke(this, e);
+            return ViewModelCanceledAsync.SafeInvokeAsync(this, e);
         }
 
         /// <summary>
@@ -834,9 +883,10 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        public virtual void OnViewModelSaved(object sender, EventArgs e)
+        public virtual Task OnViewModelSavedAsync(object sender, EventArgs e)
         {
             ViewModelSaved.SafeInvoke(this, e);
+            return ViewModelSavedAsync.SafeInvokeAsync(this, e);
         }
 
         /// <summary>
@@ -844,9 +894,10 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="Catel.MVVM.ViewModelClosedEventArgs"/> instance containing the event data.</param>
-        public virtual void OnViewModelClosed(object sender, ViewModelClosedEventArgs e)
+        public virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
             ViewModelClosed.SafeInvoke(this, e);
+            return ViewModelClosedAsync.SafeInvokeAsync(this, e);
         }
 
         /// <summary>
@@ -860,7 +911,7 @@ namespace Catel.MVVM.Providers
                 return false;
             }
 
-            bool result = ViewModel.ValidateViewModel(_isFirstValidationAfterLoaded, false);
+            var result = ViewModel.ValidateViewModel(_isFirstValidationAfterLoaded, false);
 
             _isFirstValidationAfterLoaded = false;
 
@@ -871,72 +922,72 @@ namespace Catel.MVVM.Providers
         /// Cancels the view model.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully canceled; otherwise <c>false</c>.</returns>
-        public async virtual Task<bool> CancelViewModel()
+        public virtual Task<bool> CancelViewModelAsync()
         {
             if (ViewModel == null)
             {
-                return false;
+                return TaskHelper<bool>.FromResult(false);
             }
 
-            return await ViewModel.CancelViewModel();
+            return ViewModel.CancelViewModelAsync();
         }
 
         /// <summary>
         /// Cancels and closes the view model.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully canceled; otherwise <c>false</c>.</returns>
-        public async Task<bool> CancelAndCloseViewModel()
+        public async Task<bool> CancelAndCloseViewModelAsync()
         {
-            var result = await CancelViewModel();
-            if (!result)
+            if (!await CancelViewModelAsync())
             {
-                return result;
+                return false;
             }
 
-            await CloseViewModel(result);
+            await CloseViewModelAsync(true);
 
-            return result;
+            return true;
         }
 
         /// <summary>
         /// Saves the view model.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully saved; otherwise <c>false</c>.</returns>
-        public async virtual Task<bool> SaveViewModel()
+        public virtual Task<bool> SaveViewModelAsync()
         {
-            if (ViewModel == null)
+            var vm = ViewModel;
+            if (vm == null)
             {
-                return false;
+                return TaskHelper<bool>.FromResult(false);
             }
 
-            return await ViewModel.SaveViewModel();
+            return vm.SaveViewModelAsync();
         }
 
         /// <summary>
         /// Saves and closes the view model. If the saving fails, the view model is not closed.
         /// </summary>
         /// <returns><c>true</c> if the view model is successfully saved; otherwise <c>false</c>.</returns>
-        public async Task<bool> SaveAndCloseViewModel()
+        public async Task<bool> SaveAndCloseViewModelAsync()
         {
-            var result = await SaveViewModel();
-            if (!result)
+            if (!await SaveViewModelAsync())
             {
-                return result;
+                return false;
             }
 
-            await CloseViewModel(result);
+            await CloseViewModelAsync(true);
 
-            return result;
+            return true;
         }
 
         /// <summary>
         /// Closes the view model.
         /// </summary>
-        public async virtual Task CloseViewModel(bool? result)
+        public async virtual Task CloseViewModelAsync(bool? result)
         {
-            if (ViewModel != null)
+            var vm = ViewModel;
+            if (vm != null)
             {
-                await ViewModel.CloseViewModel(result);
+                await vm.CloseViewModelAsync(result);
                 ViewModel = null;
             }
         }

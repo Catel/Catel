@@ -53,7 +53,12 @@ namespace Catel
             {
                 if (!_isInDesignMode.HasValue)
                 {
-                    _isInDesignMode = GetIsInDesignMode();
+                    _isInDesignMode = GetIsInDesignMode(true);
+                }
+
+                if (_isInDesignMode.Value)
+                {
+                    DesignTimeHelper.InitializeDesignTime();
                 }
 
                 return _isInDesignMode.Value;
@@ -134,7 +139,20 @@ namespace Catel
         /// Note that unless the <see cref="IsInDesignMode"/>, the value is not cached but always determined at runtime.
         /// </summary>
         /// <returns><c>true</c> if the software is in design mode, <c>false</c> otherwise.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "GetIsInDesignMode(bool)", TreatAsErrorFromVersion = "4.3", RemoveInVersion = "5.0")]
         public static bool GetIsInDesignMode()
+        {
+            return GetIsInDesignMode(true);
+        }
+
+        /// <summary>
+        /// Gets whether the software is currently in design mode.
+        /// <para />
+        /// Note that unless the <see cref="IsInDesignMode" />, the value is not cached but always determined at runtime.
+        /// </summary>
+        /// <param name="initializeDesignTime">if set to <c>true</c>, automatically call <see cref="DesignTimeHelper.InitializeDesignTime"/> if in design mode.</param>
+        /// <returns><c>true</c> if the software is in design mode, <c>false</c> otherwise.</returns>
+        public static bool GetIsInDesignMode(bool initializeDesignTime)
         {
             bool? isInDesignMode = null;
 
@@ -161,6 +179,11 @@ namespace Catel
 #else
             isInDesignMode = DesignerProperties.IsInDesignTool;
 #endif
+
+            if (initializeDesignTime && isInDesignMode.Value)
+            {
+                DesignTimeHelper.InitializeDesignTime();
+            }
 
             return isInDesignMode.Value;
         }

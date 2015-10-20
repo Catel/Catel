@@ -10,7 +10,6 @@
 namespace Catel.Collections
 {
     using System.Collections;
-    using System.Runtime.InteropServices;
 
     /// <summary>
     /// Collection helper class.
@@ -27,6 +26,11 @@ namespace Catel.Collections
         /// </returns>
         public static bool IsEqualTo(IEnumerable listA, IEnumerable listB)
         {
+            if (ReferenceEquals(listA, listB))
+            {
+                return true;
+            }
+
             if (listA == listB)
             {
                 return true;
@@ -35,11 +39,6 @@ namespace Catel.Collections
             if ((listA == null) || (listB == null))
             {
                 return false;
-            }
-
-            if (ReferenceEquals(listA, listB))
-            {
-                return true;
             }
 
             var enumeratorA = listA.GetEnumerator();

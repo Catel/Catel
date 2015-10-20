@@ -4,20 +4,24 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NETFX_CORE || PCL || (NET && !NET40)
+
 namespace Catel.Reflection
 {
     using System.Collections.Generic;
-#if NETFX_CORE || NET45 || PCL
     using System;
     using System.Linq;
     using System.Reflection;
     using Collections;
+    using Logging;
 
     /// <summary>
     /// The type info extensions.
     /// </summary>
     public static class TypeInfoExtensions
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         #region Methods
         /// <summary>
         /// Determines whether the hierarchy should be flattened based on the specified binding flags.
@@ -141,15 +145,15 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("typeInfo", typeInfo);
 
-            bool flattenHierarchy = ShouldFlattenHierarchy(bindingFlags);
-            List<PropertyInfo> source = (flattenHierarchy ? typeInfo.AsType().GetRuntimeProperties() : typeInfo.DeclaredProperties).ToList();
+            var flattenHierarchy = ShouldFlattenHierarchy(bindingFlags);
+            var source = (flattenHierarchy ? typeInfo.AsType().GetRuntimeProperties() : typeInfo.DeclaredProperties).ToList();
 
-            bool includeStatics = Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.Static);
+            var includeStatics = Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.Static);
 
             // TODO: This is a fix because static members are not included in FlattenHierarcy, remove when this is fixed in WinRT
             if (flattenHierarchy)
             {
-                Type baseType = typeInfo.BaseType;
+                var baseType = typeInfo.BaseType;
                 if ((baseType != null) && (baseType != typeof(object)))
                 {
                     source.AddRange(from member in GetProperties(baseType.GetTypeInfo(), bindingFlags) where member.IsStatic() select member);
@@ -295,5 +299,6 @@ namespace Catel.Reflection
         }
         #endregion
     }
-#endif
 }
+
+#endif

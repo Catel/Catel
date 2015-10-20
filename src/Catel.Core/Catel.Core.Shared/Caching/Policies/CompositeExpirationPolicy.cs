@@ -60,7 +60,7 @@ namespace Catel.Caching.Policies
             {
                 _synchronizationContext.Acquire();
 
-                bool canReset = _expirationPolicies.Any(policy => policy.CanReset);
+                var canReset = _expirationPolicies.Any(policy => policy.CanReset);
 
                 if (!IsResting || !canReset)
                 {

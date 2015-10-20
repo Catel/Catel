@@ -29,6 +29,14 @@ namespace Catel
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Initializes static members of the <see cref="ServiceLocatorAdapter"/> class.
+        /// </summary>
+        static ServiceLocatorAdapter()
+        {
+            Default = new ServiceLocatorAdapter(IoC.ServiceLocator.Default);
+        }
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceLocatorAdapter"/> class.
@@ -53,60 +61,53 @@ namespace Catel
         }
         #endregion
 
-        #region Methods
+        #region Properties
+        /// <summary>
+        /// Gets the default service locator adapter.
+        /// </summary>
+        /// <value>The default.</value>
+        public static ServiceLocatorAdapter Default { get; private set; }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// The do get instance.
         /// </summary>
-        /// <param name="serviceType">
-        /// The service type.
-        /// </param>
-        /// <param name="key">
-        /// The key.
-        /// </param>
-        /// <returns>
-        /// An instance of the type registered on the interface.
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="serviceType"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="serviceType">The service type.</param>
+        /// <param name="key">The key.</param>
+        /// <returns>An instance of the type registered on the interface.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
         protected override object DoGetInstance(Type serviceType, string key)
         {
             Argument.IsNotNull("serviceType", serviceType);
-            
+
             object instance = null;
             if (_serviceLocator.IsTypeRegistered(serviceType, key))
             {
                 instance = _serviceLocator.ResolveType(serviceType, key);
-            } 
-            else if(serviceType.IsClass && !serviceType.IsAbstract)
-        	{
-    			if (_serviceLocator.CanResolveNonAbstractTypesWithoutRegistration)
-	            {
-					instance = _serviceLocator.ResolveType(serviceType, key);
-	            }
-	            else
-	            {
-	            	var typeFactory = _serviceLocator.ResolveType<ITypeFactory>();
-	            	instance = typeFactory.CreateInstance(serviceType);
-	            }
-	        }
-    
+            }
+            else if (serviceType.IsClass && !serviceType.IsAbstract)
+            {
+                if (_serviceLocator.CanResolveNonAbstractTypesWithoutRegistration)
+                {
+                    instance = _serviceLocator.ResolveType(serviceType, key);
+                }
+                else
+                {
+                    var typeFactory = _serviceLocator.ResolveType<ITypeFactory>();
+                    instance = typeFactory.CreateInstance(serviceType);
+                }
+            }
+
             return instance;
         }
 
         /// <summary>
         /// The do get all instances.
         /// </summary>
-        /// <param name="serviceType">
-        /// The service type.
-        /// </param>
-        /// <returns>
-        /// An instance of the type registered on the interface. 
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="serviceType"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="serviceType">The service type.</param>
+        /// <returns>An instance of the type registered on the interface.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
         protected override IEnumerable<object> DoGetAllInstances(Type serviceType)
         {
             object instance = DoGetInstance(serviceType, null);

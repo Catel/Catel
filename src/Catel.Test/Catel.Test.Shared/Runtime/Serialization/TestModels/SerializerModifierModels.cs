@@ -7,8 +7,10 @@
 
 namespace Catel.Test.Runtime.Serialization.TestModels
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Windows.Media;
     using Catel.Data;
     using Catel.Runtime.Serialization;
 
@@ -56,6 +58,13 @@ namespace Catel.Test.Runtime.Serialization.TestModels
         public static readonly PropertyData IgnoredMemberProperty = RegisterProperty("IgnoredMember", typeof(string), null);
     }
 
+    [SerializerModifier(typeof(CTL550ModelSerializerModifier))]
+    public class CTL550Model : ModelBase
+    {
+        [IncludeInSerialization]
+        public Color Color { get; set; }
+    }
+
     [SerializerModifier(typeof(ChangingTypeSerializerModifier))]
     public class ChangingType : ModelBase
     {
@@ -98,7 +107,7 @@ namespace Catel.Test.Runtime.Serialization.TestModels
 
     public class ModelCSerializerModifier : SerializerModifierBase<ModelC>
     {
-        public override bool ShouldIgnoreMember(ISerializationContext context, IModel model, MemberValue memberValue)
+        public override bool ShouldIgnoreMember(ISerializationContext context, object model, MemberValue memberValue)
         {
             if (string.Equals(memberValue.Name, "IgnoredMember"))
             {
@@ -113,6 +122,37 @@ namespace Catel.Test.Runtime.Serialization.TestModels
             if (string.Equals(memberValue.Name, "ModelCProperty"))
             {
                 memberValue.Value = "ModifiedC";
+            }
+        }
+    }
+
+    public class CTL550ModelSerializerModifier : SerializerModifierBase<TestModel>
+    {
+        public override void SerializeMember(ISerializationContext context, MemberValue memberValue)
+        {
+            if (string.Equals(memberValue.Name, "Color"))
+            {
+                var color = (Color)memberValue.Value;
+
+                memberValue.Value = string.Format("{0}|{1}|{2}|{3}", color.A, color.R, color.G, color.B);
+            }
+        }
+
+        public override void DeserializeMember(ISerializationContext context, MemberValue memberValue)
+        {
+            if (string.Equals(memberValue.Name, "Color"))
+            {
+                var stringValue = memberValue.Value as string;
+                if (!string.IsNullOrWhiteSpace(stringValue))
+                {
+                    var splittedStringValue = stringValue.Split(new[] { '|' }, StringSplitOptions.None);
+                    var a = (byte)int.Parse(splittedStringValue[0]);
+                    var r = (byte)int.Parse(splittedStringValue[1]);
+                    var g = (byte)int.Parse(splittedStringValue[2]);
+                    var b = (byte)int.Parse(splittedStringValue[3]);
+
+                    memberValue.Value = Color.FromArgb(a, r, g, b);
+                }
             }
         }
     }

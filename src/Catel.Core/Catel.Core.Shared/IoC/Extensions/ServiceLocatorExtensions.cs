@@ -95,10 +95,8 @@ namespace Catel.IoC
             var registrationInfo = serviceLocator.GetRegistrationInfo(serviceType, tag);
             if (registrationInfo == null)
             {
-                string error = string.Format("The service locator could not return the registration info for type '{0}' with tag '{1}', cannot resolve type",
+                throw Log.ErrorAndCreateException<InvalidOperationException>("The service locator could not return the registration info for type '{0}' with tag '{1}', cannot resolve type",
                     serviceType.FullName, ObjectToStringHelper.ToString(tag));
-                Log.Error(error);
-                throw new InvalidOperationException(error);
             }
 
             var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
@@ -375,6 +373,10 @@ namespace Catel.IoC
                         return (TService) serviceLocator.ResolveType(typeof (TService), tag);
                     }
                 }
+            }
+            catch (TypeNotRegisteredException)
+            {
+                // Prevent first chance exceptions
             }
             catch (Exception)
             {

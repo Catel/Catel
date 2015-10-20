@@ -63,9 +63,7 @@ namespace Catel.Modules
             var moduleInfo = GetModuleInfoByName(moduleName);
             if (moduleInfo == null)
             {
-                string error = string.Format("Module '{0}' is not registered in this catalog", moduleName);
-                Log.Error(error);
-                throw new NotSupportedException(error);
+                throw Log.ErrorAndCreateException<NotSupportedException>("Module '{0}' is not registered in this catalog", moduleName);
             }
 
             if (_loadedModules.ContainsKey(moduleName))

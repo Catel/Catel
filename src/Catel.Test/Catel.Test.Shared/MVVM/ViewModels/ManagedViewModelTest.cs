@@ -131,8 +131,8 @@ namespace Catel.Test.MVVM.ViewModels
             interestingViewModel.InterestingValue = "new value";
             Assert.AreEqual("new value", interestedViewModel.InterestedValue);
 
-            await interestingViewModel.CloseViewModel(false);
-            await interestedViewModel.CloseViewModel(false);
+            await interestingViewModel.CloseViewModelAsync(false);
+            await interestedViewModel.CloseViewModelAsync(false);
         }
 
         [TestCase]
@@ -153,8 +153,8 @@ namespace Catel.Test.MVVM.ViewModels
             Assert.AreEqual(true, interestedViewModel.CommandHasBeenExecuted);
             Assert.AreEqual(false, interestedViewModel.CommandHasBeenExecutedWithParameter);
 
-            await interestingViewModel.CloseViewModel(false);
-            await interestedViewModel.CloseViewModel(false);
+            await interestingViewModel.CloseViewModelAsync(false);
+            await interestedViewModel.CloseViewModelAsync(false);
         }
 
         [TestCase]
@@ -174,8 +174,8 @@ namespace Catel.Test.MVVM.ViewModels
             Assert.AreEqual(true, interestedViewModel.CommandHasBeenExecuted);
             Assert.AreEqual(true, interestedViewModel.CommandHasBeenExecutedWithParameter);
 
-            await interestingViewModel.CloseViewModel(false);
-            await interestedViewModel.CloseViewModel(false);
+            await interestingViewModel.CloseViewModelAsync(false);
+            await interestedViewModel.CloseViewModelAsync(false);
         }
 
         [TestCase]
@@ -194,14 +194,14 @@ namespace Catel.Test.MVVM.ViewModels
             interestingViewModel.InterestingValue = "new value";
             Assert.AreEqual("new value", interestedViewModel.InterestedValue);
 
-            await interestedViewModel.CloseViewModel(null);
+            await interestedViewModel.CloseViewModelAsync(null);
 
             interestingViewModel.InterestingValue = "new value which has changed";
             Assert.AreNotEqual("new value which has changed", interestedViewModel.InterestedValue);
             Assert.AreEqual("new value", interestedViewModel.InterestedValue);
 
-            await interestingViewModel.CloseViewModel(false);
-            await interestedViewModel.CloseViewModel(false);
+            await interestingViewModel.CloseViewModelAsync(false);
+            await interestedViewModel.CloseViewModelAsync(false);
         }
 
         [TestCase]
@@ -212,14 +212,14 @@ namespace Catel.Test.MVVM.ViewModels
             var interestingViewModel = new InterestingViewModel();
             var interestedViewModel = new InterestedViewModel();
 
-            await interestingViewModel.SaveViewModel();
+            await interestingViewModel.SaveViewModelAsync();
 
             Assert.AreEqual(2, interestedViewModel.ViewModelEvents.Count);
             Assert.AreEqual(ViewModelEvent.Saving, interestedViewModel.ViewModelEvents[0]);
             Assert.AreEqual(ViewModelEvent.Saved, interestedViewModel.ViewModelEvents[1]);
 
-            await interestingViewModel.CloseViewModel(false);
-            await interestedViewModel.CloseViewModel(false);
+            await interestingViewModel.CloseViewModelAsync(false);
+            await interestedViewModel.CloseViewModelAsync(false);
         }
 
         [TestCase]
@@ -230,14 +230,14 @@ namespace Catel.Test.MVVM.ViewModels
             var interestingViewModel = new InterestingViewModel();
             var interestedViewModel = new InterestedViewModel();
 
-            await interestingViewModel.CancelViewModel();
+            await interestingViewModel.CancelViewModelAsync();
 
             Assert.AreEqual(2, interestedViewModel.ViewModelEvents.Count);
             Assert.AreEqual(ViewModelEvent.Canceling, interestedViewModel.ViewModelEvents[0]);
             Assert.AreEqual(ViewModelEvent.Canceled, interestedViewModel.ViewModelEvents[1]);
 
-            await interestingViewModel.CloseViewModel(false);
-            await interestedViewModel.CloseViewModel(false);
+            await interestingViewModel.CloseViewModelAsync(false);
+            await interestedViewModel.CloseViewModelAsync(false);
         }
 
         [TestCase]
@@ -248,13 +248,13 @@ namespace Catel.Test.MVVM.ViewModels
             var interestingViewModel = new InterestingViewModel();
             var interestedViewModel = new InterestedViewModel();
 
-            await interestingViewModel.CloseViewModel(null);
+            await interestingViewModel.CloseViewModelAsync(null);
 
             Assert.AreEqual(1, interestedViewModel.ViewModelEvents.Count);
             Assert.AreEqual(ViewModelEvent.Closed, interestedViewModel.ViewModelEvents[0]);
 
-            await interestingViewModel.CloseViewModel(false);
-            await interestedViewModel.CloseViewModel(false);
+            await interestingViewModel.CloseViewModelAsync(false);
+            await interestedViewModel.CloseViewModelAsync(false);
         }
         #endregion
     }

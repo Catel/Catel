@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="Catel.ItemTemplates.Silverlight.UserControl..576386c4-0318-4f95-abde-beb3b982ae90" Version="1.0" Language="en-US" Publisher="Geert van Horrik" />
+    <Identity Id="Catel.ItemTemplates.Silverlight.UserControl..576386c4-0318-4f95-abde-beb3b982ae90" Version="4.2" Language="en-US" Publisher="Geert van Horrik" />
     <DisplayName>Silverlight UserControl using Catel</DisplayName>
     <Description xml:space="preserve">Item template to create a Silverlight UserControl using Catel.</Description>
     <MoreInfo>http://www.catelproject.com</MoreInfo>

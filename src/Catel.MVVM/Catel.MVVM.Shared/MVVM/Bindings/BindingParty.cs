@@ -49,7 +49,7 @@ namespace Catel.MVVM
             _propertyInfo = instanceType.GetPropertyEx(_propertyName);
             if (_propertyInfo == null)
             {
-                Log.ErrorAndThrowException<InvalidOperationException>("Property '{0}' not found, cannot create binding", _toStringValue);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Property '{0}' not found, cannot create binding", _toStringValue);
             }
 
             _changeNotificationWrapper = new ChangeNotificationWrapper(instance);
@@ -117,7 +117,7 @@ namespace Catel.MVVM
             var target = _instance.Target;
             if (target == null)
             {
-                Log.ErrorAndThrowException<InvalidOperationException>("Target is no longer alive, cannot add event subscription");
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Target is no longer alive, cannot add event subscription");
             }
 
             var weakEventListener = this.SubscribeToWeakGenericEvent<TEventArgs>(target, eventName, (sender, e) => RaiseValueChanged());

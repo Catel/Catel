@@ -59,7 +59,6 @@ namespace Catel.Modules
         /// <summary>
         /// The synchronization context.
         /// </summary>
-        [CLSCompliant(false)]
         protected readonly SynchronizationContext _synchronizationContext = new SynchronizationContext();
 
         /// <summary>
@@ -90,6 +89,7 @@ namespace Catel.Modules
             : this()
         {
             Argument.IsNotNull("modules", modules);
+
             foreach (var moduleInfo in modules)
             {
                 AddModule(moduleInfo);
@@ -285,10 +285,7 @@ namespace Catel.Modules
 
             if (builderResourceUri.ToString().StartsWith("http"))
             {
-                string error = string.Format("Url '{0}' is an http url. Use CreateFromXamlAsync instead", builderResourceUri);
-                Log.Error(error);
-
-                throw new NotSupportedException(error);
+                throw Log.ErrorAndCreateException<NotSupportedException>("Url '{0}' is an http url. Use CreateFromXamlAsync instead", builderResourceUri);
             }
 
             var streamInfo = System.Windows.Application.GetResourceStream(builderResourceUri);

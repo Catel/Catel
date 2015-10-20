@@ -26,7 +26,7 @@ namespace Catel.Test.MVVM.Converters
         public void Convert_Null()
         {
             var converter = new ColorToBrushConverter();
-            Assert.AreEqual(null, converter.Convert(null, typeof (Brush), null, (CultureInfo)null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.Convert(null, typeof (Brush), null, (CultureInfo)null));
         }
 
         [TestCase]

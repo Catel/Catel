@@ -196,7 +196,7 @@ namespace Catel.Test.Extensions.Prism
                 _mainRegionMock = new Mock<IRegion>();
 
                 var dispatcherServiceMock = new Mock<IDispatcherService>();
-                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
+                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>(), true)).Callback((Action action) => action.Invoke());
 
                 //_serviceLocator = IoCFactory.CreateServiceLocator(true);
                 _serviceLocator = ServiceLocator.Default;
@@ -246,8 +246,8 @@ namespace Catel.Test.Extensions.Prism
                 viewModelLocator.Register(typeof (FooViewModelView), typeof (FooViewModel));
                 viewLocator.Register(typeof (FooViewModel), typeof (FooViewModelView));
 
-                var uiVisualizerService = _serviceLocator.ResolveType<IUIVisualizerService>();
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => uiVisualizerService.Activate(fooViewModel));
+                var uiCompositionService = _serviceLocator.ResolveType<IUICompositionService>();
+                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => uiCompositionService.Activate(fooViewModel));
             }
 
             /// <summary>
@@ -266,8 +266,8 @@ namespace Catel.Test.Extensions.Prism
                 viewModelLocator.Register(typeof (FooViewModelView), typeof (FooViewModel));
                 viewLocator.Register(typeof (FooViewModel), typeof (FooViewModelView));
 
-                var uiVisualizerService = _serviceLocator.ResolveType<IUIVisualizerService>();
-                uiVisualizerService.Activate(fooViewModel, MainRegionName);
+                var uiCompositionService = _serviceLocator.ResolveType<IUICompositionService>();
+                uiCompositionService.Activate(fooViewModel, MainRegionName);
 
                 VerifyDefaultRegionManagerBehavior();
             }
@@ -288,12 +288,12 @@ namespace Catel.Test.Extensions.Prism
                 viewModelLocator.Register(typeof (FooViewModelView), typeof (FooViewModel));
                 viewLocator.Register(typeof (FooViewModel), typeof (FooViewModelView));
 
-                var uiVisualizerService = _serviceLocator.ResolveType<IUIVisualizerService>();
-                uiVisualizerService.Activate(fooViewModel, MainRegionName);
+                var uiCompositionService = _serviceLocator.ResolveType<IUICompositionService>();
+                uiCompositionService.Activate(fooViewModel, MainRegionName);
 
-                uiVisualizerService.Deactivate(fooViewModel);
+                uiCompositionService.Deactivate(fooViewModel);
 
-                uiVisualizerService.Activate(fooViewModel);
+                uiCompositionService.Activate(fooViewModel);
 
                 _regionManagerMock.VerifyGet(collection => collection.Regions, Times.AtLeast(1));
                 _regionCollectionMock.Verify(collection => collection.ContainsRegionWithName(MainRegionName), Times.Once());
@@ -328,8 +328,8 @@ namespace Catel.Test.Extensions.Prism
                 viewModelLocator.Register(typeof (FooViewModelView), typeof (FooViewModel));
                 viewLocator.Register(typeof (FooViewModel), typeof (FooViewModelView));
 
-                var uiVisualizerService = _serviceLocator.ResolveType<IUIVisualizerService>();
-                uiVisualizerService.Activate(fooViewModel, MainRegionName);
+                var uiCompositionService = _serviceLocator.ResolveType<IUICompositionService>();
+                uiCompositionService.Activate(fooViewModel, MainRegionName);
 
                 _regionManagerMock.VerifyGet(collection => collection.Regions, Times.AtLeast(1));
                 _regionCollectionMock.Verify(collection => collection.ContainsRegionWithName(MainRegionName), Times.Once());
@@ -352,7 +352,7 @@ namespace Catel.Test.Extensions.Prism
 
                 _serviceLocator.RegisterInstance<IViewManager>(viewManagerMock.Object);
 
-                _serviceLocator.ResolveType<IUIVisualizerService>().Activate(fooViewModel, fooParentViewModel, MainRegionName);
+                _serviceLocator.ResolveType<IUICompositionService>().Activate(fooViewModel, fooParentViewModel, MainRegionName);
 
                 viewManagerMock.Verify(manager => manager.GetViewsOfViewModel(fooParentViewModel), Times.Once());
             }
@@ -382,7 +382,7 @@ namespace Catel.Test.Extensions.Prism
                 viewManagerMock.Setup(manager => manager.GetViewsOfViewModel(fooParentViewModel)).Returns(new IView[] {fooParentViewModelView});
 
                 _serviceLocator.RegisterInstance<IViewManager>(viewManagerMock.Object);
-                _serviceLocator.ResolveType<IUIVisualizerService>().Activate(fooViewModel, fooParentViewModel, MainRegionName);
+                _serviceLocator.ResolveType<IUICompositionService>().Activate(fooViewModel, fooParentViewModel, MainRegionName);
 
                 VerifyDefaultRegionManagerBehavior();
 
@@ -418,7 +418,7 @@ namespace Catel.Test.Extensions.Prism
 
                 _serviceLocator.RegisterInstance<IViewManager>(viewManagerMock.Object);
 
-                _serviceLocator.ResolveType<IUIVisualizerService>().Activate(fooViewModel, fooParentViewModel, MainRegionName);
+                _serviceLocator.ResolveType<IUICompositionService>().Activate(fooViewModel, fooParentViewModel, MainRegionName);
 
                 VerifyDefaultRegionManagerBehavior();
 
@@ -434,8 +434,8 @@ namespace Catel.Test.Extensions.Prism
             [TestCase]
             public void ThrowsArgumentNullExceptionIfViewModelIsNull()
             {
-                var uiVisualizerService = _serviceLocator.ResolveType<IUIVisualizerService>();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => uiVisualizerService.Activate(null, MainRegionName));
+                var uiCompositionService = _serviceLocator.ResolveType<IUICompositionService>();
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => uiCompositionService.Activate((IViewModel) null, MainRegionName));
             }
 
             /// <summary>
@@ -444,8 +444,8 @@ namespace Catel.Test.Extensions.Prism
             [TestCase]
             public void ThrowsArgumentNullExceptionIfParentViewModelIsNull()
             {
-                var uiVisualizerService = _serviceLocator.ResolveType<IUIVisualizerService>();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => uiVisualizerService.Activate(new FooViewModel(_serviceLocator), null, MainRegionName));
+                var uiCompositionService = _serviceLocator.ResolveType<IUICompositionService>();
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => uiCompositionService.Activate(new FooViewModel(_serviceLocator), null, MainRegionName));
             }
 
             /// <summary>
@@ -454,9 +454,9 @@ namespace Catel.Test.Extensions.Prism
             [TestCase]
             public void ThrowsInvalidOperationExceptionIfViewModelAndParentViewModelAreReferenceEquals()
             {
-                var uiVisualizerService = _serviceLocator.ResolveType<IUIVisualizerService>();
+                var uiCompositionService = _serviceLocator.ResolveType<IUICompositionService>();
                 var fooViewModel = new FooViewModel(_serviceLocator);
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => uiVisualizerService.Activate(fooViewModel, fooViewModel, MainRegionName));
+                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => uiCompositionService.Activate(fooViewModel, fooViewModel, MainRegionName));
             }
 
             /// <summary>
@@ -548,7 +548,7 @@ namespace Catel.Test.Extensions.Prism
                 _mainRegionMock = new Mock<IRegion>();
 
                 var dispatcherServiceMock = new Mock<IDispatcherService>();
-                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
+                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>(), true)).Callback((Action action) => action.Invoke());
 
                 _serviceLocator = ServiceLocator.Default;
                 _serviceLocator.RegisterInstance<IDispatcherService>(dispatcherServiceMock.Object);
@@ -578,7 +578,7 @@ namespace Catel.Test.Extensions.Prism
             /// The is called is the method is close and remove method of the region is called.
             /// </summary>
             [TestCase, Explicit]
-            public void IsCalledIsTheMethodIsCloseAndRemoveMethodOfTheRegionIsCalled()
+            public async Task IsCalledIsTheMethodIsCloseAndRemoveMethodOfTheRegionIsCalled()
             {
                 SetupRegionManagerBehaviorRelatedWithMainRegion();
 
@@ -590,10 +590,10 @@ namespace Catel.Test.Extensions.Prism
                 viewModelLocator.Register(typeof (FooViewModelView), typeof (FooViewModel));
                 viewLocator.Register(typeof (FooViewModel), typeof (FooViewModelView));
 
-                var uiVisualizerService = _serviceLocator.ResolveType<IUIVisualizerService>();
-                uiVisualizerService.Activate(fooViewModel, MainRegionName);
+                var uiCompositionService = _serviceLocator.ResolveType<IUICompositionService>();
+                uiCompositionService.Activate(fooViewModel, MainRegionName);
 
-                fooViewModel.CloseViewModel(true);
+                await fooViewModel.CloseViewModelAsync(true);
 
                 _mainRegionMock.Verify(region => region.Remove(It.IsAny<FooViewModelView>()), Times.Once());
             }
@@ -605,8 +605,9 @@ namespace Catel.Test.Extensions.Prism
             public void ThrowsArgumentExceptionIfTheViewModelIsNull()
             {
                 _serviceLocator.RegisterInstance<IRegionManager>(_regionManagerMock.Object);
-                var uiVisualizerService = _serviceLocator.ResolveType<IUIVisualizerService>();
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => uiVisualizerService.Deactivate(null));
+                var uiCompositionService = _serviceLocator.ResolveType<IUICompositionService>();
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => uiCompositionService.Deactivate(null));
             }
 
             /// <summary>
@@ -615,8 +616,9 @@ namespace Catel.Test.Extensions.Prism
             [TestCase]
             public void ThrowsInvalidOperationExceptionIfTheViewModelIsNull()
             {
-                var uiVisualizerService = _serviceLocator.ResolveType<IUIVisualizerService>();
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => uiVisualizerService.Deactivate(new FooViewModel(_serviceLocator)));
+                var uiCompositionService = _serviceLocator.ResolveType<IUICompositionService>();
+
+                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => uiCompositionService.Deactivate(new FooViewModel(_serviceLocator)));
             }
             #endregion
         }
@@ -641,7 +643,7 @@ namespace Catel.Test.Extensions.Prism
                 var fooViewModel = new FooViewModel(serviceLocator);
 
                 var dispatcherServiceMock = new Mock<IDispatcherService>();
-                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
+                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>(), true)).Callback((Action action) => action.Invoke());
                 var visualizerServiceMock = new Mock<IUIVisualizerService>();
                 visualizerServiceMock.Setup(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null)).Returns(new Task<bool>(() => true));
                 var viewManagerMock = new Mock<IViewManager>();
@@ -667,7 +669,7 @@ namespace Catel.Test.Extensions.Prism
                 var fooViewModel = new FooViewModel(serviceLocator);
 
                 var dispatcherServiceMock = new Mock<IDispatcherService>();
-                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
+                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>(), true)).Callback((Action action) => action.Invoke());
                 var visualizerServiceMock = new Mock<IUIVisualizerService>();
                 visualizerServiceMock.Setup(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null)).Returns(new Task<bool>(() => true));
                 var viewManagerMock = new Mock<IViewManager>();
@@ -697,7 +699,7 @@ namespace Catel.Test.Extensions.Prism
             //    var fooViewModel = new FooViewModel(serviceLocator);
 
             //    var dispatcherServiceMock = new Mock<IDispatcherService>();
-            //    dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
+            //    dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>(), true)).Callback((Action action) => action.Invoke());
             //    var visualizerServiceMock = new Mock<IUIVisualizerService>();
             //    visualizerServiceMock.Setup(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null)).Returns(new Task<bool>(() => true));
             //    var viewManagerMock = new Mock<IViewManager>();
@@ -727,7 +729,7 @@ namespace Catel.Test.Extensions.Prism
             //    var fooViewModel = new FooViewModel(serviceLocator);
 
             //    var dispatcherServiceMock = new Mock<IDispatcherService>();
-            //    dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>())).Callback((Action action) => action.Invoke());
+            //    dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>(), true)).Callback((Action action) => action.Invoke());
             //    var visualizerServiceMock = new Mock<IUIVisualizerService>();
             //    visualizerServiceMock.Setup(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null)).Returns(new Task<bool>(() => true));
             //    var viewManagerMock = new Mock<IViewManager>();

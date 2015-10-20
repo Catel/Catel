@@ -26,7 +26,7 @@ namespace Catel.Windows.Interactivity
 
     /// <summary>
     /// Behavior base class that handles a safe unsubscribe and clean up because the default
-    /// behavior class does not always call <see cref="Behavior.OnDetaching"/>.
+    /// behavior class does not always call <c>OnDetaching</c>.
     /// <para />
     /// This class extends the <see cref="BehaviorBase{T}"/> class by adding supports for commands.
     /// </summary>
@@ -54,8 +54,8 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Using a DependencyProperty as the backing store for Modifiers.  This enables animation, styling, binding, etc... 
         /// </summary>
-        public static readonly DependencyProperty ModifiersProperty = DependencyProperty.Register("Modifiers", typeof(ModifierKeys), typeof(CommandBehaviorBase<T>),
-            new PropertyMetadata(ModifierKeys.None));
+        public static readonly DependencyProperty ModifiersProperty = DependencyProperty.Register("Modifiers", typeof(ModifierKeys), 
+            typeof(CommandBehaviorBase<T>), new PropertyMetadata(ModifierKeys.None));
 
         /// <summary>
         /// Gets or sets the command to execute when the key is pressed.
@@ -98,6 +98,7 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnCommandCanExecuteChangedInternal(object sender, System.EventArgs e)
         {
+            OnCommandCanExecuteChanged();
             OnCommandCanExecuteChanged(sender, e);
         }
 
@@ -106,7 +107,15 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "OnCommandCanExecuteChanged", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         protected virtual void OnCommandCanExecuteChanged(object sender, System.EventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// Called when the <see cref="ICommand.CanExecute"/> state has changed.
+        /// </summary>
+        protected virtual void OnCommandCanExecuteChanged()
         {
         }
 
@@ -117,7 +126,7 @@ namespace Catel.Windows.Interactivity
         {
             base.OnAssociatedObjectLoaded();
 
-            SubscribeToCommand();
+            UpdateCommandSubscriptions();
         }
 
         /// <summary>
@@ -176,13 +185,27 @@ namespace Catel.Windows.Interactivity
         /// <param name="newValue">The new value.</param>
         private void OnCommandChangedInternal(ICommand newValue)
         {
+            UpdateCommandSubscriptions();
+        }
+
+        private void UpdateCommandSubscriptions()
+        {
+            var oldCommand = _command;
+            var newCommand = Command;
+
+            if (ReferenceEquals(oldCommand, newCommand))
+            {
+                return;
+            }
+
             UnsubscribeFromCommand();
 
-            _command = newValue;
+            _command = newCommand;
 
             SubscribeToCommand();
 
             OnCommandChanged();
+            OnCommandCanExecuteChanged();
         }
 
         /// <summary>
@@ -190,6 +213,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected virtual void OnCommandChanged()
         {
+            
         }
 
         /// <summary>
@@ -231,6 +255,11 @@ namespace Catel.Windows.Interactivity
         {
             var command = _command;
             if (command == null)
+            {
+                return false;
+            }
+
+            if (!IsEnabled)
             {
                 return false;
             }

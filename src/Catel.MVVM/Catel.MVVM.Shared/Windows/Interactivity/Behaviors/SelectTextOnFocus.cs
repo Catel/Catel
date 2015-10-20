@@ -105,6 +105,11 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         private void SelectAllText()
         {
+            if (!IsEnabled)
+            {
+                return;
+            }
+
             AssociatedObject.SelectAll();
         } 
     }

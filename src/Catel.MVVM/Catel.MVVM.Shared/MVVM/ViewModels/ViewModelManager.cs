@@ -59,7 +59,10 @@ namespace Catel.MVVM
         /// </remarks>
         public ViewModelManager()
         {
-            _instances.Add(this);
+            lock (_instances)
+            {
+                _instances.Add(this);
+            }
 
             Log.Debug("ViewModelManager instantiated");
         }
@@ -74,7 +77,7 @@ namespace Catel.MVVM
         {
             get
             {
-                int count = 0;
+                var count = 0;
 
                 lock (_managedViewModelsLock)
                 {
@@ -333,9 +336,12 @@ namespace Catel.MVVM
         /// </remarks>
         internal static void ClearAll()
         {
-            foreach (var manager in _instances)
+            lock (_instances)
             {
-                manager.Clear();
+                foreach (var manager in _instances)
+                {
+                    manager.Clear();
+                }
             }
         }
 

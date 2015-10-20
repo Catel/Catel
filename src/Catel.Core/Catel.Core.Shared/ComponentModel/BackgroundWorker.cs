@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NETFX_CORE
+#if NETFX_CORE && !UAP
 
 namespace System.ComponentModel
 {
@@ -18,6 +18,7 @@ namespace System.ComponentModel
     /// <remarks>
     /// This class originally comes from http://www.lhotka.net/cslacvs/viewvc.cgi/core/trunk/Source/Csla.WinRT/Threading/BackgroundWorkerBCL.cs.
     /// </remarks>
+    [ObsoleteEx(Message = "Use async coding instead", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public class BackgroundWorker : DependencyObject
     {
         private readonly CoreDispatcher _dispatcher;

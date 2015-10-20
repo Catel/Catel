@@ -47,11 +47,6 @@ namespace Catel.Test.MVVM.Auditing
 
         public override void OnPropertyChanging(IViewModel viewModel, string propertyName, object oldValue)
         {
-            if (OnPropertyChangingCalled)
-            {
-                return;
-            }
-
             OnPropertyChangingCalled = true;
             OnPropertyChangingViewModel = viewModel;
             OnPropertyChangingPropertyName = propertyName;
@@ -65,11 +60,6 @@ namespace Catel.Test.MVVM.Auditing
 
         public override void OnPropertyChanged(IViewModel viewModel, string propertyName, object newValue)
         {
-            if (OnPropertyChangedCalled)
-            {
-                return;
-            }
-
             OnPropertyChangedCalled = true;
             OnPropertyChangedViewModel = viewModel;
             OnPropertyChangedPropertyName = propertyName;

@@ -18,14 +18,14 @@ namespace Catel.Test.MVVM.Converters
         public void Convert_Null()
         {
             var converter = new BooleanToTextConverter();
-            Assert.AreEqual(string.Empty, converter.Convert(null, typeof (string), null, (CultureInfo)null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.Convert(null, typeof (string), null, (CultureInfo)null));
         }
 
         [TestCase]
         public void Convert_NonBoolean()
         {
             var converter = new BooleanToTextConverter();
-            Assert.AreEqual(string.Empty, converter.Convert("string", typeof (string), null, (CultureInfo)null));
+            Assert.AreEqual(ConverterHelper.UnsetValue, converter.Convert("string", typeof (string), null, (CultureInfo)null));
         }
 
         [TestCase]

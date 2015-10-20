@@ -43,6 +43,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Helpers\CollectionHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\ListDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\BackgroundWorker.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\DisplayNameAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\BeginEditEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\CancelEditCompletedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\CancelEditEventArgs.cs" />
@@ -127,16 +128,21 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationSummary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatorBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatorProviderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Devices\DeviceType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Devices\Helpers\DeviceHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DisposableToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DynamicEventListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EventHandlerExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventHandlers\AsyncEventHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventHandlers\Extensions\AsyncEventHandlerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\EventArgs\BufferedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\EventArgs\RetryingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Extensions\ExceptionServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Interfaces\IBufferPolicy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Interfaces\IExceptionHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Interfaces\IExceptionService.cs" />
@@ -149,14 +155,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\NotSupportedInPlatformException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ByteArrayExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ExceptionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ProcessExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.slug.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Factories\ExceptionFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositeFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositePredicate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\Interfaces\ICompositeFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Fluent\Interfaces\IFluent.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Generics\NullOp.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Generics\Operator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\EnvironmentHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ExpressionHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\HashHelper.cs" />
@@ -224,7 +230,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Configuration\LogListenerConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Configuration\LogListenerConfigurationCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\EventArgs\LogMessageEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\IBatchLogListenerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.debug.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.error.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.warning.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.info.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Formatters\Interfaces\IJsonLogFormatter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Formatters\JsonLogFormatter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Interfaces\IBatchLogListener.cs" />
@@ -245,6 +256,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\SeqLogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Log.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogBatchEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\LogData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogEntry.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\LogListenerBase.cs" />
@@ -286,6 +298,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\PropertyHelper.expression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\StaticHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\TypeHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflection\Interfaces\IEntryAssemblyResolver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\TypeCache.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\TypeInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\ReferenceEqualityComparer.cs" />
@@ -295,6 +308,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\SerializerModifierAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\Attributes\RedirectTypeAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\BinarySerializationContextInfoFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\BinarySerializationContextInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\BinarySerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\Interfaces\IBinarySerializer.cs" />
@@ -302,15 +316,28 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\EventArgs\CacheInvalidatedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\EventArgs\MemberSerializationEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\EventArgs\SerializationEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Extensions\ISerializationContextExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Extensions\ISerializerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Helpers\SerializationContextHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\IObjectAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\IPropertySerializable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\IFieldSerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\IModelBaseSerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializationContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializationContextInfoFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializationContextInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializationManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializerModifier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\MemberMetadata.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\MemberValue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Models\SerializableKeyValuePair.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Modifiers\KeyValuePairSerializerModifier.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\ObjectAdapter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationInfo\SerializationInfoSerializationContextInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationModelInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationObject.cs" />
@@ -325,6 +352,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Interfaces\IXmlNamespaceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSerializationContextInfoFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlNamespace.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlNamespaceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs" />
@@ -351,8 +379,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\ObjectConverterService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Test\ExceptionTester.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Text\Extensions\StringBuilderExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\AsyncLock.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\AwaitableDisposable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\DefaultAsyncWaitQueue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Extensions\AsyncWaitQueueExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Extensions\SynchronizationContextExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Extensions\TaskExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\TaskHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\TaskShim.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\ThreadHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Interfaces\IAsyncWaitQueue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Internal\Deque.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\ReaderWriterLockSlim.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\SynchronizationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Timer.cs" />
@@ -363,5 +400,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\Interfaces\IWeakReference.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\WeakAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\WeakEventListener.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)ComponentModel\DataAnnotations\" />
   </ItemGroup>
 </Project>

@@ -3,13 +3,15 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Catel.Scoping;
+
 namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using Catel.ApiCop.Rules;
-    using Catel.Data;
     using Catel.Logging;
     using Catel.Reflection;
 
@@ -40,20 +42,20 @@ namespace Catel.Runtime.Serialization
         public event EventHandler<SerializationEventArgs> Deserialized;
         #endregion
 
-        #region IModelBaseSerializer<TSerializationContext> Members
+        #region ISerializer<TSerializationContext> Members
         /// <summary>
         /// Serializes the specified model.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
-        public virtual void Serialize(ModelBase model, Stream stream)
+        public virtual void Serialize(object model, Stream stream)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
 
-            using (var context = GetContext(model, stream, SerializationContextMode.Serialization))
+            using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Serialization))
             {
-                Serialize(model, context.Context);
+                Serialize(model, context);
 
                 AppendContextToStream(context, stream);
             }
@@ -64,40 +66,68 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="context">The context.</param>
-        public virtual void Serialize(ModelBase model, TSerializationContext context)
+        public void Serialize(object model, ISerializationContextInfo context)
+        {
+            Serialize(model, (TSerializationContext)context);
+        }
+
+        /// <summary>
+        /// Serializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="context">The context.</param>
+        public virtual void Serialize(object model, TSerializationContext context)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", context);
 
-            using (var finalContext = GetContext(model, context, SerializationContextMode.Serialization))
+            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+            using (ScopeManager<ISerializer>.GetScopeManager(scopeName, () => this))
             {
-                var serializerModifiers = SerializationManager.GetSerializerModifiers(finalContext.ModelType);
-
-                Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length, finalContext.ModelType.GetSafeFullName());
-
-                var serializingEventArgs = new SerializationEventArgs(finalContext);
-
-                Serializing.SafeInvoke(this, serializingEventArgs);
-
-                foreach (var serializerModifier in serializerModifiers)
+                using (var finalContext = GetContext(model, model.GetType(), context, SerializationContextMode.Serialization))
                 {
-                    serializerModifier.OnSerializing(finalContext, model);
+                    Serialize(model, finalContext);
                 }
-
-                BeforeSerialization(finalContext);
-
-                var members = GetSerializableMembers(model);
-                SerializeMembers(finalContext, members);
-
-                AfterSerialization(finalContext);
-
-                foreach (var serializerModifier in serializerModifiers)
-                {
-                    serializerModifier.OnSerialized(finalContext, model);
-                }
-
-                Serialized.SafeInvoke(this, serializingEventArgs);
             }
+        }
+
+        /// <summary>
+        /// Serializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="context">The context.</param>
+        protected virtual void Serialize(object model, ISerializationContext<TSerializationContext> context)
+        {
+            Argument.IsNotNull("model", model);
+            Argument.IsNotNull("context", context);
+
+            var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType);
+
+            Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length,
+                context.ModelType.GetSafeFullName());
+
+            var serializingEventArgs = new SerializationEventArgs(context);
+
+            Serializing.SafeInvoke(this, serializingEventArgs);
+
+            foreach (var serializerModifier in serializerModifiers)
+            {
+                serializerModifier.OnSerializing(context, model);
+            }
+
+            BeforeSerialization(context);
+
+            var members = GetSerializableMembers(context, model);
+            SerializeMembers(context, members);
+
+            AfterSerialization(context);
+
+            foreach (var serializerModifier in serializerModifiers)
+            {
+                serializerModifier.OnSerialized(context, model);
+            }
+
+            Serialized.SafeInvoke(this, serializingEventArgs);
         }
 
         /// <summary>
@@ -106,19 +136,19 @@ namespace Catel.Runtime.Serialization
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="membersToIgnore">The members to ignore.</param>
-        public virtual void SerializeMembers(ModelBase model, Stream stream, params string[] membersToIgnore)
+        public virtual void SerializeMembers(object model, Stream stream, params string[] membersToIgnore)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
 
-            var members = GetSerializableMembers(model, membersToIgnore);
-            if (members.Count == 0)
+            using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Serialization))
             {
-                return;
-            }
+                var members = GetSerializableMembers(context, model, membersToIgnore);
+                if (members.Count == 0)
+                {
+                    return;
+                }
 
-            using (var context = GetContext(model, stream, SerializationContextMode.Serialization))
-            {
                 SerializeMembers(context, members);
 
                 AppendContextToStream(context, stream);
@@ -179,41 +209,45 @@ namespace Catel.Runtime.Serialization
             ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
                 x => x.SetInitializationMode(InitializationMode.Lazy, GetType().GetSafeFullName()));
 
-            var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType);
-
-            foreach (var member in membersToSerialize)
+            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+            using (ScopeManager<ISerializer>.GetScopeManager(scopeName, () => this))
             {
-                bool skipByModifiers = false;
-                foreach (var serializerModifier in serializerModifiers)
+                var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType);
+
+                foreach (var member in membersToSerialize)
                 {
-                    if (serializerModifier.ShouldIgnoreMember(context, context.Model, member))
+                    bool skipByModifiers = false;
+                    foreach (var serializerModifier in serializerModifiers)
                     {
-                        skipByModifiers = true;
-                        break;
+                        if (serializerModifier.ShouldIgnoreMember(context, context.Model, member))
+                        {
+                            skipByModifiers = true;
+                            break;
+                        }
                     }
+
+                    if (skipByModifiers)
+                    {
+                        continue;
+                    }
+
+                    var memberSerializationEventArgs = new MemberSerializationEventArgs(context, member);
+
+                    SerializingMember.SafeInvoke(this, memberSerializationEventArgs);
+
+                    BeforeSerializeMember(context, member);
+
+                    foreach (var serializerModifier in serializerModifiers)
+                    {
+                        serializerModifier.SerializeMember(context, member);
+                    }
+
+                    SerializeMember(context, member);
+
+                    AfterSerializeMember(context, member);
+
+                    SerializedMember.SafeInvoke(this, memberSerializationEventArgs);
                 }
-
-                if (skipByModifiers)
-                {
-                    continue;
-                }
-
-                var memberSerializationEventArgs = new MemberSerializationEventArgs(context, member);
-
-                SerializingMember.SafeInvoke(this, memberSerializationEventArgs);
-
-                BeforeSerializeMember(context, member);
-
-                foreach (var serializerModifier in serializerModifiers)
-                {
-                    serializerModifier.SerializeMember(context, member);
-                }
-
-                SerializeMember(context, member);
-
-                AfterSerializeMember(context, member);
-
-                SerializedMember.SafeInvoke(this, memberSerializationEventArgs);
             }
         }
         #endregion

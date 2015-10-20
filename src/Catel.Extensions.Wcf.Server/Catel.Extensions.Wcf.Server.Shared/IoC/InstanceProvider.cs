@@ -17,6 +17,8 @@ namespace Catel.ServiceModel.Dispatching
     /// <summary>
     /// 
     /// </summary>
+    [ObsoleteEx(Message = "We are considering to remove Wcf.Server support. See https://catelproject.atlassian.net/browse/CTL-672",
+    TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public class InstanceProvider : IInstanceProvider
     {
         #region Fields

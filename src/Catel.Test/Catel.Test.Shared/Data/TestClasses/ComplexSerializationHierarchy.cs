@@ -9,7 +9,8 @@ namespace Catel.Test.Data
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-
+    using System.Runtime.Serialization;
+    using System.Xml.Serialization;
     using Catel.Data;
 
     public enum SortDirection
@@ -88,6 +89,46 @@ namespace Catel.Test.Data
 
             return settings;
         }
+
+        public static Family CreateComplexNonCatelHierarchy()
+        {
+            var family = new Family
+            {
+                LastName = "Family last name"
+            };
+            
+            family.Persons.Add(new Person { FirstName = "Mrs.", LastName = "Doe", Gender = Gender.Female });
+            family.Persons.Add(new Person { FirstName = "Mr.", LastName = "Bla", Gender = Gender.Male});
+
+            return family;
+        }
+    }
+
+#if NET
+    [Serializable]
+#endif
+    public class Family
+    {
+        public Family()
+        {
+            Persons = new List<Person>();
+        }
+
+        public string LastName { get; set; }
+
+        public List<Person> Persons { get; private set; }
+    }
+
+#if NET
+    [Serializable]
+#endif
+    public class Person
+    {
+        public Gender Gender { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
     }
 
 #if NET
@@ -95,6 +136,17 @@ namespace Catel.Test.Data
 #endif
     public class ScheduleAssistantSettings : SavableModelBase<ScheduleAssistantSettings>
     {
+        public ScheduleAssistantSettings()
+        {
+
+        }
+
+#if NET
+        protected ScheduleAssistantSettings(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        { }
+#endif
+
         #region SelectedResource property
 
         /// <summary>
@@ -173,6 +225,17 @@ namespace Catel.Test.Data
 #endif
     public class GridSettings : ModelBase
     {
+        public GridSettings()
+        {
+
+        }
+
+#if NET
+        protected GridSettings(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        { }
+#endif
+
         #region SortSettings property
 
         /// <summary>

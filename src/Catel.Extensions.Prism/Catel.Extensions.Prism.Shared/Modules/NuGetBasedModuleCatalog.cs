@@ -29,13 +29,9 @@ namespace Catel.Modules
     /// <summary>
     /// The nuget based module catelog.
     /// </summary>
-    public sealed class NuGetBasedModuleCatalog : ModuleCatalog, INuGetBasedModuleCatalog
+    public class NuGetBasedModuleCatalog : ModuleCatalog, INuGetBasedModuleCatalog
     {
         #region Constants
-        /// <summary>
-        /// The relative Url Pattern
-        /// </summary>
-        public const string RelativeUrlPattern = "{0}/{1}/lib/{2}/{3}";
 
         /// <summary>
         /// The module descriptor pattern.
@@ -57,7 +53,7 @@ namespace Catel.Modules
         /// <summary>
         /// The package repository cache.
         /// </summary>
-        private static readonly CacheStorage<string, IPackageRepository> PackageRepositoryCache = new CacheStorage<string, IPackageRepository>(storeNullValues: true);
+        private static readonly CacheStorage<string, IPackageRepository> PackageRepositoriesCache = new CacheStorage<string, IPackageRepository>(storeNullValues: true);
 
         /// <summary>
         /// The module descriptor regular expresssion.
@@ -66,10 +62,6 @@ namespace Catel.Modules
         #endregion
 
         #region Fields
-        /// <summary>
-        /// Assembly ref cache storage
-        /// </summary>
-        private readonly CacheStorage<ModuleInfo, string> _assemblyRefCacheStorage = new CacheStorage<ModuleInfo, string>(storeNullValues: true);
 
         /// <summary>
         /// Module info cache storage.
@@ -86,11 +78,6 @@ namespace Catel.Modules
         /// </summary>
         private readonly NuGetBasedModuleCatalogParentChildBehavior _behavior;
 
-        /// <summary>
-        ///  NuGet like framework name identifier string, for instance <c>NET40</c> or <c>NET45</c>.
-        /// </summary>
-        private readonly string _frameworkNameIdentifier;
-
         #endregion
 
         #region Constructors
@@ -101,11 +88,6 @@ namespace Catel.Modules
         {
             _behavior = new NuGetBasedModuleCatalogParentChildBehavior(this);
             PackageSource = "https://nuget.org/api/v2/";
-#if NET40
-            _frameworkNameIdentifier = "NET40";
-#else 
-            _frameworkNameIdentifier = "NET45";
-#endif
         }
         #endregion
 
@@ -116,11 +98,14 @@ namespace Catel.Modules
         public string PackageSource { get; set; }
 
         /// <summary>
-        /// The output directory base Uri
+        /// The output directory Uri
         /// </summary>
-        private string BaseUrl
+        private string OutputDirectoryAbsoluteUri
         {
-            get { return "file://" + OutputDirectoryFullPath.Replace("\\", "/"); }
+            get
+            {
+                return new Uri(OutputDirectoryFullPath).AbsoluteUri;
+            }
         }
 
         /// <summary>
@@ -130,6 +115,12 @@ namespace Catel.Modules
         {
             get { return _packagedModulesFilteredSearchCacheStorage.GetFromCacheOrFetch(PackagedModuleIdFilterExpression, GetPackagedModules); }
         }
+
+        /// <summary>
+        /// Gets or sets the default initialization mode.
+        /// </summary>
+        /// <value>The default initialization mode.</value>
+        public InitializationMode DefaultInitializationMode { get; set; }
         #endregion
 
         #region INuGetBasedModuleCatalog Members
@@ -137,11 +128,8 @@ namespace Catel.Modules
         /// <summary>
         /// Gets or sets the parent nuget based catalog.
         /// </summary>
-        public INuGetBasedModuleCatalog Parent
-        {
-            get;
-            set;
-        }
+        /// <value>The parent.</value>
+        public INuGetBasedModuleCatalog Parent { get; set; }
 
         /// <summary>
         ///  Gets or sets the output directory.
@@ -186,10 +174,10 @@ namespace Catel.Modules
         {
             get
             {
-                string outputDirectory = OutputDirectory;
+                var outputDirectory = OutputDirectory;
                 if (!Path.IsPathRooted(outputDirectory))
                 {
-                    string mainModuleDirectory = IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+                    var mainModuleDirectory = IO.Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
                     outputDirectory = IO.Path.Combine(mainModuleDirectory, OutputDirectory);
                 }
 
@@ -205,85 +193,87 @@ namespace Catel.Modules
             get
             {
                 var moduleInfos = base.Modules.ToList();
+                foreach (var packageModuleInfo in this.PackagedModules)
+                {
+                    var moduleInfo = moduleInfos.FirstOrDefault(info => info.ModuleName == packageModuleInfo.ModuleName);
+                    if (moduleInfo == null)
+                    {
+                        Log.Info("Adding module info for '{0}' module with type '{1}'", packageModuleInfo.ModuleName, packageModuleInfo.ModuleType);
 
-                moduleInfos.AddRange(PackagedModules);
-                
+                        moduleInfos.Add(packageModuleInfo);
+                    }
+                    else if (moduleInfo.ModuleType == packageModuleInfo.ModuleType && (moduleInfo.Ref == null || !moduleInfo.Ref.Contains(',')))
+                    {
+                        Log.Info("Replacing module info for '{0}' module with type '{1}' to ensure load the lastest version from repository", moduleInfo.ModuleName, moduleInfo.ModuleType);
+
+                        packageModuleInfo.InitializationMode = moduleInfo.InitializationMode;
+                        moduleInfos[moduleInfos.IndexOf(moduleInfo)] = packageModuleInfo;
+                    }
+                    else
+                    {
+                        Log.Warning("Ignored module info for '{0}' module with type '{1}' because is already registered", moduleInfo.ModuleName, moduleInfo.ModuleType);
+                    }
+                }
+
                 return moduleInfos;
             }
         }
 
         /// <summary>
-        /// Tries to create and install package request from the <paramref name="moduleInfo"/>.
+        /// Tries to create and install package request from the <paramref name="moduleInfo" />.
         /// </summary>
-        /// <param name="moduleInfo">
-        /// The module info.
-        /// </param>
-        /// <param name="installPackageRequest">
-        /// The install package request.
-        /// </param>
-        /// <returns>
-        /// <c>true</c> whether the install package request is created, otherwise <c>false</c>
-        /// </returns>
+        /// <param name="moduleInfo">The module info.</param>
+        /// <param name="installPackageRequest">The install package request.</param>
+        /// <returns><c>true</c> whether the install package request is created, otherwise <c>false</c></returns>
         public bool TryCreateInstallPackageRequest(ModuleInfo moduleInfo, out InstallPackageRequest installPackageRequest)
         {
             installPackageRequest = null;
-            PackageName packageName = moduleInfo.GetPackageName();
-            if (packageName.Version != null && IsModuleAssemblyInstalled(moduleInfo))
+            var packageName = moduleInfo.GetPackageName();
+
+            ModuleAssemblyRef moduleAssemblyRef = moduleInfo.GetModuleAssemblyRef(OutputDirectoryAbsoluteUri);
+            if (packageName.Version != null && moduleAssemblyRef.IsInstalled)
             {
                 Log.Debug("Creating local install package request for '{0}'.", packageName.Name);
 
-                installPackageRequest = new InstallPackageRequest(GetModuleAssemblyRef(moduleInfo));
+                installPackageRequest = new InstallPackageRequest(moduleAssemblyRef);
             }
             else
             {
-                IPackageRepository repository = GetPackageRepository();
-                if (repository != null)
+                var repositories = GetPackageRepositories().ToList();
+
+                int i = 0;
+                while (installPackageRequest == null && i < repositories.Count)
                 {
-                    Log.Debug("Looking for package '{0}' with version '{1}' on the repository '{2}'", packageName.Id, packageName.Version, PackageSource);
-
-                    IPackage package;
-                    if (repository.TryFindPackage(packageName.Id, packageName.Version, out package))
+                    var repository = repositories[i++];
+                    if (repository != null)
                     {
-                        /*
-                        IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
-                        if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(_frameworkNameIdentifier)))
-                        {
-                            Log.Debug("Creating remote install package request for '{0}' from '{1}'", package.GetFullName(), PackageSource);
-                        }
-                        */
+                        Log.Debug("Looking for package '{0}' with version '{1}' on the repository '{2}'", packageName.Id, packageName.Version, PackageSource);
 
-                        installPackageRequest = new RemoteInstallPackageRequest(this, package, GetModuleAssemblyRef(moduleInfo, package.Version));
+                        try
+                        {
+                            var package = repository.FindPackage(packageName.Id, packageName.Version);
+                            if (package != null)
+                            {
+                                /*
+                                IEnumerable<FrameworkName> supportedFrameworks = package.GetSupportedFrameworks();
+                                if (supportedFrameworks != null && supportedFrameworks.Any(name => FrameworkIdentifierConversionMap.ContainsKey(name.FullName) && FrameworkIdentifierConversionMap[name.FullName].Equals(Platforms.CurrentPlatform)))
+                                {
+                                    Log.Debug("Creating remote install package request for '{0}' from '{1}'", package.GetFullName(), PackageSource);
+                                }
+                                */
+
+                                installPackageRequest = new RemoteInstallPackageRequest(this, package, GetModuleAssemblyRef(moduleInfo, package.Version));
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error(ex, "Failed to create install package request for package '{0}'", packageName.Id);
+                        }
                     }
                 }
             }
 
             return installPackageRequest != null;
-        }
-
-        /// <summary>
-        /// Gets the package repository.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IPackageRepository" />.
-        /// </returns>
-        public IPackageRepository GetPackageRepository()
-        {
-            return PackageRepositoryCache.GetFromCacheOrFetch(PackageSource, () =>
-                {
-                    IPackageRepository packageRepository = null;
-                    try
-                    {
-                        Log.Debug("Creating package repository with source '{0}'", PackageSource);
-
-                        packageRepository = PackageRepositoryFactory.Default.CreateRepository(PackageSource);
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error(e);
-                    }
-
-                    return packageRepository;
-                });
         }
         #endregion
 
@@ -298,26 +288,7 @@ namespace Catel.Modules
         {
             Argument.IsNotNull(() => moduleInfo);
 
-            return !string.IsNullOrWhiteSpace(GetModuleAssemblyRef(moduleInfo)) && File.Exists(new Uri(GetModuleAssemblyRef(moduleInfo)).LocalPath);
-        }
-
-        /// <summary>
-        /// Gets the module assembly ref.
-        /// </summary>
-        /// <param name="moduleInfo">The module info</param>
-        /// <returns>The module assembly ref</returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo" /> is <c>null</c>.</exception>
-        private string GetModuleAssemblyRef(ModuleInfo moduleInfo)
-        {
-            // ReSharper disable once ImplicitlyCapturedClosure
-            Argument.IsNotNull(() => moduleInfo);
-
-            return _assemblyRefCacheStorage.GetFromCacheOrFetch(moduleInfo, () =>
-                {
-                    PackageName packageName = moduleInfo.GetPackageName();
-                    string directoryName = packageName.ToString().Replace(' ', '.');
-                    return string.Format(CultureInfo.InvariantCulture, RelativeUrlPattern, BaseUrl, directoryName, _frameworkNameIdentifier, moduleInfo.GetAssemblyName());
-                });
+            return moduleInfo.GetModuleAssemblyRef(OutputDirectoryAbsoluteUri).IsInstalled;
         }
 
         /// <summary>
@@ -327,29 +298,25 @@ namespace Catel.Modules
         /// <param name="version">The version</param>
         /// <returns>The module assembly ref</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="moduleInfo" /> is <c>null</c>.</exception>
-        private string GetModuleAssemblyRef(ModuleInfo moduleInfo, SemanticVersion version)
+        private ModuleAssemblyRef GetModuleAssemblyRef(ModuleInfo moduleInfo, SemanticVersion version)
         {
-            // ReSharper disable once ImplicitlyCapturedClosure
             Argument.IsNotNull(() => moduleInfo);
 
-            var key = string.Format(CultureInfo.InvariantCulture, "ModuleName:{0}; ModuleType:{1}; Ref:{2}; Version:{3}", moduleInfo.ModuleName, moduleInfo.ModuleType, moduleInfo.Ref, version);
-            return GetModuleAssemblyRef(_moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(key, () => new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType) { Ref = string.Format("{0}, {1}", moduleInfo.GetPackageName().Id, version), DependsOn = moduleInfo.DependsOn }));
+            var moduleInfoKey = string.Format(CultureInfo.InvariantCulture, "ModuleName:{0}; ModuleType:{1}; Ref:{2}; Version:{3}", moduleInfo.ModuleName, moduleInfo.ModuleType, moduleInfo.Ref, version);
+            ModuleInfo moduleInfoFromCache = _moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(moduleInfoKey, () => new ModuleInfo(moduleInfo.ModuleName, moduleInfo.ModuleType) { Ref = string.Format("{0}, {1}", moduleInfo.GetPackageName().Id, version), DependsOn = moduleInfo.DependsOn });
+
+            return moduleInfoFromCache.GetModuleAssemblyRef(OutputDirectoryAbsoluteUri);
         }
 
         /// <summary>
-        /// Gets the available latest version of packaged modules removing.
+        /// Gets the filtered packaged modules.
+        /// <para />
+        /// Override this method to customize the package filtering behavior.
         /// </summary>
-        /// <summary>
-        /// Gets the packaged modules from the repository.
-        /// </summary>
-        /// <returns>
-        /// The packaged modules
-        /// </returns>
-        private IEnumerable<ModuleInfo> GetPackagedModules()
+        /// <param name="queryablePackages">The queryable packages.</param>
+        /// <returns>IEnumerable&lt;IPackage&gt;.</returns>
+        protected virtual IEnumerable<IPackage> GetFilteredPackagedModules(IQueryable<IPackage> queryablePackages)
         {
-            IPackageRepository packageRepository = GetPackageRepository();
-            IQueryable<IPackage> queryablePackages = packageRepository.GetPackages();
-           
             Expression<Func<IPackage, bool>> filterExpression;
             if (!string.IsNullOrWhiteSpace(PackagedModuleIdFilterExpression))
             {
@@ -357,39 +324,125 @@ namespace Catel.Modules
             }
             else
             {
-                filterExpression = package => (package.Description != null && package.Description.StartsWith("ModuleName") && package.Description.Contains("ModuleType"));
+                filterExpression = package => (package.Description != null) && package.Description.StartsWith("ModuleName") && package.Description.Contains("ModuleType");
             }
 
-            IEnumerable<IPackage> packages = queryablePackages.Where(filterExpression).ToList().GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null).ToList();
+            return queryablePackages.Where(filterExpression).ToList().GroupBy(package => package.Id).Select(packageGroup => packageGroup.ToList().OrderByDescending(package => package.Version).FirstOrDefault()).Where(package => package != null).ToList();
+        }
+
+        /// <summary>
+        /// Gets the initialization mode for the specified package.
+        /// </summary>
+        /// <param name="package">The package.</param>
+        /// <returns>InitializationMode.</returns>
+        protected virtual InitializationMode GetPackageInitializationMode(IPackage package)
+        {
+            return DefaultInitializationMode;
+        }
+
+        /// <summary>
+        /// Creates the package module based on a NuGet package.
+        /// <para />
+        /// Override this method to customize the module creation behavior.
+        /// </summary>
+        /// <param name="package">The package.</param>
+        /// <returns>ModuleInfo.</returns>
+        protected virtual ModuleInfo CreatePackageModule(IPackage package)
+        {
+            var match = ModuleDescriptorRegex.Match(package.Description);
+            if (match.Success)
+            {
+                var moduleName = match.Groups[1].Value.Trim();
+                var moduleType = match.Groups[2].Value.Trim();
+                if (!string.IsNullOrWhiteSpace(moduleName) && !string.IsNullOrWhiteSpace(moduleType))
+                {
+                    var @ref = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", package.Id, package.Version);
+                    var dependsOn = new Collection<string>();
+                    if (match.Groups.Count == 5)
+                    {
+                        var dependencies = match.Groups[4].Value.Trim();
+                        if (!string.IsNullOrWhiteSpace(dependencies))
+                        {
+                            dependsOn.AddRange(dependencies.Split(',').Select(dependency => dependency.Trim()));
+                        }
+                    }
+
+                    return new ModuleInfo(moduleName, moduleType)
+                    {
+                        Ref = @ref,
+                        InitializationMode = GetPackageInitializationMode(package),
+                        DependsOn = dependsOn
+                    };
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the available latest version of packaged modules removing.
+        /// </summary>
+        /// <returns>The packaged modules.</returns>
+        private IEnumerable<ModuleInfo> GetPackagedModules()
+        {
+            var packageRepositories = new List<IPackageRepository>(this.GetAllPackageRepositories(false));
 
             var moduleInfos = new List<ModuleInfo>();
-            foreach (var package in packages)
-            {
-                var match = ModuleDescriptorRegex.Match(package.Description);
-                if (match.Success)
-                {
-                    var moduleName = match.Groups[1].Value.Trim();
-                    var moduleType = match.Groups[2].Value.Trim();
-                    if (!string.IsNullOrWhiteSpace(moduleName) && !string.IsNullOrWhiteSpace(moduleType))
-                    {
-                        var @ref = string.Format(CultureInfo.InvariantCulture, "{0}, {1}", package.Id, package.Version);
-                        var key = string.Format(CultureInfo.InvariantCulture, "ModuleName:{0}; ModuleType:{1}; Ref:{2}; Version:{3}", moduleName, moduleType, @ref, package.Version);
-                        var dependsOn = new Collection<string>();
-                        if (match.Groups.Count == 5)
-                        {
-                            string dependencies = match.Groups[4].Value.Trim();
-                            if (!string.IsNullOrWhiteSpace(dependencies))
-                            {
-                                dependsOn.AddRange(dependencies.Split(',').Select(dependency => dependency.Trim()));
-                            }
-                        }
 
-                        moduleInfos.Add(_moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(key, () => new ModuleInfo(moduleName, moduleType) { Ref = @ref, InitializationMode = InitializationMode.OnDemand, DependsOn = dependsOn }));
+            foreach (var packageRepository in packageRepositories)
+            {
+                Log.Debug("Retrieving packaged modules from '{0}'", packageRepository.Source);
+
+                try
+                {
+                    var queryablePackages = packageRepository.GetPackages();
+                    var packages = GetFilteredPackagedModules(queryablePackages);
+
+                    foreach (var package in packages)
+                    {
+                        var module = _moduleInfoCacheStoreCacheStorage.GetFromCacheOrFetch(package.Id, () => CreatePackageModule(package));
+                        if (module != null)
+                        {
+                            moduleInfos.Add(module);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to retrieve packaged modules from '{0}'", packageRepository.Source);
                 }
             }
 
             return moduleInfos;
+        }
+
+        /// <summary>
+        /// Gets the package repository.
+        /// </summary>
+        /// <returns>IPackageRepository.</returns>
+        public IEnumerable<IPackageRepository> GetPackageRepositories()
+        {
+            var packageRepositories = new List<IPackageRepository>();
+
+            packageRepositories.Add(PackageRepositoriesCache.GetFromCacheOrFetch(PackageSource, () =>
+            {
+                IPackageRepository packageRepository = null;
+
+                try
+                {
+                    Log.Debug("Creating package repository with source '{0}'", PackageSource);
+
+                    packageRepository = PackageRepositoryFactory.Default.CreateRepository(PackageSource);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex);
+                }
+
+                return packageRepository;
+            }));
+
+            return packageRepositories;
         }
         #endregion
     }

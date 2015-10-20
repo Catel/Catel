@@ -231,10 +231,12 @@ namespace Catel.MVVM
 
             RaiseCanExecuteChanged();
 
-            Task executionTask = _execute(parameter, _cancellationTokenSource.Token, _progress);
+            var executionTask = _execute(parameter, _cancellationTokenSource.Token, _progress);
+
             try
             {
                 Log.Info("Executing task command...");
+
                 await executionTask.ConfigureAwait(false);
             }
             catch (OperationCanceledException)
@@ -259,6 +261,7 @@ namespace Catel.MVVM
             {
                 RaiseExecuted(parameter);
             }
+
             RaiseCanExecuteChanged();
         }
 
@@ -314,7 +317,40 @@ namespace Catel.MVVM
     /// <typeparamref name="TExecuteParameter" /> as generic type.
     /// </summary>
     /// <typeparam name="TExecuteParameter">The type of the execute parameter.</typeparam>
-    public class TaskCommand<TExecuteParameter> : TaskCommand<TExecuteParameter, TExecuteParameter, ITaskProgressReport>
+    /// <typeparam name="TCanExecuteParameter">The type of the can execute parameter.</typeparam>
+    public class TaskCommand<TExecuteParameter, TCanExecuteParameter> : TaskCommand<TExecuteParameter, TCanExecuteParameter, ITaskProgressReport>
+    {
+        #region Constructors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaskCommand{TExecuteParameter}" /> class.
+        /// </summary>
+        /// <param name="execute">The action to execute.</param>
+        /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
+        /// <param name="tag">The tag of the command.</param>
+        public TaskCommand(Func<TExecuteParameter, Task> execute, Func<TCanExecuteParameter, bool> canExecute = null, object tag = null)
+            : base(execute, canExecute, tag)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaskCommand{TExecuteParameter}" /> class.
+        /// </summary>
+        /// <param name="execute">The action to execute.</param>
+        /// <param name="canExecute">The function to call to determine whether the command can be executed.</param>
+        /// <param name="tag">The tag of the command.</param>
+        public TaskCommand(Func<TExecuteParameter, CancellationToken, Task> execute, Func<TCanExecuteParameter, bool> canExecute = null, object tag = null)
+            : base(execute, canExecute, tag)
+        {
+        }
+        #endregion
+    }
+
+    /// <summary>
+    /// Implements the <see cref="TaskCommand{TExecuteParameter,TCanExecuteParameter,TProgress}" /> class with only the
+    /// <typeparamref name="TExecuteParameter" /> as generic type.
+    /// </summary>
+    /// <typeparam name="TExecuteParameter">The type of the execute parameter.</typeparam>
+    public class TaskCommand<TExecuteParameter> : TaskCommand<TExecuteParameter, TExecuteParameter>
     {
         #region Constructors
         /// <summary>

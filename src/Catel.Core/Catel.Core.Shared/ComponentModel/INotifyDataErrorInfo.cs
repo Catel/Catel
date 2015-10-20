@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET40 || PCL
+#if NET40
 
 namespace System.ComponentModel
 {
@@ -19,7 +19,7 @@ namespace System.ComponentModel
         /// Gets a value indicating whether this object contains any field or business errors.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance has errors; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
         /// </value>
         bool HasErrors { get; }
 

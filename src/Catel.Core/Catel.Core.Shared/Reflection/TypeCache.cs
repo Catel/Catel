@@ -448,7 +448,15 @@ namespace Catel.Reflection
             {
                 if (!_typesByInterface.ContainsKey(interfaceType))
                 {
-                    _typesByInterface[interfaceType] = new HashSet<Type>(GetTypes(interfaceType.ImplementsInterfaceEx));
+                    _typesByInterface[interfaceType] = new HashSet<Type>(GetTypes(x =>
+                    {
+                        if (x == interfaceType)
+                        {
+                            return false;
+                        }
+
+                        return x.ImplementsInterfaceEx(interfaceType);
+                    }));
                 }
 
                 return _typesByInterface[interfaceType].ToArray();
@@ -580,7 +588,7 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
         /// <param name="assembly">The assembly to initialize the types from. If <c>null</c>, all assemblies will be checked.</param>
-        [ObsoleteEx(Replacement = "InitializeTypes(Assembly, bool)", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "InitializeTypes(Assembly, bool)", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
         public static void InitializeTypes(bool forceFullInitialization, Assembly assembly = null)
         {
             InitializeTypes(assembly, forceFullInitialization);
@@ -737,14 +745,14 @@ namespace Catel.Reflection
         }
 
         private static void InitializeType(Assembly assembly, Type type)
-        {
+        {  
             if (ShouldIgnoreType(assembly, type))
             {
                 return;
             }
 
             var newAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName);
-            string newFullType = TypeHelper.FormatType(newAssemblyName, type.FullName);
+            var newFullType = TypeHelper.FormatType(newAssemblyName, type.FullName);
 
             if (!_typesByAssembly.ContainsKey(newAssemblyName))
             {
@@ -826,6 +834,13 @@ namespace Catel.Reflection
             }
 
             var typeName = type.FullName;
+
+            // CTL-653
+            if (string.IsNullOrEmpty(typeName))
+            {
+                // Some types don't have a name (for example, after obfuscation), let's ignore these
+                return true;
+            }
 
             // Ignore useless types
             if (typeName.Contains("<PrivateImplementationDetails>") ||

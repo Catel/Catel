@@ -47,8 +47,9 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="logEvent">The log event.</param>
         /// <param name="extraData">The additional data.</param>
+        /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
+        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
             string consoleMessage = FormatLogEvent(log, message, logEvent, extraData, time);
 

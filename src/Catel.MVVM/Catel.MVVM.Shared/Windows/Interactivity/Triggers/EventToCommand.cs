@@ -89,7 +89,7 @@ namespace Catel.Windows.Interactivity
                 (sender, e) => ((EventToCommand)sender).OnDisableAssociatedObjectOnCannotExecuteChanged((bool)e.NewValue)));
         #endregion
 
-#region Methods
+        #region Methods
         /// <summary>
         /// Called when the <see cref="DisableAssociatedObjectOnCannotExecute"/> property has changed.
         /// </summary>
@@ -104,9 +104,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the <c>CanExecute</c> state of a command has changed.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnCommandCanExecuteChanged(object sender, EventArgs e)
+        protected override void OnCommandCanExecuteChanged()
         {
             UpdateElementState();
         }
@@ -130,7 +128,7 @@ namespace Catel.Windows.Interactivity
                 return;
             }
 
-            object commandParameter = CommandParameter;
+            var commandParameter = CommandParameter;
             if ((commandParameter == null) && PassEventArgsToCommand)
             {
                 commandParameter = parameter;
@@ -173,7 +171,7 @@ namespace Catel.Windows.Interactivity
                 return;
             }
 
-            bool isEnabled = CanExecuteCommand();
+            var isEnabled = CanExecuteCommand();
 
 #if SILVERLIGHT
             var associatedObjectAsControl = AssociatedObject as Control;

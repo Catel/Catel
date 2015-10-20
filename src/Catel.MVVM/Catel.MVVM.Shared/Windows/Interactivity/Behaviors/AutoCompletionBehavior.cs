@@ -36,7 +36,7 @@ namespace Catel.Windows.Interactivity
     /// <summary>
     /// Auto complete behavior to support auto complete on a <c>TextBox</c> control.
     /// </summary>
-    [ObsoleteEx(Replacement = "AutoCompletion", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+    [ObsoleteEx(ReplacementTypeOrMember = "AutoCompletion", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
     public class AutoCompletionBehavior : BehaviorBase<TextBox>
     {
         #region Fields
@@ -80,22 +80,6 @@ namespace Catel.Windows.Interactivity
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets or sets whether the auto completion functionality is enabled.
-        /// </summary>
-        /// <value>The is enabled.</value>
-        public bool IsEnabled
-        {
-            get { return (bool)GetValue(IsEnabledProperty); }
-            set { SetValue(IsEnabledProperty, value); }
-        }
-
-        /// <summary>
-        /// The is enabled property.
-        /// </summary>
-        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool),
-            typeof(AutoCompletionBehavior), new PropertyMetadata(true, (sender, e) => ((AutoCompletionBehavior)sender).OnIsEnabledChanged()));
-
         /// <summary>
         /// Gets or sets the name of the property.
         /// </summary>
@@ -291,7 +275,10 @@ namespace Catel.Windows.Interactivity
             UpdateSuggestions();
         }
 
-        private void OnIsEnabledChanged()
+        /// <summary>
+        /// Called when the is enabled property has changed.
+        /// </summary>
+        protected override void OnIsEnabledChanged()
         {
             if (IsEnabled)
             {

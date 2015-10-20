@@ -23,6 +23,7 @@ namespace Catel.Windows.Controls
     /// <summary>
     /// User control supporting animated gif.
     /// </summary>
+    [ObsoleteEx(ReplacementTypeOrMember = "Orc.Controls, see https://github.com/wildgums/orc.controls", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public class AnimatedGif : System.Windows.Controls.Image
     {
         #region Win32 imports

@@ -8,6 +8,8 @@
 namespace Catel.Reflection
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Extensions for the type class.
@@ -38,6 +40,52 @@ namespace Catel.Reflection
             }
 
             return type.IsClassEx();
+        }
+
+        /// <summary>
+        /// Determines whether the specified type is a collection.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns><c>true</c> if the specified type is a collection; otherwise, <c>false</c>.</returns>
+        public static bool IsCollection(this Type type)
+        {
+            if (type == null)
+            {
+                return false;
+            }
+
+            if (type == typeof(string))
+            {
+                return false;
+            }
+
+            return typeof (IEnumerable).IsAssignableFromEx(type);
+        }
+
+        /// <summary>
+        /// Determines whether the specified type is a dictionary.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns><c>true</c> if the specified type is a dictionary; otherwise, <c>false</c>.</returns>
+        public static bool IsDictionary(this Type type)
+        {
+            if (type == null)
+            {
+                return false;
+            }
+
+            if (type == typeof(string))
+            {
+                return false;
+            }
+
+            if (!type.IsGenericTypeEx())
+            {
+                return false;
+            }
+
+            var genericDefinition = type.GetGenericTypeDefinitionEx();
+            return genericDefinition == typeof(Dictionary<,>);
         }
 
         /// <summary>

@@ -7,6 +7,7 @@
 namespace Catel.MVVM.Providers
 {
     using System;
+    using Logging;
     using Navigation;
     using Views;
     using MVVM;
@@ -19,6 +20,8 @@ namespace Catel.MVVM.Providers
         where T : IView
     {
         #region Fields
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private NavigationAdapter _navigationAdapter;
 
         private bool _hasHandledNavigatingAway;
@@ -157,7 +160,7 @@ namespace Catel.MVVM.Providers
         {
             bool? result = true;
 
-            result = await SaveAndCloseViewModel();
+            result = await SaveAndCloseViewModelAsync();
 
             if (e.Uri != null && e.Uri.IsNavigationToExternal())
             {
@@ -186,14 +189,16 @@ namespace Catel.MVVM.Providers
         /// </summary>
         protected void EnsureViewModel()
         {
-            if (ViewModel == null)
+            var vm = ViewModel;
+            if (vm == null)
             {
-                ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(null);
-
-                if (ViewModel == null)
+                vm = ConstructViewModelUsingArgumentOrDefaultConstructor(null);
+                if (vm == null)
                 {
-                    throw new InvalidViewModelException();
+                    throw Log.ErrorAndCreateException<InvalidViewModelException>("ViewModel cannot be null");
                 }
+
+                ViewModel = vm;
             }
         }
         #endregion

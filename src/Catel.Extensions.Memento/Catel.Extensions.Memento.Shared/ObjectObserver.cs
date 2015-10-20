@@ -31,10 +31,7 @@ namespace Catel.Memento
         /// </summary>
         private readonly Dictionary<string, object> _previousPropertyValues = new Dictionary<string, object>();
 
-        /// <summary>
-        /// Subscription to the weak event listener.
-        /// </summary>
-        private IWeakEventListener _weakEventListener;
+        private INotifyPropertyChanged _object;
         #endregion
 
         #region Constructors
@@ -50,13 +47,16 @@ namespace Catel.Memento
         {
             Argument.IsNotNull("propertyChanged", propertyChanged);
 
-            Log.Debug("Initializing ObjectObserver for type '{0}'", propertyChanged.GetType().Name);
+            var propertyChangedType = propertyChanged.GetType();
 
-            _weakEventListener = this.SubscribeToWeakPropertyChangedEvent(propertyChanged, OnPropertyChanged);
+            Log.Debug("Initializing ObjectObserver for type '{0}'", propertyChangedType.Name);
+
+            _object = propertyChanged;
+            _object.PropertyChanged += OnPropertyChanged;
 
             InitializeDefaultValues(propertyChanged);
 
-            Log.Debug("Initialized ObjectObserver for type '{0}'", propertyChanged.GetType().Name);
+            Log.Debug("Initialized ObjectObserver for type '{0}'", propertyChangedType.Name);
         }
         #endregion
 
@@ -87,9 +87,16 @@ namespace Catel.Memento
                 return;
             }
 
-            object oldValue = _previousPropertyValues[e.PropertyName];
-            _previousPropertyValues[e.PropertyName] = PropertyHelper.GetPropertyValue(sender, e.PropertyName);
-            object newValue = _previousPropertyValues[e.PropertyName];
+            var oldValue = _previousPropertyValues[e.PropertyName];
+            var newValue = PropertyHelper.GetPropertyValue(sender, e.PropertyName);
+
+            // CTL-719: ignore duplicate properties
+            if (ObjectHelper.AreEqual(oldValue, newValue))
+            {
+                return;
+            }
+
+            _previousPropertyValues[e.PropertyName] = newValue;
 
             MementoService.Add(new PropertyChangeUndo(sender, e.PropertyName, oldValue, newValue, Tag));
         }
@@ -103,7 +110,8 @@ namespace Catel.Memento
         {
             Argument.IsNotNull("obj", obj);
 
-            var properties = obj.GetType().GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false));
+            var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, false);
+            var properties = obj.GetType().GetPropertiesEx(bindingFlags);
             foreach (var property in properties)
             {
                 if (!ShouldPropertyBeIgnored(obj, property.Name))
@@ -139,10 +147,10 @@ namespace Catel.Memento
         {
             Log.Debug("Canceling property change subscription");
 
-            if (_weakEventListener != null)
+            if (_object != null)
             {
-                _weakEventListener.Detach();
-                _weakEventListener = null;
+                _object.PropertyChanged -= OnPropertyChanged;
+                _object = null;
             }
 
             _previousPropertyValues.Clear();

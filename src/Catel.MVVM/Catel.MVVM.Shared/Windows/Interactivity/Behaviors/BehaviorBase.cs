@@ -23,7 +23,7 @@ namespace Catel.Windows.Interactivity
 
     /// <summary>
     /// Behavior base class that handles a safe unsubscribe and clean up because the default
-    /// behavior class does not always call <see cref="Behavior.OnDetaching"/>.
+    /// behavior class does not always call <c>OnDetaching</c>.
     /// <para />
     /// This class also adds some specific features such as <see cref="ValidateRequiredProperties"/>
     /// which is automatically called when the behavior is attached.
@@ -42,7 +42,7 @@ namespace Catel.Windows.Interactivity
         /// Gets a value indicating whether the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the <see cref="Behavior{T}.AssociatedObject"/> is loaded; otherwise, <c>false</c>.
+        /// <c>true</c> if the <see cref="Behavior{T}.AssociatedObject"/> is loaded; otherwise, <c>false</c>.
         /// </value>
         public bool IsAssociatedObjectLoaded { get { return _loadCounter > 0; } }
 
@@ -54,6 +54,22 @@ namespace Catel.Windows.Interactivity
         {
             get { return CatelEnvironment.IsInDesignMode; }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this behavior is enabled.
+        /// </summary>
+        /// <value><c>true</c> if this behavior is enabled; otherwise, <c>false</c>.</value>
+        public bool IsEnabled
+        {
+            get { return (bool)GetValue(IsEnabledProperty); }
+            set { SetValue(IsEnabledProperty, value); }
+        }
+
+        /// <summary>
+        /// The IsEnabled property registration.
+        /// </summary>
+        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool), 
+            typeof(BehaviorBase<T>), new PropertyMetadata(true, (sender, e) => ((BehaviorBase<T>)sender).OnIsEnabledChanged()));
         #endregion
 
         #region Methods
@@ -96,6 +112,13 @@ namespace Catel.Windows.Interactivity
             }
 
             base.OnDetaching();
+        }
+
+        /// <summary>
+        /// Called when the <see cref="IsEnabled" /> property has changed.
+        /// </summary>
+        protected virtual void OnIsEnabledChanged()
+        {
         }
 
         /// <summary>

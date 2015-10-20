@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="Catel.ProjectTemplates.WindowsPhone.Application..bf4b52d6-432c-4e07-bb97-b5075c6a60e5" Version="1.0" Language="en-US" Publisher="Geert van Horrik" />
-    <DisplayName>Windows Phone 8.0 application using Catel</DisplayName>
+    <Identity Id="Catel.ProjectTemplates.WindowsPhone.Application..bf4b52d6-432c-4e07-bb97-b5075c6a60e5" Version="4.2" Language="en-US" Publisher="Geert van Horrik" />
+    <DisplayName>Windows Phone Silverlight application using Catel</DisplayName>
     <Description xml:space="preserve">Project template to create an MVVM-based application for Windows Phone using Catel.</Description>
     <MoreInfo>http://www.catelproject.com</MoreInfo>
     <GettingStartedGuide>http://www.catelproject.com</GettingStartedGuide>

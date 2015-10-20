@@ -143,9 +143,7 @@ namespace Catel.IoC
                 var serviceLocator = CreateServiceLocatorFunc();
                 if (serviceLocator == null)
                 {
-                    string error = string.Format("Failed to create the IServiceLocator instance using the factory method");
-                    Log.Error(error);
-                    throw new Exception(error);
+                    throw Log.ErrorAndCreateException<Exception>("Failed to create the IServiceLocator instance using the factory method");
                 }
 
                 if (!serviceLocator.IsTypeRegistered<IDependencyResolver>())
@@ -153,9 +151,7 @@ namespace Catel.IoC
                     var dependencyResolver = CreateDependencyResolverFunc(serviceLocator);
                     if (dependencyResolver == null)
                     {
-                        string error = string.Format("Failed to create the IDependencyResolver instance using the factory method");
-                        Log.Error(error);
-                        throw new Exception(error);
+                        throw Log.ErrorAndCreateException<Exception>("Failed to create the IDependencyResolver instance using the factory method");
                     }
 
                     serviceLocator.RegisterInstance(typeof(IDependencyResolver), dependencyResolver);
@@ -166,9 +162,7 @@ namespace Catel.IoC
                     var typeFactory = CreateTypeFactoryFunc(serviceLocator);
                     if (typeFactory == null)
                     {
-                        string error = string.Format("Failed to create the ITypeFactory instance using the factory method");
-                        Log.Error(error);
-                        throw new Exception(error);
+                        throw Log.ErrorAndCreateException<Exception>("Failed to create the ITypeFactory instance using the factory method");
                     }
 
                     serviceLocator.RegisterInstance(typeof(ITypeFactory), typeFactory);
@@ -190,8 +184,7 @@ namespace Catel.IoC
                         }
                         catch (Exception ex)
                         {
-                            Log.Error(ex, "Failed to initialize service locator using initializer '{0}'", serviceLocatorInitializer.GetSafeFullName());
-                            throw;
+                            throw Log.ErrorAndCreateException<Exception>(ex, "Failed to initialize service locator using initializer '{0}'", serviceLocatorInitializer.GetSafeFullName());
                         }
                     }
                 }

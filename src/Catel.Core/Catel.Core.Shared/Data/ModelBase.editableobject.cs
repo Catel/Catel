@@ -79,7 +79,6 @@ namespace Catel.Data
             #endregion
 
             #region Methods
-
             /// <summary>
             /// Creates a backup of the object property values.
             /// </summary>
@@ -92,8 +91,11 @@ namespace Catel.Data
                                               where !propertyData.Value.IncludeInBackup
                                               select propertyData.Value.Name).ToArray();
 
-                    var serializer = SerializationFactory.GetXmlSerializer();
-                    serializer.SerializeMembers(_object, stream, propertiesToIgnore);
+                    var serializer = _object.Serializer;
+                    if (serializer != null)
+                    {
+                        serializer.SerializeMembers(_object, stream, propertiesToIgnore);
+                    }
 
                     _propertyValuesBackup = stream.ToByteArray();
                 }
@@ -113,8 +115,13 @@ namespace Catel.Data
                 {
                     try
                     {
-                        var serializer = SerializationFactory.GetXmlSerializer();
-                        var properties = serializer.DeserializeMembers(_object.GetType(), stream);
+                        var properties = new List<MemberValue>();
+
+                        var serializer = _object.Serializer;
+                        if (serializer != null)
+                        {
+                            properties = serializer.DeserializeMembers(_object.GetType(), stream);    
+                        }
 
                         oldPropertyValues = properties.ToDictionary(property => property.Name, property => property.Value);
                     }
@@ -140,7 +147,6 @@ namespace Catel.Data
 
                 _object.IsDirty = (bool)_objectValuesBackup[IsDirty];
             }
-
             #endregion
         }
         #endregion

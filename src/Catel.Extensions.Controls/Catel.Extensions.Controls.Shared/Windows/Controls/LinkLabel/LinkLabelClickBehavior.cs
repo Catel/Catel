@@ -11,6 +11,7 @@ namespace Catel.Windows.Controls
     /// <summary>
     /// Available <see cref="LinkLabel"/> clickevent behaviors.
     /// </summary>
+    [ObsoleteEx(ReplacementTypeOrMember = "Orc.Controls, see https://github.com/wildgums/orc.controls", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
     public enum LinkLabelClickBehavior
     {
         /// <summary>

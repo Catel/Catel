@@ -6,12 +6,15 @@
 namespace Catel.Caching.Policies
 {
     using System;
+    using Logging;
 
     /// <summary>
     /// The expiration policy.
     /// </summary>
     public abstract class ExpirationPolicy
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         #region Constructors
 
         /// <summary>
@@ -105,7 +108,7 @@ namespace Catel.Caching.Policies
             {
                 if (!CanReset)
                 {
-                    throw new InvalidOperationException("This policy can't be reset");
+                    throw Log.ErrorAndCreateException<InvalidOperationException>("This policy can't be reset");
                 }
 
                 OnReset();

@@ -43,6 +43,9 @@ namespace Catel.Configuration
 #if NET
         private readonly DynamicConfiguration _configuration;
         private readonly string _configFilePath;
+#elif ANDROID
+        private readonly global::Android.Content.ISharedPreferences _preferences =
+            global::Android.Preferences.PreferenceManager.GetDefaultSharedPreferences(global::Android.App.Application.Context);
 #endif
 
         private bool _suspendNotifications = false;
@@ -128,6 +131,8 @@ namespace Catel.Configuration
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
+            key = GetFinalKey(key);
+
             if (!ValueExists(key))
             {
                 return defaultValue;
@@ -159,10 +164,13 @@ namespace Catel.Configuration
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
+            var originalKey = key;
+            key = GetFinalKey(key);
+
             var stringValue = ObjectToStringHelper.ToString(value);
             SetValueToStore(key, stringValue);
 
-            RaiseConfigurationChanged(key, value);
+            RaiseConfigurationChanged(originalKey, value);
         }
 
         /// <summary>
@@ -174,6 +182,8 @@ namespace Catel.Configuration
         public bool IsValueAvailable(string key)
         {
             Argument.IsNotNullOrWhitespace("key", key);
+
+            key = GetFinalKey(key);
 
             return ValueExists(key);
         }
@@ -201,8 +211,10 @@ namespace Catel.Configuration
         /// <returns><c>true</c> if the value exists, <c>false</c> otherwise.</returns>
         protected virtual bool ValueExists(string key)
         {
-#if PCL || XAMARIN
-            throw new NotSupportedInPlatformException();
+#if PCL || (XAMARIN && !ANDROID)
+            throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
+#elif ANDROID
+            return _preferences.Contains(key);
 #elif NETFX_CORE
             var settings = ApplicationData.Current.RoamingSettings;
             return settings.Values.ContainsKey(key);
@@ -221,8 +233,10 @@ namespace Catel.Configuration
         /// <returns>The value.</returns>
         protected virtual string GetValueFromStore(string key)
         {
-#if PCL || XAMARIN
-            throw new NotSupportedInPlatformException();
+#if PCL || (XAMARIN && !ANDROID)
+            throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
+#elif ANDROID
+            return _preferences.GetString(key, null);
 #elif NETFX_CORE
             var settings = ApplicationData.Current.RoamingSettings;
             return (string)settings.Values[key];
@@ -241,8 +255,12 @@ namespace Catel.Configuration
         /// <param name="value">The value.</param>
         protected virtual void SetValueToStore(string key, string value)
         {
-#if PCL || XAMARIN
-            throw new NotSupportedInPlatformException();
+#if PCL || (XAMARIN && !ANDROID)
+            throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
+#elif ANDROID
+            _preferences.Edit()
+                        .PutString(key, value)
+                        .Apply();
 #elif NETFX_CORE
             var settings = ApplicationData.Current.RoamingSettings;
             settings.Values[key] = value;
@@ -259,6 +277,18 @@ namespace Catel.Configuration
             _configuration.SetConfigurationValue(key, value);
             _configuration.SaveAsXml(_configFilePath);
 #endif
+        }
+
+        /// <summary>
+        /// Gets the final key. This method allows customization of the key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string GetFinalKey(string key)
+        {
+            key = key.Replace(" ", "_");
+
+            return key;
         }
 
         private void RaiseConfigurationChanged(string key, object value)

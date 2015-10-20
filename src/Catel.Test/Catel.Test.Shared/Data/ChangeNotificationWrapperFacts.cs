@@ -8,6 +8,8 @@ namespace Catel.Test.Data
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using Catel.Collections;
     using Catel.Data;
 
     using NUnit.Framework;
@@ -216,6 +218,47 @@ namespace Catel.Test.Data
             }
 
             [TestCase]
+            public void HandlesCollectionChangesByResetCorrectly()
+            {
+                var collection = new FastObservableCollection<TestModel>();
+                var wrapper = new ChangeNotificationWrapper(collection);
+
+                var itemsReset = false;
+                var itemsAdded = false;
+                var itemsRemoved = false;
+
+                var model = new TestModel();
+                collection.Add(model);
+
+                wrapper.CollectionChanged += (sender, e) =>
+                {
+                    if (e.OldItems != null)
+                    {
+                        itemsRemoved = true;
+                    }
+
+                    if (e.Action == NotifyCollectionChangedAction.Reset)
+                    {
+                        itemsReset = true;
+                    }
+
+                    if (e.NewItems != null)
+                    {
+                        itemsAdded = true;
+                    }
+                };
+
+                using (collection.SuspendChangeNotifications())
+                {
+                    collection.ReplaceRange(new [] { new TestModel() });
+                }
+
+                Assert.IsFalse(itemsAdded);
+                Assert.IsFalse(itemsRemoved);
+                Assert.IsTrue(itemsReset);
+            }
+
+            [TestCase]
             public void HandlesCollectionItemPropertyChangesCorrectly()
             {
                 var collection = new ObservableCollection<TestModel>();
@@ -255,6 +298,65 @@ namespace Catel.Test.Data
 
                 collection.Clear();
                 
+                model.FirstName = "Geert";
+
+                Assert.IsFalse(collectionItemPropertyChanged);
+            }
+
+            [TestCase]
+            public void HandlesChangesOfSuspendedFastObservableCollectionCorrectly()
+            {
+                var collection = new FastObservableCollection<TestModel>();
+                TestModel model = null;
+
+                for (int i = 0; i < 10; i++)
+                {
+                    var randomModel = new TestModel();
+                    collection.Add(randomModel);
+                }
+
+                var wrapper = new ChangeNotificationWrapper(collection);
+
+                var collectionItemPropertyChanged = false;
+                wrapper.CollectionItemPropertyChanged += (sender, e) => collectionItemPropertyChanged = true;
+
+                var newModel = new TestModel();
+
+                using (collection.SuspendChangeNotifications())
+                {
+                    collection.Clear();
+                    collection.Add(newModel);
+                }
+
+                newModel.FirstName = "Geert";
+
+                Assert.IsTrue(collectionItemPropertyChanged);
+            }
+
+            [TestCase]
+            public void HandlesClearOfSuspendedFastObservableCollectionCorrectly()
+            {
+                var collection = new FastObservableCollection<TestModel>();
+                TestModel model = null;
+
+                for (int i = 0; i < 10; i++)
+                {
+                    var randomModel = new TestModel();
+                    collection.Add(randomModel);
+                }
+
+                model = collection[0];
+
+                var wrapper = new ChangeNotificationWrapper(collection);
+
+                var collectionItemPropertyChanged = false;
+                wrapper.CollectionItemPropertyChanged += (sender, e) => collectionItemPropertyChanged = true;
+
+                using (collection.SuspendChangeNotifications())
+                {
+                    collection.Clear();
+                }
+
                 model.FirstName = "Geert";
 
                 Assert.IsFalse(collectionItemPropertyChanged);

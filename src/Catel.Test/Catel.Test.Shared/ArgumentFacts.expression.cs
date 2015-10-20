@@ -57,7 +57,6 @@ namespace Catel.Test
             public void ThrowsArgumentExceptionForNullExpression()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrEmpty((Expression<Func<string>>)null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrEmpty((Expression<Func<Guid>>)null));
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrEmpty((Expression<Func<Guid?>>)null));
             }
 
@@ -65,7 +64,6 @@ namespace Catel.Test
             public void ThrowsArgumentExceptionForNullOrEmptyParameterInvokation()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsNotNullInvokation(string.Empty));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsNotNullInvokation(Guid.Empty));
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsNotNullInvokation((string)null));
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => IsNotNullInvokation(null as Guid?));
                 Guid? param01 = Guid.Empty;
@@ -86,11 +84,6 @@ namespace Catel.Test
                 Argument.IsNotNullOrEmpty(() => param01);
             }
 
-            private void IsNotNullInvokation(Guid param01)
-            {
-                Argument.IsNotNullOrEmpty(() => param01);
-            }
-
             private void IsNotNullInvokation(Guid? param01)
             {
                 Argument.IsNotNullOrEmpty(() => param01);
@@ -103,7 +96,6 @@ namespace Catel.Test
             public void ThrowsArgumentExceptionForNullExpression()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotNullOrWhitespace(null));
-
             }
 
             [TestCase]
@@ -117,7 +109,6 @@ namespace Catel.Test
             {
                 IsNotNullOrWhitespaceInvokation("string");
             }
-
 
             private void IsNotNullOrWhitespaceInvokation(string param01)
             {
@@ -157,19 +148,15 @@ namespace Catel.Test
             public void ThrowsArgumentExceptionForNullExpression()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotOutOfRange<double>(null, 0, 0, null));
-#if NET
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotOutOfRange<double>(null, 0, 0));
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsNotOutOfRange<int>(null, 0, 0));
-#endif
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForOutOfRangeInvokation()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsNotOutOfRangeInvokation(3, 1, 2));
-#if NET
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsNotOutOfRangeInvokation(3.0d, 1.0d, 2.0d));
-#endif
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsNotOutOfRangeInvokation(3.0d, 1.0d, 2.0d, (d, d1, arg3) => false));
             }
 
@@ -177,9 +164,7 @@ namespace Catel.Test
             public void SucceedsForNotOutOfRangeInvokation()
             {
                 IsNotOutOfRangeInvokation(1, 0, 2);
-#if NET
                 IsNotOutOfRangeInvokation(1.0d, 0.0d, 2.0d);
-#endif
                 IsNotOutOfRangeInvokation(1.0d, 0.0d, 2.0d, (d, d1, d2) => true);
             }
 
@@ -189,12 +174,11 @@ namespace Catel.Test
                 Argument.IsNotOutOfRange(() => param01, min, max);
             }
 
-#if NET
             private void IsNotOutOfRangeInvokation<T>(T param01, T min, T max)
+                where T : IComparable
             {
                 Argument.IsNotOutOfRange(() => param01, min, max);
             }
-#endif
 
             private void IsNotOutOfRangeInvokation<T>(T param01, T min, T max, Func<T, T, T, bool> validation)
             {
@@ -208,19 +192,15 @@ namespace Catel.Test
             public void ThrowsArgumentExceptionForNullExpression()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsMinimal<double>(null, 0, null));
-#if NET
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsMinimal<double>(null, 0));
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsMinimal<int>(null, 0));
-#endif
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIsMinimalInvokation()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsMinimalInvokation(0, 1));
-#if NET
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsMinimalInvokation(0.0d, 1.0d));
-#endif
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsMinimalInvokation(0.0d, 1.0d, (d, d1) => false));
             }
 
@@ -228,9 +208,7 @@ namespace Catel.Test
             public void SucceedsForIsMinimalInvokation()
             {
                 IsMinimalInvokation(0, 0);
-#if NET
                 IsMinimalInvokation(0.0d, 0.0d);
-#endif
                 IsMinimalInvokation(0.0d, 0.0d, (d, d1) => true);
             }
 
@@ -240,12 +218,12 @@ namespace Catel.Test
                 Argument.IsMinimal(() => param01, min);
             }
 
-#if NET
             private void IsMinimalInvokation<T>(T param01, T min)
+                where T : IComparable
             {
                 Argument.IsMinimal(() => param01, min);
             }
-#endif
+
             private void IsMinimalInvokation<T>(T param01, T min, Func<T, T, bool> validation)
             {
                 Argument.IsMinimal(() => param01, min, validation);
@@ -258,19 +236,15 @@ namespace Catel.Test
             public void ThrowsArgumentExceptionForNullExpression()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsMaximum<double>(null, 0, null));
-#if NET
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsMaximum<double>(null, 0));
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Argument.IsMaximum<int>(null, 0));
-#endif
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIsMaximumInvokation()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsMaximumInvokation(1, 0));
-#if NET
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsMaximumInvokation(1.0d, 0.0d));
-#endif
                 ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => IsMaximumInvokation(1.0d, 0.0d, (d, d1) => false));
             }
 
@@ -278,23 +252,20 @@ namespace Catel.Test
             public void SucceedsForIsMinimalInvokation()
             {
                 IsMaximumInvokation(0, 0);
-#if NET
                 IsMaximumInvokation(0.0d, 0.0d);
-#endif
                 IsMaximumInvokation(0.0d, 0.0d, (d, d1) => true);
             }
-
 
             private void IsMaximumInvokation(int param01, int min)
             {
                 Argument.IsMaximum(() => param01, min);
             }
-#if NET
+
             private void IsMaximumInvokation<T>(T param01, T min)
+                where T : IComparable
             {
                 Argument.IsMaximum(() => param01, min);
             }
-#endif
 
             private void IsMaximumInvokation<T>(T param01, T min, Func<T, T, bool> validation)
             {

@@ -88,9 +88,7 @@ namespace Catel.Windows.Interactivity
 
             if (_authenticationProvider == null)
             {
-                const string error = "No IAuthenticationProvider is registered, cannot use the Authentication behavior without an IAuthenticationProvider";
-                Log.Error(error);
-                throw new NotSupportedException(error);
+                throw Log.ErrorAndCreateException<NotSupportedException>("No IAuthenticationProvider is registered, cannot use the Authentication behavior without an IAuthenticationProvider");
             }
         }
         #endregion

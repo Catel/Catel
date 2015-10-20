@@ -71,7 +71,7 @@ namespace Catel.Test.IO
         //}
 
         [TestCase]
-        public void GetApplicationDataDirectoryForAppOnly()
+        public void GetApplicationDataDirectory_AppOnly()
         {
             string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                                            Assembly.GetExecutingAssembly().Product());
@@ -104,6 +104,46 @@ namespace Catel.Test.IO
 
             // Now create the directory
             string result = Path.GetApplicationDataDirectory(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
+
+            // Check if the directory exists
+            Assert.AreEqual(directory, result);
+            Assert.IsTrue(Directory.Exists(result));
+        }
+
+        [TestCase]
+        public void GetApplicationDataDirectoryForAllUsers_AppOnly()
+        {
+            string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                                           Assembly.GetExecutingAssembly().Product());
+
+            string result = Path.GetApplicationDataDirectoryForAllUsers(Assembly.GetExecutingAssembly().Product());
+
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestCase]
+        public void GetApplicationDataDirectoryForAllUsers_CompanyAndApp()
+        {
+            string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                                           Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
+
+            string result = Path.GetApplicationDataDirectoryForAllUsers(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
+
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestCase]
+        public void GetApplicationDataDirectoryForAllUsers_CompanyAndAppAndTestDirectoryCreation()
+        {
+            // Set up directory
+            string directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                                            Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
+
+            // Make sure that the directory does not exist
+            if (Directory.Exists(directory)) Directory.Delete(directory);
+
+            // Now create the directory
+            string result = Path.GetApplicationDataDirectoryForAllUsers(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
             // Check if the directory exists
             Assert.AreEqual(directory, result);

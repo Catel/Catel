@@ -22,7 +22,7 @@
 	
 	<dependencies>
           <dependency id="Catel.Core" version="[VERSION]" />
-          <dependency id="EntityFramework" version="6.1.0" />                   
+          <dependency id="EntityFramework" version="[replaced]" />                   
 	</dependencies>
 	
   </metadata>

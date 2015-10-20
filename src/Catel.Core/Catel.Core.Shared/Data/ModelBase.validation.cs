@@ -6,6 +6,7 @@
 
 namespace Catel.Data
 {
+    using Runtime.Serialization;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -302,6 +303,16 @@ namespace Catel.Data
         /// </summary>
         /// <value><c>true</c> if the validation must be suspended by default; otherwise, <c>false</c>.</value>
         public static bool DefaultSuspendValidationValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the validation should not try to process data annotations.
+        /// </summary>
+        protected bool ValidateUsingDataAnnotations { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the validation should not try to process data annotations.
+        /// </summary>
+        public static bool DefaultValidateUsingDataAnnotationsValue { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the validation for all classes deriving from <see cref="ModelBase"/> should be suspended.
@@ -721,7 +732,7 @@ namespace Catel.Data
         /// </remarks>
         protected void Validate(bool force = false)
         {
-            Validate(force, true);
+            Validate(force, ValidateUsingDataAnnotations);
         }
 
         /// <summary>
@@ -1232,9 +1243,11 @@ namespace Catel.Data
         /// </returns>
         IEnumerable INotifyDataErrorInfo.GetErrors(string propertyName)
         {
+            var elements = new List<string>();
+
             if (HideValidationResults)
             {
-                yield return null;
+                return elements;
             }
 
             if (string.IsNullOrEmpty(propertyName))
@@ -1243,7 +1256,7 @@ namespace Catel.Data
                 {
                     foreach (var error in _validationContext.GetBusinessRuleErrors())
                     {
-                        yield return error.Message;
+                        elements.Add(error.Message);
                     }
 
                 }
@@ -1254,10 +1267,12 @@ namespace Catel.Data
                 {
                     foreach (var error in _validationContext.GetFieldErrors(propertyName))
                     {
-                        yield return error.Message;
+                        elements.Add(error.Message);
                     }
                 }
             }
+
+            return elements;
         }
         #endregion
 
@@ -1303,9 +1318,11 @@ namespace Catel.Data
         /// <returns><see cref="IEnumerable"/> of warnings.</returns>
         IEnumerable INotifyDataWarningInfo.GetWarnings(string propertyName)
         {
+            var elements = new List<string>();
+
             if (HideValidationResults)
             {
-                yield return null;
+                return elements;
             }
 
             if (string.IsNullOrEmpty(propertyName))
@@ -1314,7 +1331,7 @@ namespace Catel.Data
                 {
                     foreach (var warning in _validationContext.GetBusinessRuleWarnings())
                     {
-                        yield return warning.Message;
+                        elements.Add(warning.Message);
                     }
 
                 }
@@ -1325,10 +1342,12 @@ namespace Catel.Data
                 {
                     foreach (var warning in _validationContext.GetFieldWarnings(propertyName))
                     {
-                        yield return warning.Message;
+                        elements.Add(warning.Message);
                     }
                 }
             }
+
+            return elements;
         }
         #endregion
 

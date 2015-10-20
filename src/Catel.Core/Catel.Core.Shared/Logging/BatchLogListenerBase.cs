@@ -9,7 +9,6 @@ namespace Catel.Logging
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -20,8 +19,6 @@ namespace Catel.Logging
     {
         #region Fields
         private readonly object _lock = new object();
-        private readonly object _flushLock = new object();
-        private int _flushCount;
 
         private readonly Timer _timer;
         private List<LogBatchEntry> _logBatch = new List<LogBatchEntry>();
@@ -59,15 +56,17 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="logEvent">The log event.</param>
         /// <param name="extraData">The additional data.</param>
+        /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
+        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
             lock (_lock)
             {
-                _logBatch.Add(new LogBatchEntry(log, message, logEvent, extraData, time));
+                _logBatch.Add(new LogBatchEntry(log, message, logEvent, extraData, logData, time));
 
                 if (_logBatch.Count >= MaximumBatchCount)
                 {
+                    // TODO: remove pragma in 5.0.0
 #pragma warning disable 4014
                     Flush();
 #pragma warning restore 4014
@@ -81,6 +80,7 @@ namespace Catel.Logging
             {
                 if (_logBatch.Count > 0)
                 {
+                    // TODO: remove pragma in 5.0.0
 #pragma warning disable 4014
                     Flush();
 #pragma warning restore 4014
@@ -92,6 +92,7 @@ namespace Catel.Logging
         /// Flushes the current queue asynchronous.
         /// </summary>
         /// <returns>Task so it can be awaited.</returns>
+        // TODO: change to public void in 5.0.0
         public async Task Flush()
         {
             List<LogBatchEntry> batchToSubmit;
@@ -103,31 +104,10 @@ namespace Catel.Logging
                 _logBatch = new List<LogBatchEntry>();
             }
 
-            await Task.Factory.StartNew(() =>
-            {
-                while (true)
-                {
-                    lock (_flushLock)
-                    {
-                        if (_flushCount == 0)
-                        {
-                            _flushCount++;
-                            return;
-                        }
-                    }
-
-                    ThreadHelper.Sleep(10);
-                }
-            });
-
             if (batchToSubmit.Count > 0)
             {
+                // TODO: remove in 5.0.0
                 await WriteBatch(batchToSubmit);
-            }
-
-            lock (_flushLock)
-            {
-                _flushCount--;
             }
         }
 
@@ -136,6 +116,7 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="batchEntries">The batch entries.</param>
         /// <returns>Task so this can be done asynchronously.</returns>
+        // TODO: change to abstract void in 5.0.0
         protected abstract Task WriteBatch(List<LogBatchEntry> batchEntries);
         #endregion
     }

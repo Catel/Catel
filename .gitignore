@@ -45,6 +45,7 @@ obj
 *.vspscc
 *.xap
 .builds
+.vs/
 
 # Visual C++ cache files
 ipch/
@@ -126,3 +127,4 @@ Desktop.ini
 # mstest test results
 TestResults
 src/UpgradeLog.htm
+src/_NCrunch_*/

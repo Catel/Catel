@@ -8,20 +8,21 @@ namespace Catel.Services
 {
     using System;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Windows;
 
     using Catel.Caching;
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.MVVM.Views;
-    using Catel.Windows.Controls;
-
     using Microsoft.Practices.Prism.Regions;
+    using Reflection;
+    using Threading;
 
     /// <summary>
     /// The user interface composition service.
     /// </summary>
-    public sealed class UICompositionService : ViewModelServiceBase,  IUICompositionService
+    public sealed class UICompositionService : ViewModelServiceBase, IUICompositionService
     {
         #region Constants
         /// <summary>
@@ -46,51 +47,47 @@ namespace Catel.Services
         #endregion
 
         #region Fields
-        /// <summary>
-        /// The region manager.
-        /// </summary>
         private readonly IRegionManager _regionManager;
-
-        /// <summary>
-        /// The view manager.
-        /// </summary>
         private readonly IViewManager _viewManager;
-
-        /// <summary>
-        /// The view locator.
-        /// </summary>
         private readonly IViewLocator _viewLocator;
-
-        /// <summary>
-        /// The dispatcher service.
-        /// </summary>
         private readonly IDispatcherService _dispatcherService;
+        private readonly IViewModelManager _viewModelManager;
+        private readonly IViewModelFactory _viewModelFactory;
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UICompositionService"/> class.
+        /// Initializes a new instance of the <see cref="UICompositionService" /> class.
         /// </summary>
         /// <param name="regionManager">The region manager</param>
         /// <param name="viewManager">The view manager</param>
         /// <param name="viewLocator">The view locator</param>
         /// <param name="dispatcherService">The dispatcher service</param>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="regionManager"/> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="viewManager"/> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="viewLocator"/> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
-        public UICompositionService(IRegionManager regionManager, IViewManager viewManager, IViewLocator viewLocator, IDispatcherService dispatcherService)
+        /// <param name="viewModelManager">The view model manager.</param>
+        /// <param name="viewModelFactory">The view model factory.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="regionManager" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="viewManager" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="viewLocator" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="dispatcherService" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="viewModelManager" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="viewModelFactory" /> is <c>null</c>.</exception>
+        public UICompositionService(IRegionManager regionManager, IViewManager viewManager, IViewLocator viewLocator, 
+            IDispatcherService dispatcherService, IViewModelManager viewModelManager, IViewModelFactory viewModelFactory)
         {
             Argument.IsNotNull(() => regionManager);
             Argument.IsNotNull(() => viewManager);
             Argument.IsNotNull(() => viewLocator);
             Argument.IsNotNull(() => dispatcherService);
+            Argument.IsNotNull(() => viewModelManager);
+            Argument.IsNotNull(() => viewModelFactory);
 
-            this._regionManager = regionManager;
-            this._viewManager = viewManager;
-            this._viewLocator = viewLocator;
-            this._dispatcherService = dispatcherService;
+            _regionManager = regionManager;
+            _viewManager = viewManager;
+            _viewLocator = viewLocator;
+            _dispatcherService = dispatcherService;
+            _viewModelManager = viewModelManager;
+            _viewModelFactory = viewModelFactory;
         }
         #endregion
 
@@ -119,27 +116,25 @@ namespace Catel.Services
 
             if (ReferenceEquals(viewModel, parentViewModel))
             {
-                var exception = new InvalidOperationException(ReferenceEqualsInvalidOperationExceptionMessage);
-
-                Log.Error(exception);
-
-                throw exception;
+                throw Log.ErrorAndCreateException<InvalidOperationException>(ReferenceEqualsInvalidOperationExceptionMessage);
             }
 
-            IView[] viewsOfParentViewModel = this._viewManager.GetViewsOfViewModel(parentViewModel);
-            IRegionInfo regionInfo = viewsOfParentViewModel.OfType<DependencyObject>().Select(dependencyObject => dependencyObject.GetRegionInfo(regionName)).FirstOrDefault(info => info != null);
+            var viewsOfParentViewModel = _viewManager.GetViewsOfViewModel(parentViewModel);
+            var regionInfo = viewsOfParentViewModel.OfType<DependencyObject>().Select(dependencyObject => dependencyObject.GetRegionInfo(regionName)).FirstOrDefault(info => info != null);
             if (regionInfo != null)
             {
-                this.Activate(viewModel, regionInfo);
+                Activate(viewModel, regionInfo);
 
-                if (parentViewModel is IRelationalViewModel)
+                var parentRelationalViewModel = parentViewModel as IRelationalViewModel;
+                if (parentRelationalViewModel != null)
                 {
-                    (parentViewModel as IRelationalViewModel).RegisterChildViewModel(viewModel);
+                    parentRelationalViewModel.RegisterChildViewModel(viewModel);
                 }
 
-                if (viewModel is IRelationalViewModel)
+                var relationalViewModel = viewModel as IRelationalViewModel;
+                if (relationalViewModel != null)
                 {
-                    (viewModel as IRelationalViewModel).SetParentViewModel(parentViewModel);
+                    relationalViewModel.SetParentViewModel(parentViewModel);
                 }
             }
         }
@@ -154,19 +149,48 @@ namespace Catel.Services
         /// <exception cref="InvalidOperationException">If <paramref name="regionName" /> is <c>null</c> and the <paramref name="viewModel" /> was no show at least one time in a <see cref="IRegion" />.</exception>
         /// <exception cref="NotSupportedException">If the implementation of IRegionManager is not registered in the IoC container</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
         public void Activate(IViewModel viewModel, string regionName = null)
         {
             Argument.IsNotNull(() => viewModel);
 
             if (string.IsNullOrEmpty(regionName))
             {
-                this.Reactivate(viewModel);
+                Reactivate(viewModel);
             }
             else
             {
-                this.Activate(viewModel, regionName, this._regionManager);
+                Activate(viewModel, regionName, this._regionManager);
             }
+        }
+
+        /// <summary>
+        /// Tries to activate an existing view model in the specified region name. If there is no view model alive, it will create one
+        /// and navigate to that view model.
+        /// </summary>
+        /// <param name="viewModelType">The view model type.</param>
+        /// <param name="regionName">Name of the region.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
+        public void Activate(Type viewModelType, string regionName)
+        {
+            Argument.IsNotNull("viewModelType", viewModelType);
+            Argument.IsNotNullOrWhitespace("regionName", regionName);
+
+            var activeVm = (from vm in _viewModelManager.ActiveViewModels
+                            where viewModelType == vm.GetType()
+                            select vm).FirstOrDefault();
+            if (activeVm == null)
+            {
+                Log.Debug("Could not find active instance of '{0}', trying to instantiate", viewModelType.GetSafeFullName());
+
+                activeVm = _viewModelFactory.CreateViewModel(viewModelType, null);
+            }
+
+            if (activeVm == null)
+            {
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Could not find an existing instance of '{0}' and could not construct it using the IViewModelFactory. It is impossible to activate this view model.", viewModelType.GetSafeFullName());
+            }
+
+            Activate(activeVm, regionName);
         }
 
         /// <summary>
@@ -179,27 +203,38 @@ namespace Catel.Services
         {
             Argument.IsNotNull(() => viewModel);
 
-            IViewInfo viewInfo = ViewInfoCacheStorage[viewModel.UniqueIdentifier];
+            Log.Debug("Deactivating '{0}'", viewModel.GetType().GetSafeFullName());
+
+            var viewInfo = ViewInfoCacheStorage[viewModel.UniqueIdentifier];
             if (viewInfo == null)
             {
-                throw new InvalidOperationException(ActivationRequiredInvalidOperationErrorMessage);
+                throw Log.ErrorAndCreateException<InvalidOperationException>(ActivationRequiredInvalidOperationErrorMessage);
             }
 
-            FrameworkElement view = viewInfo.View;
-            IRegion region = viewInfo.Region;
+            var view = viewInfo.View;
+            var region = viewInfo.Region;
 
-            this._dispatcherService.Invoke(() =>
+            _dispatcherService.Invoke(() =>
+            {
+                region.Deactivate(view);
+                if (viewModel.IsClosed)
                 {
-                    region.Deactivate(view);
-                    if (viewModel.IsClosed)
-                    {
-                        ViewInfoCacheStorage.Remove(viewModel.UniqueIdentifier, () => region.Remove(view));
-                    }
-                });
+                    ViewInfoCacheStorage.Remove(viewModel.UniqueIdentifier, () => region.Remove(view));
+                }
+            }, true);
         }
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Activates a view into a specific <see cref="IRegion" /> from a given view model and the <see cref="IRegionInfo"/>.
+        /// </summary>
+        /// <param name="viewModel">The view model</param>
+        /// <param name="regionInfo">The region info</param>
+        private void Activate(IViewModel viewModel, IRegionInfo regionInfo)
+        {
+            Activate(viewModel, regionInfo.RegionName, regionInfo.RegionManager);
+        }
 
         /// <summary>
         /// Activates a view into a specific <see cref="IRegion" /> from a given view model, the region name and the <see cref="RegionManager"/>.
@@ -209,38 +244,29 @@ namespace Catel.Services
         /// <param name="regionManager">The region Manager</param>
         private void Activate(IViewModel viewModel, string regionName, IRegionManager regionManager)
         {
+            Log.Debug("Activating '{0}' in region '{1}'", viewModel.GetType().GetSafeFullName(), regionName);
+
             if (regionManager != null && regionManager.Regions.ContainsRegionWithName(regionName))
             {
-                IViewInfo viewInfo = ViewInfoCacheStorage.GetFromCacheOrFetch(viewModel.UniqueIdentifier, () => new ViewInfo(ViewHelper.ConstructViewWithViewModel(this._viewLocator.ResolveView(viewModel.GetType()), viewModel), regionManager.Regions[regionName]));
+                var viewInfo = ViewInfoCacheStorage.GetFromCacheOrFetch(viewModel.UniqueIdentifier, () => new ViewInfo(ViewHelper.ConstructViewWithViewModel(this._viewLocator.ResolveView(viewModel.GetType()), viewModel), regionManager.Regions[regionName]));
 
-                IRegion region = viewInfo.Region;
-                FrameworkElement view = viewInfo.View;
+                var region = viewInfo.Region;
+                var view = viewInfo.View;
 
-                this._dispatcherService.Invoke(() =>
+                _dispatcherService.Invoke(() =>
+                {
+                    if (!region.ActiveViews.Contains(view))
                     {
-                        if (!region.ActiveViews.Contains(view))
+                        if (!region.Views.Contains(view))
                         {
-                            if (!region.Views.Contains(view))
-                            {
-                                region.Add(view);
-                                viewModel.Closed += this.ViewModelOnClosed;
-                            }
-
-                            region.Activate(view);
+                            region.Add(view);
+                            viewModel.ClosedAsync += ViewModelOnClosedAsync;
                         }
-                    });
+
+                        region.Activate(view);
+                    }
+                }, true);
             }
-        }
-
-
-        /// <summary>
-        /// Activates a view into a specific <see cref="IRegion" /> from a given view model and the <see cref="IRegionInfo"/>.
-        /// </summary>
-        /// <param name="viewModel">The view model</param>
-        /// <param name="regionInfo">The region info</param>
-        private void Activate(IViewModel viewModel, IRegionInfo regionInfo)
-        {
-            this.Activate(viewModel, regionInfo.RegionName, regionInfo.RegionManager);
         }
 
         /// <summary>
@@ -248,11 +274,13 @@ namespace Catel.Services
         /// </summary>
         /// <param name="sender">The view model</param>
         /// <param name="e">The event args</param>
-        private void ViewModelOnClosed(object sender, ViewModelClosedEventArgs e)
+        private Task ViewModelOnClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
             var viewModel = (IViewModel)sender;
-            viewModel.Closed -= this.ViewModelOnClosed;
-            this.Deactivate(viewModel);
+            viewModel.ClosedAsync -= ViewModelOnClosedAsync;
+            Deactivate(viewModel);
+
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -263,16 +291,16 @@ namespace Catel.Services
         /// <exception cref="InvalidOperationException">If the <paramref name="viewModel" /> was no show at least one time in a <see cref="IRegion" />.</exception>
         private void Reactivate(IViewModel viewModel)
         {
-            IViewInfo viewInfo = ViewInfoCacheStorage[viewModel.UniqueIdentifier];
+            var viewInfo = ViewInfoCacheStorage[viewModel.UniqueIdentifier];
             if (viewInfo == null)
             {
                 throw new InvalidOperationException(ActivationRequiredInvalidOperationErrorMessage);
             }
 
-            FrameworkElement view = viewInfo.View;
-            IRegion region = viewInfo.Region;
+            var view = viewInfo.View;
+            var region = viewInfo.Region;
 
-            this._dispatcherService.Invoke(() => region.Activate(view));
+            _dispatcherService.Invoke(() => region.Activate(view), true);
         }
         #endregion
 
@@ -286,12 +314,8 @@ namespace Catel.Services
             /// <summary>
             /// Initializes a new instance of the <see cref="ViewInfo" /> class.
             /// </summary>
-            /// <param name="view">
-            /// The view.
-            /// </param>
-            /// <param name="region">
-            /// The region.
-            /// </param>
+            /// <param name="view">The view.</param>
+            /// <param name="region">The region.</param>
             public ViewInfo(FrameworkElement view, IRegion region)
                 : base(view, region)
             {
@@ -304,10 +328,7 @@ namespace Catel.Services
             /// </summary>
             FrameworkElement IViewInfo.View
             {
-                get
-                {
-                    return this.Item1;
-                }
+                get { return Item1; }
             }
 
             /// <summary>
@@ -315,10 +336,7 @@ namespace Catel.Services
             /// </summary>
             IRegion IViewInfo.Region
             {
-                get
-                {
-                    return this.Item2;
-                }
+                get { return Item2; }
             }
             #endregion
         }

@@ -14,6 +14,7 @@ namespace Catel.ExceptionHandling
     using Logging;
     using Reflection;
     using System.Threading;
+    using Threading;
 
     /// <summary>
     /// The exception service allows the usage of the Try/Catch mechanics. This means that this service provides possibilities
@@ -148,7 +149,8 @@ namespace Catel.ExceptionHandling
         /// <returns>
         /// The exception handler.
         /// </returns>
-        public IExceptionHandler GetHandler<TException>() where TException : Exception
+        public IExceptionHandler GetHandler<TException>() 
+            where TException : Exception
         {
             var exceptionType = typeof(TException);
 
@@ -333,18 +335,6 @@ namespace Catel.ExceptionHandling
         /// <summary>
         /// Processes the specified action with possibilty to retry on error.
         /// </summary>
-        /// <param name="action">The action.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public void ProcessWithRetry(Action action)
-        {
-            Argument.IsNotNull("action", action);
-
-            ProcessWithRetry(() => { action(); return default(object); });
-        }
-
-        /// <summary>
-        /// Processes the specified action with possibilty to retry on error.
-        /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="action">The action.</param>
         /// <returns></returns>
@@ -417,23 +407,119 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
+        /// Processes asynchrounously the specified action with possibilty to retry on error.
+        /// </summary>
+        /// <typeparam name="TResult">The result type.</typeparam>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public async Task<TResult> ProcessWithRetryAsync<TResult>(Func<Task<TResult>> action)
+        {
+            Argument.IsNotNull("action", action);
+
+            var retryCount = 1;
+
+            while (true)
+            {
+                Exception lastError;
+                TimeSpan interval;
+
+                try
+                {
+                    return await action().ConfigureAwait(false);
+                }
+                catch (Exception exception)
+                {
+                    lock (_exceptionHandlers)
+                    {
+                        lastError = exception;
+
+                        var exceptionHandler = ExceptionHandlers.FirstOrDefault(handler => handler.ExceptionType.IsAssignableFromEx(lastError.GetType()));
+                        if (exceptionHandler != null && exceptionHandler.RetryPolicy != null)
+                        {
+                            var retryPolicy = exceptionHandler.RetryPolicy;
+
+                            retryCount++;
+
+                            if (retryCount <= retryPolicy.NumberOfTimes)
+                            {
+                                interval = retryPolicy.Interval;
+                            }
+                            else
+                            {
+                                if (!HandleException(lastError))
+                                {
+                                    throw;
+                                }
+
+                                return default(TResult);
+                            }
+                        }
+                        else
+                        {
+                            if (!HandleException(lastError))
+                            {
+                                throw;
+                            }
+
+                            return default(TResult);
+                        }
+                    }
+                }
+
+                if (interval.TotalMilliseconds < 0)
+                {
+                    interval = TimeSpan.FromMilliseconds(1);
+                }
+
+                OnRetryingAction(retryCount, lastError, interval);
+
+                Log.Debug("Retrying action for the '{0}' times", retryCount);
+
+                ThreadHelper.Sleep((int)interval.TotalMilliseconds);
+            }
+        }
+
+        /// <summary>
         /// Processes the specified action. The action will be executed asynchrounously.
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public async Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken))
+        [ObsoleteEx(Message = "Member will be removed because it's not truly asynchronous", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        public Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken))
         {
             Argument.IsNotNull("action", action);
 
             try
             {
-#if NET40 || SL5 || PCL
-                await Task.Factory.StartNew(action, cancellationToken);
-#else
-                await Task.Run(action, cancellationToken);
-#endif
+                return TaskHelper.Run(action, cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                if (!HandleException(exception))
+                {
+                    throw;
+                }
+            }
+
+            return TaskHelper.Completed;
+        }
+
+        /// <summary>
+        /// Processes the specified action.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        public async Task ProcessAsync(Task action)
+        {
+            Argument.IsNotNull("action", action);
+
+            try
+            {
+                await action.ConfigureAwait(false);
             }
             catch (Exception exception)
             {
@@ -450,21 +536,13 @@ namespace Catel.ExceptionHandling
         /// <param name="action">The action.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-#if NET40 || SL5 || PCL
-        public Task ProcessAsync(Func<Task> action)
-#else
         public async Task ProcessAsync(Func<Task> action)
-#endif
         {
             Argument.IsNotNull("action", action);
 
             try
             {
-#if NET40 || SL5 || PCL
-                action().Wait();
-#else
-                await action();
-#endif
+                await action().ConfigureAwait(false);
             }
             catch (Exception exception)
             {
@@ -473,10 +551,6 @@ namespace Catel.ExceptionHandling
                     throw;
                 }
             }
-
-#if NET40 || SL5 || PCL
-            return default(Task);
-#endif
         }
 
         /// <summary>
@@ -487,17 +561,13 @@ namespace Catel.ExceptionHandling
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public async Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken))
         {
             Argument.IsNotNull("action", action);
 
             try
             {
-#if NET40 || SL5 || PCL
-                return await Task.Factory.StartNew(action, cancellationToken);
-#else
-                return await Task.Run(action, cancellationToken);
-#endif
+                return TaskHelper.Run(action, cancellationToken);
             }
             catch (Exception exception)
             {
@@ -507,7 +577,7 @@ namespace Catel.ExceptionHandling
                 }
             }
 
-            return default(TResult);
+            return TaskHelper<TResult>.DefaultValue;
         }
 
         /// <summary>
@@ -523,7 +593,7 @@ namespace Catel.ExceptionHandling
 
             try
             {
-                return await action();
+                return await action().ConfigureAwait(false);
             }
             catch (Exception exception)
             {

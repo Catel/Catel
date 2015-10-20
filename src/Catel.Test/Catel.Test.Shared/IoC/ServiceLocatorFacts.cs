@@ -993,6 +993,10 @@ namespace Catel.Test.IoC
             {
             }
 
+            public interface IWindowsIdentityService { }
+
+            public class WindowsIdentityService : IWindowsIdentityService { }
+
             [TestCase]
             public void RegistersWithDefaultNamingConvention()
             {
@@ -1002,6 +1006,18 @@ namespace Catel.Test.IoC
                 serviceLocator.RegisterTypesUsingDefaultNamingConvention();
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
+            }
+
+            //Test case for issue CTL-673
+            [TestCase]
+            public void RegistersWithDefaultNamingConventionForITwice()
+            {
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+                serviceLocator.RegisterType<IRegistrationConventionHandler, RegistrationConventionHandler>();
+
+                serviceLocator.RegisterTypesUsingDefaultNamingConvention();
+
+                Assert.IsTrue(serviceLocator.IsTypeRegistered<IWindowsIdentityService>());
             }
 
             [TestCase]

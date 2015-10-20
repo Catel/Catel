@@ -70,6 +70,11 @@ namespace Catel.Windows.Interactivity
 
         private void UpdateVisibility()
         {
+            if (!IsEnabled)
+            {
+                return;
+            }
+
             var viewModelContainer = AssociatedObject as IViewModelContainer;
             if (viewModelContainer != null)
             {

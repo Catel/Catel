@@ -12,6 +12,7 @@ namespace Catel.Modules
     using Logging;
 
     using Microsoft.Practices.Prism.Modularity;
+    using Threading;
 
     /// <summary>
     /// Allows the combination of serveral module catalogs into a single module catalog.
@@ -25,16 +26,17 @@ namespace Catel.Modules
     /// <![CDATA[
     /// public class Bootstrapper : BootstrapperBase<Shell, CompositeModuleCatalog>
     /// {
-    /// 	protected override void ConfigureModuleCatalog()
-    /// 	{
-    ///			ModuleCatalog.Add(new DirectoryModuleCatalog { ModulePath = @".\" + ModuleBase.ModulesDirectory});
-    ///			ModuleCatalog.Add(new ConfigurationModuleCatalog());
-    /// 	}
+    ///     protected override void ConfigureModuleCatalog()
+    ///     {
+    ///         ModuleCatalog.Add(new DirectoryModuleCatalog { ModulePath = @".\" + ModuleBase.ModulesDirectory});
+    ///         ModuleCatalog.Add(new ConfigurationModuleCatalog());
+    ///     }
     /// }
     /// ]]>
     ///  </code>
     /// </example>
-    public class CompositeModuleCatalog<TModuleCatalog> : ModuleCatalog where TModuleCatalog : IModuleCatalog
+    public class CompositeModuleCatalog<TModuleCatalog> : ModuleCatalog
+        where TModuleCatalog : IModuleCatalog
     {
         #region Fields
 
@@ -60,12 +62,12 @@ namespace Catel.Modules
         {
             get
             {
-                foreach (IModuleCatalogItem moduleCatalogItem in Items)
+                foreach (var moduleCatalogItem in Items)
                 {
                     yield return moduleCatalogItem;
                 }
 
-                foreach (TModuleCatalog moduleCatalog in _moduleCatalogs)
+                foreach (var moduleCatalog in _moduleCatalogs)
                 {
                     IEnumerable<IModuleCatalogItem> moduleCatalogItems = null;
 
@@ -80,9 +82,9 @@ namespace Catel.Modules
 
                     if (moduleCatalogItems != null)
                     {
-                        foreach (IModuleCatalogItem moduleCatalogItem in moduleCatalogItems)
+                        foreach (var moduleCatalogItem in moduleCatalogItems)
                         {
-                            yield return moduleCatalogItem;    
+                            yield return moduleCatalogItem;
                         }
                     }
                 }
@@ -104,20 +106,17 @@ namespace Catel.Modules
         /// </remarks>
         public override void Initialize()
         {
-            _synchronizationContext.Execute(() =>
+            foreach (var moduleCatalog in _moduleCatalogs)
+            {
+                try
                 {
-                    foreach (var moduleCatalog in _moduleCatalogs)
-                    {
-                        try
-                        {
-                            moduleCatalog.Initialize();
-                        }
-                        catch (ModularityException e)
-                        {
-                            Log.Warning(e);
-                        }
-                    }
-                });
+                    moduleCatalog.Initialize();
+                }
+                catch (ModularityException e)
+                {
+                    Log.Warning(e);
+                }
+            }
 
             base.Initialize();
         }
@@ -125,19 +124,18 @@ namespace Catel.Modules
         /// <summary>
         /// Add a module catalog.
         /// </summary>
-        /// <param name="moduleCatalog">
-        /// The module catalog.
-        /// </param>
-        /// <exception cref="System.ArgumentNullException">
-        /// The <paramref name="moduleCatalog"/> is <c>null</c>.
-        /// </exception>
+        /// <param name="moduleCatalog">The module catalog.</param>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="moduleCatalog" /> is <c>null</c>.</exception>
         public void Add(TModuleCatalog moduleCatalog)
         {
             Argument.IsNotNull("moduleCatalog", moduleCatalog);
-            
+
             Log.Debug("Adding a module catalog to a composition");
 
-            _synchronizationContext.Execute(() => _moduleCatalogs.Add(moduleCatalog));
+            using (_synchronizationContext.AcquireScope())
+            {
+                _moduleCatalogs.Add(moduleCatalog);
+            }
 
             EnsureCatalogValidated();
         }
@@ -145,12 +143,13 @@ namespace Catel.Modules
         /// <summary>
         /// The module catalogs.
         /// </summary>
-        protected ReadOnlyCollection<TModuleCatalog> ModuleCatalogs 
-        { 
+        protected ReadOnlyCollection<TModuleCatalog> ModuleCatalogs
+        {
             get
             {
-                return _synchronizationContext.Execute(() => _moduleCatalogs.AsReadOnly());
-            } 
+                // Don't lock, might be used from multiple threads
+                return _moduleCatalogs.AsReadOnly();
+            }
         }
 
         /// <summary>
@@ -160,26 +159,25 @@ namespace Catel.Modules
         {
             get
             {
-                _synchronizationContext.Acquire();
-                
-                List<TModuleCatalog> moduleCatalogs = _moduleCatalogs;
-                foreach (TModuleCatalog moduleCatalog in moduleCatalogs)
-                {
-                    var compositeModuleCatalog = moduleCatalog as CompositeModuleCatalog<IModuleCatalog>;
-                    if (compositeModuleCatalog != null)
+                //using (_synchronizationContext.AcquireScope())
+                //{
+                    var moduleCatalogs = _moduleCatalogs;
+                    foreach (var moduleCatalog in moduleCatalogs)
                     {
-                        foreach (IModuleCatalog leafCatalog in compositeModuleCatalog.LeafCatalogs)
+                        var compositeModuleCatalog = moduleCatalog as CompositeModuleCatalog<IModuleCatalog>;
+                        if (compositeModuleCatalog != null)
                         {
-                            yield return leafCatalog;
-                        }           
+                            foreach (var leafCatalog in compositeModuleCatalog.LeafCatalogs)
+                            {
+                                yield return leafCatalog;
+                            }
+                        }
+                        else
+                        {
+                            yield return moduleCatalog;
+                        }
                     }
-                    else
-                    {
-                        yield return moduleCatalog;
-                    }
-                }
-
-                _synchronizationContext.Release();
+                //}
             }
         }
 
@@ -198,11 +196,11 @@ namespace Catel.Modules
     /// <![CDATA[
     /// public class Bootstrapper : BootstrapperBase<Shell, CompositeModuleCatalog>
     /// {
-    /// 	protected override void ConfigureModuleCatalog()
-    /// 	{
-    ///			ModuleCatalog.Add(new DirectoryModuleCatalog { ModulePath = @".\" + ModuleBase.ModulesDirectory});
-    ///			ModuleCatalog.Add(new ConfigurationModuleCatalog());
-    /// 	}
+    ///     protected override void ConfigureModuleCatalog()
+    ///     {
+    ///         ModuleCatalog.Add(new DirectoryModuleCatalog { ModulePath = @".\" + ModuleBase.ModulesDirectory});
+    ///         ModuleCatalog.Add(new ConfigurationModuleCatalog());
+    ///     }
     /// }
     /// ]]>
     ///  </code>

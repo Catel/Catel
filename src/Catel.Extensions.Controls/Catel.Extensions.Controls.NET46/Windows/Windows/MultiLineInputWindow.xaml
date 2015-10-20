@@ -1,0 +1,24 @@
+﻿<catel:DataWindow x:Class="Catel.Windows.MultiLineInputWindow"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:catel="http://catel.codeplex.com"
+                  xmlns:Controls="clr-namespace:Catel.Windows.Controls"
+                  Title="Change text">
+	
+  <!-- Content -->
+  <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+      
+    <!-- Row definitions -->
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+        
+    <!-- Input control -->
+    <Controls:MultiLineInput Grid.Row="0"
+                             Caption="{Binding Explanation}"
+                             Text="{Binding Text}"
+                             Width="500"
+                             Height="200"
+                             Margin="6" />
+  </Grid>
+</catel:DataWindow>

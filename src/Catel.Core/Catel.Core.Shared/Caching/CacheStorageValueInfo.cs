@@ -18,43 +18,28 @@ namespace Catel.Caching
     internal class CacheStorageValueInfo<TValue>
     {
         #region Fields
-
-        /// <summary>
-        /// The expiration policy.
-        /// </summary>
         private readonly ExpirationPolicy _expirationPolicy;
 
-        /// <summary>
-        /// The value.
-        /// </summary>
-        private TValue _value;
+        private readonly TValue _value;
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CacheStorageValueInfo{TValue}"/> class.
+        /// Initializes a new instance of the <see cref="CacheStorageValueInfo{TValue}" /> class.
         /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <param name="expiration">
-        /// The expiration.
-        /// </param>
+        /// <param name="value">The value.</param>
+        /// <param name="expiration">The expiration.</param>
         public CacheStorageValueInfo(TValue value, TimeSpan expiration)
             : this(value, ExpirationPolicy.Duration(expiration))
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CacheStorageValueInfo{TValue}"/> class.
+        /// Initializes a new instance of the <see cref="CacheStorageValueInfo{TValue}" /> class.
         /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <param name="expirationPolicy">
-        /// The expiration policy.
-        /// </param>
+        /// <param name="value">The value.</param>
+        /// <param name="expirationPolicy">The expiration policy.</param>
         public CacheStorageValueInfo(TValue value, ExpirationPolicy expirationPolicy = null)
         {
             _value = value;

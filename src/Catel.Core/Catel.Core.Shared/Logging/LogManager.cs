@@ -448,33 +448,32 @@ namespace Catel.Logging
         /// </summary>
         public static void FlushAll()
         {
-            TaskHelper.RunAndWait(() => FlushAllAsync().Wait());
+            var logListenersToFlush = new List<IBatchLogListener>();
+
+            var logListeners = GetThreadSafeLogListeners();
+            foreach (var listener in logListeners)
+            {
+                var batchListener = listener as IBatchLogListener;
+                if (batchListener != null)
+                {
+                    logListenersToFlush.Add(batchListener);
+                }
+            }
+
+            foreach (var logListenerToFlush in logListenersToFlush)
+            {
+                logListenerToFlush.Flush();
+            }
         }
 
         /// <summary>
         /// Flushes all listeners that implement the <see cref="IBatchLogListener" /> by calling <see cref="IBatchLogListener.Flush" />.
         /// </summary>
         /// <returns>Task so it can be awaited.</returns>
-        public static async Task FlushAllAsync()
+        [ObsoleteEx(Message = "Member will be removed because it's not truly asynchronous", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        public static Task FlushAllAsync()
         {
-            var logListenersToFlush = new List<IBatchLogListener>();
-
-            lock (_logListeners)
-            {
-                foreach (var listener in _logListeners)
-                {
-                    var batchListener = listener as IBatchLogListener;
-                    if (batchListener != null)
-                    {
-                        logListenersToFlush.Add(batchListener);
-                    }
-                }
-            }
-
-            foreach (var logListenerToFlush in logListenersToFlush)
-            {
-                await logListenerToFlush.Flush();
-            }
+            return TaskHelper.Run(() => FlushAll());
         }
 
         /// <summary>
@@ -483,10 +482,7 @@ namespace Catel.Logging
         /// <returns>An enumerable of all listeners.</returns>
         public static IEnumerable<ILogListener> GetListeners()
         {
-            lock (_logListeners)
-            {
-                return _logListeners;
-            }
+            return GetThreadSafeLogListeners();
         }
 
         /// <summary>
@@ -504,11 +500,11 @@ namespace Catel.Logging
             lock (_logListeners)
             {
                 _logListeners.Add(listener);
-
-                LogInfo.UpdateLogInfo();
-
-                Log.Debug("Added listener '{0}' to log manager", listener.GetType().FullName);
             }
+
+            LogInfo.UpdateLogInfo();
+
+            Log.Debug("Added listener '{0}' to log manager", listener.GetType().FullName);
         }
 
         /// <summary>
@@ -523,11 +519,11 @@ namespace Catel.Logging
             lock (_logListeners)
             {
                 _logListeners.Remove(listener);
-
-                LogInfo.UpdateLogInfo();
-
-                Log.Debug("Removed listener '{0}' from log manager", listener.GetType().FullName);
             }
+
+            LogInfo.UpdateLogInfo();
+
+            Log.Debug("Removed listener '{0}' from log manager", listener.GetType().FullName);
         }
 
         /// <summary>
@@ -562,6 +558,22 @@ namespace Catel.Logging
         }
 
         /// <summary>
+        /// Gets the current log listeners in a thread-safe manner.
+        /// </summary>
+        /// <returns>List&lt;ILogListener&gt;.</returns>
+        private static List<ILogListener> GetThreadSafeLogListeners()
+        {
+            var logListeners = new List<ILogListener>();
+
+            lock (_logListeners)
+            {
+                logListeners.AddRange(_logListeners);
+            }
+
+            return logListeners;
+        }
+
+        /// <summary>
         /// Called when one of the logs has written a log message.
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -581,40 +593,38 @@ namespace Catel.Logging
 
             LogMessage.SafeInvoke(sender, e);
 
-            lock (_logListeners)
+            var logListeners = GetThreadSafeLogListeners();
+            if (logListeners.Count == 0)
             {
-                if (_logListeners.Count == 0)
-                {
-                    return;
-                }
+                return;
+            }
 
-                foreach (var listener in _logListeners)
+            foreach (var listener in logListeners)
+            {
+                if (IsListenerInterested(listener, e.LogEvent))
                 {
-                    if (IsListenerInterested(listener, e.LogEvent))
+                    listener.Write(e.Log, e.Message, e.LogEvent, e.ExtraData, e.LogData, e.Time);
+
+                    switch (e.LogEvent)
                     {
-                        listener.Write(e.Log, e.Message, e.LogEvent, e.ExtraData, e.Time);
+                        case LogEvent.Debug:
+                            listener.Debug(e.Log, e.Message, e.ExtraData, e.LogData, e.Time);
+                            break;
 
-                        switch (e.LogEvent)
-                        {
-                            case LogEvent.Debug:
-                                listener.Debug(e.Log, e.Message, e.ExtraData, e.Time);
-                                break;
+                        case LogEvent.Info:
+                            listener.Info(e.Log, e.Message, e.ExtraData, e.LogData, e.Time);
+                            break;
 
-                            case LogEvent.Info:
-                                listener.Info(e.Log, e.Message, e.ExtraData, e.Time);
-                                break;
+                        case LogEvent.Warning:
+                            listener.Warning(e.Log, e.Message, e.ExtraData, e.LogData, e.Time);
+                            break;
 
-                            case LogEvent.Warning:
-                                listener.Warning(e.Log, e.Message, e.ExtraData, e.Time);
-                                break;
+                        case LogEvent.Error:
+                            listener.Error(e.Log, e.Message, e.ExtraData, e.LogData, e.Time);
+                            break;
 
-                            case LogEvent.Error:
-                                listener.Error(e.Log, e.Message, e.ExtraData, e.Time);
-                                break;
-
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                 }
             }

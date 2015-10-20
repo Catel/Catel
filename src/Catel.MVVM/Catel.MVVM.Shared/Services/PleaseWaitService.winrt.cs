@@ -31,6 +31,7 @@ namespace Catel.Services
         #region IPleaseWaitService Members
         partial void SetStatus(string status)
         {
+#pragma warning disable 4014
             _busyIndicator.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 if (status == null)
@@ -43,6 +44,7 @@ namespace Catel.Services
                     _statusTextBlock.Text = status;
                 }
             });
+#pragma warning restore 4014
         }
 
         partial void InitializeBusyIndicator()

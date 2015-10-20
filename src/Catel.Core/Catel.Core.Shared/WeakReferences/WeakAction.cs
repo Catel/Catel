@@ -17,11 +17,6 @@ namespace Catel
     {
         #region Fields
         /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
         /// WeakReference to the target listening for the event.
         /// </summary>
         private readonly WeakReference _weakTarget;
@@ -54,7 +49,7 @@ namespace Catel
         /// Gets a value indicating whether the event target has not yet been garbage collected.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the event target has not yet been garbage collected; otherwise, <c>false</c>.
+        /// <c>true</c> if the event target has not yet been garbage collected; otherwise, <c>false</c>.
         /// </value>
         /// <remarks>
         /// In case of static event handlers, this property always returns <c>false</c>.
@@ -100,25 +95,18 @@ namespace Catel
         {
             Argument.IsNotNull("action", action);
 
-#if NETFX_CORE || PCL
-            Log.Warning("Since WinRT won't allow specific reflection, the WeakAction is implemented as regular action");
-
-            _action = action;
-#else
-            MethodName = action.Method.ToString();
+            var methodInfo = action.GetMethodInfoEx();
+            MethodName = methodInfo.ToString();
 
             if (MethodName.Contains("_AnonymousDelegate>"))
             {
-                const string error = "Anonymous delegates are not supported because they are located in a private class";
-                Log.Error(error);
-                throw new NotSupportedException(error);
+                throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
             }
 
             var targetType = (target != null) ? target.GetType() : typeof(object);
             var delegateType = typeof(OpenInstanceAction<>).MakeGenericType(targetType);
 
-            _action = DelegateHelper.CreateDelegate(delegateType, action.Method);
-#endif
+            _action = DelegateHelper.CreateDelegate(delegateType, methodInfo);
         }
 
         /// <summary>
@@ -195,25 +183,18 @@ namespace Catel
         {
             Argument.IsNotNull("action", action);
 
-#if NETFX_CORE || PCL
-            Log.Warning("Since WinRT won't allow specific reflection, the WeakAction is implemented as regular action");
-
-            _action = action;
-#else
-            MethodName = action.Method.ToString();
+            var methodInfo = action.GetMethodInfoEx();
+            MethodName = methodInfo.ToString();
 
             if (MethodName.Contains("_AnonymousDelegate>"))
             {
-                const string error = "Anonymous delegates are not supported because they are located in a private class";
-                Log.Error(error);
-                throw new NotSupportedException(error);
+                throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
             }
 
             var targetType = (target != null) ? target.GetType() : typeof(object);
             var delegateType = typeof(OpenInstanceGenericAction<>).MakeGenericType(typeof(TParameter), targetType);
 
-            _action = DelegateHelper.CreateDelegate(delegateType, action.Method);
-#endif
+            _action = DelegateHelper.CreateDelegate(delegateType, methodInfo);
         }
 
         /// <summary>
@@ -261,7 +242,7 @@ namespace Catel
         /// </summary>
         /// <param name="parameter">The parameter.</param>
         /// <returns>
-        /// 	<c>true</c> if the action is executed successfully; otherwise <c>false</c>.
+        /// <c>true</c> if the action is executed successfully; otherwise <c>false</c>.
         /// </returns>
         bool IExecuteWithObject.ExecuteWithObject(object parameter)
         {

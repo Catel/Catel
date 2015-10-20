@@ -41,7 +41,12 @@ namespace Catel.Windows.Interactivity
         /// The Password Property
         /// </summary>
         public static readonly DependencyProperty PasswordProperty = DependencyProperty.Register("Password", typeof (string), typeof(UpdateBindingOnPasswordChanged),
-            new PropertyMetadata(null, (sender, e) => ((UpdateBindingOnPasswordChanged)sender).OnPasswordChanged(e)));
+#if NET
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+#else
+            new PropertyMetadata(null,
+#endif
+                (sender, e) => ((UpdateBindingOnPasswordChanged)sender).OnPasswordChanged(e)));
 
         /// <summary>
         /// Called when the password has been changed.
@@ -81,6 +86,11 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
         private void OnPasswordChanged(object sender, RoutedEventArgs e)
         {
+            if (!IsEnabled)
+            {
+                return;
+            }
+
 #if (NET || NETFX_CORE)
             Password = AssociatedObject.Password;
 #else

@@ -20,7 +20,7 @@ using System.Runtime.CompilerServices;
 ////[assembly: AssemblyDescription("DEFINED IN ACTUAL ASSEMBLYINFO")]
 
 [assembly: AssemblyCompany("CatenaLogic")]
-[assembly: AssemblyCopyright("Copyright © CatenaLogic 2010 - 2014")]
+[assembly: AssemblyCopyright("Copyright © CatenaLogic 2010 - 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en-US")]
@@ -35,8 +35,8 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("4.1")]
-[assembly: AssemblyInformationalVersion("4.1, manually built in Visual Studio")]
+[assembly: AssemblyVersion("4.4")]
+[assembly: AssemblyInformationalVersion("4.4, manually built in Visual Studio")]
 
 #if DEBUG
 
@@ -44,6 +44,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("NET40, Debug")]
 #elif NET45
 [assembly: AssemblyConfiguration("NET45, Debug")]
+#elif NET46
+[assembly: AssemblyConfiguration("NET46, Debug")]
 #elif NET50
 [assembly: AssemblyConfiguration("NET50, Debug")]
 #elif SL5
@@ -58,6 +60,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("Windows 8.0, Debug")]
 #elif WIN81
 [assembly: AssemblyConfiguration("Windows 8.1, Debug")]
+#elif UAP100
+[assembly: AssemblyConfiguration("Universal Windows 10.0, Debug")]
 #elif PCL
 [assembly: AssemblyConfiguration("PCL, Debug")]
 #elif XAMARIN && ANDROID
@@ -74,6 +78,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("NET40, Release")]
 #elif NET45
 [assembly: AssemblyConfiguration("NET45, Release")]
+#elif NET46
+[assembly: AssemblyConfiguration("NET46, Release")]
 #elif NET50
 [assembly: AssemblyConfiguration("NET50, Release")]
 #elif SL5
@@ -88,6 +94,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("Windows 8.0, Release")]
 #elif WIN81
 [assembly: AssemblyConfiguration("Windows 8.1, Release")]
+#elif UAP100
+[assembly: AssemblyConfiguration("Universal Windows 10.0, Release")]
 #elif PCL
 [assembly: AssemblyConfiguration("PCL, Release")]
 #elif XAMARIN && ANDROID
@@ -100,10 +108,10 @@ using System.Runtime.CompilerServices;
 
 #endif
 
-// CLS compliant
-#if !NETFX_CORE && !XAMARIN && !TEST
-[assembly: CLSCompliant(true)]
-#endif
+//// CLS compliant
+//#if !NETFX_CORE && !XAMARIN && !TEST
+//[assembly: CLSCompliant(true)]
+//#endif
 
 #if STRONGNAME_ASSEMBLIES
 
@@ -162,6 +170,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Catel.Extensions.Interception")]
 [assembly: InternalsVisibleTo("Catel.Extensions.Memento")]
 [assembly: InternalsVisibleTo("Catel.Extensions.Prism")]
+[assembly: InternalsVisibleTo("Catel.Extensions.Prism5")]
 
 [assembly: InternalsVisibleTo("Catel.Test")]
 #endif

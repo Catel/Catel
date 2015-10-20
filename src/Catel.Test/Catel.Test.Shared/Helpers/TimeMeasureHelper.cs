@@ -28,9 +28,9 @@ namespace Catel.Test
             GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 #endif
 
-            double totalMs = 0d;
+            var totalMs = 0d;
 
-            for (int i = 0; i < timesToInvoke; i++)
+            for (var i = 0; i < timesToInvoke; i++)
             {
 #if !SILVERLIGHT
                 var innerStopwatch = new Stopwatch();
@@ -45,7 +45,7 @@ namespace Catel.Test
                 var elapsed = innerStopwatch.Elapsed.TotalMilliseconds;
                 totalMs += elapsed;
 
-                ConsoleHelper.Write("{0} => run {1} took {2} ms", description, i + 1, elapsed);
+                //ConsoleHelper.Write("{0} => run {1} took {2} ms", description, i + 1, elapsed);
 #endif
             }
 

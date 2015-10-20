@@ -35,7 +35,7 @@
             secondPerson.LastName = "Person";
             secondPerson.ContactInfo.Street = "Another street";
             secondPerson.ContactInfo.City = "Another city";
-            secondPerson.ContactInfo.Email = "Another email";            
+            secondPerson.ContactInfo.Email = "Another email";
 
             var viewModel = new MultipleModelMappingsViewModel(firstPerson);
 
@@ -235,7 +235,7 @@
             viewModel.FirstName = "test1";
             Assert.AreEqual("test1", person.FirstName);
 
-            await viewModel.CloseViewModel(true);
+            await viewModel.CloseViewModelAsync(true);
             viewModel.FirstName = "test2";
 
             Assert.AreEqual("test1", person.FirstName);
@@ -348,9 +348,9 @@
 
             person.FirstName = "geert";
 
-            // Only model must have changed
+            // When initiated from model => VM should change
             Assert.AreEqual("geert", person.FirstName);
-            Assert.AreNotEqual(person.FirstName, viewModel.FirstNameAsExplicit);
+            Assert.AreEqual(person.FirstName, viewModel.FirstNameAsExplicit);
         }
 
         [TestCase]
@@ -364,7 +364,7 @@
 
             viewModel.FirstNameAsExplicit = "geert";
 
-            // Only view model model must have changed
+            // When initiated from VM => nothing should change
             Assert.AreEqual("geert", viewModel.FirstNameAsExplicit);
             Assert.AreNotEqual(person.FirstName, viewModel.FirstNameAsExplicit);
         }
@@ -442,7 +442,7 @@
 #endif
             Assert.IsTrue(validationTriggered, "Validating event is not triggered");
 
-            await childViewModel.CloseViewModel(null);
+            await childViewModel.CloseViewModelAsync(null);
 
             validationTriggered = false;
             validatedEvent.Reset();
@@ -556,7 +556,7 @@
 
             viewModel.FirstName = "new";
 
-            await viewModel.SaveAndCloseViewModel();
+            await viewModel.SaveAndCloseViewModelAsync();
 
             Assert.IsFalse(model.IsInEditSession);
             Assert.AreEqual("new", person.FirstName);
@@ -575,10 +575,10 @@
 
             viewModel.FirstName = "new first name";
 
-            await viewModel.CancelAndCloseViewModel();
+            await viewModel.CancelAndCloseViewModelAsync();
 
             Assert.IsFalse(model.IsInEditSession);
-            Assert.AreEqual("first name", person.FirstName);            
+            Assert.AreEqual("first name", person.FirstName);
         }
 
         [TestCase]
@@ -790,7 +790,7 @@
 
             Assert.IsTrue(viewModel.HasErrors);
             Assert.IsNotNull(summary);
-            Assert.AreEqual(0, summary.FieldErrors.Count);  
+            Assert.AreEqual(0, summary.FieldErrors.Count);
         }
 
         [TestCase]
@@ -803,7 +803,7 @@
 
             Assert.IsTrue(viewModel.HasErrors);
             Assert.IsNotNull(summary);
-            Assert.AreEqual(0, summary.FieldErrors.Count);  
+            Assert.AreEqual(0, summary.FieldErrors.Count);
         }
 
         [TestCase]
@@ -816,7 +816,7 @@
 
             Assert.IsTrue(viewModel.HasErrors);
             Assert.IsNotNull(summary);
-            Assert.AreEqual(2, summary.FieldErrors.Count);  
+            Assert.AreEqual(2, summary.FieldErrors.Count);
         }
         #endregion
 
@@ -827,11 +827,11 @@
             AuditingManager.RegisterAuditor(auditor);
 
             var vm = new TestViewModel();
-            
+
             Assert.AreEqual(false, auditor.OnViewModelCanceledCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
 
-            await vm.CancelAndCloseViewModel();
+            await vm.CancelAndCloseViewModelAsync();
 
             Assert.AreEqual(true, auditor.OnViewModelCanceledCalled);
             Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
@@ -839,7 +839,7 @@
             auditor.OnViewModelCanceledCalled = false;
             auditor.OnViewModelClosedCalled = false;
 
-            await vm.CancelAndCloseViewModel();
+            await vm.CancelAndCloseViewModelAsync();
 
             Assert.AreEqual(false, auditor.OnViewModelCanceledCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
@@ -856,7 +856,7 @@
             Assert.AreEqual(false, auditor.OnViewModelSavedCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
 
-            await vm.SaveAndCloseViewModel();
+            await vm.SaveAndCloseViewModelAsync();
 
             Assert.AreEqual(true, auditor.OnViewModelSavedCalled);
             Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
@@ -864,7 +864,7 @@
             auditor.OnViewModelSavedCalled = false;
             auditor.OnViewModelClosedCalled = false;
 
-            await vm.SaveAndCloseViewModel();
+            await vm.SaveAndCloseViewModelAsync();
 
             Assert.AreEqual(false, auditor.OnViewModelSavedCalled);
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
@@ -880,13 +880,13 @@
 
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
 
-            await vm.CloseViewModel(null);
+            await vm.CloseViewModelAsync(null);
 
             Assert.AreEqual(true, auditor.OnViewModelClosedCalled);
 
             auditor.OnViewModelClosedCalled = false;
 
-            await vm.CloseViewModel(null);
+            await vm.CloseViewModelAsync(null);
 
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
         }

@@ -20,7 +20,7 @@ public class GlobalInitialization
     {
         //System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
 
-#if NET
+#if NET && !SKIP_EF
         using (var dbContext = new Catel.Test.EntityFramework5.DbContextTest.TestDbContextContainer())
         {
             dbContext.Database.CreateIfNotExists();

@@ -2,5 +2,5 @@
 <Weavers VerifyAssembly="true">
   <ModuleInit/>
   <Obsolete/>
-  <Catel WeaveProperties="false" WeaveArguments="false" />
+  <Catel WeaveProperties="false" />
 </Weavers>

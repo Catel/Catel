@@ -21,7 +21,7 @@
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
 	
     <dependencies>
-        <dependency id="Catel.MVVM" version="[VERSION]" />          
+        <dependency id="Catel.Core" version="[VERSION]" />          
     </dependencies>
 	
   </metadata>

@@ -71,7 +71,17 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void DebugWithData(string message, object extraData = null);
+
+        /// <summary>
+        /// Writes the specified message as debug message with extra data.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        void DebugWithData(string message, LogData logData);
 
         /// <summary>
         /// Writes the specified message as debug message with extra data.
@@ -81,6 +91,7 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void DebugWithData(Exception exception, string message, object extraData = null);
 
         /// <summary>
@@ -89,7 +100,17 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void InfoWithData(string message, object extraData = null);
+
+        /// <summary>
+        /// Writes the specified message as info message with extra data.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        void InfoWithData(string message, LogData logData);
 
         /// <summary>
         /// Writes the specified message as info message with extra data.
@@ -99,6 +120,7 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void InfoWithData(Exception exception, string message, object extraData = null);
 
         /// <summary>
@@ -107,7 +129,17 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void WarningWithData(string message, object extraData = null);
+
+        /// <summary>
+        /// Writes the specified message as warning message with extra data.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        void WarningWithData(string message, LogData logData);
 
         /// <summary>
         /// Writes the specified message as warning message with extra data.
@@ -117,6 +149,7 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void WarningWithData(Exception exception, string message, object extraData = null);
 
         /// <summary>
@@ -125,7 +158,17 @@ namespace Catel.Logging
         /// <param name="message">The message.</param>
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void ErrorWithData(string message, object extraData = null);
+
+        /// <summary>
+        /// Writes the specified message as warning message with extra data.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        void ErrorWithData(string message, LogData logData);
 
         /// <summary>
         /// Writes the specified message as warning message with extra data.
@@ -135,6 +178,7 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Use extension methods instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         void ErrorWithData(Exception exception, string message, object extraData = null);
 
         /// <summary>
@@ -145,6 +189,15 @@ namespace Catel.Logging
         /// <param name="logEvent">The log event.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
         void WriteWithData(string message, object extraData, LogEvent logEvent);
+
+        /// <summary>
+        /// Writes the specified message as specified log event with extra data.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="logData">The log data.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        void WriteWithData(string message, LogData logData, LogEvent logEvent);
 
         /// <summary>
         /// Writes the specified message as specified log event with extra data.

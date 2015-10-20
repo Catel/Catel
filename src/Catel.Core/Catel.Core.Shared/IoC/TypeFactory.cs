@@ -237,9 +237,7 @@ namespace Catel.IoC
                 }
                 catch (Exception ex)
                 {
-                    string error = string.Format("Failed to set property '{0}.{1}' during property dependency injection", type.Name, propertyInfo.Name);
-                    Log.Error(ex, error);
-                    throw new InvalidOperationException(error);
+                    throw Log.ErrorAndCreateException<InvalidOperationException>(ex, "Failed to set property '{0}.{1}' during property dependency injection", type.Name, propertyInfo.Name);
                 }
             }
 

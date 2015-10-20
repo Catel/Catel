@@ -8,106 +8,58 @@
 namespace Catel.Test.Reflection
 {
     using System;
+    using System.Collections.Generic;
     using Catel.Collections;
     using Catel.Reflection;
     using Catel.Test.Runtime.Serialization;
 
     using NUnit.Framework;
 
+    [TestFixture]
     public class TypeExtensionsFacts
     {
-        #region Nested type: TheIsBasicTypeMethod
-        [TestFixture]
-        public class TheIsBasicTypeMethod
+        [TestCase(typeof(int), true)]
+        [TestCase(typeof(int?), true)]
+        [TestCase(typeof(FastObservableCollection<TestModel>), false)]
+        public void TheIsBasicTypeMethod(Type type, bool expectedValue)
         {
-            [TestCase]
-            public void ThrowsNullExceptionForNullType()
-            {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => TypeExtensions.IsBasicType(null));
-            }
-
-            [TestCase]
-            public void ReturnsTrueForIntType()
-            {
-                Assert.IsTrue(typeof(int).IsBasicType());
-            }
-
-            [TestCase]
-            public void ReturnsTrueForNullableIntType()
-            {
-                Assert.IsTrue(typeof(int?).IsBasicType());
-            }
-
-            [TestCase]
-            public void ReturnsFalseForFastObservableCollectionType()
-            {
-                Assert.IsFalse(typeof(FastObservableCollection<TestModel>).IsBasicType());
-            }
+            Assert.AreEqual(expectedValue, type.IsBasicType());
         }
-        #endregion
 
-        #region Nested type: TheIsClassTypeMethod
-        [TestFixture]
-        public class TheIsClassTypeMethod
+        [TestCase(null, false)]
+        [TestCase(typeof(int), false)]
+        [TestCase(typeof(string), false)]
+        [TestCase(typeof(TypeHelper), true)]
+        public void TheIsClassTypeMethod(Type type, bool expectedValue)
         {
-            #region Methods
-            [TestCase]
-            public void ReturnsFalseForNullType()
-            {
-                Assert.IsFalse(TypeExtensions.IsClassType(null));
-            }
-
-            [TestCase]
-            public void ReturnsFalseForValueType()
-            {
-                Assert.IsFalse(TypeExtensions.IsClassType(typeof(int)));
-            }
-
-            [TestCase]
-            public void ReturnsFalseForStringType()
-            {
-                Assert.IsFalse(TypeExtensions.IsClassType(typeof(string)));
-            }
-
-            [TestCase]
-            public void ReturnsTrueForClassType()
-            {
-                Assert.IsTrue(TypeExtensions.IsClassType(typeof(TypeHelper)));
-            }
-            #endregion
+            Assert.AreEqual(expectedValue, type.IsClassType());
         }
-        #endregion
 
-        #region Nested type: TheIsTypeNullableMethod
-        [TestFixture]
-        public class TheIsNullableTypeMethod
+        [TestCase(null, false)]
+        [TestCase(typeof(int), false)]
+        [TestCase(typeof(FastObservableCollection<int>), true)]
+        public void TheIsCollectionMethod(Type type, bool expectedValue)
         {
-            #region Methods
-            [TestCase]
-            public void ReturnsTrueForReferenceType()
-            {
-                Assert.IsTrue(TypeExtensions.IsNullableType(typeof(object)));
-            }
-
-            [TestCase]
-            public void ReturnsFalseForValueType()
-            {
-                Assert.IsFalse(TypeExtensions.IsNullableType(typeof(int)));
-            }
-
-            [TestCase]
-            public void ReturnsFalseForNullType()
-            {
-                Assert.IsFalse(TypeExtensions.IsNullableType(null));
-            }
-
-            [TestCase]
-            public void ReturnsTrueForNullableValueType()
-            {
-                Assert.IsTrue(TypeExtensions.IsNullableType(typeof(bool?)));
-            }
-            #endregion
+            Assert.AreEqual(expectedValue, type.IsCollection());
         }
-        #endregion
+
+        [TestCase(null, false)]
+        [TestCase(typeof(int), false)]
+        [TestCase(typeof(FastObservableCollection<int>), false)]
+        [TestCase(typeof(Dictionary<int, bool>), true)]
+        public void TheIsDictionaryMethod(Type type, bool expectedValue)
+        {
+            Assert.AreEqual(expectedValue, type.IsDictionary());
+        }
+
+        [TestCase(null, false)]
+        [TestCase(typeof(object), true)]
+        [TestCase(typeof(int), false)]
+        [TestCase(typeof(int?), true)]
+        [TestCase(typeof(TypeHelper), true)]
+        public void TheIsNullableTypeMethod(Type type, bool expectedValue)
+        {
+            Assert.AreEqual(expectedValue, type.IsNullableType());
+        }
     }
 }

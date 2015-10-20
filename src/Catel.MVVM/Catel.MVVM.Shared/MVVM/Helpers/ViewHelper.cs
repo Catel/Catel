@@ -91,9 +91,7 @@ namespace Catel.MVVM
             }
             catch (Exception ex)
             {
-                string error = string.Format("Failed to construct view '{0}' with both injection and empty constructor", viewType.Name);
-                Log.Error(ex, error);
-                throw new InvalidOperationException(error, ex);
+                throw Log.ErrorAndCreateException<InvalidOperationException>(ex, "Failed to construct view '{0}' with both injection and empty constructor", viewType.Name);
             }
 
             view.DataContext = dataContext;

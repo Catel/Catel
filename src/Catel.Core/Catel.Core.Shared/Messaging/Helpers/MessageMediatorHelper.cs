@@ -68,9 +68,7 @@ namespace Catel.Messaging
                             break;
 
                         default:
-                            var error = string.Format("Cannot cast '{0}' to Action or Action<T> delegate type.", methodInfo.Name);
-                            Log.Error(error);
-                            throw new InvalidCastException(error);
+                            throw Log.ErrorAndCreateException<InvalidCastException>("Cannot cast '{0}' to Action or Action<T> delegate type.", methodInfo.Name);
                     }
 
                     var tag = attribute.Tag;

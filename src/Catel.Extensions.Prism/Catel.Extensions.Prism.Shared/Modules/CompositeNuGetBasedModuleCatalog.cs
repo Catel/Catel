@@ -3,7 +3,6 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
 #if NET
 
 namespace Catel.Modules
@@ -54,9 +53,9 @@ namespace Catel.Modules
             get
             {
                 var moduleInfos = base.Modules.ToList();
-                
+
                 var rawModuleInfos = new List<ModuleInfo>();
-                foreach (INuGetBasedModuleCatalog moduleCatalog in ModuleCatalogs)
+                foreach (var moduleCatalog in ModuleCatalogs)
                 {
                     EnsureParentChildRelationship(moduleCatalog);
                     rawModuleInfos.AddRange(moduleCatalog.Modules);
@@ -146,18 +145,23 @@ namespace Catel.Modules
         /// <summary>
         /// Gets the package repository.
         /// </summary>
-        /// <returns>The <see cref="IPackageRepository" />.</returns>
-        public IPackageRepository GetPackageRepository()
+        /// <returns>IEnumerable&lt;IPackageRepository&gt;.</returns>
+        public IEnumerable<IPackageRepository> GetPackageRepositories()
         {
-            var compositePackageRepository = new CompositePackageRepository();
-            foreach (var moduleCatalog in ModuleCatalogs)
+            var packageRepositories = new List<IPackageRepository>();
+
+            foreach (var moduleCatalog in LeafCatalogs)
             {
-                EnsureParentChildRelationship(moduleCatalog);
-                compositePackageRepository.Add(moduleCatalog.GetPackageRepository());
+                var nugetBasedModuleCatalog = moduleCatalog as NuGetBasedModuleCatalog;
+                if (nugetBasedModuleCatalog != null)
+                {
+                    packageRepositories.AddRange(nugetBasedModuleCatalog.GetPackageRepositories());
+                }
             }
 
-            return compositePackageRepository;
+            return packageRepositories;
         }
+
         #endregion
 
         #region Methods

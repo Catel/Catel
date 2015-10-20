@@ -60,19 +60,19 @@ namespace Catel.Test.Runtime.Serialization
                 var fieldsToSerialize = serializationManager.GetFieldsToSerialize(typeof(TestModel)).ToArray();
 
                 Assert.AreEqual(1, fieldsToSerialize.Length);
-                Assert.AreEqual("_includedField", fieldsToSerialize[0]);
+                Assert.AreEqual("_includedField", fieldsToSerialize[0].Key);
             }
         }
 
         [TestFixture]
-        public class TheGetPropertiesToSerializeMethod
+        public class TheGetRegularPropertiesToSerializeMethod
         {
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
                 var serializationManager = new SerializationManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetPropertiesToSerialize(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetRegularPropertiesToSerialize(null));
             }
 
             [TestCase]
@@ -80,11 +80,33 @@ namespace Catel.Test.Runtime.Serialization
             {
                 var serializationManager = new SerializationManager();
 
-                var propertiesToSerialize = serializationManager.GetPropertiesToSerialize(typeof(TestModel)).ToArray();
+                var propertiesToSerialize = serializationManager.GetRegularPropertiesToSerialize(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(2, propertiesToSerialize.Length);
-                Assert.AreEqual("IncludedCatelProperty", propertiesToSerialize[0]);
-                Assert.AreEqual("IncludedRegularProperty", propertiesToSerialize[1]);
+                Assert.AreEqual(1, propertiesToSerialize.Length);
+                Assert.AreEqual("IncludedRegularProperty", propertiesToSerialize[0].Key);
+            }
+        }
+
+        [TestFixture]
+        public class TheGetCatelPropertiesToSerializeMethod
+        {
+            [TestCase]
+            public void ThrowsArgumentNullExceptionForNullType()
+            {
+                var serializationManager = new SerializationManager();
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetCatelPropertiesToSerialize(null));
+            }
+
+            [TestCase]
+            public void ReturnsCorrectProperties()
+            {
+                var serializationManager = new SerializationManager();
+
+                var propertiesToSerialize = serializationManager.GetCatelPropertiesToSerialize(typeof(TestModel)).ToArray();
+
+                Assert.AreEqual(1, propertiesToSerialize.Length);
+                Assert.AreEqual("IncludedCatelProperty", propertiesToSerialize[0].Key);
             }
         }
 
@@ -161,8 +183,9 @@ namespace Catel.Test.Runtime.Serialization
 
                 var properties = serializationManager.GetRegularPropertyNames(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(1, properties.Length);
-                Assert.AreEqual("IncludedRegularProperty", properties[0]);
+                Assert.AreEqual(2, properties.Length);
+                Assert.AreEqual("ExcludedRegularProperty", properties[0]);
+                Assert.AreEqual("IncludedRegularProperty", properties[1]);
             }
         }
 
@@ -184,9 +207,11 @@ namespace Catel.Test.Runtime.Serialization
 
                 var properties = serializationManager.GetRegularProperties(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(1, properties.Length);
-                Assert.AreEqual("IncludedRegularProperty", properties[0].Key);
+                Assert.AreEqual(2, properties.Length);
+                Assert.AreEqual("ExcludedRegularProperty", properties[0].Key);
                 Assert.AreEqual(SerializationMemberGroup.RegularProperty, properties[0].Value.MemberGroup);
+                Assert.AreEqual("IncludedRegularProperty", properties[1].Key);
+                Assert.AreEqual(SerializationMemberGroup.RegularProperty, properties[1].Value.MemberGroup);
             }
         }
 
@@ -209,8 +234,9 @@ namespace Catel.Test.Runtime.Serialization
 
                 var fields = serializationManager.GetFieldNames(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(1, fields.Length);
-                Assert.AreEqual("_includedField", fields[0]);
+                Assert.AreEqual(2, fields.Length);
+                Assert.AreEqual("_excludedField", fields[0]);
+                Assert.AreEqual("_includedField", fields[1]);
             }
         }
 
@@ -232,9 +258,11 @@ namespace Catel.Test.Runtime.Serialization
 
                 var fields = serializationManager.GetFields(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(1, fields.Length);
-                Assert.AreEqual("_includedField", fields[0].Key);
+                Assert.AreEqual(2, fields.Length);
+                Assert.AreEqual("_excludedField", fields[0].Key);
                 Assert.AreEqual(SerializationMemberGroup.Field, fields[0].Value.MemberGroup);
+                Assert.AreEqual("_includedField", fields[1].Key);
+                Assert.AreEqual(SerializationMemberGroup.Field, fields[1].Value.MemberGroup);
             }
         }
     }

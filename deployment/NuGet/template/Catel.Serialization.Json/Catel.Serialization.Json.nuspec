@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>Catel.Serialization.Json</id>
+    <version>[VERSION]</version>
+	<title>Catel.Serialization.Json</title>
+    <authors>GeertvanHorrik</authors>
+	
+	<description>
+	  Json serialization implementation for Catel.
+	</description>
+	<summary>
+	</summary>
+	
+	<tags>catel json serialization</tags>
+	
+	<language>en-US</language>
+	<projectUrl>http://www.catelproject.com</projectUrl>	
+	<licenseUrl>http://www.catelproject.com/license/</licenseUrl>
+	<!--<iconUrl>file://content/icon.png</iconUrl>-->
+	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
+    
+    <dependencies>
+        <dependency id="Catel.Core" version="[VERSION]" />
+        <dependency id="Newtonsoft.Json" version="[replaced]" />        
+    </dependencies>      
+  </metadata>
+</package>

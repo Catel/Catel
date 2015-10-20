@@ -15,5 +15,27 @@ namespace Catel.Runtime.Serialization
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
     public class IncludeInSerializationAttribute : Attribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IncludeInSerializationAttribute"/> class.
+        /// </summary>
+        public IncludeInSerializationAttribute()
+            : this(string.Empty)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IncludeInSerializationAttribute"/> class.
+        /// </summary>
+        /// <param name="name">Name of the member.</param>
+        public IncludeInSerializationAttribute(string name)
+        {
+            Name = name;
+        }
+
+        /// <summary>
+        /// Gets or sets the name of the mapped.
+        /// </summary>
+        /// <value>The name of the mapped.</value>
+        public string Name { get; set; }
     }
 }

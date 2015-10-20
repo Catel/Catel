@@ -10,11 +10,13 @@
 namespace Catel.MVVM
 {
     using System;
+    using System.Threading.Tasks;
     using System.Windows.Input;
 
     using Services;
 
     using IoC;
+    using Threading;
 
     /// <summary>
     /// Base class for generic command classes. Contains protected static services for using in derived classes.
@@ -106,6 +108,11 @@ namespace Catel.MVVM
         /// Occurs when the command has just been executed successfully.
         /// </summary>
         public event EventHandler<CommandExecutedEventArgs> Executed;
+
+        /// <summary>
+        /// Occurs when the command has just been executed successfully.
+        /// </summary>
+        public event AsyncEventHandler<CommandExecutedEventArgs> ExecutedAsync;
         #endregion
 
         #region Properties
@@ -266,30 +273,48 @@ namespace Catel.MVVM
         /// </summary>
         public virtual void RaiseCanExecuteChanged()
         {
-            AutoDispatchIfRequired(() => CanExecuteChanged.SafeInvoke(this));
+            AutoDispatchIfRequiredAsync(async () => CanExecuteChanged.SafeInvoke(this));
         }
 
         /// <summary>
         /// Raises the <see cref="Executed"/> event.
         /// </summary>
         /// <param name="parameter">The parameter.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "RaiseExecutedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected void RaiseExecuted(object parameter)
         {
-            var action = new Action(() => Executed.SafeInvoke(this, new CommandExecutedEventArgs(this, parameter)));
-
-            AutoDispatchIfRequired(action);
+            RaiseExecutedAsync(parameter);
         }
 
-        private void AutoDispatchIfRequired(Action action)
+        /// <summary>
+        /// Raises the <see cref="Executed" /> event.
+        /// </summary>
+        /// <param name="parameter">The parameter.</param>
+        /// <returns>Task.</returns>
+        protected Task RaiseExecutedAsync(object parameter)
+        {
+            var action = new Func<Task>(async () =>
+            {
+                var eventArgs = new CommandExecutedEventArgs(this, parameter);
+                Executed.SafeInvoke(this, eventArgs);
+                await ExecutedAsync.SafeInvokeAsync(this, eventArgs);
+            });
+
+            return AutoDispatchIfRequiredAsync(action);
+        }
+
+        private Task AutoDispatchIfRequiredAsync(Func<Task> action)
         {
             if (AutomaticallyDispatchEvents)
             {
-                DispatcherService.BeginInvokeIfRequired(action);
+                DispatcherService.BeginInvokeIfRequired(async () => await action());
             }
             else
             {
-                action();
+                return action();
             }
+
+            return TaskHelper.Completed;
         }
         #endregion
     }

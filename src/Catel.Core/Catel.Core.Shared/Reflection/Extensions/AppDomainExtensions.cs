@@ -39,17 +39,6 @@ namespace Catel.Reflection
             Argument.IsNotNull("appDomain", appDomain);
 
             return TypeCache.GetTypes();
-
-            //List<Assembly> assemblies = AssemblyHelper.GetLoadedAssemblies(appDomain);
-            //var types = new List<Type>();
-
-            //foreach (var assembly in assemblies)
-            //{
-            //    types.AddRange(from assemblyType in AssemblyHelper.GetAllTypesSafely(assembly)
-            //                   select assemblyType);
-            //}
-
-            //return types.ToArray();
         }
 
 #if NET
@@ -131,8 +120,15 @@ namespace Catel.Reflection
                 return;
             }
 
-            var assemblyName = AssemblyName.GetAssemblyName(assemblyFilename);
-            LoadAssemblyIntoAppDomain(appDomain, assemblyName, includeReferencedAssemblies, alreadyLoadedAssemblies);
+            try
+            {
+                var assemblyName = AssemblyName.GetAssemblyName(assemblyFilename);
+                LoadAssemblyIntoAppDomain(appDomain, assemblyName, includeReferencedAssemblies, alreadyLoadedAssemblies);
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to retrieve the assembly name of file '{0}', cannot preload assembly", assemblyFilename);
+            }
         }
 
         /// <summary>

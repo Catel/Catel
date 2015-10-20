@@ -12,7 +12,7 @@ namespace Catel.Runtime.Serialization.Binary
     /// <summary>
     /// Interface for the binary serializer.
     /// </summary>
-    public interface IBinarySerializer : IModelBaseSerializer<BinarySerializationContextInfo>
+    public interface IBinarySerializer : ISerializer
     {
     }
 }

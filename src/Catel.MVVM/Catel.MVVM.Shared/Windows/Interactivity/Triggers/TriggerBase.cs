@@ -40,7 +40,7 @@ namespace Catel.Windows.Interactivity
         /// Gets a value indicating whether the <c>TriggerBase{T}.AssociatedObject</c> is loaded.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the <c>TriggerBase{T}.AssociatedObject</c> is loaded; otherwise, <c>false</c>.
+        /// <c>true</c> if the <c>TriggerBase{T}.AssociatedObject</c> is loaded; otherwise, <c>false</c>.
         /// </value>
         public bool IsAssociatedObjectLoaded { get; private set; }
 
@@ -52,9 +52,32 @@ namespace Catel.Windows.Interactivity
         {
             get { return CatelEnvironment.IsInDesignMode; }
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this trigger is enabled.
+        /// </summary>
+        /// <value><c>true</c> if this trigger is enabled; otherwise, <c>false</c>.</value>
+        public bool IsEnabled
+        {
+            get { return (bool)GetValue(IsEnabledProperty); }
+            set { SetValue(IsEnabledProperty, value); }
+        }
+
+        /// <summary>
+        /// The IsEnabled property registration.
+        /// </summary>
+        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool),
+            typeof(TriggerBase<T>), new PropertyMetadata(true, (sender, e) => ((TriggerBase<T>)sender).OnIsEnabledChanged()));
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Called when the <see cref="IsEnabled" /> property has changed.
+        /// </summary>
+        protected virtual void OnIsEnabledChanged()
+        {
+        }
+
         /// <summary>
         /// Called after the action is attached to an AssociatedObject.
         /// </summary>

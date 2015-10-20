@@ -9,6 +9,7 @@
 namespace Catel.MVVM.Providers
 {
     using System;
+    using System.Threading.Tasks;
     using System.Windows;
     using Views;
     using Logging;
@@ -135,7 +136,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="Catel.MVVM.ViewModelClosedEventArgs"/> instance containing the event data.</param>
-        public override void OnViewModelClosed(object sender, ViewModelClosedEventArgs e)
+        public override async Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
             if (_closeInitiatedByViewModel == null)
             {
@@ -143,7 +144,7 @@ namespace Catel.MVVM.Providers
                 _closeInitiatedByViewModelResult = e.Result;
             }
 
-            base.OnViewModelClosed(sender, e);
+            await base.OnViewModelClosedAsync(sender, e);
 
 #if SILVERLIGHT
             if (TargetWindow is ChildWindow)
@@ -223,7 +224,7 @@ namespace Catel.MVVM.Providers
                     Log.Warning("Failed to get the 'DialogResult' property of window type '{0}', using 'null' as dialog result", TargetWindow.GetType().Name);
                 }
 
-                await CloseViewModel(dialogResult);
+                await CloseViewModelAsync(dialogResult);
             }
 
             _dynamicEventListener.UnsubscribeFromEvent();
@@ -237,10 +238,7 @@ namespace Catel.MVVM.Providers
             var closeMethod = TargetWindow.GetType().GetMethodEx("Close");
             if (closeMethod == null)
             {
-                string error = string.Format("Cannot close any window without a public 'Close()' method, implement the 'Close()' method on '{0}'", TargetWindow.GetType().Name);
-                Log.Error(error);
-
-                throw new NotSupportedException(error);
+                throw Log.ErrorAndCreateException<NotSupportedException>("Cannot close any window without a public 'Close()' method, implement the 'Close()' method on '{0}'", TargetWindow.GetType().Name);
             }
 
             closeMethod.Invoke(TargetWindow, null);

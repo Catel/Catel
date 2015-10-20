@@ -72,9 +72,20 @@ namespace Catel.Windows.Markup
             _targetObject = null;
             _targetProperty = null;
 #else
-            var target = serviceProvider.GetService(typeof (IProvideValueTarget)) as IProvideValueTarget;
+            var target = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
             if (target != null)
             {
+                // CTL-636
+                // In a template the TargetObject is a SharedDp (internal WPF class)
+                // In that case, the markup extension itself is returned to be re-evaluated later
+                var targetObjectType = target.TargetObject.GetType();
+                if (string.Equals(targetObjectType.FullName, "System.Windows.SharedDp")) 
+                    // Checking for setter crashes other extensions (such as FontImage in Orchestra)
+                    //string.Equals(targetObjectType.FullName, "System.Windows.Setter"))
+                {
+                    return this;
+                }
+
                 _targetObject = target.TargetObject;
                 _targetProperty = target.TargetProperty;
 
@@ -83,7 +94,7 @@ namespace Catel.Windows.Markup
                 FrameworkContentElement frameworkContentElement;
 #endif
 
-                if ((frameworkElement = _targetObject as FrameworkElement) != null) 
+                if ((frameworkElement = _targetObject as FrameworkElement) != null)
                 {
 #if NET
                     _isFrameworkElementLoaded = frameworkElement.IsLoaded;
@@ -104,7 +115,8 @@ namespace Catel.Windows.Markup
             }
 #endif
 
-            return ProvideDynamicValue();
+            var dynamicValue = ProvideDynamicValue();
+            return dynamicValue;
         }
 
         private void OnTargetObjectLoadedInternal(object sender, RoutedEventArgs e)
@@ -125,7 +137,7 @@ namespace Catel.Windows.Markup
         /// Note that this method will only be called if the target object is a <see cref="FrameworkElement"/>.
         /// </summary>
         protected virtual void OnTargetObjectLoaded()
-        {   
+        {
         }
 
         private void OnTargetObjectUnloadedInternal(object sender, RoutedEventArgs e)
@@ -176,7 +188,9 @@ namespace Catel.Windows.Markup
                     }
                     else
                     {
+#pragma warning disable 4014
                         obj.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => updateAction());
+#pragma warning restore 4014
                     }
 #else
                     if (obj.CheckAccess())

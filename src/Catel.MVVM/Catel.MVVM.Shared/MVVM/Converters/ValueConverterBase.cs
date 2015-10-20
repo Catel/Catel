@@ -8,7 +8,8 @@ namespace Catel.MVVM.Converters
 {
     using System;
     using System.Globalization;
-
+    using Logging;
+    using Reflection;
 #if XAMARIN
     
 #elif NETFX_CORE
@@ -46,6 +47,8 @@ namespace Catel.MVVM.Converters
     public abstract class ValueConverterBase<TConvert, TConvertBack> : IValueConverter
 #endif
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Gets the current culture.
         /// </summary>
@@ -122,7 +125,7 @@ namespace Catel.MVVM.Converters
         {
             CurrentCulture = culture;
 
-            object returnValue = value;
+            var returnValue = value;
 
             if (Link != null)
             {
@@ -135,6 +138,14 @@ namespace Catel.MVVM.Converters
                 // Linked converter is set, this is not the last in the chain
                 // call the linked converter, i.e. the next in the chain
                 returnValue = Link.Convert(returnValue, OverrideType ?? targetType, parameter, cultureToUse);
+            }
+
+            if (!IsConvertable<TConvert>(value))
+            {
+                Log.Warning("Cannot convert value of type '{0}', expected type '{1}', ignoring converter results",
+                    ObjectToStringHelper.ToTypeString(returnValue), typeof(TConvert));
+
+                return ConverterHelper.UnsetValue;
             }
 
             returnValue = Convert((TConvert)returnValue, targetType, parameter);
@@ -154,7 +165,15 @@ namespace Catel.MVVM.Converters
         {
             CurrentCulture = culture;
 
-            object returnValue = value;
+            var returnValue = value;
+
+            if (!IsConvertable<TConvertBack>(value))
+            {
+                Log.Warning("Cannot convert back value of type '{0}', expected type '{1}', ignoring converter results",
+                    ObjectToStringHelper.ToTypeString(returnValue), typeof(TConvertBack));
+
+                returnValue = ConverterHelper.UnsetValue;
+            }
 
             // Call ConvertBack first because we are doing this in reverse order
             returnValue = ConvertBack((TConvertBack)returnValue, targetType, parameter);
@@ -181,6 +200,30 @@ namespace Catel.MVVM.Converters
         /// <param name="parameter">An optional parameter to be used in the converter logic.</param>
         /// <returns>The value to be passed to the target dependency property.</returns>
         protected abstract object Convert(TConvert value, Type targetType, object parameter);
+
+        /// <summary>
+        /// Determines whether the specified value is convertable.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">The value.</param>
+        /// <returns><c>true</c> if the specified value is convertable; otherwise, <c>false</c>.</returns>
+        protected virtual bool IsConvertable<T>(object value)
+        {
+            var canConvert = true;
+            if (ReferenceEquals(value, null))
+            {
+                if (!typeof(T).IsNullableType())
+                {
+                    canConvert = false;
+                }
+            }
+            else
+            {
+                canConvert = value is T;
+            }
+
+            return canConvert;
+        }
 
         /// <summary>
         /// Modifies the target data before passing it to the source object.

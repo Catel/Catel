@@ -7,7 +7,7 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
-    using Data;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The mode in which a context is being used.
@@ -34,7 +34,7 @@ namespace Catel.Runtime.Serialization
         /// Gets the model that needs serialization or deserialization.
         /// </summary>
         /// <value>The model.</value>
-        ModelBase Model { get; }
+        object Model { get; set; }
 
         /// <summary>
         /// Gets the type of the model.
@@ -59,6 +59,11 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The reference manager.</value>
         ReferenceManager ReferenceManager { get; }
+
+        /// <summary>
+        /// Gets the type stack inside the current scope.
+        /// </summary>
+        Stack<Type> TypeStack { get; }
     }
 
     /// <summary>

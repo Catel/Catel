@@ -78,7 +78,7 @@ namespace Catel.Data
                         break;
 
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        throw new ArgumentOutOfRangeException("change.ChangeType");
                 }
             }
 

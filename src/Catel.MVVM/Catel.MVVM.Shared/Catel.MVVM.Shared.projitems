@@ -9,11 +9,12 @@
     <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\DesignTimeCodeAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CatelEnvironment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\FastObservableCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\DispatcherObservableObject.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DesignTimeInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Designer\Attributes\DesignTimeCodeAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Designer\DesignTimeInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Designer\Helpers\DesignTimeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\INotifyPropertyChangedExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ThemeHelper.cs" />
@@ -34,13 +35,16 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Bindings\Extensions\BindingPartyExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\AsynchronousCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Command.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandContainerBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandManagerWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CompositeCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandCanceledEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandCreatedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Extensions\ICommandManagerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Helpers\CommandHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Interfaces\IAuthenticationProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Interfaces\ICatelCommand.cs" />
@@ -63,6 +67,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\CountVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\DebugConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\EmptyStringToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\EnumToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\FormattingConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\GetFirstValidationErrorConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\Helpers\ConverterHelper.cs" />
@@ -93,6 +98,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Extensions\ObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Helpers\ViewHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Helpers\ViewModelServiceHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Extensions\IViewModelLocatorExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Interfaces\ILocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Interfaces\IUrlLocator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Interfaces\IViewLocator.cs" />
@@ -139,6 +145,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\EventArgs\CancellableEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\EventArgs\SavingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\EventArgs\ViewModelClosedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\IViewModelExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\ViewModelExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\INotifyableViewModel.cs" />
@@ -170,6 +177,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\EventArgs\DataContextChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\EventArgs\ViewLoadEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\EventArgs\ViewStackPartEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Extensions\IViewManagerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Extensions\ViewExtensions.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Extensions\ViewExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Extensions\ViewExtensions.dispatching.cs" />
@@ -226,6 +234,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Exceptions\SplashScreenException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Exceptions\WindowNotRegisteredException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IDispatcherServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IPleaseWaitServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IStartUpInfoProviderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\FileServiceBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IAccelerometerService.cs" />
@@ -297,7 +307,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Test\AccelerometerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Test\CameraService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Test\LocationService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\Test\MessageService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Test\NavigationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Test\OpenFileService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Test\PleaseWaitService.cs" />
@@ -347,6 +356,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\SetterValueBindingHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\VisualTargetPresentationSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\WrapControlHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Input\Extensions\InputGestureExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Input\Helpers\KeyboardHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Input\InputGesture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Authentication.cs" />
@@ -363,7 +373,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\DragDropHelpers\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\DragDropHelpers\UIHelpers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Focus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\FocusBehaviorBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\FocusFirstControl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\FocusOnKeyPress.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\HideUntilViewModelLoaded.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Interfaces\IBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\KeyPressToCommand.cs" />
@@ -399,6 +411,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\PopupBehavior\Popup.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\PopupBehavior\PopupOrientation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\PopupBehavior\PopupOrientationCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\DispatcherOperation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Extensions\DispatcherExtensions.tasks.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Extensions\DispatcherExtensions.begininvoke.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Extensions\DispatcherExtensions.invoke.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Extensions\DispatcherExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Helpers\Dispatcherhelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Windows\DataWindow\DataWindow.cs" />

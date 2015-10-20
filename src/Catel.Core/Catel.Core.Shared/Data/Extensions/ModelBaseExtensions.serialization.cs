@@ -29,7 +29,7 @@ namespace Catel.Data
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="serializer">The serializer.</param>
-        public static void Save(this ModelBase model, Stream stream, IModelBaseSerializer serializer)
+        public static void Save(this ModelBase model, Stream stream, ISerializer serializer)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
@@ -55,7 +55,7 @@ namespace Catel.Data
         /// <param name="model">The model.</param>
         /// <param name="filePath">The file path.</param>
         /// <param name="serializer">The serializer.</param>
-        public static void Save(this ModelBase model, string filePath, IModelBaseSerializer serializer)
+        public static void Save(this ModelBase model, string filePath, ISerializer serializer)
         {
             Argument.IsNotNullOrWhitespace("filePath", filePath);
 

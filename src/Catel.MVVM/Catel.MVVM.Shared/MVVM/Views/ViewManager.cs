@@ -53,7 +53,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="view">The view to register.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
-        public void RegisterView(IView view)
+        public virtual void RegisterView(IView view)
         {
             Argument.IsNotNull("view", view);
 
@@ -82,7 +82,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <param name="view">The view to unregister.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
-        public void UnregisterView(IView view)
+        public virtual void UnregisterView(IView view)
         {
             Argument.IsNotNull("view", view);
 
@@ -112,7 +112,7 @@ namespace Catel.MVVM.Views
         /// <param name="viewModel">The view model.</param>
         /// <returns>An array containing all the views that are linked to the view.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        public IView[] GetViewsOfViewModel(IViewModel viewModel)
+        public virtual IView[] GetViewsOfViewModel(IViewModel viewModel)
         {
             Argument.IsNotNull("viewModel", viewModel);
 
@@ -130,19 +130,6 @@ namespace Catel.MVVM.Views
             Log.Debug("Found '{0}' views for view model '{1}'", views.Count, viewModel.UniqueIdentifier);
 
             return views.ToArray();
-        }
-
-        /// <summary>
-        /// Gets the first or default instance of the specified view type.
-        /// </summary>
-        /// <typeparam name="TView">The type of the view.</typeparam>
-        /// <returns>The vie or <c>null</c> if the view is not registered.</returns>
-        public TView GetFirstOrDefaultInstance<TView>() 
-            where TView : IView
-        {
-            var viewType = typeof(TView);
-
-            return (TView)GetFirstOrDefaultInstance(viewType);
         }
 
         /// <summary>

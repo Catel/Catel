@@ -6,7 +6,6 @@
 
 #if NET
 
-
 namespace Catel.Runtime.Serialization.Binary
 {
     using System;
@@ -51,9 +50,11 @@ namespace Catel.Runtime.Serialization.Binary
         /// Initializes a new instance of the <see cref="BinarySerializer" /> class.
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
+        /// <param name="typeFactory">The type factory.</param>
+        /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        public BinarySerializer(ISerializationManager serializationManager)
-            : base(serializationManager)
+        public BinarySerializer(ISerializationManager serializationManager, ITypeFactory typeFactory, IObjectAdapter objectAdapter)
+            : base(serializationManager, typeFactory, objectAdapter)
         {
             DeserializationBinder = new RedirectDeserializationBinder();
         }
@@ -69,16 +70,15 @@ namespace Catel.Runtime.Serialization.Binary
         /// </remarks>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
-        /// <returns>ModelBase.</returns>
-        public override ModelBase Deserialize(Type modelType, Stream stream)
+        /// <returns>The serialized object.</returns>
+        public override object Deserialize(Type modelType, Stream stream)
         {
             Argument.IsNotNull("modelType", modelType);
 
-            var model = (ModelBase)TypeFactory.Default.CreateInstance(modelType);
+            // Note: although this looks like an unnecessary overload, it's required to prevent duplicate scopes
 
-            Deserialize(model, stream);
-
-            return model;
+            var model = CreateModelInstance(modelType);
+            return Deserialize(model, stream);
         }
 
         /// <summary>
@@ -90,11 +90,11 @@ namespace Catel.Runtime.Serialization.Binary
         /// </remarks>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
-        public override void Deserialize(ModelBase model, Stream stream)
+        public override object Deserialize(object model, Stream stream)
         {
             Argument.IsNotNull("model", model);
 
-            using (var context = (SerializationContext<BinarySerializationContextInfo>)GetContext(model, stream, SerializationContextMode.Deserialization))
+            using (var context = (SerializationContext<BinarySerializationContextInfo>)GetContext(model, model.GetType(), stream, SerializationContextMode.Deserialization))
             {
                 var referenceManager = context.ReferenceManager;
                 if (referenceManager.Count == 0)
@@ -109,7 +109,7 @@ namespace Catel.Runtime.Serialization.Binary
                 var memberValues = ConvertPropertyValuesToMemberValues(context, model.GetType(), propertyValues);
                 context.Context.MemberValues.AddRange(memberValues);
 
-                Deserialize(model, context.Context);
+                return Deserialize(model, context.Context);
             }
         }
         #endregion
@@ -133,6 +133,11 @@ namespace Catel.Runtime.Serialization.Binary
         {
             var serializationContext = context.Context;
             var memberValues = serializationContext.MemberValues;
+
+            if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary)
+            {
+                memberValue.Value = ConvertDictionaryToCollection(memberValue.Value);
+            }
 
             memberValues.Add(memberValue);
         }
@@ -163,24 +168,26 @@ namespace Catel.Runtime.Serialization.Binary
         /// <summary>
         /// Gets the context.
         /// </summary>
-        /// <param name="model">The model.</param>
+        /// <param name="model">The model, can be <c>null</c> for value types.</param>
+        /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
         /// <returns>ISerializationContext{SerializationInfo}.</returns>
-        protected override ISerializationContext<BinarySerializationContextInfo> GetContext(ModelBase model, Stream stream, SerializationContextMode contextMode)
+        protected override ISerializationContext<BinarySerializationContextInfo> GetContext(object model, Type modelType, Stream stream, SerializationContextMode contextMode)
         {
-            return GetContext(model, stream, contextMode, null);
+            return GetContext(model, modelType, stream, contextMode, null);
         }
 
         /// <summary>
         /// Gets the context.
         /// </summary>
-        /// <param name="model">The model.</param>
+        /// <param name="model">The model, can be <c>null</c> for value types.</param>
+        /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
         /// <param name="memberValues">The member values.</param>
         /// <returns>The serialization context.</returns>
-        private ISerializationContext<BinarySerializationContextInfo> GetContext(ModelBase model, Stream stream, SerializationContextMode contextMode, List<MemberValue> memberValues)
+        private ISerializationContext<BinarySerializationContextInfo> GetContext(object model, Type modelType, Stream stream, SerializationContextMode contextMode, List<MemberValue> memberValues)
         {
             var serializationInfo = new SerializationInfo(model.GetType(), new FormatterConverter());
             var binaryFormatter = CreateBinaryFormatter(contextMode);
@@ -190,9 +197,9 @@ namespace Catel.Runtime.Serialization.Binary
                 memberValues = new List<MemberValue>();
             }
 
-            var contextInfo = new BinarySerializationContextInfo(serializationInfo, binaryFormatter, memberValues);
+            var contextInfo = new BinarySerializationContextInfo(serializationInfo, memberValues, binaryFormatter);
 
-            return new SerializationContext<BinarySerializationContextInfo>(model, contextInfo, contextMode);
+            return new SerializationContext<BinarySerializationContextInfo>(model, modelType, contextInfo, contextMode);
         }
 
         /// <summary>
@@ -249,10 +256,19 @@ namespace Catel.Runtime.Serialization.Binary
 
             try
             {
-                // NOTE: this will deserialize a list of PropertyValue objects to maintain backwards compatibility!
-                var propertyValues = (List<PropertyValue>)serializationInfo.GetValue(PropertyValuesKey, typeof(List<PropertyValue>));
-                var memberValues = ConvertPropertyValuesToMemberValues(context, context.ModelType, propertyValues);
-                serializationContext.MemberValues.AddRange(memberValues);
+                if (ShouldSerializeAsCollection(context.ModelType, context.Model))
+                {
+                    var collection = serializationInfo.GetValue(CollectionName, context.ModelType);
+                    var memberValue = new MemberValue(SerializationMemberGroup.Collection, context.ModelType, context.ModelType, CollectionName, CollectionName, collection);
+                    serializationContext.MemberValues.Add(memberValue);
+                }
+                else
+                {
+                    // NOTE: this will deserialize a list of PropertyValue objects to maintain backwards compatibility!
+                    var propertyValues = (List<PropertyValue>)serializationInfo.GetValue(PropertyValuesKey, typeof(List<PropertyValue>));
+                    var memberValues = ConvertPropertyValuesToMemberValues(context, context.ModelType, propertyValues);
+                    serializationContext.MemberValues.AddRange(memberValues);
+                }
             }
             catch (Exception ex)
             {
@@ -268,6 +284,13 @@ namespace Catel.Runtime.Serialization.Binary
         {
             // We need to add the serialized property values to the serialization info manually here
             var serializationContext = context.Context;
+
+            // Note: since this serialize adds the items *after* serializing, don't add if we already did add it to this context
+            if (serializationContext.PropertyValues.Count > 0)
+            {
+                return;
+            }
+
             var serializationInfo = serializationContext.SerializationInfo;
             var memberValues = serializationContext.MemberValues;
             var propertyValues = ConvertMemberValuesToPropertyValues(context, memberValues);
@@ -334,8 +357,7 @@ namespace Catel.Runtime.Serialization.Binary
                 if (memberValue.Value != null && memberValue.Value.GetType().IsClassType())
                 {
                     var referenceInfo = referenceManager.GetInfo(memberValue.Value);
-
-                    if (referenceInfo.IsFirstUsage)
+                    if (referenceInfo.IsFirstUsage || memberValue.MemberGroup == SerializationMemberGroup.Collection)
                     {
                         propertyValue.GraphId = referenceInfo.Id;
                     }
@@ -386,7 +408,7 @@ namespace Catel.Runtime.Serialization.Binary
                     }
                 }
 
-                var memberValue = new MemberValue(memberGroup, modelType, memberType, propertyValue.Name, propertyValue.Value);
+                var memberValue = new MemberValue(memberGroup, modelType, memberType, propertyValue.Name, propertyValue.Name, propertyValue.Value);
                 memberValues.Add(memberValue);
             }
 

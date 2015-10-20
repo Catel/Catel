@@ -16,7 +16,7 @@ namespace Catel.Runtime.Serialization.Xml
     /// <summary>
     /// Class containing all information about the binary serialization context.
     /// </summary>
-    public class XmlSerializationContextInfo
+    public class XmlSerializationContextInfo : ISerializationContextInfo
     {
         private readonly object _lockObject = new object();
         //private DataContractSerializer _dataContractSerializer;
@@ -26,13 +26,11 @@ namespace Catel.Runtime.Serialization.Xml
         /// Initializes a new instance of the <see cref="XmlSerializationContextInfo" /> class.
         /// </summary>
         /// <param name="element">The element.</param>
-        /// <param name="model">The model.</param>
+        /// <param name="model">The model, is allowed to be null for value types.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="element" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
-        public XmlSerializationContextInfo(XElement element, ModelBase model)
+        public XmlSerializationContextInfo(XElement element, object model)
         {
             Argument.IsNotNull("element", element);
-            Argument.IsNotNull("model", model);
 
             Initialize(element, model);
         }
@@ -49,6 +47,26 @@ namespace Catel.Runtime.Serialization.Xml
             Argument.IsNotNull("xmlReader", xmlReader);
             Argument.IsNotNull("model", model);
 
+            var modelType = model.GetType();
+            var elementStart = string.Format("<{0}", modelType.Name);
+
+            if (xmlReader.HasAttributes)
+            {
+                for (int i = 0; i < xmlReader.AttributeCount; i++)
+                {
+                    xmlReader.MoveToAttribute(i);
+
+                    var attributeName = xmlReader.LocalName;
+                    var attributeValue = xmlReader.Value;
+
+                    elementStart += string.Format(" {0}=\"{1}\"", attributeName, attributeValue);
+                }
+
+                xmlReader.MoveToElement();
+            }
+
+            elementStart += ">";
+
             xmlReader.MoveToContent();
 
             var xmlContent = xmlReader.ReadInnerXml();
@@ -61,8 +79,6 @@ namespace Catel.Runtime.Serialization.Xml
 #endif
             }
 
-            var modelType = model.GetType();
-            var elementStart = string.Format("<{0}>", modelType.Name);
             var elementEnd = string.Format("</{0}>", modelType.Name);
 
             var finalXmlContent = string.Format("{0}{1}{2}", elementStart, xmlContent, elementEnd);
@@ -95,15 +111,15 @@ namespace Catel.Runtime.Serialization.Xml
         /// Gets the model.
         /// </summary>
         /// <value>The model.</value>
-        public ModelBase Model { get; private set; }
+        public object Model { get; private set; }
 
         #region Methods
-        private void Initialize(string xmlContent, ModelBase model)
+        private void Initialize(string xmlContent, object model)
         {
             Initialize(XElement.Parse(xmlContent), model);
         }
 
-        private void Initialize(XElement element, ModelBase model)
+        private void Initialize(XElement element, object model)
         {
             Element = element;
             Model = model;
