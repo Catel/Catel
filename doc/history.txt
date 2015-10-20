@@ -50,11 +50,12 @@ we will remove the features in the next major release.
 Added/fixed:
 ============
 (+) CTL-751 Add DisplayNameAttribute that uses the ILanguageService by default
+(*) CTL-755 Marked Catel.Windows.Controls.ScrollViewerProperties as obsolete to minimize maintenance costs of Catel
+(*) CTL-756 Marked Catel.Windows.Controls.RichToolTip as obsolete to minimize maintenance costs of Catel
 (x) CTL-740 TargetParameterCountException while sending message on RT projects (RT projects now support weak actions)
 (x) CTL-744 Fixed missing DataWindowStyle when only referencing Catel.Extensions.Controls theme (it was no longer
     including the Catel.MVVM theme)
-(*) CTL-755 Marked Catel.Windows.Controls.ScrollViewerProperties as obsolete to minimize maintenance costs of Catel
-(*) CTL-756 Marked Catel.Windows.Controls.RichToolTip as obsolete to minimize maintenance costs of Catel
+(x) CTL-753 Support serialization for ModelBase that also implements IList
 
 Roadmap:
 ========

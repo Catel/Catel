@@ -7,6 +7,7 @@
 namespace Catel.Runtime.Serialization.Xml
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -394,6 +395,38 @@ namespace Catel.Runtime.Serialization.Xml
         }
 
         /// <summary>
+        /// Gets the name of the xml element.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="memberName">Name of the member.</param>
+        /// <returns>System.String.</returns>
+        protected string GetXmlElementName(Type modelType, object model, string memberName)
+        {
+            if (ShouldSerializeAsCollection(modelType, model))
+            {
+                return CollectionName;
+            }
+
+            XmlRootAttribute xmlRootAttribute;
+            if (AttributeHelper.TryGetAttribute(modelType, out xmlRootAttribute))
+            {
+                return xmlRootAttribute.ElementName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(memberName))
+            {
+                var propertyDataManager = PropertyDataManager.Default;
+                if (propertyDataManager.IsPropertyNameMappedToXmlElement(modelType, memberName))
+                {
+                    return propertyDataManager.MapPropertyNameToXmlElementName(modelType, memberName);
+                }
+            }
+
+            return modelType.Name;
+        }
+
+        /// <summary>
         /// Optimizes the xml document.
         /// </summary>
         /// <param name="document">The document.</param>
@@ -479,18 +512,7 @@ namespace Catel.Runtime.Serialization.Xml
                 {
                     rootName = _rootNameCache.GetFromCacheOrFetch(modelType, () =>
                     {
-                        if (ShouldSerializeAsCollection(modelType, model))
-                        {
-                            return CollectionName;
-                        }
-
-                        XmlRootAttribute xmlRootAttribute;
-                        if (AttributeHelper.TryGetAttribute(modelType, out xmlRootAttribute))
-                        {
-                            return xmlRootAttribute.ElementName;
-                        }
-
-                        return rootName = modelType.Name;
+                        return GetXmlElementName(modelType, model, null);
                     });
                 }
 
@@ -656,7 +678,7 @@ namespace Catel.Runtime.Serialization.Xml
                 }
                 else
                 {
-                    var memberTypeToSerialize = memberValue.ActualMemberType;
+                    var memberTypeToSerialize = memberValue.GetBestMemberType();
                     var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, null, null);
 
                     ReferenceInfo referenceInfo = null;

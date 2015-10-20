@@ -437,6 +437,23 @@ namespace Catel.Reflection
         }
 
         /// <summary>
+        /// The is generic type definition ex.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>The is generic type ex.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static bool IsGenericTypeDefinitionEx(this Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+#if NETFX_CORE || PCL
+            return type.GetTypeInfo().IsGenericTypeDefinition;
+#else
+            return type.IsGenericTypeDefinition;
+#endif
+        }
+        
+        /// <summary>
         /// Returns whether the specified type implements the specified interface.
         /// </summary>
         /// <typeparam name="TInterface">The type of the t interface.</typeparam>

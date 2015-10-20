@@ -470,6 +470,13 @@ namespace Catel.Runtime.Serialization.Xml
                 return true;
             }
 
+            // Never include generic type definitions, otherwise we will get this:
+            // Error while getting known types for Type 'Catel.Test.Data.PropertyDataManagerFacts+SupportsGenericClasses+GenericClass`1[T]'. The type must not be an open or partial generic class.
+            if (type.IsGenericTypeDefinitionEx())
+            {
+                return true;
+            }
+
             // Note, although resharper says this isn't possible, it might be
             var fullName = type.GetSafeFullName();
             if (string.IsNullOrWhiteSpace(fullName))

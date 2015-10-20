@@ -108,11 +108,13 @@ namespace Catel.Runtime.Serialization.Json
             Dictionary<string, JProperty> jsonProperties = null;
             JArray jsonArray = null;
 
-            if (ShouldSerializeAsCollection(modelType, null))
+            var serializeOurselves = typeof (ModelBase).IsAssignableFromEx(modelType);
+
+            if (!serializeOurselves && ShouldSerializeAsCollection(modelType, null))
             {
                 jsonArray = JArray.Load(jsonReader);
             }
-            else if (ShouldExternalSerializerHandleMember(modelType, null))
+            else if (!serializeOurselves && ShouldExternalSerializerHandleMember(modelType, null))
             {
                 return Convert.ChangeType(jsonReader.Value, modelType, CultureInfo.CurrentCulture);
             }
@@ -533,7 +535,7 @@ namespace Catel.Runtime.Serialization.Json
                     if (jsonValue != null)
                     {
                         object finalMemberValue = null;
-                        var valueType = memberValue.MemberType;
+                        var valueType = memberValue.GetBestMemberType();
                         if (valueType.IsEnumEx())
                         {
                             var enumName = Enum.GetName(valueType, (int)jsonValue);
@@ -558,13 +560,23 @@ namespace Catel.Runtime.Serialization.Json
                                 {
                                     if (jsonValue.HasValues)
                                     {
+                                        var finalValueType = valueType;
+
+                                        var typeNameValue = jsonValue.Value<string>(TypeName);
+                                        if (!string.IsNullOrWhiteSpace(typeNameValue))
+                                        {
+                                            finalValueType = TypeCache.GetType(typeNameValue);
+                                        }
+
                                         // Serialize ourselves
-                                        finalMemberValue = Deserialize(valueType, jsonValue.CreateReader());
+                                        finalMemberValue = Deserialize(finalValueType, jsonValue.CreateReader());
                                     }
                                 }
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
+                                Log.Debug(ex, "Failed to parse json value for '{0}', treating value as string", memberValue.Name);
+
                                 // As a fallback, interpret as a string (might be a modifier)
                                 finalMemberValue = (string)jsonValue;
                             }
@@ -590,7 +602,7 @@ namespace Catel.Runtime.Serialization.Json
                 }
             }
 
-            var shouldSerializeAsCollection = ShouldSerializeAsCollection(memberValue);
+            var shouldSerializeAsCollection = ShouldManuallySerializeAsCollection(memberValue, context) || ShouldSerializeAsCollection(memberValue);
             if (shouldSerializeAsCollection)
             {
                 var collection = new List<object>();
@@ -598,7 +610,7 @@ namespace Catel.Runtime.Serialization.Json
                 var jArray = context.Context.JsonArray;
                 if (jArray != null)
                 {
-                    var memberType = memberValue.MemberType;
+                    var memberType = memberValue.GetBestMemberType();
                     var collectionItemType = typeof(object);
                     if (memberType.IsGenericTypeEx())
                     {

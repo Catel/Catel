@@ -128,6 +128,15 @@ namespace Catel.Runtime.Serialization
                 ActualMemberType = (value != null) ? value.GetType() : null;
             }
         }
+
+        /// <summary>
+        /// Gets the the best member type. Code is equal to <c>memberValue.ActualMemberType ?? memberValue.MemberType</c>.
+        /// </summary>
+        /// <returns>Type.</returns>
+        public Type GetBestMemberType()
+        {
+            return ActualMemberType ?? MemberType;
+        }
         #endregion
     }
 }

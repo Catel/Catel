@@ -426,6 +426,26 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
+        /// Returns whether the specified member value should manually be serialized as collection. This is a very rare
+        /// case where a ModelBase implements IList as well.
+        /// </summary>
+        /// <param name="memberValue">The member value.</param>
+        /// <param name="serializationContext">The serialization context.</param>
+        /// <returns><c>true</c> if the serializer should manually serialize as collection, <c>false</c> otherwise.</returns>
+        protected bool ShouldManuallySerializeAsCollection(MemberValue memberValue, ISerializationContext serializationContext)
+        {
+            // In special cases, we need to write our own collection items. One case is where a custom ModelBase
+            // implements IList and gets inside a StackOverflow
+            if (memberValue.MemberGroup != SerializationMemberGroup.Collection &&
+                typeof (ModelBase).IsAssignableFromEx(memberValue.GetBestMemberType()))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Returns whether the member value should be serialized as collection.
         /// </summary>
         /// <param name="memberValue">The member value.</param>
@@ -437,7 +457,7 @@ namespace Catel.Runtime.Serialization
                 return true;
             }
 
-            return ShouldSerializeAsCollection(memberValue.ActualMemberType ?? memberValue.MemberType, memberValue.Value);
+            return ShouldSerializeAsCollection(memberValue.GetBestMemberType(), memberValue.Value);
         }
 
         /// <summary>
@@ -449,6 +469,12 @@ namespace Catel.Runtime.Serialization
         protected virtual bool ShouldSerializeAsCollection(Type memberType, object memberValue)
         {
             if (memberType == typeof(byte[]))
+            {
+                return false;
+            }
+
+            // An exception is ModelBase, we will always serialize ourselves (even when it is a collection)
+            if (typeof (ModelBase).IsAssignableFromEx(memberType))
             {
                 return false;
             }
@@ -487,7 +513,7 @@ namespace Catel.Runtime.Serialization
                 return true;
             }
 
-            return ShouldSerializeAsDictionary(memberValue.ActualMemberType ?? memberValue.MemberType, memberValue.Value);
+            return ShouldSerializeAsDictionary(memberValue.GetBestMemberType(), memberValue.Value);
         }
 
         /// <summary>
@@ -553,7 +579,7 @@ namespace Catel.Runtime.Serialization
                 return false;
             }
 
-            return ShouldExternalSerializerHandleMember(memberValue.ActualMemberType ?? memberValue.MemberType, memberValue.Value);
+            return ShouldExternalSerializerHandleMember(memberValue.GetBestMemberType(), memberValue.Value);
         }
 
         /// <summary>
