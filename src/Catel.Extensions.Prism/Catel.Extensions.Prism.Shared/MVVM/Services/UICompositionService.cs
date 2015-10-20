@@ -15,7 +15,13 @@ namespace Catel.Services
     using Catel.Logging;
     using Catel.MVVM;
     using Catel.MVVM.Views;
+
+#if PRISM6
+    using Prism.Regions;
+#else
     using Microsoft.Practices.Prism.Regions;
+#endif
+
     using Reflection;
     using Threading;
 

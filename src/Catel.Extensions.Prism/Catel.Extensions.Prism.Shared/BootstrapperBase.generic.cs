@@ -7,7 +7,11 @@
 namespace Catel
 {
     using System.Windows;
+#if PRISM6
+    using Prism.Modularity;
+#else
     using Microsoft.Practices.Prism.Modularity;
+#endif
     using IoC;
 
 #if NET

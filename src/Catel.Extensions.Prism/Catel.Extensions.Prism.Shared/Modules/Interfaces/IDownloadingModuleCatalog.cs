@@ -7,7 +7,11 @@
 namespace Catel.Modules
 {
     using System;
+#if PRISM6
+    using Prism.Modularity;
+#else
     using Microsoft.Practices.Prism.Modularity;
+#endif
 
     /// <summary>
     /// Interfaces defining additional functionality of the <see cref="IModuleCatalog"/>.

@@ -15,12 +15,19 @@ namespace Catel
 
     using IoC;
     using Logging;
-
+#if PRISM6
+    using Prism;
+    using Prism.Events;
+    using Prism.Logging;
+    using Prism.Modularity;
+    using Prism.Regions;
+#else
     using Microsoft.Practices.Prism;
     using Microsoft.Practices.Prism.Events;
     using Microsoft.Practices.Prism.Logging;
     using Microsoft.Practices.Prism.Modularity;
     using Microsoft.Practices.Prism.Regions;
+#endif
     using Modules;
 
 #if PRISM5
@@ -414,7 +421,11 @@ namespace Catel
             if (_useDefaultConfiguration)
             {
                 Container.RegisterTypeIfNotYetRegistered<Microsoft.Practices.ServiceLocation.IServiceLocator, ServiceLocatorAdapter>();
+#if PRISM6
+                Container.RegisterTypeIfNotYetRegistered<IModuleInitializer, Prism.Modularity.ModuleInitializer>();
+#else
                 Container.RegisterTypeIfNotYetRegistered<IModuleInitializer, Microsoft.Practices.Prism.Modularity.ModuleInitializer>();
+#endif
                 Container.RegisterTypeIfNotYetRegistered<IModuleManager, ModuleManager>();
                 Container.RegisterTypeIfNotYetRegistered<RegionAdapterMappings, RegionAdapterMappings>();
                 Container.RegisterTypeIfNotYetRegistered<IRegionManager, RegionManager>();
@@ -486,11 +497,20 @@ namespace Catel
             moduleManager.Run();
         }
 
+#if PRISM6
+        /// <summary>
+        /// Called when the <see cref="IModuleManager" /> raises the <see cref="IModuleManager.ModuleDownloadProgressChanged" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="Prism.Modularity.ModuleDownloadProgressChangedEventArgs" /> instance containing the event data.</param>
+
+#else
         /// <summary>
         /// Called when the <see cref="IModuleManager" /> raises the <see cref="IModuleManager.ModuleDownloadProgressChanged" /> event.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="Microsoft.Practices.Prism.Modularity.ModuleDownloadProgressChangedEventArgs" /> instance containing the event data.</param>
+#endif 
         private void OnModuleDownloadProgressChanged(object sender, ModuleDownloadProgressChangedEventArgs e)
         {
             if (e.ProgressPercentage == 100)

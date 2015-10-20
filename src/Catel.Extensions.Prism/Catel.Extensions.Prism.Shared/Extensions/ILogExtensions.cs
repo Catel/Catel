@@ -10,7 +10,11 @@ namespace Catel
 
     using Logging;
 
+#if PRISM6
+    using Prism.Logging;
+#else
     using Microsoft.Practices.Prism.Logging;
+#endif
 
     /// <summary>
     /// The <see cref="ILog"/> extensions methods.

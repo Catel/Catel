@@ -8,14 +8,21 @@ namespace Catel.Modules
 {
     using System;
     using IoC;
+
+#if PRISM6
+    using Prism.Modularity;
+    using Prism.Regions;
+#else
     using Microsoft.Practices.Prism.Modularity;
     using Microsoft.Practices.Prism.Regions;
+#endif
+
 
     /// <summary>
     /// Base class to allow faster development of prism modules.
     /// </summary>
     /// <typeparam name="TContainer">The type of the IoC container.</typeparam>
-#if NET
+#if NET 
     [Module]
 #endif
     public abstract class ModuleBase<TContainer> : IModule

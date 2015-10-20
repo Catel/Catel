@@ -10,7 +10,12 @@ namespace Catel.Services
 
     using Catel.MVVM;
 
+#if PRISM6
+    using Prism.Regions;
+#else
     using Microsoft.Practices.Prism.Regions;
+#endif
+
 
     /// <summary>
     /// The user interface composition service interface.
