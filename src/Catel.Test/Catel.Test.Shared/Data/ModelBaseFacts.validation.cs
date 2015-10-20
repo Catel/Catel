@@ -642,15 +642,6 @@ namespace Catel.Test.Data
                 {
                     base.Validate(force);
                 }
-
-                public bool HasNotValidatedProperties()
-                {
-                    var t = typeof(ModelBase);
-                    var f = t.GetFieldEx("_propertiesNotCheckedDuringDisabledValidation", BindingFlags.Instance | BindingFlags.NonPublic);
-                    var v = f.GetValue(this) as HashSet<string>;
-
-                    return v.Count != 0;
-                }
             }
 
             [TestCase]
