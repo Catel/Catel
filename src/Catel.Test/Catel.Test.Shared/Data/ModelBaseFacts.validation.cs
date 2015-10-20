@@ -9,8 +9,11 @@ namespace Catel.Test.Data
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using System.Reflection;
+
     using Catel.Data;
     using Catel.IoC;
+    using Catel.Reflection;
 
     using NUnit.Framework;
 
@@ -639,6 +642,15 @@ namespace Catel.Test.Data
                 {
                     base.Validate(force);
                 }
+
+                public bool HasNotValidatedProperties()
+                {
+                    var t = typeof(ModelBase);
+                    var f = t.GetFieldEx("_propertiesNotCheckedDuringDisabledValidation", BindingFlags.Instance | BindingFlags.NonPublic);
+                    var v = f.GetValue(this) as HashSet<string>;
+
+                    return v.Count != 0;
+                }
             }
 
             [TestCase]
@@ -690,6 +702,71 @@ namespace Catel.Test.Data
                 model.Validate(true);
 
                 Assert.AreEqual(1, model.Counter);
+            }
+        }
+
+        [TestFixture]
+
+        public class IgnoreDataAnnotationValidationOnSetValue
+        {
+            public class ModelWithoutAnnotation : ModelBase
+            {
+                public static readonly PropertyData CounterProperty = RegisterProperty<ModelWithoutAnnotation, int>(model => model.Counter);
+
+                public int Counter
+                {
+                    get { return GetValue<int>(CounterProperty); }
+
+                    set { SetValue(CounterProperty, value); }
+                }
+
+                public void SetValidateUsingDataAnnotations(bool value)
+                {
+                    ValidateUsingDataAnnotations = value;
+                }
+
+                public bool HasNotValidatedProperties()
+                {
+                    var t = typeof(ModelBase);
+                    var f = t.GetFieldEx("_propertiesNotCheckedDuringDisabledValidation", BindingFlags.Instance | BindingFlags.NonPublic);
+                    var v = f.GetValue(this) as HashSet<string>;
+
+                    return v.Count != 0;
+                }
+            }
+
+            [TestCase]
+            public void OnInstancePropertyIgnoreDataAnnotationSkipAnnotationValidation()
+            {
+                var oldSuspension = Model.SuspendValidationForAllModels;
+                Model.SuspendValidationForAllModels = true;
+
+                // Set intance property to skip data annotations validation
+                var model = new ModelWithoutAnnotation();
+                model.SetValidateUsingDataAnnotations(false);
+
+                model.Counter = 1;
+
+                Assert.AreEqual(false, model.HasNotValidatedProperties());
+
+                Model.SuspendValidationForAllModels = oldSuspension;
+            }
+
+
+            [TestCase]
+            public void ByDefaultValidateDataAnnotationOnSetValue()
+            {
+                var oldSuspension = Model.SuspendValidationForAllModels;
+                Model.SuspendValidationForAllModels = true;
+
+                // By default instance property set to check annotation validation
+                var model = new ModelWithoutAnnotation();
+
+                model.Counter = 1;
+
+                Assert.AreEqual(true, model.HasNotValidatedProperties());
+
+                Model.SuspendValidationForAllModels = oldSuspension;
             }
         }
 #endif

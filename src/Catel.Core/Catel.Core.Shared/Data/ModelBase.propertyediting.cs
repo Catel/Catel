@@ -122,7 +122,7 @@ namespace Catel.Data
                 }
 
                 // Validate before assigning, dynamic properties will cause exception
-                if (validateAttributes && !LeanAndMeanModel)
+                if (validateAttributes && !LeanAndMeanModel && ValidateUsingDataAnnotations)
                 {
                     ValidatePropertyUsingAnnotations(property.Name, value, property);
                 }
