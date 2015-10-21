@@ -65,7 +65,7 @@ namespace Catel.MVVM
                 var valueType = value.GetType();
                 if (valueType.IsEnumEx())
                 {
-                    memberInfo = valueType.GetMember(value.ToString()).FirstOrDefault();
+                    memberInfo = valueType.GetMemberEx(value.ToString()).FirstOrDefault();
                     if (memberInfo != null)
                     {
                         DisplayNameAttribute displayAttribute = null;
