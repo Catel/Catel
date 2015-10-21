@@ -34,6 +34,54 @@ namespace Catel.Reflection
         }
 
         /// <summary>
+        /// Gets the members.
+        /// </summary>
+        /// <param name="typeInfo">The <see cref="TypeInfo"/>.</param>
+        /// <param name="bindingFlags">The binding flags.</param>
+        /// <returns>An array of <see cref="FieldInfo"/>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
+        public static MemberInfo[] GetMembers(this TypeInfo typeInfo, BindingFlags bindingFlags)
+        {
+            Argument.IsNotNull("typeInfo", typeInfo);
+
+            var flattenHierarchy = ShouldFlattenHierarchy(bindingFlags);
+            var source = typeInfo.DeclaredMembers.ToList();
+
+            // TODO: This is a fix because static members are not included in FlattenHierarcy, remove when this is fixed in WinRT
+            if (flattenHierarchy)
+            {
+                var baseType = typeInfo.BaseType;
+                if ((baseType != null) && (baseType != typeof(object)))
+                {
+                    source.AddRange(from member in GetMembers(baseType.GetTypeInfo(), bindingFlags)
+                                    select member);
+                }
+            }
+
+            return (from x in source
+                    select x).ToArray();
+        }
+
+        /// <summary>
+        /// Gets the member with the specified name.
+        /// </summary>
+        /// <param name="typeInfo">The <see cref="TypeInfo"/>.</param>
+        /// <param name="name">The name of the member to retrieve.</param>
+        /// <param name="bindingFlags">The binding flags.</param>
+        /// <returns>The <see cref="FieldInfo"/> or <c>null</c> if the member is not found.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="typeInfo"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        public static MemberInfo[] GetMember(this TypeInfo typeInfo, string name, BindingFlags bindingFlags)
+        {
+            Argument.IsNotNull("typeInfo", typeInfo);
+            Argument.IsNotNullOrWhitespace("name", name);
+
+            return (from x in GetMembers(typeInfo, bindingFlags)
+                    where x.Name == name
+                    select x).ToArray();
+        }
+
+        /// <summary>
         /// Gets the fields.
         /// </summary>
         /// <param name="typeInfo">The <see cref="TypeInfo"/>.</param>
@@ -79,9 +127,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("typeInfo", typeInfo);
             Argument.IsNotNullOrWhitespace("name", name);
-
-            //var includeStatics = Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.Static);
-
+            
             return (from x in GetFields(typeInfo, bindingFlags)
                     where x.Name == name
                     select x).FirstOrDefault();
