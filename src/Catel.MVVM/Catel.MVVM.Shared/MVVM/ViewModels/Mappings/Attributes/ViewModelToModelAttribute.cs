@@ -56,11 +56,11 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="model">The property name that holds the model object.</param>
         /// <param name="property">The property of the model object that should be linked to the <see cref="ViewModelBase"/> property.</param>
-        /// <exception cref="ArgumentException">The <paramref name="model"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
-        public ViewModelToModelAttribute(string model, string property = "")
+        public ViewModelToModelAttribute(string model = "", string property = "")
         {
-            Argument.IsNotNullOrWhitespace("model", model);
+            Argument.IsNotNull("model", model);
             Argument.IsNotNull("property", property);
 
             Model = model;
