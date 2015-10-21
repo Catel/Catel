@@ -13,7 +13,7 @@ namespace Catel.ComponentModel
     /// <summary>
     /// A custom implementation of the display name attribute that uses the <see cref="ILanguageService"/>.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event | AttributeTargets.Field)]
     public class DisplayNameAttribute :
 #if NET
         System.ComponentModel.DisplayNameAttribute
