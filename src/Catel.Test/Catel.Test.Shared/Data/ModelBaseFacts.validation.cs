@@ -697,7 +697,6 @@ namespace Catel.Test.Data
         }
 
         [TestFixture]
-
         public class IgnoreDataAnnotationValidationOnSetValue
         {
             public class ModelWithoutAnnotation : ModelBase
