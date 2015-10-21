@@ -475,6 +475,11 @@ namespace Catel.Data
         /// <returns><c>true</c> if no errors using data annotations are found; otherwise <c>false</c>.</returns>
         private bool ValidatePropertyUsingAnnotations(string propertyName, object value, PropertyData catelPropertyData)
         {
+            if (!ValidateUsingDataAnnotations)
+            {
+                return true;
+            }
+
             if (SuspendValidation)
             {
                 _propertiesNotCheckedDuringDisabledValidation.Add(propertyName);
