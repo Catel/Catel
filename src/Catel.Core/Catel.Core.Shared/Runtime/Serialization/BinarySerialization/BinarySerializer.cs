@@ -256,7 +256,8 @@ namespace Catel.Runtime.Serialization.Binary
 
             try
             {
-                if (ShouldSerializeAsCollection(context.ModelType, context.Model))
+                var shouldSerializeAsCollection = ShouldSerializeAsCollection(context.ModelType);
+                if (shouldSerializeAsCollection)
                 {
                     var collection = serializationInfo.GetValue(CollectionName, context.ModelType);
                     var memberValue = new MemberValue(SerializationMemberGroup.Collection, context.ModelType, context.ModelType, CollectionName, CollectionName, collection);
@@ -321,6 +322,17 @@ namespace Catel.Runtime.Serialization.Binary
         }
 
         /// <summary>
+        /// Shoulds the serialize model as collection.
+        /// </summary>
+        /// <param name="memberType">Type of the member.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        protected override bool ShouldSerializeModelAsCollection(Type memberType)
+        {
+            // The binary serializer never serializes models as collections
+            return false;
+        }
+
+        /// <summary>
         /// Configures the binary formatter.
         /// </summary>
         /// <param name="contextMode">The context mode.</param>
@@ -357,7 +369,8 @@ namespace Catel.Runtime.Serialization.Binary
                 if (memberValue.Value != null && memberValue.Value.GetType().IsClassType())
                 {
                     var referenceInfo = referenceManager.GetInfo(memberValue.Value);
-                    if (referenceInfo.IsFirstUsage || memberValue.MemberGroup == SerializationMemberGroup.Collection)
+                    var shouldSerializeAsCollection = memberValue.MemberGroup == SerializationMemberGroup.Collection;
+                    if (referenceInfo.IsFirstUsage || shouldSerializeAsCollection)
                     {
                         propertyValue.GraphId = referenceInfo.Id;
                     }

@@ -133,7 +133,7 @@ namespace Catel.Runtime.Serialization
                 return listToSerialize;
             }
 
-            if (ShouldSerializeAsDictionary(modelType, model))
+            if (ShouldSerializeAsDictionary(modelType))
             {
                 // CTL-688: only support json for now. In the future, these checks (depth AND type) should be removed
                 if (SupportsDictionarySerialization(context))
@@ -143,7 +143,7 @@ namespace Catel.Runtime.Serialization
                 }
             }
 
-            if (ShouldSerializeAsCollection(modelType, model))
+            if (ShouldSerializeAsCollection(modelType))
             {
                 listToSerialize.Add(new MemberValue(SerializationMemberGroup.Collection, modelType, modelType, CollectionName, CollectionName, model));
                 return listToSerialize;
@@ -234,7 +234,7 @@ namespace Catel.Runtime.Serialization
 
             if (types == null)
             {
-                types = TypeCache.GetTypes(x => typeof(ModelBase).IsAssignableFromEx(x));
+                types = TypeCache.GetTypes(x => x.IsModelBase());
             }
 
             var allTypes = new List<Type>(types);
@@ -425,19 +425,16 @@ namespace Catel.Runtime.Serialization
             return null;
         }
 
+
         /// <summary>
-        /// Returns whether the specified member value should manually be serialized as collection. This is a very rare
-        /// case where a ModelBase implements IList as well.
+        /// Returns whether the model should be serialized as collection. Note that this method will
+        /// return <c>false</c> if the method does not derive from <c>ModelBase</c>.
         /// </summary>
-        /// <param name="memberValue">The member value.</param>
-        /// <param name="serializationContext">The serialization context.</param>
-        /// <returns><c>true</c> if the serializer should manually serialize as collection, <c>false</c> otherwise.</returns>
-        protected bool ShouldManuallySerializeAsCollection(MemberValue memberValue, ISerializationContext serializationContext)
+        /// <param name="memberType">Type of the member.</param>
+        /// <returns><c>true</c> if the model should be serialized as a collection, <c>false</c> otherwise.</returns>
+        protected virtual bool ShouldSerializeModelAsCollection(Type memberType)
         {
-            // In special cases, we need to write our own collection items. One case is where a custom ModelBase
-            // implements IList and gets inside a StackOverflow
-            if (memberValue.MemberGroup != SerializationMemberGroup.Collection &&
-                typeof (ModelBase).IsAssignableFromEx(memberValue.GetBestMemberType()))
+            if (AttributeHelper.IsDecoratedWithAttribute<SerializeAsCollectionAttribute>(memberType))
             {
                 return true;
             }
@@ -457,26 +454,27 @@ namespace Catel.Runtime.Serialization
                 return true;
             }
 
-            return ShouldSerializeAsCollection(memberValue.GetBestMemberType(), memberValue.Value);
+            return ShouldSerializeAsCollection(memberValue.GetBestMemberType());
         }
 
         /// <summary>
         /// Returns whether the member value should be serialized as collection.
         /// </summary>
         /// <param name="memberType">Type of the member.</param>
-        /// <param name="memberValue">The member value.</param>
         /// <returns><c>true</c> if the member value should be serialized as collection, <c>false</c> otherwise.</returns>
-        protected virtual bool ShouldSerializeAsCollection(Type memberType, object memberValue)
+        protected virtual bool ShouldSerializeAsCollection(Type memberType)
         {
+            // TODO: add caching
+
             if (memberType == typeof(byte[]))
             {
                 return false;
             }
 
             // An exception is ModelBase, we will always serialize ourselves (even when it is a collection)
-            if (typeof (ModelBase).IsAssignableFromEx(memberType))
+            if (memberType.IsModelBase())
             {
-                return false;
+                return ShouldSerializeModelAsCollection(memberType);
             }
 
             if (memberType.IsCollection())
@@ -513,17 +511,18 @@ namespace Catel.Runtime.Serialization
                 return true;
             }
 
-            return ShouldSerializeAsDictionary(memberValue.GetBestMemberType(), memberValue.Value);
+            return ShouldSerializeAsDictionary(memberValue.GetBestMemberType());
         }
 
         /// <summary>
         /// Returns whether the member value should be serialized as dictionary.
         /// </summary>
         /// <param name="memberType">Type of the member.</param>
-        /// <param name="memberValue">The member value.</param>
         /// <returns><c>true</c> if the member value should be serialized as dictionary, <c>false</c> otherwise.</returns>
-        protected virtual bool ShouldSerializeAsDictionary(Type memberType, object memberValue)
+        protected virtual bool ShouldSerializeAsDictionary(Type memberType)
         {
+            // TODO: add caching
+
             if (memberType.IsDictionary())
             {
                 return true;

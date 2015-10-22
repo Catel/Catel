@@ -385,7 +385,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             OptimizeXDocument(document);
 
-            if (ShouldSerializeAsCollection(context.ModelType, context.Model))
+            if (ShouldSerializeAsCollection(context.ModelType))
             {
                 // Because we have 'Items\Items' for collections, remote the root
                 document = new XDocument(document.Root.FirstNode);
@@ -403,7 +403,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns>System.String.</returns>
         protected string GetXmlElementName(Type modelType, object model, string memberName)
         {
-            if (ShouldSerializeAsCollection(modelType, model))
+            if (ShouldSerializeAsCollection(modelType))
             {
                 return CollectionName;
             }
@@ -604,11 +604,55 @@ namespace Catel.Runtime.Serialization.Xml
                 }
             }
 
-            var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, propertyTypeToDeserialize, xmlName, null, null);
-
-            using (var xmlReader = element.CreateReader())
+            var isDeserialized = false;
+            if (ShouldSerializeModelAsCollection(propertyTypeToDeserialize))
             {
-                value = serializer.ReadObject(xmlReader, false);
+                var collection = value as IList;
+                if (collection == null)
+                {
+                    collection = CreateModelInstance(propertyTypeToDeserialize) as IList;
+                }
+
+                if (collection == null)
+                {
+                    throw Log.ErrorAndCreateException<NotSupportedException>("Cannot deserialize type '{0}', it should implement IList in order to be deserialized", propertyTypeToDeserialize.GetSafeFullName());
+                }
+
+                var realCollectionType = collection.GetType();
+                var childElementType = realCollectionType.GetCollectionElementType();
+                if (childElementType == null)
+                {
+                    throw Log.ErrorAndCreateException<NotSupportedException>("Cannot deserialize type '{0}', could not determine the element type of the collection", propertyTypeToDeserialize.GetSafeFullName());
+                }
+
+                var serializer = _dataContractSerializerFactory.GetDataContractSerializer(propertyTypeToDeserialize, childElementType, xmlName, null, null);
+
+                var childElements = element.Elements();
+                foreach (var childElement in childElements)
+                {
+                    using (var xmlReader = childElement.CreateReader())
+                    {
+                        var childValue = serializer.ReadObject(xmlReader, false);
+                        if (childValue != null)
+                        {
+                            collection.Add(childValue);
+                        }
+                    }
+                }
+
+                value = collection;
+
+                isDeserialized = true;
+            }
+
+            if (!isDeserialized)
+            {
+                var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, propertyTypeToDeserialize, xmlName, null, null);
+
+                using (var xmlReader = element.CreateReader())
+                {
+                    value = serializer.ReadObject(xmlReader, false);
+                }
             }
 
             // Fix for CTL-555
@@ -733,7 +777,32 @@ namespace Catel.Runtime.Serialization.Xml
                             xmlWriter.WriteAttributeString(namespacePrefix, "type", null, memberTypeToSerializerName);
                         }
 
-                        serializer.WriteObjectContent(xmlWriter, memberValue.Value);
+                        // In special cases, we need to write our own collection items. One case is where a custom ModelBase
+                        // implements IList and gets inside a StackOverflow
+                        var serialized = false;
+                        if (ShouldSerializeModelAsCollection(memberValue.GetBestMemberType()))
+                        {
+                            var collection = memberValue.Value as IEnumerable;
+                            if (collection != null)
+                            {
+                                foreach (var item in collection)
+                                {
+                                    var subItemElementName = GetXmlElementName(item.GetType(), item, null);
+                                    xmlWriter.WriteStartElement(subItemElementName);
+
+                                    serializer.WriteObjectContent(xmlWriter, item);
+
+                                    xmlWriter.WriteEndElement();
+                                }
+
+                                serialized = true;
+                            }
+                        }
+
+                        if (!serialized)
+                        {
+                            serializer.WriteObjectContent(xmlWriter, memberValue.Value);
+                        }
 
                         xmlWriter.WriteEndElement();
                     }

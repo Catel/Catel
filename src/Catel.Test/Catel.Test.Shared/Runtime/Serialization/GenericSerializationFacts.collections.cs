@@ -563,6 +563,20 @@ namespace Catel.Test.Runtime.Serialization
             }
 
             [Serializable]
+            [SerializeAsCollection]
+            public class FloorCollectionAsCollection : ModelObservableCollectionBase<Floor>, IFloorCollection
+            {
+                public FloorCollectionAsCollection()
+                {
+                }
+
+                protected FloorCollectionAsCollection(SerializationInfo info, StreamingContext context)
+                    : base(info, context)
+                {
+                }
+            }
+
+            [Serializable]
             public class Building : ModelBase
             {
                 public Building()
@@ -593,6 +607,36 @@ namespace Catel.Test.Runtime.Serialization
             }
 
             [Serializable]
+            public class BuildingAsCollection : ModelBase
+            {
+                public BuildingAsCollection()
+                {
+                }
+
+                protected BuildingAsCollection(SerializationInfo info, StreamingContext context)
+                    : base(info, context)
+                {
+                }
+
+                public string Name
+                {
+                    get { return this.GetValue<string>(NameProperty); }
+                    set { this.SetValue(NameProperty, value); }
+                }
+
+                public static readonly PropertyData NameProperty = RegisterProperty<BuildingAsCollection, string>(o => o.Name);
+
+
+                public IFloorCollection Floors
+                {
+                    get { return this.GetValue<IFloorCollection>(FloorsProperty); }
+                    set { this.SetValue(FloorsProperty, value); }
+                }
+
+                public static readonly PropertyData FloorsProperty = RegisterProperty<BuildingAsCollection, IFloorCollection>(o => o.Floors, () => (IFloorCollection)new FloorCollectionAsCollection());
+            }
+
+            [Serializable]
             public class BuildingCollection : ModelObservableCollectionBase<Building>
             {
                 public BuildingCollection()
@@ -600,6 +644,20 @@ namespace Catel.Test.Runtime.Serialization
                 }
 
                 protected BuildingCollection(SerializationInfo info, StreamingContext context)
+                    : base(info, context)
+                {
+                }
+            }
+
+            [Serializable]
+            [SerializeAsCollection]
+            public class BuildingCollectionAsCollection : ModelObservableCollectionBase<BuildingAsCollection>
+            {
+                public BuildingCollectionAsCollection()
+                {
+                }
+
+                protected BuildingCollectionAsCollection(SerializationInfo info, StreamingContext context)
                     : base(info, context)
                 {
                 }
@@ -630,7 +688,7 @@ namespace Catel.Test.Runtime.Serialization
             }
 
             [TestCase]
-            public void CanSerializeModelBaseAndCollection()
+            public void CanSerializeModelBaseAndCollectionAsModel()
             {
                 var b1 = new Building { Name = "B1" };
                 b1.Floors.Add(new Floor { Name = "F1" });
@@ -641,6 +699,38 @@ namespace Catel.Test.Runtime.Serialization
                 var b3 = new Building { Name = "B3" };
 
                 var bc = new BuildingCollection();
+                bc.Add(b1);
+                bc.Add(b2);
+                bc.Add(b3);
+
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(bc, serializer);
+
+                    Assert.AreEqual(bc.Count, deserializedObject.Count, description);
+
+                    Assert.AreEqual(3, deserializedObject.Count, description);
+                    Assert.AreEqual("B1", deserializedObject[0].Name, description);
+                    Assert.AreEqual("F1", deserializedObject[0].Floors[0].Name, description);
+                    Assert.AreEqual("F2", deserializedObject[0].Floors[1].Name, description);
+                    Assert.AreEqual("F3", deserializedObject[0].Floors[2].Name, description);
+                    Assert.AreEqual("B2", deserializedObject[1].Name, description);
+                    Assert.AreEqual("B3", deserializedObject[2].Name, description);
+                });
+            }
+
+            [TestCase]
+            public void CanSerializeModelBaseAndCollectionAsCollection()
+            {
+                var b1 = new BuildingAsCollection { Name = "B1" };
+                b1.Floors.Add(new Floor { Name = "F1" });
+                b1.Floors.Add(new Floor { Name = "F2" });
+                b1.Floors.Add(new Floor { Name = "F3" });
+
+                var b2 = new BuildingAsCollection { Name = "B2" };
+                var b3 = new BuildingAsCollection { Name = "B3" };
+
+                var bc = new BuildingCollectionAsCollection();
                 bc.Add(b1);
                 bc.Add(b2);
                 bc.Add(b3);
