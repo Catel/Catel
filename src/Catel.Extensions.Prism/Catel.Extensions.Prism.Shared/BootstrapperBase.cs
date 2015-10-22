@@ -584,17 +584,11 @@ namespace Catel
             #region Constructors
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="LoggerFacadeAdapter"/> class. 
+            /// Initializes a new instance of the <see cref="LoggerFacadeAdapter" /> class.
             /// </summary>
-            /// <param name="log">
-            /// The log.
-            /// </param>
-            /// <param name="relayCatelMessageToLoggerFacade">
-            /// Option to relay catel message to logger facade
-            /// </param>
-            /// <exception cref="System.ArgumentNullException">
-            /// The <paramref name="log"/> is <c>null</c>.
-            /// </exception>
+            /// <param name="log">The log.</param>
+            /// <param name="relayCatelMessageToLoggerFacade">Option to relay catel message to logger facade</param>
+            /// <exception cref="System.ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
             public LoggerFacadeAdapter(ILog log, bool relayCatelMessageToLoggerFacade = false)
             {
                 Argument.IsNotNull("log", log);
@@ -612,15 +606,9 @@ namespace Catel
             /// <summary>
             /// The log.
             /// </summary>
-            /// <param name="message">
-            /// The message.
-            /// </param>
-            /// <param name="category">
-            /// The category.
-            /// </param>
-            /// <param name="priority">
-            /// The priority.
-            /// </param>
+            /// <param name="message">The message.</param>
+            /// <param name="category">The category.</param>
+            /// <param name="priority">The priority.</param>
             void ILoggerFacade.Log(string message, Category category, Priority priority)
             {
                 switch (category)
@@ -706,10 +694,10 @@ namespace Catel
             /// <param name="category">The category.</param>
             private void RelayLogMessageToLoggerFacadeIfRequired(string message, Category category)
             {
-                Match match = _catelToLoggerFacadeRegex.Match(message);
+                var match = _catelToLoggerFacadeRegex.Match(message);
                 if (!match.Success)
                 {
-                    Match match2 = _catelRegex.Match(message);
+                    var match2 = _catelRegex.Match(message);
                     if (match2.Success)
                     {
                         (this as ILoggerFacade).Log(match2.Groups[1].Value, category, Priority.None);
