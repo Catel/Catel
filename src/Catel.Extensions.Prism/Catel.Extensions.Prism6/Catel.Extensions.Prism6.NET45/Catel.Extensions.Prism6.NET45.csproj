@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -25,13 +25,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>..\..\..\..\output\debug\NET45\Catel.Extensions.Prism5\Catel.Extensions.Prism.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\..\output\debug\NET45\Catel.Extensions.Prism6\Catel.Extensions.Prism.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\..\output\release\NET45\Catel.Extensions.Prism5\</OutputPath>
-    <DefineConstants>TRACE;NET; NET45; PRISM5</DefineConstants>
+    <OutputPath>..\..\..\..\output\release\NET45\Catel.Extensions.Prism6\</OutputPath>
+    <DefineConstants>TRACE;NET; NET45; PRISM6</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
