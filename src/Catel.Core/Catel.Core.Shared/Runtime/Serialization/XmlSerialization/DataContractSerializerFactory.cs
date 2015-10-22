@@ -360,7 +360,7 @@ namespace Catel.Runtime.Serialization.Xml
         {
             var typesToCheck = new List<Type>();
 
-            var isModelBase = (type == typeof(ModelBase)) || typeof(ModelBase).IsAssignableFromEx(type);
+            var isModelBase = type.IsModelBase();
             if (isModelBase)
             {
                 // No need to check members, they will be serialized by ModelBase
@@ -448,7 +448,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             // Is ModelBase
-            if (typeof(ModelBase).IsAssignableFromEx(type))
+            if (type.IsModelBase())
             {
                 return true;
             }
@@ -597,7 +597,7 @@ namespace Catel.Runtime.Serialization.Xml
         protected virtual bool AllowNonPublicReflection(Type type)
         {
 #if NET
-            var allowNonPublicReflection = (type == typeof(ModelBase)) || !typeof(ModelBase).IsAssignableFromEx(type);
+            var allowNonPublicReflection = type.IsModelBase();
 #else
             var allowNonPublicReflection = false;
 #endif

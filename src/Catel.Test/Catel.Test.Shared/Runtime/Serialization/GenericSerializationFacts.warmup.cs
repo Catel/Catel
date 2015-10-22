@@ -56,7 +56,7 @@ namespace Catel.Test.Runtime.Serialization
                             TypeCache.InitializeTypes();
 
                             ConsoleHelper.Write("TypeCache contains {0} items", TypeCache.GetTypes().Count());
-                            ConsoleHelper.Write("TypeCache contains {0} ModelBase items", TypeCache.GetTypes(x => typeof(ModelBase).IsAssignableFromEx(x)).Count());
+                            ConsoleHelper.Write("TypeCache contains {0} ModelBase items", TypeCache.GetTypes(x => x.IsModelBase()).Count());
                         });
                 });
 
@@ -76,7 +76,7 @@ namespace Catel.Test.Runtime.Serialization
                             TypeCache.InitializeTypes();
 
                             ConsoleHelper.Write("TypeCache contains {0} items", TypeCache.GetTypes().Count());
-                            ConsoleHelper.Write("TypeCache contains {0} ModelBase items", TypeCache.GetTypes(x => typeof(ModelBase).IsAssignableFromEx(x)).Count());
+                            ConsoleHelper.Write("TypeCache contains {0} ModelBase items", TypeCache.GetTypes(x => x.IsModelBase()).Count());
                         });
                 });
 
