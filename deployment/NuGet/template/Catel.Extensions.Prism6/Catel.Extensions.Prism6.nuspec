@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package>
   <metadata>
-    <id>Catel.Extensions.Prism5</id>
+    <id>Catel.Extensions.Prism6</id>
     <version>[VERSION]</version>
-	<title>Catel.Extensions.Prism5</title>
+	<title>Catel.Extensions.Prism6</title>
     <authors>GeertvanHorrik</authors>
 	
 	<description>
