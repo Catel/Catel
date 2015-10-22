@@ -60,6 +60,7 @@ Added/fixed:
 (x) CTL-744 Fixed missing DataWindowStyle when only referencing Catel.Extensions.Controls theme (it was no longer
     including the Catel.MVVM theme)
 (x) CTL-753 Support serialization for ModelBase that also implements IList
+(x) CTL-761 NumericTextBox does not support Key.Decimal entries
 
 Roadmap:
 ========
