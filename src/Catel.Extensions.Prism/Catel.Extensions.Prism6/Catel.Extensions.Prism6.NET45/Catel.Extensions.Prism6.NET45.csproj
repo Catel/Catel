@@ -20,7 +20,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\output\debug\NET45\Catel.Extensions.Prism5\</OutputPath>
+    <OutputPath>..\..\..\..\output\debug\NET45\Catel.Extensions.Prism6\</OutputPath>
     <DefineConstants>TRACE;DEBUG;NET; NET45; PRISM6</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -35,7 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>..\..\..\..\output\release\NET45\Catel.Extensions.Prism\Catel.Extensions.Prism.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\..\output\release\NET45\Catel.Extensions.Prism6\Catel.Extensions.Prism.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Catel.Fody.Attributes">

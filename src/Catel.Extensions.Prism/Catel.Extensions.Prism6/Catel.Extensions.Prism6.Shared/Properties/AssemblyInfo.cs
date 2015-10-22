@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Catel.Extensions.Prism")]
 [assembly: AssemblyProduct("Catel.Extensions.Prism")]
-[assembly: AssemblyDescription("Catel Prism 5 library")]
+[assembly: AssemblyDescription("Catel Prism 6 library")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
