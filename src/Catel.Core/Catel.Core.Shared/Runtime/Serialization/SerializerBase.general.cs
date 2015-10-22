@@ -55,6 +55,8 @@ namespace Catel.Runtime.Serialization
 
         #region Fields
         private readonly CacheStorage<Type, SerializationModelInfo> _serializationModelCache = new CacheStorage<Type, SerializationModelInfo>();
+
+        private readonly CacheStorage<Type, bool> _shouldSerializeAsCollectionCache = new CacheStorage<Type, bool>(); 
         #endregion
 
         #region Constructors
@@ -464,39 +466,41 @@ namespace Catel.Runtime.Serialization
         /// <returns><c>true</c> if the member value should be serialized as collection, <c>false</c> otherwise.</returns>
         protected virtual bool ShouldSerializeAsCollection(Type memberType)
         {
-            // TODO: add caching
-
-            if (memberType == typeof(byte[]))
+            return _shouldSerializeAsCollectionCache.GetFromCacheOrFetch(memberType, () =>
             {
-                return false;
-            }
+                if (memberType == typeof (byte[]))
+                {
+                    return false;
+                }
 
-            // An exception is ModelBase, we will always serialize ourselves (even when it is a collection)
-            if (memberType.IsModelBase())
-            {
-                return ShouldSerializeModelAsCollection(memberType);
-            }
+                // An exception is ModelBase, we will always serialize ourselves (even when it is a collection)
+                if (memberType.IsModelBase())
+                {
+                    return ShouldSerializeModelAsCollection(memberType);
+                }
 
-            if (memberType.IsCollection())
-            {
-                return true;
-            }
-
-            if (memberType == typeof(IEnumerable))
-            {
-                return true;
-            }
-
-            if (memberType.IsGenericTypeEx())
-            {
-                var genericDefinition = memberType.GetGenericTypeDefinitionEx();
-                if (genericDefinition == typeof(IEnumerable<>) || typeof(IEnumerable<>).IsAssignableFromEx(genericDefinition))
+                if (memberType.IsCollection())
                 {
                     return true;
                 }
-            }
 
-            return false;
+                if (memberType == typeof (IEnumerable))
+                {
+                    return true;
+                }
+
+                if (memberType.IsGenericTypeEx())
+                {
+                    var genericDefinition = memberType.GetGenericTypeDefinitionEx();
+                    if (genericDefinition == typeof (IEnumerable<>) ||
+                        typeof (IEnumerable<>).IsAssignableFromEx(genericDefinition))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
         }
 
         /// <summary>
