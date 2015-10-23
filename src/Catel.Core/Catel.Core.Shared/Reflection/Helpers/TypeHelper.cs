@@ -496,7 +496,7 @@ namespace Catel.Reflection
         /// <returns>The casted value.</returns>
         public static TOutput Cast<TOutput>(object value)
         {
-            TOutput output = default(TOutput);
+            var output = default(TOutput);
 
             if (!TryCast(value, out output))
             {

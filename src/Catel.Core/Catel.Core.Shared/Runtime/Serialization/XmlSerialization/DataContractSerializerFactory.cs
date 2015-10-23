@@ -112,12 +112,13 @@ namespace Catel.Runtime.Serialization.Xml
             Argument.IsNotNull("typeToSerialize", typeToSerialize);
             Argument.IsNotNullOrWhitespace("xmlName", xmlName);
 
-            var key = string.Format("{0}|{1}", typeToSerialize.GetSafeFullName(), xmlName);
+            var typeToSerializeName = typeToSerialize.GetSafeFullName();
+            var key = string.Format("{0}|{1}", typeToSerializeName, xmlName);
 
             return _dataContractSerializersCache.GetFromCacheOrFetch(key, () =>
             {
 #if ENABLE_DETAILED_LOGGING
-                Log.Debug("Getting known types for xml serialization of '{0}'", typeToSerialize.GetSafeFullName());
+                Log.Debug("Getting known types for xml serialization of '{0}'", typeToSerializeName);
 #endif
 
                 var serializerTypeInfo = new XmlSerializerTypeInfo(serializingType, typeToSerialize, additionalKnownTypes);
@@ -360,7 +361,7 @@ namespace Catel.Runtime.Serialization.Xml
         {
             var typesToCheck = new List<Type>();
 
-            var isModelBase = (type == typeof(ModelBase)) || typeof(ModelBase).IsAssignableFromEx(type);
+            var isModelBase = type.IsModelBase();
             if (isModelBase)
             {
                 // No need to check members, they will be serialized by ModelBase
@@ -448,7 +449,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             // Is ModelBase
-            if (typeof(ModelBase).IsAssignableFromEx(type))
+            if (type.IsModelBase())
             {
                 return true;
             }
@@ -470,6 +471,13 @@ namespace Catel.Runtime.Serialization.Xml
                 return true;
             }
 
+            // Never include generic type definitions, otherwise we will get this:
+            // Error while getting known types for Type 'Catel.Test.Data.PropertyDataManagerFacts+SupportsGenericClasses+GenericClass`1[T]'. The type must not be an open or partial generic class.
+            if (type.IsGenericTypeDefinitionEx())
+            {
+                return true;
+            }
+
             // Note, although resharper says this isn't possible, it might be
             var fullName = type.GetSafeFullName();
             if (string.IsNullOrWhiteSpace(fullName))
@@ -479,7 +487,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             // Ignore non-generic .NET
-            if (!type.IsGenericTypeEx() && type.GetSafeFullName().StartsWith("System."))
+            if (!type.IsGenericTypeEx() && fullName.StartsWith("System."))
             {
                 // Log.Debug("Non-generic .NET system type, can be ignored");
                 serializerTypeInfo.AddTypeAsHandled(type);
@@ -590,7 +598,7 @@ namespace Catel.Runtime.Serialization.Xml
         protected virtual bool AllowNonPublicReflection(Type type)
         {
 #if NET
-            var allowNonPublicReflection = (type == typeof(ModelBase)) || !typeof(ModelBase).IsAssignableFromEx(type);
+            var allowNonPublicReflection = type.IsModelBase();
 #else
             var allowNonPublicReflection = false;
 #endif

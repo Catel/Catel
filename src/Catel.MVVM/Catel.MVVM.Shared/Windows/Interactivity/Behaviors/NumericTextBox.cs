@@ -24,6 +24,7 @@ namespace Catel.Windows.Interactivity
 
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Windows;
     using Catel.Logging;
     using Catel.Windows.Input;
@@ -79,7 +80,7 @@ namespace Catel.Windows.Interactivity
             Key.RightShift,
 #endif
             Key.Tab,
-            Key.Up                                                                                                                                                                                          
+            Key.Up
         };
 
         /// <summary>
@@ -166,6 +167,22 @@ namespace Catel.Windows.Interactivity
             DependencyProperty.Register("IsDecimalAllowed", typeof(bool), typeof(NumericTextBox), new PropertyMetadata(true));
 
         /// <summary>
+        /// Gets or sets a value indicating whether the binding should be updated whenever the text changes.
+        /// </summary>
+        /// <value><c>true</c> if the binding should be updated; otherwise, <c>false</c>.</value>
+        public bool UpdateBindingOnTextChanged
+        {
+            get { return (bool)GetValue(UpdateBindingOnTextChangedProperty); }
+            set { SetValue(UpdateBindingOnTextChangedProperty, value); }
+        }
+
+        /// <summary>
+        /// Using a DependencyProperty as the backing store for UpdateBindingOnTextChanged.  This enables animation, styling, binding, etc...
+        /// </summary>
+        public static readonly DependencyProperty UpdateBindingOnTextChangedProperty = DependencyProperty.Register("UpdateBindingOnTextChanged",
+            typeof(bool), typeof(NumericTextBox), new PropertyMetadata(true));
+
+        /// <summary>
         /// Called when the <see cref="UIElement.KeyDown"/> occurs.
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -175,8 +192,7 @@ namespace Catel.Windows.Interactivity
             bool notAllowed = true;
             string keyValue = GetKeyValue(e);
 
-            System.Globalization.CultureInfo currentCi = System.Threading.Thread.CurrentThread.CurrentCulture;
-            string numberDecimalSeparator = currentCi.NumberFormat.NumberDecimalSeparator;
+            var numberDecimalSeparator = GetDecimalSeparator();
 
             if (keyValue == numberDecimalSeparator && IsDecimalAllowed)
             {
@@ -211,13 +227,40 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="System.Windows.Controls.TextChangedEventArgs"/> instance containing the event data.</param>
         private void OnAssociatedObjectTextChanged(object sender, TextChangedEventArgs e)
         {
+            if (!UpdateBindingOnTextChanged)
+            {
+                return;
+            }
+
             var binding = AssociatedObject.GetBindingExpression(TextBox.TextProperty);
             if (binding == null)
             {
                 return;
             }
 
-            binding.UpdateSource();
+            var update = true;
+            var text = AssociatedObject.Text;
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                if (text.StartsWith(CommaCharacter) || text.EndsWith(CommaCharacter) ||
+                    text.StartsWith(PeriodCharacter) || text.EndsWith(PeriodCharacter))
+                {
+                    // User is typing a . or , don't update
+                    update = false;
+                }
+
+                // CTL-761
+                if (string.Equals(text, "-0"))
+                {
+                    // User is typing -0 (whould would result in 0, which we don't want yet, maybe they are typing -0.5)
+                    update = false;
+                }
+            }
+
+            if (update)
+            {
+                binding.UpdateSource();
+            }
         }
 
 #if NET
@@ -231,9 +274,23 @@ namespace Catel.Windows.Interactivity
             if (e.DataObject.GetDataPresent(typeof(string)))
             {
                 var text = (string)e.DataObject.GetData(typeof(string));
-                if (!IsDigitsOnly(text))
+                if (!IsDecimalAllowed && !IsDigitsOnly(text))
                 {
-                    Log.Warning("Pasted text '{0}' contains non-acceptable characters, paste is not allowed", text);
+                    Log.Warning("Pasted text '{0}' contains decimal separator which is not allowed, paste is not allowed", text);
+
+                    e.CancelCommand();
+                }
+                else if (!IsNegativeAllowed && text.Contains(MinusCharacter))
+                {
+                    Log.Warning("Pasted text '{0}' contains negative value which is not allowed, paste is not allowed", text);
+
+                    e.CancelCommand();
+                }
+
+                var tempDouble = 0d;
+                if (!double.TryParse(text, NumberStyles.Any, Culture, out tempDouble))
+                {
+                    Log.Warning("Pasted text '{0}' could not be parsed as double (wrong culture?), paste is not allowed", text);
 
                     e.CancelCommand();
                 }
@@ -244,6 +301,17 @@ namespace Catel.Windows.Interactivity
             }
         }
 #endif
+
+        /// <summary>
+        /// Gets the decimal separator.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        private string GetDecimalSeparator()
+        {
+            var numberDecimalSeparator = Culture.NumberFormat.NumberDecimalSeparator;
+
+            return numberDecimalSeparator;
+        }
 
         /// <summary>
         /// Determines whether the input string only consists of digits.
@@ -298,7 +366,11 @@ namespace Catel.Windows.Interactivity
             string keyValue = string.Empty;
 
 #if NET
-            if (e.Key == Key.OemMinus || e.Key == Key.Subtract)
+            if (e.Key == Key.Decimal)
+            {
+                keyValue = GetDecimalSeparator();
+            }
+            else if (e.Key == Key.OemMinus || e.Key == Key.Subtract)
             {
                 keyValue = MinusCharacter;
             }
@@ -338,7 +410,7 @@ namespace Catel.Windows.Interactivity
             }
             else
             {
-                keyValue = e.Key.ToString().Replace("D", "").Replace("NumPad", "");
+                keyValue = e.Key.ToString().Replace("D", string.Empty).Replace("NumPad", string.Empty);
             }
 #endif
 

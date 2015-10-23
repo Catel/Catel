@@ -43,6 +43,12 @@ namespace Catel.Runtime.Serialization
         Type ModelType { get; }
 
         /// <summary>
+        /// Gets the name of the model type, which should be a cached version of <c>ModelType.GetSafeFullName();</c>.
+        /// </summary>
+        /// <value>The name of the model type.</value>
+        string ModelTypeName { get; }
+
+        /// <summary>
         /// Gets the depth of the current element being processed.
         /// </summary>
         /// <value>The depth.</value>

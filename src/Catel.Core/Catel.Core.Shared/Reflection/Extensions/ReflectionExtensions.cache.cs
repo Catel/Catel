@@ -45,7 +45,12 @@ namespace Catel.Reflection
             /// <summary>
             /// The method.
             /// </summary>
-            Method
+            Method,
+
+            /// <summary>
+            /// The members.
+            /// </summary>
+            Member
         }
 
         /// <summary>

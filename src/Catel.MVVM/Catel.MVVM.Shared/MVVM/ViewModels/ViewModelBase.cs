@@ -290,7 +290,7 @@ namespace Catel.MVVM
             ViewModelCommandManager = MVVM.ViewModelCommandManager.Create(this);
             ViewModelCommandManager.AddHandler(async (viewModel, propertyName, command, commandParameter) =>
             {
-                var eventArgs = new CommandExecutedEventArgs((ICatelCommand) command, commandParameter, propertyName);
+                var eventArgs = new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName);
 
                 CommandExecuted.SafeInvoke(this, eventArgs);
                 await CommandExecutedAsync.SafeInvokeAsync(this, eventArgs);
@@ -610,6 +610,10 @@ namespace Catel.MVVM
             var viewModelToModelMap = new Dictionary<string, ViewModelToModelMapping>();
             var validationSummaries = new Dictionary<string, ValidationToViewModelAttribute>();
 
+            var modelNames = (from propertyInfo in properties
+                              where AttributeHelper.IsDecoratedWithAttribute<ModelAttribute>(propertyInfo)
+                              select propertyInfo.Name).ToList();
+
             foreach (var propertyInfo in properties)
             {
                 #region Model attributes
@@ -628,6 +632,18 @@ namespace Catel.MVVM
                     {
                         // Assume the property name in the model is the same as in the view model
                         viewModelToModelAttribute.Property = propertyInfo.Name;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(viewModelToModelAttribute.Model))
+                    {
+                        Log.Debug("ViewToViewModel is missing the Model name, searching for the right model automatically");
+
+                        if (modelNames.Count != 1)
+                        {
+                            throw Log.ErrorAndCreateException<InvalidOperationException>("It is only possible to automatically select the right model if there is 1 model. There are '{0}' models, so please specify the model name explicitly.", modelNames.Count);
+                        }
+
+                        viewModelToModelAttribute.Model = modelNames[0];
                     }
 
                     if (!viewModelToModelMap.ContainsKey(propertyInfo.Name))
@@ -1200,7 +1216,7 @@ namespace Catel.MVVM
                     if (_modelObjects[mapping.ModelProperty] == sender)
                     {
                         // Only OneWay, TwoWay or Explicit (yes, only VM => M is explicit) should be mapped
-                        if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWay) || 
+                        if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWay) ||
                             (mapping.Mode == ViewModelToModelMode.Explicit))
                         {
                             var values = new object[mapping.ValueProperties.Length];

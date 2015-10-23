@@ -51,6 +51,35 @@
         }
 
         [TestCase]
+        public void ViewModelWithViewModelToModelMappings_MissingModelName_WorksWithSingleModel()
+        {
+            var person = new Person();
+            person.FirstName = "John";
+            person.LastName = "Doe";
+            person.ContactInfo.Street = "Unknown street";
+            person.ContactInfo.City = "Unknown city";
+            person.ContactInfo.Email = "john@doe.com";
+
+            var viewModel = new ImplicitModelMappingsViewModel(person);
+
+            Assert.IsNotNull(viewModel.Person);
+            Assert.AreEqual("John", viewModel.FirstName);
+        }
+
+        [TestCase]
+        public void ViewModelWithViewModelToModelMappings_MissingModelName_ThrowsExceptionWithMultipleModels()
+        {
+            var person = new Person();
+            person.FirstName = "John";
+            person.LastName = "Doe";
+            person.ContactInfo.Street = "Unknown street";
+            person.ContactInfo.City = "Unknown city";
+            person.ContactInfo.Email = "john@doe.com";
+
+            ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => new ImplicitModelMappingsWithMultipleModelsViewModel(person));
+        }
+
+        [TestCase]
         public void ViewModelWithViewModelToModelMappings_PropertyChanges()
         {
             const string FirstName = "first name";

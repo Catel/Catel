@@ -519,6 +519,9 @@ namespace Catel.Caching
         /// <returns>The lock object.</returns>
         private object GetLockByKey(TKey key)
         {
+            // Note: we never clear items from the key locks, but this is so they can be re-used in the future without the cost 
+            // of garbage collection
+
             lock (_syncObj)
             {
                 var containsKey = _syncObjs.ContainsKey(key);

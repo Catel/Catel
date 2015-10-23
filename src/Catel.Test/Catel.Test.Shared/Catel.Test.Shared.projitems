@@ -176,6 +176,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\IsSelectedValueConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\MethodToValueConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\MultiplyConverterTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ObjectToDisplayNameConverterFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ReferenceToBooleanConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ReferenceToCollapsingVisibilityConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ShortDateFormattingConverterTest.cs" />
@@ -229,7 +230,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\Attributes\RedirectTypeAttributeTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\BinarySerializerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\RedirectDeserializationBinderFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFact.advanced.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFacts.warmup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFacts.dictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFacts.collections.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFacts.basic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Helpers\SerializationTestHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\JsonSerialization\JsonSerializationFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationManagerFacts.cs" />
