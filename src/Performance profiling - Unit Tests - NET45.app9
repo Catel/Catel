@@ -2,13 +2,13 @@
   <Property Name="DotNetDesktopApplicationSettings">
     <Object Type="RedGate.Profiler.Project.DotNetDesktopApplicationSettings,RedGate.Profiler.Project">
       <Property Name="WorkingDirectory">
-        <Object Type="System.String">C:\Source\Catel\output\debug\NET40\Test</Object>
+        <Object Type="System.String">C:\Program Files (x86)\NUnit 2.6.4\bin</Object>
       </Property>
       <Property Name="ExecutablePath">
-        <Object Type="System.String">C:\Program Files (x86)\Microsoft Visual Studio 11.0\Common7\IDE\MSTest.exe</Object>
+        <Object Type="System.String">C:\Program Files (x86)\NUnit 2.6.4\bin\nunit-console.exe</Object>
       </Property>
       <Property Name="Arguments">
-        <Object Type="System.String">/testcontainer:"C:\Source\Catel\output\debug\NET40\Test\Catel.Test.dll"</Object>
+        <Object Type="System.String">"C:\Source\Catel\output\debug\NET45\Test\Catel.Test.dll"</Object>
       </Property>
     </Object>
   </Property>
@@ -120,6 +120,9 @@
       <Property Name="WindowsServiceName">
         <NullValue />
       </Property>
+      <Property Name="Timeout">
+        <Object Type="System.Int32">60</Object>
+      </Property>
       <Property Name="Arguments">
         <NullValue />
       </Property>
@@ -148,17 +151,68 @@
       </Property>
     </Object>
   </Property>
+  <Property Name="DnxSettings">
+    <Object Type="RedGate.Profiler.Project.DnxSettings,RedGate.Profiler.Project">
+      <Property Name="DnxProjectFileJsonPath">
+        <NullValue />
+      </Property>
+      <Property Name="DnxRuntime">
+        <Object Type="RedGate.Profiler.Shared.Dnx.DnxRuntime,RedGate.Profiler.Project">
+          <Property Name="Name">
+            <Object Type="System.String">dnx-clr-win-x64.1.0.0-beta5</Object>
+          </Property>
+          <Property Name="DirPath">
+            <Object Type="System.String">C:\Users\Geert\.dnx\runtimes\dnx-clr-win-x64.1.0.0-beta5</Object>
+          </Property>
+          <Property Name="ExePath">
+            <Object Type="System.String">C:\Users\Geert\.dnx\runtimes\dnx-clr-win-x64.1.0.0-beta5\bin\dnx.exe</Object>
+          </Property>
+        </Object>
+      </Property>
+      <Property Name="StartInIisExpress">
+        <Object Type="System.Boolean">False</Object>
+      </Property>
+    </Object>
+  </Property>
+  <Property Name="AzureSettings">
+    <Object Type="RedGate.Profiler.Shared.Azure.AzureSettings,RedGate.Profiler.Engine">
+      <Property Name="AzureDeploymentFolder">
+        <NullValue />
+      </Property>
+      <Property Name="AzureConfigurationFile">
+        <NullValue />
+      </Property>
+      <Property Name="StartInIISExpress">
+        <Object Type="System.Boolean">True</Object>
+      </Property>
+      <Property Name="StartInEmulatorExpress">
+        <Object Type="System.Boolean">True</Object>
+      </Property>
+      <Property Name="StartStorageEmulator">
+        <Object Type="System.Boolean">True</Object>
+      </Property>
+      <Property Name="PortNumber">
+        <Object Type="System.Int32">8080</Object>
+      </Property>
+      <Property Name="UseManualDeploy">
+        <Object Type="System.Boolean">True</Object>
+      </Property>
+      <Property Name="Elevated">
+        <Object Type="System.Boolean">False</Object>
+      </Property>
+    </Object>
+  </Property>
   <Property Name="SelectedFrontEndClientId">
     <Object Type="System.String">Google Chrome</Object>
   </Property>
   <Property Name="ProjectType">
     <Object Type="RedGate.Profiler.Project.ProjectType,RedGate.Profiler.Project">DotNetDesktopApplication</Object>
   </Property>
-  <Property Name="ProfilingMode">
-    <Object Type="RedGate.Profiler.Project.ProfilingMode,RedGate.Profiler.Project">Detailed</Object>
-  </Property>
   <Property Name="TimeStyle">
     <Object Type="RedGate.Profiler.Project.TimeStyle,RedGate.Profiler.Project">CPU</Object>
+  </Property>
+  <Property Name="ProfilingMode">
+    <Object Type="RedGate.Profiler.Project.ProfilingMode,RedGate.Profiler.Project">Detailed</Object>
   </Property>
   <Property Name="RecordEtwEvents">
     <Object Type="System.Boolean">False</Object>
@@ -170,6 +224,9 @@
     <Object Type="System.Boolean">True</Object>
   </Property>
   <Property Name="EnableInlining">
+    <Object Type="System.Boolean">True</Object>
+  </Property>
+  <Property Name="EnableSqlProfiling">
     <Object Type="System.Boolean">True</Object>
   </Property>
   <Property Name="BakeSourceFilesIntoLog">
@@ -190,16 +247,19 @@
   <Property Name="AspNetIISESettings">
     <Object Type="RedGate.Profiler.Project.AspNetIISESettings,RedGate.Profiler.Project">
       <Property Name="ConfigPath">
-        <Object Type="System.String">C:\Users\Geert\SkyDrive\Documents\IISExpress\config\applicationhost.config</Object>
+        <Object Type="System.String">C:\Users\Geert\OneDrive\Documents\IISExpress\config\applicationhost.config</Object>
       </Property>
       <Property Name="SiteName">
-        <Object Type="System.String">Catel.Test.SL4.Web</Object>
+        <Object Type="System.String">Asp.Net.Demo</Object>
       </Property>
       <Property Name="BrowserStartPage">
         <Object Type="System.String">/</Object>
       </Property>
+      <Property Name="Protocol">
+        <Object Type="System.String">http</Object>
+      </Property>
       <Property Name="ProfilePort">
-        <Object Type="System.Int32">8013</Object>
+        <Object Type="System.Int32">1359</Object>
       </Property>
       <Property Name="NetVersion">
         <Object Type="System.Int32">4</Object>
