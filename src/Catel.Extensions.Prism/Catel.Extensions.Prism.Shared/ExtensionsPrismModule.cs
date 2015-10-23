@@ -10,7 +10,12 @@ namespace Catel
     using IoC;
     using Services;
 
+#if PRISM6
+    using Prism.Regions;
+#else
     using Microsoft.Practices.Prism.Regions;
+#endif
+
     using Tasks;
 
     /// <summary>

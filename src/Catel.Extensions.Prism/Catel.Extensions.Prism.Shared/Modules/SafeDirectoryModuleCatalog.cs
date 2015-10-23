@@ -14,9 +14,14 @@ namespace Catel.Modules
     using System.Reflection;
     using System.Security.Policy;
     using Catel.Logging;
+#if PRISM6
+    using Prism.Modularity;
+#else
     using Microsoft.Practices.Prism;
     using Microsoft.Practices.Prism.Modularity;
+#endif
     using System;
+    using System.Collections.ObjectModel;
 
     /// <summary>
     /// Safe implementation of the <see cref="DirectoryModuleCatalog"/> which does not crash when

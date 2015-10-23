@@ -19,7 +19,11 @@ namespace Catel.Modules
     using Catel.Logging;
     using Catel.Windows.Threading;
 
+#if PRISM6
+    using Prism.Modularity;
+#else
     using Microsoft.Practices.Prism.Modularity;
+#endif
 
     /// <summary>
     /// The NuGet module type loader.

@@ -12,7 +12,11 @@ namespace Catel
 
     using IoC;
 
-	using Microsoft.Practices.Prism.Regions;
+#if PRISM6
+    using Prism.Regions;
+#else
+    using Microsoft.Practices.Prism.Regions;
+#endif
 
 	/// <summary>
 	/// The dependency object extensions.

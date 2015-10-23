@@ -15,12 +15,19 @@ namespace Catel
 
     using IoC;
     using Logging;
-
+#if PRISM6
+    using Prism;
+    using Prism.Events;
+    using Prism.Logging;
+    using Prism.Modularity;
+    using Prism.Regions;
+#else
     using Microsoft.Practices.Prism;
     using Microsoft.Practices.Prism.Events;
     using Microsoft.Practices.Prism.Logging;
     using Microsoft.Practices.Prism.Modularity;
     using Microsoft.Practices.Prism.Regions;
+#endif
     using Modules;
 
 #if PRISM5
@@ -414,7 +421,11 @@ namespace Catel
             if (_useDefaultConfiguration)
             {
                 Container.RegisterTypeIfNotYetRegistered<Microsoft.Practices.ServiceLocation.IServiceLocator, ServiceLocatorAdapter>();
+#if PRISM6
+                Container.RegisterTypeIfNotYetRegistered<IModuleInitializer, Prism.Modularity.ModuleInitializer>();
+#else
                 Container.RegisterTypeIfNotYetRegistered<IModuleInitializer, Microsoft.Practices.Prism.Modularity.ModuleInitializer>();
+#endif
                 Container.RegisterTypeIfNotYetRegistered<IModuleManager, ModuleManager>();
                 Container.RegisterTypeIfNotYetRegistered<RegionAdapterMappings, RegionAdapterMappings>();
                 Container.RegisterTypeIfNotYetRegistered<IRegionManager, RegionManager>();
@@ -486,11 +497,20 @@ namespace Catel
             moduleManager.Run();
         }
 
+#if PRISM6
+        /// <summary>
+        /// Called when the <see cref="IModuleManager" /> raises the <see cref="IModuleManager.ModuleDownloadProgressChanged" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="Prism.Modularity.ModuleDownloadProgressChangedEventArgs" /> instance containing the event data.</param>
+
+#else
         /// <summary>
         /// Called when the <see cref="IModuleManager" /> raises the <see cref="IModuleManager.ModuleDownloadProgressChanged" /> event.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="Microsoft.Practices.Prism.Modularity.ModuleDownloadProgressChangedEventArgs" /> instance containing the event data.</param>
+#endif 
         private void OnModuleDownloadProgressChanged(object sender, ModuleDownloadProgressChangedEventArgs e)
         {
             if (e.ProgressPercentage == 100)
@@ -564,17 +584,11 @@ namespace Catel
             #region Constructors
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="LoggerFacadeAdapter"/> class. 
+            /// Initializes a new instance of the <see cref="LoggerFacadeAdapter" /> class.
             /// </summary>
-            /// <param name="log">
-            /// The log.
-            /// </param>
-            /// <param name="relayCatelMessageToLoggerFacade">
-            /// Option to relay catel message to logger facade
-            /// </param>
-            /// <exception cref="System.ArgumentNullException">
-            /// The <paramref name="log"/> is <c>null</c>.
-            /// </exception>
+            /// <param name="log">The log.</param>
+            /// <param name="relayCatelMessageToLoggerFacade">Option to relay catel message to logger facade</param>
+            /// <exception cref="System.ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
             public LoggerFacadeAdapter(ILog log, bool relayCatelMessageToLoggerFacade = false)
             {
                 Argument.IsNotNull("log", log);
@@ -592,15 +606,9 @@ namespace Catel
             /// <summary>
             /// The log.
             /// </summary>
-            /// <param name="message">
-            /// The message.
-            /// </param>
-            /// <param name="category">
-            /// The category.
-            /// </param>
-            /// <param name="priority">
-            /// The priority.
-            /// </param>
+            /// <param name="message">The message.</param>
+            /// <param name="category">The category.</param>
+            /// <param name="priority">The priority.</param>
             void ILoggerFacade.Log(string message, Category category, Priority priority)
             {
                 switch (category)
@@ -686,10 +694,10 @@ namespace Catel
             /// <param name="category">The category.</param>
             private void RelayLogMessageToLoggerFacadeIfRequired(string message, Category category)
             {
-                Match match = _catelToLoggerFacadeRegex.Match(message);
+                var match = _catelToLoggerFacadeRegex.Match(message);
                 if (!match.Success)
                 {
-                    Match match2 = _catelRegex.Match(message);
+                    var match2 = _catelRegex.Match(message);
                     if (match2.Success)
                     {
                         (this as ILoggerFacade).Log(match2.Groups[1].Value, category, Priority.None);
