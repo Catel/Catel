@@ -56,7 +56,10 @@ namespace Catel.Runtime.Serialization.Binary
         public BinarySerializer(ISerializationManager serializationManager, ITypeFactory typeFactory, IObjectAdapter objectAdapter)
             : base(serializationManager, typeFactory, objectAdapter)
         {
-            DeserializationBinder = new RedirectDeserializationBinder();
+            if (DeserializationBinder == null)
+            {
+                DeserializationBinder = new RedirectDeserializationBinder();
+            }
         }
         #endregion
 

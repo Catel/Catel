@@ -333,7 +333,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
             catch (Exception ex)
             {
-                Log.Debug(ex, "Failed to deserialize '{0}.{1}'", memberValue.ModelType.GetSafeFullName(), memberValue.Name);
+                Log.Debug(ex, "Failed to deserialize '{0}.{1}'", memberValue.ModelTypeName, memberValue.Name);
             }
 
             return SerializationObject.FailedToDeserialize(modelType, memberValue.MemberGroup, memberValue.Name);
@@ -738,7 +738,11 @@ namespace Catel.Runtime.Serialization.Xml
 
                             if (!referenceInfo.IsFirstUsage)
                             {
-                                Log.Debug("Existing reference detected for element type '{0}' with id '{1}', only storing id", memberTypeToSerialize.GetSafeFullName(), referenceInfo.Id);
+                                // Note: we don't want to call GetSafeFullName if we don't have to
+                                if (LogManager.IsDebugEnabled ?? false)
+                                {
+                                    Log.Debug("Existing reference detected for element type '{0}' with id '{1}', only storing id", memberTypeToSerialize.GetSafeFullName(), referenceInfo.Id);
+                                }
 
                                 //serializer.WriteStartObject(xmlWriter, memberValue.Value);
                                 xmlWriter.WriteStartElement(elementName);

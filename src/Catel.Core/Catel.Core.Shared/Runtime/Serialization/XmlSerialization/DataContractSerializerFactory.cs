@@ -112,12 +112,13 @@ namespace Catel.Runtime.Serialization.Xml
             Argument.IsNotNull("typeToSerialize", typeToSerialize);
             Argument.IsNotNullOrWhitespace("xmlName", xmlName);
 
-            var key = string.Format("{0}|{1}", typeToSerialize.GetSafeFullName(), xmlName);
+            var typeToSerializeName = typeToSerialize.GetSafeFullName();
+            var key = string.Format("{0}|{1}", typeToSerializeName, xmlName);
 
             return _dataContractSerializersCache.GetFromCacheOrFetch(key, () =>
             {
 #if ENABLE_DETAILED_LOGGING
-                Log.Debug("Getting known types for xml serialization of '{0}'", typeToSerialize.GetSafeFullName());
+                Log.Debug("Getting known types for xml serialization of '{0}'", typeToSerializeName);
 #endif
 
                 var serializerTypeInfo = new XmlSerializerTypeInfo(serializingType, typeToSerialize, additionalKnownTypes);
@@ -486,7 +487,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             // Ignore non-generic .NET
-            if (!type.IsGenericTypeEx() && type.GetSafeFullName().StartsWith("System."))
+            if (!type.IsGenericTypeEx() && fullName.StartsWith("System."))
             {
                 // Log.Debug("Non-generic .NET system type, can be ignored");
                 serializerTypeInfo.AddTypeAsHandled(type);

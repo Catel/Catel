@@ -56,6 +56,7 @@ Added/fixed:
 (*) CTL-755 Marked Catel.Windows.Controls.ScrollViewerProperties as obsolete to minimize maintenance costs of Catel
 (*) CTL-756 Marked Catel.Windows.Controls.RichToolTip as obsolete to minimize maintenance costs of Catel
 (*) CTL-759 Allow ViewToViewModel to have the model property name missing when there is just 1 model
+(*) CTL-763 Improve performance of serialization engine by caching some method results
 (x) CTL-740 TargetParameterCountException while sending message on RT projects (RT projects now support weak actions)
 (x) CTL-744 Fixed missing DataWindowStyle when only referencing Catel.Extensions.Controls theme (it was no longer
     including the Catel.MVVM theme)

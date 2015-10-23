@@ -56,7 +56,9 @@ namespace Catel.Runtime.Serialization
         #region Fields
         private readonly CacheStorage<Type, SerializationModelInfo> _serializationModelCache = new CacheStorage<Type, SerializationModelInfo>();
 
-        private readonly CacheStorage<Type, bool> _shouldSerializeAsCollectionCache = new CacheStorage<Type, bool>(); 
+        private readonly CacheStorage<Type, bool> _shouldSerializeAsCollectionCache = new CacheStorage<Type, bool>();
+        private readonly CacheStorage<Type, bool> _shouldSerializeAsDictionaryCache = new CacheStorage<Type, bool>();
+        private readonly CacheStorage<Type, bool> _shouldSerializeByExternalSerializerCache = new CacheStorage<Type, bool>();
         #endregion
 
         #region Constructors
@@ -129,7 +131,7 @@ namespace Catel.Runtime.Serialization
             var modelType = model.GetType();
 
             // If a basic type, we need to directly deserialize as member and replace the context model
-            if (ShouldExternalSerializerHandleMember(context.ModelType, context.Model))
+            if (ShouldExternalSerializerHandleMember(context.ModelType))
             {
                 listToSerialize.Add(new MemberValue(SerializationMemberGroup.SimpleRootObject, modelType, modelType, RootObjectName, RootObjectName, model));
                 return listToSerialize;
@@ -197,7 +199,6 @@ namespace Catel.Runtime.Serialization
                     continue;
                 }
 
-                // TODO: why get value but not store it?
                 var memberValue = ObjectAdapter.GetMemberValue(model, memberName, modelInfo);
                 if (memberValue != null)
                 {
@@ -525,14 +526,15 @@ namespace Catel.Runtime.Serialization
         /// <returns><c>true</c> if the member value should be serialized as dictionary, <c>false</c> otherwise.</returns>
         protected virtual bool ShouldSerializeAsDictionary(Type memberType)
         {
-            // TODO: add caching
-
-            if (memberType.IsDictionary())
+            return _shouldSerializeAsDictionaryCache.GetFromCacheOrFetch(memberType, () =>
             {
-                return true;
-            }
+                if (memberType.IsDictionary())
+                {
+                    return true;
+                }
 
-            return false;
+                return false;
+            });
         }
 
         /// <summary>
@@ -582,7 +584,7 @@ namespace Catel.Runtime.Serialization
                 return false;
             }
 
-            return ShouldExternalSerializerHandleMember(memberValue.GetBestMemberType(), memberValue.Value);
+            return ShouldExternalSerializerHandleMember(memberValue.GetBestMemberType());
         }
 
         /// <summary>
@@ -591,41 +593,43 @@ namespace Catel.Runtime.Serialization
         /// By default it only handles non-class types.
         /// </summary>
         /// <param name="memberType">Type of the member.</param>
-        /// <param name="memberValue">The member value.</param>
         /// <returns><c>true</c> if json.net should handle the type, <c>false</c> otherwise.</returns>
-        protected virtual bool ShouldExternalSerializerHandleMember(Type memberType, object memberValue)
+        protected virtual bool ShouldExternalSerializerHandleMember(Type memberType)
         {
-            if (memberType == typeof(IEnumerable))
+            return _shouldSerializeByExternalSerializerCache.GetFromCacheOrFetch(memberType, () =>
             {
+                if (memberType == typeof(IEnumerable))
+                {
+                    return false;
+                }
+
+                if (!memberType.IsClassType())
+                {
+                    return true;
+                }
+
+                if (memberType == typeof(string))
+                {
+                    return true;
+                }
+
+                if (memberType == typeof(Guid))
+                {
+                    return true;
+                }
+
+                if (memberType == typeof(Uri))
+                {
+                    return true;
+                }
+
+                if (memberType == typeof(byte[]))
+                {
+                    return true;
+                }
+
                 return false;
-            }
-
-            if (!memberType.IsClassType())
-            {
-                return true;
-            }
-
-            if (memberType == typeof(string))
-            {
-                return true;
-            }
-
-            if (memberType == typeof(Guid))
-            {
-                return true;
-            }
-
-            if (memberType == typeof(Uri))
-            {
-                return true;
-            }
-
-            if (memberType == typeof(byte[]))
-            {
-                return true;
-            }
-
-            return false;
+            });
         }
 
         /// <summary>
