@@ -458,7 +458,7 @@ namespace Catel.Data
                 foreach (string property in _propertiesNotCheckedDuringDisabledValidation)
                 {
                     var propertyData = GetPropertyData(property);
-                    var propertyValue = GetValueFast(propertyData.Name);
+                    var propertyValue = GetValueFast<object>(propertyData.Name);
                     ValidatePropertyUsingAnnotations(property, propertyValue, propertyData);
                 }
 

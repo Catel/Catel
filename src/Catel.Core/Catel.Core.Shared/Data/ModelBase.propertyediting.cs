@@ -106,7 +106,7 @@ namespace Catel.Data
 
             lock (_propertyValuesLock)
             {
-                oldValue = GetValueFast(property.Name);
+                oldValue = GetValueFast<object>(property.Name);
                 var areOldAndNewValuesEqual = ObjectHelper.AreEqualReferences(oldValue, value);
 
                 if (notifyOnChange && (AlwaysInvokeNotifyChanged || !areOldAndNewValuesEqual) && !LeanAndMeanModel)
@@ -172,9 +172,12 @@ namespace Catel.Data
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns>The value of the property.</returns>
-        private object GetValueFast(string propertyName)
+        private T GetValueFast<T>(string propertyName)
         {
-            return _propertyBag.GetPropertyValue<object>(propertyName);
+            lock (_propertyValuesLock)
+            {
+                return _propertyBag.GetPropertyValue<T>(propertyName);
+            }
         }
 
         /// <summary>
@@ -224,7 +227,7 @@ namespace Catel.Data
                 return PropertyHelper.GetPropertyValue(this, property.Name);
             }
 
-            return GetValueFast(property.Name);
+            return GetValueFast<object>(property.Name);
         }
 
         /// <summary>
@@ -290,7 +293,7 @@ namespace Catel.Data
         /// </remarks>
         object IModelEditor.GetValueFastButUnsecure(string propertyName)
         {
-            return GetValueFast(propertyName);
+            return GetValueFast<object>(propertyName);
         }
 
         /// <summary>

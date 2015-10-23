@@ -159,11 +159,10 @@ namespace Catel.Reflection
             var propertyInfo = GetPropertyInfo(obj, property);
             if (propertyInfo == null)
             {
-                Log.Error("Property '{0}' is not found on the object '{1}', probably the wrong field is being mapped", property, obj.GetType().Name);
-
                 if (throwOnException)
                 {
-                    throw new PropertyNotFoundException(property);
+                    throw Log.ErrorAndCreateException(s => new PropertyNotFoundException(property),
+                        "Property '{0}' is not found on the object '{1}', probably the wrong field is being mapped", property, obj.GetType().Name);
                 }
 
                 return false;
@@ -172,11 +171,10 @@ namespace Catel.Reflection
             // Return property value if available
             if (!propertyInfo.CanRead)
             {
-                Log.Error("Cannot read property {0}.'{1}'", obj.GetType().Name, property);
-
                 if (throwOnException)
                 {
-                    throw new CannotGetPropertyValueException(property);
+                    throw Log.ErrorAndCreateException(s => new CannotGetPropertyValueException(property), 
+                        "Cannot read property {0}.'{1}'", obj.GetType().Name, property);
                 }
 
                 return false;
@@ -193,11 +191,10 @@ namespace Catel.Reflection
             }
             catch (MethodAccessException)
             {
-                Log.Error("Cannot read property {0}.'{1}'", obj.GetType().Name, property);
-
                 if (throwOnException)
                 {
-                    throw new CannotGetPropertyValueException(property);
+                    throw Log.ErrorAndCreateException(s => new CannotGetPropertyValueException(property),
+                        "Cannot read property {0}.'{1}'", obj.GetType().Name, property);
                 }
 
                 return false;
@@ -243,11 +240,10 @@ namespace Catel.Reflection
             var propertyInfo = GetPropertyInfo(obj, property);
             if (propertyInfo == null)
             {
-                Log.Error("Property '{0}' is not found on the object '{1}', probably the wrong field is being mapped", property, obj.GetType().Name);
-
                 if (throwOnError)
                 {
-                    throw new PropertyNotFoundException(property);
+                    throw Log.ErrorAndCreateException(s => new PropertyNotFoundException(property),
+                        "Property '{0}' is not found on the object '{1}', probably the wrong field is being mapped", property, obj.GetType().Name);
                 }
 
                 return false;
@@ -255,11 +251,10 @@ namespace Catel.Reflection
 
             if (!propertyInfo.CanWrite)
             {
-                Log.Error("Cannot write property {0}.'{1}'", obj.GetType().Name, property);
-
                 if (throwOnError)
                 {
-                    throw new CannotSetPropertyValueException(property);
+                    throw Log.ErrorAndCreateException(s => new CannotSetPropertyValueException(property),
+                        "Cannot write property {0}.'{1}'", obj.GetType().Name, property);
                 }
 
                 return false;
@@ -276,11 +271,10 @@ namespace Catel.Reflection
 #endif
             if (setMethod == null)
             {
-                Log.Error("Cannot write property {0}.'{1}', SetMethod is null", obj.GetType().Name, property);
-
                 if (throwOnError)
                 {
-                    throw new CannotSetPropertyValueException(property);
+                    throw Log.ErrorAndCreateException(s => new CannotSetPropertyValueException(property),
+                        "Cannot write property {0}.'{1}', SetMethod is null", obj.GetType().Name, property);
                 }
 
                 return false;
@@ -317,13 +311,12 @@ namespace Catel.Reflection
             var propertyInfo = baseType.GetPropertyEx(property, bindingFlags);
             if (propertyInfo == null)
             {
-                Log.Error("Hidden property '{0}' is not found on the base type '{1}'", property, baseType.GetType().Name);
-                throw new PropertyNotFoundException(property);
+                throw Log.ErrorAndCreateException(s => new PropertyNotFoundException(property),
+                    "Hidden property '{0}' is not found on the base type '{1}'", property, baseType.GetType().Name);
             }
 
             return (TValue)propertyInfo.GetValue(obj, bindingFlags, null, new object[] { }, CultureInfo.InvariantCulture);
         }
-
 #endif
 
         /// <summary>

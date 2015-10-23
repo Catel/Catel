@@ -34,7 +34,7 @@ namespace Catel.Data
         {
             var bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic;
 
-            _getValueFastMethodInfo = typeof(ModelBase).GetMethodEx("GetValueFast", bindingFlags);
+            _getValueFastMethodInfo = typeof(ModelBase).GetMethodEx("GetValueFast", bindingFlags).MakeGenericMethod(new [] { typeof(object) });
             _setValueFastMethodInfo = typeof(ModelBase).GetMethodEx("SetValueFast", bindingFlags);
         }
 
