@@ -248,6 +248,13 @@ namespace Catel.Windows.Interactivity
                     // User is typing a . or , don't update
                     update = false;
                 }
+
+                // CTL-761
+                if (string.Equals(text, "-0"))
+                {
+                    // User is typing -0 (whould would result in 0, which we don't want yet, maybe they are typing -0.5)
+                    update = false;
+                }
             }
 
             if (update)
