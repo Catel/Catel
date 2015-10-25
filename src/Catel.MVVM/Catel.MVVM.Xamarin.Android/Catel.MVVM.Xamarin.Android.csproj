@@ -64,6 +64,7 @@
     <Compile Include="Android\App\Activity.cs" />
     <Compile Include="Android\App\Application.cs" />
     <Compile Include="Android\App\Fragment.cs" />
+    <Compile Include="Android\App\Visibility.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
