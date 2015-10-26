@@ -27,6 +27,8 @@ namespace Catel.Windows
     using Catel.MVVM.Providers;
     using Catel.Threading;
     using Catel.Windows.Threading;
+    using IoC;
+    using Services;
 
 #if SILVERLIGHT
     using System.Windows.Media;
@@ -900,27 +902,29 @@ namespace Catel.Windows
                 return;
             }
 
+            var languageService = ServiceLocator.Default.ResolveType<ILanguageService>();
+
             if (IsOKButtonAvailable)
             {
-                var button = new DataWindowButton(MVVM.Properties.Resources.OK, OnOkExecute, OnOkCanExecute);
+                var button = new DataWindowButton(languageService.GetString("OK"), OnOkExecute, OnOkCanExecute);
                 button.IsDefault = (DefaultButton == DataWindowDefaultButton.OK);
                 _buttons.Add(button);
             }
             if (IsCancelButtonAvailable)
             {
-                var button = new DataWindowButton(MVVM.Properties.Resources.Cancel, OnCancelExecute, OnCancelCanExecute);
+                var button = new DataWindowButton(languageService.GetString("Cancel"), OnCancelExecute, OnCancelCanExecute);
                 button.IsCancel = true;
                 _buttons.Add(button);
             }
             if (IsApplyButtonAvailable)
             {
-                var button = new DataWindowButton(MVVM.Properties.Resources.Apply, OnApplyExcute, OnApplyCanExecute);
+                var button = new DataWindowButton(languageService.GetString("Apply"), OnApplyExcute, OnApplyCanExecute);
                 button.IsDefault = (DefaultButton == DataWindowDefaultButton.Apply);
                 _buttons.Add(button);
             }
             if (IsCloseButtonAvailable)
             {
-                var button = new DataWindowButton(MVVM.Properties.Resources.Close, OnCloseExecute, OnCloseCanExecute);
+                var button = new DataWindowButton(languageService.GetString("Close"), OnCloseExecute, OnCloseCanExecute);
                 button.IsDefault = (DefaultButton == DataWindowDefaultButton.Close);
                 _buttons.Add(button);
             }
