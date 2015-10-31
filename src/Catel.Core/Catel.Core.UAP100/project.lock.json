@@ -3,7 +3,7 @@
   "version": 1,
   "targets": {
     "UAP,Version=v10.0": {
-      "Catel.Fody/2.10.0": {
+      "Catel.Fody/2.12.0": {
         "dependencies": {
           "Fody": "[1.29.3, )"
         },
@@ -1566,7 +1566,7 @@
       }
     },
     "UAP,Version=v10.0/win10-arm": {
-      "Catel.Fody/2.10.0": {
+      "Catel.Fody/2.12.0": {
         "dependencies": {
           "Fody": "[1.29.3, )"
         },
@@ -3219,7 +3219,7 @@
       }
     },
     "UAP,Version=v10.0/win10-arm-aot": {
-      "Catel.Fody/2.10.0": {
+      "Catel.Fody/2.12.0": {
         "dependencies": {
           "Fody": "[1.29.3, )"
         },
@@ -4844,7 +4844,7 @@
       }
     },
     "UAP,Version=v10.0/win10-x64": {
-      "Catel.Fody/2.10.0": {
+      "Catel.Fody/2.12.0": {
         "dependencies": {
           "Fody": "[1.29.3, )"
         },
@@ -6502,7 +6502,7 @@
       }
     },
     "UAP,Version=v10.0/win10-x64-aot": {
-      "Catel.Fody/2.10.0": {
+      "Catel.Fody/2.12.0": {
         "dependencies": {
           "Fody": "[1.29.3, )"
         },
@@ -8127,7 +8127,7 @@
       }
     },
     "UAP,Version=v10.0/win10-x86": {
-      "Catel.Fody/2.10.0": {
+      "Catel.Fody/2.12.0": {
         "dependencies": {
           "Fody": "[1.29.3, )"
         },
@@ -9785,7 +9785,7 @@
       }
     },
     "UAP,Version=v10.0/win10-x86-aot": {
-      "Catel.Fody/2.10.0": {
+      "Catel.Fody/2.12.0": {
         "dependencies": {
           "Fody": "[1.29.3, )"
         },
@@ -11411,8 +11411,8 @@
     }
   },
   "libraries": {
-    "Catel.Fody/2.10.0": {
-      "sha512": "FPt1iASIufG6pYRxr3M4OtrixK0843c+PJN7cp7XY+e5kt9QP28Y6Z87F6T1mCHV+6Ly2z5OKi5DtkIQQpWdKQ==",
+    "Catel.Fody/2.12.0": {
+      "sha512": "zawKke65ulvgJlpULYuZkHqnxCFcyNpzKsY70xV1HPl5gwwjCo1H+ODC/M6v7CQWyNyuMCFZCHr89S/zQ3ksvg==",
       "type": "Package",
       "files": [
         "[Content_Types].xml",
@@ -11426,7 +11426,7 @@
         "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.pdb",
         "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.pdb.srcsrv",
         "lib/portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40/Catel.Fody.Attributes.XML",
-        "package/services/metadata/core-properties/451acbedafa644569cd85ead82fcb1d1.psmdcp"
+        "package/services/metadata/core-properties/b8e06469a1704f7abdab829be88247e6.psmdcp"
       ]
     },
     "Fody/1.29.3": {
@@ -14838,7 +14838,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "Catel.Fody >= 2.10.0",
+      "Catel.Fody >= 2.12.0",
       "Fody >= 1.29.3",
       "Microsoft.NETCore.UniversalWindowsPlatform >= 5.0.0",
       "ModuleInit.Fody >= 1.5.8",
