@@ -106,6 +106,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Windows\Controls\MultiLineInput.xaml.cs">
       <DependentUpon>MultiLineInput.xaml</DependentUpon>
     </Compile>

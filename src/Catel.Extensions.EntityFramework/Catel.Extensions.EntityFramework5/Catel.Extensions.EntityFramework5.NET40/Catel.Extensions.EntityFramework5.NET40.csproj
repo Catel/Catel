@@ -92,6 +92,9 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ModuleInitializer.cs" />
+  </ItemGroup>
   <Import Project="..\..\Catel.Extensions.EntityFramework.Shared\Catel.Extensions.EntityFramework.Shared.projitems" Label="Shared" Condition="Exists('..\..\Catel.Extensions.EntityFramework.Shared\Catel.Extensions.EntityFramework.Shared.projitems')" />
   <Import Project="..\Catel.Extensions.EntityFramework5.Shared\Catel.Extensions.EntityFramework5.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.EntityFramework5.Shared\Catel.Extensions.EntityFramework5.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

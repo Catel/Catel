@@ -123,6 +123,9 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ModuleInitializer.cs" />
+  </ItemGroup>
   <Import Project="..\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems')" />
   <Import Project="..\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems')" />
   <Import Project="..\..\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems" Label="Shared" Condition="Exists('..\..\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems')" />

@@ -101,6 +101,9 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ModuleInitializer.cs" />
+  </ItemGroup>
   <Import Project="..\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>

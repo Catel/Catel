@@ -114,6 +114,9 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ModuleInitializer.cs" />
+  </ItemGroup>
   <Import Project="..\Catel.MVC4.Shared\Catel.MVC4.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.MVC4.Shared\Catel.MVC4.Shared.projitems')" />
   <Import Project="..\..\Catel.MVC.Shared\Catel.MVC.Shared.projitems" Label="Shared" Condition="Exists('..\..\Catel.MVC.Shared\Catel.MVC.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
