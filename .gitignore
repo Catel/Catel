@@ -22,6 +22,8 @@ TestResult.xml
 bin
 obj
 [Ll]ib/
+*.nuget.targets
+project.lock.json
 *.ide/
 *_i.c
 *_p.c
