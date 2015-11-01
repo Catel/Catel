@@ -7,8 +7,7 @@
     <authors>GeertvanHorrik</authors>
 	
 	<description>
-	  Catel.Core library which provides the core building blocks required when developing professional applications. This
-	  package contains IoC components, logging, argument checking, message mediators and much more!
+	  Catel.Core library which provides the core building blocks required when developing professional applications. This package contains IoC components, logging, argument checking, message mediators and much more!
 	</description>
 	<summary>
 	</summary>
