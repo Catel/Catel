@@ -58,13 +58,16 @@ namespace Catel.Threading
     public class Timer : IDisposable
     {
         #region Fields
+        private const int DefaultTimeout = 100;
+
         private readonly TimerCallback _timerCallback;
         private readonly object _timerState;
 
         private System.Threading.CancellationTokenSource _cancellationTokenSource;
 
 #if USE_INTERNAL_TIMER
-        private readonly System.Threading.Timer _timer;
+        private readonly object _lock = new object();
+        private System.Threading.Timer _timer;
 #endif
         #endregion
 
@@ -73,7 +76,7 @@ namespace Catel.Threading
         /// Initializes a new instance of the <see cref="Timer"/> class.
         /// </summary>
         public Timer()
-            : this(100)
+            : this(DefaultTimeout)
         {
         }
 
@@ -91,7 +94,7 @@ namespace Catel.Threading
         /// </summary>
         /// <param name="callback">The callback.</param>
         public Timer(TimerCallback callback)
-            : this(callback, null, Timeout.Infinite, Timeout.Infinite)
+            : this(callback, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100))
         { }
 
         /// <summary>
@@ -118,10 +121,6 @@ namespace Catel.Threading
         {
             _timerCallback = callback;
             _timerState = state;
-
-#if USE_INTERNAL_TIMER
-            _timer = new System.Threading.Timer(OnTimerTick, null, Timeout.Infinite, Timeout.Infinite);
-#endif
 
             Interval = (int)interval.TotalMilliseconds;
 
@@ -168,6 +167,19 @@ namespace Catel.Threading
             _cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = _cancellationTokenSource.Token;
 
+#if USE_INTERNAL_TIMER
+            lock (_lock)
+            {
+                if (_timer != null)
+                {
+                    _timer.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+                    _timer = null;
+                }
+
+                _timer = new System.Threading.Timer(OnTimerTick, cancellationToken, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+            }
+#endif
+
             Interval = (int)interval.TotalMilliseconds;
 
             if (dueTime < TimeSpan.Zero)
@@ -185,7 +197,13 @@ namespace Catel.Threading
             {
                 // Invoke after due time
 #if USE_INTERNAL_TIMER
-                _timer.Change(Interval, System.Threading.Timeout.Infinite);
+                lock (_lock)
+                {
+                    if (_timer != null)
+                    {
+                        _timer.Change(dueTime, Timeout.InfiniteTimeSpan);
+                    }
+                }
 #else
                 var delayTask = TaskShim.Delay(dueTime, cancellationToken);
                 delayTask.ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
@@ -211,7 +229,13 @@ namespace Catel.Threading
             }
 
 #if USE_INTERNAL_TIMER
-            _timer.Change(Interval, System.Threading.Timeout.Infinite);
+            lock (_lock)
+            {
+                if (_timer != null)
+                {
+                    _timer.Change(Interval, Timeout.Infinite);
+                }
+            }
 #else
             var delayTask = TaskShim.Delay(Interval, cancellationToken);
             delayTask.ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
@@ -228,6 +252,17 @@ namespace Catel.Threading
                 _cancellationTokenSource.Cancel();
                 _cancellationTokenSource = null;
             }
+
+#if USE_INTERNAL_TIMER
+            lock (_lock)
+            {
+                if (_timer != null)
+                {
+                    _timer.Change(Timeout.Infinite, Timeout.Infinite);
+                    _timer = null;
+                }
+            }
+#endif
         }
 
         /// <summary>
