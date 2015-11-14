@@ -47,7 +47,7 @@ namespace Catel.Caching
         /// <summary>
         /// The timer that is being executed to invalidate the cache.
         /// </summary>
-        private Timer _expirationTimer;
+        private Catel.Threading.Timer _expirationTimer;
 
         /// <summary>
         /// The expiration timer interval.
@@ -151,7 +151,7 @@ namespace Catel.Caching
 
                     if (_expirationTimer == null)
                     {
-                        _expirationTimer = new Timer(OnTimerElapsed, null, timeSpan, timeSpan);
+                        _expirationTimer = new Catel.Threading.Timer(OnTimerElapsed, null, timeSpan, timeSpan);
                     }
                     else
                     {

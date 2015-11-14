@@ -4,21 +4,32 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NET40 || SL5
+#define USE_INTERNAL_TIMER
+#endif
+
 #if WIN80 || PCL
 
 namespace System.Threading
 {
-    using Tasks;
-
     /// <summary>
-    /// Timer callback delegate.
+    /// Timer class.
     /// </summary>
-    /// <param name="state">
-    /// The state.
-    /// </param>
-    public delegate void TimerCallback(object state);
+    [ObsoleteEx(ReplacementTypeOrMember = "Catel.Threading.Timer", TreatAsErrorFromVersion = "4.4", RemoveInVersion = "5.0")]
+    public class Timer : Catel.Threading.Timer
+    {
 
-#if !PCL
+    }
+}
+
+#endif
+
+namespace Catel.Threading
+{
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// The timeout class.
     /// </summary>
@@ -28,8 +39,18 @@ namespace System.Threading
         /// A constant used to specify an infinite waiting period, for threading methods that accept an Int32 parameter.
         /// </summary>
         public const int Infinite = -1;
+
+        /// <summary>
+        /// A constant used to specify an infinite waiting period, for threading methods that accept an TimeSpan parameter.
+        /// </summary>
+        public static readonly TimeSpan InfiniteTimeSpan = TimeSpan.FromMilliseconds(-1);
     }
-#endif
+
+    /// <summary>
+    /// Timer callback delegate.
+    /// </summary>
+    /// <param name="state">The state.</param>
+    public delegate void TimerCallback(object state);
 
     /// <summary>
     /// Timer for WinRT since WinRT only provides the DispatcherTimer which cannot be used outside the UI thread.
@@ -40,7 +61,11 @@ namespace System.Threading
         private readonly TimerCallback _timerCallback;
         private readonly object _timerState;
 
-        private CancellationTokenSource _cancellationTokenSource;
+        private System.Threading.CancellationTokenSource _cancellationTokenSource;
+
+#if USE_INTERNAL_TIMER
+        private readonly System.Threading.Timer _timer;
+#endif
         #endregion
 
         #region Constructors
@@ -57,8 +82,8 @@ namespace System.Threading
         /// </summary>
         /// <param name="interval">The interval in milliseconds.</param>
         public Timer(int interval)
+            : this(null, null, TimeSpan.FromMilliseconds(interval), TimeSpan.FromMilliseconds(interval))
         {
-            Interval = interval;
         }
 
         /// <summary>
@@ -94,7 +119,13 @@ namespace System.Threading
             _timerCallback = callback;
             _timerState = state;
 
+            Interval = (int)interval.TotalMilliseconds;
+
             Change(dueTime, interval);
+
+#if USE_INTERNAL_TIMER
+            _timer = new System.Threading.Timer(OnTimerTick);
+#endif
         }
         #endregion
 
@@ -153,7 +184,12 @@ namespace System.Threading
             else
             {
                 // Invoke after due time
-                Task.Delay(dueTime, cancellationToken).ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
+#if USE_INTERNAL_TIMER
+                _timer.Change(Interval, System.Threading.Timeout.Infinite);
+#else
+                var delayTask = TaskShim.Delay(dueTime, cancellationToken);
+                delayTask.ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
+#endif
             }
         }
 
@@ -174,7 +210,12 @@ namespace System.Threading
                 return;
             }
 
-            Task.Delay(Interval, cancellationToken).ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
+#if USE_INTERNAL_TIMER
+            _timer.Change(Interval, System.Threading.Timeout.Infinite);
+#else
+            var delayTask = TaskShim.Delay(Interval, cancellationToken);
+            delayTask.ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
+#endif
         }
 
         /// <summary>
@@ -226,7 +267,6 @@ namespace System.Threading
                 _timerCallback(_timerState);
             }
         }
-        #endregion
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -235,6 +275,13 @@ namespace System.Threading
         {
             Stop();
         }
+
+#if !PCL
+        private void OnTimerTick(object state)
+        {
+            ContinueTimer(null, state);
+        }
+#endif
+#endregion
     }
 }
-#endif
