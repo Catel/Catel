@@ -119,13 +119,13 @@ namespace Catel.Threading
             _timerCallback = callback;
             _timerState = state;
 
-            Interval = (int)interval.TotalMilliseconds;
-
-            Change(dueTime, interval);
-
 #if USE_INTERNAL_TIMER
             _timer = new System.Threading.Timer(OnTimerTick);
 #endif
+
+            Interval = (int)interval.TotalMilliseconds;
+
+            Change(dueTime, interval);
         }
         #endregion
 
