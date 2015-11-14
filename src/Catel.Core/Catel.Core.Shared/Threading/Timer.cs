@@ -124,7 +124,7 @@ namespace Catel.Threading
 
             Interval = (int)interval.TotalMilliseconds;
 
-            Change(dueTime, interval);
+            SetUpTimer(dueTime, interval);
         }
         #endregion
 
@@ -162,25 +162,9 @@ namespace Catel.Threading
         /// <param name="interval">The interval.</param>
         public void Change(TimeSpan dueTime, TimeSpan interval)
         {
-            Stop();
+            SetUpTimer(dueTime, interval);
 
-            _cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = _cancellationTokenSource.Token;
-
-#if USE_INTERNAL_TIMER
-            lock (_lock)
-            {
-                if (_timer != null)
-                {
-                    _timer.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
-                    _timer = null;
-                }
-
-                _timer = new System.Threading.Timer(OnTimerTick, cancellationToken, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
-            }
-#endif
-
-            Interval = (int)interval.TotalMilliseconds;
 
             if (dueTime < TimeSpan.Zero)
             {
@@ -209,6 +193,34 @@ namespace Catel.Threading
                 delayTask.ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
 #endif
             }
+        }
+
+        /// <summary>
+        /// Sets up the timer.
+        /// </summary>
+        /// <param name="dueTime"></param>
+        /// <param name="interval"></param>
+        private void SetUpTimer(TimeSpan dueTime, TimeSpan interval)
+        {
+            Stop();
+
+            _cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = _cancellationTokenSource.Token;
+
+#if USE_INTERNAL_TIMER
+            lock (_lock)
+            {
+                if (_timer != null)
+                {
+                    _timer.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+                    _timer = null;
+                }
+
+                _timer = new System.Threading.Timer(OnTimerTick, cancellationToken, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+            }
+#endif
+
+            Interval = (int)interval.TotalMilliseconds;
         }
 
         /// <summary>
