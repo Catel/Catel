@@ -321,7 +321,7 @@ namespace Catel.Threading
             Stop();
         }
 
-#if !PCL
+#if USE_INTERNAL_TIMER
         private void OnTimerTick(object state)
         {
             ContinueTimer(null, state);
