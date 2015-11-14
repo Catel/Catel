@@ -58,8 +58,6 @@ namespace Catel.Threading
     public class Timer : IDisposable
     {
         #region Fields
-        private const int DefaultTimeout = 100;
-
         private readonly TimerCallback _timerCallback;
         private readonly object _timerState;
 
@@ -76,7 +74,7 @@ namespace Catel.Threading
         /// Initializes a new instance of the <see cref="Timer"/> class.
         /// </summary>
         public Timer()
-            : this(DefaultTimeout)
+            : this(Timeout.Infinite)
         {
         }
 
@@ -94,7 +92,7 @@ namespace Catel.Threading
         /// </summary>
         /// <param name="callback">The callback.</param>
         public Timer(TimerCallback callback)
-            : this(callback, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100))
+            : this(callback, null, Timeout.Infinite, Timeout.Infinite)
         { }
 
         /// <summary>
@@ -124,7 +122,7 @@ namespace Catel.Threading
 
             Interval = (int)interval.TotalMilliseconds;
 
-            SetUpTimer(dueTime, interval);
+            Change(dueTime, interval);
         }
         #endregion
 
@@ -132,7 +130,7 @@ namespace Catel.Threading
         /// <summary>
         /// Gets or sets the interval.
         /// </summary>
-        /// <value>The interval. The default is 100 milliseconds.</value>
+        /// <value>The interval.</value>
         public int Interval { get; set; }
         #endregion
 
