@@ -120,7 +120,7 @@ namespace Catel.Threading
             _timerState = state;
 
 #if USE_INTERNAL_TIMER
-            _timer = new System.Threading.Timer(OnTimerTick);
+            _timer = new System.Threading.Timer(OnTimerTick, null, Timeout.Infinite, Timeout.Infinite);
 #endif
 
             Interval = (int)interval.TotalMilliseconds;
