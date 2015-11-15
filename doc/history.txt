@@ -55,6 +55,7 @@ Added/fixed:
     ModelBase and IList (otherwise it will default to serialize as model)
 (+) CTL-766 Support visibility converters in Xamarin.Android
 (+) CTL-776 Introduce Catel.Threading.Timer so it behaves the same on all platforms
+(+) CTL-777 Create extension methods to log headers (e.g. log.DebugHeading1, etc)
 (*) CTL-754 Turn DataAnnotation validation off when setting property value
 (*) CTL-755 Marked Catel.Windows.Controls.ScrollViewerProperties as obsolete to minimize maintenance costs of Catel
 (*) CTL-756 Marked Catel.Windows.Controls.RichToolTip as obsolete to minimize maintenance costs of Catel

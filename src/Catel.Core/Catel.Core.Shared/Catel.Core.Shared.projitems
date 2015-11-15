@@ -235,6 +235,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.debug.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.error.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.headers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.warning.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.info.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Formatters\Interfaces\IJsonLogFormatter.cs" />
