@@ -3,7 +3,7 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
+#if !XAMARIN_FORMS
 namespace Catel.MVVM
 {
     using System;
@@ -244,3 +244,4 @@ namespace Catel.MVVM
             : base(execute, canExecute, tag) { }
     }
 }
+#endif

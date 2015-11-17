@@ -11,7 +11,7 @@ namespace Catel.MVVM
     using System.Collections.Generic;
     using System.ComponentModel;
 
-#if !WINDOWS_PHONE && !NET35
+#if !WINDOWS_PHONE && !NET35 && !XAMARIN_FORMS
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
@@ -368,7 +368,7 @@ namespace Catel.MVVM
                 return objAsString;
             }
 
-#if !WINDOWS_PHONE && !NET35
+#if !WINDOWS_PHONE && !NET35 && !XAMARIN_FORMS
             var objAsValidationResult = obj as ValidationResult;
             if (objAsValidationResult != null)
             {
@@ -379,7 +379,7 @@ namespace Catel.MVVM
             return null;
         }
 
-#if !WINDOWS_PHONE && !NET35
+#if !WINDOWS_PHONE && !NET35 && !XAMARIN_FORMS
         /// <summary>
         /// Initializes the default errors.
         /// </summary>

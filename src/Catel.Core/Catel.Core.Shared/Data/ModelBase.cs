@@ -292,11 +292,12 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether property change notifications are currently disabled for all instances.
         /// </summary>
         /// <value><c>true</c> if property change notifications should be disabled for all instances; otherwise, <c>false</c>.</value>
+        /// TODO: Try to revert to internal but is required by XAMARIN_FORMS
 #if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
-        internal static bool DisablePropertyChangeNotifications { get; set; }
+        public static bool DisablePropertyChangeNotifications { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether event subscriptions of child values should be disabled.
@@ -483,9 +484,9 @@ namespace Catel.Data
         [XmlIgnore]
         protected bool DeserializationSucceeded { get; private set; }
 
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
         /// <summary>
         /// Allows the initialization of custom properties. This is a virtual method that is called
         /// inside the constructor before the object is fully constructed.
@@ -807,9 +808,9 @@ namespace Catel.Data
 
             SetDirtyAndAutomaticallyValidate(string.Empty, true);
         }
-        #endregion
+#endregion
 
-        #region INotifyPropertyChanged Members
+#region INotifyPropertyChanged Members
         /// <summary>
         /// Invokes the property changed for all registered properties.
         /// </summary>
@@ -977,6 +978,6 @@ namespace Catel.Data
                 Validate();
             }
         }
-        #endregion
+#endregion
     }
 }

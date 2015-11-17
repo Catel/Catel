@@ -748,7 +748,8 @@ namespace Catel.Data
         /// <remarks>
         /// To check whether this object contains any errors, use the <see cref="INotifyDataErrorInfo.HasErrors"/> property.
         /// </remarks>
-        internal void Validate(bool force, bool validateDataAnnotations)
+        /// TODO: Try to revert to internal but is required by XAMARIN_FORMS
+        public void Validate(bool force, bool validateDataAnnotations)
         {
             if (SuspendValidation)
             {

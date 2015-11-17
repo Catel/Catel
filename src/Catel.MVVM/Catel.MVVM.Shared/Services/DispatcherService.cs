@@ -17,7 +17,7 @@ namespace Catel.Services
 #elif NETFX_CORE
     using Windows.Threading;
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
-#else
+#elif !XAMARIN_FORMS
     using Windows.Threading;
     using System.Windows.Threading;
 #endif
@@ -83,8 +83,9 @@ namespace Catel.Services
         public void Invoke(Action action, bool onlyInvokeWhenNoAccess)
         {
             Argument.IsNotNull("action", action);
-
-#if ANDROID
+#if XAMARIN_FORMS
+            throw new MustBeImplementedException();
+#elif ANDROID
             _handler.Post(action);
 #elif IOS
             DispatchQueue.MainQueue.DispatchSync(() => action());
@@ -103,8 +104,9 @@ namespace Catel.Services
         public void BeginInvoke(Action action, bool onlyBeginInvokeWhenNoAccess)
         {
             Argument.IsNotNull("action", action);
-
-#if ANDROID
+#if XAMARIN_FORMS
+            throw new MustBeImplementedException();
+#elif ANDROID
             _handler.Post(action);
 #elif IOS
             DispatchQueue.MainQueue.DispatchAsync(() => action());
