@@ -69,6 +69,7 @@ Added/fixed:
     including the Catel.MVVM theme)
 (x) CTL-753 Support serialization for ModelBase that also implements IList
 (x) CTL-761 NumericTextBox does not support Key.Decimal entries
+(x) CTL-780 Support untyped generics in IoC when registering them via attributes
 
 Roadmap:
 ========

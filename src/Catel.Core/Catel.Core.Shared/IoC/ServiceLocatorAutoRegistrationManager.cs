@@ -157,9 +157,10 @@ namespace Catel.IoC
                         ServiceLocatorRegistrationAttribute attribute;
                         if (AttributeHelper.TryGetAttribute(type, out attribute))
                         {
-                            if (type.IsAbstractEx() || !attribute.InterfaceType.IsAssignableFromEx(type))
+                            // CTL-780: support open generics
+                            if (!type.IsGenericTypeEx() && (type.IsAbstractEx() || !attribute.InterfaceType.IsAssignableFromEx(type)))
                             {
-                                string message = string.Format("The type '{0}' is abstract or can't be registered as '{1}'", type, attribute.InterfaceType);
+                                var message = string.Format("The type '{0}' is abstract or can't be registered as '{1}'", type, attribute.InterfaceType);
 
                                 if (!IgnoreRuntimeIncorrectUsageOfRegisterAttribute)
                                 {
