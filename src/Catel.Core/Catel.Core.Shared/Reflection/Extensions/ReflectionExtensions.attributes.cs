@@ -1,8 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AttributeHelper.cs" company="Catel development team">
+// <copyright file="ReflectionExtensions.attributes.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 
 namespace Catel.Reflection
 {
@@ -10,10 +11,9 @@ namespace Catel.Reflection
     using System.Reflection;
 
     /// <summary>
-    /// Attribute helper class.
+    /// Reflection extension class.
     /// </summary>
-    [ObsoleteEx(ReplacementTypeOrMember = "Use reflection extension methods instead", TreatAsErrorFromVersion = "4.4", RemoveInVersion = "5.0")]
-    public static class AttributeHelper
+    public static partial class ReflectionExtensions
     {
         /// <summary>
         /// Tries to the get attribute.
@@ -25,7 +25,7 @@ namespace Catel.Reflection
         /// <c>true</c> if the attribute is retrieved successfully; otherwise <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="memberInfo"/> is <c>null</c>.</exception>
-        public static bool TryGetAttribute<TAttribute>(MemberInfo memberInfo, out TAttribute attribute)
+        public static bool TryGetAttribute<TAttribute>(this MemberInfo memberInfo, out TAttribute attribute)
             where TAttribute : Attribute
         {
             Attribute tempAttribute;
@@ -46,7 +46,7 @@ namespace Catel.Reflection
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="memberInfo"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType"/> is <c>null</c>.</exception>
-        public static bool TryGetAttribute(MemberInfo memberInfo, Type attributeType, out Attribute attribute)
+        public static bool TryGetAttribute(this MemberInfo memberInfo, Type attributeType, out Attribute attribute)
         {
             Argument.IsNotNull("memberInfo", memberInfo);
             Argument.IsNotNull("attributeType", attributeType);
@@ -71,7 +71,7 @@ namespace Catel.Reflection
         /// <param name="attribute">The attribute.</param>
         /// <returns><c>true</c> if the attribute is retrieved successfully; otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
-        public static bool TryGetAttribute<TAttribute>(Type type, out TAttribute attribute)
+        public static bool TryGetAttribute<TAttribute>(this Type type, out TAttribute attribute)
             where TAttribute : Attribute
         {
             Attribute tempAttribute;
@@ -90,7 +90,7 @@ namespace Catel.Reflection
         /// <returns><c>true</c> if the attribute is retrieved successfully; otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
-        public static bool TryGetAttribute(Type type, Type attributeType, out Attribute attribute)
+        public static bool TryGetAttribute(this Type type, Type attributeType, out Attribute attribute)
         {
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("attributeType", attributeType);
@@ -116,9 +116,9 @@ namespace Catel.Reflection
         ///   <c>true</c> if the member is decorated with the attribute; otherwise, <c>false</c>.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="memberInfo"/> is <c>null</c>.</exception>
-        public static bool IsDecoratedWithAttribute<TAttribute>(MemberInfo memberInfo)
+        public static bool IsDecoratedWithAttribute<TAttribute>(this MemberInfo memberInfo)
         {
-            return IsDecoratedWithAttribute(memberInfo, typeof (TAttribute));
+            return IsDecoratedWithAttribute(memberInfo, typeof(TAttribute));
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Catel.Reflection
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="memberInfo"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType"/> is <c>null</c>.</exception>
-        public static bool IsDecoratedWithAttribute(MemberInfo memberInfo,  Type attributeType)
+        public static bool IsDecoratedWithAttribute(this MemberInfo memberInfo, Type attributeType)
         {
             Argument.IsNotNull("memberInfo", memberInfo);
             Argument.IsNotNull("attributeType", attributeType);
@@ -147,7 +147,7 @@ namespace Catel.Reflection
         /// <param name="type">The type.</param>
         /// <returns><c>true</c> if the member is decorated with the attribute; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
-        public static bool IsDecoratedWithAttribute<TAttribute>(Type type)
+        public static bool IsDecoratedWithAttribute<TAttribute>(this Type type)
         {
             return IsDecoratedWithAttribute(type, typeof(TAttribute));
         }
@@ -160,7 +160,7 @@ namespace Catel.Reflection
         /// <returns><c>true</c> if the member is decorated with the attribute; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
-        public static bool IsDecoratedWithAttribute(Type type, Type attributeType)
+        public static bool IsDecoratedWithAttribute(this Type type, Type attributeType)
         {
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("attributeType", attributeType);

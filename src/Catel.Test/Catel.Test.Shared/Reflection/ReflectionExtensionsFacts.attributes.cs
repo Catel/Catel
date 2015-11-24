@@ -1,21 +1,18 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AttributeHelperTest.cs" company="Catel development team">
+// <copyright file="ReflectionExtensionsFacts.attributes.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 
 namespace Catel.Test.Reflection
 {
     using System;
     using System.Reflection;
     using Catel.Reflection;
-
     using NUnit.Framework;
 
-    /// <summary>
-    /// The attribute helper facts.
-    /// </summary>
-    public class AttributeHelperFacts
+    public partial class ReflectionExtensionsFacts
     {
         /// <summary>
         /// The the try get attribute method.
@@ -32,7 +29,7 @@ namespace Catel.Test.Reflection
             public void ThrowsArgumentNullExceptionForNullPropertyInfo()
             {
                 ObsoleteAttribute attribute;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => AttributeHelper.TryGetAttribute((MemberInfo)null, out attribute));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ((MemberInfo)null).TryGetAttribute(out attribute));
             }
 
             #endregion

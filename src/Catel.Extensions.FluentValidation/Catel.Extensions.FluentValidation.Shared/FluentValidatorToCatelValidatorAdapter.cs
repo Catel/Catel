@@ -52,7 +52,7 @@ namespace Catel
                 _validator = (IValidator)constructorInfo.Invoke(new object[] { });
             }
 
-            if (!AttributeHelper.TryGetAttribute(validatorType, out _validatorDescriptionAttribute))
+            if (!validatorType.TryGetAttribute(out _validatorDescriptionAttribute))
             {
                 _validatorDescriptionAttribute = new ValidatorDescriptionAttribute(validatorType.Name);
             }

@@ -46,6 +46,7 @@ we will remove the features in the next major release.
 * CTL-740 Marked IMessageMediator.SendMessageAsync as obsolete because it's not truly async
 * CTL-755 Marked Catel.Windows.Controls.ScrollViewerProperties as obsolete to minimize maintenance costs of Catel
 * CTL-756 Marked Catel.Windows.Controls.RichToolTip as obsolete to minimize maintenance costs of Catel
+* CTL-784 Marked AttributeHelper as obsolete, use reflection extensions instead
 
 Added/fixed:
 ============
@@ -65,6 +66,7 @@ Added/fixed:
 (*) CTL-763 Improve performance of serialization engine by caching some method results
 (*) CTL-767 Use ILanguageService in UI elements (like DataWindow, InfoBarMessageControl, etc)
 (*) CTL-778 Default to null instead of string.Empty when reading tags from IoC configuration
+(*) CTL-784 Move AttributeHelper to reflection extensions
 (x) CTL-740 TargetParameterCountException while sending message on RT projects (RT projects now support weak actions)
 (x) CTL-744 Fixed missing DataWindowStyle when only referencing Catel.Extensions.Controls theme (it was no longer
     including the Catel.MVVM theme)

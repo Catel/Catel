@@ -286,6 +286,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\MemberInfoExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\ObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\ReflectionExtensions.assembly.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\ReflectionExtensions.attributes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\ReflectionExtensions.cache.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\ReflectionExtensions.methodinfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\ReflectionExtensions.propertyinfo.cs" />

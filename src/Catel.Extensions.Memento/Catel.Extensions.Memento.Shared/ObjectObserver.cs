@@ -131,7 +131,7 @@ namespace Catel.Memento
         {
             var objectType = obj.GetType();
             var propertyInfo = objectType.GetPropertyEx(propertyName);
-            var ignore = AttributeHelper.IsDecoratedWithAttribute<IgnoreMementoSupportAttribute>(propertyInfo);
+            var ignore = propertyInfo.IsDecoratedWithAttribute<IgnoreMementoSupportAttribute>();
             if (ignore)
             {
                 Log.Debug("Ignored property '{0}' because it is decorated with the IgnoreMementoSupportAttribute", propertyName);

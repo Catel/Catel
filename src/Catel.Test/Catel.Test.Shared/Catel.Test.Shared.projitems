@@ -216,10 +216,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\AppDomainExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\AssemblyExtensionsTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Reflection\AttributeHelperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\PropertyHelperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\PropertyHelperFacts.expression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionExtensionsFacts.assembly.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionExtensionsFacts.attributes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionExtensionsFacts.methodinfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionExtensionsFacts.propertyinfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionExtensionsFacts.type.cs" />

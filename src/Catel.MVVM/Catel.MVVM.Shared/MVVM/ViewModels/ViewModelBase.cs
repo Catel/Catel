@@ -611,7 +611,7 @@ namespace Catel.MVVM
             var validationSummaries = new Dictionary<string, ValidationToViewModelAttribute>();
 
             var modelNames = (from propertyInfo in properties
-                              where AttributeHelper.IsDecoratedWithAttribute<ModelAttribute>(propertyInfo)
+                              where propertyInfo.IsDecoratedWithAttribute<ModelAttribute>()
                               select propertyInfo.Name).ToList();
 
             foreach (var propertyInfo in properties)
