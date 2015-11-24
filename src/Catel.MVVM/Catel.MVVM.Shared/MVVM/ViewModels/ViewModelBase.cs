@@ -952,7 +952,7 @@ namespace Catel.MVVM
                     var modelValues = mapping.Converter.ConvertBack(value, this);
                     for (int i = 0; i < mapping.ValueProperties.Length; i++)
                     {
-                        if (PropertyHelper.TrySetPropertyValue(model, mapping.ValueProperties[i], modelValues[i]))
+                        if (PropertyHelper.TrySetPropertyValue(model, mapping.ValueProperties[i], modelValues[i], false))
                         {
                             Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", mapping.ValueProperties, model.GetType().Name, ObjectToStringHelper.ToString(value));
                         }
@@ -1021,7 +1021,7 @@ namespace Catel.MVVM
                                 for (var index = 0; index < mapping.ValueProperties.Length; index++)
                                 {
                                     var property = mapping.ValueProperties[index];
-                                    values[index] = PropertyHelper.GetPropertyValue(newModelValue, property);
+                                    values[index] = PropertyHelper.GetPropertyValue(newModelValue, property, false);
                                 }
                             }
                             else
@@ -1074,7 +1074,7 @@ namespace Catel.MVVM
                                     }
                                     for (int index = 0; index < propertiesToSet.Length && index < valuesToSet.Length; index++)
                                     {
-                                        if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index]))
+                                        if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index], false))
                                         {
                                             Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
                                         }
@@ -1223,7 +1223,7 @@ namespace Catel.MVVM
                             for (var index = 0; index < mapping.ValueProperties.Length; index++)
                             {
                                 var property = mapping.ValueProperties[index];
-                                values[index] = PropertyHelper.GetPropertyValue(sender, property);
+                                values[index] = PropertyHelper.GetPropertyValue(sender, property, false);
                             }
 
                             var convertedValue = mapping.Converter.Convert(values, this);

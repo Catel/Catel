@@ -112,7 +112,7 @@ namespace Catel.Services
                 }
                 else
                 {
-                    content = PropertyHelper.GetPropertyValue(view, "Content");
+                    content = PropertyHelper.GetPropertyValue(view, "Content", false);
                 }
             }
 
@@ -136,7 +136,7 @@ namespace Catel.Services
                 return;
             }
 
-            PropertyHelper.SetPropertyValue(view, "Content", content);
+            PropertyHelper.SetPropertyValue(view, "Content", content, false);
         }
     }
 }

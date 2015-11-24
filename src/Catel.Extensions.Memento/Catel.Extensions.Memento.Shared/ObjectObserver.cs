@@ -88,7 +88,7 @@ namespace Catel.Memento
             }
 
             var oldValue = _previousPropertyValues[e.PropertyName];
-            var newValue = PropertyHelper.GetPropertyValue(sender, e.PropertyName);
+            var newValue = PropertyHelper.GetPropertyValue(sender, e.PropertyName, false);
 
             // CTL-719: ignore duplicate properties
             if (ObjectHelper.AreEqual(oldValue, newValue))
@@ -116,7 +116,7 @@ namespace Catel.Memento
             {
                 if (!ShouldPropertyBeIgnored(obj, property.Name))
                 {
-                    _previousPropertyValues[property.Name] = PropertyHelper.GetPropertyValue(obj, property.Name);
+                    _previousPropertyValues[property.Name] = PropertyHelper.GetPropertyValue(obj, property.Name, false);
                 }
             }
         }

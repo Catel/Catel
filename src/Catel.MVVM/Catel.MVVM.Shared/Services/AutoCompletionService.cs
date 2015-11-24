@@ -96,7 +96,7 @@ namespace Catel.Services
             }
             else
             {
-                value = PropertyHelper.GetPropertyValue(obj, propertyName);
+                value = PropertyHelper.GetPropertyValue(obj, propertyName, false);
             }
 
             return ObjectToStringHelper.ToString(value);
