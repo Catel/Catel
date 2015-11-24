@@ -16,6 +16,70 @@ namespace Catel.Reflection
     public static partial class ReflectionExtensions
     {
         /// <summary>
+        /// Gets the attribute from the member.
+        /// </summary>
+        /// <typeparam name="TAttribute">The attribute type.</typeparam>
+        /// <param name="memberInfo">The member Info.</param>
+        /// <returns>The attribute or <c>null</c> of the member is not decorated with the attribute.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="memberInfo" /> is <c>null</c>.</exception>
+        public static TAttribute GetAttribute<TAttribute>(this MemberInfo memberInfo)
+            where TAttribute : Attribute
+        {
+            Attribute tempAttribute;
+            TryGetAttribute(memberInfo, typeof(TAttribute), out tempAttribute);
+
+            return tempAttribute as TAttribute;
+        }
+
+        /// <summary>
+        /// Gets the attribute from the member.
+        /// </summary>
+        /// <param name="memberInfo">The member Info.</param>
+        /// <param name="attributeType">Type of the attribute.</param>
+        /// <returns>The attribute or <c>null</c> of the member is not decorated with the attribute.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="memberInfo" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
+        public static Attribute GetAttribute(this MemberInfo memberInfo, Type attributeType)
+        {
+            Attribute attribute;
+            TryGetAttribute(memberInfo, attributeType, out attribute);
+
+            return attribute;
+        }
+
+        /// <summary>
+        /// Gets the attribute from the type.
+        /// </summary>
+        /// <typeparam name="TAttribute">The attribute type.</typeparam>
+        /// <param name="type">The type.</param>
+        /// <returns>The attribute or <c>null</c> of the member is not decorated with the attribute.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static TAttribute GetAttribute<TAttribute>(this Type type)
+            where TAttribute : Attribute
+        {
+            Attribute tempAttribute;
+            TryGetAttribute(type, typeof(TAttribute), out tempAttribute);
+
+            return tempAttribute as TAttribute;
+        }
+
+        /// <summary>
+        /// Gets the attribute from the type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="attributeType">Type of the attribute.</param>
+        /// <returns>The attribute or <c>null</c> of the member is not decorated with the attribute.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="attributeType" /> is <c>null</c>.</exception>
+        public static Attribute GetAttribute(this Type type, Type attributeType)
+        {
+            Attribute attribute;
+            TryGetAttribute(type, attributeType, out attribute);
+
+            return attribute;
+        }
+
+        /// <summary>
         /// Tries to the get attribute.
         /// </summary>
         /// <typeparam name="TAttribute">The attribute type.</typeparam>

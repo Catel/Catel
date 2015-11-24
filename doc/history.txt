@@ -59,6 +59,7 @@ Added/fixed:
 (+) CTL-777 Create extension methods to log headers (e.g. log.DebugHeading1, etc)
 (+) CTL-779 Add Russian resources to Catel.MVVM
 (+) CTL-782 Add case insensitive overloads to all PropertyHelper methods
+(+) CTL-783 Create GetAttribute extension methods for Type and MemberInfo
 (*) CTL-754 Turn DataAnnotation validation off when setting property value
 (*) CTL-755 Marked Catel.Windows.Controls.ScrollViewerProperties as obsolete to minimize maintenance costs of Catel
 (*) CTL-756 Marked Catel.Windows.Controls.RichToolTip as obsolete to minimize maintenance costs of Catel
