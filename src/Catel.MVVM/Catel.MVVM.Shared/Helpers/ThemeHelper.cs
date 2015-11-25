@@ -9,6 +9,7 @@
 namespace Catel
 {
     using System;
+    using Caching;
     using Catel.Logging;
 
 #if NETFX_CORE
@@ -24,6 +25,8 @@ namespace Catel
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private static readonly ICacheStorage<Uri, bool> ThemeLoadedCache = new CacheStorage<Uri, bool>(); 
+
         /// <summary>
         /// Ensures that the Catel.MVVM theme is loaded.
         /// </summary>
@@ -38,30 +41,36 @@ namespace Catel
         /// <param name="resourceUri">The resource URI.</param>
         public static void EnsureThemeIsLoaded(Uri resourceUri)
         {
-            Argument.IsNotNull(() => resourceUri);
+            EnsureThemeIsLoaded(resourceUri, () => 
+            {
+                var application = Application.Current;
+                if (application == null)
+                {
+                    return false;
+                }
+
+                return ThemeLoadedCache.GetFromCacheOrFetch(resourceUri, () => ContainsDictionary(application.Resources, resourceUri));
+            });
+        }
+
+        /// <summary>
+        /// Ensures that the specified theme is loaded.
+        /// </summary>
+        /// <param name="resourceUri">The resource URI.</param>
+        /// <param name="predicate">The predicate.</param>
+        public static void EnsureThemeIsLoaded(Uri resourceUri, Func<bool> predicate)
+        {
+            Argument.IsNotNull("resourceUri", resourceUri);
+            Argument.IsNotNull("predicate", predicate);
 
             try
             {
                 var application = Application.Current;
                 if (application != null)
                 {
-                    bool containsCatelDictionary = false;
-
                     var resources = application.Resources;
-                    foreach (var resource in resources.MergedDictionaries)
-                    {
-                        var source = resource.Source;
-                        if (source != null)
-                        {
-                            if (source.ToString().Contains("Catel"))
-                            {
-                                containsCatelDictionary = true;
-                                break;
-                            }
-                        }
-                    }
 
-                    if (!containsCatelDictionary)
+                    if (!predicate())
                     {
                         Log.Info("Loading resource dictionary '{0}'", resourceUri.ToString());
 
@@ -76,6 +85,28 @@ namespace Catel
             {
                 Log.Error(ex, "Failed to resource dictionary '{0}'", resourceUri.ToString());
             }
+        }
+
+        private static bool ContainsDictionary(ResourceDictionary resourceDictionary, Uri resourceUri)
+        {
+            var source = resourceDictionary.Source;
+            if (source != null)
+            {
+                if (source.ToString().EqualsIgnoreCase(resourceUri.ToString()))
+                {
+                    return true;
+                }
+            }
+
+            foreach (var mergedDictionary in resourceDictionary.MergedDictionaries)
+            {
+                if (ContainsDictionary(mergedDictionary, resourceUri))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
