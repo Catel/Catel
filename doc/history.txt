@@ -60,6 +60,7 @@ Added/fixed:
 (+) CTL-779 Add Russian resources to Catel.MVVM
 (+) CTL-782 Add case insensitive overloads to all PropertyHelper methods
 (+) CTL-783 Create GetAttribute extension methods for Type and MemberInfo
+(+) CTL-786 Include generated resources.dll in the NuGet packages
 (*) CTL-754 Turn DataAnnotation validation off when setting property value
 (*) CTL-755 Marked Catel.Windows.Controls.ScrollViewerProperties as obsolete to minimize maintenance costs of Catel
 (*) CTL-756 Marked Catel.Windows.Controls.RichToolTip as obsolete to minimize maintenance costs of Catel
