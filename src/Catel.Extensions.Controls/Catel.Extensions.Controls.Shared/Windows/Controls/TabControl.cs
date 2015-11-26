@@ -130,9 +130,6 @@ namespace Catel.Windows.Controls
     /// <summary>
     /// TabControl that will not remove the tab items from the visual tree. This way, views can be re-used.
     /// </summary>
-    /// <remarks>
-    /// This code was originally found at http://eric.burke.name/dotnetmania/2009/04/26/22.09.28.
-    /// </remarks>
     [TemplatePart(Name = "PART_ItemsHolder", Type = typeof(Panel))]
     public class TabControl : System.Windows.Controls.TabControl
     {

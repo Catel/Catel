@@ -13,6 +13,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
     using Catel.Data;
     using Catel.IoC;
     using Catel.MVVM;
+    using Catel.MVVM.Views;
 
     /// <summary>
     /// Test view model.
@@ -94,12 +95,12 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the Person property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData PersonProperty = RegisterProperty("Person", typeof (IPerson));
+        public static readonly PropertyData PersonProperty = RegisterProperty("Person", typeof(IPerson));
 
         /// <summary>
         /// Register the SpecialValidationModel property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData SpecialValidationModelProperty = RegisterProperty("SpecialValidationModel", typeof (SpecialValidationModel));
+        public static readonly PropertyData SpecialValidationModelProperty = RegisterProperty("SpecialValidationModel", typeof(SpecialValidationModel));
         #endregion
 
         #region Properties
@@ -132,37 +133,37 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the FirstName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof (string));
+        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string));
 
         /// <summary>
         /// Register the MiddleName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof (string));
+        public static readonly PropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof(string));
 
         /// <summary>
         /// Register the LastName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof (string));
+        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string));
 
         /// <summary>
         /// Register the FieldErrorWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FieldErrorWhenEmptyProperty = RegisterProperty("FieldErrorWhenEmpty", typeof (string));
+        public static readonly PropertyData FieldErrorWhenEmptyProperty = RegisterProperty("FieldErrorWhenEmpty", typeof(string));
 
         /// <summary>
         /// Register the FieldWarningWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FieldWarningWhenEmptyProperty = RegisterProperty("FieldWarningWhenEmpty", typeof (string));
+        public static readonly PropertyData FieldWarningWhenEmptyProperty = RegisterProperty("FieldWarningWhenEmpty", typeof(string));
 
         /// <summary>
         /// Register the BusinessRuleErrorWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData BusinessRuleErrorWhenEmptyProperty = RegisterProperty("BusinessRuleErrorWhenEmpty", typeof (string));
+        public static readonly PropertyData BusinessRuleErrorWhenEmptyProperty = RegisterProperty("BusinessRuleErrorWhenEmpty", typeof(string));
 
         /// <summary>
         /// Register the BusinessRuleWarningWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData BusinessRuleWarningWhenEmptyProperty = RegisterProperty("BusinessRuleWarningWhenEmpty", typeof (string));
+        public static readonly PropertyData BusinessRuleWarningWhenEmptyProperty = RegisterProperty("BusinessRuleWarningWhenEmpty", typeof(string));
 
         /// <summary>Register the FullName property so it is known in the class.</summary>
         public static readonly PropertyData FullNameProperty = RegisterProperty<TestViewModel, string>(model => model.FullName);
@@ -208,7 +209,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Gets or sets the full name.
         /// </summary>
-        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] {"LastName"}, ConverterType = typeof (CollapsMapping))]
+        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] { "LastName" }, ConverterType = typeof(CollapsMapping))]
         public string FullName
         {
             get { return GetValue<string>(FullNameProperty); }
@@ -218,15 +219,15 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Gets or sets the full name with separated names with ';'.
         /// </summary>
-        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] {"LastName"}, ConverterType = typeof (CollapsMapping),
-            AdditionalConstructorArgs = new object[] {';'})]
+        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] { "LastName" }, ConverterType = typeof(CollapsMapping),
+            AdditionalConstructorArgs = new object[] { ';' })]
         public string FullNameWithCustomSeparator
         {
             get { return GetValue<string>(FullNameWithCustomSeparatorProperty); }
             set { SetValue(FullNameWithCustomSeparatorProperty, value); }
         }
 
-        [ViewModelToModel("Person", ConverterType = typeof (UIntToStringMapping))]
+        [ViewModelToModel("Person", ConverterType = typeof(UIntToStringMapping))]
         public string Age
         {
             get { return GetValue<string>(AgeProperty); }
@@ -374,17 +375,17 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the FirstName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof (string));
+        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string));
 
         /// <summary>
         /// Register the MiddleName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof (string));
+        public static readonly PropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof(string));
 
         /// <summary>
         /// Register the LastName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof (string));
+        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string));
         #endregion
 
         #region Properties
@@ -454,12 +455,12 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         {
             if (string.IsNullOrEmpty(FirstName))
             {
-                validationResults.Add(new FieldValidationResult(FirstNameProperty, ValidationResultType.Error, "First name is required") {Tag = "PersonValidation"});
+                validationResults.Add(new FieldValidationResult(FirstNameProperty, ValidationResultType.Error, "First name is required") { Tag = "PersonValidation" });
             }
 
             if (string.IsNullOrEmpty(LastName))
             {
-                validationResults.Add(new FieldValidationResult(LastNameProperty, ValidationResultType.Error, "Last name is required") {Tag = "PersonValidation"});
+                validationResults.Add(new FieldValidationResult(LastNameProperty, ValidationResultType.Error, "Last name is required") { Tag = "PersonValidation" });
             }
         }
         #endregion
@@ -471,27 +472,27 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the Person property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData PersonProperty = RegisterProperty("Person", typeof (IPerson));
+        public static readonly PropertyData PersonProperty = RegisterProperty("Person", typeof(IPerson));
 
         /// <summary>
         /// Register the FirstNameAsTwoWay property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FirstNameAsTwoWayProperty = RegisterProperty("FirstNameAsTwoWay", typeof (string), string.Empty);
+        public static readonly PropertyData FirstNameAsTwoWayProperty = RegisterProperty("FirstNameAsTwoWay", typeof(string), string.Empty);
 
         /// <summary>
         /// Register the FirstNameAsOneWay property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FirstNameAsOneWayProperty = RegisterProperty("FirstNameAsOneWay", typeof (string), string.Empty);
+        public static readonly PropertyData FirstNameAsOneWayProperty = RegisterProperty("FirstNameAsOneWay", typeof(string), string.Empty);
 
         /// <summary>
         /// Register the FirstNameAsOneWayToSource property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FirstNameAsOneWayToSourceProperty = RegisterProperty("FirstNameAsOneWayToSource", typeof (string), string.Empty);
+        public static readonly PropertyData FirstNameAsOneWayToSourceProperty = RegisterProperty("FirstNameAsOneWayToSource", typeof(string), string.Empty);
 
         /// <summary>
         /// Register the FirstNameAsExplicit property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FirstNameAsExplicitProperty = RegisterProperty("FirstNameAsExplicit", typeof (string), string.Empty);
+        public static readonly PropertyData FirstNameAsExplicitProperty = RegisterProperty("FirstNameAsExplicit", typeof(string), string.Empty);
         #endregion
 
         #region Constructors
@@ -570,17 +571,17 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the Person property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData PersonProperty = RegisterProperty("Person", typeof (IPerson));
+        public static readonly PropertyData PersonProperty = RegisterProperty("Person", typeof(IPerson));
 
         /// <summary>
         /// Register the ContactInfo property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ContactInfoProperty = RegisterProperty("ContactInfo", typeof (IContactInfo));
+        public static readonly PropertyData ContactInfoProperty = RegisterProperty("ContactInfo", typeof(IContactInfo));
 
         /// <summary>
         /// Register the Email property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData EmailProperty = RegisterProperty("Email", typeof (string));
+        public static readonly PropertyData EmailProperty = RegisterProperty("Email", typeof(string));
         #endregion
 
         #region Constructors
@@ -624,6 +625,67 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         #endregion
     }
 
+    public class ImplicitModelMappingsViewModel : ViewModelBase
+    {
+        public ImplicitModelMappingsViewModel(IPerson person)
+        {
+            Person = person;
+        }
+
+        [Model]
+        public IPerson Person
+        {
+            get { return GetValue<IPerson>(PersonProperty); }
+            private set { SetValue(PersonProperty, value); }
+        }
+
+        public static readonly PropertyData PersonProperty = RegisterProperty("Person", typeof(IPerson));
+
+        [ViewModelToModel]
+        public string FirstName
+        {
+            get { return GetValue<string>(FirstNameProperty); }
+            set { SetValue(FirstNameProperty, value); }
+        }
+
+        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+    }
+
+    public class ImplicitModelMappingsWithMultipleModelsViewModel : ViewModelBase
+    {
+        public ImplicitModelMappingsWithMultipleModelsViewModel(IPerson person)
+        {
+        }
+
+        [Model]
+        public IPerson Person1
+        {
+            get { return GetValue<IPerson>(Person1Property); }
+            private set { SetValue(Person1Property, value); }
+        }
+
+        public static readonly PropertyData Person1Property = RegisterProperty("Person1", typeof(IPerson));
+
+        [Model]
+        public IPerson Person2
+        {
+            get { return GetValue<IPerson>(Person2Property); }
+            private set { SetValue(Person2Property, value); }
+        }
+
+        public static readonly PropertyData Person2Property = RegisterProperty("Person2", typeof(IPerson));
+
+
+        [ViewModelToModel]
+        public string FirstName
+        {
+            get { return GetValue<string>(FirstNameProperty); }
+            set { SetValue(FirstNameProperty, value); }
+        }
+
+        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+    }
+
     public class CollapsMapping : DefaultViewModelToModelMappingConverter
     {
         #region Fields
@@ -653,22 +715,22 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         #region Methods
         public override bool CanConvert(Type[] types, Type outType, Type viewModelType)
         {
-            return types.All(x => x == typeof (string)) && outType == typeof (string);
+            return types.All(x => x == typeof(string)) && outType == typeof(string);
         }
 
         public override object Convert(object[] values, IViewModel viewModel)
         {
-            return string.Join(Separator.ToString(), values.Where(x => !string.IsNullOrWhiteSpace((string) x)));
+            return string.Join(Separator.ToString(), values.Where(x => !string.IsNullOrWhiteSpace((string)x)));
         }
 
         public override bool CanConvertBack(Type inType, Type[] outTypes, Type viewModelType)
         {
-            return outTypes.All(x => x == typeof (string)) && inType == typeof (string);
+            return outTypes.All(x => x == typeof(string)) && inType == typeof(string);
         }
 
         public override object[] ConvertBack(object value, IViewModel viewModel)
         {
-            return ((string) value).Split(Separator);
+            return ((string)value).Split(Separator);
         }
         #endregion
     }
@@ -685,24 +747,24 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         #region Methods
         public override bool CanConvert(Type[] types, Type outType, Type viewModelType)
         {
-            return types.Length == 1 && types[0] == typeof (uint) && outType == typeof (string);
+            return types.Length == 1 && types[0] == typeof(uint) && outType == typeof(string);
         }
 
         public override object Convert(object[] values, IViewModel viewModel)
         {
-            return ((uint) values[0]).ToString();
+            return ((uint)values[0]).ToString();
         }
 
         public override bool CanConvertBack(Type inType, Type[] outTypes, Type viewModelType)
         {
-            return outTypes.Length == 1 && outTypes[0] == typeof (uint) && inType == typeof (string);
+            return outTypes.Length == 1 && outTypes[0] == typeof(uint) && inType == typeof(string);
         }
 
         public override object[] ConvertBack(object value, IViewModel viewModel)
         {
             uint res = 0;
-            uint.TryParse((string) value, out res);
-            return new object[] {res};
+            uint.TryParse((string)value, out res);
+            return new object[] { res };
         }
         #endregion
     }

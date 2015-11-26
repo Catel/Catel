@@ -7,7 +7,12 @@
 namespace Catel.Modules
 {
     using System;
+    
+#if PRISM6
+    using Prism.Modularity;
+#else
     using Microsoft.Practices.Prism.Modularity;
+#endif
 
     /// <summary>
     /// Event args for moldue events.

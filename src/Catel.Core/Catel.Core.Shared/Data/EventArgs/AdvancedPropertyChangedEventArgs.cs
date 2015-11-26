@@ -25,7 +25,8 @@ namespace Catel.Data
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="Catel.Data.AdvancedPropertyChangedEventArgs"/>"/> instance containing the event data.</param>
         public AdvancedPropertyChangedEventArgs(object sender, AdvancedPropertyChangedEventArgs e)
-            : this(e.OriginalSender, sender, e.PropertyName, e.OldValue, e.NewValue, e.IsOldValueMeaningful, e.IsNewValueMeaningful) { }
+            : this(e.OriginalSender, sender, e.PropertyName, e.OldValue, e.NewValue, e.IsOldValueMeaningful, e.IsNewValueMeaningful)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdvancedPropertyChangedEventArgs"/>"/> class.
@@ -33,7 +34,8 @@ namespace Catel.Data
         /// <param name="sender">The sender.</param>
         /// <param name="propertyName">Name of the property.</param>
         public AdvancedPropertyChangedEventArgs(object sender, string propertyName)
-            : this(sender, sender, propertyName, null, null, false, false) { }
+            : this(sender, sender, propertyName, null, null, false, false)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdvancedPropertyChangedEventArgs"/>"/> class.
@@ -42,7 +44,8 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="newValue">The new value.</param>
         public AdvancedPropertyChangedEventArgs(object sender, string propertyName, object newValue)
-            : this(sender, sender, propertyName, null, newValue, false, true) { }
+            : this(sender, sender, propertyName, null, newValue, false, true)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdvancedPropertyChangedEventArgs"/>"/> class.
@@ -52,7 +55,8 @@ namespace Catel.Data
         /// <param name="oldValue">The old value.</param>
         /// <param name="newValue">The new value.</param>
         public AdvancedPropertyChangedEventArgs(object sender, string propertyName, object oldValue, object newValue)
-            : this(sender, sender, propertyName, oldValue, newValue, true, true) { }
+            : this(sender, sender, propertyName, oldValue, newValue, true, true)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdvancedPropertyChangedEventArgs"/>"/> class.
@@ -61,7 +65,8 @@ namespace Catel.Data
         /// <param name="latestSender">The latest sender.</param>
         /// <param name="propertyName">Name of the property.</param>
         public AdvancedPropertyChangedEventArgs(object originalSender, object latestSender, string propertyName)
-            : this(originalSender, latestSender, propertyName, null, null, false, false) { }
+            : this(originalSender, latestSender, propertyName, null, null, false, false)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdvancedPropertyChangedEventArgs"/>"/> class.
@@ -71,7 +76,8 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="newValue">The new value.</param>
         public AdvancedPropertyChangedEventArgs(object originalSender, object latestSender, string propertyName, object newValue)
-            : this(originalSender, latestSender, propertyName, null, newValue, false, true) { }
+            : this(originalSender, latestSender, propertyName, null, newValue, false, true)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdvancedPropertyChangedEventArgs"/>"/> class.
@@ -82,7 +88,8 @@ namespace Catel.Data
         /// <param name="oldValue">The old value.</param>
         /// <param name="newValue">The new value.</param>
         public AdvancedPropertyChangedEventArgs(object originalSender, object latestSender, string propertyName, object oldValue, object newValue)
-            : this(originalSender, latestSender, propertyName, oldValue, newValue, true, true) { }
+            : this(originalSender, latestSender, propertyName, oldValue, newValue, true, true)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdvancedPropertyChangedEventArgs"/>"/> class.
@@ -104,12 +111,9 @@ namespace Catel.Data
             // Last resort to get the new value
             if (!isNewValueMeaningful && !string.IsNullOrEmpty(propertyName))
             {
-                if (PropertyHelper.IsPropertyAvailable(originalSender, propertyName))
+                if (PropertyHelper.TryGetPropertyValue(originalSender, propertyName, out newValue))
                 {
-                    if (PropertyHelper.TryGetPropertyValue(originalSender, propertyName, out newValue))
-                    {
-                        isNewValueMeaningful = true;
-                    }
+                    isNewValueMeaningful = true;
                 }
             }
 

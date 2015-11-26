@@ -15,6 +15,8 @@ namespace Catel.MVVM
         /// Determines whether the specified object is a sentinel.
         /// <para />
         /// For more information, see http://stackoverflow.com/questions/3868786/wpf-sentinel-objects-and-how-to-check-for-an-internal-type.
+        /// <para />
+        /// Original license: CC BY-SA 2.5, compatible with the MIT license.
         /// </summary>
         /// <param name="dataContext">The data context.</param>
         /// <returns><c>true</c> if the data context is a sentinel; otherwise, <c>false</c>.</returns>

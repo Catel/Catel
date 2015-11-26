@@ -11,7 +11,11 @@ namespace Catel.Services
     using System.Threading.Tasks;
     using IoC;
 
+#if PRISM6
+    using Prism.Regions;
+#else
     using Microsoft.Practices.Prism.Regions;
+#endif
 
     using MVVM;
     using MVVM.Views;

@@ -312,7 +312,7 @@ namespace Catel.Interception.Handlers
             Argument.IsNotNull(() => type);
 
             return type.GetMethodsToIntercept()
-                       .Where(method => !AttributeHelper.IsDecoratedWithAttribute<DoNotInterceptAttribute>(method));
+                       .Where(method => !method.IsDecoratedWithAttribute<DoNotInterceptAttribute>());
         }
 
         /// <summary>

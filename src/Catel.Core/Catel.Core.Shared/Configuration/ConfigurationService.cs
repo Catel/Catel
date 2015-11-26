@@ -58,8 +58,8 @@ namespace Catel.Configuration
         /// <param name="objectConverterService">The object converter service.</param>
         public ConfigurationService(ISerializationManager serializationManager, IObjectConverterService objectConverterService)
         {
-            Argument.IsNotNull(() => serializationManager);
-            Argument.IsNotNull(() => objectConverterService);
+            Argument.IsNotNull("serializationManager", serializationManager);
+            Argument.IsNotNull("objectConverterService", objectConverterService);
 
             _serializationManager = serializationManager;
             _objectConverterService = objectConverterService;

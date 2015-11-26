@@ -142,7 +142,7 @@ namespace Catel.Runtime.Serialization
 
             var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType);
 
-            Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length, context.ModelType.GetSafeFullName());
+            Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length, context.ModelTypeName);
 
             var serializingEventArgs = new SerializationEventArgs(context);
 
@@ -299,7 +299,7 @@ namespace Catel.Runtime.Serialization
                         if (targetDictionary == null)
                         {
                             throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a dictionary, but target model cannot be updated because it does not implement IDictionary",
-                                context.ModelType.GetSafeFullName());
+                                context.ModelTypeName);
                         }
 
                         var enumerable = memberValue.Value as List<SerializableKeyValuePair>;
@@ -339,7 +339,7 @@ namespace Catel.Runtime.Serialization
                             if (targetCollection == null)
                             {
                                 throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
-                                    context.ModelType.GetSafeFullName());
+                                    context.ModelTypeName);
                             }
 
                             if (sourceCollection != null)
@@ -388,7 +388,7 @@ namespace Catel.Runtime.Serialization
                     if (targetDictionary == null)
                     {
                         throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a dictionary, but target model cannot be updated because it does not implement IDictionary",
-                            context.ModelType.GetSafeFullName());
+                            context.ModelTypeName);
                     }
 
                     targetDictionary.Clear();
@@ -414,7 +414,7 @@ namespace Catel.Runtime.Serialization
                         if (targetCollection == null)
                         {
                             throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
-                                context.ModelType.GetSafeFullName());
+                                context.ModelTypeName);
                         }
 
                         targetCollection.Clear();

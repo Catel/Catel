@@ -5,6 +5,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using Catel.Reflection;
+
 namespace Catel.Runtime.Serialization
 {
     using System;
@@ -67,7 +69,9 @@ namespace Catel.Runtime.Serialization
         {
             MemberGroup = memberGroup;
             ModelType = modelType;
+            ModelTypeName = modelType.GetSafeFullName();
             MemberType = memberType;
+            MemberTypeName = memberType.GetSafeFullName();
             Name = name;
             NameForSerialization = nameForSerialization;
             Value = value;
@@ -81,6 +85,18 @@ namespace Catel.Runtime.Serialization
         public SerializationMemberGroup MemberGroup { get; private set; }
 
         /// <summary>
+        /// Gets the type of the model which this member value is a member of.
+        /// </summary>
+        /// <value>The type of the model.</value>
+        public Type ModelType { get; private set; }
+
+        /// <summary>
+        /// Gets the name of the model type, which should be a cached version of <c>ModelType.GetSafeFullName();</c>.
+        /// </summary>
+        /// <value>The name of the model type.</value>
+        public string ModelTypeName { get; private set; }
+
+        /// <summary>
         /// Gets the type of the member.
         /// <para />
         /// This is the actual member type as it is defined on the type. This is <c>not</c> a wrapper around
@@ -90,16 +106,16 @@ namespace Catel.Runtime.Serialization
         public Type MemberType { get; private set; }
 
         /// <summary>
+        /// Gets the name of the model type, which should be a cached version of <c>ModelType.GetSafeFullName();</c>.
+        /// </summary>
+        /// <value>The name of the model type.</value>
+        public string MemberTypeName { get; private set; }
+
+        /// <summary>
         /// Gets the actual type of the value.
         /// </summary>
         /// <value>The actual type of the value.</value>
         public Type ActualMemberType { get; private set; }
-
-        /// <summary>
-        /// Gets the type of the model which this member value is a member of.
-        /// </summary>
-        /// <value>The type of the model.</value>
-        public Type ModelType { get; private set; }
 
         /// <summary>
         /// Gets the name of the member.
@@ -127,6 +143,15 @@ namespace Catel.Runtime.Serialization
 
                 ActualMemberType = (value != null) ? value.GetType() : null;
             }
+        }
+
+        /// <summary>
+        /// Gets the the best member type. Code is equal to <c>memberValue.ActualMemberType ?? memberValue.MemberType</c>.
+        /// </summary>
+        /// <returns>Type.</returns>
+        public Type GetBestMemberType()
+        {
+            return ActualMemberType ?? MemberType;
         }
         #endregion
     }

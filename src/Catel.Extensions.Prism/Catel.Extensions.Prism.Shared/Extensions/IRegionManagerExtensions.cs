@@ -9,7 +9,11 @@ namespace Catel
 {
     using System;
     using System.Windows.Controls;
+#if PRISM6
+    using Prism.Regions;
+#else
     using Microsoft.Practices.Prism.Regions;
+#endif
 
     /// <summary>
     /// The <see cref="IRegionManager"/> extensions methods.

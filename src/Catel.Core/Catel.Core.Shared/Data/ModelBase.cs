@@ -443,8 +443,9 @@ namespace Catel.Data
         [XmlIgnore]
         public bool IsDirty
         {
-            get { return GetValue<bool>(IsDirtyProperty); }
-            protected set { SetValue(IsDirtyProperty, value); }
+            // Note: we know what we are doing, use GetValueFast (but not SetValueFast)
+            get { return GetValueFast<bool>(IsDirtyProperty.Name); }
+            protected set { SetValue(IsDirtyProperty.Name, value); }
         }
 
         /// <summary>
@@ -461,7 +462,8 @@ namespace Catel.Data
         [XmlIgnore]
         public bool IsReadOnly
         {
-            get { return GetValue<bool>(IsReadOnlyProperty); }
+            // Note: we know what we are doing, use GetValueFast (but not SetValueFast)
+            get { return GetValueFast<bool>(IsReadOnlyProperty.Name); }
             protected set { SetValue(IsReadOnlyProperty, value); }
         }
 
@@ -575,7 +577,7 @@ namespace Catel.Data
                 {
                     lock (_propertyValuesLock)
                     {
-                        var propertyValue = GetValueFast(propertyData.Key);
+                        var propertyValue = GetValueFast<object>(propertyData.Key);
                         var propertyValueAsModelBase = propertyValue as ModelBase;
                         var propertyValueAsIEnumerable = propertyValue as IEnumerable;
 

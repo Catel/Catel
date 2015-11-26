@@ -16,7 +16,7 @@ namespace Catel.Test.Reflection
         public class TheGetPropertyNameWithExpressionMethod
         {
             #region TestClasses
-                        public TheGetPropertyNameWithExpressionMethod()
+            public TheGetPropertyNameWithExpressionMethod()
             {
                 TestProperty = new A();
             }
@@ -31,7 +31,7 @@ namespace Catel.Test.Reflection
                     SubClass = new B();
                 }
 
-                public int Id { get; set; }   
+                public int Id { get; set; }
 
                 public B SubClass { get; set; }
             }

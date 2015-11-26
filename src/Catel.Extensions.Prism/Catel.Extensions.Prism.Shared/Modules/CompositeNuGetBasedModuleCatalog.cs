@@ -12,7 +12,11 @@ namespace Catel.Modules
 
     using Catel.Logging;
 
+#if PRISM6
+    using Prism.Modularity;
+#else
     using Microsoft.Practices.Prism.Modularity;
+#endif
 
     using NuGet;
 

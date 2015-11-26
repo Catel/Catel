@@ -37,7 +37,7 @@ namespace Catel
             {
                 Catel.ComponentModel.DisplayNameAttribute displayNameAttribute;
                 string displayName = member.Name;
-                if (AttributeHelper.TryGetAttribute(member, out displayNameAttribute))
+                if (member.TryGetAttribute(out displayNameAttribute))
                 {
                     displayName = displayNameAttribute.DisplayName;
                 }

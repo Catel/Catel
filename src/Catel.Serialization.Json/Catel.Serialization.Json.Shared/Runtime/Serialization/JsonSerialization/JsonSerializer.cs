@@ -108,11 +108,11 @@ namespace Catel.Runtime.Serialization.Json
             Dictionary<string, JProperty> jsonProperties = null;
             JArray jsonArray = null;
 
-            if (ShouldSerializeAsCollection(modelType, null))
+            if (ShouldSerializeAsCollection(modelType))
             {
                 jsonArray = JArray.Load(jsonReader);
             }
-            else if (ShouldExternalSerializerHandleMember(modelType, null))
+            else if (ShouldExternalSerializerHandleMember(modelType))
             {
                 return Convert.ChangeType(jsonReader.Value, modelType, CultureInfo.CurrentCulture);
             }
@@ -188,7 +188,7 @@ namespace Catel.Runtime.Serialization.Json
         {
             var jsonWriter = context.Context.JsonWriter;
 
-            if (ShouldSerializeAsCollection(context.ModelType, context.Model))
+            if (ShouldSerializeAsCollection(context.ModelType))
             {
                 // Nothing required
             }
@@ -208,7 +208,7 @@ namespace Catel.Runtime.Serialization.Json
                 if (WriteTypeInfo && context.ModelType != typeof(SerializableKeyValuePair))
                 {
                     jsonWriter.WritePropertyName(TypeName);
-                    jsonWriter.WriteValue(context.ModelType.GetSafeFullName());
+                    jsonWriter.WriteValue(context.ModelTypeName);
                 }
             }
 
@@ -225,7 +225,7 @@ namespace Catel.Runtime.Serialization.Json
 
             var jsonWriter = context.Context.JsonWriter;
 
-            if (ShouldSerializeAsCollection(context.ModelType, context.Model))
+            if (ShouldSerializeAsCollection(context.ModelType))
             {
                 // Nothing required
             }
@@ -307,7 +307,7 @@ namespace Catel.Runtime.Serialization.Json
                         if (item != null)
                         {
                             var itemType = item.GetType();
-                            if (ShouldExternalSerializerHandleMember(itemType, null))
+                            if (ShouldExternalSerializerHandleMember(itemType))
                             {
                                 jsonSerializer.Serialize(jsonWriter, item);
                             }
@@ -331,7 +331,7 @@ namespace Catel.Runtime.Serialization.Json
                     if (item != null)
                     {
                         var itemType = item.GetType();
-                        if (ShouldExternalSerializerHandleMember(itemType, null))
+                        if (ShouldExternalSerializerHandleMember(itemType))
                         {
                             jsonSerializer.Serialize(jsonWriter, item);
                         }
@@ -357,7 +357,7 @@ namespace Catel.Runtime.Serialization.Json
         protected override void BeforeDeserialization(ISerializationContext<JsonSerializationContextInfo> context)
         {
             var serializationContext = context.Context;
-            if (ShouldSerializeAsDictionary(context.ModelType, context.Model))
+            if (ShouldSerializeAsDictionary(context.ModelType))
             {
                 if (serializationContext.JsonProperties == null)
                 {
@@ -365,7 +365,7 @@ namespace Catel.Runtime.Serialization.Json
                     serializationContext.JsonProperties = jsonObject.Properties().ToDictionary(x => x.Name, x => x);
                 }
             }
-            else if (ShouldSerializeAsCollection(context.ModelType, context.Model))
+            else if (ShouldSerializeAsCollection(context.ModelType))
             {
                 if (serializationContext.JsonArray == null)
                 {
@@ -510,7 +510,7 @@ namespace Catel.Runtime.Serialization.Json
                             }
                         }
 
-                        var shouldValueTypeBeHandledByExternalSerializer = ShouldExternalSerializerHandleMember(typeToDeserialize, null);
+                        var shouldValueTypeBeHandledByExternalSerializer = ShouldExternalSerializerHandleMember(typeToDeserialize);
                         if (shouldValueTypeBeHandledByExternalSerializer)
                         {
                             deserializedItem = jsonProperty.Value.ToObject(valueType, serializationContext.JsonSerializer);
@@ -533,7 +533,7 @@ namespace Catel.Runtime.Serialization.Json
                     if (jsonValue != null)
                     {
                         object finalMemberValue = null;
-                        var valueType = memberValue.MemberType;
+                        var valueType = memberValue.GetBestMemberType();
                         if (valueType.IsEnumEx())
                         {
                             var enumName = Enum.GetName(valueType, (int)jsonValue);
@@ -558,13 +558,23 @@ namespace Catel.Runtime.Serialization.Json
                                 {
                                     if (jsonValue.HasValues)
                                     {
+                                        var finalValueType = valueType;
+
+                                        var typeNameValue = jsonValue.Value<string>(TypeName);
+                                        if (!string.IsNullOrWhiteSpace(typeNameValue))
+                                        {
+                                            finalValueType = TypeCache.GetType(typeNameValue);
+                                        }
+
                                         // Serialize ourselves
-                                        finalMemberValue = Deserialize(valueType, jsonValue.CreateReader());
+                                        finalMemberValue = Deserialize(finalValueType, jsonValue.CreateReader());
                                     }
                                 }
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
+                                Log.Debug(ex, "Failed to parse json value for '{0}', treating value as string", memberValue.Name);
+
                                 // As a fallback, interpret as a string (might be a modifier)
                                 finalMemberValue = (string)jsonValue;
                             }
@@ -598,18 +608,10 @@ namespace Catel.Runtime.Serialization.Json
                 var jArray = context.Context.JsonArray;
                 if (jArray != null)
                 {
-                    var memberType = memberValue.MemberType;
-                    var collectionItemType = typeof(object);
-                    if (memberType.IsGenericTypeEx())
-                    {
-                        collectionItemType = memberType.GetGenericArgumentsEx()[0];
-                    }
-                    else if (memberType.IsArrayEx())
-                    {
-                        collectionItemType = memberType.GetElementTypeEx();
-                    }
+                    var memberType = memberValue.GetBestMemberType();
+                    var collectionItemType = memberType.GetCollectionElementType();
 
-                    var shouldBeHandledByExternalSerializer = ShouldExternalSerializerHandleMember(collectionItemType, null);
+                    var shouldBeHandledByExternalSerializer = ShouldExternalSerializerHandleMember(collectionItemType);
 
                     foreach (var item in jArray.Children())
                     {

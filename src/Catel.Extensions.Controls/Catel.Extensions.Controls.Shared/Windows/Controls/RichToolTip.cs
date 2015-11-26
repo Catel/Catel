@@ -54,6 +54,7 @@ namespace Catel.Windows.Controls
     /// <remarks>
     /// Originally found at http://blogs.microsoft.co.il/blogs/zuker/archive/2009/01/18/wpf-popups-and-tooltip-behavior-solution.aspx
     /// </remarks>
+    [ObsoleteEx(Message = "Removed because no longer being used", TreatAsErrorFromVersion = "4.4", RemoveInVersion = "5.0")]
     public class RichToolTip : ContentControl
     {
         #region Fields

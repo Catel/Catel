@@ -13,6 +13,7 @@ namespace Catel.Runtime.Serialization.Binary
     using System.Globalization;
     using System.Reflection;
     using System.Runtime.Serialization;
+    using Caching;
     using Logging;
     using Reflection;
 
@@ -26,6 +27,8 @@ namespace Catel.Runtime.Serialization.Binary
         /// The <see cref="ILog">log</see> object.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private static readonly CacheStorage<Type, bool> TypeBinarySerializableCache = new CacheStorage<Type, bool>();
 
         /// <summary>
         /// A dictionary of all <see cref="RedirectTypeAttribute"/> found.
@@ -103,13 +106,16 @@ namespace Catel.Runtime.Serialization.Binary
 
         private bool IsTypeBinarySerializable(Type type)
         {
-            if (type == null)
+            return TypeBinarySerializableCache.GetFromCacheOrFetch(type, () =>
             {
-                return false;
-            }
+                if (type == null)
+                {
+                    return false;
+                }
 
-            var ctor = type.GetConstructor(new [] { typeof(SerializationInfo), typeof(StreamingContext) });
-            return ctor != null;
+                var ctor = type.GetConstructor(new[] {typeof (SerializationInfo), typeof (StreamingContext)});
+                return ctor != null;
+            });
         }
 
         /// <summary>
@@ -136,11 +142,11 @@ namespace Catel.Runtime.Serialization.Binary
             {
                 if (type != null)
                 {
-                    string typeName = TypeHelper.FormatType(type.Assembly.FullName, type.FullName);
+                    var typeName = TypeHelper.FormatType(type.Assembly.FullName, type.FullName);
                     typeName = TypeHelper.ConvertTypeToVersionIndependentType(typeName);
 
-                    string finalTypeName = TypeHelper.GetTypeName(typeName);
-                    string finalAssemblyName = TypeHelper.GetAssemblyName(typeName);
+                    var finalTypeName = TypeHelper.GetTypeName(typeName);
+                    var finalAssemblyName = TypeHelper.GetAssemblyName(typeName);
 
                     attribute.NewTypeName = finalTypeName;
                     attribute.NewAssemblyName = finalAssemblyName;
@@ -172,7 +178,7 @@ namespace Catel.Runtime.Serialization.Binary
             string currentTypeVersionIndependent = TypeHelper.ConvertTypeToVersionIndependentType(currentType);
             string newType = ConvertTypeToNewType(currentTypeVersionIndependent);
 
-            Type typeToDeserialize = LoadType(newType) ?? (LoadType(currentTypeVersionIndependent) ?? LoadType(currentType));
+            var typeToDeserialize = LoadType(newType) ?? (LoadType(currentTypeVersionIndependent) ?? LoadType(currentType));
 
             if (typeToDeserialize == null)
             {

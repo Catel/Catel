@@ -8,7 +8,11 @@ namespace Catel
 {
     using System.Windows;
 
+#if PRISM6
+    using Prism.Regions;
+#else
     using Microsoft.Practices.Prism.Regions;
+#endif
 
     /// <summary>
     /// The view region item interface.

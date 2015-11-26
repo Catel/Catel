@@ -76,6 +76,15 @@ namespace Catel.Test.Reflection
                 var myPropertyHelperClass = new MyPropertyHelperClass();
                 Assert.AreEqual(true, PropertyHelper.IsPropertyAvailable(myPropertyHelperClass, "PublicProperty"));
             }
+
+            [TestCase("publicProperty", false, false)]
+            [TestCase("publicProperty", true, true)]
+            public void IsPropertyAvailable_ExistingProperty_IgnoreCase(string property, bool ignoreCase, bool expectedResult)
+            {
+                var myPropertyHelperClass = new MyPropertyHelperClass();
+
+                Assert.AreEqual(expectedResult, PropertyHelper.IsPropertyAvailable(myPropertyHelperClass, property, ignoreCase));
+            }
         }
 
         [TestFixture]
@@ -118,6 +127,23 @@ namespace Catel.Test.Reflection
 
                 Assert.IsTrue(result);
                 Assert.AreEqual(1, value);
+            }
+
+            [TestCase("publicProperty", false, false)]
+            [TestCase("publicProperty", true, true)]
+            public void TryGetPropertyValue_ExistingProperty_IgnoreCase(string property, bool ignoreCase, bool expectedResult)
+            {
+                object value;
+                var obj = new MyPropertyHelperClass();
+
+                var result = PropertyHelper.TryGetPropertyValue(obj, property, ignoreCase, out value);
+
+                Assert.AreEqual(expectedResult, result);
+
+                if (expectedResult)
+                {
+                    Assert.AreEqual(1, value);
+                }
             }
         }
 
@@ -166,6 +192,24 @@ namespace Catel.Test.Reflection
                 myPropertyHelperClass.StringValue = "FourtyTwo";
                 Assert.AreEqual("FourtyTwo", PropertyHelper.GetPropertyValue<string>(myPropertyHelperClass, "StringValue"));
             }
+
+            [TestCase("stringValue", false, "exception")]
+            [TestCase("stringValue", true, "FourtyTwo")]
+            public void GetPropertyValue_StringValue_IgnoreCase(string property, bool ignoreCase, string expectedResult)
+            {
+                var myPropertyHelperClass = new MyPropertyHelperClass();
+                myPropertyHelperClass.StringValue = expectedResult;
+
+                if (expectedResult == "exception")
+                {
+                    ExceptionTester.CallMethodAndExpectException<PropertyNotFoundException>(() => PropertyHelper.GetPropertyValue<string>(myPropertyHelperClass, property, ignoreCase));
+                }
+                else
+                {
+                    var result = PropertyHelper.GetPropertyValue<string>(myPropertyHelperClass, property, ignoreCase);
+                    Assert.AreEqual(expectedResult, result);
+                }
+            }
         }
 
         [TestFixture]
@@ -203,6 +247,21 @@ namespace Catel.Test.Reflection
 
                 Assert.IsTrue(result);
                 Assert.AreEqual(5, obj.PublicProperty);
+            }
+
+            [TestCase("publicProperty", false, false)]
+            [TestCase("publicProperty", true, true)]
+            public void TrySetPropertyValue_ExistingProperty_IgnoreCase(string property, bool ignoreCase, bool expectedResult)
+            {
+                var obj = new MyPropertyHelperClass();
+
+                var result = PropertyHelper.TrySetPropertyValue(obj, property, 5, ignoreCase);
+
+                Assert.AreEqual(result, expectedResult);
+                if (expectedResult)
+                {
+                    Assert.AreEqual(5, obj.PublicProperty);
+                }
             }
         }
 
@@ -251,6 +310,23 @@ namespace Catel.Test.Reflection
                 var myPropertyHelperClass = new MyPropertyHelperClass();
                 PropertyHelper.SetPropertyValue(myPropertyHelperClass, "StringValue", "FourtyTwo");
                 Assert.AreEqual("FourtyTwo", myPropertyHelperClass.StringValue);
+            }
+
+            [TestCase("stringValue", false, false)]
+            [TestCase("stringValue", true, true)]
+            public void SetPropertyValue_StringValue_IgnoreCase(string property, bool ignoreCase, bool expectedResult)
+            {
+                var myPropertyHelperClass = new MyPropertyHelperClass();
+                
+                if (!expectedResult)
+                {
+                    ExceptionTester.CallMethodAndExpectException<PropertyNotFoundException>(() => PropertyHelper.SetPropertyValue(myPropertyHelperClass, property, "FourtyTwo", ignoreCase));
+                }
+                else
+                {
+                    PropertyHelper.SetPropertyValue(myPropertyHelperClass, property, "FourtyTwo", ignoreCase);
+                    Assert.AreEqual("FourtyTwo", myPropertyHelperClass.StringValue);
+                }
             }
         }
     }

@@ -8,6 +8,7 @@
 
 namespace Catel.Windows.Interactivity
 {
+    using System.Globalization;
     using System.Windows;
     using IoC;
     using MVVM.Views;
@@ -53,6 +54,15 @@ namespace Catel.Windows.Interactivity
         protected bool IsInDesignMode
         {
             get { return CatelEnvironment.IsInDesignMode; }
+        }
+
+        /// <summary>
+        /// Gets the culture.
+        /// </summary>
+        /// <value>The culture.</value>
+        protected CultureInfo Culture
+        {
+            get { return CultureInfo.CurrentUICulture; }
         }
 
         /// <summary>

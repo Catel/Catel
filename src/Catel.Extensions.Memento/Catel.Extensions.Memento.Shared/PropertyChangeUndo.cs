@@ -67,7 +67,7 @@ namespace Catel.Memento
         /// </summary>
         protected override void UndoAction()
         {
-            PropertyHelper.SetPropertyValue(Target, PropertyName, OldValue);
+            PropertyHelper.SetPropertyValue(Target, PropertyName, OldValue, false);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Catel.Memento
         /// </summary>
         protected override void RedoAction()
         {
-            PropertyHelper.SetPropertyValue(Target, PropertyName, NewValue);
+            PropertyHelper.SetPropertyValue(Target, PropertyName, NewValue, false);
         }
         #endregion
     }

@@ -11,7 +11,12 @@ namespace Catel.Modules
 
     using Logging;
 
+#if PRISM6
+    using Prism.Modularity;
+#else
     using Microsoft.Practices.Prism.Modularity;
+#endif
+
     using Threading;
 
     /// <summary>
@@ -75,10 +80,17 @@ namespace Catel.Modules
                     {
                         moduleCatalogItems = (moduleCatalog as ModuleCatalog).QueryItems;
                     }
+#if PRISM6
+                    else if (moduleCatalog is Prism.Modularity.ModuleCatalog)
+                    {
+                            moduleCatalogItems = (moduleCatalog as Prism.Modularity.ModuleCatalog).Items;
+                    }
+#else
                     else if (moduleCatalog is Microsoft.Practices.Prism.Modularity.ModuleCatalog)
                     {
                         moduleCatalogItems = (moduleCatalog as Microsoft.Practices.Prism.Modularity.ModuleCatalog).Items;
                     }
+#endif
 
                     if (moduleCatalogItems != null)
                     {

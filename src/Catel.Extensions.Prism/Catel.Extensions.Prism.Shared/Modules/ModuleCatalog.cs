@@ -16,8 +16,12 @@ namespace Catel.Modules
     using System.Net;
     using System.Windows.Markup;
     using Logging;
+#if PRISM6
+    using Prism.Modularity;
+#else
     using Microsoft.Practices.Prism;
     using Microsoft.Practices.Prism.Modularity;
+#endif
     using Threading;
 
     /// <summary>

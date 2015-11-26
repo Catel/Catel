@@ -58,8 +58,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactiv
 		..\lib\NET45\Interactivity\System.Windows.Interactivity.dll = ..\lib\NET45\Interactivity\System.Windows.Interactivity.dll
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{DF031B6B-BD75-4D24-9411-2A691B7241D7}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "design", "design", "{4B5D5785-1151-4517-8157-3C094D8A3E1B}"
 	ProjectSection(SolutionItems) = preProject
 		..\design\Catel logo (silverlight).png = ..\design\Catel logo (silverlight).png
@@ -145,11 +143,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight testing", "Silv
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.Data", "Catel.Extensions.Data", "{41BA68F9-3422-4FB0-B6DE-7097A22565E5}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{4C1D672F-892E-4AC7-84EA-FE5BE2046000}"
-	ProjectSection(SolutionItems) = preProject
-		..\tools\nuget\NuGet.exe = ..\tools\nuget\NuGet.exe
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EF5", "EF5", "{B08AF9A4-DD22-4ACF-9387-9C3600D487DE}"
 EndProject
@@ -409,6 +402,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Serialization.Json.UA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Prism5.NET46", "Catel.Extensions.Prism\Catel.Extensions.Prism5\Catel.Extensions.Prism5.NET46\Catel.Extensions.Prism5.NET46.csproj", "{74C33BB6-23F5-495F-85E2-93879EB8CB84}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Prism6", "Prism6", "{7CC94A52-F2F1-4CB9-9D12-18D87E79688F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Prism6.NET45", "Catel.Extensions.Prism\Catel.Extensions.Prism6\Catel.Extensions.Prism6.NET45\Catel.Extensions.Prism6.NET45.csproj", "{7432D47D-7A58-4F1A-A3FA-FA97CCD91EB4}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Extensions.Prism6.Shared", "Catel.Extensions.Prism\Catel.Extensions.Prism6\Catel.Extensions.Prism6.Shared\Catel.Extensions.Prism6.Shared.shproj", "{58250A2A-51A0-45B5-8D01-0F97A3719668}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Prism6.NET46", "Catel.Extensions.Prism\Catel.Extensions.Prism6\Catel.Extensions.Prism6.NET46\Catel.Extensions.Prism6.NET46.csproj", "{E54D6F7C-8CE4-42C4-A1E6-40203EBE49B8}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Catel.Extensions.Wcf.Server\Catel.Extensions.Wcf.Server.Shared\Catel.Extensions.Wcf.Server.Shared.projitems*{bd187286-74f3-4c79-9f4c-4b0102947ea8}*SharedItemsImports = 4
@@ -425,10 +426,10 @@ Global
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{917af08f-4bd5-468a-bdb0-4c0ecdad71ec}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{786d0298-2117-4b96-838d-c0e9458d06c2}*SharedItemsImports = 4
 		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{3658ef5e-766f-4d36-b0fc-dfadae6547dd}*SharedItemsImports = 4
-		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.Shared\Catel.Extensions.EntityFramework5.Shared.projitems*{2156065f-74f7-420c-a7c9-f40b4751e36a}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework.Shared\Catel.Extensions.EntityFramework.Shared.projitems*{2156065f-74f7-420c-a7c9-f40b4751e36a}*SharedItemsImports = 4
-		Catel.Extensions.Prism\Catel.Extensions.Prism4\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems*{1dac9a4b-2572-446a-99b8-9e86c1d9254b}*SharedItemsImports = 4
+		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.Shared\Catel.Extensions.EntityFramework5.Shared.projitems*{2156065f-74f7-420c-a7c9-f40b4751e36a}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{1dac9a4b-2572-446a-99b8-9e86c1d9254b}*SharedItemsImports = 4
+		Catel.Extensions.Prism\Catel.Extensions.Prism4\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems*{1dac9a4b-2572-446a-99b8-9e86c1d9254b}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{8c7eab82-554b-4761-b67e-7e9b9a306914}*SharedItemsImports = 13
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{5168abf4-2dcb-496b-8f76-db9b716acc4a}*SharedItemsImports = 4
 		Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems*{918b3e4e-eda7-44d0-99ca-d1f40cd59e9d}*SharedItemsImports = 4
@@ -452,11 +453,11 @@ Global
 		Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems*{9ff05999-2cd0-40c1-a5f1-6384c73402c3}*SharedItemsImports = 4
 		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{db390685-297c-41d9-b4ac-201e58a8364c}*SharedItemsImports = 4
 		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{9d908408-ca30-447a-bc47-85048e5a2999}*SharedItemsImports = 4
-		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.Shared\Catel.Extensions.EntityFramework5.Shared.projitems*{2a4af4d2-e74c-4a8a-947b-1b7ce5bdb67a}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework.Shared\Catel.Extensions.EntityFramework.Shared.projitems*{2a4af4d2-e74c-4a8a-947b-1b7ce5bdb67a}*SharedItemsImports = 4
+		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.Shared\Catel.Extensions.EntityFramework5.Shared.projitems*{2a4af4d2-e74c-4a8a-947b-1b7ce5bdb67a}*SharedItemsImports = 4
 		Catel.Extensions.Controls\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems*{6ed252b8-178a-4349-8940-afd2cb2b87e3}*SharedItemsImports = 13
-		Catel.Extensions.Prism\Catel.Extensions.Prism4\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems*{8127ebee-c5bb-4201-b899-9ca788688e83}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{8127ebee-c5bb-4201-b899-9ca788688e83}*SharedItemsImports = 4
+		Catel.Extensions.Prism\Catel.Extensions.Prism4\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems*{8127ebee-c5bb-4201-b899-9ca788688e83}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{29ebe1ed-4e23-4da4-99d2-b991e69039ee}*SharedItemsImports = 13
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{97e093e6-1cf9-4cff-9201-540a7681bc12}*SharedItemsImports = 4
 		Catel.Extensions.Controls\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems*{7023e502-52a5-4b1d-9560-fd57afc917fd}*SharedItemsImports = 4
@@ -472,6 +473,8 @@ Global
 		Catel.Extensions.Controls\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems*{2dc754dd-c7b1-4318-8365-05e6c22dad41}*SharedItemsImports = 4
 		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{f488f690-bb85-4aa1-b78f-bccfc883d828}*SharedItemsImports = 4
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{bc9f0fc7-aeee-419b-8d69-e1459be5f846}*SharedItemsImports = 4
+		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{7432d47d-7a58-4f1a-a3fa-fa97ccd91eb4}*SharedItemsImports = 4
+		Catel.Extensions.Prism\Catel.Extensions.Prism6\Catel.Extensions.Prism6.Shared\Catel.Extensions.Prism6.Shared.projitems*{7432d47d-7a58-4f1a-a3fa-fa97ccd91eb4}*SharedItemsImports = 4
 		Catel.Extensions.Interception\Catel.Extensions.Interception.Shared\Catel.Extensions.Interception.Shared.projitems*{6bcc1122-5f7e-4322-9d18-c28e86b7f459}*SharedItemsImports = 4
 		Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.projitems*{c7bc725e-fa25-46a8-9288-c708b69e5bd3}*SharedItemsImports = 13
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework6\Catel.Extensions.EntityFramework6.Shared\Catel.Extensions.EntityFramework6.Shared.projitems*{e14d5a70-cd76-4b12-8512-d390bea30bd6}*SharedItemsImports = 13
@@ -479,12 +482,13 @@ Global
 		Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.projitems*{135e7f2b-1fe8-44e1-b1ad-0c80b972459e}*SharedItemsImports = 4
 		Catel.Extensions.Interception\Catel.Extensions.Interception.Shared\Catel.Extensions.Interception.Shared.projitems*{9b000dc9-7110-4173-bf97-e975ed77c24b}*SharedItemsImports = 4
 		Catel.Extensions.Wcf.Server\Catel.Extensions.Wcf.Server.Shared\Catel.Extensions.Wcf.Server.Shared.projitems*{ffaccf18-9a3f-4585-bd42-66453cf615c4}*SharedItemsImports = 13
+		Catel.Extensions.Prism\Catel.Extensions.Prism6\Catel.Extensions.Prism6.Shared\Catel.Extensions.Prism6.Shared.projitems*{58250a2a-51a0-45b5-8d01-0f97a3719668}*SharedItemsImports = 13
 		Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems*{5ef649e7-7704-4f3a-9923-227beaff07d1}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism5\Catel.Extensions.Prism5.Shared\Catel.Extensions.Prism5.Shared.projitems*{3604ff18-b278-4508-aa83-88d34f6c026d}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{3604ff18-b278-4508-aa83-88d34f6c026d}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{461e63d9-fd22-49bf-94ed-af5ac870c348}*SharedItemsImports = 4
-		Catel.Extensions.Prism\Catel.Extensions.Prism4\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems*{c9ead437-56ba-45bb-a982-845ad72fe1c8}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{c9ead437-56ba-45bb-a982-845ad72fe1c8}*SharedItemsImports = 4
+		Catel.Extensions.Prism\Catel.Extensions.Prism4\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems*{c9ead437-56ba-45bb-a982-845ad72fe1c8}*SharedItemsImports = 4
 		Catel.Extensions.CSLA\Catel.Extensions.CSLA.Shared\Catel.Extensions.CSLA.Shared.projitems*{58e5120b-bf91-4d36-804f-fc294daf183e}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework.Shared\Catel.Extensions.EntityFramework.Shared.projitems*{63025202-610a-4f75-92e7-1c622b5ab2e8}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework6\Catel.Extensions.EntityFramework6.Shared\Catel.Extensions.EntityFramework6.Shared.projitems*{63025202-610a-4f75-92e7-1c622b5ab2e8}*SharedItemsImports = 4
@@ -494,6 +498,8 @@ Global
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{c022232f-d54e-4c23-9f16-360f9812a53e}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework.Shared\Catel.Extensions.EntityFramework.Shared.projitems*{610e738c-29e2-4dfe-abf1-6ca5fb37f1e5}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework6\Catel.Extensions.EntityFramework6.Shared\Catel.Extensions.EntityFramework6.Shared.projitems*{610e738c-29e2-4dfe-abf1-6ca5fb37f1e5}*SharedItemsImports = 4
+		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{e54d6f7c-8ce4-42c4-a1e6-40203ebe49b8}*SharedItemsImports = 4
+		Catel.Extensions.Prism\Catel.Extensions.Prism6\Catel.Extensions.Prism6.Shared\Catel.Extensions.Prism6.Shared.projitems*{e54d6f7c-8ce4-42c4-a1e6-40203ebe49b8}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{2d2f7284-7844-439a-bbdb-638608198895}*SharedItemsImports = 4
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{7c69650f-08c8-494c-857f-43b29a4bb20c}*SharedItemsImports = 4
 		Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems*{7a435d25-643c-4d49-b638-2778a029288f}*SharedItemsImports = 4
@@ -508,8 +514,8 @@ Global
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{427247ba-c418-4004-a592-cea9eddea9df}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{4f616501-99c8-480a-a7bf-9e4c7050fdc9}*SharedItemsImports = 4
 		Catel.Extensions.CSLA\Catel.Extensions.CSLA.Shared\Catel.Extensions.CSLA.Shared.projitems*{c848666a-bf2d-476f-ae4c-3ea40e475692}*SharedItemsImports = 13
-		Catel.MVC\Catel.MVC5\Catel.MVC5.Shared\Catel.MVC5.Shared.projitems*{62c00328-b780-48e4-88c1-9eea1a1d6277}*SharedItemsImports = 4
 		Catel.MVC\Catel.MVC.Shared\Catel.MVC.Shared.projitems*{62c00328-b780-48e4-88c1-9eea1a1d6277}*SharedItemsImports = 4
+		Catel.MVC\Catel.MVC5\Catel.MVC5.Shared\Catel.MVC5.Shared.projitems*{62c00328-b780-48e4-88c1-9eea1a1d6277}*SharedItemsImports = 4
 		Catel.MVC\Catel.MVC4\Catel.MVC4.Shared\Catel.MVC4.Shared.projitems*{5c9be8af-d2f1-4853-b683-c5d87aa0dbfc}*SharedItemsImports = 4
 		Catel.MVC\Catel.MVC.Shared\Catel.MVC.Shared.projitems*{5c9be8af-d2f1-4853-b683-c5d87aa0dbfc}*SharedItemsImports = 4
 		Catel.MVC\Catel.MVC4\Catel.MVC4.Shared\Catel.MVC4.Shared.projitems*{06b7664e-06dc-4d39-bf57-4c3f92ebc3ff}*SharedItemsImports = 13
@@ -1675,6 +1681,26 @@ Global
 		{74C33BB6-23F5-495F-85E2-93879EB8CB84}.Release|x64.Build.0 = Release|Any CPU
 		{74C33BB6-23F5-495F-85E2-93879EB8CB84}.Release|x86.ActiveCfg = Release|Any CPU
 		{74C33BB6-23F5-495F-85E2-93879EB8CB84}.Release|x86.Build.0 = Release|Any CPU
+		{7432D47D-7A58-4F1A-A3FA-FA97CCD91EB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7432D47D-7A58-4F1A-A3FA-FA97CCD91EB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7432D47D-7A58-4F1A-A3FA-FA97CCD91EB4}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{7432D47D-7A58-4F1A-A3FA-FA97CCD91EB4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7432D47D-7A58-4F1A-A3FA-FA97CCD91EB4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7432D47D-7A58-4F1A-A3FA-FA97CCD91EB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7432D47D-7A58-4F1A-A3FA-FA97CCD91EB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7432D47D-7A58-4F1A-A3FA-FA97CCD91EB4}.Release|ARM.ActiveCfg = Release|Any CPU
+		{7432D47D-7A58-4F1A-A3FA-FA97CCD91EB4}.Release|x64.ActiveCfg = Release|Any CPU
+		{7432D47D-7A58-4F1A-A3FA-FA97CCD91EB4}.Release|x86.ActiveCfg = Release|Any CPU
+		{E54D6F7C-8CE4-42C4-A1E6-40203EBE49B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E54D6F7C-8CE4-42C4-A1E6-40203EBE49B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E54D6F7C-8CE4-42C4-A1E6-40203EBE49B8}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E54D6F7C-8CE4-42C4-A1E6-40203EBE49B8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E54D6F7C-8CE4-42C4-A1E6-40203EBE49B8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E54D6F7C-8CE4-42C4-A1E6-40203EBE49B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E54D6F7C-8CE4-42C4-A1E6-40203EBE49B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E54D6F7C-8CE4-42C4-A1E6-40203EBE49B8}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E54D6F7C-8CE4-42C4-A1E6-40203EBE49B8}.Release|x64.ActiveCfg = Release|Any CPU
+		{E54D6F7C-8CE4-42C4-A1E6-40203EBE49B8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1700,7 +1726,6 @@ Global
 		{B5C5A548-D22B-4BF2-8E10-19F67DF5D0AD} = {F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A}
 		{F80CC0BE-3DA4-4889-A905-A0BE751C31E7} = {F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A}
 		{41BA68F9-3422-4FB0-B6DE-7097A22565E5} = {58F62039-8645-499C-B264-66048F4F0F75}
-		{4C1D672F-892E-4AC7-84EA-FE5BE2046000} = {DF031B6B-BD75-4D24-9411-2A691B7241D7}
 		{B08AF9A4-DD22-4ACF-9387-9C3600D487DE} = {04FB2E2C-C216-4270-B397-3C893D1E5CF2}
 		{4C91969A-ED94-4647-9816-D80254360B75} = {8C0BE8CA-0F38-4324-9B80-A1553ACB158C}
 		{A6B36C41-DB02-43BB-88CA-A5042D6B365B} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
@@ -1830,6 +1855,10 @@ Global
 		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
 		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC} = {85BEBC4F-4020-4045-945B-B8F6F732FC6E}
 		{74C33BB6-23F5-495F-85E2-93879EB8CB84} = {E5028E09-22DA-4E47-9FE4-55E033B8DB9C}
+		{7CC94A52-F2F1-4CB9-9D12-18D87E79688F} = {6270F84B-38B3-4602-803C-EAE9E8C924C6}
+		{7432D47D-7A58-4F1A-A3FA-FA97CCD91EB4} = {7CC94A52-F2F1-4CB9-9D12-18D87E79688F}
+		{58250A2A-51A0-45B5-8D01-0F97A3719668} = {7CC94A52-F2F1-4CB9-9D12-18D87E79688F}
+		{E54D6F7C-8CE4-42C4-A1E6-40203EBE49B8} = {7CC94A52-F2F1-4CB9-9D12-18D87E79688F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35

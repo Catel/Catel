@@ -43,7 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Catel.Fody.Attributes">
-      <HintPath>..\..\..\lib\Catel.Fody.2.10.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.Fody.2.12.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Obsolete, Version=4.0.3.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
@@ -78,60 +78,67 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Exceptions.NET45.Designer.cs">
+    <Compile Include="..\Catel.MVVM.Shared\Properties\Exceptions.NET45.Designer.cs">
       <Link>Properties\Exceptions.NET45.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Exceptions.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.de.NET45.Designer.cs">
+    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.de.NET45.Designer.cs">
       <Link>Properties\Resources.de.NET45.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.de.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.es.NET45.Designer.cs">
+    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.es.NET45.Designer.cs">
       <Link>Properties\Resources.es.NET45.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.es.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.fr.NET45.Designer.cs">
+    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.fr.NET45.Designer.cs">
       <Link>Properties\Resources.fr.NET45.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.fr.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.it.NET45.Designer.cs">
+    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.it.NET45.Designer.cs">
       <Link>Properties\Resources.it.NET45.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.it.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.NET45.Designer.cs">
+    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.NET45.Designer.cs">
       <Link>Properties\Resources.NET45.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.nl.NET45.Designer.cs">
+    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.nl.NET45.Designer.cs">
       <Link>Properties\Resources.nl.NET45.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.nl.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.tr.NET45.Designer.cs">
+    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.tr.NET45.Designer.cs">
       <Link>Properties\Resources.tr.NET45.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.tr.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.zh-Hans.NET45.Designer.cs">
+    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.zh-Hans.NET45.Designer.cs">
       <Link>Properties\Resources.zh-Hans.NET45.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
+    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.ru.NET45.Designer.cs">
+      <Link>Properties\Resources.ru.NET45.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.ru.resx</DependentUpon>
+    </Compile>	
+    <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Windows\Windows\LoaderAnimation.xaml.cs">
       <DependentUpon>LoaderAnimation.xaml</DependentUpon>
     </Compile>
@@ -168,66 +175,72 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Exceptions.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Exceptions.resx">
       <Link>Properties\Exceptions.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Exceptions.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.de.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.de.resx">
       <Link>Properties\Resources.de.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.de.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.es.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.es.resx">
       <Link>Properties\Resources.es.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.es.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.fr.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.fr.resx">
       <Link>Properties\Resources.fr.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.fr.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.it.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.it.resx">
       <Link>Properties\Resources.it.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.it.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.nl.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.nl.resx">
       <Link>Properties\Resources.nl.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.nl.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.resx">
       <Link>Properties\Resources.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.tr.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.tr.resx">
       <Link>Properties\Resources.tr.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.tr.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.zh-Hans.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.zh-Hans.resx">
       <Link>Properties\Resources.zh-Hans.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.zh-Hans.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.ru.resx">
+      <Link>Properties\Resources.ru.resx</Link>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.ru.NET45.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
+    </EmbeddedResource>	
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\Catel.MVVM.NET40\Resources\Images\Error.png">
+    <Resource Include="..\Catel.MVVM.Shared\Resources\Images\Error.png">
       <Link>Resources\Images\Error.png</Link>
     </Resource>
-    <Resource Include="..\Catel.MVVM.NET40\Resources\Images\Warning.png">
+    <Resource Include="..\Catel.MVVM.Shared\Resources\Images\Warning.png">
       <Link>Resources\Images\Warning.png</Link>
     </Resource>
   </ItemGroup>
@@ -246,10 +259,12 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\lib\Fody.1.29.3\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.29.3\build\dotnet\Fody.targets'))" />
     <Error Condition="!Exists('..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets'))" />
-    <Error Condition="!Exists('..\..\..\lib\Catel.Fody.2.10.0\build\dotnet\Catel.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Catel.Fody.2.10.0\build\dotnet\Catel.Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\ModuleInit.Fody.1.5.8.0\build\dotnet\ModuleInit.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\ModuleInit.Fody.1.5.8.0\build\dotnet\ModuleInit.Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\Catel.Fody.2.12.0\build\dotnet\Catel.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Catel.Fody.2.12.0\build\dotnet\Catel.Fody.targets'))" />
   </Target>
   <Import Project="..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets" Condition="Exists('..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets')" />
-  <Import Project="..\..\..\lib\Catel.Fody.2.10.0\build\dotnet\Catel.Fody.targets" Condition="Exists('..\..\..\lib\Catel.Fody.2.10.0\build\dotnet\Catel.Fody.targets')" />
+  <Import Project="..\..\..\lib\ModuleInit.Fody.1.5.8.0\build\dotnet\ModuleInit.Fody.targets" Condition="Exists('..\..\..\lib\ModuleInit.Fody.1.5.8.0\build\dotnet\ModuleInit.Fody.targets')" />
+  <Import Project="..\..\..\lib\Catel.Fody.2.12.0\build\dotnet\Catel.Fody.targets" Condition="Exists('..\..\..\lib\Catel.Fody.2.12.0\build\dotnet\Catel.Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -31,6 +31,8 @@ namespace Catel.MVVM.Converters
     /// </summary>
     /// <remarks>
     /// Original source: http://www.codeproject.com/KB/WPF/PipingValueConverters_WPF.aspx
+    /// <para />
+    /// Original license: CPOL, compatible with the MIT license.
     /// </remarks>
     [ContentProperty("Converters")]
     public class ValueConverterGroup : IValueConverter

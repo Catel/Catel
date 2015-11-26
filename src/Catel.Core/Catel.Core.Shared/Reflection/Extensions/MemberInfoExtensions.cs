@@ -37,8 +37,8 @@ namespace Catel.Reflection
 
                 stringBuilder.Append(GetMethodBaseSignaturePrefix(constructorInfo));
                 stringBuilder.Append("ctor(");
-                var param = constructorInfo.GetParameters().Select(p => String.Format("{0} {1}", p.ParameterType.Name, p.Name)).ToArray();
-                stringBuilder.Append(String.Join(", ", param));
+                var param = constructorInfo.GetParameters().Select(p => string.Format("{0} {1}", p.ParameterType.Name, p.Name)).ToArray();
+                stringBuilder.Append(string.Join(", ", param));
                 stringBuilder.Append(")");
 
                 return stringBuilder.ToString();
@@ -63,8 +63,8 @@ namespace Catel.Reflection
                 stringBuilder.Append(methodInfo.ReturnType.Name + " ");
 
                 stringBuilder.Append(methodInfo.Name + "(");
-                var param = methodInfo.GetParameters().Select(p => String.Format("{0} {1}", p.ParameterType.Name, p.Name)).ToArray();
-                stringBuilder.Append(String.Join(", ", param));
+                var param = methodInfo.GetParameters().Select(p => string.Format("{0} {1}", p.ParameterType.Name, p.Name)).ToArray();
+                stringBuilder.Append(string.Join(", ", param));
                 stringBuilder.Append(")");
 
                 return stringBuilder.ToString();

@@ -42,18 +42,7 @@ namespace Catel
 
             ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
 
-            // Don't use property, we cannot trust the cached property here yet in Visual Studio
-            if (CatelEnvironment.GetIsInDesignMode())
-            {
-                foreach (var assembly in AssemblyHelper.GetLoadedAssemblies())
-                {
-                    var attributes = assembly.GetCustomAttributesEx(typeof (DesignTimeCodeAttribute));
-                    foreach (var attribute in attributes)
-                    {
-                        // No need to do anything
-                    }
-                }
-            }
+            DesignTimeHelper.InitializeDesignTime();
         }
     }
 }

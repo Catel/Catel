@@ -383,7 +383,8 @@ namespace Catel.Data
                 return false;
             }
 
-            return GetPropertyData(name).IsModelBaseProperty;
+            var propertyData = GetPropertyData(name);
+            return propertyData.IsModelBaseProperty;
         }
 
         /// <summary>

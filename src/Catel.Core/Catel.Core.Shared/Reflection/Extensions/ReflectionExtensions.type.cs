@@ -437,6 +437,23 @@ namespace Catel.Reflection
         }
 
         /// <summary>
+        /// The is generic type definition ex.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>The is generic type ex.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static bool IsGenericTypeDefinitionEx(this Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+#if NETFX_CORE || PCL
+            return type.GetTypeInfo().IsGenericTypeDefinition;
+#else
+            return type.IsGenericTypeDefinition;
+#endif
+        }
+        
+        /// <summary>
         /// Returns whether the specified type implements the specified interface.
         /// </summary>
         /// <typeparam name="TInterface">The type of the t interface.</typeparam>
@@ -717,6 +734,40 @@ namespace Catel.Reflection
         }
 
         /// <summary>
+        /// Gets the member on the specified type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="flattenHierarchy">The flatten hierarchy.</param>
+        /// <param name="allowStaticMembers">The allow static members.</param>
+        /// <returns>MemberInfo[][].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static MemberInfo[] GetMemberEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false)
+        {
+            return GetMemberEx(type, name, BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers));
+        }
+
+        /// <summary>
+        /// Gets the member on the specified type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="bindingFlags">The binding Flags.</param>
+        /// <returns>MemberInfo[][].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static MemberInfo[] GetMemberEx(this Type type, string name, BindingFlags bindingFlags)
+        {
+            Argument.IsNotNull("type", type);
+
+#if ENABLE_CACHE
+            var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Member, bindingFlags, name);
+            return _fieldCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetMember(name, bindingFlags));
+#else
+            return type.GetTypeInfo().GetMember(name, bindingFlags);
+#endif
+        }
+
+        /// <summary>
         /// The get field ex.
         /// </summary>
         /// <param name="type">The type.</param>
@@ -799,7 +850,7 @@ namespace Catel.Reflection
         public static PropertyInfo GetPropertyEx(this Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false,
             bool allowExplicitInterfaceProperties = true)
         {
-            BindingFlags bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers);
+            var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers);
             return GetPropertyEx(type, name, bindingFlags, allowExplicitInterfaceProperties);
         }
 

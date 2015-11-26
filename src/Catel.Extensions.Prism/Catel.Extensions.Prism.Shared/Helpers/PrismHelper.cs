@@ -11,7 +11,11 @@ namespace Catel
     using System.Windows;
     using IoC;
     using Logging;
+#if PRISM6
+    using Prism.Regions;
+#else
     using Microsoft.Practices.Prism.Regions;
+#endif
 
     /// <summary>
     /// Prism helper class.
