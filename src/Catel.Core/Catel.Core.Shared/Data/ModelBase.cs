@@ -12,6 +12,7 @@ namespace Catel.Data
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.IO;
+    using System.Runtime.CompilerServices;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
     using IoC;
@@ -312,6 +313,19 @@ namespace Catel.Data
         public static bool DefaultDisableEventSubscriptionsOfChildValuesValue { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether usage of equality comparer for equals should be disabled.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        /// <value><c>true</c> if usage of equality comparer for equals should be disabled; otherwise, <c>false</c>.</value>
+        protected bool DisableUsageOfEqualityComparerForEquals { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether usage of equality comparer for equals should be disabled.
+        /// </summary>
+        public static bool DefaultDisableUsageOfEqualityComparerForEqualsValue { get; set; }
+
+        /// <summary>
         /// Gets the property data manager that manages the properties of this object.
         /// </summary>
         /// <value>The property data manager.</value>
@@ -528,6 +542,7 @@ namespace Catel.Data
             SuspendValidation = DefaultSuspendValidationValue;
             ValidateUsingDataAnnotations = DefaultValidateUsingDataAnnotationsValue;
             DisableEventSubscriptionsOfChildValues = DefaultDisableEventSubscriptionsOfChildValuesValue;
+            DisableUsageOfEqualityComparerForEquals = DefaultDisableUsageOfEqualityComparerForEqualsValue;
             DeserializationSucceeded = false;
             HandlePropertyAndCollectionChanges = true;
             AlwaysInvokeNotifyChanged = false;
@@ -546,6 +561,7 @@ namespace Catel.Data
                     _propertyValuesIgnoredOrFailedForValidation[type].Add("EqualityComparer");
                     _propertyValuesIgnoredOrFailedForValidation[type].Add("LeanAndMeanModel");
                     _propertyValuesIgnoredOrFailedForValidation[type].Add("DisableEventSubscriptionsOfChildValues");
+                    _propertyValuesIgnoredOrFailedForValidation[type].Add("DisableUsageOfEqualityComparerForEquals");
                     _propertyValuesIgnoredOrFailedForValidation[type].Add("IsInitializing");
                     _propertyValuesIgnoredOrFailedForValidation[type].Add("IsInitialized");
                     _propertyValuesIgnoredOrFailedForValidation[type].Add("ContainsNonSerializableMembers");
@@ -626,6 +642,11 @@ namespace Catel.Data
         /// </exception>
         public override bool Equals(object obj)
         {
+            if (DisableUsageOfEqualityComparerForEquals)
+            {
+                return RuntimeHelpers.Equals(this, obj);
+            }
+
             // Note: at first we only implemented the EqualityComparer, but the IEqualityComparer of Microsoft
             // throws an exception when the 2 types are not the same. Although MS does recommend not to throw exceptions,
             // they do it themselves. Check for null and check the types before feeding it to the equality comparer.
@@ -654,6 +675,11 @@ namespace Catel.Data
         /// </returns>
         public override int GetHashCode()
         {
+            if (DisableUsageOfEqualityComparerForEquals)
+            {
+                return RuntimeHelpers.GetHashCode(this);
+            }
+
             if (!_hashCode.HasValue)
             {
                 var equalityComparer = EqualityComparer;

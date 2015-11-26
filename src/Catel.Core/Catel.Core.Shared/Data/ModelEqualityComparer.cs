@@ -10,6 +10,8 @@ namespace Catel.Data
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
+
     using Catel.Collections;
 
     /// <summary>
@@ -82,6 +84,11 @@ namespace Catel.Data
                 return true;
             }
 
+            if (!CompareProperties)
+            {
+                return false;
+            }
+
             if (((object)x == null) || ((object)y == null))
             {
                 return false;
@@ -92,11 +99,6 @@ namespace Catel.Data
             var xType = x.GetType();
             var yType = y.GetType();
             if (xType != yType)
-            {
-                return false;
-            }
-
-            if (!CompareProperties)
             {
                 return false;
             }
@@ -159,13 +161,7 @@ namespace Catel.Data
         /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
         public override int GetHashCode(ModelBase obj)
         {
-            if (obj == null)
-            {
-                return 0;
-            }
-
-            var objType = obj.GetType();
-            return objType.FullName.GetHashCode();
+            return RuntimeHelpers.GetHashCode(obj);
         }
     }
 }
