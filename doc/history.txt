@@ -47,7 +47,6 @@ we will remove the features in the next major release.
 
 Added/fixed:
 ============
-(*) CTL-754 Turn DataAnnotation validation off when setting property value
 (+) CTL-751 Add DisplayNameAttribute that uses the ILanguageService by default
 (x) CTL-740 TargetParameterCountException while sending message on RT projects (RT projects now support weak actions)
 (x) CTL-744 Fixed missing DataWindowStyle when only referencing Catel.Extensions.Controls theme (it was no longer
