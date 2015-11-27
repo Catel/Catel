@@ -43,7 +43,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public CatelTypeInfo(Type type)
         {
-            Argument.IsNotNull("type", type);
+            Argument.IsNotNull(() => type);
 
             Type = type;
 
@@ -95,17 +95,20 @@ namespace Catel.Data
         /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
         public PropertyData GetPropertyData(string name)
         {
-            Argument.IsNotNullOrWhitespace("name", name);
-
-            if (!IsPropertyRegistered(name))
-            {
-                throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, Type), 
-                    "Property '{0}' on type '{1}' is not registered", name, Type.FullName);
-            }
+            Argument.IsNotNullOrWhitespace(() => name);
 
             lock (_lockObject)
             {
-                return _catelProperties[name];
+                PropertyData catelProperty;
+                if (!_catelProperties.TryGetValue(name, out catelProperty))
+                {
+                    // it should be okay to trow an exception inside the lock
+                    // http://stackoverflow.com/questions/590159/does-a-locked-object-stay-locked-if-an-exception-occurs-inside-it
+                    throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, Type),
+                    "Property '{0}' on type '{1}' is not registered", name, Type.FullName);
+                }
+
+                return catelProperty;
             }
         }
 
@@ -119,7 +122,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public bool IsPropertyRegistered(string name)
         {
-            Argument.IsNotNullOrWhitespace("name", name);
+            Argument.IsNotNullOrWhitespace(() => name);
 
             lock (_lockObject)
             {
@@ -171,8 +174,8 @@ namespace Catel.Data
         /// <exception cref="PropertyAlreadyRegisteredException">A property with the same name is already registered.</exception>
         public void RegisterProperty(string name, PropertyData propertyData)
         {
-            Argument.IsNotNullOrWhitespace("name", name);
-            Argument.IsNotNull("propertyData", propertyData);
+            Argument.IsNotNullOrWhitespace(() => name);
+            Argument.IsNotNull(() => propertyData);
 
             lock (_lockObject)
             {
@@ -182,7 +185,7 @@ namespace Catel.Data
                         "Property '{0}' on type '{1}' is already registered", name, Type.FullName);
                 }
 
-                _catelProperties.Add(name, propertyData);
+                _catelProperties[name] = propertyData;
             }
         }
 
@@ -193,7 +196,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public void UnregisterProperty(string name)
         {
-            Argument.IsNotNullOrWhitespace("name", name);
+            Argument.IsNotNullOrWhitespace(() => name);
 
             lock (_lockObject)
             {
