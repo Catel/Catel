@@ -23,7 +23,7 @@ For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/U
 
 Release date:
 =============
-2015/xx/xx
+2015/11/27
 
 Added/fixed (BREAKING CHANGES):
 ===============================
@@ -33,7 +33,7 @@ marked as obsolete and have an async handler which must be used in the future.
 
 Platform support changes:
 =========================
-xxx
+[none]
 
 Classes / members marked as obsolete:
 =====================================
