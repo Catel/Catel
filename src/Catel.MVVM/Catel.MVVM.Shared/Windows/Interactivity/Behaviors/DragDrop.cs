@@ -22,6 +22,8 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     /// <remarks>
     /// This code was originally found at http://wpfbehaviorlibrary.codeplex.com/, which is based on http://gallery.expression.microsoft.com/DragDropBehavior/.
+    /// <para />
+    /// Original license: Ms-Pl, compatible with the MIT license.
     /// </remarks>
     public class DragDrop : BehaviorBase<ItemsControl>
     {

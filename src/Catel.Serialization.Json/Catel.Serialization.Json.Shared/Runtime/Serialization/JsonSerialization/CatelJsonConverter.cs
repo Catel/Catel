@@ -90,7 +90,7 @@ namespace Catel.Runtime.Serialization.JsonSerialization
         /// <returns><c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.</returns>
         public override bool CanConvert(Type objectType)
         {
-            var canConvert = typeof(ModelBase).IsAssignableFromEx(objectType);
+            var canConvert = objectType.IsModelBase();
             return canConvert;
         }
     }

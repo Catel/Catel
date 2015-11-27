@@ -12,6 +12,7 @@ namespace Catel.Reflection
     /// <summary>
     /// Attribute helper class.
     /// </summary>
+    [ObsoleteEx(ReplacementTypeOrMember = "Use reflection extension methods instead", TreatAsErrorFromVersion = "4.4", RemoveInVersion = "5.0")]
     public static class AttributeHelper
     {
         /// <summary>

@@ -138,7 +138,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             var propertiesSequence = new XmlSchemaSequence();
 
-            if (typeof(ModelBase).IsAssignableFromEx(type))
+            if (type.IsModelBase())
             {
                 var members = new List<MemberMetadata>();
                 members.AddRange(from field in serializationManager.GetFieldsToSerialize(type)

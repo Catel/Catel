@@ -20,7 +20,7 @@ namespace Catel.Logging
         #region Fields
         private readonly object _lock = new object();
 
-        private readonly Timer _timer;
+        private readonly Catel.Threading.Timer _timer;
         private List<LogBatchEntry> _logBatch = new List<LogBatchEntry>();
         #endregion
 
@@ -34,7 +34,7 @@ namespace Catel.Logging
             MaximumBatchCount = maxBatchCount;
 
             var interval = TimeSpan.FromSeconds(5);
-            _timer = new Timer(OnTimerTick, null, interval, interval);
+            _timer = new Catel.Threading.Timer(OnTimerTick, null, interval, interval);
         }
         #endregion
 

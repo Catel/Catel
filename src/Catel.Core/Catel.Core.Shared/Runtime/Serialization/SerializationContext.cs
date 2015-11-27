@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Runtime.Serialization;
+using Catel.Reflection;
 
 namespace Catel.Runtime.Serialization
 {
@@ -40,6 +41,7 @@ namespace Catel.Runtime.Serialization
 
             Model = model;
             ModelType = modelType;
+            ModelTypeName = modelType.GetSafeFullName();
             Context = context;
             ContextMode = contextMode;
             TypeStack = new Stack<Type>();
@@ -69,6 +71,12 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The type of the model.</value>
         public Type ModelType { get; private set; }
+
+        /// <summary>
+        /// Gets the name of the model type, which should be a cached version of <c>ModelType.GetSafeFullName();</c>.
+        /// </summary>
+        /// <value>The name of the model type.</value>
+        public string ModelTypeName { get; private set; }
 
         /// <summary>
         /// Gets the depth of the current element being processed.

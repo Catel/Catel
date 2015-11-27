@@ -108,16 +108,6 @@ namespace Catel
             return lamdaExpression.Compile().DynamicInvoke();
         }
 
-        private static ParameterExpression GetParameterExpression(Expression expression)
-        {
-            if (expression.NodeType == ExpressionType.Parameter)
-            {
-                return (ParameterExpression)expression;
-            }
-
-            return null;
-        }
-
         private static Expression GetExpressionToHandle<TProperty>(Expression<Func<TProperty>> propertyExpression)
         {
             var expressionToHandle = propertyExpression.Body; 

@@ -291,6 +291,7 @@ namespace Catel.Messaging
         /// <param name="message">The message parameter.</param>
         /// <param name="tag">The message tag.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="message"/> is <c>null</c>.</exception>
+        [ObsoleteEx(Message = "Not truly async, removing this member in future version", TreatAsErrorFromVersion = "4.4", RemoveInVersion = "5.0")]
         public void SendMessageAsync<TMessage>(TMessage message, object tag = null)
         {
             Func<TMessage, object, bool> sendMessageFunction = SendMessage;

@@ -75,9 +75,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\IntToStringConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\IsSelectedConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\IsSelectedValueConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\LanguageConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\MethodToValueConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\MultiplyConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\NullableValueConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ObjectToDisplayNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\PlatformToBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ReferenceToBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ReferenceToVisibilityConverter.cs" />

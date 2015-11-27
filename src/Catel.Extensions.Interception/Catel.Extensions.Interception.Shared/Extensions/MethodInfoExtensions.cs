@@ -25,7 +25,7 @@ namespace Catel.Reflection
         /// <returns></returns>
         public static MethodInfo[] SelectOverridableMethods(this IEnumerable<MethodInfo> methods)
         {
-            Argument.IsNotNull(() => methods);
+            Argument.IsNotNull("methods", methods);
 
             return methods.Where(method => method.IsVirtual && !method.IsFinal).ToArray();
         }
@@ -37,7 +37,7 @@ namespace Catel.Reflection
         /// <returns></returns>
         public static IEnumerable<MethodInfo> SelectGetters(this IEnumerable<MethodInfo> methods)
         {
-            Argument.IsNotNull(() => methods);
+            Argument.IsNotNull("methods", methods);
 
             return methods.Where(method => method.Name.StartsWith("get_", StringComparison.OrdinalIgnoreCase)).ToArray();
         }
@@ -49,7 +49,7 @@ namespace Catel.Reflection
         /// <returns></returns>
         public static IEnumerable<MethodInfo> SelectSetters(this IEnumerable<MethodInfo> methods)
         {
-            Argument.IsNotNull(() => methods);
+            Argument.IsNotNull("methods", methods);
 
             return methods.Where(method => method.Name.StartsWith("set_", StringComparison.OrdinalIgnoreCase)).ToArray();
         }
@@ -61,7 +61,7 @@ namespace Catel.Reflection
         /// <returns></returns>
         public static Type[] GetMethodParameterTypes(this MethodInfo method)
         {
-            Argument.IsNotNull(() => method);
+            Argument.IsNotNull("method", method);
 
             return method.GetParameters().Select(parameter => parameter.ParameterType).ToArray();
         }
@@ -73,7 +73,7 @@ namespace Catel.Reflection
         /// <returns></returns>
         public static IMemberDefinition ExtractDefinition(this MethodInfo info)
         {
-            Argument.IsNotNull(() => info);
+            Argument.IsNotNull("info", info);
 
             return new MemberDefinition(info.Name, info.GetMethodParameterTypes());
         }
@@ -85,7 +85,7 @@ namespace Catel.Reflection
         /// <returns></returns>
         public static IEnumerable<MethodInfo> GetMethodsToIntercept(this Type type)
         {
-            Argument.IsNotNull(() => type);
+            Argument.IsNotNull("type", type);
 
             return type.IsInterface ?
                        type.GetMethods(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public)

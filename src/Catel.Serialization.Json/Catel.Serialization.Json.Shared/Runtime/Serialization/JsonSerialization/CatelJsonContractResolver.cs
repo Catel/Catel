@@ -26,7 +26,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <returns>JsonConverter.</returns>
         protected override JsonConverter ResolveContractConverter(Type objectType)
         {
-            if (typeof (ModelBase).IsAssignableFromEx(objectType))
+            if (objectType.IsModelBase())
             {
                 return null; // pretend converter is not specified
             }

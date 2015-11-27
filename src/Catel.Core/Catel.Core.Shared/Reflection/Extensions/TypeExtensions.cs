@@ -10,6 +10,8 @@ namespace Catel.Reflection
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
+    using Data;
 
     /// <summary>
     /// Extensions for the type class.
@@ -59,7 +61,7 @@ namespace Catel.Reflection
                 return false;
             }
 
-            return typeof (IEnumerable).IsAssignableFromEx(type);
+            return typeof(IEnumerable).IsAssignableFromEx(type);
         }
 
         /// <summary>
@@ -139,6 +141,53 @@ namespace Catel.Reflection
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Determines whether the specified type derives from <see cref="ModelBase" />.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns><c>true</c> if the specified type is a model base; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static bool IsModelBase(this Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+            if (type == typeof (ModelBase))
+            {
+                return true;
+            }
+
+            return typeof (ModelBase).IsAssignableFromEx(type);
+        }
+
+        /// <summary>
+        /// Gets the element type of the collection.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>Type.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        public static Type GetCollectionElementType(this Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+            if (type.IsArrayEx())
+            {
+                var arrayElementType = type.GetElementTypeEx();
+                return arrayElementType;
+            }
+
+            var interfaces = type.GetInterfacesEx();
+            var genericEnumerableInterface = (from iface in interfaces
+                                              where iface.Name.StartsWith("IEnumerable") && iface.IsGenericTypeEx()
+                                              select iface).FirstOrDefault();
+            if (genericEnumerableInterface == null)
+            {
+                return null;
+            }
+
+            var elementType = genericEnumerableInterface.GetGenericArgumentsEx()[0];
+            return elementType;
         }
     }
 }

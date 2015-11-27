@@ -14,6 +14,7 @@ namespace Catel.Windows
     using System.Windows.Controls;
     using System.Windows.Media;
     using System.Windows.Threading;
+    using IoC;
 
     /// <summary>
     /// The action that the <see cref="PleaseWaitWindow"/> should take when it becomes visible.
@@ -67,7 +68,7 @@ namespace Catel.Windows
         /// Initializes a new instance of the <see cref="PleaseWaitWindow"/> class.
         /// </summary>
         public PleaseWaitWindow()
-            : this(MVVM.Properties.Resources.PleaseWait) { }
+            : this(LanguageHelper.GetString("PleaseWait")) { }
 
         /// <summary>
         /// Initializes a please wait window with default text.

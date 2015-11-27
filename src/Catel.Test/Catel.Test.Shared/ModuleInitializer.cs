@@ -6,6 +6,7 @@
 
 namespace Catel.Test
 {
+    using System.Diagnostics;
     using Catel.Data;
     using Catel.IoC;
     using Catel.Logging;
@@ -26,7 +27,10 @@ namespace Catel.Test
         /// </summary>
         public static void Initialize()
         {
-            LogManager.AddDebugListener();
+            if (Debugger.IsAttached)
+            {
+                LogManager.AddDebugListener();
+            }
 
             // For testing purposes, enable features we disabled for CTL-234
             var modelEqualityComparer = ServiceLocator.Default.ResolveType<IModelEqualityComparer>();

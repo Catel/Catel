@@ -7,9 +7,7 @@
     <authors>GeertvanHorrik</authors>
 	
 	<description>
-	  Catel.MVVM library which contains the MVVM framework available in Catel. This MVVM framework solves actual
-	  real-life development problems when using MVVM for professional applications written in any XAML language
-	  such as WPF, Silverlight, Windows Phone and WinRT.
+	  Catel.MVVM library which contains the MVVM framework available in Catel. This MVVM framework solves actual real-life development problems when using MVVM for professional applications written in any XAML language such as WPF, Silverlight, Windows Phone and WinRT.
 	</description>
 	<summary>
 	</summary>

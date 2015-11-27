@@ -180,7 +180,7 @@ namespace Catel.Runtime.Serialization
                     var memberMetadata = modelProperty.Value;
                     var propertyData = (PropertyData)memberMetadata.Tag;
 
-                    bool isSerializable = propertyData.IsSerializable || typeof(ModelBase).IsAssignableFromEx(propertyData.Type);
+                    bool isSerializable = propertyData.IsSerializable || propertyData.Type.IsModelBase();
                     if (!isSerializable)
                     {
                         // CTL-550
@@ -238,7 +238,7 @@ namespace Catel.Runtime.Serialization
 
                 var catelPropertyNames = new HashSet<string>();
 
-                var isModelBase = typeof(ModelBase).IsAssignableFromEx(type);
+                var isModelBase = type.IsModelBase();
                 if (isModelBase)
                 {
                     catelPropertyNames = GetCatelPropertyNames(type, true);

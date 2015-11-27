@@ -71,6 +71,9 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ModuleInitializer.cs" />
+  </ItemGroup>
   <Import Project="..\Catel.Core.Shared\Catel.Core.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Core.Shared\Catel.Core.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\..\lib\Fody.1.29.3\build\dotnet\Fody.targets" Condition="Exists('..\..\..\lib\Fody.1.29.3\build\dotnet\Fody.targets')" />
@@ -80,8 +83,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\lib\Fody.1.29.3\build\dotnet\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.1.29.3\build\dotnet\Fody.targets'))" />
     <Error Condition="!Exists('..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets'))" />
-    <Error Condition="!Exists('..\..\..\lib\Catel.Fody.2.10.0\build\dotnet\Catel.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Catel.Fody.2.10.0\build\dotnet\Catel.Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\ModuleInit.Fody.1.5.8.0\build\dotnet\ModuleInit.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\ModuleInit.Fody.1.5.8.0\build\dotnet\ModuleInit.Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\Catel.Fody.2.12.0\build\dotnet\Catel.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Catel.Fody.2.12.0\build\dotnet\Catel.Fody.targets'))" />
   </Target>
   <Import Project="..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets" Condition="Exists('..\..\..\lib\Obsolete.Fody.4.0.3\build\dotnet\Obsolete.Fody.targets')" />
-  <Import Project="..\..\..\lib\Catel.Fody.2.10.0\build\dotnet\Catel.Fody.targets" Condition="Exists('..\..\..\lib\Catel.Fody.2.10.0\build\dotnet\Catel.Fody.targets')" />
+  <Import Project="..\..\..\lib\ModuleInit.Fody.1.5.8.0\build\dotnet\ModuleInit.Fody.targets" Condition="Exists('..\..\..\lib\ModuleInit.Fody.1.5.8.0\build\dotnet\ModuleInit.Fody.targets')" />
+  <Import Project="..\..\..\lib\Catel.Fody.2.12.0\build\dotnet\Catel.Fody.targets" Condition="Exists('..\..\..\lib\Catel.Fody.2.12.0\build\dotnet\Catel.Fody.targets')" />
 </Project>

@@ -10,6 +10,7 @@ namespace Catel.MVVM.Converters
     using System.Globalization;
     using Logging;
     using Reflection;
+
 #if XAMARIN
     
 #elif NETFX_CORE

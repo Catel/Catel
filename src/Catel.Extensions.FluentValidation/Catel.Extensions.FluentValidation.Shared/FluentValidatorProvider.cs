@@ -34,16 +34,16 @@ namespace Catel
         {
             ValidatorOptions.CascadeMode = CascadeMode.StopOnFirstFailure;
             ValidatorOptions.DisplayNameResolver = (type, member, expression) =>
+            {
+                Catel.ComponentModel.DisplayNameAttribute displayNameAttribute;
+                string displayName = member.Name;
+                if (member.TryGetAttribute(out displayNameAttribute))
                 {
-                    DisplayNameAttribute displayNameAttribute;
-                    string displayName = member.Name;
-                    if (AttributeHelper.TryGetAttribute(member, out displayNameAttribute))
-                    {
-                        displayName = displayNameAttribute.DisplayName;
-                    }
+                    displayName = displayNameAttribute.DisplayName;
+                }
 
-                    return displayName;
-                };
+                return displayName;
+            };
         }
 
         #endregion

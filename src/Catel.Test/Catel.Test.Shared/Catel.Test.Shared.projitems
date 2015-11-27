@@ -23,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Collections\CollectionExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\CollectionHelperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\FastObservableCollectionFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\DisplayNameAttributeFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationServiceFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\DynamicConfigurationFacts.cs" />
@@ -78,7 +79,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\Helpers\IsolationHelperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\Repositories\EntityRepositoryFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\TestClasses\TestConnectionStrings.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\Attributes\DisplayNameAttributeFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\FluentValidatorProviderFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\FluentValidatorToCatelValidatorAdapterFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\Models\Person.cs" />
@@ -176,6 +176,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\IsSelectedValueConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\MethodToValueConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\MultiplyConverterTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ObjectToDisplayNameConverterFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ReferenceToBooleanConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ReferenceToCollapsingVisibilityConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ShortDateFormattingConverterTest.cs" />
@@ -215,10 +216,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\AppDomainExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\AssemblyExtensionsTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Reflection\AttributeHelperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\PropertyHelperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\PropertyHelperFacts.expression.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionExtensionsFacts.assembly.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionExtensionsFacts.attributes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionExtensionsFacts.methodinfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionExtensionsFacts.propertyinfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionExtensionsFacts.type.cs" />
@@ -229,7 +230,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\Attributes\RedirectTypeAttributeTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\BinarySerializerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\RedirectDeserializationBinderFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFact.advanced.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFacts.warmup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFacts.dictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFacts.collections.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFacts.basic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Helpers\SerializationTestHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\JsonSerialization\JsonSerializationFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationManagerFacts.cs" />
@@ -247,6 +253,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\EventArgs\UICompletedEventArgsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Exceptions\WindowNotRegisteredExceptionTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IStartupInfoProviderExtensionsFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Fixtures\LanguageServiceFixture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Fixtures\StartupInfoProviderFixture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LanguageServiceFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NamingConventionTest.cs" />

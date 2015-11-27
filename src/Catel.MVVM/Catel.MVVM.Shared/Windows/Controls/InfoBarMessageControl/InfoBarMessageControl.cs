@@ -13,9 +13,9 @@ namespace Catel.Windows.Controls
     using System.Collections.ObjectModel;
     using System.Windows;
     using System.Windows.Controls;
-
+    using IoC;
     using Logging;
-
+    using Services;
 #if NET
     using System.ComponentModel;
     using System.Windows.Data;
@@ -84,7 +84,8 @@ namespace Catel.Windows.Controls
         /// </summary>
         static InfoBarMessageControl()
         {
-            DefaultTextPropertyValue = MVVM.Properties.Resources.InfoBarMessageControlErrorTitle;
+            var languageService = ServiceLocator.Default.ResolveType<ILanguageService>();
+            DefaultTextPropertyValue = languageService.GetString("InfoBarMessageControlErrorTitle");
 
 #if NET
             DefaultStyleKeyProperty.OverrideMetadata(typeof(InfoBarMessageControl), new FrameworkPropertyMetadata(typeof(InfoBarMessageControl)));

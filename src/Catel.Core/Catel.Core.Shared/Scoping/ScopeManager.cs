@@ -23,6 +23,7 @@ namespace Catel.Scoping
         #region Constants
         private static readonly object _lock = new object();
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly string TypeName;
 
         private static Dictionary<string, object> _instances = new Dictionary<string, object>();
         #endregion
@@ -34,6 +35,15 @@ namespace Catel.Scoping
         #endregion
 
         #region Constructors
+
+        /// <summary>
+        /// Initializes static members of the <see cref="ScopeManager{T}"/> class.
+        /// </summary>
+        static ScopeManager()
+        {
+            TypeName = typeof(T).GetSafeFullName();
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ScopeManager{T}" /> class.
         /// </summary>
@@ -45,13 +55,13 @@ namespace Catel.Scoping
 
             if (createScopeFunction != null)
             {
-                Log.Debug("Custom function to create the scope is provided, creating custom scope for type '{0}' with name '{1}'", typeof(T).GetSafeFullName(), _scopeName);
+                Log.Debug("Custom function to create the scope is provided, creating custom scope for type '{0}' with name '{1}'", TypeName, _scopeName);
 
                 _scopeObject = createScopeFunction();
             }
             else
             {
-                Log.Debug("No custom function to create the scope is provided, creating custom scope for type '{0}' with name '{1}' using TypeFactory", typeof(T).GetSafeFullName(), _scopeName);
+                Log.Debug("No custom function to create the scope is provided, creating custom scope for type '{0}' with name '{1}' using TypeFactory", TypeName, _scopeName);
 
                 var typeFactory = this.GetTypeFactory();
                 _scopeObject = typeFactory.CreateInstance<T>();
@@ -112,7 +122,7 @@ namespace Catel.Scoping
             {
                 _refCount += 1;
 
-                Log.Debug("Referencing type '{0}' with scope name '{1}', new ref count is {2}", typeof(T).GetSafeFullName(), _scopeName, _refCount);
+                Log.Debug("Referencing type '{0}' with scope name '{1}', new ref count is {2}", TypeName, _scopeName, _refCount);
             }
         }
 
@@ -122,11 +132,11 @@ namespace Catel.Scoping
             {
                 _refCount -= 1;
 
-                Log.Debug("Dereferencing type '{0}' with scope name '{1}', new ref count is {2}", typeof(T).GetSafeFullName(), _scopeName, _refCount);
+                Log.Debug("Dereferencing type '{0}' with scope name '{1}', new ref count is {2}", TypeName, _scopeName, _refCount);
 
                 if (_refCount == 0)
                 {
-                    Log.Debug("Type '{0}' with scope name '{1}' has reached a ref count of 0, scope is closed now", typeof(T).GetSafeFullName(), _scopeName);
+                    Log.Debug("Type '{0}' with scope name '{1}' has reached a ref count of 0, scope is closed now", TypeName, _scopeName);
 
                     var scopeObjectAsDisposable = _scopeObject as IDisposable;
                     if (scopeObjectAsDisposable != null)
@@ -180,13 +190,13 @@ namespace Catel.Scoping
 
                 if (_instances.ContainsKey(scopeName))
                 {
-                    Log.Debug("Returning existing scope for type '{0}' with name '{1}'", typeof(T).GetSafeFullName(), scopeName);
+                    Log.Debug("Returning existing scope for type '{0}' with name '{1}'", TypeName, scopeName);
 
                     scopeManager = (ScopeManager<T>)(_instances[scopeName]);
                 }
                 else
                 {
-                    Log.Debug("Creating new scope for type '{0}' with name '{1}'", typeof(T).GetSafeFullName(), scopeName);
+                    Log.Debug("Creating new scope for type '{0}' with name '{1}'", TypeName, scopeName);
 
                     scopeManager = new ScopeManager<T>(scopeName, createScopeFunction);
                     _instances[scopeName] = scopeManager;

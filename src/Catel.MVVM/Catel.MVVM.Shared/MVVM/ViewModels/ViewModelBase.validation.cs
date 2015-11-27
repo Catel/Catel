@@ -329,7 +329,7 @@ namespace Catel.MVVM
                     validationSummary = this.GetValidationSummary(validationSummaryInfo.Value.IncludeChildViewModels);
                 }
 
-                PropertyHelper.SetPropertyValue(this, validationSummaryInfo.Key, validationSummary);
+                PropertyHelper.SetPropertyValue(this, validationSummaryInfo.Key, validationSummary, false);
                 _validationSummariesUpdateStamps[validationSummaryInfo.Key] = validationSummary.LastModifiedTicks;
 
                 updatedValidationSummaries = true;

@@ -290,7 +290,7 @@ namespace Catel.MVVM
             ViewModelCommandManager = MVVM.ViewModelCommandManager.Create(this);
             ViewModelCommandManager.AddHandler(async (viewModel, propertyName, command, commandParameter) =>
             {
-                var eventArgs = new CommandExecutedEventArgs((ICatelCommand) command, commandParameter, propertyName);
+                var eventArgs = new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName);
 
                 CommandExecuted.SafeInvoke(this, eventArgs);
                 await CommandExecutedAsync.SafeInvokeAsync(this, eventArgs);
@@ -610,6 +610,10 @@ namespace Catel.MVVM
             var viewModelToModelMap = new Dictionary<string, ViewModelToModelMapping>();
             var validationSummaries = new Dictionary<string, ValidationToViewModelAttribute>();
 
+            var modelNames = (from propertyInfo in properties
+                              where propertyInfo.IsDecoratedWithAttribute<ModelAttribute>()
+                              select propertyInfo.Name).ToList();
+
             foreach (var propertyInfo in properties)
             {
                 #region Model attributes
@@ -628,6 +632,18 @@ namespace Catel.MVVM
                     {
                         // Assume the property name in the model is the same as in the view model
                         viewModelToModelAttribute.Property = propertyInfo.Name;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(viewModelToModelAttribute.Model))
+                    {
+                        Log.Debug("ViewToViewModel is missing the Model name, searching for the right model automatically");
+
+                        if (modelNames.Count != 1)
+                        {
+                            throw Log.ErrorAndCreateException<InvalidOperationException>("It is only possible to automatically select the right model if there is 1 model. There are '{0}' models, so please specify the model name explicitly.", modelNames.Count);
+                        }
+
+                        viewModelToModelAttribute.Model = modelNames[0];
                     }
 
                     if (!viewModelToModelMap.ContainsKey(propertyInfo.Name))
@@ -936,7 +952,7 @@ namespace Catel.MVVM
                     var modelValues = mapping.Converter.ConvertBack(value, this);
                     for (int i = 0; i < mapping.ValueProperties.Length; i++)
                     {
-                        if (PropertyHelper.TrySetPropertyValue(model, mapping.ValueProperties[i], modelValues[i]))
+                        if (PropertyHelper.TrySetPropertyValue(model, mapping.ValueProperties[i], modelValues[i], false))
                         {
                             Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", mapping.ValueProperties, model.GetType().Name, ObjectToStringHelper.ToString(value));
                         }
@@ -1005,7 +1021,7 @@ namespace Catel.MVVM
                                 for (var index = 0; index < mapping.ValueProperties.Length; index++)
                                 {
                                     var property = mapping.ValueProperties[index];
-                                    values[index] = PropertyHelper.GetPropertyValue(newModelValue, property);
+                                    values[index] = PropertyHelper.GetPropertyValue(newModelValue, property, false);
                                 }
                             }
                             else
@@ -1058,7 +1074,7 @@ namespace Catel.MVVM
                                     }
                                     for (int index = 0; index < propertiesToSet.Length && index < valuesToSet.Length; index++)
                                     {
-                                        if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index]))
+                                        if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index], false))
                                         {
                                             Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
                                         }
@@ -1200,14 +1216,14 @@ namespace Catel.MVVM
                     if (_modelObjects[mapping.ModelProperty] == sender)
                     {
                         // Only OneWay, TwoWay or Explicit (yes, only VM => M is explicit) should be mapped
-                        if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWay) || 
+                        if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWay) ||
                             (mapping.Mode == ViewModelToModelMode.Explicit))
                         {
                             var values = new object[mapping.ValueProperties.Length];
                             for (var index = 0; index < mapping.ValueProperties.Length; index++)
                             {
                                 var property = mapping.ValueProperties[index];
-                                values[index] = PropertyHelper.GetPropertyValue(sender, property);
+                                values[index] = PropertyHelper.GetPropertyValue(sender, property, false);
                             }
 
                             var convertedValue = mapping.Converter.Convert(values, this);

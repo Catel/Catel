@@ -37,7 +37,7 @@ namespace Catel.Windows
         #endregion
 
         #region Fields
-        private string _currentStatusText = Resources.PleaseWait;
+        private string _currentStatusText = LanguageHelper.GetString("PleaseWait");
 
         private double _currentWindowWidth = 0.0d;
         #endregion
@@ -182,7 +182,7 @@ namespace Catel.Windows
         {
             if (string.IsNullOrEmpty(status))
             {
-                status = Resources.PleaseWait;
+                status = LanguageHelper.GetString("PleaseWait");
             }
 
             Dispatcher.Invoke(() => Instance.UpdateStatusText(status, double.NaN));
@@ -340,7 +340,7 @@ namespace Catel.Windows
                 pleaseWaitWindow.Hide();
                 PleaseWaitWindow = null;
 
-                _currentStatusText = Resources.PleaseWait;
+                _currentStatusText = LanguageHelper.GetString("PleaseWait");
                 _currentWindowWidth = 0d;
             });
         }

@@ -23,12 +23,15 @@ namespace Catel
         /// <returns><c>true</c> if the objects are equal; otherwise <c>false</c>.</returns>
         public static bool AreEqual(object object1, object object2)
         {
-            if ((object1 == null) && (object2 == null))
+            var isObject1Null = object1 == null;
+            var isObject2Null = object2 == null;
+
+            if (isObject1Null && isObject2Null)
             {
                 return true;
             }
 
-            if ((object1 == null) || (object2 == null))
+            if (isObject1Null || isObject2Null)
             {
                 return false;
             }
@@ -76,12 +79,15 @@ namespace Catel
         /// <returns><c>true</c> if the objects are equal references; otherwise <c>false</c>.</returns>
         public static bool AreEqualReferences(object object1, object object2)
         {
-            if ((object1 == null) && (object2 == null))
+            var isObject1Null = object1 == null;
+            var isObject2Null = object2 == null;
+
+            if (isObject1Null && isObject2Null)
             {
                 return true;
             }
 
-            if ((object1 == null) || (object2 == null))
+            if (isObject1Null || isObject2Null)
             {
                 return false;
             }

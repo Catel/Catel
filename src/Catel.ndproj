@@ -1,58 +1,60 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="Catel" Platform="DotNet">
   <OutputDir KeepXmlFiles="True">..\output\NDependOut</OutputDir>
   <Assemblies>
+    <Name>Catel.Core</Name>
     <Name>Catel.Extensions.Controls</Name>
+    <Name>Catel.MVVM</Name>
+    <Name>Catel.Extensions.FluentValidation</Name>
+    <Name>Catel.Extensions.Prism</Name>
     <Name>Catel.Extensions.CSLA</Name>
     <Name>Catel.Extensions.Data</Name>
-    <Name>Catel.Extensions.DynamicObjects</Name>
     <Name>Catel.Extensions.EntityFramework5</Name>
-    <Name>Catel.Extensions.EntityFramework6</Name>
-    <Name>Catel.Extensions.FluentValidation</Name>
-    <Name>Catel.Extensions.Interception</Name>
-    <Name>Catel.Extensions.Memento</Name>
-    <Name>Catel.Extensions.Prism</Name>
-    <Name>Catel.Extensions.Wcf.Server</Name>
     <Name>Catel.MVC4</Name>
+    <Name>Catel.Extensions.Memento</Name>
+    <Name>Catel.Extensions.Interception</Name>
+    <Name>Catel.Extensions.DynamicObjects</Name>
+    <Name>Catel.Extensions.EntityFramework6</Name>
+    <Name>Catel.Extensions.Wcf.Server</Name>
     <Name>Catel.MVC5</Name>
-    <Name>Catel.Core</Name>
-    <Name>Catel.MVVM</Name>
+    <Name>Catel.Serialization.Json</Name>
   </Assemblies>
   <FrameworkAssemblies>
-    <Name>PresentationFramework</Name>
-    <Name>System.Xaml</Name>
-    <Name>PresentationCore</Name>
     <Name>mscorlib</Name>
     <Name>System</Name>
-    <Name>System.Xml</Name>
-    <Name>WindowsBase</Name>
-    <Name>System.Drawing</Name>
     <Name>System.Core</Name>
-    <Name>Csla.Xaml</Name>
-    <Name>Csla</Name>
+    <Name>System.Xml.Linq</Name>
+    <Name>System.Runtime.Serialization</Name>
+    <Name>System.Xml</Name>
+    <Name>System.Configuration</Name>
+    <Name>System.ComponentModel.DataAnnotations</Name>
+    <Name>WindowsBase</Name>
+    <Name>PresentationCore</Name>
+    <Name>PresentationFramework</Name>
+    <Name>Newtonsoft.Json</Name>
+    <Name>Microsoft.Practices.Prism</Name>
+    <Name>Microsoft.Practices.ServiceLocation</Name>
+    <Name>NuGet.Core</Name>
+    <Name>FluentValidation</Name>
     <Name>System.Data.Entity</Name>
+    <Name>System.Xaml</Name>
     <Name>EntityFramework</Name>
     <Name>System.Data</Name>
-    <Name>System.Configuration</Name>
+    <Name>System.Drawing</Name>
+    <Name>System.Windows.Forms</Name>
+    <Name>System.Windows.Interactivity</Name>
+    <Name>Csla.Xaml</Name>
+    <Name>Csla</Name>
     <Name>System.Web</Name>
-    <Name>FluentValidation</Name>
+    <Name>System.Web.Mvc</Name>
     <Name>Castle.Core</Name>
-    <Name>Microsoft.Practices.Prism</Name>
-    <Name>NuGet.Core</Name>
-    <Name>Microsoft.Practices.ServiceLocation</Name>
     <Name>System.ServiceModel.Activation</Name>
     <Name>System.ServiceModel</Name>
-    <Name>System.Runtime.Serialization</Name>
-    <Name>System.Web.Mvc</Name>
-    <Name>System.Xml.Linq</Name>
-    <Name>System.ComponentModel.DataAnnotations</Name>
-    <Name>System.Windows.Interactivity</Name>
-    <Name>System.Windows.Forms</Name>
   </FrameworkAssemblies>
   <Dirs>
     <Dir>C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319</Dir>
     <Dir>C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\WPF</Dir>
-    <Dir>C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies</Dir>
+    <Dir>C:\Program Files\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies</Dir>
     <Dir>..\output\debug\NET45\Catel.Core</Dir>
     <Dir>..\output\debug\NET45\Catel.Extensions.Controls</Dir>
     <Dir>..\output\debug\NET45\Catel.Extensions.CSLA</Dir>
@@ -68,16 +70,22 @@
     <Dir>..\output\debug\NET45\Catel.MVC4</Dir>
     <Dir>..\output\debug\NET45\Catel.MVC5</Dir>
     <Dir>..\output\debug\NET45\Catel.MVVM</Dir>
+    <Dir>..\output\debug\NET45\Catel.Extensions.Prism4</Dir>
+    <Dir>..\output\debug\NET45\Catel.Extensions.Prism5</Dir>
+    <Dir>..\output\debug\NET45\Catel.Serialization.Json</Dir>
+    <Dir>..\output\debug\NET45\Test</Dir>
   </Dirs>
+  <MergeCodeGeneratedByCompiler>True</MergeCodeGeneratedByCompiler>
   <Report Kind="0" SectionsEnabled="12287" XslPath="" Flags="64512" />
   <BuildComparisonSetting ProjectMode="DontCompare" BuildMode="MostRecentAnalysisResultAvailable" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
   <BaselineInUISetting ProjectMode="DontCompare" BuildMode="MostRecentAnalysisResultAvailable" ProjectFileToCompareWith="" BuildFileToCompareWith="" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
-  <CoverageFiles UncoverableAttribute="" />
+  <CoverageFiles CoverageDir="" UncoverableAttribute="" />
   <TrendMetrics UseCustomLog="False" LogRecurrence="3" LogLabel="2" UseCustomDir="False" CustomDir="" />
   <HistoricAnalysisResult PersistRecurrence="2" UseCustomDir="False" CustomDir="" />
   <SourceFileRebasing FromPath="" ToPath="" />
   <PathVariables />
-  <Queries>
+  <RuleFiles />
+  <ProjectRules AreActive="True" /><Queries>
     <Group Name="Code Quality" Active="True" ShownInReport="False">
       <Query Active="False" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Types too big - critical</Name>
 warnif count > 0 from t in JustMyCode.Types where 
@@ -3640,5 +3648,4 @@ from f in Application.Fields where
   f.Name == "components" && f.ParentType.DeriveFrom("System.Windows.Forms.Control".AllowNoMatch())
 select f]]></Query>
     </Group>
-  </Queries>
-</NDepend>
+  </Queries></NDepend>

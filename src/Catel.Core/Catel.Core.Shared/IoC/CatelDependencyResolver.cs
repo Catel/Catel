@@ -108,9 +108,9 @@ namespace Catel.IoC
                     {
                         resolvedTypes[i] = Resolve(types[i], tag);
                     }
-                    catch (TypeNotRegisteredException e)
+                    catch (TypeNotRegisteredException ex)
                     {
-                        Log.Debug(e, "Failed to resolve type '{0}', returning null", e.RequestedType.GetSafeFullName());
+                        Log.Debug(ex, "Failed to resolve type '{0}', returning null", ex.RequestedType.GetSafeFullName());
                     }
                 }
             }

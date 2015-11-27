@@ -56,9 +56,9 @@
     <NoWarn>1998</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Catel.Fody.Attributes, Version=2.10.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
+    <Reference Include="Catel.Fody.Attributes, Version=2.12.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Catel.Fody.2.10.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.Fody.2.12.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
@@ -108,114 +108,71 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Exceptions.SL5.Designer.cs">
+    <Compile Include="..\Catel.MVVM.Shared\Properties\Exceptions.SL5.Designer.cs">
       <Link>Properties\Exceptions.SL5.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Exceptions.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.de.SL5.Designer.cs">
-      <Link>Properties\Resources.de.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.de.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.es.SL5.Designer.cs">
-      <Link>Properties\Resources.es.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.es.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.fr.SL5.Designer.cs">
-      <Link>Properties\Resources.fr.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.fr.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.it.SL5.Designer.cs">
-      <Link>Properties\Resources.it.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.it.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.nl.SL5.Designer.cs">
-      <Link>Properties\Resources.nl.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.nl.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.SL5.Designer.cs">
+    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.SL5.Designer.cs">
       <Link>Properties\Resources.SL5.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.tr.SL5.Designer.cs">
-      <Link>Properties\Resources.tr.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.tr.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.NET40\Properties\Resources.zh-Hans.SL5.Designer.cs">
-      <Link>Properties\Resources.zh-Hans.SL5.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
-    </Compile>
+    <Compile Include="ModuleInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Exceptions.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Exceptions.resx">
       <Link>Properties\Exceptions.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Exceptions.SL5.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.de.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.de.resx">
       <Link>Properties\Resources.de.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.de.SL5.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.es.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.es.resx">
       <Link>Properties\Resources.es.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.es.SL5.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.fr.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.fr.resx">
       <Link>Properties\Resources.fr.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.fr.SL5.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.it.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.it.resx">
       <Link>Properties\Resources.it.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.it.SL5.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.nl.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.nl.resx">
       <Link>Properties\Resources.nl.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.nl.SL5.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.resx">
       <Link>Properties\Resources.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.SL5.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.tr.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.tr.resx">
       <Link>Properties\Resources.tr.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.tr.SL5.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\Catel.MVVM.NET40\Properties\Resources.zh-Hans.resx">
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.zh-Hans.resx">
       <Link>Properties\Resources.zh-Hans.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.zh-Hans.SL5.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.ru.resx">
+      <Link>Properties\Resources.ru.resx</Link>
+      <LastGenOutput>Resources.ru.SL5.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
@@ -223,12 +180,12 @@
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\Catel.MVVM.NET40\Resources\Images\Error.png">
+    <Resource Include="..\Catel.MVVM.Shared\Resources\Images\Error.png">
       <Link>Resources\Images\Error.png</Link>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\Catel.MVVM.NET40\Resources\Images\Warning.png">
+    <Resource Include="..\Catel.MVVM.Shared\Resources\Images\Warning.png">
       <Link>Resources\Images\Warning.png</Link>
     </Resource>
   </ItemGroup>

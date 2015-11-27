@@ -9,6 +9,7 @@
 namespace Catel.Windows.Markup
 {
     using System;
+    using System.Globalization;
     using System.Windows;
     using System.Windows.Threading;
     using Catel.IoC;
@@ -61,6 +62,12 @@ namespace Catel.Windows.Markup
         /// </summary>
         /// <value><c>true</c> if design time messages should be hidden; otherwise, <c>false</c>.</value>
         public bool HideDesignTimeMessages { get; set; }
+
+        /// <summary>
+        /// Gets or sets the culture. If set to <c>null</c>, it will be determined automatically.
+        /// </summary>
+        /// <value>The culture.</value>
+        public CultureInfo Culture { get; set; }
         #endregion
 
         private void OnLanguageUpdated(object sender, EventArgs e)
@@ -94,7 +101,18 @@ namespace Catel.Windows.Markup
                 return null;
             }
 
-            var resource = _languageService.GetString(ResourceName);
+            var resource = string.Empty;
+
+            var culture = Culture;
+            if (culture != null)
+            {
+                resource = _languageService.GetString(ResourceName, culture);
+            }
+            else
+            {
+                resource = _languageService.GetString(ResourceName);
+            }
+
             if (string.IsNullOrWhiteSpace(resource))
             {
                 if (ShowDesignTimeMessages())
