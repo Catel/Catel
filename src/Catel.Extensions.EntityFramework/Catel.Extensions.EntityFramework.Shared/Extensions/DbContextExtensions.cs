@@ -393,7 +393,7 @@ namespace Catel.Data
             Argument.IsNotNull("entityType", entityType);
 
             var objectSet = GetObjectSet(objectContext, entityType);
-            var entitySet = (EntitySet)PropertyHelper.GetPropertyValue(objectSet, "EntitySet");
+            var entitySet = (EntitySet)PropertyHelper.GetPropertyValue(objectSet, "EntitySet", false);
             return entitySet;
         }
 

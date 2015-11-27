@@ -9,7 +9,6 @@ namespace Catel.Data.Repositories
     using System;
     using System.Collections.Generic;
     using Logging;
-    using System.Threading;
 
     /// <summary>
     /// Extended base class for repositories with caching support.
@@ -28,7 +27,7 @@ namespace Catel.Data.Repositories
         /// <summary>
         /// The timer that is being executed to invalidate the cache.
         /// </summary>
-        private readonly Timer _timer;
+        private readonly Catel.Threading.Timer _timer;
         #endregion
 
         #region Constructors
@@ -40,7 +39,7 @@ namespace Catel.Data.Repositories
             Expiration = new TimeSpan();
             DataLoadedTimestamp = DateTime.MinValue;
 
-            _timer = new Timer(OnTimerElapsed, null, 1000, 1000);
+            _timer = new Catel.Threading.Timer(OnTimerElapsed, null, 1000, 1000);
         }
         #endregion
 

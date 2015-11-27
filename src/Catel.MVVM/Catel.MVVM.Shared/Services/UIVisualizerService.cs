@@ -428,7 +428,7 @@ namespace Catel.Services
             var activeWindow = GetActiveWindow();
             if (window != activeWindow)
             {
-                PropertyHelper.TrySetPropertyValue(window, "Owner", activeWindow);
+                PropertyHelper.TrySetPropertyValue(window, "Owner", activeWindow, false);
             }
 #endif
 

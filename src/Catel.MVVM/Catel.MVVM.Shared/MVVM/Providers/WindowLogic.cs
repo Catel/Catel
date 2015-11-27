@@ -158,7 +158,7 @@ namespace Catel.MVVM.Providers
                 bool result;
                 try
                 {
-                    result = PropertyHelper.TrySetPropertyValue(TargetWindow, "DialogResult", _closeInitiatedByViewModelResult);
+                    result = PropertyHelper.TrySetPropertyValue(TargetWindow, "DialogResult", _closeInitiatedByViewModelResult, true);
                 }
                 catch (Exception ex)
                 {

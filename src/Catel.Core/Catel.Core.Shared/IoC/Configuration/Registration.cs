@@ -81,7 +81,17 @@ namespace Catel.IoC
         [ConfigurationProperty(TagPropertyName)]
         public string Tag
         {
-            get { return (string) this[TagPropertyName]; }
+            get
+            {
+                var tag = (string) this[TagPropertyName];
+
+                if (string.IsNullOrEmpty(tag))
+                {
+                    tag = null;
+                }
+
+                return tag;
+            }
             set { this[TagPropertyName] = value; }
         }
 
