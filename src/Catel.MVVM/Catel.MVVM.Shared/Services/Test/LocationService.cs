@@ -34,7 +34,7 @@ namespace Catel.Services.Test
     {
         #region Fields
         private ILocation _currentLocation;
-        private readonly Timer _timer;
+        private readonly Threading.Timer _timer;
         #endregion
 
         #region Constructors
@@ -44,7 +44,8 @@ namespace Catel.Services.Test
         public LocationService()
         {
             var interval = TimeSpan.FromSeconds(1);
-            _timer = new Timer(OnTimerTick, null, interval, interval);
+            _timer = new Threading.Timer(OnTimerTick, null, interval, interval);
+
 
             ExpectedLocations = new Queue<LocationTestData>();
         }

@@ -84,7 +84,7 @@ namespace Catel.MVVM.Views
 
         private ViewLoadStateEvent _lastInvokedViewLoadStateEvent;
 
-        private readonly Timer _cleanUpTimer;
+        private readonly Catel.Threading.Timer _cleanUpTimer;
         #endregion
 
         #region Constructors
@@ -93,7 +93,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         public ViewLoadManager()
         {
-            _cleanUpTimer = new Timer(x => CleanUp(), null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
+            _cleanUpTimer = new Threading.Timer(x => CleanUp(), null, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(30));
         }
         #endregion
 
