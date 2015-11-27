@@ -81,7 +81,7 @@ namespace Catel.Modules
                 {
                     try
                     {
-                        var leafCatalogs = PropertyHelper.GetPropertyValue(moduleCatalog, "LeafCatalogs");
+                        var leafCatalogs = PropertyHelper.GetPropertyValue(moduleCatalog, "LeafCatalogs", false);
                         foreach (var leafCatalog in (IEnumerable)leafCatalogs)
                         {
                             var finalLeafCatalog = leafCatalog as IModuleCatalog;

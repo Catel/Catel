@@ -9,8 +9,8 @@ namespace Catel.Caching
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Threading;
     using System.Threading.Tasks;
+    using Logging;
     using Policies;
     using Threading;
 
@@ -22,6 +22,8 @@ namespace Catel.Caching
     public class CacheStorage<TKey, TValue> : ICacheStorage<TKey, TValue>
     {
         #region Fields
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private readonly Func<ExpirationPolicy> _defaultExpirationPolicyInitCode;
 
         /// <summary>
@@ -47,7 +49,7 @@ namespace Catel.Caching
         /// <summary>
         /// The timer that is being executed to invalidate the cache.
         /// </summary>
-        private Timer _expirationTimer;
+        private Catel.Threading.Timer _expirationTimer;
 
         /// <summary>
         /// The expiration timer interval.
@@ -151,7 +153,7 @@ namespace Catel.Caching
 
                     if (_expirationTimer == null)
                     {
-                        _expirationTimer = new Timer(OnTimerElapsed, null, timeSpan, timeSpan);
+                        _expirationTimer = new Catel.Threading.Timer(OnTimerElapsed, null, timeSpan, timeSpan);
                     }
                     else
                     {
@@ -540,6 +542,8 @@ namespace Catel.Caching
         /// <param name="state">The timer state.</param>
         private void OnTimerElapsed(object state)
         {
+            //Log.Debug("Expiration timer elapsed");
+
             if (!_checkForExpiredItems)
             {
                 return;

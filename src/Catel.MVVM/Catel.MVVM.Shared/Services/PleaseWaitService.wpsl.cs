@@ -99,7 +99,7 @@ namespace Catel.Services
 
             _containerPopup.IsOpen = true;
 
-            PropertyHelper.TrySetPropertyValue(_busyIndicator, "IsIndeterminate", indeterminate);
+            PropertyHelper.TrySetPropertyValue(_busyIndicator, "IsIndeterminate", indeterminate, false);
             _busyIndicator.Visibility = Visibility.Visible;
 
             var rootVisual = (FrameworkElement)Application.Current.RootVisual;

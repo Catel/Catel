@@ -388,11 +388,11 @@ namespace Catel.MVVM.Views
             Argument.IsNotNullOrWhitespace("sourcePropertyName", sourcePropertyName);
             Argument.IsNotNullOrWhitespace("targetPropertyName", targetPropertyName);
 
-            object valueToTransfer = PropertyHelper.GetPropertyValue(source, sourcePropertyName);
+            object valueToTransfer = PropertyHelper.GetPropertyValue(source, sourcePropertyName, false);
 
             Log.Debug("Transferring value of {0}.{1} to {2}.{3}", source.GetType().Name, sourcePropertyName, target.GetType().Name, targetPropertyName);
 
-            PropertyHelper.SetPropertyValue(target, targetPropertyName, valueToTransfer);
+            PropertyHelper.SetPropertyValue(target, targetPropertyName, valueToTransfer, false);
         }
         #endregion
     }

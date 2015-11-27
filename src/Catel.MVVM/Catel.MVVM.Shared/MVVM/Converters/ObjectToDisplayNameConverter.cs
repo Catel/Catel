@@ -39,7 +39,7 @@ namespace Catel.MVVM
             if (type != null)
             {
                 DisplayNameAttribute displayAttribute = null;
-                if (AttributeHelper.TryGetAttribute(type, out displayAttribute))
+                if (type.TryGetAttribute(out displayAttribute))
                 {
                     return GetDisplayName(displayAttribute);
                 }
@@ -51,7 +51,7 @@ namespace Catel.MVVM
             if (memberInfo != null)
             {
                 DisplayNameAttribute displayAttribute = null;
-                if (AttributeHelper.TryGetAttribute(memberInfo, out displayAttribute))
+                if (memberInfo.TryGetAttribute(out displayAttribute))
                 {
                     return GetDisplayName(displayAttribute);
                 }
@@ -69,7 +69,7 @@ namespace Catel.MVVM
                     if (memberInfo != null)
                     {
                         DisplayNameAttribute displayAttribute = null;
-                        if (AttributeHelper.TryGetAttribute(memberInfo, out displayAttribute))
+                        if (memberInfo.TryGetAttribute(out displayAttribute))
                         {
                             return GetDisplayName(displayAttribute);
                         }

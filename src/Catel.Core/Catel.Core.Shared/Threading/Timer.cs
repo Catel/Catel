@@ -4,21 +4,32 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if !PCL
+#define USE_INTERNAL_TIMER
+#endif
+
 #if WIN80 || PCL
 
 namespace System.Threading
 {
-    using Tasks;
-
     /// <summary>
-    /// Timer callback delegate.
+    /// Timer class.
     /// </summary>
-    /// <param name="state">
-    /// The state.
-    /// </param>
-    public delegate void TimerCallback(object state);
+    [ObsoleteEx(ReplacementTypeOrMember = "Catel.Threading.Timer", TreatAsErrorFromVersion = "4.4", RemoveInVersion = "5.0")]
+    public class Timer : Catel.Threading.Timer
+    {
 
-#if !PCL
+    }
+}
+
+#endif
+
+namespace Catel.Threading
+{
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// The timeout class.
     /// </summary>
@@ -28,8 +39,18 @@ namespace System.Threading
         /// A constant used to specify an infinite waiting period, for threading methods that accept an Int32 parameter.
         /// </summary>
         public const int Infinite = -1;
+
+        /// <summary>
+        /// A constant used to specify an infinite waiting period, for threading methods that accept an TimeSpan parameter.
+        /// </summary>
+        public static readonly TimeSpan InfiniteTimeSpan = TimeSpan.FromMilliseconds(-1);
     }
-#endif
+
+    /// <summary>
+    /// Timer callback delegate.
+    /// </summary>
+    /// <param name="state">The state.</param>
+    public delegate void TimerCallback(object state);
 
     /// <summary>
     /// Timer for WinRT since WinRT only provides the DispatcherTimer which cannot be used outside the UI thread.
@@ -40,7 +61,12 @@ namespace System.Threading
         private readonly TimerCallback _timerCallback;
         private readonly object _timerState;
 
-        private CancellationTokenSource _cancellationTokenSource;
+        private System.Threading.CancellationTokenSource _cancellationTokenSource;
+
+#if USE_INTERNAL_TIMER
+        private readonly object _lock = new object();
+        private System.Threading.Timer _timer;
+#endif
         #endregion
 
         #region Constructors
@@ -48,7 +74,7 @@ namespace System.Threading
         /// Initializes a new instance of the <see cref="Timer"/> class.
         /// </summary>
         public Timer()
-            : this(100)
+            : this(Timeout.Infinite)
         {
         }
 
@@ -57,8 +83,8 @@ namespace System.Threading
         /// </summary>
         /// <param name="interval">The interval in milliseconds.</param>
         public Timer(int interval)
+            : this(null, null, TimeSpan.FromMilliseconds(interval), TimeSpan.FromMilliseconds(interval))
         {
-            Interval = interval;
         }
 
         /// <summary>
@@ -94,6 +120,8 @@ namespace System.Threading
             _timerCallback = callback;
             _timerState = state;
 
+            Interval = (int)interval.TotalMilliseconds;
+
             Change(dueTime, interval);
         }
         #endregion
@@ -102,7 +130,7 @@ namespace System.Threading
         /// <summary>
         /// Gets or sets the interval.
         /// </summary>
-        /// <value>The interval. The default is 100 milliseconds.</value>
+        /// <value>The interval.</value>
         public int Interval { get; set; }
         #endregion
 
@@ -132,12 +160,9 @@ namespace System.Threading
         /// <param name="interval">The interval.</param>
         public void Change(TimeSpan dueTime, TimeSpan interval)
         {
-            Stop();
+            SetUpTimer(dueTime, interval);
 
-            _cancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = _cancellationTokenSource.Token;
-
-            Interval = (int)interval.TotalMilliseconds;
 
             if (dueTime < TimeSpan.Zero)
             {
@@ -153,8 +178,47 @@ namespace System.Threading
             else
             {
                 // Invoke after due time
-                Task.Delay(dueTime, cancellationToken).ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
+#if USE_INTERNAL_TIMER
+                lock (_lock)
+                {
+                    if (_timer != null)
+                    {
+                        _timer.Change(dueTime, Timeout.InfiniteTimeSpan);
+                    }
+                }
+#else
+                var delayTask = TaskShim.Delay(dueTime, cancellationToken);
+                delayTask.ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
+#endif
             }
+        }
+
+        /// <summary>
+        /// Sets up the timer.
+        /// </summary>
+        /// <param name="dueTime"></param>
+        /// <param name="interval"></param>
+        private void SetUpTimer(TimeSpan dueTime, TimeSpan interval)
+        {
+            Stop();
+
+            _cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = _cancellationTokenSource.Token;
+
+#if USE_INTERNAL_TIMER
+            lock (_lock)
+            {
+                if (_timer != null)
+                {
+                    _timer.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+                    _timer = null;
+                }
+
+                _timer = new System.Threading.Timer(OnTimerTick, cancellationToken, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+            }
+#endif
+
+            Interval = (int)interval.TotalMilliseconds;
         }
 
         /// <summary>
@@ -174,7 +238,18 @@ namespace System.Threading
                 return;
             }
 
-            Task.Delay(Interval, cancellationToken).ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
+#if USE_INTERNAL_TIMER
+            lock (_lock)
+            {
+                if (_timer != null)
+                {
+                    _timer.Change(Interval, Timeout.Infinite);
+                }
+            }
+#else
+            var delayTask = TaskShim.Delay(Interval, cancellationToken);
+            delayTask.ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
+#endif
         }
 
         /// <summary>
@@ -187,6 +262,17 @@ namespace System.Threading
                 _cancellationTokenSource.Cancel();
                 _cancellationTokenSource = null;
             }
+
+#if USE_INTERNAL_TIMER
+            lock (_lock)
+            {
+                if (_timer != null)
+                {
+                    _timer.Change(Timeout.Infinite, Timeout.Infinite);
+                    _timer = null;
+                }
+            }
+#endif
         }
 
         /// <summary>
@@ -226,7 +312,6 @@ namespace System.Threading
                 _timerCallback(_timerState);
             }
         }
-        #endregion
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -235,6 +320,13 @@ namespace System.Threading
         {
             Stop();
         }
+
+#if USE_INTERNAL_TIMER
+        private void OnTimerTick(object state)
+        {
+            ContinueTimer(null, state);
+        }
+#endif
+#endregion
     }
 }
-#endif

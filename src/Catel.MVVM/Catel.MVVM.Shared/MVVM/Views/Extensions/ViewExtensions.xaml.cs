@@ -55,7 +55,7 @@ namespace Catel.MVVM.Views
                     var propertyInfo = viewType.GetPropertyEx(dependencyProperty.PropertyName);
                     if (propertyInfo != null)
                     {
-                        if (AttributeHelper.IsDecoratedWithAttribute<ViewToViewModelAttribute>(propertyInfo))
+                        if (propertyInfo.IsDecoratedWithAttribute<ViewToViewModelAttribute>())
                         {
                             viewPropertySelector.AddPropertyToSubscribe(dependencyProperty.PropertyName, viewType);
                         }

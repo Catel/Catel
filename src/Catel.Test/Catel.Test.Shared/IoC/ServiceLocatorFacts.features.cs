@@ -48,6 +48,34 @@ namespace Catel.Test.IoC
                 get { return _services; }
             }
         }
+
+        public interface IInjectable<T>
+        {
+            T Injected { get; }
+        }
+
+        public class Injectable<T> : IInjectable<T>
+        {
+            public Injectable(T injected)
+            {
+                Injected = injected;
+            }
+            public T Injected { get; private set; }
+        }
+
+        public class Item
+        {
+        }
+
+        public class Consumer
+        {
+            public Consumer(IInjectable<Item> item)
+            {
+                Item = item;
+            }
+
+            public IInjectable<Item> Item { get; private set; }
+        }
         #endregion
 
         [TestFixture]
@@ -126,6 +154,25 @@ namespace Catel.Test.IoC
                 Assert.IsNotNull(resolved.Services);
                 Assert.AreEqual(1, resolved.Services.Count());
                 Assert.IsTrue(typeof(IndependentService).IsAssignableFromEx(resolved.Services.First().GetType()));
+            }
+        }
+
+        [TestFixture]
+        public class TheOpenGenericFeature
+        {
+            [TestCase]
+            public void CatelInjection()
+            {
+                var serviceLocator = new ServiceLocator();
+
+                serviceLocator.RegisterType<Consumer, Consumer>();
+                serviceLocator.RegisterType<Item, Item>();
+                serviceLocator.RegisterType(typeof(IInjectable<>), typeof(Injectable<>));
+
+                var model = serviceLocator.ResolveType<Consumer>();
+
+                Assert.IsNotNull(model);
+                Assert.IsNotNull(model.Item);
             }
         }
     }

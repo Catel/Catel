@@ -235,6 +235,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.debug.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.error.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.headers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.warning.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Extensions\LogExtensions.info.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Formatters\Interfaces\IJsonLogFormatter.cs" />
@@ -285,6 +286,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\MemberInfoExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\ObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\ReflectionExtensions.assembly.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\ReflectionExtensions.attributes.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\ReflectionExtensions.cache.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\ReflectionExtensions.methodinfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\ReflectionExtensions.propertyinfo.cs" />
