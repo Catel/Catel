@@ -84,60 +84,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Exceptions.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.de.NET45.Designer.cs">
-      <Link>Properties\Resources.de.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.de.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.es.NET45.Designer.cs">
-      <Link>Properties\Resources.es.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.es.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.fr.NET45.Designer.cs">
-      <Link>Properties\Resources.fr.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.fr.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.it.NET45.Designer.cs">
-      <Link>Properties\Resources.it.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.it.resx</DependentUpon>
-    </Compile>
     <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.NET45.Designer.cs">
       <Link>Properties\Resources.NET45.Designer.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.nl.NET45.Designer.cs">
-      <Link>Properties\Resources.nl.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.nl.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.tr.NET45.Designer.cs">
-      <Link>Properties\Resources.tr.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.tr.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.zh-Hans.NET45.Designer.cs">
-      <Link>Properties\Resources.zh-Hans.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\Catel.MVVM.Shared\Properties\Resources.ru.NET45.Designer.cs">
-      <Link>Properties\Resources.ru.NET45.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.ru.resx</DependentUpon>
-    </Compile>	
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Windows\Windows\LoaderAnimation.xaml.cs">
       <DependentUpon>LoaderAnimation.xaml</DependentUpon>
@@ -183,31 +135,26 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.de.resx">
       <Link>Properties\Resources.de.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.de.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.es.resx">
       <Link>Properties\Resources.es.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.es.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.fr.resx">
       <Link>Properties\Resources.fr.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.fr.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.it.resx">
       <Link>Properties\Resources.it.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.it.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.nl.resx">
       <Link>Properties\Resources.nl.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.nl.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
@@ -219,22 +166,19 @@
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.tr.resx">
       <Link>Properties\Resources.tr.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.tr.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.zh-Hans.resx">
       <Link>Properties\Resources.zh-Hans.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.zh-Hans.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.ru.resx">
       <Link>Properties\Resources.ru.resx</Link>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.ru.NET45.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Catel.MVVM.Properties</CustomToolNamespace>
-    </EmbeddedResource>	
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="..\Catel.MVVM.Shared\Resources\Images\Error.png">
