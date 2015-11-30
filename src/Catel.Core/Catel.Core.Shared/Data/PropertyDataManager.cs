@@ -70,7 +70,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public CatelTypeInfo GetCatelTypeInfo(Type type)
         {
-            Argument.IsNotNull(() => type);
+            Argument.IsNotNull("type", type);
 
             lock (_propertyDataLock)
             {
@@ -95,7 +95,7 @@ namespace Catel.Data
         /// <exception cref="InvalidOperationException">The properties are not declared correctly.</exception>
         public CatelTypeInfo RegisterProperties(Type type)
         {
-            Argument.IsNotNull(() => type);
+            Argument.IsNotNull("type", type);
 
             lock (_propertyDataLock)
             {
@@ -122,9 +122,9 @@ namespace Catel.Data
         /// <exception cref="PropertyAlreadyRegisteredException">A property with the same name is already registered.</exception>
         public void RegisterProperty(Type type, string name, PropertyData propertyData)
         {
-            Argument.IsNotNull(() => type);
-            Argument.IsNotNullOrWhitespace(() => name);
-            Argument.IsNotNull(() => propertyData);
+            Argument.IsNotNull("type", type);
+            Argument.IsNotNullOrWhitespace("name", name);
+            Argument.IsNotNull("propertyData", propertyData);
 
             lock (_propertyDataLock)
             {
@@ -146,7 +146,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public void UnregisterProperty(Type type, string name)
         {
-            Argument.IsNotNullOrWhitespace(() => name);
+            Argument.IsNotNullOrWhitespace("name", name);
 
             lock (_propertyDataLock)
             {
@@ -171,8 +171,8 @@ namespace Catel.Data
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         public bool IsPropertyRegistered(Type type, string name)
         {
-            Argument.IsNotNull(() => type);
-            Argument.IsNotNullOrWhitespace(() => name);
+            Argument.IsNotNull("type", type);
+            Argument.IsNotNullOrWhitespace("name", name);
 
             lock (_propertyDataLock)
             {
@@ -197,8 +197,8 @@ namespace Catel.Data
         /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
         public PropertyData GetPropertyData(Type type, string name)
         {
-            Argument.IsNotNull(() => type);
-            Argument.IsNotNullOrWhitespace(() => name);
+            Argument.IsNotNull("type", type);
+            Argument.IsNotNullOrWhitespace("name", name);
 
             lock (_propertyDataLock)
             {
