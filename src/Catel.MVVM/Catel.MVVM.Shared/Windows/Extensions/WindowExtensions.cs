@@ -292,7 +292,7 @@ namespace Catel.Windows
                     if (window.Dispatcher.GetThreadId() != ownerWindow.Dispatcher.GetThreadId())
                     {
                         Log.Warning("The owner window '{0}' is not created on the same thread as the current window '{1}', cannot set owner window",
-                            ownerWindow.GetType().GetSafeFullName(), window.GetType().GetSafeFullName());
+                            ownerWindow.GetType().GetSafeFullName(false), window.GetType().GetSafeFullName(false));
                         return;
                     }
 

@@ -57,7 +57,7 @@ namespace Catel.ApiCop.Rules
 
             lock (_lockObject)
             {
-                var typeName = type.GetSafeFullName();
+                var typeName = type.GetSafeFullName(true);
 
                 AddTag(typeName);
 

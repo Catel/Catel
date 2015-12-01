@@ -184,7 +184,7 @@ namespace Catel.IoC
                                             var instance = typeFactory.CreateInstance(type);
                                             if (instance == null)
                                             {
-                                                Log.Error("Failed to instantiate type '{0}', cannot automatically register the instance", type.GetSafeFullName());
+                                                Log.Error("Failed to instantiate type '{0}', cannot automatically register the instance", type.GetSafeFullName(false));
                                             }
                                             else
                                             {

@@ -38,7 +38,7 @@ namespace Catel.Windows.Interactivity
             var viewModelContainer = AssociatedObject as IViewModelContainer;
             if (viewModelContainer == null)
             {
-                string error = string.Format("This behavior can only be used on IViewModelContainer classes, '{0}' does not implement; IViewModelContainer", AssociatedObject.GetType().GetSafeFullName());
+                string error = string.Format("This behavior can only be used on IViewModelContainer classes, '{0}' does not implement; IViewModelContainer", AssociatedObject.GetType().GetSafeFullName(false));
 
                 Log.Error(error);
                 throw new InvalidOperationException(error);
