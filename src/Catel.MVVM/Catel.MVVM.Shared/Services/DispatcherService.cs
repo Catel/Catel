@@ -4,6 +4,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Threading;
+using Xamarin.Forms;
+
 namespace Catel.Services
 {
     using System;
@@ -84,7 +87,7 @@ namespace Catel.Services
         {
             Argument.IsNotNull("action", action);
 #if XAMARIN_FORMS
-            throw new MustBeImplementedException();
+            SynchronizationContext.Current.Post(state => action(), null);
 #elif ANDROID
             _handler.Post(action);
 #elif IOS
@@ -105,7 +108,7 @@ namespace Catel.Services
         {
             Argument.IsNotNull("action", action);
 #if XAMARIN_FORMS
-            throw new MustBeImplementedException();
+            SynchronizationContext.Current.Post(state => action(), null);           
 #elif ANDROID
             _handler.Post(action);
 #elif IOS
