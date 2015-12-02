@@ -43,7 +43,7 @@ namespace Catel.Runtime.Serialization
         Type ModelType { get; }
 
         /// <summary>
-        /// Gets the name of the model type, which should be a cached version of <c>ModelType.GetSafeFullName();</c>.
+        /// Gets the name of the model type, which should be a cached version of <c>ModelType.GetSafeFullName(false);</c>.
         /// </summary>
         /// <value>The name of the model type.</value>
         string ModelTypeName { get; }

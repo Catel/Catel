@@ -93,7 +93,7 @@ namespace Catel.Modules
                     }
                     catch (Exception ex)
                     {
-                        Log.Warning(ex, "Failed to get LeafCatalogs from the (expected) composite catalog '{0}'", moduleCatalogType.GetSafeFullName());
+                        Log.Warning(ex, "Failed to get LeafCatalogs from the (expected) composite catalog '{0}'", moduleCatalogType.GetSafeFullName(false));
                     }
                 }
             }

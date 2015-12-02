@@ -41,7 +41,7 @@ namespace Catel.Scoping
         /// </summary>
         static ScopeManager()
         {
-            TypeName = typeof(T).GetSafeFullName();
+            TypeName = typeof(T).GetSafeFullName(false);
         }
 
         /// <summary>

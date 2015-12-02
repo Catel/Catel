@@ -125,7 +125,7 @@ namespace Catel
                 type = instance.GetType();
             }
 
-            return type.GetSafeFullName();
+            return type.GetSafeFullName(false);
         }
     }
 }

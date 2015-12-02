@@ -152,7 +152,7 @@ namespace Catel.Runtime.Serialization.Json
                     var modelTypeOverride = TypeCache.GetTypeWithoutAssembly(modelTypeOverrideValue);
                     if (modelTypeOverride == null)
                     {
-                        Log.Warning("Object was serialized as '{0}', but the type is not available. Using original type '{1}'", modelTypeOverrideValue, modelType.GetSafeFullName());
+                        Log.Warning("Object was serialized as '{0}', but the type is not available. Using original type '{1}'", modelTypeOverrideValue, modelType.GetSafeFullName(false));
                     }
                     else
                     {

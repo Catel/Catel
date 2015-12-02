@@ -115,7 +115,7 @@ namespace Catel.MVVM
             if (viewModel.GetType() != ViewModelType)
             {
                 throw Log.ErrorAndCreateException(msg => new WrongViewModelTypeException(viewModel.GetType(), ViewModelType),
-                    "Cannot use view model type '{0}', expected type '{1}'", viewModel.GetType().GetSafeFullName(), ViewModelType.GetSafeFullName());
+                    "Cannot use view model type '{0}', expected type '{1}'", viewModel.GetType().GetSafeFullName(false), ViewModelType.GetSafeFullName(false));
             }
 
             lock (_lock)

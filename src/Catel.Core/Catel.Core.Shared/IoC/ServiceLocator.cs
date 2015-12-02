@@ -262,7 +262,7 @@ namespace Catel.IoC
                         var isOpenGenericTypeRegistered = IsTypeRegistered(genericType, tag);
                         if (isOpenGenericTypeRegistered)
                         {
-                            Log.Debug("An open generic type '{0}' is registered, registering new closed generic type '{1}' based on the open registration", genericType.GetSafeFullName(), serviceType.GetSafeFullName());
+                            Log.Debug("An open generic type '{0}' is registered, registering new closed generic type '{1}' based on the open registration", genericType.GetSafeFullName(false), serviceType.GetSafeFullName(false));
 
                             var registrationInfo = GetRegistrationInfo(genericType, tag);
                             var finalType = registrationInfo.ImplementingType.MakeGenericType(genericArguments.ToArray());
@@ -453,7 +453,7 @@ namespace Catel.IoC
                         }
                         catch (TypeNotRegisteredException ex)
                         {
-                            Log.Debug(ex, "Failed to resolve type '{0}', returning null", ex.RequestedType.GetSafeFullName());
+                            Log.Debug(ex, "Failed to resolve type '{0}', returning null", ex.RequestedType.GetSafeFullName(false));
                         }
                     }
                 }
@@ -673,7 +673,7 @@ namespace Catel.IoC
 
             if (serviceImplementationType.IsInterfaceEx())
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot register interface type '{0}' as implementation, make sure to specify an actual class", serviceImplementationType.GetSafeFullName());
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot register interface type '{0}' as implementation, make sure to specify an actual class", serviceImplementationType.GetSafeFullName(false));
             }
 
             /* TODO: This code have to be here to ensure the right usage of non-generic overloads of register methods.
@@ -827,7 +827,7 @@ namespace Catel.IoC
             // or _currentTypeRequestPath.PopType();
 
             throw Log.ErrorAndCreateException(msg => new TypeNotRegisteredException(type, msg),
-                "The type '{0}' is not registered", type.GetSafeFullName());
+                "The type '{0}' is not registered", type.GetSafeFullName(true));
         }
         #endregion
 
