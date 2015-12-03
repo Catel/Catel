@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{BE079DB6-FD92-4167-8DF4-CACB2E1422FC}"
 	ProjectSection(SolutionItems) = preProject
@@ -170,6 +170,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.DynamicObj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.Xamarin.Forms", "Catel.MVVM\Catel.MVVM.Xamarin.Forms\Catel.MVVM.Xamarin.Forms.csproj", "{E0D994CA-D553-4009-A159-33542A16C4D0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{970CFC8C-E0AC-41DF-8C3C-CB43D363EF51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvvmEnforcement", "MvvmEnforcement\MvvmEnforcement.csproj", "{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvvmEnforcement.Droid", "MvvmEnforcement.Droid\MvvmEnforcement.Droid.csproj", "{A2950DB3-1065-44EA-95CF-279A1AF602E3}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{3743a304-3ee5-4909-bfec-988d59d1b33a}*SharedItemsImports = 13
@@ -281,6 +287,46 @@ Global
 		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|x64.Build.0 = Release|Any CPU
 		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|x86.ActiveCfg = Release|Any CPU
 		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|x86.Build.0 = Release|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Debug|ARM.Build.0 = Debug|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Debug|x64.Build.0 = Debug|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Debug|x86.Build.0 = Debug|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Release|ARM.ActiveCfg = Release|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Release|ARM.Build.0 = Release|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Release|x64.ActiveCfg = Release|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Release|x64.Build.0 = Release|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Release|x86.ActiveCfg = Release|Any CPU
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D}.Release|x86.Build.0 = Release|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Debug|ARM.Build.0 = Debug|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Debug|ARM.Deploy.0 = Debug|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Debug|x64.Build.0 = Debug|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Debug|x64.Deploy.0 = Debug|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Debug|x86.Build.0 = Debug|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Debug|x86.Deploy.0 = Debug|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Release|ARM.ActiveCfg = Release|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Release|ARM.Build.0 = Release|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Release|ARM.Deploy.0 = Release|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Release|x64.ActiveCfg = Release|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Release|x64.Build.0 = Release|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Release|x64.Deploy.0 = Release|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Release|x86.ActiveCfg = Release|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Release|x86.Build.0 = Release|Any CPU
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Release|x86.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -319,6 +365,8 @@ Global
 		{3633B1F2-1D87-4E9E-87AB-4996369E96AF} = {BD2D9D3A-6266-4D0B-B2B4-DD5726861E36}
 		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
 		{E0D994CA-D553-4009-A159-33542A16C4D0} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
+		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D} = {970CFC8C-E0AC-41DF-8C3C-CB43D363EF51}
+		{A2950DB3-1065-44EA-95CF-279A1AF602E3} = {970CFC8C-E0AC-41DF-8C3C-CB43D363EF51}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35
