@@ -37,6 +37,37 @@ namespace Catel.MVVM.Views
 
         public event EventHandler<DataContextChangedEventArgs> DataContextChanged;
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            ViewModel?.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            ViewModel?.OnDisappearing();
+        }
+
+        /// <summary>
+        /// Application developers can override this method to provide behavior when the back button is pressed.
+        /// </summary>
+        /// <returns>
+        /// To be added.
+        /// </returns>
+        /// <remarks>
+        /// To be added.
+        /// </remarks>
+        protected override bool OnBackButtonPressed()
+        {
+            if (ViewModel != null)
+            {
+                return ViewModel.OnBackButtonPressed() || base.OnBackButtonPressed();
+            }
+
+            return base.OnBackButtonPressed();
+        }
+
         private void OnDataContextChanged(object sender, DataContextChangedEventArgs dataContextChangedEventArgs)
         {
             ViewModelChanged.SafeInvoke(this);

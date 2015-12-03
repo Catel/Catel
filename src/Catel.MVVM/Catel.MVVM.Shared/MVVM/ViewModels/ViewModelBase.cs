@@ -1827,6 +1827,37 @@ namespace Catel.MVVM
 
             ViewModelManager.UnregisterViewModelInstance(this);
         }
-        #endregion
+
+#if XAMARIN_FORMS
+        /// <summary>
+        /// Called when view is appearing
+        /// </summary>
+        public virtual void OnAppearing()
+        {
+        }
+
+        /// <summary>
+        /// Called when view is disappearing
+        /// </summary>
+        public virtual void OnDisappearing()
+        {
+        }
+
+        /// <summary>
+        /// Application developers can override this method to provide behavior when the back button is pressed.
+        /// </summary>
+        /// <returns>
+        /// To be added.
+        /// </returns>
+        /// <remarks>
+        /// To be added.
+        /// </remarks>
+        public virtual bool OnBackButtonPressed()
+        {
+            return false;
+        }
+#endif
+
+#endregion
     }
 }
