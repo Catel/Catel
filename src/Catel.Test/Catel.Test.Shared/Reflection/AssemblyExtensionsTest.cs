@@ -65,7 +65,7 @@ namespace Catel.Test.Reflection
         //[TestCase]
         //public void InformationalVersionAutomatic()
         //{
-        //    var expected = "4.5, manually built in Visual Studio";
+        //    var expected = VersionPrefix + ", manually built in Visual Studio";
 
         //    var result = Assembly.InformationalVersion();
 
