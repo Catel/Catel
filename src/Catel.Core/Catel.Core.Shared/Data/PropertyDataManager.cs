@@ -205,8 +205,6 @@ namespace Catel.Data
                 CatelTypeInfo propertyDataOfType;
                 if (!_propertyData.TryGetValue(type, out propertyDataOfType))
                 {
-                    // It should be okay to trow an exception inside the lock
-                    // http://stackoverflow.com/questions/590159/does-a-locked-object-stay-locked-if-an-exception-occurs-inside-it
                     throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, type),
                         "Property '{0}' on type '{1}' is not registered", name, type.FullName);
                 }

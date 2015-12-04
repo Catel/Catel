@@ -72,7 +72,7 @@ namespace Catel.Data
         /// <returns>Dictionary containing the Catel properties.</returns>
         public IDictionary<string, PropertyData> GetCatelProperties()
         {
-            // TODO: Clone or not to clone? For performance reasons decided not to
+            // Clone or not to clone? For performance reasons decided not to
             return _catelProperties;
         }
 
@@ -82,7 +82,7 @@ namespace Catel.Data
         /// <returns>Dictionary containing the non-Catel properties.</returns>
         public IDictionary<string, CachedPropertyInfo> GetNonCatelProperties()
         {
-            // TODO: Clone or not to clone? For performance reasons decided not to
+            // Clone or not to clone? For performance reasons decided not to
             return _nonCatelProperties;
         }
 
@@ -102,8 +102,6 @@ namespace Catel.Data
                 PropertyData catelProperty;
                 if (!_catelProperties.TryGetValue(name, out catelProperty))
                 {
-                    // it should be okay to trow an exception inside the lock
-                    // http://stackoverflow.com/questions/590159/does-a-locked-object-stay-locked-if-an-exception-occurs-inside-it
                     throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, Type),
                     "Property '{0}' on type '{1}' is not registered", name, Type.FullName);
                 }
