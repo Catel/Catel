@@ -13,7 +13,7 @@ namespace Catel.Services
     using global::Android.App;
     using global::Android.OS;
 #elif IOS
-    using global::MonoTouch.CoreFoundation;
+    using global::CoreFoundation;
 #elif NETFX_CORE
     using Windows.Threading;
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
