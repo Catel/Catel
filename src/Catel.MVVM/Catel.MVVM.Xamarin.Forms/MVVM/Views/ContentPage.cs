@@ -6,6 +6,7 @@
 
 
 using System;
+using System.Threading.Tasks;
 
 namespace Catel.MVVM.Views
 {
@@ -62,7 +63,7 @@ namespace Catel.MVVM.Views
         {
             if (ViewModel != null)
             {
-                return ViewModel.OnBackButtonPressed() || base.OnBackButtonPressed();
+                return ViewModel.CancelAndCloseViewModel().Result || base.OnBackButtonPressed();
             }
 
             return base.OnBackButtonPressed();

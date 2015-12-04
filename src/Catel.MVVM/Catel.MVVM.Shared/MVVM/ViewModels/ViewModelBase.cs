@@ -1428,7 +1428,7 @@ namespace Catel.MVVM
         /// </returns>
         protected virtual Task<bool> CancelAsync()
         {
-            // Note: should be converted to a sync method in v5
+            // Note: should be converted to a sync method in v5`
             return Cancel();
         }
 
@@ -1827,23 +1827,6 @@ namespace Catel.MVVM
 
             ViewModelManager.UnregisterViewModelInstance(this);
         }
-
-#if XAMARIN_FORMS
-        /// <summary>
-        /// Application developers can override this method to provide behavior when the back button is pressed.
-        /// </summary>
-        /// <returns>
-        /// To be added.
-        /// </returns>
-        /// <remarks>
-        /// To be added.
-        /// </remarks>
-        public virtual bool OnBackButtonPressed()
-        {
-            return false;
-        }
-#endif
-
 #endregion
     }
 }

@@ -247,19 +247,6 @@ namespace Catel.MVVM
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
         Task CloseViewModelAsync(bool? result);
 
-#if XAMARIN_FORMS
-        /// <summary>
-        /// Application developers can override this method to provide behavior when the back button is pressed.
-        /// </summary>
-        /// <returns>
-        /// To be added.
-        /// </returns>
-        /// <remarks>
-        /// To be added.
-        /// </remarks>
-        bool OnBackButtonPressed();
-#endif
         #endregion
-
     }
 }
