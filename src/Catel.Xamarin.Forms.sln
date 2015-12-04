@@ -176,13 +176,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvvmEnforcement", "MvvmEnfo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvvmEnforcement.Droid", "MvvmEnforcement.Droid\MvvmEnforcement.Droid.csproj", "{A2950DB3-1065-44EA-95CF-279A1AF602E3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.FluentValidation", "Catel.Extensions.FluentValidation", "{82B45C79-0810-48F2-9F1C-A1E2E0768EC7}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Extensions.FluentValidation.Shared", "Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.shproj", "{C7BC725E-FA25-46A8-9288-C708B69E5BD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.FluentValidation.PCL", "Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.PCL\Catel.Extensions.FluentValidation.PCL.csproj", "{6040C547-F6C9-4526-A164-554A2EF9E1E5}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{3743a304-3ee5-4909-bfec-988d59d1b33a}*SharedItemsImports = 13
 		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{3658ef5e-766f-4d36-b0fc-dfadae6547dd}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{8c7eab82-554b-4761-b67e-7e9b9a306914}*SharedItemsImports = 13
 		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{41c1b6d9-e16a-4137-b573-1ab9da17eff3}*SharedItemsImports = 13
+		Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.projitems*{6040c547-f6c9-4526-a164-554a2ef9e1e5}*SharedItemsImports = 4
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{5a6cf7d5-9bbc-44b5-8a73-2146d03c3c1e}*SharedItemsImports = 4
+		Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.projitems*{c7bc725e-fa25-46a8-9288-c708b69e5bd3}*SharedItemsImports = 13
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{e0d994ca-d553-4009-a159-33542a16c4d0}*SharedItemsImports = 4
 		Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems*{c1e36b63-d33e-4f25-844b-0de262d8a01a}*SharedItemsImports = 13
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{c35d5dc5-7149-4e56-9f0c-90d8f6a1c495}*SharedItemsImports = 4
@@ -327,6 +335,22 @@ Global
 		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Release|x86.ActiveCfg = Release|Any CPU
 		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Release|x86.Build.0 = Release|Any CPU
 		{A2950DB3-1065-44EA-95CF-279A1AF602E3}.Release|x86.Deploy.0 = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|ARM.Build.0 = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|x64.Build.0 = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|x86.Build.0 = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|ARM.ActiveCfg = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|ARM.Build.0 = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|x64.ActiveCfg = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|x64.Build.0 = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|x86.ActiveCfg = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -367,6 +391,9 @@ Global
 		{E0D994CA-D553-4009-A159-33542A16C4D0} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
 		{4F78F4E7-1886-4B5C-B037-EFA2F0698C8D} = {970CFC8C-E0AC-41DF-8C3C-CB43D363EF51}
 		{A2950DB3-1065-44EA-95CF-279A1AF602E3} = {970CFC8C-E0AC-41DF-8C3C-CB43D363EF51}
+		{82B45C79-0810-48F2-9F1C-A1E2E0768EC7} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{C7BC725E-FA25-46A8-9288-C708B69E5BD3} = {82B45C79-0810-48F2-9F1C-A1E2E0768EC7}
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5} = {82B45C79-0810-48F2-9F1C-A1E2E0768EC7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35
