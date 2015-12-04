@@ -249,16 +249,6 @@ namespace Catel.MVVM
 
 #if XAMARIN_FORMS
         /// <summary>
-        /// Called when view is appearing
-        /// </summary>
-        void OnAppearing();
-
-        /// <summary>
-        /// Called when view is disappearing
-        /// </summary>
-        void OnDisappearing();
-
-        /// <summary>
         /// Application developers can override this method to provide behavior when the back button is pressed.
         /// </summary>
         /// <returns>

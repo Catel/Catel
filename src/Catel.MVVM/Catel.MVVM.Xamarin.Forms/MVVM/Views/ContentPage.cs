@@ -40,13 +40,13 @@ namespace Catel.MVVM.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ViewModel?.OnAppearing();
+            ViewModel?.InitializeViewModelAsync();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            ViewModel?.OnDisappearing();
+            ViewModel?.CloseViewModelAsync(true);
         }
 
         /// <summary>
