@@ -130,7 +130,7 @@ namespace Catel.Data
             {
                 if (!_propertyData.ContainsKey(type))
                 {
-                    _propertyData.Add(type, new CatelTypeInfo(type));
+                    _propertyData[type] = new CatelTypeInfo(type);
                 }
 
                 _propertyData[type].RegisterProperty(name, propertyData);
@@ -152,7 +152,7 @@ namespace Catel.Data
             {
                 if (!_propertyData.ContainsKey(type))
                 {
-                    _propertyData.Add(type, new CatelTypeInfo(type));
+                    _propertyData[type] = new CatelTypeInfo(type);
                 }
 
                 _propertyData[type].UnregisterProperty(name);
@@ -176,12 +176,13 @@ namespace Catel.Data
 
             lock (_propertyDataLock)
             {
-                if (_propertyData.ContainsKey(type))
+                CatelTypeInfo propertyDataOfType;
+                if (!_propertyData.TryGetValue(type, out propertyDataOfType))
                 {
-                    return _propertyData[type].IsPropertyRegistered(name);
+                    return false;
                 }
 
-                return false;
+                return propertyDataOfType.IsPropertyRegistered(name);
             }
         }
 
@@ -199,15 +200,18 @@ namespace Catel.Data
             Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("name", name);
 
-            if (!IsPropertyRegistered(type, name))
-            {
-                throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, type),
-                    "Property '{0}' on type '{1}' is not registered", name, type.FullName);
-            }
-
             lock (_propertyDataLock)
             {
-                return _propertyData[type].GetPropertyData(name);
+                CatelTypeInfo propertyDataOfType;
+                if (!_propertyData.TryGetValue(type, out propertyDataOfType))
+                {
+                    // It should be okay to trow an exception inside the lock
+                    // http://stackoverflow.com/questions/590159/does-a-locked-object-stay-locked-if-an-exception-occurs-inside-it
+                    throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, type),
+                        "Property '{0}' on type '{1}' is not registered", name, type.FullName);
+                }
+
+                return propertyDataOfType.GetPropertyData(name);
             }
         }
 

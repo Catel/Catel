@@ -97,15 +97,18 @@ namespace Catel.Data
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
-            if (!IsPropertyRegistered(name))
-            {
-                throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, Type), 
-                    "Property '{0}' on type '{1}' is not registered", name, Type.FullName);
-            }
-
             lock (_lockObject)
             {
-                return _catelProperties[name];
+                PropertyData catelProperty;
+                if (!_catelProperties.TryGetValue(name, out catelProperty))
+                {
+                    // it should be okay to trow an exception inside the lock
+                    // http://stackoverflow.com/questions/590159/does-a-locked-object-stay-locked-if-an-exception-occurs-inside-it
+                    throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, Type),
+                    "Property '{0}' on type '{1}' is not registered", name, Type.FullName);
+                }
+
+                return catelProperty;
             }
         }
 
@@ -182,7 +185,7 @@ namespace Catel.Data
                         "Property '{0}' on type '{1}' is already registered", name, Type.FullName);
                 }
 
-                _catelProperties.Add(name, propertyData);
+                _catelProperties[name] = propertyData;
             }
         }
 
