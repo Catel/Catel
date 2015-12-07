@@ -644,7 +644,7 @@ namespace Catel.Data
         {
             if (DisableUsageOfEqualityComparerForEquals)
             {
-                return RuntimeHelpers.Equals(this, obj);
+                return ObjectHelper.AreEqualReferences(this, obj);
             }
 
             // Note: at first we only implemented the EqualityComparer, but the IEqualityComparer of Microsoft
