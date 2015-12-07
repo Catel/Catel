@@ -446,7 +446,7 @@ namespace Catel.Data
         {
             // Note: we know what we are doing, use GetValueFast (but not SetValueFast)
             get { return GetValueFast<bool>(IsDirtyProperty.Name); }
-            protected set { SetValue(IsDirtyProperty.Name, value); }
+            protected set { SetValue(IsDirtyProperty, value); }
         }
 
         /// <summary>

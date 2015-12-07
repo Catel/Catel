@@ -641,7 +641,7 @@ namespace Catel.IoC
             #region Constructors
             public ConstructorCacheKey(Type type, object[] parameters)
             {
-                string key = type.GetSafeFullName();
+                string key = type.GetSafeFullName(true);
                 foreach (var parameter in parameters)
                 {
                     key += "_" + ObjectToStringHelper.ToFullTypeString(parameter);

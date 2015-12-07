@@ -233,7 +233,7 @@ namespace Catel.Runtime.Serialization
         public void Warmup(IEnumerable<Type> types, int typesPerThread = 1000)
         {
             ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
-                x => x.SetInitializationMode(InitializationMode.Eager, GetType().GetSafeFullName()));
+                x => x.SetInitializationMode(InitializationMode.Eager, GetType().GetSafeFullName(false)));
 
             if (types == null)
             {

@@ -77,7 +77,7 @@ namespace Catel
             if (commandNameField == null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not available on container type '{1}'",
-                    commandNameFieldName, containerType.GetSafeFullName());
+                    commandNameFieldName, containerType.GetSafeFullName(false));
             }
 
             var commandName = (string)commandNameField.GetValue(null);
@@ -103,7 +103,7 @@ namespace Catel
                                         select type).FirstOrDefault();
             if (commandContainerType != null)
             {
-                Log.Debug("Found command container '{0}', registering it in the ServiceLocator now", commandContainerType.GetSafeFullName());
+                Log.Debug("Found command container '{0}', registering it in the ServiceLocator now", commandContainerType.GetSafeFullName(false));
 
                 var serviceLocator = commandManager.GetServiceLocator();
                 if (!serviceLocator.IsTypeRegistered(commandContainerType))
@@ -116,7 +116,7 @@ namespace Catel
                     }
                     else
                     {
-                        Log.Warning("Cannot create command container '{0}', skipping registration", commandContainerType.GetSafeFullName());
+                        Log.Warning("Cannot create command container '{0}', skipping registration", commandContainerType.GetSafeFullName(false));
                     }
                 }
             }

@@ -104,7 +104,7 @@ namespace Catel.Windows.Interactivity
             _layoutRoot = AssociatedObject.FindLogicalRoot() as FrameworkElement;
             if (_layoutRoot != null)
             {
-                Log.Debug("Found layout root '{0}', subscribing to KeyDown event", _layoutRoot.GetType().GetSafeFullName());
+                Log.Debug("Found layout root '{0}', subscribing to KeyDown event", _layoutRoot.GetType().GetSafeFullName(false));
 
                 _layoutRoot.KeyDown += OnKeyDown;
             }

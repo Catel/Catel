@@ -112,7 +112,7 @@ namespace Catel.Runtime.Serialization.Xml
             Argument.IsNotNull("typeToSerialize", typeToSerialize);
             Argument.IsNotNullOrWhitespace("xmlName", xmlName);
 
-            var typeToSerializeName = typeToSerialize.GetSafeFullName();
+            var typeToSerializeName = typeToSerialize.GetSafeFullName(false);
             var key = string.Format("{0}|{1}", typeToSerializeName, xmlName);
 
             return _dataContractSerializersCache.GetFromCacheOrFetch(key, () =>
@@ -187,7 +187,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
 #if ENABLE_DETAILED_LOGGING
-            Log.Debug("Getting known types for '{0}'", type.GetSafeFullName());
+            Log.Debug("Getting known types for '{0}'", type.GetSafeFullName(false));
 #endif
 
             GetKnownTypesForItems(type, serializerTypeInfo);
@@ -255,13 +255,13 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             // Fix generics
-            if (type.GetSafeFullName().StartsWith("System."))
+            if (type.GetSafeFullName(false).StartsWith("System."))
             {
                 var genericArguments = type.GetGenericArgumentsEx();
                 foreach (var genericArgument in genericArguments)
                 {
 #if ENABLE_DETAILED_LOGGING
-                    Log.Debug("Retrieving known types for generic argument '{0}' of '{1}'", genericArgument.GetSafeFullName(), type.GetSafeFullName());
+                    Log.Debug("Retrieving known types for generic argument '{0}' of '{1}'", genericArgument.GetSafeFullName(false), type.GetSafeFullName(false));
 #endif
 
                     GetKnownTypes(genericArgument, serializerTypeInfo);
@@ -282,7 +282,7 @@ namespace Catel.Runtime.Serialization.Xml
             if (baseType != null)
             {
 #if ENABLE_DETAILED_LOGGING
-                Log.Debug("Checking base type of '{0}' for known types", type.GetSafeFullName());
+                Log.Debug("Checking base type of '{0}' for known types", type.GetSafeFullName(false));
 #endif
 
                 if (baseType.FullName != null)
@@ -300,13 +300,13 @@ namespace Catel.Runtime.Serialization.Xml
             if (knowTypesByAttributes.Length > 0)
             {
 #if ENABLE_DETAILED_LOGGING
-                Log.Debug("Found {0} additional known types for type '{1}'", knowTypesByAttributes.Length, type.GetSafeFullName());
+                Log.Debug("Found {0} additional known types for type '{1}'", knowTypesByAttributes.Length, type.GetSafeFullName(false));
 #endif
 
                 foreach (var knownTypeByAttribute in knowTypesByAttributes)
                 {
                     var attributeType = knownTypeByAttribute;
-                    var attributeTypeFullName = attributeType.GetSafeFullName();
+                    var attributeTypeFullName = attributeType.GetSafeFullName(false);
                     if (attributeTypeFullName != null)
                     {
                         GetKnownTypes(knownTypeByAttribute, serializerTypeInfo);
@@ -404,7 +404,7 @@ namespace Catel.Runtime.Serialization.Xml
                     continue;
                 }
 
-                var propertyTypeFullName = typeToCheck.GetSafeFullName();
+                var propertyTypeFullName = typeToCheck.GetSafeFullName(false);
                 if (propertyTypeFullName == null)
                 {
                     serializerTypeInfo.AddTypeAsHandled(typeToCheck);
@@ -479,7 +479,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             // Note, although resharper says this isn't possible, it might be
-            var fullName = type.GetSafeFullName();
+            var fullName = type.GetSafeFullName(false);
             if (string.IsNullOrWhiteSpace(fullName))
             {
                 serializerTypeInfo.AddTypeAsHandled(type);
@@ -872,7 +872,7 @@ namespace Catel.Runtime.Serialization.Xml
             {
                 if (type.IsGenericTypeEx())
                 {
-                    var fullName = type.GetSafeFullName();
+                    var fullName = type.GetSafeFullName(false);
 
                     if (fullName.StartsWith("System.Collections.ObjectModel.ObservableCollection") ||
                         fullName.StartsWith("System.Collections.Generic."))

@@ -114,7 +114,7 @@ namespace Catel.Data
             }
 
             var modelType = model.GetType();
-            Log.Debug("Register dynamic property '{0}.{1}' of type '{2}'", modelType.GetSafeFullName(), propertyName, propertyType.GetSafeFullName());
+            Log.Debug("Register dynamic property '{0}.{1}' of type '{2}'", modelType.GetSafeFullName(false), propertyName, propertyType.GetSafeFullName(false));
 
             var registerPropertyMethodInfo = GetRegisterSimplePropertyMethodInfo(modelType);
             registerPropertyMethodInfo.Invoke(model, new object[] { propertyName, propertyType });

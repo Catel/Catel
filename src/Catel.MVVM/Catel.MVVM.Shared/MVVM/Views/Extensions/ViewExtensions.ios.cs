@@ -12,7 +12,7 @@ namespace Catel.MVVM.Views
 {
     using System;
     using System.Collections.Generic;
-    using global::MonoTouch.UIKit;
+    using global::UIKit;
 
     public static partial class ViewExtensions
     {
