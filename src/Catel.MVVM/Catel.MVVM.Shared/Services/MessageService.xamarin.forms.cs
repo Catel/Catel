@@ -4,19 +4,16 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Catel.Extensions;
-using Catel.Reflection;
-using Xamarin.Forms;
-
 #if XAMARIN_FORMS
 
 namespace Catel.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Catel.Extensions;
+    using Xamarin.Forms;
+
     public partial class MessageService
     {
         /// <summary>
@@ -56,13 +53,9 @@ namespace Catel.Services
             if (currentPage != null)
             {
                 var configuration = _configurationResultMap[button];
-
-                var argument = MessagingCenterHelper.CreateAlertArgument(caption, message, configuration.PositiveButton, configuration.NegativeButton);
-                MessagingCenterHelper.SendAlert(currentPage, argument);
-
-                await argument.Result.Task;
-
-                messageResult = argument.Result.Task.Result ? configuration.PositiveResult: configuration.NegativeResult;
+                var result = MessagingCenterHelper.SendAlert(currentPage, caption, message, configuration.PositiveButton, configuration.NegativeButton);
+                await result.Task;
+                messageResult = result.Task.Result ? configuration.PositiveResult: configuration.NegativeResult;
             }
 
             return messageResult;
