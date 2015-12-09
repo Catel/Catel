@@ -16,7 +16,8 @@ namespace Catel.Services
 #elif NETFX_CORE
     using global::Windows.UI.Popups;
 #else
-
+    using System.Windows;
+    using Windows;
 #endif
 
     /// <summary>
