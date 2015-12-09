@@ -1,12 +1,12 @@
-using System;
-using System.Linq;
-using System.Reflection;
-using Xamarin.Forms;
-
 #if XAMARIN_FORMS
 
 namespace Catel
 {
+	using System;
+	using System.Linq;
+	using System.Reflection;
+	using Xamarin.Forms;
+
     public static class MessagingCenterHelper
     {
         public static void Send(Type typeOfSender, object sender, string message, Type typeOfArgs, object args)
