@@ -37,10 +37,18 @@ namespace Catel.Services
             Argument.IsNotNull(() => dispatcherService);
 
             _dispatcherService = dispatcherService;
+            Initialize();
         }
 
         #region Methods
+
+        /// <summary>
+        /// 
+        /// </summary>
+        partial void Initialize();
+
 #if !XAMARIN
+
         /// <summary>
         /// Translates the message box result.
         /// </summary>
