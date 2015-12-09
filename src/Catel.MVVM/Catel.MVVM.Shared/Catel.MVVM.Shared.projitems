@@ -275,6 +275,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\LocationService.winrt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LocationService.wpsl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LocationServiceBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\MessageService.xamarin.forms.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\MessageService.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\MessageService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\MessageService.ios.cs" />

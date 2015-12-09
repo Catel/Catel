@@ -16,8 +16,7 @@ namespace Catel.Services
 #elif NETFX_CORE
     using global::Windows.UI.Popups;
 #else
-    using System.Windows;
-    using Windows;
+
 #endif
 
     /// <summary>
@@ -217,11 +216,7 @@ namespace Catel.Services
         public virtual Task<MessageResult> ShowAsync(string message, string caption = "", MessageButton button = MessageButton.OK,
           MessageImage icon = MessageImage.None)
         {
-#if XAMARIN_FORMS
-            throw new MustBeImplementedException();
-#else
             return ShowMessageBoxAsync(message, caption, button, icon);
-#endif
         }
 #endregion
     }
