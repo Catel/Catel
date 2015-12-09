@@ -45,16 +45,16 @@ namespace Catel.Services
         /// <exception cref="ArgumentException">The <paramref name="message" /> is <c>null</c> or whitespace.</exception>
         protected virtual async Task<MessageResult> ShowMessageBoxAsync(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
         {
-            var messageResult = MessageResult.Cancel;
+            if (!_configurationResultMap.ContainsKey(button))
+            {
+                throw new ArgumentOutOfRangeException("button");
+            }
+
+            var messageResult = MessageResult.None;
 
             var currentPage = Application.Current.CurrentPage();
             if (currentPage != null)
             {
-                if (!_configurationResultMap.ContainsKey(button))
-                {
-                    throw new ArgumentOutOfRangeException("button");
-                }
-
                 var configuration = _configurationResultMap[button];
 
                 var argument = MessagingCenterHelper.CreateAlertArgument(caption, message, configuration.PositiveButton, configuration.NegativeButton);
