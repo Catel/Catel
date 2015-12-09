@@ -19,7 +19,7 @@ namespace Catel.Windows.Controls
     /// <summary>
     /// The content page.
     /// </summary>
-    public class ContentPage : Xamarin.Forms.ContentPage, IView
+    public class ContentPage : global::Xamarin.Forms.ContentPage, IView
     {
         /// <summary>
         /// The view mananger.

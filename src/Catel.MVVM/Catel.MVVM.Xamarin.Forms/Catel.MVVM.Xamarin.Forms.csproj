@@ -42,8 +42,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Application.cs" />
+    <Compile Include="Xamarin.Forms\Application.cs" />
     <Compile Include="ModuleInitializer.cs" />
+    <Compile Include="Xamarin.Forms\Extensions\ApplicationExtensions.cs" />
+    <Compile Include="Xamarin.Forms\MessagingCenter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

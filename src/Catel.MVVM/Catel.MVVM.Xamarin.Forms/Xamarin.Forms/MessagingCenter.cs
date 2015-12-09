@@ -1,20 +1,18 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessagingCenterHelper.cs" company="Catel development team">
+// <copyright file="MessagingCenter.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if XAMARIN_FORMS
+using System;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using Catel.Reflection;
+using Xamarin.Forms;
 
-namespace Catel
+namespace Catel.Xamarin.Forms
 {
-    using System;
-    using System.Linq;
-    using System.Reflection;
-    using System.Threading.Tasks;
-    using Catel.Reflection;
-    using Xamarin.Forms;
-
     /// <summary>
     ///     The arguments proxy interface.
     /// </summary>
@@ -100,8 +98,17 @@ namespace Catel
     /// <summary>
     ///     The Messaging Center Helper
     /// </summary>
-    public static class MessagingCenterHelper
+    public class MessagingCenter 
     {
+        private MessagingCenter()
+        {
+            
+        }
+
+        private static MessagingCenter _current;
+
+        public static MessagingCenter Current => _current ?? (_current = new MessagingCenter());
+
         /// <summary>
         /// </summary>
         /// <param name="typeOfSender"></param>
@@ -114,7 +121,7 @@ namespace Catel
         {
             Argument.IsOfType(() => sender, typeOfSender);
 
-            var type = typeof (MessagingCenter);
+            var type = typeof (global::Xamarin.Forms.MessagingCenter);
             //// TODO: Use reflection API instead but reflection API requires some fixes.
             var methodInfo =
                 type.GetRuntimeMethods()
@@ -148,7 +155,7 @@ namespace Catel
         /// <param name="positiveButton"></param>
         /// <param name="negativeButton"></param>
         /// <returns></returns>
-        public static TaskCompletionSource<bool> SendAlert(Page sender, string caption, string message, string positiveButton, string negativeButton)
+        public TaskCompletionSource<bool> SendAlert(Page sender, string caption, string message, string positiveButton, string negativeButton)
         {
             var argument = ArgumentsProxyFactory.CreateAlertArgument(caption, message, positiveButton, negativeButton);
             SendAlert(sender, argument);
@@ -167,5 +174,3 @@ namespace Catel
         }
     }
 }
-
-#endif

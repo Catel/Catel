@@ -3,7 +3,7 @@ using Catel.IoC;
 using Catel.MVVM;
 using Xamarin.Forms;
 
-namespace Catel
+namespace Catel.Xamarin.Forms
 {
     public class Application<TViewModel> : Application where TViewModel : IViewModel
     {

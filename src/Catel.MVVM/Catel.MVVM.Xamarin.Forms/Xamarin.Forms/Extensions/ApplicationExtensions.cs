@@ -1,6 +1,8 @@
 ﻿
-#if XAMARIN_FORMS
-namespace Catel.Extensions
+
+using Xamarin.Forms;
+
+namespace Catel.Xamarin.Forms
 {
     using Xamarin.Forms;
 
@@ -12,7 +14,7 @@ namespace Catel.Extensions
         /// <summary>
         /// Gets the current page.
         /// </summary>
-        /// <param name="@this">
+        /// <param name="this">
         /// The instance.
         /// </param>
         /// <returns>
@@ -34,4 +36,3 @@ namespace Catel.Extensions
         }
     }
 }
-#endif

@@ -15,10 +15,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Designer\Attributes\DesignTimeCodeAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Designer\DesignTimeInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Designer\Helpers\DesignTimeHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ApplicationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\INotifyPropertyChangedExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\MessagingCenterHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ThemeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVMModule.cs" />
