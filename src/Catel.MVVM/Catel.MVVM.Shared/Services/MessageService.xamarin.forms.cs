@@ -57,8 +57,8 @@ namespace Catel.Services
 
                 var configuration = _configurationResultMap[button];
 
-                var argument = new AlertArgumentProxy(caption, message, configuration.PositiveButton, configuration.NegativeButton);
-                MessagingCenterHelper.Send(typeof(Page), currentPage, "Xamarin.SendAlert", argument.InternalType, argument.Object);
+                var argument = MessagingCenterHelper.CreateAlertArgument(caption, message, configuration.PositiveButton, configuration.NegativeButton);
+                MessagingCenterHelper.SendAlert(currentPage, argument);
 
                 await argument.Result.Task;
 
@@ -66,46 +66,6 @@ namespace Catel.Services
             }
 
             return messageResult;
-        }
-
-        /// <summary>
-        /// The alert argument proxy.
-        /// </summary>
-        private sealed class AlertArgumentProxy
-        {
-            private readonly PropertyInfo _propertyInfo;
-
-            /// <summary>
-            ///     Initializes a new instance of the <see cref="AlertArgumentProxy" /> class.
-            /// </summary>
-            /// <param name="caption">The caption</param>
-            /// <param name="message">The message</param>
-            /// <param name="positiveButton">The positive button text</param>
-            /// <param name="negativeButton">The negative button text</param>
-            public AlertArgumentProxy(string caption, string message, string positiveButton, string negativeButton)
-            {
-                var assembly = typeof (Application).GetAssemblyEx();
-                InternalType = assembly.GetType("Xamarin.Forms.AlertArguments");
-
-                _propertyInfo = InternalType.GetPropertyEx("Result");
-                var constructor = InternalType.GetConstructorsEx()[0];
-                Object = constructor.Invoke(new object[] {caption, message, positiveButton, negativeButton});
-            }
-
-            /// <summary>
-            /// 
-            /// </summary>
-            public object Object { get; }
-
-            /// <summary>
-            /// 
-            /// </summary>
-            public Type InternalType { get; }
-
-            /// <summary>
-            /// 
-            /// </summary>
-            public TaskCompletionSource<bool> Result => (TaskCompletionSource<bool>) _propertyInfo.GetValue(Object);
         }
 
         /// <summary>
