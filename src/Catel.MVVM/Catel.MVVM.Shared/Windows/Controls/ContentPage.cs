@@ -4,9 +4,15 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.MVVM.Views
+
+#if XAMARIN_FORMS
+
+namespace Catel.Windows.Controls
 {
     using IoC;
+
+    using MVVM;
+    using MVVM.Views;
 
     using System;
 
@@ -134,3 +140,5 @@ namespace Catel.MVVM.Views
         }
     }
 }
+
+#endif
