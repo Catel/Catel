@@ -4,6 +4,9 @@
 // </copyright>>
 // --------------------------------------------------------------------------------------------------------------------
 
+
+using Xamarin.Forms;
+
 #if XAMARIN_FORMS
 
 namespace Catel.Services
@@ -12,7 +15,11 @@ namespace Catel.Services
     using System.Collections.Generic;
     using Catel.IoC;
     using Catel.MVVM;
+    using Catel.MVVM.Views;
+
     using Catel.Reflection;
+
+    using Xamarin.Forms;
 
     /// <summary>
     /// Service to navigate inside applications.
@@ -24,10 +31,7 @@ namespace Catel.Services
         /// Gets the can go back.
         /// </summary>
         /// <value>The can go back.</value>
-        public override bool CanGoBack
-        {
-            get { throw new MustBeImplementedException(); }
-        }
+        public override bool CanGoBack => this.GetBackStackCount() > 0;
 
         /// <summary>
         /// Gets the can go forward.
@@ -35,7 +39,10 @@ namespace Catel.Services
         /// <value>The can go forward.</value>
         public override bool CanGoForward
         {
-            get { throw new MustBeImplementedException(); }
+            get
+            {
+                throw new MustBeImplementedException();
+            }
         }
 #endregion
 
@@ -60,7 +67,14 @@ namespace Catel.Services
         /// <returns>System.Int32.</returns>
         public override int GetBackStackCount()
         {
-            throw new MustBeImplementedException();
+            var backStackCount = 0;
+            var currentPage = Application.Current.CurrentPage();
+            if (currentPage != null)
+            {
+                backStackCount = currentPage.Navigation.ModalStack.Count - 1;
+            }
+
+            return backStackCount;
         }
 
         /// <summary>
@@ -68,7 +82,7 @@ namespace Catel.Services
         /// </summary>
         public override void RemoveBackEntry()
         {
-            //throw new MustBeImplementedException();
+            throw new MustBeImplementedException();
         }
 
         /// <summary>
@@ -81,7 +95,6 @@ namespace Catel.Services
 
         partial void Initialize()
         {
-            throw new MustBeImplementedException();
         }
 
         partial void CloseMainWindow()
@@ -89,9 +102,13 @@ namespace Catel.Services
             throw new MustBeImplementedException();
         }
 
-        partial void NavigateBack()
+        async partial void NavigateBack()
         {
-            throw new MustBeImplementedException();
+            var currentPage = Application.Current.CurrentPage();
+            if (currentPage != null)
+            {
+                await currentPage.Navigation.PopModalAsync();
+            }
         }
 
         partial void NavigateForward()
@@ -99,9 +116,21 @@ namespace Catel.Services
             throw new MustBeImplementedException();
         }
 
-        partial void NavigateWithParameters(string uri, Dictionary<string, object> parameters)
+        async partial void NavigateWithParameters(string uri, Dictionary<string, object> parameters)
         {
-            throw new MustBeImplementedException();
+            var viewType = Type.GetType(uri);
+            var viewModelLocator = this.GetDependencyResolver().Resolve<IViewModelLocator>();
+            var viewModelType = viewModelLocator.ResolveViewModel(viewType);
+            var typeFactory = this.GetDependencyResolver().Resolve<ITypeFactory>();
+            var view = (Page)typeFactory.CreateInstance(viewType);
+            var viewModelFactory = this.GetDependencyResolver().Resolve<IViewModelFactory>();
+            var viewModel = viewModelFactory.CreateViewModel(viewModelType, null);
+            view.BindingContext = viewModel;
+            var currentPage = Application.Current.CurrentPage();
+            if (currentPage != null)
+            {
+                await currentPage.Navigation.PushModalAsync(view);
+            }
         }
 
         partial void NavigateToUri(Uri uri)
