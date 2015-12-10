@@ -33,14 +33,16 @@ namespace Catel.Services
         /// </summary>
         public LanguageService()
         {
-            _languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Resources"));
-            _languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Exceptions"));
+            // Note: we don't have resources in Catel.Core at the moment
+            //_languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Resources"));
+            //_languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Exceptions"));
 
             _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Resources"));
             _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Exceptions"));
 
-            _languageSources.Add(new LanguageResourceSource("Catel.Extensions.Controls", "Catel.Properties", "Resources"));
-            _languageSources.Add(new LanguageResourceSource("Catel.Extensions.Controls", "Catel.Properties", "Exceptions"));
+            // Note: we don't have resources in Catel.Extensions.Controls at the moment
+            //_languageSources.Add(new LanguageResourceSource("Catel.Extensions.Controls", "Catel.Properties", "Resources"));
+            //_languageSources.Add(new LanguageResourceSource("Catel.Extensions.Controls", "Catel.Properties", "Exceptions"));
 
             FallbackCulture = CultureInfo.CurrentUICulture;
             PreferredCulture = CultureInfo.CurrentUICulture;

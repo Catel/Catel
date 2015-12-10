@@ -56,6 +56,7 @@ Added/fixed:
 (*) CTL-792 Improve property editing performance
 (*) CTL-794 Allow application-wide commands to be executed when child windows have a focus
 (x) CTL-791 Types with the same FullName from different assemblies will cause issues with the TypeFactory cache
+(x) CTL-798 Prevent MissingResourceException when resolving strings for Catel.Core
 
 Roadmap:
 ========
