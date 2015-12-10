@@ -26,6 +26,20 @@ namespace Catel.Test.MVVM
 
                 Assert.AreEqual(expectedValue, ((ICatelCommand)compositeCommand).CanExecute(null));
             }
+
+            [TestCase(false, true)]
+            [TestCase(true, false)]
+            public void PreventsExecutionOfPartiallyExecutableCommand(bool checkCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand, bool expectedValue)
+            {
+                var compositeCommand = new CompositeCommand();
+
+                compositeCommand.RegisterCommand(new Command(() => { }, () => false));
+                compositeCommand.RegisterCommand(new Command(() => { }, () => true));
+
+                compositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand = checkCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand;
+
+                Assert.AreEqual(expectedValue, ((ICatelCommand)compositeCommand).CanExecute(null));
+            }
         }
 
         [TestFixture]
@@ -43,7 +57,7 @@ namespace Catel.Test.MVVM
             public void RegistersCommandForExecution()
             {
                 var vm = new CompositeCommandViewModel();
-                var compositeCommand = new CompositeCommand(); 
+                var compositeCommand = new CompositeCommand();
 
                 compositeCommand.RegisterCommand(vm.TestCommand1, vm);
 
@@ -68,7 +82,7 @@ namespace Catel.Test.MVVM
             public void UnregistersCommandForExecution()
             {
                 var vm = new CompositeCommandViewModel();
-                var compositeCommand = new CompositeCommand(); 
+                var compositeCommand = new CompositeCommand();
 
                 compositeCommand.RegisterCommand(vm.TestCommand1, vm);
                 compositeCommand.RegisterCommand(vm.TestCommand2, vm);

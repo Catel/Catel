@@ -141,6 +141,23 @@ namespace Catel.MVVM
         {
             lock (_lock)
             {
+                if (!AllowPartialExecution)
+                {
+                    var commands = (from commandInfo in _commandInfo
+                                    select commandInfo.Command).ToList();
+
+                    foreach (var command in commands)
+                    {
+                        if (command != null)
+                        {
+                            if (!command.CanExecute(parameter))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+
                 if (AtLeastOneMustBeExecutable)
                 {
                     if (_actions.Count > 0 || _actionsWithParameter.Count > 0)
@@ -163,25 +180,6 @@ namespace Catel.MVVM
                     }
 
                     return false;
-                }
-
-                if (!AllowPartialExecution)
-                {
-                    var commands = (from commandInfo in _commandInfo
-                                    select commandInfo.Command).ToList();
-
-                    foreach (var command in commands)
-                    {
-                        if (command != null)
-                        {
-                            if (!command.CanExecute(parameter))
-                            {
-                                return false;
-                            }
-                        }
-                    }
-
-                    return true;
                 }
 
                 return true;
