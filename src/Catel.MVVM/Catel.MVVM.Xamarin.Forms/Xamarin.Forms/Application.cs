@@ -1,26 +1,40 @@
-﻿using System;
-using Catel.IoC;
-using Catel.MVVM;
-using Xamarin.Forms;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MessagingCenter.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Catel.Xamarin.Forms
 {
-    public class Application<TViewModel> : Application where TViewModel : IViewModel
+    using System;
+    using Catel.IoC;
+    using Catel.MVVM;
+    using Forms;
+    using Page = global::Xamarin.Forms.Page;
+    using Application = global::Xamarin.Forms.Application;
+
+    public class Application<TViewModel> : Application 
+        where TViewModel : IViewModel
     {
         protected Application()
         {
+            var serviceLocator = ServiceLocator.Default;
+
             // TODO: ModuleInit should work instead this.
-            Core.ModuleInitializer.Initialize();
-            ModuleInitializer.Initialize();
+            var coreModule = new CoreModule();
+            coreModule.Initialize(serviceLocator);
+
+            var mvvmModule = new MVVMModule();
+            mvvmModule.Initialize(serviceLocator);
 
             // TODO: Improve this approach.
-            var viewLocator = this.GetDependencyResolver().Resolve<IViewLocator>();
-            var viewModelFactory = this.GetDependencyResolver().Resolve<IViewModelFactory>();
-            var resolveView = viewLocator.ResolveView(typeof(TViewModel));
-            ApplicationPage = (Page)Activator.CreateInstance(resolveView);
+            var viewLocator = serviceLocator.ResolveType<IViewLocator>();
+            var viewModelFactory = serviceLocator.ResolveType<IViewModelFactory>();
+            var resolveView = viewLocator.ResolveView(typeof (TViewModel));
+            ApplicationPage = (Page) Activator.CreateInstance(resolveView);
             ApplicationPage.BindingContext = viewModelFactory.CreateViewModel<TViewModel>(null);
         }
 
-        protected Page ApplicationPage { get; private set; }
+        protected Page ApplicationPage { get; }
     }
 }

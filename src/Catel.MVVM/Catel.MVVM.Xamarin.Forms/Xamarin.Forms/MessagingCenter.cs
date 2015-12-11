@@ -4,15 +4,16 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Catel.Reflection;
-using Xamarin.Forms;
-
 namespace Catel.Xamarin.Forms
 {
+    using System;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading.Tasks;
+    using Catel.Reflection;
+    using Application = global::Xamarin.Forms.Application;
+    using Page = global::Xamarin.Forms.Page;
+
     /// <summary>
     ///     The arguments proxy interface.
     /// </summary>
@@ -69,19 +70,19 @@ namespace Catel.Xamarin.Forms
             /// <param name="negativeButton">The negative button text</param>
             public AlertArgumentsProxy(string caption, string message, string positiveButton, string negativeButton)
             {
-                var assembly = typeof (Application).GetAssemblyEx();
+                var assembly = typeof(Application).GetAssemblyEx();
                 InternalType = assembly.GetType("Xamarin.Forms.AlertArguments");
 
                 _propertyInfo = InternalType.GetPropertyEx("Result");
                 var constructor = InternalType.GetConstructorsEx()[0];
-                Object = constructor.Invoke(new object[] {caption, message, positiveButton, negativeButton});
+                Object = constructor.Invoke(new object[] { caption, message, positiveButton, negativeButton });
             }
 
 
             /// <summary>
             ///     The task completion source.
             /// </summary>
-            public TaskCompletionSource<bool> Result => (TaskCompletionSource<bool>) _propertyInfo.GetValue(Object);
+            public TaskCompletionSource<bool> Result => (TaskCompletionSource<bool>)_propertyInfo.GetValue(Object);
 
             /// <summary>
             ///     The object.
@@ -98,11 +99,11 @@ namespace Catel.Xamarin.Forms
     /// <summary>
     ///     The Messaging Center Helper
     /// </summary>
-    public class MessagingCenter 
+    public class MessagingCenter
     {
         private MessagingCenter()
         {
-            
+
         }
 
         private static MessagingCenter _current;
@@ -121,7 +122,7 @@ namespace Catel.Xamarin.Forms
         {
             Argument.IsOfType(() => sender, typeOfSender);
 
-            var type = typeof (global::Xamarin.Forms.MessagingCenter);
+            var type = typeof(global::Xamarin.Forms.MessagingCenter);
             //// TODO: Use reflection API instead but reflection API requires some fixes.
             var methodInfo =
                 type.GetRuntimeMethods()
@@ -129,8 +130,8 @@ namespace Catel.Xamarin.Forms
                         info =>
                             info.Name == "Send" && info.GetGenericArguments().Length == 2 &&
                             info.GetParameters().Length == 3);
-            var makeGenericMethod = methodInfo.MakeGenericMethod(typeof (Page), argumentsProxy.InternalType);
-            makeGenericMethod.Invoke(type, new[] {sender, message, argumentsProxy.Object});
+            var makeGenericMethod = methodInfo.MakeGenericMethod(typeof(Page), argumentsProxy.InternalType);
+            makeGenericMethod.Invoke(type, new[] { sender, message, argumentsProxy.Object });
 
             return argumentsProxy.Result;
         }

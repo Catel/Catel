@@ -4,9 +4,6 @@
 // </copyright>>
 // --------------------------------------------------------------------------------------------------------------------
 
-
-using Xamarin.Forms;
-
 #if XAMARIN_FORMS
 
 namespace Catel.Services
@@ -15,18 +12,16 @@ namespace Catel.Services
     using System.Collections.Generic;
     using Catel.IoC;
     using Catel.MVVM;
-    using Catel.MVVM.Views;
 
-    using Catel.Reflection;
-
-    using Xamarin.Forms;
+    using Application = global::Xamarin.Forms.Application;
+    using Page = global::Xamarin.Forms.Page;
 
     /// <summary>
     /// Service to navigate inside applications.
     /// </summary>
     public partial class NavigationService
     {
-#region Properties
+        #region Properties
         /// <summary>
         /// Gets the can go back.
         /// </summary>
@@ -44,9 +39,9 @@ namespace Catel.Services
                 throw new MustBeImplementedException();
             }
         }
-#endregion
+        #endregion
 
-#region Methods
+        #region Methods
         /// <summary>
         /// Resolves the navigation target.
         /// </summary>
@@ -137,7 +132,7 @@ namespace Catel.Services
         {
             throw new MustBeImplementedException();
         }
-#endregion
+        #endregion
     }
 }
 
