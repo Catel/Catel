@@ -5,8 +5,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-#if XAMARIN_FORMS
-
 namespace Catel.Windows.Controls
 {
     using IoC;
@@ -29,7 +27,7 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="ContentPage"/> class.
         /// </summary>
-        protected ContentPage()
+        public ContentPage()
         {
             _viewManager = this.GetDependencyResolver().Resolve<IViewManager>();
 
@@ -56,7 +54,6 @@ namespace Catel.Windows.Controls
         public object DataContext
         {
             get { return BindingContext; }
-
             set { BindingContext = value; }
         }
 
@@ -77,6 +74,11 @@ namespace Catel.Windows.Controls
         /// Occurs when the view is unloaded.
         /// </summary>
         public event EventHandler<EventArgs> Unloaded;
+
+        /// <summary>
+        /// Occurs when the back button is pressed.
+        /// </summary>
+        public event EventHandler<EventArgs> BackButtonPressed;
 
         /// <summary>
         /// Occurs when the data context has changed.
@@ -112,33 +114,30 @@ namespace Catel.Windows.Controls
         /// </remarks>
         protected override sealed bool OnBackButtonPressed()
         {
-            if (ViewModel != null)
-            {
-                return ViewModel.CancelAndCloseViewModelAsync().Result || base.OnBackButtonPressed();
-            }
-
+            BackButtonPressed.SafeInvoke(this);
+            //// TODO: Review how if we must call Cancel method on view model here.
             return base.OnBackButtonPressed();
         }
 
         /// <summary>
+        ///     Occurs when the data context has changed.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="dataContextChangedEventArgs"></param>
-        private void OnDataContextChanged(object sender, DataContextChangedEventArgs dataContextChangedEventArgs)
+        /// <param name="sender">The sender</param>
+        /// <param name="eventArgs">The data context changed event args.</param>
+        private void OnDataContextChanged(object sender, DataContextChangedEventArgs eventArgs)
         {
             _viewManager.RegisterView(this);
             ViewModelChanged.SafeInvoke(this);
         }
 
         /// <summary>
+        ///     Occurs when the binding context has changed.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="eventArgs"></param>
+        /// <param name="sender">The sender</param>
+        /// <param name="eventArgs">The binding contextchanged event args.</param>
         private void OnBindingContextChanged(object sender, EventArgs eventArgs)
         {
             DataContextChanged.SafeInvoke(this, new DataContextChangedEventArgs(null, BindingContext));
         }
     }
 }
-
-#endif

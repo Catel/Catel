@@ -335,7 +335,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\ViewModelWrapperService.ios.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ViewModelWrapperService.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ViewModelWrapperServiceBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\ContentPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\InfoBarMessageControl\InfoBarMessageControl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\InfoBarMessageControl\InfoBarMessageControlVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\Page.cs" />
