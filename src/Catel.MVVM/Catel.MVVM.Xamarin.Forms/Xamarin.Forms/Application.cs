@@ -13,8 +13,13 @@ namespace Catel.Xamarin.Forms
     using Page = global::Xamarin.Forms.Page;
     using Application = global::Xamarin.Forms.Application;
 
-    public class Application<TViewModel> : Application 
-        where TViewModel : IViewModel
+    /// <summary>
+    /// The application base class.
+    /// </summary>
+    /// <typeparam name="TMainPage">
+    /// The main page type.
+    /// </typeparam>
+    public class Application<TMainPage> : Application where TMainPage : Page
     {
         protected Application()
         {
@@ -28,13 +33,50 @@ namespace Catel.Xamarin.Forms
             mvvmModule.Initialize(serviceLocator);
 
             // TODO: Improve this approach.
-            var viewLocator = serviceLocator.ResolveType<IViewLocator>();
+            var viewModelLocator = serviceLocator.ResolveType<IViewModelLocator>();
             var viewModelFactory = serviceLocator.ResolveType<IViewModelFactory>();
-            var resolveView = viewLocator.ResolveView(typeof (TViewModel));
-            ApplicationPage = (Page) Activator.CreateInstance(resolveView);
-            ApplicationPage.BindingContext = viewModelFactory.CreateViewModel<TViewModel>(null);
+            var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+            var viewModelType= viewModelLocator.ResolveViewModel(typeof(TMainPage));
+            var mainPage = typeFactory.CreateInstance<TMainPage>(); ;
+            mainPage.BindingContext = viewModelFactory.CreateViewModel(viewModelType, null);
+            Initialize(mainPage);
+        }
+        
+        /// <summary>
+        /// Initialize the main page. 
+        /// </summary>
+        /// <param name="mainPage"></param>
+        private void Initialize(TMainPage mainPage)
+        {
+            this.MainPage = CustomizeMainPage(mainPage);
         }
 
-        protected Page ApplicationPage { get; }
+        /// <summary>
+        /// Allow developers customize the application page.
+        /// </summary>
+        /// <param name="currentMainPage"></param>
+        /// <returns>The application page</returns>
+        /// <remarks>If customization is <c>null</c> the <paramref name="currentMainPage"/> will be set as MainPage.</remarks>
+        private Page CustomizeMainPage(TMainPage currentMainPage)
+        {
+            return OnCustomizeMainPage(currentMainPage) ?? currentMainPage;
+        }
+
+        /// <summary>
+        /// Allow developers customize the application page.
+        /// </summary>
+        /// <param name="currentMainPage">
+        /// The current main page.
+        /// </param>
+        /// <returns>
+        /// The customized main page
+        /// </returns>
+        /// <example>
+        /// return new Navigation(currentMainPage);
+        /// </example>
+        protected virtual Page OnCustomizeMainPage(TMainPage currentMainPage)
+        {
+            return null;
+        }
     }
 }
