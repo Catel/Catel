@@ -87,7 +87,7 @@ namespace Catel.Windows.Markup
         /// Provides the dynamic value.
         /// </summary>
         /// <returns>System.Object.</returns>
-        protected override object ProvideDynamicValue()
+        protected override object ProvideDynamicValue(IServiceProvider serviceProvider)
         {
             if (_commandManager == null)
             {
