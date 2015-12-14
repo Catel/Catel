@@ -7,6 +7,7 @@
 namespace Catel.Windows
 {
     using System;
+    using System.Threading.Tasks;
     using System.Windows.Input;
     using MVVM;
 
@@ -22,8 +23,32 @@ namespace Catel.Windows
         /// <param name="text">The text.</param>
         /// <param name="execute">The execute delegate.</param>
         /// <param name="canExecute">The can execute delegate.</param>
+        public static DataWindowButton FromSync(string text, Action execute, Func<bool> canExecute = null)
+        {
+            return new DataWindowButton(text, new Command(execute, canExecute));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataWindowButton"/> class.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="executeAsync">The async execute delegate.</param>
+        /// <param name="canExecute">The can execute delegate.</param>
+        public static DataWindowButton FromAsync(string text, Func<Task> executeAsync, Func<bool> canExecute = null)
+        {
+            return new DataWindowButton(text, new TaskCommand(executeAsync, canExecute));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataWindowButton"/> class.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="execute">The execute delegate.</param>
+        /// <param name="canExecute">The can execute delegate.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "DataWindowButton.FromSync", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public DataWindowButton(string text, Action execute, Func<bool> canExecute = null)
-            : this(text, new Command(execute, canExecute)) { }
+            : this(text, new Command(execute, canExecute))
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataWindowButton"/> class.
@@ -77,7 +102,7 @@ namespace Catel.Windows
         /// Gets or sets a value indicating whether this button is the default button.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this button is the default button; otherwise, <c>false</c>.
+        /// <c>true</c> if this button is the default button; otherwise, <c>false</c>.
         /// </value>
         public bool IsDefault { get; set; }
 
@@ -85,7 +110,7 @@ namespace Catel.Windows
         /// Gets or sets a value indicating whether this button is the cancel button.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this button is the cancel button; otherwise, <c>false</c>.
+        /// <c>true</c> if this button is the cancel button; otherwise, <c>false</c>.
         /// </value>
         public bool IsCancel { get; set; }
         #endregion

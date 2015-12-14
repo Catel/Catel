@@ -463,12 +463,26 @@ namespace Catel.Windows
         /// <summary>
         /// Executes the OK command.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "ExecuteCancelAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected void ExecuteOk()
         {
             if (OnOkCanExecute())
             {
                 OnOkExecute();
             }
+        }
+
+        /// <summary>
+        /// Executes the OK command.
+        /// </summary>
+        protected Task ExecuteOkAsync()
+        {
+            if (OnOkCanExecute())
+            {
+                return OnOkExecuteAsync();
+            }
+
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -483,7 +497,16 @@ namespace Catel.Windows
         /// <summary>
         /// Handled when the user invokes the OK command.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "OnCancelExecuteAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected async void OnOkExecute()
+        {
+            await OnOkExecuteAsync();
+        }
+
+        /// <summary>
+        /// Handled when the user invokes the OK command.
+        /// </summary>
+        protected async Task OnOkExecuteAsync()
         {
             if (!await ApplyChangesAsync())
             {
@@ -497,7 +520,7 @@ namespace Catel.Windows
         /// <summary>
         /// Executes the Cancel command.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnApplyExcuteAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "ExecuteCancelAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected void ExecuteCancel()
         {
             ExecuteCancelAsync();
@@ -528,7 +551,7 @@ namespace Catel.Windows
         /// <summary>
         /// Handled when the user invokes the Cancel command.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnApplyExcuteAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "OnCancelExecuteAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected async void OnCancelExecute()
         {
             await OnCancelExecuteAsync();
@@ -585,16 +608,25 @@ namespace Catel.Windows
         /// <summary>
         /// Handled when the user invokes the Apply command.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnApplyExcuteAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "OnApplyExecuteAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected async void OnApplyExcute()
         {
-            await OnApplyExcuteAsync();
+            await OnApplyExecuteAsync();
         }
 
         /// <summary>
         /// Handled when the user invokes the Apply command.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "OnApplyExecuteAsync (small typo)", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected async Task OnApplyExcuteAsync()
+        {
+            await ApplyChangesAsync();
+        }
+
+        /// <summary>
+        /// Handled when the user invokes the Apply command.
+        /// </summary>
+        protected async Task OnApplyExecuteAsync()
         {
             await ApplyChangesAsync();
         }
@@ -907,25 +939,25 @@ namespace Catel.Windows
 
             if (IsOKButtonAvailable)
             {
-                var button = new DataWindowButton(languageService.GetString("OK"), OnOkExecute, OnOkCanExecute);
+                var button = DataWindowButton.FromAsync(languageService.GetString("OK"), OnOkExecuteAsync, OnOkCanExecute);
                 button.IsDefault = (DefaultButton == DataWindowDefaultButton.OK);
                 _buttons.Add(button);
             }
             if (IsCancelButtonAvailable)
             {
-                var button = new DataWindowButton(languageService.GetString("Cancel"), OnCancelExecute, OnCancelCanExecute);
+                var button = DataWindowButton.FromAsync(languageService.GetString("Cancel"), OnCancelExecuteAsync, OnCancelCanExecute);
                 button.IsCancel = true;
                 _buttons.Add(button);
             }
             if (IsApplyButtonAvailable)
             {
-                var button = new DataWindowButton(languageService.GetString("Apply"), OnApplyExcute, OnApplyCanExecute);
+                var button = DataWindowButton.FromAsync(languageService.GetString("Apply"), OnApplyExecuteAsync, OnApplyCanExecute);
                 button.IsDefault = (DefaultButton == DataWindowDefaultButton.Apply);
                 _buttons.Add(button);
             }
             if (IsCloseButtonAvailable)
             {
-                var button = new DataWindowButton(languageService.GetString("Close"), OnCloseExecute, OnCloseCanExecute);
+                var button = DataWindowButton.FromSync(languageService.GetString("Close"), OnCloseExecute, OnCloseCanExecute);
                 button.IsDefault = (DefaultButton == DataWindowDefaultButton.Close);
                 _buttons.Add(button);
             }
