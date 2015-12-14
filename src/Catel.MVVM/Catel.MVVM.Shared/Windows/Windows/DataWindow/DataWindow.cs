@@ -897,7 +897,8 @@ namespace Catel.Windows
                 return;
             }
 
-            if (!WrapControlHelper.CanBeWrapped(newContent as FrameworkElement) || _isWrapped)
+            var newContentAsFrameworkElement = newContent as FrameworkElement;
+            if (_isWrapped || !WrapControlHelper.CanBeWrapped(newContentAsFrameworkElement))
             {
                 return;
             }
@@ -929,7 +930,7 @@ namespace Catel.Windows
                 _buttons.Add(button);
             }
 
-            foreach (DataWindowButton button in _buttons)
+            foreach (var button in _buttons)
             {
                 _commands.Add(button.Command);
             }
@@ -951,7 +952,7 @@ namespace Catel.Windows
 
             _isWrapped = true;
 
-            var contentGrid = WrapControlHelper.Wrap((FrameworkElement)newContent, wrapOptions, _buttons.ToArray(), this);
+            var contentGrid = WrapControlHelper.Wrap(newContentAsFrameworkElement, wrapOptions, _buttons.ToArray(), this);
 
             var internalGrid = contentGrid.FindVisualDescendant(obj => (obj is FrameworkElement) && string.Equals(((FrameworkElement)obj).Name, WrapControlHelper.InternalGridName)) as Grid;
             if (internalGrid != null)
@@ -961,7 +962,7 @@ namespace Catel.Windows
 #else
                 internalGrid.SetResourceReference(StyleProperty, "WindowGridStyle");
 
-                ((UIElement)newContent).FocusFirstControl();
+                newContentAsFrameworkElement.FocusFirstControl();
 #endif
 
                 _defaultOkCommand = (from button in _buttons
