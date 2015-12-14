@@ -50,10 +50,14 @@ we will remove the features in the next major release.
 
 Added/fixed:
 ============
+(*) CTL-785 Support expressions in validation result static members so you can now write
+    FieldValidationResult.CreateWarning(() => MyProperty, "This field is required");
 (*) CTL-789 Improve property handling in the context of RegisterProperties
 (*) CTL-792 Improve property editing performance
 (*) CTL-794 Allow application-wide commands to be executed when child windows have a focus
 (x) CTL-791 Types with the same FullName from different assemblies will cause issues with the TypeFactory cache
+(x) CTL-793 CompositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand not respected
+(x) CTL-798 Prevent MissingResourceException when resolving strings for Catel.Core
 
 Roadmap:
 ========
