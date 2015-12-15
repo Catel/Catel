@@ -4,7 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Catel.MVVM.Views;
 
 #if NET || SL5
 
@@ -15,6 +14,8 @@ namespace Catel.Services
     using IoC;
     using MVVM;
     using MVVM.Properties;
+    using MVVM.Views;
+    using Threading;
 
     /// <summary>
     /// Extension methods for the <see cref="IUIVisualizerService"/>.
@@ -128,37 +129,6 @@ namespace Catel.Services
         }
 
         /// <summary>
-        /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
-        /// </summary>
-        /// <param name="uiVisualizerService">The UI visualizer service.</param>
-        /// <param name="viewModelType">Type of the view model.</param>
-        /// <param name="completedProc">The completed proc. Not applicable if window already exists.</param>
-        /// <returns><c>true</c> if shown or activated successfully, <c>false</c> otherwise.</returns>
-        public static bool? Show(this IUIVisualizerService uiVisualizerService, Type viewModelType, EventHandler<UICompletedEventArgs> completedProc = null) {
-            Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
-
-            string fullName = viewModelType.FullName;
-            var viewModelManager = uiVisualizerService.GetServiceLocator().ResolveType<IViewModelManager>();
-            var viewModel = viewModelManager.GetFirstOrDefaultInstance(viewModelType);
-            if (viewModel == null) {
-                return uiVisualizerService.Show(fullName, (object)viewModelType, completedProc);
-            }
-
-            var viewLocator = uiVisualizerService.GetDependencyResolver().Resolve<IViewLocator>();
-            var viewType = viewLocator.ResolveView(viewModel.GetType());
-            var viewManager = uiVisualizerService.GetServiceLocator().ResolveType<IViewManager>();
-            var view = viewManager.GetFirstOrDefaultInstance(viewType);
-            if (view == null) {
-                return uiVisualizerService.Show(fullName, (object)viewModelType, completedProc);            
-            }
-            var window = view as System.Windows.Window;
-            if (window == null) {
-                return false;
-            }
-            return window.Activate();
-        }
-
-        /// <summary>
         /// Shows the window in non-modal state and creates the view model automatically using the specified model.
         /// </summary>
         /// <typeparam name="TViewModel">The type of the view model.</typeparam>
@@ -220,6 +190,79 @@ namespace Catel.Services
             var dependencyResolver = uiVisualizerService.GetDependencyResolver();
             var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
             return viewModelFactory;
+        }
+
+        /// <summary>
+        /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
+        /// </summary>
+        /// <param name="uiVisualizerService">The UI visualizer service.</param>
+        /// <param name="viewModelType">Type of the view model.</param>
+        /// <param name="completedProc">The completed proc. Not applicable if window already exists.</param>
+        /// <returns><c>true</c> if shown or activated successfully, <c>false</c> otherwise.</returns>
+        public static bool? ShowOrActivate(this IUIVisualizerService uiVisualizerService, Type viewModelType, EventHandler<UICompletedEventArgs> completedProc = null) 
+        {
+            Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
+
+            string fullName = viewModelType.FullName;
+            var viewModelManager = uiVisualizerService.GetServiceLocator().ResolveType<IViewModelManager>();
+            var viewModel = viewModelManager.GetFirstOrDefaultInstance(viewModelType);
+            if (viewModel == null)
+            {
+                return uiVisualizerService.Show(fullName, null, completedProc);
+            }
+
+            var viewLocator = uiVisualizerService.GetDependencyResolver().Resolve<IViewLocator>();
+            var viewType = viewLocator.ResolveView(viewModel.GetType());
+            var viewManager = uiVisualizerService.GetServiceLocator().ResolveType<IViewManager>();
+            var view = viewManager.GetFirstOrDefaultInstance(viewType);
+            if (view == null)
+            {
+                return uiVisualizerService.Show(fullName, null, completedProc);            
+            }
+
+            var window = view as System.Windows.Window;
+            if (window == null)
+            {
+                return false;
+            }
+            return window.Activate();
+        }
+
+        /// <summary>
+        /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
+        /// </summary>
+        /// <param name="uiVisualizerService">The UI visualizer service.</param>
+        /// <param name="viewModelType">Type of the view model.</param>
+        /// <param name="completedProc">The completed proc. Not applicable if window already exists.</param>
+        /// <returns><c>true</c> if shown or activated successfully, <c>false</c> otherwise.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
+        public static Task<bool?> ShowOrActivateAsync(this IUIVisualizerService uiVisualizerService, Type viewModelType, EventHandler<UICompletedEventArgs> completedProc = null)        
+        {
+            Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
+
+            string fullName = viewModelType.FullName;
+            var viewModelManager = uiVisualizerService.GetServiceLocator().ResolveType<IViewModelManager>();
+            var viewModel = viewModelManager.GetFirstOrDefaultInstance(viewModelType);
+            if (viewModel == null)
+            {
+                return uiVisualizerService.ShowAsync(fullName, null, completedProc);
+            }
+
+            var viewLocator = uiVisualizerService.GetDependencyResolver().Resolve<IViewLocator>();
+            var viewType = viewLocator.ResolveView(viewModel.GetType());
+            var viewManager = uiVisualizerService.GetServiceLocator().ResolveType<IViewManager>();
+            var view = viewManager.GetFirstOrDefaultInstance(viewType);
+            if (view == null)
+            {
+                return uiVisualizerService.ShowAsync(fullName, null, completedProc);            
+            }
+
+            var window = view as System.Windows.Window;
+            if (window == null)
+            {
+                return new Task<bool?>(() => false);
+            }
+            return TaskHelper.Run(() => (bool?)window.Activate(), true);
         }
     }
 }
