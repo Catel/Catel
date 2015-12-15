@@ -192,23 +192,25 @@ namespace Catel.Services
             return viewModelFactory;
         }
 
-        /// <summary>
-        /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
-        /// </summary>
-        /// <param name="uiVisualizerService">The UI visualizer service.</param>
-        /// <param name="viewModelType">Type of the view model.</param>
-        /// <param name="completedProc">The completed proc. Not applicable if window already exists.</param>
-        /// <returns><c>true</c> if shown or activated successfully, <c>false</c> otherwise.</returns>
-        public static bool? ShowOrActivate(this IUIVisualizerService uiVisualizerService, Type viewModelType, EventHandler<UICompletedEventArgs> completedProc = null) 
+      /// <summary>
+      /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
+      /// </summary>
+      /// <param name="uiVisualizerService">The UI visualizer service.</param>
+      /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+      /// <param name="model">The model to be injected into the view model, can be <c>null</c>.</param>
+      /// <param name="completedProc">The completed proc. Not applicable if window already exists.</param>
+      /// <returns><c>true</c> if shown or activated successfully, <c>false</c> otherwise.</returns>
+      public static bool? ShowOrActivate<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null) 
         {
             Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
 
-            string fullName = viewModelType.FullName;
             var viewModelManager = uiVisualizerService.GetServiceLocator().ResolveType<IViewModelManager>();
-            var viewModel = viewModelManager.GetFirstOrDefaultInstance(viewModelType);
+            var viewModel = viewModelManager.GetFirstOrDefaultInstance(typeof(TViewModel));
             if (viewModel == null)
             {
-                return uiVisualizerService.Show(fullName, null, completedProc);
+                var viewModelFactory = GetViewModelFactory(uiVisualizerService);
+                var vm = viewModelFactory.CreateViewModel(typeof(TViewModel), model);
+                return uiVisualizerService.Show(vm, completedProc);
             }
 
             var viewLocator = uiVisualizerService.GetDependencyResolver().Resolve<IViewLocator>();
@@ -217,7 +219,7 @@ namespace Catel.Services
             var view = viewManager.GetFirstOrDefaultInstance(viewType);
             if (view == null)
             {
-                return uiVisualizerService.Show(fullName, null, completedProc);            
+                return uiVisualizerService.Show(typeof(TViewModel).FullName, null, completedProc);
             }
 
             var window = view as System.Windows.Window;
@@ -232,20 +234,22 @@ namespace Catel.Services
         /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
         /// </summary>
         /// <param name="uiVisualizerService">The UI visualizer service.</param>
-        /// <param name="viewModelType">Type of the view model.</param>
+        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+        /// <param name="model">The model to be injected into the view model, can be <c>null</c>.</param>
         /// <param name="completedProc">The completed proc. Not applicable if window already exists.</param>
         /// <returns><c>true</c> if shown or activated successfully, <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
-        public static Task<bool?> ShowOrActivateAsync(this IUIVisualizerService uiVisualizerService, Type viewModelType, EventHandler<UICompletedEventArgs> completedProc = null)        
+        public static Task<bool?> ShowOrActivateAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null) 
         {
             Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
 
-            string fullName = viewModelType.FullName;
             var viewModelManager = uiVisualizerService.GetServiceLocator().ResolveType<IViewModelManager>();
-            var viewModel = viewModelManager.GetFirstOrDefaultInstance(viewModelType);
+            var viewModel = viewModelManager.GetFirstOrDefaultInstance(typeof(TViewModel));
             if (viewModel == null)
             {
-                return uiVisualizerService.ShowAsync(fullName, null, completedProc);
+                var viewModelFactory = GetViewModelFactory(uiVisualizerService);
+                var vm = viewModelFactory.CreateViewModel(typeof(TViewModel), model);
+                return uiVisualizerService.ShowAsync(vm, completedProc);
             }
 
             var viewLocator = uiVisualizerService.GetDependencyResolver().Resolve<IViewLocator>();
@@ -254,7 +258,7 @@ namespace Catel.Services
             var view = viewManager.GetFirstOrDefaultInstance(viewType);
             if (view == null)
             {
-                return uiVisualizerService.ShowAsync(fullName, null, completedProc);            
+                return uiVisualizerService.ShowAsync(typeof(TViewModel).FullName, null, completedProc);
             }
 
             var window = view as System.Windows.Window;
