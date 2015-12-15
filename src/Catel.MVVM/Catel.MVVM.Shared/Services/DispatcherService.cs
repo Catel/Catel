@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Threading;
-using Xamarin.Forms;
 
 namespace Catel.Services
 {
@@ -23,6 +21,9 @@ namespace Catel.Services
 #elif !XAMARIN_FORMS
     using Windows.Threading;
     using System.Windows.Threading;
+#else 
+    using System.Threading;
+    using Xamarin.Forms;
 #endif
 
     /// <summary>
