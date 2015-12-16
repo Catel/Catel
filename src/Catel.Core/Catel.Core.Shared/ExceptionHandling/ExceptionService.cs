@@ -191,7 +191,7 @@ namespace Catel.ExceptionHandling
         /// Unregisters a specific exception for handling.
         /// </summary>
         /// <typeparam name="TException">The type of the exception.</typeparam>
-        /// <returns><c>true</c> if the exception is unsubscribed; otherwise <c>false</c>.</returns>
+        /// <returns><c>true</c> if the exception is unsubscripted; otherwise <c>false</c>.</returns>
         public bool Unregister<TException>()
             where TException : Exception
         {
@@ -333,7 +333,7 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
-        /// Processes the specified action with possibilty to retry on error.
+        /// Processes the specified action with possibility to retry on error.
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="action">The action.</param>
@@ -407,7 +407,7 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
-        /// Processes asynchrounously the specified action with possibilty to retry on error.
+        /// Processes asynchronously the specified action with possibility to retry on error.
         /// </summary>
         /// <typeparam name="TResult">The result type.</typeparam>
         /// <param name="action">The action.</param>
@@ -481,7 +481,7 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
-        /// Processes the specified action. The action will be executed asynchrounously.
+        /// Processes the specified action. The action will be executed asynchronously.
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -554,7 +554,7 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
-        /// Processes the specified action. The action will be executed asynchrounously.
+        /// Processes the specified action. The action will be executed asynchronously.
         /// </summary>
         /// <typeparam name="TResult">The result type.</typeparam>
         /// <param name="action">The action.</param>
