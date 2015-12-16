@@ -164,6 +164,7 @@ namespace Catel.ExceptionHandling
         /// <param name="handler">The action to execute when the exception occurs.</param>
         /// <returns>The handler to use.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        /// <exception cref="Exception">A delegate callback throws an exception.</exception>
         public IExceptionHandler Register<TException>(Action<TException> handler)
             where TException : Exception
         {
@@ -171,17 +172,35 @@ namespace Catel.ExceptionHandling
 
             var exceptionType = typeof(TException);
 
+            var exceptionAction = new Action<Exception>(exception => handler((TException)exception));
+
+            var exceptionHandler = new ExceptionHandler(exceptionType, exceptionAction);
+
+            return Register(exceptionHandler);
+        }
+
+        /// <summary>
+        /// Registers an handler for a specific exception type.
+        /// </summary>
+        /// <param name="handler">The handler to use when the exception occurs.</param>
+        /// <returns>The handler to use.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        public IExceptionHandler Register(IExceptionHandler handler)
+        {
+            Argument.IsNotNull("handler", handler);
+
+            var exceptionType = handler.ExceptionType;
+
             lock (_exceptionHandlers)
             {
-                if (!_exceptionHandlers.ContainsKey(exceptionType))
+                if (_exceptionHandlers.ContainsKey(exceptionType))
                 {
-                    var exceptionAction = new Action<Exception>(exception => handler((TException)exception));
-
-                    var exceptionHandler = new ExceptionHandler(exceptionType, exceptionAction);
-                    _exceptionHandlers.Add(exceptionType, exceptionHandler);
-
-                    Log.Debug("Added exception handler for type '{0}'", exceptionType.Name);
+                    return _exceptionHandlers[exceptionType];
                 }
+
+                _exceptionHandlers.Add(exceptionType, handler);
+
+                Log.Debug("Added the handler for the exception type '{0}'", exceptionType.Name);
 
                 return _exceptionHandlers[exceptionType];
             }

@@ -184,6 +184,80 @@ namespace Catel.Test.ExceptionHandling
 
         #endregion
 
+        #region Nested type: TheRegsiterHandlerMethod
+        [TestFixture]
+        public class TheRegsiterHandlerMethod
+        {
+            #region Methods
+            [TestCase]
+            public void ThrowsArgumentNullExceptionForNullParameter()
+            {
+                var exceptionService = new ExceptionService();
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => exceptionService.Register((IExceptionHandler)null));
+            }
+
+            [TestCase]
+            public void ProceedToSucceed()
+            {
+                var exceptionService = new ExceptionService();
+                var value = string.Empty;
+
+                var argumentExceptionHandler = new ExceptionHandler(typeof(ArgumentException), exception => { value = exception.Message; });
+
+                exceptionService.Register(argumentExceptionHandler);
+                value = exceptionService.Process(() => (1 + 1).ToString(CultureInfo.InvariantCulture));
+
+                Assert.AreEqual("2", value);
+
+                exceptionService.Process<string>(() => { throw new ArgumentException("achieved"); });
+
+                Assert.AreEqual("achieved", value);
+            }
+
+            [TestCase]
+            public void ProceedToFail()
+            {
+                var exceptionService = new ExceptionService();
+                var value = string.Empty;
+
+                var argumentExceptionHandler = new ExceptionHandler(typeof(ArgumentException), exception => { value = exception.Message; });
+
+                exceptionService.Register(argumentExceptionHandler);
+                exceptionService.Process<string>(() => { throw new ArgumentOutOfRangeException("achieved"); });
+
+                Assert.AreNotEqual("achieved", value);
+            }
+            #endregion
+        }
+        #endregion
+
+        #region Nested type: TheRegsiterHandlerGenericMethod
+        [TestFixture]
+        public class TheRegsiterHandlerGenericMethod
+        {
+            class DivideByZeroExceptionHandler : ExceptionHandler<DivideByZeroException>
+            {
+                public override void OnException(DivideByZeroException exception)
+                {
+                    Assert.AreEqual("trying to divide by zero", exception.Message);
+                }
+            }
+
+            #region Methods
+
+            [TestCase]
+            public void ShouldSucceedToHandleUsingRegisteredHandler()
+            {
+                var exceptionService = new ExceptionService();
+
+                exceptionService.Register<DivideByZeroExceptionHandler>();
+
+                exceptionService.Process(() => { throw new DivideByZeroException("trying to divide by zero"); });
+            }
+            #endregion
+        }
+        #endregion
+
         #region Nested type: TheGetHandlerMethod
         [TestFixture]
         public class TheGetHandlerMethod

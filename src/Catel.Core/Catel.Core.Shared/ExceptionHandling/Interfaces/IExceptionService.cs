@@ -84,8 +84,17 @@ namespace Catel.ExceptionHandling
         /// <param name="handler">The action to execute when the exception occurs.</param>
         /// <returns>The handler to use.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        /// <exception cref="Exception">A delegate callback throws an exception.</exception>
         IExceptionHandler Register<TException>(Action<TException> handler)
             where TException : Exception;
+
+        /// <summary>
+        /// Registers an handler for a specific exception.
+        /// </summary>
+        /// <param name="handler">The handler to use when the exception occurs.</param>
+        /// <returns>The handler to use.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        IExceptionHandler Register(IExceptionHandler handler);
 
         /// <summary>
         /// Unregisters a specific exception for handling.

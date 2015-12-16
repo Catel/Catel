@@ -41,4 +41,16 @@ namespace Catel.ExceptionHandling
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         void Handle(Exception exception);
     }
+
+    /// <summary>
+    /// Interface that describes a single generic Exception handler.
+    /// </summary>
+    public interface IExceptionHandler<in TException> : IExceptionHandler where TException : Exception
+    {
+        /// <summary>
+        /// The action to do on an exception of defined type occurs.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        void OnException(TException exception);
+    }
 }
