@@ -202,7 +202,9 @@ namespace Catel.Reflection
                 var baseType = typeInfo.BaseType;
                 if ((baseType != null) && (baseType != typeof(object)))
                 {
-                    source.AddRange(from member in GetProperties(baseType.GetTypeInfo(), bindingFlags) where member.IsStatic() select member);
+                    source.AddRange(from member in GetProperties(baseType.GetTypeInfo(), bindingFlags)
+                                    where member.IsStatic()
+                                    select member);
                 }
             }
 

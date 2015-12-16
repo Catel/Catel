@@ -66,7 +66,8 @@ namespace Catel.IoC
         /// <param name="serviceLocator">The service locator.</param>
         /// <param name="registrationType">Type of the registration.</param>
         /// <returns>IRegistrationConventionHandler.</returns>
-        public static IRegistrationConventionHandler RegisterTypesUsingConvention<TRegistrationConvention>(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton) where TRegistrationConvention : IRegistrationConvention
+        public static IRegistrationConventionHandler RegisterTypesUsingConvention<TRegistrationConvention>(this IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton) 
+            where TRegistrationConvention : IRegistrationConvention
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
 

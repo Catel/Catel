@@ -40,7 +40,8 @@ namespace Catel.ExceptionHandling
         /// <param name="exceptionService">The exception service.</param>
         /// <returns>The handler to use.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="exceptionService"/> is <c>null</c>.</exception>
-        public static IExceptionHandler Register<TExceptionHandler>(this IExceptionService exceptionService) where TExceptionHandler : IExceptionHandler, new()
+        public static IExceptionHandler Register<TExceptionHandler>(this IExceptionService exceptionService) 
+            where TExceptionHandler : IExceptionHandler, new()
         {
             Argument.IsNotNull("exceptionService", exceptionService);
 

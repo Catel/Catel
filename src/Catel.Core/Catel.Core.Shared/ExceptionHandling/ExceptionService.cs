@@ -193,14 +193,12 @@ namespace Catel.ExceptionHandling
 
             lock (_exceptionHandlers)
             {
-                if (_exceptionHandlers.ContainsKey(exceptionType))
+                if (!_exceptionHandlers.ContainsKey(exceptionType))
                 {
-                    return _exceptionHandlers[exceptionType];
+                    _exceptionHandlers.Add(exceptionType, handler);
+
+                    Log.Debug("Added the handler for the exception type '{0}'", exceptionType.Name);
                 }
-
-                _exceptionHandlers.Add(exceptionType, handler);
-
-                Log.Debug("Added the handler for the exception type '{0}'", exceptionType.Name);
 
                 return _exceptionHandlers[exceptionType];
             }
@@ -221,6 +219,7 @@ namespace Catel.ExceptionHandling
                 if (_exceptionHandlers.ContainsKey(exceptionType))
                 {
                     _exceptionHandlers.Remove(exceptionType);
+
                     Log.Debug("Removed exception handler for type '{0}'", exceptionType.Name);
 
                     return true;

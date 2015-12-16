@@ -45,7 +45,8 @@ namespace Catel.ExceptionHandling
     /// <summary>
     /// Interface that describes a single generic Exception handler.
     /// </summary>
-    public interface IExceptionHandler<in TException> : IExceptionHandler where TException : Exception
+    public interface IExceptionHandler<in TException> : IExceptionHandler 
+        where TException : Exception
     {
         /// <summary>
         /// The action to do on an exception of defined type occurs.

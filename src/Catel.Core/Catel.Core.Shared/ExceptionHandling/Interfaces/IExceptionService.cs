@@ -44,7 +44,8 @@ namespace Catel.ExceptionHandling
         /// <returns>
         ///   <c>true</c> if the exception type is registered; otherwise, <c>false</c>.
         /// </returns>
-        bool IsExceptionRegistered<TException>() where TException : Exception;
+        bool IsExceptionRegistered<TException>() 
+            where TException : Exception;
 
         /// <summary>
         /// Determines whether the specified exception type is registered.
@@ -75,7 +76,8 @@ namespace Catel.ExceptionHandling
         /// <returns>
         ///   The exception handler.
         /// </returns>
-        IExceptionHandler GetHandler<TException>() where TException : Exception;
+        IExceptionHandler GetHandler<TException>() 
+            where TException : Exception;
 
         /// <summary>
         /// Registers a specific exception including the handler.

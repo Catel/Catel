@@ -184,9 +184,9 @@ namespace Catel.Test.ExceptionHandling
 
         #endregion
 
-        #region Nested type: TheRegsiterHandlerMethod
+        #region Nested type: TheRegisterHandlerMethod
         [TestFixture]
-        public class TheRegsiterHandlerMethod
+        public class TheRegisterHandlerMethod
         {
             #region Methods
             [TestCase]
@@ -231,9 +231,9 @@ namespace Catel.Test.ExceptionHandling
         }
         #endregion
 
-        #region Nested type: TheRegsiterHandlerGenericMethod
+        #region Nested type: TheRegisterHandlerGenericMethod
         [TestFixture]
-        public class TheRegsiterHandlerGenericMethod
+        public class TheRegisterHandlerGenericMethod
         {
             class DivideByZeroExceptionHandler : ExceptionHandler<DivideByZeroException>
             {
