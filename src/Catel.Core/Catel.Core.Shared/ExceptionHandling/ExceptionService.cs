@@ -173,15 +173,7 @@ namespace Catel.ExceptionHandling
         public IExceptionHandler Register<TException>(Action<TException> handler)
             where TException : Exception
         {
-            Argument.IsNotNull("handler", handler);
-
-            var exceptionType = typeof(TException);
-
-            var exceptionAction = new Action<Exception>(exception => handler((TException)exception));
-
-            var exceptionHandler = new ExceptionHandler(exceptionType, exceptionAction);
-
-            return Register(exceptionHandler);
+            return Register(handler, null);
         }
 
         /// <summary>
@@ -191,14 +183,12 @@ namespace Catel.ExceptionHandling
         /// <param name="exceptionPredicate">The  exception filter.</param>
         /// <param name="handler">The action to execute when the exception occurs.</param>
         /// <returns>The handler to use.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="exceptionPredicate"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         /// <exception cref="Exception">A delegate callback throws an exception.</exception>
-        public IExceptionHandler Register<TException>(Action<TException> handler, Func<TException, bool> exceptionPredicate)
+        public IExceptionHandler Register<TException>(Action<TException> handler, Func<TException, bool> exceptionPredicate = null)
             where TException : Exception
         {
             Argument.IsNotNull("handler", handler);
-            Argument.IsNotNull("exceptionPredicate", exceptionPredicate);
 
             var exceptionType = typeof(TException);
 

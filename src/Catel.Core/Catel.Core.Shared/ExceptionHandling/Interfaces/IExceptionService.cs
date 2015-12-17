@@ -99,7 +99,6 @@ namespace Catel.ExceptionHandling
         /// <param name="exceptionPredicate">The  exception filter.</param>
         /// <returns>The handler to use.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="exceptionPredicate"/> is <c>null</c>.</exception>
         /// <exception cref="Exception">A delegate callback throws an exception.</exception>
         IExceptionHandler Register<TException>(Action<TException> handler, Func<TException, bool> exceptionPredicate = null)
             where TException : Exception;
