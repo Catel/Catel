@@ -797,5 +797,129 @@ namespace Catel.Test.ExceptionHandling
             #endregion
         }
         #endregion
+
+        #region Nested type: CheckSorting
+        [TestFixture]
+        public class CheckSorting
+        {
+            private ExceptionService _exceptionService;
+            private bool _exLevel0;
+            private bool _exLevel21;
+            private bool _exLevel11;
+            private bool _exLevel31;
+            private bool _exLevel32;
+            private bool _exLevel22;
+
+            [SetUp]
+            public void Setup()
+            {
+                _exceptionService = new ExceptionService();
+
+                _exceptionService.Register<Exception>(exception => { _exLevel0 = true; });
+                _exceptionService.Register<Level21Exception>(exception => { _exLevel21 = true; });
+                _exceptionService.Register<Level11Exception>(exception => { _exLevel11 = true; });
+                _exceptionService.Register<Level31Exception>(exception => { _exLevel31 = true; });
+                _exceptionService.Register<Level32Exception>(exception => { _exLevel32 = true; });
+                _exceptionService.Register<Level22Exception>(exception => { _exLevel22 = true; });
+                _exLevel0 = false;
+                _exLevel21 = false;
+                _exLevel11 = false;
+                _exLevel31 = false;
+                _exLevel32 = false;
+                _exLevel22 = false;
+
+            }
+
+            [TestCase]
+            public void PerformHandleExceptionLevel0()
+            {
+                var originalException = new Exception();
+                Assert.IsTrue(_exceptionService.HandleException(originalException));
+
+                Assert.IsTrue(_exLevel0);
+                Assert.IsFalse(_exLevel11);
+                Assert.IsFalse(_exLevel21);
+                Assert.IsFalse(_exLevel31);
+                Assert.IsFalse(_exLevel32);
+                Assert.IsFalse(_exLevel22);
+            }
+
+            [TestCase]
+            public void PerformHandleExceptionLevel11()
+            {
+                var originalException = new Level11Exception();
+                Assert.IsTrue(_exceptionService.HandleException(originalException));
+
+                Assert.IsFalse(_exLevel0);
+                Assert.IsTrue(_exLevel11);
+                Assert.IsFalse(_exLevel21);
+                Assert.IsFalse(_exLevel31);
+                Assert.IsFalse(_exLevel32);
+                Assert.IsFalse(_exLevel22);
+            }
+
+            [TestCase]
+            public void PerformHandleExceptionLevel21()
+            {
+                var originalException = new Level21Exception();
+                Assert.IsTrue(_exceptionService.HandleException(originalException));
+
+                Assert.IsFalse(_exLevel0);
+                Assert.IsFalse(_exLevel11);
+                Assert.IsTrue(_exLevel21);
+                Assert.IsFalse(_exLevel31);
+                Assert.IsFalse(_exLevel32);
+                Assert.IsFalse(_exLevel22);
+            }
+
+            [TestCase]
+            public void PerformHandleExceptionLevel31()
+            {
+                var originalException = new Level31Exception();
+                Assert.IsTrue(_exceptionService.HandleException(originalException));
+
+                Assert.IsFalse(_exLevel0);
+                Assert.IsFalse(_exLevel11);
+                Assert.IsFalse(_exLevel21);
+                Assert.IsTrue(_exLevel31);
+                Assert.IsFalse(_exLevel32);
+                Assert.IsFalse(_exLevel22);
+            }
+
+            [TestCase]
+            public void PerformHandleExceptionLevel32()
+            {
+                var originalException = new Level32Exception();
+                Assert.IsTrue(_exceptionService.HandleException(originalException));
+
+                Assert.IsFalse(_exLevel0);
+                Assert.IsFalse(_exLevel11);
+                Assert.IsFalse(_exLevel21);
+                Assert.IsFalse(_exLevel31);
+                Assert.IsTrue(_exLevel32);
+                Assert.IsFalse(_exLevel22);
+            }
+
+            [TestCase]
+            public void PerformHandleExceptionLevel22()
+            {
+                var originalException = new Level22Exception();
+                Assert.IsTrue(_exceptionService.HandleException(originalException));
+
+                Assert.IsFalse(_exLevel0);
+                Assert.IsFalse(_exLevel11);
+                Assert.IsFalse(_exLevel21);
+                Assert.IsFalse(_exLevel31);
+                Assert.IsFalse(_exLevel32);
+                Assert.IsTrue(_exLevel22);
+            }
+
+            private class Level11Exception : Exception { }
+            private class Level21Exception : Level11Exception { }
+            private class Level31Exception : Level21Exception { }
+            private class Level22Exception : Level11Exception { }
+            private class Level32Exception : Level22Exception { }
+        }
+        #endregion
     }
 }
