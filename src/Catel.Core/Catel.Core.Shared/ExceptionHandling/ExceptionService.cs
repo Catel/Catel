@@ -169,6 +169,7 @@ namespace Catel.ExceptionHandling
         /// <returns>The handler to use.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         /// <exception cref="Exception">A delegate callback throws an exception.</exception>
+        [ObsoleteEx(Message = "", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         public IExceptionHandler Register<TException>(Action<TException> handler)
             where TException : Exception
         {
@@ -179,6 +180,38 @@ namespace Catel.ExceptionHandling
             var exceptionAction = new Action<Exception>(exception => handler((TException)exception));
 
             var exceptionHandler = new ExceptionHandler(exceptionType, exceptionAction);
+
+            return Register(exceptionHandler);
+        }
+
+        /// <summary>
+        /// Registers a specific exception including the handler.
+        /// </summary>
+        /// <typeparam name="TException">The type of the exception.</typeparam>
+        /// <param name="exceptionPredicate">The  exception filter.</param>
+        /// <param name="handler">The action to execute when the exception occurs.</param>
+        /// <returns>The handler to use.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="exceptionPredicate"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        /// <exception cref="Exception">A delegate callback throws an exception.</exception>
+        public IExceptionHandler Register<TException>(Action<TException> handler, Func<TException, bool> exceptionPredicate)
+            where TException : Exception
+        {
+            Argument.IsNotNull("handler", handler);
+            Argument.IsNotNull("exceptionPredicate", exceptionPredicate);
+
+            var exceptionType = typeof(TException);
+
+            ExceptionPredicate predicate = null;
+
+            if (exceptionPredicate != null)
+            {
+                predicate = exception => exception is TException && exceptionPredicate((TException) exception);
+            }
+
+            var exceptionAction = new Action<Exception>(exception => handler((TException)exception));
+
+            var exceptionHandler = new ExceptionHandler(exceptionType, exceptionAction, predicate);
 
             return Register(exceptionHandler);
         }

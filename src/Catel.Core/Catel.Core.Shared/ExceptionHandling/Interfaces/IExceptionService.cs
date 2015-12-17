@@ -87,7 +87,21 @@ namespace Catel.ExceptionHandling
         /// <returns>The handler to use.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         /// <exception cref="Exception">A delegate callback throws an exception.</exception>
+        [ObsoleteEx(Message = "", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         IExceptionHandler Register<TException>(Action<TException> handler)
+            where TException : Exception;
+
+        /// <summary>
+        /// Registers a specific exception including the handler.
+        /// </summary>
+        /// <typeparam name="TException">The type of the exception.</typeparam>
+        /// <param name="handler">The action to execute when the exception occurs.</param>
+        /// <param name="exceptionPredicate">The  exception filter.</param>
+        /// <returns>The handler to use.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="exceptionPredicate"/> is <c>null</c>.</exception>
+        /// <exception cref="Exception">A delegate callback throws an exception.</exception>
+        IExceptionHandler Register<TException>(Action<TException> handler, Func<TException, bool> exceptionPredicate = null)
             where TException : Exception;
 
         /// <summary>
@@ -154,6 +168,7 @@ namespace Catel.ExceptionHandling
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        [ObsoleteEx(Message = "Member will be removed because it's not truly asynchronous", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -193,4 +208,11 @@ namespace Catel.ExceptionHandling
         Task<TResult> ProcessWithRetryAsync<TResult>(Func<Task<TResult>> action);
         #endregion
     }
+
+    /// <summary>
+    /// The exception filter.
+    /// </summary>
+    /// <param name="exception"></param>
+    /// <returns></returns>
+    public delegate bool ExceptionPredicate(Exception exception); 
 }

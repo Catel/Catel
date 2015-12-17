@@ -34,6 +34,23 @@ namespace Catel.ExceptionHandling
             ExceptionType = exceptionType;
             _action = action;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExceptionHandler" /> class.
+        /// </summary>
+        /// <param name="exceptionType">Type of the exception.</param>
+        /// <param name="action">The action to execute.</param>
+        /// <param name="filter">The exception filter.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exceptionType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="filter" /> is <c>null</c>.</exception>
+        public ExceptionHandler(Type exceptionType, Action<Exception> action, ExceptionPredicate filter)
+            : this(exceptionType, action)
+        {
+            Argument.IsNotNull("filter", filter);
+
+            Filter = filter;
+        }
         #endregion
 
         #region IExceptionHandler Members
@@ -41,6 +58,11 @@ namespace Catel.ExceptionHandling
         /// Gets the type of the handled exception.
         /// </summary>
         public Type ExceptionType { get; private set; }
+
+        /// <summary>
+        /// Gets the exception filter.
+        /// </summary>
+        public ExceptionPredicate Filter { get; private set; }
 
         /// <summary>
         /// Gets or sets the buffer policy.
@@ -67,7 +89,19 @@ namespace Catel.ExceptionHandling
         {
             Argument.IsNotNull("exception", exception);
 
-            _action(exception);
+            if (Filter != null && Filter.Invoke(exception))
+            {
+                _action(exception);
+                return;
+            }
+            
+            if (Filter == null)
+            {
+                _action(exception);
+                return;
+            }
+
+            throw exception;
         }
         #endregion
     }
@@ -89,6 +123,8 @@ namespace Catel.ExceptionHandling
         protected ExceptionHandler()
         {
             ExceptionType = typeof(TException);
+
+            SetFilter();
         }
         #endregion
 
@@ -99,11 +135,24 @@ namespace Catel.ExceptionHandling
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         public abstract void OnException(TException exception);
 
+        /// <summary>
+        /// Get the exception filter.
+        /// </summary>
+        /// <returns></returns>
+        public virtual Func<TException, bool> GetFilter()
+        {
+            return null;
+        }
 
         /// <summary>
         /// Gets the type of the handled exception.
         /// </summary>
         public Type ExceptionType { get; private set; }
+
+        /// <summary>
+        /// Gets the exception filter.
+        /// </summary>
+        public ExceptionPredicate Filter { get; private set; }
 
         /// <summary>
         /// Gets or sets the buffer policy.
@@ -132,7 +181,33 @@ namespace Catel.ExceptionHandling
 
             _action = ex => OnException((TException)exception);
 
-            _action(exception);
+            if (Filter != null && Filter.Invoke(exception))
+            {
+                _action(exception);
+                return;
+            }
+
+            if (Filter == null)
+            {
+                _action(exception);
+                return;
+            }
+
+            throw exception;
+        }
+
+        private void SetFilter()
+        {
+            var exceptionPredicate = GetFilter();
+
+            ExceptionPredicate filter = null;
+
+            if (exceptionPredicate != null)
+            {
+                filter = exception => exception is TException && exceptionPredicate((TException)exception);
+            }
+
+            Filter = filter;
         }
         #endregion
     }

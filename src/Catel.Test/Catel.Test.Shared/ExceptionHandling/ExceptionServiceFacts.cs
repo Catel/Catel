@@ -75,6 +75,69 @@ namespace Catel.Test.ExceptionHandling
         }
         #endregion
 
+        #region Nested type: TheRegisterWithPredicateMethod
+        [TestFixture]
+        public class TheRegisterWithPredicateMethod
+        {
+            #region Methods
+            [TestCase]
+            public void ShouldHandleTheGoodExceptionTheFluentWay()
+            {
+                var exceptionService = new ExceptionService();
+
+                exceptionService.Register<CodeException>(
+                    exception => Assert.AreEqual(3, exception.Code)
+                    , exception => exception.Code == 3);
+
+                exceptionService.Register<DivideByZeroException>(
+                    exception => Assert.AreEqual("trying to divide by zero", exception.Message));
+
+                ExceptionTester.CallMethodAndExpectException<CodeException>(() => exceptionService.Process(() => { throw new CodeException(2); }));
+                exceptionService.Process(() => { throw new DivideByZeroException("trying to divide by zero"); });
+                exceptionService.Process(() => { throw new CodeException(3); });
+            }
+
+            [TestCase]
+            public void ShouldHandleTheGoodExceptionUsingCustomHandler()
+            {
+                var exceptionService = new ExceptionService();
+
+                exceptionService.Register<CodeExceptionHandler>();
+
+                exceptionService.Register<DivideByZeroException>(
+                    exception => Assert.AreEqual("trying to divide by zero", exception.Message));
+
+                ExceptionTester.CallMethodAndExpectException<CodeException>(() => exceptionService.Process(() => { throw new CodeException(2); }));
+                exceptionService.Process(() => { throw new DivideByZeroException("trying to divide by zero"); });
+                exceptionService.Process(() => { throw new CodeException(3); });
+            }
+            #endregion
+
+            private class CodeException : Exception
+            {
+                public int Code { get; private set; }
+
+                public CodeException(int code)
+                {
+                    Code = code;
+                }
+            }
+
+            private class CodeExceptionHandler : ExceptionHandler<CodeException>
+            {
+                public override void OnException(CodeException exception)
+                {
+                    
+                }
+
+                public override Func<CodeException, bool> GetFilter()
+                {
+                    return exception => exception.Code == 3;
+                }
+            }
+        }
+        #endregion
+
         #region Nested type: TheGenericProcessAsyncMethod
         [TestFixture]
         public class TheGenericProcessAsyncMethod
@@ -98,14 +161,14 @@ namespace Catel.Test.ExceptionHandling
                 exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture))
                                 .ContinueWith(task => Assert.AreEqual(value, task.Result));
 #else
-                value = await exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture));
+                value = await exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture)).ConfigureAwait(false);
                 Assert.AreEqual("2", value);
 #endif
 
 #if NET40 || SL5 || PCL
                 exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); });
 #else
-                await exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); });
+                await exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); }).ConfigureAwait(false);
 #endif
 
                 Assert.AreEqual("achieved", value);
@@ -227,23 +290,6 @@ namespace Catel.Test.ExceptionHandling
 
                 Assert.AreNotEqual("achieved", value);
             }
-            #endregion
-        }
-        #endregion
-
-        #region Nested type: TheRegisterHandlerGenericMethod
-        [TestFixture]
-        public class TheRegisterHandlerGenericMethod
-        {
-            class DivideByZeroExceptionHandler : ExceptionHandler<DivideByZeroException>
-            {
-                public override void OnException(DivideByZeroException exception)
-                {
-                    Assert.AreEqual("trying to divide by zero", exception.Message);
-                }
-            }
-
-            #region Methods
 
             [TestCase]
             public void ShouldSucceedToHandleUsingRegisteredHandler()
@@ -255,6 +301,14 @@ namespace Catel.Test.ExceptionHandling
                 exceptionService.Process(() => { throw new DivideByZeroException("trying to divide by zero"); });
             }
             #endregion
+
+            private class DivideByZeroExceptionHandler : ExceptionHandler<DivideByZeroException>
+            {
+                public override void OnException(DivideByZeroException exception)
+                {
+                    Assert.AreEqual("trying to divide by zero", exception.Message);
+                }
+            }
         }
         #endregion
 

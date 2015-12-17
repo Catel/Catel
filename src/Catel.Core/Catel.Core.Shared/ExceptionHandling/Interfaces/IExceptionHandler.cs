@@ -19,6 +19,11 @@ namespace Catel.ExceptionHandling
         Type ExceptionType { get; }
 
         /// <summary>
+        /// Gets the exception filter.
+        /// </summary>
+        ExceptionPredicate Filter { get; }
+
+        /// <summary>
         /// Gets or sets the buffer policy.
         /// </summary>
         /// <value>
@@ -53,5 +58,11 @@ namespace Catel.ExceptionHandling
         /// </summary>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         void OnException(TException exception);
+
+        /// <summary>
+        /// Get the exception filter.
+        /// </summary>
+        /// <returns></returns>
+        Func<TException, Boolean> GetFilter();
     }
 }
