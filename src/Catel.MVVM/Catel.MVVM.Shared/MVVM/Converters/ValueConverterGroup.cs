@@ -18,6 +18,8 @@ namespace Catel.MVVM.Converters
     using System.Windows.Markup;
     using Logging;
 
+    
+
     /// <summary>
     /// A value converter which contains a list of IValueConverters and invokes their Convert or ConvertBack methods
     /// in the order that they exist in the list.  The output of one converter is piped into the next converter
@@ -35,13 +37,13 @@ namespace Catel.MVVM.Converters
     /// Original license: CPOL, compatible with the MIT license.
     /// </remarks>
     [ContentProperty("Converters")]
-    public class ValueConverterGroup : IValueConverter
+    public class ValueConverterGroup : System.Windows.Data.IValueConverter
     {
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly ObservableCollection<IValueConverter> _converters = new ObservableCollection<IValueConverter>();
-        private readonly Dictionary<IValueConverter, ValueConversionAttribute> _cachedAttributes = new Dictionary<IValueConverter, ValueConversionAttribute>();
+        private readonly ObservableCollection<System.Windows.Data.IValueConverter> _converters = new ObservableCollection<System.Windows.Data.IValueConverter>();
+        private readonly Dictionary<System.Windows.Data.IValueConverter, ValueConversionAttribute> _cachedAttributes = new Dictionary<System.Windows.Data.IValueConverter, ValueConversionAttribute>();
         #endregion
 
         #region Constructors
@@ -58,7 +60,7 @@ namespace Catel.MVVM.Converters
         /// <summary>
         /// Returns the list of IValueConverters contained in this converter.
         /// </summary>
-        public ObservableCollection<IValueConverter> Converters
+        public ObservableCollection<System.Windows.Data.IValueConverter> Converters
         {
             get { return _converters; }
         }
@@ -135,7 +137,7 @@ namespace Catel.MVVM.Converters
         {
             // If the current converter is not the last/first in the list, 
             // get a reference to the next/previous converter.
-            IValueConverter nextConverter = null;
+            System.Windows.Data.IValueConverter nextConverter = null;
             if (convert)
             {
                 if (converterIndex < Converters.Count - 1)
