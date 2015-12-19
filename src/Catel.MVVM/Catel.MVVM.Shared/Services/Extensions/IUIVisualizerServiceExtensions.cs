@@ -4,17 +4,19 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 #if NET || SL5
 
 namespace Catel.Services
 {
     using System;
     using System.Threading.Tasks;
+    using System.Windows;
+    using Windows.Threading;
     using IoC;
     using MVVM;
     using MVVM.Properties;
     using MVVM.Views;
+    using Reflection;
     using Threading;
 
     /// <summary>
@@ -192,15 +194,15 @@ namespace Catel.Services
             return viewModelFactory;
         }
 
-      /// <summary>
-      /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
-      /// </summary>
-      /// <param name="uiVisualizerService">The UI visualizer service.</param>
-      /// <typeparam name="TViewModel">The type of the view model.</typeparam>
-      /// <param name="model">The model to be injected into the view model, can be <c>null</c>.</param>
-      /// <param name="completedProc">The completed proc. Not applicable if window already exists.</param>
-      /// <returns><c>true</c> if shown or activated successfully, <c>false</c> otherwise.</returns>
-      public static bool? ShowOrActivate<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null) 
+        /// <summary>
+        /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
+        /// </summary>
+        /// <param name="uiVisualizerService">The UI visualizer service.</param>
+        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
+        /// <param name="model">The model to be injected into the view model, can be <c>null</c>.</param>
+        /// <param name="completedProc">The completed proc. Not applicable if window already exists.</param>
+        /// <returns><c>true</c> if shown or activated successfully, <c>false</c> otherwise.</returns>
+        public static bool? ShowOrActivate<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null) where TViewModel : IViewModel
         {
             Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
 
@@ -217,17 +219,13 @@ namespace Catel.Services
             var viewType = viewLocator.ResolveView(viewModel.GetType());
             var viewManager = uiVisualizerService.GetServiceLocator().ResolveType<IViewManager>();
             var view = viewManager.GetFirstOrDefaultInstance(viewType);
-            if (view == null)
+            var window = view as System.Windows.Window;
+            if (view == null || window == null)
             {
-                return uiVisualizerService.Show(typeof(TViewModel).FullName, null, completedProc);
+                return uiVisualizerService.Show(viewModel, completedProc);
             }
 
-            var window = view as System.Windows.Window;
-            if (window == null)
-            {
-                return false;
-            }
-            return window.Activate();
+            return ActivateWindow(window);
         }
 
         /// <summary>
@@ -256,17 +254,31 @@ namespace Catel.Services
             var viewType = viewLocator.ResolveView(viewModel.GetType());
             var viewManager = uiVisualizerService.GetServiceLocator().ResolveType<IViewManager>();
             var view = viewManager.GetFirstOrDefaultInstance(viewType);
-            if (view == null)
+            var window = view as System.Windows.Window;
+            if (view == null || window == null)
             {
-                return uiVisualizerService.ShowAsync(typeof(TViewModel).FullName, null, completedProc);
+                return uiVisualizerService.ShowAsync(viewModel, completedProc);
             }
 
-            var window = view as System.Windows.Window;
-            if (window == null)
+            return TaskHelper.Run(() => ActivateWindow(window), true);
+        }
+
+        /// <summary>
+        /// Activates the window.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <returns><c>true</c> if the window is activated with success; otherwise <c>false</c> or <c>null</c>.</returns>
+        public static bool? ActivateWindow(Window window)
+        {
+            var activateMethodInfo = window.GetType().GetMethodEx("Activate");
+            if (activateMethodInfo == null)
             {
-                return new Task<bool?>(() => false);
+                throw new NotSupportedException(string.Format("Method 'Activate' not found on '{0}', cannot activate the window", window.GetType().Name));
             }
-            return TaskHelper.Run(() => (bool?)window.Activate(), true);
+
+            bool? result = false;
+            window.Dispatcher.InvokeIfRequired(() => result = (bool?) activateMethodInfo.Invoke(window, null));
+            return result;
         }
     }
 }
