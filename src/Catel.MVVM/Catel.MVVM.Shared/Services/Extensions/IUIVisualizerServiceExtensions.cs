@@ -13,6 +13,7 @@ namespace Catel.Services
     using System.Windows;
     using Windows.Threading;
     using IoC;
+    using Logging;
     using MVVM;
     using MVVM.Properties;
     using MVVM.Views;
@@ -273,7 +274,7 @@ namespace Catel.Services
             var activateMethodInfo = window.GetType().GetMethodEx("Activate");
             if (activateMethodInfo == null)
             {
-                throw new NotSupportedException(string.Format("Method 'Activate' not found on '{0}', cannot activate the window", window.GetType().Name));
+                throw LogManager.GetCurrentClassLogger().ErrorAndCreateException<NotSupportedException>("Method 'Activate' not found on '{0}', cannot activate the window", window.GetType().Name);
             }
 
             bool? result = false;
