@@ -18,8 +18,6 @@ namespace Catel.MVVM.Converters
     using System.Windows.Markup;
     using Logging;
 
-    
-
     /// <summary>
     /// A value converter which contains a list of IValueConverters and invokes their Convert or ConvertBack methods
     /// in the order that they exist in the list.  The output of one converter is piped into the next converter
@@ -37,7 +35,7 @@ namespace Catel.MVVM.Converters
     /// Original license: CPOL, compatible with the MIT license.
     /// </remarks>
     [ContentProperty("Converters")]
-    public class ValueConverterGroup : System.Windows.Data.IValueConverter
+    public class ValueConverterGroup : IValueConverter
     {
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
