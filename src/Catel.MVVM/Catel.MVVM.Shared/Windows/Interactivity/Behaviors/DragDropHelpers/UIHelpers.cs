@@ -73,12 +73,14 @@ namespace Catel.Windows.Interactivity.DragDropHelpers
             return null;
         }
 
-        public static T GetVisualDescendent<T>(DependencyObject d) where T : DependencyObject
+        public static T GetVisualDescendent<T>(DependencyObject d) 
+            where T : DependencyObject
         {
             return GetVisualDescendents<T>(d).FirstOrDefault();
         }
 
-        private static IEnumerable<T> GetVisualDescendents<T>(DependencyObject d) where T : DependencyObject
+        private static IEnumerable<T> GetVisualDescendents<T>(DependencyObject d) 
+            where T : DependencyObject
         {
             for (var n = 0; n < VisualTreeHelper.GetChildrenCount(d); n++)
             {

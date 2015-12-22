@@ -140,6 +140,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\EventArgs\BufferedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\EventArgs\RetryingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionInheritanceComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Extensions\ExceptionServiceExtensions.cs" />

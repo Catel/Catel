@@ -75,6 +75,69 @@ namespace Catel.Test.ExceptionHandling
         }
         #endregion
 
+        #region Nested type: TheRegisterWithPredicateMethod
+        [TestFixture]
+        public class TheRegisterWithPredicateMethod
+        {
+            #region Methods
+            [TestCase]
+            public void ShouldHandleTheGoodExceptionTheFluentWay()
+            {
+                var exceptionService = new ExceptionService();
+
+                exceptionService.Register<CodeException>(
+                    exception => Assert.AreEqual(3, exception.Code)
+                    , exception => exception.Code == 3);
+
+                exceptionService.Register<DivideByZeroException>(
+                    exception => Assert.AreEqual("trying to divide by zero", exception.Message));
+
+                ExceptionTester.CallMethodAndExpectException<CodeException>(() => exceptionService.Process(() => { throw new CodeException(2); }));
+                exceptionService.Process(() => { throw new DivideByZeroException("trying to divide by zero"); });
+                exceptionService.Process(() => { throw new CodeException(3); });
+            }
+
+            [TestCase]
+            public void ShouldHandleTheGoodExceptionUsingCustomHandler()
+            {
+                var exceptionService = new ExceptionService();
+
+                exceptionService.Register<CodeExceptionHandler>();
+
+                exceptionService.Register<DivideByZeroException>(
+                    exception => Assert.AreEqual("trying to divide by zero", exception.Message));
+
+                ExceptionTester.CallMethodAndExpectException<CodeException>(() => exceptionService.Process(() => { throw new CodeException(2); }));
+                exceptionService.Process(() => { throw new DivideByZeroException("trying to divide by zero"); });
+                exceptionService.Process(() => { throw new CodeException(3); });
+            }
+            #endregion
+
+            private class CodeException : Exception
+            {
+                public int Code { get; private set; }
+
+                public CodeException(int code)
+                {
+                    Code = code;
+                }
+            }
+
+            private class CodeExceptionHandler : ExceptionHandler<CodeException>
+            {
+                public override void OnException(CodeException exception)
+                {
+                    
+                }
+
+                public override Func<CodeException, bool> GetFilter()
+                {
+                    return exception => exception.Code == 3;
+                }
+            }
+        }
+        #endregion
+
         #region Nested type: TheGenericProcessAsyncMethod
         [TestFixture]
         public class TheGenericProcessAsyncMethod
@@ -98,14 +161,14 @@ namespace Catel.Test.ExceptionHandling
                 exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture))
                                 .ContinueWith(task => Assert.AreEqual(value, task.Result));
 #else
-                value = await exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture));
+                value = await exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture)).ConfigureAwait(false);
                 Assert.AreEqual("2", value);
 #endif
 
 #if NET40 || SL5 || PCL
                 exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); });
 #else
-                await exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); });
+                await exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); }).ConfigureAwait(false);
 #endif
 
                 Assert.AreEqual("achieved", value);
@@ -182,6 +245,71 @@ namespace Catel.Test.ExceptionHandling
             #endregion
         }
 
+        #endregion
+
+        #region Nested type: TheRegisterHandlerMethod
+        [TestFixture]
+        public class TheRegisterHandlerMethod
+        {
+            #region Methods
+            [TestCase]
+            public void ThrowsArgumentNullExceptionForNullParameter()
+            {
+                var exceptionService = new ExceptionService();
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => exceptionService.Register((IExceptionHandler)null));
+            }
+
+            [TestCase]
+            public void ProceedToSucceed()
+            {
+                var exceptionService = new ExceptionService();
+                var value = string.Empty;
+
+                var argumentExceptionHandler = new ExceptionHandler(typeof(ArgumentException), exception => { value = exception.Message; });
+
+                exceptionService.Register(argumentExceptionHandler);
+                value = exceptionService.Process(() => (1 + 1).ToString(CultureInfo.InvariantCulture));
+
+                Assert.AreEqual("2", value);
+
+                exceptionService.Process<string>(() => { throw new ArgumentException("achieved"); });
+
+                Assert.AreEqual("achieved", value);
+            }
+
+            [TestCase]
+            public void ProceedToFail()
+            {
+                var exceptionService = new ExceptionService();
+                var value = string.Empty;
+
+                var argumentExceptionHandler = new ExceptionHandler(typeof(ArgumentException), exception => { value = exception.Message; });
+
+                exceptionService.Register(argumentExceptionHandler);
+                exceptionService.Process<string>(() => { throw new ArgumentOutOfRangeException("achieved"); });
+
+                Assert.AreNotEqual("achieved", value);
+            }
+
+            [TestCase]
+            public void ShouldSucceedToHandleUsingRegisteredHandler()
+            {
+                var exceptionService = new ExceptionService();
+
+                exceptionService.Register<DivideByZeroExceptionHandler>();
+
+                exceptionService.Process(() => { throw new DivideByZeroException("trying to divide by zero"); });
+            }
+            #endregion
+
+            private class DivideByZeroExceptionHandler : ExceptionHandler<DivideByZeroException>
+            {
+                public override void OnException(DivideByZeroException exception)
+                {
+                    Assert.AreEqual("trying to divide by zero", exception.Message);
+                }
+            }
+        }
         #endregion
 
         #region Nested type: TheGetHandlerMethod
@@ -721,6 +849,130 @@ namespace Catel.Test.ExceptionHandling
                 Assert.AreEqual(9, buffercount);
             }
             #endregion
+        }
+        #endregion
+
+        #region Nested type: CheckSorting
+        [TestFixture]
+        public class CheckSorting
+        {
+            private ExceptionService _exceptionService;
+            private bool _exLevel0;
+            private bool _exLevel21;
+            private bool _exLevel11;
+            private bool _exLevel31;
+            private bool _exLevel32;
+            private bool _exLevel22;
+
+            [SetUp]
+            public void Setup()
+            {
+                _exceptionService = new ExceptionService();
+
+                _exceptionService.Register<Exception>(exception => { _exLevel0 = true; });
+                _exceptionService.Register<Level21Exception>(exception => { _exLevel21 = true; });
+                _exceptionService.Register<Level11Exception>(exception => { _exLevel11 = true; });
+                _exceptionService.Register<Level31Exception>(exception => { _exLevel31 = true; });
+                _exceptionService.Register<Level32Exception>(exception => { _exLevel32 = true; });
+                _exceptionService.Register<Level22Exception>(exception => { _exLevel22 = true; });
+                _exLevel0 = false;
+                _exLevel21 = false;
+                _exLevel11 = false;
+                _exLevel31 = false;
+                _exLevel32 = false;
+                _exLevel22 = false;
+
+            }
+
+            [TestCase]
+            public void PerformHandleExceptionLevel0()
+            {
+                var originalException = new Exception();
+                Assert.IsTrue(_exceptionService.HandleException(originalException));
+
+                Assert.IsTrue(_exLevel0);
+                Assert.IsFalse(_exLevel11);
+                Assert.IsFalse(_exLevel21);
+                Assert.IsFalse(_exLevel31);
+                Assert.IsFalse(_exLevel32);
+                Assert.IsFalse(_exLevel22);
+            }
+
+            [TestCase]
+            public void PerformHandleExceptionLevel11()
+            {
+                var originalException = new Level11Exception();
+                Assert.IsTrue(_exceptionService.HandleException(originalException));
+
+                Assert.IsFalse(_exLevel0);
+                Assert.IsTrue(_exLevel11);
+                Assert.IsFalse(_exLevel21);
+                Assert.IsFalse(_exLevel31);
+                Assert.IsFalse(_exLevel32);
+                Assert.IsFalse(_exLevel22);
+            }
+
+            [TestCase]
+            public void PerformHandleExceptionLevel21()
+            {
+                var originalException = new Level21Exception();
+                Assert.IsTrue(_exceptionService.HandleException(originalException));
+
+                Assert.IsFalse(_exLevel0);
+                Assert.IsFalse(_exLevel11);
+                Assert.IsTrue(_exLevel21);
+                Assert.IsFalse(_exLevel31);
+                Assert.IsFalse(_exLevel32);
+                Assert.IsFalse(_exLevel22);
+            }
+
+            [TestCase]
+            public void PerformHandleExceptionLevel31()
+            {
+                var originalException = new Level31Exception();
+                Assert.IsTrue(_exceptionService.HandleException(originalException));
+
+                Assert.IsFalse(_exLevel0);
+                Assert.IsFalse(_exLevel11);
+                Assert.IsFalse(_exLevel21);
+                Assert.IsTrue(_exLevel31);
+                Assert.IsFalse(_exLevel32);
+                Assert.IsFalse(_exLevel22);
+            }
+
+            [TestCase]
+            public void PerformHandleExceptionLevel32()
+            {
+                var originalException = new Level32Exception();
+                Assert.IsTrue(_exceptionService.HandleException(originalException));
+
+                Assert.IsFalse(_exLevel0);
+                Assert.IsFalse(_exLevel11);
+                Assert.IsFalse(_exLevel21);
+                Assert.IsFalse(_exLevel31);
+                Assert.IsTrue(_exLevel32);
+                Assert.IsFalse(_exLevel22);
+            }
+
+            [TestCase]
+            public void PerformHandleExceptionLevel22()
+            {
+                var originalException = new Level22Exception();
+                Assert.IsTrue(_exceptionService.HandleException(originalException));
+
+                Assert.IsFalse(_exLevel0);
+                Assert.IsFalse(_exLevel11);
+                Assert.IsFalse(_exLevel21);
+                Assert.IsFalse(_exLevel31);
+                Assert.IsFalse(_exLevel32);
+                Assert.IsTrue(_exLevel22);
+            }
+
+            private class Level11Exception : Exception { }
+            private class Level21Exception : Level11Exception { }
+            private class Level31Exception : Level21Exception { }
+            private class Level22Exception : Level11Exception { }
+            private class Level32Exception : Level22Exception { }
         }
         #endregion
     }

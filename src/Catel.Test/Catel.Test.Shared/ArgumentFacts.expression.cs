@@ -294,7 +294,8 @@ namespace Catel.Test
                 ImplementsInterfaceInvokation(typeof(List<int>), typeof(IList));
             }
 
-            public void ImplementsInterfaceInvokation<T>(T param, Type interfaceType) where T : class
+            public void ImplementsInterfaceInvokation<T>(T param, Type interfaceType) 
+                where T : class
             {
                 Argument.ImplementsInterface(() => param, interfaceType);
             }
@@ -321,7 +322,8 @@ namespace Catel.Test
                 IsOfTypeInvokation(typeof(PersonViewModel), typeof(ViewModelBase));
             }
 
-            public void IsOfTypeInvokation<T>(T param, Type interfaceType) where T : class
+            public void IsOfTypeInvokation<T>(T param, Type interfaceType) 
+                where T : class
             {
                 Argument.IsOfType(() => param, interfaceType);
             }
@@ -499,7 +501,8 @@ namespace Catel.Test
                  ImplementsOneOfTheInterfacesInvokation(typeof(List<int>), new[] { typeof(IList) });
              }
 
-            public void ImplementsOneOfTheInterfacesInvokation<T>(T param, Type[] interfaceTypes) where T : class
+            public void ImplementsOneOfTheInterfacesInvokation<T>(T param, Type[] interfaceTypes) 
+                where T : class
             {
                 Argument.ImplementsOneOfTheInterfaces(() => param, interfaceTypes);
             }

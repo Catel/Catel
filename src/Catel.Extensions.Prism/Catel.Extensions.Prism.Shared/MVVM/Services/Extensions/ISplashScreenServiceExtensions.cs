@@ -25,7 +25,8 @@ namespace Catel.Services
         /// <param name="viewModel">The view model.</param>
         /// <param name="regionName">The region name.</param>
         /// <param name="completedCallback">The completed callback.</param>
-        public static void CommitAsync<TViewModel>(this ISplashScreenService @this, TViewModel viewModel, string regionName, Action completedCallback = null) where TViewModel : IProgressNotifyableViewModel
+        public static void CommitAsync<TViewModel>(this ISplashScreenService @this, TViewModel viewModel, string regionName, Action completedCallback = null) 
+            where TViewModel : IProgressNotifyableViewModel
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
             var uiCompositionService = dependencyResolver.Resolve<IUICompositionService>();
