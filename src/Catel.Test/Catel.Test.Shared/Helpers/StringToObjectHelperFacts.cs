@@ -12,7 +12,14 @@ namespace Catel.Test
 
     public class StringToObjectHelperFacts
     {
-        // TODO: Write unit tests
+        public enum TestEnum
+        {
+            Value1,
+
+            Value2,
+
+            Value3
+        }
 
         [TestFixture]
         public class TheGetValueAsTimeSpanMethod
@@ -28,17 +35,20 @@ namespace Catel.Test
         }
 
         [TestFixture]
+        public class TheToRightTypeMethod
+        {
+            [TestCase]
+            public void SupportsEnum()
+            {
+                var enumValue = StringToObjectHelper.ToRightType(typeof(TestEnum), "Value3");
+
+                Assert.AreEqual(TestEnum.Value3, enumValue);
+            }
+        }
+
+        [TestFixture]
         public class TheGetValueAsEnumMethod
         {
-            public enum TestEnum
-            {
-                Value1,
-
-                Value2,
-
-                Value3
-            }
-
             [TestCase]
             public void ReturnsDefaultValueForInvalidValue()
             {
