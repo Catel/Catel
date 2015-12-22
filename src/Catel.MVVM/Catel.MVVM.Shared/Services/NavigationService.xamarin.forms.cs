@@ -77,7 +77,12 @@ namespace Catel.Services
         /// </summary>
         public override void RemoveBackEntry()
         {
-            throw new MustBeImplementedException();
+            if (CanGoBack)
+            {
+                var currentPage = Application.Current.CurrentPage();
+                var page = currentPage.Navigation.ModalStack[currentPage.Navigation.ModalStack.Count - 1];
+                currentPage.Navigation.RemovePage(page);
+            }
         }
 
         /// <summary>

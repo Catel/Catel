@@ -4,6 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Linq;
+using System.Reflection;
+using Catel.Reflection;
+
 namespace Catel.Xamarin.Forms
 {
     using System;
@@ -21,6 +25,9 @@ namespace Catel.Xamarin.Forms
     /// </typeparam>
     public class Application<TMainPage> : Application where TMainPage : Page
     {
+        /// <summary>
+        /// 
+        /// </summary>
         protected Application()
         {
             var serviceLocator = ServiceLocator.Default;
@@ -32,10 +39,19 @@ namespace Catel.Xamarin.Forms
             var mvvmModule = new MVVMModule();
             mvvmModule.Initialize(serviceLocator);
 
+            var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+
+            var assembly = this.GetType().GetTypeInfo().Assembly;
+            var currentModuleType = assembly.ExportedTypes.FirstOrDefault(type => typeof(IServiceLocatorInitializer).IsAssignableFromEx(type));
+            if (currentModuleType != null)
+            {
+                var currentModule = (IServiceLocatorInitializer)typeFactory.CreateInstance(currentModuleType);
+                currentModule.Initialize(serviceLocator);
+            }
+
             // TODO: Improve this approach.
             var viewModelLocator = serviceLocator.ResolveType<IViewModelLocator>();
             var viewModelFactory = serviceLocator.ResolveType<IViewModelFactory>();
-            var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
             var viewModelType= viewModelLocator.ResolveViewModel(typeof(TMainPage));
             var mainPage = typeFactory.CreateInstance<TMainPage>(); ;
             mainPage.BindingContext = viewModelFactory.CreateViewModel(viewModelType, null);
