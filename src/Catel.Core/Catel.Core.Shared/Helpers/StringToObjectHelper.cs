@@ -10,6 +10,7 @@ namespace Catel
     using System.Globalization;
     using System.Text;
     using Logging;
+    using Reflection;
 
     /// <summary>
     /// String to object helper class that converts a string to the right object if possible.
@@ -421,6 +422,11 @@ namespace Catel
             if (targetType == typeof(Type))
             {
                 return ToType(value);
+            }
+
+            if (targetType.IsEnumEx())
+            {
+                return Enum.Parse(targetType, value);
             }
 
             throw Log.ErrorAndCreateException<NotSupportedException>("Type '{0}' is not yet supported", targetType.FullName);
