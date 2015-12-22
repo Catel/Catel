@@ -426,7 +426,7 @@ namespace Catel
 
             if (targetType.IsEnumEx())
             {
-                return Enum.Parse(targetType, value);
+                return Enum.Parse(targetType, value, false);
             }
 
             throw Log.ErrorAndCreateException<NotSupportedException>("Type '{0}' is not yet supported", targetType.FullName);
