@@ -169,7 +169,7 @@ namespace Catel.ExceptionHandling
         /// <returns>The handler to use.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         /// <exception cref="Exception">A delegate callback throws an exception.</exception>
-        [ObsoleteEx(Message = "", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        [ObsoleteEx(Message = "Use Register<TException>(Action<TException> handler, Func<TException, bool> exceptionPredicate = null) instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         public IExceptionHandler Register<TException>(Action<TException> handler)
             where TException : Exception
         {

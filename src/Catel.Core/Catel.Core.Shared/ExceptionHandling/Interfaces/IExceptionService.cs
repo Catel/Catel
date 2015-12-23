@@ -12,6 +12,13 @@ namespace Catel.ExceptionHandling
     using System.Threading.Tasks;
 
     /// <summary>
+    /// The exception filter.
+    /// </summary>
+    /// <param name="exception"></param>
+    /// <returns></returns>
+    public delegate bool ExceptionPredicate(Exception exception); 
+
+    /// <summary>
     /// This interface describes a simple Exception service.
     /// </summary>
     public interface IExceptionService
@@ -87,7 +94,7 @@ namespace Catel.ExceptionHandling
         /// <returns>The handler to use.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
         /// <exception cref="Exception">A delegate callback throws an exception.</exception>
-        [ObsoleteEx(Message = "", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        [ObsoleteEx(Message = "Use Register<TException>(Action<TException> handler, Func<TException, bool> exceptionPredicate = null) instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         IExceptionHandler Register<TException>(Action<TException> handler)
             where TException : Exception;
 
@@ -207,11 +214,4 @@ namespace Catel.ExceptionHandling
         Task<TResult> ProcessWithRetryAsync<TResult>(Func<Task<TResult>> action);
         #endregion
     }
-
-    /// <summary>
-    /// The exception filter.
-    /// </summary>
-    /// <param name="exception"></param>
-    /// <returns></returns>
-    public delegate bool ExceptionPredicate(Exception exception); 
 }
