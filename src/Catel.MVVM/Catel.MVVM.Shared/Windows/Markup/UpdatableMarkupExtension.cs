@@ -35,6 +35,7 @@ namespace Catel.Windows.Markup
         private object _targetObject;
         private object _targetProperty;
         private bool _isFrameworkElementLoaded;
+        private IServiceProvider _serviceProvider;
         #endregion
 
         #region Constructors
@@ -71,7 +72,9 @@ namespace Catel.Windows.Markup
 #if WINDOWS_PHONE || NETFX_CORE
             _targetObject = null;
             _targetProperty = null;
+            _serviceProvider = null;
 #else
+            _serviceProvider = serviceProvider;
             var target = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
             if (target != null)
             {
@@ -115,7 +118,7 @@ namespace Catel.Windows.Markup
             }
 #endif
 
-            var dynamicValue = ProvideDynamicValue();
+            var dynamicValue = ProvideDynamicValue(serviceProvider);
             return dynamicValue;
         }
 
@@ -166,7 +169,7 @@ namespace Catel.Windows.Markup
         /// </summary>
         protected void UpdateValue()
         {
-            var value = ProvideDynamicValue();
+            var value = ProvideDynamicValue(_serviceProvider);
 
             if (_targetObject != null)
             {
@@ -218,7 +221,7 @@ namespace Catel.Windows.Markup
         /// Provides the dynamic value.
         /// </summary>
         /// <returns>System.Object.</returns>
-        protected abstract object ProvideDynamicValue();
+        protected abstract object ProvideDynamicValue(IServiceProvider serviceProvider);
         #endregion
     }
 }

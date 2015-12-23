@@ -79,7 +79,7 @@ namespace Catel.Windows.Markup
         /// When implemented in a derived class, returns an object that is provided as the value of the target property for this markup extension.
         /// </summary>
         /// <returns>The object value to set on the property where the extension is applied.</returns>
-        protected override object ProvideDynamicValue()
+        protected override object ProvideDynamicValue(IServiceProvider serviceProvider)
         {
             if (_languageService == null)
             {
