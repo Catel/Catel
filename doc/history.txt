@@ -59,6 +59,7 @@ Added/fixed:
 (*) CTL-789 Improve property handling in the context of RegisterProperties
 (*) CTL-792 Improve property editing performance
 (*) CTL-794 Allow application-wide commands to be executed when child windows have a focus
+(*) CTL-800 UpdatableMarkupExtension should expose IServiceProvider in the ProvideDynamicValue method
 (*) CTL-802 Add async version of OnOkExecute to DataWindow
 (*) CTL-806 Allow ValueConverterGroup to contain System.Windows.IValueConverter objects
 (*) CTL-807 Support enum values in ConfigurationService (and StringToObjectHelper)
