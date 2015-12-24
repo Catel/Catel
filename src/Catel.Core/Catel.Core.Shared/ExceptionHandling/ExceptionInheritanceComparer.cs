@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 #if !SL5
+
 namespace Catel.ExceptionHandling
 {
     using System;
@@ -42,4 +43,5 @@ namespace Catel.ExceptionHandling
         }
     }
 }
+
 #endif
