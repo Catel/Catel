@@ -105,8 +105,8 @@ namespace Catel.Threading
         {
             if (IsLockAcquired)
             {
-                Monitor.Exit(_syncObj);
                 IsLockAcquired = false;
+                Monitor.Exit(_syncObj);
             }
         }
 
