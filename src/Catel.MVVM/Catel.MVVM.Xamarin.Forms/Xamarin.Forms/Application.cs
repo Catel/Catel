@@ -31,16 +31,10 @@ namespace Catel.Xamarin.Forms
         protected Application()
         {
             var serviceLocator = ServiceLocator.Default;
-
-            // TODO: ModuleInit should work instead this.
-            var coreModule = new CoreModule();
-            coreModule.Initialize(serviceLocator);
-
-            var mvvmModule = new MVVMModule();
-            mvvmModule.Initialize(serviceLocator);
-
             var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
 
+            // TODO: Check if ModuleInit is enabled in runtime and execute this.
+            /*
             var assembly = this.GetType().GetTypeInfo().Assembly;
             var currentModuleType = assembly.ExportedTypes.FirstOrDefault(type => typeof(IServiceLocatorInitializer).IsAssignableFromEx(type));
             if (currentModuleType != null)
@@ -48,6 +42,7 @@ namespace Catel.Xamarin.Forms
                 var currentModule = (IServiceLocatorInitializer)typeFactory.CreateInstance(currentModuleType);
                 currentModule.Initialize(serviceLocator);
             }
+            */
 
             // TODO: Improve this approach.
             var viewModelLocator = serviceLocator.ResolveType<IViewModelLocator>();
