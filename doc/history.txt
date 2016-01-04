@@ -52,10 +52,11 @@ we will remove the features in the next major release.
 
 Added/fixed:
 ============
-(+) CTL-622 Added check type sorting and expression filter on ExceptionService
-(+) CTL-803 Added RegisterHandler method on IExceptionService
-(+) CTL-805 Added IExceptionHandler<T> to make implementation of custom exception handlers easier
-(+) CTL-809 Added CreateTaskCommand method on CommandHelper
+(+) CTL-622 Add check type sorting and expression filter on ExceptionService
+(+) CTL-796 Add Activate existing window methods in IUIVisualizerService
+(+) CTL-803 Add RegisterHandler method on IExceptionService
+(+) CTL-805 Add IExceptionHandler<T> to make implementation of custom exception handlers easier
+(+) CTL-809 Add CreateTaskCommand method on CommandHelper
 (*) CTL-785 Support expressions in validation result static members so you can now write
     FieldValidationResult.CreateWarning(() => MyProperty, "This field is required");
 (*) CTL-789 Improve property handling in the context of RegisterProperties

@@ -25,6 +25,8 @@ namespace Catel.Services
     /// </summary>
     public static class IUIVisualizerServiceExtensions
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Determines whether the specified view model type is registered.
         /// </summary>
@@ -62,7 +64,7 @@ namespace Catel.Services
         /// <exception cref="ArgumentException">viewModelType</exception>
         public static void Register<TViewModel, TView>(this IUIVisualizerService uiVisualizerService, bool throwExceptionIfExists = true)
         {
-            Register(uiVisualizerService, typeof (TViewModel), typeof (TView), throwExceptionIfExists);
+            Register(uiVisualizerService, typeof(TViewModel), typeof(TView), throwExceptionIfExists);
         }
 
         /// <summary>
@@ -127,7 +129,7 @@ namespace Catel.Services
             Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
 
             var viewModelFactory = GetViewModelFactory(uiVisualizerService);
-            var vm = viewModelFactory.CreateViewModel(typeof (TViewModel), model);
+            var vm = viewModelFactory.CreateViewModel(typeof(TViewModel), model);
             return uiVisualizerService.Show(vm, completedProc);
         }
 
@@ -203,11 +205,14 @@ namespace Catel.Services
         /// <param name="model">The model to be injected into the view model, can be <c>null</c>.</param>
         /// <param name="completedProc">The completed proc. Not applicable if window already exists.</param>
         /// <returns><c>true</c> if shown or activated successfully, <c>false</c> otherwise.</returns>
-        public static bool? ShowOrActivate<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null) where TViewModel : IViewModel
+        public static bool? ShowOrActivate<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null)
+            where TViewModel : IViewModel
         {
             Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
 
-            var viewModelManager = uiVisualizerService.GetServiceLocator().ResolveType<IViewModelManager>();
+            var dependencyResolver = uiVisualizerService.GetDependencyResolver();
+
+            var viewModelManager = dependencyResolver.Resolve<IViewModelManager>();
             var viewModel = viewModelManager.GetFirstOrDefaultInstance(typeof(TViewModel));
             if (viewModel == null)
             {
@@ -216,9 +221,9 @@ namespace Catel.Services
                 return uiVisualizerService.Show(vm, completedProc);
             }
 
-            var viewLocator = uiVisualizerService.GetDependencyResolver().Resolve<IViewLocator>();
+            var viewLocator = dependencyResolver.Resolve<IViewLocator>();
             var viewType = viewLocator.ResolveView(viewModel.GetType());
-            var viewManager = uiVisualizerService.GetServiceLocator().ResolveType<IViewManager>();
+            var viewManager = dependencyResolver.Resolve<IViewManager>();
             var view = viewManager.GetFirstOrDefaultInstance(viewType);
             var window = view as System.Windows.Window;
             if (view == null || window == null)
@@ -238,11 +243,14 @@ namespace Catel.Services
         /// <param name="completedProc">The completed proc. Not applicable if window already exists.</param>
         /// <returns><c>true</c> if shown or activated successfully, <c>false</c> otherwise.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="uiVisualizerService" /> is <c>null</c>.</exception>
-        public static Task<bool?> ShowOrActivateAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null) 
+        public static Task<bool?> ShowOrActivateAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object model = null, EventHandler<UICompletedEventArgs> completedProc = null)
+            where TViewModel : IViewModel
         {
             Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
 
-            var viewModelManager = uiVisualizerService.GetServiceLocator().ResolveType<IViewModelManager>();
+            var dependencyResolver = uiVisualizerService.GetDependencyResolver();
+
+            var viewModelManager = dependencyResolver.Resolve<IViewModelManager>();
             var viewModel = viewModelManager.GetFirstOrDefaultInstance(typeof(TViewModel));
             if (viewModel == null)
             {
@@ -251,9 +259,9 @@ namespace Catel.Services
                 return uiVisualizerService.ShowAsync(vm, completedProc);
             }
 
-            var viewLocator = uiVisualizerService.GetDependencyResolver().Resolve<IViewLocator>();
+            var viewLocator = dependencyResolver.Resolve<IViewLocator>();
             var viewType = viewLocator.ResolveView(viewModel.GetType());
-            var viewManager = uiVisualizerService.GetServiceLocator().ResolveType<IViewManager>();
+            var viewManager = dependencyResolver.Resolve<IViewManager>();
             var view = viewManager.GetFirstOrDefaultInstance(viewType);
             var window = view as System.Windows.Window;
             if (view == null || window == null)
@@ -261,7 +269,8 @@ namespace Catel.Services
                 return uiVisualizerService.ShowAsync(viewModel, completedProc);
             }
 
-            return TaskHelper.Run(() => ActivateWindow(window), true);
+            var activated = ActivateWindow(window);
+            return TaskHelper<bool?>.FromResult(activated);
         }
 
         /// <summary>
@@ -274,11 +283,11 @@ namespace Catel.Services
             var activateMethodInfo = window.GetType().GetMethodEx("Activate");
             if (activateMethodInfo == null)
             {
-                throw LogManager.GetCurrentClassLogger().ErrorAndCreateException<NotSupportedException>("Method 'Activate' not found on '{0}', cannot activate the window", window.GetType().Name);
+                throw Log.ErrorAndCreateException<NotSupportedException>("Method 'Activate' not found on '{0}', cannot activate the window", window.GetType().Name);
             }
 
             bool? result = false;
-            window.Dispatcher.InvokeIfRequired(() => result = (bool?) activateMethodInfo.Invoke(window, null));
+            window.Dispatcher.InvokeIfRequired(() => result = (bool?)activateMethodInfo.Invoke(window, null));
             return result;
         }
     }
