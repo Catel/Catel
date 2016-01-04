@@ -67,6 +67,7 @@ Added/fixed:
 (x) CTL-791 Types with the same FullName from different assemblies will cause issues with the TypeFactory cache
 (x) CTL-793 CompositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand not respected
 (x) CTL-798 Prevent MissingResourceException when resolving strings for Catel.Core
+(x) CTL-811 Fixed thread racing against IsLockAcquired property
 
 Roadmap:
 ========
