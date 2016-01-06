@@ -72,6 +72,7 @@ Added/fixed:
 (x) CTL-793 CompositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand not respected
 (x) CTL-798 Prevent MissingResourceException when resolving strings for Catel.Core
 (x) CTL-811 Fixed thread racing against IsLockAcquired property
+(x) CTL-813 BehaviorBase - AssociatedObject.Unloaded can be called multiple times
 
 Roadmap:
 ========

@@ -119,8 +119,8 @@ namespace Catel.Windows.Markup
             }
 #endif
 
-            var dynamicValue = ProvideDynamicValue();
-            return dynamicValue;
+            var value = GetValue();
+            return value;
         }
 
         private void OnTargetObjectLoadedInternal(object sender, RoutedEventArgs e)
@@ -170,12 +170,7 @@ namespace Catel.Windows.Markup
         /// </summary>
         protected void UpdateValue()
         {
-            var value = ProvideDynamicValue(_serviceProvider);
-            if (value == null)
-            {
-                // Backwards compatibility, will be removed in v5
-                value = ProvideDynamicValue();
-            }
+            var value = GetValue();
 
             if (_targetObject != null)
             {
@@ -221,6 +216,22 @@ namespace Catel.Windows.Markup
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the value by combining the rights methods (so we don't have to repeat ourselves).
+        /// </summary>
+        /// <returns>System.Object.</returns>
+        private object GetValue()
+        {
+            var value = ProvideDynamicValue(_serviceProvider);
+            if (value == null)
+            {
+                // Backwards compatibility, will be removed in v5
+                value = ProvideDynamicValue();
+            }
+
+            return value;
         }
 
         /// <summary>
