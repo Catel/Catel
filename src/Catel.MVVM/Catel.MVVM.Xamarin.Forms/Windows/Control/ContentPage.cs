@@ -5,6 +5,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using Catel.Windows.Control;
+
 namespace Catel.Windows.Controls
 {
     using IoC;
@@ -115,8 +117,9 @@ namespace Catel.Windows.Controls
         protected override sealed bool OnBackButtonPressed()
         {
             BackButtonPressed.SafeInvoke(this);
-            //// TODO: Review how if we must call Cancel method on view model here.
-            return base.OnBackButtonPressed();
+            var popupLayout = Content as PopupLayout;
+            //// TODO: Lookup for top most popup layout.
+            return (popupLayout != null && popupLayout.IsPopupActive) || base.OnBackButtonPressed();
         }
 
         /// <summary>
