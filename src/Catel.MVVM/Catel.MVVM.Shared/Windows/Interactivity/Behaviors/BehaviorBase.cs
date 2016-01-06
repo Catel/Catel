@@ -35,6 +35,7 @@ namespace Catel.Windows.Interactivity
     {
         #region Fields
         private bool _isClean = true;
+        private bool _isUnloadedHandled = false;
         private int _loadCounter;
         #endregion
 
@@ -177,7 +178,12 @@ namespace Catel.Windows.Interactivity
                 return;
             }
 
-            AssociatedObject.Unloaded += OnAssociatedObjectUnloadedInternal;
+            // Check if we already added unloaded handler.
+            if (!_isUnloadedHandled)
+            {
+                AssociatedObject.Unloaded += OnAssociatedObjectUnloadedInternal;
+                _isUnloadedHandled = true;
+            }
 
             OnAssociatedObjectLoaded();
         }
@@ -231,6 +237,7 @@ namespace Catel.Windows.Interactivity
             if (AssociatedObject != null)
             {
                 AssociatedObject.Unloaded -= OnAssociatedObjectUnloadedInternal;
+                _isUnloadedHandled = false;
             }
 
             Uninitialize();
