@@ -65,6 +65,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\DynamicConfigurationSerializerModifier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\EventArgs\ConfigurationChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\ConfigurationExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\ConfigurationExtensions.net.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\DynamicConfigurationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Interfaces\IConfigurationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoreModule.cs" />
