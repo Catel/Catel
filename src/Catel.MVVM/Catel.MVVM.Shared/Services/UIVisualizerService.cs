@@ -60,7 +60,7 @@ namespace Catel.Services
         /// <exception cref="ArgumentNullException">The <paramref name="viewLocator"/> is <c>null</c>.</exception>
         public UIVisualizerService(IViewLocator viewLocator)
         {
-            Argument.IsNotNull(() => viewLocator);
+            Argument.IsNotNull("viewLocator", viewLocator);
 
             _viewLocator = viewLocator;
         }

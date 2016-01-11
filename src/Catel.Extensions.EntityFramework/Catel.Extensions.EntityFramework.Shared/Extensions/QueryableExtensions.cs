@@ -37,8 +37,8 @@ namespace Catel.Data
 #endif
         public static IQueryable<T> Include<T>(this IQueryable<T> query, Expression<Func<T, object>> expression)
         {
-            Argument.IsNotNull(() => query);
-            Argument.IsNotNull(() => expression);
+            Argument.IsNotNull("query", query);
+            Argument.IsNotNull("expression", expression);
 
             var objectQuery = query as ObjectQuery<T>;
             if (objectQuery != null)

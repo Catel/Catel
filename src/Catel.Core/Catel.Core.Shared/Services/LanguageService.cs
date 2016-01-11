@@ -116,7 +116,7 @@ namespace Catel.Services
         /// <exception cref="ArgumentNullException">The <paramref name="languageSource" /> is <c>null</c> or whitespace.</exception>
         public void RegisterLanguageSource(ILanguageSource languageSource)
         {
-            Argument.IsNotNull(() => languageSource);
+            Argument.IsNotNull("languageSource", languageSource);
 
             _languageSources.Insert(0, languageSource);
         }

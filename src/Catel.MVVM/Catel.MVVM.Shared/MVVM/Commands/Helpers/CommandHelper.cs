@@ -20,50 +20,7 @@ namespace Catel.MVVM
     /// </summary>
     public static class CommandHelper
     {
-        //private static readonly ICacheStorage<string, ICommand> _commandsCache = new CacheStorage<string, ICommand>();
-
         #region Methods
-        ///// <summary>
-        ///// Initializes and caches <see cref="ICommand"/> instances to be used from a <see cref="ICommand"/> property getter.
-        ///// <para />
-        ///// Enables the declaration of a command using a get-only property without initialization code or storage field.
-        ///// <para />
-        ///// The command is provided using a factory function.
-        ///// <para />
-        ///// The source file path and property name is used as key for the cache.
-        ///// </summary>
-        ///// <param name="commandFactory">Function which returns a new instance of the command to be used.</param>
-        ///// <param name="callerFilePath">Used as cache key. Will be filled by the compiler.</param>
-        ///// <param name="callerMemberName">Used as cache key. Will be filled by the compiler.</param>
-        ///// <example>
-        ///// <code>
-        /////  <![CDATA[
-        ///// public ICommand SampleCommand
-        ///// {
-        /////     get
-        /////     {
-        /////         return Commands.GetCommand(() =>
-        /////             new Catel.MVVM.Command<string>(
-        /////                 execute: (x) => DoSomethingWith(x),
-        /////                 canExecute: (x) => !string.IsNullOrEmpty(x))
-        /////             );
-        /////     }
-        ///// }
-        ///// ]]>
-        ///// </code>
-        ///// </example>
-        //public static ICommand GetCommand(Func<ICommand> commandFactory,
-        //                                 [CallerFilePath] string callerFilePath = null,
-        //                                 [CallerMemberName] string callerMemberName = null)
-        //{
-        //    Argument.IsNotNull(() => commandFactory);
-
-        //    // build the key for the cache
-        //    var key = callerFilePath + ";" + callerMemberName;
-
-        //    return _commandsCache.GetFromCacheOrFetch(key, commandFactory);
-        //}
-
         /// <summary>
         /// Creates a new <see cref="Command"/> that automatically determines whether it can be executed. It does this
         /// by checking the right validation summary, which should be in a property..

@@ -37,8 +37,8 @@ namespace Catel.Data
         /// <param name="validate">if set to <c>true</c>, this method call will immediately force a call to validate the model.</param>
         public static void AddBusinessRuleValidationResult(this IModelValidation modelValidation, IBusinessRuleValidationResult businessRuleValidationResult, bool validate = false)
         {
-            Argument.IsNotNull(() => modelValidation);
-            Argument.IsNotNull(() => businessRuleValidationResult);
+            Argument.IsNotNull("modelValidation", modelValidation);
+            Argument.IsNotNull("businessRuleValidationResult", businessRuleValidationResult);
 
             EventHandler<ValidationEventArgs> validating = null;
             validating = (sender, e) =>
@@ -65,8 +65,8 @@ namespace Catel.Data
         /// <param name="validate">if set to <c>true</c>, this method call will immediately force a call to validate the model.</param>
         public static void AddFieldValidationResult(this IModelValidation modelValidation, IFieldValidationResult fieldValidationResult, bool validate = false)
         {
-            Argument.IsNotNull(() => modelValidation);
-            Argument.IsNotNull(() => fieldValidationResult);
+            Argument.IsNotNull("modelValidation", modelValidation);
+            Argument.IsNotNull("fieldValidationResult", fieldValidationResult);
 
             EventHandler<ValidationEventArgs> validating = null;
             validating = (sender, e) =>

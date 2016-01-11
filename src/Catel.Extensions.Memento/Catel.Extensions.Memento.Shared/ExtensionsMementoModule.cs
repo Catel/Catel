@@ -21,7 +21,7 @@ namespace Catel
         /// <param name="serviceLocator">The service locator.</param>
         public void Initialize(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull(() => serviceLocator);
+            Argument.IsNotNull("serviceLocator", serviceLocator);
 
             if (!serviceLocator.IsTypeRegistered<IMementoService>())
             {

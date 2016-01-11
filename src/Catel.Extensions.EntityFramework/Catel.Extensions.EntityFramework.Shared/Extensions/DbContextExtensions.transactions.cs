@@ -29,7 +29,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="dbContext"/> is <c>null</c>.</exception>
         public static void SetTransactionLevel(this DbContext dbContext, IsolationLevel isolationLevel)
         {
-            Argument.IsNotNull(() => dbContext);
+            Argument.IsNotNull("dbContext", dbContext);
 
             Log.Info("Setting transaction isolation level to '{0}' for DbContext '{1}'", isolationLevel, ObjectToStringHelper.ToFullTypeString(dbContext));
 

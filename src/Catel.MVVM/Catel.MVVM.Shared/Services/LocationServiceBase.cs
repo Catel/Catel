@@ -31,7 +31,7 @@ namespace Catel.Services
         /// <param name="dispatcherService">The dispatcher service.</param>
         protected LocationServiceBase(IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull(() => dispatcherService);
+            Argument.IsNotNull("dispatcherService", dispatcherService);
 
             _dispatcherService = dispatcherService;
 

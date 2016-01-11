@@ -20,7 +20,7 @@ namespace Catel.Services
         /// <returns>IDisposable.</returns>
         public static IDisposable HideTemporarily(this IPleaseWaitService pleaseWaitService)
         {
-            Argument.IsNotNull(() => pleaseWaitService);
+            Argument.IsNotNull("pleaseWaitService", pleaseWaitService);
 
             var showCounter = pleaseWaitService.ShowCounter;
 
@@ -56,7 +56,7 @@ namespace Catel.Services
         /// </example>
         public static IDisposable PushInScope(this IPleaseWaitService pleaseWaitService)
         {
-            Argument.IsNotNull(() => pleaseWaitService);
+            Argument.IsNotNull("pleaseWaitService", pleaseWaitService);
 
             return new DisposableToken<IPleaseWaitService>(pleaseWaitService, token => token.Instance.Push(), token => token.Instance.Pop());
         }

@@ -236,7 +236,7 @@ namespace Catel.MVVM
         /// </remarks>
         public void RegisterCommand(ICommand command, IViewModel viewModel = null)
         {
-            Argument.IsNotNull(() => command);
+            Argument.IsNotNull("command", command);
 
             lock (_lock)
             {

@@ -34,7 +34,7 @@ namespace Catel.Services
         /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
         public MessageService(IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull(() => dispatcherService);
+            Argument.IsNotNull("dispatcherService", dispatcherService);
 
             _dispatcherService = dispatcherService;
         }
