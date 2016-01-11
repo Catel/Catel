@@ -55,8 +55,8 @@ namespace Catel.MVVM.Views
 
                     var viewToViewModelAttribute = (ViewToViewModelAttribute)viewToViewModelAttributes[0];
 
-                    string propertyName = property.Name;
-                    string viewModelPropertyName = (string.IsNullOrEmpty(viewToViewModelAttribute.ViewModelPropertyName)) ? propertyName : viewToViewModelAttribute.ViewModelPropertyName;
+                    var propertyName = property.Name;
+                    var viewModelPropertyName = (string.IsNullOrEmpty(viewToViewModelAttribute.ViewModelPropertyName)) ? propertyName : viewToViewModelAttribute.ViewModelPropertyName;
 
                     var mapping = new ViewToViewModelMapping(propertyName, viewModelPropertyName, viewToViewModelAttribute.MappingType);
 

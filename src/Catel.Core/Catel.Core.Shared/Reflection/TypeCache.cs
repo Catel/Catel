@@ -734,38 +734,18 @@ namespace Catel.Reflection
 
         private static Dictionary<Assembly, HashSet<Type>> GetAssemblyTypes(List<Assembly> assemblies)
         {
-            // No need to use ConcurrentDictionary, keys are safe
-            var typesToAdd = new Dictionary<Assembly, HashSet<Type>>();
-            var actions = new List<Action>();
+            // Multithreaded invocation
+            var types = (from assembly in assemblies
+                         select new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assembly.GetAllTypesSafely())));
 
-            foreach (var assembly in assemblies)
-            {
-                Action task = () =>
-                {
-                    try
-                    {
-                        var types = new HashSet<Type>();
+#if SILVERLIGHT || PCL
+            var results = types;
+#else
+            var results = types.AsParallel();
+#endif
 
-                        foreach (var type in assembly.GetAllTypesSafely())
-                        {
-                            types.Add(type);
-                        }
-
-                        typesToAdd[assembly] = types;
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Warning(ex, "Failed to get all types in assembly '{0}'", assembly);
-                    }
-                };
-
-                actions.Add(task);
-            }
-
-            TaskHelper.RunAndWait(actions.ToArray());
-
-            return typesToAdd;
-        } 
+            return results.ToDictionary(p => p.Key, p => p.Value);
+        }
 
         private static void InitializeType(Assembly assembly, Type type)
         {
