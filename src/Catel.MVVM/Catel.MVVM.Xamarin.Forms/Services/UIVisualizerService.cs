@@ -1,39 +1,40 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UIVisualizerService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Threading.Tasks;
-using Catel.IoC;
-using Catel.MVVM;
-using Catel.Windows.Control;
-using Xamarin.Forms;
-using ContentPage = Catel.Windows.Controls.ContentPage;
 
 namespace Catel.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Threading.Tasks;
+    using Windows.Controls;
+    using global::Xamarin.Forms;
+    using IoC;
+    using MVVM;
+    using ContentPage = Windows.Controls.ContentPage;
+
     /// <summary>
     ///     Defines a UI controller which can be used to display dialogs in either modal or modaless form from a ViewModel
     /// </summary>
     public sealed class UIVisualizerService : IUIVisualizerService
     {
+        private readonly Dictionary<ContentPage, EventHandler<UICompletedEventArgs>> _callbacks = new Dictionary<ContentPage, EventHandler<UICompletedEventArgs>>();
+
+        private readonly ILanguageService _languageService;
+
         /// <summary>
         ///     The type factory.
         /// </summary>
         private readonly ITypeFactory _typeFactory;
 
-        private readonly ILanguageService _languageService;
-
         /// <summary>
         ///     The view locator.
         /// </summary>
         private readonly IViewLocator _viewLocator;
-
-        private readonly Dictionary<ContentPage, EventHandler<UICompletedEventArgs>> _callbacks = new Dictionary<ContentPage, EventHandler<UICompletedEventArgs>>();
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="UIVisualizerService" /> class.
