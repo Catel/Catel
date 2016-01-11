@@ -21,14 +21,15 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// The view mananger.
         /// </summary>
-        private IViewManager _viewManager;
+        private readonly IViewManager _viewManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContentView"/> class.
         /// </summary>
         protected ContentView()
         {
-            _viewManager = this.GetDependencyResolver().Resolve<IViewManager>();
+            var dependencyResolver = this.GetDependencyResolver();
+            _viewManager = dependencyResolver.Resolve<IViewManager>();
 
             BindingContextChanged += OnBindingContextChanged;
             DataContextChanged += OnDataContextChanged;
@@ -37,12 +38,10 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// Gets the view model.
         /// </summary>
-        public IViewModel ViewModel => DataContext as IViewModel;
-
-        /// <summary>
-        /// Occurs when the view model has changed.
-        /// </summary>
-        public event EventHandler<EventArgs> ViewModelChanged;
+        public IViewModel ViewModel
+        {
+            get { return DataContext as IViewModel; }
+        }
 
         /// <summary>
         /// Gets or sets the data context.
@@ -53,17 +52,19 @@ namespace Catel.Windows.Controls
         public object DataContext
         {
             get { return BindingContext; }
-
             set { BindingContext = value; }
         }
 
         /// <summary>
         /// Gets or sets the tag.
         /// </summary>
-        /// <value>
-        /// The tag.
-        /// </value>
+        /// <value>The tag.</value>
         public object Tag { get; set; }
+
+        /// <summary>
+        /// Occurs when the view model has changed.
+        /// </summary>
+        public event EventHandler<EventArgs> ViewModelChanged;
 
         /// <summary>
         /// Occurs when the view is loaded.

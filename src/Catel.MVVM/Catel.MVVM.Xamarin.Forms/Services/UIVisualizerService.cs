@@ -26,6 +26,8 @@ namespace Catel.Services
         /// </summary>
         private readonly ITypeFactory _typeFactory;
 
+        private readonly ILanguageService _languageService;
+
         /// <summary>
         ///     The view locator.
         /// </summary>
@@ -38,13 +40,16 @@ namespace Catel.Services
         /// </summary>
         /// <exception cref="System.ArgumentNullException">The <paramref name="viewLocator" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
-        public UIVisualizerService(IViewLocator viewLocator, ITypeFactory typeFactory)
+        /// <exception cref="System.ArgumentNullException">The <paramref name="languageService" /> is <c>null</c>.</exception>
+        public UIVisualizerService(IViewLocator viewLocator, ITypeFactory typeFactory, ILanguageService languageService)
         {
             Argument.IsNotNull(() => viewLocator);
             Argument.IsNotNull(() => typeFactory);
+            Argument.IsNotNull(() => languageService);
 
             _viewLocator = viewLocator;
             _typeFactory = typeFactory;
+            _languageService = languageService;
         }
 
         /// <summary>
@@ -136,7 +141,10 @@ namespace Catel.Services
             var viewModelView = (View) _typeFactory.CreateInstance(resolvedView);
             viewModelView.BindingContext = viewModel;
 
-            var okButton = new Button {Text = "OK"};
+            var okButton = new Button
+            {
+                Text = _languageService.GetString("OK")
+            };
             okButton.Clicked += async (sender, args) =>
             {
                 await viewModel.SaveAndCloseViewModel();
@@ -160,7 +168,10 @@ namespace Catel.Services
                 checkIfViewModelHasErrors();
             }
 
-            var cancelButton = new Button {Text = "Cancel"};
+            var cancelButton = new Button
+            {
+                Text = _languageService.GetString("Cancel")
+            };
             cancelButton.Clicked += async (sender, args) =>
             {
                 await viewModel.CancelAndCloseViewModel();
@@ -242,7 +253,7 @@ namespace Catel.Services
         /// </exception>
         public bool? Show(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
-            throw new MustBeImplementedException();
+            throw new NotSupportedInPlatformException();
         }
 
         /// <summary>
@@ -264,7 +275,7 @@ namespace Catel.Services
         /// </exception>
         public Task<bool?> ShowAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
-            throw new MustBeImplementedException();
+            throw new NotSupportedInPlatformException();
         }
 
         /// <summary>

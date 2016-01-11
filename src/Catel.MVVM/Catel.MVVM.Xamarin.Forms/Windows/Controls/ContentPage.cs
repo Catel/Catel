@@ -5,8 +5,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-using Catel.Windows.Control;
-
 namespace Catel.Windows.Controls
 {
     using IoC;

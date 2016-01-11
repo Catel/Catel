@@ -1,21 +1,15 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MessagingCenter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
+// <copyright file="Application.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Linq;
-using System.Reflection;
-using Catel.Reflection;
 
 namespace Catel.Xamarin.Forms
 {
-    using System;
-    using Catel.IoC;
-    using Catel.MVVM;
-    using Forms;
-    using Page = global::Xamarin.Forms.Page;
-    using Application = global::Xamarin.Forms.Application;
+    using global::Xamarin.Forms;
+    using IoC;
+    using MVVM;
 
     /// <summary>
     /// The application base class.
@@ -23,10 +17,11 @@ namespace Catel.Xamarin.Forms
     /// <typeparam name="TMainPage">
     /// The main page type.
     /// </typeparam>
-    public class Application<TMainPage> : Application where TMainPage : Page
+    public class Application<TMainPage> : Application 
+        where TMainPage : Page
     {
         /// <summary>
-        /// 
+        /// The main application.
         /// </summary>
         protected Application()
         {
@@ -47,26 +42,27 @@ namespace Catel.Xamarin.Forms
             // TODO: Improve this approach.
             var viewModelLocator = serviceLocator.ResolveType<IViewModelLocator>();
             var viewModelFactory = serviceLocator.ResolveType<IViewModelFactory>();
-            var viewModelType= viewModelLocator.ResolveViewModel(typeof(TMainPage));
-            var mainPage = typeFactory.CreateInstance<TMainPage>(); ;
+            var viewModelType = viewModelLocator.ResolveViewModel(typeof (TMainPage));
+            var mainPage = typeFactory.CreateInstance<TMainPage>();
+            
             mainPage.BindingContext = viewModelFactory.CreateViewModel(viewModelType, null);
             Initialize(mainPage);
         }
-        
+
         /// <summary>
         /// Initialize the main page. 
         /// </summary>
         /// <param name="mainPage"></param>
         private void Initialize(TMainPage mainPage)
         {
-            this.MainPage = CustomizeMainPage(mainPage);
+            MainPage = CustomizeMainPage(mainPage);
         }
 
         /// <summary>
         /// Allow developers customize the application page.
         /// </summary>
         /// <param name="currentMainPage"></param>
-        /// <returns>The application page</returns>
+        /// <returns>The application page.</returns>
         /// <remarks>If customization is <c>null</c> the <paramref name="currentMainPage"/> will be set as MainPage.</remarks>
         private Page CustomizeMainPage(TMainPage currentMainPage)
         {
@@ -76,12 +72,8 @@ namespace Catel.Xamarin.Forms
         /// <summary>
         /// Allow developers customize the application page.
         /// </summary>
-        /// <param name="currentMainPage">
-        /// The current main page.
-        /// </param>
-        /// <returns>
-        /// The customized main page
-        /// </returns>
+        /// <param name="currentMainPage">The current main page.</param>
+        /// <returns>The customized main page.</returns>
         /// <example>
         /// return new Navigation(currentMainPage);
         /// </example>

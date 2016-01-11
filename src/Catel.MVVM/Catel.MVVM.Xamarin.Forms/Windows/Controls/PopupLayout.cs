@@ -1,10 +1,17 @@
-using System;
-using System.Threading.Tasks;
-using Catel.Logging;
-using Xamarin.Forms;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ContentPage.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Windows.Control
+
+namespace Catel.Windows.Controls
 {
+    using System;
+    using System.Threading.Tasks;
+    using Catel.Logging;
+    using global::Xamarin.Forms;
+
     /// <summary>
     ///     Is a relative layout that allow show view as modal.
     /// </summary>
@@ -91,8 +98,8 @@ namespace Catel.Windows.Control
             }
 
             backdrop.Children.Add(_popupView,
-                Constraint.RelativeToParent(p => (Width/2) - (_popupView.WidthRequest/2)),
-                Constraint.RelativeToParent(p => (Height/2) - (_popupView.HeightRequest/2)),
+                Constraint.RelativeToParent(p => Width/2 - _popupView.WidthRequest/2),
+                Constraint.RelativeToParent(p => Height/2 - _popupView.HeightRequest/2),
                 Constraint.RelativeToParent(p => _popupView.WidthRequest),
                 Constraint.RelativeToParent(p => _popupView.HeightRequest));
 

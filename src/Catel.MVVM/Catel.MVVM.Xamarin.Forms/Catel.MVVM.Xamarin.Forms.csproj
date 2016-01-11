@@ -46,9 +46,9 @@
   <ItemGroup>
     <Compile Include="ModuleInitializer.cs" />
     <Compile Include="Services\UIVisualizerService.cs" />
-    <Compile Include="Windows\Control\ContentPage.cs" />
-    <Compile Include="Windows\Control\ContentView.cs" />
-    <Compile Include="Windows\Control\PopupLayout.cs" />
+    <Compile Include="Windows\Controls\ContentPage.cs" />
+    <Compile Include="Windows\Controls\ContentView.cs" />
+    <Compile Include="Windows\Controls\PopupLayout.cs" />
     <Compile Include="Xamarin.Forms\Application.cs" />
     <Compile Include="Xamarin.Forms\MessagingCenter.cs" />
   </ItemGroup>
