@@ -1,6 +1,13 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CameraService.xamarin.forms.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+#if XAMARIN_FORMS
+
 namespace Catel.Services
 {
-#if XAMARIN_FORMS
     using System.Collections.Generic;
 
     public partial class CameraService
@@ -224,6 +231,6 @@ namespace Catel.Services
             throw new MustBeImplementedException();
         }
     }
+}
 
 #endif
-}

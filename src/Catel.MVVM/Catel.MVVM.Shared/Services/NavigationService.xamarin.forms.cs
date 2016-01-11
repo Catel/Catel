@@ -26,7 +26,10 @@ namespace Catel.Services
         /// Gets the can go back.
         /// </summary>
         /// <value>The can go back.</value>
-        public override bool CanGoBack => this.GetBackStackCount() > 0;
+        public override bool CanGoBack
+        {
+            get { return GetBackStackCount() > 0; }
+        }
 
         /// <summary>
         /// Gets the can go forward.
@@ -118,14 +121,17 @@ namespace Catel.Services
 
         async partial void NavigateWithParameters(string uri, Dictionary<string, object> parameters)
         {
+            var dependencyResolver = this.GetDependencyResolver();
+
             var viewType = Type.GetType(uri);
-            var viewModelLocator = this.GetDependencyResolver().Resolve<IViewModelLocator>();
+            var viewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
             var viewModelType = viewModelLocator.ResolveViewModel(viewType);
-            var typeFactory = this.GetDependencyResolver().Resolve<ITypeFactory>();
+            var typeFactory = dependencyResolver.Resolve<ITypeFactory>();
             var view = (Page)typeFactory.CreateInstance(viewType);
-            var viewModelFactory = this.GetDependencyResolver().Resolve<IViewModelFactory>();
+            var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
             var viewModel = viewModelFactory.CreateViewModel(viewModelType, null);
             view.BindingContext = viewModel;
+
             var currentPage = Application.Current.CurrentPage();
             if (currentPage != null)
             {

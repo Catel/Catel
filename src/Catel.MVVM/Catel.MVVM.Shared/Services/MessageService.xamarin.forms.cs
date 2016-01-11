@@ -9,13 +9,12 @@
 
 namespace Catel.Services
 {
-    using Catel.Xamarin.Forms;
-
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using global::Xamarin.Forms;
+    using IoC;
 
     public partial class MessageService
     {
@@ -29,9 +28,15 @@ namespace Catel.Services
         /// </summary>
         partial void Initialize()
         {
-            _configurationResultMap.Add(MessageButton.OK, new Configuration("OK", MessageResult.OK, null, MessageResult.None));
-            _configurationResultMap.Add(MessageButton.OKCancel, new Configuration("OK", MessageResult.OK, "Cancel", MessageResult.Cancel));
-            _configurationResultMap.Add(MessageButton.YesNo, new Configuration("Yes", MessageResult.Yes, "No", MessageResult.No));
+            var dependencyResolver = this.GetDependencyResolver();
+
+            var languageService = dependencyResolver.Resolve<ILanguageService>();
+
+            _configurationResultMap.Add(MessageButton.OK, new Configuration(languageService.GetString("OK"), MessageResult.OK, null, MessageResult.None));
+            _configurationResultMap.Add(MessageButton.OKCancel, new Configuration(languageService.GetString("OK"), MessageResult.OK,
+                languageService.GetString("Cancel"), MessageResult.Cancel));
+            _configurationResultMap.Add(MessageButton.YesNo, new Configuration(languageService.GetString("Yes"), MessageResult.Yes,
+                languageService.GetString("No"), MessageResult.No));
         }
 
         /// <summary>
