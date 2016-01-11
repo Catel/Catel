@@ -8,11 +8,11 @@ namespace Catel.Reflection
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Threading;
     using Logging;
+    using Threading;
 
     /// <summary>
     /// Cache containing the types of an appdomain.
@@ -673,7 +673,7 @@ namespace Catel.Reflection
                     _typesWithoutAssemblyLowerCase = new Dictionary<string, string>();
                 }
 
-                var assembliesToInitialize = checkSingleAssemblyOnly ? new List<Assembly>(new[] {assembly}) : AssemblyHelper.GetLoadedAssemblies();
+                var assembliesToInitialize = checkSingleAssemblyOnly ? new List<Assembly>(new[] { assembly }) : AssemblyHelper.GetLoadedAssemblies();
                 InitializeAssemblies(assembliesToInitialize);
             }
         }
@@ -682,39 +682,27 @@ namespace Catel.Reflection
         {
             lock (_lockObject)
             {
-                var typesToAdd = new Dictionary<Assembly, HashSet<Type>>();
+                var assembliesToRetrieve = new List<Assembly>();
 
                 foreach (var assembly in assemblies)
                 {
                     var loadedAssemblyFullName = assembly.FullName;
-
-                    try
+                    if (_loadedAssemblies.Contains(loadedAssemblyFullName))
                     {
-                        if (_loadedAssemblies.Contains(loadedAssemblyFullName))
-                        {
-                            continue;
-                        }
-
-                        _loadedAssemblies.Add(loadedAssemblyFullName);
-
-                        if (ShouldIgnoreAssembly(assembly))
-                        {
-                            continue;
-                        }
-
-                        typesToAdd[assembly] = new HashSet<Type>();
-
-                        foreach (var type in AssemblyHelper.GetAllTypesSafely(assembly))
-                        {
-                            typesToAdd[assembly].Add(type);
-                        }
+                        continue;
                     }
-                    catch (Exception ex)
+
+                    _loadedAssemblies.Add(loadedAssemblyFullName);
+
+                    if (ShouldIgnoreAssembly(assembly))
                     {
-                        Log.Warning(ex, "Failed to get all types in assembly '{0}'", loadedAssemblyFullName);
+                        continue;
                     }
+
+                    assembliesToRetrieve.Add(assembly);
                 }
 
+                var typesToAdd = GetAssemblyTypes(assembliesToRetrieve);
                 foreach (var assemblyWithTypes in typesToAdd)
                 {
                     foreach (var type in assemblyWithTypes.Value)
@@ -744,8 +732,43 @@ namespace Catel.Reflection
             }
         }
 
+        private static Dictionary<Assembly, HashSet<Type>> GetAssemblyTypes(List<Assembly> assemblies)
+        {
+            // No need to use ConcurrentDictionary, keys are safe
+            var typesToAdd = new Dictionary<Assembly, HashSet<Type>>();
+            var actions = new List<Action>();
+
+            foreach (var assembly in assemblies)
+            {
+                Action task = () =>
+                {
+                    try
+                    {
+                        var types = new HashSet<Type>();
+
+                        foreach (var type in assembly.GetAllTypesSafely())
+                        {
+                            types.Add(type);
+                        }
+
+                        typesToAdd[assembly] = types;
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Warning(ex, "Failed to get all types in assembly '{0}'", assembly);
+                    }
+                };
+
+                actions.Add(task);
+            }
+
+            TaskHelper.RunAndWait(actions.ToArray());
+
+            return typesToAdd;
+        } 
+
         private static void InitializeType(Assembly assembly, Type type)
-        {  
+        {
             if (ShouldIgnoreType(assembly, type))
             {
                 return;
