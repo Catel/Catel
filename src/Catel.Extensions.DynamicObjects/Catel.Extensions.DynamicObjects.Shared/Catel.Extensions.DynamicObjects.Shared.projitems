@@ -11,6 +11,8 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Data\DynamicModelBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\DynamicModelBaseMetaObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\DynamicObservableObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\DynamicObservableObjectMetaObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExtensionsDynamicObjectsModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />

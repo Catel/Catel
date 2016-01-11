@@ -66,6 +66,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Data\Specifications\OrSpecificationFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Data\Specifications\SpecificationTestData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DynamicObjects\DynamicModelBaseFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DynamicObjects\DynamicObservableObjectFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\Data\ConnectionStringManagerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\Data\ContextManagerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\Data\DbContextManagerFacts.cs" />

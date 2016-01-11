@@ -23,7 +23,7 @@ For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/U
 
 Release date:
 =============
-201x/xx/xx
+2016/xx/xx
 
 Added/fixed (BREAKING CHANGES):
 ===============================
@@ -57,6 +57,7 @@ Added/fixed:
 (+) CTL-803 Add RegisterHandler method on IExceptionService
 (+) CTL-805 Add IExceptionHandler<T> to make implementation of custom exception handlers easier
 (+) CTL-809 Add CreateTaskCommand method on CommandHelper
+(+) CTL-817 Add DynamicObservableObject implementation
 (*) CTL-785 Support expressions in validation result static members so you can now write
     FieldValidationResult.CreateWarning(() => MyProperty, "This field is required");
 (*) CTL-789 Improve property handling in the context of RegisterProperties
@@ -68,6 +69,7 @@ Added/fixed:
 (*) CTL-806 Allow ValueConverterGroup to contain System.Windows.IValueConverter objects
 (*) CTL-807 Support enum values in ConfigurationService (and StringToObjectHelper)
 (*) CTL-810 Marked QueryableExtensions.Include(Expression) as obsolete for EF6 and higher
+(*) CTL-814 Improve Argument.IsValid implementation to allow more options
 (x) CTL-791 Types with the same FullName from different assemblies will cause issues with the TypeFactory cache
 (x) CTL-793 CompositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand not respected
 (x) CTL-798 Prevent MissingResourceException when resolving strings for Catel.Core
