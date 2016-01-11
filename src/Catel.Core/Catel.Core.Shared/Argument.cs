@@ -777,8 +777,6 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsValid<T>(string paramName, T paramValue, bool validation)
         {
-            Argument.IsNotNull("paramValue", paramValue);
-
             if (!validation)
             {
                 var error = string.Format("Argument '{0}' is not valid", ObjectToStringHelper.ToString(paramName));
