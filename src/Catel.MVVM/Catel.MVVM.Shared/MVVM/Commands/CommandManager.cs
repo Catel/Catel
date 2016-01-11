@@ -113,8 +113,6 @@ namespace Catel.MVVM
                 _originalCommandGestures.Add(commandName, inputGesture);
                 _commandGestures.Add(commandName, inputGesture);
 
-                InvalidateCommands();
-
                 CommandCreated.SafeInvoke(this, new CommandCreatedEventArgs(compositeCommand, commandName));
             }
         }
