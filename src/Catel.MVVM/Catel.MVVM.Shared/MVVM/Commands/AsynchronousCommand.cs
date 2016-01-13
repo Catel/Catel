@@ -190,7 +190,7 @@ namespace Catel.MVVM
 
                     if (IsCancelationRequested)
                     {
-                        Canceled.SafeInvoke(this, new CommandEventArgs(parameter));
+                        Canceled.SafeInvoke(this, () => new CommandEventArgs(parameter));
                     }
                     else
                     {

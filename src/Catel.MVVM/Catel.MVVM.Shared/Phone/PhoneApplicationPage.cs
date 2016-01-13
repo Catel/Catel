@@ -21,15 +21,15 @@ namespace Catel.Phone.Controls
     /// </summary>
     public class PhoneApplicationPage : Microsoft.Phone.Controls.PhoneApplicationPage, IPage
     {
-        #region Fields
+#region Fields
         private readonly PageLogic _logic;
 
         private event EventHandler<EventArgs> _viewLoaded;
         private event EventHandler<EventArgs> _viewUnloaded;
         private event EventHandler<DataContextChangedEventArgs> _viewDataContextChanged;
-        #endregion
+#endregion
 
-        #region Constructors
+#region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="PhoneApplicationPage"/> class.
         /// </summary>
@@ -75,11 +75,11 @@ namespace Catel.Phone.Controls
                 OnUnloaded(e);
             };
 
-            this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged.SafeInvoke(this, new DataContextChangedEventArgs(e.OldValue, e.NewValue)));
+            this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged.SafeInvoke(this, () => new DataContextChangedEventArgs(e.OldValue, e.NewValue)));
         }
-        #endregion
+#endregion
 
-        #region Properties
+#region Properties
         /// <summary>
         /// Gets the type of the view model that this user control uses.
         /// </summary>
@@ -109,9 +109,9 @@ namespace Catel.Phone.Controls
         {
             get { return _logic.GetValue<PageLogic, IViewModel>(x => x.ViewModel); }
         }
-        #endregion
+#endregion
 
-        #region Events
+#region Events
         /// <summary>
         /// Occurs when a property on the container has changed.
         /// </summary>
@@ -157,9 +157,9 @@ namespace Catel.Phone.Controls
             add { _viewDataContextChanged += value; }
             remove { _viewDataContextChanged -= value; }
         }
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
         private void RaiseViewModelChanged()
         {
             OnViewModelChanged();
@@ -210,7 +210,7 @@ namespace Catel.Phone.Controls
         protected virtual void OnViewModelChanged()
         {
         }
-        #endregion
+#endregion
     }
 }
 

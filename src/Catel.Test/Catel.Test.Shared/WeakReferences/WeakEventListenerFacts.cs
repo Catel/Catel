@@ -125,12 +125,12 @@ namespace Catel.Test
             #region Methods
             public static void RaiseStaticEvent()
             {
-                StaticEvent.SafeInvoke(null, new ViewModelClosedEventArgs(new TestViewModel(), true));
+                StaticEvent.SafeInvoke(null, () => new ViewModelClosedEventArgs(new TestViewModel(), true));
             }
 
             public void RaisePublicEvent()
             {
-                PublicEvent.SafeInvoke(this, new ViewModelClosedEventArgs(new TestViewModel(), true));
+                PublicEvent.SafeInvoke(this, () => new ViewModelClosedEventArgs(new TestViewModel(), true));
             }
 
             public void RaisePrivateEvent()
@@ -145,7 +145,7 @@ namespace Catel.Test
 
             public void RaiseCollectionChangedEvent()
             {
-                CollectionChanged.SafeInvoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                CollectionChanged.SafeInvoke(this, () => new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             }
             #endregion
 

@@ -114,7 +114,7 @@ namespace Catel.Runtime.Serialization
                 _serializationModifiersPerTypeCache.Remove(type);
             }
 
-            CacheInvalidated.SafeInvoke(this, new CacheInvalidatedEventArgs(type));
+            CacheInvalidated.SafeInvoke(this, () => new CacheInvalidatedEventArgs(type));
         }
 
         /// <summary>

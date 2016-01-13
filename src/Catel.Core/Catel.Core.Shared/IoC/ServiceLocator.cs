@@ -278,23 +278,27 @@ namespace Catel.IoC
                 // TODO: Can register, 
 
                 // Last resort
-                var eventArgs = new MissingTypeEventArgs(serviceType);
-                MissingType.SafeInvoke(this, eventArgs);
-
-                if (eventArgs.ImplementingInstance != null)
+                var missingTypeHandler = MissingType;
+                if (missingTypeHandler != null)
                 {
-                    Log.Debug("Late registering type '{0}' to instance of type '{1}' via MissingTypeEventArgs.ImplementingInstance", serviceType.FullName, eventArgs.ImplementingInstance.GetType().FullName);
+                    var eventArgs = new MissingTypeEventArgs(serviceType);
+                    missingTypeHandler(this, eventArgs);
 
-                    RegisterInstance(serviceType, eventArgs.ImplementingInstance, eventArgs.Tag, this);
-                    return true;
-                }
+                    if (eventArgs.ImplementingInstance != null)
+                    {
+                        Log.Debug("Late registering type '{0}' to instance of type '{1}' via MissingTypeEventArgs.ImplementingInstance", serviceType.FullName, eventArgs.ImplementingInstance.GetType().FullName);
 
-                if (eventArgs.ImplementingType != null)
-                {
-                    Log.Debug("Late registering type '{0}' to type '{1}' via MissingTypeEventArgs.ImplementingType", serviceType.FullName, eventArgs.ImplementingType.FullName);
+                        RegisterInstance(serviceType, eventArgs.ImplementingInstance, eventArgs.Tag, this);
+                        return true;
+                    }
 
-                    RegisterType(serviceType, eventArgs.ImplementingType, eventArgs.Tag, eventArgs.RegistrationType, true, this, null);
-                    return true;
+                    if (eventArgs.ImplementingType != null)
+                    {
+                        Log.Debug("Late registering type '{0}' to type '{1}' via MissingTypeEventArgs.ImplementingType", serviceType.FullName, eventArgs.ImplementingType.FullName);
+
+                        RegisterType(serviceType, eventArgs.ImplementingType, eventArgs.Tag, eventArgs.RegistrationType, true, this, null);
+                        return true;
+                    }
                 }
             }
 
@@ -644,7 +648,7 @@ namespace Catel.IoC
                 _registeredInstances[serviceInfo] = new RegisteredInstanceInfo(registeredTypeInfo, instance);
             }
 
-            TypeRegistered.SafeInvoke(this, new TypeRegisteredEventArgs(registeredTypeInfo.DeclaringType, registeredTypeInfo.ImplementingType, tag, RegistrationType.Singleton));
+            TypeRegistered.SafeInvoke(this, () => new TypeRegisteredEventArgs(registeredTypeInfo.DeclaringType, registeredTypeInfo.ImplementingType, tag, RegistrationType.Singleton));
 
             Log.Debug("Registered type '{0}' to instance of type '{1}'", serviceType.FullName, instance.GetType().FullName);
         }
@@ -710,7 +714,7 @@ namespace Catel.IoC
                 _registeredTypes[serviceInfo] = registeredTypeInfo;
             }
 
-            TypeRegistered.SafeInvoke(this, new TypeRegisteredEventArgs(registeredTypeInfo.DeclaringType, registeredTypeInfo.ImplementingType, tag, registeredTypeInfo.RegistrationType));
+            TypeRegistered.SafeInvoke(this, () => new TypeRegisteredEventArgs(registeredTypeInfo.DeclaringType, registeredTypeInfo.ImplementingType, tag, registeredTypeInfo.RegistrationType));
 
             Log.Debug("Registered type '{0}' to type '{1}'", serviceType.FullName, serviceImplementationType.FullName);
         }

@@ -146,6 +146,44 @@ namespace Catel
             return false;
         }
 
+
+        /// <summary>
+        /// Invokes the specified <paramref name="handler"/> in a thread-safe manner. Where normally one
+        /// has to write the following code:
+        /// <para />
+        /// <code>
+        /// <![CDATA[
+        /// var handler = MyEvent;
+        /// if (handler != null)
+        /// {
+        ///     handler(this, e);
+        /// }
+        /// ]]>
+        /// </code>
+        /// <para />
+        /// One can now write:
+        /// <para />
+        /// <code>
+        /// MyEvent.SafeInvoke(this, e);
+        /// </code>
+        /// </summary>
+        /// <typeparam name="TEventArgs">The type of the <see cref="EventArgs"/> class.</typeparam>
+        /// <param name="handler">The handler.</param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The event args.</param>
+        /// <returns><c>true</c> if the event handler was not <c>null</c>; otherwise <c>false</c>.</returns>
+        public static bool SafeInvoke<TEventArgs>(this EventHandler<TEventArgs> handler, object sender, Func<TEventArgs> e)
+            where TEventArgs : EventArgs
+        {
+            if (handler != null)
+            {
+                SplitInvoke(handler, sender, e());
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Invokes the specified <paramref name="handler"/> in a thread-safe manner. Where normally one
         /// has to write the following code:
@@ -187,6 +225,41 @@ namespace Catel
         /// <para />
         /// <code>
         /// <![CDATA[
+        /// var handler = PropertyChanged;
+        /// if (handler != null)
+        /// {
+        ///     handler(this, e, new PropertyChangedEventArgs("propertyName"));
+        /// }
+        /// ]]>
+        /// </code>
+        /// <para />
+        /// One can now write:
+        /// <para />
+        /// <code>
+        /// PropertyChanged.SafeInvoke(this, e, new PropertyChangedEventArgs("propertyName"));
+        /// </code>
+        /// </summary>
+        /// <param name="handler">The handler.</param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The event args.</param>
+        /// <returns><c>true</c> if the event handler was not <c>null</c>; otherwise <c>false</c>.</returns>
+        public static bool SafeInvoke(this PropertyChangedEventHandler handler, object sender, Func<PropertyChangedEventArgs> e)
+        {
+            if (handler != null)
+            {
+                SplitInvoke(handler, sender, e());
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Invokes the specified <paramref name="handler"/> in a thread-safe manner. Where normally one
+        /// has to write the following code:
+        /// <para />
+        /// <code>
+        /// <![CDATA[
         /// var handler = CollectionChanged;
         /// if (handler != null)
         /// {
@@ -210,6 +283,41 @@ namespace Catel
             if (handler != null)
             {
                 SplitInvoke(handler, sender, e);
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Invokes the specified <paramref name="handler"/> in a thread-safe manner. Where normally one
+        /// has to write the following code:
+        /// <para />
+        /// <code>
+        /// <![CDATA[
+        /// var handler = CollectionChanged;
+        /// if (handler != null)
+        /// {
+        ///     handler(this, e, new NotifyCollectionChangedEventArgs(...));
+        /// }
+        /// ]]>
+        /// </code>
+        /// <para />
+        /// One can now write:
+        /// <para />
+        /// <code>
+        /// CollectionChanged.SafeInvoke(this, e, new NotifyCollectionChangedEventArgs(...));
+        /// </code>
+        /// </summary>
+        /// <param name="handler">The handler.</param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The event args.</param>
+        /// <returns><c>true</c> if the event handler was not <c>null</c>; otherwise <c>false</c>.</returns>
+        public static bool SafeInvoke(this NotifyCollectionChangedEventHandler handler, object sender, Func<NotifyCollectionChangedEventArgs> e)
+        {
+            if (handler != null)
+            {
+                SplitInvoke(handler, sender, e());
                 return true;
             }
 
