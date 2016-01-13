@@ -81,7 +81,10 @@ namespace Catel.Xamarin.Forms
             /// <summary>
             ///     The task completion source.
             /// </summary>
-            public TaskCompletionSource<bool> Result => (TaskCompletionSource<bool>) _propertyInfo.GetValue(Object);
+            public TaskCompletionSource<bool> Result
+            {
+                get { return (TaskCompletionSource<bool>) _propertyInfo.GetValue(Object); }
+            }
 
             /// <summary>
             ///     The object.
@@ -98,30 +101,25 @@ namespace Catel.Xamarin.Forms
     /// <summary>
     ///     The Messaging Center Helper
     /// </summary>
-    public class MessagingCenter
+    internal static class MessagingCenter
     {
-        private static MessagingCenter _current;
-
-        private MessagingCenter()
-        {
-        }
-
-        public static MessagingCenter Current
-        {
-            get { return _current ?? (_current = new MessagingCenter()); }
-        }
-
         /// <summary>
         /// Sends the specified type of sender.
         /// </summary>
-        /// <param name="typeOfSender">The type of sender.</param>
         /// <param name="sender">The sender.</param>
+        /// <param name="typeOfSender">The type of sender.</param>
         /// <param name="message">The message.</param>
         /// <param name="argumentsProxy">The arguments proxy.</param>
         /// <returns>System.Threading.Tasks.TaskCompletionSource&lt;System.Boolean&gt;.</returns>
-        private static TaskCompletionSource<bool> Send(Type typeOfSender, object sender, string message, IArgumentsProxy argumentsProxy)
+        /// <exception cref="System.ArgumentNullException">The <paramref name="typeOfSender"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="sender"/> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="argumentsProxy"/> is <c>null</c>.</exception>
+        private static TaskCompletionSource<bool> Send(object sender, Type typeOfSender, string message, IArgumentsProxy argumentsProxy)
         {
+            Argument.IsNotNull(() => sender);
+            Argument.IsNotNull(() => typeOfSender);
             Argument.IsOfType(() => sender, typeOfSender);
+            Argument.IsNotNull(() => argumentsProxy);
 
             var type = typeof(global::Xamarin.Forms.MessagingCenter);
             //// TODO: Use reflection API instead but reflection API requires some fixes.
@@ -140,7 +138,7 @@ namespace Catel.Xamarin.Forms
         /// <returns>System.Threading.Tasks.TaskCompletionSource&lt;System.Boolean&gt;.</returns>
         private static TaskCompletionSource<bool> SendAlert(Page sender, IArgumentsProxy arguments)
         {
-            return Send(typeof(Page), sender, Messages.SendAlert, arguments);
+            return Send(sender, typeof(Page), Messages.SendAlert, arguments);
         }
 
         /// <summary>
@@ -152,7 +150,7 @@ namespace Catel.Xamarin.Forms
         /// <param name="positiveButton">The positive button.</param>
         /// <param name="negativeButton">The negative button.</param>
         /// <returns>System.Threading.Tasks.TaskCompletionSource&lt;System.Boolean&gt;.</returns>
-        public TaskCompletionSource<bool> SendAlert(Page sender, string caption, string message, string positiveButton, string negativeButton)
+        public static TaskCompletionSource<bool> SendAlert(Page sender, string caption, string message, string positiveButton, string negativeButton)
         {
             var argument = ArgumentsProxyFactory.CreateAlertArgument(caption, message, positiveButton, negativeButton);
             SendAlert(sender, argument);

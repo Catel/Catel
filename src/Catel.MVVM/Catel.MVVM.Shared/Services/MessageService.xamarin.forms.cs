@@ -61,7 +61,7 @@ namespace Catel.Services
             if (currentPage != null)
             {
                 var configuration = _configurationResultMap[button];
-                var result = Xamarin.Forms.MessagingCenter.Current.SendAlert(currentPage, caption, message, configuration.PositiveButton, configuration.NegativeButton);
+                var result = Xamarin.Forms.MessagingCenter.SendAlert(currentPage, caption, message, configuration.PositiveButton, configuration.NegativeButton);
                 await result.Task;
                 messageResult = result.Task.Result ? configuration.PositiveResult: configuration.NegativeResult;
             }
