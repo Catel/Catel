@@ -83,7 +83,7 @@ namespace Catel.Android.App
 
                 _dataContext = value;
 
-                DataContextChanged.SafeInvoke(this, new DataContextChangedEventArgs(oldValue, newValue));
+                DataContextChanged.SafeInvoke(this, () => new DataContextChangedEventArgs(oldValue, newValue));
             }
         }
 
@@ -233,7 +233,7 @@ namespace Catel.Android.App
             OnViewModelChanged();
 
             ViewModelChanged.SafeInvoke(this);
-            PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
+            PropertyChanged.SafeInvoke(this, () => new PropertyChangedEventArgs("ViewModel"));
 
             if (_bindingContext != null)
             {

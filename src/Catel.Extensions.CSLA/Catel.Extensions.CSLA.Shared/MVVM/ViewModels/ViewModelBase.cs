@@ -68,7 +68,7 @@ namespace Catel.MVVM.CSLA
             _viewModelCommandManager = ViewModelCommandManager.Create(this);
             _viewModelCommandManager.AddHandler(async (viewModel, propertyName, command, commandParameter) =>
             {
-                _catelCommandExecuted.SafeInvoke(this, new CommandExecutedEventArgs((ICatelCommand) command, commandParameter, propertyName));
+                _catelCommandExecuted.SafeInvoke(this, () => new CommandExecutedEventArgs((ICatelCommand) command, commandParameter, propertyName));
             });
 
             ViewModelManager.RegisterViewModelInstance(this);
@@ -541,7 +541,7 @@ namespace Catel.MVVM.CSLA
 
             ViewModelManager.UnregisterViewModelInstance(this);
 
-            _catelClosed.SafeInvoke(this, new ViewModelClosedEventArgs(this, result));
+            _catelClosed.SafeInvoke(this, () => new ViewModelClosedEventArgs(this, result));
         }
 
         /// <summary>

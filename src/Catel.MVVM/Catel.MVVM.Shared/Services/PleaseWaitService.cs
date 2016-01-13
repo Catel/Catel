@@ -27,7 +27,7 @@ namespace Catel.Services
         /// <param name="languageService">The language service.</param>
         public PleaseWaitService(ILanguageService languageService)
         {
-            Argument.IsNotNull(() => languageService);
+            Argument.IsNotNull("languageService", languageService);
 
             _languageService = languageService;
         }

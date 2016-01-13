@@ -308,7 +308,7 @@ namespace Catel.MVVM
         /// <returns>The child view models.</returns>
         public IEnumerable<IRelationalViewModel> GetChildViewModels(IViewModel parentViewModel)
         {
-            Argument.IsNotNull(() => parentViewModel);
+            Argument.IsNotNull("parentViewModel", parentViewModel);
 
             var childViewModels = GetChildViewModels(parentViewModel.UniqueIdentifier);
 

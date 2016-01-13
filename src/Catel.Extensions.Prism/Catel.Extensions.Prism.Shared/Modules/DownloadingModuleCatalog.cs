@@ -23,19 +23,19 @@ namespace Catel.Modules
     /// </summary>
     public class DownloadingModuleCatalog : ModuleCatalog, IDownloadingModuleCatalog
     {
-        #region Constants
+#region Constants
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
+#endregion
 
-        #region Fields
+#region Fields
         private readonly Dictionary<string, ModuleBase> _loadedModules = new Dictionary<string, ModuleBase>();
         private readonly Dictionary<string, Queue<Action>> _pendingLoads = new Dictionary<string, Queue<Action>>();
-        #endregion
+#endregion
 
-        #region Events
+#region Events
         /// <summary>
         /// Occurs when the module catalog starts downloading a module.
         /// </summary>
@@ -45,9 +45,9 @@ namespace Catel.Modules
         /// Occurs when the module catalog has finished downloading a module.
         /// </summary>
         public event EventHandler<ModuleEventArgs> ModuleDownloaded;
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
         /// <summary>
         /// Loads a specific module.
         /// </summary>
@@ -218,7 +218,7 @@ namespace Catel.Modules
 
             Log.Info("Downloading module '{0}' from '{1}'", moduleInfo.ModuleName, GetModuleUri(moduleInfo));
 
-            ModuleDownloading.SafeInvoke(this, new ModuleEventArgs(moduleInfo));
+            ModuleDownloading.SafeInvoke(this, () => new ModuleEventArgs(moduleInfo));
 
             var uri = GetModuleUri(moduleInfo);
 
@@ -319,7 +319,7 @@ namespace Catel.Modules
                 ModuleDownloaded.SafeInvoke(this, new ModuleEventArgs(moduleInfo));
             }
         }
-        #endregion
+#endregion
     }
 }
 

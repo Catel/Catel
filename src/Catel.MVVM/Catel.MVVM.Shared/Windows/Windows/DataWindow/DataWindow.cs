@@ -294,7 +294,7 @@ namespace Catel.Windows
 
             Loaded += (sender, e) => Initialize();
             Closing += OnDataWindowClosing;
-            DataContextChanged += (sender, e) => _viewDataContextChanged.SafeInvoke(this, new DataContextChangedEventArgs(e.OldValue, e.NewValue));
+            DataContextChanged += (sender, e) => _viewDataContextChanged.SafeInvoke(this, () => new DataContextChangedEventArgs(e.OldValue, e.NewValue));
 
 #if NET
             if (setOwnerAndFocus)
@@ -714,7 +714,7 @@ namespace Catel.Windows
             OnViewModelChanged();
 
             ViewModelChanged.SafeInvoke(this);
-            PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
+            PropertyChanged.SafeInvoke(this, () => new PropertyChangedEventArgs("ViewModel"));
         }
 
 #if SILVERLIGHT

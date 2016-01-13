@@ -1034,30 +1034,38 @@ namespace Catel.MVVM.Providers
                 return null;
             }
 
-            var determineViewModelInstanceEventArgs = new DetermineViewModelInstanceEventArgs(injectionObject);
-            DetermineViewModelInstance.SafeInvoke(this, determineViewModelInstanceEventArgs);
-            if (determineViewModelInstanceEventArgs.ViewModel != null)
+            var determineViewModelInstanceHandler = DetermineViewModelInstance;
+            if (determineViewModelInstanceHandler != null)
             {
-                var viewModel = determineViewModelInstanceEventArgs.ViewModel;
-                Log.Info("ViewModel instance is overriden by the DetermineViewModelInstance event, using view model of type '{0}'", viewModel.GetType().Name);
+                var determineViewModelInstanceEventArgs = new DetermineViewModelInstanceEventArgs(injectionObject);
+                determineViewModelInstanceHandler(this, determineViewModelInstanceEventArgs);
+                if (determineViewModelInstanceEventArgs.ViewModel != null)
+                {
+                    var viewModel = determineViewModelInstanceEventArgs.ViewModel;
+                    Log.Info("ViewModel instance is overriden by the DetermineViewModelInstance event, using view model of type '{0}'", viewModel.GetType().Name);
 
-                return viewModel;
+                    return viewModel;
+                }
+
+                if (determineViewModelInstanceEventArgs.DoNotCreateViewModel)
+                {
+                    Log.Info("ViewModel construction is prevented by the DetermineViewModelInstance event (DoNotCreateViewModel is set to true)");
+                    return null;
+                }
             }
 
-            if (determineViewModelInstanceEventArgs.DoNotCreateViewModel)
+            var determineViewModelTypeHandler = DetermineViewModelType;
+            if (determineViewModelTypeHandler != null)
             {
-                Log.Info("ViewModel construction is prevented by the DetermineViewModelInstance event (DoNotCreateViewModel is set to true)");
-                return null;
-            }
+                var determineViewModelTypeEventArgs = new DetermineViewModelTypeEventArgs(injectionObject);
+                determineViewModelTypeHandler(this, determineViewModelTypeEventArgs);
+                if (determineViewModelTypeEventArgs.ViewModelType != null)
+                {
+                    Log.Info("ViewModelType is overriden by the DetermineViewModelType event, using '{0}' instead of '{1}'",
+                        determineViewModelTypeEventArgs.ViewModelType.FullName, viewModelType.FullName);
 
-            var determineViewModelTypeEventArgs = new DetermineViewModelTypeEventArgs(injectionObject);
-            DetermineViewModelType.SafeInvoke(this, determineViewModelTypeEventArgs);
-            if (determineViewModelTypeEventArgs.ViewModelType != null)
-            {
-                Log.Info("ViewModelType is overriden by the DetermineViewModelType event, using '{0}' instead of '{1}'",
-                    determineViewModelTypeEventArgs.ViewModelType.FullName, viewModelType.FullName);
-
-                viewModelType = determineViewModelTypeEventArgs.ViewModelType;
+                    viewModelType = determineViewModelTypeEventArgs.ViewModelType;
+                }
             }
 
             var injectionObjectAsViewModel = injectionObject as IViewModel;

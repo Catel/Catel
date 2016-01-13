@@ -189,7 +189,7 @@ namespace Catel.MVVM
         /// <exception cref="System.ArgumentNullException">The <paramref name="task" /> is <c>null</c>.</exception>
         public void UpdateStatus(int currentItem, int totalItems, ITask task)
         {
-            Argument.IsNotNull(() => task);
+            Argument.IsNotNull("task", task);
 
             Task = task;
 

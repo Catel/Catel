@@ -90,8 +90,8 @@ namespace Catel.MVVM
         /// <param name="commandManager">The command manager.</param>
         protected CommandContainerBase(string commandName, ICommandManager commandManager)
         {
-            Argument.IsNotNullOrWhitespace(() => commandName);
-            Argument.IsNotNull(() => commandManager);
+            Argument.IsNotNullOrWhitespace("commandName", commandName);
+            Argument.IsNotNull("commandManager", commandManager);
 
             CommandName = commandName;
             _commandManager = commandManager;

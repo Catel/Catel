@@ -237,7 +237,7 @@ namespace Catel.Windows
         /// <returns>IntPtr.</returns>
         public static IntPtr GetWindowHandle(this SystemWindow window)
         {
-            Argument.IsNotNull(() => window);
+            Argument.IsNotNull("window", window);
 
             var interopHelper = new WindowInteropHelper(window);
             return interopHelper.Handle;
@@ -396,7 +396,7 @@ namespace Catel.Windows
         /// <param name="window">The window.</param>
         public static void ApplyIconFromApplication(this SystemWindow window)
         {
-            Argument.IsNotNull(() => window);
+            Argument.IsNotNull("window", window);
 
             try
             {

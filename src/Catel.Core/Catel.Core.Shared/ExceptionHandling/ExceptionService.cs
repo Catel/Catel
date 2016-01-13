@@ -661,7 +661,7 @@ namespace Catel.ExceptionHandling
         /// <param name="delay">The delay that indicates how long the current thread will be suspended before the next iteration is invoked.</param>
         protected virtual void OnRetryingAction(int retryCount, Exception lastError, TimeSpan delay)
         {
-            RetryingAction.SafeInvoke(this, new RetryingEventArgs(retryCount, delay, lastError));
+            RetryingAction.SafeInvoke(this, () => new RetryingEventArgs(retryCount, delay, lastError));
         }
 
         /// <summary>
@@ -671,7 +671,7 @@ namespace Catel.ExceptionHandling
         /// <param name="dateTime">The date and time when the event occurs.</param>
         protected virtual void OnExceptionBuffered(Exception bufferedException, DateTime dateTime)
         {
-            ExceptionBuffered.SafeInvoke(this, new BufferedEventArgs(bufferedException, dateTime));
+            ExceptionBuffered.SafeInvoke(this, () => new BufferedEventArgs(bufferedException, dateTime));
         }
         #endregion
     }

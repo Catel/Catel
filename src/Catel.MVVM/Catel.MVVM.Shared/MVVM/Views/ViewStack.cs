@@ -313,14 +313,14 @@ namespace Catel.MVVM.Views
 
         private void RaiseViewLoaded()
         {
-            ViewLoaded.SafeInvoke(this, new ViewStackPartEventArgs(_viewInfo.View));
+            ViewLoaded.SafeInvoke(this, () => new ViewStackPartEventArgs(_viewInfo.View));
 
             MarkAsLoaded();
         }
 
         private void RaiseViewUnloaded()
         {
-            ViewUnloaded.SafeInvoke(this, new ViewStackPartEventArgs(_viewInfo.View));
+            ViewUnloaded.SafeInvoke(this, () => new ViewStackPartEventArgs(_viewInfo.View));
         }
 
         private void OnViewLoaded(object sender, EventArgs e)
