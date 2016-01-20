@@ -51,8 +51,8 @@ namespace Catel.Windows.Controls
         /// </value>
         public object DataContext
         {
-            get { return BindingContext; }
-            set { BindingContext = value; }
+            get { return this.BindingContext; }
+            set { this.BindingContext = value; }
         }
 
         /// <summary>

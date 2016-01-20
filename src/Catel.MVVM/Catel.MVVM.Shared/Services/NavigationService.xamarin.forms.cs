@@ -4,6 +4,8 @@
 // </copyright>>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Catel.MVVM.Views;
+
 #if XAMARIN_FORMS
 
 namespace Catel.Services
@@ -130,7 +132,14 @@ namespace Catel.Services
             var view = (Page)typeFactory.CreateInstance(viewType);
             var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
             var viewModel = viewModelFactory.CreateViewModel(viewModelType, null);
-            view.BindingContext = viewModel;
+            if (view is IView)
+            {
+                (view as IView).DataContext = viewModel;
+            }
+            else
+            {
+                view.BindingContext = viewModel;
+            }
 
             var currentPage = Application.Current.CurrentPage();
             if (currentPage != null)

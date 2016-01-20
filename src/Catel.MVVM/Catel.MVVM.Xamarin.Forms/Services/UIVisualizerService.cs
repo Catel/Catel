@@ -5,6 +5,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using Catel.MVVM.Views;
+
 namespace Catel.Services
 {
     using System;
@@ -139,8 +141,16 @@ namespace Catel.Services
             bool? result = null;
             var viewModelType = viewModel.GetType();
             var resolvedView = _viewLocator.ResolveView(viewModelType);
-            var viewModelView = (View) _typeFactory.CreateInstance(resolvedView);
-            viewModelView.BindingContext = viewModel;
+            var view = (View) _typeFactory.CreateInstance(resolvedView);
+
+            if (view is IView)
+            {
+                (view as IView).DataContext = viewModel;
+            }
+            else
+            {
+                view.BindingContext = viewModel;
+            }
 
             var okButton = new Button
             {
@@ -201,7 +211,7 @@ namespace Catel.Services
             buttonsStackLayout.Children.Add(cancelButton);
 
             var contentLayout = new StackLayout();
-            contentLayout.Children.Add(viewModelView);
+            contentLayout.Children.Add(view);
             contentLayout.Children.Add(buttonsStackLayout);
 
             var currentPage = Application.Current.CurrentPage() as ContentPage;
@@ -214,8 +224,8 @@ namespace Catel.Services
                 popupLayout[0] = currentPage.Content as PopupLayout;
                 if (popupLayout[0] != null && !popupLayout[0].IsPopupActive)
                 {
-                    contentLayout.HeightRequest = viewModelView.HeightRequest + buttonsStackLayout.HeightRequest;
-                    contentLayout.WidthRequest = viewModelView.WidthRequest;
+                    contentLayout.HeightRequest = view.HeightRequest + buttonsStackLayout.HeightRequest;
+                    contentLayout.WidthRequest = view.WidthRequest;
                     await popupLayout[0].ShowPopup(contentLayout);
                 }
             }
