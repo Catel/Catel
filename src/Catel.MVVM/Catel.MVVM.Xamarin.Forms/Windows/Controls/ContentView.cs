@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Xamarin.Forms;
+
 namespace Catel.Windows.Controls
 {
     using IoC;
@@ -30,8 +32,6 @@ namespace Catel.Windows.Controls
         {
             var dependencyResolver = this.GetDependencyResolver();
             _viewManager = dependencyResolver.Resolve<IViewManager>();
-
-            BindingContextChanged += OnBindingContextChanged;
             DataContextChanged += OnDataContextChanged;
         }
 
@@ -42,6 +42,65 @@ namespace Catel.Windows.Controls
         {
             get { return DataContext as IViewModel; }
         }
+
+
+        /// <summary>
+        /// Gets or sets object that contains the properties that will be targeted by the bound properties that belong to this <see cref="T:Xamarin.Forms.BindableObject"/>.
+        /// </summary>
+        /// 
+        /// <value>
+        /// An <see cref="T:System.Object"/> that contains the properties that will be targeted by the bound properties that belong to this <see cref="T:Xamarin.Forms.BindableObject"/>. This is a bindable property.
+        /// </value>
+        /// 
+        /// <remarks>
+        /// <block subset="none" type="note">Typically, the runtime performance is better if  <see cref="P:Xamarin.Forms.BindableObject.BindingContext"/> is set after all calls to <see cref="M:Xamarin.Forms.BindableObject.SetBinding"/> have been made.</block>
+        /// <para>
+        /// The following example shows how to apply a BindingContext and a Binding to a Label (inherits from BindableObject):
+        /// </para>
+        /// 
+        /// <example>
+        /// 
+        /// <code lang="C#">
+        /// <![CDATA[
+        /// var label = new Label ();
+        /// label.SetBinding (Label.TextProperty, "Name");
+        /// label.BindingContext = new {Name = "John Doe", Company = "Xamarin"};
+        /// Debug.WriteLine (label.Text); //prints "John Doe"
+        ///         ]]>
+        /// </code>
+        /// 
+        /// </example>
+        /// 
+        /// </remarks>
+        public new object BindingContext
+        {
+            get
+            {
+                return base.BindingContext;
+            }
+
+            set
+            {
+                if (!object.Equals(base.BindingContext, value))
+                {
+                    _viewManager.UnregisterView(this);
+                    var oldContext = base.BindingContext;
+
+                    var viewModel = base.BindingContext as IViewModel;
+                    var relationalViewModel = base.BindingContext as IRelationalViewModel;
+                    var parentViewModel = FindParentViewModel(this, viewModel, relationalViewModel);
+                    if (parentViewModel != null)
+                    {
+                        relationalViewModel?.SetParentViewModel(null);
+                        (parentViewModel as IRelationalViewModel)?.UnregisterChildViewModel(viewModel);
+                    }
+
+                    base.BindingContext = value;
+                    DataContextChanged.SafeInvoke(this, new DataContextChangedEventArgs(oldContext, BindingContext));
+                }
+            }
+        }
+
 
         /// <summary>
         /// Gets or sets the data context.
@@ -81,63 +140,57 @@ namespace Catel.Windows.Controls
         /// </summary>
         public event EventHandler<DataContextChangedEventArgs> DataContextChanged;
 
-        /*
-        /// <summary>
-        /// Occurs immediately prior to the <see cref="T:Xamarin.Forms.Page"/> becoming visible.
-        /// </summary>
-        protected sealed override void OnAppearing()
-        {
-            base.OnAppearing();
-            ViewModel?.InitializeViewModelAsync();
-        }
-        
-
-        /// <summary>
-        /// Occurs when the <see cref="T:Xamarin.Forms.Page"/> disappears.
-        /// </summary>
-        protected sealed override void OnDisappearing()
-        {
-            base.OnDisappearing();
-            ViewModel?.CloseViewModelAsync(true);
-        }
-        
-        /// <summary>
-        ///     Occurs when the back button is pressed.
-        /// </summary>
-        /// <returns>
-        ///     To be added.
-        /// </returns>
-        /// <remarks>
-        ///     TODO: This implementation requires improvements.
-        /// </remarks>
-        protected override sealed bool OnBackButtonPressed()
-        {
-            if (ViewModel != null)
-            {
-                return ViewModel.CancelAndCloseViewModelAsync().Result || base.OnBackButtonPressed();
-            }
-
-            return base.OnBackButtonPressed();
-        }
-        */
-
         /// <summary>
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="dataContextChangedEventArgs"></param>
         private void OnDataContextChanged(object sender, DataContextChangedEventArgs dataContextChangedEventArgs)
         {
+            var view = sender as View;
+
             _viewManager.RegisterView(this);
+
+            var viewModel = dataContextChangedEventArgs.NewContext as IViewModel;
+            var relationalViewModel = dataContextChangedEventArgs.NewContext as IRelationalViewModel;
+            var parentViewModel = FindParentViewModel(view, viewModel, relationalViewModel);
+            if (parentViewModel != null)
+            {
+                relationalViewModel?.SetParentViewModel(parentViewModel as IViewModel);
+                (parentViewModel as IRelationalViewModel)?.RegisterChildViewModel(viewModel);
+            }
+
             ViewModelChanged.SafeInvoke(this);
         }
 
         /// <summary>
+        /// 
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="eventArgs"></param>
-        private void OnBindingContextChanged(object sender, EventArgs eventArgs)
+        /// <param name="view"></param>
+        /// <param name="viewModel"></param>
+        /// <param name="relationalViewModel"></param>
+        /// <returns></returns>
+        private static object FindParentViewModel(View view, IViewModel viewModel, IRelationalViewModel relationalViewModel)
         {
-            DataContextChanged.SafeInvoke(this, new DataContextChangedEventArgs(null, BindingContext));
+            object parentViewModel = null;
+            if (view != null && viewModel != null && relationalViewModel != null)
+            {
+                Element parent = view.Parent;
+                while (parentViewModel == null && parent != null)
+                {
+                    var parentViewModelAsRelationalViewModel = parent.BindingContext as IRelationalViewModel;
+                    var parentViewModelAsViewModel = parent.BindingContext as IViewModel;
+                    if (parentViewModelAsViewModel != null && parentViewModelAsRelationalViewModel != null && !ReferenceEquals(parent.BindingContext, viewModel))
+                    {
+                        parentViewModel = parentViewModelAsViewModel;
+                    }
+                    else
+                    {
+                        parent = parent.Parent;
+                    }
+                }
+            }
+
+            return parentViewModel;
         }
     }
 }
