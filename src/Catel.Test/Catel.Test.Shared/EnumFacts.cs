@@ -13,7 +13,7 @@ namespace Catel.Test
     public class EnumFacts
     {
         [Flags]
-        private enum Enum1
+        public enum Enum1
         {
             MyValue = 1,
 
@@ -218,21 +218,25 @@ namespace Catel.Test
         [TestFixture]
         public class TheTryParseMethod
         {
-            [TestCase]
-            public void ReturnsFalseForInvalidValue()
+            [TestCase("hi there", false, null)]
+            [TestCase("hi there", true, null)]
+            [TestCase("MySecondValue", false, Enum1.MySecondValue)]
+            [TestCase("MySecondValue", true, Enum1.MySecondValue)]
+            [TestCase("MYSECONDVALUE", false, null)]
+            [TestCase("MYSECONDVALUE", true, Enum1.MySecondValue)]
+            public void ReturnsCorrectValueForTryParseMethod(string input, bool ignoreCase, Enum1? expectedResult)
             {
                 Enum1 result;
 
-                Assert.IsFalse(Enum<Enum1>.TryParse("hi there", out result));
-            }
+                var parseResult = Enum<Enum1>.TryParse(input, ignoreCase, out result);
 
-            [TestCase]
-            public void ReturnsTrueForValidValue()
-            {
-                Enum1 result;
+                if (!expectedResult.HasValue && !parseResult)
+                {
+                    return;
+                }
 
-                Assert.IsTrue(Enum<Enum1>.TryParse("MySecondValue", out result));
-                Assert.AreEqual(Enum1.MySecondValue, result);
+                Assert.IsTrue(parseResult);
+                Assert.AreEqual(expectedResult.Value, result);
             }
         }
     }

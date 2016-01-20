@@ -161,18 +161,13 @@ namespace Catel
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public static bool TryParse(string input, bool ignoreCase, out TEnum? result)
         {
-            result = null;
-            if (!Enum.IsDefined(typeof(TEnum), input))
-            {
-                return false;
-            }
-
             try
             {
                 result = (TEnum)Enum.Parse(typeof(TEnum), input, ignoreCase);
             }
             catch (Exception)
             {
+                result = null;
                 return false;
             }
 
