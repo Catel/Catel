@@ -5,8 +5,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-using Xamarin.Forms;
-
 namespace Catel.Windows.Controls
 {
 
@@ -15,8 +13,6 @@ namespace Catel.Windows.Controls
     using Catel.IoC;
     using Catel.MVVM;
     using Catel.MVVM.Views;
-
-    using Xamarin.Forms;
 
     /// <summary>
     ///     The content page.
@@ -155,7 +151,7 @@ namespace Catel.Windows.Controls
         private void OnDataContextChanged(object sender, DataContextChangedEventArgs dataContextChangedEventArgs)
         {
             _viewManager.RegisterView(this);
-            EnsureParentChildRelationship(dataContextChangedEventArgs);
+            EnsureParentChildRelationship(dataContextChangedEventArgs.NewContext);
             ViewModelChanged.SafeInvoke(this);
         }
 
