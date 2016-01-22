@@ -4,8 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
-
+using Catel.Services.Helpers;
 
 namespace Catel.Services
 {
@@ -28,8 +27,14 @@ namespace Catel.Services
     /// </summary>
     public sealed class UIVisualizerService : IUIVisualizerService
     {
+        /// <summary>
+        /// The callbacks. 
+        /// </summary>
         private readonly Dictionary<ContentPage, EventHandler<UICompletedEventArgs>> _callbacks = new Dictionary<ContentPage, EventHandler<UICompletedEventArgs>>();
 
+        /// <summary>
+        /// The language services. 
+        /// </summary>
         private readonly ILanguageService _languageService;
 
         /// <summary>
@@ -160,6 +165,7 @@ namespace Catel.Services
             {
                 Text = _languageService.GetString("OK")
             };
+
             okButton.Clicked += async (sender, args) =>
             {
                 await viewModel.SaveAndCloseViewModel();
@@ -171,7 +177,7 @@ namespace Catel.Services
                 }
                 else
                 {
-                    await Application.Current.CurrentPage().Navigation.PopModalAsync();
+                    await NavigationHelper.PopModalAsync();
                 }
             };
 
@@ -187,20 +193,20 @@ namespace Catel.Services
             {
                 Text = _languageService.GetString("Cancel")
             };
+
             cancelButton.Clicked += async (sender, args) =>
             {
                 await viewModel.CancelAndCloseViewModel();
                 result = false;
                 // TODO: Review why the viewmodel have all changes even after be cancelled.
                 completedProc?.SafeInvoke(this, new UICompletedEventArgs(viewModel, result));
-
                 if (popupLayout[0] != null)
                 {
                     await popupLayout[0].DismissPopup();
                 }
                 else
                 {
-                    await Application.Current.CurrentPage().Navigation.PopModalAsync();
+                    await NavigationHelper.PopModalAsync();
                 }
             };
 
@@ -243,7 +249,7 @@ namespace Catel.Services
 
                 _callbacks[contentPage] = completedProc;
                 contentPage.BackButtonPressed += OnBackButtonPressed;
-                await Application.Current.CurrentPage().Navigation.PushModalAsync(contentPage);
+                await NavigationHelper.PushModalAsync(contentPage);
             }
 
             return result;
@@ -402,7 +408,7 @@ namespace Catel.Services
                 if (popupLayout == null)
                 {
                     _callbacks[contentPage]?.SafeInvoke(this, new UICompletedEventArgs(contentPage.ViewModel, null));
-                    await Application.Current.CurrentPage().Navigation.PopModalAsync();
+                    await NavigationHelper.PopModalAsync(); 
                 }
             }
         }

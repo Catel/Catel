@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -95,6 +95,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.zh-Hans.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\Helpers\NavigationHelper.cs" />
     <Compile Include="Services\UIVisualizerService.cs" />
     <Compile Include="Windows\Controls\ContentPage.cs" />
     <Compile Include="Windows\Controls\ContentView.cs" />
@@ -136,27 +137,27 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Exceptions.resx">
-  	  <Link>Properties\Exceptions.resx</Link>
+      <Link>Properties\Exceptions.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Exceptions.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.de.resx">
-	  <Link>Properties\Resources.de.resx</Link>
+      <Link>Properties\Resources.de.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.de.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.es.resx">
-	  <Link>Properties\Resources.es.resx</Link>
+      <Link>Properties\Resources.es.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.es.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.fr.resx">
-	  <Link>Properties\Resources.fr.resx</Link>
+      <Link>Properties\Resources.fr.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.fr.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.it.resx">
-   	  <Link>Properties\Resources.it.resx</Link>
+      <Link>Properties\Resources.it.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.it.Designer.cs</LastGenOutput>
     </EmbeddedResource>
@@ -166,22 +167,22 @@
       <LastGenOutput>Resources.nl.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.resx">
-	  <Link>Properties\Resources.resx</Link>
+      <Link>Properties\Resources.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.ru.resx">
-	  <Link>Properties\Resources.ru.resx</Link>
+      <Link>Properties\Resources.ru.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.ru.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.tr.resx">
-	  <Link>Properties\Resources.tr.resx</Link>
+      <Link>Properties\Resources.tr.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.tr.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.zh-Hans.resx">
-	  <Link>Properties\Resources.zh-Hans.resx</Link>
+      <Link>Properties\Resources.zh-Hans.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.zh-Hans.Designer.cs</LastGenOutput>
     </EmbeddedResource>
