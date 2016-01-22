@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Catel.Services.Helpers;
+
 
 namespace Catel.Services
 {
@@ -18,6 +18,7 @@ namespace Catel.Services
     using Catel.IoC;
     using Catel.MVVM;
     using Catel.MVVM.Views;
+	using Catel.Services.Helpers;
     using Catel.Windows.Controls;
     
     using ContentPage = Windows.Controls.ContentPage;
@@ -144,8 +145,6 @@ namespace Catel.Services
         public async Task<bool?> ShowAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNull(() => viewModel);
-
-            // PopupLayout[] popupLayout = {null};
 
             bool? result = null;
             var viewModelType = viewModel.GetType();
