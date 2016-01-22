@@ -30,7 +30,7 @@ namespace Catel.Services
         /// <summary>
         /// The callbacks. 
         /// </summary>
-        private readonly Dictionary<ContentPage, EventHandler<UICompletedEventArgs>> _callbacks = new Dictionary<ContentPage, EventHandler<UICompletedEventArgs>>();
+        private readonly Dictionary<ContentPage, Tuple<IViewModel, EventHandler<UICompletedEventArgs>>> _callbacks = new Dictionary<ContentPage, Tuple<IViewModel, EventHandler<UICompletedEventArgs>>>();
 
         /// <summary>
         /// The language services. 
@@ -145,7 +145,7 @@ namespace Catel.Services
         {
             Argument.IsNotNull(() => viewModel);
 
-            PopupLayout[] popupLayout = {null};
+            // PopupLayout[] popupLayout = {null};
 
             bool? result = null;
             var viewModelType = viewModel.GetType();
@@ -168,17 +168,19 @@ namespace Catel.Services
 
             okButton.Clicked += async (sender, args) =>
             {
-                await viewModel.SaveAndCloseViewModel();
                 result = true;
-                completedProc?.SafeInvoke(this, new UICompletedEventArgs(viewModel, result));
-                if (popupLayout[0] != null)
-                {
-                    await popupLayout[0].DismissPopup();
-                }
-                else
-                {
-                    await NavigationHelper.PopModalAsync();
-                }
+                OnOkButtonClicked(viewModel, completedProc);
+            };
+
+            var cancelButton = new Button
+            {
+                Text = _languageService.GetString("Cancel")
+            };
+
+            cancelButton.Clicked += async (sender, args) =>
+            {
+                result = false;
+                OnCancelButtonClicked(viewModel, completedProc);
             };
 
             var dataErrorInfo = viewModel as INotifyDataErrorInfo;
@@ -188,27 +190,6 @@ namespace Catel.Services
                 viewModel.PropertyChanged += (sender, args) => checkIfViewModelHasErrors();
                 checkIfViewModelHasErrors();
             }
-
-            var cancelButton = new Button
-            {
-                Text = _languageService.GetString("Cancel")
-            };
-
-            cancelButton.Clicked += async (sender, args) =>
-            {
-                await viewModel.CancelAndCloseViewModel();
-                result = false;
-                // TODO: Review why the viewmodel have all changes even after be cancelled.
-                completedProc?.SafeInvoke(this, new UICompletedEventArgs(viewModel, result));
-                if (popupLayout[0] != null)
-                {
-                    await popupLayout[0].DismissPopup();
-                }
-                else
-                {
-                    await NavigationHelper.PopModalAsync();
-                }
-            };
 
             ////TODO: Improve the layout.
             var buttonsStackLayout = new StackLayout
@@ -224,35 +205,107 @@ namespace Catel.Services
             contentLayout.Children.Add(view);
             contentLayout.Children.Add(buttonsStackLayout);
 
-            var currentPage = Application.Current.CurrentPage() as ContentPage;
-            if (currentPage != null)
+            if (!await TryDisplayAsPopup(viewModel, completedProc, contentLayout))
             {
-                _callbacks[currentPage] = completedProc;
-                currentPage.BackButtonPressed += OnBackButtonPressed;
-
-                // TODO: Look for the top must popup layout inactive
-                popupLayout[0] = currentPage.Content as PopupLayout;
-                if (popupLayout[0] != null && !popupLayout[0].IsPopupActive)
-                {
-                    contentLayout.HeightRequest = view.HeightRequest + buttonsStackLayout.HeightRequest;
-                    contentLayout.WidthRequest = view.WidthRequest;
-                    await popupLayout[0].ShowPopup(contentLayout);
-                }
-            }
-
-            if (popupLayout[0] == null)
-            {
-                var contentPage = new ContentPage
-                {
-                    Content = contentLayout
-                };
-
-                _callbacks[contentPage] = completedProc;
-                contentPage.BackButtonPressed += OnBackButtonPressed;
-                await NavigationHelper.PushModalAsync(contentPage);
+                await DisplayUsingNavigation(viewModel, completedProc, contentLayout);
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <param name="completedProc"></param>
+        /// <param name="contentLayout"></param>
+        /// <returns></returns>
+        private async Task DisplayUsingNavigation(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc, StackLayout contentLayout)
+        {
+            var contentPage = new ContentPage
+            {
+                Content = contentLayout
+            };
+
+            _callbacks[contentPage] = new Tuple<IViewModel, EventHandler<UICompletedEventArgs>>(viewModel, completedProc);
+            contentPage.BackButtonPressed += OnBackButtonPressed;
+            await NavigationHelper.PushModalAsync(contentPage);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <param name="completedProc"></param>
+        /// <param name="contentLayout"></param>
+        /// <param name="view"></param>
+        /// <param name="buttonsStackLayout"></param>
+        /// <returns></returns>
+        private async Task<bool> TryDisplayAsPopup(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc, StackLayout contentLayout)
+        {
+            bool result = false;
+            var currentPage = Application.Current.CurrentPage() as ContentPage;
+            if (currentPage != null)
+            {
+                _callbacks[currentPage] = new Tuple<IViewModel, EventHandler<UICompletedEventArgs>>(viewModel, completedProc);
+                // TODO: Look for the top must popup layout inactive
+                var popupLayout = currentPage.Content as PopupLayout;
+                if (popupLayout != null && !popupLayout.IsPopupActive)
+                {
+                    currentPage.BackButtonPressed += OnBackButtonPressed;
+                    contentLayout.HeightRequest = contentLayout.Children[0].HeightRequest + contentLayout.Children[1].HeightRequest;
+                    contentLayout.WidthRequest = contentLayout.Children[0].WidthRequest;
+                    result = true;
+                    await popupLayout.ShowPopup(contentLayout);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <param name="completedProc"></param>
+        private async void OnOkButtonClicked(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc)
+        {
+            await viewModel.SaveAndCloseViewModel();
+            completedProc?.SafeInvoke(this, new UICompletedEventArgs(viewModel, true));
+            await CloseModal();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private static async Task CloseModal()
+        {
+            var currentPage = Application.Current.CurrentPage() as ContentPage;
+            if (currentPage != null)
+            {
+                var popupLayout = currentPage.Content as PopupLayout;
+                if (popupLayout != null && popupLayout.IsPopupActive)
+                {
+                    await popupLayout.DismissPopup();
+                }
+                else
+                {
+                    await NavigationHelper.PopModalAsync();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="viewModel"></param>
+        /// <param name="completedProc"></param>
+        private async void OnCancelButtonClicked(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc)
+        {
+            await viewModel.CancelAndCloseViewModel();
+            completedProc?.SafeInvoke(this, new UICompletedEventArgs(viewModel, false));
+            await CloseModal();
         }
 
         /// <summary>
@@ -399,17 +452,17 @@ namespace Catel.Services
                 var popupLayout = contentPage.Content as PopupLayout;
                 if (popupLayout != null && popupLayout.IsPopupActive)
                 {
-                    _callbacks[contentPage]?.SafeInvoke(this, new UICompletedEventArgs(contentPage.ViewModel, null));
+                    _callbacks[contentPage]?.Item2?.SafeInvoke(this, new UICompletedEventArgs(_callbacks[contentPage].Item1, null));
                     await popupLayout.DismissPopup();
                 }
 
-                contentPage.BackButtonPressed -= OnBackButtonPressed;
-
                 if (popupLayout == null)
                 {
-                    _callbacks[contentPage]?.SafeInvoke(this, new UICompletedEventArgs(contentPage.ViewModel, null));
+                    _callbacks[contentPage]?.Item2?.SafeInvoke(this, new UICompletedEventArgs(_callbacks[contentPage].Item1, null));
                     await NavigationHelper.PopModalAsync(); 
                 }
+                
+                contentPage.BackButtonPressed -= OnBackButtonPressed;
             }
         }
     }
