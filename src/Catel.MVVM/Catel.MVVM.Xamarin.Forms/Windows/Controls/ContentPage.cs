@@ -7,12 +7,11 @@
 
 namespace Catel.Windows.Controls
 {
-    using IoC;
-
-    using MVVM;
-    using MVVM.Views;
-
     using System;
+
+    using Catel.IoC;
+    using Catel.MVVM;
+    using Catel.MVVM.Views;
 
     /// <summary>
     /// The content page.

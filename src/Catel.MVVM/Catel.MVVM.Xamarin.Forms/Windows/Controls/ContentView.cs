@@ -7,7 +7,6 @@
 
 namespace Catel.Windows.Controls
 {
-
     using System;
 
     using Catel.IoC;

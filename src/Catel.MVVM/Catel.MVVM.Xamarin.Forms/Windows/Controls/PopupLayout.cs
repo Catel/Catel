@@ -9,6 +9,7 @@ namespace Catel.Windows.Controls
 {
     using System;
     using System.Threading.Tasks;
+
     using Catel.Logging;
     using global::Xamarin.Forms;
 

@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-using Catel.MVVM.Views;
+
 
 namespace Catel.Services
 {
@@ -13,10 +13,14 @@ namespace Catel.Services
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Threading.Tasks;
-    using Windows.Controls;
+
     using global::Xamarin.Forms;
-    using IoC;
-    using MVVM;
+
+    using Catel.IoC;
+    using Catel.MVVM;
+    using Catel.MVVM.Views;
+    using Catel.Windows.Controls;
+    
     using ContentPage = Windows.Controls.ContentPage;
 
     /// <summary>
