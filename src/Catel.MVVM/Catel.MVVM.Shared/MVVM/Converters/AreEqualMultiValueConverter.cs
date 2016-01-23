@@ -10,13 +10,14 @@ namespace Catel.MVVM.Converters
 {
     using System;
     using System.Windows.Data;
+    using System.Windows.Markup;
 
     /// <summary>
     /// Converts a comparison of 2 bindings to a boolean whether the 
     /// objects are equal or not.
     /// </summary>
     [ValueConversion(typeof(object), typeof(object))]
-    public class AreEqualMultiValueConverter : IMultiValueConverter
+    public class AreEqualMultiValueConverter : MarkupExtension, IMultiValueConverter
     {
         /// <summary>
         /// Converts the comparison of 2 values to a boolean.
@@ -61,6 +62,16 @@ namespace Catel.MVVM.Converters
         {
             // Not supported (and IMultiValueConverter must return null if no conversion is supported)
             return null;
+        }
+
+        /// <summary>
+        /// When implemented in a derived class, returns an object that is set as the value of the target property for this markup extension.
+        /// </summary>
+        /// <param name="serviceProvider">Object that can provide services for the markup extension.</param>
+        /// <returns>The object value to set on the property where the extension is applied.</returns>
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return this;
         }
     }
 }
