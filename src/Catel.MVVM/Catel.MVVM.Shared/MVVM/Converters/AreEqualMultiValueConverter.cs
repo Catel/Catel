@@ -34,20 +34,7 @@ namespace Catel.MVVM.Converters
                 return false;
             }
 
-            object value1 = values[0];
-            object value2 = values[1];
-
-            if ((value1 == null) && (value2 == null))
-            {
-                return true;
-            }
-
-            if ((value1 == null) || (value2 == null))
-            {
-                return false;
-            }
-
-            return value1.Equals(value2);
+            return object.Equals(values[0], values[1]);
         }
 
         /// <summary>
