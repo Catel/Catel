@@ -250,14 +250,15 @@ namespace Catel.Data
         /// </summary>
         void IEditableObject.BeginEdit()
         {
+            if(_backup != null)
+            {
+                Log.Debug("IEditableObject is already in edit state");
+                return;
+            }
+
             var eventArgs = new BeginEditEventArgs(this);
             _beginEditingEvent.SafeInvoke(this, eventArgs);
             OnBeginEdit(eventArgs);
-
-            if (_backup != null)
-            {
-                return;
-            }
 
             if (eventArgs.Cancel)
             {
@@ -275,6 +276,12 @@ namespace Catel.Data
         /// </summary>
         void IEditableObject.CancelEdit()
         {
+            if(_backup == null)
+            {
+                Log.Debug("IEditableObject is not in edit state");
+                return;
+            }
+
             CancelEditCompletedEventArgs cancelEditCompletedEventArgs;
             var eventArgs = new CancelEditEventArgs(this);
             _cancelEditingEvent.SafeInvoke(this, eventArgs);
@@ -283,14 +290,6 @@ namespace Catel.Data
             if (eventArgs.Cancel)
             {
                 Log.Info("IEditableObject.CancelEdit is canceled by the event args");
-                cancelEditCompletedEventArgs = new CancelEditCompletedEventArgs(true);
-                _cancelEditingCompletedEvent.SafeInvoke(this, cancelEditCompletedEventArgs);
-                OnCancelEditCompleted(cancelEditCompletedEventArgs);
-                return;
-            }
-
-            if (_backup == null)
-            {
                 cancelEditCompletedEventArgs = new CancelEditCompletedEventArgs(true);
                 _cancelEditingCompletedEvent.SafeInvoke(this, cancelEditCompletedEventArgs);
                 OnCancelEditCompleted(cancelEditCompletedEventArgs);
@@ -312,6 +311,12 @@ namespace Catel.Data
         /// </summary>
         void IEditableObject.EndEdit()
         {
+            if (_backup == null)
+            {
+                Log.Debug("IEditableObject is not in edit state");
+                return;
+            }
+
             var eventArgs = new EndEditEventArgs(this);
             _endEditingEvent.SafeInvoke(this, eventArgs);
             OnEndEdit(eventArgs);
@@ -319,11 +324,6 @@ namespace Catel.Data
             if (eventArgs.Cancel)
             {
                 Log.Info("IEditableObject.EndEdit is canceled by the event args");
-                return;
-            }
-
-            if (_backup == null)
-            {
                 return;
             }
 

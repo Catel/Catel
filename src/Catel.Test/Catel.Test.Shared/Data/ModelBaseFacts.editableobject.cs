@@ -226,10 +226,10 @@ namespace Catel.Test.Data
 
                 editableObjectAsIEditableObject.CancelEdit();
 
-                Assert.IsTrue(editableObject.CancelEditingCalled);
-                Assert.IsTrue(editableObject.CancelEditingCompletedCalled);
-                Assert.IsTrue(editableObject.OnCancelEditCalled);
-                Assert.IsTrue(editableObject.OnCancelEditCompletedCalled);
+                Assert.IsFalse(editableObject.CancelEditingCalled);
+                Assert.IsFalse(editableObject.CancelEditingCompletedCalled);
+                Assert.IsFalse(editableObject.OnCancelEditCalled);
+                Assert.IsFalse(editableObject.OnCancelEditCompletedCalled);
             }
 
             [TestCase]
@@ -342,8 +342,8 @@ namespace Catel.Test.Data
 
                 editableObjectAsIEditableObject.EndEdit();
 
-                Assert.IsTrue(editableObject.EndEditingCalled);
-                Assert.IsTrue(editableObject.OnEndEditCalled);
+                Assert.IsFalse(editableObject.EndEditingCalled);
+                Assert.IsFalse(editableObject.OnEndEditCalled);
             }
 
             [TestCase]
