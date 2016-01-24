@@ -103,7 +103,7 @@ namespace Catel
                                         select type).FirstOrDefault();
             if (commandContainerType == null)
             {
-                Log.Debug("Couldn't find command container '{0}', you will need to add a custom action or command manually in order to make the CompositeCommand useful", commandContainerType.GetSafeFullName(false));
+                Log.Debug("Couldn't find command container '{0}', you will need to add a custom action or command manually in order to make the CompositeCommand useful", commandContainerName);
                 return;
             }
 
