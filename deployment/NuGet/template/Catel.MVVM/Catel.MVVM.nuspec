@@ -21,7 +21,14 @@
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
 	
     <dependencies>
-          <dependency id="Catel.Core" version="[VERSION]" />
+		<!-- Always include regardless of target framework -->
+		<group>
+		  <dependency id="Catel.Core" version="[VERSION]" />
+		</group>
+		
+        <group targetFramework="uap10.0">
+          <dependency id="Microsoft.Xaml.Behaviors.Uwp.Managed" version="1.0.3" />
+        </group>		  
     </dependencies>
 	
   </metadata>
