@@ -9,12 +9,12 @@
 namespace Catel.Windows.Threading
 {
     using System;
-
+    
 #if NETFX_CORE
     using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;
-
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
+    using System.Linq;
 #else
     using System.Windows.Threading;
 #endif
@@ -134,16 +134,16 @@ namespace Catel.Windows.Threading
             
             return Dispatcher.CurrentDispatcher;
 #elif NETFX_CORE
+            var firstView = global::Windows.ApplicationModel.Core.CoreApplication.Views.FirstOrDefault();
+            if (firstView != null)
+            {
+                return firstView.Dispatcher;
+            }
+
             var window = Window.Current;
             if (window != null)
             {
                 return window.Dispatcher;
-            }
-
-            var coreWindow = CoreWindow.GetForCurrentThread();
-            if (coreWindow != null)
-            {
-                return coreWindow.Dispatcher;
             }
 
             return null;
