@@ -72,6 +72,7 @@ Added/fixed:
 (*) CTL-814 Improve Argument.IsValid implementation to allow more options
 (*) CTL-819 Prevent unnecessary creation of event args in .SafeInvoke when handler is null
 (*) CTL-825 Use NuGet package for behaviors SDK instead of local reference for UWP
+(*) CTL-828 Prevent unneccessary creation of empty dictionary entries in ModelBase
 (x) CTL-791 Types with the same FullName from different assemblies will cause issues with the TypeFactory cache
 (x) CTL-793 CompositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand not respected
 (x) CTL-798 Prevent MissingResourceException when resolving strings for Catel.Core

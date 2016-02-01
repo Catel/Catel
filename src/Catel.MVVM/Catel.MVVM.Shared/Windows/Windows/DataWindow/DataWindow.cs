@@ -463,7 +463,7 @@ namespace Catel.Windows
         /// <summary>
         /// Executes the OK command.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "ExecuteCancelAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "ExecuteOkAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected void ExecuteOk()
         {
             if (OnOkCanExecute())
@@ -497,7 +497,7 @@ namespace Catel.Windows
         /// <summary>
         /// Handled when the user invokes the OK command.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnCancelExecuteAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "OnOkExecuteAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
         protected async void OnOkExecute()
         {
             await OnOkExecuteAsync();

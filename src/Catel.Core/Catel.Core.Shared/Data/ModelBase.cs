@@ -740,21 +740,22 @@ namespace Catel.Data
 
             lock (_propertyValuesLock)
             {
-                if (_propertyValueChangeNotificationWrappers.ContainsKey(propertyName))
+                ChangeNotificationWrapper oldWrapper;
+
+                if (_propertyValueChangeNotificationWrappers.TryGetValue(propertyName, out oldWrapper))
                 {
-                    var oldWrapper = _propertyValueChangeNotificationWrappers[propertyName];
-                    if (oldWrapper != null)
-                    {
-                        oldWrapper.PropertyChanged -= OnPropertyObjectPropertyChanged;
-                        oldWrapper.CollectionChanged -= OnPropertyObjectCollectionChanged;
-                        oldWrapper.CollectionItemPropertyChanged -= OnPropertyObjectCollectionItemPropertyChanged;
-                        oldWrapper.UnsubscribeFromAllEvents();
-                    }
+                    oldWrapper.PropertyChanged -= OnPropertyObjectPropertyChanged;
+                    oldWrapper.CollectionChanged -= OnPropertyObjectCollectionChanged;
+                    oldWrapper.CollectionItemPropertyChanged -= OnPropertyObjectCollectionItemPropertyChanged;
+                    oldWrapper.UnsubscribeFromAllEvents();
                 }
 
                 if (!ChangeNotificationWrapper.IsUsefulForObject(propertyValue))
                 {
-                    _propertyValueChangeNotificationWrappers[propertyName] = null;
+                    if (oldWrapper != null)
+                    {
+                        _propertyValueChangeNotificationWrappers.Remove(propertyName);
+                    }
                 }
                 else
                 {

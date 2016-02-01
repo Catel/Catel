@@ -183,7 +183,7 @@ namespace Catel.Data
                     }
                     else
                     {
-                        Log.Warning("Received NotifyCollectionChangedAction.Reset for '{0}', but the type does implement ICollection", sender.GetType().GetSafeFullName(false));
+                        Log.Warning("Received NotifyCollectionChangedAction.Reset for '{0}', but the type does not implement ICollection", sender.GetType().GetSafeFullName(false));
                     }
                 }
 

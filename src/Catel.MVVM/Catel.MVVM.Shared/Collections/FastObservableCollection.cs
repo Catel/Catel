@@ -23,7 +23,7 @@ namespace Catel.Collections
 #if NET
     [Serializable]
 #endif
-    public class FastObservableCollection<T> : ObservableCollection<T>
+    public class FastObservableCollection<T> : ObservableCollection<T>, ISuspendChangeNotificationsCollection
     {
         #region Constants
         private static readonly IDispatcherService _dispatcherService;
