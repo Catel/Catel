@@ -329,8 +329,9 @@ namespace Catel
         /// is causing issues.
         /// </summary>
         /// <param name="handler">The handler.</param>
-        /// <param name="args">The arguments.</param>
-        private static void SplitInvoke(Delegate handler, params object[] args)
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The event args.</param>
+        private static void SplitInvoke(NotifyCollectionChangedEventHandler handler, object sender, NotifyCollectionChangedEventArgs e)
         {
             var invocationList = handler.GetInvocationList();
 
@@ -338,8 +339,8 @@ namespace Catel
             {
                 try
                 {
-                    var invocationItem = invocationList[i];
-                    invocationItem.DynamicInvoke(args);
+                    var invocationItem = (NotifyCollectionChangedEventHandler) invocationList[i];
+                    invocationItem(sender, e);
                 }
                 catch (Exception ex)
                 {
@@ -348,5 +349,86 @@ namespace Catel
                 }
             }
         }
+
+        /// <summary>
+        /// Invokes the registered handlers one by one. This way it is easy to determine which subscription on a specific event handler
+        /// is causing issues.
+        /// </summary>
+        /// <param name="handler">The handler.</param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The event args.</param>
+        private static void SplitInvoke(EventHandler handler, object sender, EventArgs e)
+        {
+            var invocationList = handler.GetInvocationList();
+
+            for (int i = 0; i < invocationList.Length; i++)
+            {
+                try
+                {
+                    var invocationItem = (EventHandler)invocationList[i];
+                    invocationItem(sender, e);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to invoke event handler at index '{0}'", i);
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Invokes the registered handlers one by one. This way it is easy to determine which subscription on a specific event handler
+        /// is causing issues.
+        /// </summary>
+        /// <param name="handler">The handler.</param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The event args.</param>
+        private static void SplitInvoke(PropertyChangedEventHandler handler, object sender, PropertyChangedEventArgs e)
+        {
+            var invocationList = handler.GetInvocationList();
+
+            for (int i = 0; i < invocationList.Length; i++)
+            {
+                try
+                {
+                    var invocationItem = (PropertyChangedEventHandler)invocationList[i];
+                    invocationItem(sender, e);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to invoke event handler at index '{0}'", i);
+                    throw;
+                }
+            }
+        }
+        /// <summary>
+        /// Invokes the registered handlers one by one. This way it is easy to determine which subscription on a specific event handler
+        /// is causing issues.
+        /// </summary>
+        /// <typeparam name="TEventArgs">The type of the <see cref="EventArgs"/> class.</typeparam>
+        /// <param name="handler">The handler.</param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The event args.</param>
+        private static void SplitInvoke<TEventArgs>(this EventHandler<TEventArgs> handler, object sender, TEventArgs e)
+            where TEventArgs : EventArgs
+        {
+            var invocationList = handler.GetInvocationList();
+
+            for (int i = 0; i < invocationList.Length; i++)
+            {
+                try
+                {
+                    var invocationItem = (EventHandler<TEventArgs>)invocationList[i];
+                    invocationItem(sender, e);
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(ex, "Failed to invoke event handler at index '{0}'", i);
+                    throw;
+                }
+            }
+        }
+
+
     }
 }
