@@ -7,11 +7,10 @@
 namespace Catel.Data
 {
     using Reflection;
+    using System.Collections.Generic;
     using System.Dynamic;
-    using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
-    using System.Collections.Generic;
 
     /// <summary>
     /// Class containing metadata for the <see cref="DynamicObservableObject"/>.
@@ -20,7 +19,6 @@ namespace Catel.Data
     {
         private static readonly MethodInfo _getValueMethodInfo;
         private static readonly MethodInfo _setValueMethodInfo;
-        private static readonly FieldInfo _getPropertiesNamesFieldInfo;
 
         /// <summary>
         /// Initializes static members of the <see cref=" DynamicObservableObjectMetaObject"/> class.
@@ -31,10 +29,6 @@ namespace Catel.Data
 
             _getValueMethodInfo = typeof(DynamicObservableObject).GetMethodEx("GetValue", bindingFlags).MakeGenericMethod(new[] { typeof(object) });
             _setValueMethodInfo = typeof(DynamicObservableObject).GetMethodEx("SetValue", bindingFlags);
-
-            bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic;
-
-            _getPropertiesNamesFieldInfo = typeof(DynamicObservableObject).GetFieldEx("_dynamicProperties", bindingFlags);
         }
 
         /// <summary>
@@ -54,7 +48,7 @@ namespace Catel.Data
         /// <returns>The list of dynamic member names.</returns>
         public override IEnumerable<string> GetDynamicMemberNames()
         {
-            return ((IDictionary<string, object>)_getPropertiesNamesFieldInfo.GetValue(Value)).Keys.ToList();
+            return ((DynamicObservableObject)Value).GetPropertyNames();
         }
 
         /// <summary>
