@@ -208,7 +208,9 @@ namespace Catel.Reflection
                 }
             }
 
-            return (from x in source where x.IsStatic() == includeStatics select x).ToArray();
+            return (from x in source
+                    where x.IsStatic() == includeStatics
+                    select x).ToArray();
         }
 
         /// <summary>
