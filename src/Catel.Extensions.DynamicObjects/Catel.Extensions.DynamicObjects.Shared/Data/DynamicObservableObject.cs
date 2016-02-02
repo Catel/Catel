@@ -9,6 +9,7 @@ namespace Catel.Data
     using System;
     using System.Collections.Generic;
     using System.Dynamic;
+    using System.Linq;
     using System.Linq.Expressions;
 
     /// <summary>
@@ -64,6 +65,15 @@ namespace Catel.Data
         public DynamicMetaObject GetMetaObject(Expression parameter)
         {
             return new DynamicObservableObjectMetaObject(parameter, this);
+        }
+
+        /// <summary>
+        /// Returns the enumeration of all property names.
+        /// </summary>
+        /// <returns>The list of property names.</returns>
+        protected internal IEnumerable<string> GetPropertyNames()
+        {
+            return new List<string>(_dynamicProperties.Keys);
         }
     }
 }
