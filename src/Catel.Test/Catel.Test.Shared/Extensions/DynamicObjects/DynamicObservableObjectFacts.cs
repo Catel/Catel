@@ -8,10 +8,12 @@
 namespace Catel.Test.Extensions.DynamicObjects
 {
     using System;
+    using System.Dynamic;
+    using System.Linq;
+    using System.Linq.Expressions;
     using System.IO;
     using Catel.Data;
     using Catel.Runtime.Serialization;
-
     using NUnit.Framework;
 
     public class DynamicObservableObjectFacts
@@ -78,6 +80,25 @@ namespace Catel.Test.Extensions.DynamicObjects
             }
 
             [TestCase]
+            public void CorrectlyReturnsTheDefaultValue_WhenNotSet()
+            {
+                var observableObject = new CustomObject();
+                dynamic dynamicObservableObject = observableObject;
+
+                Assert.AreEqual(null, observableObject.GetValue<string>("Property1"));
+                Assert.AreEqual(0, observableObject.GetValue<int>("Property2"));
+                Assert.AreEqual(0F, observableObject.GetValue<float>("Property3"));
+                Assert.AreEqual(0M, observableObject.GetValue<decimal>("Property4"));
+                Assert.AreEqual(DateTime.MinValue, observableObject.GetValue<DateTime>("Property5"));
+                //
+                Assert.AreEqual(null, observableObject.GetValue<string>("Property1"));
+                Assert.AreEqual(null, observableObject.GetValue<int?>("Property2"));
+                Assert.AreEqual(null, observableObject.GetValue<float?>("Property3"));
+                Assert.AreEqual(null, observableObject.GetValue<decimal?>("Property4"));
+                Assert.AreEqual(null, observableObject.GetValue<DateTime?>("Property5"));
+            }
+
+            [TestCase]
             public void RaisesAdvancedPropertyChangingEvents_WhenSetViaDynamicProperty()
             {
                 var counter = 0;
@@ -100,25 +121,6 @@ namespace Catel.Test.Extensions.DynamicObjects
 
                 Assert.AreEqual(1, counter);
                 Assert.AreEqual(propertyName, "Property1");
-            }
-
-            [TestCase]
-            public void CorrectlyReturnsTheDefaultValue_WhenNotSet()
-            {
-                var observableObject = new CustomObject();
-                dynamic dynamicObservableObject = observableObject;
-
-                Assert.AreEqual(null, observableObject.GetValue<string>("Property1"));
-                Assert.AreEqual(0, observableObject.GetValue<int>("Property2"));
-                Assert.AreEqual(0F, observableObject.GetValue<float>("Property3"));
-                Assert.AreEqual(0M, observableObject.GetValue<decimal>("Property4"));
-                Assert.AreEqual(DateTime.MinValue, observableObject.GetValue<DateTime>("Property5"));
-                //
-                Assert.AreEqual(null, observableObject.GetValue<string>("Property1"));
-                Assert.AreEqual(null, observableObject.GetValue<int?>("Property2"));
-                Assert.AreEqual(null, observableObject.GetValue<float?>("Property3"));
-                Assert.AreEqual(null, observableObject.GetValue<decimal?>("Property4"));
-                Assert.AreEqual(null, observableObject.GetValue<DateTime?>("Property5"));
             }
 
             [TestCase]
@@ -217,6 +219,60 @@ namespace Catel.Test.Extensions.DynamicObjects
                 Assert.Throws<ArgumentException>(() => observableObject.SetValue(null, "test"));
                 Assert.Throws<ArgumentException>(() => observableObject.SetValue("", "test"));
                 Assert.Throws<ArgumentException>(() => observableObject.SetValue(" ", "test"));
+            }
+        }
+
+        [TestFixture]
+        public class TheGetDynamicMemberNamesMethod
+        {
+            [TestCase]
+            public void CorrectlyReturnsDynamicMemberNames_WhenSetViaDynamicProperty()
+            {
+                var observableObject = new CustomObject();
+                dynamic dynamicObservableObject = observableObject;
+
+                // Settings value via dynamic property.
+                DateTime dt = DateTime.ParseExact("2016-01-01 01:01:01", "yyyy-MM-dd HH:mm:ss", null);
+                dynamicObservableObject.Property1 = "test";
+                dynamicObservableObject.Property2 = 100;
+                dynamicObservableObject.Property3 = 3.14F;
+                dynamicObservableObject.Property4 = 1.2M;
+                dynamicObservableObject.Property5 = dt;
+
+                // Get dynamic member names and sort (we get keys from dictionary where order is unspecified, so it's better to sort by names).
+                var memberNames = observableObject.GetMetaObject(Expression.Constant(observableObject)).GetDynamicMemberNames().ToList();
+                memberNames.Sort();
+                Assert.AreEqual(5, memberNames.Count);
+                Assert.AreEqual("Property1", memberNames[0]);
+                Assert.AreEqual("Property2", memberNames[1]);
+                Assert.AreEqual("Property3", memberNames[2]);
+                Assert.AreEqual("Property4", memberNames[3]);
+                Assert.AreEqual("Property5", memberNames[4]);
+            }
+
+            [TestCase]
+            public void CorrectlyReturnsDynamicMemberNames_WhenSetViaSetValueMethod()
+            {
+                var observableObject = new CustomObject();
+                dynamic dynamicObservableObject = observableObject;
+
+                // Setting value via SetValue method.
+                DateTime dt = DateTime.ParseExact("2016-01-01 01:01:01", "yyyy-MM-dd HH:mm:ss", null);
+                observableObject.SetValue("Property1", "test");
+                observableObject.SetValue("Property2", 100);
+                observableObject.SetValue("Property3", 3.14F);
+                observableObject.SetValue("Property4", 1.2M);
+                observableObject.SetValue("Property5", dt);
+
+                // Get dynamic member names and sort (we get keys from dictionary where order is unspecified, so it's better to sort by names).
+                var memberNames = observableObject.GetMetaObject(Expression.Constant(observableObject)).GetDynamicMemberNames().ToList();
+                memberNames.Sort();
+                Assert.AreEqual(5, memberNames.Count);
+                Assert.AreEqual("Property1", memberNames[0]);
+                Assert.AreEqual("Property2", memberNames[1]);
+                Assert.AreEqual("Property3", memberNames[2]);
+                Assert.AreEqual("Property4", memberNames[3]);
+                Assert.AreEqual("Property5", memberNames[4]);
             }
         }
     }

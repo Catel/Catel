@@ -7,6 +7,7 @@
 namespace Catel.Data
 {
     using Reflection;
+    using System.Collections.Generic;
     using System.Dynamic;
     using System.Linq.Expressions;
     using System.Reflection;
@@ -39,6 +40,15 @@ namespace Catel.Data
             : base(parameter, BindingRestrictions.Empty, observableObject)
         {
 
+        }
+
+        /// <summary>
+        /// Returns the enumeration of all dynamic member names.
+        /// </summary>
+        /// <returns>The list of dynamic member names.</returns>
+        public override IEnumerable<string> GetDynamicMemberNames()
+        {
+            return ((DynamicObservableObject)Value).GetPropertyNames();
         }
 
         /// <summary>

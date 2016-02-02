@@ -102,7 +102,8 @@ namespace Catel
         {
             if (handler != null)
             {
-                SplitInvoke(handler, sender, e);
+            	Action<EventHandler> action = (EventHandler invocationItem) => invocationItem(sender, e);
+                SplitInvoke(handler.GetInvocationList(), action, sender, e);
                 return true;
             }
 
@@ -139,7 +140,8 @@ namespace Catel
         {
             if (handler != null)
             {
-                SplitInvoke(handler, sender, e);
+                Action<EventHandler<TEventArgs>> action = (EventHandler<TEventArgs> invocationItem) => invocationItem(sender, e);
+                SplitInvoke(handler.GetInvocationList(), action, sender, e);
                 return true;
             }
 
@@ -170,14 +172,16 @@ namespace Catel
         /// <typeparam name="TEventArgs">The type of the <see cref="EventArgs"/> class.</typeparam>
         /// <param name="handler">The handler.</param>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The event args.</param>
+        /// <param name="fE">The event args.</param>
         /// <returns><c>true</c> if the event handler was not <c>null</c>; otherwise <c>false</c>.</returns>
-        public static bool SafeInvoke<TEventArgs>(this EventHandler<TEventArgs> handler, object sender, Func<TEventArgs> e)
+        public static bool SafeInvoke<TEventArgs>(this EventHandler<TEventArgs> handler, object sender, Func<TEventArgs> fE)
             where TEventArgs : EventArgs
         {
             if (handler != null)
             {
-                SplitInvoke(handler, sender, e());
+            	var e = fE();
+                Action<EventHandler<TEventArgs>> action = (EventHandler<TEventArgs> invocationItem) => invocationItem(sender, e);
+                SplitInvoke(handler.GetInvocationList(), action, sender, e);
                 return true;
             }
 
@@ -212,7 +216,8 @@ namespace Catel
         {
             if (handler != null)
             {
-                SplitInvoke(handler, sender, e);
+                Action<PropertyChangedEventHandler> action = (PropertyChangedEventHandler invocationItem) => invocationItem(sender, e);
+                SplitInvoke(handler.GetInvocationList(), action, sender, e);
                 return true;
             }
 
@@ -241,13 +246,15 @@ namespace Catel
         /// </summary>
         /// <param name="handler">The handler.</param>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The event args.</param>
+        /// <param name="fE">The event args.</param>
         /// <returns><c>true</c> if the event handler was not <c>null</c>; otherwise <c>false</c>.</returns>
-        public static bool SafeInvoke(this PropertyChangedEventHandler handler, object sender, Func<PropertyChangedEventArgs> e)
+        public static bool SafeInvoke(this PropertyChangedEventHandler handler, object sender, Func<PropertyChangedEventArgs> fE)
         {
             if (handler != null)
             {
-                SplitInvoke(handler, sender, e());
+                var e = fE();
+                Action<PropertyChangedEventHandler> action = (PropertyChangedEventHandler invocationItem) => invocationItem(sender, e);
+                SplitInvoke(handler.GetInvocationList(), action, sender, e);
                 return true;
             }
 
@@ -282,7 +289,8 @@ namespace Catel
         {
             if (handler != null)
             {
-                SplitInvoke(handler, sender, e);
+                Action<NotifyCollectionChangedEventHandler> action = (NotifyCollectionChangedEventHandler invocationItem) => invocationItem(sender, e);
+                SplitInvoke(handler.GetInvocationList(), action, sender, e);
                 return true;
             }
 
@@ -311,42 +319,54 @@ namespace Catel
         /// </summary>
         /// <param name="handler">The handler.</param>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The event args.</param>
+        /// <param name="fE">The event args.</param>
         /// <returns><c>true</c> if the event handler was not <c>null</c>; otherwise <c>false</c>.</returns>
-        public static bool SafeInvoke(this NotifyCollectionChangedEventHandler handler, object sender, Func<NotifyCollectionChangedEventArgs> e)
+        public static bool SafeInvoke(this NotifyCollectionChangedEventHandler handler, object sender, Func<NotifyCollectionChangedEventArgs> fE)
         {
             if (handler != null)
             {
-                SplitInvoke(handler, sender, e());
+            	var e = fE();
+            	Action<NotifyCollectionChangedEventHandler> action = (NotifyCollectionChangedEventHandler invocationItem) => invocationItem(sender, e);
+                SplitInvoke(handler.GetInvocationList(), action, sender, e);
                 return true;
             }
 
             return false;
         }
-
-        /// <summary>
-        /// Invokes the registered handlers one by one. This way it is easy to determine which subscription on a specific event handler
-        /// is causing issues.
-        /// </summary>
-        /// <param name="handler">The handler.</param>
-        /// <param name="args">The arguments.</param>
-        private static void SplitInvoke(Delegate handler, params object[] args)
+        
+		/// <summary>  
+		/// Invokes the invocation list one by one. This way it is easy to determine which subscription on a specific event handler  
+		/// is causing issues.  
+		/// </summary>  
+		/// <param name="invocationList">The invocationList.</param>
+		/// <param name="handler">The handler.</param>  
+		/// <param name="sender">The sender.</param>  
+		/// <param name="e">The event args.</param>  
+        
+        private static void SplitInvoke<THandler>(Delegate[] invocationList, Action<THandler> handler, object sender, object e) 
+        	where THandler : class
         {
-            var invocationList = handler.GetInvocationList();
-
-            for (int i = 0; i < invocationList.Length; i++)
-            {
-                try
-                {
-                    var invocationItem = invocationList[i];
-                    invocationItem.DynamicInvoke(args);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Failed to invoke event handler at index '{0}'", i);
-                    throw;
-                }
-            }
-        }
+	    	for (int i = 0; i < invocationList.Length; i++)  
+			{  
+				try  
+				{  
+					var invocationItem = invocationList[i] as THandler;  
+					if (invocationItem != null)
+					{
+						handler(invocationItem);
+					}
+					else
+					{
+						var args = new Object[] { sender, e };
+						invocationList[i].DynamicInvoke(args);
+					}
+				}
+				catch (Exception ex)  
+				{  
+					Log.Error(ex, "Failed to invoke event handler at index '{0}'", i);  
+					throw;  
+				}
+			}
+		}
     }
 }
