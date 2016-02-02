@@ -216,7 +216,7 @@ namespace Catel.Test.Data
             }
 
             [TestCase]
-            public void DoesNotInvokeCancelEditingEventAfterBeginEditIsCalled()
+            public void DoesNotInvokeCancelEditingEventWhenBeginEditWasNotCalled()
             {
                 var editableObject = new EditableObject();
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
@@ -332,7 +332,7 @@ namespace Catel.Test.Data
             }
 
             [TestCase]
-            public void DoesNotInvokeEndEditingEventAfterBeginEditIsCalled()
+            public void DoesNotInvokeEndEditingEventWhenBeginEditWasNotCalled()
             {
                 var editableObject = new EditableObject();
                 var editableObjectAsIEditableObject = (IEditableObject)editableObject;
