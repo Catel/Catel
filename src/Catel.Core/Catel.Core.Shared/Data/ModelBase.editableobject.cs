@@ -120,7 +120,7 @@ namespace Catel.Data
                         var serializer = _object.Serializer;
                         if (serializer != null)
                         {
-                            properties = serializer.DeserializeMembers(_object.GetType(), stream);    
+                            properties = serializer.DeserializeMembers(_object.GetType(), stream);
                         }
 
                         oldPropertyValues = properties.ToDictionary(property => property.Name, property => property.Value);
@@ -250,7 +250,7 @@ namespace Catel.Data
         /// </summary>
         void IEditableObject.BeginEdit()
         {
-            if(_backup != null)
+            if (_backup != null)
             {
                 Log.Debug("IEditableObject is already in edit state");
                 return;
@@ -276,7 +276,7 @@ namespace Catel.Data
         /// </summary>
         void IEditableObject.CancelEdit()
         {
-            if(_backup == null)
+            if (_backup == null)
             {
                 Log.Debug("IEditableObject is not in edit state");
                 return;

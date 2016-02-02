@@ -71,6 +71,7 @@ Added/fixed:
 (*) CTL-810 Marked QueryableExtensions.Include(Expression) as obsolete for EF6 and higher
 (*) CTL-814 Improve Argument.IsValid implementation to allow more options
 (*) CTL-819 Prevent unnecessary creation of event args in .SafeInvoke when handler is null
+(*) CTL-824 ModelBase.editableobject should check for duplicated BeginEdit(), EndEdit(), CancelEdit()
 (*) CTL-825 Use NuGet package for behaviors SDK instead of local reference for UWP
 (*) CTL-828 Prevent unneccessary creation of empty dictionary entries in ModelBase
 (x) CTL-791 Types with the same FullName from different assemblies will cause issues with the TypeFactory cache
