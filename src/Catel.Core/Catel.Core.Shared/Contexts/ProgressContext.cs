@@ -22,7 +22,7 @@ namespace Catel
         /// Initializes a new instance of the <see cref="ProgressContext"/> class.
         /// </summary>
         /// <param name="totalCount">The total count that this progress context represents.</param>
-        /// <param name="numberOfRefreshes">The number of refreshes in which the total items should be divided.</param>
+        /// <param name="numberOfRefreshes">The number of refreshes required during progress.</param>
         public ProgressContext(long totalCount, int numberOfRefreshes)
         {
             Argument.IsMinimal("numberOfRefreshes", numberOfRefreshes, 1);
@@ -90,10 +90,8 @@ namespace Catel
         {
             get
             {
-                var remainder = 0L;
-                Math.DivRem(CurrentCount, _refreshInterval, out remainder);
-
-                return (remainder == 0L);
+                var remainder = CurrentCount % _refreshInterval;
+                return remainder == 0L;
             }
         }
     }

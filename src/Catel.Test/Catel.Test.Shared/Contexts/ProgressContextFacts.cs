@@ -49,5 +49,24 @@ namespace Catel.Test.Contexts
 
             Assert.AreEqual(expectedRefreshNumber, currentRefreshNumber);
         }
+
+        [TestCase(10, 0, 10, true)]
+        [TestCase(10, 1, 10, true)]
+        [TestCase(100, 1, 10, false)]
+        [TestCase(100, 2, 10, false)]
+        [TestCase(100, 5, 10, false)]
+        [TestCase(100, 8, 10, false)]
+        [TestCase(100, 10, 10, true)]
+        [TestCase(100, 12, 10, false)]
+        [TestCase(100, 50, 10, true)]
+        public void CorrectlyCalculatesIsRefreshRequired(int totalCount, int currentCount, int numberOfRefreshes, bool expectedIsRefreshRequired)
+        {
+            var progressContext = new ProgressContext(totalCount, numberOfRefreshes);
+            progressContext.CurrentCount = currentCount;
+
+            var isRefreshRequired = progressContext.IsRefreshRequired;
+
+            Assert.AreEqual(expectedIsRefreshRequired, isRefreshRequired);
+        }
     }
 }
