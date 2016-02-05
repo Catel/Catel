@@ -12,7 +12,7 @@ namespace Catel
     /// <summary>
     /// Never calculate progress manually anymore.
     /// </summary>
-    public class ProgressContext
+    public class ProgressContext : Disposable
     {
         private readonly double _onePercentage;
         private readonly long _refreshInterval;
