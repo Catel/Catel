@@ -58,6 +58,7 @@ Added/fixed:
 (+) CTL-805 Add IExceptionHandler<T> to make implementation of custom exception handlers easier
 (+) CTL-809 Add CreateTaskCommand method on CommandHelper
 (+) CTL-817 Add DynamicObservableObject implementation
+(+) CTL-832 Added ProgressContext to easily allow progress calculation
 (*) CTL-785 Support expressions in validation result static members so you can now write
     FieldValidationResult.CreateWarning(() => MyProperty, "This field is required");
 (*) CTL-789 Improve property handling in the context of RegisterProperties

@@ -69,6 +69,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\ConfigurationExtensions.net.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\DynamicConfigurationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Interfaces\IConfigurationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contexts\ProgressContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoreModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Attributes\ExcludeFromValidationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Attributes\ValidateModelAttribute.cs" />
