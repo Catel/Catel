@@ -33,11 +33,43 @@ namespace Catel.Windows
         /// Initializes a new instance of the <see cref="DataWindowButton"/> class.
         /// </summary>
         /// <param name="text">The text.</param>
+        /// <param name="execute">The execute delegate.</param>
+        /// <param name="canExecute">The can execute delegate.</param>
+        /// <param name="contentBindingPath">The binding path expression of the content to bind to.</param>
+        /// <param name="contentValueConverter">The value converter used with content binding.</param>
+        /// <param name="visibilityBindingPath">The binding path expression of the visibility to bind to.</param>
+        /// <param name="visibilityValueConverter">The value converter used with visibility binding.</param>
+        /// <remarks>Text is ignored when contentBindingPath is set.</remarks>
+        public static DataWindowButton FromSync(string text, Action execute, Func<bool> canExecute = null, string contentBindingPath = null, IValueConverter contentValueConverter = null, string visibilityBindingPath = null, IValueConverter visibilityValueConverter = null)
+        {
+            return new DataWindowButton(text, new Command(execute, canExecute), contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataWindowButton"/> class.
+        /// </summary>
+        /// <param name="text">The text.</param>
         /// <param name="executeAsync">The async execute delegate.</param>
         /// <param name="canExecute">The can execute delegate.</param>
         public static DataWindowButton FromAsync(string text, Func<Task> executeAsync, Func<bool> canExecute = null)
         {
             return new DataWindowButton(text, new TaskCommand(executeAsync, canExecute));
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataWindowButton"/> class.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="executeAsync">The async execute delegate.</param>
+        /// <param name="canExecute">The can execute delegate.</param>
+        /// <param name="contentBindingPath">The binding path expression of the content to bind to.</param>
+        /// <param name="contentValueConverter">The value converter used with content binding.</param>
+        /// <param name="visibilityBindingPath">The binding path expression of the visibility to bind to.</param>
+        /// <param name="visibilityValueConverter">The value converter used with visibility binding.</param>
+        /// <remarks>Text is ignored when contentBindingPath is set.</remarks>
+        public static DataWindowButton FromAsync(string text, Func<Task> executeAsync, Func<bool> canExecute = null, string contentBindingPath = null, IValueConverter contentValueConverter = null, string visibilityBindingPath = null, IValueConverter visibilityValueConverter = null)
+        {
+            return new DataWindowButton(text, new TaskCommand(executeAsync, canExecute), contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
         }
 
         /// <summary>
@@ -69,7 +101,7 @@ namespace Catel.Windows
         /// <param name="contentBindingPath">The binding path expression of the content to bind to.</param>
         /// <param name="contentValueConverter">The value converter used with content binding.</param>
         /// <param name="visibilityBindingPath">The binding path expression of the visibility to bind to.</param>
-        /// <param name="visibilityValueConverter">The value converter used with visibiliyu binding.</param>
+        /// <param name="visibilityValueConverter">The value converter used with visibility binding.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="command"/> is <c>null</c>.</exception>
         /// <remarks>Text is ignored when contentBindingPath is set.</remarks>
         public DataWindowButton(string text, ICommand command, string contentBindingPath = null, IValueConverter contentValueConverter = null, string visibilityBindingPath = null, IValueConverter visibilityValueConverter = null)
@@ -104,7 +136,7 @@ namespace Catel.Windows
         /// <param name="contentBindingPath">The binding path expression of the content to bind to.</param>
         /// <param name="contentValueConverter">The value converter used with content binding.</param>
         /// <param name="visibilityBindingPath">The binding path expression of the visibility to bind to.</param>
-        /// <param name="visibilityValueConverter">The value converter used with visibiliyu binding.</param>
+        /// <param name="visibilityValueConverter">The value converter used with visibility binding.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="commandBindingPath"/> is <c>null</c>.</exception>
         /// <remarks>Text is ignored when contentBindingPath is set.</remarks>
         public DataWindowButton(string text, string commandBindingPath, string contentBindingPath = null, IValueConverter contentValueConverter = null, string visibilityBindingPath = null, IValueConverter visibilityValueConverter = null)
