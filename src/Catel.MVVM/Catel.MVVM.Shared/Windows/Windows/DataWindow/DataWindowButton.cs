@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NET || SL5
+
 namespace Catel.Windows
 {
     using System;
@@ -213,3 +215,5 @@ namespace Catel.Windows
         #endregion
     }
 }
+
+#endif
