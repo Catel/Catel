@@ -34,6 +34,8 @@ namespace Catel.MVVM.Providers
         private bool? _closeInitiatedByViewModel;
         private bool? _closeInitiatedByViewModelResult;
 
+        private readonly string _targetWindowClosedEventName;
+
         private readonly DynamicEventListener _dynamicEventListener;
 
 #if SILVERLIGHT
@@ -69,6 +71,8 @@ namespace Catel.MVVM.Providers
 
                 _dynamicEventListener = new DynamicEventListener(targetWindow, "Unloaded", this, "OnTargetWindowClosed");
             }
+
+            _targetWindowClosedEventName = eventName;
 
             Log.Debug("Using '{0}.{1}' event to determine window closing", targetWindowType.FullName, eventName);
         }
@@ -117,9 +121,16 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override void OnTargetViewUnloaded(object sender, EventArgs e)
+        public override async void OnTargetViewUnloaded(object sender, EventArgs e)
         {
             base.OnTargetViewUnloaded(sender, e);
+
+            // This should only happen when the window only exposes an Unloaded event
+            var vm = ViewModel;
+            if (vm != null && !vm.IsClosed)
+            {
+                await CloseViewModelAsync(null);
+            }
 
             ViewModel = null;
         }
