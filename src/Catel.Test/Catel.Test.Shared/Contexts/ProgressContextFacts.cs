@@ -21,6 +21,8 @@ namespace Catel.Test.Contexts
         [TestCase(100, 10, 10, 10d)]
         [TestCase(100, 12, 10, 12d)]
         [TestCase(100, 50, 10, 50d)]
+        [TestCase(2, 1, 75, 50)]
+        [TestCase(2, 2, 75, 100)]
         public void CorrectlyCalculatesPercentage(int totalCount, int currentCount, int numberOfRefreshes, double expectedPercentage)
         {
             var progressContext = new ProgressContext(totalCount, numberOfRefreshes);
@@ -40,6 +42,9 @@ namespace Catel.Test.Contexts
         [TestCase(100, 10, 10, 1)]
         [TestCase(100, 12, 10, 1)]
         [TestCase(100, 50, 10, 5)]
+        [TestCase(2, 0, 75, 0)]
+        [TestCase(2, 1, 75, 37)]
+        [TestCase(2, 2, 75, 75)]
         public void CorrectlyCalculatesCurrentRefreshNumber(int totalCount, int currentCount, int numberOfRefreshes, int expectedRefreshNumber)
         {
             var progressContext = new ProgressContext(totalCount, numberOfRefreshes);
@@ -59,6 +64,9 @@ namespace Catel.Test.Contexts
         [TestCase(100, 10, 10, true)]
         [TestCase(100, 12, 10, false)]
         [TestCase(100, 50, 10, true)]
+        [TestCase(2, 0, 75, true)]
+        [TestCase(2, 1, 75, true)]
+        [TestCase(2, 2, 75, true)]
         public void CorrectlyCalculatesIsRefreshRequired(int totalCount, int currentCount, int numberOfRefreshes, bool expectedIsRefreshRequired)
         {
             var progressContext = new ProgressContext(totalCount, numberOfRefreshes);

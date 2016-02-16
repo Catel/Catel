@@ -15,8 +15,11 @@ namespace Catel
     public class ProgressContext : Disposable
     {
         private readonly double _onePercentage;
+
         private readonly long _refreshInterval;
+
         private readonly long _refreshIntervalCount;
+        private readonly double _smallRefreshIntervalCounter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProgressContext"/> class.
@@ -30,9 +33,18 @@ namespace Catel
             TotalCount = totalCount;
             NumberOfRefreshes = numberOfRefreshes;
 
-            _onePercentage = TotalCount/100d;
-            _refreshIntervalCount = totalCount/numberOfRefreshes;
-            _refreshInterval = TotalCount/NumberOfRefreshes;
+            _onePercentage = TotalCount / 100d;
+            _refreshIntervalCount = totalCount / numberOfRefreshes;
+            if (_refreshIntervalCount == 0)
+            {
+                _smallRefreshIntervalCounter = totalCount / (double)numberOfRefreshes;
+            }
+
+            _refreshInterval = TotalCount / NumberOfRefreshes;
+            if (_refreshInterval == 0)
+            {
+                _refreshInterval = 1;
+            }
         }
 
         /// <summary>
@@ -56,8 +68,16 @@ namespace Catel
         {
             get
             {
-                var currentRefreshNumber = (CurrentCount/_refreshIntervalCount);
-                return (int) currentRefreshNumber;
+                var currentCount = CurrentCount;
+
+                if (_refreshIntervalCount == 0)
+                {
+                    var currentRefreshNumberAsDouble = (currentCount / _smallRefreshIntervalCounter);
+                    return (int)currentRefreshNumberAsDouble;
+                }
+
+                var currentRefreshNumber = (currentCount / _refreshIntervalCount);
+                return (int)currentRefreshNumber;
             }
         }
 
@@ -69,7 +89,7 @@ namespace Catel
         {
             get
             {
-                var percentage = (CurrentCount/_onePercentage);
+                var percentage = (CurrentCount / _onePercentage);
                 return percentage;
             }
         }
