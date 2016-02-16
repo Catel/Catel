@@ -10,7 +10,7 @@ namespace Catel.Test.Contexts
     using NUnit.Framework;
 
     [TestFixture]
-    public class ProgressContextFacts
+    public class ProgressContextFacts 
     {
         [TestCase(10, 0, 10, 0d)]
         [TestCase(10, 1, 10, 10d)]
