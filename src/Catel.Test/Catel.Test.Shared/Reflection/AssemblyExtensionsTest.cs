@@ -95,7 +95,7 @@ namespace Catel.Test.Reflection
         [TestCase]
         public void CopyrightAutomatic()
         {
-            string expected = "Copyright © CatenaLogic 2010 - 2015";
+            string expected = "Copyright © CatenaLogic 2010 - 2016";
 
             var result = Assembly.Copyright();
 
