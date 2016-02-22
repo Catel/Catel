@@ -60,6 +60,7 @@ Added/fixed:
 (+) CTL-817 Add DynamicObservableObject implementation
 (+) CTL-832 Added ProgressContext to easily allow progress calculation
 (+) CTL-745 Allow DataWindowButton to be bindable (both text and visibility)
+(+) CTL-843 Add ToString implementation for ValidationContext and ValidationSummary
 (*) CTL-785 Support expressions in validation result static members so you can now write
     FieldValidationResult.CreateWarning(() => MyProperty, "This field is required");
 (*) CTL-789 Improve property handling in the context of RegisterProperties

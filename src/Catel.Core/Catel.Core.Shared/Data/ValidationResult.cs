@@ -8,6 +8,7 @@ namespace Catel.Data
 {
     using System;
     using System.Linq.Expressions;
+    using System.Text;
 
     /// <summary>
     /// Base class for validation results.
@@ -95,6 +96,16 @@ namespace Catel.Data
         /// </summary>
         /// <value>The name of the property.</value>
         public string PropertyName { get; private set; }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        public override string ToString()
+        {
+            var value = string.Format("{0} (Field: {1} | Tag: {2})", Message, PropertyName, ObjectToStringHelper.ToString(Tag));
+            return value;
+        }
 
         /// <summary>
         /// Creates a <see cref="FieldValidationResult"/> containing a warning.
@@ -190,7 +201,6 @@ namespace Catel.Data
 
             return warning;
         }
-
 
         /// <summary>
         /// Creates a <see cref="FieldValidationResult" /> containing a warning.
@@ -339,6 +349,16 @@ namespace Catel.Data
         public BusinessRuleValidationResult(ValidationResultType validationResultType, string messageFormat, params object[] args)
             : base(validationResultType, (args == null || args.Length == 0) ? messageFormat : string.Format(messageFormat, args))
         {
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        public override string ToString()
+        {
+            var value = string.Format("{0} (Tag: {1})", Message, ObjectToStringHelper.ToString(Tag));
+            return value;
         }
 
         /// <summary>
