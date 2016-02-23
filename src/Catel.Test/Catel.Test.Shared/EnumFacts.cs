@@ -15,14 +15,31 @@ namespace Catel.Test
         [Flags]
         public enum Enum1
         {
+            None = 0,
+
             MyValue = 1,
 
-            MySecondValue = 2
+            MySecondValue = 2,
+
+            MyThirdValue = 4
         }
-        
+
         private enum Enum2
         {
             MyValue = 0
+        }
+
+        [TestFixture]
+        public class TheGetValuesFromFlagsMethod
+        {
+            [TestCase(Enum1.MySecondValue | Enum1.MyThirdValue, new[] {Enum1.MySecondValue, Enum1.MyThirdValue})]
+            [TestCase(Enum1.MyThirdValue, new[] { Enum1.MyThirdValue })]
+            public void ReturnsCorrectFlags(Enum1 flags, Enum1[] expectedValues)
+            {
+                var actualValues = Enum<Enum1>.Flags.GetValues(flags);
+
+                Assert.AreEqual(expectedValues, actualValues);
+            }
         }
 
         [TestFixture]
@@ -88,7 +105,7 @@ namespace Catel.Test
                 Assert.AreEqual("MySecondValue", name);
             }
         }
-        
+
         [TestFixture]
         public class TheGetNamesMethod
         {
@@ -102,7 +119,7 @@ namespace Catel.Test
                 Assert.AreEqual("MySecondValue", names[1]);
             }
         }
-        
+
         [TestFixture]
         public class TheGetValuesMethod
         {
@@ -116,7 +133,7 @@ namespace Catel.Test
                 Assert.AreEqual(Enum1.MySecondValue, values[1]);
             }
         }
-       
+
         [TestFixture]
         public class TheIsFlagSetMethod
         {
