@@ -114,9 +114,11 @@ namespace Catel.Test
             {
                 var names = Enum<Enum1>.GetNames();
 
-                Assert.AreEqual(2, names.Length);
-                Assert.AreEqual("MyValue", names[0]);
-                Assert.AreEqual("MySecondValue", names[1]);
+                Assert.AreEqual(4, names.Length);
+                Assert.AreEqual("None", names[0]);
+                Assert.AreEqual("MyValue", names[1]);
+                Assert.AreEqual("MySecondValue", names[2]);
+                Assert.AreEqual("MyThirdValue", names[3]);
             }
         }
 
@@ -128,9 +130,11 @@ namespace Catel.Test
             {
                 var values = Enum<Enum1>.GetValues();
 
-                Assert.AreEqual(2, values.Count);
-                Assert.AreEqual(Enum1.MyValue, values[0]);
-                Assert.AreEqual(Enum1.MySecondValue, values[1]);
+                Assert.AreEqual(4, values.Count);
+                Assert.AreEqual(Enum1.None, values[0]);
+                Assert.AreEqual(Enum1.MyValue, values[1]);
+                Assert.AreEqual(Enum1.MySecondValue, values[2]);
+                Assert.AreEqual(Enum1.MyThirdValue, values[3]);
             }
         }
 
@@ -210,9 +214,11 @@ namespace Catel.Test
             {
                 var list = Enum<Enum1>.ToList();
 
-                Assert.AreEqual(2, list.Count);
-                Assert.AreEqual(Enum1.MyValue, list[0]);
-                Assert.AreEqual(Enum1.MySecondValue, list[1]);
+                Assert.AreEqual(4, list.Count);
+                Assert.AreEqual(Enum1.None, list[0]);
+                Assert.AreEqual(Enum1.MyValue, list[1]);
+                Assert.AreEqual(Enum1.MySecondValue, list[2]);
+                Assert.AreEqual(Enum1.MyThirdValue, list[3]);
             }
         }
 
