@@ -78,6 +78,7 @@ Added/fixed:
 (*) CTL-824 ModelBase.editableobject should check for duplicated BeginEdit(), EndEdit(), CancelEdit()
 (*) CTL-825 Use NuGet package for behaviors SDK instead of local reference for UWP
 (*) CTL-828 Prevent unneccessary creation of empty dictionary entries in ModelBase
+(*) CTL-846 ObjectConverterService (and thus ConfigurationService) should respect culture on UWP
 (x) CTL-791 Types with the same FullName from different assemblies will cause issues with the TypeFactory cache
 (x) CTL-793 CompositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand not respected
 (x) CTL-798 Prevent MissingResourceException when resolving strings for Catel.Core

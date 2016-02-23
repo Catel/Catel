@@ -65,17 +65,23 @@ namespace Catel
             }
 #endif
 
-#if !NETFX_CORE
-            // Note: cannot be used on NETFX_CORE
+            var instanceType = instance.GetType();
+            if (instanceType == typeof (DateTime) || instanceType == typeof (DateTime?))
+            {
+                return ((DateTime) instance).ToString(cultureInfo);
+            }
+
+            //if (instanceType == typeof(TimeSpan) || instanceType == typeof(TimeSpan?))
+            //{
+            //    return ((TimeSpan)instance).ToString(ccultureInfo);
+            //}
 
             // Check if there is a culture specific version
-            var instanceType = instance.GetType();
             var toStringMethod = instanceType.GetMethodEx("ToString", new[] {typeof (IFormatProvider)});
             if (toStringMethod != null)
             {
                 return (string)toStringMethod.Invoke(instance, new object[] { cultureInfo });
             }
-#endif
 
             return instance.ToString();
         }
