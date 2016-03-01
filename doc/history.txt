@@ -49,6 +49,7 @@ we will remove the features in the next major release.
 * CTL-784 Marked AttributeHelper as obsolete, use reflection extensions instead
 * CTL-808 Marked AsynchronousCommand as obsolete, use TaskCommand instead
 * CTL-810 Marked QueryableExtensions.Include(Expression) as obsolete for EF6 and higher, use the default EF implementation
+* CTL-849 Marked ExpressionUtil obsolete, use ExpressionHelper instead
 
 Added/fixed:
 ============
