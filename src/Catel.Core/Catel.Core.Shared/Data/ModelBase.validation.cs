@@ -455,7 +455,7 @@ namespace Catel.Data
             {
                 Log.Debug("Validation was suspended, and properties were not checked during this suspended time, checking them now");
 
-                foreach (string property in _propertiesNotCheckedDuringDisabledValidation)
+                foreach (var property in _propertiesNotCheckedDuringDisabledValidation)
                 {
                     var propertyData = GetPropertyData(property);
                     var propertyValue = GetValueFast<object>(propertyData.Name);
@@ -762,7 +762,12 @@ namespace Catel.Data
 
             IsValidating = true;
 
-            var existingValidationContext = (ValidationContext)_validationContext;
+            var existingValidationContext = _validationContext;
+            if (existingValidationContext == null)
+            {
+                existingValidationContext = new ValidationContext();
+            }
+
             bool hasErrors = existingValidationContext.HasErrors;
             bool hasWarnings = existingValidationContext.HasWarnings;
 
