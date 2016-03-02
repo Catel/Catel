@@ -311,6 +311,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\ReferenceEqualityComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\ReferenceInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\ReferenceManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\RuntimeBindingRedirect.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\ExcludeFromSerializationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\SerializeAsCollectionAttribute.cs" />
