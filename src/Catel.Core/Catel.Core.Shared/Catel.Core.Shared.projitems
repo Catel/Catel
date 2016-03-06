@@ -31,6 +31,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\CoverageExcludeAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheStorage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheStorageValueInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\EventArgs\ExpiredEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\EventArgs\ExpiringEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Interfaces\ICacheStorage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\AbsoluteExpirationPolicy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\CompositeExpirationPolicy.cs" />

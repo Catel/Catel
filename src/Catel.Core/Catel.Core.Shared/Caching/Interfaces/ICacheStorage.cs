@@ -18,7 +18,23 @@ namespace Catel.Caching
     /// <typeparam name="TValue">The value type.</typeparam>
     public interface ICacheStorage<TKey, TValue>
     {
+        /// <summary>
+        /// Occurs when the item is expiring.
+        /// </summary>
+        event EventHandler<ExpiringEventArgs<TKey, TValue>> Expiring;
+
+        /// <summary>
+        /// Occurs when the item has expired.
+        /// </summary>
+        event EventHandler<ExpiredEventArgs<TKey, TValue>> Expired;
+
         #region Properties
+        /// <summary>
+        /// Gets or sets whether values should be disposed on removal.
+        /// </summary>
+        /// <value><c>true</c> if values should be disposed on removal; otherwise, <c>false</c>.</value>
+        bool DisposeValuesOnRemoval { get; set; }
+
         /// <summary>
         /// Gets the value associated with the specified key.
         /// </summary>

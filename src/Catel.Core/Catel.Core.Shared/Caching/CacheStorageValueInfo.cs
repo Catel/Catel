@@ -90,6 +90,32 @@ namespace Catel.Caching
                 return CanExpire && _expirationPolicy.IsExpired;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the expiration policy.
+        /// </summary>
+        internal ExpirationPolicy ExpirationPolicy
+        {
+            get
+            {
+                return _expirationPolicy;
+            }
+        }
+
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Dispose value.
+        /// </summary>
+        public void DisposeValue()
+        {
+            var disposable = _value as IDisposable;
+            if (disposable != null)
+            {
+                disposable.Dispose();
+            }
+        }
         #endregion
     }
 }
