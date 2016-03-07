@@ -123,9 +123,10 @@ namespace Catel.Windows.Interactivity
 
             CleanUp();
 
-            if (AssociatedObject != null)
+            var associatedObject = AssociatedObject;
+            if (associatedObject != null)
             {
-                AssociatedObject.Loaded -= OnAssociatedObjectLoadedInternal;
+                associatedObject.Loaded -= OnAssociatedObjectLoadedInternal;
                 _isSubscribedToLoadedEvent = false;
             }
 
@@ -240,9 +241,10 @@ namespace Catel.Windows.Interactivity
 
             _isClean = true;
 
-            if (AssociatedObject != null)
+            var associatedObject = AssociatedObject;
+            if (associatedObject != null)
             {
-                AssociatedObject.Unloaded -= OnAssociatedObjectUnloadedInternal;
+                associatedObject.Unloaded -= OnAssociatedObjectUnloadedInternal;
                 _isSubscribedToUnloadedEvent = false;
             }
 
