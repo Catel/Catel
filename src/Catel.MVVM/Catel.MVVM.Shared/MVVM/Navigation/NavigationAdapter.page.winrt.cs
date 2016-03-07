@@ -31,6 +31,11 @@ namespace Catel.MVVM.Navigation
 
         partial void Initialize()
         {
+            if (RootFrame != null)
+            {
+                return;
+            }
+
             RootFrame = Window.Current.Content as Frame ?? ((Page)NavigationTarget).Frame;
             if (RootFrame == null)
             {
@@ -47,8 +52,12 @@ namespace Catel.MVVM.Navigation
 
         partial void Uninitialize()
         {
-            RootFrame.Navigating -= OnNavigatingEvent;
-            RootFrame.Navigated -= OnNavigatedEvent;
+            var rootFrame = RootFrame;
+            if (rootFrame != null)
+            {
+                rootFrame.Navigating -= OnNavigatingEvent;
+                rootFrame.Navigated -= OnNavigatedEvent;
+            }
 
 #if WINDOWS_PHONE
             HardwareButtons.BackPressed -= OnBackPressed; 
@@ -96,6 +105,8 @@ namespace Catel.MVVM.Navigation
         /// <returns><c>true</c> if the navigation can be handled by this adapter; otherwise, <c>false</c>.</returns>
         protected override bool CanHandleNavigation()
         {
+            Initialize();
+
             var rootFrame = RootFrame;
             if (rootFrame == null)
             {
