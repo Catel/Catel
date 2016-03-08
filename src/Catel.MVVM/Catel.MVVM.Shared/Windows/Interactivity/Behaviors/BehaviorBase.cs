@@ -109,6 +109,17 @@ namespace Catel.Windows.Interactivity
             ValidateRequiredProperties();
 
             Initialize();
+
+            // Note: we don't always get a loaded event (especially in UWP, for example for a TextBox control). Let's "assume" that 
+            // an object is loaded if it has an actual width and height
+            if (!IsAssociatedObjectLoaded)
+            {
+                var associatedObject = AssociatedObject;
+                if ((associatedObject.ActualHeight > 0) && (associatedObject.ActualWidth > 0))
+                {
+                    OnAssociatedObjectLoadedInternal();
+                }
+            }
         }
 
         /// <summary>
@@ -122,6 +133,13 @@ namespace Catel.Windows.Interactivity
             }
 
             CleanUp();
+
+            // Note: we don't always get an unloaded event (especially in UWP, for example for a TextBox control). Let's "assume" that 
+            // an object is unloaded if it has an actual width and height
+            if (IsAssociatedObjectLoaded)
+            {
+                OnAssociatedObjectUnloadedInternal();
+            }
 
             var associatedObject = AssociatedObject;
             if (associatedObject != null)
@@ -178,6 +196,11 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnAssociatedObjectLoadedInternal(object sender, UIEventArgs e)
         {
+            OnAssociatedObjectLoadedInternal();
+        }
+
+        private void OnAssociatedObjectLoadedInternal()
+        {
             _loadCounter++;
 
             // Yes, 1, because we just increased the counter
@@ -209,6 +232,11 @@ namespace Catel.Windows.Interactivity
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnAssociatedObjectUnloadedInternal(object sender, UIEventArgs e)
+        {
+            OnAssociatedObjectUnloadedInternal();
+        }
+
+        private void OnAssociatedObjectUnloadedInternal()
         {
             _loadCounter--;
 
