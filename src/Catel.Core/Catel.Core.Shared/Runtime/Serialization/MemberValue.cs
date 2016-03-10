@@ -69,9 +69,9 @@ namespace Catel.Runtime.Serialization
         {
             MemberGroup = memberGroup;
             ModelType = modelType;
-            ModelTypeName = modelType.GetSafeFullName();
+            ModelTypeName = modelType.GetSafeFullName(false);
             MemberType = memberType;
-            MemberTypeName = memberType.GetSafeFullName();
+            MemberTypeName = memberType.GetSafeFullName(false);
             Name = name;
             NameForSerialization = nameForSerialization;
             Value = value;
@@ -91,7 +91,7 @@ namespace Catel.Runtime.Serialization
         public Type ModelType { get; private set; }
 
         /// <summary>
-        /// Gets the name of the model type, which should be a cached version of <c>ModelType.GetSafeFullName();</c>.
+        /// Gets the name of the model type, which should be a cached version of <c>ModelType.GetSafeFullName(false);</c>.
         /// </summary>
         /// <value>The name of the model type.</value>
         public string ModelTypeName { get; private set; }
@@ -106,7 +106,7 @@ namespace Catel.Runtime.Serialization
         public Type MemberType { get; private set; }
 
         /// <summary>
-        /// Gets the name of the model type, which should be a cached version of <c>ModelType.GetSafeFullName();</c>.
+        /// Gets the name of the model type, which should be a cached version of <c>ModelType.GetSafeFullName(false);</c>.
         /// </summary>
         /// <value>The name of the model type.</value>
         public string MemberTypeName { get; private set; }

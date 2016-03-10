@@ -184,7 +184,7 @@ namespace Catel.IoC
                         }
                         catch (Exception ex)
                         {
-                            throw Log.ErrorAndCreateException<Exception>(ex, "Failed to initialize service locator using initializer '{0}'", serviceLocatorInitializer.GetSafeFullName());
+                            throw Log.ErrorAndCreateException<Exception>(ex, "Failed to initialize service locator using initializer '{0}'", serviceLocatorInitializer.GetSafeFullName(false));
                         }
                     }
                 }

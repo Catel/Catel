@@ -60,7 +60,7 @@ namespace Catel.Services
         /// <exception cref="ArgumentNullException">The <paramref name="viewLocator"/> is <c>null</c>.</exception>
         public UIVisualizerService(IViewLocator viewLocator)
         {
-            Argument.IsNotNull(() => viewLocator);
+            Argument.IsNotNull("viewLocator", viewLocator);
 
             _viewLocator = viewLocator;
         }
@@ -425,10 +425,13 @@ namespace Catel.Services
             var window = ViewHelper.ConstructViewWithViewModel(windowType, data);
 
 #if NET
-            var activeWindow = GetActiveWindow();
-            if (window != activeWindow)
+            if (isModal)
             {
-                PropertyHelper.TrySetPropertyValue(window, "Owner", activeWindow, false);
+                var activeWindow = GetActiveWindow();
+                if (window != activeWindow)
+                {
+                    PropertyHelper.TrySetPropertyValue(window, "Owner", activeWindow, false);
+                }
             }
 #endif
 

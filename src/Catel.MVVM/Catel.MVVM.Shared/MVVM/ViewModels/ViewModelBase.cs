@@ -1428,7 +1428,7 @@ namespace Catel.MVVM
         /// </returns>
         protected virtual Task<bool> CancelAsync()
         {
-            // Note: should be converted to a sync method in v5
+            // Note: should be converted to a sync method in v5`
             return Cancel();
         }
 
@@ -1827,6 +1827,6 @@ namespace Catel.MVVM
 
             ViewModelManager.UnregisterViewModelInstance(this);
         }
-        #endregion
+#endregion
     }
 }

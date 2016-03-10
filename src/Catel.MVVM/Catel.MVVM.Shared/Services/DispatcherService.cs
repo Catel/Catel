@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.Services
 {
     using System;
@@ -13,13 +14,16 @@ namespace Catel.Services
     using global::Android.App;
     using global::Android.OS;
 #elif IOS
-    using global::MonoTouch.CoreFoundation;
+    using global::CoreFoundation;
 #elif NETFX_CORE
     using Windows.Threading;
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
 #elif !XAMARIN_FORMS
     using Windows.Threading;
     using System.Windows.Threading;
+#else 
+    using System.Threading;
+    using Xamarin.Forms;
 #endif
 
     /// <summary>
@@ -84,7 +88,7 @@ namespace Catel.Services
         {
             Argument.IsNotNull("action", action);
 #if XAMARIN_FORMS
-            throw new MustBeImplementedException();
+            SynchronizationContext.Current.Post(state => action(), null);
 #elif ANDROID
             _handler.Post(action);
 #elif IOS
@@ -105,7 +109,7 @@ namespace Catel.Services
         {
             Argument.IsNotNull("action", action);
 #if XAMARIN_FORMS
-            throw new MustBeImplementedException();
+            SynchronizationContext.Current.Post(state => action(), null);           
 #elif ANDROID
             _handler.Post(action);
 #elif IOS

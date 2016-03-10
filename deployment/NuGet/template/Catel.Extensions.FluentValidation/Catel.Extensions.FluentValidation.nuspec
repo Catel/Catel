@@ -21,7 +21,9 @@
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
 	
     <dependencies>
-        <dependency id="Catel.Core" version="[VERSION]" />         
+        <dependency id="Catel.Core" version="[VERSION]" />       
+		
+		<dependency id="FluentValidation" version="[replaced]" />       
     </dependencies>
 	
   </metadata>

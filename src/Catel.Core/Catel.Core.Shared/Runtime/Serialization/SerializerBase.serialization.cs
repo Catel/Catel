@@ -207,7 +207,7 @@ namespace Catel.Runtime.Serialization
         protected virtual void SerializeMembers(ISerializationContext<TSerializationContext> context, List<MemberValue> membersToSerialize)
         {
             ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
-                x => x.SetInitializationMode(InitializationMode.Lazy, GetType().GetSafeFullName()));
+                x => x.SetInitializationMode(InitializationMode.Lazy, GetType().GetSafeFullName(false)));
 
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
             using (ScopeManager<ISerializer>.GetScopeManager(scopeName, () => this))

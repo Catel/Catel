@@ -271,7 +271,7 @@ namespace Catel.Runtime.Serialization
         protected virtual List<MemberValue> DeserializeMembers(ISerializationContext<TSerializationContext> context)
         {
             ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
-                x => x.SetInitializationMode(InitializationMode.Lazy, GetType().GetSafeFullName()));
+                x => x.SetInitializationMode(InitializationMode.Lazy, GetType().GetSafeFullName(false)));
 
             var deserializedMemberValues = new List<MemberValue>();
 

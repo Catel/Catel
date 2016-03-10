@@ -335,7 +335,7 @@ namespace Catel.MVVM.Providers
 
                 // NOTE: Beginning invoke (running async) because setting of TargetControl Content property causes memory faults
                 // when this method called by TargetControlContentChanged handler. No need to await though.
-#if NETFX_CORE
+#if NETFX_CORE && !UAP
                 var dispatcher = ((FrameworkElement)TargetView).Dispatcher;
 #pragma warning disable 4014
                 dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { action(); });

@@ -23,7 +23,7 @@ namespace Catel.ExceptionHandling
         /// <exception cref="System.ArgumentNullException">The <paramref name="bufferedException"/> is <c>null</c>.</exception>
         public BufferedEventArgs(Exception bufferedException, DateTime dateTime)
         {
-            Argument.IsNotNull(() => bufferedException);
+            Argument.IsNotNull("bufferedException", bufferedException);
 
             BufferedException = bufferedException;
 

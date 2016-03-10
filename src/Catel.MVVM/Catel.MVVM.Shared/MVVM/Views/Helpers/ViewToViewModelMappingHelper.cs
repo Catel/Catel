@@ -43,6 +43,12 @@ namespace Catel.MVVM.Views
         /// List of properties in the view that should be ignored.
         /// </summary>
         private readonly HashSet<string> _ignoredViewChanges = new HashSet<string>();
+
+        /// <summary>
+        /// Gets or sets the previous view model.
+        /// </summary>
+        /// <value>The previous view model.</value>
+        private IViewModel _previousViewModel;
         #endregion
 
         #region Constructors
@@ -89,12 +95,6 @@ namespace Catel.MVVM.Views
         {
             get { return ViewModelContainer.GetType(); }
         }
-
-        /// <summary>
-        /// Gets or sets the previous view model.
-        /// </summary>
-        /// <value>The previous view model.</value>
-        private IViewModel PreviousViewModel { get; set; }
 
         /// <summary>
         /// Gets the current view model.
@@ -165,15 +165,15 @@ namespace Catel.MVVM.Views
 
             Log.Debug("Initializing view model '{0}'", viewModelType);
 
-            UninitializeViewModel(PreviousViewModel);
+            UninitializeViewModel(_previousViewModel);
 
-            PreviousViewModel = viewModel;
+            _previousViewModel = viewModel;
 
             if (viewModel != null)
             {
                 // If there are mappings, sync them in the right way
                 var viewModelContainerType = ViewModelContainerType;
-                foreach (ViewToViewModelMapping mapping in _viewToViewModelMappingContainers[viewModelContainerType].GetAllViewToViewModelMappings())
+                foreach (var mapping in _viewToViewModelMappingContainers[viewModelContainerType].GetAllViewToViewModelMappings())
                 {
                     try
                     {

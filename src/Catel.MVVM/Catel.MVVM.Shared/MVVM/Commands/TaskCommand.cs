@@ -255,7 +255,7 @@ namespace Catel.MVVM
 
             if (executionTask.IsCanceled || executionTask.IsFaulted)
             {
-                Canceled.SafeInvoke(this, new CommandEventArgs(parameter));
+                Canceled.SafeInvoke(this, () => new CommandEventArgs(parameter));
             }
             else
             {
@@ -294,7 +294,7 @@ namespace Catel.MVVM
                 _reportProgress(progress);
             }
 
-            var action = new Action(() => ProgressChanged.SafeInvoke(this, new CommandProgressChangedEventArgs<TProgress>(progress)));
+            var action = new Action(() => ProgressChanged.SafeInvoke(this, () => new CommandProgressChangedEventArgs<TProgress>(progress)));
             AutoDispatchIfRequired(action);
         }
 

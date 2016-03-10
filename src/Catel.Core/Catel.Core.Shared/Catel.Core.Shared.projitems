@@ -41,6 +41,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Extensions\CollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Extensions\DictionaryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Helpers\CollectionHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\Interfaces\ISuspendChangeNotificationsCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\ListDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\BackgroundWorker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\DisplayNameAttribute.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\DynamicConfigurationSerializerModifier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\EventArgs\ConfigurationChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\ConfigurationExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\ConfigurationExtensions.net.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\DynamicConfigurationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Interfaces\IConfigurationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoreModule.cs" />
@@ -140,6 +142,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\EventArgs\BufferedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\EventArgs\RetryingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionInheritanceComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Extensions\ExceptionHandlerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\Extensions\ExceptionServiceExtensions.cs" />

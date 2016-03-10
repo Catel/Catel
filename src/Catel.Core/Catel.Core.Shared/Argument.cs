@@ -717,7 +717,6 @@ namespace Catel
         /// <param name="validation">The validation function.</param>
         /// <exception cref="ArgumentException">If the <paramref name="validation" /> code returns <c>false</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="paramName" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="paramValue" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsValid<T>(string paramName, T paramValue, Func<bool> validation)
         {
@@ -735,7 +734,6 @@ namespace Catel
         /// <param name="validation">The validation function.</param>
         /// <exception cref="ArgumentException">If the <paramref name="validation" /> code returns <c>false</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="paramName" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="paramValue" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="validation" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsValid<T>(string paramName, T paramValue, Func<T, bool> validation)
@@ -754,7 +752,6 @@ namespace Catel
         /// <param name="validator">The validator.</param>
         /// <exception cref="ArgumentException">If the <see cref="IValueValidator{TValue}.IsValid" /> of  <paramref name="validator" /> returns <c>false</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="paramName" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="paramValue" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="validator" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsValid<T>(string paramName, T paramValue, IValueValidator<T> validator)
@@ -773,12 +770,9 @@ namespace Catel
         /// <param name="validation">The validation function.</param>
         /// <exception cref="ArgumentException">If the <paramref name="validation" /> code returns <c>false</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="paramName" /> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="paramValue" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsValid<T>(string paramName, T paramValue, bool validation)
         {
-            Argument.IsNotNull("paramValue", paramValue);
-
             if (!validation)
             {
                 var error = string.Format("Argument '{0}' is not valid", ObjectToStringHelper.ToString(paramName));

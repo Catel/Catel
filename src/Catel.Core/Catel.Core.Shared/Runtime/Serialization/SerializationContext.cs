@@ -41,7 +41,7 @@ namespace Catel.Runtime.Serialization
 
             Model = model;
             ModelType = modelType;
-            ModelTypeName = modelType.GetSafeFullName();
+            ModelTypeName = modelType.GetSafeFullName(false);
             Context = context;
             ContextMode = contextMode;
             TypeStack = new Stack<Type>();
@@ -73,7 +73,7 @@ namespace Catel.Runtime.Serialization
         public Type ModelType { get; private set; }
 
         /// <summary>
-        /// Gets the name of the model type, which should be a cached version of <c>ModelType.GetSafeFullName();</c>.
+        /// Gets the name of the model type, which should be a cached version of <c>ModelType.GetSafeFullName(false);</c>.
         /// </summary>
         /// <value>The name of the model type.</value>
         public string ModelTypeName { get; private set; }

@@ -23,7 +23,7 @@ For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/U
 
 Release date:
 =============
-201x/xx/xx
+2016/xx/xx
 
 Added/fixed (BREAKING CHANGES):
 ===============================
@@ -47,10 +47,39 @@ we will remove the features in the next major release.
 * CTL-755 Marked Catel.Windows.Controls.ScrollViewerProperties as obsolete to minimize maintenance costs of Catel
 * CTL-756 Marked Catel.Windows.Controls.RichToolTip as obsolete to minimize maintenance costs of Catel
 * CTL-784 Marked AttributeHelper as obsolete, use reflection extensions instead
+* CTL-808 Marked AsynchronousCommand as obsolete, use TaskCommand instead
+* CTL-810 Marked QueryableExtensions.Include(Expression) as obsolete for EF6 and higher, use the default EF implementation
 
 Added/fixed:
 ============
-xxxx
+(+) CTL-622 Add check type sorting and expression filter on ExceptionService
+(+) CTL-796 Add Activate existing window methods in IUIVisualizerService
+(+) CTL-803 Add RegisterHandler method on IExceptionService
+(+) CTL-805 Add IExceptionHandler<T> to make implementation of custom exception handlers easier
+(+) CTL-809 Add CreateTaskCommand method on CommandHelper
+(+) CTL-817 Add DynamicObservableObject implementation
+(*) CTL-785 Support expressions in validation result static members so you can now write
+    FieldValidationResult.CreateWarning(() => MyProperty, "This field is required");
+(*) CTL-789 Improve property handling in the context of RegisterProperties
+(*) CTL-792 Improve property editing performance
+(*) CTL-794 Allow application-wide commands to be executed when child windows have a focus
+(*) CTL-797 Only set owner window for modal dialogs in UIVisualizerService
+(*) CTL-800 UpdatableMarkupExtension should expose IServiceProvider in the ProvideDynamicValue method
+(*) CTL-802 Add async version of OnOkExecute to DataWindow
+(*) CTL-806 Allow ValueConverterGroup to contain System.Windows.IValueConverter objects
+(*) CTL-807 Support enum values in ConfigurationService (and StringToObjectHelper)
+(*) CTL-810 Marked QueryableExtensions.Include(Expression) as obsolete for EF6 and higher
+(*) CTL-814 Improve Argument.IsValid implementation to allow more options
+(*) CTL-819 Prevent unnecessary creation of event args in .SafeInvoke when handler is null
+(*) CTL-824 ModelBase.editableobject should check for duplicated BeginEdit(), EndEdit(), CancelEdit()
+(*) CTL-825 Use NuGet package for behaviors SDK instead of local reference for UWP
+(*) CTL-828 Prevent unneccessary creation of empty dictionary entries in ModelBase
+(x) CTL-791 Types with the same FullName from different assemblies will cause issues with the TypeFactory cache
+(x) CTL-793 CompositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand not respected
+(x) CTL-798 Prevent MissingResourceException when resolving strings for Catel.Core
+(x) CTL-811 Fixed thread racing against IsLockAcquired property
+(x) CTL-813 BehaviorBase - AssociatedObject.Unloaded can be called multiple times
+(x) CTL-823 Enum<TEnum>.TryParse with case insensitive does not work
 
 Roadmap:
 ========

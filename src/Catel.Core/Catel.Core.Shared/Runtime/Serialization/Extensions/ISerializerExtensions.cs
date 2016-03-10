@@ -25,7 +25,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="serializer"/> is <c>null</c>.</exception>
         public static TModel Deserialize<TModel>(this ISerializer serializer, Stream stream)
         {
-            Argument.IsNotNull(() => serializer);
+            Argument.IsNotNull("serializer", serializer);
 
             var model = serializer.Deserialize(typeof (TModel), stream);
             return (TModel) model;

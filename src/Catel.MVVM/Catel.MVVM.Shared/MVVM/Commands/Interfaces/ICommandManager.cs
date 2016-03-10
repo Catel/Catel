@@ -9,6 +9,7 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
+    using System.Windows;
     using System.Windows.Input;
 
 #if !WINDOWS_PHONE && !XAMARIN
@@ -135,6 +136,15 @@ namespace Catel.MVVM
         /// Subscribes to keyboard events.
         /// </summary>
         void SubscribeToKeyboardEvents();
+
+#if NET || SL5
+        /// <summary>
+        /// Subscribes to keyboard events.
+        /// </summary>
+        /// <param name="view">The view.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
+        void SubscribeToKeyboardEvents(FrameworkElement view);
+#endif
 #endif
 
         /// <summary>

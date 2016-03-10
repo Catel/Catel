@@ -42,7 +42,7 @@ namespace Catel.MVVM
         /// <param name="commandManager">The command manager.</param>
         public CommandManagerWrapper(FrameworkElement view, ICommandManager commandManager = null)
         {
-            Argument.IsNotNull(() => view);
+            Argument.IsNotNull("view", view);
 
             _commandManager = commandManager ?? ServiceLocator.Default.ResolveType<ICommandManager>();
 

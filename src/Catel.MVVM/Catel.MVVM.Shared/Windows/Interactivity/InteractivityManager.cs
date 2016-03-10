@@ -55,7 +55,7 @@ namespace Catel.Windows.Interactivity
 
             //_behaviors.Add(behavior);
 
-            BehaviorLoaded.SafeInvoke(this, new BehaviorEventArgs(behavior));
+            BehaviorLoaded.SafeInvoke(this, () => new BehaviorEventArgs(behavior));
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Catel.Windows.Interactivity
 
             //_behaviors.Remove(behavior);
 
-            BehaviorUnloaded.SafeInvoke(this, new BehaviorEventArgs(behavior));
+            BehaviorUnloaded.SafeInvoke(this, () => new BehaviorEventArgs(behavior));
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Catel.Windows.Interactivity
 
             //_triggers.Add(trigger);
 
-            TriggerLoaded.SafeInvoke(this, new TriggerEventArgs(trigger));
+            TriggerLoaded.SafeInvoke(this, () => new TriggerEventArgs(trigger));
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Catel.Windows.Interactivity
 
             //_triggers.Remove(trigger);
 
-            TriggerUnloaded.SafeInvoke(this, new TriggerEventArgs(trigger));
+            TriggerUnloaded.SafeInvoke(this, () => new TriggerEventArgs(trigger));
         }
 
         /// <summary>

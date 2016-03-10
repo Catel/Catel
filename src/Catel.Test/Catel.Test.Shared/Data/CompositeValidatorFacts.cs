@@ -411,7 +411,8 @@ namespace Catel.Test.Data
             validator2Mock.Verify(expression, Times.Once());
         }
 
-        private static void TestCompositeRethrowException<TException>(CompositeValidator compositeValidator, Expression<Action<IValidator>> expression, Action actionToExecute) where TException : Exception, new()
+        private static void TestCompositeRethrowException<TException>(CompositeValidator compositeValidator, Expression<Action<IValidator>> expression, Action actionToExecute) 
+            where TException : Exception, new()
         {
             var validator1Mock = new Mock<IValidator>();
             validator1Mock.Setup(expression);

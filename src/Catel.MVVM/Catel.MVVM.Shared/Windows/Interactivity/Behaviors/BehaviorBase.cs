@@ -36,6 +36,9 @@ namespace Catel.Windows.Interactivity
         #region Fields
         private bool _isClean = true;
         private int _loadCounter;
+
+        private bool _isSubscribedToLoadedEvent = false;
+        private bool _isSubscribedToUnloadedEvent = false;
         #endregion
 
         #region Properties
@@ -78,7 +81,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// The IsEnabled property registration.
         /// </summary>
-        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool), 
+        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool),
             typeof(BehaviorBase<T>), new PropertyMetadata(true, (sender, e) => ((BehaviorBase<T>)sender).OnIsEnabledChanged()));
         #endregion
 
@@ -95,7 +98,11 @@ namespace Catel.Windows.Interactivity
 
             base.OnAttached();
 
-            AssociatedObject.Loaded += OnAssociatedObjectLoadedInternal;
+            if (!_isSubscribedToLoadedEvent)
+            {
+                AssociatedObject.Loaded += OnAssociatedObjectLoadedInternal;
+                _isSubscribedToLoadedEvent = true;
+            }
 
             _isClean = false;
 
@@ -119,6 +126,7 @@ namespace Catel.Windows.Interactivity
             if (AssociatedObject != null)
             {
                 AssociatedObject.Loaded -= OnAssociatedObjectLoadedInternal;
+                _isSubscribedToLoadedEvent = false;
             }
 
             base.OnDetaching();
@@ -145,7 +153,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected virtual void Initialize()
         {
-            
+
         }
 
         /// <summary>
@@ -158,7 +166,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected virtual void Uninitialize()
         {
-            
+
         }
 
         /// <summary>
@@ -177,13 +185,17 @@ namespace Catel.Windows.Interactivity
                 return;
             }
 
-            AssociatedObject.Unloaded += OnAssociatedObjectUnloadedInternal;
+            if (!_isSubscribedToUnloadedEvent)
+            {
+                AssociatedObject.Unloaded += OnAssociatedObjectUnloadedInternal;
+                _isSubscribedToUnloadedEvent = true;
+            }
 
             OnAssociatedObjectLoaded();
         }
 
         /// <summary>
-        /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
+        /// Called when the AssociatedObject is loaded.
         /// </summary>
         protected virtual void OnAssociatedObjectLoaded()
         {
@@ -206,11 +218,11 @@ namespace Catel.Windows.Interactivity
 
             OnAssociatedObjectUnloaded();
 
-            //CleanUp();
+            CleanUp();
         }
 
         /// <summary>
-        /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is unloaded.
+        /// Called when the AssociatedObject is unloaded.
         /// </summary>
         protected virtual void OnAssociatedObjectUnloaded()
         {
@@ -231,6 +243,7 @@ namespace Catel.Windows.Interactivity
             if (AssociatedObject != null)
             {
                 AssociatedObject.Unloaded -= OnAssociatedObjectUnloadedInternal;
+                _isSubscribedToUnloadedEvent = false;
             }
 
             Uninitialize();

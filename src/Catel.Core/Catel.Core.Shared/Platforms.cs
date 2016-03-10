@@ -122,6 +122,9 @@ namespace Catel
                 case KnownPlatforms.XamariniOS:
                     return currentPlatform == SupportedPlatforms.iOS;
 
+                case KnownPlatforms.XamarinForms:
+                    return currentPlatform == SupportedPlatforms.PCL;
+
                 case KnownPlatforms.PCL:
                     return currentPlatform == SupportedPlatforms.PCL;
 
@@ -162,6 +165,8 @@ namespace Catel
             return SupportedPlatforms.Android;
 #elif IOS
             return SupportedPlatforms.iOS;
+#elif XAMARIN_FORMS
+            return SupportedPlatforms.XamarinForms;
 #else
             throw new System.NotSupportedException("Unknown platform is not supported");
 #endif
@@ -237,6 +242,11 @@ namespace Catel
         /// The iOS platform.
         /// </summary>
         iOS,
+
+        /// <summary>
+        /// Portable Class Library platform.
+        /// </summary>
+        XamarinForms,
 
         /// <summary>
         /// Portable Class Library platform.
@@ -358,6 +368,11 @@ namespace Catel
         /// The Xamarin iOS platform.
         /// </summary>
         XamariniOS,
+
+        /// <summary>
+        /// The xamarin forms platform.
+        /// </summary>
+        XamarinForms,
 
         /// <summary>
         /// Portable Class Library platform.

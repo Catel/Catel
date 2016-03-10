@@ -491,6 +491,7 @@ namespace Catel.Test.Runtime.Serialization
                 protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
                 {
                     Contract.Requires(e != null);
+
                     this.CollectionChanged.SafeInvoke(this, e);
                 }
 

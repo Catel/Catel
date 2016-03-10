@@ -55,8 +55,8 @@ namespace Catel.Services
         /// <exception cref="ArgumentNullException">The <paramref name="saveFileService" /> is <c>null</c>.</exception>
         public ViewExportService(IViewManager viewManager, ISaveFileService saveFileService)
         {
-            Argument.IsNotNull(() => viewManager);
-            Argument.IsNotNull(() => saveFileService);
+            Argument.IsNotNull("viewManager", viewManager);
+            Argument.IsNotNull("saveFileService", saveFileService);
 
             _viewManager = viewManager;
             _saveFileService = saveFileService;
@@ -75,7 +75,7 @@ namespace Catel.Services
         /// <remarks>If <paramref name="exportMode" /> is <see cref="ExportMode.Print" /> then the <paramref name="dpiX" /> and <paramref name="dpiY" /> argument will be ignored.</remarks>
         public virtual void Export(IViewModel viewModel, ExportMode exportMode = ExportMode.Print, double dpiX = 96, double dpiY = 96)
         {
-            Argument.IsNotNull(() => viewModel);
+            Argument.IsNotNull("viewModel", viewModel);
 
             var view = _viewManager.GetViewsOfViewModel(viewModel).OfType<UIElement>().FirstOrDefault();
             if (view == null)

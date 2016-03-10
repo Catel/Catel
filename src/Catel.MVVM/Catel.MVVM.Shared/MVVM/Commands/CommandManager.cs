@@ -41,8 +41,6 @@ namespace Catel.MVVM
 
 #if NET
         private bool _subscribedToApplicationActivedEvent;
-#elif SL5
-        private bool _subscribedToKeyboardEvent;
 #endif
 
 #if NET || SL5
@@ -115,9 +113,7 @@ namespace Catel.MVVM
                 _originalCommandGestures.Add(commandName, inputGesture);
                 _commandGestures.Add(commandName, inputGesture);
 
-                InvalidateCommands();
-
-                CommandCreated.SafeInvoke(this, new CommandCreatedEventArgs(compositeCommand, commandName));
+                CommandCreated.SafeInvoke(this, () => new CommandCreatedEventArgs(compositeCommand, commandName));
             }
         }
 #else
@@ -160,7 +156,7 @@ namespace Catel.MVVM
 
                 InvalidateCommands();
 
-                CommandCreated.SafeInvoke(this, new CommandCreatedEventArgs(compositeCommand, commandName));
+                CommandCreated.SafeInvoke(this, () => new CommandCreatedEventArgs(compositeCommand, commandName));
             }
         }
 #endif
@@ -544,13 +540,6 @@ namespace Catel.MVVM
         /// </summary>
         public void SubscribeToKeyboardEvents()
         {
-#if SL5
-            if (_subscribedToKeyboardEvent)
-            {
-                return;
-            }
-#endif
-
 #if NET || SILVERLIGHT
             var application = Application.Current;
             if (application == null)
@@ -580,19 +569,52 @@ namespace Catel.MVVM
                 Log.Warning("Application.RootVisual is null, cannot subscribe to keyboard events");
                 return;
             }
-
-            _subscribedToKeyboardEvent = true;
 #elif NETFX_CORE
             // TODO: Grab events
 #endif
 
 #if NET || SL5
-            CommandManagerWrapper commandManagerWrapper = null;
-            if (!_subscribedViews.TryGetValue(mainView, out commandManagerWrapper))
-            {
-                _subscribedViews.Add(mainView, new CommandManagerWrapper(mainView, this));
-            }
+            SubscribeToKeyboardEvents(mainView);
 #endif
+        }
+#endif
+
+#if NET || SL5
+        /// <summary>
+        /// Subscribes to keyboard events.
+        /// </summary>
+        /// <param name="view">The view.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
+        public void SubscribeToKeyboardEvents(FrameworkElement view)
+        {
+            Argument.IsNotNull("view", view);
+
+            CommandManagerWrapper commandManagerWrapper = null;
+            if (!_subscribedViews.TryGetValue(view, out commandManagerWrapper))
+            {
+                _subscribedViews.Add(view, new CommandManagerWrapper(view, this));
+
+#if NET
+                var app = Application.Current;
+                if (app != null)
+                {
+                    var mainWindow = app.MainWindow;
+                    if (ReferenceEquals(mainWindow, view))
+                    {
+                        EventManager.RegisterClassHandler(typeof(Window), Window.LoadedEvent, new RoutedEventHandler(OnWindowLoaded));
+                    }
+                }
+#endif
+            }
+        }
+
+        private void OnWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            var view = sender as FrameworkElement;
+            if (view != null)
+            {
+                SubscribeToKeyboardEvents(view);
+            }
         }
 #endif
     }

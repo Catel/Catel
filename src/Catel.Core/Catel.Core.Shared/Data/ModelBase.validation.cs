@@ -1011,13 +1011,13 @@ namespace Catel.Data
             {
                 RaisePropertyChanged(ErrorMessageProperty);
 
-                _errorsChanged.SafeInvoke(this, new DataErrorsChangedEventArgs(string.Empty));
+                _errorsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(string.Empty));
             }
             else
             {
                 RaisePropertyChanged(this, new PropertyChangedEventArgs(propertyName), false, true);
 
-                _errorsChanged.SafeInvoke(this, new DataErrorsChangedEventArgs(propertyName));
+                _errorsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(propertyName));
             }
 
             if (notifyHasErrors)
@@ -1039,13 +1039,13 @@ namespace Catel.Data
             {
                 RaisePropertyChanged(WarningMessageProperty);
 
-                _warningsChanged.SafeInvoke(this, new DataErrorsChangedEventArgs(string.Empty));
+                _warningsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(string.Empty));
             }
             else
             {
                 RaisePropertyChanged(this, new PropertyChangedEventArgs(propertyName), false, true);
 
-                _warningsChanged.SafeInvoke(this, new DataErrorsChangedEventArgs(propertyName));
+                _warningsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(propertyName));
             }
 
             if (notifyHasWarnings)

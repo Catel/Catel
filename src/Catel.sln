@@ -412,6 +412,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Prism6.NET
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.Xamarin.Forms", "Catel.MVVM\Catel.MVVM.Xamarin.Forms\Catel.MVVM.Xamarin.Forms.csproj", "{E0D994CA-D553-4009-A159-33542A16C4D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.FluentValidation.PCL", "Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.PCL\Catel.Extensions.FluentValidation.PCL.csproj", "{6040C547-F6C9-4526-A164-554A2EF9E1E5}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Catel.Extensions.Wcf.Server\Catel.Extensions.Wcf.Server.Shared\Catel.Extensions.Wcf.Server.Shared.projitems*{bd187286-74f3-4c79-9f4c-4b0102947ea8}*SharedItemsImports = 4
@@ -447,9 +449,10 @@ Global
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{2b6db2b2-c289-4779-97c1-507bc779ba25}*SharedItemsImports = 4
 		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{41c1b6d9-e16a-4137-b573-1ab9da17eff3}*SharedItemsImports = 13
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{609d1289-9d9a-4cf5-b354-3eb916c9f6b7}*SharedItemsImports = 4
+		Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.projitems*{6040c547-f6c9-4526-a164-554a2ef9e1e5}*SharedItemsImports = 4
 		Catel.MVC\Catel.MVC5\Catel.MVC5.Shared\Catel.MVC5.Shared.projitems*{a47b205c-e577-43aa-8717-85a03fbaccca}*SharedItemsImports = 13
-		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{74c33bb6-23f5-495f-85e2-93879eb8cb84}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism5\Catel.Extensions.Prism5.Shared\Catel.Extensions.Prism5.Shared.projitems*{74c33bb6-23f5-495f-85e2-93879eb8cb84}*SharedItemsImports = 4
+		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{74c33bb6-23f5-495f-85e2-93879eb8cb84}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework.Shared\Catel.Extensions.EntityFramework.Shared.projitems*{1783efdc-8731-4e76-b92c-591a9a7c4ddf}*SharedItemsImports = 13
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{fc00c799-175f-42ec-a481-24a06cf20508}*SharedItemsImports = 4
 		Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems*{9ff05999-2cd0-40c1-a5f1-6384c73402c3}*SharedItemsImports = 4
@@ -487,8 +490,8 @@ Global
 		Catel.Extensions.Prism\Catel.Extensions.Prism6\Catel.Extensions.Prism6.Shared\Catel.Extensions.Prism6.Shared.projitems*{58250a2a-51a0-45b5-8d01-0f97a3719668}*SharedItemsImports = 13
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{e0d994ca-d553-4009-a159-33542a16c4d0}*SharedItemsImports = 4
 		Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems*{5ef649e7-7704-4f3a-9923-227beaff07d1}*SharedItemsImports = 4
-		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{3604ff18-b278-4508-aa83-88d34f6c026d}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism5\Catel.Extensions.Prism5.Shared\Catel.Extensions.Prism5.Shared.projitems*{3604ff18-b278-4508-aa83-88d34f6c026d}*SharedItemsImports = 4
+		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{3604ff18-b278-4508-aa83-88d34f6c026d}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{461e63d9-fd22-49bf-94ed-af5ac870c348}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism.Shared\Catel.Extensions.Prism.Shared.projitems*{c9ead437-56ba-45bb-a982-845ad72fe1c8}*SharedItemsImports = 4
 		Catel.Extensions.Prism\Catel.Extensions.Prism4\Catel.Extensions.Prism4.Shared\Catel.Extensions.Prism4.Shared.projitems*{c9ead437-56ba-45bb-a982-845ad72fe1c8}*SharedItemsImports = 4
@@ -1720,6 +1723,22 @@ Global
 		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|x64.Build.0 = Release|Any CPU
 		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|x86.ActiveCfg = Release|Any CPU
 		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|x86.Build.0 = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|ARM.Build.0 = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|x64.Build.0 = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|x86.Build.0 = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|ARM.ActiveCfg = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|ARM.Build.0 = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|x64.ActiveCfg = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|x64.Build.0 = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|x86.ActiveCfg = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1879,6 +1898,7 @@ Global
 		{58250A2A-51A0-45B5-8D01-0F97A3719668} = {7CC94A52-F2F1-4CB9-9D12-18D87E79688F}
 		{E54D6F7C-8CE4-42C4-A1E6-40203EBE49B8} = {7CC94A52-F2F1-4CB9-9D12-18D87E79688F}
 		{E0D994CA-D553-4009-A159-33542A16C4D0} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5} = {DA48A112-2316-4576-84F7-2665282C75BE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35
