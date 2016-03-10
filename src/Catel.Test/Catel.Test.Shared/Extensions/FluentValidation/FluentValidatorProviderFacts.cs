@@ -83,9 +83,9 @@ namespace Catel.Test.Extensions.FluentValidation
 
                 Assert.IsTrue(validationSummary.HasWarnings);
                 Assert.IsTrue(validationSummary.HasBusinessRuleWarnings);
-                Assert.AreEqual(2, validationSummary.BusinessWarnings.Count);
-                Assert.IsTrue(validationSummary.BusinessWarnings[0].Message.Contains("First name"));
-                Assert.IsTrue(validationSummary.BusinessWarnings[1].Message.Contains("Last name"));
+                Assert.AreEqual(2, validationSummary.BusinessRuleWarnings.Count);
+                Assert.IsTrue(validationSummary.BusinessRuleWarnings[0].Message.Contains("First name"));
+                Assert.IsTrue(validationSummary.BusinessRuleWarnings[1].Message.Contains("Last name"));
             }
 
             /// <summary>

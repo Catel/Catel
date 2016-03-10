@@ -20,7 +20,7 @@ using System.Runtime.CompilerServices;
 ////[assembly: AssemblyDescription("DEFINED IN ACTUAL ASSEMBLYINFO")]
 
 [assembly: AssemblyCompany("CatenaLogic")]
-[assembly: AssemblyCopyright("Copyright © CatenaLogic 2010 - 2015")]
+[assembly: AssemblyCopyright("Copyright © CatenaLogic 2010 - 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en-US")]

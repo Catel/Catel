@@ -65,11 +65,22 @@ namespace Catel
             }
 #endif
 
+            var instanceType = instance.GetType();
+            if (instanceType == typeof (DateTime) || instanceType == typeof (DateTime?))
+            {
+                return ((DateTime) instance).ToString(cultureInfo);
+            }
+
+            //if (instanceType == typeof(TimeSpan) || instanceType == typeof(TimeSpan?))
+            //{
+            //    return ((TimeSpan)instance).ToString(ccultureInfo);
+            //}
+
 #if !NETFX_CORE
-            // Note: cannot be used on NETFX_CORE
+			// Note: Not supported on NETFX_CORE, don't enable, really doesn't work. If you need a ToString
+			// for a specific string, use a cast like the DateTime about
 
             // Check if there is a culture specific version
-            var instanceType = instance.GetType();
             var toStringMethod = instanceType.GetMethodEx("ToString", new[] {typeof (IFormatProvider)});
             if (toStringMethod != null)
             {

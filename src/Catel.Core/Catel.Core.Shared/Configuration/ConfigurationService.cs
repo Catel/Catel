@@ -10,6 +10,7 @@ namespace Catel.Configuration
     using Runtime.Serialization;
     using Services;
     using System;
+    using System.Globalization;
     using System.IO;
     using System.Runtime.Serialization;
     using Data;
@@ -146,7 +147,7 @@ namespace Catel.Configuration
                     return defaultValue;
                 }
 
-                return (T) _objectConverterService.ConvertFromStringToObject(value, typeof (T));
+                return (T) _objectConverterService.ConvertFromStringToObject(value, typeof (T), CultureInfo.InvariantCulture);
             }
             catch (Exception)
             {
@@ -167,7 +168,7 @@ namespace Catel.Configuration
             var originalKey = key;
             key = GetFinalKey(key);
 
-            var stringValue = ObjectToStringHelper.ToString(value);
+            var stringValue = _objectConverterService.ConvertFromObjectToString(value, CultureInfo.InvariantCulture);
             SetValueToStore(key, stringValue);
 
             RaiseConfigurationChanged(originalKey, value);

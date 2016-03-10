@@ -49,6 +49,7 @@ we will remove the features in the next major release.
 * CTL-784 Marked AttributeHelper as obsolete, use reflection extensions instead
 * CTL-808 Marked AsynchronousCommand as obsolete, use TaskCommand instead
 * CTL-810 Marked QueryableExtensions.Include(Expression) as obsolete for EF6 and higher, use the default EF implementation
+* CTL-849 Marked ExpressionUtil obsolete, use ExpressionHelper instead
 
 Added/fixed:
 ============
@@ -58,6 +59,12 @@ Added/fixed:
 (+) CTL-805 Add IExceptionHandler<T> to make implementation of custom exception handlers easier
 (+) CTL-809 Add CreateTaskCommand method on CommandHelper
 (+) CTL-817 Add DynamicObservableObject implementation
+(+) CTL-832 Added ProgressContext to easily allow progress calculation
+(+) CTL-745 Allow DataWindowButton to be bindable (both text and visibility)
+(+) CTL-842 Add events to ICacheStorage when items are removed from the cache
+(+) CTL-843 Add ToString implementation for ValidationContext and ValidationSummary
+(+) CTL-844 Create Enum<TEnum>.Flags.GetValues(TEnum enum) to retrieve list of flags
+(+) CTL-848 CacheStorage - automatically dispose item on removing
 (*) CTL-785 Support expressions in validation result static members so you can now write
     FieldValidationResult.CreateWarning(() => MyProperty, "This field is required");
 (*) CTL-789 Improve property handling in the context of RegisterProperties
@@ -74,12 +81,15 @@ Added/fixed:
 (*) CTL-824 ModelBase.editableobject should check for duplicated BeginEdit(), EndEdit(), CancelEdit()
 (*) CTL-825 Use NuGet package for behaviors SDK instead of local reference for UWP
 (*) CTL-828 Prevent unneccessary creation of empty dictionary entries in ModelBase
+(*) CTL-846 ObjectConverterService (and thus ConfigurationService) should respect culture on UWP
+(*) CTL-850 Don't set AssociatedObject to null in IBehavior.Detach for UWP
 (x) CTL-791 Types with the same FullName from different assemblies will cause issues with the TypeFactory cache
 (x) CTL-793 CompositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand not respected
 (x) CTL-798 Prevent MissingResourceException when resolving strings for Catel.Core
 (x) CTL-811 Fixed thread racing against IsLockAcquired property
 (x) CTL-813 BehaviorBase - AssociatedObject.Unloaded can be called multiple times
 (x) CTL-823 Enum<TEnum>.TryParse with case insensitive does not work
+(x) CTL-839 Windows not exposing the Closed event (such as MahApps ContentDialog) don't close the view model
 
 Roadmap:
 ========

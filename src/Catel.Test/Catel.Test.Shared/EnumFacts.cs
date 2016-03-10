@@ -15,14 +15,31 @@ namespace Catel.Test
         [Flags]
         public enum Enum1
         {
+            None = 0,
+
             MyValue = 1,
 
-            MySecondValue = 2
+            MySecondValue = 2,
+
+            MyThirdValue = 4
         }
-        
+
         private enum Enum2
         {
             MyValue = 0
+        }
+
+        [TestFixture]
+        public class TheGetValuesFromFlagsMethod
+        {
+            [TestCase(Enum1.MySecondValue | Enum1.MyThirdValue, new[] {Enum1.MySecondValue, Enum1.MyThirdValue})]
+            [TestCase(Enum1.MyThirdValue, new[] { Enum1.MyThirdValue })]
+            public void ReturnsCorrectFlags(Enum1 flags, Enum1[] expectedValues)
+            {
+                var actualValues = Enum<Enum1>.Flags.GetValues(flags);
+
+                Assert.AreEqual(expectedValues, actualValues);
+            }
         }
 
         [TestFixture]
@@ -88,7 +105,7 @@ namespace Catel.Test
                 Assert.AreEqual("MySecondValue", name);
             }
         }
-        
+
         [TestFixture]
         public class TheGetNamesMethod
         {
@@ -97,12 +114,14 @@ namespace Catel.Test
             {
                 var names = Enum<Enum1>.GetNames();
 
-                Assert.AreEqual(2, names.Length);
-                Assert.AreEqual("MyValue", names[0]);
-                Assert.AreEqual("MySecondValue", names[1]);
+                Assert.AreEqual(4, names.Length);
+                Assert.AreEqual("None", names[0]);
+                Assert.AreEqual("MyValue", names[1]);
+                Assert.AreEqual("MySecondValue", names[2]);
+                Assert.AreEqual("MyThirdValue", names[3]);
             }
         }
-        
+
         [TestFixture]
         public class TheGetValuesMethod
         {
@@ -111,12 +130,14 @@ namespace Catel.Test
             {
                 var values = Enum<Enum1>.GetValues();
 
-                Assert.AreEqual(2, values.Count);
-                Assert.AreEqual(Enum1.MyValue, values[0]);
-                Assert.AreEqual(Enum1.MySecondValue, values[1]);
+                Assert.AreEqual(4, values.Count);
+                Assert.AreEqual(Enum1.None, values[0]);
+                Assert.AreEqual(Enum1.MyValue, values[1]);
+                Assert.AreEqual(Enum1.MySecondValue, values[2]);
+                Assert.AreEqual(Enum1.MyThirdValue, values[3]);
             }
         }
-       
+
         [TestFixture]
         public class TheIsFlagSetMethod
         {
@@ -193,9 +214,11 @@ namespace Catel.Test
             {
                 var list = Enum<Enum1>.ToList();
 
-                Assert.AreEqual(2, list.Count);
-                Assert.AreEqual(Enum1.MyValue, list[0]);
-                Assert.AreEqual(Enum1.MySecondValue, list[1]);
+                Assert.AreEqual(4, list.Count);
+                Assert.AreEqual(Enum1.None, list[0]);
+                Assert.AreEqual(Enum1.MyValue, list[1]);
+                Assert.AreEqual(Enum1.MySecondValue, list[2]);
+                Assert.AreEqual(Enum1.MyThirdValue, list[3]);
             }
         }
 

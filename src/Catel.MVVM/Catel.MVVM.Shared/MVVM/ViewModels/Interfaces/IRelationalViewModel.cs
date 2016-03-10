@@ -11,7 +11,7 @@ namespace Catel.MVVM
     /// <summary>
     /// Interface that allows a view model to be used in a nested user controls scenario.
     /// </summary>
-    public interface IRelationalViewModel
+    public interface IRelationalViewModel : IViewModel
     {
         /// <summary>
         /// Gets the parent view model.

@@ -631,13 +631,24 @@ namespace Catel.MVVM.Providers
         private void RegisterViewModelAsChild()
         {
             var parentViewModel = _parentViewModel as IRelationalViewModel;
-            var viewModel = ViewModel as IRelationalViewModel;
-
-            if ((parentViewModel != null) && (viewModel != null) && !ReferenceEquals(parentViewModel, viewModel))
+            if (parentViewModel == null)
             {
-                parentViewModel.RegisterChildViewModel(ViewModel);
-                viewModel.SetParentViewModel(_parentViewModel);
+                return;
             }
+
+            var viewModel = ViewModel as IRelationalViewModel;
+            if (viewModel == null)
+            {
+                return;
+            }
+
+            if (ObjectHelper.AreEqualReferences(parentViewModel, viewModel))
+            {
+                return;
+            }
+
+            parentViewModel.RegisterChildViewModel(viewModel);
+            viewModel.SetParentViewModel(_parentViewModel);
         }
 
         /// <summary>
@@ -646,13 +657,24 @@ namespace Catel.MVVM.Providers
         private void UnregisterViewModelAsChild()
         {
             var parentViewModel = _parentViewModel as IRelationalViewModel;
-            var viewModel = ViewModel as IRelationalViewModel;
-
-            if ((parentViewModel != null) && (viewModel != null) && !ObjectHelper.AreEqualReferences(parentViewModel, viewModel))
+            if (parentViewModel == null)
             {
-                viewModel.SetParentViewModel(null);
-                parentViewModel.UnregisterChildViewModel(ViewModel);
+                return;
             }
+
+            var viewModel = ViewModel as IRelationalViewModel;
+            if (viewModel == null)
+            {
+                return;
+            }
+
+            if (ObjectHelper.AreEqualReferences(parentViewModel, viewModel))
+            {
+                return;
+            }
+
+            viewModel.SetParentViewModel(null);
+            parentViewModel.UnregisterChildViewModel(viewModel);
         }
 
         /// <summary>

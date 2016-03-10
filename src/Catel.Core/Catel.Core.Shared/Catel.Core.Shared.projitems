@@ -31,6 +31,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\CoverageExcludeAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheStorage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\CacheStorageValueInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\EventArgs\ExpiredEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Caching\EventArgs\ExpiringEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Interfaces\ICacheStorage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\AbsoluteExpirationPolicy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\CompositeExpirationPolicy.cs" />
@@ -69,6 +71,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\ConfigurationExtensions.net.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\DynamicConfigurationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Interfaces\IConfigurationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contexts\ProgressContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoreModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Attributes\ExcludeFromValidationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Attributes\ValidateModelAttribute.cs" />
@@ -310,6 +313,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\ReferenceEqualityComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\ReferenceInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\ReferenceManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\RuntimeBindingRedirect.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\ExcludeFromSerializationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\SerializeAsCollectionAttribute.cs" />

@@ -26,6 +26,19 @@ namespace Catel
         /// <summary>
         /// Gets the name of the property from the expression.
         /// </summary>
+        /// <typeparam name="TSource">The type of the t source.</typeparam>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <param name="propertyExpression">The property expression.</param>
+        /// <returns>The name of the property parsed from the expression or <c>null</c> if the property cannot be found.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
+        public static string GetPropertyName<TSource, TProperty>(Expression<Func<TSource, TProperty>> propertyExpression)
+        {
+            return PropertyHelper.GetPropertyName(propertyExpression);
+        }
+
+        /// <summary>
+        /// Gets the name of the property from the expression.
+        /// </summary>
         /// <typeparam name="TProperty">The type of the property.</typeparam>
         /// <param name="propertyExpression">The property expression.</param>
         /// <returns>

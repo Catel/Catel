@@ -37,7 +37,7 @@ namespace Catel.Test.Data
 
                 Assert.AreEqual(2, summary.FieldWarnings.Count);
                 Assert.AreEqual(2, summary.FieldErrors.Count);
-                Assert.AreEqual(2, summary.BusinessWarnings.Count);
+                Assert.AreEqual(2, summary.BusinessRuleWarnings.Count);
                 Assert.AreEqual(2, summary.BusinessRuleErrors.Count);
             }
 
@@ -50,7 +50,7 @@ namespace Catel.Test.Data
 
                 Assert.AreEqual(1, summary.FieldWarnings.Count);
                 Assert.AreEqual(1, summary.FieldErrors.Count);
-                Assert.AreEqual(1, summary.BusinessWarnings.Count);
+                Assert.AreEqual(1, summary.BusinessRuleWarnings.Count);
                 Assert.AreEqual(1, summary.BusinessRuleErrors.Count);
             }
         }

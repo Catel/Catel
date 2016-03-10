@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 #if NETFX_CORE
+
 namespace Catel.MVVM.Navigation
 {
     using System.Collections.Generic;
@@ -30,6 +31,11 @@ namespace Catel.MVVM.Navigation
 
         partial void Initialize()
         {
+            if (RootFrame != null)
+            {
+                return;
+            }
+
             RootFrame = Window.Current.Content as Frame ?? ((Page)NavigationTarget).Frame;
             if (RootFrame == null)
             {
@@ -38,7 +44,7 @@ namespace Catel.MVVM.Navigation
 
             RootFrame.Navigating += OnNavigatingEvent;
             RootFrame.Navigated += OnNavigatedEvent;
-            
+
 #if WINDOWS_PHONE
             HardwareButtons.BackPressed += OnBackPressed; 
 #endif
@@ -46,19 +52,23 @@ namespace Catel.MVVM.Navigation
 
         partial void Uninitialize()
         {
-            RootFrame.Navigating -= OnNavigatingEvent;
-            RootFrame.Navigated -= OnNavigatedEvent;
-            
+            var rootFrame = RootFrame;
+            if (rootFrame != null)
+            {
+                rootFrame.Navigating -= OnNavigatingEvent;
+                rootFrame.Navigated -= OnNavigatedEvent;
+            }
+
 #if WINDOWS_PHONE
             HardwareButtons.BackPressed -= OnBackPressed; 
-#endif      
+#endif
         }
 
 #if WINDOWS_PHONE
         private void OnBackPressed(object sender, BackPressedEventArgs e) 
         { 
             var rootFrame = RootFrame;
-            if (rootFrame.CanGoBack) 
+            if (rootFrame != null && rootFrame.CanGoBack) 
             { 
                 rootFrame.GoBack();
  
@@ -67,7 +77,7 @@ namespace Catel.MVVM.Navigation
             } 
         } 
 #endif
-        
+
         partial void DetermineNavigationContext()
         {
             if (_lastNavigationContext == null)
@@ -95,6 +105,14 @@ namespace Catel.MVVM.Navigation
         /// <returns><c>true</c> if the navigation can be handled by this adapter; otherwise, <c>false</c>.</returns>
         protected override bool CanHandleNavigation()
         {
+            Initialize();
+
+            var rootFrame = RootFrame;
+            if (rootFrame == null)
+            {
+                return false;
+            }
+
             var content = RootFrame.Content;
             return ReferenceEquals(content, NavigationTarget);
         }

@@ -9,7 +9,8 @@ namespace Catel.Data
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
+    using System.Text;
+    using Text;
 #if NET
     using System.Diagnostics;
 #endif
@@ -53,7 +54,8 @@ namespace Catel.Data
         /// Initializes a new instance of the <see cref="ValidationContext"/> class.
         /// </summary>
         public ValidationContext()
-            : this(null, null) { }
+            : this(null, null)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidationContext"/> class.
@@ -61,7 +63,8 @@ namespace Catel.Data
         /// <param name="fieldValidationResults">The field validation results. Can be <c>null</c> to add no field validation results.</param>
         /// <param name="businessRuleValidationResults">The business rule validation results. Can be <c>null</c> to add no business rule validations.</param>
         public ValidationContext(IEnumerable<IFieldValidationResult> fieldValidationResults, IEnumerable<IBusinessRuleValidationResult> businessRuleValidationResults)
-            : this (fieldValidationResults, businessRuleValidationResults, DateTime.Now) { }
+            : this(fieldValidationResults, businessRuleValidationResults, DateTime.Now)
+        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidationContext" /> class.
@@ -863,6 +866,52 @@ namespace Catel.Data
                 LastModifiedTicks = dateTime.Ticks;
 #endif                
             }
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine("Errors");
+            stringBuilder.AppendLine("===============================");
+
+            var errors = GetErrors();
+            if (errors.Count == 0)
+            {
+                stringBuilder.AppendLine("[no errors]");
+            }
+            else
+            {
+                foreach (var error in errors)
+                {
+                    stringBuilder.AppendLine("- {0}", error);
+                }
+            }
+
+            stringBuilder.AppendLine();
+
+            stringBuilder.AppendLine("Warnings");
+            stringBuilder.AppendLine("===============================");
+
+            var warnings = GetWarnings();
+            if (warnings.Count == 0)
+            {
+                stringBuilder.AppendLine("[no warnings]");
+            }
+            else
+            {
+                foreach (var warning in warnings)
+                {
+                    stringBuilder.AppendLine("- {0}", warning);
+                }
+            }
+
+            var finalString = stringBuilder.ToString();
+            return finalString;
         }
         #endregion
     }

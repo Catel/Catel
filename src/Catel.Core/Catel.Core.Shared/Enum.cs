@@ -347,6 +347,32 @@ namespace Catel
         {
             #region Static Methods
             /// <summary>
+            /// Gets the selected values of the flags.
+            /// </summary>
+            /// <param name="flags">The flags.</param>
+            /// <returns>List of values inside the flags.</returns>
+            public static TEnum[] GetValues(TEnum flags)
+            {
+                var values = new List<TEnum>();
+
+                foreach (var value in Enum<TEnum>.GetValues())
+                {
+                    var intValue = Convert.ToInt32(value);
+                    if (intValue == 0)
+                    {
+                        continue;
+                    }
+
+                    if (IsFlagSet(flags, value))
+                    {
+                        values.Add(value);
+                    }
+                }
+
+                return values.ToArray();
+            }
+
+            /// <summary>
             /// Clears the flag.
             /// </summary>
             /// <param name="flags">The flags.</param>

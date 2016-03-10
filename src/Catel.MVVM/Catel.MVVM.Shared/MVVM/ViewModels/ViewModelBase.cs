@@ -224,8 +224,8 @@ namespace Catel.MVVM
         /// </summary>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        protected ViewModelBase() :
-            this(true, false, false)
+        protected ViewModelBase() 
+            : this(true, false, false)
         {
         }
 
@@ -842,9 +842,12 @@ namespace Catel.MVVM
                 else
                 {
                     var validationContext = ((IModelValidation)childViewModel).ValidationContext;
-                    if (validationContext.HasErrors || validationContext.HasWarnings)
+                    if (validationContext != null)
                     {
-                        validate = true;
+                        if (validationContext.HasErrors || validationContext.HasWarnings)
+                        {
+                            validate = true;
+                        }
                     }
                 }
 

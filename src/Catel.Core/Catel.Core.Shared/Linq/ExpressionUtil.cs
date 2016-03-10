@@ -20,6 +20,7 @@ namespace Catel.Linq
     /// <remarks>
     /// Code originally found at http://www.yoda.arachsys.com/csharp/miscutil/.
     /// </remarks>
+    [ObsoleteEx(ReplacementTypeOrMember = "ExpressionHelper", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
     public static class ExpressionUtil
     {
         /// <summary>

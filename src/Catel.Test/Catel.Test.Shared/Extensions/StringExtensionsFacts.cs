@@ -12,6 +12,21 @@ namespace Catel.Test.Extensions
     public class StringExtensionsFacts
     {
         [TestFixture]
+        public class TheSplitByCamelCaseMethod
+        {
+            [TestCase(null, null)]
+            [TestCase("ThisIsATest", "This is a test")]
+            [TestCase("IsIncluded", "Is included")]
+            [TestCase("PropertyName", "Property name")]
+            public void SplitsCorrectly(string input, string expectedOutput)
+            {
+                var output = input.SplitCamelCase();
+
+                Assert.AreEqual(expectedOutput, output);
+            }
+        }
+
+        [TestFixture]
         public class TheGetSlugMethod
         {
             [TestCase("this.hello something", "thishellosomething")]
