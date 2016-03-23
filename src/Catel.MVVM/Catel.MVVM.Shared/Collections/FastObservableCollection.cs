@@ -13,6 +13,7 @@ namespace Catel.Collections
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Diagnostics;
+    using System.Linq;
 
     using IoC;
     using Services;
@@ -37,12 +38,22 @@ namespace Catel.Collections
         /// <summary>
         /// Added items while suspending notifications.
         /// </summary>
-        private readonly LinkedList<Tuple<int, T>> _newItems = new LinkedList<Tuple<int, T>>();
+        private readonly List<T> _newItems = new List<T>();
+
+        /// <summary>
+        /// The indices of the added items while suspending notifications.
+        /// </summary>
+        private readonly List<int> _newItemIndices = new List<int>();
 
         /// <summary>
         /// Removed items while suspending notifications.
         /// </summary>
-        private readonly LinkedList<Tuple<int, T>> _oldItems = new LinkedList<Tuple<int, T>>();
+        private readonly List<T> _oldItems = new List<T>();
+
+        /// <summary>
+        /// The indices of the removed items while suspending notifications.
+        /// </summary>
+        private readonly List<int> _oldItemIndices = new List<int>();
 
         /// <summary>
         /// The current suspension mode.
@@ -167,12 +178,13 @@ namespace Catel.Collections
         /// </summary>
         public void Reset()
         {
-            var oldSuspensionMode = _suspensionMode;
-            _suspensionMode = SuspensionMode.Mixed;
+            if (_suspendChangeNotifications)
+            {
+                Debug.Fail("Cannot reset while notifications are suspended");
+                return;
+            }
 
             NotifyChanges();
-
-            _suspensionMode = oldSuspensionMode;
         }
 
         /// <summary>
@@ -343,15 +355,7 @@ namespace Catel.Collections
                         return;
                     }
 
-                    var items = new List<T>(_newItems.Count);
-                    var indices = new List<int>(_newItems.Count);
-                    foreach (var newItemTuple in _newItems)
-                    {
-                        items.Add(newItemTuple.Item2);
-                        indices.Add(newItemTuple.Item1);
-                    }
-
-                    eventArgs = new NotifyRangedCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, items, indices);
+                    eventArgs = new NotifyRangedCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, _newItems.ToList(), _newItemIndices.ToList());
                 }
                 else if (_suspensionMode == SuspensionMode.Removing)
                 {
@@ -360,15 +364,7 @@ namespace Catel.Collections
                         return;
                     }
 
-                    var items = new List<T>(_oldItems.Count);
-                    var indices = new List<int>(_oldItems.Count);
-                    foreach (var oldItemTuple in _oldItems)
-                    {
-                        items.Add(oldItemTuple.Item2);
-                        indices.Add(oldItemTuple.Item1);
-                    }
-
-                    eventArgs = new NotifyRangedCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, items, indices);
+                    eventArgs = new NotifyRangedCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, _oldItems.ToList(), _oldItemIndices.ToList());
                 }
                 else
                 {
@@ -383,7 +379,9 @@ namespace Catel.Collections
 
                 // Reset cached items
                 _newItems.Clear();
+                _newItemIndices.Clear();
                 _oldItems.Clear();
+                _oldItemIndices.Clear();
             };
 
             if (AutomaticallyDispatchChangeNotifications)
@@ -472,7 +470,8 @@ namespace Catel.Collections
             if (_suspendChangeNotifications && _suspensionMode == SuspensionMode.Adding)
             {
                 // Remember
-                _newItems.AddLast(Tuple.Create(index, item));
+                _newItems.Add(item);
+                _newItemIndices.Add(index);
             }
         }
 
@@ -521,7 +520,8 @@ namespace Catel.Collections
             if (_suspendChangeNotifications && _suspensionMode == SuspensionMode.Removing)
             {
                 // Remember
-                _oldItems.AddLast(Tuple.Create(index, item));
+                _oldItems.Add(item);
+                _oldItemIndices.Add(index);
             }
         }
 
