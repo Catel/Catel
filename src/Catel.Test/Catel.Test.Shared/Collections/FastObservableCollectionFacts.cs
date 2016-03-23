@@ -8,8 +8,12 @@ namespace Catel.Test.Collections
 {
     using System;
     using System.Collections.Specialized;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using System.Reflection;
+
     using Catel.Collections;
+    using Catel.Reflection;
 
     using NUnit.Framework;
 
@@ -41,6 +45,42 @@ namespace Catel.Test.Collections
                 }
 
                 Assert.IsFalse(fastCollection.IsDirty);
+            }
+        }
+
+        [TestFixture]
+        public class TheNotificationsSuspendedProperty
+        {
+            [TestCase]
+            public void ReturnsFalseAfterDisposing()
+            {
+                var fastCollection = new FastObservableCollection<int>();
+
+                using (fastCollection.SuspendChangeNotifications())
+                {
+                    fastCollection.Add(1);
+
+                    Assert.IsTrue(fastCollection.NotificationsSuspended);
+                }
+
+                Assert.IsFalse(fastCollection.NotificationsSuspended);
+            }
+
+            /// <remarks>
+            /// BUG: This is a misbehavior - will fail if fixed!
+            /// </remarks>
+            [TestCase]
+            public void ReturnsTrueAfterChangedDisposing()
+            {
+                var fastCollection = new FastObservableCollection<int>();
+
+                var firstToken = fastCollection.SuspendChangeNotifications();
+                var secondToken = fastCollection.SuspendChangeNotifications();
+
+                firstToken.Dispose();
+                secondToken.Dispose();
+
+                Assert.IsTrue(fastCollection.NotificationsSuspended);
             }
         }
 
@@ -147,6 +187,56 @@ namespace Catel.Test.Collections
         }
 
         [TestFixture]
+        public class TheResetMethod
+        {
+            [TestCase]
+            public void ResetWithoutSuspendChangeNotifications()
+            {
+                var collectionChanged= false;
+                var fastCollection = new FastObservableCollection<int>();
+                fastCollection.CollectionChanged += (sender, e) =>
+                {
+                    collectionChanged = true;
+                };
+
+                fastCollection.Reset();
+
+                Assert.AreEqual(true, collectionChanged);
+            }
+
+            [TestCase]
+            public void CallingResetWhileAddingItemsInAddingMode()
+            {
+                var counter = 0;
+                var eventArgs = (NotifyCollectionChangedEventArgs)null;
+
+                var fastCollection = new FastObservableCollection<int>();
+                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                fastCollection.CollectionChanged += (sender, e) =>
+                {
+                    counter++;
+                    eventArgs = e;
+                };
+
+                var token = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
+                fastCollection.Add(1);
+                fastCollection.Add(2);
+
+                fastCollection.Reset();
+                Assert.AreEqual(0, counter);
+
+                fastCollection.Add(3);
+                fastCollection.Add(4);
+                fastCollection.Add(5);
+                token.Dispose();
+
+                Assert.AreEqual(1, counter);
+                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
+                CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
+            }
+        }
+
+        [TestFixture]
         public class TheSuspensionModeMethod
         {
             [TestCase]
@@ -176,6 +266,115 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
                 CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
             }
+
+            [TestCase]
+            public void CascadedAddingItemsInAddingMode()
+            {
+                var counter = 0;
+                var eventArgs = (NotifyCollectionChangedEventArgs)null;
+
+                var fastCollection = new FastObservableCollection<int>();
+                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                fastCollection.CollectionChanged += (sender, e) =>
+                {
+                    counter++;
+                    eventArgs = e;
+                };
+
+                var firstToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
+                var secondToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
+
+                fastCollection.Add(1);
+                fastCollection.Add(2);
+                fastCollection.Add(3);
+                fastCollection.Add(4);
+                fastCollection.Add(5);
+
+                secondToken.Dispose();
+                Assert.AreEqual(0, counter);
+                Assert.IsNull(eventArgs);
+
+                firstToken.Dispose();
+                Assert.AreEqual(1, counter);
+                // ReSharper disable PossibleNullReferenceException
+                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
+                CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
+                // ReSharper restore PossibleNullReferenceException
+            }
+
+            [TestCase]
+            public void CascadedAddingItemsInAddingModeWithInterceptingDisposing()
+            {
+                var counter = 0;
+                var eventArgs = (NotifyCollectionChangedEventArgs)null;
+
+                var fastCollection = new FastObservableCollection<int>();
+                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                fastCollection.CollectionChanged += (sender, e) =>
+                {
+                    counter++;
+                    eventArgs = e;
+                };
+
+                var firstToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
+                var secondToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
+
+                fastCollection.Add(1);
+                fastCollection.Add(2);
+
+                secondToken.Dispose();
+                Assert.AreEqual(0, counter);
+                Assert.IsNull(eventArgs);
+
+                fastCollection.Add(3);
+                fastCollection.Add(4);
+                fastCollection.Add(5);
+
+                firstToken.Dispose();
+                Assert.AreEqual(1, counter);
+                // ReSharper disable PossibleNullReferenceException
+                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
+                CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
+                // ReSharper restore PossibleNullReferenceException
+            }
+
+            /////// <remarks>
+            /////// BUG: This is a misbehavior ... solution pending
+            /////// </remarks>
+            ////[TestCase]
+            ////public void CascadedAddingItemsInAddingModeWithChangedDisposing()
+            ////{
+            ////    var counter = 0;
+            ////    var eventArgs = (NotifyCollectionChangedEventArgs)null;
+
+            ////    var fastCollection = new FastObservableCollection<int>();
+            ////    fastCollection.AutomaticallyDispatchChangeNotifications = false;
+            ////    fastCollection.CollectionChanged += (sender, e) =>
+            ////    {
+            ////        counter++;
+            ////        eventArgs = e;
+            ////    };
+
+            ////    var firstToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
+            ////    var secondToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
+
+            ////    fastCollection.Add(1);
+            ////    fastCollection.Add(2);
+            ////    fastCollection.Add(3);
+            ////    fastCollection.Add(4);
+            ////    fastCollection.Add(5);
+
+            ////    firstToken.Dispose();
+            ////    Assert.AreEqual(0, counter); ??
+            ////    Assert.IsNull(eventArgs); ??
+
+            ////    secondToken.Dispose();
+            ////    Assert.AreEqual(1, counter); ??
+            ////    // ReSharper disable PossibleNullReferenceException
+            ////    Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action); ??
+            ////    CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 }); ??
+            ////    // ReSharper restore PossibleNullReferenceException
+            ////}
 
             [TestCase]
             public void MultipleActionsWithoutSuspendingNotifications()
@@ -231,6 +430,40 @@ namespace Catel.Test.Collections
                 CollectionAssert.AreEqual(eventArgs.OldItems, new[] { 1, 2, 3, 4, 5 });
             }
 
+            private SuspensionContext<T> GetSuspensionContext<T>(FastObservableCollection<T> collection)
+            {
+                var t = typeof(FastObservableCollection<T>);
+                var f = t.GetFieldEx("_suspensionContext", BindingFlags.Instance | BindingFlags.NonPublic);
+                var v = f.GetValue(collection) as SuspensionContext<T>;
+
+                return v;
+            }
+
+            [TestCase]
+            public void CleanedUpSuspensionContextAfterAdding()
+            {
+                var fastCollection = new FastObservableCollection<int>();
+                using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
+                {
+                    fastCollection.Add(1);
+                }
+
+                var context = GetSuspensionContext(fastCollection);
+                Assert.IsNull(context);
+            }
+
+            [TestCase]
+            public void CleanedUpSuspensionContextAfterDoingNothing()
+            {
+                var fastCollection = new FastObservableCollection<int>();
+                using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
+                {
+                }
+
+                var context = GetSuspensionContext(fastCollection);
+                Assert.IsNull(context);
+            }
+
             [TestCase]
             public void ThrowsInvalidOperationExceptionForAddingInRemovingMode()
             {
@@ -278,6 +511,17 @@ namespace Catel.Test.Collections
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
                     Assert.Throws<InvalidOperationException>(() => fastCollection[0] = 0);
+                }
+            }
+
+            [TestCase]
+            [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1501:StatementMustNotBeOnSingleLine", Justification = "Reviewed. Suppression is OK here.")]
+            public void ThrowsInvalidOperationExceptionForChangingMode()
+            {
+                var fastCollection = new FastObservableCollection<int> { 0 };
+                using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
+                {
+                    Assert.Throws<InvalidOperationException>(() => { using (fastCollection.SuspendChangeNotifications(SuspensionMode.Removing)) { } });
                 }
             }
         }
