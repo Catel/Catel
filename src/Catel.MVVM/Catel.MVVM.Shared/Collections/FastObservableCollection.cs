@@ -323,14 +323,12 @@ namespace Catel.Collections
         /// <returns>IDisposable.</returns>
         public IDisposable SuspendChangeNotifications(SuspensionMode mode)
         {
-            // Set suspension mode
-            _suspensionMode = mode;
-
             return new DisposableToken<FastObservableCollection<T>>(
                 this,
                 x =>
                 {
                     x.Instance._suspendChangeNotifications = true;
+                    x.Instance._suspensionMode = mode;
                 },
                 x =>
                 {
