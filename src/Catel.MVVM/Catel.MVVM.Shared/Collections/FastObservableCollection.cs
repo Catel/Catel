@@ -15,6 +15,8 @@ namespace Catel.Collections
     using System.Diagnostics;
     using System.Linq;
 
+    using Catel.Logging;
+
     using IoC;
     using Services;
 
@@ -29,6 +31,8 @@ namespace Catel.Collections
     public class FastObservableCollection<T> : ObservableCollection<T>, ISuspendChangeNotificationsCollection
     {
         #region Constants
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private static readonly IDispatcherService _dispatcherService;
         #endregion
 
@@ -180,7 +184,7 @@ namespace Catel.Collections
         {
             if (_suspendChangeNotifications)
             {
-                Debug.Fail("Cannot reset while notifications are suspended");
+                Log.Error("Cannot reset while notifications are suspended");
                 return;
             }
 
@@ -445,7 +449,7 @@ namespace Catel.Collections
             // Check
             if (_suspendChangeNotifications && _suspensionMode != SuspensionMode.Mixed)
             {
-                throw new InvalidOperationException("Clearing items is not allowed in modes other than mixed.");
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Clearing items is not allowed in modes other than mixed.");
             }
 
             // Call base
@@ -461,7 +465,7 @@ namespace Catel.Collections
             // Check
             if (_suspendChangeNotifications && _suspensionMode == SuspensionMode.Removing)
             {
-                throw new InvalidOperationException("Adding items is not allowed in removing mode.");
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in removing mode.");
             }
 
             // Call base
@@ -484,7 +488,7 @@ namespace Catel.Collections
             // Check
             if (_suspendChangeNotifications && _suspensionMode != SuspensionMode.Mixed)
             {
-                throw new InvalidOperationException("Moving items is not allowed in modes other than mixed.");
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Moving items is not allowed in modes other than mixed.");
             }
 
             // Call base
@@ -500,7 +504,7 @@ namespace Catel.Collections
             // Check
             if (_suspendChangeNotifications && _suspensionMode == SuspensionMode.Adding)
             {
-                throw new InvalidOperationException("Removing items is not allowed in adding mode.");
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in adding mode.");
             }
 
             // Get item
@@ -534,7 +538,7 @@ namespace Catel.Collections
             // Check
             if (_suspendChangeNotifications && _suspensionMode != SuspensionMode.Mixed)
             {
-                throw new InvalidOperationException("Replacing items is not allowed in modes other than mixed.");
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Replacing items is not allowed in modes other than mixed.");
             }
 
             // Call base

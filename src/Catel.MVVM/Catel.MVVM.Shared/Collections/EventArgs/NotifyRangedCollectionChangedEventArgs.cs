@@ -39,15 +39,11 @@ namespace Catel.Collections
         public NotifyRangedCollectionChangedEventArgs(NotifyCollectionChangedAction action, IList changedItems, IList<int> indices)
             : base(action, changedItems, (indices != null && indices.Count != 0) ? indices[0] : -1)
         {
-            // Check arguments
             Argument.IsNotNull("indices", indices);
             // ReSharper disable once PossibleNullReferenceException
             Argument.IsNotOutOfRange("indices", indices.Count, changedItems.Count, changedItems.Count);
 
-            // Dependency injection
             Indices = indices;
-
-            // Initializations
         }
 
         #endregion Constructors
