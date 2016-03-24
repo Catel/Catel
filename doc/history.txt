@@ -83,6 +83,7 @@ Added/fixed:
 (*) CTL-828 Prevent unneccessary creation of empty dictionary entries in ModelBase
 (*) CTL-846 ObjectConverterService (and thus ConfigurationService) should respect culture on UWP
 (*) CTL-850 Don't set AssociatedObject to null in IBehavior.Detach for UWP
+(*) CTL-856 Improved FastObservableCollection to have concrete suspension modes for change notifications
 (x) CTL-791 Types with the same FullName from different assemblies will cause issues with the TypeFactory cache
 (x) CTL-793 CompositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand not respected
 (x) CTL-798 Prevent MissingResourceException when resolving strings for Catel.Core
