@@ -7,6 +7,7 @@
 namespace Catel.Test.Collections
 {
     using System;
+    using System.Collections;
     using System.Collections.Specialized;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
@@ -106,6 +107,18 @@ namespace Catel.Test.Collections
                 fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 });
 
                 Assert.AreEqual(1, counter);
+
+                fastCollection.AddItems(new ArrayList(new[] { 1, 2, 3, 4, 5 }));
+
+                Assert.AreEqual(2, counter);
+
+                fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0);
+
+                Assert.AreEqual(3, counter);
+
+                fastCollection.InsertItems(new ArrayList(new[] { 1, 2, 3, 4, 5 }), 0);
+
+                Assert.AreEqual(4, counter);
             }
         }
 
@@ -120,17 +133,21 @@ namespace Catel.Test.Collections
             }
 
             [TestCase]
-            public void RaisesSingleEventWhileAddingRange()
+            public void RaisesSingleEventWhileRemovingRange()
             {
                 int counter = 0;
 
-                var fastCollection = new FastObservableCollection<int>(new [] { 1, 2, 3, 4, 5 });
+                var fastCollection = new FastObservableCollection<int>(new [] { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 });
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) => counter++;
 
                 fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 });
 
                 Assert.AreEqual(1, counter);
+
+                fastCollection.RemoveItems(new ArrayList(new[] { 1, 2, 3, 4, 5 }));
+
+                Assert.AreEqual(2, counter);
             }
         }
 
