@@ -338,44 +338,6 @@ namespace Catel.Test.Collections
                 // ReSharper restore PossibleNullReferenceException
             }
 
-            /////// <remarks>
-            /////// BUG: This is a misbehavior ... solution pending
-            /////// </remarks>
-            ////[TestCase]
-            ////public void CascadedAddingItemsInAddingModeWithChangedDisposing()
-            ////{
-            ////    var counter = 0;
-            ////    var eventArgs = (NotifyCollectionChangedEventArgs)null;
-
-            ////    var fastCollection = new FastObservableCollection<int>();
-            ////    fastCollection.AutomaticallyDispatchChangeNotifications = false;
-            ////    fastCollection.CollectionChanged += (sender, e) =>
-            ////    {
-            ////        counter++;
-            ////        eventArgs = e;
-            ////    };
-
-            ////    var firstToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
-            ////    var secondToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
-
-            ////    fastCollection.Add(1);
-            ////    fastCollection.Add(2);
-            ////    fastCollection.Add(3);
-            ////    fastCollection.Add(4);
-            ////    fastCollection.Add(5);
-
-            ////    firstToken.Dispose();
-            ////    Assert.AreEqual(0, counter); ??
-            ////    Assert.IsNull(eventArgs); ??
-
-            ////    secondToken.Dispose();
-            ////    Assert.AreEqual(1, counter); ??
-            ////    // ReSharper disable PossibleNullReferenceException
-            ////    Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action); ??
-            ////    CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 }); ??
-            ////    // ReSharper restore PossibleNullReferenceException
-            ////}
-
             [TestCase]
             public void MultipleActionsWithoutSuspendingNotifications()
             {
