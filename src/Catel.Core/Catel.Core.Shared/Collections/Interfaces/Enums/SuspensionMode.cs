@@ -14,7 +14,7 @@ namespace Catel.Collections
         /// <summary>
         /// The mixed.
         /// </summary>
-        Mixed,
+        None,
 
         /// <summary>
         /// The adding.
