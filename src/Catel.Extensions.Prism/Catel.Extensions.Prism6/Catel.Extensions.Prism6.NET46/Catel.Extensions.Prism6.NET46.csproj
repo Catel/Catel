@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5E7A99E8-8B88-4E44-8183-CF67C9818CE9}</ProjectGuid>
+    <ProjectGuid>{E54D6F7C-8CE4-42C4-A1E6-40203EBE49B8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Catel</RootNamespace>
