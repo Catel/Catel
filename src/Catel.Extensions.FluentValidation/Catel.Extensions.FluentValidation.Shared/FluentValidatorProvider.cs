@@ -70,8 +70,13 @@ namespace Catel
             IValidator validator = null;
 
             // NOTE: Patch for performance issue the validator of a viewmodel must be in the same assembly of the view model.
-            var assembly = targetType.Assembly;
+            
+            var assembly = targetType.GetAssemblyEx();
+#if PCL
+            var exportedTypes = assembly.ExportedTypes;
+#else
             var exportedTypes = assembly.GetExportedTypes();
+#endif
             var validatorTypes = new List<Type>();
             foreach (var exportedType in exportedTypes)
             {
@@ -84,7 +89,12 @@ namespace Catel
                         if (currentType != null)
                         {
                             TypeInfo typeInfo = currentType.GetTypeInfo();
-                            found = typeInfo.IsGenericType && typeInfo.GetGenericArguments().ToList().FirstOrDefault(type => type.IsAssignableFromEx(targetType)) != null;
+#if PCL
+                            var genericArguments = typeInfo.GenericTypeArguments.ToList();
+#else
+                            var genericArguments = typeInfo.GetGenericArguments().ToList();
+#endif
+                            found = typeInfo.IsGenericType &&  genericArguments.FirstOrDefault(type => type.IsAssignableFromEx(targetType)) != null;
                             if (!found)
                             {
                                 currentType = typeInfo.BaseType;
@@ -107,6 +117,6 @@ namespace Catel
             return validator;
         }
 
-        #endregion
+#endregion
     }
 }

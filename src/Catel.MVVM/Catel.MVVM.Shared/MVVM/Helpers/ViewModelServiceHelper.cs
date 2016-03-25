@@ -93,6 +93,10 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IPhoneService, PhoneService>();
 #endif
 
+#if XAMARIN_FORMS
+                serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
+#endif
+
                 Log.Debug("Registered default service implementations for IoC container");
             }
             catch (Exception ex)

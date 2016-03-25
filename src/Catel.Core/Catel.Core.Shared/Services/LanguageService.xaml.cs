@@ -113,7 +113,6 @@ namespace Catel.Services
 
                     var assemblyName = splittedString[1].Trim();
                     var containingAssemblyName = string.Format("{0},", assemblyName);
-
                     var loadedAssemblies = AssemblyHelper.GetLoadedAssemblies();
 
                     // Invert so design-time will always pick the latest version

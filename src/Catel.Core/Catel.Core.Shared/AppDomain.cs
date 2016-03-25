@@ -98,7 +98,10 @@ namespace System
                     }
                 }
 #else
-                // TODO: Write
+                var currentdomain = typeof(string).GetTypeInfo().Assembly.GetType("System.AppDomain").GetRuntimeProperty("CurrentDomain").GetMethod.Invoke(null, new object[] { });
+                var method = currentdomain.GetType().GetRuntimeMethod("GetAssemblies", new Type[] { });
+                var assemblies = method.Invoke(currentdomain, new object[] { }) as Assembly[];
+                _loadedAssemblies.AddRange(assemblies);
 #endif
             }
 

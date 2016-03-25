@@ -17,6 +17,8 @@ namespace Catel.MVVM
     using View = global::Android.Views.View;
 #elif IOS
     using View = UIKit.UIView;
+#elif XAMARIN_FORMS
+    using View = global::Xamarin.Forms.VisualElement;
 #else
     using View = System.Windows.FrameworkElement;
 #endif
