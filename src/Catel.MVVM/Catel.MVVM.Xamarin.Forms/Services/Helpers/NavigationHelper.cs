@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Services.Helpers
+namespace Catel.Services
 {
     using System.Threading.Tasks;
     using global::Xamarin.Forms;

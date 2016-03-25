@@ -18,7 +18,6 @@ namespace Catel.Services
     using Catel.IoC;
     using Catel.MVVM;
     using Catel.MVVM.Views;
-	using Catel.Services.Helpers;
     using Catel.Windows.Controls;
     
     using ContentPage = Windows.Controls.ContentPage;

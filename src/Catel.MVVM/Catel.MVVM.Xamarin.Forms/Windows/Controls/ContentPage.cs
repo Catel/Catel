@@ -21,14 +21,16 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// The view mananger.
         /// </summary>
-        private IViewManager _viewManager;
+        private readonly IViewManager _viewManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContentPage"/> class.
         /// </summary>
         public ContentPage()
         {
-            _viewManager = this.GetDependencyResolver().Resolve<IViewManager>();
+            var dependencyResolver = this.GetDependencyResolver();
+            _viewManager = dependencyResolver.Resolve<IViewManager>();
+
             DataContextChanged += OnDataContextChanged;
         }
 
@@ -50,8 +52,8 @@ namespace Catel.Windows.Controls
         /// </value>
         public object DataContext
         {
-            get { return this.BindingContext; }
-            set { this.BindingContext = value; }
+            get { return BindingContext; }
+            set { BindingContext = value; }
         }
 
         /// <summary>
@@ -91,13 +93,13 @@ namespace Catel.Windows.Controls
 
             set
             {
-                if (!object.Equals(base.BindingContext, value))
+                if (!Equals(base.BindingContext, value))
                 {
                     _viewManager.UnregisterView(this);
 
                     var oldContext = base.BindingContext;
                     base.BindingContext = value;
-                    DataContextChanged.SafeInvoke(this, new DataContextChangedEventArgs(oldContext, BindingContext));
+                    DataContextChanged.SafeInvoke(this, () => new DataContextChangedEventArgs(oldContext, BindingContext));
                 }
             }
         }
@@ -136,6 +138,7 @@ namespace Catel.Windows.Controls
         protected sealed override void OnAppearing()
         {
             base.OnAppearing();
+
             ViewModel?.InitializeViewModelAsync();
         }
 
@@ -144,8 +147,9 @@ namespace Catel.Windows.Controls
         /// </summary>
         protected sealed override void OnDisappearing()
         {
-            base.OnDisappearing();
             ViewModel?.CloseViewModelAsync(true);
+
+            base.OnDisappearing();
         }
 
         /// <summary>
@@ -160,6 +164,7 @@ namespace Catel.Windows.Controls
         protected override sealed bool OnBackButtonPressed()
         {
             BackButtonPressed.SafeInvoke(this);
+
             var popupLayout = Content as PopupLayout;
             //// TODO: Lookup for top most popup layout.
             return (popupLayout != null && popupLayout.IsPopupActive) || base.OnBackButtonPressed();
@@ -173,6 +178,7 @@ namespace Catel.Windows.Controls
         private void OnDataContextChanged(object sender, DataContextChangedEventArgs eventArgs)
         {
             _viewManager.RegisterView(this);
+
             ViewModelChanged.SafeInvoke(this);
         }
     }

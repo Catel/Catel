@@ -34,7 +34,6 @@ namespace Catel.Windows.Controls
             DataContextChanged += OnDataContextChanged;
         }
 
-
         /// <summary>
         ///     Gets or sets object that contains the properties that will be targeted by the bound properties that belong to this
         ///     <see cref="T:Xamarin.Forms.BindableObject" />.
@@ -90,7 +89,6 @@ namespace Catel.Windows.Controls
         {
             get { return DataContext as IViewModel; }
         }
-
 
         /// <summary>
         ///     Gets or sets the data context.
@@ -150,21 +148,34 @@ namespace Catel.Windows.Controls
         private void OnDataContextChanged(object sender, DataContextChangedEventArgs dataContextChangedEventArgs)
         {
             _viewManager.RegisterView(this);
+
             EnsureParentChildRelationship(dataContextChangedEventArgs.NewContext);
+
             ViewModelChanged.SafeInvoke(this);
         }
 
         /// <summary>
-        /// Ensures the parent-child relationship
+        /// Ensures the parent-child relationship.
         /// </summary>
         /// <param name="dataContext"></param>
         private void EnsureParentChildRelationship(object dataContext)
         {
-            var parentViewModel = FindParentViewModel();
+            var parentViewModel = FindParentViewModel() as IViewModel;
             if (parentViewModel != null)
             {
-                (dataContext as IRelationalViewModel)?.SetParentViewModel(parentViewModel as IViewModel);
-                (parentViewModel as IRelationalViewModel)?.RegisterChildViewModel(dataContext as IViewModel);
+                // Note: note sure if the DataContext can be used, we should use a bit different technique to retrieve the
+                // child view model
+                var childViewModel = dataContext as IRelationalViewModel;
+                if (childViewModel != null)
+                {
+                    childViewModel.SetParentViewModel(parentViewModel);
+                }
+
+                var parentRelationalViewModel = parentViewModel as IRelationalViewModel;
+                if (parentRelationalViewModel != null)
+                {
+                    parentRelationalViewModel.RegisterChildViewModel(dataContext as IViewModel);
+                }
             }
         }
 
@@ -176,13 +187,13 @@ namespace Catel.Windows.Controls
         /// </returns>
         private object FindParentViewModel()
         {
-            var viewModel = this.BindingContext as IViewModel;
-            var relationalViewModel = this.BindingContext as IRelationalViewModel;
+            var viewModel = BindingContext as IViewModel;
+            var relationalViewModel = BindingContext as IRelationalViewModel;
 
             object parentViewModel = null;
             if (viewModel != null && relationalViewModel != null)
             {
-                var parent = this.Parent;
+                var parent = Parent;
                 while (parentViewModel == null && parent != null)
                 {
                     var parentViewModelAsRelationalViewModel = parent.BindingContext as IRelationalViewModel;
