@@ -150,6 +150,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\EventArgs\SavingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\EventArgs\ViewModelClosedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\IViewModelExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\IViewModelFactoryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\ViewModelExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\INotifyableViewModel.cs" />
