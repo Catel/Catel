@@ -432,7 +432,7 @@ namespace Catel.Collections
             // Check
             if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Clearing items is not allowed in modes other than mixed.");
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, current mode is '{_suspensionContext.Mode}'");
             }
 
             // Call base
@@ -448,7 +448,7 @@ namespace Catel.Collections
             // Check
             if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in removing mode.");
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
             }
 
             // Call base
@@ -471,7 +471,7 @@ namespace Catel.Collections
             // Check
             if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Moving items is not allowed in modes other than mixed.");
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, current mode is '{_suspensionContext.Mode}'");
             }
 
             // Call base
@@ -487,7 +487,7 @@ namespace Catel.Collections
             // Check
             if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Adding)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in adding mode.");
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
             }
 
             // Get item
@@ -521,7 +521,7 @@ namespace Catel.Collections
             // Check
             if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Replacing items is not allowed in modes other than mixed.");
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, current mode is '{_suspensionContext.Mode}'");
             }
 
             // Call base
