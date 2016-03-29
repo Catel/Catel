@@ -386,7 +386,7 @@ namespace Catel.Collections
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs" /> instance containing the event data.</param>
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            if (_suspensionContext == null || (_suspensionContext != null &&_suspensionContext.Count == 0))
+            if (_suspensionContext == null || (_suspensionContext != null && _suspensionContext.Count == 0))
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {
@@ -412,7 +412,7 @@ namespace Catel.Collections
         /// <param name="e">The <see cref="PropertyChangedEventArgs" /> instance containing the event data.</param>
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            if (!NotificationsSuspended)
+            if (_suspensionContext == null || (_suspensionContext != null && _suspensionContext.Count == 0))
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {
