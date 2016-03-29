@@ -13,7 +13,6 @@ namespace Catel.Collections
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Diagnostics;
-    using System.Linq;
 
     using Catel.Logging;
 
@@ -37,8 +36,6 @@ namespace Catel.Collections
         #endregion
 
         #region Fields
-        private bool _suspendChangeNotifications;
-
         /// <summary>
         /// The current suspension context.
         /// </summary>
@@ -106,7 +103,7 @@ namespace Catel.Collections
         {
             get
             {
-                return _suspendChangeNotifications;
+                return _suspensionContext != null;
             }
         }
 
@@ -162,12 +159,12 @@ namespace Catel.Collections
         /// </summary>
         public void Reset()
         {
-            if (_suspendChangeNotifications)
+            if (NotificationsSuspended)
             {
                 Log.Error("Cannot reset while notifications are suspended");
                 return;
             }
-            
+
             NotifyChanges();
         }
 
@@ -303,7 +300,12 @@ namespace Catel.Collections
         /// <returns>IDisposable.</returns>
         public IDisposable SuspendChangeNotifications(SuspensionMode mode)
         {
-            if (_suspendChangeNotifications && _suspensionContext.Mode != mode)
+            if (_suspensionContext == null)
+            {
+                // Create new context
+                _suspensionContext = new SuspensionContext<T>(mode);
+            }
+            else if (_suspensionContext != null && _suspensionContext.Mode != mode)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot change mode during another active suspension.");
             }
@@ -312,13 +314,12 @@ namespace Catel.Collections
                 this,
                 x =>
                 {
-                    x.Instance._suspendChangeNotifications = true;
-                    x.Instance._suspensionContext = _suspensionContext ?? new SuspensionContext<T>(mode);
+                    x.Instance._suspensionContext.Count++;
                 },
                 x =>
                 {
-                    x.Instance._suspendChangeNotifications = (bool)x.Tag;
-                    if (!x.Instance._suspendChangeNotifications)
+                    x.Instance._suspensionContext.Count--;
+                    if (x.Instance._suspensionContext.Count == 0)
                     {
                         if (x.Instance.IsDirty)
                         {
@@ -328,9 +329,7 @@ namespace Catel.Collections
 
                         x.Instance._suspensionContext = null;
                     }
-                }, _suspendChangeNotifications);
-
-            // BUG: for multiple suspensions -> disposing in the wrong order (may only: first token not disposed last) leads to misbehavior - see ReturnsTrueAfterChangedDisposing() in the facts
+                }, _suspensionContext);
         }
 
         /// <summary>
@@ -387,7 +386,7 @@ namespace Catel.Collections
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs" /> instance containing the event data.</param>
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            if (!_suspendChangeNotifications)
+            if (_suspensionContext == null || (_suspensionContext != null &&_suspensionContext.Count == 0))
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {
@@ -401,7 +400,10 @@ namespace Catel.Collections
                 return;
             }
 
-            IsDirty = true;
+            if (_suspensionContext != null && _suspensionContext.Count != 0)
+            {
+                IsDirty = true;
+            }
         }
 
         /// <summary>
@@ -410,7 +412,7 @@ namespace Catel.Collections
         /// <param name="e">The <see cref="PropertyChangedEventArgs" /> instance containing the event data.</param>
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            if (!_suspendChangeNotifications)
+            if (!NotificationsSuspended)
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {

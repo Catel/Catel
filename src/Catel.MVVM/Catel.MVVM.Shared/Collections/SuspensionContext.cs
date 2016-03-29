@@ -23,6 +23,8 @@ namespace Catel.Collections
 
         private readonly List<T> _oldItems = new List<T>();
 
+        private int _suspensionCount;
+
         private readonly SuspensionMode _suspensionMode;
         #endregion
 
@@ -38,6 +40,32 @@ namespace Catel.Collections
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets or sets the suspension count.
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                return _suspensionCount;
+            }
+
+            set
+            {
+                if (value != _suspensionCount)
+                {
+                    if (value < 0)
+                    {
+                        _suspensionCount = 0;
+                    }
+                    else
+                    {
+                        _suspensionCount = value;
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Gets the suspension mode.
         /// </summary>

@@ -67,11 +67,8 @@ namespace Catel.Test.Collections
                 Assert.IsFalse(fastCollection.NotificationsSuspended);
             }
 
-            /// <remarks>
-            /// BUG: This is a misbehavior - will fail if fixed!
-            /// </remarks>
             [TestCase]
-            public void ReturnsTrueAfterChangedDisposing()
+            public void ReturnsFalseAfterChangedDisposing()
             {
                 var fastCollection = new FastObservableCollection<int>();
 
@@ -81,7 +78,7 @@ namespace Catel.Test.Collections
                 firstToken.Dispose();
                 secondToken.Dispose();
 
-                Assert.IsTrue(fastCollection.NotificationsSuspended);
+                Assert.IsFalse(fastCollection.NotificationsSuspended);
             }
         }
 
