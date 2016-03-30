@@ -19,6 +19,24 @@ namespace Catel
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// Unsubscribes all the handlers from the specified event.
+        /// </summary>
+        /// <typeparam name="TEventArgs">The type of the event arguments.</typeparam>
+        /// <param name="handler">The handler.</param>
+        public static void UnsubscribeAllHandlers<TEventArgs>(this EventHandler<TEventArgs> handler)
+        {
+            if (handler != null)
+            {
+                var invocationList = handler.GetInvocationList();
+
+                foreach (var d in invocationList)
+                {
+                    handler -= (EventHandler<TEventArgs>)d;
+                }
+            }
+        }
+
+        /// <summary>
         /// Invokes the specified <paramref name="handler"/> in a thread-safe manner with <see cref="EventArgs.Empty"/>
         /// as parameter for the event args. Where normally one has to write the following code:
         /// <para />
