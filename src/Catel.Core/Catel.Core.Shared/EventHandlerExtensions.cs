@@ -24,6 +24,7 @@ namespace Catel
         /// <typeparam name="TEventArgs">The type of the event arguments.</typeparam>
         /// <param name="handler">The handler.</param>
         public static void UnsubscribeAllHandlers<TEventArgs>(this EventHandler<TEventArgs> handler)
+            where TEventArgs: EventArgs
         {
             if (handler != null)
             {
