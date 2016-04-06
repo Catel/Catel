@@ -19,6 +19,10 @@ namespace Catel.Collections
     using IoC;
     using Services;
 
+#if SL5
+    using NotifyRangedCollectionChangedEventArgs = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
+#endif
+
     /// <summary>
     /// Fast implementation of <see cref="ObservableCollection{T}"/> where the change notifications
     /// can be suspended.
@@ -345,20 +349,21 @@ namespace Catel.Collections
                 {
                     if (_suspensionContext.NewItems.Count != 0)
                     {
-                        eventArgs = new NotifyRangedCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, _suspensionContext.NewItems, _suspensionContext.NewItemIndices);
+                        eventArgs = CreateEventArgs(NotifyCollectionChangedAction.Add, _suspensionContext.NewItems, _suspensionContext.NewItemIndices);
                     }
                 }
                 else if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
                 {
                     if (_suspensionContext.OldItems.Count != 0)
                     {
-                        eventArgs = new NotifyRangedCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, _suspensionContext.OldItems, _suspensionContext.OldItemIndices);
+                        eventArgs = CreateEventArgs(NotifyCollectionChangedAction.Remove, _suspensionContext.OldItems, _suspensionContext.OldItemIndices);
                     }
                 }
                 else
                 {
                     Debug.Assert(_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.None, "Wrong/unknown suspension mode!");
-                    eventArgs = new NotifyRangedCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+
+                    eventArgs = CreateEventArgs(NotifyCollectionChangedAction.Reset);
                 }
 
                 // Fire events
@@ -464,6 +469,7 @@ namespace Catel.Collections
             }
         }
 
+#if !SL5
         /// <summary>
         /// Moves the item at the specified index to a new location in the collection.
         /// </summary>
@@ -479,6 +485,7 @@ namespace Catel.Collections
             // Call base
             base.MoveItem(oldIndex, newIndex);
         }
+#endif
 
         /// <summary>
         /// Removes the item at the specified index of the collection.
@@ -530,6 +537,19 @@ namespace Catel.Collections
             base.SetItem(index, item);
         }
         #endregion Overrides of ObservableCollection
-        #endregion
+
+        private NotifyRangedCollectionChangedEventArgs CreateEventArgs(NotifyCollectionChangedAction action, IList changedItems = null, IList<int> changedIndices = null)
+        {
+            NotifyRangedCollectionChangedEventArgs eventArgs;
+
+#if SL5
+            eventArgs = new NotifyRangedCollectionChangedEventArgs(action);
+#else
+            eventArgs = new NotifyRangedCollectionChangedEventArgs(action, changedItems, changedIndices);
+#endif
+
+            return eventArgs;
+        }
+#endregion
     }
 }

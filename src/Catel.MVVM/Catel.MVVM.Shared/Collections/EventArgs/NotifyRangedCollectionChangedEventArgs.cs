@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if !SL5
+
 namespace Catel.Collections
 {
     using System.Collections;
@@ -15,12 +17,6 @@ namespace Catel.Collections
     /// </summary>
     public class NotifyRangedCollectionChangedEventArgs : NotifyCollectionChangedEventArgs
     {
-        #region Fields
-
-        #endregion Fields
-
-        #region Constructors
-
         /// <summary>
         /// Initializes a new instance of the <see cref="NotifyRangedCollectionChangedEventArgs"/> class.
         /// </summary>
@@ -46,19 +42,11 @@ namespace Catel.Collections
             Indices = indices;
         }
 
-        #endregion Constructors
-
-        #region Properties
-
         /// <summary>
         /// Gets the indices.
         /// </summary>
         public IList<int> Indices { get; private set; }
-
-        #endregion Properties
-
-        #region Methods
-
-        #endregion Methods
     }
 }
+
+#endif
