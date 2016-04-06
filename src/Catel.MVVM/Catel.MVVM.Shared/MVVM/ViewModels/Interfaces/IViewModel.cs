@@ -246,6 +246,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
         Task CloseViewModelAsync(bool? result);
+
         #endregion
     }
 }

@@ -1059,7 +1059,7 @@ namespace Catel.MVVM
                                 var viewModelValue = GetValue(e.PropertyName);
                                 var propertiesToSet = mapping.ValueProperties;
 
-#if !WINDOWS_PHONE && !NET35
+#if !WINDOWS_PHONE && !NET35 && !XAMARIN_FORMS
                                 if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
                                 {
                                     mapping.ValueProperties.ForEach(_modelErrorInfo[mapping.ModelProperty].ClearDefaultErrors);
@@ -1431,7 +1431,7 @@ namespace Catel.MVVM
         /// </returns>
         protected virtual Task<bool> CancelAsync()
         {
-            // Note: should be converted to a sync method in v5
+            // Note: should be converted to a sync method in v5`
             return Cancel();
         }
 
@@ -1830,6 +1830,6 @@ namespace Catel.MVVM
 
             ViewModelManager.UnregisterViewModelInstance(this);
         }
-        #endregion
+#endregion
     }
 }

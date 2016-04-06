@@ -15,16 +15,18 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// Interface for all value converters.
     /// </summary>
-    public interface IValueConverter 
-#if XAMARIN
-        // No base class
+    public interface IValueConverter
+#if XAMARIN_FORMS
+        : global::Xamarin.Forms.IValueConverter
+#elif XAMARIN
+    // No base class
 #elif NETFX_CORE
         : global::Windows.UI.Xaml.Data.IValueConverter
 #else
         : System.Windows.Data.IValueConverter
 #endif
     {
-#if XAMARIN
+#if XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
         /// </summary>

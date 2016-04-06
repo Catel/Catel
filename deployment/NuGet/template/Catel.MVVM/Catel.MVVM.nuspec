@@ -29,7 +29,10 @@
         <group targetFramework="uap10.0">
           <dependency id="Microsoft.Xaml.Behaviors.Uwp.Managed" version="1.0.3" />
         </group>		  
-    </dependencies>
-	
+        
+        <group targetFramework="portable-net45+win8+wpa81+wp8">        
+          <dependency id="Xamarin.Forms" version="2.0.0.6490" />
+        </group>
+    </dependencies>	
   </metadata>
 </package>

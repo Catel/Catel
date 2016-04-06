@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Designer\Attributes\DesignTimeCodeAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Designer\DesignTimeInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Designer\Helpers\DesignTimeHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\ApplicationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\INotifyPropertyChangedExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ThemeHelper.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Navigation\EventArgs\NavigationEventArgsBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Navigation\Extensions\NavigationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Navigation\Extensions\NavigationModeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Navigation\NavigationAdapter.xamarin.forms.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Navigation\NavigationAdapter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Navigation\NavigationAdapter.page.sl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Navigation\NavigationAdapter.page.winrt.cs" />
@@ -150,6 +152,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\EventArgs\SavingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\EventArgs\ViewModelClosedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\IViewModelExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\IViewModelFactoryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\ViewModelExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\INotifyableViewModel.cs" />
@@ -225,6 +228,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\CameraService.ios.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\CameraService.winrt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\CameraService.wpsl.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\CameraService.xamarin.forms.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\CameraServiceBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\DataContextSubscriptionService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\DispatcherService.cs" />
@@ -275,6 +279,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\LocationService.winrt.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LocationService.wpsl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LocationServiceBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\MessageService.xamarin.forms.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\MessageService.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\MessageService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\MessageService.ios.cs" />
@@ -286,6 +291,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Models\Location.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Models\Size.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NamingConvention.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\NavigationService.xamarin.forms.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NavigationService.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NavigationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NavigationService.ios.cs" />
@@ -326,6 +332,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\VibrateService.wpsl.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ViewExportService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ViewModelServiceBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ViewModelWrapperService.xamarin.forms.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ViewModelWrapperService.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ViewModelWrapperService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ViewModelWrapperService.ios.cs" />

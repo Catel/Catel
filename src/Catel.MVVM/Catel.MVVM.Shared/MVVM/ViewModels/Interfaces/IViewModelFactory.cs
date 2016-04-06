@@ -37,17 +37,30 @@ namespace Catel.MVVM
         /// <returns>The newly created <see cref="IViewModel"/> or <c>null</c> if no view model could be created.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="viewModelType"/> does not implement the <see cref="IViewModel"/> interface.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "CreateViewModel(Type, object, object)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         IViewModel CreateViewModel(Type viewModelType, object dataContext);
 
         /// <summary>
         /// Creates a new view model.
+        /// </summary>
+        /// <param name="viewModelType">Type of the view model that needs to be created.</param>
+        /// <param name="dataContext">The data context of the view model.</param>
+        /// <param name="tag">The preferred scope to use when resolving dependencies.</param>
+        /// <returns>The newly created <see cref="IViewModel" /> or <c>null</c> if no view model could be created.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="viewModelType" /> does not implement the <see cref="IViewModel" /> interface.</exception>
+        IViewModel CreateViewModel(Type viewModelType, object dataContext, object tag);
+
+        /// <summary>
+        /// Creates a new view model.
         /// <para />
-        /// This is a convenience wrapper around the <see cref="ViewModelFactory.CreateViewModel"/> method. This method cannot be overriden.
+        /// This is a convenience wrapper around the <see cref="ViewModelFactory.CreateViewModel(Type, Object, Object)"/> method. This method cannot be overriden.
         /// </summary>
         /// <typeparam name="TViewModel">The type of the view model.</typeparam>
         /// <param name="dataContext">The data context.</param>
         /// <returns>The newly created <see cref="IViewModel"/> or <c>null</c> if no view model could be created.</returns>
         /// <exception cref="ArgumentException">The <c>TViewModel</c> does not implement the <see cref="IViewModel"/> interface.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "CreateViewModel<TViewModel>(Type, object, object)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         TViewModel CreateViewModel<TViewModel>(object dataContext)
             where TViewModel : IViewModel;
     }

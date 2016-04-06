@@ -34,7 +34,8 @@ namespace Catel.Data
         /// <param name="validateAttributes">If set to <c>true</c>, the validation attributes on the property will be validated.</param>
         /// <exception cref="PropertyNotNullableException">The property is not nullable, but <paramref name="value"/> is <c>null</c>.</exception>
         /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
-        internal void SetValue(string name, object value, bool notifyOnChange, bool validateAttributes)
+        //// TODO: turn in back to internal if is possible.
+        public void SetValue(string name, object value, bool notifyOnChange, bool validateAttributes)
         {
             var property = GetPropertyData(name);
             if ((value == null) && !property.Type.IsNullableType())

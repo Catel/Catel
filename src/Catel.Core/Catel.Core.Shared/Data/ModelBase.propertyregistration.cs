@@ -392,7 +392,8 @@ namespace Catel.Data
         /// </summary>
         /// <param name="name">Name of the property.</param>
         /// <returns>True if the property is registered, otherwise false.</returns>
-        protected internal bool IsPropertyRegistered(string name)
+        /// TODO: Try to revert to internal but is required by XAMARIN_FORMS
+        public bool IsPropertyRegistered(string name)
         {
             return IsPropertyRegistered(GetType(), name);
         }

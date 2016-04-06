@@ -11,7 +11,7 @@ namespace Catel.Services
     using System;
     using System.Collections.Generic;
     
-#if XAMARIN
+#if XAMARIN && !XAMARIN_FORMS
     using System.Drawing;
 #elif NETFX_CORE
     using global::Windows.Foundation;

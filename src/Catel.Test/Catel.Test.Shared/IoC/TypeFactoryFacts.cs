@@ -29,6 +29,16 @@ namespace Catel.Test.IoC
             }
         }
 
+        public interface IDummyDependency
+        {
+            string Value { get; set; }
+        }
+
+        public class DummyDependency : IDummyDependency
+        {
+            public string Value { get; set; }
+        }
+
         public class DependencyInjectionTestClass : INeedCustomInitialization
         {
             public DependencyInjectionTestClass()
@@ -79,7 +89,19 @@ namespace Catel.Test.IoC
                 IntValue = intValue;
             }
 
-            public AdvancedDependencyInjectionTestClass(string stringValue, int intValue, long longValue, IMessageService messageService, INavigationService navigationService)
+            public AdvancedDependencyInjectionTestClass(int intValue, IMessageService messageService, INavigationService navigationService,
+                IDummyDependency dependency)
+            {
+                Argument.IsNotNull(() => messageService);
+                Argument.IsNotNull(() => navigationService);
+                Argument.IsNotNull(() => dependency);
+
+                IntValue = intValue;
+                Dependency = dependency;
+            }
+
+            public AdvancedDependencyInjectionTestClass(string stringValue, int intValue, long longValue, IMessageService messageService,
+                INavigationService navigationService)
             {
                 Argument.IsNotNull(() => messageService);
                 Argument.IsNotNull(() => navigationService);
@@ -89,11 +111,26 @@ namespace Catel.Test.IoC
                 LongValue = longValue;
             }
 
+            public AdvancedDependencyInjectionTestClass(string stringValue, int intValue, long longValue, IMessageService messageService,
+                INavigationService navigationService, IDummyDependency dependency)
+            {
+                Argument.IsNotNull(() => messageService);
+                Argument.IsNotNull(() => navigationService);
+                Argument.IsNotNull(() => dependency);
+
+                StringValue = stringValue;
+                IntValue = intValue;
+                LongValue = longValue;
+                Dependency = dependency;
+            }
+
             public int IntValue { get; private set; }
 
             public string StringValue { get; private set; }
 
             public long LongValue { get; private set; }
+
+            public IDummyDependency Dependency { get; private set; }
         }
 
         [TestFixture]
@@ -228,6 +265,12 @@ namespace Catel.Test.IoC
         }
 
         [TestFixture]
+        public class TheCreateInstanceWithTagMethod
+        {
+
+        }
+
+        [TestFixture]
         public class TheCreateInstanceWithAutoCompletionMethod
         {
             public class Person
@@ -301,7 +344,7 @@ namespace Catel.Test.IoC
             {
                 var typeFactory = TypeFactory.Default;
 
-                var person = new Person {FirstName = "John", LastName = "Doe"};
+                var person = new Person { FirstName = "John", LastName = "Doe" };
                 var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletion<ClassWithDynamicConstructor>(person);
 
                 Assert.IsFalse(instance.IsDynamicConstructorCalled);
@@ -326,6 +369,41 @@ namespace Catel.Test.IoC
                 var instance = typeFactory.CreateInstance<ClassWithPropertyInjection>();
 
                 Assert.IsNotNull(instance.UiVisualizerService);
+            }
+        }
+
+        [TestFixture]
+        public class TheCreateInstanceWithAutoCompletionWithTagMethod
+        {
+            [TestCase]
+            public void CreatesTypeWhenDynamicConstructorIsAvailable()
+            {
+                var serviceLocator = new ServiceLocator();
+                var noTagDependency = new DummyDependency
+                {
+                    Value = "no tag"
+                };
+
+                var tagDependency = new DummyDependency
+                {
+                    Value = "tag"
+                };
+
+                serviceLocator.RegisterType<IDispatcherService, DispatcherService>();
+                serviceLocator.RegisterType<IMessageService, MessageService>();
+                serviceLocator.RegisterType<INavigationService, NavigationService>();
+                serviceLocator.RegisterInstance<IDummyDependency>(noTagDependency);
+                serviceLocator.RegisterInstance<IDummyDependency>(tagDependency, "tag");
+
+                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                var instance = typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag<AdvancedDependencyInjectionTestClass>("tag", "string", 42, 42L);
+
+                Assert.IsNotNull(instance);
+                Assert.AreEqual("string", instance.StringValue);
+                Assert.AreEqual(42, instance.IntValue);
+                Assert.AreEqual(42L, instance.LongValue);
+
+                Assert.IsTrue(ReferenceEquals(tagDependency, instance.Dependency));
             }
         }
     }

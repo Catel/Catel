@@ -188,7 +188,7 @@ namespace Catel.Services
             {
                 Log.Debug("Could not find active instance of '{0}', trying to instantiate", viewModelType.GetSafeFullName(false));
 
-                activeVm = _viewModelFactory.CreateViewModel(viewModelType, null);
+                activeVm = _viewModelFactory.CreateViewModel(viewModelType, null, null);
             }
 
             if (activeVm == null)

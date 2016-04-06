@@ -122,7 +122,19 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct"/> is <c>null</c>.</exception>
         public object CreateInstance(Type typeToConstruct)
         {
-            return CreateInstanceWithSpecifiedParameters(typeToConstruct, null, true);
+            return CreateInstanceWithTag(typeToConstruct, null);
+        }
+
+        /// <summary>
+        /// Creates an instance of the specified type using dependency injection.
+        /// </summary>
+        /// <param name="typeToConstruct">The type to construct.</param>
+        /// <param name="tag">The preferred tag when resolving dependencies.</param>
+        /// <returns>The instantiated type using dependency injection.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
+        public object CreateInstanceWithTag(Type typeToConstruct, object tag)
+        {
+            return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, null, true);
         }
 
         /// <summary>
@@ -134,9 +146,22 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct"/> is <c>null</c>.</exception>
         public object CreateInstanceWithParameters(Type typeToConstruct, params object[] parameters)
         {
+            return CreateInstanceWithParametersWithTag(typeToConstruct, null, parameters);
+        }
+
+        /// <summary>
+        /// Creates an instance of the specified type using the specified parameters as injection values.
+        /// </summary>
+        /// <param name="typeToConstruct">The type to construct.</param>
+        /// <param name="tag">The preferred tag when resolving dependencies.</param>
+        /// <param name="parameters">The parameters to inject.</param>
+        /// <returns>The instantiated type using dependency injection.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
+        public object CreateInstanceWithParametersWithTag(Type typeToConstruct, object tag, params object[] parameters)
+        {
             Argument.IsNotNull("typeToConstruct", typeToConstruct);
 
-            return CreateInstanceWithSpecifiedParameters(typeToConstruct, parameters, false);
+            return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, parameters, false);
         }
 
         /// <summary>
@@ -150,9 +175,24 @@ namespace Catel.IoC
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct"/> is <c>null</c>.</exception>
         public object CreateInstanceWithParametersAndAutoCompletion(Type typeToConstruct, params object[] parameters)
         {
+            return CreateInstanceWithParametersAndAutoCompletionWithTag(typeToConstruct, null, parameters);
+        }
+
+        /// <summary>
+        /// Creates an instance of the specified type using the specified parameters as injection values.
+        /// <para />
+        /// This method will also auto-complete any additional dependencies that can be resolved from the <see cref="IServiceLocator" />.
+        /// </summary>
+        /// <param name="typeToConstruct">The type to construct.</param>
+        /// <param name="tag">The preferred tag when resolving dependencies.</param>
+        /// <param name="parameters">The parameters to inject.</param>
+        /// <returns>The instantiated type using dependency injection.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
+        public object CreateInstanceWithParametersAndAutoCompletionWithTag(Type typeToConstruct, object tag, params object[] parameters)
+        {
             Argument.IsNotNull("typeToConstruct", typeToConstruct);
 
-            return CreateInstanceWithSpecifiedParameters(typeToConstruct, parameters, true);
+            return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, parameters, true);
         }
 
         /// <summary>
@@ -252,12 +292,13 @@ namespace Catel.IoC
         /// Creates an instance of the specified type using the specified parameters as injection values.
         /// </summary>
         /// <param name="typeToConstruct">The type to construct.</param>
+        /// <param name="tag">The preferred tag when resolving dependencies.</param>
         /// <param name="parameters">The parameters to inject.</param>
         /// <param name="autoCompleteDependencies">if set to <c>true</c>, the additional dependencies will be auto completed.</param>
-        /// <param name="preventCircularDependencies">if set to <c>true</c>, prevent circular dependencies using the <see cref="TypeRequestPath"/>.</param>
+        /// <param name="preventCircularDependencies">if set to <c>true</c>, prevent circular dependencies using the <see cref="TypeRequestPath" />.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
-        private object CreateInstanceWithSpecifiedParameters(Type typeToConstruct, object[] parameters,
+        private object CreateInstanceWithSpecifiedParameters(Type typeToConstruct, object tag, object[] parameters,
             bool autoCompleteDependencies, bool preventCircularDependencies = true)
         {
             Argument.IsNotNull("typeToConstruct", typeToConstruct);
@@ -292,8 +333,7 @@ namespace Catel.IoC
                     if (constructorCache.ContainsKey(constructorCacheKey))
                     {
                         var cachedConstructor = constructorCache[constructorCacheKey];
-                        var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, cachedConstructor,
-                            parameters, false, false);
+                        var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, cachedConstructor, tag, parameters, false, false);
                         if (instanceCreatedWithInjection != null)
                         {
                             if (preventCircularDependencies)
@@ -318,8 +358,7 @@ namespace Catel.IoC
                     {
                         var constructor = constructors[i];
 
-                        var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, constructor,
-                            parameters, true, i < constructors.Count - 1);
+                        var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, constructor, tag, parameters, true, i < constructors.Count - 1);
                         if (instanceCreatedWithInjection != null)
                         {
                             if (preventCircularDependencies)
@@ -403,10 +442,11 @@ namespace Catel.IoC
         /// Determines whether the specified constructor can be used for dependency injection.
         /// </summary>
         /// <param name="constructor">The constructor.</param>
-        /// <param name="autoCompleteDependencies">if set to <c>true</c>, additional dependencies can be completed from the <see cref="IServiceLocator"/>.</param>
+        /// <param name="tag">The preferred tag when resolving dependencies.</param>
+        /// <param name="autoCompleteDependencies">if set to <c>true</c>, additional dependencies can be completed from the <see cref="IServiceLocator" />.</param>
         /// <param name="parameters">The parameters.</param>
         /// <returns><c>true</c> if this instance [can constructor be used] the specified constructor; otherwise, <c>false</c>.</returns>
-        private bool CanConstructorBeUsed(ConstructorInfo constructor, bool autoCompleteDependencies, params object[] parameters)
+        private bool CanConstructorBeUsed(ConstructorInfo constructor, object tag, bool autoCompleteDependencies, params object[] parameters)
         {
             Log.Debug("Checking if constructor '{0}' can be used", constructor.GetSignature());
 
@@ -510,6 +550,7 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="typeToConstruct">Type of the service.</param>
         /// <param name="constructor">The constructor info.</param>
+        /// <param name="tag">The preferred tag when resolving dependencies.</param>
         /// <param name="parameters">The parameters to pass into the constructor.</param>
         /// <param name="checkConstructor">if set to <c>true</c>, check whether the constructor can be used before using it.</param>
         /// <param name="hasMoreConstructorsLeft">if set to <c>true</c>, more constructors are left so don't throw exceptions.</param>
@@ -517,13 +558,13 @@ namespace Catel.IoC
         /// <remarks>Note that this method does not require an implementation of
         /// <see cref="TypeRequestPath" /> because this already has the parameter values
         /// and thus cannot lead to invalid circular dependencies.</remarks>
-        private object TryCreateToConstruct(Type typeToConstruct, ConstructorInfo constructor, object[] parameters,
+        private object TryCreateToConstruct(Type typeToConstruct, ConstructorInfo constructor, object tag, object[] parameters,
             bool checkConstructor, bool hasMoreConstructorsLeft)
         {
             // Check if this constructor is even possible
             if (checkConstructor)
             {
-                if (!CanConstructorBeUsed(constructor, true, parameters))
+                if (!CanConstructorBeUsed(constructor, tag, true, parameters))
                 {
                     return null;
                 }
@@ -535,7 +576,19 @@ namespace Catel.IoC
                 var ctorParameters = constructor.GetParameters();
                 for (int i = parameters.Length; i < ctorParameters.Length; i++)
                 {
-                    var ctorParameterValue = _serviceLocator.ResolveType(ctorParameters[i].ParameterType);
+                    object ctorParameterValue = null;
+
+                    if (tag != null && _serviceLocator.IsTypeRegistered(ctorParameters[i].ParameterType, tag))
+                    {
+                        // Use preferred tag
+                        ctorParameterValue = _serviceLocator.ResolveType(ctorParameters[i].ParameterType, tag);
+                    }
+                    else
+                    {
+                        // No tag or fallback to default without tag
+                        ctorParameterValue = _serviceLocator.ResolveType(ctorParameters[i].ParameterType);
+                    }
+
                     finalParameters.Add(ctorParameterValue);
                 }
 

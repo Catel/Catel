@@ -20,6 +20,21 @@ namespace Catel.Reflection
     /// </summary>
     public static partial class ReflectionExtensions
     {
+        public static Type[] GetExportedTypesEx(this Assembly assembly)
+        {
+            Argument.IsNotNull("assembly", assembly);
+
+            Type[] results = null;
+
+#if NETFX_CORE || WP80 || PCL
+            results = assembly.ExportedTypes.ToArray();
+#else
+            results = assembly.GetExportedTypes();
+#endif
+
+            return results;
+        }
+
         public static Type[] GetTypesEx(this Assembly assembly)
         {
             Argument.IsNotNull("assembly", assembly);
