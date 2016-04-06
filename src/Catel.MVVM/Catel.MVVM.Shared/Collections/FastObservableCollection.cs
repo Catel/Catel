@@ -43,6 +43,9 @@ namespace Catel.Collections
         /// <summary>
         /// The current suspension context.
         /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
         private SuspensionContext<T> _suspensionContext;
         #endregion
 
@@ -361,7 +364,7 @@ namespace Catel.Collections
                 }
                 else
                 {
-                    Debug.Assert(_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.None, "Wrong/unknown suspension mode!");
+                    //Debug.Assert(_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.None, "Wrong/unknown suspension mode!");
 
                     eventArgs = CreateEventArgs(NotifyCollectionChangedAction.Reset);
                 }
@@ -545,7 +548,14 @@ namespace Catel.Collections
 #if SL5
             eventArgs = new NotifyRangedCollectionChangedEventArgs(action);
 #else
-            eventArgs = new NotifyRangedCollectionChangedEventArgs(action, changedItems, changedIndices);
+            if (changedItems == null && changedIndices == null)
+            {
+                eventArgs = new NotifyRangedCollectionChangedEventArgs(action);
+            }
+            else
+            {
+                eventArgs = new NotifyRangedCollectionChangedEventArgs(action, changedItems, changedIndices);
+            }
 #endif
 
             return eventArgs;
