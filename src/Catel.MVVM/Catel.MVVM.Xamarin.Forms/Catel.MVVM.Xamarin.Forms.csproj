@@ -22,21 +22,21 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\PCL\Catel.MVVM.Xamarin.Forms\</OutputPath>
+    <OutputPath>..\..\..\output\debug\Xamarin.Forms\Catel.MVVM\</OutputPath>
     <DefineConstants>TRACE;DEBUG;XAMARIN;XAMARIN_FORMS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\debug\PCL\Catel.MVVM.Xamarin.Forms\Catel.MVVM.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\output\debug\Xamarin.Forms\Catel.MVVM.XML</DocumentationFile>
     <NoWarn>1998</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\PCL\Catel.MVVM.Xamarin.Forms\</OutputPath>
+    <OutputPath>..\..\..\output\release\Xamarin.Forms\</OutputPath>
     <DefineConstants>TRACE;XAMARIN;XAMARIN_FORMS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\release\PCL\Catel.MVVM.Xamarin.Forms\Catel.MVVM.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\output\release\Xamarin.Forms\Catel.MVVM.XML</DocumentationFile>
     <NoWarn>1998</NoWarn>
   </PropertyGroup>
   <ItemGroup>
