@@ -10,7 +10,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CatelEnvironment.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\EventArgs\NotifyRangedCollectionChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\FastObservableCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\SuspensionContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\DispatcherObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Designer\Attributes\DesignTimeCodeAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Designer\DesignTimeInitializer.cs" />

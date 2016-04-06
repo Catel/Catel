@@ -43,6 +43,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Extensions\CollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Extensions\DictionaryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Helpers\CollectionHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\Interfaces\Enums\SuspensionMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Interfaces\ISuspendChangeNotificationsCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\ListDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\BackgroundWorker.cs" />

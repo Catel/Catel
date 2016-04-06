@@ -41,5 +41,12 @@ namespace Catel.Collections
         /// </summary>
         /// <returns>IDisposable.</returns>
         IDisposable SuspendChangeNotifications();
+
+        /// <summary>
+        /// Suspends the change notifications until the returned <see cref="IDisposable"/> is disposed.
+        /// </summary>
+        /// <param name="mode">The suspension Mode.</param>
+        /// <returns>IDisposable.</returns>
+        IDisposable SuspendChangeNotifications(SuspensionMode mode);
     }
 }
