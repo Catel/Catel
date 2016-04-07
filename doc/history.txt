@@ -54,6 +54,7 @@ we will remove the features in the next major release.
 Added/fixed:
 ============
 (+) CTL-622 Add check type sorting and expression filter on ExceptionService
+(+) CTL-788 Added new LogEvent called Status which can be used for status updates
 (+) CTL-796 Add Activate existing window methods in IUIVisualizerService
 (+) CTL-803 Add RegisterHandler method on IExceptionService
 (+) CTL-805 Add IExceptionHandler<T> to make implementation of custom exception handlers easier

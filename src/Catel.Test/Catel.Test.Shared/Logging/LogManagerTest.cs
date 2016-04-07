@@ -23,7 +23,7 @@ namespace Catel.Test.Logging
         #region Test classes
         public class TestLogListener : LogListenerBase
         {
-            public static ILog Log = LogManager.GetCurrentClassLogger();
+            public static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
             public int DebugCount { get; private set; }
 
@@ -32,6 +32,8 @@ namespace Catel.Test.Logging
             public int WarningCount { get; private set; }
 
             public int ErrorCount { get; private set; }
+
+            public int StatusCount { get; private set; }
 
             protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
             {
@@ -56,6 +58,10 @@ namespace Catel.Test.Logging
 
                     case LogEvent.Error:
                         ErrorCount++;
+                        break;
+
+                    case LogEvent.Status:
+                        StatusCount++;
                         break;
                 }
             }
@@ -229,7 +235,8 @@ namespace Catel.Test.Logging
             Assert.IsTrue(listener.IsInfoEnabled);
             Assert.IsTrue(listener.IsWarningEnabled);
             Assert.IsTrue(listener.IsErrorEnabled);
-            
+            Assert.IsTrue(listener.IsStatusEnabled);
+
             LogManager.AddListener(listener);
 
             TestLogListener.Log.Debug("debug");
@@ -243,6 +250,9 @@ namespace Catel.Test.Logging
 
             TestLogListener.Log.Error("error");
             Assert.AreEqual(1, listener.ErrorCount);
+
+            TestLogListener.Log.Status("status");
+            Assert.AreEqual(1, listener.StatusCount);
 
             LogManager.RemoveListener(listener);
         }
@@ -268,6 +278,9 @@ namespace Catel.Test.Logging
             TestLogListener.Log.Error("error");
             Assert.AreEqual(1, listener.ErrorCount);
 
+            TestLogListener.Log.Status("status");
+            Assert.AreEqual(1, listener.StatusCount);
+
             LogManager.RemoveListener(listener);
         }
 
@@ -291,6 +304,9 @@ namespace Catel.Test.Logging
 
             TestLogListener.Log.Error("error");
             Assert.AreEqual(1, listener.ErrorCount);
+
+            TestLogListener.Log.Status("status");
+            Assert.AreEqual(1, listener.StatusCount);
 
             LogManager.RemoveListener(listener);
         }
@@ -316,6 +332,9 @@ namespace Catel.Test.Logging
             TestLogListener.Log.Error("error");
             Assert.AreEqual(1, listener.ErrorCount);
 
+            TestLogListener.Log.Status("status");
+            Assert.AreEqual(1, listener.StatusCount);
+
             LogManager.RemoveListener(listener);
         }
 
@@ -339,6 +358,36 @@ namespace Catel.Test.Logging
 
             TestLogListener.Log.Error("error");
             Assert.AreEqual(0, listener.ErrorCount);
+
+            TestLogListener.Log.Status("status");
+            Assert.AreEqual(1, listener.StatusCount);
+
+            LogManager.RemoveListener(listener);
+        }
+
+        [TestCase]
+        public void Log_StatusNotEnabled()
+        {
+            var listener = new TestLogListener();
+
+            listener.IsStatusEnabled = false;
+
+            LogManager.AddListener(listener);
+
+            TestLogListener.Log.Debug("debug");
+            Assert.AreEqual(1, listener.DebugCount);
+
+            TestLogListener.Log.Info("info");
+            Assert.AreEqual(1, listener.InfoCount);
+
+            TestLogListener.Log.Warning("warning");
+            Assert.AreEqual(1, listener.WarningCount);
+
+            TestLogListener.Log.Error("error");
+            Assert.AreEqual(1, listener.ErrorCount);
+
+            TestLogListener.Log.Status("status");
+            Assert.AreEqual(0, listener.StatusCount);
 
             LogManager.RemoveListener(listener);
         }
