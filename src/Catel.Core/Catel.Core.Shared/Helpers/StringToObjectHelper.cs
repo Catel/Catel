@@ -54,6 +54,16 @@ namespace Catel
                 return true;
             }
 
+            if (string.Equals(value, "true", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return true;
+            }
+
+            if (string.Equals(value, "false", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return false;
+            }
+
             return bool.Parse(value);
         }
 
@@ -216,6 +226,58 @@ namespace Catel
         }
 
         /// <summary>
+        /// Converts a string to a short.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The short value of the string.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="value"/> is <c>null</c> or whitespace.</exception>
+        public static short ToShort(string value)
+        {
+            return ToShort(value, DefaultCulture);
+        }
+
+        /// <summary>
+        /// Converts a string to a short.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="cultureInfo">The culture information.</param>
+        /// <returns>The short value of the string.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="value" /> is <c>null</c> or whitespace.</exception>
+        public static short ToShort(string value, CultureInfo cultureInfo)
+        {
+            Argument.IsNotNullOrWhitespace("value", value);
+            value = CleanString(value);
+
+            return short.Parse(value, cultureInfo);
+        }
+
+        /// <summary>
+        /// Converts a string to an unsigned short.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The unsigned short value of the string.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="value"/> is <c>null</c> or whitespace.</exception>
+        public static ushort ToUShort(string value)
+        {
+            return ToUShort(value, DefaultCulture);
+        }
+
+        /// <summary>
+        /// Converts a string to an unsigned short.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="cultureInfo">The culture information.</param>
+        /// <returns>The unsigned short value of the string.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="value" /> is <c>null</c> or whitespace.</exception>
+        public static ushort ToUShort(string value, CultureInfo cultureInfo)
+        {
+            Argument.IsNotNullOrWhitespace("value", value);
+            value = CleanString(value);
+
+            return ushort.Parse(value, cultureInfo);
+        }
+
+        /// <summary>
         /// Converts a string to an integer.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -242,6 +304,32 @@ namespace Catel
         }
 
         /// <summary>
+        /// Converts a string to an unsigned integer.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The unsigned integer value of the string.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="value"/> is <c>null</c> or whitespace.</exception>
+        public static uint ToUInt(string value)
+        {
+            return ToUInt(value, DefaultCulture);
+        }
+
+        /// <summary>
+        /// Converts a string to an unsigned integer.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="cultureInfo">The culture information.</param>
+        /// <returns>The unsigned integer value of the string.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="value" /> is <c>null</c> or whitespace.</exception>
+        public static uint ToUInt(string value, CultureInfo cultureInfo)
+        {
+            Argument.IsNotNullOrWhitespace("value", value);
+            value = CleanString(value);
+
+            return uint.Parse(value, cultureInfo);
+        }
+
+        /// <summary>
         /// Converts a string to a long.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -265,6 +353,32 @@ namespace Catel
             value = CleanString(value);
 
             return long.Parse(value, cultureInfo);
+        }
+
+        /// <summary>
+        /// Converts a string to an unsigned long.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The unsigned long value of the string.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="value"/> is <c>null</c> or whitespace.</exception>
+        public static ulong ToULong(string value)
+        {
+            return ToULong(value, DefaultCulture);
+        }
+
+        /// <summary>
+        /// Converts a string to an unsigned long.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="cultureInfo">The culture information.</param>
+        /// <returns>The unsigned long value of the string.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="value" /> is <c>null</c> or whitespace.</exception>
+        public static ulong ToULong(string value, CultureInfo cultureInfo)
+        {
+            Argument.IsNotNullOrWhitespace("value", value);
+            value = CleanString(value);
+
+            return ulong.Parse(value, cultureInfo);
         }
 
         /// <summary>
@@ -324,12 +438,8 @@ namespace Catel
                 return value;
             }
 
-            if (targetType == typeof(bool))
-            {
-                return ToBool(value);
-            }
-
-            if (targetType == typeof(bool?))
+            if (targetType == typeof(bool) ||
+                targetType == typeof(bool?))
             {
                 return ToBool(value);
             }
@@ -339,86 +449,78 @@ namespace Catel
                 return ToByteArray(value);
             }
 
-            if (targetType == typeof(DateTime))
+            if (targetType == typeof(DateTime) ||
+                targetType == typeof(DateTime?))
             {
                 return ToDateTime(value, cultureInfo);
             }
 
-            if (targetType == typeof(DateTime?))
-            {
-                return ToDateTime(value, cultureInfo);
-            }
-
-            if (targetType == typeof(TimeSpan))
+            if (targetType == typeof(TimeSpan) ||
+                targetType == typeof(TimeSpan?))
             {
                 return ToTimeSpan(value, cultureInfo);
             }
 
-            if (targetType == typeof(TimeSpan?))
-            {
-                return ToTimeSpan(value, cultureInfo);
-            }
-
-            if (targetType == typeof(decimal))
+            if (targetType == typeof(decimal) ||
+                targetType == typeof(decimal?))
             {
                 return ToDecimal(value, cultureInfo);
             }
 
-            if (targetType == typeof(decimal?))
-            {
-                return ToDecimal(value, cultureInfo);
-            }
-
-            if (targetType == typeof(double))
+            if (targetType == typeof(double) ||
+                targetType == typeof(double?))
             {
                 return ToDouble(value, cultureInfo);
             }
 
-            if (targetType == typeof(double?))
-            {
-                return ToDouble(value, cultureInfo);
-            }
-
-            if (targetType == typeof(float))
+            if (targetType == typeof(float) ||
+                targetType == typeof(float?))
             {
                 return ToFloat(value, cultureInfo);
             }
 
-            if (targetType == typeof(float?))
-            {
-                return ToFloat(value, cultureInfo);
-            }
-
-            if (targetType == typeof(Guid))
+            if (targetType == typeof(Guid) ||
+                targetType == typeof(Guid?))
             {
                 return ToGuid(value);
             }
 
-            if (targetType == typeof(Guid?))
+            if (targetType == typeof(short) ||
+                targetType == typeof(short?))
             {
-                return ToGuid(value);
+                return ToShort(value, cultureInfo);
             }
 
-            if (targetType == typeof(int))
+            if (targetType == typeof(ushort) ||
+                targetType == typeof(ushort?))
+            {
+                return ToUShort(value, cultureInfo);
+            }
+
+            if (targetType == typeof(int) ||
+                targetType == typeof(int?))
             {
                 return ToInt(value, cultureInfo);
             }
 
-            if (targetType == typeof(int?))
+            if (targetType == typeof(uint) ||
+                targetType == typeof(uint?))
             {
-                return ToInt(value, cultureInfo);
+                return ToUInt(value, cultureInfo);
             }
 
-            if (targetType == typeof(long))
+            if (targetType == typeof(long) ||
+                targetType == typeof(long?))
             {
                 return ToLong(value, cultureInfo);
             }
 
-            if (targetType == typeof(long?))
+            if (targetType == typeof(ulong) ||
+                targetType == typeof(ulong?))
             {
-                return ToLong(value, cultureInfo);
+                return ToULong(value, cultureInfo);
             }
-            
+
             if (targetType == typeof(Type))
             {
                 return ToType(value);
@@ -429,7 +531,7 @@ namespace Catel
                 return Enum.Parse(targetType, value, false);
             }
 
-            throw Log.ErrorAndCreateException<NotSupportedException>("Type '{0}' is not yet supported", targetType.FullName);
+            throw Log.ErrorAndCreateException<NotSupportedException>($"Type '{targetType.FullName}' is not yet supported");
         }
 
         /// <summary>

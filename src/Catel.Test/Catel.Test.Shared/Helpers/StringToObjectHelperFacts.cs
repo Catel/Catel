@@ -37,6 +37,19 @@ namespace Catel.Test
         [TestFixture]
         public class TheToRightTypeMethod
         {
+            [TestCase("1", true)]
+            [TestCase("true", true)]
+            [TestCase("TRUE", true)]
+            [TestCase("0", false)]
+            [TestCase("false", false)]
+            [TestCase("FALSE", false)]
+            public void SupportsBoolean(string input, bool expectedValue)
+            {
+                var actualValue = StringToObjectHelper.ToRightType(typeof(bool), input);
+
+                Assert.AreEqual(expectedValue, actualValue);
+            }
+
             [TestCase]
             public void SupportsEnum()
             {
