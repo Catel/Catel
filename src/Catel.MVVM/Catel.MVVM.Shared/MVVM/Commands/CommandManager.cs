@@ -49,6 +49,8 @@ namespace Catel.MVVM
 
         private readonly Dictionary<string, InputGesture> _originalCommandGestures = new Dictionary<string, InputGesture>();
         private readonly Dictionary<string, InputGesture> _commandGestures = new Dictionary<string, InputGesture>();
+
+        private bool _suspendedKeyboardEvents;
 #endif
 
         /// <summary>
@@ -60,6 +62,37 @@ namespace Catel.MVVM
             SubscribeToKeyboardEvents();
 #endif
         }
+
+        #region Properties
+#if !WINDOWS_PHONE && !XAMARIN
+        /// <summary>
+        /// Gets or sets a value indicating whether the keyboard events are suspended.
+        /// </summary>
+        /// <value><c>true</c> if the keyboard events are suspended; otherwise, <c>false</c>.</value>
+        public bool IsKeyboardEventsSuspended
+        {
+            get { return _suspendedKeyboardEvents; }
+            set
+            {
+                if (_suspendedKeyboardEvents == value)
+                {
+                    return;
+                }
+
+                _suspendedKeyboardEvents = value;
+
+                if (value)
+                {
+                    Log.Debug("Suspended keyboard events");
+                }
+                else
+                {
+                    Log.Debug("Resumed keyboard events");
+                }
+            }
+        }
+#endif
+        #endregion
 
         #region Events
         /// <summary>
@@ -92,7 +125,7 @@ namespace Catel.MVVM
 
                 if (_commands.ContainsKey(commandName))
                 {
-                    var error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
+                    var error = $"Command '{commandName}' is already created using the CreateCommand method";
                     Log.Error(error);
 
                     if (throwExceptionWhenCommandIsAlreadyCreated)
