@@ -34,7 +34,7 @@ namespace Catel.Configuration
     /// <para />
     /// This default implementation writes to the
     /// </summary>
-    public class ConfigurationService : IConfigurationService
+    public partial class ConfigurationService : IConfigurationService
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
@@ -42,8 +42,11 @@ namespace Catel.Configuration
         private readonly IObjectConverterService _objectConverterService;
 
 #if NET
-        private readonly DynamicConfiguration _configuration;
-        private readonly string _configFilePath;
+        private readonly DynamicConfiguration _localConfiguration;
+        private readonly DynamicConfiguration _roamingConfiguration;
+
+        private readonly string _localConfigFilePath;
+        private readonly string _roamingConfigFilePath;
 #elif ANDROID
         private readonly global::Android.Content.ISharedPreferences _preferences =
             global::Android.Preferences.PreferenceManager.GetDefaultSharedPreferences(global::Android.App.Application.Context);
@@ -66,26 +69,48 @@ namespace Catel.Configuration
             _objectConverterService = objectConverterService;
 
 #if NET
-            _configFilePath = Path.Combine(Path.GetApplicationDataDirectory(), "configuration.xml");
+            _localConfigFilePath = Path.Combine(Path.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserLocal), "configuration.xml");
 
             try
             {
-                if (File.Exists(_configFilePath))
+                if (File.Exists(_localConfigFilePath))
                 {
-                    using (var fileStream = new FileStream(_configFilePath, FileMode.Open))
+                    using (var fileStream = new FileStream(_localConfigFilePath, FileMode.Open))
                     {
-                        _configuration = ModelBase.Load<DynamicConfiguration>(fileStream, SerializationMode.Xml);
+                        _localConfiguration = ModelBase.Load<DynamicConfiguration>(fileStream, SerializationMode.Xml);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to load configuration, using default settings");
+                Log.Error(ex, "Failed to load local configuration, using default settings");
             }
 
-            if (_configuration == null)
+            if (_localConfiguration == null)
             {
-                _configuration = new DynamicConfiguration();
+                _localConfiguration = new DynamicConfiguration();
+            }
+
+            _roamingConfigFilePath = Path.Combine(Path.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "configuration.xml");
+
+            try
+            {
+                if (File.Exists(_roamingConfigFilePath))
+                {
+                    using (var fileStream = new FileStream(_roamingConfigFilePath, FileMode.Open))
+                    {
+                        _roamingConfiguration = ModelBase.Load<DynamicConfiguration>(fileStream, SerializationMode.Xml);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to load roaming configuration, using default settings");
+            }
+
+            if (_roamingConfiguration == null)
+            {
+                _roamingConfiguration = new DynamicConfiguration();
             }
 #endif
         }
@@ -114,7 +139,7 @@ namespace Catel.Configuration
                     x.Instance._suspendNotifications = false;
                     if (x.Instance._hasPendingNotifications)
                     {
-                        x.Instance.RaiseConfigurationChanged(string.Empty, string.Empty);
+                        x.Instance.RaiseConfigurationChanged(ConfigurationContainer.Roaming, string.Empty, string.Empty);
                         x.Instance._hasPendingNotifications = false;
                     }
                 });
@@ -128,26 +153,41 @@ namespace Catel.Configuration
         /// <param name="defaultValue">The default value. Will be returned if the value cannot be found.</param>
         /// <returns>The configuration value.</returns>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "GetValue<T>(ConfigurationContainer, string, T)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public T GetValue<T>(string key, T defaultValue = default(T))
+        {
+            return GetValue(ConfigurationContainer.Roaming, key, defaultValue);
+        }
+
+        /// <summary>
+        /// Gets the configuration value.
+        /// </summary>
+        /// <typeparam name="T">The type of the value to retrieve.</typeparam>
+        /// <param name="container">The container.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="defaultValue">The default value. Will be returned if the value cannot be found.</param>
+        /// <returns>The configuration value.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
+        public T GetValue<T>(ConfigurationContainer container, string key, T defaultValue = default(T))
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
             key = GetFinalKey(key);
 
-            if (!ValueExists(key))
+            if (!ValueExists(container, key))
             {
                 return defaultValue;
             }
 
             try
             {
-                var value = GetValueFromStore(key);
+                var value = GetValueFromStore(container, key);
                 if (value == null)
                 {
                     return defaultValue;
                 }
 
-                return (T) _objectConverterService.ConvertFromStringToObject(value, typeof (T), CultureInfo.InvariantCulture);
+                return (T)_objectConverterService.ConvertFromStringToObject(value, typeof(T), CultureInfo.InvariantCulture);
             }
             catch (Exception)
             {
@@ -161,7 +201,20 @@ namespace Catel.Configuration
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "SetValue(ConfigurationContainer, string, object)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public void SetValue(string key, object value)
+        {
+            SetValue(ConfigurationContainer.Roaming, key, value);
+        }
+
+        /// <summary>
+        /// Sets the configuration value.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
+        public void SetValue(ConfigurationContainer container, string key, object value)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
@@ -169,9 +222,9 @@ namespace Catel.Configuration
             key = GetFinalKey(key);
 
             var stringValue = _objectConverterService.ConvertFromObjectToString(value, CultureInfo.InvariantCulture);
-            SetValueToStore(key, stringValue);
+            SetValueToStore(container, key, stringValue);
 
-            RaiseConfigurationChanged(originalKey, value);
+            RaiseConfigurationChanged(container, originalKey, value);
         }
 
         /// <summary>
@@ -180,13 +233,26 @@ namespace Catel.Configuration
         /// <param name="key">The key.</param>
         /// <returns><c>true</c> if the specified value is available; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "IsValueAvailable(ConfigurationContainer, string)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public bool IsValueAvailable(string key)
+        {
+            return IsValueAvailable(ConfigurationContainer.Roaming, key);
+        }
+
+        /// <summary>
+        /// Determines whether the specified value is available.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="key">The key.</param>
+        /// <returns><c>true</c> if the specified value is available; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
+        public bool IsValueAvailable(ConfigurationContainer container, string key)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
             key = GetFinalKey(key);
 
-            return ValueExists(key);
+            return ValueExists(container, key);
         }
 
         /// <summary>
@@ -195,13 +261,26 @@ namespace Catel.Configuration
         /// <param name="key">The key.</param>
         /// <param name="defaultValue">The default value.</param>
         /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "InitializeValue(ConfigurationContainer, string, object)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public void InitializeValue(string key, object defaultValue)
+        {
+            InitializeValue(ConfigurationContainer.Roaming, key, defaultValue);
+        }
+
+        /// <summary>
+        /// Initializes the value by setting the value to the <paramref name="defaultValue" /> if the value does not yet exist.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
+        public void InitializeValue(ConfigurationContainer container, string key, object defaultValue)
         {
             Argument.IsNotNullOrWhitespace("key", key);
 
-            if (!IsValueAvailable(key))
+            if (!IsValueAvailable(container, key))
             {
-                SetValue(key, defaultValue);
+                SetValue(container, key, defaultValue);
             }
         }
 
@@ -210,20 +289,33 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns><c>true</c> if the value exists, <c>false</c> otherwise.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "ValueExists(ConfigurationContainer, string)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         protected virtual bool ValueExists(string key)
+        {
+            return ValueExists(ConfigurationContainer.Roaming, key);
+        }
+
+        /// <summary>
+        /// Determines whether the specified key value exists in the configuration.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="key">The key.</param>
+        /// <returns><c>true</c> if the value exists, <c>false</c> otherwise.</returns>
+        protected virtual bool ValueExists(ConfigurationContainer container, string key)
         {
 #if PCL || (XAMARIN && !ANDROID)
             throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
 #elif ANDROID
             return _preferences.Contains(key);
 #elif NETFX_CORE
-            var settings = ApplicationData.Current.RoamingSettings;
+            var settings = GetSettingsContainer(container);
             return settings.Values.ContainsKey(key);
 #elif WINDOWS_PHONE || SILVERLIGHT
             var settings = IsolatedStorageSettings.ApplicationSettings;
             return settings.Contains(key);
 #else
-            return _configuration.IsConfigurationKeyAvailable(key);
+            var settings = GetSettingsContainer(container);
+            return settings.IsConfigurationKeyAvailable(key);
 #endif
         }
 
@@ -232,20 +324,33 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>The value.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "GetValueFromStore(ConfigurationContainer, string)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         protected virtual string GetValueFromStore(string key)
+        {
+            return GetValueFromStore(ConfigurationContainer.Roaming, key);
+        }
+
+        /// <summary>
+        /// Gets the value from the store.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="key">The key.</param>
+        /// <returns>The value.</returns>
+        protected virtual string GetValueFromStore(ConfigurationContainer container, string key)
         {
 #if PCL || (XAMARIN && !ANDROID)
             throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
 #elif ANDROID
             return _preferences.GetString(key, null);
 #elif NETFX_CORE
-            var settings = ApplicationData.Current.RoamingSettings;
+            var settings = GetSettingsContainer(container);
             return (string)settings.Values[key];
 #elif WINDOWS_PHONE || SILVERLIGHT
             var settings = IsolatedStorageSettings.ApplicationSettings;
             return (string)settings[key];
 #else
-            return _configuration.GetConfigurationValue<string>(key);
+            var settings = GetSettingsContainer(container);
+            return settings.GetConfigurationValue<string>(key);
 #endif
         }
 
@@ -254,7 +359,19 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "SetValueToStore(ConfigurationContainer, string, string)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         protected virtual void SetValueToStore(string key, string value)
+        {
+            SetValueToStore(ConfigurationContainer.Roaming, key, value);
+        }
+
+        /// <summary>
+        /// Sets the value to the store.
+        /// </summary>
+        /// <param name="container">The container.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        protected virtual void SetValueToStore(ConfigurationContainer container, string key, string value)
         {
 #if PCL || (XAMARIN && !ANDROID)
             throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
@@ -263,20 +380,39 @@ namespace Catel.Configuration
                         .PutString(key, value)
                         .Apply();
 #elif NETFX_CORE
-            var settings = ApplicationData.Current.RoamingSettings;
+            var settings = GetSettingsContainer(container);
             settings.Values[key] = value;
 #elif WINDOWS_PHONE || SILVERLIGHT
             var settings = IsolatedStorageSettings.ApplicationSettings;
             settings[key] = value;
             settings.Save();
 #else
-            if (!_configuration.IsConfigurationKeyAvailable(key))
+            var settings = GetSettingsContainer(container);
+
+            if (!settings.IsConfigurationKeyAvailable(key))
             {
-                _configuration.RegisterConfigurationKey(key);
+                settings.RegisterConfigurationKey(key);
             }
 
-            _configuration.SetConfigurationValue(key, value);
-            _configuration.SaveAsXml(_configFilePath);
+            settings.SetConfigurationValue(key, value);
+
+            string fileName = string.Empty;
+
+            switch (container)
+            {
+                case ConfigurationContainer.Local:
+                    fileName = _localConfigFilePath;
+                    break;
+
+                case ConfigurationContainer.Roaming:
+                    fileName = _roamingConfigFilePath;
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException("container");
+            }
+
+            settings.SaveAsXml(fileName);
 #endif
         }
 
@@ -292,7 +428,7 @@ namespace Catel.Configuration
             return key;
         }
 
-        private void RaiseConfigurationChanged(string key, object value)
+        private void RaiseConfigurationChanged(ConfigurationContainer container, string key, object value)
         {
             if (_suspendNotifications)
             {
@@ -300,11 +436,7 @@ namespace Catel.Configuration
                 return;
             }
 
-            var handler = ConfigurationChanged;
-            if (handler != null)
-            {
-                handler.Invoke(this, new ConfigurationChangedEventArgs(key, value));
-            }
+            ConfigurationChanged.SafeInvoke(this, () => new ConfigurationChangedEventArgs(container, key, value));
         }
         #endregion
     }

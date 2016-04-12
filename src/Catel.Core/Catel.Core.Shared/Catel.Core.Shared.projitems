@@ -64,13 +64,17 @@
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\INotifyDataWarningInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\INotifyPropertyChanging.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\RunWorkerCompletedEventHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationService.net.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationService.netfxcore.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\DynamicConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\DynamicConfigurationSerializerModifier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\EventArgs\ConfigurationChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\ConfigurationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\ConfigurationExtensions.net.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\DynamicConfigurationExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\Extensions\IConfigurationServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\Interfaces\IConfigurationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Contexts\ProgressContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CoreModule.cs" />
