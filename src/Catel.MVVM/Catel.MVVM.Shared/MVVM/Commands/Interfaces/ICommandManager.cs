@@ -24,6 +24,14 @@ namespace Catel.MVVM
     {
 #if !WINDOWS_PHONE && !XAMARIN
         /// <summary>
+        /// Gets or sets a value indicating whether the keyboard events are suspended.
+        /// </summary>
+        /// <value><c>true</c> if the keyboard events are suspended; otherwise, <c>false</c>.</value>
+        bool IsKeyboardEventsSuspended { get; set; }
+#endif
+
+#if !WINDOWS_PHONE && !XAMARIN
+        /// <summary>
         /// Creates the command inside the command manager.
         /// <para />
         /// If the <paramref name="throwExceptionWhenCommandIsAlreadyCreated"/> is <c>false</c> and the command is already created, only

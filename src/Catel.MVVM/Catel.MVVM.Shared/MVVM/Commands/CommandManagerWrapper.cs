@@ -115,6 +115,11 @@ namespace Catel.MVVM
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
+            if (_commandManager.IsKeyboardEventsSuspended)
+            {
+                return;
+            }
+
             if (e.Handled)
             {
                 // Don't get in the way of already handled KeyDown events

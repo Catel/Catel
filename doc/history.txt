@@ -54,6 +54,7 @@ we will remove the features in the next major release.
 Added/fixed:
 ============
 (+) CTL-622 Add check type sorting and expression filter on ExceptionService
+(+) CTL-788 Added new LogEvent called Status which can be used for status updates
 (+) CTL-796 Add Activate existing window methods in IUIVisualizerService
 (+) CTL-803 Add RegisterHandler method on IExceptionService
 (+) CTL-805 Add IExceptionHandler<T> to make implementation of custom exception handlers easier
@@ -66,6 +67,7 @@ Added/fixed:
 (+) CTL-844 Create Enum<TEnum>.Flags.GetValues(TEnum enum) to retrieve list of flags
 (+) CTL-848 CacheStorage - automatically dispose item on removing
 (+) CTL-861 Add tag overload to IViewModelFactory to allow resolving of dependencies using tags
+(+) CTL-873 Allow ConfigurationService to store values in separate containers (local and roaming)
 (*) CTL-785 Support expressions in validation result static members so you can now write
     FieldValidationResult.CreateWarning(() => MyProperty, "This field is required");
 (*) CTL-789 Improve property handling in the context of RegisterProperties

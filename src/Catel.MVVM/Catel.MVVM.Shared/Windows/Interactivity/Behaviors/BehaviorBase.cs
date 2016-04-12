@@ -65,7 +65,7 @@ namespace Catel.Windows.Interactivity
         /// <value>The culture.</value>
         protected CultureInfo Culture
         {
-            get { return CultureInfo.CurrentUICulture; }
+            get { return CultureInfo.CurrentCulture; }
         }
 
         /// <summary>

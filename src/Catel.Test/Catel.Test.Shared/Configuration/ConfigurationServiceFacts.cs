@@ -24,105 +24,128 @@ namespace Catel.Test.Configuration
         [TestFixture]
         public class TheGetValueMethod
         {
-            [TestCase]
-            public void ThrowsArgumentExceptionForNullKey()
+            [TestCase(ConfigurationContainer.Local)]
+            [TestCase(ConfigurationContainer.Roaming)]
+            public void ThrowsArgumentExceptionForNullKey(ConfigurationContainer container)
             {
                 var configurationService = GetConfigurationService();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.GetValue<string>(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.GetValue<string>(container, null));
             }
 
-            [TestCase]
-            public void ThrowsArgumentExceptionForEmptyKey()
+            [TestCase(ConfigurationContainer.Local)]
+            [TestCase(ConfigurationContainer.Roaming)]
+            public void ThrowsArgumentExceptionForEmptyKey(ConfigurationContainer container)
             {
                 var configurationService = GetConfigurationService();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.GetValue<string>(string.Empty));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.GetValue<string>(container, string.Empty));
             }
 
-            [TestCase]
-            public void ReturnsExistingValue()
+            [TestCase(ConfigurationContainer.Local)]
+            [TestCase(ConfigurationContainer.Roaming)]
+            public void ReturnsExistingValue(ConfigurationContainer container)
             {
                 var configurationService = GetConfigurationService();
 
-                configurationService.SetValue("myKey", "myValue");
+                configurationService.SetValue(container, "myKey", "myValue");
 
-                Assert.AreEqual("myValue", configurationService.GetValue<string>("myKey"));
+                Assert.AreEqual("myValue", configurationService.GetValue<string>(container, "myKey"));
             }
 
-            [TestCase]
-            public void ReturnsDefaultValueForNonExistingValue()
+            [TestCase(ConfigurationContainer.Local)]
+            [TestCase(ConfigurationContainer.Roaming)]
+            public void ReturnsDefaultValueForNonExistingValue(ConfigurationContainer container)
             {
                 var configurationService = GetConfigurationService();
 
-                Assert.AreEqual("nonExistingValue", configurationService.GetValue("nonExistingKey", "nonExistingValue"));
+                Assert.AreEqual("nonExistingValue", configurationService.GetValue(container, "nonExistingKey", "nonExistingValue"));
             }
 
-            [TestCase]
-            public void ReturnsValueForKeyWithSpecialCharacters()
+            [TestCase(ConfigurationContainer.Local)]
+            [TestCase(ConfigurationContainer.Roaming)]
+            public void ReturnsValueForKeyWithSpecialCharacters(ConfigurationContainer container)
             {
                 var configurationService = GetConfigurationService();
 
-                configurationService.SetValue("key with special chars", "myValue");
+                configurationService.SetValue(container, "key with special chars", "myValue");
 
-                Assert.AreEqual("myValue", configurationService.GetValue("key with special chars", "nonExistingValue"));
+                Assert.AreEqual("myValue", configurationService.GetValue(container, "key with special chars", "nonExistingValue"));
             }
         }
 
         [TestFixture]
         public class TheSetValueMethod
         {
-            [TestCase]
-            public void ThrowsArgumentExceptionForNullKey()
+            [TestCase(ConfigurationContainer.Local)]
+            [TestCase(ConfigurationContainer.Roaming)]
+            public void ThrowsArgumentExceptionForNullKey(ConfigurationContainer container)
             {
                 var configurationService = GetConfigurationService();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.SetValue(null, "value"));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.SetValue(container, null, "value"));
             }
 
-            [TestCase]
-            public void ThrowsArgumentExceptionForEmptyKey()
+            [TestCase(ConfigurationContainer.Local)]
+            [TestCase(ConfigurationContainer.Roaming)]
+            public void ThrowsArgumentExceptionForEmptyKey(ConfigurationContainer container)
             {
                 var configurationService = GetConfigurationService();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.SetValue(string.Empty, "value"));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.SetValue(container, string.Empty, "value"));
             }
 
-            [TestCase]
-            public void SetsValueCorrectly()
+            [TestCase(ConfigurationContainer.Local)]
+            [TestCase(ConfigurationContainer.Roaming)]
+            public void SetsValueCorrectly(ConfigurationContainer container)
             {
                 var configurationService = GetConfigurationService();
  
-                configurationService.SetValue("myKey", "myValue");
+                configurationService.SetValue(container, "myKey", "myValue");
 
-                Assert.AreEqual("myValue", configurationService.GetValue<string>("myKey"));
+                Assert.AreEqual("myValue", configurationService.GetValue<string>(container, "myKey"));
             }
 
-            [TestCase]
-            public void SetsValueCorrectlyForKeyWithSpecialCharacters()
+            [TestCase(ConfigurationContainer.Local)]
+            [TestCase(ConfigurationContainer.Roaming)]
+            public void SetsValueCorrectlyForKeyWithSpecialCharacters(ConfigurationContainer container)
             {
                 var configurationService = GetConfigurationService();
 
-                configurationService.SetValue("key with special chars", "myValue");
+                configurationService.SetValue(container, "key with special chars", "myValue");
 
-                Assert.AreEqual("myValue", configurationService.GetValue<string>("key with special chars"));
+                Assert.AreEqual("myValue", configurationService.GetValue<string>(container, "key with special chars"));
             }
         }
 
         [TestFixture]
         public class TheConfigurationChangedEvent
         {
-            [TestCase]
-            public void IsInvokedDuringSetValueMethod()
+            [TestCase(ConfigurationContainer.Local)]
+            [TestCase(ConfigurationContainer.Roaming)]
+            public void IsInvokedDuringSetValueMethod(ConfigurationContainer container)
             {
                 var configurationService = GetConfigurationService();
 
                 bool invoked = false;
-                configurationService.ConfigurationChanged += (sender, e) => invoked = true;
+                ConfigurationContainer receivedContainer = ConfigurationContainer.Roaming;
+                string receivedKey = null;
+                object receivedValue = null;
 
-                configurationService.SetValue("key", "value");
+                configurationService.ConfigurationChanged += (sender, e) =>
+                {
+                    invoked = true;
+                    receivedContainer = e.Container;
+                    receivedKey = e.Key;
+                    receivedValue = e.NewValue;
+                };
+
+                configurationService.SetValue(container, "key", "value");
 
                 Assert.IsTrue(invoked);
+                Assert.AreEqual(container, receivedContainer);
+                Assert.AreEqual("key", receivedKey);
+                Assert.AreEqual("value", (string)receivedValue);
             }
         }
     }
