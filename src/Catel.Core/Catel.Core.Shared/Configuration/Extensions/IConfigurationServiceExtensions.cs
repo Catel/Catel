@@ -136,7 +136,7 @@ namespace Catel.Configuration
         {
             Argument.IsNotNull("configurationService", configurationService);
 
-            configurationService.GetValue(ConfigurationContainer.Roaming, key, value);
+            configurationService.SetValue(ConfigurationContainer.Roaming, key, value);
         }
     }
 }
