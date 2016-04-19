@@ -107,7 +107,7 @@ namespace Catel.Configuration
 
             return configurationService.GetValue(ConfigurationContainer.Roaming, key, defaultValue);
         }
-
+         
         /// <summary>
         /// Sets the configuration value using <see cref="ConfigurationContainer.Local" />.
         /// </summary>
