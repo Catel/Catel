@@ -503,15 +503,7 @@ namespace Catel.Collections
             }
 
             // Get item
-            T item;
-            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
-            {
-                item = this[index];
-            }
-            else
-            {
-                item = default(T);
-            }
+            T item = this[index];
 
             // Call base
             base.RemoveItem(index);
