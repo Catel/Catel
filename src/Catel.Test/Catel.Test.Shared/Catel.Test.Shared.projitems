@@ -22,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\SlidingExpirationPolicyFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\CollectionExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\CollectionHelperFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\FastBindingListFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\FastObservableCollectionFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\DisplayNameAttributeFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs" />
