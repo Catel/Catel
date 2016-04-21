@@ -208,6 +208,7 @@ namespace Catel.Test.Collections
             {
                 var collectionChanged= false;
                 var fastCollection = new FastObservableCollection<int>();
+                fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 fastCollection.CollectionChanged += (sender, e) =>
                 {
                     collectionChanged = true;
