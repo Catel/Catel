@@ -258,7 +258,7 @@ namespace Catel.Data
                     _propertyData[type] = new CatelTypeInfo(type);
                 }
 
-                return propertyDataOfType.GetCatelProperties().Values.Where(x => x.IsDynamicProperty);
+                return propertyDataOfType.GetCatelProperties().Values.Where(x => x.IsDynamicProperty).ToList();
             }
         }
 
