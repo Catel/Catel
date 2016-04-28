@@ -14,7 +14,7 @@ namespace Catel.Data
     using Catel.Caching;
     using Catel.Logging;
     using Catel.Reflection;
-
+    using System.Collections.Generic;
     /// <summary>
     /// Class containing metadata for the <see cref="DynamicModelBase"/>.
     /// </summary>
@@ -47,6 +47,15 @@ namespace Catel.Data
             : base(parameter, BindingRestrictions.Empty, model)
         {
 
+        }
+
+        /// <summary>
+        /// Gets the enumeration of all dynamic member names.
+        /// </summary>
+        /// <returns>The enumeration of dynamic member names.</returns>
+        public override IEnumerable<string> GetDynamicMemberNames()
+        {
+            return ((DynamicModelBase)Value).GetDynamicPropertyNames();
         }
 
         /// <summary>

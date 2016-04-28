@@ -8,6 +8,7 @@ namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Xml.Serialization;
     using Logging;
 
@@ -187,6 +188,33 @@ namespace Catel.Data
         }
 
         /// <summary>
+        /// Returns whether a specific property is registered as dynamic.
+        /// </summary>
+        /// <param name="type">The type for which to check whether the property is registered as dynamic.</param>
+        /// <param name="name">The name of the property.</param>
+        /// <returns>
+        /// True if the property is registered as dynamic, otherwise false.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        public bool IsPropertyRegisteredAsDynamic(Type type, string name)
+        {
+            Argument.IsNotNull("type", type);
+            Argument.IsNotNullOrWhitespace("name", name);
+
+            lock (_propertyDataLock)
+            {
+                CatelTypeInfo propertyDataOfType;
+                if (!_propertyData.TryGetValue(type, out propertyDataOfType))
+                {
+                    return false;
+                }
+
+                return propertyDataOfType.IsPropertyRegisteredAsDynamic(name);
+            }
+        }
+
+        /// <summary>
         /// Gets the property data.
         /// </summary>
         /// <param name="type">The type for which to get the property data.</param>
@@ -210,6 +238,27 @@ namespace Catel.Data
                 }
 
                 return propertyDataOfType.GetPropertyData(name);
+            }
+        }
+
+        /// <summary>
+        /// Gets the dynamic properties data.
+        /// </summary>
+        /// <param name="type">The type for which to get the dynamic properties data.</param>
+        /// <returns>The <see cref="IEnumerable{PropertyData}"/> containing dynamic properties data.</returns>
+        public IEnumerable<PropertyData> GetDynamicPropertiesData(Type type)
+        {
+            Argument.IsNotNull("type", type);
+
+            lock (_propertyDataLock)
+            {
+                CatelTypeInfo propertyDataOfType;
+                if (!_propertyData.TryGetValue(type, out propertyDataOfType))
+                {
+                    _propertyData[type] = new CatelTypeInfo(type);
+                }
+
+                return propertyDataOfType.GetCatelProperties().Values.Where(x => x.IsDynamicProperty);
             }
         }
 

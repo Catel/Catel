@@ -225,7 +225,7 @@ namespace Catel.Data
 #endif
 
             var property = new PropertyData(name, type, createDefaultValue, setParent, propertyChangedEventHandler, isSerializable,
-                includeInSerialization, includeInBackup, isModelBaseProperty, false);
+                includeInSerialization, includeInBackup, isModelBaseProperty, false, false);
             return property;
         }
 
@@ -310,7 +310,8 @@ namespace Catel.Data
         private void InitializeProperty(PropertyData property, bool lateRegistration = false, bool isCalculatedProperty = false)
         {
             InitializeProperty(property.Name, property.Type, property.GetDefaultValue(), property.SetParent, property.PropertyChangedEventHandler,
-                property.IsSerializable, property.IncludeInSerialization, property.IncludeInBackup, property.IsModelBaseProperty, lateRegistration, isCalculatedProperty);
+                property.IsSerializable, property.IncludeInSerialization, property.IncludeInBackup, property.IsModelBaseProperty, lateRegistration,
+                isCalculatedProperty, property.IsDynamicProperty);
         }
 
         /// <summary>
@@ -327,10 +328,11 @@ namespace Catel.Data
         /// <param name="isModelBaseProperty">if set to <c>true</c>, the property is declared by the <see cref="ModelBase"/>.</param>
         /// <param name="lateRegistration">if set to <c>true</c>, the property is assumed to be registered after the official initialization.</param>
         /// <param name="isCalculatedProperty">if set to <c>true</c>, the property is a calculated property.</param>
+        /// <param name="isDynamicProperty">if set to <c>true</c>, the property is a dynamic property.</param>
         /// <exception cref="InvalidPropertyException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="PropertyAlreadyRegisteredException">The property is already registered.</exception>
         private void InitializeProperty(string name, Type type, object defaultValue, bool setParent, EventHandler<AdvancedPropertyChangedEventArgs> propertyChangedEventHandler,
-            bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool lateRegistration, bool isCalculatedProperty)
+            bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool lateRegistration, bool isCalculatedProperty, bool isDynamicProperty)
         {
             var objectType = GetType();
             if ((defaultValue == null) && !type.IsNullableType())
@@ -346,7 +348,8 @@ namespace Catel.Data
                     if (!IsPropertyRegistered(name))
                     {
                         var propertyData = new PropertyData(name, type, defaultValue, setParent, propertyChangedEventHandler,
-                            isSerializable, includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty);
+                            isSerializable, includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty,
+                            isDynamicProperty);
                         PropertyDataManager.RegisterProperty(objectType, name, propertyData);
 
 #if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35

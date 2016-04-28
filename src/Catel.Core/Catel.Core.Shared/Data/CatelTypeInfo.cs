@@ -129,6 +129,30 @@ namespace Catel.Data
         }
 
         /// <summary>
+        /// Returns whether a specific property is registered as dynamic.
+        /// </summary>
+        /// <param name="name">The name of the property.</param>
+        /// <returns>
+        /// True if the property is registered as dynamic, otherwise false.
+        /// </returns>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        public bool IsPropertyRegisteredAsDynamic(string name)
+        {
+            Argument.IsNotNullOrWhitespace("name", name);
+
+            lock (_lockObject)
+            {
+                PropertyData propertyData = null;
+                if (!_catelProperties.TryGetValue(name, out propertyData))
+                {
+                    return false;
+                }
+
+                return propertyData.IsDynamicProperty;
+            }
+        }
+
+        /// <summary>
         /// Registers all the properties for the specified type.
         /// <para/>
         /// This method can only be called once per type. The <see cref="PropertyDataManager"/> caches
