@@ -895,16 +895,16 @@ namespace Catel.Windows.Controls
             var validationData = new ValidationData(ParentEnumerable);
 
             validationData.FieldWarnings = new ObservableCollection<FieldWarningOrErrorInfo>();
-            validationData.FieldWarnings.AddRange(FieldWarnings);
+            ((ICollection<FieldWarningOrErrorInfo>)validationData.FieldWarnings).AddRange(FieldWarnings);
 
             validationData.BusinessWarnings = new ObservableCollection<BusinessWarningOrErrorInfo>();
-            validationData.BusinessWarnings.AddRange(BusinessWarnings);
+            ((ICollection<BusinessWarningOrErrorInfo>)validationData.BusinessWarnings).AddRange(BusinessWarnings);
 
             validationData.FieldErrors = new ObservableCollection<FieldWarningOrErrorInfo>();
-            validationData.FieldErrors.AddRange(FieldErrors);
+            ((ICollection<FieldWarningOrErrorInfo>)validationData.FieldErrors).AddRange(FieldErrors);
 
             validationData.BusinessErrors = new ObservableCollection<BusinessWarningOrErrorInfo>();
-            validationData.BusinessErrors.AddRange(BusinessErrors);
+            ((ICollection<BusinessWarningOrErrorInfo>)validationData.BusinessErrors).AddRange(BusinessErrors);
 
             return validationData;
         }
