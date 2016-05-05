@@ -244,6 +244,7 @@ namespace Catel.Test.Collections
 
                 Assert.AreEqual(1, counter);
                 Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
+                Assert.AreEqual(NotifyRangedListChangedAction.Add, eventArgs.Action);
                 CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
             }
         }
@@ -504,6 +505,7 @@ namespace Catel.Test.Collections
 
                 Assert.AreEqual(1, counter);
                 Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
+                Assert.AreEqual(NotifyRangedListChangedAction.Add, eventArgs.Action);
                 CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
             }
 
@@ -538,6 +540,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(1, counter);
                 // ReSharper disable PossibleNullReferenceException
                 Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
+                Assert.AreEqual(NotifyRangedListChangedAction.Add, eventArgs.Action);
                 CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
                 // ReSharper restore PossibleNullReferenceException
             }
@@ -574,6 +577,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(1, counter);
                 // ReSharper disable PossibleNullReferenceException
                 Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
+                Assert.AreEqual(NotifyRangedListChangedAction.Add, eventArgs.Action);
                 CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
                 // ReSharper restore PossibleNullReferenceException
             }
@@ -603,6 +607,7 @@ namespace Catel.Test.Collections
 
                 Assert.AreEqual(1, counter);
                 Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
+                Assert.AreEqual(NotifyRangedListChangedAction.Remove, eventArgs.Action);
                 CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
             }
 

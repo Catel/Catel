@@ -20,10 +20,12 @@ namespace Catel.Collections
         /// <summary>
         /// Initializes a new instance of the <see cref="NotifyRangedListChangedEventArgs"/> class.
         /// </summary>
-        /// <param name="listChangedType">Type of change.</param>
-        public NotifyRangedListChangedEventArgs(ListChangedType listChangedType)
-            : base(listChangedType)
+        /// <param name="action">The real action that was performed on the <see cref="FastBindingList{T}"/>.</param>
+        public NotifyRangedListChangedEventArgs(NotifyRangedListChangedAction action)
+            : base(ListChangedType.Reset, -1)
         {
+            Action = action;
+
             NewStartingIndex = -1;
             OldStartingIndex = -1;
         }
@@ -31,18 +33,25 @@ namespace Catel.Collections
         /// <summary>
         /// Initializes a new instance of the <see cref="NotifyRangedListChangedEventArgs"/> class.
         /// </summary>
-        /// <param name="listChangedType">Type of change.</param>
+        /// <param name="action">The real action that was performed on the <see cref="FastBindingList{T}"/>.</param>
         /// <param name="changedItems">The changed items.</param>
         /// <param name="indices">The indices.</param>
-        public NotifyRangedListChangedEventArgs(ListChangedType listChangedType, IList changedItems, IList<int> indices)
-            : base(listChangedType, -1)
+        public NotifyRangedListChangedEventArgs(NotifyRangedListChangedAction action, IList changedItems, IList<int> indices)
+            : base(ListChangedType.Reset, -1)
         {
+            Action = action;
+
             NewItems = changedItems;
             NewStartingIndex = (indices != null && indices.Count != 0) ? indices[0] : -1;
             OldStartingIndex = -1;
 
             Indices = indices;
         }
+
+        /// <summary>
+        /// Gets the real action that was performed on the <see cref="FastBindingList{T}"/>.
+        /// </summary>
+        public NotifyRangedListChangedAction Action { get; private set; }
 
         /// <summary>
         /// Gets the new items.
