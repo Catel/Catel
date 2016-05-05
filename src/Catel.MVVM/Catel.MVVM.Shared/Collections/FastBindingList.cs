@@ -409,14 +409,14 @@ namespace Catel.Collections
                 {
                     if (_suspensionContext.NewItems.Count != 0)
                     {
-                        eventArgs = new NotifyRangedListChangedEventArgs(ListChangedType.ItemAdded, _suspensionContext.NewItems, _suspensionContext.NewItemIndices);
+                        eventArgs = new NotifyRangedListChangedEventArgs(ListChangedType.Reset, _suspensionContext.NewItems, _suspensionContext.NewItemIndices);
                     }
                 }
                 else if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
                 {
                     if (_suspensionContext.OldItems.Count != 0)
                     {
-                        eventArgs = new NotifyRangedListChangedEventArgs(ListChangedType.ItemDeleted, _suspensionContext.OldItems, _suspensionContext.OldItemIndices);
+                        eventArgs = new NotifyRangedListChangedEventArgs(ListChangedType.Reset, _suspensionContext.OldItems, _suspensionContext.OldItemIndices);
                     }
                 }
                 else

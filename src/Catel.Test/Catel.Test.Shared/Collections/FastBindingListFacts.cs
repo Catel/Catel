@@ -243,7 +243,7 @@ namespace Catel.Test.Collections
                 token.Dispose();
 
                 Assert.AreEqual(1, counter);
-                Assert.AreEqual(ListChangedType.ItemAdded, eventArgs.ListChangedType);
+                Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
                 CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
             }
         }
@@ -503,7 +503,7 @@ namespace Catel.Test.Collections
                 }
 
                 Assert.AreEqual(1, counter);
-                Assert.AreEqual(ListChangedType.ItemAdded, eventArgs.ListChangedType);
+                Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
                 CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
             }
 
@@ -537,7 +537,7 @@ namespace Catel.Test.Collections
                 firstToken.Dispose();
                 Assert.AreEqual(1, counter);
                 // ReSharper disable PossibleNullReferenceException
-                Assert.AreEqual(ListChangedType.ItemAdded, eventArgs.ListChangedType);
+                Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
                 CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
                 // ReSharper restore PossibleNullReferenceException
             }
@@ -573,7 +573,7 @@ namespace Catel.Test.Collections
                 firstToken.Dispose();
                 Assert.AreEqual(1, counter);
                 // ReSharper disable PossibleNullReferenceException
-                Assert.AreEqual(ListChangedType.ItemAdded, eventArgs.ListChangedType);
+                Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
                 CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
                 // ReSharper restore PossibleNullReferenceException
             }
@@ -602,7 +602,7 @@ namespace Catel.Test.Collections
                 }
 
                 Assert.AreEqual(1, counter);
-                Assert.AreEqual(ListChangedType.ItemDeleted, eventArgs.ListChangedType);
+                Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
                 CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
             }
 
