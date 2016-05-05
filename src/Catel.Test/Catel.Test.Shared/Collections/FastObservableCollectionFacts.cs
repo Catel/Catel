@@ -8,6 +8,7 @@ namespace Catel.Test.Collections
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
@@ -89,7 +90,7 @@ namespace Catel.Test.Collections
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
                 var fastCollection = new FastObservableCollection<int>();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.AddItems(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ((ICollection<int>)fastCollection).AddRange(null));
             }
 
             [TestCase]
@@ -368,7 +369,7 @@ namespace Catel.Test.Collections
                 fastCollection.Remove(0);
                 fastCollection.Remove(1);
 
-                CollectionExtensions.AddRange(fastCollection, new[] { 1, 2 });
+                CollectionExtensions.AddRange(((ICollection<int>)fastCollection), new[] { 1, 2 });
 
                 fastCollection[0] = 5;
 
