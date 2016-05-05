@@ -633,12 +633,12 @@ namespace Catel.Test.Data
                     ValidateUsingDataAnnotations = value;
                 }
 
-                public void Validate(bool force, bool useAnnotations)
+                public new void Validate(bool force, bool useAnnotations)
                 {
                     base.Validate(force, useAnnotations);
                 }
 
-                public void Validate(bool force)
+                public new void Validate(bool force)
                 {
                     base.Validate(force);
                 }

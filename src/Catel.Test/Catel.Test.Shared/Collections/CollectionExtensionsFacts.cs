@@ -389,7 +389,7 @@ namespace Catel.Test.Collections
             {
                 var newList = new List<int> { 4, 5, 6 };
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.AddRange(null, newList));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.AddRange((ICollection<int>)null, newList));
             }
 
             [TestCase]
@@ -454,7 +454,7 @@ namespace Catel.Test.Collections
             {
                 var newList = new List<int> { 4, 5, 6 };
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.ReplaceRange(null, newList));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.ReplaceRange((ICollection<int>)null, newList));
             }
 
             [TestCase]

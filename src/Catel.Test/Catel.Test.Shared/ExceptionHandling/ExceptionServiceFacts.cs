@@ -144,101 +144,58 @@ namespace Catel.Test.ExceptionHandling
         {
             #region Methods
 
-         
             [TestCase]
-#if NET40 || SL5 || PCL
-            public void ProceedActionToSucceed()
-#else
             public async Task ProceedActionToSucceed()
-#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
-                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40 || SL5 || PCL
-                value = "2";
-                exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture))
-                                .ContinueWith(task => Assert.AreEqual(value, task.Result));
-#else
+                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; }, null);
                 value = await exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture)).ConfigureAwait(false);
                 Assert.AreEqual("2", value);
-#endif
 
-#if NET40 || SL5 || PCL
-                exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); });
-#else
                 await exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); }).ConfigureAwait(false);
-#endif
 
                 Assert.AreEqual("achieved", value);
             }
 
             [TestCase]
-#if NET40 || SL5 || PCL
-            public void ProceedTaskToSucceed()
-#else
             public async Task ProceedTaskToSucceed()
-#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40 || SL5 || PCL
-                value = "2";
-                exceptionService.ProcessAsync(() => (1 + 1).ToString(CultureInfo.InvariantCulture))
-                                .ContinueWith(task => Assert.AreEqual(value, task.Result));
-#else
                 value = await exceptionService.ProcessAsync(async () => (1 + 1).ToString(CultureInfo.InvariantCulture));
                 Assert.AreEqual("2", value);
-#endif
 
-#if NET40 || SL5 || PCL
-                exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); });
-#else
-                await exceptionService.ProcessAsync<string>(async () => { throw new ArgumentException("achieved"); });
-#endif
+                await exceptionService.ProcessAsync<string>(() => { throw new ArgumentException("achieved"); });
 
                 Assert.AreEqual("achieved", value);
             }
 
             [TestCase]
-#if NET40 || SL5 || PCL
-            public void ProceedActionToFail()
-#else
             public async Task ProceedActionToFail()
-#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40 || SL5 || PCL
-                exceptionService.ProcessAsync<string>(() => { throw new ArgumentOutOfRangeException("achieved"); });
-#else
+
                 await exceptionService.ProcessAsync<string>(() => { throw new ArgumentOutOfRangeException("achieved"); });
-#endif
 
                 Assert.AreNotEqual("achieved", value);
             }
 
             [TestCase]
-#if NET40 || SL5 || PCL
-            public void ProceedTaskToFail()
-#else
             public async Task ProceedTaskToFail()
-#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
                 exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40 || SL5 || PCL
-                exceptionService.ProcessAsync<string>(() => { throw new ArgumentOutOfRangeException("achieved"); });
-#else
+
                 await exceptionService.ProcessAsync<string>( async () => { throw new ArgumentOutOfRangeException("achieved"); });
-#endif
 
                 Assert.AreNotEqual("achieved", value);
             }
@@ -330,7 +287,7 @@ namespace Catel.Test.ExceptionHandling
             {
                 var exceptionService = new ExceptionService();
 
-                exceptionService.Register<ArgumentNullException>(exception => { });
+                exceptionService.Register<ArgumentNullException>(exception => { }, null);
 
                 Assert.IsNull(exceptionService.GetHandler(typeof (Exception)));
             }
@@ -340,7 +297,7 @@ namespace Catel.Test.ExceptionHandling
             {
                 var exceptionService = new ExceptionService();
 
-                exceptionService.Register<ArgumentNullException>(exception => { });
+                exceptionService.Register<ArgumentNullException>(exception => { }, null);
 
                 Assert.IsNull(exceptionService.GetHandler<Exception>());
             }
@@ -350,9 +307,8 @@ namespace Catel.Test.ExceptionHandling
             {
                 var exceptionService = new ExceptionService();
 
-                exceptionService.Register<Exception>(exception => { });
-
-                exceptionService.Register<ArgumentNullException>(exception => { });
+                exceptionService.Register<Exception>(exception => { }, null);
+                exceptionService.Register<ArgumentNullException>(exception => { }, null);
 
                 var handler = exceptionService.GetHandler(typeof (ArgumentNullException));
 
@@ -365,9 +321,8 @@ namespace Catel.Test.ExceptionHandling
             {
                 var exceptionService = new ExceptionService();
 
-                exceptionService.Register<Exception>(exception => { });
-
-                exceptionService.Register<ArgumentNullException>(exception => { });
+                exceptionService.Register<Exception>(exception => { }, null);
+                exceptionService.Register<ArgumentNullException>(exception => { }, null);
 
                 var handler = exceptionService.GetHandler<Exception>();
 
@@ -396,7 +351,7 @@ namespace Catel.Test.ExceptionHandling
                 var exceptionService = new ExceptionService();
                 var originalException = new DivideByZeroException("achieved");
                 var value = string.Empty;
-                exceptionService.Register<Exception>(exception => { value = exception.Message; });
+                exceptionService.Register<Exception>(exception => { value = exception.Message; }, null);
 
                 Assert.IsTrue(exceptionService.HandleException(originalException));
 
@@ -424,7 +379,7 @@ namespace Catel.Test.ExceptionHandling
             {
                 var exceptionService = new ExceptionService();
 
-                exceptionService.Register<ArgumentNullException>(exception => { });
+                exceptionService.Register<ArgumentNullException>(exception => { }, null);
 
                 Assert.IsFalse(exceptionService.IsExceptionRegistered(typeof (Exception)));
             }
@@ -434,7 +389,7 @@ namespace Catel.Test.ExceptionHandling
             {
                 var exceptionService = new ExceptionService();
 
-                exceptionService.Register<ArgumentNullException>(exception => { });
+                exceptionService.Register<ArgumentNullException>(exception => { }, null);
 
                 Assert.IsFalse(exceptionService.IsExceptionRegistered<Exception>());
             }
@@ -444,9 +399,8 @@ namespace Catel.Test.ExceptionHandling
             {
                 var exceptionService = new ExceptionService();
 
-                exceptionService.Register<Exception>(exception => { });
-
-                exceptionService.Register<ArgumentNullException>(exception => { });
+                exceptionService.Register<Exception>(exception => { }, null);
+                exceptionService.Register<ArgumentNullException>(exception => { }, null);
 
                 Assert.IsTrue(exceptionService.IsExceptionRegistered(typeof (ArgumentNullException)));
             }
@@ -456,9 +410,8 @@ namespace Catel.Test.ExceptionHandling
             {
                 var exceptionService = new ExceptionService();
 
-                exceptionService.Register<Exception>(exception => { });
-
-                exceptionService.Register<ArgumentNullException>(exception => { });
+                exceptionService.Register<Exception>(exception => { }, null);
+                exceptionService.Register<ArgumentNullException>(exception => { }, null);
 
                 Assert.IsTrue(exceptionService.IsExceptionRegistered<Exception>());
             }
@@ -484,7 +437,7 @@ namespace Catel.Test.ExceptionHandling
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
-                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
+                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; }, null);
                 exceptionService.Process(() => { throw new ArgumentException("achieved"); });
 
                 Assert.AreEqual("achieved", value);
@@ -496,7 +449,7 @@ namespace Catel.Test.ExceptionHandling
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
-                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
+                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; }, null);
                 exceptionService.Process(() => { throw new ArgumentOutOfRangeException("achieved"); });
 
                 Assert.AreNotEqual("achieved", value);
@@ -512,81 +465,49 @@ namespace Catel.Test.ExceptionHandling
             #region Methods
 
             [TestCase]
-#if NET40 || SL5 || PCL
-            public void ProceedActionToSucceed()
-#else
             public async Task ProceedActionToSucceed()
-#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
-                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40 || SL5 || PCL
-                exceptionService.ProcessAsync(() => { throw new ArgumentException("achieved"); });
-#else
+                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; }, null);
                 await exceptionService.ProcessAsync(() => { throw new ArgumentException("achieved"); });
-#endif
 
                 Assert.AreEqual("achieved", value);
             }
 
             [TestCase]
-#if NET40 || SL5 || PCL
-            public void ProceedTaskToSucceed()
-#else
             public async Task ProceedTaskToSucceed()
-#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
-                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40 || SL5 || PCL
-                exceptionService.ProcessAsync(() => { throw new ArgumentException("achieved"); });
-#else
+                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; }, null);
                 await exceptionService.ProcessAsync(async () => { throw new ArgumentException("achieved"); });
-#endif
 
                 Assert.AreEqual("achieved", value);
             }
 
             [TestCase]
-#if NET40 || SL5 || PCL
-            public void ProceedActionToFail()
-#else
             public async Task ProceedActionToFail()
-#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
-                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40 || SL5 || PCL
-                exceptionService.ProcessAsync(() => { throw new ArgumentOutOfRangeException("achieved"); });
-#else
+                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; }, null);
                 await exceptionService.ProcessAsync(() => { throw new ArgumentOutOfRangeException("achieved"); });
-#endif
 
                 Assert.AreNotEqual("achieved", value);
             }
 
             [TestCase]
-#if NET40 || SL5 || PCL
-            public void ProceedTaskToFail()
-#else
             public async Task ProceedTaskToFail()
-#endif
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
 
-                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; });
-#if NET40 || SL5 || PCL
-                exceptionService.ProcessAsync(() => { throw new ArgumentOutOfRangeException("achieved"); });
-#else
+                exceptionService.Register<ArgumentException>(exception => { value = exception.Message; }, null);
                 await exceptionService.ProcessAsync(async () => { throw new ArgumentOutOfRangeException("achieved"); });
-#endif
 
                 Assert.AreNotEqual("achieved", value);
             }
@@ -609,7 +530,7 @@ namespace Catel.Test.ExceptionHandling
                 exceptionService.RetryingAction += (sender, args) => Assert.AreEqual(attemptsCount, args.CurrentRetryCount);
 
                 exceptionService
-                    .Register<DivideByZeroException>(exception => { })
+                    .Register<DivideByZeroException>(exception => { }, null)
                     .OnErrorRetryImmediately(attemptsCount);
 
                 exceptionService.ProcessWithRetry(() => { throw new DivideByZeroException(); });
@@ -623,7 +544,7 @@ namespace Catel.Test.ExceptionHandling
                 var exceptionService = new ExceptionService();
 
                 exceptionService
-                    .Register<DivideByZeroException>(exception => { })
+                    .Register<DivideByZeroException>(exception => { }, null)
                     .OnErrorRetryImmediately(2);
 
                 exceptionService.ProcessWithRetry(() =>
@@ -641,7 +562,7 @@ namespace Catel.Test.ExceptionHandling
                 var exceptionService = new ExceptionService();
 
                 exceptionService
-                    .Register<DivideByZeroException>(exception => { })
+                    .Register<DivideByZeroException>(exception => { }, null)
                     .OnErrorRetryImmediately(3);
 
                 var attemptsCount = 0;
@@ -663,7 +584,7 @@ namespace Catel.Test.ExceptionHandling
                 exceptionService.RetryingAction += (sender, args) => attemptsCount++;
 
                 exceptionService
-                    .Register<DivideByZeroException>(exception => { })
+                    .Register<DivideByZeroException>(exception => { }, null)
                     .OnErrorRetryImmediately(3);
 
                 exceptionService.ProcessWithRetry(() => { });
@@ -681,7 +602,7 @@ namespace Catel.Test.ExceptionHandling
                 exceptionService.RetryingAction += (sender, args) => attemptsCount++;
 
                 exceptionService
-                    .Register<DivideByZeroException>(exception => { })
+                    .Register<DivideByZeroException>(exception => { }, null)
                     .OnErrorRetryImmediately(3);
 
                 var result = exceptionService.ProcessWithRetry(() => 1 + 1);
@@ -708,7 +629,7 @@ namespace Catel.Test.ExceptionHandling
                 exceptionService.RetryingAction += (sender, args) => Assert.AreEqual(interval, args.Delay);
 
                 exceptionService
-                    .Register<DivideByZeroException>(exception => { })
+                    .Register<DivideByZeroException>(exception => { }, null)
                     .OnErrorRetry(2, interval);
 
                 exceptionService.ProcessWithRetry(() => { throw new DivideByZeroException(); });
@@ -729,7 +650,7 @@ namespace Catel.Test.ExceptionHandling
                 Assert.IsNotNull(exceptionService.ExceptionHandlers);
                 Assert.AreEqual(exceptionService.ExceptionHandlers.Count(), 0);
 
-                exceptionService.Register<ArgumentException>(exception => { });
+                exceptionService.Register<ArgumentException>(exception => { }, null);
 
                 Assert.IsTrue(exceptionService.ExceptionHandlers.ToList().Any(row => row.ExceptionType == typeof (ArgumentException)));
                 Assert.AreEqual(exceptionService.ExceptionHandlers.Count(), 1);
@@ -742,8 +663,8 @@ namespace Catel.Test.ExceptionHandling
                 Assert.IsNotNull(exceptionService.ExceptionHandlers);
                 Assert.AreEqual(exceptionService.ExceptionHandlers.Count(), 0);
 
-                exceptionService.Register<ArgumentException>(exception => { });
-                exceptionService.Register<ArgumentException>(exception => { });
+                exceptionService.Register<ArgumentException>(exception => { }, null);
+                exceptionService.Register<ArgumentException>(exception => { }, null);
 
                 Assert.IsTrue(exceptionService.ExceptionHandlers.ToList().Any(row => row.ExceptionType == typeof (ArgumentException)));
                 Assert.AreEqual(exceptionService.ExceptionHandlers.Count(), 1);
@@ -762,7 +683,7 @@ namespace Catel.Test.ExceptionHandling
             {
                 var exceptionService = new ExceptionService();
 
-                exceptionService.Register<ArgumentException>(exception => { });
+                exceptionService.Register<ArgumentException>(exception => { }, null);
 
                 Assert.IsTrue(exceptionService.ExceptionHandlers.ToList().Any(row => row.ExceptionType == typeof (ArgumentException)));
                 Assert.AreEqual(exceptionService.ExceptionHandlers.Count(), 1);
@@ -778,7 +699,7 @@ namespace Catel.Test.ExceptionHandling
             {
                 var exceptionService = new ExceptionService();
 
-                exceptionService.Register<ArgumentException>(exception => { });
+                exceptionService.Register<ArgumentException>(exception => { }, null);
 
                 Assert.IsTrue(exceptionService.ExceptionHandlers.ToList().Any(row => row.ExceptionType == typeof (ArgumentException)));
                 Assert.AreEqual(exceptionService.ExceptionHandlers.Count(), 1);
@@ -803,7 +724,7 @@ namespace Catel.Test.ExceptionHandling
             {
                 var exceptionService = new ExceptionService();
 
-                exceptionService.Register<DivideByZeroException>(exception => { })
+                exceptionService.Register<DivideByZeroException>(exception => { }, null)
                     .UsingTolerance(9, TimeSpan.FromSeconds(10.0));
 
                 var index = 0;
@@ -832,7 +753,7 @@ namespace Catel.Test.ExceptionHandling
                     buffercount++;
                 };
 
-                exceptionService.Register<DivideByZeroException>(exception => { })
+                exceptionService.Register<DivideByZeroException>(exception => { }, null)
                     .UsingTolerance(9, TimeSpan.FromSeconds(10.0));
 
                 var index = 0;
@@ -869,12 +790,12 @@ namespace Catel.Test.ExceptionHandling
             {
                 _exceptionService = new ExceptionService();
 
-                _exceptionService.Register<Exception>(exception => { _exLevel0 = true; });
-                _exceptionService.Register<Level21Exception>(exception => { _exLevel21 = true; });
-                _exceptionService.Register<Level11Exception>(exception => { _exLevel11 = true; });
-                _exceptionService.Register<Level31Exception>(exception => { _exLevel31 = true; });
-                _exceptionService.Register<Level32Exception>(exception => { _exLevel32 = true; });
-                _exceptionService.Register<Level22Exception>(exception => { _exLevel22 = true; });
+                _exceptionService.Register<Exception>(exception => { _exLevel0 = true; }, null);
+                _exceptionService.Register<Level21Exception>(exception => { _exLevel21 = true; }, null);
+                _exceptionService.Register<Level11Exception>(exception => { _exLevel11 = true; }, null);
+                _exceptionService.Register<Level31Exception>(exception => { _exLevel31 = true; }, null);
+                _exceptionService.Register<Level32Exception>(exception => { _exLevel32 = true; }, null);
+                _exceptionService.Register<Level22Exception>(exception => { _exLevel22 = true; }, null);
                 _exLevel0 = false;
                 _exLevel21 = false;
                 _exLevel11 = false;

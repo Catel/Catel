@@ -259,7 +259,7 @@ namespace Catel.Test.Runtime.Serialization
                 {
                     if (enumeration != null)
                     {
-                        this.Items.AddRange(enumeration);
+                        ((ICollection<T>)this.Items).AddRange(enumeration);
                     }
                 }
 
