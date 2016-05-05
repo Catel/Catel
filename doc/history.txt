@@ -96,6 +96,7 @@ Added/fixed:
 (x) CTL-813 BehaviorBase - AssociatedObject.Unloaded can be called multiple times
 (x) CTL-823 Enum<TEnum>.TryParse with case insensitive does not work
 (x) CTL-839 Windows not exposing the Closed event (such as MahApps ContentDialog) don't close the view model
+(x) CTL-877 TypeCache.InitializeTypes with force & assembly should only invalidate that assembly
 
 Roadmap:
 ========

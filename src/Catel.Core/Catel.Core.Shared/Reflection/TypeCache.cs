@@ -613,7 +613,8 @@ namespace Catel.Reflection
 
             lock (_lockObject)
             {
-                if (forceFullInitialization)
+                // CTL-877 Only clear when assembly != null
+                if (forceFullInitialization && assembly == null)
                 {
                     _loadedAssemblies.Clear();
 
@@ -674,11 +675,11 @@ namespace Catel.Reflection
                 }
 
                 var assembliesToInitialize = checkSingleAssemblyOnly ? new List<Assembly>(new[] { assembly }) : AssemblyHelper.GetLoadedAssemblies();
-                InitializeAssemblies(assembliesToInitialize);
+                InitializeAssemblies(assembliesToInitialize, forceFullInitialization);
             }
         }
 
-        private static void InitializeAssemblies(IEnumerable<Assembly> assemblies)
+        private static void InitializeAssemblies(IEnumerable<Assembly> assemblies, bool force)
         {
             lock (_lockObject)
             {
@@ -687,12 +688,15 @@ namespace Catel.Reflection
                 foreach (var assembly in assemblies)
                 {
                     var loadedAssemblyFullName = assembly.FullName;
-                    if (_loadedAssemblies.Contains(loadedAssemblyFullName))
+                    if (!force && _loadedAssemblies.Contains(loadedAssemblyFullName))
                     {
                         continue;
                     }
 
-                    _loadedAssemblies.Add(loadedAssemblyFullName);
+                    if (!_loadedAssemblies.Contains(loadedAssemblyFullName))
+                    {
+                        _loadedAssemblies.Add(loadedAssemblyFullName);
+                    }
 
                     if (ShouldIgnoreAssembly(assembly))
                     {
@@ -726,7 +730,7 @@ namespace Catel.Reflection
 
                 if (lateLoadedAssemblies.Count > 0)
                 {
-                    InitializeAssemblies(lateLoadedAssemblies);
+                    InitializeAssemblies(lateLoadedAssemblies, false);
                 }
 #endif
             }
