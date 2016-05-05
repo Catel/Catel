@@ -205,7 +205,7 @@ namespace Catel.Collections
         /// <param name="range">An range of items.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="range"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "AddRange(this ICollection<T>, IEnumerable<T>)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "AddRange(this ICollection<T>, IEnumerable<T>)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> range)
         {
             AddRange((ICollection<T>) collection, range);
@@ -220,7 +220,7 @@ namespace Catel.Collections
         /// <param name="range">The range of items to add to the observable collection.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="range"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "ReplaceRange(this ICollection<T>, IEnumerable<T>)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "ReplaceRange(this ICollection<T>, IEnumerable<T>)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         public static void ReplaceRange<T>(this ObservableCollection<T> collection, IEnumerable<T> range)
         {
             ReplaceRange((ICollection<T>)collection, range);
