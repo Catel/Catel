@@ -30,24 +30,19 @@ namespace Catel.Logging
         private const string AutoLogFileName = "{AutoLogFileName}";
         private readonly string AutoLogFileNameReplacement = string.Format("{0}_{1}_{2}_{3}", AssemblyName, Date, Time, ProcessId);
 
-        private readonly Assembly _assembly;
+        private Assembly _assembly;
         private string _filePath;
 
-        #region Constructors
+#region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="FileLogListener" /> class.
         /// </summary>
         /// <param name="assembly">The assembly to load the product info from. If <c>null</c>, the entry assembly will be used.</param>
         public FileLogListener(Assembly assembly = null)
         {
+            Initialize(true, assembly);
+
             MaxSizeInKiloBytes = 1000 * 10; // 10 MB
-
-            _assembly = assembly ?? AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
-
-            if (string.IsNullOrWhiteSpace(_filePath))
-            {
-                _filePath = DetermineFilePath(AutoLogFileName);
-            }
         }
 
         /// <summary>
@@ -58,16 +53,17 @@ namespace Catel.Logging
         /// <param name="assembly">The assembly to load the product info from. If <c>null</c>, the entry assembly will be used.</param>
         /// <exception cref="ArgumentException">The <paramref name="filePath" /> is <c>null</c> or whitespace.</exception>
         public FileLogListener(string filePath, int maxSizeInKiloBytes, Assembly assembly = null)
-            : this(assembly)
         {
             Argument.IsNotNullOrWhitespace(() => filePath);
+
+            Initialize(false, assembly);
 
             FilePath = filePath;
             MaxSizeInKiloBytes = maxSizeInKiloBytes;
         }
-        #endregion
+#endregion
 
-        #region Properties
+#region Properties
         /// <summary>
         /// Gets or sets the file path.
         /// </summary>
@@ -83,9 +79,9 @@ namespace Catel.Logging
         /// </summary>
         /// <value>The maximum size information kilo bytes.</value>
         public int MaxSizeInKiloBytes { get; set; }
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
         /// <summary>
         /// Writes the batch of entries.
         /// </summary>
@@ -129,6 +125,16 @@ namespace Catel.Logging
             }
         }
 
+        private void Initialize(bool initFilePath, Assembly assembly = null)
+        {
+           _assembly = assembly ?? AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
+
+            if (initFilePath && string.IsNullOrWhiteSpace(_filePath))
+            {
+                _filePath = DetermineFilePath(AutoLogFileName);
+            }            
+        }
+
         private void CreateCopyOfCurrentLogFile(string filePath)
         {
             for (int i = 1; i < 999; i++)
@@ -153,15 +159,18 @@ namespace Catel.Logging
                 filePath = filePath.Replace(AutoLogFileName, AutoLogFileNameReplacement);
             }
 
+            var isWebApp = HttpContextHelper.HasHttpContext();
+
             string dataDirectory;
 
             if (_assembly != null)
             {
-                dataDirectory = IO.Path.GetApplicationDataDirectory(_assembly.Company(), _assembly.Product());
+                dataDirectory = isWebApp ? IO.Path.GetApplicationDataDirectoryForAllUsers(_assembly.Company(), _assembly.Product()) 
+                                         : IO.Path.GetApplicationDataDirectory(_assembly.Company(), _assembly.Product());
             }
             else
             {
-                dataDirectory = IO.Path.GetApplicationDataDirectory();
+                dataDirectory = isWebApp ? IO.Path.GetApplicationDataDirectoryForAllUsers() : IO.Path.GetApplicationDataDirectory();
             }
 
             if (filePath.Contains(AssemblyName))
@@ -203,7 +212,7 @@ namespace Catel.Logging
 
             return filePath;
         }
-        #endregion
+#endregion
     }
 }
 
