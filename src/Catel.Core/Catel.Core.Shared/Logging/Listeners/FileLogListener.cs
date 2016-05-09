@@ -16,12 +16,19 @@ namespace Catel.Logging
     using Reflection;
     using System.Threading.Tasks;
 
+    using Catel.IO;
+
+    using Path = System.IO.Path;
+
     /// <summary>
     /// Log listener which writes all data to a file.
     /// </summary>
     public class FileLogListener : BatchLogListenerBase
     {
         private const string AppData = "{AppData}";
+        private const string AppDataLocal = "{AppDataLocal}";
+        private const string AppDataRoaming = "{AppDataRoaming}";
+        private const string AppDataMachine = "{AppDataMachine}";
         private const string AppDir = "{AppDir}";
         private const string Date = "{Date}";
         private const string Time = "{Time}";
@@ -82,6 +89,110 @@ namespace Catel.Logging
 #endregion
 
 #region Methods
+        /// <summary>
+        /// Determines the real file path.
+        /// </summary>
+        /// <param name="filePath">The file path to examine.</param>
+        /// <returns>The real file path.</returns>
+        protected virtual string DetermineFilePath(string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                filePath = string.Empty;
+            }
+
+            if (filePath.Contains(AutoLogFileName))
+            {
+                filePath = filePath.Replace(AutoLogFileName, AutoLogFileNameReplacement);
+            }
+
+            var isWebApp = HttpContextHelper.HasHttpContext();
+
+            string dataDirectory;
+
+            if (_assembly != null)
+            {
+                dataDirectory = isWebApp ? IO.Path.GetApplicationDataDirectoryForAllUsers(_assembly.Company(), _assembly.Product()) 
+                                         : IO.Path.GetApplicationDataDirectory(_assembly.Company(), _assembly.Product());
+            }
+            else
+            {
+                dataDirectory = isWebApp ? IO.Path.GetApplicationDataDirectoryForAllUsers() 
+                                         : IO.Path.GetApplicationDataDirectory();
+            }
+
+            if (filePath.Contains(AssemblyName))
+            {
+                filePath = filePath.Replace(AssemblyName, _assembly.GetName().Name);
+            }
+
+            if (filePath.Contains(ProcessId))
+            {
+                filePath = filePath.Replace(ProcessId, Process.GetCurrentProcess().Id.ToString());
+            }
+
+            if (filePath.Contains(Date))
+            {
+                filePath = filePath.Replace(Date, DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+            }
+
+            if (filePath.Contains(Time))
+            {
+                filePath = filePath.Replace(Time, DateTime.Now.ToString("HHmmss", CultureInfo.InvariantCulture));
+            }
+
+            if (filePath.Contains(AppData))
+            {
+                filePath = filePath.Replace(AppData, dataDirectory);
+            }
+
+            if (filePath.Contains(AppDataLocal))
+            {
+                var dataDirectoryLocal = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserLocal, 
+                                                                                                 _assembly.Company(), 
+                                                                                                 _assembly.Product()) 
+                                                            : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserLocal);
+
+
+                filePath = filePath.Replace(AppDataLocal, dataDirectoryLocal);
+            }
+
+            if (filePath.Contains(AppDataRoaming))
+            {
+                var dataDirectoryRoaming = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming, 
+                                                                                                   _assembly.Company(), 
+                                                                                                   _assembly.Product()) 
+                                                             : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming);
+
+
+                filePath = filePath.Replace(AppDataRoaming, dataDirectoryRoaming);
+            }
+
+            if (filePath.Contains(AppDataMachine))
+            {
+                var dataDirectoryMachine = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.Machine, 
+                                                                                                   _assembly.Company(), 
+                                                                                                   _assembly.Product()) 
+                                                             : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.Machine);
+
+                filePath = filePath.Replace(AppDataMachine, dataDirectoryMachine);
+            }
+
+            if (filePath.Contains(AppDir))
+            {
+                filePath = filePath.Replace(AppDir, AppDomain.CurrentDomain.BaseDirectory);
+            }
+
+            filePath = IO.Path.GetFullPath(filePath, dataDirectory);
+
+            if (!filePath.EndsWith(".log"))
+            {
+                filePath += ".log";
+            }
+
+            return filePath;
+        }
+
         /// <summary>
         /// Writes the batch of entries.
         /// </summary>
@@ -145,72 +256,6 @@ namespace Catel.Logging
                     File.Move(filePath, possibleFilePath);
                 }
             }
-        }
-
-        private string DetermineFilePath(string filePath)
-        {
-            if (string.IsNullOrWhiteSpace(filePath))
-            {
-                filePath = string.Empty;
-            }
-
-            if (filePath.Contains(AutoLogFileName))
-            {
-                filePath = filePath.Replace(AutoLogFileName, AutoLogFileNameReplacement);
-            }
-
-            var isWebApp = HttpContextHelper.HasHttpContext();
-
-            string dataDirectory;
-
-            if (_assembly != null)
-            {
-                dataDirectory = isWebApp ? IO.Path.GetApplicationDataDirectoryForAllUsers(_assembly.Company(), _assembly.Product()) 
-                                         : IO.Path.GetApplicationDataDirectory(_assembly.Company(), _assembly.Product());
-            }
-            else
-            {
-                dataDirectory = isWebApp ? IO.Path.GetApplicationDataDirectoryForAllUsers() : IO.Path.GetApplicationDataDirectory();
-            }
-
-            if (filePath.Contains(AssemblyName))
-            {
-                filePath = filePath.Replace(AssemblyName, _assembly.GetName().Name);
-            }
-
-            if (filePath.Contains(ProcessId))
-            {
-                filePath = filePath.Replace(ProcessId, Process.GetCurrentProcess().Id.ToString());
-            }
-
-            if (filePath.Contains(Date))
-            {
-                filePath = filePath.Replace(Date, DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
-            }
-
-            if (filePath.Contains(Time))
-            {
-                filePath = filePath.Replace(Time, DateTime.Now.ToString("HHmmss", CultureInfo.InvariantCulture));
-            }
-
-            if (filePath.Contains(AppData))
-            {
-                filePath = filePath.Replace(AppData, dataDirectory);
-            }
-
-            if (filePath.Contains(AppDir))
-            {
-                filePath = filePath.Replace(AppDir, AppDomain.CurrentDomain.BaseDirectory);
-            }
-
-            filePath = IO.Path.GetFullPath(filePath, dataDirectory);
-
-            if (!filePath.EndsWith(".log"))
-            {
-                filePath += ".log";
-            }
-
-            return filePath;
         }
 #endregion
     }
