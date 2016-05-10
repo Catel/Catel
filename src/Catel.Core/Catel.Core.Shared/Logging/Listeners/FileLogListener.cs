@@ -33,6 +33,8 @@ namespace Catel.Logging
         private const string Date = "{Date}";
         private const string Time = "{Time}";
         private const string AssemblyName = "{AssemblyName}";
+        private const string AssemblyCompany = "{AssemblyCompany}";
+        private const string AssemblyProduct = "{AssemblyProduct}";
         private const string ProcessId = "{ProcessId}";
         private const string AutoLogFileName = "{AutoLogFileName}";
         private readonly string AutoLogFileNameReplacement = string.Format("{0}_{1}_{2}_{3}", AssemblyName, Date, Time, ProcessId);
@@ -124,6 +126,16 @@ namespace Catel.Logging
             if (filePath.Contains(AssemblyName))
             {
                 filePath = filePath.Replace(AssemblyName, _assembly.GetName().Name);
+            }
+
+            if (filePath.Contains(AssemblyProduct))
+            {
+                filePath = filePath.Replace(AssemblyProduct, _assembly.Product());
+            }
+
+            if (filePath.Contains(AssemblyCompany))
+            {
+                filePath = filePath.Replace(AssemblyCompany, _assembly.Company());
             }
 
             if (filePath.Contains(ProcessId))
