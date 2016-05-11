@@ -97,6 +97,7 @@ Added/fixed:
 (x) CTL-823 Enum<TEnum>.TryParse with case insensitive does not work
 (x) CTL-839 Windows not exposing the Closed event (such as MahApps ContentDialog) don't close the view model
 (x) CTL-877 TypeCache.InitializeTypes with force & assembly should only invalidate specified assembly
+(x) CTL-878 Fix for FileLogListener causes UnauthorizedAccessException in web applications 
 
 Roadmap:
 ========
