@@ -86,6 +86,7 @@ namespace Catel.Test.Collections
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
                 var fastCollection = new FastBindingList<int>();
+                fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.AddItems(null));
             }
 
@@ -105,14 +106,36 @@ namespace Catel.Test.Collections
                 fastCollection.AddItems(new ArrayList(new[] { 1, 2, 3, 4, 5 }));
 
                 Assert.AreEqual(2, counter);
+            }
+        }
+
+        [TestFixture]
+        public class TheInsertRangeMethod
+        {
+            [TestCase]
+            public void ThrowsArgumentNullExceptionForNullCollection()
+            {
+                var fastCollection = new FastBindingList<int>();
+                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.InsertItems(null, 0));
+            }
+
+            [TestCase]
+            public void RaisesSingleEventWhileAddingRange()
+            {
+                int counter = 0;
+
+                var fastCollection = new FastBindingList<int>();
+                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                fastCollection.ListChanged += (sender, e) => counter++;
 
                 fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0);
 
-                Assert.AreEqual(3, counter);
+                Assert.AreEqual(1, counter);
 
                 fastCollection.InsertItems(new ArrayList(new[] { 1, 2, 3, 4, 5 }), 0);
 
-                Assert.AreEqual(4, counter);
+                Assert.AreEqual(2, counter);
             }
         }
 
@@ -123,6 +146,7 @@ namespace Catel.Test.Collections
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
                 var fastCollection = new FastBindingList<int>();
+                fastCollection.AutomaticallyDispatchChangeNotifications = false;
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.RemoveItems(null));
             }
 

@@ -124,15 +124,31 @@ namespace Catel.Collections
         #region Methods
         /// <summary>
         /// Inserts the elements of the specified collection at the specified index.
+        /// <para />
+        /// This method will raise a change notification at the end.
         /// </summary>
         /// <param name="collection">The collection.</param>
         /// <param name="index">The start index.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public virtual void InsertItems(IEnumerable<T> collection, int index)
         {
+            InsertItems(collection, index, SuspensionMode.None);
+        }
+
+        /// <summary>
+        /// Inserts the elements of the specified collection at the specified index.
+        /// <para />
+        /// This method will raise a change notification at the end.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="index">The start index.</param>
+        /// <param name="mode">The suspension mode.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
+        public virtual void InsertItems(IEnumerable<T> collection, int index, SuspensionMode mode)
+        {
             Argument.IsNotNull("collection", collection);
 
-            using (SuspendChangeNotifications(SuspensionMode.Adding))
+            using (SuspendChangeNotifications(mode))
             {
                 foreach (var item in collection)
                 {
@@ -143,15 +159,31 @@ namespace Catel.Collections
 
         /// <summary>
         /// Inserts the elements of the specified collection at the specified index.
+        /// <para />
+        /// This method will raise a change notification at the end.
         /// </summary>
         /// <param name="collection">The collection.</param>
         /// <param name="index">The start index.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public virtual void InsertItems(IEnumerable collection, int index)
         {
+            InsertItems(collection, index, SuspensionMode.None);
+        }
+
+        /// <summary>
+        /// Inserts the elements of the specified collection at the specified index.
+        /// <para />
+        /// This method will raise a change notification at the end.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="index">The start index.</param>
+        /// <param name="mode">The suspension mode.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
+        public virtual void InsertItems(IEnumerable collection, int index, SuspensionMode mode)
+        {
             Argument.IsNotNull("collection", collection);
 
-            using (SuspendChangeNotifications(SuspensionMode.Adding))
+            using (SuspendChangeNotifications(mode))
             {
                 foreach (var item in collection)
                 {
@@ -184,9 +216,22 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void AddItems(IEnumerable<T> collection)
         {
+            AddItems(collection, SuspensionMode.None);
+        }
+
+        /// <summary>
+        /// Adds the specified items to the collection without causing a change notification for all items.
+        /// <para />
+        /// This method will raise a change notification at the end.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="mode">The suspension mode.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
+        public void AddItems(IEnumerable<T> collection, SuspensionMode mode)
+        {
             Argument.IsNotNull("collection", collection);
 
-            using (SuspendChangeNotifications(SuspensionMode.Adding))
+            using (SuspendChangeNotifications(mode))
             {
                 foreach (var item in collection)
                 {
@@ -204,9 +249,22 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void AddItems(IEnumerable collection)
         {
+            AddItems(collection, SuspensionMode.None);
+        }
+
+        /// <summary>
+        /// Adds the specified items to the collection without causing a change notification for all items.
+        /// <para />
+        /// This method will raise a change notification at the end.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="mode">The suspension mode.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
+        public void AddItems(IEnumerable collection, SuspensionMode mode)
+        {
             Argument.IsNotNull("collection", collection);
 
-            using (SuspendChangeNotifications(SuspensionMode.Adding))
+            using (SuspendChangeNotifications(mode))
             {
                 foreach (var item in collection)
                 {
@@ -224,9 +282,22 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void RemoveItems(IEnumerable<T> collection)
         {
+            RemoveItems(collection, SuspensionMode.None);
+        }
+
+        /// <summary>
+        /// Removes the specified items from the collection without causing a change notification for all items.
+        /// <para />
+        /// This method will raise a change notification at the end.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="mode">The suspension mode.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
+        public void RemoveItems(IEnumerable<T> collection, SuspensionMode mode)
+        {
             Argument.IsNotNull("collection", collection);
 
-            using (SuspendChangeNotifications(SuspensionMode.Removing))
+            using (SuspendChangeNotifications(mode))
             {
                 foreach (var item in collection)
                 {
@@ -244,9 +315,22 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void RemoveItems(IEnumerable collection)
         {
+            RemoveItems(collection, SuspensionMode.None);
+        }
+
+        /// <summary>
+        /// Removes the specified items from the collection without causing a change notification for all items.
+        /// <para />
+        /// This method will raise a change notification at the end.
+        /// </summary>
+        /// <param name="collection">The collection.</param>
+        /// <param name="mode">The suspension mode.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
+        public void RemoveItems(IEnumerable collection, SuspensionMode mode)
+        {
             Argument.IsNotNull("collection", collection);
 
-            using (SuspendChangeNotifications(SuspensionMode.Removing))
+            using (SuspendChangeNotifications(mode))
             {
                 foreach (var item in collection)
                 {
@@ -552,6 +636,6 @@ namespace Catel.Collections
 
             return eventArgs;
         }
-#endregion
+        #endregion
     }
 }
