@@ -7,6 +7,7 @@
 namespace Catel.MVVM.Providers
 {
     using System;
+    using System.Threading.Tasks;
     using Logging;
     using Navigation;
     using Views;
@@ -86,11 +87,11 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override void OnTargetViewLoaded(object sender, EventArgs e)
+        public override async Task OnTargetViewLoadedAsync(object sender, EventArgs e)
         {
             _hasHandledNavigatingAway = false;
 
-            base.OnTargetViewLoaded(sender, e);
+            await base.OnTargetViewLoadedAsync(sender, e);
 
             CreateNavigationAdapter(true);
 
@@ -102,7 +103,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override void OnTargetViewUnloaded(object sender, EventArgs e)
+        public override async Task OnTargetViewUnloadedAsync(object sender, EventArgs e)
         {
             if (!_hasHandledNavigatingAway)
             {
@@ -111,7 +112,7 @@ namespace Catel.MVVM.Providers
                 _hasHandledNavigatingAway = true;
             }
 
-            base.OnTargetViewUnloaded(sender, e);
+            await base.OnTargetViewUnloadedAsync(sender, e);
 
             DestroyNavigationAdapter();
         }

@@ -45,7 +45,7 @@ namespace Catel.MVVM.Providers
         /// Gets a value indicating whether the control can be loaded. This is very useful in non-WPF classes where
         /// the <c>LayoutUpdated</c> is used instead of the <c>Loaded</c> event.
         /// <para />
-        /// If this value is <c>true</c>, this logic implementation can call the  <see cref="NavigationLogicBase{T}.OnTargetViewLoaded" /> when the 
+        /// If this value is <c>true</c>, this logic implementation can call the  <see cref="NavigationLogicBase{T}.OnTargetViewLoadedAsync" /> when the 
         /// control is loaded. Otherwise, the call will be ignored.
         /// </summary>
         /// <value><c>true</c> if this instance can control be loaded; otherwise, <c>false</c>.</value>

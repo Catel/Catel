@@ -361,8 +361,10 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override async void OnTargetViewLoaded(object sender, EventArgs e)
+        public override async Task OnTargetViewLoadedAsync(object sender, EventArgs e)
         {
+            await CompleteViewModelClosingAsync();
+
             // Do not call base because it will create a VM. We will create the VM ourselves
             //base.OnTargetControlLoaded(sender, e);
 
@@ -423,9 +425,9 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override async void OnTargetViewUnloaded(object sender, EventArgs e)
+        public override async Task OnTargetViewUnloadedAsync(object sender, EventArgs e)
         {
-            base.OnTargetViewUnloaded(sender, e);
+            await base.OnTargetViewUnloadedAsync(sender, e);
 
             if (ViewModel != null)
             {
@@ -702,7 +704,7 @@ namespace Catel.MVVM.Providers
                         ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(newDataContext);
                     }
                 }
-                else if (!(newDataContext.GetType().IsAssignableFromEx(ViewModelType)))
+                else if (!newDataContext.GetType().IsAssignableFromEx(ViewModelType))
                 {
                     if (ViewModel != null)
                     {
@@ -775,8 +777,7 @@ namespace Catel.MVVM.Providers
                     }
                 }
 
-                await vm.CloseViewModelAsync(result);
-                ViewModel = null;
+                await CloseViewModelAsync(result);
             }
         }
 

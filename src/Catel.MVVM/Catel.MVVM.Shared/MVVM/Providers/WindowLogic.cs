@@ -121,9 +121,9 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        public override async void OnTargetViewUnloaded(object sender, EventArgs e)
+        public override async Task OnTargetViewUnloadedAsync(object sender, EventArgs e)
         {
-            base.OnTargetViewUnloaded(sender, e);
+            await base.OnTargetViewUnloadedAsync(sender, e);
 
             // This should only happen when the window only exposes an Unloaded event
             var vm = ViewModel;
