@@ -68,6 +68,7 @@ namespace Catel.MVVM.Providers
             ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.SupportParentViewModelContainers", "No parent IViewModelContainer is found in the visual tree. Only use this feature when there are parent IViewModelContainer instances. Consider setting the SupportParentViewModelContainers to false.", ApiCopRuleLevel.Error,
                 "https://catelproject.atlassian.net/wiki/display/CTL/Performance+considerations"));
 
+            DefaultSupportParentViewModelContainersValue = true;
             DefaultUnloadBehaviorValue = UnloadBehavior.SaveAndCloseViewModel;
 
 #if !XAMARIN
@@ -94,9 +95,9 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
-            SupportParentViewModelContainers = true;
-            CloseViewModelOnUnloaded = true;
+            SupportParentViewModelContainers = DefaultSupportParentViewModelContainersValue;
             UnloadBehavior = DefaultUnloadBehaviorValue;
+            CloseViewModelOnUnloaded = true;
 
 #if !XAMARIN
             TransferStylesAndTransitionsToViewModelGrid = DefaultTransferStylesAndTransitionsToViewModelGridValue;
@@ -161,6 +162,14 @@ namespace Catel.MVVM.Providers
         /// <c>true</c> if parent view model containers are supported; otherwise, <c>false</c>.
         /// </value>
         public bool SupportParentViewModelContainers { get; set; }
+
+        /// <summary>
+        /// Gets or sets the default value for the <see cref="SupportParentViewModelContainers"/> property.
+        /// <para />
+        /// The default value is <c>true</c>.
+        /// </summary>
+        /// <value>The unload behavior.</value>
+        public static bool DefaultSupportParentViewModelContainersValue { get; set; }
 
         /// <summary>
         /// Gets or sets the unload behavior when the data context of the target control changes.

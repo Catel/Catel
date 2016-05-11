@@ -197,6 +197,18 @@ namespace Catel.Windows.Controls
         }
 
         /// <summary>
+        /// Gets or sets a value for the <see cref="SupportParentViewModelContainers"/> property. This way, the behavior
+        /// can be changed an entire application to prevent disabling it on every control.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        public static bool DefaultSupportParentViewModelContainersValue
+        {
+            get { return UserControlLogic.DefaultSupportParentViewModelContainersValue; }
+            set { UserControlLogic.DefaultSupportParentViewModelContainersValue = value; }
+        }
+
+        /// <summary>
         /// Gets or sets the unload behavior when the data context of the target control changes.
         /// </summary>
         /// <value>The unload behavior.</value>
