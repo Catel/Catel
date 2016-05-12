@@ -68,6 +68,7 @@ Added/fixed:
 (+) CTL-848 CacheStorage - automatically dispose item on removing
 (+) CTL-861 Add tag overload to IViewModelFactory to allow resolving of dependencies using tags
 (+) CTL-873 Allow ConfigurationService to store values in separate containers (local and roaming)
+(+) CTL-883 Create magic "ViewModelContainer" name so you can define your own view model grid
 (*) CTL-785 Support expressions in validation result static members so you can now write
     FieldValidationResult.CreateWarning(() => MyProperty, "This field is required");
 (*) CTL-789 Improve property handling in the context of RegisterProperties

@@ -42,9 +42,18 @@ namespace Catel.Services
         protected override bool IsViewWrapped(IView view)
         {
             var content = GetContent(view) as FrameworkElement;
-            if (content == null || content.Name.StartsWith(InnerWrapperName))
+            if (content == null)
             {
                 return true;
+            }
+
+            if (content.Name.StartsWith(InnerWrapperName))
+            {
+                var binding = content.GetBindingExpression(FrameworkElement.DataContextProperty);
+                if (binding != null)
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -64,32 +73,61 @@ namespace Catel.Services
                 return null;
             }
 
+            var viewTypeName = view.GetType().Name;
+
             _weakIsWrappingTable.Add(view, new object());
 
-            var vmGrid = new Grid();
-            vmGrid.Name = InnerWrapperName.GetUniqueControlName();
-            vmGrid.SetBinding(FrameworkElement.DataContextProperty, new Binding { Path = new PropertyPath("ViewModel"), Source = viewModelSource });
+            Grid vmGrid = null;
+
+            var existingGrid = GetContent(view) as Grid;
+            if (existingGrid != null)
+            {
+                if (existingGrid.Name.StartsWith(InnerWrapperName))
+                {
+                    Log.Debug($"No need to create content wrapper grid for view model for view '{viewTypeName}', custom grid with special name defined");
+
+                    vmGrid = existingGrid;
+                }
+            }
+
+            if (vmGrid == null)
+            {
+                Log.Debug($"Creating content wrapper grid for view model for view '{viewTypeName}'");
+
+                vmGrid = new Grid();
+                vmGrid.Name = InnerWrapperName.GetUniqueControlName();
 
 #if NET || SL5
-            if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.CreateWarningAndErrorValidatorForViewModel))
-            {
-                var warningAndErrorValidator = new WarningAndErrorValidator();
-                warningAndErrorValidator.SetBinding(WarningAndErrorValidator.SourceProperty, new Binding());
+                if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.CreateWarningAndErrorValidatorForViewModel))
+                {
+                    var warningAndErrorValidator = new WarningAndErrorValidator();
+                    warningAndErrorValidator.SetBinding(WarningAndErrorValidator.SourceProperty, new Binding());
 
-                vmGrid.Children.Add(warningAndErrorValidator);
-            }
+                    vmGrid.Children.Add(warningAndErrorValidator);
+                }
 #endif
 
-            if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.TransferStylesAndTransitionsToViewModelGrid))
-            {
-                content.TransferStylesAndTransitions(vmGrid);
+                if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.TransferStylesAndTransitionsToViewModelGrid))
+                {
+                    content.TransferStylesAndTransitions(vmGrid);
+                }
+
+                SetContent(view, null);
+                vmGrid.Children.Add(content);
+                SetContent(view, vmGrid);
+
+                Log.Debug($"Created content wrapper grid for view model for view '{viewTypeName}'");
             }
 
-            SetContent(view, null);
-            vmGrid.Children.Add(content);
-            SetContent(view, vmGrid);
-
-            Log.Debug("Created target control content wrapper grid for view model");
+            var binding = vmGrid.GetBindingExpression(FrameworkElement.DataContextProperty);
+            if (binding == null)
+            {
+                vmGrid.SetBinding(FrameworkElement.DataContextProperty, new Binding
+                {
+                    Path = new PropertyPath("ViewModel"),
+                    Source = viewModelSource
+                });
+            }
 
             return new ViewModelWrapper(vmGrid);
         }
