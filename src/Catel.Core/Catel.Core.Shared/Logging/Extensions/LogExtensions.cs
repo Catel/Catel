@@ -45,7 +45,7 @@ namespace Catel.Logging
 			{
 				Write(log, LogEvent.Info, "Informational version: {0}", assembly.InformationalVersion());
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 			}
             
