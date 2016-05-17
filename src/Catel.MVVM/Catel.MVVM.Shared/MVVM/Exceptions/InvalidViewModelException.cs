@@ -14,10 +14,11 @@ namespace Catel.MVVM
     public class InvalidViewModelException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="InvalidViewModelException"/> class.
+        /// Initializes a new instance of the <see cref="InvalidViewModelException" /> class.
         /// </summary>
-        public InvalidViewModelException()
-            : base(ResourceHelper.GetString("InvalidViewModel"))
+        /// <param name="message">The message.</param>
+        public InvalidViewModelException(string message)
+            : base(message)
         {
         }
     }
