@@ -84,5 +84,17 @@ namespace Catel.ComponentModel
                 return displayName;
             }
         }
+
+        /// <summary>
+        /// Gets the resource name.
+        /// </summary>
+        /// <value>The resource name.</value>
+        public string ResourceName
+        {
+            get
+            {
+                return _resourceName;
+            }
+        }
     }
 }
