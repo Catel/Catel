@@ -93,7 +93,7 @@ namespace Catel.ComponentModel
         {
             get
             {
-                return this._resourceName;
+                return _resourceName;
             }
         }
     }
