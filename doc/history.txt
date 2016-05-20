@@ -90,6 +90,7 @@ Added/fixed:
 (*) CTL-856 Improved FastObservableCollection to have concrete suspension modes for change notifications
 (*) CTL-859 When resolving types from the service locator (for dependency injection), prefer registered 
     types with the right scope
+(*) CTL-886 Support AsyncLock in CacheStorage so async retrieval is covered by locks as well
 (x) CTL-791 Types with the same FullName from different assemblies will cause issues with the TypeFactory cache
 (x) CTL-793 CompositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand not respected
 (x) CTL-798 Prevent MissingResourceException when resolving strings for Catel.Core

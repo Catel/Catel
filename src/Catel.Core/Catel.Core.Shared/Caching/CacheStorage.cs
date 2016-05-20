@@ -47,9 +47,9 @@ namespace Catel.Caching
         private readonly object _syncObj = new object();
 
         /// <summary>
-        /// The synchronization objects.
+        /// The async locks.
         /// </summary>
-        private readonly Dictionary<TKey, object> _syncObjs = new Dictionary<TKey, object>();
+        private readonly Dictionary<TKey, AsyncLock> _locksByKey = new Dictionary<TKey, AsyncLock>();
 
         /// <summary>
         /// The timer that is being executed to invalidate the cache.
@@ -201,7 +201,8 @@ namespace Catel.Caching
             Argument.IsNotNull("key", key);
 
             CacheStorageValueInfo<TValue> valueInfo;
-            lock (GetLockByKey(key))
+            var asyncLock = GetLockByKey(key);
+            using (asyncLock.Lock())
             {
                 _dictionary.TryGetValue(key, out valueInfo);
             }
@@ -219,7 +220,8 @@ namespace Catel.Caching
         {
             Argument.IsNotNull("key", key);
 
-            lock (GetLockByKey(key))
+            var asyncLock = GetLockByKey(key);
+            using (asyncLock.Lock())
             {
                 return _dictionary.ContainsKey(key);
             }
@@ -242,9 +244,11 @@ namespace Catel.Caching
             Argument.IsNotNull("code", code);
 
             TValue value;
-            lock (GetLockByKey(key))
+
+            var asyncLock = GetLockByKey(key);
+            using (asyncLock.Lock())
             {
-                bool containsKey = _dictionary.ContainsKey(key);
+                var containsKey = _dictionary.ContainsKey(key);
                 if (!containsKey || @override)
                 {
                     value = code.Invoke();
@@ -316,19 +320,17 @@ namespace Catel.Caching
             Argument.IsNotNull("key", key);
             Argument.IsNotNull("code", code);
 
-            lock (GetLockByKey(key))
+            var asyncLock = GetLockByKey(key);
+            using (await asyncLock.LockAsync())
             {
                 var containsKey = _dictionary.ContainsKey(key);
                 if (containsKey && !@override)
                 {
                     return _dictionary[key].Value;
                 }
-            }
 
-            var value = await code.Invoke();
+                var value = await code.Invoke();
 
-            lock (GetLockByKey(key))
-            {
                 if (!ReferenceEquals(value, null) || _storeNullValues)
                 {
                     if (expirationPolicy == null && _defaultExpirationPolicyInitCode != null)
@@ -355,9 +357,9 @@ namespace Catel.Caching
                         }
                     }
                 }
-            }
 
-            return value;
+                return value;
+            }
         }
 
         /// <summary>
@@ -456,7 +458,8 @@ namespace Catel.Caching
         {
             Argument.IsNotNull("key", key);
 
-            lock (GetLockByKey(key))
+            var asyncLock = GetLockByKey(key);
+            using (asyncLock.Lock())
             {
                 if (_dictionary.ContainsKey(key))
                 {
@@ -482,7 +485,8 @@ namespace Catel.Caching
 
                 foreach (var keyToRemove in keysToRemove)
                 {
-                    lock (GetLockByKey(keyToRemove))
+                    var asyncLock = GetLockByKey(keyToRemove);
+                    using (asyncLock.Lock())
                     {
                         RemoveItem(keyToRemove, false);
                     }
@@ -525,7 +529,8 @@ namespace Catel.Caching
 
             foreach (var keyToRemove in keysToRemove)
             {
-                lock (GetLockByKey(keyToRemove))
+                var asyncLock = GetLockByKey(keyToRemove);
+                using (asyncLock.Lock())
                 {
                     var removed = RemoveItem(keyToRemove, true);
 
@@ -554,21 +559,21 @@ namespace Catel.Caching
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>The lock object.</returns>
-        private object GetLockByKey(TKey key)
+        private AsyncLock GetLockByKey(TKey key)
         {
             // Note: we never clear items from the key locks, but this is so they can be re-used in the future without the cost 
             // of garbage collection
 
             lock (_syncObj)
             {
-                var containsKey = _syncObjs.ContainsKey(key);
+                var containsKey = _locksByKey.ContainsKey(key);
                 if (!containsKey)
                 {
-                    _syncObjs[key] = new object();
+                    _locksByKey[key] = new AsyncLock();
                 }
             }
 
-            return _syncObjs[key];
+            return _locksByKey[key];
         }
 
         /// <summary>
