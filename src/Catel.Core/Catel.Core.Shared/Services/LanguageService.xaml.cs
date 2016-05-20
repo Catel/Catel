@@ -61,25 +61,39 @@ namespace Catel.Services
 
                 // Try the language specific first
                 var neutralSource = string.Format("{0}", resourceContainer);
-                var languageSpecificSource = string.Format("{0}.{1}", resourceContainer, cultureInfo.Name);
+                var cultureName = cultureInfo.Name;
+                var languageSpecificSource = string.Format("{0}.{1}", resourceContainer, cultureName);
 
                 var currentResourceManager = Windows.ApplicationModel.Resources.Core.ResourceManager.Current;
 
                 var finalResourceMap = (from resourceMap in currentResourceManager.AllResourceMaps
-                                        where resourceMap.Value.GetSubtree(languageSpecificSource) != null
-                                        select resourceMap.Value.GetSubtree(languageSpecificSource)).FirstOrDefault();
+                                        let rm = resourceMap.Value.GetSubtree(languageSpecificSource)
+                                        where rm != null
+                                        select rm).FirstOrDefault();
+
+                if ((finalResourceMap == null) && !cultureInfo.IsNeutralCulture)
+                {
+                    cultureName = cultureInfo.Parent.Name;
+                    languageSpecificSource = string.Format("{0}.{1}", resourceContainer, cultureName);
+
+                    finalResourceMap = (from resourceMap in currentResourceManager.AllResourceMaps
+                                        let rm = resourceMap.Value.GetSubtree(languageSpecificSource)
+                                        where rm != null
+                                        select rm).FirstOrDefault();
+                }
 
                 if (finalResourceMap == null)
                 {
                     finalResourceMap = (from resourceMap in currentResourceManager.AllResourceMaps
-                                        where resourceMap.Value.GetSubtree(neutralSource) != null
-                                        select resourceMap.Value.GetSubtree(neutralSource)).FirstOrDefault();
+                                        let rm = resourceMap.Value.GetSubtree(neutralSource)
+                                        where rm != null
+                                        select rm).FirstOrDefault();
                 }
 
                 if (finalResourceMap != null)
                 {
                     var resourceContext = ResourceContext.GetForViewIndependentUse();
-                    resourceContext.Languages = new[] { cultureInfo.Name };
+                    resourceContext.Languages = new[] { cultureName };
 
                     var resourceCandidate = finalResourceMap.GetValue(resourceName, resourceContext);
                     if (resourceCandidate != null)
