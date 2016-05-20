@@ -965,7 +965,7 @@ namespace Catel.MVVM.Providers
         {
             if (ViewModel == null)
             {
-                return TaskHelper<bool>.FromResult(false);
+                return TaskHelper<bool>.FromResult(true);
             }
 
             return ViewModel.CancelViewModelAsync();
@@ -996,7 +996,7 @@ namespace Catel.MVVM.Providers
             var vm = ViewModel;
             if (vm == null)
             {
-                return TaskHelper<bool>.FromResult(false);
+                return TaskHelper<bool>.FromResult(true);
             }
 
             return vm.SaveViewModelAsync();

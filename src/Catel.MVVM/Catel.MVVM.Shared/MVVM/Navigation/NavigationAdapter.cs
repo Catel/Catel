@@ -27,12 +27,14 @@ namespace Catel.MVVM.Navigation
         /// Initializes a new instance of the <see cref="NavigationAdapter" /> class.
         /// </summary>
         /// <param name="navigationTarget">The navigation target.</param>
-        public NavigationAdapter(IView navigationTarget)
+        /// <param name="navigationRoot">The navigation root.</param>
+        public NavigationAdapter(IView navigationTarget, object navigationRoot)
         {
             Argument.IsNotNull("navigationTarget", navigationTarget);
 
             NavigationTarget = navigationTarget;
             NavigationTargetType = navigationTarget.GetType();
+            NavigationRoot = navigationRoot;
             NavigationContext = new NavigationContext();
 
             // Listen to loaded because not every framework already has the application at this stage
@@ -51,6 +53,12 @@ namespace Catel.MVVM.Navigation
         /// </summary>
         /// <value>The type of the navigation target.</value>
         public Type NavigationTargetType { get; private set; }
+
+        /// <summary>
+        /// Gets the navigation root.
+        /// </summary>
+        /// <value>The navigation root.</value>
+        public object NavigationRoot { get; private set; }
 
         /// <summary>
         /// Gets the navigation context.

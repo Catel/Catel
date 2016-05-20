@@ -23,15 +23,15 @@ namespace Catel.MVVM.Navigation
 
         partial void Initialize()
         {
-            RootFrame = Application.Current.RootVisual.FindVisualDescendant(e => e is PhoneApplicationFrame) as PhoneApplicationFrame;
-            if (RootFrame == null)
+            var rootFrame = NavigationRoot as PhoneApplicationFrame;
+            if (rootFrame == null)
             {
                 return;
             }
 
-            //this.SubscribeToWeakGenericEvent<CancelEventArgs>(RootFrame, "BackKeyPress", OnBackKeyPress);
-            this.SubscribeToWeakGenericEvent<NavigatingCancelEventArgs>(RootFrame, "Navigating", OnNavigatingEvent);
-            this.SubscribeToWeakGenericEvent<NavigationEventArgs>(RootFrame, "Navigated", OnNavigatedEvent);
+            //this.SubscribeToWeakGenericEvent<CancelEventArgs>(rootFrame, "BackKeyPress", OnBackKeyPress);
+            this.SubscribeToWeakGenericEvent<NavigatingCancelEventArgs>(rootFrame, "Navigating", OnNavigatingEvent);
+            this.SubscribeToWeakGenericEvent<NavigationEventArgs>(rootFrame, "Navigated", OnNavigatedEvent);
         }
 
         partial void Uninitialize()

@@ -23,27 +23,16 @@ namespace Catel.MVVM.Navigation
         private static Dictionary<string, object> _lastGlobalNavigationContext;
         private Dictionary<string, object> _lastNavigationContext;
 
-        /// <summary>
-        /// Gets the root frame.
-        /// </summary>
-        /// <value>The root frame.</value>
-        protected Frame RootFrame { get; private set; }
-
         partial void Initialize()
         {
-            if (RootFrame != null)
+            var rootFrame = NavigationRoot as Frame;
+            if (rootFrame == null)
             {
                 return;
             }
 
-            RootFrame = Window.Current.Content as Frame ?? ((Page)NavigationTarget).Frame;
-            if (RootFrame == null)
-            {
-                return;
-            }
-
-            RootFrame.Navigating += OnNavigatingEvent;
-            RootFrame.Navigated += OnNavigatedEvent;
+            rootFrame.Navigating += OnNavigatingEvent;
+            rootFrame.Navigated += OnNavigatedEvent;
 
 #if WINDOWS_PHONE
             HardwareButtons.BackPressed += OnBackPressed; 
@@ -52,7 +41,7 @@ namespace Catel.MVVM.Navigation
 
         partial void Uninitialize()
         {
-            var rootFrame = RootFrame;
+            var rootFrame = NavigationRoot as Frame;
             if (rootFrame != null)
             {
                 rootFrame.Navigating -= OnNavigatingEvent;
@@ -67,7 +56,7 @@ namespace Catel.MVVM.Navigation
 #if WINDOWS_PHONE
         private void OnBackPressed(object sender, BackPressedEventArgs e) 
         { 
-            var rootFrame = RootFrame;
+            var rootFrame = NavigationRoot as Frame;
             if (rootFrame != null && rootFrame.CanGoBack) 
             { 
                 rootFrame.GoBack();
@@ -105,15 +94,15 @@ namespace Catel.MVVM.Navigation
         /// <returns><c>true</c> if the navigation can be handled by this adapter; otherwise, <c>false</c>.</returns>
         protected override bool CanHandleNavigation()
         {
-            Initialize();
+            InitializeNavigationService(false);
 
-            var rootFrame = RootFrame;
+            var rootFrame = NavigationRoot as Frame;
             if (rootFrame == null)
             {
                 return false;
             }
 
-            var content = RootFrame.Content;
+            var content = rootFrame.Content;
             return ReferenceEquals(content, NavigationTarget);
         }
 

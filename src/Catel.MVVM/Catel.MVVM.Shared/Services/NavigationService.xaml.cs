@@ -21,15 +21,19 @@ namespace Catel.Services
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Navigation;
+    using RootFrameType = global::Windows.UI.Xaml.Controls.Frame;
 #elif WINDOWS_PHONE
     using System.Windows.Navigation;
     using System.Net;
     using Microsoft.Phone.Controls;
+    using RootFrameType = Microsoft.Phone.Controls.PhoneApplicationFrame;
 #elif SILVERLIGHT
     using System.Windows.Navigation;
     using System.Windows.Browser;
+    using RootFrameType = System.Windows.Controls.Frame;
 #else
     using System.Windows.Navigation;
+    using RootFrameType = System.Windows.Navigation.NavigationWindow;
 #endif
 
     /// <summary>
@@ -38,8 +42,6 @@ namespace Catel.Services
     public partial class NavigationService
     {
         #region Fields
-        private static object _rootFrame;
-
 #if NET || SL5
         private bool _appClosingByMainWindow;
         private bool _appClosedFromService;
@@ -68,27 +70,14 @@ namespace Catel.Services
         {
             get { return RootFrame.CanGoForward; }
         }
-
-        /// <summary>
-        /// Gets the root frame.
-        /// </summary>
-        /// <value>The root frame.</value>
-#if NETFX_CORE
-        private Frame RootFrame
-#elif WINDOWS_PHONE
-        private Microsoft.Phone.Controls.PhoneApplicationFrame RootFrame
-#elif SILVERLIGHT
-        private System.Windows.Controls.Frame RootFrame
-#else
-        private NavigationWindow RootFrame
-#endif
-        {
-            get { return GetApplicationRootFrame(); }
-        }
-
         #endregion
 
         #region Methods
+        private RootFrameType RootFrame
+        {
+            get { return _navigationRootService.GetNavigationRoot() as RootFrameType; }
+        }
+
         partial void Initialize()
         {
 #if NET || SL5
@@ -165,7 +154,7 @@ namespace Catel.Services
         partial void NavigateToUri(Uri uri)
         {
 #if NETFX_CORE
-            var error = string.Format("Direct navigations to urls is not supported in '{0}', cannot navigate to '{1}'. Use Navigate(type) instead.", Platforms.CurrentPlatform, uri.ToString());
+            var error = $"Direct navigations to urls is not supported in '{Platforms.CurrentPlatform}', cannot navigate to '{uri}'. Use Navigate(type) instead.";
             Log.Error(error);
             throw new NotSupportedInPlatformException(error);
 #else
@@ -175,9 +164,19 @@ namespace Catel.Services
 
         partial void NavigateWithParameters(string uri, Dictionary<string, object> parameters)
         {
+            Log.Debug($"Navigating to '{uri}'");
+
 #if NETFX_CORE
             var type = Reflection.TypeCache.GetType(uri);
-            RootFrame.Navigate(type, parameters);
+            var result = RootFrame.Navigate(type, parameters);
+            if (result)
+            {
+                Log.Debug($"Navigated to '{uri}'");
+            }
+            else
+            {
+                Log.Error($"Failed to navigate to '{uri}'");
+            }
 #elif SILVERLIGHT || WINDOWS_PHONE
             string finalUri = string.Format("{0}{1}", uri, ToQueryString(parameters));
             Navigate(new Uri(finalUri, UriKind.RelativeOrAbsolute));
@@ -267,72 +266,6 @@ namespace Catel.Services
             }
 #endif
         }
-
-#if NETFX_CORE
-        /// <summary>
-        /// Gets the application root frame.
-        /// </summary>
-        private Frame GetApplicationRootFrame()
-        {
-            if (_rootFrame == null)
-            {
-                if (Window.Current != null)
-                {
-                    _rootFrame = Window.Current.Content as Frame;
-                }
-            }
-
-            return _rootFrame as Frame;
-        }
-#elif WINDOWS_PHONE
-        /// <summary>
-        /// Gets the application root frame.
-        /// </summary>
-        private Microsoft.Phone.Controls.PhoneApplicationFrame GetApplicationRootFrame()
-        {
-            if (_rootFrame == null)
-            {
-                _rootFrame = Application.Current.RootVisual as Microsoft.Phone.Controls.PhoneApplicationFrame;
-            }
-
-            return _rootFrame as Microsoft.Phone.Controls.PhoneApplicationFrame;
-        }
-#elif SILVERLIGHT
-        /// <summary>
-        /// Gets the application root frame.
-        /// </summary>
-        private System.Windows.Controls.Frame GetApplicationRootFrame()
-        {
-            if (_rootFrame == null)
-            {
-                if (Application.Current != null)
-                {
-                    if (Application.Current.RootVisual != null)
-                    {
-                        _rootFrame = Application.Current.RootVisual.FindVisualDescendant(e => e is System.Windows.Controls.Frame) as System.Windows.Controls.Frame;
-                    }
-                }
-            }
-
-            return _rootFrame as System.Windows.Controls.Frame;
-        }
-#else
-        /// <summary>
-        /// Gets the application root frame.
-        /// </summary>
-        private NavigationWindow GetApplicationRootFrame()
-        {
-            if (_rootFrame == null)
-            {
-                if (Application.Current != null)
-                {
-                    _rootFrame = Application.Current.MainWindow as NavigationWindow;
-                }
-            }
-
-            return _rootFrame as NavigationWindow;
-        }
-#endif
 
 #if SILVERLIGHT
         /// <summary>

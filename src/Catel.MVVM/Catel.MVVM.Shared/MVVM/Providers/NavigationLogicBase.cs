@@ -8,10 +8,12 @@ namespace Catel.MVVM.Providers
 {
     using System;
     using System.Threading.Tasks;
+    using IoC;
     using Logging;
     using Navigation;
     using Views;
     using MVVM;
+    using Catel.Services;
 
     /// <summary>
     /// Base class for pages or controls containing navigation logic.
@@ -58,7 +60,11 @@ namespace Catel.MVVM.Providers
         {
             if (_navigationAdapter == null)
             {
-                _navigationAdapter = new NavigationAdapter(TargetPage);
+                var serviceLocator = this.GetServiceLocator();
+                var navigationService = serviceLocator.ResolveType<INavigationRootService>();
+                var navigationRoot = navigationService.GetNavigationRoot();
+
+                _navigationAdapter = new NavigationAdapter(TargetPage, navigationRoot);
                 _navigationAdapter.NavigatedTo += OnNavigatedTo;
                 _navigationAdapter.NavigatingAway += OnNavigatingAway;
                 _navigationAdapter.NavigatedAway += OnNavigatedAway;

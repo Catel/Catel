@@ -260,6 +260,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILocation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILocationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IMessageService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\INavigationRootService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\INavigationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IOpenFileService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IPhoneService.cs" />
@@ -295,6 +296,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Models\Location.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Models\Size.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NamingConvention.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\NavigationRootService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\NavigationRootService.xamarin.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\NavigationRootService.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NavigationService.xamarin.forms.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NavigationService.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NavigationService.cs" />
