@@ -200,14 +200,14 @@ namespace Catel.Caching
         {
             Argument.IsNotNull("key", key);
 
-            CacheStorageValueInfo<TValue> valueInfo;
-            var asyncLock = GetLockByKey(key);
-            using (asyncLock.Lock())
+            return ExecuteInLock(key, () =>
             {
-                _dictionary.TryGetValue(key, out valueInfo);
-            }
+                CacheStorageValueInfo<TValue> valueInfo;
 
-            return (valueInfo != null) ? valueInfo.Value : default(TValue);
+                _dictionary.TryGetValue(key, out valueInfo);
+
+                return (valueInfo != null) ? valueInfo.Value : default(TValue);
+            });
         }
 
         /// <summary>
@@ -220,11 +220,10 @@ namespace Catel.Caching
         {
             Argument.IsNotNull("key", key);
 
-            var asyncLock = GetLockByKey(key);
-            using (asyncLock.Lock())
+            return ExecuteInLock(key, () =>
             {
                 return _dictionary.ContainsKey(key);
-            }
+            });
         }
 
         /// <summary>
@@ -243,11 +242,10 @@ namespace Catel.Caching
             Argument.IsNotNull("key", key);
             Argument.IsNotNull("code", code);
 
-            TValue value;
-
-            var asyncLock = GetLockByKey(key);
-            using (asyncLock.Lock())
+            return ExecuteInLock(key, () =>
             {
+                TValue value;
+
                 var containsKey = _dictionary.ContainsKey(key);
                 if (!containsKey || @override)
                 {
@@ -283,9 +281,9 @@ namespace Catel.Caching
                 {
                     value = _dictionary[key].Value;
                 }
-            }
 
-            return value;
+                return value;
+            });
         }
 
         /// <summary>
@@ -315,13 +313,12 @@ namespace Catel.Caching
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        public async Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, ExpirationPolicy expirationPolicy, bool @override = false)
+        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, ExpirationPolicy expirationPolicy, bool @override = false)
         {
             Argument.IsNotNull("key", key);
             Argument.IsNotNull("code", code);
 
-            var asyncLock = GetLockByKey(key);
-            using (await asyncLock.LockAsync())
+            return ExecuteInLockAsync(key, async () =>
             {
                 var containsKey = _dictionary.ContainsKey(key);
                 if (containsKey && !@override)
@@ -359,7 +356,7 @@ namespace Catel.Caching
                 }
 
                 return value;
-            }
+            });
         }
 
         /// <summary>
@@ -458,8 +455,7 @@ namespace Catel.Caching
         {
             Argument.IsNotNull("key", key);
 
-            var asyncLock = GetLockByKey(key);
-            using (asyncLock.Lock())
+            ExecuteInLock(key, () =>
             {
                 if (_dictionary.ContainsKey(key))
                 {
@@ -470,7 +466,7 @@ namespace Catel.Caching
 
                     RemoveItem(key, false);
                 }
-            }
+            });
         }
 
         /// <summary>
@@ -485,11 +481,10 @@ namespace Catel.Caching
 
                 foreach (var keyToRemove in keysToRemove)
                 {
-                    var asyncLock = GetLockByKey(keyToRemove);
-                    using (asyncLock.Lock())
+                    ExecuteInLock(keyToRemove, () =>
                     {
                         RemoveItem(keyToRemove, false);
-                    }
+                    });
                 }
 
                 _checkForExpiredItems = false;
@@ -529,8 +524,7 @@ namespace Catel.Caching
 
             foreach (var keyToRemove in keysToRemove)
             {
-                var asyncLock = GetLockByKey(keyToRemove);
-                using (asyncLock.Lock())
+                ExecuteInLock(keyToRemove, () =>
                 {
                     var removed = RemoveItem(keyToRemove, true);
 
@@ -541,7 +535,7 @@ namespace Catel.Caching
                             containsItemsThatCanExpire = true;
                         }
                     }
-                }
+                });
             }
 
             lock (_syncObj)
@@ -554,12 +548,68 @@ namespace Catel.Caching
             }
         }
 
+        private void ExecuteInLock(TKey key, Action action)
+        {
+            ExecuteInLock(key, () =>
+            {
+                action();
+                return true;
+            });
+        }
+
+        private T ExecuteInLock<T>(TKey key, Func<T> action)
+        {
+            var asyncLock = GetLockByKey(key);
+            lock (asyncLock)
+            {
+                // Looks complex, but we need to ensure that we can enter the same lock multiple times in non-async scenarios
+                var taken = asyncLock.IsTaken;
+                IDisposable unlockDisposable = null;
+
+                try
+                {
+                    if (!taken)
+                    {
+                        unlockDisposable = asyncLock.Lock();
+                    }
+
+                    return action();
+                }
+                finally
+                {
+                    if (unlockDisposable != null)
+                    {
+                        unlockDisposable.Dispose();
+                    }
+                }
+            }
+        }
+
+        private Task ExecuteInLockAsync(TKey key, Func<Task> action)
+        {
+            return ExecuteInLockAsync(key, async () =>
+            {
+                await action();
+                return true;
+            });
+        }
+
+        private async Task<T> ExecuteInLockAsync<T>(TKey key, Func<Task<T>> action)
+        {
+            var asyncLock = GetLockByKey(key);
+            using (await asyncLock.LockAsync())
+            {
+                return await action();
+            }
+        }
+
         /// <summary>
         /// Gets the lock by key.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>The lock object.</returns>
-        private AsyncLock GetLockByKey(TKey key)
+        private
+        AsyncLock GetLockByKey(TKey key)
         {
             // Note: we never clear items from the key locks, but this is so they can be re-used in the future without the cost 
             // of garbage collection
@@ -602,7 +652,7 @@ namespace Catel.Caching
         {
             // Try to get item, if there is no item by that key then return true to indicate that item was removed.
             var item = default(CacheStorageValueInfo<TValue>);
-            if(!_dictionary.TryGetValue(key, out item))
+            if (!_dictionary.TryGetValue(key, out item))
             {
                 return true;
             }
