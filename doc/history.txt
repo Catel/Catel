@@ -101,6 +101,7 @@ Added/fixed:
 (x) CTL-877 TypeCache.InitializeTypes with force & assembly should only invalidate specified assembly
 (x) CTL-878 Fix for FileLogListener causes UnauthorizedAccessException in web applications 
 (x) CTL-880 Sometimes (very rarely) fails to set view model when switching views (loaded, unloaded, loaded) very fast
+(x) CTL-887 GetString in LanguageService does not correctly resolve resources for non-neutral cultures in metro apps
 
 Roadmap:
 ========
