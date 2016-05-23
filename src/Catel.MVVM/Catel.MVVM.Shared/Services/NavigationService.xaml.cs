@@ -228,6 +228,8 @@ namespace Catel.Services
         /// </summary>
         public override void RemoveBackEntry()
         {
+            Log.Debug("Removing last back entry");
+
 #if NETFX_CORE && !WIN80
             var lastItem = RootFrame.BackStack.LastOrDefault();
             if (lastItem != null)
@@ -250,10 +252,10 @@ namespace Catel.Services
         /// </summary>
         public override void RemoveAllBackEntries()
         {
-#if NETFX_CORE && WINDOWS_PHONE
+            Log.Debug("Clearing all back entries");
+
+#if NETFX_CORE
             RootFrame.BackStack.Clear();
-#elif NETFX_CORE 
-            throw new MustBeImplementedException();
 #elif WINDOWS_PHONE
             while (RootFrame.RemoveBackEntry() != null)
             {
