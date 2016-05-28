@@ -48,8 +48,15 @@ namespace Catel.Services
         /// <param name="resourceName">Name of the resource.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The string or <c>null</c> if the string cannot be found.</returns>
-        protected override string GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo)
+        /// <exception cref="ArgumentNullException">The <paramref name="languageSource" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="cultureInfo" /> is <c>null</c>.</exception>
+        public override string GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo)
         {
+            Argument.IsNotNull("languageSource", languageSource);
+            Argument.IsNotNullOrWhitespace("resourceName", resourceName);
+            Argument.IsNotNull("cultureInfo", cultureInfo);
+            
             string value = null;
             var source = languageSource.GetSource();
             var resourceLoader = GetResourceManager(source);
