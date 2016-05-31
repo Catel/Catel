@@ -20,12 +20,14 @@ namespace Catel.Services
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Data;
     using Page = global::Windows.UI.Xaml.Controls.Page;
+    using UserControl = global::Windows.UI.Xaml.Controls.UserControl;
 #else
     using Catel.Windows.Controls;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
     using Page = System.Windows.Controls.Page;
+    using UserControl = System.Windows.Controls.UserControl;
 #endif
 
     public partial class ViewModelWrapperService
@@ -134,31 +136,40 @@ namespace Catel.Services
 
         private object GetContent(IView view)
         {
-            object content = null;
+            var userControl = view as UserControl;
+            if (userControl != null)
+            {
+                var content = userControl.Content as FrameworkElement;
+                return content;
+            }
 
             var contentControl = view as ContentControl;
             if (contentControl != null)
             {
-                content = contentControl.Content as FrameworkElement;
-            }
-            else
-            {
-                var page = view as Page;
-                if (page != null)
-                {
-                    content = page.Content as FrameworkElement;
-                }
-                else
-                {
-                    content = PropertyHelper.GetPropertyValue(view, "Content", false);
-                }
+                var content = contentControl.Content as FrameworkElement;
+                return content;
             }
 
-            return content;
+            var page = view as Page;
+            if (page != null)
+            {
+                var content = page.Content as FrameworkElement;
+                return content;
+            }
+
+            var lastResortContent = PropertyHelper.GetPropertyValue(view, "Content", false);
+            return lastResortContent;
         }
 
         private void SetContent(IView view, object content)
         {
+            var userControl = view as UserControl;
+            if (userControl != null)
+            {
+                userControl.Content = (UIElement)content;
+                return;
+            }
+
             var contentControl = view as ContentControl;
             if (contentControl != null)
             {
