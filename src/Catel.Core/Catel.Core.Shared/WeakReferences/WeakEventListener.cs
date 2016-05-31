@@ -1357,7 +1357,7 @@ namespace Catel
 
             MethodInfo methodInfo = null;
 
-            var cacheKey = string.Format("{0}_{1}", targetType.FullName, sourceType.FullName);
+            var cacheKey = $"{targetType.FullName}_{sourceType.FullName}";
 
             lock (ListenerTypeCache)
             {

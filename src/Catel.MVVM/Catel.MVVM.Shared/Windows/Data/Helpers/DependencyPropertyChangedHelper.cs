@@ -216,7 +216,8 @@ namespace Catel.Windows.Data
 
             //Log.Debug("Unsubscribing from changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
 
-            var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, GetHandlerDependencyPropertyName(propertyName));
+            var handlerDependencyPropertyName = GetHandlerDependencyPropertyName(propertyName);
+            var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, handlerDependencyPropertyName);
             var internalHandler = (EventHandler<DependencyPropertyValueChangedEventArgs>)frameworkElement.GetValue(handlerDependencyProperty);
             if (internalHandler != null)
             {
