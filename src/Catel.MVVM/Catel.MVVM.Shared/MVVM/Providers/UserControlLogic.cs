@@ -115,20 +115,6 @@ namespace Catel.MVVM.Providers
             // Hence target control content wrapper grid will be recreated each time content changes.
             targetView.SubscribeToPropertyChanged("Content", OnTargetControlContentChanged);
 #endif
-
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoading", OnViewLoadedManagerLoadingForParentView, false) == null)
-            {
-                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoading', going to subscribe without weak events");
-
-                ViewLoadManager.ViewLoading += OnViewLoadedManagerLoadingForParentView;
-            }
-
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloading", OnViewLoadedManagerUnloadingForParentView, false) == null)
-            {
-                Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloading', going to subscribe without weak events");
-
-                ViewLoadManager.ViewUnloading += OnViewLoadedManagerUnloadingForParentView;
-            }
         }
         #endregion
 
@@ -519,12 +505,14 @@ namespace Catel.MVVM.Providers
         }
 
         /// <summary>
-        /// Public event to get information about the parent view.
+        /// Called when the view manager is loading.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The event args.</param>
-        public void OnViewLoadedManagerLoadingForParentView(object sender, ViewLoadEventArgs e)
+        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+        protected override void OnViewLoadedManagerLoading(object sender, ViewLoadEventArgs e)
         {
+            base.OnViewLoadedManagerLoading(sender, e);
+
             if (ReferenceEquals(e.View, ParentViewModelContainer))
             {
                 OnParentViewModelContainerLoading(e.View, EventArgs.Empty);
@@ -532,12 +520,14 @@ namespace Catel.MVVM.Providers
         }
 
         /// <summary>
-        /// Public event to get information about the parent view.
+        /// Called when the view manager is unloading.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The event args.</param>
-        public void OnViewLoadedManagerUnloadingForParentView(object sender, ViewLoadEventArgs e)
+        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+        protected override void OnViewLoadedManagerUnloading(object sender, ViewLoadEventArgs e)
         {
+            base.OnViewLoadedManagerUnloading(sender, e);
+
             if (ReferenceEquals(e.View, ParentViewModelContainer))
             {
                 OnParentViewModelContainerUnloading(e.View, EventArgs.Empty);

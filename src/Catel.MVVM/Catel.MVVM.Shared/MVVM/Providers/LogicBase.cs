@@ -176,42 +176,36 @@ namespace Catel.MVVM.Providers
                 SetDataContext(ViewModel);
             }
 
-            // Very impoortant to exit here in design mode
-            if (CatelEnvironment.IsInDesignMode)
-            {
-                return;
-            }
-
             Log.Debug("Subscribing to view events");
 
             ViewLoadManager.AddView(this);
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoading", OnViewLoadedManagerLoading, false) == null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoading", OnViewLoadedManagerLoadingInternal, false) == null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoading', going to subscribe without weak events");
 
-                ViewLoadManager.ViewLoading += OnViewLoadedManagerLoading;
+                ViewLoadManager.ViewLoading += OnViewLoadedManagerLoadingInternal;
             }
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoaded", OnViewLoadedManagerLoaded, false) == null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoaded", OnViewLoadedManagerLoadedInternal, false) == null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoaded', going to subscribe without weak events");
 
-                ViewLoadManager.ViewLoaded += OnViewLoadedManagerLoaded;
+                ViewLoadManager.ViewLoaded += OnViewLoadedManagerLoadedInternal;
             }
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloading", OnViewLoadedManagerUnloading, false) == null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloading", OnViewLoadedManagerUnloadingInternal, false) == null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloading', going to subscribe without weak events");
 
-                ViewLoadManager.ViewUnloading += OnViewLoadedManagerUnloading;
+                ViewLoadManager.ViewUnloading += OnViewLoadedManagerUnloadingInternal;
             }
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloaded", OnViewLoadedManagerUnloaded, false) == null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloaded", OnViewLoadedManagerUnloadedInternal, false) == null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloaded', going to subscribe without weak events");
 
-                ViewLoadManager.ViewUnloaded += OnViewLoadedManagerUnloaded;
+                ViewLoadManager.ViewUnloaded += OnViewLoadedManagerUnloadedInternal;
             }
 
             // Required so the ViewLoadManager can handle the rest
@@ -618,7 +612,19 @@ namespace Catel.MVVM.Providers
         /// <para />
         /// This method is public because the view loaded manager must be subscribed to as a weak event.
         /// </summary>
-        public void OnViewLoadedManagerLoading(object sender, ViewLoadEventArgs e)
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+        public void OnViewLoadedManagerLoadingInternal(object sender, ViewLoadEventArgs e)
+        {
+            OnViewLoadedManagerLoading(sender, e);
+        }
+
+        /// <summary>
+        /// Called when the view manager is unloading.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnViewLoadedManagerLoading(object sender, ViewLoadEventArgs e)
         {
             if (ReferenceEquals(e.View, TargetView))
             {
@@ -631,7 +637,19 @@ namespace Catel.MVVM.Providers
         /// <para />
         /// This method is public because the view loaded manager must be subscribed to as a weak event.
         /// </summary>
-        public void OnViewLoadedManagerLoaded(object sender, ViewLoadEventArgs e)
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+        public void OnViewLoadedManagerLoadedInternal(object sender, ViewLoadEventArgs e)
+        {
+            OnViewLoadedManagerLoaded(sender, e);
+        }
+
+        /// <summary>
+        /// Called when the view manager is loaded.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnViewLoadedManagerLoaded(object sender, ViewLoadEventArgs e)
         {
             if (ReferenceEquals(e.View, TargetView))
             {
@@ -644,7 +662,19 @@ namespace Catel.MVVM.Providers
         /// <para />
         /// This method is public because the view loaded manager must be subscribed to as a weak event.
         /// </summary>
-        public void OnViewLoadedManagerUnloading(object sender, ViewLoadEventArgs e)
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+        public void OnViewLoadedManagerUnloadingInternal(object sender, ViewLoadEventArgs e)
+        {
+            OnViewLoadedManagerUnloading(sender, e);
+        }
+
+        /// <summary>
+        /// Called when the view manager is unloading.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnViewLoadedManagerUnloading(object sender, ViewLoadEventArgs e)
         {
             if (ReferenceEquals(e.View, TargetView))
             {
@@ -657,7 +687,19 @@ namespace Catel.MVVM.Providers
         /// <para />
         /// This method is public because the view loaded manager must be subscribed to as a weak event.
         /// </summary>
-        public void OnViewLoadedManagerUnloaded(object sender, ViewLoadEventArgs e)
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+        public void OnViewLoadedManagerUnloadedInternal(object sender, ViewLoadEventArgs e)
+        {
+            OnViewLoadedManagerUnloaded(sender, e);
+        }
+
+        /// <summary>
+        /// Called when the view manager is unloaded.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ViewLoadEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnViewLoadedManagerUnloaded(object sender, ViewLoadEventArgs e)
         {
             if (ReferenceEquals(e.View, TargetView))
             {
