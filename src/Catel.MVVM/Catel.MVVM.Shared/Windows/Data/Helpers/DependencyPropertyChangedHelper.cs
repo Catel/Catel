@@ -60,11 +60,11 @@ namespace Catel.Windows.Data
 
             var type = frameworkElement.GetType();
 
-            string key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(type, propertyName);
+            var key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(type, propertyName);
 
             if (!_realDependencyPropertiesCache.ContainsKey(key))
             {
-                bool isRealDependencyProperty = true;
+                var isRealDependencyProperty = true;
 
                 if (propertyName.EndsWith("_handler"))
                 {
