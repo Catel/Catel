@@ -470,7 +470,7 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         public override async void OnTargetViewDataContextChanged(object sender, Catel.MVVM.Views.DataContextChangedEventArgs e)
         {
-            if (e.AreEqual)
+            if (IsCurrentDataContext(e))
             {
                 return;
             }

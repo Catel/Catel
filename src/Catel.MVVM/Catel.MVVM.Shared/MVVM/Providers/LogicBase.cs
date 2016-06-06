@@ -240,9 +240,15 @@ namespace Catel.MVVM.Providers
                     var dependencyResolver = this.GetDependencyResolver();
                     _viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
                 }
+
                 return _viewModelFactory;
             }
         }
+
+        /// <summary>
+        /// Gets the weak reference to the last known data context.
+        /// </summary>
+        protected WeakReference LastKnownDataContext { get; private set; }
 
         /// <summary>
         /// Gets or sets the view model.
@@ -750,6 +756,9 @@ namespace Catel.MVVM.Providers
 
             IsTargetViewLoaded = true;
 
+            var dataContext = view.DataContext;
+            LastKnownDataContext = (dataContext != null) ? new WeakReference(dataContext) : null;
+
             await OnTargetViewLoadedAsync(sender, e);
 
             TargetView.EnsureVisualTree();
@@ -882,18 +891,45 @@ namespace Catel.MVVM.Providers
         }
 
         /// <summary>
+        /// Gets a value indicating whether the specified arguments represent the current data context.
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        protected bool IsCurrentDataContext(DataContextChangedEventArgs e)
+        {
+            if (e.AreEqual)
+            {
+                return true;
+            }
+
+            // CTL-891 Additional check for data context change
+            var lastKnownDataContext = LastKnownDataContext;
+            if (lastKnownDataContext != null && lastKnownDataContext.IsAlive)
+            {
+                if (ReferenceEquals(lastKnownDataContext.Target, e.NewContext))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Called when the <c>DataContext</c> property of the <see cref="TargetView" /> has changed.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         public virtual void OnTargetViewDataContextChanged(object sender, DataContextChangedEventArgs e)
         {
-            if (e.AreEqual)
+            if (IsCurrentDataContext(e))
             {
                 return;
             }
 
             Log.Debug($"DataContext of TargetView '{TargetViewType?.Name}' has changed to '{ObjectToStringHelper.ToTypeString(TargetView.DataContext)}'");
+
+            LastKnownDataContext = null;
 
             var dataContext = TargetView.DataContext;
             if (dataContext == null)
@@ -905,6 +941,9 @@ namespace Catel.MVVM.Providers
             {
                 return;
             }
+
+            // Here we have a data context that makes sense
+            LastKnownDataContext = (dataContext != null) ? new WeakReference(dataContext) : null;
 
             if (ReferenceEquals(ViewModel, dataContext))
             {
