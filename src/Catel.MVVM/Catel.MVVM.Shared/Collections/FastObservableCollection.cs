@@ -36,7 +36,11 @@ namespace Catel.Collections
         #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static readonly IDispatcherService _dispatcherService;
+        private static readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() =>
+        {
+            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+            return dependencyResolver.Resolve<IDispatcherService>();
+        });
         #endregion
 
         #region Fields
@@ -50,15 +54,6 @@ namespace Catel.Collections
         #endregion
 
         #region Constructors
-        /// <summary>
-        /// Initializes static members of the <see cref="FastObservableCollection{T}"/> class.
-        /// </summary>
-        static FastObservableCollection()
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            _dispatcherService = dependencyResolver.Resolve<IDispatcherService>();
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="FastObservableCollection{T}" /> class.
         /// </summary>
@@ -464,7 +459,7 @@ namespace Catel.Collections
 
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.BeginInvokeIfRequired(action);
+                _dispatcherService.Value.BeginInvokeIfRequired(action);
             }
             else
             {
@@ -482,7 +477,7 @@ namespace Catel.Collections
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {
-                    _dispatcherService.BeginInvokeIfRequired(() => base.OnCollectionChanged(e));
+                    _dispatcherService.Value.BeginInvokeIfRequired(() => base.OnCollectionChanged(e));
                 }
                 else
                 {
@@ -508,7 +503,7 @@ namespace Catel.Collections
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {
-                    _dispatcherService.BeginInvokeIfRequired(() => base.OnPropertyChanged(e));
+                    _dispatcherService.Value.BeginInvokeIfRequired(() => base.OnPropertyChanged(e));
                 }
                 else
                 {
