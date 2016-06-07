@@ -559,6 +559,7 @@ namespace Catel.Caching
 
         private T ExecuteInLock<T>(TKey key, Func<T> action)
         {
+            // Note: check comments below, this lock is required like this
             var asyncLock = GetLockByKey(key);
             lock (asyncLock)
             {
@@ -577,10 +578,7 @@ namespace Catel.Caching
                 }
                 finally
                 {
-                    if (unlockDisposable != null)
-                    {
-                        unlockDisposable.Dispose();
-                    }
+                    unlockDisposable?.Dispose();
                 }
             }
         }

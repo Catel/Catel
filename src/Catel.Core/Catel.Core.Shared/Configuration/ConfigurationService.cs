@@ -174,13 +174,13 @@ namespace Catel.Configuration
 
             key = GetFinalKey(key);
 
-            if (!ValueExists(container, key))
-            {
-                return defaultValue;
-            }
-
             try
             {
+                if (!ValueExists(container, key))
+                {
+                    return defaultValue;
+                }
+
                 var value = GetValueFromStore(container, key);
                 if (value == null)
                 {
@@ -189,8 +189,10 @@ namespace Catel.Configuration
 
                 return (T)_objectConverterService.ConvertFromStringToObject(value, typeof(T), CultureInfo.InvariantCulture);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Warning(ex, $"Failed to retrieve configuration value '{container}.{key}', returning default value");
+
                 return defaultValue;
             }
         }

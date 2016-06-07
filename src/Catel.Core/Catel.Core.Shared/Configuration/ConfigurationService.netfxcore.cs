@@ -9,10 +9,13 @@
 namespace Catel.Configuration
 {
     using System;
+    using System.Collections.Generic;
     using Windows.Storage;
 
     public partial class ConfigurationService
     {
+        private readonly Dictionary<ConfigurationContainer, ApplicationDataContainer> _containerCache = new Dictionary<ConfigurationContainer, ApplicationDataContainer>();
+
         /// <summary>
         /// Gets the settings container for this platform
         /// </summary>
@@ -22,18 +25,26 @@ namespace Catel.Configuration
         {
             ApplicationDataContainer settings = null;
 
-            switch (container)
+            lock (_containerCache)
             {
-                case ConfigurationContainer.Local:
-                    settings = ApplicationData.Current.LocalSettings;
-                    break;
+                if (!_containerCache.TryGetValue(container, out settings))
+                {
+                    switch (container)
+                    {
+                        case ConfigurationContainer.Local:
+                            settings = ApplicationData.Current.LocalSettings;
+                            break;
 
-                case ConfigurationContainer.Roaming:
-                    settings = ApplicationData.Current.RoamingSettings;
-                    break;
+                        case ConfigurationContainer.Roaming:
+                            settings = ApplicationData.Current.RoamingSettings;
+                            break;
 
-                default:
-                    throw new ArgumentOutOfRangeException("container");
+                        default:
+                            throw new ArgumentOutOfRangeException("container");
+                    }
+
+                    _containerCache[container] = settings;
+                }
             }
 
             return settings;
