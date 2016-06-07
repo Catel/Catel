@@ -187,6 +187,12 @@ namespace Catel.Configuration
                     return defaultValue;
                 }
 
+                // ObjectConverterService doesn't support object, but just return the value as is
+                if (typeof(T) == typeof(object))
+                {
+                    return (T)(object)value;
+                }
+
                 return (T)_objectConverterService.ConvertFromStringToObject(value, typeof(T), CultureInfo.InvariantCulture);
             }
             catch (Exception ex)
