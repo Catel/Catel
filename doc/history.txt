@@ -103,6 +103,8 @@ Added/fixed:
 (x) CTL-880 Sometimes (very rarely) fails to set view model when switching views (loaded, unloaded, loaded) very fast
 (x) CTL-887 GetString in LanguageService does not correctly resolve resources for non-neutral cultures in metro apps
 (x) CTL-891 Prevent duplicate view model creation in nested user controls when the data context hasn't really changed
+(x) CTL-892 Fixed NullReferenceException when using the GetErrorMessage() or GetWarningMessage() extension 
+    methods for ModelBase
 
 Roadmap:
 ========
