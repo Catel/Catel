@@ -115,52 +115,5 @@ namespace Catel.Services
 
             dispatcherService.BeginInvoke(() => method.DynamicInvoke(args), true);
         }
-
-#if NET
-        /// <summary>
-        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
-        /// </summary>
-        /// <param name="dispatcherService">The dispatcher service.</param>
-        /// <param name="action">The action.</param>
-        /// <returns>The task representing the action.</returns>
-        public static async Task InvokeAsync(this IDispatcherService dispatcherService, Action action)
-        {
-            var dispatcher = dispatcherService.CurrentDispatcher;
-
-#if NET40
-            await DispatcherExtensions.InvokeAsync(dispatcher, action);
-#else
-            await dispatcher.InvokeAsync(action);
-#endif
-        }
-
-        /// <summary>
-        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
-        /// </summary>
-        /// <param name="dispatcherService">The dispatcher service.</param>
-        /// <param name="method">The method.</param>
-        /// <param name="args">The arguments to pass into the method.</param>
-        /// <returns>The task representing the action.</returns>
-        public static Task InvokeAsync(this IDispatcherService dispatcherService, Delegate method, params object[] args)
-        {
-            var dispatcher = dispatcherService.CurrentDispatcher;
-
-            return DispatcherExtensions.InvokeAsync(dispatcher, method, args);
-        }
-
-        /// <summary>
-        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
-        /// </summary>
-        /// <typeparam name="T">The type of the result.</typeparam>
-        /// <param name="dispatcherService">The dispatcher service.</param>
-        /// <param name="func">The function.</param>
-        /// <returns>The task representing the action.</returns>
-        public static Task<T> InvokeAsync<T>(this IDispatcherService dispatcherService, Func<T> func)
-        {
-            var dispatcher = dispatcherService.CurrentDispatcher;
-
-            return DispatcherExtensions.InvokeAsync(dispatcher, func);
-        }
-#endif
-        }
+    }
 }

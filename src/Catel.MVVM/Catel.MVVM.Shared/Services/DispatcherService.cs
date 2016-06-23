@@ -7,6 +7,7 @@
 namespace Catel.Services
 {
     using System;
+    using System.Threading.Tasks;
     using Logging;
 
 #if ANDROID
@@ -36,7 +37,7 @@ namespace Catel.Services
         public DispatcherService()
         {
             // Get current dispatcher to make sure we have one
-            var currentDispatcher = CurrentDispatcher;
+            var currentDispatcher = DispatcherHelper.CurrentDispatcher;
             if (currentDispatcher != null)
             {
                 Log.Debug("Successfully Initialized current dispatcher");
@@ -56,9 +57,53 @@ namespace Catel.Services
         /// <para />
         /// Internally, this property uses the <see cref="DispatcherHelper"/>, but can be overriden if required.
         /// </summary>
-        public virtual Dispatcher CurrentDispatcher
+        protected virtual Dispatcher CurrentDispatcher
         {
             get { return DispatcherHelper.CurrentDispatcher; }
+        }
+#endif
+
+#if NET
+        /// <summary>
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns>The task representing the action.</returns>
+        public async Task InvokeAsync(Action action)
+        {
+            var dispatcher = CurrentDispatcher;
+
+#if NET40
+            await DispatcherExtensions.InvokeAsync(dispatcher, action);
+#else
+            await dispatcher.InvokeAsync(action);
+#endif
+        }
+
+        /// <summary>
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="args">The arguments to pass into the method.</param>
+        /// <returns>The task representing the action.</returns>
+        public Task InvokeAsync(Delegate method, params object[] args)
+        {
+            var dispatcher = CurrentDispatcher;
+
+            return DispatcherExtensions.InvokeAsync(dispatcher, method, args);
+        }
+
+        /// <summary>
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+        /// </summary>
+        /// <typeparam name="T">The type of the result.</typeparam>
+        /// <param name="func">The function.</param>
+        /// <returns>The task representing the action.</returns>
+        public Task<T> InvokeAsync<T>(Func<T> func)
+        {
+            var dispatcher = CurrentDispatcher;
+
+            return DispatcherExtensions.InvokeAsync(dispatcher, func);
         }
 #endif
 
