@@ -69,14 +69,14 @@ namespace Catel.Services
         /// </summary>
         /// <param name="action">The action.</param>
         /// <returns>The task representing the action.</returns>
-        public async Task InvokeAsync(Action action)
+        public Task InvokeAsync(Action action)
         {
             var dispatcher = CurrentDispatcher;
 
 #if NET40
-            await DispatcherExtensions.InvokeAsync(dispatcher, action);
+            return DispatcherExtensions.InvokeAsync(dispatcher, action);
 #else
-            await dispatcher.InvokeAsync(action);
+            return dispatcher.InvokeAsync(action).Task;
 #endif
         }
 
