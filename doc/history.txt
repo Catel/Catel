@@ -53,6 +53,8 @@ we will remove the features in the next major release.
 
 Added/fixed:
 ============
+(*) CTL-895 Removing CurrentDispatcher property from IDispatcherService interface. Adding methods to IDispatcher 
+    that ensures backward capability
 (+) CTL-622 Add check type sorting and expression filter on ExceptionService
 (+) CTL-788 Added new LogEvent called Status which can be used for status updates
 (+) CTL-796 Add Activate existing window methods in IUIVisualizerService
@@ -153,8 +155,6 @@ we will remove the features in the next major release.
 
 Added/fixed:
 ============
-(*) CTL-895 Removing CurrentDispatcher property from IDispatcherService interface. Adding methods to IDispatcher 
-    that ensures backward capability
 (+) CTL-742 Add support for Prism 6 (NET45 and NET46)
 (+) CTL-751 Add DisplayNameAttribute that uses the ILanguageService by default
 (+) CTL-762 Add SerializeAsCollection attribute to serialize a ModelBase as collection when it implements both 
