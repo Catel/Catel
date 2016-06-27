@@ -96,7 +96,7 @@ namespace Catel.Windows.Interactivity
                 focusDelay = 5000;
             }
 
-            Log.Debug("Starting focus on element '{0}' with a delay of '{1}' ms", AssociatedObject.GetType().GetSafeFullName(), focusDelay);
+            Log.Debug("Starting focus on element '{0}' with a delay of '{1}' ms", AssociatedObject.GetType().GetSafeFullName(false), focusDelay);
 
             if (focusDelay > 25)
             {
@@ -153,7 +153,7 @@ namespace Catel.Windows.Interactivity
             if (AssociatedObject.Focus())
 #endif
             {
-                Log.Debug("Focused '{0}'", AssociatedObject.GetType().GetSafeFullName());
+                Log.Debug("Focused '{0}'", AssociatedObject.GetType().GetSafeFullName(false));
 
                 var textBox = AssociatedObject as TextBox;
                 if (textBox != null)
@@ -164,7 +164,7 @@ namespace Catel.Windows.Interactivity
                 return true;
             }
 
-            Log.Debug("Failed to focus '{0}'", AssociatedObject.GetType().GetSafeFullName());
+            Log.Debug("Failed to focus '{0}'", AssociatedObject.GetType().GetSafeFullName(false));
 
             return false;
         }

@@ -15,15 +15,23 @@ namespace Catel.Configuration
     public class ConfigurationChangedEventArgs : EventArgs
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigurationChangedEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="ConfigurationChangedEventArgs" /> class.
         /// </summary>
+        /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <param name="newValue">The new value.</param>
-        public ConfigurationChangedEventArgs(string key, object newValue)
+        public ConfigurationChangedEventArgs(ConfigurationContainer container, string key, object newValue)
         {
+            Container = container;
             Key = key;
             NewValue = newValue;
         }
+
+        /// <summary>
+        /// Gets the container.
+        /// </summary>
+        /// <value>The container.</value>
+        public ConfigurationContainer Container { get; private set; }
 
         /// <summary>
         /// Gets the key.

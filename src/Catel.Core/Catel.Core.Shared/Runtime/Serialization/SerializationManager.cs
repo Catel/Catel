@@ -60,7 +60,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public void Warmup(Type type)
         {
-            Argument.IsNotNull(() => type);
+            Argument.IsNotNull("type", type);
 
             lock (_lock)
             {
@@ -114,7 +114,7 @@ namespace Catel.Runtime.Serialization
                 _serializationModifiersPerTypeCache.Remove(type);
             }
 
-            CacheInvalidated.SafeInvoke(this, new CacheInvalidatedEventArgs(type));
+            CacheInvalidated.SafeInvoke(this, () => new CacheInvalidatedEventArgs(type));
         }
 
         /// <summary>

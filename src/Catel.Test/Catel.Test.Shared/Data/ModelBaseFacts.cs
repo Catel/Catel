@@ -368,13 +368,17 @@ namespace Catel.Test.Data
 
             }
 
+#pragma warning disable 659
             public class TestModelWithCustomizedEquals : ModelBase, ITestModel
             {
                 public override bool Equals(object obj)
                 {
+#pragma warning disable 252,253
                     return this == obj;
+#pragma warning restore 252,253
                 }
             }
+#pragma warning restore 659
 
             //[TestCase]
             //public void EqualsWorksWithoutProperties()

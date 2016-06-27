@@ -25,14 +25,21 @@ namespace Catel.Services
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private static readonly Dictionary<string, string> _registeredUris = new Dictionary<string, string>();
+
+        private readonly INavigationRootService _navigationRootService;
         #endregion
 
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationService" /> class.
         /// </summary>
-        public NavigationService()
+        /// <param name="navigationRootService">The navigation root service.</param>
+        public NavigationService(INavigationRootService navigationRootService)
         {
+            Argument.IsNotNull(() => navigationRootService);
+
+            _navigationRootService = navigationRootService;
+
             Initialize();
         }
         #endregion
@@ -104,6 +111,17 @@ namespace Catel.Services
         /// <summary>
         /// Navigates to a specific location.
         /// </summary>
+        /// <exception cref="ArgumentNullException">The <paramref name="uri"/> is <c>null</c>.</exception>
+        public virtual void Navigate(Uri uri)
+        {
+            Argument.IsNotNull("uri", uri);
+
+            NavigateToUri(uri);
+        }
+
+        /// <summary>
+        /// Navigates to a specific location.
+        /// </summary>
         /// <param name="uri">The URI.</param>
         /// <param name="parameters">Dictionary of parameters, where the key is the name of the parameter, 
         /// and the value is the value of the parameter.</param>
@@ -154,18 +172,6 @@ namespace Catel.Services
 
                 Navigate(_registeredUris[viewModelTypeName], parameters);
             }
-        }
-
-
-        /// <summary>
-        /// Navigates to a specific location.
-        /// </summary>
-        /// <exception cref="ArgumentNullException">The <paramref name="uri"/> is <c>null</c>.</exception>
-        public virtual void Navigate(Uri uri)
-        {
-            Argument.IsNotNull("uri", uri);
-
-            NavigateToUri(uri);
         }
 
         /// <summary>

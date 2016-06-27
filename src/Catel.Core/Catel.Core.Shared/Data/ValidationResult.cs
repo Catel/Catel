@@ -7,6 +7,8 @@
 namespace Catel.Data
 {
     using System;
+    using System.Linq.Expressions;
+    using System.Text;
 
     /// <summary>
     /// Base class for validation results.
@@ -96,6 +98,16 @@ namespace Catel.Data
         public string PropertyName { get; private set; }
 
         /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        public override string ToString()
+        {
+            var value = string.Format("{0} (Field: {1} | Tag: {2})", Message, PropertyName, ObjectToStringHelper.ToString(Tag));
+            return value;
+        }
+
+        /// <summary>
         /// Creates a <see cref="FieldValidationResult"/> containing a warning.
         /// </summary>
         /// <param name="propertyData">The property data.</param>
@@ -134,6 +146,25 @@ namespace Catel.Data
         }
 
         /// <summary>
+        /// Creates a <see cref="FieldValidationResult" /> containing a warning.
+        /// </summary>
+        /// <typeparam name="TProperty">The type of themodel.</typeparam>
+        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="args">The args.</param>
+        /// <returns>The <see cref="FieldValidationResult" />.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="messageFormat" /> is <c>null</c> or whitespace.</exception>
+        public static FieldValidationResult CreateWarning<TProperty>(Expression<Func<TProperty>> propertyExpression, string messageFormat, params object[] args)
+        {
+            Argument.IsNotNull("propertyExpression", propertyExpression);
+            Argument.IsNotNullOrWhitespace("messageFormat", messageFormat);
+
+            var propertyName = ExpressionHelper.GetPropertyName(propertyExpression);
+            return new FieldValidationResult(propertyName, ValidationResultType.Warning, messageFormat, args);
+        }
+
+        /// <summary>
         /// Creates a <see cref="FieldValidationResult"/> containing a warning.
         /// </summary>
         /// <param name="propertyData">The property data.</param>
@@ -166,6 +197,24 @@ namespace Catel.Data
         public static FieldValidationResult CreateWarningWithTag(string propertyName, string message, object tag)
         {
             var warning = CreateWarning(propertyName, message);
+            warning.Tag = tag;
+
+            return warning;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="FieldValidationResult" /> containing a warning.
+        /// </summary>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="tag">The tag.</param>
+        /// <returns>The <see cref="FieldValidationResult" />.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        public static FieldValidationResult CreateWarningWithTag<TProperty>(Expression<Func<TProperty>> propertyExpression, string message, object tag)
+        {
+            var warning = CreateWarning(propertyExpression, message);
             warning.Tag = tag;
 
             return warning;
@@ -210,6 +259,25 @@ namespace Catel.Data
         }
 
         /// <summary>
+        /// Creates a <see cref="FieldValidationResult" /> containing an error.
+        /// </summary>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="args">The args.</param>
+        /// <returns>The <see cref="FieldValidationResult" />.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="messageFormat" /> is <c>null</c> or whitespace.</exception>
+        public static FieldValidationResult CreateError<TProperty>(Expression<Func<TProperty>> propertyExpression, string messageFormat, params object[] args)
+        {
+            Argument.IsNotNull("propertyName", propertyExpression);
+            Argument.IsNotNullOrWhitespace("messageFormat", messageFormat);
+
+            var propertyName = ExpressionHelper.GetPropertyName(propertyExpression);
+            return new FieldValidationResult(propertyName, ValidationResultType.Error, messageFormat, args);
+        }
+
+        /// <summary>
         /// Creates a <see cref="FieldValidationResult"/> containing an error.
         /// </summary>
         /// <param name="propertyData">The property data.</param>
@@ -246,6 +314,24 @@ namespace Catel.Data
 
             return error;
         }
+
+        /// <summary>
+        /// Creates a <see cref="FieldValidationResult" /> containing an error.
+        /// </summary>
+        /// <typeparam name="TProperty">The type of the property.</typeparam>
+        /// <param name="propertyExpression">The property expression.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="tag">The tag.</param>
+        /// <returns>The <see cref="FieldValidationResult" />.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="message" /> is <c>null</c>.</exception>
+        public static FieldValidationResult CreateErrorWithTag<TProperty>(Expression<Func<TProperty>> propertyExpression, string message, object tag)
+        {
+            var error = CreateError(propertyExpression, message);
+            error.Tag = tag;
+
+            return error;
+        }
     }
 
     /// <summary>
@@ -263,6 +349,16 @@ namespace Catel.Data
         public BusinessRuleValidationResult(ValidationResultType validationResultType, string messageFormat, params object[] args)
             : base(validationResultType, (args == null || args.Length == 0) ? messageFormat : string.Format(messageFormat, args))
         {
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        public override string ToString()
+        {
+            var value = string.Format("{0} (Tag: {1})", Message, ObjectToStringHelper.ToString(Tag));
+            return value;
         }
 
         /// <summary>

@@ -241,7 +241,7 @@ namespace Catel.Windows.Controls
             {
                 foreach (var entry in entries)
                 {
-                    string date = entry.Time.ToString(CultureInfo.CurrentUICulture);
+                    string date = entry.Time.ToString(CultureInfo.CurrentCulture);
                     string type = entry.LogEvent.ToString("G").PadRight(maxTypeLength, ' ');
                     string datefiller = new String(' ', date.Length);
                     string typefiller = new String(' ', type.Length);

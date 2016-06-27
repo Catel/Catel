@@ -500,7 +500,7 @@ namespace Catel.Reflection
 
             if (!TryCast(value, out output))
             {
-                var tI = value.GetType().GetSafeFullName();
+                var tI = value.GetType().GetSafeFullName(false);
                 string tO = typeof(TOutput).FullName;
                 string vl = string.Concat(value);
                 string msg = "Failed to cast from '{0}' to '{1}'";

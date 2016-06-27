@@ -225,7 +225,29 @@ namespace Catel.Windows
                         button.Command = dataWindowButton.Command;
                     }
 
-                    button.Content = dataWindowButton.Text;
+                    if (dataWindowButton.ContentBindingPath != null)
+                    {
+                        Binding contentBinding = new Binding(dataWindowButton.ContentBindingPath);
+                        if (dataWindowButton.ContentValueConverter != null)
+                        {
+                            contentBinding.Converter = dataWindowButton.ContentValueConverter;
+                        }
+                        button.SetBinding(ButtonBase.ContentProperty, contentBinding);
+                    }
+                    else
+                    {
+                        button.Content = dataWindowButton.Text;
+                    }
+
+                    if (dataWindowButton.VisibilityBindingPath != null)
+                    {
+                        Binding visibilityBinding = new Binding(dataWindowButton.VisibilityBindingPath);
+                        if (dataWindowButton.VisibilityValueConverter != null)
+                        {
+                            visibilityBinding.Converter = dataWindowButton.VisibilityValueConverter;
+                        }
+                        button.SetBinding(ButtonBase.VisibilityProperty, visibilityBinding);
+                    }
 #if NET
                     button.SetResourceReference(FrameworkElement.StyleProperty, "DataWindowButtonStyle");
                     button.IsDefault = dataWindowButton.IsDefault;

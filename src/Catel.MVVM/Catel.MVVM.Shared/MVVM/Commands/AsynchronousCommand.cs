@@ -3,7 +3,7 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
+#if !XAMARIN_FORMS
 namespace Catel.MVVM
 {
     using System;
@@ -24,6 +24,7 @@ namespace Catel.MVVM
     /// </summary>
     /// <typeparam name="TExecuteParameter">The type of the execute parameter.</typeparam>
     /// <typeparam name="TCanExecuteParameter">The type of the can execute parameter.</typeparam>
+    [ObsoleteEx(ReplacementTypeOrMember = "TaskCommand", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
     public class AsynchronousCommand<TExecuteParameter, TCanExecuteParameter> : Command<TExecuteParameter, TCanExecuteParameter>
     {
         private static readonly IDispatcherService _dispatcherService;
@@ -189,7 +190,7 @@ namespace Catel.MVVM
 
                     if (IsCancelationRequested)
                     {
-                        Canceled.SafeInvoke(this, new CommandEventArgs(parameter));
+                        Canceled.SafeInvoke(this, () => new CommandEventArgs(parameter));
                     }
                     else
                     {
@@ -208,6 +209,7 @@ namespace Catel.MVVM
     /// as generic type.
     /// </summary>
     /// <typeparam name="TExecuteParameter">The type of the execute parameter.</typeparam>
+    [ObsoleteEx(ReplacementTypeOrMember = "TaskCommand", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
     public class AsynchronousCommand<TExecuteParameter> : AsynchronousCommand<TExecuteParameter, TExecuteParameter>
     {
         /// <summary>
@@ -232,6 +234,7 @@ namespace Catel.MVVM
     /// <summary>
     /// Implements the <see cref="AsynchronousCommand{TExecuteParameter, TCanExecuteParameter}"/> class with <see cref="Object"/> as generic types.
     /// </summary>
+    [ObsoleteEx(ReplacementTypeOrMember = "TaskCommand", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
     public class AsynchronousCommand : AsynchronousCommand<object, object>
     {
         /// <summary>
@@ -244,3 +247,4 @@ namespace Catel.MVVM
             : base(execute, canExecute, tag) { }
     }
 }
+#endif

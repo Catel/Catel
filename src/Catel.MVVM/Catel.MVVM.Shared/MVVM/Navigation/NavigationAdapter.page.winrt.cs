@@ -5,6 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 #if NETFX_CORE
+
 namespace Catel.MVVM.Navigation
 {
     using System.Collections.Generic;
@@ -22,23 +23,17 @@ namespace Catel.MVVM.Navigation
         private static Dictionary<string, object> _lastGlobalNavigationContext;
         private Dictionary<string, object> _lastNavigationContext;
 
-        /// <summary>
-        /// Gets the root frame.
-        /// </summary>
-        /// <value>The root frame.</value>
-        protected Frame RootFrame { get; private set; }
-
         partial void Initialize()
         {
-            RootFrame = Window.Current.Content as Frame ?? ((Page)NavigationTarget).Frame;
-            if (RootFrame == null)
+            var rootFrame = NavigationRoot as Frame;
+            if (rootFrame == null)
             {
                 return;
             }
 
-            RootFrame.Navigating += OnNavigatingEvent;
-            RootFrame.Navigated += OnNavigatedEvent;
-            
+            rootFrame.Navigating += OnNavigatingEvent;
+            rootFrame.Navigated += OnNavigatedEvent;
+
 #if WINDOWS_PHONE
             HardwareButtons.BackPressed += OnBackPressed; 
 #endif
@@ -46,19 +41,23 @@ namespace Catel.MVVM.Navigation
 
         partial void Uninitialize()
         {
-            RootFrame.Navigating -= OnNavigatingEvent;
-            RootFrame.Navigated -= OnNavigatedEvent;
-            
+            var rootFrame = NavigationRoot as Frame;
+            if (rootFrame != null)
+            {
+                rootFrame.Navigating -= OnNavigatingEvent;
+                rootFrame.Navigated -= OnNavigatedEvent;
+            }
+
 #if WINDOWS_PHONE
             HardwareButtons.BackPressed -= OnBackPressed; 
-#endif      
+#endif
         }
 
 #if WINDOWS_PHONE
         private void OnBackPressed(object sender, BackPressedEventArgs e) 
         { 
-            var rootFrame = RootFrame;
-            if (rootFrame.CanGoBack) 
+            var rootFrame = NavigationRoot as Frame;
+            if (rootFrame != null && rootFrame.CanGoBack) 
             { 
                 rootFrame.GoBack();
  
@@ -67,7 +66,7 @@ namespace Catel.MVVM.Navigation
             } 
         } 
 #endif
-        
+
         partial void DetermineNavigationContext()
         {
             if (_lastNavigationContext == null)
@@ -95,7 +94,15 @@ namespace Catel.MVVM.Navigation
         /// <returns><c>true</c> if the navigation can be handled by this adapter; otherwise, <c>false</c>.</returns>
         protected override bool CanHandleNavigation()
         {
-            var content = RootFrame.Content;
+            InitializeNavigationService(false);
+
+            var rootFrame = NavigationRoot as Frame;
+            if (rootFrame == null)
+            {
+                return false;
+            }
+
+            var content = rootFrame.Content;
             return ReferenceEquals(content, NavigationTarget);
         }
 

@@ -24,7 +24,7 @@ namespace Catel.ExceptionHandling
         /// <exception cref="System.ArgumentNullException">The <paramref name="lastException"/> is <c>null</c>.</exception>
         public RetryingEventArgs(int currentRetryCount, TimeSpan delay, Exception lastException)
         {
-            Argument.IsNotNull(() => lastException);
+            Argument.IsNotNull("lastException", lastException);
 
             CurrentRetryCount = currentRetryCount;
             Delay = delay;

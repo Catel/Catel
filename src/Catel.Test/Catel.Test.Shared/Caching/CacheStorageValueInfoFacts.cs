@@ -20,7 +20,7 @@ namespace Catel.Test.Caching
             [TestCase]
             public void ReturnsFalseWhenTimeSpanIsZero()
             {
-                var valueInfo = new CacheStorageValueInfo<int>(0, new TimeSpan(0));    
+                var valueInfo = new CacheStorageValueInfo<int>(0, new TimeSpan(0));
 
                 Assert.IsFalse(valueInfo.CanExpire);
             }
@@ -86,6 +86,45 @@ namespace Catel.Test.Caching
                 ThreadHelper.Sleep(500);
 
                 Assert.IsTrue(valueInfo.IsExpired);
+            }
+        }
+
+        [TestFixture]
+        public class TheDisposeValueMethod
+        {
+            private class CustomDisposable : IDisposable
+            {
+                public CustomDisposable()
+                {
+                    IsDiposed = false;
+                }
+
+                public bool IsDiposed { get; private set; }
+
+                public void Dispose()
+                {
+                    IsDiposed = true;
+                }
+            }
+
+            [TestCase]
+            public void ValueIsNotDisposedBeforeCall()
+            {
+                var disposable = new CustomDisposable();
+                var valueInfo = new CacheStorageValueInfo<CustomDisposable>(disposable, TimeSpan.FromMilliseconds(250));
+
+                Assert.That(disposable.IsDiposed, Is.False);
+            }
+
+            [TestCase]
+            public void ValueIsDisposedAfterCall()
+            {
+                var disposable = new CustomDisposable();
+                var valueInfo = new CacheStorageValueInfo<CustomDisposable>(disposable, TimeSpan.FromMilliseconds(250));
+
+                valueInfo.DisposeValue();
+
+                Assert.That(disposable.IsDiposed, Is.True);
             }
         }
     }

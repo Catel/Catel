@@ -20,7 +20,7 @@ using System.Runtime.CompilerServices;
 ////[assembly: AssemblyDescription("DEFINED IN ACTUAL ASSEMBLYINFO")]
 
 [assembly: AssemblyCompany("CatenaLogic")]
-[assembly: AssemblyCopyright("Copyright © CatenaLogic 2010 - 2015")]
+[assembly: AssemblyCopyright("Copyright © CatenaLogic 2010 - 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en-US")]
@@ -35,8 +35,8 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("4.4")]
-[assembly: AssemblyInformationalVersion("4.4, manually built in Visual Studio")]
+[assembly: AssemblyVersion("4.5")]
+[assembly: AssemblyInformationalVersion("4.5, manually built in Visual Studio")]
 
 #if DEBUG
 

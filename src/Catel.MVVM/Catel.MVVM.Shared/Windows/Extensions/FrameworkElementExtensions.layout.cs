@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
-
 #if !XAMARIN
 
 namespace Catel.Windows
@@ -33,7 +31,7 @@ namespace Catel.Windows
         /// <param name="element">The UI element.</param>
         public static void FixBlurriness(this FrameworkElement element)
         {
-            Argument.IsNotNull(() => element);
+            Argument.IsNotNull("element", element);
 
 #if NET
             element.SnapsToDevicePixels = true;

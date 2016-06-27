@@ -278,7 +278,8 @@ namespace Catel.MVVM
         /// <returns>
         /// The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.
         /// </returns>
-        public TViewModel GetFirstOrDefaultInstance<TViewModel>() where TViewModel : IViewModel
+        public TViewModel GetFirstOrDefaultInstance<TViewModel>() 
+            where TViewModel : IViewModel
         {
             var viewModelType = typeof(TViewModel);
 
@@ -307,7 +308,7 @@ namespace Catel.MVVM
         /// <returns>The child view models.</returns>
         public IEnumerable<IRelationalViewModel> GetChildViewModels(IViewModel parentViewModel)
         {
-            Argument.IsNotNull(() => parentViewModel);
+            Argument.IsNotNull("parentViewModel", parentViewModel);
 
             var childViewModels = GetChildViewModels(parentViewModel.UniqueIdentifier);
 

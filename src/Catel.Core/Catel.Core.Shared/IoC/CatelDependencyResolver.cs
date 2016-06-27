@@ -110,7 +110,7 @@ namespace Catel.IoC
                     }
                     catch (TypeNotRegisteredException ex)
                     {
-                        Log.Debug(ex, "Failed to resolve type '{0}', returning null", ex.RequestedType.GetSafeFullName());
+                        Log.Debug(ex, "Failed to resolve type '{0}', returning null", ex.RequestedType.GetSafeFullName(false));
                     }
                 }
             }

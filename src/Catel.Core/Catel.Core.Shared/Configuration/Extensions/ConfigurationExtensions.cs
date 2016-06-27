@@ -4,52 +4,49 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
-
 namespace Catel.Configuration
 {
-    using System.Configuration;
+    using System;
 
     /// <summary>
     /// The configuration extension methods.
     /// </summary>
-    public static class ConfigurationExtensions
+    public static partial class ConfigurationExtensions
     {
-        #region Methods
         /// <summary>
-        /// Gets the section.
+        /// Determines whether the specified <see cref="ConfigurationChangedEventArgs"/> represents the expected key.
+        /// <para />
+        /// A key is also expected if the key is <c>null</c> or whitespace because it represents a full scope update in the 
+        /// <see cref="IConfigurationService"/>.
         /// </summary>
-        /// <param name="this">The instance</param>
-        /// <param name="sectionName">The section name</param>
-        /// <param name="sectionGroupName">The section group name</param>
-        /// <typeparam name="TSection">The type of the section</typeparam>
-        /// <returns>The section</returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="this"/> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentException">The <paramref name="sectionName"/> is <c>null</c> or empty.</exception>
-        public static TSection GetSection<TSection>(this Configuration @this, string sectionName, string sectionGroupName = null)
-            where TSection : ConfigurationSection
+        /// <param name="eventArgs">The <see cref="ConfigurationChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="expectedKey">The expected key.</param>
+        /// <returns><c>true</c> if the event args represent the expected key; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="eventArgs"/> is <c>null</c>.</exception>
+        public static bool IsConfigurationKey(this ConfigurationChangedEventArgs eventArgs, string expectedKey)
         {
-            Argument.IsNotNull("@this", @this);
-            Argument.IsNotNullOrEmpty("sectionName", sectionName);
+            Argument.IsNotNull("eventArgs", eventArgs);
 
-            TSection section = null;
-            if (!string.IsNullOrEmpty(sectionGroupName))
-            {
-                var configurationSectionGroup = @this.GetSectionGroup(sectionGroupName);
-                if (configurationSectionGroup != null)
-                {
-                    section = (TSection) configurationSectionGroup.Sections[sectionName];
-                }
-            }
-            else
-            {
-                section = (TSection) @this.Sections[sectionName];
-            }
-
-            return section;
+            return IsConfigurationKey(eventArgs.Key, expectedKey);
         }
-        #endregion
+
+        /// <summary>
+        /// Determines whether the specified configuration key represents the expected key.
+        /// <para />
+        /// A key is also expected if the key is <c>null</c> or whitespace because it represents a full scope update in the 
+        /// <see cref="IConfigurationService"/>.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="expectedKey">The expected key.</param>
+        /// <returns><c>true</c> if [is configuration key] [the specified expected key]; otherwise, <c>false</c>.</returns>
+        public static bool IsConfigurationKey(this string key, string expectedKey)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return true;
+            }
+
+            return key.EqualsIgnoreCase(expectedKey);
+        }
     }
 }
-
-#endif

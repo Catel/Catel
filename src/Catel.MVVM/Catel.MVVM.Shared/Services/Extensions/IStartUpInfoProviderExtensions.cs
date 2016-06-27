@@ -29,7 +29,7 @@ namespace Catel.Services
         /// <exception cref="ArgumentNullException">The <paramref name="startUpInfoProvider"/> is <c>null</c>.</exception>
         public static string GetCommandLine(this IStartUpInfoProvider startUpInfoProvider)
         {
-            Argument.IsNotNull(() => startUpInfoProvider);
+            Argument.IsNotNull("startUpInfoProvider", startUpInfoProvider);
 
             var commandLine = string.Join(" ", startUpInfoProvider.Arguments.Select(x => x.TrimStart().IndexOfAny(ReplaceableCharacters) > 0 ? string.Format("\"{0}\"", x) : x));
             return commandLine;

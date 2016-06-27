@@ -48,6 +48,8 @@ namespace Catel.Data
         /// <param name="context">The context.</param>
         protected override void Initialize(TDbContext context)
         {
+            Argument.IsNotNull("context", context);
+
             try
             {
                 context.Database.Initialize(false);

@@ -455,7 +455,7 @@ namespace Catel.Data
             {
                 Log.Debug("Validation was suspended, and properties were not checked during this suspended time, checking them now");
 
-                foreach (string property in _propertiesNotCheckedDuringDisabledValidation)
+                foreach (var property in _propertiesNotCheckedDuringDisabledValidation)
                 {
                     var propertyData = GetPropertyData(property);
                     var propertyValue = GetValueFast<object>(propertyData.Name);
@@ -748,7 +748,8 @@ namespace Catel.Data
         /// <remarks>
         /// To check whether this object contains any errors, use the <see cref="INotifyDataErrorInfo.HasErrors"/> property.
         /// </remarks>
-        internal void Validate(bool force, bool validateDataAnnotations)
+        /// TODO: Try to revert to internal but is required by XAMARIN_FORMS
+        public void Validate(bool force, bool validateDataAnnotations)
         {
             if (SuspendValidation)
             {
@@ -762,7 +763,12 @@ namespace Catel.Data
 
             IsValidating = true;
 
-            var existingValidationContext = (ValidationContext)_validationContext;
+            var existingValidationContext = _validationContext;
+            if (existingValidationContext == null)
+            {
+                existingValidationContext = new ValidationContext();
+            }
+
             bool hasErrors = existingValidationContext.HasErrors;
             bool hasWarnings = existingValidationContext.HasWarnings;
 
@@ -1010,13 +1016,13 @@ namespace Catel.Data
             {
                 RaisePropertyChanged(ErrorMessageProperty);
 
-                _errorsChanged.SafeInvoke(this, new DataErrorsChangedEventArgs(string.Empty));
+                _errorsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(string.Empty));
             }
             else
             {
                 RaisePropertyChanged(this, new PropertyChangedEventArgs(propertyName), false, true);
 
-                _errorsChanged.SafeInvoke(this, new DataErrorsChangedEventArgs(propertyName));
+                _errorsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(propertyName));
             }
 
             if (notifyHasErrors)
@@ -1038,13 +1044,13 @@ namespace Catel.Data
             {
                 RaisePropertyChanged(WarningMessageProperty);
 
-                _warningsChanged.SafeInvoke(this, new DataErrorsChangedEventArgs(string.Empty));
+                _warningsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(string.Empty));
             }
             else
             {
                 RaisePropertyChanged(this, new PropertyChangedEventArgs(propertyName), false, true);
 
-                _warningsChanged.SafeInvoke(this, new DataErrorsChangedEventArgs(propertyName));
+                _warningsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(propertyName));
             }
 
             if (notifyHasWarnings)

@@ -292,11 +292,12 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether property change notifications are currently disabled for all instances.
         /// </summary>
         /// <value><c>true</c> if property change notifications should be disabled for all instances; otherwise, <c>false</c>.</value>
+        /// TODO: Try to revert to internal but is required by XAMARIN_FORMS
 #if NET || SILVERLIGHT
         [Browsable(false)]
 #endif
         [XmlIgnore]
-        internal static bool DisablePropertyChangeNotifications { get; set; }
+        public static bool DisablePropertyChangeNotifications { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether event subscriptions of child values should be disabled.
@@ -445,7 +446,7 @@ namespace Catel.Data
         {
             // Note: we know what we are doing, use GetValueFast (but not SetValueFast)
             get { return GetValueFast<bool>(IsDirtyProperty.Name); }
-            protected set { SetValue(IsDirtyProperty.Name, value); }
+            protected set { SetValue(IsDirtyProperty, value); }
         }
 
         /// <summary>
@@ -483,9 +484,9 @@ namespace Catel.Data
         [XmlIgnore]
         protected bool DeserializationSucceeded { get; private set; }
 
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
         /// <summary>
         /// Allows the initialization of custom properties. This is a virtual method that is called
         /// inside the constructor before the object is fully constructed.
@@ -739,21 +740,22 @@ namespace Catel.Data
 
             lock (_propertyValuesLock)
             {
-                if (_propertyValueChangeNotificationWrappers.ContainsKey(propertyName))
+                ChangeNotificationWrapper oldWrapper;
+
+                if (_propertyValueChangeNotificationWrappers.TryGetValue(propertyName, out oldWrapper))
                 {
-                    var oldWrapper = _propertyValueChangeNotificationWrappers[propertyName];
-                    if (oldWrapper != null)
-                    {
-                        oldWrapper.PropertyChanged -= OnPropertyObjectPropertyChanged;
-                        oldWrapper.CollectionChanged -= OnPropertyObjectCollectionChanged;
-                        oldWrapper.CollectionItemPropertyChanged -= OnPropertyObjectCollectionItemPropertyChanged;
-                        oldWrapper.UnsubscribeFromAllEvents();
-                    }
+                    oldWrapper.PropertyChanged -= OnPropertyObjectPropertyChanged;
+                    oldWrapper.CollectionChanged -= OnPropertyObjectCollectionChanged;
+                    oldWrapper.CollectionItemPropertyChanged -= OnPropertyObjectCollectionItemPropertyChanged;
+                    oldWrapper.UnsubscribeFromAllEvents();
                 }
 
                 if (!ChangeNotificationWrapper.IsUsefulForObject(propertyValue))
                 {
-                    _propertyValueChangeNotificationWrappers[propertyName] = null;
+                    if (oldWrapper != null)
+                    {
+                        _propertyValueChangeNotificationWrappers.Remove(propertyName);
+                    }
                 }
                 else
                 {
@@ -807,9 +809,9 @@ namespace Catel.Data
 
             SetDirtyAndAutomaticallyValidate(string.Empty, true);
         }
-        #endregion
+#endregion
 
-        #region INotifyPropertyChanged Members
+#region INotifyPropertyChanged Members
         /// <summary>
         /// Invokes the property changed for all registered properties.
         /// </summary>
@@ -977,6 +979,6 @@ namespace Catel.Data
                 Validate();
             }
         }
-        #endregion
+#endregion
     }
 }

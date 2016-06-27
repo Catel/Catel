@@ -16,6 +16,7 @@ namespace Catel.MVVM
     using Services;
 
     using IoC;
+    using Logging;
     using Threading;
 
     /// <summary>
@@ -54,6 +55,8 @@ namespace Catel.MVVM
     public class Command<TExecuteParameter, TCanExecuteParameter> : CommandBase, ICatelCommand<TExecuteParameter, TCanExecuteParameter>
     {
         #region Fields
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         private Func<TCanExecuteParameter, bool> _canExecuteWithParameter;
         private Func<bool> _canExecuteWithoutParameter;
         private Action<TExecuteParameter> _executeWithParameter;
@@ -273,7 +276,17 @@ namespace Catel.MVVM
         /// </summary>
         public virtual void RaiseCanExecuteChanged()
         {
-            AutoDispatchIfRequiredAsync(async () => CanExecuteChanged.SafeInvoke(this));
+            AutoDispatchIfRequiredAsync(async () =>
+            {
+                try
+                {
+                    CanExecuteChanged.SafeInvoke(this);
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "Failed to raise CanExecuteChanged");
+                }
+            });
         }
 
         /// <summary>

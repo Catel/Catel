@@ -49,7 +49,7 @@ namespace Catel
         #endregion
 
         #region Public Methods and Operators
-       
+
         /// <summary>
         /// Gets a validator for the specified target type.
         /// </summary>
@@ -70,21 +70,25 @@ namespace Catel
             IValidator validator = null;
 
             // NOTE: Patch for performance issue the validator of a viewmodel must be in the same assembly of the view model.
-            var assembly = targetType.Assembly;
-            var exportedTypes = assembly.GetExportedTypes();
+
+            var assembly = targetType.GetAssemblyEx();
+            var exportedTypes = assembly.GetExportedTypesEx();
+
             var validatorTypes = new List<Type>();
             foreach (var exportedType in exportedTypes)
             {
                 if (typeof(FluentValidation.IValidator).IsAssignableFromEx(exportedType))
                 {
-                    Type currentType = exportedType;
+                    var currentType = exportedType;
                     bool found = false;
                     while (!found && currentType != typeof(object))
                     {
                         if (currentType != null)
                         {
-                            TypeInfo typeInfo = currentType.GetTypeInfo();
-                            found = typeInfo.IsGenericType && typeInfo.GetGenericArguments().ToList().FirstOrDefault(type => type.IsAssignableFromEx(targetType)) != null;
+                            var typeInfo = currentType.GetTypeInfo();
+                            var genericArguments = currentType.GetGenericArgumentsEx();
+
+                            found = typeInfo.IsGenericType && genericArguments.FirstOrDefault(type => type.IsAssignableFromEx(targetType)) != null;
                             if (!found)
                             {
                                 currentType = typeInfo.BaseType;

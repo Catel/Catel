@@ -132,7 +132,7 @@ namespace Catel.Runtime.Serialization.Xml
                         var fieldInfo = type.GetFieldEx(memberName);
                         if (fieldInfo == null)
                         {
-                            Log.Warning("Failed to retrieve the field info of '{0}.{1}' during warmup", type.GetSafeFullName(), memberName);
+                            Log.Warning("Failed to retrieve the field info of '{0}.{1}' during warmup", type.GetSafeFullName(false), memberName);
                             return;
                         }
 
@@ -143,7 +143,7 @@ namespace Catel.Runtime.Serialization.Xml
                         var propertyInfo = type.GetPropertyEx(memberName);
                         if (propertyInfo == null)
                         {
-                            Log.Warning("Failed to retrieve the property info of '{0}.{1}' during warmup", type.GetSafeFullName(), memberName);
+                            Log.Warning("Failed to retrieve the property info of '{0}.{1}' during warmup", type.GetSafeFullName(false), memberName);
                             return;
                         }
 
@@ -161,7 +161,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Failed to warmup member '{0}.{1}'. This member might cause problems during serialization", type.GetSafeFullName(), memberName);
+                Log.Warning(ex, "Failed to warmup member '{0}.{1}'. This member might cause problems during serialization", type.GetSafeFullName(false), memberName);
             }
         }
 
@@ -615,14 +615,14 @@ namespace Catel.Runtime.Serialization.Xml
 
                 if (collection == null)
                 {
-                    throw Log.ErrorAndCreateException<NotSupportedException>("Cannot deserialize type '{0}', it should implement IList in order to be deserialized", propertyTypeToDeserialize.GetSafeFullName());
+                    throw Log.ErrorAndCreateException<NotSupportedException>("Cannot deserialize type '{0}', it should implement IList in order to be deserialized", propertyTypeToDeserialize.GetSafeFullName(false));
                 }
 
                 var realCollectionType = collection.GetType();
                 var childElementType = realCollectionType.GetCollectionElementType();
                 if (childElementType == null)
                 {
-                    throw Log.ErrorAndCreateException<NotSupportedException>("Cannot deserialize type '{0}', could not determine the element type of the collection", propertyTypeToDeserialize.GetSafeFullName());
+                    throw Log.ErrorAndCreateException<NotSupportedException>("Cannot deserialize type '{0}', could not determine the element type of the collection", propertyTypeToDeserialize.GetSafeFullName(false));
                 }
 
                 var serializer = _dataContractSerializerFactory.GetDataContractSerializer(propertyTypeToDeserialize, childElementType, xmlName, null, null);
@@ -741,7 +741,7 @@ namespace Catel.Runtime.Serialization.Xml
                                 // Note: we don't want to call GetSafeFullName if we don't have to
                                 if (LogManager.IsDebugEnabled ?? false)
                                 {
-                                    Log.Debug("Existing reference detected for element type '{0}' with id '{1}', only storing id", memberTypeToSerialize.GetSafeFullName(), referenceInfo.Id);
+                                    Log.Debug("Existing reference detected for element type '{0}' with id '{1}', only storing id", memberTypeToSerialize.GetSafeFullName(false), referenceInfo.Id);
                                 }
 
                                 //serializer.WriteStartObject(xmlWriter, memberValue.Value);

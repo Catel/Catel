@@ -23,7 +23,7 @@ namespace Catel.Reflection
         /// <returns>DateTime.</returns>
         public static DateTime GetBuildDateTime(this Assembly assembly)
         {
-            Argument.IsNotNull(() => assembly);
+            Argument.IsNotNull("assembly", assembly);
 
             return AssemblyHelper.GetLinkerTimestamp(assembly.Location);
         }

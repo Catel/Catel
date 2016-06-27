@@ -20,7 +20,7 @@ namespace Catel.Test.Services.Fixtures
             _values[resourceName] = value;
         }
 
-        protected override string GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo)
+        public override string GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo)
         {
             return _values[resourceName];
         }

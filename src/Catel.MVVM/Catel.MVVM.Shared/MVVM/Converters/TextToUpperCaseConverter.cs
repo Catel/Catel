@@ -28,7 +28,7 @@ namespace Catel.MVVM.Converters
             var stringValue = value as string;
             if (stringValue != null)
             {
-#if NETFX_CORE
+#if NETFX_CORE || XAMARIN_FORMS
                 return stringValue.ToUpper();
 #else
                 return stringValue.ToUpper(CurrentCulture ?? CultureInfo.CurrentCulture);

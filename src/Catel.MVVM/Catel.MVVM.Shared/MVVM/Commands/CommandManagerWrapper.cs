@@ -42,7 +42,7 @@ namespace Catel.MVVM
         /// <param name="commandManager">The command manager.</param>
         public CommandManagerWrapper(FrameworkElement view, ICommandManager commandManager = null)
         {
-            Argument.IsNotNull(() => view);
+            Argument.IsNotNull("view", view);
 
             _commandManager = commandManager ?? ServiceLocator.Default.ResolveType<ICommandManager>();
 
@@ -115,6 +115,11 @@ namespace Catel.MVVM
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
+            if (_commandManager.IsKeyboardEventsSuspended)
+            {
+                return;
+            }
+
             if (e.Handled)
             {
                 // Don't get in the way of already handled KeyDown events

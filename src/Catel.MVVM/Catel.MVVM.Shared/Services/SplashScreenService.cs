@@ -99,10 +99,10 @@ namespace Catel.Services
         public SplashScreenService(IDispatcherService dispatcherService, IViewModelFactory viewModelFactory,
             IUIVisualizerService uiVisualizerService, IPleaseWaitService pleaseWaitService, IExceptionService exceptionService)
         {
-            Argument.IsNotNull(() => dispatcherService);
-            Argument.IsNotNull(() => viewModelFactory);
-            Argument.IsNotNull(() => uiVisualizerService);
-            Argument.IsNotNull(() => exceptionService);
+            Argument.IsNotNull("dispatcherService", dispatcherService);
+            Argument.IsNotNull("viewModelFactory", viewModelFactory);
+            Argument.IsNotNull("uiVisualizerService", uiVisualizerService);
+            Argument.IsNotNull("exceptionService", exceptionService);
 
             _dispatcherService = dispatcherService;
             _viewModelFactory = viewModelFactory;

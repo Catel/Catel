@@ -449,7 +449,7 @@ namespace Catel.Windows
             var frameworkElement = dependencyObject as FrameworkElement;
             if (frameworkElement != null)
             {
-                return string.Equals((frameworkElement).Name, name);
+                return string.Equals(frameworkElement.Name, name);
             }
 
             return false;

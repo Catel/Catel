@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+// Required since we are testing obsolete attribute retrievals
+#pragma warning disable 612
 
 namespace Catel.Test.Reflection
 {

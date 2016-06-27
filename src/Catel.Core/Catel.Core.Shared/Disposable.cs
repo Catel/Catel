@@ -58,8 +58,8 @@ namespace Catel
             {
                 if (IsDisposed)
                 {
-                    throw Log.ErrorAndCreateException(msg => new ObjectDisposedException(GetType().GetSafeFullName()),
-                        "Object '{0}' is already disposed", GetType().GetSafeFullName());
+                    throw Log.ErrorAndCreateException(msg => new ObjectDisposedException(GetType().GetSafeFullName(false)),
+                        "Object '{0}' is already disposed", GetType().GetSafeFullName(false));
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace Catel
                                     throw;
                                 }
 
-                                Log.Error( ex, "Error while disposing managed resources of '{0}'.", GetType().GetSafeFullName());
+                                Log.Error( ex, "Error while disposing managed resources of '{0}'.", GetType().GetSafeFullName(false));
                             }
                         }
 
@@ -120,7 +120,7 @@ namespace Catel
                                 throw;
                             }
 
-                            Log.Error(ex, "Error while disposing unmanaged resources of '{0}'.", GetType().GetSafeFullName());
+                            Log.Error(ex, "Error while disposing unmanaged resources of '{0}'.", GetType().GetSafeFullName(false));
                         }
 
                         IsDisposed = true;

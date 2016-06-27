@@ -135,7 +135,13 @@ namespace Catel.Data
 
             lock (_lockObject)
             {
-                return _properties.ContainsKey(propertyName) ? (TValue)_properties[propertyName] : defaultValue;
+                object propertyValue;
+                if (_properties.TryGetValue(propertyName, out propertyValue))
+                {
+                    return (TValue) propertyValue;
+                }
+
+                return defaultValue;
             }
         }
 
@@ -153,10 +159,10 @@ namespace Catel.Data
 
             lock (_lockObject)
             {
-                if (!_properties.ContainsKey(propertyName) || !ObjectHelper.AreEqualReferences(_properties[propertyName], value))
+                object propertyValue;
+                if (!_properties.TryGetValue(propertyName, out propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, value))
                 {
                     _properties[propertyName] = value;
-
                     raisePropertyChanged = true;
                 }
             }
@@ -181,12 +187,13 @@ namespace Catel.Data
 
             lock (_lockObject)
             {
-                if (!_properties.ContainsKey(propertyName))
+                object propertyValue;
+                if (_properties.TryGetValue(propertyName, out propertyValue) == false)
                 {
                     return;
                 }
 
-                var value = (TValue) _properties[propertyName];
+                var value = (TValue) propertyValue;
                 var updatedValue = update(value);
 
                 SetPropertyValue(propertyName, updatedValue);

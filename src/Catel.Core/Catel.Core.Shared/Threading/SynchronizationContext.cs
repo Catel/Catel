@@ -24,6 +24,7 @@ namespace Catel.Threading
         /// </summary>
         private readonly object _syncObj = new object();
 
+        private volatile bool _isLockAcquired = false;
         private int _calls = 0;
         #endregion
 
@@ -32,7 +33,11 @@ namespace Catel.Threading
         /// <summary>
         /// Gets a value indicating whether is the lock is acquired.
         /// </summary>
-        public bool IsLockAcquired { get; private set; }
+        public bool IsLockAcquired
+        {
+            get { return _isLockAcquired; }
+            private set { _isLockAcquired = value; }
+        }
         #endregion
 
         #region Methods
@@ -105,8 +110,8 @@ namespace Catel.Threading
         {
             if (IsLockAcquired)
             {
-                Monitor.Exit(_syncObj);
                 IsLockAcquired = false;
+                Monitor.Exit(_syncObj);
             }
         }
 

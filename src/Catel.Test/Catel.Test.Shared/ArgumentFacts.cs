@@ -526,6 +526,7 @@ namespace Catel.Test
             public void ThrowsArgumentExceptionForNotValid()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", "value", false));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", (string)null, false));
             }            
             
 #if !NETFX_CORE
@@ -535,6 +536,7 @@ namespace Catel.Test
                 var validatorMock = new Mock<IValueValidator<string>>();
                 validatorMock.Setup(validator => validator.IsValid(It.IsAny<string>())).Returns(false);
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", "value", validatorMock.Object));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", (string)null, validatorMock.Object));
             }  
 #endif
             
@@ -543,26 +545,28 @@ namespace Catel.Test
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", "value", () => false));
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", "value", s => s.Length > 10));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", (string)null, s => s != null));
             }
             
             [TestCase]
             public void ThrowsArgumentNullExceptionIfFuncIsNull()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", "value", (Func<string, bool>)null));
-  
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", (string)null, (Func<string, bool>)null));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionifValidatorIsNull()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", "value", (IValueValidator<string>)null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Argument.IsValid("myParam", (string)null, (IValueValidator<string>)null));
             }
             
-
             [TestCase]
             public void SucceedsForValid()
             {
                 Argument.IsValid("myParam", "value", true);
+                Argument.IsValid("myParam", (string)null, true);
             }       
             
 #if !NETFX_CORE
@@ -572,6 +576,7 @@ namespace Catel.Test
                 var validatorMock = new Mock<IValueValidator<string>>();
                 validatorMock.Setup(validator => validator.IsValid(It.IsAny<string>())).Returns(true);
                 Argument.IsValid("myParam", "value", validatorMock.Object);
+                Argument.IsValid("myParam", (string)null, validatorMock.Object);
             }
 #endif
 
@@ -580,6 +585,7 @@ namespace Catel.Test
             {
                 Argument.IsValid("myParam", "value", () => true);
                 Argument.IsValid("myParam", "value", s => s.Length < 10);
+                Argument.IsValid("myParam", (string)null, s => s == null);
             }
         }
     }

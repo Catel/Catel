@@ -237,7 +237,7 @@ namespace Catel.Windows
         /// <returns>IntPtr.</returns>
         public static IntPtr GetWindowHandle(this SystemWindow window)
         {
-            Argument.IsNotNull(() => window);
+            Argument.IsNotNull("window", window);
 
             var interopHelper = new WindowInteropHelper(window);
             return interopHelper.Handle;
@@ -292,7 +292,7 @@ namespace Catel.Windows
                     if (window.Dispatcher.GetThreadId() != ownerWindow.Dispatcher.GetThreadId())
                     {
                         Log.Warning("The owner window '{0}' is not created on the same thread as the current window '{1}', cannot set owner window",
-                            ownerWindow.GetType().GetSafeFullName(), window.GetType().GetSafeFullName());
+                            ownerWindow.GetType().GetSafeFullName(false), window.GetType().GetSafeFullName(false));
                         return;
                     }
 
@@ -396,7 +396,7 @@ namespace Catel.Windows
         /// <param name="window">The window.</param>
         public static void ApplyIconFromApplication(this SystemWindow window)
         {
-            Argument.IsNotNull(() => window);
+            Argument.IsNotNull("window", window);
 
             try
             {

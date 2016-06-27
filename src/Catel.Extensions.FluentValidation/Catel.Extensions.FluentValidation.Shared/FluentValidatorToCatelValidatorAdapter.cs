@@ -46,12 +46,7 @@ namespace Catel
         /// </param>
         private FluentValidatorToCatelValidatorAdapter(Type validatorType)
         {
-            ConstructorInfo constructorInfo = validatorType.GetConstructor(new Type[] { });
-            if (constructorInfo != null)
-            {
-                _validator = (IValidator)constructorInfo.Invoke(new object[] { });
-            }
-
+            _validator = (IValidator)Activator.CreateInstance(validatorType);
             if (!validatorType.TryGetAttribute(out _validatorDescriptionAttribute))
             {
                 _validatorDescriptionAttribute = new ValidatorDescriptionAttribute(validatorType.Name);

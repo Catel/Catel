@@ -45,7 +45,7 @@ namespace Catel.Data
             }
 
             var messageBuilder = new StringBuilder();
-            messageBuilder.AppendLine(ResourceHelper.GetString("WarningsFound"), userFriendlyObjectName);
+            messageBuilder.AppendLine($"Found the following warnings in '{userFriendlyObjectName}'");
             messageBuilder.Append(GetListMessages(validationContext, ValidationResultType.Warning));
 
             return messageBuilder.ToString();
@@ -78,7 +78,7 @@ namespace Catel.Data
             }
 
             var messageBuilder = new StringBuilder();
-            messageBuilder.AppendLine(ResourceHelper.GetString("ErrorsFound"), userFriendlyObjectName);
+            messageBuilder.AppendLine($"Found the following errors in '{userFriendlyObjectName}'");
             messageBuilder.Append(GetListMessages(validationContext, ValidationResultType.Error));
 
             return messageBuilder.ToString();

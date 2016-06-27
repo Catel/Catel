@@ -207,7 +207,7 @@ namespace Catel.Reflection
 
                 // Note: actually load a type so the assembly is loaded
                 var type = loadedAssembly.GetTypesEx().FirstOrDefault(x => x.IsClassEx() && !x.IsInterfaceEx());
-                Log.Debug("Loaded assembly, found '{0}' as first class type", type.GetSafeFullName());
+                Log.Debug("Loaded assembly, found '{0}' as first class type", type.GetSafeFullName(false));
 
                 if (includeReferencedAssemblies)
                 {

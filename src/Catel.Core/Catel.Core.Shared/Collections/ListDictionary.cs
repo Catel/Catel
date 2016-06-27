@@ -65,13 +65,14 @@ namespace Catel.Collections
         {
             get
             {
-                var keyValuePair = _list.FirstOrDefault(item => Equals(item.Key, key));
-                if (Equals(keyValuePair, default(KeyValuePair<TKey, TValue>)))
+                var index = GetIndex(key);
+
+                if (index < 0)
                 {
                     throw new KeyNotFoundException();
                 }
 
-                return keyValuePair.Value;
+                return _list[index].Value;
             }
             set
             {
@@ -194,7 +195,8 @@ namespace Catel.Collections
         /// <returns></returns>
         public bool ContainsKey(TKey key)
         {
-            return _list.Any(item => Equals(item.Key, key));
+            var index = GetIndex(key);
+            return index >= 0;
         }
 
         /// <summary>

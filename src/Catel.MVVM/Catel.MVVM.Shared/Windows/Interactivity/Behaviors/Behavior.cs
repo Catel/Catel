@@ -14,9 +14,8 @@ namespace Catel.Windows.Interactivity
     using global::Windows.UI.Xaml;
     using IXamlBehavior = Microsoft.Xaml.Interactivity.IBehavior;
     
-
     /// <summary>
-    /// Base class for the behavior because the SDK in WIN81 only ships with interfaces.
+    /// Base class for the behavior because the SDK for WinRT only ships with interfaces.
     /// <para />
     /// This class tries to mimic the WPF, Silverlight and Windows Phone behavior class to allow reusage of the behaviors in Catel.
     /// </summary>
@@ -56,9 +55,7 @@ namespace Catel.Windows.Interactivity
         {
             if (associatedObject != null && typeof(T).IsInstanceOfTypeEx(associatedObject.GetType()))
             {
-                string error = string.Format("Invalid target type '{0}', expected '{1}'", associatedObject.GetType().GetSafeFullName(), typeof (T).GetSafeFullName());
-                Log.Error(error);
-                throw new InvalidOperationException(error);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Invalid target type '{0}', expected '{1}'", associatedObject.GetType().GetSafeFullName(false), typeof (T).GetSafeFullName(false));
             }
 
             AssociatedObject = associatedObject as T;
@@ -71,7 +68,8 @@ namespace Catel.Windows.Interactivity
         void IXamlBehavior.Detach()
         {
             OnDetaching();
-            AssociatedObject = null;
+
+            // Note: CTL-850 don't set AssociatedObject to null, we need to be able to unsubscribe from events
         }
         #endregion
 

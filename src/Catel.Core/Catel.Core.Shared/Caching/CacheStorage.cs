@@ -27,6 +27,11 @@ namespace Catel.Caching
         private readonly Func<ExpirationPolicy> _defaultExpirationPolicyInitCode;
 
         /// <summary>
+        /// Determines whether values should be disposed on removal.
+        /// </summary>
+        private bool _disposeValuesOnRemoval;
+
+        /// <summary>
         /// Determines whether the cache storage can store null values.
         /// </summary>
         private readonly bool _storeNullValues;
@@ -42,9 +47,9 @@ namespace Catel.Caching
         private readonly object _syncObj = new object();
 
         /// <summary>
-        /// The synchronization objects.
+        /// The async locks.
         /// </summary>
-        private readonly Dictionary<TKey, object> _syncObjs = new Dictionary<TKey, object>();
+        private readonly Dictionary<TKey, AsyncLock> _locksByKey = new Dictionary<TKey, AsyncLock>();
 
         /// <summary>
         /// The timer that is being executed to invalidate the cache.
@@ -61,6 +66,16 @@ namespace Catel.Caching
         /// </summary>
         private bool _checkForExpiredItems;
         #endregion
+
+        /// <summary>
+        /// Occurs when the item is expiring.
+        /// </summary>
+        public event EventHandler<ExpiringEventArgs<TKey, TValue>> Expiring;
+
+        /// <summary>
+        /// Occurs when the item has expired.
+        /// </summary>
+        public event EventHandler<ExpiredEventArgs<TKey, TValue>> Expired;
 
         #region Constructors
         /// <summary>
@@ -85,14 +100,26 @@ namespace Catel.Caching
             IEqualityComparer<TKey> equalityComparer = null)
         {
             _dictionary = new Dictionary<TKey, CacheStorageValueInfo<TValue>>(equalityComparer);
+            _disposeValuesOnRemoval = false;
             _storeNullValues = storeNullValues;
             _defaultExpirationPolicyInitCode = defaultExpirationPolicyInitCode;
 
             _expirationTimerInterval = TimeSpan.FromSeconds(1);
         }
+
         #endregion
 
         #region ICacheStorage<TKey,TValue> Members
+        /// <summary>
+        /// Gets or sets whether values should be disposed on removal.
+        /// </summary>
+        /// <value><c>true</c> if values should be disposed on removal; otherwise, <c>false</c>.</value>
+        public bool DisposeValuesOnRemoval
+        {
+            get { return _disposeValuesOnRemoval; }
+            set { _disposeValuesOnRemoval = value; }
+        }
+
         /// <summary>
         /// Gets the value associated with the specified key.
         /// </summary>
@@ -173,13 +200,14 @@ namespace Catel.Caching
         {
             Argument.IsNotNull("key", key);
 
-            CacheStorageValueInfo<TValue> valueInfo;
-            lock (GetLockByKey(key))
+            return ExecuteInLock(key, () =>
             {
-                _dictionary.TryGetValue(key, out valueInfo);
-            }
+                CacheStorageValueInfo<TValue> valueInfo;
 
-            return (valueInfo != null) ? valueInfo.Value : default(TValue);
+                _dictionary.TryGetValue(key, out valueInfo);
+
+                return (valueInfo != null) ? valueInfo.Value : default(TValue);
+            });
         }
 
         /// <summary>
@@ -192,10 +220,10 @@ namespace Catel.Caching
         {
             Argument.IsNotNull("key", key);
 
-            lock (GetLockByKey(key))
+            return ExecuteInLock(key, () =>
             {
                 return _dictionary.ContainsKey(key);
-            }
+            });
         }
 
         /// <summary>
@@ -214,10 +242,11 @@ namespace Catel.Caching
             Argument.IsNotNull("key", key);
             Argument.IsNotNull("code", code);
 
-            TValue value;
-            lock (GetLockByKey(key))
+            return ExecuteInLock(key, () =>
             {
-                bool containsKey = _dictionary.ContainsKey(key);
+                TValue value;
+
+                var containsKey = _dictionary.ContainsKey(key);
                 if (!containsKey || @override)
                 {
                     value = code.Invoke();
@@ -252,9 +281,9 @@ namespace Catel.Caching
                 {
                     value = _dictionary[key].Value;
                 }
-            }
 
-            return value;
+                return value;
+            });
         }
 
         /// <summary>
@@ -284,24 +313,21 @@ namespace Catel.Caching
         /// <returns>The instance initialized by the <paramref name="code" />.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        public async Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, ExpirationPolicy expirationPolicy, bool @override = false)
+        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, ExpirationPolicy expirationPolicy, bool @override = false)
         {
             Argument.IsNotNull("key", key);
             Argument.IsNotNull("code", code);
 
-            lock (GetLockByKey(key))
+            return ExecuteInLockAsync(key, async () =>
             {
                 var containsKey = _dictionary.ContainsKey(key);
                 if (containsKey && !@override)
                 {
                     return _dictionary[key].Value;
                 }
-            }
 
-            var value = await code.Invoke();
+                var value = await code.Invoke();
 
-            lock (GetLockByKey(key))
-            {
                 if (!ReferenceEquals(value, null) || _storeNullValues)
                 {
                     if (expirationPolicy == null && _defaultExpirationPolicyInitCode != null)
@@ -328,9 +354,9 @@ namespace Catel.Caching
                         }
                     }
                 }
-            }
 
-            return value;
+                return value;
+            });
         }
 
         /// <summary>
@@ -429,7 +455,7 @@ namespace Catel.Caching
         {
             Argument.IsNotNull("key", key);
 
-            lock (GetLockByKey(key))
+            ExecuteInLock(key, () =>
             {
                 if (_dictionary.ContainsKey(key))
                 {
@@ -438,9 +464,9 @@ namespace Catel.Caching
                         action.Invoke();
                     }
 
-                    _dictionary.Remove(key);
+                    RemoveItem(key, false);
                 }
-            }
+            });
         }
 
         /// <summary>
@@ -455,10 +481,10 @@ namespace Catel.Caching
 
                 foreach (var keyToRemove in keysToRemove)
                 {
-                    lock (GetLockByKey(keyToRemove))
+                    ExecuteInLock(keyToRemove, () =>
                     {
-                        _dictionary.Remove(keyToRemove);
-                    }
+                        RemoveItem(keyToRemove, false);
+                    });
                 }
 
                 _checkForExpiredItems = false;
@@ -498,10 +524,18 @@ namespace Catel.Caching
 
             foreach (var keyToRemove in keysToRemove)
             {
-                lock (GetLockByKey(keyToRemove))
+                ExecuteInLock(keyToRemove, () =>
                 {
-                    _dictionary.Remove(keyToRemove);
-                }
+                    var removed = RemoveItem(keyToRemove, true);
+
+                    if (!removed)
+                    {
+                        if (!containsItemsThatCanExpire && _dictionary[keyToRemove].CanExpire)
+                        {
+                            containsItemsThatCanExpire = true;
+                        }
+                    }
+                });
             }
 
             lock (_syncObj)
@@ -514,26 +548,80 @@ namespace Catel.Caching
             }
         }
 
+        private void ExecuteInLock(TKey key, Action action)
+        {
+            ExecuteInLock(key, () =>
+            {
+                action();
+                return true;
+            });
+        }
+
+        private T ExecuteInLock<T>(TKey key, Func<T> action)
+        {
+            // Note: check comments below, this lock is required like this
+            var asyncLock = GetLockByKey(key);
+            lock (asyncLock)
+            {
+                // Looks complex, but we need to ensure that we can enter the same lock multiple times in non-async scenarios
+                var taken = asyncLock.IsTaken;
+                IDisposable unlockDisposable = null;
+
+                try
+                {
+                    if (!taken)
+                    {
+                        unlockDisposable = asyncLock.Lock();
+                    }
+
+                    return action();
+                }
+                finally
+                {
+                    unlockDisposable?.Dispose();
+                }
+            }
+        }
+
+        private Task ExecuteInLockAsync(TKey key, Func<Task> action)
+        {
+            return ExecuteInLockAsync(key, async () =>
+            {
+                await action();
+                return true;
+            });
+        }
+
+        private async Task<T> ExecuteInLockAsync<T>(TKey key, Func<Task<T>> action)
+        {
+            var asyncLock = GetLockByKey(key);
+            using (await asyncLock.LockAsync())
+            {
+                return await action();
+            }
+        }
+
         /// <summary>
         /// Gets the lock by key.
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>The lock object.</returns>
-        private object GetLockByKey(TKey key)
+        private
+        AsyncLock GetLockByKey(TKey key)
         {
             // Note: we never clear items from the key locks, but this is so they can be re-used in the future without the cost 
             // of garbage collection
 
             lock (_syncObj)
             {
-                var containsKey = _syncObjs.ContainsKey(key);
+                var containsKey = _locksByKey.ContainsKey(key);
                 if (!containsKey)
                 {
-                    _syncObjs[key] = new object();
+                    _locksByKey[key] = new AsyncLock();
                 }
             }
 
-            return _syncObjs[key];
+            return _locksByKey[key];
         }
 
         /// <summary>
@@ -550,6 +638,63 @@ namespace Catel.Caching
             }
 
             RemoveExpiredItems();
+        }
+
+        /// <summary>
+        /// Remove item from cache by key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="raiseEvents">Indicates whether events should be raised.</param>
+        /// <returns>The value indicating whether the item was removed.</returns>
+        private bool RemoveItem(TKey key, bool raiseEvents)
+        {
+            // Try to get item, if there is no item by that key then return true to indicate that item was removed.
+            var item = default(CacheStorageValueInfo<TValue>);
+            if (!_dictionary.TryGetValue(key, out item))
+            {
+                return true;
+            }
+
+            var cancel = false;
+            var expirationPolicy = item.ExpirationPolicy;
+            if (raiseEvents)
+            {
+                var expiringEventArgs = new ExpiringEventArgs<TKey, TValue>(key, item.Value, expirationPolicy);
+                Expiring.SafeInvoke(this, expiringEventArgs);
+
+                cancel = expiringEventArgs.Cancel;
+                expirationPolicy = expiringEventArgs.ExpirationPolicy;
+            }
+
+            if (cancel)
+            {
+                if (expirationPolicy == null && _defaultExpirationPolicyInitCode != null)
+                {
+                    expirationPolicy = _defaultExpirationPolicyInitCode.Invoke();
+                }
+
+                _dictionary[key] = new CacheStorageValueInfo<TValue>(item.Value, expirationPolicy);
+
+                return false;
+            }
+
+            _dictionary.Remove(key);
+
+            bool dispose = _disposeValuesOnRemoval;
+            if (raiseEvents)
+            {
+                var expiredEventArgs = new ExpiredEventArgs<TKey, TValue>(key, item.Value, dispose);
+                Expired.SafeInvoke(this, expiredEventArgs);
+
+                dispose = expiredEventArgs.Dispose;
+            }
+
+            if (dispose)
+            {
+                item.DisposeValue();
+            }
+
+            return true;
         }
         #endregion
     }

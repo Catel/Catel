@@ -9,6 +9,7 @@ namespace Catel.Test.Reflection
     using System;
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
+    using Catel.IoC;
     using Catel.Reflection;
     using NUnit.Framework;
 
@@ -46,6 +47,19 @@ namespace Catel.Test.Reflection
                 var type = typeof (B);
 
                 Assert.IsTrue(type.ImplementsInterfaceEx<ISomeInterface>());
+            }
+        }
+
+        [TestFixture]
+        public class TheGetSafeFullNameMethod
+        {
+            [TestCase(typeof(string), false, "System.String")]
+            [TestCase(typeof(string), true, "System.String, System")]
+            [TestCase(typeof(TypeFactory), false, "Catel.IoC.typeFactory")]
+            [TestCase(typeof(TypeFactory), true, "Catel.IoC.typeFactory, Catel.Core")]
+            public void ReturnsFullName(Type type, bool includeAssembly, string expected)
+            {
+                
             }
         }
 

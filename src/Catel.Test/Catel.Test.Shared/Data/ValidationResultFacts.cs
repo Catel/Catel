@@ -75,6 +75,8 @@ namespace Catel.Test.Data
         [TestFixture]
         public class TheCreateWarningMethod
         {
+            private string MyProperty { get; set; }
+
             [TestCase]
             public void SetsValuesCorrectlyUsingNormalMessage()
             {
@@ -94,11 +96,23 @@ namespace Catel.Test.Data
                 Assert.AreEqual(ValidationResultType.Warning, validationResult.ValidationResultType);
                 Assert.AreEqual("my message with format", validationResult.Message);
             }
+
+            [TestCase]
+            public void SetsValueCorrectlyUsingExpression()
+            {
+                var validationResult = FieldValidationResult.CreateWarning(() => MyProperty, "my message with {0}", "format");
+
+                Assert.AreEqual("MyProperty", validationResult.PropertyName);
+                Assert.AreEqual(ValidationResultType.Warning, validationResult.ValidationResultType);
+                Assert.AreEqual("my message with format", validationResult.Message);
+            }
         }
 
         [TestFixture]
         public class TheCreateErrorMethod
         {
+            private string MyProperty { get; set; }
+
             [TestCase]
             public void SetsValuesCorrectlyUsingNormalMessage()
             {
@@ -115,6 +129,16 @@ namespace Catel.Test.Data
                 var validationResult = FieldValidationResult.CreateError("myProperty", "my message with {0}", "format");
 
                 Assert.AreEqual("myProperty", validationResult.PropertyName);
+                Assert.AreEqual(ValidationResultType.Error, validationResult.ValidationResultType);
+                Assert.AreEqual("my message with format", validationResult.Message);
+            }
+
+            [TestCase]
+            public void SetsValueCorrectlyUsingExpression()
+            {
+                var validationResult = FieldValidationResult.CreateError(() => MyProperty, "my message with {0}", "format");
+
+                Assert.AreEqual("MyProperty", validationResult.PropertyName);
                 Assert.AreEqual(ValidationResultType.Error, validationResult.ValidationResultType);
                 Assert.AreEqual("my message with format", validationResult.Message);
             }

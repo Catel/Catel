@@ -50,6 +50,7 @@ namespace Catel.Logging
             IsInfoEnabled = true;
             IsWarningEnabled = true;
             IsErrorEnabled = true;
+            IsStatusEnabled = true;
 
             IgnoreCatelLogging = ignoreCatelLogging;
 
@@ -110,6 +111,16 @@ namespace Catel.Logging
         /// <c>true</c> if this listener is interested in error messages; otherwise, <c>false</c>.
         /// </value>
         public bool IsErrorEnabled { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this listener is interested in status messages.
+        /// <para />
+        /// This default value is <c>true</c>.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this listener is interested in error messages; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsStatusEnabled { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating what format of time to use.
@@ -327,6 +338,29 @@ namespace Catel.Logging
 
             Error(log, message, extraData, time);
             Error(log, message, extraData, logData, time);
+        }
+
+        /// <summary>
+        /// Called when a <see cref="LogEvent.Status" /> message is written to the log.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="extraData">The additional data.</param>
+        /// <param name="logData">The log data.</param>
+        /// <param name="time">The ti me.</param>
+        void ILogListener.Status(ILog log, string message, object extraData, LogData logData, DateTime time)
+        {
+            if (IgnoreCatelLogging && log.IsCatelLogging)
+            {
+                return;
+            }
+
+            if (ShouldIgnoreLogMessage(log, message, LogEvent.Status, extraData, logData, time))
+            {
+                return;
+            }
+
+            Status(log, message, extraData, logData, time);
         }
         #endregion
 
@@ -558,6 +592,19 @@ namespace Catel.Logging
         /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
         protected virtual void Error(ILog log, string message, object extraData, LogData logData, DateTime time)
+        {
+            // Empty by default
+        }
+
+        /// <summary>
+        /// Called when a <see cref="LogEvent.Status" /> message is written to the log.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="extraData">The additional data.</param>
+        /// <param name="logData">The log data.</param>
+        /// <param name="time">The time.</param>
+        protected virtual void Status(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
             // Empty by default
         }

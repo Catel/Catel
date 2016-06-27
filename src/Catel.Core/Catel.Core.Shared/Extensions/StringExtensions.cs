@@ -16,6 +16,37 @@ namespace Catel
     {
         #region Methods
         /// <summary>
+        /// Splits the string by camel case, e.g. 'HiThere' will result in 'Hi there'.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
+        public static string SplitCamelCase(this string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+
+            var finalString = string.Empty;
+
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (i != 0)
+                {
+                    if (char.IsUpper(value[i]))
+                    {
+                        finalString += " " + char.ToLower(value[i]);
+                        continue;
+                    }
+                }
+
+                finalString += value[i];
+            }
+
+            return finalString;
+        }
+
+        /// <summary>
         /// Executes a string comparison that is case insensitive.
         /// </summary>
         /// <param name="str">The string.</param>

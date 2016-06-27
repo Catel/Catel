@@ -37,7 +37,7 @@ namespace Catel.Test.Runtime.Serialization
 
             foreach (var serializer in serializers)
             {
-                var typeName = serializer.GetType().GetSafeFullName();
+                var typeName = serializer.GetType().GetSafeFullName(false);
 
                 Log.Info();
                 Log.Info();

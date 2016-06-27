@@ -11,6 +11,7 @@ namespace Catel.Logging
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
+    using Threading;
 
     /// <summary>
     /// Base class for log listeners that can write in batches.
@@ -60,9 +61,11 @@ namespace Catel.Logging
         /// <param name="time">The time.</param>
         protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
+            var logEntry = new LogBatchEntry(log, message, logEvent, extraData, logData, time);
+
             lock (_lock)
             {
-                _logBatch.Add(new LogBatchEntry(log, message, logEvent, extraData, logData, time));
+                _logBatch.Add(logEntry);
 
                 if (_logBatch.Count >= MaximumBatchCount)
                 {
@@ -106,6 +109,8 @@ namespace Catel.Logging
 
             if (batchToSubmit.Count > 0)
             {
+                await WriteBatchAsync(batchToSubmit);
+
                 // TODO: remove in 5.0.0
                 await WriteBatch(batchToSubmit);
             }
@@ -116,8 +121,18 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="batchEntries">The batch entries.</param>
         /// <returns>Task so this can be done asynchronously.</returns>
-        // TODO: change to abstract void in 5.0.0
+        [ObsoleteEx(ReplacementTypeOrMember = "WriteBatchAsync", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         protected abstract Task WriteBatch(List<LogBatchEntry> batchEntries);
+
+        /// <summary>
+        /// Writes the batch of entries.
+        /// </summary>
+        /// <param name="batchEntries">The batch entries.</param>
+        /// <returns>Task so this can be done asynchronously.</returns>
+        protected virtual Task WriteBatchAsync(List<LogBatchEntry> batchEntries)
+        {
+            return TaskHelper.Completed;
+        }
         #endregion
     }
 }
