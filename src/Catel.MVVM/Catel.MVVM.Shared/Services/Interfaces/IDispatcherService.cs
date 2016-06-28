@@ -7,7 +7,7 @@
 namespace Catel.Services
 {
     using System;
-
+    using System.Threading.Tasks;
 #if !XAMARIN
 #if NETFX_CORE
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
@@ -21,14 +21,30 @@ namespace Catel.Services
     /// </summary>
     public interface IDispatcherService
     {
-#if !XAMARIN
+#if NET
         /// <summary>
-        /// Gets the dispatcher that the dispatcher service uses.
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
-        /// <value>The dispatcher.</value>
-        Dispatcher CurrentDispatcher { get; }
-#endif
+        /// <param name="action">The action.</param>
+        /// <returns>The task representing the action.</returns>
+        Task InvokeAsync(Action action);
 
+        /// <summary>
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="args">The arguments to pass into the method.</param>
+        /// <returns>The task representing the action.</returns>
+        Task InvokeAsync(Delegate method, params object[] args);
+
+        /// <summary>
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+        /// </summary>
+        /// <typeparam name="T">The type of the result.</typeparam>
+        /// <param name="func">The function.</param>
+        /// <returns>The task representing the action.</returns>
+        Task<T> InvokeAsync<T>(Func<T> func);
+#endif
         /// <summary>
         /// Executes the specified action with the specified arguments synchronously on the thread the Dispatcher is associated with.
         /// </summary>
