@@ -130,10 +130,10 @@
     <value>Error</value>
   </data>
   <data name="Failed" xml:space="preserve">
-    <value>Fallado</value>
+    <value>Fallido</value>
   </data>
   <data name="InfoBarMessageControlErrorTitle" xml:space="preserve">
-    <value>Se encontraror los siguientes errores y/o advertencias (ver la lista):</value>
+    <value>Se encontraron los siguientes errores y/o advertencias (ver la lista):</value>
   </data>
   <data name="InfoTitle" xml:space="preserve">
     <value>Información</value>
@@ -151,6 +151,6 @@
     <value>Atención</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Si</value>
+    <value>Sí</value>
   </data>
 </root>
