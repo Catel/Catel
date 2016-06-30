@@ -210,6 +210,12 @@ namespace Catel.Windows.Interactivity
         {
             _loadCounter--;
 
+            if (_loadCounter < 0)
+            {
+                _loadCounter = 0;
+                return;
+            }
+
             if (_loadCounter != 0)
             {
                 return;

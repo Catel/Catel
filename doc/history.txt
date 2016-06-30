@@ -109,6 +109,7 @@ Added/fixed:
     methods for ModelBase
 (x) CTL-893 ThemeHelper should not cache too aggressive, it could result in full refresh of all DataWindows each 
     time a new DataWindow is openened
+(x) CTL-896 BehaviorBase could get into a negative loaded count prevent the next load event from being noticed
 
 Roadmap:
 ========
