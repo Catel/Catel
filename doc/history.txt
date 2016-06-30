@@ -53,8 +53,6 @@ we will remove the features in the next major release.
 
 Added/fixed:
 ============
-(*) CTL-895 Removing CurrentDispatcher property from IDispatcherService interface. Adding methods to IDispatcher 
-    that ensures backward capability
 (+) CTL-622 Add check type sorting and expression filter on ExceptionService
 (+) CTL-788 Added new LogEvent called Status which can be used for status updates
 (+) CTL-796 Add Activate existing window methods in IUIVisualizerService
@@ -93,6 +91,8 @@ Added/fixed:
 (*) CTL-859 When resolving types from the service locator (for dependency injection), prefer registered 
     types with the right scope
 (*) CTL-886 Support AsyncLock in CacheStorage so async retrieval is covered by locks as well
+(*) CTL-895 Removing CurrentDispatcher property from IDispatcherService interface. Adding methods to IDispatcher 
+    that ensures backward capability
 (x) CTL-791 Types with the same FullName from different assemblies will cause issues with the TypeFactory cache
 (x) CTL-793 CompositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand not respected
 (x) CTL-798 Prevent MissingResourceException when resolving strings for Catel.Core
