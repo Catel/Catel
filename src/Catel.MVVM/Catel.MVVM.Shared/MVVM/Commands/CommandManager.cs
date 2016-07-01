@@ -41,8 +41,6 @@ namespace Catel.MVVM
 
 #if NET
         private bool _subscribedToApplicationActivedEvent;
-#elif SL5
-        private bool _subscribedToKeyboardEvent;
 #endif
 
 #if NET || SL5
@@ -51,6 +49,8 @@ namespace Catel.MVVM
 
         private readonly Dictionary<string, InputGesture> _originalCommandGestures = new Dictionary<string, InputGesture>();
         private readonly Dictionary<string, InputGesture> _commandGestures = new Dictionary<string, InputGesture>();
+
+        private bool _suspendedKeyboardEvents;
 #endif
 
         /// <summary>
@@ -62,6 +62,37 @@ namespace Catel.MVVM
             SubscribeToKeyboardEvents();
 #endif
         }
+
+        #region Properties
+#if !WINDOWS_PHONE && !XAMARIN
+        /// <summary>
+        /// Gets or sets a value indicating whether the keyboard events are suspended.
+        /// </summary>
+        /// <value><c>true</c> if the keyboard events are suspended; otherwise, <c>false</c>.</value>
+        public bool IsKeyboardEventsSuspended
+        {
+            get { return _suspendedKeyboardEvents; }
+            set
+            {
+                if (_suspendedKeyboardEvents == value)
+                {
+                    return;
+                }
+
+                _suspendedKeyboardEvents = value;
+
+                if (value)
+                {
+                    Log.Debug("Suspended keyboard events");
+                }
+                else
+                {
+                    Log.Debug("Resumed keyboard events");
+                }
+            }
+        }
+#endif
+        #endregion
 
         #region Events
         /// <summary>
@@ -94,7 +125,7 @@ namespace Catel.MVVM
 
                 if (_commands.ContainsKey(commandName))
                 {
-                    var error = string.Format("Command '{0}' is already created using the CreateCommand method", commandName);
+                    var error = $"Command '{commandName}' is already created using the CreateCommand method";
                     Log.Error(error);
 
                     if (throwExceptionWhenCommandIsAlreadyCreated)
@@ -115,9 +146,7 @@ namespace Catel.MVVM
                 _originalCommandGestures.Add(commandName, inputGesture);
                 _commandGestures.Add(commandName, inputGesture);
 
-                InvalidateCommands();
-
-                CommandCreated.SafeInvoke(this, new CommandCreatedEventArgs(compositeCommand, commandName));
+                CommandCreated.SafeInvoke(this, () => new CommandCreatedEventArgs(compositeCommand, commandName));
             }
         }
 #else
@@ -160,7 +189,7 @@ namespace Catel.MVVM
 
                 InvalidateCommands();
 
-                CommandCreated.SafeInvoke(this, new CommandCreatedEventArgs(compositeCommand, commandName));
+                CommandCreated.SafeInvoke(this, () => new CommandCreatedEventArgs(compositeCommand, commandName));
             }
         }
 #endif
@@ -544,13 +573,6 @@ namespace Catel.MVVM
         /// </summary>
         public void SubscribeToKeyboardEvents()
         {
-#if SL5
-            if (_subscribedToKeyboardEvent)
-            {
-                return;
-            }
-#endif
-
 #if NET || SILVERLIGHT
             var application = Application.Current;
             if (application == null)
@@ -580,19 +602,52 @@ namespace Catel.MVVM
                 Log.Warning("Application.RootVisual is null, cannot subscribe to keyboard events");
                 return;
             }
-
-            _subscribedToKeyboardEvent = true;
 #elif NETFX_CORE
             // TODO: Grab events
 #endif
 
 #if NET || SL5
-            CommandManagerWrapper commandManagerWrapper = null;
-            if (!_subscribedViews.TryGetValue(mainView, out commandManagerWrapper))
-            {
-                _subscribedViews.Add(mainView, new CommandManagerWrapper(mainView, this));
-            }
+            SubscribeToKeyboardEvents(mainView);
 #endif
+        }
+#endif
+
+#if NET || SL5
+        /// <summary>
+        /// Subscribes to keyboard events.
+        /// </summary>
+        /// <param name="view">The view.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
+        public void SubscribeToKeyboardEvents(FrameworkElement view)
+        {
+            Argument.IsNotNull("view", view);
+
+            CommandManagerWrapper commandManagerWrapper = null;
+            if (!_subscribedViews.TryGetValue(view, out commandManagerWrapper))
+            {
+                _subscribedViews.Add(view, new CommandManagerWrapper(view, this));
+
+#if NET
+                var app = Application.Current;
+                if (app != null)
+                {
+                    var mainWindow = app.MainWindow;
+                    if (ReferenceEquals(mainWindow, view))
+                    {
+                        EventManager.RegisterClassHandler(typeof(Window), Window.LoadedEvent, new RoutedEventHandler(OnWindowLoaded));
+                    }
+                }
+#endif
+            }
+        }
+
+        private void OnWindowLoaded(object sender, RoutedEventArgs e)
+        {
+            var view = sender as FrameworkElement;
+            if (view != null)
+            {
+                SubscribeToKeyboardEvents(view);
+            }
         }
 #endif
     }

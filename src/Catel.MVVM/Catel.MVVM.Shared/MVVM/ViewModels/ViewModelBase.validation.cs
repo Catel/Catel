@@ -11,6 +11,7 @@ namespace Catel.MVVM
     using System.Linq;
     using Catel.Data;
     using Catel.Reflection;
+    using Logging;
 
 #if NET40 || SILVERLIGHT && !WINDOWS_PHONE
     using System.ComponentModel.DataAnnotations;

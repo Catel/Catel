@@ -167,8 +167,6 @@ namespace Catel.MVVM.Views
         /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
         private void SyncViewModelOfView(IView view)
         {
-            Argument.IsNotNull("view", view);
-
             lock (_syncObj)
             {
                 var activeViewModel = view.ViewModel;

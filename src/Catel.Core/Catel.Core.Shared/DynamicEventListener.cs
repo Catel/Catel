@@ -244,7 +244,7 @@ namespace Catel
         public void OnEvent()
 // ReSharper restore UnusedMember.Global
         {
-            EventOccurred.SafeInvoke(this, EventArgs.Empty);
+            EventOccurred.SafeInvoke(this);
 
             if (_handlerInstance != null)
             {

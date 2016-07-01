@@ -42,7 +42,7 @@ namespace Catel
         /// <param name="featureFormat">The feature format.</param>
         /// <param name="args">The formatting arguments.</param>
         public NotSupportedInPlatformException(string featureFormat = "", params object[] args)
-            : base(ResourceHelper.GetString("NotSupportedInPlatform"))
+            : base("Feature is currently not yet supported for this platform")
         {
             Reason = string.Format(featureFormat, args);
             Platform = Platforms.CurrentPlatform;

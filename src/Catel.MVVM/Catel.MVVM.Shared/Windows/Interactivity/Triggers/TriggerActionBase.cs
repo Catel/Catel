@@ -32,6 +32,10 @@ namespace Catel.Windows.Interactivity
     {
         #region Fields
         private bool _isClean = true;
+        private int _loadCounter;
+
+        private bool _isSubscribedToLoadedEvent = false;
+        private bool _isSubscribedToUnloadedEvent = false;
         #endregion
 
         #region Constructors
@@ -44,7 +48,16 @@ namespace Catel.Windows.Interactivity
         /// <value>
         /// <c>true</c> if the <c>TriggerActionBase{T}.AssociatedObject</c> is loaded; otherwise, <c>false</c>.
         /// </value>
-        public bool IsAssociatedObjectLoaded { get; private set; }
+        public bool IsAssociatedObjectLoaded { get { return _loadCounter > 0; } }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is in design mode.
+        /// </summary>
+        /// <value><c>true</c> if this instance is in design mode; otherwise, <c>false</c>.</value>
+        protected bool IsInDesignMode
+        {
+            get { return CatelEnvironment.IsInDesignMode; }
+        }
         #endregion
 
         #region Methods
@@ -53,12 +66,20 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override void OnAttached()
         {
+            if (IsInDesignMode)
+            {
+                return;
+            }
+
             base.OnAttached();
 
-            AssociatedObject.Loaded += OnAssociatedObjectLoadedInternal;
+            if (!_isSubscribedToLoadedEvent)
+            {
+                AssociatedObject.Loaded += OnAssociatedObjectLoadedInternal;
+                _isSubscribedToLoadedEvent = true;
+            }
 
             _isClean = false;
-            IsAssociatedObjectLoaded = false;
 
             ValidateRequiredProperties();
 
@@ -70,11 +91,17 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override void OnDetaching()
         {
+            if (IsInDesignMode)
+            {
+                return;
+            }
+
             CleanUp();
 
             if (AssociatedObject != null)
             {
                 AssociatedObject.Loaded -= OnAssociatedObjectLoadedInternal;
+                _isSubscribedToLoadedEvent = false;
             }
 
             base.OnDetaching();
@@ -117,23 +144,37 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnAssociatedObjectLoadedInternal(object sender, UIEventArgs e)
         {
-            if (IsAssociatedObjectLoaded)
+            _loadCounter++;
+
+            // Yes, 1, because we just increased the counter
+            if (_loadCounter != 1)
             {
                 return;
             }
 
-            AssociatedObject.Unloaded += OnAssociatedObjectUnloadedInternal;
+            if (!_isSubscribedToUnloadedEvent)
+            {
+                AssociatedObject.Unloaded += OnAssociatedObjectUnloadedInternal;
+                _isSubscribedToUnloadedEvent = true;
+            }
 
-            IsAssociatedObjectLoaded = true;
-
+            OnAssociatedObjectLoaded();
             OnAssociatedObjectLoaded(sender, e);
         }
 
         /// <summary>
-        /// Called when the <see cref="TriggerAction{T}.AssociatedObject"/> is loaded.
+        /// Called when the AssociatedObject is loaded.
+        /// </summary>
+        protected virtual void OnAssociatedObjectLoaded()
+        {
+        }
+
+        /// <summary>
+        /// Called when the AssociatedObject is loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "OnAssociatedObjectLoaded()", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         protected virtual void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
         {
         }
@@ -146,23 +187,32 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnAssociatedObjectUnloadedInternal(object sender, UIEventArgs e)
         {
-            if (!IsAssociatedObjectLoaded)
+            _loadCounter--;
+
+            if (_loadCounter != 0)
             {
                 return;
             }
 
-            IsAssociatedObjectLoaded = false;
-
+            OnAssociatedObjectUnloaded();
             OnAssociatedObjectUnloaded(sender, e);
 
             CleanUp();
         }
 
         /// <summary>
-        /// Called when the <see cref="TriggerAction{T}.AssociatedObject"/> is unloaded.
+        /// Called when the AssociatedObject is unloaded.
+        /// </summary>
+        protected virtual void OnAssociatedObjectUnloaded()
+        {
+        }
+
+        /// <summary>
+        /// Called when the AssociatedObject is unloaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "OnAssociatedObjectUnloaded()", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         protected virtual void OnAssociatedObjectUnloaded(object sender, UIEventArgs e)
         {
         }
@@ -182,6 +232,7 @@ namespace Catel.Windows.Interactivity
             if (AssociatedObject != null)
             {
                 AssociatedObject.Unloaded -= OnAssociatedObjectUnloadedInternal;
+                _isSubscribedToUnloadedEvent = false;
             }
 
             Uninitialize();

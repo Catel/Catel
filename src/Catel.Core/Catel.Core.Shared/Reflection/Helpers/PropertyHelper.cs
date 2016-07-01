@@ -466,7 +466,7 @@ namespace Catel.Reflection
         /// <returns>PropertyInfo.</returns>
         public static PropertyInfo GetPropertyInfo(object obj, string property, bool ignoreCase)
         {
-            string cacheKey = string.Format("{0}_{1}_{2}", obj.GetType().FullName, property, ignoreCase);
+            string cacheKey = $"{obj.GetType().FullName}_{property}_{ignoreCase}";
             return _availableProperties.GetFromCacheOrFetch(cacheKey, () =>
             {
                 var objectType = obj.GetType();

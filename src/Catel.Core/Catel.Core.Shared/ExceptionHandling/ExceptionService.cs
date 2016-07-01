@@ -55,7 +55,11 @@ namespace Catel.ExceptionHandling
         /// <summary>
         /// The _exception handlers
         /// </summary>
+#if !SL5
+        private readonly SortedDictionary<Type, IExceptionHandler> _exceptionHandlers = new SortedDictionary<Type, IExceptionHandler>(new ExceptionInheritanceComparer());
+#else
         private readonly Dictionary<Type, IExceptionHandler> _exceptionHandlers = new Dictionary<Type, IExceptionHandler>();
+#endif
         #endregion
 
         #region Properties
@@ -164,23 +168,63 @@ namespace Catel.ExceptionHandling
         /// <param name="handler">The action to execute when the exception occurs.</param>
         /// <returns>The handler to use.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        /// <exception cref="Exception">A delegate callback throws an exception.</exception>
+        [ObsoleteEx(Message = "Use Register<TException>(Action<TException> handler, Func<TException, bool> exceptionPredicate = null) instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         public IExceptionHandler Register<TException>(Action<TException> handler)
+            where TException : Exception
+        {
+            return Register(handler, null);
+        }
+
+        /// <summary>
+        /// Registers a specific exception including the handler.
+        /// </summary>
+        /// <typeparam name="TException">The type of the exception.</typeparam>
+        /// <param name="exceptionPredicate">The  exception filter.</param>
+        /// <param name="handler">The action to execute when the exception occurs.</param>
+        /// <returns>The handler to use.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        /// <exception cref="Exception">A delegate callback throws an exception.</exception>
+        public IExceptionHandler Register<TException>(Action<TException> handler, Func<TException, bool> exceptionPredicate = null)
             where TException : Exception
         {
             Argument.IsNotNull("handler", handler);
 
             var exceptionType = typeof(TException);
 
+            ExceptionPredicate predicate = null;
+
+            if (exceptionPredicate != null)
+            {
+                predicate = exception => exception is TException && exceptionPredicate((TException) exception);
+            }
+
+            var exceptionAction = new Action<Exception>(exception => handler((TException)exception));
+
+            var exceptionHandler = new ExceptionHandler(exceptionType, exceptionAction, predicate);
+
+            return Register(exceptionHandler);
+        }
+
+        /// <summary>
+        /// Registers an handler for a specific exception type.
+        /// </summary>
+        /// <param name="handler">The handler to use when the exception occurs.</param>
+        /// <returns>The handler to use.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        public IExceptionHandler Register(IExceptionHandler handler)
+        {
+            Argument.IsNotNull("handler", handler);
+
+            var exceptionType = handler.ExceptionType;
+
             lock (_exceptionHandlers)
             {
                 if (!_exceptionHandlers.ContainsKey(exceptionType))
                 {
-                    var exceptionAction = new Action<Exception>(exception => handler((TException)exception));
+                    _exceptionHandlers.Add(exceptionType, handler);
 
-                    var exceptionHandler = new ExceptionHandler(exceptionType, exceptionAction);
-                    _exceptionHandlers.Add(exceptionType, exceptionHandler);
-
-                    Log.Debug("Added exception handler for type '{0}'", exceptionType.Name);
+                    Log.Debug("Added the handler for the exception type '{0}'", exceptionType.Name);
                 }
 
                 return _exceptionHandlers[exceptionType];
@@ -191,7 +235,7 @@ namespace Catel.ExceptionHandling
         /// Unregisters a specific exception for handling.
         /// </summary>
         /// <typeparam name="TException">The type of the exception.</typeparam>
-        /// <returns><c>true</c> if the exception is unsubscribed; otherwise <c>false</c>.</returns>
+        /// <returns><c>true</c> if the exception is unsubscripted; otherwise <c>false</c>.</returns>
         public bool Unregister<TException>()
             where TException : Exception
         {
@@ -202,6 +246,7 @@ namespace Catel.ExceptionHandling
                 if (_exceptionHandlers.ContainsKey(exceptionType))
                 {
                     _exceptionHandlers.Remove(exceptionType);
+
                     Log.Debug("Removed exception handler for type '{0}'", exceptionType.Name);
 
                     return true;
@@ -333,7 +378,7 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
-        /// Processes the specified action with possibilty to retry on error.
+        /// Processes the specified action with possibility to retry on error.
         /// </summary>
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="action">The action.</param>
@@ -407,7 +452,7 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
-        /// Processes asynchrounously the specified action with possibilty to retry on error.
+        /// Processes asynchronously the specified action with possibility to retry on error.
         /// </summary>
         /// <typeparam name="TResult">The result type.</typeparam>
         /// <param name="action">The action.</param>
@@ -481,7 +526,7 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
-        /// Processes the specified action. The action will be executed asynchrounously.
+        /// Processes the specified action. The action will be executed asynchronously.
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
@@ -554,7 +599,7 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
-        /// Processes the specified action. The action will be executed asynchrounously.
+        /// Processes the specified action. The action will be executed asynchronously.
         /// </summary>
         /// <typeparam name="TResult">The result type.</typeparam>
         /// <param name="action">The action.</param>
@@ -616,7 +661,7 @@ namespace Catel.ExceptionHandling
         /// <param name="delay">The delay that indicates how long the current thread will be suspended before the next iteration is invoked.</param>
         protected virtual void OnRetryingAction(int retryCount, Exception lastError, TimeSpan delay)
         {
-            RetryingAction.SafeInvoke(this, new RetryingEventArgs(retryCount, delay, lastError));
+            RetryingAction.SafeInvoke(this, () => new RetryingEventArgs(retryCount, delay, lastError));
         }
 
         /// <summary>
@@ -626,7 +671,7 @@ namespace Catel.ExceptionHandling
         /// <param name="dateTime">The date and time when the event occurs.</param>
         protected virtual void OnExceptionBuffered(Exception bufferedException, DateTime dateTime)
         {
-            ExceptionBuffered.SafeInvoke(this, new BufferedEventArgs(bufferedException, dateTime));
+            ExceptionBuffered.SafeInvoke(this, () => new BufferedEventArgs(bufferedException, dateTime));
         }
         #endregion
     }

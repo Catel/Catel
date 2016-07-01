@@ -198,14 +198,43 @@ namespace Catel.Collections
         }
 
         /// <summary>
-        /// Add an range of items to the specified <see cref="ObservableCollection{T}"/>.
+        /// Add an range of items to the specified <see cref="ICollection{T}"/>.
         /// </summary>
-        /// <typeparam name="T">Type of items within the observable collection.</typeparam>
-        /// <param name="collection">The <see cref="ObservableCollection{T}"/>.</param>
+        /// <typeparam name="T">Type of items within the collection.</typeparam>
+        /// <param name="collection">The collection.</param>
         /// <param name="range">An range of items.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="range"/> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "AddRange(this ICollection<T>, IEnumerable<T>)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> range)
+        {
+            AddRange((ICollection<T>) collection, range);
+        }
+
+        /// <summary>
+        /// Replaces the whole range of the specified <paramref name="collection"/>. This is done by internally
+        /// calling <see cref="ICollection{T}.Clear"/> and finally <c>AddRange{T}</c>.
+        /// </summary>
+        /// <typeparam name="T">Type of items within the collection.</typeparam>
+        /// <param name="collection">The collection.</param>
+        /// <param name="range">The range of items to add to the observable collection.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="range"/> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "ReplaceRange(this ICollection<T>, IEnumerable<T>)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public static void ReplaceRange<T>(this ObservableCollection<T> collection, IEnumerable<T> range)
+        {
+            ReplaceRange((ICollection<T>)collection, range);
+        }
+
+        /// <summary>
+        /// Add an range of items to the specified <see cref="ICollection{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">Type of items within the collection.</typeparam>
+        /// <param name="collection">The collection.</param>
+        /// <param name="range">An range of items.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="range"/> is <c>null</c>.</exception>
+        public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> range)
         {
             Argument.IsNotNull("collection", collection);
             Argument.IsNotNull("range", range);
@@ -218,14 +247,14 @@ namespace Catel.Collections
 
         /// <summary>
         /// Replaces the whole range of the specified <paramref name="collection"/>. This is done by internally
-        /// calling <see cref="Collection{T}.Clear"/> and finally <see cref="AddRange{T}"/>.
+        /// calling <see cref="ICollection{T}.Clear"/> and finally <c>AddRange{T}</c>.
         /// </summary>
-        /// <typeparam name="T">Type of items within the observable collection.</typeparam>
+        /// <typeparam name="T">Type of items within the collection.</typeparam>
         /// <param name="collection">The collection.</param>
         /// <param name="range">The range of items to add to the observable collection.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="range"/> is <c>null</c>.</exception>
-        public static void ReplaceRange<T>(this ObservableCollection<T> collection, IEnumerable<T> range)
+        public static void ReplaceRange<T>(this ICollection<T> collection, IEnumerable<T> range)
         {
             Argument.IsNotNull("collection", collection);
             Argument.IsNotNull("range", range);

@@ -48,9 +48,6 @@ namespace Catel.Logging
                 case LogEvent.Error:
                     _eventSource.Error(message);
                     break;
-
-                default:
-                    throw new ArgumentOutOfRangeException("logEvent");
             }
         }
     }

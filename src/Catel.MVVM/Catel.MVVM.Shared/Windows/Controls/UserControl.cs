@@ -123,7 +123,7 @@ namespace Catel.Windows.Controls
                 OnUnloaded(e);
             };
 
-            this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged.SafeInvoke(this, new Catel.MVVM.Views.DataContextChangedEventArgs(e.OldValue, e.NewValue)));
+            this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged.SafeInvoke(this, () => new Catel.MVVM.Views.DataContextChangedEventArgs(e.OldValue, e.NewValue)));
         }
         #endregion
 
@@ -194,6 +194,18 @@ namespace Catel.Windows.Controls
         {
             get { return _logic.GetValue<UserControlLogic, bool>(x => x.SupportParentViewModelContainers, true); }
             set { _logic.SetValue<UserControlLogic>(x => x.SupportParentViewModelContainers = value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value for the <see cref="SupportParentViewModelContainers"/> property. This way, the behavior
+        /// can be changed an entire application to prevent disabling it on every control.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        public static bool DefaultSupportParentViewModelContainersValue
+        {
+            get { return UserControlLogic.DefaultSupportParentViewModelContainersValue; }
+            set { UserControlLogic.DefaultSupportParentViewModelContainersValue = value; }
         }
 
         /// <summary>
@@ -393,7 +405,7 @@ namespace Catel.Windows.Controls
             OnViewModelChanged();
 
             ViewModelChanged.SafeInvoke(this);
-            PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
+            PropertyChanged.SafeInvoke(this, () => new PropertyChangedEventArgs("ViewModel"));
         }
 
         /// <summary>

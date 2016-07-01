@@ -9,6 +9,8 @@ namespace Catel.Data
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Text;
+    using Text;
 
 #if NETFX_CORE
     using Catel.Collections;
@@ -194,11 +196,21 @@ namespace Catel.Data
         /// Gets a collection of business rule warnings.
         /// </summary>
         /// <value>The business warnings.</value>
+        [ObsoleteEx(ReplacementTypeOrMember = "BusinessRuleWarnings", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public ReadOnlyCollection<IBusinessRuleValidationResult> BusinessWarnings
+        {
+            get { return BusinessRuleWarnings; }
+        }
+
+        /// <summary>
+        /// Gets a collection of business rule warnings.
+        /// </summary>
+        /// <value>The business warnings.</value>
+        public ReadOnlyCollection<IBusinessRuleValidationResult> BusinessRuleWarnings
         {
             get
             {
-               return new ReadOnlyCollection<IBusinessRuleValidationResult>(_businessRuleWarnings);
+                return new ReadOnlyCollection<IBusinessRuleValidationResult>(_businessRuleWarnings);
             }
         }
 
@@ -212,6 +224,60 @@ namespace Catel.Data
             {
                 return new ReadOnlyCollection<IBusinessRuleValidationResult>(_businessRuleErrors);
             }
+        }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine("Errors");
+            stringBuilder.AppendLine("===============================");
+
+            var errors = new List<IValidationResult>();
+            errors.AddRange(BusinessRuleErrors);
+            errors.AddRange(FieldErrors);
+
+            if (errors.Count == 0)
+            {
+                stringBuilder.AppendLine("[no errors]");
+            }
+            else
+            {
+                foreach (var error in errors)
+                {
+                    stringBuilder.AppendLine("- {0}", error);
+                }
+            }
+
+            stringBuilder.AppendLine();
+
+            stringBuilder.AppendLine("Warnings");
+            stringBuilder.AppendLine("===============================");
+
+            var warnings = new List<IValidationResult>();
+            warnings.AddRange(BusinessWarnings);
+            warnings.AddRange(FieldWarnings);
+
+            if (warnings.Count == 0)
+            {
+                stringBuilder.AppendLine("[no warnings]");
+            }
+            else
+            {
+                foreach (var warning in warnings)
+                {
+                    stringBuilder.AppendLine("- {0}", warning);
+                }
+            }
+
+            var finalString = stringBuilder.ToString();
+            return finalString;
         }
         #endregion
     }

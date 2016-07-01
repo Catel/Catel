@@ -1,0 +1,356 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{BE079DB6-FD92-4167-8DF4-CACB2E1422FC}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\readme.txt = ..\lib\readme.txt
+		..\lib\repositories.config = ..\lib\repositories.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{58F62039-8645-499C-B264-66048F4F0F75}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{E0737FB3-1C66-4582-A076-F6DCD6504C48}"
+	ProjectSection(SolutionItems) = preProject
+		..\doc\catel rules.txt = ..\doc\catel rules.txt
+		..\doc\easy deployment.txt = ..\doc\easy deployment.txt
+		..\doc\faq.txt = ..\doc\faq.txt
+		..\doc\history.txt = ..\doc\history.txt
+		..\doc\projects explanation.txt = ..\doc\projects explanation.txt
+		..\doc\readme.txt = ..\doc\readme.txt
+		..\doc\release steps.txt = ..\doc\release steps.txt
+		..\doc\running custom tool.txt = ..\doc\running custom tool.txt
+		..\doc\translating resources.txt = ..\doc\translating resources.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{EF395E12-0C90-4CE1-921A-A276AF0DC28A}"
+	ProjectSection(SolutionItems) = preProject
+		Catel.FxCop = Catel.FxCop
+		Catel.snk = Catel.snk
+		Catel.vsmdi = Catel.vsmdi
+		CustomDictionary.xml = CustomDictionary.xml
+		nuget.config = nuget.config
+		Settings.StyleCop = Settings.StyleCop
+		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "snippets", "snippets", "{0530FD4D-FB57-412E-877C-014B42413D0A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SL5", "SL5", "{B0EED982-2D1D-4830-B616-1B8E46BB4C7A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET40", "NET40", "{80394EA6-3B1A-457A-A21E-EAE2CCEF6BA5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactivity", "{1E51A52B-C52A-4883-95A2-0B15D81E83EF}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\NET40\Interactivity\System.Windows.Interactivity.dll = ..\lib\NET40\Interactivity\System.Windows.Interactivity.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactivity", "{340E7DDE-6DB6-4B51-9F4B-9251C088944F}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\SL5\Interactivity\System.Windows.Interactivity.dll = ..\lib\SL5\Interactivity\System.Windows.Interactivity.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NET45", "NET45", "{65417F3B-DCC0-490F-A13D-9EF48F6F5352}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactivity", "{A53512E9-0AA1-4623-9E28-E44693631341}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\NET45\Interactivity\System.Windows.Interactivity.dll = ..\lib\NET45\Interactivity\System.Windows.Interactivity.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "design", "design", "{4B5D5785-1151-4517-8157-3C094D8A3E1B}"
+	ProjectSection(SolutionItems) = preProject
+		..\design\Catel logo (silverlight).png = ..\design\Catel logo (silverlight).png
+		..\design\Catel logo (transparent).png = ..\design\Catel logo (transparent).png
+		..\design\Catel logo (windows phone 7).png = ..\design\Catel logo (windows phone 7).png
+		..\design\Catel logo (wpf).png = ..\design\Catel logo (wpf).png
+		..\design\Catel logo.ico = ..\design\Catel logo.ico
+		..\design\Catel logo.png = ..\design\Catel logo.png
+		..\design\logo_pcl.jpg = ..\design\logo_pcl.jpg
+		..\design\logo_plc_large.png = ..\design\logo_plc_large.png
+		..\design\logo_silverlight.jpg = ..\design\logo_silverlight.jpg
+		..\design\logo_windows8.jpg = ..\design\logo_windows8.jpg
+		..\design\logo_wp.jpg = ..\design\logo_wp.jpg
+		..\design\logo_wpf.jpg = ..\design\logo_wpf.jpg
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Core", "Catel.Core", "{3F661942-9946-4292-9FE7-6B576782D5F9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.MVVM", "Catel.MVVM", "{162DE45B-B7A2-4D4A-B90D-F1762133C31C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8C3710FE-B6C7-4261-81B6-897F4B286B2B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CSharp", "CSharp", "{0FF8A998-8E34-424B-9C36-41A111341EB0}"
+	ProjectSection(SolutionItems) = preProject
+		..\snippets\C#\dataobject.snippet = ..\snippets\C#\dataobject.snippet
+		..\snippets\C#\dataprop.snippet = ..\snippets\C#\dataprop.snippet
+		..\snippets\C#\datapropchanged.snippet = ..\snippets\C#\datapropchanged.snippet
+		..\snippets\C#\model.snippet = ..\snippets\C#\model.snippet
+		..\snippets\C#\modelprop.snippet = ..\snippets\C#\modelprop.snippet
+		..\snippets\C#\modelpropchanged.snippet = ..\snippets\C#\modelpropchanged.snippet
+		..\snippets\C#\vm.snippet = ..\snippets\C#\vm.snippet
+		..\snippets\C#\vmcommand.snippet = ..\snippets\C#\vmcommand.snippet
+		..\snippets\C#\vmcommandwithcanexecute.snippet = ..\snippets\C#\vmcommandwithcanexecute.snippet
+		..\snippets\C#\vmcommandwithvalidationsummary.snippet = ..\snippets\C#\vmcommandwithvalidationsummary.snippet
+		..\snippets\C#\vmprop.snippet = ..\snippets\C#\vmprop.snippet
+		..\snippets\C#\vmpropchanged.snippet = ..\snippets\C#\vmpropchanged.snippet
+		..\snippets\C#\vmpropmodel.snippet = ..\snippets\C#\vmpropmodel.snippet
+		..\snippets\C#\vmpropviewmodeltomodel.snippet = ..\snippets\C#\vmpropviewmodeltomodel.snippet
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VB.NET", "VB.NET", "{4B60DC07-ACC6-4EFA-BED6-22AA8F34DC24}"
+	ProjectSection(SolutionItems) = preProject
+		..\snippets\VB.NET\dataobject.snippet = ..\snippets\VB.NET\dataobject.snippet
+		..\snippets\VB.NET\dataprop.snippet = ..\snippets\VB.NET\dataprop.snippet
+		..\snippets\VB.NET\datapropchanged.snippet = ..\snippets\VB.NET\datapropchanged.snippet
+		..\snippets\VB.NET\model.snippet = ..\snippets\VB.NET\model.snippet
+		..\snippets\VB.NET\modelprop.snippet = ..\snippets\VB.NET\modelprop.snippet
+		..\snippets\VB.NET\modelpropchanged.snippet = ..\snippets\VB.NET\modelpropchanged.snippet
+		..\snippets\VB.NET\vm.snippet = ..\snippets\VB.NET\vm.snippet
+		..\snippets\VB.NET\vmcommand.snippet = ..\snippets\VB.NET\vmcommand.snippet
+		..\snippets\VB.NET\vmcommandwithcanexecute.snippet = ..\snippets\VB.NET\vmcommandwithcanexecute.snippet
+		..\snippets\VB.NET\vmcommandwithvalidationsummary.snippet = ..\snippets\VB.NET\vmcommandwithvalidationsummary.snippet
+		..\snippets\VB.NET\vmprop.snippet = ..\snippets\VB.NET\vmprop.snippet
+		..\snippets\VB.NET\vmpropchanged.snippet = ..\snippets\VB.NET\vmpropchanged.snippet
+		..\snippets\VB.NET\vmpropmodel.snippet = ..\snippets\VB.NET\vmpropmodel.snippet
+		..\snippets\VB.NET\vmpropviewmodeltomodel.snippet = ..\snippets\VB.NET\vmpropviewmodeltomodel.snippet
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Toolkit", "Toolkit", "{7D3D71F1-1B3D-4B27-8216-86FC25C8CC91}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\SL5\Toolkit\System.Windows.Controls.Toolkit.dll = ..\lib\SL5\Toolkit\System.Windows.Controls.Toolkit.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WP80", "WP80", "{F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interactivity", "Interactivity", "{B5C5A548-D22B-4BF2-8E10-19F67DF5D0AD}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\WP80\Interactivity\System.Windows.Interactivity.dll = ..\lib\WP80\Interactivity\System.Windows.Interactivity.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight testing", "Silverlight testing", "{F80CC0BE-3DA4-4889-A905-A0BE751C31E7}"
+	ProjectSection(SolutionItems) = preProject
+		..\lib\WP80\Silverlight testing\Microsoft.Silverlight.Testing.dll = ..\lib\WP80\Silverlight testing\Microsoft.Silverlight.Testing.dll
+		..\lib\WP80\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll = ..\lib\WP80\Silverlight testing\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.Data", "Catel.Extensions.Data", "{41BA68F9-3422-4FB0-B6DE-7097A22565E5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.Memento", "Catel.Extensions.Memento", "{BD2D9D3A-6266-4D0B-B2B4-DD5726861E36}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.DynamicObjects", "Catel.Extensions.DynamicObjects", "{B5ED1A50-E238-4C92-996A-08ED76033DF3}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Core.Shared", "Catel.Core\Catel.Core.Shared\Catel.Core.Shared.shproj", "{3743A304-3EE5-4909-BFEC-988D59D1B33A}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Extensions.Data.Shared", "Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.shproj", "{41C1B6D9-E16A-4137-B573-1AB9DA17EFF3}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Extensions.DynamicObjects.Shared", "Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.shproj", "{F8820AE3-4021-4622-A0A9-E33876A471B4}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Extensions.Memento.Shared", "Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.shproj", "{C1E36B63-D33E-4F25-844B-0DE262D8A01A}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Test.Shared", "Catel.Test\Catel.Test.Shared\Catel.Test.Shared.shproj", "{84191838-C476-4E1A-9129-07D8C906674A}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.MVVM.Shared", "Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.shproj", "{8C7EAB82-554B-4761-B67E-7E9B9A306914}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.PCL", "Catel.Core\Catel.Core.PCL\Catel.Core.PCL.csproj", "{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Serialization.Json", "Catel.Serialization.Json", "{85BEBC4F-4020-4045-945B-B8F6F732FC6E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Serialization.Yaml", "Catel.Serialization.Yaml", "{E3580D73-CCCC-4956-8BCD-6F4F9B58310D}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Serialization.Json.Shared", "Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.shproj", "{E686A62C-2E03-40A2-8BE6-BDF6D5F19A71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Serialization.Json.PCL", "Catel.Serialization.Json\Catel.Serialization.Json.PCL\Catel.Serialization.Json.PCL.csproj", "{5A6CF7D5-9BBC-44B5-8A73-2146D03C3C1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Data.PCL", "Catel.Extensions.Data\Catel.Extensions.Data.PCL\Catel.Extensions.Data.PCL.csproj", "{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Memento.PCL", "Catel.Extensions.Memento\Catel.Extensions.Memento.PCL\Catel.Extensions.Memento.PCL.csproj", "{3633B1F2-1D87-4E9E-87AB-4996369E96AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.DynamicObjects.PCL", "Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.PCL\Catel.Extensions.DynamicObjects.PCL.csproj", "{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.Xamarin.Forms", "Catel.MVVM\Catel.MVVM.Xamarin.Forms\Catel.MVVM.Xamarin.Forms.csproj", "{E0D994CA-D553-4009-A159-33542A16C4D0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.FluentValidation", "Catel.Extensions.FluentValidation", "{82B45C79-0810-48F2-9F1C-A1E2E0768EC7}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Extensions.FluentValidation.Shared", "Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.shproj", "{C7BC725E-FA25-46A8-9288-C708B69E5BD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.FluentValidation.PCL", "Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.PCL\Catel.Extensions.FluentValidation.PCL.csproj", "{6040C547-F6C9-4526-A164-554A2EF9E1E5}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{3743a304-3ee5-4909-bfec-988d59d1b33a}*SharedItemsImports = 13
+		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{3658ef5e-766f-4d36-b0fc-dfadae6547dd}*SharedItemsImports = 4
+		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{8c7eab82-554b-4761-b67e-7e9b9a306914}*SharedItemsImports = 13
+		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{41c1b6d9-e16a-4137-b573-1ab9da17eff3}*SharedItemsImports = 13
+		Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.projitems*{6040c547-f6c9-4526-a164-554a2ef9e1e5}*SharedItemsImports = 4
+		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{5a6cf7d5-9bbc-44b5-8a73-2146d03c3c1e}*SharedItemsImports = 4
+		Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.projitems*{c7bc725e-fa25-46a8-9288-c708b69e5bd3}*SharedItemsImports = 13
+		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{e0d994ca-d553-4009-a159-33542a16c4d0}*SharedItemsImports = 4
+		Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems*{c1e36b63-d33e-4f25-844b-0de262d8a01a}*SharedItemsImports = 13
+		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{c35d5dc5-7149-4e56-9f0c-90d8f6a1c495}*SharedItemsImports = 4
+		Catel.Test\Catel.Test.Shared\Catel.Test.Shared.projitems*{84191838-c476-4e1a-9129-07d8c906674a}*SharedItemsImports = 13
+		Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.projitems*{f8820ae3-4021-4622-a0a9-e33876a471b4}*SharedItemsImports = 13
+		Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems*{3633b1f2-1d87-4e9e-87ab-4996369e96af}*SharedItemsImports = 4
+		Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.projitems*{f55d14dc-3fa4-4fd9-ae73-a8cdf2bb7c33}*SharedItemsImports = 4
+		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{e686a62c-2e03-40a2-8be6-bdf6d5f19a71}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM = Debug|ARM
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|ARM = Release|ARM
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Release|ARM.ActiveCfg = Release|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Release|x64.ActiveCfg = Release|Any CPU
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}.Release|x86.ActiveCfg = Release|Any CPU
+		{5A6CF7D5-9BBC-44B5-8A73-2146D03C3C1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A6CF7D5-9BBC-44B5-8A73-2146D03C3C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A6CF7D5-9BBC-44B5-8A73-2146D03C3C1E}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{5A6CF7D5-9BBC-44B5-8A73-2146D03C3C1E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5A6CF7D5-9BBC-44B5-8A73-2146D03C3C1E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5A6CF7D5-9BBC-44B5-8A73-2146D03C3C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A6CF7D5-9BBC-44B5-8A73-2146D03C3C1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A6CF7D5-9BBC-44B5-8A73-2146D03C3C1E}.Release|ARM.ActiveCfg = Release|Any CPU
+		{5A6CF7D5-9BBC-44B5-8A73-2146D03C3C1E}.Release|x64.ActiveCfg = Release|Any CPU
+		{5A6CF7D5-9BBC-44B5-8A73-2146D03C3C1E}.Release|x86.ActiveCfg = Release|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Debug|ARM.Build.0 = Debug|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Debug|x64.Build.0 = Debug|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Debug|x86.Build.0 = Debug|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Release|ARM.ActiveCfg = Release|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Release|ARM.Build.0 = Release|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Release|x64.ActiveCfg = Release|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Release|x64.Build.0 = Release|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Release|x86.ActiveCfg = Release|Any CPU
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD}.Release|x86.Build.0 = Release|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Debug|ARM.Build.0 = Debug|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Debug|x64.Build.0 = Debug|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Debug|x86.Build.0 = Debug|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Release|ARM.ActiveCfg = Release|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Release|ARM.Build.0 = Release|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Release|x64.ActiveCfg = Release|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Release|x64.Build.0 = Release|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Release|x86.ActiveCfg = Release|Any CPU
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF}.Release|x86.Build.0 = Release|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|ARM.Build.0 = Debug|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|x64.Build.0 = Debug|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|x86.Build.0 = Debug|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|ARM.ActiveCfg = Release|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|ARM.Build.0 = Release|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|x64.ActiveCfg = Release|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|x64.Build.0 = Release|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|x86.ActiveCfg = Release|Any CPU
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|x86.Build.0 = Release|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Debug|ARM.Build.0 = Debug|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Debug|x64.Build.0 = Debug|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Debug|x86.Build.0 = Debug|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|ARM.ActiveCfg = Release|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|ARM.Build.0 = Release|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|x64.ActiveCfg = Release|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|x64.Build.0 = Release|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|x86.ActiveCfg = Release|Any CPU
+		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|x86.Build.0 = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|ARM.Build.0 = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|x64.Build.0 = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Debug|x86.Build.0 = Debug|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|ARM.ActiveCfg = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|ARM.Build.0 = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|x64.ActiveCfg = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|x64.Build.0 = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|x86.ActiveCfg = Release|Any CPU
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B0EED982-2D1D-4830-B616-1B8E46BB4C7A} = {BE079DB6-FD92-4167-8DF4-CACB2E1422FC}
+		{80394EA6-3B1A-457A-A21E-EAE2CCEF6BA5} = {BE079DB6-FD92-4167-8DF4-CACB2E1422FC}
+		{1E51A52B-C52A-4883-95A2-0B15D81E83EF} = {80394EA6-3B1A-457A-A21E-EAE2CCEF6BA5}
+		{340E7DDE-6DB6-4B51-9F4B-9251C088944F} = {B0EED982-2D1D-4830-B616-1B8E46BB4C7A}
+		{65417F3B-DCC0-490F-A13D-9EF48F6F5352} = {BE079DB6-FD92-4167-8DF4-CACB2E1422FC}
+		{A53512E9-0AA1-4623-9E28-E44693631341} = {65417F3B-DCC0-490F-A13D-9EF48F6F5352}
+		{3F661942-9946-4292-9FE7-6B576782D5F9} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{162DE45B-B7A2-4D4A-B90D-F1762133C31C} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{8C3710FE-B6C7-4261-81B6-897F4B286B2B} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{0FF8A998-8E34-424B-9C36-41A111341EB0} = {0530FD4D-FB57-412E-877C-014B42413D0A}
+		{4B60DC07-ACC6-4EFA-BED6-22AA8F34DC24} = {0530FD4D-FB57-412E-877C-014B42413D0A}
+		{7D3D71F1-1B3D-4B27-8216-86FC25C8CC91} = {B0EED982-2D1D-4830-B616-1B8E46BB4C7A}
+		{F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A} = {BE079DB6-FD92-4167-8DF4-CACB2E1422FC}
+		{B5C5A548-D22B-4BF2-8E10-19F67DF5D0AD} = {F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A}
+		{F80CC0BE-3DA4-4889-A905-A0BE751C31E7} = {F63BBBF1-FC19-4F0A-81D7-2C4C27A1768A}
+		{41BA68F9-3422-4FB0-B6DE-7097A22565E5} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{BD2D9D3A-6266-4D0B-B2B4-DD5726861E36} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{B5ED1A50-E238-4C92-996A-08ED76033DF3} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{3743A304-3EE5-4909-BFEC-988D59D1B33A} = {3F661942-9946-4292-9FE7-6B576782D5F9}
+		{41C1B6D9-E16A-4137-B573-1AB9DA17EFF3} = {41BA68F9-3422-4FB0-B6DE-7097A22565E5}
+		{F8820AE3-4021-4622-A0A9-E33876A471B4} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
+		{C1E36B63-D33E-4F25-844B-0DE262D8A01A} = {BD2D9D3A-6266-4D0B-B2B4-DD5726861E36}
+		{84191838-C476-4E1A-9129-07D8C906674A} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
+		{8C7EAB82-554B-4761-B67E-7E9B9A306914} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
+		{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495} = {3F661942-9946-4292-9FE7-6B576782D5F9}
+		{85BEBC4F-4020-4045-945B-B8F6F732FC6E} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{E3580D73-CCCC-4956-8BCD-6F4F9B58310D} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{E686A62C-2E03-40A2-8BE6-BDF6D5F19A71} = {85BEBC4F-4020-4045-945B-B8F6F732FC6E}
+		{5A6CF7D5-9BBC-44B5-8A73-2146D03C3C1E} = {85BEBC4F-4020-4045-945B-B8F6F732FC6E}
+		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD} = {41BA68F9-3422-4FB0-B6DE-7097A22565E5}
+		{3633B1F2-1D87-4E9E-87AB-4996369E96AF} = {BD2D9D3A-6266-4D0B-B2B4-DD5726861E36}
+		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
+		{E0D994CA-D553-4009-A159-33542A16C4D0} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
+		{82B45C79-0810-48F2-9F1C-A1E2E0768EC7} = {58F62039-8645-499C-B264-66048F4F0F75}
+		{C7BC725E-FA25-46A8-9288-C708B69E5BD3} = {82B45C79-0810-48F2-9F1C-A1E2E0768EC7}
+		{6040C547-F6C9-4526-A164-554A2EF9E1E5} = {82B45C79-0810-48F2-9F1C-A1E2E0768EC7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35
+	EndGlobalSection
+	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
+		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
+	EndGlobalSection
+EndGlobal

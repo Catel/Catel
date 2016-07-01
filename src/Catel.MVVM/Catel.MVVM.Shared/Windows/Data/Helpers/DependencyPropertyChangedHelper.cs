@@ -60,11 +60,11 @@ namespace Catel.Windows.Data
 
             var type = frameworkElement.GetType();
 
-            string key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(type, propertyName);
+            var key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(type, propertyName);
 
             if (!_realDependencyPropertiesCache.ContainsKey(key))
             {
-                bool isRealDependencyProperty = true;
+                var isRealDependencyProperty = true;
 
                 if (propertyName.EndsWith("_handler"))
                 {
@@ -216,7 +216,8 @@ namespace Catel.Windows.Data
 
             //Log.Debug("Unsubscribing from changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
 
-            var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, GetHandlerDependencyPropertyName(propertyName));
+            var handlerDependencyPropertyName = GetHandlerDependencyPropertyName(propertyName);
+            var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, handlerDependencyPropertyName);
             var internalHandler = (EventHandler<DependencyPropertyValueChangedEventArgs>)frameworkElement.GetValue(handlerDependencyProperty);
             if (internalHandler != null)
             {

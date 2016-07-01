@@ -40,7 +40,15 @@ namespace Catel.Logging
             var assembly = AssemblyHelper.GetEntryAssembly();
             Write(log, LogEvent.Info, "Assembly:              {0}", assembly.Title());
             Write(log, LogEvent.Info, "Version:               {0}", assembly.Version());
-            //Write(log, LogEvent.Info, "Informational version: {0}", assembly.InformationalVersion());
+			
+			try
+			{
+				Write(log, LogEvent.Info, "Informational version: {0}", assembly.InformationalVersion());
+			}
+			catch (Exception)
+			{
+			}
+            
             Write(log, LogEvent.Info, string.Empty);
             Write(log, LogEvent.Info, "Company:               {0}", assembly.Company());
             Write(log, LogEvent.Info, "Copyright:             {0}", assembly.Copyright());
@@ -253,7 +261,7 @@ namespace Catel.Logging
                 var exception = ExceptionFactory.CreateException<TException>(msg, innerException);
                 if (exception == null)
                 {
-                    var error = string.Format("Exception type '{0}' does not have a constructor accepting a string", typeof (TException).Name);
+                    var error = $"Exception type '{typeof (TException).Name}' does not have a constructor accepting a string";
 
                     if (log != null)
                     {
@@ -312,7 +320,7 @@ namespace Catel.Logging
             var exception = createExceptionCallback(message);
             if (exception == null)
             {
-                var error = string.Format("Exception type '{0}' does not have a constructor accepting a string", typeof(TException).Name);
+                var error = $"Exception type '{typeof (TException).Name}' does not have a constructor accepting a string";
 
                 if (log != null)
                 {
@@ -362,13 +370,13 @@ namespace Catel.Logging
         {
             Argument.IsNotNull("exception", exception);
 
-            var formattedException = string.Format("[{0}] {1}", exception.GetType().Name, exception);
+            var formattedException = $"[{exception.GetType().Name}] {exception}";
             if (string.IsNullOrEmpty(message))
             {
                 return formattedException;
             }
 
-            return string.Format("{0} | {1}", message, formattedException);
+            return $"{message} | {formattedException}";
         }
     }
 }

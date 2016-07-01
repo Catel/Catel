@@ -75,6 +75,21 @@ namespace Catel.Threading
         }
 
         /// <summary>
+        /// Gets a value indicating whether this lock is taken.
+        /// </summary>
+        /// <value><c>true</c> if this lock is taken; otherwise, <c>false</c>.</value>
+        public bool IsTaken
+        {
+            get
+            {
+                lock (_mutex)
+                {
+                    return _taken;
+                }
+            }
+        }
+
+        /// <summary>
         /// Asynchronously acquires the lock. Returns a disposable that releases the lock when disposed.
         /// </summary>
         /// <param name="cancellationToken">The cancellation token used to cancel the lock. If this is already set, then this method will attempt to take the lock immediately (succeeding if the lock is currently available).</param>

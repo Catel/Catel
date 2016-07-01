@@ -20,12 +20,14 @@ namespace Catel.Services
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Data;
     using Page = global::Windows.UI.Xaml.Controls.Page;
+    using UserControl = global::Windows.UI.Xaml.Controls.UserControl;
 #else
     using Catel.Windows.Controls;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
     using Page = System.Windows.Controls.Page;
+    using UserControl = System.Windows.Controls.UserControl;
 #endif
 
     public partial class ViewModelWrapperService
@@ -42,9 +44,18 @@ namespace Catel.Services
         protected override bool IsViewWrapped(IView view)
         {
             var content = GetContent(view) as FrameworkElement;
-            if (content == null || content.Name.StartsWith(InnerWrapperName))
+            if (content == null)
             {
                 return true;
+            }
+
+            if (content.Name.StartsWith(InnerWrapperName))
+            {
+                var binding = content.GetBindingExpression(FrameworkElement.DataContextProperty);
+                if (binding != null)
+                {
+                    return true;
+                }
             }
 
             return false;
@@ -64,63 +75,101 @@ namespace Catel.Services
                 return null;
             }
 
+            var viewTypeName = view.GetType().Name;
+
             _weakIsWrappingTable.Add(view, new object());
 
-            var vmGrid = new Grid();
-            vmGrid.Name = InnerWrapperName.GetUniqueControlName();
-            vmGrid.SetBinding(FrameworkElement.DataContextProperty, new Binding { Path = new PropertyPath("ViewModel"), Source = viewModelSource });
+            Grid vmGrid = null;
+
+            var existingGrid = GetContent(view) as Grid;
+            if (existingGrid != null)
+            {
+                if (existingGrid.Name.StartsWith(InnerWrapperName))
+                {
+                    Log.Debug($"No need to create content wrapper grid for view model for view '{viewTypeName}', custom grid with special name defined");
+
+                    vmGrid = existingGrid;
+                }
+            }
+
+            if (vmGrid == null)
+            {
+                Log.Debug($"Creating content wrapper grid for view model for view '{viewTypeName}'");
+
+                vmGrid = new Grid();
+                vmGrid.Name = InnerWrapperName.GetUniqueControlName();
 
 #if NET || SL5
-            if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.CreateWarningAndErrorValidatorForViewModel))
-            {
-                var warningAndErrorValidator = new WarningAndErrorValidator();
-                warningAndErrorValidator.SetBinding(WarningAndErrorValidator.SourceProperty, new Binding());
+                if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.CreateWarningAndErrorValidatorForViewModel))
+                {
+                    var warningAndErrorValidator = new WarningAndErrorValidator();
+                    warningAndErrorValidator.SetBinding(WarningAndErrorValidator.SourceProperty, new Binding());
 
-                vmGrid.Children.Add(warningAndErrorValidator);
-            }
+                    vmGrid.Children.Add(warningAndErrorValidator);
+                }
 #endif
 
-            if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.TransferStylesAndTransitionsToViewModelGrid))
-            {
-                content.TransferStylesAndTransitions(vmGrid);
+                if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.TransferStylesAndTransitionsToViewModelGrid))
+                {
+                    content.TransferStylesAndTransitions(vmGrid);
+                }
+
+                SetContent(view, null);
+                vmGrid.Children.Add(content);
+                SetContent(view, vmGrid);
+
+                Log.Debug($"Created content wrapper grid for view model for view '{viewTypeName}'");
             }
 
-            SetContent(view, null);
-            vmGrid.Children.Add(content);
-            SetContent(view, vmGrid);
-
-            Log.Debug("Created target control content wrapper grid for view model");
+            var binding = vmGrid.GetBindingExpression(FrameworkElement.DataContextProperty);
+            if (binding == null)
+            {
+                vmGrid.SetBinding(FrameworkElement.DataContextProperty, new Binding
+                {
+                    Path = new PropertyPath("ViewModel"),
+                    Source = viewModelSource
+                });
+            }
 
             return new ViewModelWrapper(vmGrid);
         }
 
         private object GetContent(IView view)
         {
-            object content = null;
+            var userControl = view as UserControl;
+            if (userControl != null)
+            {
+                var content = userControl.Content as FrameworkElement;
+                return content;
+            }
 
             var contentControl = view as ContentControl;
             if (contentControl != null)
             {
-                content = contentControl.Content as FrameworkElement;
-            }
-            else
-            {
-                var page = view as Page;
-                if (page != null)
-                {
-                    content = page.Content as FrameworkElement;
-                }
-                else
-                {
-                    content = PropertyHelper.GetPropertyValue(view, "Content", false);
-                }
+                var content = contentControl.Content as FrameworkElement;
+                return content;
             }
 
-            return content;
+            var page = view as Page;
+            if (page != null)
+            {
+                var content = page.Content as FrameworkElement;
+                return content;
+            }
+
+            var lastResortContent = PropertyHelper.GetPropertyValue(view, "Content", false);
+            return lastResortContent;
         }
 
         private void SetContent(IView view, object content)
         {
+            var userControl = view as UserControl;
+            if (userControl != null)
+            {
+                userControl.Content = (UIElement)content;
+                return;
+            }
+
             var contentControl = view as ContentControl;
             if (contentControl != null)
             {

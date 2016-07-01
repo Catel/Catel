@@ -19,20 +19,26 @@ namespace Catel.MVVM.Navigation
 
         partial void Initialize()
         {
-            RootFrame = Application.Current.RootVisual.FindVisualDescendant(e => e is Frame) as Frame;
-            if (RootFrame == null)
+            var rootFrame = NavigationRoot as Frame;
+            if (rootFrame == null)
             {
                 return;
             }
 
-            RootFrame.Navigating += OnNavigatingEvent;
-            RootFrame.Navigated += OnNavigatedEvent;
+            rootFrame.Navigating += OnNavigatingEvent;
+            rootFrame.Navigated += OnNavigatedEvent;
         }
 
         partial void Uninitialize()
         {
-            RootFrame.Navigating -= OnNavigatingEvent;
-            RootFrame.Navigated -= OnNavigatedEvent;
+            var rootFrame = NavigationRoot as Frame;
+            if (rootFrame == null)
+            {
+                return;
+            }
+
+            rootFrame.Navigating -= OnNavigatingEvent;
+            rootFrame.Navigated -= OnNavigatedEvent;
         }
 
         partial void DetermineNavigationContext()
@@ -55,7 +61,13 @@ namespace Catel.MVVM.Navigation
         /// <returns><c>true</c> if the navigation can be handled by this adapter; otherwise, <c>false</c>.</returns>
         protected override bool CanHandleNavigation()
         {
-            var content = RootFrame.Content;
+            var rootFrame = NavigationRoot as Frame;
+            if (rootFrame == null)
+            {
+                return false;
+            }
+
+            var content = rootFrame.Content;
             return ReferenceEquals(content, NavigationTarget);
         }
 

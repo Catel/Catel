@@ -48,8 +48,15 @@ namespace Catel.Services
         /// <param name="resourceName">Name of the resource.</param>
         /// <param name="cultureInfo">The culture information.</param>
         /// <returns>The string or <c>null</c> if the string cannot be found.</returns>
-        protected override string GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo)
+        /// <exception cref="ArgumentNullException">The <paramref name="languageSource" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="cultureInfo" /> is <c>null</c>.</exception>
+        public override string GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo)
         {
+            Argument.IsNotNull("languageSource", languageSource);
+            Argument.IsNotNullOrWhitespace("resourceName", resourceName);
+            Argument.IsNotNull("cultureInfo", cultureInfo);
+            
             string value = null;
             var source = languageSource.GetSource();
             var resourceLoader = GetResourceManager(source);
@@ -61,25 +68,39 @@ namespace Catel.Services
 
                 // Try the language specific first
                 var neutralSource = string.Format("{0}", resourceContainer);
-                var languageSpecificSource = string.Format("{0}.{1}", resourceContainer, cultureInfo.Name);
+                var cultureName = cultureInfo.Name;
+                var languageSpecificSource = string.Format("{0}.{1}", resourceContainer, cultureName);
 
                 var currentResourceManager = Windows.ApplicationModel.Resources.Core.ResourceManager.Current;
 
                 var finalResourceMap = (from resourceMap in currentResourceManager.AllResourceMaps
-                                        where resourceMap.Value.GetSubtree(languageSpecificSource) != null
-                                        select resourceMap.Value.GetSubtree(languageSpecificSource)).FirstOrDefault();
+                                        let rm = resourceMap.Value.GetSubtree(languageSpecificSource)
+                                        where rm != null
+                                        select rm).FirstOrDefault();
+
+                if ((finalResourceMap == null) && !cultureInfo.IsNeutralCulture)
+                {
+                    cultureName = cultureInfo.Parent.Name;
+                    languageSpecificSource = string.Format("{0}.{1}", resourceContainer, cultureName);
+
+                    finalResourceMap = (from resourceMap in currentResourceManager.AllResourceMaps
+                                        let rm = resourceMap.Value.GetSubtree(languageSpecificSource)
+                                        where rm != null
+                                        select rm).FirstOrDefault();
+                }
 
                 if (finalResourceMap == null)
                 {
                     finalResourceMap = (from resourceMap in currentResourceManager.AllResourceMaps
-                                        where resourceMap.Value.GetSubtree(neutralSource) != null
-                                        select resourceMap.Value.GetSubtree(neutralSource)).FirstOrDefault();
+                                        let rm = resourceMap.Value.GetSubtree(neutralSource)
+                                        where rm != null
+                                        select rm).FirstOrDefault();
                 }
 
                 if (finalResourceMap != null)
                 {
                     var resourceContext = ResourceContext.GetForViewIndependentUse();
-                    resourceContext.Languages = new[] { cultureInfo.Name };
+                    resourceContext.Languages = new[] { cultureName };
 
                     var resourceCandidate = finalResourceMap.GetValue(resourceName, resourceContext);
                     if (resourceCandidate != null)
@@ -113,7 +134,6 @@ namespace Catel.Services
 
                     var assemblyName = splittedString[1].Trim();
                     var containingAssemblyName = string.Format("{0},", assemblyName);
-
                     var loadedAssemblies = AssemblyHelper.GetLoadedAssemblies();
 
                     // Invert so design-time will always pick the latest version

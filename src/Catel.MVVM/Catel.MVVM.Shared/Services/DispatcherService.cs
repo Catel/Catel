@@ -4,22 +4,27 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.Services
 {
     using System;
+    using System.Threading.Tasks;
     using Logging;
 
 #if ANDROID
     using global::Android.App;
     using global::Android.OS;
 #elif IOS
-    using global::MonoTouch.CoreFoundation;
+    using global::CoreFoundation;
 #elif NETFX_CORE
     using Windows.Threading;
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
-#else
+#elif !XAMARIN_FORMS
     using Windows.Threading;
     using System.Windows.Threading;
+#else 
+    using System.Threading;
+    using Xamarin.Forms;
 #endif
 
     /// <summary>
@@ -36,7 +41,7 @@ namespace Catel.Services
         public DispatcherService()
         {
             // Get current dispatcher to make sure we have one
-            var currentDispatcher = CurrentDispatcher;
+            var currentDispatcher = DispatcherHelper.CurrentDispatcher;
             if (currentDispatcher != null)
             {
                 Log.Debug("Successfully Initialized current dispatcher");
@@ -56,9 +61,53 @@ namespace Catel.Services
         /// <para />
         /// Internally, this property uses the <see cref="DispatcherHelper"/>, but can be overriden if required.
         /// </summary>
-        public virtual Dispatcher CurrentDispatcher
+        protected virtual Dispatcher CurrentDispatcher
         {
             get { return DispatcherHelper.CurrentDispatcher; }
+        }
+#endif
+
+#if NET
+        /// <summary>
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+        /// </summary>
+        /// <param name="action">The action.</param>
+        /// <returns>The task representing the action.</returns>
+        public Task InvokeAsync(Action action)
+        {
+            var dispatcher = CurrentDispatcher;
+
+#if NET40
+            return DispatcherExtensions.InvokeAsync(dispatcher, action);
+#else
+            return dispatcher.InvokeAsync(action).Task;
+#endif
+        }
+
+        /// <summary>
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="args">The arguments to pass into the method.</param>
+        /// <returns>The task representing the action.</returns>
+        public Task InvokeAsync(Delegate method, params object[] args)
+        {
+            var dispatcher = CurrentDispatcher;
+
+            return DispatcherExtensions.InvokeAsync(dispatcher, method, args);
+        }
+
+        /// <summary>
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+        /// </summary>
+        /// <typeparam name="T">The type of the result.</typeparam>
+        /// <param name="func">The function.</param>
+        /// <returns>The task representing the action.</returns>
+        public Task<T> InvokeAsync<T>(Func<T> func)
+        {
+            var dispatcher = CurrentDispatcher;
+
+            return DispatcherExtensions.InvokeAsync(dispatcher, func);
         }
 #endif
 
@@ -83,8 +132,9 @@ namespace Catel.Services
         public void Invoke(Action action, bool onlyInvokeWhenNoAccess)
         {
             Argument.IsNotNull("action", action);
-
-#if ANDROID
+#if XAMARIN_FORMS
+            SynchronizationContext.Current.Post(state => action(), null);
+#elif ANDROID
             _handler.Post(action);
 #elif IOS
             DispatchQueue.MainQueue.DispatchSync(() => action());
@@ -103,8 +153,9 @@ namespace Catel.Services
         public void BeginInvoke(Action action, bool onlyBeginInvokeWhenNoAccess)
         {
             Argument.IsNotNull("action", action);
-
-#if ANDROID
+#if XAMARIN_FORMS
+            SynchronizationContext.Current.Post(state => action(), null);           
+#elif ANDROID
             _handler.Post(action);
 #elif IOS
             DispatchQueue.MainQueue.DispatchAsync(() => action());

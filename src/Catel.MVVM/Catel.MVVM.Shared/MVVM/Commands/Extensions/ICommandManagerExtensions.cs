@@ -77,7 +77,7 @@ namespace Catel
             if (commandNameField == null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not available on container type '{1}'",
-                    commandNameFieldName, containerType.GetSafeFullName());
+                    commandNameFieldName, containerType.GetSafeFullName(false));
             }
 
             var commandName = (string)commandNameField.GetValue(null);
@@ -101,23 +101,26 @@ namespace Catel
             var commandContainerType = (from type in TypeCache.GetTypes()
                                         where string.Equals(type.Name, commandContainerName, StringComparison.OrdinalIgnoreCase)
                                         select type).FirstOrDefault();
-            if (commandContainerType != null)
+            if (commandContainerType == null)
             {
-                Log.Debug("Found command container '{0}', registering it in the ServiceLocator now", commandContainerType.GetSafeFullName());
+                Log.Debug("Couldn't find command container '{0}', you will need to add a custom action or command manually in order to make the CompositeCommand useful", commandContainerName);
+                return;
+            }
 
-                var serviceLocator = commandManager.GetServiceLocator();
-                if (!serviceLocator.IsTypeRegistered(commandContainerType))
+            Log.Debug("Found command container '{0}', registering it in the ServiceLocator now", commandContainerType.GetSafeFullName(false));
+
+            var serviceLocator = commandManager.GetServiceLocator();
+            if (!serviceLocator.IsTypeRegistered(commandContainerType))
+            {
+                var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+                var commandContainer = typeFactory.CreateInstance(commandContainerType);
+                if (commandContainer != null)
                 {
-                    var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
-                    var commandContainer = typeFactory.CreateInstance(commandContainerType);
-                    if (commandContainer != null)
-                    {
-                        serviceLocator.RegisterInstance(commandContainer);
-                    }
-                    else
-                    {
-                        Log.Warning("Cannot create command container '{0}', skipping registration", commandContainerType.GetSafeFullName());
-                    }
+                    serviceLocator.RegisterInstance(commandContainer);
+                }
+                else
+                {
+                    Log.Warning("Cannot create command container '{0}', skipping registration", commandContainerType.GetSafeFullName(false));
                 }
             }
         }

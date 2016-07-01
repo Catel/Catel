@@ -228,7 +228,7 @@ namespace Catel.Interception
         public TProxy Create<TProxy>(object[] parameters, IInterceptor interceptor, params Type[] interfaces)
             where TProxy : class
         {
-            Argument.IsNotNullOrEmptyArray(() => parameters);
+            Argument.IsNotNullOrEmptyArray("parameters", parameters);
             Argument.IsNotNull(() => interceptor);
 
             var proxyType = typeof (TProxy);

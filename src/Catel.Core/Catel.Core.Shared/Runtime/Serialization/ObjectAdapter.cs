@@ -92,7 +92,7 @@ namespace Catel.Runtime.Serialization
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", modelType.GetSafeFullName(), memberName);
+                Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", modelType.GetSafeFullName(false), memberName);
             }
 
             return null;
@@ -137,7 +137,7 @@ namespace Catel.Runtime.Serialization
 
                     if (!set)
                     {
-                        Log.Warning("Failed to set property '{0}.{1}' because the member cannot be found on the model", modelType.GetSafeFullName(), member.Name);
+                        Log.Warning("Failed to set property '{0}.{1}' because the member cannot be found on the model", modelType.GetSafeFullName(false), member.Name);
                     }
                 }
                 else if (modelInfo.FieldNames.Contains(member.Name))
@@ -162,13 +162,13 @@ namespace Catel.Runtime.Serialization
 
                     if (!set)
                     {
-                        Log.Warning("Failed to set field '{0}.{1}' because the member cannot be found on the model", modelType.GetSafeFullName(), member.Name);
+                        Log.Warning("Failed to set field '{0}.{1}' because the member cannot be found on the model", modelType.GetSafeFullName(false), member.Name);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Failed to populate '{0}.{1}', setting the member value threw an exception", modelType.GetSafeFullName(), member.Name);
+                Log.Warning(ex, "Failed to populate '{0}.{1}', setting the member value threw an exception", modelType.GetSafeFullName(false), member.Name);
             }
         }
     }

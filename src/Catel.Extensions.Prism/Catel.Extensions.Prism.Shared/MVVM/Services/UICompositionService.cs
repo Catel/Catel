@@ -186,14 +186,14 @@ namespace Catel.Services
                             select vm).FirstOrDefault();
             if (activeVm == null)
             {
-                Log.Debug("Could not find active instance of '{0}', trying to instantiate", viewModelType.GetSafeFullName());
+                Log.Debug("Could not find active instance of '{0}', trying to instantiate", viewModelType.GetSafeFullName(false));
 
-                activeVm = _viewModelFactory.CreateViewModel(viewModelType, null);
+                activeVm = _viewModelFactory.CreateViewModel(viewModelType, null, null);
             }
 
             if (activeVm == null)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Could not find an existing instance of '{0}' and could not construct it using the IViewModelFactory. It is impossible to activate this view model.", viewModelType.GetSafeFullName());
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Could not find an existing instance of '{0}' and could not construct it using the IViewModelFactory. It is impossible to activate this view model.", viewModelType.GetSafeFullName(false));
             }
 
             Activate(activeVm, regionName);
@@ -209,7 +209,7 @@ namespace Catel.Services
         {
             Argument.IsNotNull(() => viewModel);
 
-            Log.Debug("Deactivating '{0}'", viewModel.GetType().GetSafeFullName());
+            Log.Debug("Deactivating '{0}'", viewModel.GetType().GetSafeFullName(false));
 
             var viewInfo = ViewInfoCacheStorage[viewModel.UniqueIdentifier];
             if (viewInfo == null)
@@ -250,7 +250,7 @@ namespace Catel.Services
         /// <param name="regionManager">The region Manager</param>
         private void Activate(IViewModel viewModel, string regionName, IRegionManager regionManager)
         {
-            Log.Debug("Activating '{0}' in region '{1}'", viewModel.GetType().GetSafeFullName(), regionName);
+            Log.Debug("Activating '{0}' in region '{1}'", viewModel.GetType().GetSafeFullName(false), regionName);
 
             if (regionManager != null && regionManager.Regions.ContainsRegionWithName(regionName))
             {

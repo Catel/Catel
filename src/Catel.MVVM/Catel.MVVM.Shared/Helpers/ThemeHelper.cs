@@ -49,7 +49,15 @@ namespace Catel
                     return false;
                 }
 
-                return ThemeLoadedCache.GetFromCacheOrFetch(resourceUri, () => ContainsDictionary(application.Resources, resourceUri));
+                var value = ThemeLoadedCache.GetFromCacheOrFetch(resourceUri, () => ContainsDictionary(application.Resources, resourceUri));
+
+                // CTL-893: don't store "false" values, we are only interested in cached "true" values
+                if (!value)
+                {
+                    ThemeLoadedCache.Remove(resourceUri);
+                }
+
+                return value;
             });
         }
 

@@ -97,7 +97,7 @@ namespace Catel.MVVM.Converters
         /// <returns>The value to be passed to the target dependency property.</returns>
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return Convert(value, targetType, parameter, new CultureInfo(language));
+            return Convert(value, targetType, parameter, GetCulture(language));
         }
 
         /// <summary>
@@ -110,7 +110,23 @@ namespace Catel.MVVM.Converters
         /// <returns>The value to be passed to the source object.</returns>
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            return ConvertBack(value, targetType, parameter, new CultureInfo(language));
+            return ConvertBack(value, targetType, parameter, GetCulture(language));
+        }
+
+        /// <summary>
+        /// Gets the current culture for the specified language. If the language is <c>null</c>, this method returns the <c>CurrentCulture</c>.
+        /// </summary>
+        /// <param name="language">The language.</param>
+        /// <returns>The culture info.</returns>
+        protected static CultureInfo GetCulture(string language)
+        {
+            var culture = CultureInfo.CurrentCulture;
+            if (!string.IsNullOrWhiteSpace(language))
+            {
+                culture = new CultureInfo(language);
+            }
+
+            return culture;
         }
 #endif
 

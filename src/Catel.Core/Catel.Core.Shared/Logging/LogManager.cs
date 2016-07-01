@@ -43,7 +43,7 @@ namespace Catel.Logging
             /// </value>
             public static bool IsEnabled
             {
-                get { return IsDebugEnabled || IsInfoEnabled || IsWarningEnabled || IsErrorEnabled; }
+                get { return IsDebugEnabled || IsInfoEnabled || IsWarningEnabled || IsErrorEnabled || IsStatusEnabled; }
             }
 
             /// <summary>
@@ -90,6 +90,15 @@ namespace Catel.Logging
             /// <c>true</c> if error logging is enabled; otherwise, <c>false</c>.
             /// </value>
             public static bool IsErrorEnabled { get; private set; }
+
+            /// <summary>
+            /// Gets a value indicating whether status logging is enabled. This means that there is at least one listener 
+            /// that is interested in status logging.
+            /// </summary>
+            /// <value>
+            /// <c>true</c> if status logging is enabled; otherwise, <c>false</c>.
+            /// </value>
+            public static bool IsStatusEnabled { get; private set; }
             #endregion
 
             #region Methods
@@ -105,6 +114,7 @@ namespace Catel.Logging
                     IsInfoEnabled = false;
                     IsWarningEnabled = false;
                     IsErrorEnabled = false;
+                    IsStatusEnabled = false;
 
                     foreach (var listener in _logListeners)
                     {
@@ -131,6 +141,11 @@ namespace Catel.Logging
                         if (listener.IsErrorEnabled)
                         {
                             IsErrorEnabled = true;
+                        }
+
+                        if (listener.IsStatusEnabled)
+                        {
+                            IsStatusEnabled = true;
                         }
                     }
 
@@ -159,6 +174,11 @@ namespace Catel.Logging
                     {
                         IsErrorEnabled = LogManager.IsErrorEnabled.Value;
                     }
+
+                    if (LogManager.IsStatusEnabled.HasValue)
+                    {
+                        IsStatusEnabled = LogManager.IsStatusEnabled.Value;
+                    }
                 }
             }
 
@@ -183,9 +203,11 @@ namespace Catel.Logging
                     case LogEvent.Error:
                         return IsErrorEnabled;
 
-                    default:
-                        throw new ArgumentOutOfRangeException("logEvent");
+                    case LogEvent.Status:
+                        return IsStatusEnabled;
                 }
+
+                return false;
             }
             #endregion
         }
@@ -212,6 +234,7 @@ namespace Catel.Logging
         private static bool? _isInfoEnabled;
         private static bool? _isWarningEnabled;
         private static bool? _isErrorEnabled;
+        private static bool? _isStatusEnabled;
         #endregion
 
         #region Constructors
@@ -309,6 +332,23 @@ namespace Catel.Logging
             set
             {
                 _isErrorEnabled = value;
+                LogInfo.UpdateLogInfo();
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the global IsStatusEnabled should be overriden.
+        /// <para />
+        /// Note that this value will override all settings of each listener globally. If this value is
+        /// set to <c>null</c>, nothing will be overriden.
+        /// </summary>
+        /// <value><c>true</c> if status logging must be enabled for all log listeners; otherwise, <c>false</c>.</value>
+        public static bool? IsStatusEnabled
+        {
+            get { return _isStatusEnabled; }
+            set
+            {
+                _isStatusEnabled = value;
                 LogInfo.UpdateLogInfo();
             }
         }
@@ -412,7 +452,11 @@ namespace Catel.Logging
 
             if (debugLogListener == null)
             {
-                debugLogListener = new DebugLogListener { IgnoreCatelLogging = ignoreCatelLogging };
+                debugLogListener = new DebugLogListener
+                {
+                    IgnoreCatelLogging = ignoreCatelLogging
+                };
+
                 AddListener(debugLogListener);
             }
 
@@ -623,8 +667,9 @@ namespace Catel.Logging
                             listener.Error(e.Log, e.Message, e.ExtraData, e.LogData, e.Time);
                             break;
 
-                        default:
-                            throw new ArgumentOutOfRangeException();
+                        case LogEvent.Status:
+                            listener.Status(e.Log, e.Message, e.ExtraData, e.LogData, e.Time);
+                            break;
                     }
                 }
             }
@@ -657,9 +702,11 @@ namespace Catel.Logging
                 case LogEvent.Error:
                     return listener.IsErrorEnabled;
 
-                default:
-                    throw new ArgumentOutOfRangeException("logEvent");
+                case LogEvent.Status:
+                    return listener.IsStatusEnabled;
             }
+
+            return false;
         }
 
         #endregion

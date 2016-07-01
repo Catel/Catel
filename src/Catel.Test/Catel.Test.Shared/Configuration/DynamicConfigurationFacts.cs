@@ -180,7 +180,7 @@ namespace Catel.Test.Configuration
                 memoryStream.Position = 0L;
 
                 var newDynamicConfiguration = ModelBase.Load<DynamicConfiguration>(memoryStream, SerializationMode.Xml);
-                var newComplexSetting = newDynamicConfiguration.GetConfigurationValue<ComplexSetting>("ComplexSetting");
+                var newComplexSetting = newDynamicConfiguration.GetConfigurationValue<ComplexSetting>("ComplexSetting", null);
 
                 Assert.AreEqual(newComplexSetting.FirstName, complexSetting.FirstName);
                 Assert.AreEqual(newComplexSetting.MiddleName, complexSetting.MiddleName);

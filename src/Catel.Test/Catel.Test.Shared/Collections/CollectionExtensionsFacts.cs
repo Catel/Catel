@@ -389,13 +389,13 @@ namespace Catel.Test.Collections
             {
                 var newList = new List<int> { 4, 5, 6 };
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.AddRange(null, newList));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.AddRange((ICollection<int>)null, newList));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullRange()
             {
-                var collection = new ObservableCollection<int> { 1, 2, 3 };
+                var collection = new Collection<int> { 1, 2, 3 };
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => collection.AddRange(null));
             }
@@ -403,7 +403,7 @@ namespace Catel.Test.Collections
             [TestCase]
             public void AddsItemsToEmptyCollection()
             {
-                var collection = new ObservableCollection<int>();
+                var collection = new Collection<int>();
                 var newList = new List<int> { 4, 5, 6 };
 
                 collection.AddRange(newList);
@@ -417,7 +417,7 @@ namespace Catel.Test.Collections
             [TestCase]
             public void AddsItemsToFilledCollection()
             {
-                var collection = new ObservableCollection<int> { 1, 2, 3 };
+                var collection = new Collection<int> { 1, 2, 3 };
                 var newList = new List<int> { 4, 5, 6 };
 
                 collection.AddRange(newList);
@@ -434,7 +434,7 @@ namespace Catel.Test.Collections
             [TestCase]
             public void AddsNoItemsToFilledCollectionWhenItemsToAddIsEmpty()
             {
-                var collection = new ObservableCollection<int> { 1, 2, 3 };
+                var collection = new Collection<int> { 1, 2, 3 };
                 var newList = new List<int>();
 
                 collection.AddRange(newList);
@@ -454,13 +454,13 @@ namespace Catel.Test.Collections
             {
                 var newList = new List<int> { 4, 5, 6 };
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.ReplaceRange(null, newList));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.ReplaceRange((ICollection<int>)null, newList));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullRange()
             {
-                var collection = new ObservableCollection<int> { 1, 2, 3 };
+                var collection = new Collection<int> { 1, 2, 3 };
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => collection.ReplaceRange(null));
             }
@@ -468,7 +468,7 @@ namespace Catel.Test.Collections
             [TestCase]
             public void ReplacesFilledCollectionByEmptyCollection()
             {
-                var collection = new ObservableCollection<int> { 1, 2, 3 };
+                var collection = new Collection<int> { 1, 2, 3 };
                 var newList = new List<int>();
 
                 collection.ReplaceRange(newList);
@@ -479,7 +479,7 @@ namespace Catel.Test.Collections
             [TestCase]
             public void ReplacesEmptyCollectionByFilledCollection()
             {
-                var collection = new ObservableCollection<int>();
+                var collection = new Collection<int>();
                 var newList = new List<int> { 4, 5, 6 };
 
                 collection.ReplaceRange(newList);
@@ -493,7 +493,7 @@ namespace Catel.Test.Collections
             [TestCase]
             public void ReplacedFilledCollectionByFilledCollection()
             {
-                var collection = new ObservableCollection<int> { 1, 2, 3 };
+                var collection = new Collection<int> { 1, 2, 3 };
                 var newList = new List<int> { 4, 5, 6 };
 
                 collection.ReplaceRange(newList);

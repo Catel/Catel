@@ -36,6 +36,9 @@ namespace Catel.Windows.Interactivity
         #region Fields
         private bool _isClean = true;
         private int _loadCounter;
+
+        private bool _isSubscribedToLoadedEvent = false;
+        private bool _isSubscribedToUnloadedEvent = false;
         #endregion
 
         #region Properties
@@ -62,7 +65,7 @@ namespace Catel.Windows.Interactivity
         /// <value>The culture.</value>
         protected CultureInfo Culture
         {
-            get { return CultureInfo.CurrentUICulture; }
+            get { return CultureInfo.CurrentCulture; }
         }
 
         /// <summary>
@@ -78,7 +81,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// The IsEnabled property registration.
         /// </summary>
-        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool), 
+        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool),
             typeof(BehaviorBase<T>), new PropertyMetadata(true, (sender, e) => ((BehaviorBase<T>)sender).OnIsEnabledChanged()));
         #endregion
 
@@ -95,13 +98,28 @@ namespace Catel.Windows.Interactivity
 
             base.OnAttached();
 
-            AssociatedObject.Loaded += OnAssociatedObjectLoadedInternal;
+            if (!_isSubscribedToLoadedEvent)
+            {
+                AssociatedObject.Loaded += OnAssociatedObjectLoadedInternal;
+                _isSubscribedToLoadedEvent = true;
+            }
 
             _isClean = false;
 
             ValidateRequiredProperties();
 
             Initialize();
+
+            // Note: we don't always get a loaded event (especially in UWP, for example for a TextBox control). Let's "assume" that 
+            // an object is loaded if it has an actual width and height
+            if (!IsAssociatedObjectLoaded)
+            {
+                var associatedObject = AssociatedObject;
+                if ((associatedObject.ActualHeight > 0) && (associatedObject.ActualWidth > 0))
+                {
+                    OnAssociatedObjectLoadedInternal();
+                }
+            }
         }
 
         /// <summary>
@@ -116,9 +134,18 @@ namespace Catel.Windows.Interactivity
 
             CleanUp();
 
-            if (AssociatedObject != null)
+            // Note: we don't always get an unloaded event (especially in UWP, for example for a TextBox control). Let's "assume" that 
+            // an object is unloaded if it has an actual width and height
+            if (IsAssociatedObjectLoaded)
             {
-                AssociatedObject.Loaded -= OnAssociatedObjectLoadedInternal;
+                OnAssociatedObjectUnloadedInternal();
+            }
+
+            var associatedObject = AssociatedObject;
+            if (associatedObject != null)
+            {
+                associatedObject.Loaded -= OnAssociatedObjectLoadedInternal;
+                _isSubscribedToLoadedEvent = false;
             }
 
             base.OnDetaching();
@@ -145,7 +172,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected virtual void Initialize()
         {
-            
+
         }
 
         /// <summary>
@@ -158,7 +185,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected virtual void Uninitialize()
         {
-            
+
         }
 
         /// <summary>
@@ -169,6 +196,11 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnAssociatedObjectLoadedInternal(object sender, UIEventArgs e)
         {
+            OnAssociatedObjectLoadedInternal();
+        }
+
+        private void OnAssociatedObjectLoadedInternal()
+        {
             _loadCounter++;
 
             // Yes, 1, because we just increased the counter
@@ -177,13 +209,17 @@ namespace Catel.Windows.Interactivity
                 return;
             }
 
-            AssociatedObject.Unloaded += OnAssociatedObjectUnloadedInternal;
+            if (!_isSubscribedToUnloadedEvent)
+            {
+                AssociatedObject.Unloaded += OnAssociatedObjectUnloadedInternal;
+                _isSubscribedToUnloadedEvent = true;
+            }
 
             OnAssociatedObjectLoaded();
         }
 
         /// <summary>
-        /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
+        /// Called when the AssociatedObject is loaded.
         /// </summary>
         protected virtual void OnAssociatedObjectLoaded()
         {
@@ -197,7 +233,18 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnAssociatedObjectUnloadedInternal(object sender, UIEventArgs e)
         {
+            OnAssociatedObjectUnloadedInternal();
+        }
+
+        private void OnAssociatedObjectUnloadedInternal()
+        {
             _loadCounter--;
+
+            if (_loadCounter < 0)
+            {
+                _loadCounter = 0;
+                return;
+            }
 
             if (_loadCounter != 0)
             {
@@ -206,11 +253,11 @@ namespace Catel.Windows.Interactivity
 
             OnAssociatedObjectUnloaded();
 
-            //CleanUp();
+            CleanUp();
         }
 
         /// <summary>
-        /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is unloaded.
+        /// Called when the AssociatedObject is unloaded.
         /// </summary>
         protected virtual void OnAssociatedObjectUnloaded()
         {
@@ -228,9 +275,11 @@ namespace Catel.Windows.Interactivity
 
             _isClean = true;
 
-            if (AssociatedObject != null)
+            var associatedObject = AssociatedObject;
+            if (associatedObject != null)
             {
-                AssociatedObject.Unloaded -= OnAssociatedObjectUnloadedInternal;
+                associatedObject.Unloaded -= OnAssociatedObjectUnloadedInternal;
+                _isSubscribedToUnloadedEvent = false;
             }
 
             Uninitialize();

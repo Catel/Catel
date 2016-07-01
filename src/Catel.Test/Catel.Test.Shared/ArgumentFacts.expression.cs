@@ -294,7 +294,8 @@ namespace Catel.Test
                 ImplementsInterfaceInvokation(typeof(List<int>), typeof(IList));
             }
 
-            public void ImplementsInterfaceInvokation<T>(T param, Type interfaceType) where T : class
+            public void ImplementsInterfaceInvokation<T>(T param, Type interfaceType) 
+                where T : class
             {
                 Argument.ImplementsInterface(() => param, interfaceType);
             }
@@ -321,7 +322,8 @@ namespace Catel.Test
                 IsOfTypeInvokation(typeof(PersonViewModel), typeof(ViewModelBase));
             }
 
-            public void IsOfTypeInvokation<T>(T param, Type interfaceType) where T : class
+            public void IsOfTypeInvokation<T>(T param, Type interfaceType) 
+                where T : class
             {
                 Argument.IsOfType(() => param, interfaceType);
             }
@@ -403,18 +405,21 @@ namespace Catel.Test
             public void SucceedsForIsValidInvokation1()
             {
                 this.IsValidInvokation("myValue", () => true);
+                this.IsValidInvokation((string)null, () => true);
             }
 
             [TestCase]
             public void SucceedsForIsValidInvokation2()
             {
                 this.IsValidInvokation("myValue", s => s.Length < 10);
+                this.IsValidInvokation((string)null, s => s == null);
             }
 
             [TestCase]
             public void SucceedsForIsValidInvokation3()
             {
                 this.IsValidInvokation("myValue", true);
+                this.IsValidInvokation((string)null, true);
             }
 
 #if !NETFX_CORE
@@ -424,6 +429,7 @@ namespace Catel.Test
                 var mock = new Mock<IValueValidator<string>>();
                 mock.Setup(validator => validator.IsValid(It.IsAny<string>())).Returns(true);
                 this.IsValidInvokation("myValue", mock.Object);
+                this.IsValidInvokation((string)null, mock.Object);
             }
 #endif
 
@@ -431,18 +437,21 @@ namespace Catel.Test
             public void ThrowsArgumentExceptionForIsValidInvokation1()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation("myValue", () => false));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation((string)null, () => false));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForIsValidInvokation2()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation("myValue", s => s.Length > 10));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation((string)null, s => s != null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForIsValidInvokation3()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation("myValue", false));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation((string)null, false));
             }
 
 #if !NETFX_CORE
@@ -452,6 +461,7 @@ namespace Catel.Test
                 var mock = new Mock<IValueValidator<string>>();
                 mock.Setup(validator => validator.IsValid(It.IsAny<string>())).Returns(false);
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation("myValue", mock.Object));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => this.IsValidInvokation((string)null, mock.Object));
             }
 #endif
 
@@ -499,7 +509,8 @@ namespace Catel.Test
                  ImplementsOneOfTheInterfacesInvokation(typeof(List<int>), new[] { typeof(IList) });
              }
 
-            public void ImplementsOneOfTheInterfacesInvokation<T>(T param, Type[] interfaceTypes) where T : class
+            public void ImplementsOneOfTheInterfacesInvokation<T>(T param, Type[] interfaceTypes) 
+                where T : class
             {
                 Argument.ImplementsOneOfTheInterfaces(() => param, interfaceTypes);
             }

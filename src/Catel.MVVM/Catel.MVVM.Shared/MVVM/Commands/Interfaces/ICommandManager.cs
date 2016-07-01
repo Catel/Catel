@@ -9,6 +9,7 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
+    using System.Windows;
     using System.Windows.Input;
 
 #if !WINDOWS_PHONE && !XAMARIN
@@ -21,6 +22,14 @@ namespace Catel.MVVM
     /// </summary>
     public interface ICommandManager
     {
+#if !WINDOWS_PHONE && !XAMARIN
+        /// <summary>
+        /// Gets or sets a value indicating whether the keyboard events are suspended.
+        /// </summary>
+        /// <value><c>true</c> if the keyboard events are suspended; otherwise, <c>false</c>.</value>
+        bool IsKeyboardEventsSuspended { get; set; }
+#endif
+
 #if !WINDOWS_PHONE && !XAMARIN
         /// <summary>
         /// Creates the command inside the command manager.
@@ -135,6 +144,15 @@ namespace Catel.MVVM
         /// Subscribes to keyboard events.
         /// </summary>
         void SubscribeToKeyboardEvents();
+
+#if NET || SL5
+        /// <summary>
+        /// Subscribes to keyboard events.
+        /// </summary>
+        /// <param name="view">The view.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
+        void SubscribeToKeyboardEvents(FrameworkElement view);
+#endif
 #endif
 
         /// <summary>

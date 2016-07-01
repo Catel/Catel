@@ -16,6 +16,112 @@ License:         http://www.catelproject.com/about/license
 **********************************************************
 
 ==================
+Version 4.5.0
+==================
+
+For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
+
+Release date:
+=============
+2016/07/01
+
+Added/fixed (BREAKING CHANGES):
+===============================
+No breaking changes, but made a lot of preparations for the "async big bang" that will happen in Catel 5.0. We are
+currently trying to index all members that might need async members in the future. Most of these members are now
+marked as obsolete and have an async handler which must be used in the future.
+
+Platform support changes:
+=========================
+[none]
+
+Classes / members marked as obsolete:
+=====================================
+Our mission is to make Catel easier to maintain in the future. One way to achieve this is to remove unused
+features and components. We are actively removing features by marking them obsolete. If nobody complains,
+we will remove the features in the next major release.
+
+* CTL-671 Marked Catel.Extensions.CSLA as obsolete to minimize maintenance costs of Catel
+* CTL-672 Marked Catel.Extensions.Wcf.Server as obsolete to minimize maintenance costs of Catel
+* CTL-740 Marked IMessageMediator.SendMessageAsync as obsolete because it's not truly async
+* CTL-755 Marked Catel.Windows.Controls.ScrollViewerProperties as obsolete to minimize maintenance costs of Catel
+* CTL-756 Marked Catel.Windows.Controls.RichToolTip as obsolete to minimize maintenance costs of Catel
+* CTL-784 Marked AttributeHelper as obsolete, use reflection extensions instead
+* CTL-808 Marked AsynchronousCommand as obsolete, use TaskCommand instead
+* CTL-810 Marked QueryableExtensions.Include(Expression) as obsolete for EF6 and higher, use the default EF implementation
+* CTL-849 Marked ExpressionUtil obsolete, use ExpressionHelper instead
+
+Added/fixed:
+============
+(+) CTL-622 Add check type sorting and expression filter on ExceptionService
+(+) CTL-788 Added new LogEvent called Status which can be used for status updates
+(+) CTL-796 Add Activate existing window methods in IUIVisualizerService
+(+) CTL-803 Add RegisterHandler method on IExceptionService
+(+) CTL-805 Add IExceptionHandler<T> to make implementation of custom exception handlers easier
+(+) CTL-809 Add CreateTaskCommand method on CommandHelper
+(+) CTL-817 Add DynamicObservableObject implementation
+(+) CTL-832 Added ProgressContext to easily allow progress calculation
+(+) CTL-745 Allow DataWindowButton to be bindable (both text and visibility)
+(+) CTL-842 Add events to ICacheStorage when items are removed from the cache
+(+) CTL-843 Add ToString implementation for ValidationContext and ValidationSummary
+(+) CTL-844 Create Enum<TEnum>.Flags.GetValues(TEnum enum) to retrieve list of flags
+(+) CTL-848 CacheStorage - automatically dispose item on removing
+(+) CTL-861 Add tag overload to IViewModelFactory to allow resolving of dependencies using tags
+(+) CTL-873 Allow ConfigurationService to store values in separate containers (local and roaming)
+(+) CTL-883 Create magic "ViewModelContainer" name so you can define your own view model grid
+(*) CTL-785 Support expressions in validation result static members so you can now write
+    FieldValidationResult.CreateWarning(() => MyProperty, "This field is required");
+(*) CTL-789 Improve property handling in the context of RegisterProperties
+(*) CTL-792 Improve property editing performance
+(*) CTL-794 Allow application-wide commands to be executed when child windows have a focus
+(*) CTL-797 Only set owner window for modal dialogs in UIVisualizerService
+(*) CTL-800 UpdatableMarkupExtension should expose IServiceProvider in the ProvideDynamicValue method
+(*) CTL-802 Add async version of OnOkExecute to DataWindow
+(*) CTL-806 Allow ValueConverterGroup to contain System.Windows.IValueConverter objects
+(*) CTL-807 Support enum values in ConfigurationService (and StringToObjectHelper)
+(*) CTL-810 Marked QueryableExtensions.Include(Expression) as obsolete for EF6 and higher
+(*) CTL-814 Improve Argument.IsValid implementation to allow more options
+(*) CTL-819 Prevent unnecessary creation of event args in .SafeInvoke when handler is null
+(*) CTL-824 ModelBase.editableobject should check for duplicated BeginEdit(), EndEdit(), CancelEdit()
+(*) CTL-825 Use NuGet package for behaviors SDK instead of local reference for UWP
+(*) CTL-828 Prevent unneccessary creation of empty dictionary entries in ModelBase
+(*) CTL-846 ObjectConverterService (and thus ConfigurationService) should respect culture on UWP
+(*) CTL-850 Don't set AssociatedObject to null in IBehavior.Detach for UWP
+(*) CTL-856 Improved FastObservableCollection to have concrete suspension modes for change notifications
+(*) CTL-859 When resolving types from the service locator (for dependency injection), prefer registered 
+    types with the right scope
+(*) CTL-886 Support AsyncLock in CacheStorage so async retrieval is covered by locks as well
+(*) CTL-895 Removing CurrentDispatcher property from IDispatcherService interface. Adding methods to IDispatcher 
+    that ensures backward capability
+(x) CTL-791 Types with the same FullName from different assemblies will cause issues with the TypeFactory cache
+(x) CTL-793 CompositeCommand.CheckCanExecuteOfAllCommandsToDetermineCanExecuteForCompositeCommand not respected
+(x) CTL-798 Prevent MissingResourceException when resolving strings for Catel.Core
+(x) CTL-811 Fixed thread racing against IsLockAcquired property
+(x) CTL-813 BehaviorBase - AssociatedObject.Unloaded can be called multiple times
+(x) CTL-823 Enum<TEnum>.TryParse with case insensitive does not work
+(x) CTL-839 Windows not exposing the Closed event (such as MahApps ContentDialog) don't close the view model
+(x) CTL-877 TypeCache.InitializeTypes with force & assembly should only invalidate specified assembly
+(x) CTL-878 Fix for FileLogListener causes UnauthorizedAccessException in web applications 
+(x) CTL-880 Sometimes (very rarely) fails to set view model when switching views (loaded, unloaded, loaded) very fast
+(x) CTL-887 GetString in LanguageService does not correctly resolve resources for non-neutral cultures in metro apps
+(x) CTL-891 Prevent duplicate view model creation in nested user controls when the data context hasn't really changed
+(x) CTL-892 Fixed NullReferenceException when using the GetErrorMessage() or GetWarningMessage() extension 
+    methods for ModelBase
+(x) CTL-893 ThemeHelper should not cache too aggressive, it could result in full refresh of all DataWindows each 
+    time a new DataWindow is openened
+(x) CTL-896 BehaviorBase could get into a negative loaded count prevent the next load event from being noticed
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 4.4.0
 ==================
 

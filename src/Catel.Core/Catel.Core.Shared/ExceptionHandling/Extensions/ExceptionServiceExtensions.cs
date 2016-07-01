@@ -18,7 +18,7 @@ namespace Catel.ExceptionHandling
     public static class ExceptionServiceExtensions
     {
         /// <summary>
-        /// Handles asynchounously the specified exception if possible.
+        /// Handles asynchronously the specified exception if possible.
         /// </summary>
         /// <param name="exceptionService">The exception service.</param>
         /// <param name="exception">The exception to handle.</param>
@@ -34,7 +34,24 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
-        /// Processes asynchrounously the specified action with possibilty to retry on error.
+        /// Registers an handler for a specific exception.
+        /// </summary>
+        /// <typeparam name="TExceptionHandler">The type of the exception handler.</typeparam>
+        /// <param name="exceptionService">The exception service.</param>
+        /// <returns>The handler to use.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="exceptionService"/> is <c>null</c>.</exception>
+        public static IExceptionHandler Register<TExceptionHandler>(this IExceptionService exceptionService) 
+            where TExceptionHandler : IExceptionHandler, new()
+        {
+            Argument.IsNotNull("exceptionService", exceptionService);
+
+            var exceptionHandler = new TExceptionHandler();
+
+            return exceptionService.Register(exceptionHandler);
+        }
+
+        /// <summary>
+        /// Processes asynchronously the specified action with possibility to retry on error.
         /// </summary>
         /// <param name="exceptionService">The exception service.</param>
         /// <param name="action">The action.</param>
@@ -47,13 +64,13 @@ namespace Catel.ExceptionHandling
 
             return exceptionService.ProcessWithRetryAsync(async () => 
             {
-                await action.ConfigureAwait(false);
+                await action.ConfigureAwait(TaskHelper.DefaultConfigureAwaitValue);
                 return default(object);
             });
         }
 
         /// <summary>
-        /// Processes asynchrounously the specified action with possibilty to retry on error.
+        /// Processes asynchronously the specified action with possibility to retry on error.
         /// </summary>
         /// <param name="exceptionService">The exception service.</param>
         /// <param name="action">The action.</param>
@@ -68,7 +85,7 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
-        /// Processes asynchrounously the specified action with possibilty to retry on error.
+        /// Processes asynchronously the specified action with possibility to retry on error.
         /// </summary>
         /// <typeparam name="TResult">The result type.</typeparam>
         /// <param name="exceptionService">The exception service.</param>
@@ -91,6 +108,7 @@ namespace Catel.ExceptionHandling
         /// <param name="action">The action.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        /// <exception cref="Exception">A delegate callback throws an exception.</exception>
         public static Task ProcessWithRetryAsync(this IExceptionService exceptionService, Func<Task> action)
         {
             Argument.IsNotNull("exceptionService", exceptionService);
@@ -98,7 +116,7 @@ namespace Catel.ExceptionHandling
 
             return exceptionService.ProcessWithRetryAsync(async () =>
             {
-                await action().ConfigureAwait(false);
+                await action().ConfigureAwait(TaskHelper.DefaultConfigureAwaitValue);
                 return default(object);
             });
         }
@@ -109,6 +127,7 @@ namespace Catel.ExceptionHandling
         /// <param name="exceptionService">The exception service.</param>
         /// <param name="action">The action.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
+        /// <exception cref="Exception">A delegate callback throws an exception.</exception>
         public static void ProcessWithRetry(this IExceptionService exceptionService, Action action)
         {
             Argument.IsNotNull("exceptionService", exceptionService);

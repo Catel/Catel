@@ -44,7 +44,7 @@ namespace Catel.MVVM.Tasks
         /// <exception cref="ArgumentNullException">The <paramref name="name" /> is <c>null</c>.</exception>
         protected TaskBase(string name)
         {
-            Argument.IsNotNull(() => name);
+            Argument.IsNotNull("name", name);
 
             Name = name;
         }

@@ -78,7 +78,14 @@ namespace Catel.Data
         /// Gets a collection of business rule warnings.
         /// </summary>
         /// <value>The business warnings.</value>
+        [ObsoleteEx(ReplacementTypeOrMember = "BusinessRuleWarnings", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         ReadOnlyCollection<IBusinessRuleValidationResult> BusinessWarnings { get; }
+
+        /// <summary>
+        /// Gets a collection of business rule warnings.
+        /// </summary>
+        /// <value>The business warnings.</value>
+        ReadOnlyCollection<IBusinessRuleValidationResult> BusinessRuleWarnings { get; }
 
         /// <summary>
         /// Gets a collection of business rule errors.

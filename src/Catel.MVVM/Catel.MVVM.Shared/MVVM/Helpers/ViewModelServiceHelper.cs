@@ -60,6 +60,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelLocator, ViewModelLocator>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<INavigationRootService, NavigationRootService>();
 
                 serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IAccelerometerService, AccelerometerService>();
@@ -91,6 +92,10 @@ namespace Catel.MVVM
 
 #if (WINDOWS_PHONE && SILVERLIGHT) || XAMARIN
                 serviceLocator.RegisterTypeIfNotYetRegistered<IPhoneService, PhoneService>();
+#endif
+
+#if XAMARIN_FORMS
+                serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
 #endif
 
                 Log.Debug("Registered default service implementations for IoC container");

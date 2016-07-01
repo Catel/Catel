@@ -68,6 +68,18 @@ namespace Catel.Services
         string GetString(string resourceName, CultureInfo cultureInfo);
 
         /// <summary>
+        /// Gets the string with the specified language source and culture.
+        /// </summary>
+        /// <param name="languageSource">The language source.</param>
+        /// <param name="resourceName">Name of the resource.</param>
+        /// <param name="cultureInfo">The culture information.</param>
+        /// <returns>The string or <c>null</c> if the resource cannot be found.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="languageSource" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="resourceName" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="cultureInfo" /> is <c>null</c>.</exception>
+        string GetString(ILanguageSource languageSource, string resourceName, CultureInfo cultureInfo);
+
+        /// <summary>
         /// Preloads the language sources to provide optimal performance.
         /// </summary>
         void PreloadLanguageSources();

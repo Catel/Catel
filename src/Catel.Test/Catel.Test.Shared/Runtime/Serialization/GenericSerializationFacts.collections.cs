@@ -259,7 +259,7 @@ namespace Catel.Test.Runtime.Serialization
                 {
                     if (enumeration != null)
                     {
-                        this.Items.AddRange(enumeration);
+                        ((ICollection<T>)this.Items).AddRange(enumeration);
                     }
                 }
 
@@ -491,6 +491,7 @@ namespace Catel.Test.Runtime.Serialization
                 protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
                 {
                     Contract.Requires(e != null);
+
                     this.CollectionChanged.SafeInvoke(this, e);
                 }
 

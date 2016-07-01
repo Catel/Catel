@@ -19,7 +19,7 @@ namespace Catel.Services.Test
     {
         #region Fields
         private TValueInterface _currentValue;
-        private readonly Timer _timer;
+        private readonly Threading.Timer _timer;
         private readonly TimeSpan _defaultInterval = TimeSpan.FromSeconds(1);
         #endregion
 
@@ -29,7 +29,7 @@ namespace Catel.Services.Test
         /// </summary>
         protected SensorServiceBase()
         {
-            _timer = new Timer(OnTimerTick, null, _defaultInterval, _defaultInterval);
+            _timer = new Threading.Timer(OnTimerTick, null, _defaultInterval, _defaultInterval);
 
             ExpectedValues = new Queue<SensorTestData<TValueInterface>>();
 

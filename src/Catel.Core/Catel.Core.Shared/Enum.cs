@@ -161,18 +161,13 @@ namespace Catel
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public static bool TryParse(string input, bool ignoreCase, out TEnum? result)
         {
-            result = null;
-            if (!Enum.IsDefined(typeof(TEnum), input))
-            {
-                return false;
-            }
-
             try
             {
                 result = (TEnum)Enum.Parse(typeof(TEnum), input, ignoreCase);
             }
             catch (Exception)
             {
+                result = null;
                 return false;
             }
 
@@ -351,6 +346,32 @@ namespace Catel
         public static class Flags
         {
             #region Static Methods
+            /// <summary>
+            /// Gets the selected values of the flags.
+            /// </summary>
+            /// <param name="flags">The flags.</param>
+            /// <returns>List of values inside the flags.</returns>
+            public static TEnum[] GetValues(TEnum flags)
+            {
+                var values = new List<TEnum>();
+
+                foreach (var value in Enum<TEnum>.GetValues())
+                {
+                    var intValue = Convert.ToInt32(value);
+                    if (intValue == 0)
+                    {
+                        continue;
+                    }
+
+                    if (IsFlagSet(flags, value))
+                    {
+                        values.Add(value);
+                    }
+                }
+
+                return values.ToArray();
+            }
+
             /// <summary>
             /// Clears the flag.
             /// </summary>

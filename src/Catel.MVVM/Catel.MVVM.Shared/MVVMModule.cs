@@ -26,7 +26,7 @@ namespace Catel
         /// <param name="serviceLocator">The service locator.</param>
         public void Initialize(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull(() => serviceLocator);
+            Argument.IsNotNull("serviceLocator", serviceLocator);
 
             serviceLocator.RegisterTypeIfNotYetRegistered<IDataContextSubscriptionService, DataContextSubscriptionService>();
             serviceLocator.RegisterTypeIfNotYetRegistered<ICommandManager, CommandManager>();

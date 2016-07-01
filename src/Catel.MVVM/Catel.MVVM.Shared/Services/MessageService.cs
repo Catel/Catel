@@ -34,13 +34,21 @@ namespace Catel.Services
         /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
         public MessageService(IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull(() => dispatcherService);
+            Argument.IsNotNull("dispatcherService", dispatcherService);
 
             _dispatcherService = dispatcherService;
+            Initialize();
         }
 
         #region Methods
+
+        /// <summary>
+        /// 
+        /// </summary>
+        partial void Initialize();
+
 #if !XAMARIN
+
         /// <summary>
         /// Translates the message box result.
         /// </summary>
@@ -219,6 +227,6 @@ namespace Catel.Services
         {
             return ShowMessageBoxAsync(message, caption, button, icon);
         }
-        #endregion
+#endregion
     }
 }

@@ -25,8 +25,8 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelManager" /> is <c>null</c>.</exception>
         public static void SaveAndCloseViewModels(this IViewModelManager viewModelManager, Func<IViewModel, bool> predicate)
         {
-            Argument.IsNotNull(() => viewModelManager);
-            Argument.IsNotNull(() => predicate);
+            Argument.IsNotNull("viewModelManager", viewModelManager);
+            Argument.IsNotNull("predicate", predicate);
 
             var activeViewModels = viewModelManager.ActiveViewModels.ToList();
             foreach (var viewModel in activeViewModels)
@@ -48,8 +48,8 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelManager" /> is <c>null</c>.</exception>
         public static void CancelAndCloseViewModels(this IViewModelManager viewModelManager, Func<IViewModel, bool> predicate)
         {
-            Argument.IsNotNull(() => viewModelManager);
-            Argument.IsNotNull(() => predicate);
+            Argument.IsNotNull("viewModelManager", viewModelManager);
+            Argument.IsNotNull("predicate", predicate);
 
             var activeViewModels = viewModelManager.ActiveViewModels.ToList();
             foreach (var viewModel in activeViewModels)

@@ -250,7 +250,7 @@ namespace Catel.Test.Data
 
                 using (collection.SuspendChangeNotifications())
                 {
-                    collection.ReplaceRange(new [] { new TestModel() });
+                    ((ICollection<TestModel>)collection).ReplaceRange(new [] { new TestModel() });
                 }
 
                 Assert.IsFalse(itemsAdded);
@@ -307,7 +307,6 @@ namespace Catel.Test.Data
             public void HandlesChangesOfSuspendedFastObservableCollectionCorrectly()
             {
                 var collection = new FastObservableCollection<TestModel>();
-                TestModel model = null;
 
                 for (int i = 0; i < 10; i++)
                 {

@@ -37,7 +37,7 @@ namespace Catel.Test
             {
                 Assert.IsTrue(container.IsSuspended);
                 Assert.IsFalse(container.IsDisposed);
-                Assert.IsTrue(ReferenceEquals(container, ((DisposableToken<DisposableTokenTestContainer>) token).Instance));
+                Assert.IsTrue(ReferenceEquals(container, ((DisposableToken<DisposableTokenTestContainer>)token).Instance));
             }
         }
 
@@ -59,7 +59,7 @@ namespace Catel.Test
 
             Assert.IsTrue(container.IsSuspended);
             Assert.IsTrue(container.IsDisposed);
-            Assert.IsNull(((DisposableToken<DisposableTokenTestContainer>)token).Instance);            
+            Assert.IsNull(((DisposableToken<DisposableTokenTestContainer>)token).Instance);
         }
     }
 }

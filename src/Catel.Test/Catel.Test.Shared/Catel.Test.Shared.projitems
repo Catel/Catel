@@ -22,11 +22,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\SlidingExpirationPolicyFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\CollectionExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\CollectionHelperFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\FastBindingListFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\FastObservableCollectionFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\DisplayNameAttributeFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\PropertyChangedEventArgsExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationServiceFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\DynamicConfigurationFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Contexts\ProgressContextFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\CatelTypeInfoFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ChangeNotificationWrapperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\CompositeValidatorFacts.cs" />
@@ -66,6 +68,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Data\Specifications\OrSpecificationFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Data\Specifications\SpecificationTestData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DynamicObjects\DynamicModelBaseFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DynamicObjects\DynamicObservableObjectFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\Data\ConnectionStringManagerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\Data\ContextManagerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\Data\DbContextManagerFacts.cs" />
