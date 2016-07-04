@@ -179,14 +179,6 @@ Name: {app}; Type: filesandordirs
 Root: HKLM; SubKey: SOFTWARE\Microsoft\.NETFramework\v4.0.30319\AssemblyFoldersEx\Catel; ValueType: string; ValueData: {app}\Libraries\NET40; Flags: UninsDeleteKey
 Root: HKLM; SubKey: SOFTWARE\Microsoft\.NETFramework\v4.5.40805\AssemblyFoldersEx\Catel; ValueType: string; ValueData: {app}\Libraries\NET45; Flags: UninsDeleteKey
 
-Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\Silverlight\v4.0\AssemblyFoldersEx\Catel; ValueType: string; ValueData: {app}\Libraries\SL4; Flags: UninsDeleteKey
-Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\Silverlight\v5.0\AssemblyFoldersEx\Catel; ValueType: string; ValueData: {app}\Libraries\SL5; Flags: UninsDeleteKey
-
-Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\Silverlight for WindowsPhone\v4.0\AssemblyFoldersEx\Catel (WP7); ValueType: string; ValueData: {app}\Libraries\WP7; Flags: UninsDeleteKey
-Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\WindowsPhone\v8.0\AssemblyFoldersEx\Catel (WP80); ValueType: string; ValueData: {app}\Libraries\WP80; Flags: UninsDeleteKey
-
-;Root: HKLM; SubKey: SOFTWARE\Microsoft\Microsoft SDKs\Silverlight for WindowsPhone\v4.0\AssemblyFoldersEx\Catel (WinRT); ValueType: string; ValueData: {app}\Libraries\WinRT; Flags: UninsDeleteKey
-
 [Icons]
 Name: "{group}\Go to Catel website"; Filename: http://www.catelproject.com;
 Name: "{group}\Documentation (online)"; Filename: http://www.catelproject.com/support/documentation;

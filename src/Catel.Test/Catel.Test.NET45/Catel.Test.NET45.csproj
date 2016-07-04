@@ -164,14 +164,6 @@
       <Project>{78940ad6-6cbe-4a64-b36e-8595633034fa}</Project>
       <Name>Catel.Extensions.Memento.NET45</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism4\Catel.Extensions.Prism4.NET45\Catel.Extensions.Prism4.NET45.csproj">
-      <Project>{1dac9a4b-2572-446a-99b8-9e86c1d9254b}</Project>
-      <Name>Catel.Extensions.Prism4.NET45</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Catel.Extensions.Wcf.Server\Catel.Extensions.Wcf.Server.NET45\Catel.Extensions.Wcf.Server.NET45.csproj">
-      <Project>{9d5b9051-9102-4225-b89c-be0e665e2ad3}</Project>
-      <Name>Catel.Extensions.Wcf.Server.NET45</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.NET45\Catel.MVVM.NET45.csproj">
       <Project>{bedeb2cb-51ab-4af6-85f9-6a596b4603bb}</Project>
       <Name>Catel.MVVM.NET45</Name>

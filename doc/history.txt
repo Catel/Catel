@@ -16,7 +16,7 @@ License:         http://www.catelproject.com/about/license
 **********************************************************
 
 ==================
-Version xx
+Version 5.0.0
 ==================
 
 For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
@@ -27,13 +27,22 @@ Release date:
 
 Added/fixed (BREAKING CHANGES):
 ===============================
-No breaking changes, but made a lot of preparations for the "async big bang" that will happen in Catel 5.0. We are
-currently trying to index all members that might need async members in the future. Most of these members are now
-marked as obsolete and have an async handler which must be used in the future.
+-
 
 Platform support changes:
 =========================
-[none]
+Dropped support for the following platforms:
+* Silverlight 5
+* Windows Phone 8.0 (Silverlight)
+* Windows Phone 8.1 (Silverlight)
+* Windows Phone 8.1 (Runtime)
+* Windows 8.1 (Runtime)
+
+Dropped support for the following components:
+* Catel.Extensions.CSLA
+* Catel.Extensions.Wcf.Server
+* Catel.Extensions.Prism4
+* Catel.Extensions.MVC4
 
 Classes / members marked as obsolete:
 =====================================
@@ -41,15 +50,7 @@ Our mission is to make Catel easier to maintain in the future. One way to achiev
 features and components. We are actively removing features by marking them obsolete. If nobody complains,
 we will remove the features in the next major release.
 
-* CTL-671 Marked Catel.Extensions.CSLA as obsolete to minimize maintenance costs of Catel
-* CTL-672 Marked Catel.Extensions.Wcf.Server as obsolete to minimize maintenance costs of Catel
-* CTL-740 Marked IMessageMediator.SendMessageAsync as obsolete because it's not truly async
-* CTL-755 Marked Catel.Windows.Controls.ScrollViewerProperties as obsolete to minimize maintenance costs of Catel
-* CTL-756 Marked Catel.Windows.Controls.RichToolTip as obsolete to minimize maintenance costs of Catel
-* CTL-784 Marked AttributeHelper as obsolete, use reflection extensions instead
-* CTL-808 Marked AsynchronousCommand as obsolete, use TaskCommand instead
-* CTL-810 Marked QueryableExtensions.Include(Expression) as obsolete for EF6 and higher, use the default EF implementation
-* CTL-849 Marked ExpressionUtil obsolete, use ExpressionHelper instead
+-
 
 Added/fixed:
 ============
