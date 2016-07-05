@@ -40,9 +40,9 @@ namespace Catel.MVVM
 
         #region Properties
         /// <summary>
-        /// Gets or sets a value indicating whether all validation should be deferred until the first call to <see cref="SaveViewModel"/>.
+        /// Gets or sets a value indicating whether all validation should be deferred until the first call to <see cref="SaveViewModelAsync"/>.
         /// <para />
-        /// If this value is <c>true</c>, all validation will be suspended. As soon as the first call is made to the <see cref="SaveViewModel"/>,
+        /// If this value is <c>true</c>, all validation will be suspended. As soon as the first call is made to the <see cref="SaveViewModelAsync"/>,
         /// the validation will no longer be suspended and activated.
         /// <para />
         /// The default value is <c>false</c>.

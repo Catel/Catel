@@ -43,30 +43,6 @@ namespace Catel.Windows.Controls
         /// Load all tabs when any of the tabs is used for the first time.
         /// </summary>
         EagerLoadingOnFirstUse,
-
-        /// <summary>
-        /// Obsolete, use <see cref="LazyLoading"/> instead.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "LazyLoading", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        Single = LazyLoading,
-
-        /// <summary>
-        /// Obsolete, use <see cref="LazyLoadingUnloadOthers"/> instead.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "LazyLoadingUnloadOthers", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        SingleUnloadOthers = LazyLoadingUnloadOthers,
-
-        /// <summary>
-        /// Obsolete, use <see cref="EagerLoading"/> instead.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "EagerLoading", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        AllOnStartUp = EagerLoading,
-
-        /// <summary>
-        /// Obsolete, use <see cref="EagerLoadingOnFirstUse"/> instead.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "EagerLoadingOnFirstUse", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        AllOnFirstUse = EagerLoadingOnFirstUse
     }
 
     /// <summary>
@@ -310,7 +286,7 @@ namespace Catel.Windows.Controls
                 }
             }
 
-            var loadAllItems = (LoadTabItems == LoadTabItemsBehavior.AllOnStartUp) || (IsLoaded && !IsLazyLoading);
+            var loadAllItems = (LoadTabItems == LoadTabItemsBehavior.EagerLoading) || (IsLoaded && !IsLazyLoading);
             if (loadAllItems)
             {
                 foreach (ContentPresenter child in _itemsHolder.Children)

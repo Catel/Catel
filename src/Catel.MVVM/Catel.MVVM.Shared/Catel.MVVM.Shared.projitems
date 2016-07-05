@@ -40,7 +40,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Bindings\Extensions\BindingContextExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Bindings\Extensions\BindingExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Bindings\Extensions\BindingPartyExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\AsynchronousCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Command.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandContainerBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandManager.cs" />
@@ -380,7 +379,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Input\InputGesture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Authentication.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\AutoCompletion.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\AutoCompletionBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Behavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\BehaviorBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\CommandBehaviorBase.cs" />
@@ -409,8 +407,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\WindowEventToCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\EventArgs\BehaviorEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\EventArgs\TriggerEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\InteractivityManager.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Interfaces\IInteractivityManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Triggers\CommandEventTriggerBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Triggers\CommandTriggerActionBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Triggers\CommandTriggerBase.cs" />
@@ -439,5 +435,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Windows\DataWindow\DataWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Windows\DataWindow\DataWindowButton.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Windows\Window.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Interfaces\" />
   </ItemGroup>
 </Project>

@@ -180,23 +180,12 @@ namespace Catel.Windows.Interactivity
             }
 
             OnAssociatedObjectLoaded();
-            OnAssociatedObjectLoaded(sender, e);
         }
 
         /// <summary>
         /// Called when the AssociatedObject is loaded.
         /// </summary>
         protected virtual void OnAssociatedObjectLoaded()
-        {
-        }
-
-        /// <summary>
-        /// Called when the AssociatedObject is loaded.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnAssociatedObjectLoaded()", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        protected virtual void OnAssociatedObjectLoaded(object sender, UIEventArgs e)
         {
         }
 
@@ -222,7 +211,6 @@ namespace Catel.Windows.Interactivity
             }
 
             OnAssociatedObjectUnloaded();
-            OnAssociatedObjectUnloaded(sender, e);
 
             CleanUp();
         }
@@ -231,16 +219,6 @@ namespace Catel.Windows.Interactivity
         /// Called when the AssociatedObject is unloaded.
         /// </summary>
         protected virtual void OnAssociatedObjectUnloaded()
-        {
-        }
-
-        /// <summary>
-        /// Called when the AssociatedObject is unloaded.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnAssociatedObjectUnloaded()", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        protected virtual void OnAssociatedObjectUnloaded(object sender, UIEventArgs e)
         {
         }
 

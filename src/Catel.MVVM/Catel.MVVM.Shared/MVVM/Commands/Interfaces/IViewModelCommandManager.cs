@@ -22,14 +22,6 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="handler">The handler to execute when a command is executed.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="handler" /> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "AddHandler with async func", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        void AddHandler(Action<IViewModel, string, ICommand, object> handler);
-
-        /// <summary>
-        /// Adds a new handler when a command is executed on the specified view model.
-        /// </summary>
-        /// <param name="handler">The handler to execute when a command is executed.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler" /> is <c>null</c>.</exception>
         void AddHandler(Func<IViewModel, string, ICommand, object, Task> handler);
 
         /// <summary>

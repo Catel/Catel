@@ -491,30 +491,12 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> has been canceled.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelCanceledAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<EventArgs> ViewModelCanceled;
-
-        /// <summary>
-        /// Occurs when the <see cref="ViewModel"/> has been canceled.
-        /// </summary>
         public event AsyncEventHandler<EventArgs> ViewModelCanceledAsync;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> has been saved.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelSavedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<EventArgs> ViewModelSaved;
-
-        /// <summary>
-        /// Occurs when the <see cref="ViewModel"/> has been saved.
-        /// </summary>
         public event AsyncEventHandler<EventArgs> ViewModelSavedAsync;
-
-        /// <summary>
-        /// Occurs when the <see cref="ViewModel"/> has been closed.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<ViewModelClosedEventArgs> ViewModelClosed;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> has been closed.
@@ -994,7 +976,6 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         public virtual Task OnViewModelCanceledAsync(object sender, EventArgs e)
         {
-            ViewModelCanceled.SafeInvoke(this, e);
             return ViewModelCanceledAsync.SafeInvokeAsync(this, e);
         }
 
@@ -1005,7 +986,6 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         public virtual Task OnViewModelSavedAsync(object sender, EventArgs e)
         {
-            ViewModelSaved.SafeInvoke(this, e);
             return ViewModelSavedAsync.SafeInvokeAsync(this, e);
         }
 
@@ -1016,7 +996,6 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="Catel.MVVM.ViewModelClosedEventArgs"/> instance containing the event data.</param>
         public virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
-            ViewModelClosed.SafeInvoke(this, e);
             return ViewModelClosedAsync.SafeInvokeAsync(this, e);
         }
 

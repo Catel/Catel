@@ -149,20 +149,6 @@ namespace Catel.Configuration
         /// Gets the configuration value.
         /// </summary>
         /// <typeparam name="T">The type of the value to retrieve.</typeparam>
-        /// <param name="key">The key.</param>
-        /// <param name="defaultValue">The default value. Will be returned if the value cannot be found.</param>
-        /// <returns>The configuration value.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetValue<T>(ConfigurationContainer, string, T)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        public T GetValue<T>(string key, T defaultValue = default(T))
-        {
-            return GetValue(ConfigurationContainer.Roaming, key, defaultValue);
-        }
-
-        /// <summary>
-        /// Gets the configuration value.
-        /// </summary>
-        /// <typeparam name="T">The type of the value to retrieve.</typeparam>
         /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <param name="defaultValue">The default value. Will be returned if the value cannot be found.</param>
@@ -206,18 +192,6 @@ namespace Catel.Configuration
         /// <summary>
         /// Sets the configuration value.
         /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "SetValue(ConfigurationContainer, string, object)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        public void SetValue(string key, object value)
-        {
-            SetValue(ConfigurationContainer.Roaming, key, value);
-        }
-
-        /// <summary>
-        /// Sets the configuration value.
-        /// </summary>
         /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
@@ -238,18 +212,6 @@ namespace Catel.Configuration
         /// <summary>
         /// Determines whether the specified value is available.
         /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns><c>true</c> if the specified value is available; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "IsValueAvailable(ConfigurationContainer, string)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        public bool IsValueAvailable(string key)
-        {
-            return IsValueAvailable(ConfigurationContainer.Roaming, key);
-        }
-
-        /// <summary>
-        /// Determines whether the specified value is available.
-        /// </summary>
         /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <returns><c>true</c> if the specified value is available; otherwise, <c>false</c>.</returns>
@@ -261,18 +223,6 @@ namespace Catel.Configuration
             key = GetFinalKey(key);
 
             return ValueExists(container, key);
-        }
-
-        /// <summary>
-        /// Initializes the value by setting the value to the <paramref name="defaultValue" /> if the value does not yet exist.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="defaultValue">The default value.</param>
-        /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "InitializeValue(ConfigurationContainer, string, object)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        public void InitializeValue(string key, object defaultValue)
-        {
-            InitializeValue(ConfigurationContainer.Roaming, key, defaultValue);
         }
 
         /// <summary>
@@ -295,17 +245,6 @@ namespace Catel.Configuration
         /// <summary>
         /// Determines whether the specified key value exists in the configuration.
         /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns><c>true</c> if the value exists, <c>false</c> otherwise.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "ValueExists(ConfigurationContainer, string)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        protected virtual bool ValueExists(string key)
-        {
-            return ValueExists(ConfigurationContainer.Roaming, key);
-        }
-
-        /// <summary>
-        /// Determines whether the specified key value exists in the configuration.
-        /// </summary>
         /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <returns><c>true</c> if the value exists, <c>false</c> otherwise.</returns>
@@ -323,19 +262,8 @@ namespace Catel.Configuration
             return settings.Contains(key);
 #else
             var settings = GetSettingsContainer(container);
-            return settings.IsConfigurationKeyAvailable(key);
+            return settings.IsConfigurationValueSet(key);
 #endif
-        }
-
-        /// <summary>
-        /// Gets the value from the store.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns>The value.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetValueFromStore(ConfigurationContainer, string)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        protected virtual string GetValueFromStore(string key)
-        {
-            return GetValueFromStore(ConfigurationContainer.Roaming, key);
         }
 
         /// <summary>
@@ -358,19 +286,8 @@ namespace Catel.Configuration
             return (string)settings[key];
 #else
             var settings = GetSettingsContainer(container);
-            return settings.GetConfigurationValue<string>(key);
+            return settings.GetConfigurationValue<string>(key, string.Empty);
 #endif
-        }
-
-        /// <summary>
-        /// Sets the value to the store.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "SetValueToStore(ConfigurationContainer, string, string)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        protected virtual void SetValueToStore(string key, string value)
-        {
-            SetValueToStore(ConfigurationContainer.Roaming, key, value);
         }
 
         /// <summary>
@@ -397,7 +314,7 @@ namespace Catel.Configuration
 #else
             var settings = GetSettingsContainer(container);
 
-            if (!settings.IsConfigurationKeyAvailable(key))
+            if (!settings.IsConfigurationValueSet(key))
             {
                 settings.RegisterConfigurationKey(key);
             }

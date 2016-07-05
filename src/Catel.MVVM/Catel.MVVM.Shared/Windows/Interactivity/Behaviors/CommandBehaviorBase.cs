@@ -99,17 +99,6 @@ namespace Catel.Windows.Interactivity
         private void OnCommandCanExecuteChangedInternal(object sender, System.EventArgs e)
         {
             OnCommandCanExecuteChanged();
-            OnCommandCanExecuteChanged(sender, e);
-        }
-
-        /// <summary>
-        /// Called when the <see cref="ICommand.CanExecute"/> state has changed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnCommandCanExecuteChanged", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        protected virtual void OnCommandCanExecuteChanged(object sender, System.EventArgs e)
-        {
         }
 
         /// <summary>

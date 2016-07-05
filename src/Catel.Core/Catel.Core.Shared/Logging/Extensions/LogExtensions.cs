@@ -334,32 +334,6 @@ namespace Catel.Logging
         }
 
         /// <summary>
-        /// Writes the specified message as error message and then throws the specified exception.
-        /// <para/>
-        /// The specified exception must have a constructor that accepts a single string as message.
-        /// </summary>
-        /// <typeparam name="TException">The type of the exception.</typeparam>
-        /// <param name="log">The log.</param>
-        /// <param name="messageFormat">The message format.</param>
-        /// <param name="args">The args.</param>
-        /// <example>
-        ///   <code>
-        /// This example logs an error and immediately throws the exception:<para/>
-        ///   <![CDATA[
-        /// Log.ErrorAndThrowException<NotSupportedException>("This action is not supported");
-        /// ]]>
-        ///   </code>
-        ///   </example>
-        /// <exception cref="ArgumentNullException">The <paramref name="log"/> is <c>null</c>.</exception>
-        /// <exception cref="NotSupportedException">The <typeparamref name="TException"/> does not have a constructor accepting a string.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "ErrorAndCreateException", TreatAsErrorFromVersion = "4.3", RemoveInVersion = "5.0")]
-        public static void ErrorAndThrowException<TException>(this ILog log, string messageFormat, params object[] args)
-            where TException : Exception
-        {
-            throw ErrorAndCreateException<TException>(log, messageFormat, args);
-        }
-
-        /// <summary>
         /// Formats the exception for logging with an additional message.
         /// </summary>
         /// <param name="exception">The exception.</param>

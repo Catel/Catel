@@ -355,7 +355,7 @@ namespace Catel.Runtime.Serialization.Xml
                 var properties = modelType.GetPropertiesEx();
                 foreach (var property in properties)
                 {
-                    if (AttributeHelper.IsDecoratedWithAttribute<XmlIgnoreAttribute>(property))
+                    if (property.IsDecoratedWithAttribute<XmlIgnoreAttribute>())
                     {
                         ignoredProperties.Add(property.Name);
                     }
@@ -409,7 +409,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             XmlRootAttribute xmlRootAttribute;
-            if (AttributeHelper.TryGetAttribute(modelType, out xmlRootAttribute))
+            if (modelType.TryGetAttribute(out xmlRootAttribute))
             {
                 return xmlRootAttribute.ElementName;
             }

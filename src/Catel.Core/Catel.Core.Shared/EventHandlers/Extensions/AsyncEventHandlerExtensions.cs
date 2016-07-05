@@ -21,21 +21,6 @@ namespace Catel
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// Invokes the specified <paramref name="handler"/>
-        /// </summary>
-        /// <param name="handler">The handler.</param>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The event args.</param>
-        /// <typeparam name="TEventArgs">The type of the <see cref="EventArgs"/> class.</typeparam>
-        /// <returns></returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "SafeInvokeAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public static Task<bool> SafeInvoke<TEventArgs>(this AsyncEventHandler<TEventArgs> handler, object sender, TEventArgs e)
-            where TEventArgs : EventArgs
-        {
-            return SafeInvokeAsync(handler, sender, e);
-        }
-
-        /// <summary>
         /// Invokes the specified <paramref name="handler" />
         /// </summary>
         /// <param name="handler">The handler.</param>

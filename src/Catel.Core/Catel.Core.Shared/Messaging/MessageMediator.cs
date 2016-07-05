@@ -285,21 +285,6 @@ namespace Catel.Messaging
         }
 
         /// <summary>
-        /// Broadcasts a message to all message targets for a given message tag and passes a parameter, the message targets are all called asynchronously.
-        /// </summary>
-        /// <typeparam name="TMessage">The type of the message.</typeparam>
-        /// <param name="message">The message parameter.</param>
-        /// <param name="tag">The message tag.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="message"/> is <c>null</c>.</exception>
-        [ObsoleteEx(Message = "Not truly async, removing this member in future version", TreatAsErrorFromVersion = "4.4", RemoveInVersion = "5.0")]
-        public void SendMessageAsync<TMessage>(TMessage message, object tag = null)
-        {
-            Func<TMessage, object, bool> sendMessageFunction = SendMessage;
-
-            sendMessageFunction.BeginInvoke(message, tag, null, null);
-        }
-
-        /// <summary>
         /// Cleans up the list of registered handlers. All handlers that are no longer alive
         /// are removed from the list.
         /// <para />

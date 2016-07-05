@@ -816,13 +816,13 @@ namespace Catel.IoC
                 if (decoratedWithInjectionConstructorAttribute)
                 {
                     constructors = (from ctor in constructors
-                                    where AttributeHelper.IsDecoratedWithAttribute<InjectionConstructorAttribute>(ctor)
+                                    where ctor.IsDecoratedWithAttribute<InjectionConstructorAttribute>()
                                     select ctor).ToList();
                 }
                 else
                 {
                     constructors = (from ctor in constructors
-                                    where !AttributeHelper.IsDecoratedWithAttribute<InjectionConstructorAttribute>(ctor)
+                                    where !ctor.IsDecoratedWithAttribute<InjectionConstructorAttribute>()
                                     select ctor).ToList();
                 }
 

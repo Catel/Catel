@@ -140,17 +140,6 @@ namespace Catel.Reflection
         /// Gets the full name of the type in a safe way. This means it checks for null first.
         /// </summary>
         /// <param name="type">The type.</param>
-        /// <returns>The safe full name.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetSafeFullName(Type, bool)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        public static string GetSafeFullName(this Type type)
-        {
-            return GetSafeFullName(type, false);
-        }
-
-        /// <summary>
-        /// Gets the full name of the type in a safe way. This means it checks for null first.
-        /// </summary>
-        /// <param name="type">The type.</param>
         /// <param name="fullyQualifiedAssemblyName">if set to <c>true</c>, include the assembly name in the type name.</param>
         /// <returns>The safe full name.</returns>
         public static string GetSafeFullName(this Type type, bool fullyQualifiedAssemblyName /* in v5, set = false */)

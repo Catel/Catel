@@ -7,7 +7,7 @@
 namespace Catel.MVVM
 {
     /// <summary>
-    /// EventArgs for the <see cref="IViewModel.Saving"/> event.
+    /// EventArgs for the <see cref="IViewModel.SavingAsync"/> event.
     /// </summary>
     public class SavingEventArgs : CancellableEventArgs
     {

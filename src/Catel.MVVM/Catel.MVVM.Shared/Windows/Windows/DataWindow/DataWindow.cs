@@ -254,7 +254,6 @@ namespace Catel.Windows
 #endif
             };
 
-            _logic.ViewModelClosed += OnViewModelClosed;
             _logic.ViewModelClosedAsync += OnViewModelClosedAsync;
             _logic.ViewModelChanged += (sender, e) => RaiseViewModelChanged();
 
@@ -463,18 +462,6 @@ namespace Catel.Windows
         /// <summary>
         /// Executes the OK command.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "ExecuteOkAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected void ExecuteOk()
-        {
-            if (OnOkCanExecute())
-            {
-                OnOkExecute();
-            }
-        }
-
-        /// <summary>
-        /// Executes the OK command.
-        /// </summary>
         protected Task ExecuteOkAsync()
         {
             if (OnOkCanExecute())
@@ -497,15 +484,6 @@ namespace Catel.Windows
         /// <summary>
         /// Handled when the user invokes the OK command.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnOkExecuteAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected async void OnOkExecute()
-        {
-            await OnOkExecuteAsync();
-        }
-
-        /// <summary>
-        /// Handled when the user invokes the OK command.
-        /// </summary>
         protected async Task OnOkExecuteAsync()
         {
             if (!await ApplyChangesAsync())
@@ -515,15 +493,6 @@ namespace Catel.Windows
 
             ClosedByButton = true;
             SetDialogResultAndMakeSureWindowGetsClosed(true);
-        }
-
-        /// <summary>
-        /// Executes the Cancel command.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "ExecuteCancelAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected void ExecuteCancel()
-        {
-            ExecuteCancelAsync();
         }
 
         /// <summary>
@@ -551,15 +520,6 @@ namespace Catel.Windows
         /// <summary>
         /// Handled when the user invokes the Cancel command.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnCancelExecuteAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected async void OnCancelExecute()
-        {
-            await OnCancelExecuteAsync();
-        }
-
-        /// <summary>
-        /// Handled when the user invokes the Cancel command.
-        /// </summary>
         protected async Task OnCancelExecuteAsync()
         {
             if (!await DiscardChangesAsync())
@@ -577,20 +537,11 @@ namespace Catel.Windows
         /// <summary>
         /// Executes the Apply command.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "ExecuteApplyAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected void ExecuteApply()
-        {
-            ExecuteApplyAsync();
-        }
-
-        /// <summary>
-        /// Executes the Apply command.
-        /// </summary>
         protected Task ExecuteApplyAsync()
         {
             if (OnApplyCanExecute())
             {
-                return OnApplyExcuteAsync();
+                return OnApplyExecuteAsync();
             }
 
             return TaskHelper.Completed;
@@ -603,24 +554,6 @@ namespace Catel.Windows
         protected bool OnApplyCanExecute()
         {
             return ValidateData();
-        }
-
-        /// <summary>
-        /// Handled when the user invokes the Apply command.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnApplyExecuteAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected async void OnApplyExcute()
-        {
-            await OnApplyExecuteAsync();
-        }
-
-        /// <summary>
-        /// Handled when the user invokes the Apply command.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnApplyExecuteAsync (small typo)", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected async Task OnApplyExcuteAsync()
-        {
-            await ApplyChangesAsync();
         }
 
         /// <summary>
@@ -1074,30 +1007,9 @@ namespace Catel.Windows
         /// Applies all changes made by this window.
         /// </summary>
         /// <returns>True if successful, otherwise false.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "ApplyChangesAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual async Task<bool> ApplyChanges()
-        {
-            var result = await ApplyChangesAsync();
-            return result;
-        }
-
-        /// <summary>
-        /// Applies all changes made by this window.
-        /// </summary>
-        /// <returns>True if successful, otherwise false.</returns>
         protected async virtual Task<bool> ApplyChangesAsync()
         {
             var result = await _logic.SaveViewModelAsync();
-            return result;
-        }
-
-        /// <summary>
-        /// Discards all changes made by this window.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "DiscardChangesAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual async Task<bool> DiscardChanges()
-        {
-            var result = await DiscardChangesAsync();
             return result;
         }
 
@@ -1152,16 +1064,6 @@ namespace Catel.Windows
         /// </summary>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
-        {
-        }
-
-        /// <summary>
-        /// Called when the <see cref="ViewModel"/> has been closed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnViewModelClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual void OnViewModelClosed(object sender, ViewModelClosedEventArgs e)
         {
         }
 

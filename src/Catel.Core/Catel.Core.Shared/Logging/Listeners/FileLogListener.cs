@@ -209,7 +209,7 @@ namespace Catel.Logging
         /// Writes the batch of entries.
         /// </summary>
         /// <param name="batchEntries">The batch entries.</param>
-        protected override async Task WriteBatch(System.Collections.Generic.List<LogBatchEntry> batchEntries)
+        protected override async Task WriteBatchAsync(System.Collections.Generic.List<LogBatchEntry> batchEntries)
         {
             try
             {
@@ -233,7 +233,7 @@ namespace Catel.Logging
                     {
                         foreach (var batchEntry in batchEntries)
                         {
-                            var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Time);
+                            var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Data, batchEntry.Time);
 
                             writer.WriteLine(message);
                         }

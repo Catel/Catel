@@ -78,29 +78,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="typeToSerialize">The type to (de)serialize.</param>
         /// <param name="xmlName">Name of the property as known in XML.</param>
         /// <param name="rootNamespace">The root namespace.</param>
-        /// <param name="serializingObject">The object to create the serializer for. When the object is not <c>null</c>, the types that are
-        /// a child object of this object are added to the known types of the serializer.</param>
-        /// <param name="additionalKnownTypes">A list of additional types to add to the known types.</param>
-        /// <returns><see cref="DataContractSerializer" /> for the given type.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="serializingType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="xmlName" /> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2",
-            ReplacementTypeOrMember = "IDataContractSerializerFactory.GetDataContractSerializer(serializingType, typeToSerialize, xmlName, rootNamespace, additionalKnownTypes)")]
-        public virtual DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string rootNamespace, object serializingObject, List<Type> additionalKnownTypes = null)
-        {
-            // Note: use cast to force usage of this method
-            return GetDataContractSerializer(serializingType, typeToSerialize, xmlName, rootNamespace, (List<Type>)additionalKnownTypes);
-        }
-
-        /// <summary>
-        /// Gets the Data Contract serializer for a specific type. This method caches serializers so the
-        /// performance can be improved when a serializer is used more than once.
-        /// </summary>
-        /// <param name="serializingType">The type that is currently (de)serializing.</param>
-        /// <param name="typeToSerialize">The type to (de)serialize.</param>
-        /// <param name="xmlName">Name of the property as known in XML.</param>
-        /// <param name="rootNamespace">The root namespace.</param>
         /// <param name="additionalKnownTypes">A list of additional types to add to the known types.</param>
         /// <returns><see cref="DataContractSerializer" /> for the given type.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serializingType" /> is <c>null</c>.</exception>
@@ -146,32 +123,6 @@ namespace Catel.Runtime.Serialization.Xml
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Gets the known types for a specific object instance.
-        /// </summary>
-        /// <param name="obj">The object to retrieve the known types for.</param>
-        /// <param name="serializerTypeInfo">The serializer type info.</param>
-        /// <returns>Array of <see cref="Type"/> that are found in the object instance.</returns>
-        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2",
-            ReplacementTypeOrMember = "DataContractSerializerFactory.GetKnownTypes(type, serializerTypeInfo)")]
-        protected virtual void GetKnownTypesForInstance(object obj, XmlSerializerTypeInfo serializerTypeInfo)
-        {
-            if (obj == null)
-            {
-                return;
-            }
-
-            var objectType = obj.GetType();
-
-            if (ShouldTypeBeIgnored(objectType, serializerTypeInfo))
-            {
-                return;
-            }
-
-            GetKnownTypesForItemsInstance(obj, serializerTypeInfo);
-            GetKnownTypes(objectType, serializerTypeInfo);
-        }
-
         /// <summary>
         /// Gets the known types inside the specific type.
         /// </summary>
@@ -336,27 +287,6 @@ namespace Catel.Runtime.Serialization.Xml
             }
         }
 
-        /// <summary>
-        /// Gets the known types of IEnumerable instance.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="serializerTypeInfo">The serializer type info.</param>
-        /// <returns>Array of <see cref="Type"/> that are found in the object type.</returns>  
-        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2",
-             ReplacementTypeOrMember = "DataContractSerializerFactory.GetKnownTypesForItems(type, serializerTypeInfo)")]
-        private void GetKnownTypesForItemsInstance(object obj, XmlSerializerTypeInfo serializerTypeInfo)
-        {
-            var ienumerable = obj as IEnumerable;
-
-            if (ienumerable != null)
-            {
-                foreach (var item in ienumerable)
-                {
-                    GetKnownTypesForInstance(item, serializerTypeInfo);
-                }
-            }
-        }
-
         private void AddTypeMembers(Type type, XmlSerializerTypeInfo serializerTypeInfo)
         {
             var typesToCheck = new List<Type>();
@@ -429,7 +359,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             // DataContract attribute
-            if (AttributeHelper.IsDecoratedWithAttribute<DataContractAttribute>(type))
+            if (type.IsDecoratedWithAttribute<DataContractAttribute>())
             {
                 return true;
             }

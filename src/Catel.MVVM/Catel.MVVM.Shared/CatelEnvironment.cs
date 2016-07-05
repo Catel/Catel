@@ -136,18 +136,6 @@ namespace Catel
         /// <summary>
         /// Gets whether the software is currently in design mode.
         /// <para />
-        /// Note that unless the <see cref="IsInDesignMode"/>, the value is not cached but always determined at runtime.
-        /// </summary>
-        /// <returns><c>true</c> if the software is in design mode, <c>false</c> otherwise.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetIsInDesignMode(bool)", TreatAsErrorFromVersion = "4.3", RemoveInVersion = "5.0")]
-        public static bool GetIsInDesignMode()
-        {
-            return GetIsInDesignMode(true);
-        }
-
-        /// <summary>
-        /// Gets whether the software is currently in design mode.
-        /// <para />
         /// Note that unless the <see cref="IsInDesignMode" />, the value is not cached but always determined at runtime.
         /// </summary>
         /// <param name="initializeDesignTime">if set to <c>true</c>, automatically call <see cref="DesignTimeHelper.InitializeDesignTime"/> if in design mode.</param>

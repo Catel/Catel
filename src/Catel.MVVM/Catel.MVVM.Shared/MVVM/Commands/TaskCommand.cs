@@ -259,7 +259,7 @@ namespace Catel.MVVM
             }
             else
             {
-                RaiseExecuted(parameter);
+                await RaiseExecutedAsync(parameter);
             }
 
             RaiseCanExecuteChanged();

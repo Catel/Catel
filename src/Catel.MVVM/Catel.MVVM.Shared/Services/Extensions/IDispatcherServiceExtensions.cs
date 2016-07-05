@@ -30,7 +30,7 @@ namespace Catel.Services
         {
             Argument.IsNotNull("method", method);
 
-            dispatcherService.Invoke(() => method.DynamicInvoke(args));
+            dispatcherService.Invoke(() => method.DynamicInvoke(args), true);
         }
 
         /// <summary>

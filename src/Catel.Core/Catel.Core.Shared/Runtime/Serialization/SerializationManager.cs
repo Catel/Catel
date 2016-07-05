@@ -140,12 +140,12 @@ namespace Catel.Runtime.Serialization
                     // Exclude fields by default
                     var include = false;
 
-                    if (AttributeHelper.IsDecoratedWithAttribute<IncludeInSerializationAttribute>(fieldInfo))
+                    if (fieldInfo.IsDecoratedWithAttribute<IncludeInSerializationAttribute>())
                     {
                         include = true;
                     }
 
-                    if (AttributeHelper.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>(fieldInfo))
+                    if (fieldInfo.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>())
                     {
                         include = false;
                     }
@@ -185,7 +185,7 @@ namespace Catel.Runtime.Serialization
                     {
                         // CTL-550
                         var cachedPropertyInfo = propertyData.GetPropertyInfo(type);
-                        if (AttributeHelper.IsDecoratedWithAttribute<IncludeInSerializationAttribute>(cachedPropertyInfo.PropertyInfo))
+                        if (cachedPropertyInfo.PropertyInfo.IsDecoratedWithAttribute<IncludeInSerializationAttribute>())
                         {
                             isSerializable = true;
                         }
@@ -206,7 +206,7 @@ namespace Catel.Runtime.Serialization
                     var propertyInfo = propertyData.GetPropertyInfo(type);
                     if (propertyInfo != null)
                     {
-                        if (!AttributeHelper.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>(propertyInfo.PropertyInfo))
+                        if (!propertyInfo.PropertyInfo.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>())
                         {
                             serializableMembers.Add(modelProperty.Key, memberMetadata);
                         }
@@ -255,12 +255,12 @@ namespace Catel.Runtime.Serialization
                         // If not a ModelBase, include by default
                         var include = !isModelBase;
 
-                        if (AttributeHelper.IsDecoratedWithAttribute<IncludeInSerializationAttribute>(propertyInfo))
+                        if (propertyInfo.IsDecoratedWithAttribute<IncludeInSerializationAttribute>())
                         {
                             include = true;
                         }
 
-                        if (AttributeHelper.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>(propertyInfo))
+                        if (propertyInfo.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>())
                         {
                             include = false;
                         }
@@ -542,7 +542,7 @@ namespace Catel.Runtime.Serialization
             var name = string.Empty;
 
             DataMemberAttribute dataMemberAttribute = null;
-            if (AttributeHelper.TryGetAttribute(memberInfo, out dataMemberAttribute))
+            if (memberInfo.TryGetAttribute(out dataMemberAttribute))
             {
                 if (!string.IsNullOrWhiteSpace(dataMemberAttribute.Name))
                 {
@@ -551,7 +551,7 @@ namespace Catel.Runtime.Serialization
             }
 
             IncludeInSerializationAttribute includeInSerializationAttribute = null;
-            if (AttributeHelper.TryGetAttribute(memberInfo, out includeInSerializationAttribute))
+            if (memberInfo.TryGetAttribute(out includeInSerializationAttribute))
             {
                 if (!string.IsNullOrWhiteSpace(includeInSerializationAttribute.Name))
                 {
@@ -564,7 +564,7 @@ namespace Catel.Runtime.Serialization
 
         private string GetCacheKey(Type type, bool additionalValue)
         {
-            var key = string.Format("{0}_{1}", type.AssemblyQualifiedName, additionalValue);
+            var key = $"{type.AssemblyQualifiedName}_{additionalValue}";
             return key;
         }
     }

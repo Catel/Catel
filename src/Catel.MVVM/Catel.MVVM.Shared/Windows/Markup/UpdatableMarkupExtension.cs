@@ -225,21 +225,8 @@ namespace Catel.Windows.Markup
         private object GetValue()
         {
             var value = ProvideDynamicValue(_serviceProvider);
-            if (value == null)
-            {
-                // Backwards compatibility, will be removed in v5
-                value = ProvideDynamicValue();
-            }
-
             return value;
         }
-
-        /// <summary>
-        /// Provides the dynamic value.
-        /// </summary>
-        /// <returns>System.Object.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "ProvideDynamicValue(IServiceProvider)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        protected abstract object ProvideDynamicValue();
 
         /// <summary>
         /// Provides the dynamic value.

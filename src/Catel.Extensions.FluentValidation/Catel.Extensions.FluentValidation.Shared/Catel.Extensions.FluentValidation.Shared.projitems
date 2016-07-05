@@ -9,7 +9,6 @@
     <Import_RootNamespace>Catel</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Attributes\DisplayNameAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Attributes\ValidatorDescriptionAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExtensionsFluentValidationModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FluentValidatorProvider.cs" />

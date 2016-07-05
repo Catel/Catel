@@ -332,7 +332,7 @@ namespace Catel.Services
 
                 if (_progressNotifyableViewModel != null && CloseViewModelOnTerminated)
                 {
-                    _dispatcherService.Invoke(() => _progressNotifyableViewModel.CloseViewModel(null));
+                    _dispatcherService.Invoke(async () => await _progressNotifyableViewModel.CloseViewModelAsync(null));
                 }
 
                 if (_completedCallback != null)

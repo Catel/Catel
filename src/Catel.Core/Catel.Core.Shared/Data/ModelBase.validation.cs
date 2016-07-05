@@ -564,43 +564,12 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Sets the field validation result.
-        /// </summary>
-        /// <param name="validationResult">The field validation result.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="validationResult"/> is <c>null</c>.</exception>
-        [ObsoleteEx(Message = "Use ValidateFields(valiationResults) instead to populate the validation results", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected void SetFieldValidationResult(IFieldValidationResult validationResult)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
         /// Validates the business rules of this object. Override this method to enable
         /// validation of business rules.
         /// </summary>
         /// <param name="validationResults">The validation results, add additional results to this list.</param>
         protected virtual void ValidateBusinessRules(List<IBusinessRuleValidationResult> validationResults)
         {
-        }
-
-        /// <summary>
-        /// Sets the business rule validation result.
-        /// </summary>
-        /// <param name="validationResult">The business rule validation result.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="validationResult"/> is <c>null</c>.</exception>
-        [ObsoleteEx(Message = "Use ValidateBusinessRules(valiationResults) instead to populate the validation results", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected void SetBusinessRuleValidationResult(IBusinessRuleValidationResult validationResult)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Called when the object is validating.
-        /// </summary>
-        [ObsoleteEx(Message = "Use OnValidating(IValidationContext) instead", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected virtual void OnValidating()
-        {
-            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -619,28 +588,10 @@ namespace Catel.Data
         /// <summary>
         /// Called when the object is validating the fields.
         /// </summary>
-        [ObsoleteEx(Message = "Use OnValidatingFields(IValidationContext) instead", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected virtual void OnValidatingFields()
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Called when the object is validating the fields.
-        /// </summary>
         /// <param name="validationContext">The validation context.</param>
         protected virtual void OnValidatingFields(IValidationContext validationContext)
         {
             ValidatingFields.SafeInvoke(this);
-        }
-
-        /// <summary>
-        /// Called when the object has validated the fields.
-        /// </summary>
-        [ObsoleteEx(Message = "Use OnValidatedFields(IValidationContext) instead", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected virtual void OnValidatedFields()
-        {
-            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -655,15 +606,6 @@ namespace Catel.Data
         /// <summary>
         /// Called when the object is validating the business rules.
         /// </summary>
-        [ObsoleteEx(Message = "Use OnValidatingBusinessRules(IValidationContext) instead", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected virtual void OnValidatingBusinessRules()
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Called when the object is validating the business rules.
-        /// </summary>
         /// <param name="validationContext">The validation context.</param>
         protected virtual void OnValidatingBusinessRules(IValidationContext validationContext)
         {
@@ -673,28 +615,10 @@ namespace Catel.Data
         /// <summary>
         /// Called when the object has validated the business rules.
         /// </summary>
-        [ObsoleteEx(Message = "Use OnValidatedBusinessRules(IValidationContext) instead", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected virtual void OnValidatedBusinessRules()
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Called when the object has validated the business rules.
-        /// </summary>
         /// <param name="validationContext">The validation context.</param>
         protected virtual void OnValidatedBusinessRules(IValidationContext validationContext)
         {
             ValidatedBusinessRules.SafeInvoke(this);
-        }
-
-        /// <summary>
-        /// Called when the object is validated.
-        /// </summary>
-        [ObsoleteEx(Message = "Use OnValidatedBusinessRules(IValidationContext) instead", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected virtual void OnValidated()
-        {
-            throw new NotSupportedException();
         }
 
         /// <summary>

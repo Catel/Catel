@@ -30,32 +30,12 @@ namespace Catel.Configuration
         /// Gets the configuration value.
         /// </summary>
         /// <typeparam name="T">The type of the value to retrieve.</typeparam>
-        /// <param name="key">The key.</param>
-        /// <param name="defaultValue">The default value. Will be returned if the value cannot be found.</param>
-        /// <returns>The configuration value.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetValue<T>(ConfigurationContainer, string, T)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        T GetValue<T>(string key, T defaultValue = default(T));
-
-        /// <summary>
-        /// Gets the configuration value.
-        /// </summary>
-        /// <typeparam name="T">The type of the value to retrieve.</typeparam>
         /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <param name="defaultValue">The default value. Will be returned if the value cannot be found.</param>
         /// <returns>The configuration value.</returns>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
         T GetValue<T>(ConfigurationContainer container, string key, T defaultValue = default(T));
-
-        /// <summary>
-        /// Sets the configuration value.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "SetValue(ConfigurationContainer, string, object)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        void SetValue(string key, object value);
 
         /// <summary>
         /// Sets the configuration value.
@@ -69,29 +49,11 @@ namespace Catel.Configuration
         /// <summary>
         /// Determines whether the specified value is available.
         /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns><c>true</c> if the specified value is available; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "IsValueAvailable(ConfigurationContainer, string)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        bool IsValueAvailable(string key);
-
-        /// <summary>
-        /// Determines whether the specified value is available.
-        /// </summary>
         /// <param name="container">The container.</param>
         /// <param name="key">The key.</param>
         /// <returns><c>true</c> if the specified value is available; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
         bool IsValueAvailable(ConfigurationContainer container, string key);
-
-        /// <summary>
-        /// Initializes the value by setting the value to the <paramref name="defaultValue" /> if the value does not yet exist.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="defaultValue">The default value.</param>
-        /// <exception cref="ArgumentException">The <paramref name="key"/> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "InitializeValue(ConfigurationContainer, string, object)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        void InitializeValue(string key, object defaultValue);
 
         /// <summary>
         /// Initializes the value by setting the value to the <paramref name="defaultValue" /> if the value does not yet exist.
