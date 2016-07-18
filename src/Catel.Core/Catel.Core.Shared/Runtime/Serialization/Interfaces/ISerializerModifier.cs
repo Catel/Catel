@@ -15,6 +15,18 @@ namespace Catel.Runtime.Serialization
     public interface ISerializerModifier
     {
         /// <summary>
+        /// Returns whether the serializer should serialize this model as a collection.
+        /// </summary>
+        /// <returns><c>true</c> if the model should be serialized as a collection, <c>false</c> if not. Return <c>null</c> if the serializer should decide automatically.</returns>
+        bool? ShouldSerializeAsCollection();
+
+        /// <summary>
+        /// Returns whether the serializer should serialize this model as a dictionary.
+        /// </summary>
+        /// <returns><c>true</c> if the model should be serialized as a dictionary, <c>false</c> if not. Return <c>null</c> if the serializer should decide automatically.</returns>
+        bool? ShouldSerializeAsDictionary();
+
+        /// <summary>
         /// Determines whether the specified member should be ignored.
         /// </summary>
         /// <param name="context">The context.</param>
