@@ -36,12 +36,23 @@ namespace Catel.MVVM.Navigation
             NavigationTargetType = navigationTarget.GetType();
             NavigationRoot = navigationRoot;
             NavigationContext = new NavigationContext();
+            HandleNavigatedOnLoaded = true;
+
+            InitializeNavigationService(false);
 
             // Listen to loaded because not every framework already has the application at this stage
             NavigationTarget.Loaded += OnNavigationTargetLoaded;
         }
 
         #region Properties
+        /// <summary>
+        /// Gets or sets a value indicating whether the navigated event should be invoked on the loaded event.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if navigation should be handled on loaded event; otherwise, <c>false</c>.
+        /// </value>
+        private bool HandleNavigatedOnLoaded { get; set; }
+
         /// <summary>
         /// Gets the navigation target.
         /// </summary>
@@ -107,7 +118,7 @@ namespace Catel.MVVM.Navigation
 
             _navigationServiceInitialized = true;
 
-            if (isComingFromLoadedEvent)
+            if (isComingFromLoadedEvent && HandleNavigatedOnLoaded)
             {
                 var eventArgs = new NavigatedEventArgs(string.Empty, NavigationMode.New);
                 RaiseNavigatedTo(eventArgs);
