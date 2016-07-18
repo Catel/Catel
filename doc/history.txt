@@ -43,6 +43,7 @@ Dropped support for the following components:
 * Catel.Extensions.Wcf.Server
 * Catel.Extensions.Prism4
 * Catel.Extensions.MVC4
+* Catel.Extensions.MVC5
 
 Classes / members marked as obsolete:
 =====================================
