@@ -43,7 +43,7 @@ namespace Catel.MVVM
         private bool _subscribedToApplicationActivedEvent;
 #endif
 
-#if NET || SL5
+#if NET
         private readonly ConditionalWeakTable<FrameworkElement, CommandManagerWrapper> _subscribedViews = new ConditionalWeakTable<FrameworkElement, CommandManagerWrapper>();
 #endif
 
@@ -573,7 +573,7 @@ namespace Catel.MVVM
         /// </summary>
         public void SubscribeToKeyboardEvents()
         {
-#if NET || SILVERLIGHT
+#if NET
             var application = Application.Current;
             if (application == null)
             {
@@ -595,24 +595,17 @@ namespace Catel.MVVM
 
                 return;
             }
-#elif SILVERLIGHT
-            var mainView = application.RootVisual as FrameworkElement;
-            if (mainView == null)
-            {
-                Log.Warning("Application.RootVisual is null, cannot subscribe to keyboard events");
-                return;
-            }
 #elif NETFX_CORE
             // TODO: Grab events
 #endif
 
-#if NET || SL5
+#if NET
             SubscribeToKeyboardEvents(mainView);
 #endif
         }
 #endif
 
-#if NET || SL5
+#if NET
         /// <summary>
         /// Subscribes to keyboard events.
         /// </summary>

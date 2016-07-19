@@ -367,9 +367,9 @@ namespace Catel.Services
 
                         Execute();
                     });
-#if !SILVERLIGHT
+
                 _thread.SetApartmentState(ApartmentState.STA);
-#endif                
+
                 _completedCallback = completedCallback;
                 _thread.Start();
             }

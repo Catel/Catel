@@ -346,8 +346,7 @@ namespace Catel.Data
                 var propertyChangedValue = value as INotifyPropertyChanged;
                 if (propertyChangedValue != null)
                 {
-                    // ObservableObject implements PropertyChanged as protected, make sure we accept that in non-.NET languages such
-                    // as Silverlight, Windows Phone and WinRT
+                    // ObservableObject implements PropertyChanged as protected, make sure we accept that in all platforms
                     try
                     {
                         SubscribeNotifyChangedEvent(propertyChangedValue, EventChangeType.Property, parentCollection);

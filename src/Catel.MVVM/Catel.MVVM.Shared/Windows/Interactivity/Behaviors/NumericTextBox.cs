@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SILVERLIGHT
+#if NET
 
 namespace Catel.Windows.Interactivity
 {
@@ -53,9 +53,7 @@ namespace Catel.Windows.Interactivity
             Key.CapsLock,
 #endif
             
-#if SILVERLIGHT                                                                
-            //Key.Ctrl
-#elif NETFX_CORE
+#if NETFX_CORE
             Key.LeftControl,
             Key.RightControl,
             Key.Control,
@@ -73,12 +71,8 @@ namespace Catel.Windows.Interactivity
             Key.PageDown,
             Key.PageUp,
             Key.Right,
-#if SILVERLIGHT
-            //Key.Shift                                                                
-#else
             Key.LeftShift,
             Key.RightShift,
-#endif
             Key.Tab,
             Key.Up
         };
@@ -198,16 +192,6 @@ namespace Catel.Windows.Interactivity
             {
                 notAllowed = AssociatedObject.Text.Contains(numberDecimalSeparator);
             }
-#if SILVERLIGHT
-            else if (keyValue == MinusCharacter && IsNegativeAllowed)
-            {
-                notAllowed = AssociatedObject.Text.Length > 0;
-            }
-            else if (AllowedKeys.Contains(e.Key) || IsDigit(e.Key))
-            {
-                notAllowed = false;
-            }
-#else
             else if (keyValue == MinusCharacter && IsNegativeAllowed)
             {
                 notAllowed = ((TextBox)sender).CaretIndex > 0;
@@ -216,7 +200,7 @@ namespace Catel.Windows.Interactivity
             {
                 notAllowed = (e.Key == Key.OemMinus && ((TextBox)sender).CaretIndex > 0 && IsNegativeAllowed);
             }
-#endif
+
             e.Handled = notAllowed;
         }
 

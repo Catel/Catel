@@ -10,8 +10,6 @@ namespace Catel.Data
 
 #if NETFX_CORE
     using Windows.Storage.Streams;
-#elif SILVERLIGHT
-    using System.IO.IsolatedStorage;
 #endif
 
     /// <summary>

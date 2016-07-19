@@ -69,7 +69,7 @@ namespace Catel.Windows.Markup
         /// <returns>The object value to set on the property where the extension is applied.</returns>
         public override sealed object ProvideValue(IServiceProvider serviceProvider)
         {
-#if WINDOWS_PHONE || NETFX_CORE
+#if NETFX_CORE
             _targetObject = null;
             _targetProperty = null;
             _serviceProvider = null;
@@ -94,7 +94,7 @@ namespace Catel.Windows.Markup
                 _targetProperty = target.TargetProperty;
 
                 FrameworkElement frameworkElement;
-#if !SILVERLIGHT && !NETFX_CORE
+#if !NETFX_CORE
                 FrameworkContentElement frameworkContentElement;
 #endif
 
@@ -107,7 +107,7 @@ namespace Catel.Windows.Markup
                     frameworkElement.Loaded += OnTargetObjectLoadedInternal;
                     frameworkElement.Unloaded += OnTargetObjectUnloadedInternal;
                 }
-#if !SILVERLIGHT && !NETFX_CORE
+#if !NETFX_CORE
                 else if ((frameworkContentElement = _targetObject as FrameworkContentElement) != null)
                 {
                     _isFrameworkElementLoaded = frameworkContentElement.IsLoaded;

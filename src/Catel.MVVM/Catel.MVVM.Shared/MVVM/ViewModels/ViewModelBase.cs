@@ -75,8 +75,7 @@ namespace Catel.MVVM
     /// View model base for MVVM implementations. This class is based on the <see cref="ModelBase" />, and supports all
     /// common interfaces used by WPF.
     /// </summary>
-    /// <remarks>This view model base does not add any services. The technique specific implementation should take care of that
-    /// (such as WPF, Silverlight, etc).</remarks>
+    /// <remarks>This view model base does not add any services.</remarks>
     public abstract partial class ViewModelBase : ModelBase, INotifyableViewModel, IRelationalViewModel, IUniqueIdentifyable
     {
         #region Fields
@@ -283,10 +282,7 @@ namespace Catel.MVVM
             _dispatcherService = DependencyResolver.Resolve<IDispatcherService>();
 #endif
 
-            // In silverlight, automatically invalidate commands when property changes
-#if !WINDOWS_PHONE && !NET35
             ValidateModelsOnInitialization = true;
-#endif
 
             ViewModelCommandManager = MVVM.ViewModelCommandManager.Create(this);
             ViewModelCommandManager.AddHandler(async (viewModel, propertyName, command, commandParameter) =>

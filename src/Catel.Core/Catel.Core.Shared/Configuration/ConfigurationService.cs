@@ -20,8 +20,6 @@ namespace Catel.Configuration
     // Not supported
 #elif NETFX_CORE
     using Windows.Storage;
-#elif WINDOWS_PHONE || SILVERLIGHT
-    using System.IO.IsolatedStorage;
 #else
     using System.Configuration;
     using System.Linq;
@@ -257,9 +255,6 @@ namespace Catel.Configuration
 #elif NETFX_CORE
             var settings = GetSettingsContainer(container);
             return settings.Values.ContainsKey(key);
-#elif WINDOWS_PHONE || SILVERLIGHT
-            var settings = IsolatedStorageSettings.ApplicationSettings;
-            return settings.Contains(key);
 #else
             var settings = GetSettingsContainer(container);
             return settings.IsConfigurationValueSet(key);
@@ -281,9 +276,6 @@ namespace Catel.Configuration
 #elif NETFX_CORE
             var settings = GetSettingsContainer(container);
             return (string)settings.Values[key];
-#elif WINDOWS_PHONE || SILVERLIGHT
-            var settings = IsolatedStorageSettings.ApplicationSettings;
-            return (string)settings[key];
 #else
             var settings = GetSettingsContainer(container);
             return settings.GetConfigurationValue<string>(key, string.Empty);
@@ -307,10 +299,6 @@ namespace Catel.Configuration
 #elif NETFX_CORE
             var settings = GetSettingsContainer(container);
             settings.Values[key] = value;
-#elif WINDOWS_PHONE || SILVERLIGHT
-            var settings = IsolatedStorageSettings.ApplicationSettings;
-            settings[key] = value;
-            settings.Save();
 #else
             var settings = GetSettingsContainer(container);
 

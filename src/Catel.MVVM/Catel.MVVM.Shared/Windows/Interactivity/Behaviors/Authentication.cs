@@ -153,7 +153,7 @@ namespace Catel.Windows.Interactivity
                         break;
 
                     case AuthenticationAction.Disable:
-#if SILVERLIGHT || NETFX_CORE
+#if NETFX_CORE
                         if (!(AssociatedObject is Control))
                         {
                             throw new InvalidOperationException("The AssociatedObject is not a Control instance, only AuthenticationAction.Collapse is allowed in SL, Windows Phone and WinRT");

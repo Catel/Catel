@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SILVERLIGHT
+#if NET
 
 namespace Catel.Windows.Interactivity
 {
@@ -18,10 +18,6 @@ namespace Catel.Windows.Interactivity
     using System.Windows;
     using System.Windows.Interactivity;
     using UIEventArgs = System.EventArgs;
-#endif
-
-#if SILVERLIGHT
-    using System.Windows.Controls;
 #endif
 
     /// <summary>
@@ -143,17 +139,7 @@ namespace Catel.Windows.Interactivity
         /// <returns><c>true</c> if the associated object is disabled; otherwise <c>false</c>.</returns>
         private bool IsAssociatedObjectDisabled()
         {
-#if SILVERLIGHT
-            var associatedObjectAsControl = AssociatedObject as Control;
-            if (associatedObjectAsControl != null)
-            {
-                return !associatedObjectAsControl.IsEnabled;
-            }
-
-            return false;
-#else
             return ((AssociatedObject != null) && !AssociatedObject.IsEnabled);
-#endif
         }
 
         /// <summary>
@@ -173,15 +159,7 @@ namespace Catel.Windows.Interactivity
 
             var isEnabled = CanExecuteCommand();
 
-#if SILVERLIGHT
-            var associatedObjectAsControl = AssociatedObject as Control;
-            if (associatedObjectAsControl != null)
-            {
-                associatedObjectAsControl.IsEnabled = isEnabled;
-            }
-#else
             AssociatedObject.IsEnabled = isEnabled;
-#endif
         }
 
         /// <summary>

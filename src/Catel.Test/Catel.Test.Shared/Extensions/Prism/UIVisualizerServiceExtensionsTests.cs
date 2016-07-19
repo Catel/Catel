@@ -23,10 +23,6 @@ namespace Catel.Test.Extensions.Prism
 
     using NUnit.Framework;
 
-#if SILVERLIGHT
-    using Microsoft.Silverlight.Testing;
-#endif
-
     /// <summary>
     /// The ui visualizer service extensions tests.
     /// </summary>
@@ -630,65 +626,7 @@ namespace Catel.Test.Extensions.Prism
         /// </summary>
         [TestFixture]
         public class TheShowMethod
-#if SILVERLIGHT
-            : SilverlightTest
-#endif
         {
-#if SILVERLIGHT
-            [TestCase]
-            [Asynchronous]
-            public void TheOpenedActionIsCalledWhenViewManagerHaveRegisteredAViewForTheViewModel()
-            {
-                 var serviceLocator = IoCFactory.CreateServiceLocator();
-                var fooViewModel = new FooViewModel(serviceLocator);
-
-                var dispatcherServiceMock = new Mock<IDispatcherService>();
-                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>(), true)).Callback((Action action) => action.Invoke());
-                var visualizerServiceMock = new Mock<IUIVisualizerService>();
-                visualizerServiceMock.Setup(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null)).Returns(new Task<bool>(() => true));
-                var viewManagerMock = new Mock<IViewManager>();
-                viewManagerMock.Setup(manager => manager.GetViewsOfViewModel(fooViewModel)).Returns(new IView[] { new FooViewModelView(fooViewModel) });
-                
-                serviceLocator.RegisterInstance<IDispatcherService>(dispatcherServiceMock.Object);
-            	serviceLocator.RegisterInstance<IUIVisualizerService>(visualizerServiceMock.Object);
-            	serviceLocator.RegisterInstance<IViewManager>(viewManagerMock.Object);
-            
-                serviceLocator.ResolveType<IUIVisualizerService>().Show(fooViewModel, () =>
-                    {
-                        visualizerServiceMock.Verify(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null), Times.Once());
-                        viewManagerMock.Verify(manager => manager.GetViewsOfViewModel(fooViewModel), Times.AtLeastOnce());  
-                        this.EnqueueTestComplete();
-                    });
-            }
-
-            [TestCase]
-            [Asynchronous]
-            public void TheOpenedActionIsCalledEvenWhenThereNoViewsAvailablesInTheExpectedTimeForTheCurrentViewModelButUnlockingTheInspectionThread()
-            {
-                var serviceLocator = IoCFactory.CreateServiceLocator();
-                var fooViewModel = new FooViewModel(serviceLocator);
-
-                var dispatcherServiceMock = new Mock<IDispatcherService>();
-                dispatcherServiceMock.Setup(service => service.Invoke(It.IsAny<Action>(), true)).Callback((Action action) => action.Invoke());
-                var visualizerServiceMock = new Mock<IUIVisualizerService>();
-                visualizerServiceMock.Setup(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null)).Returns(new Task<bool>(() => true));
-                var viewManagerMock = new Mock<IViewManager>();
-                viewManagerMock.Setup(manager => manager.GetViewsOfViewModel(fooViewModel)).Returns(new IView[] { });
-
-                serviceLocator.RegisterInstance<IDispatcherService>(dispatcherServiceMock.Object);
-                serviceLocator.RegisterInstance<IUIVisualizerService>(visualizerServiceMock.Object);
-                serviceLocator.RegisterInstance<IViewManager>(viewManagerMock.Object);
-
-                serviceLocator.ResolveType<IUIVisualizerService>().Show(fooViewModel, () =>
-                    {
-                        visualizerServiceMock.Verify(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null), Times.Once());
-                        viewManagerMock.Verify(manager => manager.GetViewsOfViewModel(fooViewModel), Times.AtLeastOnce());
-                        this.EnqueueTestComplete();
-                    });
-            }
-            
-#else
-
             ///// <summary>
             ///// The the opened action is called when view manager have registered a view for the view model.
             ///// </summary>
@@ -748,8 +686,6 @@ namespace Catel.Test.Extensions.Prism
             //    visualizerServiceMock.Verify(service => service.Show(It.Is<FooViewModel>(model => ReferenceEquals(model, fooViewModel)), null), Times.Once());
             //    viewManagerMock.Verify(manager => manager.GetViewsOfViewModel(fooViewModel), Times.AtLeastOnce());
             //}
-
-#endif
         }
         #endregion
     }

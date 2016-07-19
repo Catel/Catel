@@ -212,8 +212,7 @@ namespace Catel.Reflection
         #endregion
 
         /// <summary>
-        /// Gets the specified type from the loaded assemblies. This is a great way to load types without having
-        /// to know the exact version in Silverlight.
+        /// Gets the specified type from the loaded assemblies.
         /// </summary>
         /// <param name="typeName">The name of the type including namespace.</param>
         /// <param name="assemblyName">The name of the type including namespace.</param>
@@ -249,8 +248,7 @@ namespace Catel.Reflection
         }
 
         /// <summary>
-        /// Gets the specified type from the loaded assemblies. This is a great way to load types without having
-        /// to know the exact version in Silverlight.
+        /// Gets the specified type from the loaded assemblies.
         /// </summary>
         /// <param name="typeNameWithAssembly">The name of the type including namespace and assembly, formatted with the <see cref="TypeHelper.FormatType"/> method.</param>
         /// <param name="ignoreCase">A value indicating whether the case should be ignored.</param>
@@ -333,11 +331,6 @@ namespace Catel.Reflection
                 {
 #if NETFX_CORE || PCL
                     var type = Type.GetType(typeNameWithAssembly, false);
-#elif SILVERLIGHT
-                    // Due to a FileLoadException when loading types without a specific version, we need to map the assembly version here
-                    var assemblyNameWithVersion = AssemblyHelper.GetAssemblyNameWithVersion(assemblyName);
-                    var typeNameWithAssemblyNameWithVersion = TypeHelper.FormatType(assemblyNameWithVersion, typeName);
-                    var type = Type.GetType(typeNameWithAssemblyNameWithVersion, false, ignoreCase);
 #else
                     var type = Type.GetType(typeNameWithAssembly, false, ignoreCase);
 #endif
@@ -549,7 +542,7 @@ namespace Catel.Reflection
         }
 
         /// <summary>
-        /// Initializes the types in Silverlight. It does this by looping through all loaded assemblies and
+        /// Initializes the types. It does this by looping through all loaded assemblies and
         /// registering the type by type name and assembly name.
         /// <para/>
         /// The types initialized by this method are used by <see cref="object.GetType"/>.
@@ -728,7 +721,7 @@ namespace Catel.Reflection
             var types = (from assembly in assemblies
                          select new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assembly.GetAllTypesSafely())));
 
-#if SILVERLIGHT || PCL
+#if PCL
             var results = types;
 #else
             var results = types.AsParallel();

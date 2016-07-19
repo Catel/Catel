@@ -28,7 +28,7 @@ namespace Catel.Messaging
         /// <param name="messageMediator">The message mediator. If <c>null</c>, the default will be used.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="instance"/> is <c>null</c>.</exception>
         /// <exception cref="NotSupportedException">The object has non-public methods decorated with the <see cref="MessageRecipientAttribute"/>, but the
-        /// application is not written in .NET (but in Silverlight, Windows Phone or WinRT).</exception>
+        /// application is not written in full .NET.</exception>
         /// <exception cref="InvalidCastException">One of the methods cannot be casted to a valid message method.</exception>
         public static void SubscribeRecipient(object instance, IMessageMediator messageMediator = null)
         {

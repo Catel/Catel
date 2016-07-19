@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5
+#if NET
 
 namespace Catel.Windows.Media.Effects
 {
@@ -35,10 +35,8 @@ namespace Catel.Windows.Media.Effects
         /// </summary>
         static ShaderEffectBase()
         {
-#if !SILVERLIGHT
             // Subscribe to events so the software doesn't crash on invalid pixel shaders
             PixelShader.InvalidPixelShaderEncountered += OnPixelShaderInvalidPixelShaderEncountered;
-#endif
         }
 
         /// <summary>
@@ -98,16 +96,13 @@ namespace Catel.Windows.Media.Effects
 
                     _pixelShader = new PixelShader() { UriSource = new Uri(@"/Catel.Extensions.Controls;component/Windows/Media/Effects/EmptyEffect/EmptyEffect.ps", UriKind.RelativeOrAbsolute) };
 
-#if !SILVERLIGHT
                     // Only render in software (so limited video cards can break the software)
                     _pixelShader.ShaderRenderMode = ShaderRenderMode.SoftwareOnly;
-#endif
                 }
                 else
                 {
                     _pixelShader = CreatePixelShader();
 
-#if !SILVERLIGHT
                     switch (StyleHelper.PixelShaderMode)
                     {
                         case PixelShaderMode.Auto:
@@ -126,7 +121,6 @@ namespace Catel.Windows.Media.Effects
                             _pixelShader.ShaderRenderMode = ShaderRenderMode.SoftwareOnly;
                             break;
                     }
-#endif
                 }
             }
 
@@ -139,7 +133,6 @@ namespace Catel.Windows.Media.Effects
         /// <returns><see cref="PixelShader"/>.</returns>
         protected abstract PixelShader CreatePixelShader();
 
-#if !SILVERLIGHT
         /// <summary>
         /// Handles the InvalidPixelShaderEncountered event of the PixelShader control.
         /// </summary>
@@ -152,7 +145,6 @@ namespace Catel.Windows.Media.Effects
         {
             Log.Warning("Invalid PixelShader Encountered. Occurs when the render thread cannot process the pixel shader.");
         }
-#endif
         #endregion
     }
 }

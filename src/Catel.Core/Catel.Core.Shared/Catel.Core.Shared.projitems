@@ -258,8 +258,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.ios.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.net.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.sl.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.winrt.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.uap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.wp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\EtwLogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\EventLogListener.cs" />
@@ -404,7 +403,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\ThreadHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Interfaces\IAsyncWaitQueue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Internal\Deque.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Threading\ReaderWriterLockSlim.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\SynchronizationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Timer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\Interfaces\IExecute.cs" />

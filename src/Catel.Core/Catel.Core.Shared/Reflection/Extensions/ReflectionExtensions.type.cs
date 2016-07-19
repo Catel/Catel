@@ -1126,7 +1126,7 @@ namespace Catel.Reflection
 #endif
         }
 
-#if NET40 || SILVERLIGHT
+#if NET40
 
         /// <summary>
         /// The type infos cache.

@@ -21,7 +21,7 @@ namespace Catel.MVVM.Converters
     public static class ConverterHelper
     {
         /// <summary>
-        /// The generic <c>UnSet</c> value, compatible with WPF and Silverlight.
+        /// The generic <c>UnSet</c> value, compatible with all platforms.
         /// </summary>
         public static readonly object UnsetValue = 
 #if XAMARIN

@@ -16,7 +16,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ILogExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IRegionManagerExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\HostHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\PrismHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IModuleTracker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRegionInfo.cs" />

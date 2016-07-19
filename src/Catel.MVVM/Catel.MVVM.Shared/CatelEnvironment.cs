@@ -101,10 +101,9 @@ namespace Catel
             ViewModelServiceHelper.RegisterDefaultViewModelServices(ServiceLocator.Default);
         }
 
-#if !WINDOWS_PHONE && !PCL && !XAMARIN
+#if !PCL && !XAMARIN
         /// <summary>
-        /// Gets the main window of the application. This is a convenience call to easily allow the retrieval of the main window
-        /// for each target framework (WPF, Silverlight, Windows Phone, etc).
+        /// Gets the main window of the application.
         /// </summary>
         public static Window MainWindow
         {

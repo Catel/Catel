@@ -169,9 +169,7 @@ namespace Catel.Threading
         {
             Argument.IsNotNull("actions", actions);
 
-#if !SILVERLIGHT && !PCL
-            Parallel.Invoke(actions);
-#elif PCL
+#if PCL
             var list = actions.ToList();
             var tasks = new List<Task>();
             for (int i = 0; i < list.Count; i++)
@@ -183,31 +181,7 @@ namespace Catel.Threading
 
             Task.WaitAll(tasks.ToArray());
 #else
-            var list = actions.ToList();
-            var handles = new ManualResetEvent[list.Count];
-            for (var i = 0; i < list.Count; i++)
-            {
-                handles[i] = new ManualResetEvent(false);
-
-                var currentAction = list[i];
-                var currentHandle = handles[i];
-
-                Action wrappedAction = () =>
-                {
-                    try
-                    {
-                        currentAction();
-                    }
-                    finally
-                    {
-                        currentHandle.Set();
-                    }
-                };
-
-                ThreadPool.QueueUserWorkItem(x => wrappedAction());
-            }
-
-            WaitHandle.WaitAll(handles);
+            Parallel.Invoke(actions);
 #endif
         }
 

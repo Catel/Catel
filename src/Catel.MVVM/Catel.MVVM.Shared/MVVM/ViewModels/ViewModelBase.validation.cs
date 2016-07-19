@@ -13,7 +13,7 @@ namespace Catel.MVVM
     using Catel.Reflection;
     using Logging;
 
-#if NET40 || SILVERLIGHT && !WINDOWS_PHONE
+#if NET40
     using System.ComponentModel.DataAnnotations;
 #endif
 

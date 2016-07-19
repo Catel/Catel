@@ -19,10 +19,6 @@ namespace Catel.Reflection
     using System.Runtime.InteropServices;
 #endif
 
-#if SILVERLIGHT
-    using System.Windows;
-#endif
-
 #if SL5
     using System.Windows.Resources;
     using System.Xml.Linq;
@@ -168,8 +164,6 @@ namespace Catel.Reflection
                                 where string.Equals(x.Location, assemblyPath)
                                 select x).FirstOrDefault();
                 }
-#elif SILVERLIGHT
-                assembly = System.Windows.Application.Current.GetType().Assembly;
 #elif NETFX_CORE
                 assembly = global::Windows.UI.Xaml.Application.Current.GetType().GetAssemblyEx();
 #else
@@ -265,8 +259,7 @@ namespace Catel.Reflection
 
         /// <summary>
         /// Gets the loaded assemblies by using the right method. For Windows applications, it uses
-        /// <c>AppDomain.GetAssemblies()</c>. For Silverlight, it uses the assemblies
-        /// from the current application.
+        /// <c>AppDomain.GetAssemblies()</c>.
         /// </summary>
         /// <returns><see cref="List{Assembly}" /> of all loaded assemblies.</returns>
         public static List<Assembly> GetLoadedAssemblies()
@@ -276,8 +269,7 @@ namespace Catel.Reflection
 
         /// <summary>
         /// Gets the loaded assemblies by using the right method. For Windows applications, it uses
-        /// <c>AppDomain.GetAssemblies()</c>. For Silverlight, it uses the assemblies
-        /// from the current application.
+        /// <c>AppDomain.GetAssemblies()</c>.
         /// </summary>
         /// <param name="appDomain">The app domain to search in.</param>
         /// <returns><see cref="List{Assembly}" /> of all loaded assemblies.</returns>
@@ -288,8 +280,7 @@ namespace Catel.Reflection
 
         /// <summary>
         /// Gets the loaded assemblies by using the right method. For Windows applications, it uses
-        /// <c>AppDomain.GetAssemblies()</c>. For Silverlight, it uses the assemblies
-        /// from the current application.
+        /// <c>AppDomain.GetAssemblies()</c>.
         /// </summary>
         /// <param name="appDomain">The app domain to search in.</param>
         /// <param name="ignoreDynamicAssemblies">if set to <c>true</c>, dynamic assemblies are being ignored.</param>
@@ -299,45 +290,6 @@ namespace Catel.Reflection
             var assemblies = new List<Assembly>();
 
             assemblies.AddRange(appDomain.GetAssemblies());
-
-#if SILVERLIGHT
-            try
-            {
-                if (Deployment.Current != null)
-                {
-                    foreach (AssemblyPart assemblyPart in Deployment.Current.Parts)
-                    {
-#if WINDOWS_PHONE
-                        try
-                        {
-                            // It's not much, but it's the best we could do for Windows Phone
-                            assemblies.Add(Assembly.Load(assemblyPart.Source.Replace(".dll", string.Empty)));
-                        }
-                        catch (Exception)
-                        {
-                            // Continue, let's hope this assembly is not required
-                        }
-#else
-                        var sri = Application.GetResourceStream(new Uri(assemblyPart.Source, UriKind.Relative));
-                        var assembly = assemblyPart.Load(sri.Stream);
-                        if (assembly != null)
-                        {
-                            assemblies.Add(assembly);
-                        }
-#endif
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to load Deployment.Current.Parts");
-            }
-
-#if SL5
-            // Add the loaded xap cache
-            assemblies.AddRange(_externalAssemblies);
-#endif
-#endif
 
             var finalAssemblies = new List<Assembly>();
 
@@ -365,7 +317,7 @@ namespace Catel.Reflection
         public static bool IsDynamicAssembly(this Assembly assembly)
         {
             var isDynamicAssembly =
-#if NET || SL5
+#if NET
                 (assembly is System.Reflection.Emit.AssemblyBuilder) &&
 #endif
                 string.Equals(assembly.GetType().FullName, "System.Reflection.Emit.InternalAssemblyBuilder", StringComparison.Ordinal)

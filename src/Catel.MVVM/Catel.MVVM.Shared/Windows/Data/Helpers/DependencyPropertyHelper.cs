@@ -42,7 +42,7 @@ namespace Catel.Windows.Data
 
         /// <summary>
         /// Cache containing the names of all found dependency properties, required because it is not possible to get the name of a 
-        /// dependency property in Silverlight and Windows Phone.
+        /// dependency property in some platforms.
         /// </summary>
         private static readonly Dictionary<DependencyProperty, string> _cacheByDependencyProperty = new Dictionary<DependencyProperty, string>();
 

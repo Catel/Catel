@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5
+#if NET
 
 namespace Catel.Windows
 {
@@ -29,10 +29,6 @@ namespace Catel.Windows
     using Catel.Windows.Threading;
     using IoC;
     using Services;
-
-#if SILVERLIGHT
-    using System.Windows.Media;
-#endif
 
     /// <summary>
     /// Mode of the <see cref="DataWindow"/>.
@@ -111,20 +107,13 @@ namespace Catel.Windows
     /// <see cref="Window"/> class that implements the <see cref="InfoBarMessageControl"/> and
     /// the default buttons, according to the <see cref="DataWindowMode"/>.
     /// </summary>
-    public class DataWindow
-#if SILVERLIGHT
-        : ChildWindow, IDataWindow
-#else
-        : System.Windows.Window, IDataWindow
-#endif
+    public class DataWindow : System.Windows.Window, IDataWindow
     {
         #region Constants
-#if NET
         /// <summary>
         /// Offset of the window to the sides of the primary monitor.
         /// </summary>
         private const int Offset = 50;
-#endif
         #endregion
 
         #region Fields
@@ -207,16 +196,7 @@ namespace Catel.Windows
 
             // Set window style (WPF doesn't allow styling on root elements of XAML files, too bad)
             // For more info, see http://social.msdn.microsoft.com/Forums/en-US/wpf/thread/3059c0e4-c372-4da2-b384-28f271feef05/
-#if SILVERLIGHT
-            Style dataWindowStyle = null;
-            if (this.TryFindResource(typeof(DataWindow), out dataWindowStyle))
-            {
-                DefaultStyleKey = typeof (DataWindow);
-                //Style = dataWindowStyle;
-            }
-#else
             SetResourceReference(StyleProperty, typeof(DataWindow));
-#endif
 
             Mode = mode;
             DefaultButton = defaultButton;
@@ -224,26 +204,18 @@ namespace Catel.Windows
 
             this.FixBlurriness();
 
-#if NET
             SizeToContent = SizeToContent.WidthAndHeight;
             ShowInTaskbar = false;
             ResizeMode = ResizeMode.NoResize;
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
             this.ApplyIconFromApplication();
-#endif
 
             ThemeHelper.EnsureCatelMvvmThemeIsLoaded();
 
             _logic = new WindowLogic(this, null, viewModel);
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
-#if !NET
-                // WPF already calls this method automatically
-                OnPropertyChanged(e);
-
-                PropertyChanged.SafeInvoke(this, e);
-#else
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
                 // on systems where NET45 is *not* installed
                 if (!string.Equals(e.PropertyName, "ActualWidth", StringComparison.InvariantCulture) &&
@@ -251,7 +223,6 @@ namespace Catel.Windows
                 {
                     PropertyChanged.SafeInvoke(this, e);
                 }
-#endif
             };
 
             _logic.ViewModelClosedAsync += OnViewModelClosedAsync;
@@ -295,7 +266,6 @@ namespace Catel.Windows
             Closing += OnDataWindowClosing;
             DataContextChanged += (sender, e) => _viewDataContextChanged.SafeInvoke(this, () => new DataContextChangedEventArgs(e.OldValue, e.NewValue));
 
-#if NET
             if (setOwnerAndFocus)
             {
                 this.SetOwnerWindowAndFocus();
@@ -304,7 +274,6 @@ namespace Catel.Windows
             {
                 this.FocusFirstControl();
             }
-#endif
         }
         #endregion
 
@@ -649,67 +618,7 @@ namespace Catel.Windows
             ViewModelChanged.SafeInvoke(this);
             PropertyChanged.SafeInvoke(this, () => new PropertyChangedEventArgs("ViewModel"));
         }
-
-#if SILVERLIGHT
-        /// <summary>
-        /// Builds the visual tree for the <see cref="T:System.Windows.Controls.ChildWindow"/> control when a new template is applied.
-        /// </summary>
-        /// <remarks></remarks>
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-
-            // Solves issue where ChildWindow does not center when browser is not active
-            var contentRoot = GetTemplateChild("ContentRoot") as FrameworkElement;
-            if (contentRoot != null)
-            {
-                bool centerChildWindow = (HorizontalAlignment == HorizontalAlignment.Center) && (VerticalAlignment == VerticalAlignment.Center);
-                if (centerChildWindow)
-                {
-                    Dispatcher.BeginInvoke(CenterInScreen);
-                }
-            }
-            else
-            {
-                Log.Debug("Cannot center childwindow because 'ContentRoot' cannot be found");
-            }
-        }
-
-        /// <summary>
-        /// Centers the Silverlight ChildWindow in screen.
-        /// </summary>
-        protected void CenterInScreen()
-        {
-            var contentRoot = GetTemplateChild("ContentRoot") as FrameworkElement;
-            if (contentRoot == null)
-            {
-                return;
-            }
-
-            var group = contentRoot.RenderTransform as TransformGroup;
-            if (group == null)
-            {
-                return;
-            }
-
-            foreach (var transform in group.Children.OfType<TranslateTransform>())
-            {
-                // reset transform
-                transform.X = 0.0;
-                transform.Y = 0.0;
-            }
-        }
-#endif
-
-#if SILVERLIGHT
-        /// <summary>
-        /// Invoked when an unhandled <c>KeyUp</c> attached event reaches an element in its route that is derived from this class. Implement this method to add class handling for this event.
-        /// </summary>
-        /// <param name="e">The <see cref="T:System.Windows.Input.KeyEventArgs"/> that contains the event data.</param>
-        protected override void OnKeyUp(KeyEventArgs e)
-        {
-            base.OnKeyUp(e);
-#else
+        
         /// <summary>
         /// Invoked when an unhandled <see cref="Keyboard.KeyDownEvent"/> attached event reaches an element in its route that is derived from this class. Implement this method to add class handling for this event.
         /// </summary>
@@ -717,7 +626,6 @@ namespace Catel.Windows
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
-#endif
 
             if (e.Handled)
             {
@@ -922,13 +830,9 @@ namespace Catel.Windows
             var internalGrid = contentGrid.FindVisualDescendant(obj => (obj is FrameworkElement) && string.Equals(((FrameworkElement)obj).Name, WrapControlHelper.InternalGridName)) as Grid;
             if (internalGrid != null)
             {
-#if SILVERLIGHT
-                internalGrid.Style = Application.Current.Resources["WindowGridStyle"] as Style;
-#else
                 internalGrid.SetResourceReference(StyleProperty, "WindowGridStyle");
 
                 newContentAsFrameworkElement.FocusFirstControl();
-#endif
 
                 _defaultOkCommand = (from button in _buttons
                                      where button.IsDefault

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !XAMARIN && !NET40 && !PCL && !SILVERLIGHT
+#if !XAMARIN && !NET40 && !PCL
 
 namespace Catel.Logging
 {
