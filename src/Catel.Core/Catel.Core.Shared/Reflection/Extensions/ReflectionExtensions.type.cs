@@ -1084,9 +1084,7 @@ namespace Catel.Reflection
 #endif
 
 #else
-#if WP80
-            return type.GetTypeInfo().GetMethod(name, bindingFlags, null, types, null);
-#elif XAMARIN
+#if XAMARIN
             return type.GetTypeInfo().GetMethod(name, types);
 #else
             return type.GetTypeInfo().GetMethod(name, types, bindingFlags);

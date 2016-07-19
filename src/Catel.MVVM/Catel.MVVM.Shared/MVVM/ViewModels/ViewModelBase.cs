@@ -1009,7 +1009,7 @@ namespace Catel.MVVM
                                 var viewModelValue = GetValue(e.PropertyName);
                                 var propertiesToSet = mapping.ValueProperties;
 
-#if !WINDOWS_PHONE && !NET35 && !XAMARIN_FORMS
+#if !XAMARIN_FORMS
                                 if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
                                 {
                                     mapping.ValueProperties.ForEach(_modelErrorInfo[mapping.ModelProperty].ClearDefaultErrors);
@@ -1250,7 +1250,7 @@ namespace Catel.MVVM
                 }
             }
 
-#if (NET || SL5) && !NET35
+#if NET
             if (ValidateModelsOnInitialization)
             {
                 var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();

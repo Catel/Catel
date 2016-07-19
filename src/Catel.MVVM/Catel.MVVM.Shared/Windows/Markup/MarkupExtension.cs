@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NETFX_CORE || WINDOWS_PHONE
+#if NETFX_CORE
 
 namespace Catel.Windows.Markup
 {

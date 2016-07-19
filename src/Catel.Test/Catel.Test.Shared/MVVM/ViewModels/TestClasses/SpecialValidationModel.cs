@@ -11,10 +11,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
     using System.Collections.Generic;
     using System.ComponentModel;
 
-    public class SpecialValidationModel
-#if !WINDOWS_PHONE
-        : INotifyDataErrorInfo, INotifyDataWarningInfo
-#endif
+    public class SpecialValidationModel : INotifyDataErrorInfo, INotifyDataWarningInfo
     {
         private readonly Dictionary<string, List<string>> _fieldErrors = new Dictionary<string, List<string>>();
         private readonly Dictionary<string, List<string>> _fieldWarnings = new Dictionary<string, List<string>>();

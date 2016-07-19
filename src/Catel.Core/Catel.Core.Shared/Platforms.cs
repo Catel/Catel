@@ -100,8 +100,6 @@ namespace Catel
         {
 #if PCL
             return SupportedPlatforms.PCL;
-#elif NET35
-            throw new System.NotSupportedException("NET35 is not supported");
 #elif NET40
             return SupportedPlatforms.NET40;
 #elif NET45

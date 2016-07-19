@@ -259,7 +259,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.ios.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.net.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.uap.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.wp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\EtwLogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\EventLogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\FileLogListener.cs" />

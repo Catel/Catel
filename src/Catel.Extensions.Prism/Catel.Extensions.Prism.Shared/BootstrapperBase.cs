@@ -465,7 +465,6 @@ namespace Catel
                     typeLoaders.AddRange(existingTypeLoaders);
                 }
 
-#if !SL5
                 // CTL-646
                 if (ModuleCatalog.IsCatalogType<INuGetBasedModuleCatalog>())
                 {
@@ -474,7 +473,6 @@ namespace Catel
                         typeLoaders.Add(new NuGetModuleTypeLoader(ModuleCatalog));
                     }
                 }
-#endif
 
                 defaultModuleManager.ModuleTypeLoaders = typeLoaders;
             }

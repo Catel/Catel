@@ -536,7 +536,7 @@ namespace Catel.Data
 
             var type = GetType();
 
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
+#if !NETFX_CORE && !PCL
             lock (_propertyValuesIgnoredOrFailedForValidation)
             {
                 if (!_propertyValuesIgnoredOrFailedForValidation.ContainsKey(type))

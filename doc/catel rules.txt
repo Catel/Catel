@@ -38,27 +38,3 @@ is SolutionAssemblyInfo which is located in Catel.Core.NET35.
 
 Every project (thus Catel.Core, Catel.MVVM, etc) all have a separate AssemblyInfo
 that must be located in the NET35 project and referenced by all other projects.
-
-
-Caitlyn
-=======
-
-See https://github.com/GeertvanHorrik/Caitlyn
-
-I have created a tool that makes it easier to create the linked files. So, from now
-on you only have to add files to the NET35 project. Then, simply run Caitlyn
-via the Visual Studio extension.
-
-It will automatically loop all the files in "Catel.Core.NET40"
-and create them in the following projects (if they exist):
-
-* Catel.Core.NET40
-* Catel.Core.NET45
-* Catel.Core.SL4
-* Catel.Core.SL5
-* Catel.Core.WP7
-* Catel.Core.WP8
-* Catel.Core.WIN80
-* Catel.Core.PCL
-
-This makes the development a lot easier!

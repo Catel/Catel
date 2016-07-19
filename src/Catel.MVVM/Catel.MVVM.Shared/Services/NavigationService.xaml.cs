@@ -71,7 +71,7 @@ namespace Catel.Services
 
         partial void Initialize()
         {
-#if NET || SL5
+#if NET
             var mainWindow = CatelEnvironment.MainWindow;
             if (mainWindow != null)
             {
@@ -100,7 +100,7 @@ namespace Catel.Services
 
         partial void CloseMainWindow()
         {
-#if NET || SL5
+#if NET
             _appClosedFromService = true;
 
             var mainWindow = CatelEnvironment.MainWindow;

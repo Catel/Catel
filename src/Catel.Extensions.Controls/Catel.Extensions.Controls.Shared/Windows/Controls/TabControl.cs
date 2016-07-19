@@ -133,10 +133,6 @@ namespace Catel.Windows.Controls
             ItemContainerGenerator.StatusChanged += OnItemContainerGeneratorStatusChanged;
             Loaded += OnTabControlLoaded;
 
-#if SL5
-            DefaultStyleKey = typeof (TabControl);
-#endif
-
             this.SubscribeToDependencyProperty("SelectedItem", OnSelectedItemChanged);
         }
 

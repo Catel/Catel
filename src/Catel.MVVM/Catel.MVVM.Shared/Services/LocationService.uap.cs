@@ -22,13 +22,8 @@ namespace Catel.Services
         #region Methods
         private void OnGeolocatorPositionChanged(Geolocator sender, PositionChangedEventArgs e)
         {
-#if WIN80
-            var coordinate = e.Position.Coordinate;
-            _lastKnownPosition = new Location(coordinate.Latitude, coordinate.Longitude, coordinate.Altitude ?? 0d);
-#else
             var position = e.Position.Coordinate.Point.Position;
             _lastKnownPosition = new Location(position.Latitude, position.Longitude, position.Altitude);
-#endif
 
             RaiseLocationChanged();
         }

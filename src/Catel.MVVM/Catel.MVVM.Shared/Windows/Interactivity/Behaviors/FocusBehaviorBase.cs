@@ -4,8 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !WIN80 && !XAMARIN
-
+#if !XAMARIN
 
 namespace Catel.Windows.Interactivity
 {
@@ -142,10 +141,6 @@ namespace Catel.Windows.Interactivity
             {
                 return false;
             }
-
-#if SL5
-            System.Windows.Browser.HtmlPage.Plugin.Focus();
-#endif
 
 #if NETFX_CORE
             if (AssociatedObject.Focus(FocusState.Programmatic))

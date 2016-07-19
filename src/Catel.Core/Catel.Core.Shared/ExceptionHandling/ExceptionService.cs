@@ -55,11 +55,7 @@ namespace Catel.ExceptionHandling
         /// <summary>
         /// The _exception handlers
         /// </summary>
-#if !SL5
         private readonly SortedDictionary<Type, IExceptionHandler> _exceptionHandlers = new SortedDictionary<Type, IExceptionHandler>(new ExceptionInheritanceComparer());
-#else
-        private readonly Dictionary<Type, IExceptionHandler> _exceptionHandlers = new Dictionary<Type, IExceptionHandler>();
-#endif
         #endregion
 
         #region Properties

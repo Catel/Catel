@@ -106,7 +106,7 @@ namespace Catel.Data
 #endif
         private static readonly Dictionary<Type, HashSet<string>> _propertyValuesIgnoredOrFailedForValidation = new Dictionary<Type, HashSet<string>>();
 
-#if !NETFX_CORE && !PCL && !NET35
+#if !NETFX_CORE && !PCL
 
 #if NET
         [field: NonSerialized]
@@ -486,7 +486,7 @@ namespace Catel.Data
                 return true;
             }
 
-#if !NETFX_CORE && !PCL && !NET35
+#if !NETFX_CORE && !PCL
             var type = GetType();
 
             try
@@ -731,7 +731,7 @@ namespace Catel.Data
                     ValidatePropertyUsingAnnotations(propertyData.Key, propertyValue, propertyData.Value);
                 }
 
-#if !NETFX_CORE && !PCL && !NET35
+#if !NETFX_CORE && !PCL
                 // Validate non-catel properties as well for attribute validation
                 foreach (var propertyInfo in catelTypeInfo.GetNonCatelProperties())
                 {
@@ -792,7 +792,7 @@ namespace Catel.Data
                         validator.ValidateFields(this, fieldValidationResults);
                     }
 
-#if !NETFX_CORE && !PCL && !NET35
+#if !NETFX_CORE && !PCL
                     // Support annotation validation
                     fieldValidationResults.AddRange(from fieldAnnotationValidation in _dataAnnotationValidationResults
                                                     where !string.IsNullOrEmpty(fieldAnnotationValidation.Value)

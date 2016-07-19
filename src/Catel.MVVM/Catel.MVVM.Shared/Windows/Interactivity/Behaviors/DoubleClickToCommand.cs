@@ -134,12 +134,10 @@ namespace Catel.Windows.Interactivity
         /// <returns><c>true</c> if the element is hit at the mouse position; otherwise, <c>false</c>.</returns>
         protected virtual bool IsElementHit(Point mousePosition)
         {
-#if !WINDOWS_PHONE
             if (AssociatedObject is DataGrid)
             {
                 return GetHitElements(mousePosition).OfType<DataGridRow>().FirstOrDefault() != null;
             }
-#endif
 
             return true;
         }

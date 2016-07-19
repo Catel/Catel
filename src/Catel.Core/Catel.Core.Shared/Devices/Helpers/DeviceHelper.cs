@@ -76,10 +76,8 @@ namespace Catel
                 return _deviceType.Value;
             }
 
-#if NET || SL5
+#if NET
             _deviceType = DeviceType.Desktop;
-#elif WINDOWS_PHONE
-            _deviceType = DeviceType.Phone;
 #elif UAP
             var deviceFamily = Windows.System.Profile.AnalyticsInfo.VersionInfo.DeviceFamily;
             if (string.Equals(deviceFamily, "Windows.Mobile", StringComparison.OrdinalIgnoreCase))
@@ -95,9 +93,6 @@ namespace Catel
                 // TODO: add more support like xbox and IoT, but need devices for this
                 _deviceType = DeviceType.Unknown;
             }
-#elif NETFX_CORE
-            // Assume tablet for WinRT
-            _deviceType = DeviceType.Tablet;
 #elif IOS
             _deviceType = DeviceType.Unknown;
 #elif ANDROID

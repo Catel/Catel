@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !WIN80 && !XAMARIN
+#if !XAMARIN
 
 namespace Catel.Windows.Interactivity
 {
@@ -52,7 +52,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if !NETFX_CORE
         private DynamicEventListener _dynamicEventListener;
 #endif
         #endregion
@@ -188,7 +188,7 @@ namespace Catel.Windows.Interactivity
                 {
                     case FocusMoment.Event:
                         
-#if WINDOWS_PHONE || NETFX_CORE
+#if NETFX_CORE
                         throw new NotSupportedInPlatformException("Dynamic events are not supported");
 #else
                         _dynamicEventListener.EventOccurred -= OnSourceEventOccurred;
@@ -215,7 +215,7 @@ namespace Catel.Windows.Interactivity
                 switch (FocusMoment)
                 {
                     case FocusMoment.Event:
-#if WINDOWS_PHONE || NETFX_CORE
+#if NETFX_CORE
                         throw new NotSupportedInPlatformException("Dynamic events are not supported");
 #else
                         if (string.IsNullOrEmpty(EventName))

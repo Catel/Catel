@@ -23,7 +23,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\CompositeModuleCatalog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\CompositeNuGetBasedModuleCatalog.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\DownloadingModuleCatalog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\EventArgs\ModuleEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\Extensions\INuGetBasedModuleCatalogExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\Extensions\ModuleCatalogExtensions.cs" />

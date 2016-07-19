@@ -53,7 +53,7 @@ namespace Catel.MVVM.Views
         /// </value>
         bool SupportParentViewModelContainers { get; set; }
 
-#if NET || SL5
+#if NET
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <see cref="InfoBarMessageControl"/> that can be found. 

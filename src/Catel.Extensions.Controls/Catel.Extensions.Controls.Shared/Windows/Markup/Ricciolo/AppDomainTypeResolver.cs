@@ -24,17 +24,12 @@ namespace Ricciolo.StylesExplorer.MarkupReflection
 
         public static AppDomainTypeResolver GetIntoNewAppDomain(string baseDir)
         {
-            AppDomainSetup info = new AppDomainSetup();
+            var info = new AppDomainSetup();
             info.ApplicationBase = Environment.CurrentDirectory;
-            AppDomain domain = AppDomain.CreateDomain("AppDomainTypeResolver", null, info, new PermissionSet(PermissionState.Unrestricted));
-#if NET35
-            AppDomainTypeResolver resolver = (AppDomainTypeResolver)domain.CreateInstanceAndUnwrap(typeof(AppDomainTypeResolver).Assembly.FullName,
-                                                                                                    typeof(AppDomainTypeResolver).FullName, false, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, new object[] { domain, baseDir }, null, null, null);
-#else
-            AppDomainTypeResolver resolver = (AppDomainTypeResolver)domain.CreateInstanceAndUnwrap(typeof(AppDomainTypeResolver).Assembly.FullName,
-                                                                                                    typeof(AppDomainTypeResolver).FullName, false, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, new object[] { domain, baseDir }, null, null);
-#endif
+            var domain = AppDomain.CreateDomain("AppDomainTypeResolver", null, info, new PermissionSet(PermissionState.Unrestricted));
 
+            var resolver = (AppDomainTypeResolver)domain.CreateInstanceAndUnwrap(typeof(AppDomainTypeResolver).Assembly.FullName,
+                typeof(AppDomainTypeResolver).FullName, false, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, new object[] { domain, baseDir }, null, null);
             return resolver;
         }
 

@@ -13,11 +13,7 @@ namespace Catel.Test.Data
     using System.Linq.Expressions;
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
-
-#if !WINDOWS_PHONE
     using System.ComponentModel.DataAnnotations;
-#endif
-
     using Catel.Data;
 
     #region Test classes
@@ -1372,7 +1368,6 @@ namespace Catel.Test.Data
         /// </summary>
         public static readonly PropertyData ValueToValidateProperty = RegisterProperty("ValueToValidate", typeof(string), ValueThatHasNoWarningsOrErrors);
 
-#if !WINDOWS_PHONE
         [Required(ErrorMessage = "Non-catel is required")]
         public string NonCatelPropertyWithAnnotations { get; set; }
 
@@ -1393,7 +1388,6 @@ namespace Catel.Test.Data
         /// Register the ValueWithAnnotations property so it is known in the class.
         /// </summary>
         public static readonly PropertyData ValueWithAnnotationsProperty = RegisterProperty("ValueWithAnnotations", typeof(string), "value");
-#endif
         #endregion
 
         #region Methods

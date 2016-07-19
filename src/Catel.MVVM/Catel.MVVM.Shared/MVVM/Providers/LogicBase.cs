@@ -165,10 +165,6 @@ namespace Catel.MVVM.Providers
             ViewModelType = viewModelType;
             ViewModel = viewModel;
 
-#if SL5
-            Catel.Windows.FrameworkElementExtensions.FixUILanguageBug((System.Windows.FrameworkElement)TargetView);
-#endif
-
             ViewModelBehavior = (viewModel != null) ? LogicViewModelBehavior.Injected : LogicViewModelBehavior.Dynamic;
 
             if (ViewModel != null)
