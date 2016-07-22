@@ -24,7 +24,6 @@ namespace Catel.Services
     using RootFrameType = global::Windows.UI.Xaml.Controls.Frame;
 #else
     using System.Windows.Navigation;
-    //using RootFrameType = System.Windows.Navigation.NavigationWindow;
     using RootFrameType = System.Windows.Controls.Frame;
 #endif
 

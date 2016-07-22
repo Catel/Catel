@@ -14,7 +14,8 @@ namespace Catel.Services
     using global::Windows.UI.Xaml.Navigation;
 #else
     using System.Windows;
-    using System.Windows.Navigation;
+    using System.Windows.Controls;
+    using Windows;
 #endif
 
     public partial class NavigationRootService
@@ -50,17 +51,22 @@ namespace Catel.Services
         /// <summary>
         /// Gets the application root frame.
         /// </summary>
-        protected virtual NavigationWindow GetApplicationRootFrame()
+        protected virtual Frame GetApplicationRootFrame()
         {
             if (_rootFrame == null)
             {
-                if (Application.Current != null)
+                var application = Application.Current;
+                if (application != null)
                 {
-                    _rootFrame = Application.Current.MainWindow as NavigationWindow;
+                    var mainWindow = application.MainWindow;
+                    if (mainWindow != null)
+                    {
+                        _rootFrame = mainWindow.FindVisualDescendant(e => e is Frame) as Frame;
+                    }
                 }
             }
 
-            return _rootFrame as NavigationWindow;
+            return _rootFrame as Frame;
         }
 #endif
     }
