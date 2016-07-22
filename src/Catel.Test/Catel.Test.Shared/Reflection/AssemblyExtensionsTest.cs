@@ -45,7 +45,7 @@ namespace Catel.Test.Reflection
         [TestCase]
         public void VersionWithSeparatorAutomatic()
         {
-            string expected = VersionPrefix;
+            string expected = "4.5";
 
             var result = Assembly.Version(1);
 
