@@ -43,11 +43,11 @@ namespace Catel.Test.Runtime.Serialization.TestModels
     {
         public string ModelCProperty
         {
-            get { return GetValue<string>( ModelCPropertyProperty); }
-            set { SetValue( ModelCPropertyProperty, value); }
+            get { return GetValue<string>(ModelCPropertyProperty); }
+            set { SetValue(ModelCPropertyProperty, value); }
         }
 
-        public static readonly PropertyData  ModelCPropertyProperty = RegisterProperty("ModelCProperty", typeof(string), null);
+        public static readonly PropertyData ModelCPropertyProperty = RegisterProperty("ModelCProperty", typeof(string), null);
 
         public string IgnoredMember
         {
@@ -74,13 +74,41 @@ namespace Catel.Test.Runtime.Serialization.TestModels
         public ObservableCollection<int> CustomizedCollection
         {
             get { return GetValue<ObservableCollection<int>>(CustomizedCollectionProperty); }
-	        set { SetValue(CustomizedCollectionProperty, value); }
+            set { SetValue(CustomizedCollectionProperty, value); }
         }
 
         /// <summary>
         /// Register the CustomizedCollection property so it is known in the class.
         /// </summary>
         public static readonly PropertyData CustomizedCollectionProperty = RegisterProperty("CustomizedCollection", typeof(ObservableCollection<int>), () => new ObservableCollection<int>());
+    }
+
+    public class DynamicSerializerModifierModel : ModelBase
+    {
+        /// <summary>
+        /// Gets or sets the property value.
+        /// </summary>
+        public string Name
+        {
+            get { return GetValue<string>(NameProperty); }
+            set { SetValue(NameProperty, value); }
+        }
+
+        /// <summary>
+        /// Register the Name property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+    }
+
+    public class DynamicSerializerModifier : SerializerModifierBase<DynamicSerializerModifierModel>
+    {
+        public override void SerializeMember(ISerializationContext context, MemberValue memberValue)
+        {
+            if (string.Equals(memberValue.Name, "Name"))
+            {
+                memberValue.Value = "modified";
+            }
+        }
     }
 
     public class ModelASerializerModifier : SerializerModifierBase<ModelA>

@@ -142,10 +142,10 @@ namespace Catel.MVVM.Navigation
                 uriString = e.SourcePageType.ToString();
             }
 
+            _lastGlobalNavigationContext = e.Parameter as Dictionary<string, object>;
+
             var eventArgs = new NavigatedEventArgs(uriString, NavigationMode.Unknown);
             HandleNavigatedEvent(eventArgs);
-
-            _lastGlobalNavigationContext = e.Parameter as Dictionary<string, object>;
         }
     }
 }

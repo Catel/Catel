@@ -13,6 +13,7 @@ namespace Catel.Test.Runtime.Serialization
     using Catel.Runtime.Serialization;
 
     using NUnit.Framework;
+    using TestModels;
 
     public class SerializationManagerFacts
     {
@@ -263,6 +264,68 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.AreEqual(SerializationMemberGroup.Field, fields[0].Value.MemberGroup);
                 Assert.AreEqual("_includedField", fields[1].Key);
                 Assert.AreEqual(SerializationMemberGroup.Field, fields[1].Value.MemberGroup);
+            }
+        }
+
+        [TestFixture]
+        public class TheAddSerializerModifierMethod
+        {
+            [TestCase]
+            public void ThrowsArgumentNullExceptionForNullType()
+            {
+                var serializationManager = new SerializationManager();
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.AddSerializerModifier(null, typeof(DynamicSerializerModifier)));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.AddSerializerModifier(typeof(DynamicSerializerModifierModel), null));
+            }
+
+            [TestCase]
+            public void AddsSerializerModifier()
+            {
+                var serializationManager = new SerializationManager();
+
+                var modifiers = serializationManager.GetSerializerModifiers<DynamicSerializerModifierModel>();
+
+                Assert.AreEqual(0, modifiers.Length);
+
+                serializationManager.AddSerializerModifier<DynamicSerializerModifierModel, DynamicSerializerModifier>();
+
+                modifiers = serializationManager.GetSerializerModifiers(typeof(DynamicSerializerModifierModel));
+
+                Assert.AreEqual(1, modifiers.Length);
+                Assert.AreEqual(typeof(DynamicSerializerModifier), modifiers[0].GetType());
+            }
+        }
+
+        [TestFixture]
+        public class TheRemoveSerializerModifierMethod
+        {
+            [TestCase]
+            public void ThrowsArgumentNullExceptionForNullType()
+            {
+                var serializationManager = new SerializationManager();
+
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.RemoveSerializerModifier(null, typeof(DynamicSerializerModifier)));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.RemoveSerializerModifier(typeof(DynamicSerializerModifierModel), null));
+            }
+
+            [TestCase]
+            public void RemovesSerializerModifier()
+            {
+                var serializationManager = new SerializationManager();
+
+                serializationManager.AddSerializerModifier<DynamicSerializerModifierModel, DynamicSerializerModifier>();
+
+                var modifiers = serializationManager.GetSerializerModifiers(typeof(DynamicSerializerModifierModel));
+
+                Assert.AreEqual(1, modifiers.Length);
+                Assert.AreEqual(typeof(DynamicSerializerModifier), modifiers[0].GetType());
+
+                serializationManager.RemoveSerializerModifier<DynamicSerializerModifierModel, DynamicSerializerModifier>();
+
+                modifiers = serializationManager.GetSerializerModifiers(typeof(DynamicSerializerModifierModel));
+
+                Assert.AreEqual(0, modifiers.Length);
             }
         }
     }
