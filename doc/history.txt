@@ -56,6 +56,7 @@ we will remove the features in the next major release.
 Added/fixed:
 ============
 (+) CTL-902 Allow custom management of serializer modifiers in the ISerializerManager
+(*) CTL-903 Only support Frame and not NavigationWindow for WPF navigation
 (x) CTL-899 Navigation in WPF is not working when using custom frame
 (-) Removed test implementations of services
 
