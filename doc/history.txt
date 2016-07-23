@@ -19,7 +19,7 @@ License:         http://www.catelproject.com/about/license
 Version 5.0.0
 ==================
 
-For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
+For an upgrade guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
 
 Release date:
 =============
@@ -74,7 +74,7 @@ See http://www.catelproject.com/support/issue-tracker
 Version 4.5.1
 ==================
 
-For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
+For an upgrade guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
 
 Release date:
 =============
