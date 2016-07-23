@@ -335,6 +335,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\EventArgs\MemberSerializationEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\EventArgs\SerializationEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Extensions\ISerializationContextExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Extensions\ISerializationManagerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Extensions\ISerializerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Helpers\SerializationContextHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\IObjectAdapter.cs" />

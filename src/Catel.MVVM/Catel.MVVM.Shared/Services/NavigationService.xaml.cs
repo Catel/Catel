@@ -33,7 +33,7 @@ namespace Catel.Services
     using RootFrameType = System.Windows.Controls.Frame;
 #else
     using System.Windows.Navigation;
-    using RootFrameType = System.Windows.Navigation.NavigationWindow;
+    using RootFrameType = System.Windows.Controls.Frame;
 #endif
 
     /// <summary>
@@ -46,6 +46,8 @@ namespace Catel.Services
         private bool _appClosingByMainWindow;
         private bool _appClosedFromService;
 #endif
+
+        private RootFrameType _rootFrame;
         #endregion
 
         #region Properties
@@ -75,7 +77,15 @@ namespace Catel.Services
         #region Methods
         private RootFrameType RootFrame
         {
-            get { return _navigationRootService.GetNavigationRoot() as RootFrameType; }
+            get
+            {
+                if (_rootFrame == null)
+                {
+                    _rootFrame = _navigationRootService.GetNavigationRoot() as RootFrameType;
+                }
+
+                return _rootFrame;
+            }
         }
 
         partial void Initialize()
@@ -115,9 +125,7 @@ namespace Catel.Services
             var mainWindow = CatelEnvironment.MainWindow;
             if (mainWindow == null)
             {
-                const string error = "No main window found (not running SL out of browser? Cannot close application without a window.";
-                Log.Error(error);
-                throw new NotSupportedException(error);
+                throw Log.ErrorAndCreateException<NotSupportedException>("No main window found (not running SL out of browser? Cannot close application without a window.");
             }
 
             if (!_appClosingByMainWindow)
@@ -154,9 +162,7 @@ namespace Catel.Services
         partial void NavigateToUri(Uri uri)
         {
 #if NETFX_CORE
-            var error = $"Direct navigations to urls is not supported in '{Platforms.CurrentPlatform}', cannot navigate to '{uri}'. Use Navigate(type) instead.";
-            Log.Error(error);
-            throw new NotSupportedInPlatformException(error);
+            throw Log.ErrorAndCreateException<NotSupportedInPlatformException>($"Direct navigations to urls is not supported in '{Platforms.CurrentPlatform}', cannot navigate to '{uri}'. Use Navigate(type) instead.");
 #else
             RootFrame.Navigate(uri);
 #endif

@@ -469,7 +469,20 @@ namespace Catel.Runtime.Serialization
         {
             return _shouldSerializeAsCollectionCache.GetFromCacheOrFetch(memberType, () =>
             {
-                if (memberType == typeof (byte[]))
+                var serializerModifiers = SerializationManager.GetSerializerModifiers(memberType);
+                if (serializerModifiers != null)
+                {
+                    foreach (var serializerModifier in serializerModifiers)
+                    {
+                        var shouldSerializeAsCollection = serializerModifier.ShouldSerializeAsCollection();
+                        if (shouldSerializeAsCollection.HasValue)
+                        {
+                            return shouldSerializeAsCollection.Value;
+                        }
+                    }
+                }
+
+                if (memberType == typeof(byte[]))
                 {
                     return false;
                 }
@@ -485,7 +498,7 @@ namespace Catel.Runtime.Serialization
                     return true;
                 }
 
-                if (memberType == typeof (IEnumerable))
+                if (memberType == typeof(IEnumerable))
                 {
                     return true;
                 }
@@ -493,8 +506,8 @@ namespace Catel.Runtime.Serialization
                 if (memberType.IsGenericTypeEx())
                 {
                     var genericDefinition = memberType.GetGenericTypeDefinitionEx();
-                    if (genericDefinition == typeof (IEnumerable<>) ||
-                        typeof (IEnumerable<>).IsAssignableFromEx(genericDefinition))
+                    if (genericDefinition == typeof(IEnumerable<>) ||
+                        typeof(IEnumerable<>).IsAssignableFromEx(genericDefinition))
                     {
                         return true;
                     }
@@ -528,6 +541,19 @@ namespace Catel.Runtime.Serialization
         {
             return _shouldSerializeAsDictionaryCache.GetFromCacheOrFetch(memberType, () =>
             {
+                var serializerModifiers = SerializationManager.GetSerializerModifiers(memberType);
+                if (serializerModifiers != null)
+                {
+                    foreach (var serializerModifier in serializerModifiers)
+                    {
+                        var shouldSerializeAsDictionary = serializerModifier.ShouldSerializeAsDictionary();
+                        if (shouldSerializeAsDictionary.HasValue)
+                        {
+                            return shouldSerializeAsDictionary.Value;
+                        }
+                    }
+                }
+
                 if (memberType.IsDictionary())
                 {
                     return true;

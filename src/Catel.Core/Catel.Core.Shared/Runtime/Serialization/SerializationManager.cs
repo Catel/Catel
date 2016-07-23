@@ -45,6 +45,7 @@ namespace Catel.Runtime.Serialization
         private readonly ICacheStorage<Type, HashSet<string>> _fieldNamesCache = new CacheStorage<Type, HashSet<string>>();
         private readonly ICacheStorage<Type, Dictionary<string, MemberMetadata>> _fieldsCache = new CacheStorage<Type, Dictionary<string, MemberMetadata>>();
 
+        private readonly Dictionary<Type, List<Type>> _serializationModifierDefinitionsPerTypeCache = new Dictionary<Type, List<Type>>();
         private readonly ICacheStorage<Type, ISerializerModifier> _serializerModifierCache = new CacheStorage<Type, ISerializerModifier>();
         private readonly ICacheStorage<Type, ISerializerModifier[]> _serializationModifiersPerTypeCache = new CacheStorage<Type, ISerializerModifier[]>();
 
@@ -111,6 +112,7 @@ namespace Catel.Runtime.Serialization
                 _fieldsCache.Remove(type);
 
                 _serializerModifierCache.Remove(type);
+                _serializationModifierDefinitionsPerTypeCache.Remove(type);
                 _serializationModifiersPerTypeCache.Remove(type);
             }
 
@@ -487,6 +489,68 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
+        /// Adds the serializer modifier for a specific type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="serializerModifierType">Type of the serializer modifier.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="serializerModifierType"/> is <c>null</c>.</exception>
+        public void AddSerializerModifier(Type type, Type serializerModifierType)
+        {
+            Argument.IsNotNull("type", type);
+            Argument.IsNotNull("serializerModifierType", serializerModifierType);
+
+            List<Type> serializerModifierTypes = null;
+            if (!_serializationModifierDefinitionsPerTypeCache.TryGetValue(type, out serializerModifierTypes))
+            {
+                serializerModifierTypes = new List<Type>();
+                _serializationModifierDefinitionsPerTypeCache[type] = serializerModifierTypes;
+            }
+
+            Log.Debug($"Adding serializer modifier '{serializerModifierType.Name}' for '{type.Name}'");
+
+            if (serializerModifierTypes.Contains(serializerModifierType))
+            {
+                Log.Debug($"Serializer modifier '{serializerModifierType.Name}' for '{type.Name}' is already registered");
+                return;
+            }
+
+            serializerModifierTypes.Add(serializerModifierType);
+            _serializationModifiersPerTypeCache.Remove(type);
+        }
+
+        /// <summary>
+        /// Removes the serializer modifier for a specific type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="serializerModifierType">Type of the serializer modifier.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="serializerModifierType"/> is <c>null</c>.</exception>
+        public void RemoveSerializerModifier(Type type, Type serializerModifierType)
+        {
+            Argument.IsNotNull("type", type);
+            Argument.IsNotNull("serializerModifierType", serializerModifierType);
+
+            List<Type> serializerModifierTypes = null;
+            if (!_serializationModifierDefinitionsPerTypeCache.TryGetValue(type, out serializerModifierTypes))
+            {
+                serializerModifierTypes = new List<Type>();
+                _serializationModifierDefinitionsPerTypeCache[type] = serializerModifierTypes;
+            }
+
+            Log.Debug($"Removing serializer modifier '{serializerModifierType.Name}' for '{type.Name}'");
+
+            if (!serializerModifierTypes.Contains(serializerModifierType))
+            {
+                Log.Debug($"Serializer modifier '{serializerModifierType.Name}' for '{type.Name}' is not registered");
+                return;
+            }
+
+            serializerModifierTypes.Remove(serializerModifierType);
+            _serializationModifiersPerTypeCache.Remove(type);
+        }
+
+        /// <summary>
         /// Gets the serializer modifiers for the specified type.
         /// <para />
         /// Note that the order is important because the modifiers will be called in the returned order during serialization
@@ -502,14 +566,14 @@ namespace Catel.Runtime.Serialization
             return _serializationModifiersPerTypeCache.GetFromCacheOrFetch(type, () =>
             {
                 var serializers = new List<ISerializerModifier>();
-                var serializerModifierAttributes = FindSerializerModifiers(type);
+                var serializerModifierTypes = FindSerializerModifiers(type);
 
-                foreach (var serializerModifierAttribute in serializerModifierAttributes)
+                foreach (var serializerModifierType in serializerModifierTypes)
                 {
-                    var innerAttribute = serializerModifierAttribute;
-                    serializers.Add(_serializerModifierCache.GetFromCacheOrFetch(innerAttribute.SerializerModifierType, () =>
+                    var innerAttribute = serializerModifierType;
+                    serializers.Add(_serializerModifierCache.GetFromCacheOrFetch(serializerModifierType, () =>
                     {
-                        return (ISerializerModifier)_typeFactory.CreateInstance(innerAttribute.SerializerModifierType);
+                        return (ISerializerModifier)_typeFactory.CreateInstance(serializerModifierType);
                     }));
                 }
 
@@ -522,14 +586,20 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>The list of modifier attributes found.</returns>
-        private List<SerializerModifierAttribute> FindSerializerModifiers(Type type)
+        protected virtual List<Type> FindSerializerModifiers(Type type)
         {
-            var modifiers = new List<SerializerModifierAttribute>();
+            var modifiers = new List<Type>();
+
+            List<Type> customModifierTypes = null;
+            if (_serializationModifierDefinitionsPerTypeCache.TryGetValue(type, out customModifierTypes))
+            {
+                modifiers.AddRange(customModifierTypes);
+            }
 
             var attributes = type.GetCustomAttributesEx(typeof(SerializerModifierAttribute), true);
             foreach (var attribute in attributes)
             {
-                modifiers.Add((SerializerModifierAttribute)attribute);
+                modifiers.Add(((SerializerModifierAttribute)attribute).SerializerModifierType);
             }
 
             modifiers.Reverse();
