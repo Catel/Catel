@@ -57,6 +57,7 @@ Added/fixed:
 ============
 (+) CTL-902 Allow custom management of serializer modifiers in the ISerializerManager
 (*) CTL-903 Only support Frame and not NavigationWindow for WPF navigation
+(*) CTL-905 Always log Argument logging (even when Catel logging is being ignored)
 (x) CTL-899 Navigation in WPF is not working when using custom frame
 (-) Removed test implementations of services
 

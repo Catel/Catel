@@ -162,14 +162,19 @@ namespace Catel.Logging
         /// <param name="time">The time.</param>
         void ILogListener.Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
-            if (IgnoreCatelLogging && log.IsCatelLogging)
+            // We always want the Argument class logging, no matter what
+            var isArgumentLog = log.TargetType == typeof(Argument);
+            if (!isArgumentLog)
             {
-                return;
-            }
+                if (IgnoreCatelLogging && log.IsCatelLogging)
+                {
+                    return;
+                }
 
-            if (ShouldIgnoreLogMessage(log, message, logEvent, extraData, logData, time))
-            {
-                return;
+                if (ShouldIgnoreLogMessage(log, message, logEvent, extraData, logData, time))
+                {
+                    return;
+                }
             }
 
             Write(log, message, logEvent, extraData, logData, time);
@@ -187,14 +192,19 @@ namespace Catel.Logging
         /// <param name="time">The time.</param>
         void ILogListener.Debug(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
-            if (IgnoreCatelLogging && log.IsCatelLogging)
+            // We always want the Argument class logging, no matter what
+            var isArgumentLog = log.TargetType == typeof(Argument);
+            if (!isArgumentLog)
             {
-                return;
-            }
+                if (IgnoreCatelLogging && log.IsCatelLogging)
+                {
+                    return;
+                }
 
-            if (ShouldIgnoreLogMessage(log, message, LogEvent.Debug, extraData, logData, time))
-            {
-                return;
+                if (ShouldIgnoreLogMessage(log, message, LogEvent.Debug, extraData, logData, time))
+                {
+                    return;
+                }
             }
 
             Debug(log, message, extraData, logData, time);
@@ -210,14 +220,19 @@ namespace Catel.Logging
         /// <param name="time">The time.</param>
         void ILogListener.Info(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
-            if (IgnoreCatelLogging && log.IsCatelLogging)
+            // We always want the Argument class logging, no matter what
+            var isArgumentLog = log.TargetType == typeof(Argument);
+            if (!isArgumentLog)
             {
-                return;
-            }
+                if (IgnoreCatelLogging && log.IsCatelLogging)
+                {
+                    return;
+                }
 
-            if (ShouldIgnoreLogMessage(log, message, LogEvent.Info, extraData, logData, time))
-            {
-                return;
+                if (ShouldIgnoreLogMessage(log, message, LogEvent.Info, extraData, logData, time))
+                {
+                    return;
+                }
             }
 
             Info(log, message, extraData, logData, time);
@@ -233,14 +248,19 @@ namespace Catel.Logging
         /// <param name="time">The time.</param>
         void ILogListener.Warning(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
-            if (IgnoreCatelLogging && log.IsCatelLogging)
+            // We always want the Argument class logging, no matter what
+            var isArgumentLog = log.TargetType == typeof(Argument);
+            if (!isArgumentLog)
             {
-                return;
-            }
+                if (IgnoreCatelLogging && log.IsCatelLogging)
+                {
+                    return;
+                }
 
-            if (ShouldIgnoreLogMessage(log, message, LogEvent.Warning, extraData, logData, time))
-            {
-                return;
+                if (ShouldIgnoreLogMessage(log, message, LogEvent.Warning, extraData, logData, time))
+                {
+                    return;
+                }
             }
 
             Warning(log, message, extraData, logData, time);
@@ -256,14 +276,19 @@ namespace Catel.Logging
         /// <param name="time">The ti me.</param>
         void ILogListener.Error(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
-            if (IgnoreCatelLogging && log.IsCatelLogging)
+            // We always want the Argument class logging, no matter what
+            var isArgumentLog = log.TargetType == typeof(Argument);
+            if (!isArgumentLog)
             {
-                return;
-            }
+                if (IgnoreCatelLogging && log.IsCatelLogging)
+                {
+                    return;
+                }
 
-            if (ShouldIgnoreLogMessage(log, message, LogEvent.Error, extraData, logData, time))
-            {
-                return;
+                if (ShouldIgnoreLogMessage(log, message, LogEvent.Error, extraData, logData, time))
+                {
+                    return;
+                }
             }
 
             Error(log, message, extraData, logData, time);
@@ -279,7 +304,11 @@ namespace Catel.Logging
         /// <param name="time">The ti me.</param>
         void ILogListener.Status(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
-            if (IgnoreCatelLogging && log.IsCatelLogging)
+            // We always want the Argument class logging, no matter what
+            var isArgumentLog = log.TargetType == typeof(Argument);
+            if (!isArgumentLog)
+            {
+                if (IgnoreCatelLogging && log.IsCatelLogging)
             {
                 return;
             }
@@ -288,6 +317,7 @@ namespace Catel.Logging
             {
                 return;
             }
+}
 
             Status(log, message, extraData, logData, time);
         }
