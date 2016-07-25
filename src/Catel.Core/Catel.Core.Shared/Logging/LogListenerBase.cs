@@ -20,6 +20,8 @@ namespace Catel.Logging
         /// The log event strings.
         /// </summary>
         protected static readonly Dictionary<LogEvent, string> LogEventStrings;
+
+        private static readonly Type ArgumentType = typeof(Argument);
         #endregion
 
         #region Fields
@@ -163,7 +165,7 @@ namespace Catel.Logging
         void ILogListener.Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
             // We always want the Argument class logging, no matter what
-            var isArgumentLog = log.TargetType == typeof(Argument);
+            var isArgumentLog = log.TargetType == ArgumentType;
             if (!isArgumentLog)
             {
                 if (IgnoreCatelLogging && log.IsCatelLogging)
@@ -193,7 +195,7 @@ namespace Catel.Logging
         void ILogListener.Debug(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
             // We always want the Argument class logging, no matter what
-            var isArgumentLog = log.TargetType == typeof(Argument);
+            var isArgumentLog = log.TargetType == ArgumentType;
             if (!isArgumentLog)
             {
                 if (IgnoreCatelLogging && log.IsCatelLogging)
@@ -221,7 +223,7 @@ namespace Catel.Logging
         void ILogListener.Info(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
             // We always want the Argument class logging, no matter what
-            var isArgumentLog = log.TargetType == typeof(Argument);
+            var isArgumentLog = log.TargetType == ArgumentType;
             if (!isArgumentLog)
             {
                 if (IgnoreCatelLogging && log.IsCatelLogging)
@@ -249,7 +251,7 @@ namespace Catel.Logging
         void ILogListener.Warning(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
             // We always want the Argument class logging, no matter what
-            var isArgumentLog = log.TargetType == typeof(Argument);
+            var isArgumentLog = log.TargetType == ArgumentType;
             if (!isArgumentLog)
             {
                 if (IgnoreCatelLogging && log.IsCatelLogging)
@@ -277,7 +279,7 @@ namespace Catel.Logging
         void ILogListener.Error(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
             // We always want the Argument class logging, no matter what
-            var isArgumentLog = log.TargetType == typeof(Argument);
+            var isArgumentLog = log.TargetType == ArgumentType;
             if (!isArgumentLog)
             {
                 if (IgnoreCatelLogging && log.IsCatelLogging)
@@ -305,7 +307,7 @@ namespace Catel.Logging
         void ILogListener.Status(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
             // We always want the Argument class logging, no matter what
-            var isArgumentLog = log.TargetType == typeof(Argument);
+            var isArgumentLog = log.TargetType == ArgumentType;
             if (!isArgumentLog)
             {
                 if (IgnoreCatelLogging && log.IsCatelLogging)
