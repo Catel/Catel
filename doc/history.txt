@@ -59,6 +59,7 @@ Added/fixed:
 (*) CTL-903 Only support Frame and not NavigationWindow for WPF navigation
 (*) CTL-905 Always log Argument logging (even when Catel logging is being ignored)
 (x) CTL-899 Navigation in WPF is not working when using custom frame
+(x) CTL-906 Clear current navigation context when (re)navigating to the same view in WPF
 (-) Removed test implementations of services
 
 Roadmap:
