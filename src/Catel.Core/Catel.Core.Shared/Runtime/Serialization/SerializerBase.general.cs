@@ -11,6 +11,7 @@ namespace Catel.Runtime.Serialization
     using System.Collections;
     using System.Collections.Generic;
     using System.IO;
+    using System.Reflection;
     using Catel.ApiCop;
     using Catel.ApiCop.Rules;
     using Catel.Caching;
@@ -59,6 +60,10 @@ namespace Catel.Runtime.Serialization
         private readonly CacheStorage<Type, bool> _shouldSerializeAsCollectionCache = new CacheStorage<Type, bool>();
         private readonly CacheStorage<Type, bool> _shouldSerializeAsDictionaryCache = new CacheStorage<Type, bool>();
         private readonly CacheStorage<Type, bool> _shouldSerializeByExternalSerializerCache = new CacheStorage<Type, bool>();
+        private readonly CacheStorage<Type, bool> _shouldSerializeUsingParseCache = new CacheStorage<Type, bool>();
+
+        private readonly CacheStorage<Type, MethodInfo> _parseMethodCache = new CacheStorage<Type, MethodInfo>();
+        private readonly CacheStorage<Type, MethodInfo> _toStringMethodCache = new CacheStorage<Type, MethodInfo>();
         #endregion
 
         #region Constructors
@@ -561,6 +566,63 @@ namespace Catel.Runtime.Serialization
 
                 return false;
             });
+        }
+
+        /// <summary>
+        /// Returns whether the member value should be serialized using <c>ToString(IFormatProvider)</c> and deserialized using <c>Parse(string, IFormatProvider)</c>.
+        /// </summary>
+        /// <param name="memberType">Type of the member.</param>
+        /// <returns><c>true</c> if the member should be serialized using parse.</returns>
+        protected virtual bool ShouldSerializeUsingParse(Type memberType)
+        {
+            return _shouldSerializeUsingParseCache.GetFromCacheOrFetch(memberType, () =>
+            {
+                var toStringMethod = GetObjectToStringMethod(memberType);
+                if (toStringMethod == null)
+                {
+                    return false;
+                }
+
+                var parseMethod = GetObjectParseMethod(memberType);
+                if (parseMethod == null)
+                {
+                    return false;
+                }
+
+                return true;
+            });
+        }
+
+        /// <summary>
+        /// Gets the <c>ToString(IFormatProvider)</c> method.
+        /// </summary>
+        /// <param name="memberType">Type of the member.</param>
+        /// <returns></returns>
+        protected virtual MethodInfo GetObjectToStringMethod(Type memberType)
+        {
+            var toStringMethod = _toStringMethodCache.GetFromCacheOrFetch(memberType, () =>
+            {
+                var method = memberType.GetMethodEx("ToString", new[] { typeof(IFormatProvider) }, BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                return method;
+            });
+
+            return toStringMethod;
+        }
+
+        /// <summary>
+        /// Gets the <c>Parse(string, IFormatProvider)</c> method.
+        /// </summary>
+        /// <param name="memberType">Type of the member.</param>
+        /// <returns></returns>
+        protected virtual MethodInfo GetObjectParseMethod(Type memberType)
+        {
+            var parseMethod = _parseMethodCache.GetFromCacheOrFetch(memberType, () =>
+            {
+                var method = memberType.GetMethodEx("Parse", new[] { typeof(string), typeof(IFormatProvider) }, BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
+                return method;
+            });
+
+            return parseMethod;
         }
 
         /// <summary>

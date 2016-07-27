@@ -605,7 +605,26 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             var isDeserialized = false;
-            if (ShouldSerializeModelAsCollection(propertyTypeToDeserialize))
+
+            if (propertyTypeToDeserialize == typeof(string) && ShouldSerializeUsingParse(memberValue.MemberType))
+            {
+                var tempValue = memberValue.Value;
+                memberValue.Value = element.Value;
+
+                var parsedValue = DeserializeUsingObjectParse(context, memberValue);
+                if (parsedValue != null)
+                {
+                    value = parsedValue;
+
+                    isDeserialized = true;
+                }
+                else
+                {
+                    memberValue.Value = tempValue;
+                }
+            }
+
+            if (!isDeserialized && ShouldSerializeModelAsCollection(propertyTypeToDeserialize))
             {
                 var collection = value as IList;
                 if (collection == null)
@@ -714,7 +733,7 @@ namespace Catel.Runtime.Serialization.Xml
                     xmlWriter.WriteStartElement(elementName);
 
 #if XAMARIN
-                    xmlWriter.WriteAttributeString("xmlns", namespacePrefix, defaultNamespace, "http://catel.codeplex.com"); 
+                    xmlWriter.WriteAttributeString("xmlns", namespacePrefix, defaultNamespace, "http://catel.codeplex.com");
 #endif
 
                     xmlWriter.WriteAttributeString(namespacePrefix, "IsNull", null, "true");

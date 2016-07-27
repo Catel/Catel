@@ -9,6 +9,7 @@ namespace Catel.Runtime.Serialization
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using ApiCop.Rules;
@@ -436,6 +437,37 @@ namespace Catel.Runtime.Serialization
             }
 
             return deserializedMemberValues;
+        }
+
+        /// <summary>
+        /// Deserializes the object using the <c>Parse(string, IFormatProvider)</c> method.
+        /// </summary>
+        /// <returns>The deserialized object.</returns>
+        protected virtual object DeserializeUsingObjectParse(ISerializationContext<TSerializationContext> context, MemberValue memberValue)
+        {
+            // Note: don't use GetBestMemberType, it could return string type
+            var parseMethod = GetObjectParseMethod(memberValue.MemberType);
+            if (parseMethod == null)
+            {
+                return null;
+            }
+
+            var memberValueAsString = memberValue.Value as string;
+            if (memberValueAsString == null)
+            {
+                return null;
+            }
+            
+            try
+            {
+                var obj = parseMethod.Invoke(null, new object[] { memberValueAsString, CultureInfo.InvariantCulture });
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, $"Failed to deserialize type '{memberValue.GetBestMemberType().GetSafeFullName(false)}' using Parse(string, IFormatProvider)");
+                return null;
+            }
         }
         #endregion
     }
