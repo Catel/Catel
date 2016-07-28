@@ -10,6 +10,7 @@ namespace Catel.Test.Runtime.Serialization.TestModels
     using System;
     using System.Runtime.InteropServices;
     using Catel.Data;
+    using Catel.Runtime.Serialization;
 
     public class TestModelWithParsableMembers : ModelBase
     {
@@ -56,6 +57,34 @@ namespace Catel.Test.Runtime.Serialization.TestModels
             var z = double.Parse(splitted[2], formatProvider);
 
             return new Vector(x, y, z);
+        }
+    }
+
+    public class TestModelWithParsableMembersSerializerModifier : SerializerModifierBase<TestModelWithParsableMembers>
+    {
+        public override void SerializeMember(ISerializationContext context, MemberValue memberValue)
+        {
+            base.SerializeMember(context, memberValue);
+
+            if (memberValue.Name == "Vector")
+            {
+                var vector = (Vector)memberValue.Value;
+                memberValue.Value = $"{vector.X}|{vector.Y}|{vector.Z}";
+            }
+        }
+
+        public override void DeserializeMember(ISerializationContext context, MemberValue memberValue)
+        {
+            base.DeserializeMember(context, memberValue);
+
+            if (memberValue.Name == "Vector")
+            {
+                var vectorString = (string)memberValue.Value;
+                var parsedValues = vectorString.Split(new [] {"|"}, StringSplitOptions.RemoveEmptyEntries);
+
+                memberValue.Value = new Vector(StringToObjectHelper.ToDouble(parsedValues[0]), StringToObjectHelper.ToDouble(parsedValues[1]),
+                    StringToObjectHelper.ToDouble(parsedValues[2]));
+            }
         }
     }
 }

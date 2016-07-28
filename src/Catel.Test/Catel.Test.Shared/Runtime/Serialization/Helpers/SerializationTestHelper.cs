@@ -22,34 +22,39 @@ namespace Catel.Test.Runtime.Serialization
 
     public static class SerializationTestHelper
     {
-        private static readonly Dictionary<XmlSerializerOptimalizationMode, IXmlSerializer> _xmlSerializers = new Dictionary<XmlSerializerOptimalizationMode, IXmlSerializer>(); 
-
-        static SerializationTestHelper()
+        public static IXmlSerializer GetXmlSerializer(XmlSerializerOptimalizationMode optimalizationMode, ISerializationManager serializationManager = null)
         {
-            var typeFactory = TypeFactory.Default;
-
-            foreach (var value in Enum<XmlSerializerOptimalizationMode>.GetValues())
+            if (serializationManager == null)
             {
-                var xmlSerializer = typeFactory.CreateInstance<XmlSerializer>();
-                xmlSerializer.OptimalizationMode = value;
-
-                _xmlSerializers[value] = xmlSerializer;
+                serializationManager = new SerializationManager();
             }
+
+            var serializer = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<XmlSerializer>(serializationManager);
+            serializer.OptimalizationMode = optimalizationMode;
+
+            return serializer;
         }
 
-        public static IXmlSerializer GetXmlSerializer(XmlSerializerOptimalizationMode optimalizationMode)
+        public static IBinarySerializer GetBinarySerializer(ISerializationManager serializationManager = null)
         {
-            return _xmlSerializers[optimalizationMode];
+            if (serializationManager == null)
+            {
+                serializationManager = new SerializationManager();
+            }
+
+            var serializer = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<BinarySerializer>(serializationManager);
+            return serializer;
         }
 
-        public static IBinarySerializer GetBinarySerializer()
+        public static IJsonSerializer GetJsonSerializer(ISerializationManager serializationManager = null)
         {
-            return SerializationFactory.GetBinarySerializer();
-        }
+            if (serializationManager == null)
+            {
+                serializationManager = new SerializationManager();
+            }
 
-        public static IJsonSerializer GetJsonSerializer()
-        {
-            return new JsonSerializer(new SerializationManager(), TypeFactory.Default, new ObjectAdapter());
+            var serializer = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<JsonSerializer>(serializationManager);
+            return serializer;
         }
 
         /// <summary>

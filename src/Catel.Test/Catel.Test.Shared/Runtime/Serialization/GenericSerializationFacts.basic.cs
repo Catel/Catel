@@ -7,6 +7,7 @@
 
 namespace Catel.Test.Runtime.Serialization
 {
+    using Catel.Runtime.Serialization;
     using Data;
     using NUnit.Framework;
     using TestModels;
@@ -212,6 +213,25 @@ namespace Catel.Test.Runtime.Serialization
                     Assert.AreEqual(originalObject.Vector.Y, clonedObject.Vector.Y, description);
                     Assert.AreEqual(originalObject.Vector.Z, clonedObject.Vector.Z, description);
                 });
+            }
+
+            [TestCase]
+            public void SerializesModelsWithParsableObjectsAndSerializerModifier()
+            {
+                var originalObject = new TestModelWithParsableMembers();
+                originalObject.Vector = new Vector(1, 2, 3);
+
+                var serializationManager = new SerializationManager();
+                serializationManager.AddSerializerModifier<TestModelWithParsableMembers, TestModelWithParsableMembersSerializerModifier>();
+
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+
+                    Assert.AreEqual(originalObject.Vector.X, clonedObject.Vector.X, description);
+                    Assert.AreEqual(originalObject.Vector.Y, clonedObject.Vector.Y, description);
+                    Assert.AreEqual(originalObject.Vector.Z, clonedObject.Vector.Z, description);
+                }, serializationManager: serializationManager);
             }
         }
     }
