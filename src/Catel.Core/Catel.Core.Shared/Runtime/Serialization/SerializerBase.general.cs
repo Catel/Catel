@@ -594,6 +594,10 @@ namespace Catel.Runtime.Serialization
                 }
 
                 var memberType = checkActualMemberType ? memberValue.ActualMemberType : memberValue.MemberType;
+                if (memberType == null)
+                {
+                    memberType = memberValue.MemberType;
+                }
 
                 var toStringMethod = GetObjectToStringMethod(memberType);
                 if (toStringMethod == null)
