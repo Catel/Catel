@@ -13,6 +13,7 @@ namespace Catel.Runtime.Serialization.Json
     using System.IO;
     using System.Linq;
     using System.Text;
+    using Caching;
     using Data;
     using IoC;
     using JsonSerialization;
@@ -546,28 +547,50 @@ namespace Catel.Runtime.Serialization.Json
                         {
                             try
                             {
-                                if (ShouldExternalSerializerHandleMember(memberValue))
+                                var isDeserialized = false;
+                                if (jsonValue.Type == JTokenType.String && ShouldSerializeUsingParse(memberValue.MemberType))
                                 {
-                                    finalMemberValue = jsonValue.ToObject(valueType, serializationContext.JsonSerializer);
-                                }
-                                else if (ShouldSerializeAsCollection(memberValue))
-                                {
-                                    finalMemberValue = Deserialize(valueType, jsonProperty.Value.CreateReader());
-                                }
-                                else
-                                {
-                                    if (jsonValue.HasValues)
+                                    var tempValue = memberValue.Value;
+                                    memberValue.Value = (string)jsonValue;
+
+                                    var parsedValue = DeserializeUsingObjectParse(context, memberValue);
+                                    if (parsedValue != null)
                                     {
-                                        var finalValueType = valueType;
+                                        finalMemberValue = parsedValue;
 
-                                        var typeNameValue = jsonValue.Value<string>(TypeName);
-                                        if (!string.IsNullOrWhiteSpace(typeNameValue))
+                                        isDeserialized = true;
+                                    }
+                                    else
+                                    {
+                                        memberValue.Value = tempValue;
+                                    }
+                                }
+
+                                if (!isDeserialized)
+                                {
+                                    if (ShouldExternalSerializerHandleMember(memberValue))
+                                    {
+                                        finalMemberValue = jsonValue.ToObject(valueType, serializationContext.JsonSerializer);
+                                    }
+                                    else if (ShouldSerializeAsCollection(memberValue))
+                                    {
+                                        finalMemberValue = Deserialize(valueType, jsonProperty.Value.CreateReader());
+                                    }
+                                    else
+                                    {
+                                        if (jsonValue.HasValues)
                                         {
-                                            finalValueType = TypeCache.GetType(typeNameValue);
-                                        }
+                                            var finalValueType = valueType;
 
-                                        // Serialize ourselves
-                                        finalMemberValue = Deserialize(finalValueType, jsonValue.CreateReader());
+                                            var typeNameValue = jsonValue.Value<string>(TypeName);
+                                            if (!string.IsNullOrWhiteSpace(typeNameValue))
+                                            {
+                                                finalValueType = TypeCache.GetType(typeNameValue);
+                                            }
+
+                                            // Serialize ourselves
+                                            finalMemberValue = Deserialize(finalValueType, jsonValue.CreateReader());
+                                        }
                                     }
                                 }
                             }

@@ -130,6 +130,12 @@ namespace Catel.MVVM.Navigation
 
         private void OnNavigatedEvent(object sender, NavigationEventArgs e)
         {
+            // CTL-906: clear current navication context if (re) navigating to the same view
+            if (e.IsNavigationForView(NavigationTargetType))
+            {
+                _lastNavigationContext = null;
+            }
+
             var sourceDictionary = e.ExtraData as Dictionary<string, object>;
             if (sourceDictionary == null)
             {

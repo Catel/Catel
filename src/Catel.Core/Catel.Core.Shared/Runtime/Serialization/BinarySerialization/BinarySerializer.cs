@@ -156,13 +156,29 @@ namespace Catel.Runtime.Serialization.Binary
             var serializationContext = context.Context;
             var memberValues = serializationContext.MemberValues;
 
-            var finalMembervalue = (from x in memberValues
+            var finalMemberValue = (from x in memberValues
                                     where string.Equals(x.Name, memberValue.Name, StringComparison.Ordinal)
                                     select x).FirstOrDefault();
 
-            if (finalMembervalue != null)
+            if (finalMemberValue != null)
             {
-                return SerializationObject.SucceededToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name, finalMembervalue.Value);
+                if (finalMemberValue.Value is string && ShouldSerializeUsingParse(memberValue.MemberType))
+                {
+                    var tempValue = memberValue.Value;
+                    memberValue.Value = finalMemberValue.Value;
+
+                    var parsedValue = DeserializeUsingObjectParse(context, memberValue);
+                    if (parsedValue != null)
+                    {
+                        finalMemberValue.Value = parsedValue;
+                    }
+                    else
+                    {
+                        memberValue.Value = tempValue;
+                    }
+                }
+
+                return SerializationObject.SucceededToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name, finalMemberValue.Value);
             }
 
             return SerializationObject.FailedToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name);
