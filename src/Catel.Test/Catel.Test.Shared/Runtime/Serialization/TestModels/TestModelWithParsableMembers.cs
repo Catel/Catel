@@ -60,8 +60,25 @@ namespace Catel.Test.Runtime.Serialization.TestModels
         }
     }
 
-    public class TestModelWithParsableMembersSerializerModifier : SerializerModifierBase<TestModelWithParsableMembers>
+    public abstract class TestModelWithParsableMembersSerializerModifierBase : SerializerModifierBase<TestModelWithParsableMembers>
     {
+        private readonly bool _serializeUsingParse;
+
+        protected TestModelWithParsableMembersSerializerModifierBase(bool serializeUsingParse)
+        {
+            _serializeUsingParse = serializeUsingParse;
+        }
+
+        public override bool? ShouldSerializeMemberUsingParse(MemberValue memberValue)
+        {
+            if (memberValue.Name == "Vector")
+            {
+                return _serializeUsingParse;
+            }
+
+            return base.ShouldSerializeMemberUsingParse(memberValue);
+        }
+
         public override void SerializeMember(ISerializationContext context, MemberValue memberValue)
         {
             base.SerializeMember(context, memberValue);
@@ -80,11 +97,27 @@ namespace Catel.Test.Runtime.Serialization.TestModels
             if (memberValue.Name == "Vector")
             {
                 var vectorString = (string)memberValue.Value;
-                var parsedValues = vectorString.Split(new [] {"|"}, StringSplitOptions.RemoveEmptyEntries);
+                var parsedValues = vectorString.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
 
                 memberValue.Value = new Vector(StringToObjectHelper.ToDouble(parsedValues[0]), StringToObjectHelper.ToDouble(parsedValues[1]),
                     StringToObjectHelper.ToDouble(parsedValues[2]));
             }
+        }
+    }
+
+    public class TestModelWithParsableMembersUsingParseSerializerModifier : TestModelWithParsableMembersSerializerModifierBase
+    {
+        public TestModelWithParsableMembersUsingParseSerializerModifier() 
+            : base(true)
+        {
+        }
+    }
+
+    public class TestModelWithParsableMembersNotUsingParseSerializerModifier : TestModelWithParsableMembersSerializerModifierBase
+    {
+        public TestModelWithParsableMembersNotUsingParseSerializerModifier()
+            : base(false)
+        {
         }
     }
 }

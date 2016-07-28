@@ -60,7 +60,7 @@ namespace Catel.Runtime.Serialization
         private readonly CacheStorage<Type, bool> _shouldSerializeAsCollectionCache = new CacheStorage<Type, bool>();
         private readonly CacheStorage<Type, bool> _shouldSerializeAsDictionaryCache = new CacheStorage<Type, bool>();
         private readonly CacheStorage<Type, bool> _shouldSerializeByExternalSerializerCache = new CacheStorage<Type, bool>();
-        private readonly CacheStorage<Type, bool> _shouldSerializeUsingParseCache = new CacheStorage<Type, bool>();
+        private readonly CacheStorage<string, bool> _shouldSerializeUsingParseCache = new CacheStorage<string, bool>();
 
         private readonly CacheStorage<Type, MethodInfo> _parseMethodCache = new CacheStorage<Type, MethodInfo>();
         private readonly CacheStorage<Type, MethodInfo> _toStringMethodCache = new CacheStorage<Type, MethodInfo>();
@@ -571,12 +571,30 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// Returns whether the member value should be serialized using <c>ToString(IFormatProvider)</c> and deserialized using <c>Parse(string, IFormatProvider)</c>.
         /// </summary>
-        /// <param name="memberType">Type of the member.</param>
-        /// <returns><c>true</c> if the member should be serialized using parse.</returns>
-        protected virtual bool ShouldSerializeUsingParse(Type memberType)
+        /// <param name="memberValue">The member value.</param>
+        /// <param name="checkActualMemberType">if set to <c>true</c>, check the actual member type.</param>
+        /// <returns>
+        ///   <c>true</c> if the member should be serialized using parse.
+        /// </returns>
+        protected virtual bool ShouldSerializeUsingParse(MemberValue memberValue, bool checkActualMemberType)
         {
-            return _shouldSerializeUsingParseCache.GetFromCacheOrFetch(memberType, () =>
+            var cacheKey = $"{memberValue.ModelTypeName}|{memberValue.MemberTypeName}|{checkActualMemberType}";
+
+            return _shouldSerializeUsingParseCache.GetFromCacheOrFetch(cacheKey, () =>
             {
+                var serializerModifiers = SerializationManager.GetSerializerModifiers(memberValue.ModelType);
+
+                foreach (var serializerModifier in serializerModifiers)
+                {
+                    var value = serializerModifier.ShouldSerializeMemberUsingParse(memberValue);
+                    if (value.HasValue && !value.Value)
+                    {
+                        return false;
+                    }
+                }
+
+                var memberType = checkActualMemberType ? memberValue.ActualMemberType : memberValue.MemberType;
+
                 var toStringMethod = GetObjectToStringMethod(memberType);
                 if (toStringMethod == null)
                 {

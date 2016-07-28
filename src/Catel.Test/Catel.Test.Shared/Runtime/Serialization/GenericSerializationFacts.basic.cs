@@ -216,13 +216,32 @@ namespace Catel.Test.Runtime.Serialization
             }
 
             [TestCase]
-            public void SerializesModelsWithParsableObjectsAndSerializerModifier()
+            public void SerializesModelsWithParsableObjectsAndSerializerModifierUsingParse()
             {
                 var originalObject = new TestModelWithParsableMembers();
                 originalObject.Vector = new Vector(1, 2, 3);
 
                 var serializationManager = new SerializationManager();
-                serializationManager.AddSerializerModifier<TestModelWithParsableMembers, TestModelWithParsableMembersSerializerModifier>();
+                serializationManager.AddSerializerModifier<TestModelWithParsableMembers, TestModelWithParsableMembersUsingParseSerializerModifier>();
+
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+
+                    Assert.AreEqual(originalObject.Vector.X, clonedObject.Vector.X, description);
+                    Assert.AreEqual(originalObject.Vector.Y, clonedObject.Vector.Y, description);
+                    Assert.AreEqual(originalObject.Vector.Z, clonedObject.Vector.Z, description);
+                }, serializationManager: serializationManager);
+            }
+
+            [TestCase]
+            public void SerializesModelsWithParsableObjectsAndSerializerModifierNotUsingParse()
+            {
+                var originalObject = new TestModelWithParsableMembers();
+                originalObject.Vector = new Vector(1, 2, 3);
+
+                var serializationManager = new SerializationManager();
+                serializationManager.AddSerializerModifier<TestModelWithParsableMembers, TestModelWithParsableMembersNotUsingParseSerializerModifier>();
 
                 TestSerializationOnAllSerializers((serializer, description) =>
                 {

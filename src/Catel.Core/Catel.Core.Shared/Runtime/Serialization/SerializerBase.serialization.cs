@@ -248,7 +248,7 @@ namespace Catel.Runtime.Serialization
                         serializerModifier.SerializeMember(context, member);
                     }
 
-                    if (ShouldSerializeUsingParse(member.GetBestMemberType()))
+                    if (ShouldSerializeUsingParse(member, true))
                     {
                         var objectToStringValue = SerializeUsingObjectToString(context, member);
                         if (!string.IsNullOrWhiteSpace(objectToStringValue))

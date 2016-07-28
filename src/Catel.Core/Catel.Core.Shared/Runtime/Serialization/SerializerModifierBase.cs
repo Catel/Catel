@@ -33,6 +33,15 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
+        /// Returns whether the serializer should serialize the member using <c>ToString(IFormatProvider)</c> and <c>Parse(string, IFormatProvider)</c>.
+        /// </summary>
+        /// <returns><c>true</c> if the member should be serialized using parse, <c>false</c> if not. Return <c>null</c> if the serializer should decide automatically.</returns>
+        public virtual bool? ShouldSerializeMemberUsingParse(MemberValue memberValue)
+        {
+            return null;
+        }
+
+        /// <summary>
         /// Determines whether the specified member should be ignored.
         /// </summary>
         /// <param name="context">The context.</param>

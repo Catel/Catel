@@ -606,7 +606,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             var isDeserialized = false;
 
-            if (propertyTypeToDeserialize == typeof(string) && ShouldSerializeUsingParse(memberValue.MemberType))
+            if (propertyTypeToDeserialize == typeof(string) && ShouldSerializeUsingParse(memberValue, false))
             {
                 var tempValue = memberValue.Value;
                 memberValue.Value = element.Value;
