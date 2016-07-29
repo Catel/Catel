@@ -442,7 +442,7 @@ namespace Catel.Runtime.Serialization
         /// <returns><c>true</c> if the model should be serialized as a collection, <c>false</c> otherwise.</returns>
         protected virtual bool ShouldSerializeModelAsCollection(Type memberType)
         {
-            if (AttributeHelper.IsDecoratedWithAttribute<SerializeAsCollectionAttribute>(memberType))
+            if (memberType.IsDecoratedWithAttribute<SerializeAsCollectionAttribute>())
             {
                 return true;
             }
