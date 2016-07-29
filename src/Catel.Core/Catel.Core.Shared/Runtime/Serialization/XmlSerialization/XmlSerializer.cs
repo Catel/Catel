@@ -355,7 +355,7 @@ namespace Catel.Runtime.Serialization.Xml
                 var properties = modelType.GetPropertiesEx();
                 foreach (var property in properties)
                 {
-                    if (property.IsDecoratedWithAttribute<XmlIgnoreAttribute>())
+                    if (AttributeHelper.IsDecoratedWithAttribute<XmlIgnoreAttribute>(property))
                     {
                         ignoredProperties.Add(property.Name);
                     }
@@ -409,7 +409,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             XmlRootAttribute xmlRootAttribute;
-            if (modelType.TryGetAttribute(out xmlRootAttribute))
+            if (AttributeHelper.TryGetAttribute(modelType, out xmlRootAttribute))
             {
                 return xmlRootAttribute.ElementName;
             }
@@ -606,7 +606,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             var isDeserialized = false;
 
-            if (propertyTypeToDeserialize == typeof(string) && ShouldSerializeUsingParse(memberValue.MemberType))
+            if (propertyTypeToDeserialize == typeof(string) && ShouldSerializeUsingParse(memberValue, false))
             {
                 var tempValue = memberValue.Value;
                 memberValue.Value = element.Value;

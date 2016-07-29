@@ -548,7 +548,7 @@ namespace Catel.Runtime.Serialization.Json
                             try
                             {
                                 var isDeserialized = false;
-                                if (jsonValue.Type == JTokenType.String && ShouldSerializeUsingParse(memberValue.MemberType))
+                                if (jsonValue.Type == JTokenType.String && ShouldSerializeUsingParse(memberValue, false))
                                 {
                                     var tempValue = memberValue.Value;
                                     memberValue.Value = (string)jsonValue;
