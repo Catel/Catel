@@ -302,7 +302,7 @@ namespace Catel.MVVM
             }
             finally
             {
-                _managedViewModelsLock.EnterReadLock();
+                _managedViewModelsLock.ExitReadLock();
             }
 
             Log.Debug("Did not find the instance of view model with unique identifier '{0}'. It is either not registered or not alive.", uniqueIdentifier);
@@ -566,10 +566,11 @@ namespace Catel.MVVM
                 {
                     return result;
                 }
+
+                result = new ManagedViewModel(viewModelType);
                 _managedViewModelsLock.EnterWriteLock();
                 try
-                {
-                    result = new ManagedViewModel(viewModelType);
+                {                    
                     _managedViewModels.Add(viewModelType, result);
                 }
                 finally
