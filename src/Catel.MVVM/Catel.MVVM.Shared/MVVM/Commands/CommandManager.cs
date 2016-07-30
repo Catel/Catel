@@ -15,7 +15,7 @@ namespace Catel.MVVM
     using System.Windows.Input;
     using Catel.Logging;
 
-#if !WINDOWS_PHONE && !XAMARIN
+#if !XAMARIN
     using InputGesture = Catel.Windows.Input.InputGesture;
 
 #if NETFX_CORE
@@ -37,13 +37,13 @@ namespace Catel.MVVM
         private readonly object _lockObject = new object();
         private readonly Dictionary<string, ICompositeCommand> _commands = new Dictionary<string, ICompositeCommand>();
 
-#if !WINDOWS_PHONE && !XAMARIN
+#if !XAMARIN
 
 #if NET
         private bool _subscribedToApplicationActivedEvent;
 #endif
 
-#if NET || SL5
+#if NET
         private readonly ConditionalWeakTable<FrameworkElement, CommandManagerWrapper> _subscribedViews = new ConditionalWeakTable<FrameworkElement, CommandManagerWrapper>();
 #endif
 
@@ -58,13 +58,13 @@ namespace Catel.MVVM
         /// </summary>
         public CommandManager()
         {
-#if !WINDOWS_PHONE && !XAMARIN
+#if !XAMARIN
             SubscribeToKeyboardEvents();
 #endif
         }
 
         #region Properties
-#if !WINDOWS_PHONE && !XAMARIN
+#if !XAMARIN
         /// <summary>
         /// Gets or sets a value indicating whether the keyboard events are suspended.
         /// </summary>
@@ -101,7 +101,7 @@ namespace Catel.MVVM
         public event EventHandler<CommandCreatedEventArgs> CommandCreated;
         #endregion
 
-#if !WINDOWS_PHONE && !XAMARIN
+#if !XAMARIN
         /// <summary>
         /// Creates the command inside the command manager.
         /// <para />
@@ -483,7 +483,7 @@ namespace Catel.MVVM
             }
         }
 
-#if !WINDOWS_PHONE && !XAMARIN
+#if !XAMARIN
         /// <summary>
         /// Gets the original input gesture with which the command was initially created.
         /// </summary>
@@ -573,7 +573,7 @@ namespace Catel.MVVM
         /// </summary>
         public void SubscribeToKeyboardEvents()
         {
-#if NET || SILVERLIGHT
+#if NET
             var application = Application.Current;
             if (application == null)
             {
@@ -595,24 +595,17 @@ namespace Catel.MVVM
 
                 return;
             }
-#elif SILVERLIGHT
-            var mainView = application.RootVisual as FrameworkElement;
-            if (mainView == null)
-            {
-                Log.Warning("Application.RootVisual is null, cannot subscribe to keyboard events");
-                return;
-            }
 #elif NETFX_CORE
             // TODO: Grab events
 #endif
 
-#if NET || SL5
+#if NET
             SubscribeToKeyboardEvents(mainView);
 #endif
         }
 #endif
 
-#if NET || SL5
+#if NET
         /// <summary>
         /// Subscribes to keyboard events.
         /// </summary>

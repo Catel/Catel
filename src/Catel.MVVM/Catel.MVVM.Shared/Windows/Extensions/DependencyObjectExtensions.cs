@@ -12,6 +12,7 @@ namespace Catel.Windows
     using System.Collections.Generic;
     using System.Linq;
     using Catel.Logging;
+
 #if NETFX_CORE
     using global::Windows.UI;
     using global::Windows.UI.Xaml;
@@ -24,7 +25,6 @@ namespace Catel.Windows
     using System.Windows.Media;
 
     using Catel.Windows.Data;
-
 #endif
 
     /// <summary>
@@ -32,28 +32,6 @@ namespace Catel.Windows
     /// </summary>
     public static class DependencyObjectExtensions
     {
-#if SILVERLIGHT
-        /// <summary>
-        /// Gets the binding expression for the specified dependency property.
-        /// </summary>
-        /// <param name="dependencyObject">The dependency object.</param>
-        /// <param name="dependencyProperty">The dependency property.</param>
-        /// <returns>
-        /// The <see cref="BindingExpression"/> or <c>null</c> if the property is not bound.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="dependencyObject"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="dependencyProperty"/> is <c>null</c>.</exception>
-        public static BindingExpression GetBindingExpression(this DependencyObject dependencyObject, DependencyProperty dependencyProperty)
-        {
-            Argument.IsNotNull("dependencyObject", dependencyObject);
-            Argument.IsNotNull("dependencyProperty", dependencyProperty);
-
-            return dependencyObject.ReadLocalValue(dependencyProperty) as BindingExpression;
-        }
-#endif
-
-
-
         /// <summary>
         /// Returns the ancestory object of a <see cref="DependencyObject"/>.
         /// </summary>
@@ -96,7 +74,7 @@ namespace Catel.Windows
         {
 #if NET
             // Try to find logical ancestor one level up
-            object logicalAncestor = FindLogicalAncestor(startElement, condition, 1);
+            var logicalAncestor = FindLogicalAncestor(startElement, condition, 1);
             if (logicalAncestor != null)
             {
                 return logicalAncestor;
@@ -104,7 +82,7 @@ namespace Catel.Windows
 #endif
 
             // Try to find visual ancestor one level up
-            object visualAncestor = FindVisualAncestor(startElement, condition, 1);
+            var visualAncestor = FindVisualAncestor(startElement, condition, 1);
             if (visualAncestor != null)
             {
                 return visualAncestor;
@@ -144,7 +122,7 @@ namespace Catel.Windows
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
         public static object FindLogicalAncestor(this DependencyObject startElement, Predicate<object> condition, int maxDepth = -1)
         {
-            DependencyObject obj = startElement;
+            var obj = startElement;
             while ((obj != null) && !condition(obj))
             {
                 if (maxDepth == 0)
@@ -281,13 +259,11 @@ namespace Catel.Windows
                     return startElement;
                 }
 
-#if !WINDOWS_PHONE
                 var startElementAsUserControl = startElement as UserControl;
                 if (startElementAsUserControl != null)
                 {
                     return FindVisualDescendant(startElementAsUserControl.Content as DependencyObject, condition);
                 }
-#endif
 
                 var startElementAsContentControl = startElement as ContentControl;
                 if (startElementAsContentControl != null)

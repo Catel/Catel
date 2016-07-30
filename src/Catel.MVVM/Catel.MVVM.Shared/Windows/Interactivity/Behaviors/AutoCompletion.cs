@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5 || (NETFX_CORE && !WIN80)
+#if NET || NETFX_CORE
 
 namespace Catel.Windows.Interactivity
 {

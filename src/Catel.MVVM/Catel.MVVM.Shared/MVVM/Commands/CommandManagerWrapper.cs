@@ -4,15 +4,15 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !XAMARIN && !WINDOWS_PHONE
+#if !XAMARIN
 
 namespace Catel.MVVM
 {
     using Catel.IoC;
     using Logging;
-#if !WINDOWS_PHONE && !XAMARIN
-    using InputGesture = Catel.Windows.Input.InputGesture;
 
+#if !XAMARIN
+    using InputGesture = Catel.Windows.Input.InputGesture;
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
     using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;

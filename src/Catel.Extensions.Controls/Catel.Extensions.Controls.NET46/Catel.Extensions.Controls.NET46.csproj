@@ -128,31 +128,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\LinkLabel.generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Themes\TabControl.generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\WatermarkTextBox.generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Controls\MultiLineInput.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Controls\TraceOutputControl\Views\TraceOutputControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Windows\MultiLineInputWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Windows\MultipleChoiceWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -168,18 +144,6 @@
       <Link>Windows\Media\Effects\ShaderEffectBase.cs</Link>
     </Compile>
     <Compile Include="ModuleInitializer.cs" />
-    <Compile Include="Windows\Controls\MultiLineInput.xaml.cs">
-      <DependentUpon>MultiLineInput.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Controls\TraceOutputControl\Views\TraceOutputControl.xaml.cs">
-      <DependentUpon>TraceOutputControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Windows\MultiLineInputWindow.xaml.cs">
-      <DependentUpon>MultiLineInputWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Windows\MultipleChoiceWindow.xaml.cs">
-      <DependentUpon>MultipleChoiceWindow.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect\EmptyEffect.fx">

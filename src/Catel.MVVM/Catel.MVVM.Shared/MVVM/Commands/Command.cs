@@ -249,7 +249,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
         /// <param name="ignoreCanExecuteCheck">if set to <c>true</c>, the check on <see cref="CanExecute()"/> will be used before actually executing the action.</param>
-        protected virtual void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
+        protected virtual async void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
         {
             // Double check whether execution is allowed, some controls directly call Execute
             if (!ignoreCanExecuteCheck && !CanExecute(parameter))
@@ -260,12 +260,12 @@ namespace Catel.MVVM
             if (_executeWithParameter != null)
             {
                 _executeWithParameter(parameter);
-                RaiseExecuted(parameter);
+                await RaiseExecutedAsync(parameter);
             }
             else if (_executeWithoutParameter != null)
             {
                 _executeWithoutParameter();
-                RaiseExecuted(parameter);
+                await RaiseExecutedAsync(parameter);
             }
 
             RaiseCanExecuteChanged();
@@ -287,16 +287,6 @@ namespace Catel.MVVM
                     Log.Warning(ex, "Failed to raise CanExecuteChanged");
                 }
             });
-        }
-
-        /// <summary>
-        /// Raises the <see cref="Executed"/> event.
-        /// </summary>
-        /// <param name="parameter">The parameter.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "RaiseExecutedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected void RaiseExecuted(object parameter)
-        {
-            RaiseExecutedAsync(parameter);
         }
 
         /// <summary>

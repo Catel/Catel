@@ -98,7 +98,6 @@ namespace Catel.Windows.Controls
 #endif
             };
 
-            _logic.ViewModelClosed += OnViewModelClosed;
             _logic.ViewModelClosedAsync += OnViewModelClosedAsync;
             _logic.ViewModelChanged += (sender, e) => RaiseViewModelChanged();
 
@@ -257,7 +256,7 @@ namespace Catel.Windows.Controls
             set { UserControlLogic.DefaultTransferStylesAndTransitionsToViewModelGridValue = value; }
         }
 
-#if NET || SL5
+#if NET
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <see cref="InfoBarMessageControl"/> that can be found. 
@@ -424,16 +423,6 @@ namespace Catel.Windows.Controls
         /// </summary>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
-        {
-        }
-
-        /// <summary>
-        /// Called when the <see cref="ViewModel"/> has been closed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnViewModelClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual void OnViewModelClosed(object sender, ViewModelClosedEventArgs e)
         {
         }
 

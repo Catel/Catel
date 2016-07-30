@@ -70,25 +70,11 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="viewModelType">Type of the view model that needs to be created.</param>
         /// <param name="dataContext">The data context of the view model.</param>
-        /// <returns>The newly created <see cref="IViewModel"/> or <c>null</c> if no view model could be created.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="viewModelType"/> does not implement the <see cref="IViewModel"/> interface.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "CreateViewModel(Type, object, object)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        public virtual IViewModel CreateViewModel(Type viewModelType, object dataContext)
-        {
-            return CreateViewModel(viewModelType, dataContext, null);
-        }
-
-        /// <summary>
-        /// Creates a new view model.
-        /// </summary>
-        /// <param name="viewModelType">Type of the view model that needs to be created.</param>
-        /// <param name="dataContext">The data context of the view model.</param>
         /// <param name="tag">The preferred tag to use when resolving dependencies.</param>
         /// <returns>The newly created <see cref="IViewModel"/> or <c>null</c> if no view model could be created.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="viewModelType"/> does not implement the <see cref="IViewModel"/> interface.</exception>
-        public virtual IViewModel CreateViewModel(Type viewModelType, object dataContext, object tag)
+        public virtual IViewModel CreateViewModel(Type viewModelType, object dataContext, object tag = null)
         {
             Argument.IsNotNull("viewModelType", viewModelType);
             Argument.ImplementsInterface("viewModelType", viewModelType, typeof(IViewModel));
@@ -121,23 +107,6 @@ namespace Catel.MVVM
                 viewModelType.FullName, ObjectToStringHelper.ToTypeString(dataContext));
 
             return viewModel;
-        }
-
-        /// <summary>
-        /// Creates a new view model.
-        /// <para />
-        /// This is a convenience wrapper around the <see cref="CreateViewModel(Type, object, object)"/> method. This method cannot be overriden.
-        /// </summary>
-        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        /// <param name="dataContext">The data context.</param>
-        /// <returns>The newly created <see cref="IViewModel"/> or <c>null</c> if no view model could be created.</returns>
-        /// <exception cref="ArgumentException">The <c>TViewModel</c> does not implement the <see cref="IViewModel"/> interface.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "CreateViewModel<TViewModel>(Type, object, object)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        public TViewModel CreateViewModel<TViewModel>(object dataContext)
-            where TViewModel : IViewModel
-        {
-            var viewModelType = typeof(TViewModel);
-            return (TViewModel)CreateViewModel(viewModelType, dataContext, null);
         }
     }
 }

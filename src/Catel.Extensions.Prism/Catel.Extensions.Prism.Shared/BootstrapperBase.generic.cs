@@ -7,6 +7,7 @@
 namespace Catel
 {
     using System.Windows;
+
 #if PRISM6
     using Prism.Modularity;
 #else
@@ -24,12 +25,8 @@ namespace Catel
     /// <typeparam name="TShell">
     /// The shell type
     /// </typeparam>
-    public abstract class BootstrapperBase<TShell> : BootstrapperBase
-#if SILVERLIGHT
-        where TShell : UIElement
-#else
+    public abstract class BootstrapperBase<TShell> : BootstrapperBase 
         where TShell : System.Windows.Window
-#endif
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BootstrapperBase{TShell}" /> class.
@@ -58,9 +55,6 @@ namespace Catel
         /// </summary>
         protected override void InitializeShell()
         {
-#if SILVERLIGHT
-            Application.Current.RootVisual = (UIElement)Shell;
-#else
             var shell = Shell as System.Windows.Window;
             if (shell != null)
             {
@@ -71,7 +65,6 @@ namespace Catel
                 shell.Show();
                 shell.BringWindowToTop();
             }
-#endif
         }
 
         /// <summary>
@@ -98,11 +91,7 @@ namespace Catel
     /// The module catalog type
     /// </typeparam>
     public abstract class BootstrapperBase<TShell, TModuleCatalog> : BootstrapperBase<TShell>
-#if SILVERLIGHT
-        where TShell : UIElement
-#else
         where TShell : System.Windows.Window
-#endif
         where TModuleCatalog : class, IModuleCatalog, new()
     {
         /// <summary>

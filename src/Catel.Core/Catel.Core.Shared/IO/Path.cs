@@ -32,12 +32,6 @@ namespace Catel.IO
         UserRoaming,
 
         /// <summary>
-        /// The user.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "UserRoaming", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        User = UserRoaming,
-
-        /// <summary>
         /// The machine.
         /// </summary>
         Machine

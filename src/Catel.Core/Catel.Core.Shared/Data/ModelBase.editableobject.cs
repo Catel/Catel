@@ -127,7 +127,7 @@ namespace Catel.Data
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex, "Failed to deserialize the data for backup, which is weird. However, for Silverlight, Windows Phone and Windows 8 there is no other option");
+                        Log.Error(ex, "Failed to deserialize the data for backup, which is weird");
                     }
                 }
 

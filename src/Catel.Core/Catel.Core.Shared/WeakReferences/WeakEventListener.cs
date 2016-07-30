@@ -710,11 +710,7 @@ namespace Catel
         {
             Argument.IsNotNull("methodInfo", methodInfo);
 
-#if WIN80
-            methodInfo.Invoke(source, new object[] { _eventRegistrationToken });
-#else
             methodInfo.Invoke(source, new object[] { _internalEventDelegate });
-#endif
 
             return true;
         }

@@ -4,18 +4,15 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if EF5
+
 namespace Catel.Data
 {
     using System;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
-
-#if EF5
     using System.Data.Objects;
-#else
-    using System.Data.Entity.Core.Objects;
-#endif
 
     /// <summary>
     /// Extensions for the <see cref="IQueryable"/> interface.
@@ -31,10 +28,6 @@ namespace Catel.Data
         /// <returns>The queryable with the include path.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="query"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="expression"/> is <c>null</c>.</exception>
-#if !EF5
-        // TODO: Put #if EF5 on top of this file
-        [ObsoleteEx(ReplacementTypeOrMember = "System.Data.Entity.QueryableExtensions.Include(Expression<Func<T, object>>)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-#endif
         public static IQueryable<T> Include<T>(this IQueryable<T> query, Expression<Func<T, object>> expression)
         {
             Argument.IsNotNull("query", query);
@@ -72,3 +65,5 @@ namespace Catel.Data
         }
     }
 }
+
+#endif

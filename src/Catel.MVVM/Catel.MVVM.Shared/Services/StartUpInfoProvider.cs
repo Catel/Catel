@@ -4,30 +4,20 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5
+#if NET
 
 namespace Catel.Services
 {
-#if SILVERLIGHT
-    using System.Collections.Generic;
-
-    using System.Windows;
-#endif
-
     /// <summary>
     /// 
     /// </summary>
     public class StartUpInfoProvider : IStartUpInfoProvider
     {
-#if NET
         /// <summary>
         /// The command argument list.
         /// </summary>
         private string[] _arguments;
-#endif
-
         #region IStartUpInfoProvider Members
-#if NET
         /// <summary>
         /// Gets the application command line argument.
         /// </summary>
@@ -50,17 +40,6 @@ namespace Catel.Services
                 return _arguments;
             }
         }
-#endif
-
-#if SL5
-        /// <summary>
-        /// Gets the silverlight application initialization parameters.
-        /// </summary>
-        public IDictionary<string, string> InitParams
-        {
-            get { return Application.Current.Host.InitParams; }
-        }
-#endif
         #endregion
     }
 }

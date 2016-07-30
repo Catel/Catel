@@ -98,28 +98,10 @@ namespace Catel.Data
         /// <summary>
         /// Saves the changes inside the unit of work.
         /// </summary>
-        /// <param name="saveOptions">The save options.</param>
-        /// <exception cref="InvalidOperationException">A transaction is running. Call CommitTransaction instead.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "SaveChangesAsync()", Message = "EF no longer exposes methods with SaveOptions, so this will be removed",
-            TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        void SaveChanges(SaveOptions saveOptions);
-
-        /// <summary>
-        /// Saves the changes inside the unit of work.
-        /// </summary>
         /// <exception cref="InvalidOperationException">A transaction is running. Call CommitTransaction instead.</exception>
         void SaveChanges();
 
 #if EF_ASYNC
-        /// <summary>
-        /// Saves the changes inside the unit of work.
-        /// </summary>
-        /// <param name="saveOptions">The save options.</param>
-        /// <exception cref="InvalidOperationException">A transaction is running. Call CommitTransaction instead.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "SaveChangesAsync()", Message = "EF no longer exposes methods with SaveOptions, so this will be removed",
-            TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        Task SaveChangesAsync(SaveOptions saveOptions);
-
         /// <summary>
         /// Saves the changes inside the unit of work.
         /// </summary>

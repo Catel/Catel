@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !WIN80 && !XAMARIN
+#if !XAMARIN
 
 namespace Catel.Windows.Interactivity
 {
@@ -44,8 +44,6 @@ namespace Catel.Windows.Interactivity
     /// Behavior to set focus to a <see cref="FrameworkElement"/>. This behavior sets the focus
     /// only once on the first time the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
     /// </summary>
-    /// <remarks>In Silverlight, focusing a control seems very, very hard. Just calling Focus() isn't enough, so a timer is used to set the timer 500 milliseconds after the
-    /// user control has been loaded. This is customizable via the <see cref="FocusBehaviorBase.FocusDelay"/> property.</remarks>
     public class Focus : FocusBehaviorBase
     {
         #region Fields
@@ -54,7 +52,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if !NETFX_CORE
         private DynamicEventListener _dynamicEventListener;
 #endif
         #endregion
@@ -190,7 +188,7 @@ namespace Catel.Windows.Interactivity
                 {
                     case FocusMoment.Event:
                         
-#if WINDOWS_PHONE || NETFX_CORE
+#if NETFX_CORE
                         throw new NotSupportedInPlatformException("Dynamic events are not supported");
 #else
                         _dynamicEventListener.EventOccurred -= OnSourceEventOccurred;
@@ -217,7 +215,7 @@ namespace Catel.Windows.Interactivity
                 switch (FocusMoment)
                 {
                     case FocusMoment.Event:
-#if WINDOWS_PHONE || NETFX_CORE
+#if NETFX_CORE
                         throw new NotSupportedInPlatformException("Dynamic events are not supported");
 #else
                         if (string.IsNullOrEmpty(EventName))

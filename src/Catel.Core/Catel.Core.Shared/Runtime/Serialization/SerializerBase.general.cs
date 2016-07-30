@@ -11,6 +11,7 @@ namespace Catel.Runtime.Serialization
     using System.Collections;
     using System.Collections.Generic;
     using System.IO;
+    using System.Reflection;
     using Catel.ApiCop;
     using Catel.ApiCop.Rules;
     using Catel.Caching;
@@ -59,6 +60,10 @@ namespace Catel.Runtime.Serialization
         private readonly CacheStorage<Type, bool> _shouldSerializeAsCollectionCache = new CacheStorage<Type, bool>();
         private readonly CacheStorage<Type, bool> _shouldSerializeAsDictionaryCache = new CacheStorage<Type, bool>();
         private readonly CacheStorage<Type, bool> _shouldSerializeByExternalSerializerCache = new CacheStorage<Type, bool>();
+        private readonly CacheStorage<string, bool> _shouldSerializeUsingParseCache = new CacheStorage<string, bool>();
+
+        private readonly CacheStorage<Type, MethodInfo> _parseMethodCache = new CacheStorage<Type, MethodInfo>();
+        private readonly CacheStorage<Type, MethodInfo> _toStringMethodCache = new CacheStorage<Type, MethodInfo>();
         #endregion
 
         #region Constructors
@@ -437,7 +442,7 @@ namespace Catel.Runtime.Serialization
         /// <returns><c>true</c> if the model should be serialized as a collection, <c>false</c> otherwise.</returns>
         protected virtual bool ShouldSerializeModelAsCollection(Type memberType)
         {
-            if (AttributeHelper.IsDecoratedWithAttribute<SerializeAsCollectionAttribute>(memberType))
+            if (memberType.IsDecoratedWithAttribute<SerializeAsCollectionAttribute>())
             {
                 return true;
             }
@@ -469,7 +474,20 @@ namespace Catel.Runtime.Serialization
         {
             return _shouldSerializeAsCollectionCache.GetFromCacheOrFetch(memberType, () =>
             {
-                if (memberType == typeof (byte[]))
+                var serializerModifiers = SerializationManager.GetSerializerModifiers(memberType);
+                if (serializerModifiers != null)
+                {
+                    foreach (var serializerModifier in serializerModifiers)
+                    {
+                        var shouldSerializeAsCollection = serializerModifier.ShouldSerializeAsCollection();
+                        if (shouldSerializeAsCollection.HasValue)
+                        {
+                            return shouldSerializeAsCollection.Value;
+                        }
+                    }
+                }
+
+                if (memberType == typeof(byte[]))
                 {
                     return false;
                 }
@@ -485,7 +503,7 @@ namespace Catel.Runtime.Serialization
                     return true;
                 }
 
-                if (memberType == typeof (IEnumerable))
+                if (memberType == typeof(IEnumerable))
                 {
                     return true;
                 }
@@ -493,8 +511,8 @@ namespace Catel.Runtime.Serialization
                 if (memberType.IsGenericTypeEx())
                 {
                     var genericDefinition = memberType.GetGenericTypeDefinitionEx();
-                    if (genericDefinition == typeof (IEnumerable<>) ||
-                        typeof (IEnumerable<>).IsAssignableFromEx(genericDefinition))
+                    if (genericDefinition == typeof(IEnumerable<>) ||
+                        typeof(IEnumerable<>).IsAssignableFromEx(genericDefinition))
                     {
                         return true;
                     }
@@ -528,6 +546,19 @@ namespace Catel.Runtime.Serialization
         {
             return _shouldSerializeAsDictionaryCache.GetFromCacheOrFetch(memberType, () =>
             {
+                var serializerModifiers = SerializationManager.GetSerializerModifiers(memberType);
+                if (serializerModifiers != null)
+                {
+                    foreach (var serializerModifier in serializerModifiers)
+                    {
+                        var shouldSerializeAsDictionary = serializerModifier.ShouldSerializeAsDictionary();
+                        if (shouldSerializeAsDictionary.HasValue)
+                        {
+                            return shouldSerializeAsDictionary.Value;
+                        }
+                    }
+                }
+
                 if (memberType.IsDictionary())
                 {
                     return true;
@@ -535,6 +566,85 @@ namespace Catel.Runtime.Serialization
 
                 return false;
             });
+        }
+
+        /// <summary>
+        /// Returns whether the member value should be serialized using <c>ToString(IFormatProvider)</c> and deserialized using <c>Parse(string, IFormatProvider)</c>.
+        /// </summary>
+        /// <param name="memberValue">The member value.</param>
+        /// <param name="checkActualMemberType">if set to <c>true</c>, check the actual member type.</param>
+        /// <returns>
+        ///   <c>true</c> if the member should be serialized using parse.
+        /// </returns>
+        protected virtual bool ShouldSerializeUsingParse(MemberValue memberValue, bool checkActualMemberType)
+        {
+            var cacheKey = $"{memberValue.ModelTypeName}|{memberValue.MemberTypeName}|{checkActualMemberType}";
+
+            return _shouldSerializeUsingParseCache.GetFromCacheOrFetch(cacheKey, () =>
+            {
+                var serializerModifiers = SerializationManager.GetSerializerModifiers(memberValue.ModelType);
+
+                foreach (var serializerModifier in serializerModifiers)
+                {
+                    var value = serializerModifier.ShouldSerializeMemberUsingParse(memberValue);
+                    if (value.HasValue && !value.Value)
+                    {
+                        return false;
+                    }
+                }
+
+                var memberType = checkActualMemberType ? memberValue.ActualMemberType : memberValue.MemberType;
+                if (memberType == null)
+                {
+                    memberType = memberValue.MemberType;
+                }
+
+                var toStringMethod = GetObjectToStringMethod(memberType);
+                if (toStringMethod == null)
+                {
+                    return false;
+                }
+
+                var parseMethod = GetObjectParseMethod(memberType);
+                if (parseMethod == null)
+                {
+                    return false;
+                }
+
+                return true;
+            });
+        }
+
+        /// <summary>
+        /// Gets the <c>ToString(IFormatProvider)</c> method.
+        /// </summary>
+        /// <param name="memberType">Type of the member.</param>
+        /// <returns></returns>
+        protected virtual MethodInfo GetObjectToStringMethod(Type memberType)
+        {
+            var toStringMethod = _toStringMethodCache.GetFromCacheOrFetch(memberType, () =>
+            {
+                var method = memberType.GetMethodEx("ToString", new[] { typeof(IFormatProvider) }, BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                return method;
+            });
+
+            return toStringMethod;
+        }
+
+        /// <summary>
+        /// Gets the <c>Parse(string, IFormatProvider)</c> method.
+        /// </summary>
+        /// <param name="memberType">Type of the member.</param>
+        /// <returns></returns>
+        protected virtual MethodInfo GetObjectParseMethod(Type memberType)
+        {
+            var parseMethod = _parseMethodCache.GetFromCacheOrFetch(memberType, () =>
+            {
+                var method = memberType.GetMethodEx("Parse", new[] { typeof(string), typeof(IFormatProvider) }, BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
+                return method;
+            });
+
+            return parseMethod;
         }
 
         /// <summary>

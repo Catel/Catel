@@ -33,68 +33,6 @@ namespace Catel.Services
         }
 
         /// <summary>
-        /// Activates a view into a specific <see cref="IRegion" /> via <see cref="IRegionManager" /> from a given view model.
-        /// </summary>
-        /// <param name="this">The <see cref="IUIVisualizerService" /> service self instance.</param>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="regionName">The region name.</param>
-        /// <exception cref="InvalidOperationException">If <paramref name="regionName" /> is <c>null</c> and the <paramref name="viewModel" /> was no show at least one time in a <see cref="IRegion" />.</exception>
-        /// <exception cref="InvalidOperationException">If <paramref name="regionName" /> is <c>null</c> and the <paramref name="viewModel" /> was no show at least one time in a <see cref="IRegion" />.</exception>
-        /// <exception cref="InvalidOperationException">If <paramref name="regionName" /> is <c>null</c> and the <paramref name="viewModel" /> was no show at least one time in a <see cref="IRegion" />.</exception>
-        /// <exception cref="NotSupportedException">If the implementation of IRegionManager is not registered in the IoC container</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
-        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2", ReplacementTypeOrMember = "IUICompositionService.Activate(viewModel, regionName)")]
-        public static void Activate(this IUIVisualizerService @this, IViewModel viewModel, string regionName = null)
-        {
-            Argument.IsNotNull("@this", @this);
-
-            var uiCompositionService = ResolveTypeFromContainer<IUICompositionService>();
-            uiCompositionService.Activate(viewModel, regionName);
-        }
-
-        /// <summary>
-        /// Activates a view into a specific <see cref="IRegion" /> via <see cref="IRegionManager" /> from a given view model.
-        /// </summary>
-        /// <param name="this">The <see cref="IUIVisualizerService" /> service self instance.</param>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="parentViewModel">The parent view model.</param>
-        /// <param name="regionName">The region name.</param>
-        /// <exception cref="InvalidOperationException">If <paramref name="regionName" /> is <c>null</c> and the <paramref name="viewModel" /> was no show at least one time in a <see cref="IRegion" />.</exception>
-        /// <exception cref="InvalidOperationException">If <paramref name="regionName" /> is <c>null</c> and the <paramref name="viewModel" /> was no show at least one time in a <see cref="IRegion" />.</exception>
-        /// <exception cref="InvalidOperationException">If <paramref name="regionName" /> is <c>null</c> and the <paramref name="viewModel" /> was no show at least one time in a <see cref="IRegion" />.</exception>
-        /// <exception cref="System.InvalidOperationException">The <paramref name="viewModel" /> and <paramref name="parentViewModel" /> are equals.</exception>
-        /// <exception cref="NotSupportedException">If the implementation of IRegionManager is not registered in the IoC container</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentException">The <paramref name="regionName" /> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
-        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2", ReplacementTypeOrMember = "IUICompositionService.Activate(viewModel, parentViewModel, regionName)")]
-        public static void Activate(this IUIVisualizerService @this, IViewModel viewModel, IViewModel parentViewModel, string regionName)
-        {
-            Argument.IsNotNull("@this", @this);
-
-            var uiCompositionService = ResolveTypeFromContainer<IUICompositionService>();
-            uiCompositionService.Activate(viewModel, parentViewModel, regionName);
-        }
-
-        /// <summary>
-        /// Deactivates the views that belongs to the <paramref name="viewModel" /> instance.
-        /// </summary>
-        /// <param name="this">The <see cref="IUIVisualizerService" /> service self instance.</param>
-        /// <param name="viewModel">The view model.</param>
-        /// <exception cref="ArgumentException">If <paramref name="viewModel" /> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">If the <paramref name="viewModel" /> was no show at least one time in a <see cref="IRegion" />.</exception>
-        [ObsoleteEx(RemoveInVersion = "5.0", TreatAsErrorFromVersion = "4.2", ReplacementTypeOrMember = "IUICompositionService.Activate(viewModel, parentViewModel, regionName)")]
-        public static void Deactivate(this IUIVisualizerService @this, IViewModel viewModel)
-        {
-            Argument.IsNotNull("@this", @this);
-
-            var uiCompositionService = ResolveTypeFromContainer<IUICompositionService>();
-            uiCompositionService.Deactivate(viewModel);
-        }
-
-        /// <summary>
         /// Shows a window that is registered with the specified view model in a non-modal state.
         /// </summary>
         /// <param name="this">The <see cref="IUIVisualizerService" /> service self instance.</param>

@@ -8,22 +8,6 @@
 #define USE_INTERNAL_TIMER
 #endif
 
-#if WIN80 || PCL
-
-namespace System.Threading
-{
-    /// <summary>
-    /// Timer class.
-    /// </summary>
-    [ObsoleteEx(ReplacementTypeOrMember = "Catel.Threading.Timer", TreatAsErrorFromVersion = "4.4", RemoveInVersion = "5.0")]
-    public class Timer : Catel.Threading.Timer
-    {
-
-    }
-}
-
-#endif
-
 namespace Catel.Threading
 {
     using System;

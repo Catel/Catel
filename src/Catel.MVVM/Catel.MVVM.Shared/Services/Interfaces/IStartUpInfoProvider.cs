@@ -13,13 +13,6 @@ namespace Catel.Services
     /// </summary>
     public interface IStartUpInfoProvider
     {
-#if SILVERLIGHT
-        /// <summary>
-        /// Gets the silverlight application initialization parameters.
-        /// </summary>
-        IDictionary<string, string> InitParams { get; }
-#endif
-
 #if NET
         /// <summary>
         /// Gets the application command line argument.

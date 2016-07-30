@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5
+#if NET
 
 namespace Catel.Windows
 {
@@ -73,17 +73,6 @@ namespace Catel.Windows
         {
             return new DataWindowButton(text, new TaskCommand(executeAsync, canExecute), contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DataWindowButton"/> class.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        /// <param name="execute">The execute delegate.</param>
-        /// <param name="canExecute">The can execute delegate.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "DataWindowButton.FromSync", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        public DataWindowButton(string text, Action execute, Func<bool> canExecute = null)
-            : this(text, new Command(execute, canExecute))
-        { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataWindowButton"/> class.

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SILVERLIGHT
+#if NET
 
 namespace Catel.Windows.Markup
 {
@@ -78,8 +78,9 @@ namespace Catel.Windows.Markup
         /// <summary>
         /// When implemented in a derived class, returns an object that is provided as the value of the target property for this markup extension.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <returns>The object value to set on the property where the extension is applied.</returns>
-        protected override object ProvideDynamicValue()
+        protected override object ProvideDynamicValue(IServiceProvider serviceProvider)
         {
             if (_languageService == null)
             {

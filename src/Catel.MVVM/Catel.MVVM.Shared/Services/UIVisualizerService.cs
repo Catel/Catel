@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5
+#if NET
 
 namespace Catel.Services
 {
@@ -19,6 +19,7 @@ namespace Catel.Services
     using Reflection;
     using Catel.Windows.Threading;
     using Threading;
+
 #if NET
     using Windows;
 #endif
@@ -69,8 +70,6 @@ namespace Catel.Services
         /// <summary>
         /// Gets the type of the window that this implementation of the <see cref="IUIVisualizerService"/> interface
         /// supports.
-        /// <para />
-        /// The default value is <c>Window</c> in WPF and <c>ChildWindow</c> in Silverlight.
         /// </summary>
         /// <value>
         /// The type of the window.
@@ -463,14 +462,7 @@ namespace Catel.Services
                 PropertyHelper.TryGetPropertyValue(window, "DialogResult", out dialogResult);
 
                 completedProc(this, new UICompletedEventArgs(data, isModal ? dialogResult : null));
-#if SILVERLIGHT     
-                if (window is ChildWindow)
-                {
-                    // Due to a bug in the latest version of the Silverlight toolkit, set parent to enabled again
-                    // TODO: After every toolkit release, check if this code can be removed
-                    Application.Current.RootVisual.SetValue(Control.IsEnabledProperty, true);
-                }
-#endif
+
                 dynamicEventListener.EventOccurred -= closed;
                 dynamicEventListener.UnsubscribeFromEvent();
             };

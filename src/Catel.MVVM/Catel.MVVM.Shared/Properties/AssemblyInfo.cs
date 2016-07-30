@@ -41,7 +41,7 @@ using System.Windows.Markup;
 #endif
 
 // XmlnsDefinition is not supported in Windows Phone 7 and WinRT
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !XAMARIN
+#if !NETFX_CORE && !PCL && !XAMARIN
 
 [assembly: XmlnsPrefix("http://catel.codeplex.com", "catel")]
 [assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.MVVM")]
@@ -54,14 +54,7 @@ using System.Windows.Markup;
 
 #if NET
 [assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.Windows.Data")]
-#endif
-
-#if NET || SL5
 [assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.Windows.Markup")]
-#endif
-
-#if SILVERLIGHT
-[assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.Windows.PopupBehavior")]
 #endif
 
 #endif

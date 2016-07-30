@@ -99,7 +99,7 @@ namespace Catel.Services
                 vmGrid = new Grid();
                 vmGrid.Name = InnerWrapperName.GetUniqueControlName();
 
-#if NET || SL5
+#if NET
                 if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.CreateWarningAndErrorValidatorForViewModel))
                 {
                     var warningAndErrorValidator = new WarningAndErrorValidator();

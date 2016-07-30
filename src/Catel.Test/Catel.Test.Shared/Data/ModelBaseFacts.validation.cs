@@ -65,7 +65,6 @@ namespace Catel.Test.Data
                 Assert.AreEqual(0, validation.BusinessRuleErrorCount);
             }
 
-#if !WINDOWS_PHONE
             [TestCase]
             public void ValidationUsingAnnotationsForCatelProperties()
             {
@@ -108,11 +107,9 @@ namespace Catel.Test.Data
 
                 Assert.IsFalse(validationObject.HasErrors);
             }
-#endif
             #endregion
 
             #region IDataErrorInfo tests
-#if !WINDOWS_PHONE
             [TestCase]
             public void IDataErrorInfo_FieldWithError()
             {
@@ -129,11 +126,9 @@ namespace Catel.Test.Data
                 Assert.IsFalse(validation.HasErrors);
                 Assert.IsTrue(string.IsNullOrEmpty(((IDataErrorInfo)obj)["ErrorWhenEmpty"]));
             }
-#endif
             #endregion
 
             #region INotifyDataErrorInfo tests
-#if !WINDOWS_PHONE
             [TestCase]
             public void INotifyDataErrorInfo_FieldWithError()
             {
@@ -256,7 +251,6 @@ namespace Catel.Test.Data
                 }
                 Assert.AreEqual(0, count);
             }
-#endif
             #endregion
 
             #region IDataWarningInfo tests
@@ -429,7 +423,6 @@ namespace Catel.Test.Data
                 Assert.AreEqual(1, validator.AfterValidationCount);
             }
 
-#if !WINDOWS_PHONE
             [TestCase]
             public void IValidator_AddFieldErrors()
             {
@@ -461,7 +454,6 @@ namespace Catel.Test.Data
 
                 Assert.AreEqual("Error", dataErrorInfo.Error);
             }
-#endif
             #endregion
         }
 

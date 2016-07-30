@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !WIN80 && !XAMARIN
+#if !XAMARIN
 
 namespace Catel.MVVM.Providers
 {
@@ -73,7 +73,7 @@ namespace Catel.MVVM.Providers
             set { Logic.SupportParentViewModelContainers = value; }
         }
 
-#if NET || SL5
+#if NET
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <c>InfoBarMessageControl</c> that can be found. 

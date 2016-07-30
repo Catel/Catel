@@ -19,11 +19,7 @@ namespace Catel.Test.Logging
         }
         #endregion
 
-#if WINDOWS_PHONE
-        private const string ArgumentNullExceptionText = "[ArgumentNullException] System.ArgumentNullException: Value can not be null.";
-#else
         private const string ArgumentNullExceptionText = "[ArgumentNullException] System.ArgumentNullException: Value cannot be null.";
-#endif
 
         [TestFixture]
         public class ThePerformance

@@ -67,7 +67,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<ILocationService, LocationService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IVibrateService, VibrateService>();
 
-#if !NET && !SL5
+#if !NET
                 serviceLocator.RegisterTypeIfNotYetRegistered<ICameraService, CameraService>();
 #endif
 
@@ -81,17 +81,13 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISelectDirectoryService, SelectDirectoryService>();
 #endif
 
-#if NET || SL5
+#if NET
                 serviceLocator.RegisterTypeIfNotYetRegistered<IOpenFileService, OpenFileService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISaveFileService, SaveFileService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IStartUpInfoProvider, StartUpInfoProvider>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISplashScreenService, SplashScreenService>(RegistrationType.Transient);
-#endif
-
-#if (WINDOWS_PHONE && SILVERLIGHT) || XAMARIN
-                serviceLocator.RegisterTypeIfNotYetRegistered<IPhoneService, PhoneService>();
 #endif
 
 #if XAMARIN_FORMS

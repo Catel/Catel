@@ -48,7 +48,7 @@ namespace Catel.MVVM.Providers
         private IViewModelContainer _parentViewModelContainer;
         private IViewModel _parentViewModel;
 
-#if NET ||SL5
+#if NET
         private InfoBarMessageControl _infoBarMessageControl;
 #endif
         #endregion
@@ -75,7 +75,7 @@ namespace Catel.MVVM.Providers
             DefaultTransferStylesAndTransitionsToViewModelGridValue = false;
 #endif
 
-#if NET || SL5
+#if NET
             DefaultCreateWarningAndErrorValidatorForViewModelValue = true;
 #endif
         }
@@ -103,7 +103,7 @@ namespace Catel.MVVM.Providers
             TransferStylesAndTransitionsToViewModelGrid = DefaultTransferStylesAndTransitionsToViewModelGridValue;
 #endif
 
-#if NET || SL5
+#if NET
             SkipSearchingForInfoBarMessageControl = DefaultSkipSearchingForInfoBarMessageControlValue;
             CreateWarningAndErrorValidatorForViewModel = DefaultCreateWarningAndErrorValidatorForViewModelValue;
 #endif
@@ -192,7 +192,7 @@ namespace Catel.MVVM.Providers
         public static bool DefaultTransferStylesAndTransitionsToViewModelGridValue { get; set; }
 #endif
 
-#if NET || SL5
+#if NET
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <see cref="InfoBarMessageControl"/> that can be found. 
@@ -312,7 +312,7 @@ namespace Catel.MVVM.Providers
             {
                 var wrapOptions = WrapOptions.None;
 
-#if NET || SL5
+#if NET
                 if (CreateWarningAndErrorValidatorForViewModel)
                 {
                     wrapOptions |= WrapOptions.CreateWarningAndErrorValidatorForViewModel;
@@ -368,7 +368,7 @@ namespace Catel.MVVM.Providers
             // even if the Content property was changed while InitializeComponents() running there is no triggering of a binding update.
             CreateViewModelWrapper();
 
-#if NET || SL5
+#if NET
             if (!SkipSearchingForInfoBarMessageControl)
             {
                 Log.Debug("Searching for an instance of the InfoBarMessageControl");
@@ -928,7 +928,7 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
-#if NET || SL5
+#if NET
             if (_infoBarMessageControl != null)
             {
                 _infoBarMessageControl.ClearObjectMessages(obj);

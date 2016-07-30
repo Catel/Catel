@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !WIN80 && !XAMARIN
+#if !XAMARIN
 
 namespace Catel.Windows.Interactivity
 {
@@ -239,6 +239,12 @@ namespace Catel.Windows.Interactivity
         private void OnAssociatedObjectUnloadedInternal()
         {
             _loadCounter--;
+
+            if (_loadCounter < 0)
+            {
+                _loadCounter = 0;
+                return;
+            }
 
             if (_loadCounter != 0)
             {

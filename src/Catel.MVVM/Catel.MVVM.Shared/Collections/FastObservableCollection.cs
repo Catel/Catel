@@ -19,10 +19,6 @@ namespace Catel.Collections
     using IoC;
     using Services;
 
-#if SL5
-    using NotifyRangedCollectionChangedEventArgs = System.Collections.Specialized.NotifyCollectionChangedEventArgs;
-#endif
-
     /// <summary>
     /// Fast implementation of <see cref="ObservableCollection{T}"/> where the change notifications
     /// can be suspended.
@@ -551,7 +547,6 @@ namespace Catel.Collections
             }
         }
 
-#if !SL5
         /// <summary>
         /// Moves the item at the specified index to a new location in the collection.
         /// </summary>
@@ -567,7 +562,6 @@ namespace Catel.Collections
             // Call base
             base.MoveItem(oldIndex, newIndex);
         }
-#endif
 
         /// <summary>
         /// Removes the item at the specified index of the collection.
@@ -616,9 +610,6 @@ namespace Catel.Collections
         {
             NotifyRangedCollectionChangedEventArgs eventArgs;
 
-#if SL5
-            eventArgs = new NotifyRangedCollectionChangedEventArgs(action);
-#else
             if (changedItems == null && changedIndices == null)
             {
                 eventArgs = new NotifyRangedCollectionChangedEventArgs(action);
@@ -627,7 +618,6 @@ namespace Catel.Collections
             {
                 eventArgs = new NotifyRangedCollectionChangedEventArgs(action, changedItems, changedIndices);
             }
-#endif
 
             return eventArgs;
         }

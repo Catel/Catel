@@ -268,7 +268,7 @@ namespace Catel.Services
         /// <param name="completedProc"></param>
         private async void OnOkButtonClicked(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc)
         {
-            await viewModel.SaveAndCloseViewModel();
+            await viewModel.SaveAndCloseViewModelAsync();
             completedProc?.SafeInvoke(this, new UICompletedEventArgs(viewModel, true));
             await CloseModal();
         }
@@ -301,7 +301,7 @@ namespace Catel.Services
         /// <param name="completedProc"></param>
         private async void OnCancelButtonClicked(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc)
         {
-            await viewModel.CancelAndCloseViewModel();
+            await viewModel.CancelAndCloseViewModelAsync();
             completedProc?.SafeInvoke(this, new UICompletedEventArgs(viewModel, false));
             await CloseModal();
         }

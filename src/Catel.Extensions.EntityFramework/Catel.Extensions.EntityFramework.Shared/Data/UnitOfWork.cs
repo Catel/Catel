@@ -305,18 +305,6 @@ namespace Catel.Data
         /// <summary>
         /// Saves the changes inside the unit of work.
         /// </summary>
-        /// <param name="saveOptions">The save options.</param>
-        /// <exception cref="InvalidOperationException">A transaction is running. Call CommitTransaction instead.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "SaveChanges()", Message = "EF no longer exposes methods with SaveOptions, so this will be removed",
-            TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public virtual void SaveChanges(SaveOptions saveOptions)
-        {
-            SaveChanges();
-        }
-
-        /// <summary>
-        /// Saves the changes inside the unit of work.
-        /// </summary>
         /// <exception cref="InvalidOperationException">A transaction is running. Call CommitTransaction instead.</exception>
         public virtual void SaveChanges()
         {
@@ -333,18 +321,6 @@ namespace Catel.Data
         }
 
 #if EF_ASYNC
-        /// <summary>
-        /// Saves the changes inside the unit of work.
-        /// </summary>
-        /// <param name="saveOptions">The save options.</param>
-        /// <exception cref="InvalidOperationException">A transaction is running. Call CommitTransaction instead.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "SaveChangesAsync()", Message = "EF no longer exposes methods with SaveOptions, so this will be removed",
-            TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public virtual async Task SaveChangesAsync(SaveOptions saveOptions)
-        {
-            await SaveChangesAsync();
-        }
-
         /// <summary>
         /// Saves the changes inside the unit of work.
         /// </summary>

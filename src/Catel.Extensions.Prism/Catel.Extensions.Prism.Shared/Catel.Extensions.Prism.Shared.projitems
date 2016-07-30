@@ -16,7 +16,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ILogExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IRegionManagerExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\HostHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\PrismHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IModuleTracker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IRegionInfo.cs" />
@@ -24,7 +23,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\CompositeModuleCatalog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\CompositeNuGetBasedModuleCatalog.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modules\DownloadingModuleCatalog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\EventArgs\ModuleEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\Extensions\INuGetBasedModuleCatalogExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Modules\Extensions\ModuleCatalogExtensions.cs" />

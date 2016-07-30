@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5
+#if NET
 
 namespace Catel.Windows
 {
@@ -169,17 +169,6 @@ namespace Catel.Windows
                 }
             }
 
-#if SILVERLIGHT
-            // According to the documentation, no visual tree is garantueed in the Loaded event of the user control.
-            // However, as a solution the documentation says you need to manually call ApplyTemplate, so let's do that.
-            // For more info, see http://msdn.microsoft.com/en-us/library/ms596558(vs.95)
-            var frameworkElementAsControl = frameworkElement as Control;
-            if (frameworkElementAsControl != null)
-            {
-                frameworkElementAsControl.ApplyTemplate();
-            }
-#endif
-
             if (parentContentControl != null)
             {
                 SetControlContent(parentContentControl, null);
@@ -193,14 +182,10 @@ namespace Catel.Windows
 
             if (Application.Current != null)
             {
-#if SILVERLIGHT
-                // TODO: Fix styles for silverlight
-#else
                 outsideGrid.Resources.MergedDictionaries.Add(Application.Current.Resources);
-#endif
             }
 
-#region Generate buttons
+            #region Generate buttons
 #if !NETFX_CORE
             if (buttons.Length > 0)
             {
@@ -281,9 +266,9 @@ namespace Catel.Windows
                 mainContent = subDockPanel;
             }
 #endif
-#endregion
+            #endregion
 
-#region Generate internal grid
+            #region Generate internal grid
             // Create grid
             var internalGrid = new Grid();
             internalGrid.Name = InternalGridName;
@@ -291,9 +276,9 @@ namespace Catel.Windows
 
             // Grid is now the main content
             mainContent = internalGrid;
-#endregion
+            #endregion
 
-#region Generate WarningAndErrorValidator
+            #region Generate WarningAndErrorValidator
             if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateWarningAndErrorValidatorForDataContext))
             {
                 // Create warning and error validator
@@ -304,9 +289,9 @@ namespace Catel.Windows
                 // Add to grid
                 internalGrid.Children.Add(warningAndErrorValidator);
             }
-#endregion
+            #endregion
 
-#region Generate InfoBarMessageControl
+            #region Generate InfoBarMessageControl
 #if !NETFX_CORE
             if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateInlineInfoBarMessageControl) ||
                 Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateOverlayInfoBarMessageControl))
@@ -325,7 +310,7 @@ namespace Catel.Windows
                 mainContent = infoBarMessageControl;
             }
 #endif
-#endregion
+            #endregion
 
             // Set content of the outside grid
             outsideGrid.Children.Add(mainContent);
@@ -432,8 +417,7 @@ namespace Catel.Windows
         }
 
         /// <summary>
-        /// Sets the content of the control via reflection so all "special implementation differences"
-        /// between WPF and Silverlight are now removed.
+        /// Sets the content of the control via reflection.
         /// </summary>
         /// <param name="contentControl">The content control.</param>
         /// <param name="element">The element.</param>

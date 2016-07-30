@@ -402,7 +402,7 @@
         #endregion
 
         #region Attribute validation
-#if NET || SL5
+#if NET
         [TestCase]
         public void AttributeValidation_DoNotValidate()
         {

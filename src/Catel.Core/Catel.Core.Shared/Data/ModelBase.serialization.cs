@@ -27,9 +27,7 @@ namespace Catel.Data
     using System.Reflection;
 #endif
 
-#if NET35
-    using System.Security.Permissions;
-#elif NET40 || NET45
+#if NET
     using System.Security;
 #endif
 

@@ -349,7 +349,7 @@ namespace Catel.Data
                             isSerializable, includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty);
                         PropertyDataManager.RegisterProperty(objectType, name, propertyData);
 
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
+#if !NETFX_CORE && !PCL
                         // Skip validation for modelbase properties
                         if (propertyData.IsModelBaseProperty)
                         {

@@ -37,7 +37,7 @@ using System.Windows.Markup;
 #endif
 
 // XmlnsDefinition is not supported in Windows Phone 7 and WinRT
-#if !WINDOWS_PHONE && !NETFX_CORE
+#if !NETFX_CORE
 
 [assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.Windows")]
 [assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.Windows.Controls")]

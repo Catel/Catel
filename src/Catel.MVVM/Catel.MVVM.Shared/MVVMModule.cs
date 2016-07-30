@@ -36,10 +36,6 @@ namespace Catel
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IAutoCompletionService, AutoCompletionService>();
 
-#if !XAMARIN && !WIN80
-            serviceLocator.RegisterTypeIfNotYetRegistered<IInteractivityManager, InteractivityManager>();
-#endif
-
             ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
 
             DesignTimeHelper.InitializeDesignTime();

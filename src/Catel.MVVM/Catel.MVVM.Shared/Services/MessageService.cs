@@ -88,34 +88,11 @@ namespace Catel.Services
         /// </summary>
         /// <param name="exception">The exception.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public virtual Task<MessageResult> ShowError(Exception exception)
-        {
-            return ShowErrorAsync(exception);
-        }
-
-        /// <summary>
-        /// Shows an error message to the user and allows a callback operation when the message is completed.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         public virtual Task<MessageResult> ShowErrorAsync(Exception exception)
         {
             Argument.IsNotNull("exception", exception);
 
-            return ShowError(exception.Message, string.Empty);
-        }
-
-        /// <summary>
-        /// Shows an error message to the user and allows a callback operation when the message is completed.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="caption">The caption.</param>
-        /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public virtual Task<MessageResult> ShowError(string message, string caption = "")
-        {
-            return ShowErrorAsync(message, caption);
+            return ShowErrorAsync(exception.Message, string.Empty);
         }
 
         /// <summary>
@@ -134,19 +111,7 @@ namespace Catel.Services
             const MessageButton button = MessageButton.OK;
             const MessageImage icon = MessageImage.Error;
 
-            return Show(message, caption, button, icon);
-        }
-
-        /// <summary>
-        /// Shows a warning message to the user and allows a callback operation when the message is completed.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="caption">The caption.</param>
-        /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public virtual Task<MessageResult> ShowWarning(string message, string caption = "")
-        {
-            return ShowWarningAsync(message, caption);
+            return ShowAsync(message, caption, button, icon);
         }
 
         /// <summary>
@@ -165,19 +130,7 @@ namespace Catel.Services
             const MessageButton button = MessageButton.OK;
             const MessageImage icon = MessageImage.Warning;
 
-            return Show(message, caption, button, icon);
-        }
-
-        /// <summary>
-        /// Shows an information message to the user and allows a callback operation when the message is completed.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="caption">The caption.</param>
-        /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public virtual Task<MessageResult> ShowInformation(string message, string caption = "")
-        {
-            return ShowInformationAsync(message, caption);
+            return ShowAsync(message, caption, button, icon);
         }
 
         /// <summary>
@@ -196,21 +149,6 @@ namespace Catel.Services
             const MessageButton button = MessageButton.OK;
             const MessageImage icon = MessageImage.Information;
 
-            return Show(message, caption, button, icon);
-        }
-
-        /// <summary>
-        /// Shows the specified message and returns the result.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="caption">The caption.</param>
-        /// <param name="button">The button.</param>
-        /// <param name="icon">The icon.</param>
-        /// <returns>The <see cref="MessageResult"/>.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="message"/> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public virtual Task<MessageResult> Show(string message, string caption = "", MessageButton button = MessageButton.OK, MessageImage icon = MessageImage.None)
-        {
             return ShowAsync(message, caption, button, icon);
         }
 

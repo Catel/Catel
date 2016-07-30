@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5
+#if NET
 
 namespace Catel.MVVM.Providers
 {
@@ -15,10 +15,6 @@ namespace Catel.MVVM.Providers
     using Logging;
     using MVVM;
     using Reflection;
-
-#if SILVERLIGHT
-    using System.Windows.Controls;
-#endif
 
     /// <summary>
     /// MVVM Provider behavior implementation for a window.
@@ -37,10 +33,6 @@ namespace Catel.MVVM.Providers
         private readonly string _targetWindowClosedEventName;
 
         private readonly DynamicEventListener _dynamicEventListener;
-
-#if SILVERLIGHT
-        private bool _isClosed;
-#endif
         #endregion
 
         #region Constructors
@@ -150,20 +142,6 @@ namespace Catel.MVVM.Providers
 
             await base.OnViewModelClosedAsync(sender, e);
 
-#if SILVERLIGHT
-            if (TargetWindow is ChildWindow)
-            {
-                // This code is implemented due to a bug in the ChildWindow of silverlight, see:
-                // http://silverlight.codeplex.com/workitem/7935
-
-                // Only handle this once
-                if (_isClosed)
-                {
-                    return;
-                }
-            }
-#endif
-
             if (_closeInitiatedByViewModelResult != null)
             {
                 bool result;
@@ -205,19 +183,6 @@ namespace Catel.MVVM.Providers
         public async void OnTargetWindowClosed()
         // ReSharper restore UnusedMember.Local
         {
-#if SILVERLIGHT
-            // This code is implemented due to a bug in the ChildWindow of silverlight, see:
-            // http://silverlight.codeplex.com/workitem/7935
-
-            // Only handle this once
-            if (_isClosed)
-            {
-                return;
-            }
-
-            _isClosed = true;
-#endif
-
             if (_closeInitiatedByViewModel == null)
             {
                 _closeInitiatedByViewModel = false;

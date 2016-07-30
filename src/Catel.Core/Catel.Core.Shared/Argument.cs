@@ -69,19 +69,6 @@ namespace Catel
         }
 
         /// <summary>
-        /// Determines whether the specified argument is not <c>null</c> or empty.
-        /// </summary>
-        /// <param name="paramName">Name of the parameter.</param>
-        /// <param name="paramValue">Value of the parameter.</param>
-        /// <exception cref="ArgumentException">If <paramref name="paramValue" /> is <c>null</c> or empty.</exception>
-        [DebuggerNonUserCode, DebuggerStepThrough]
-        [ObsoleteEx(ReplacementTypeOrMember = "IsNotEmpty(string paramName, Guid paramValue)", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public static void IsNotNullOrEmpty(string paramName, Guid paramValue)
-        {
-            IsNotEmpty(paramName, paramValue);
-        }
-
-        /// <summary>
         /// Determines whether the specified argument is not empty.
         /// </summary>
         /// <param name="paramName">Name of the parameter.</param>

@@ -19,10 +19,6 @@ namespace Catel.Windows.Threading
     using System.Windows.Threading;
 #endif
 
-#if SILVERLIGHT
-    using System.Windows;
-#endif
-
     /// <summary>
     /// Dispatcher helper class.
     /// </summary>

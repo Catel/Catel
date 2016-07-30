@@ -8,6 +8,7 @@
 namespace Catel.Services
 {
     using System;
+    using System.Threading.Tasks;
     using Logging;
 
 #if ANDROID
@@ -40,7 +41,7 @@ namespace Catel.Services
         public DispatcherService()
         {
             // Get current dispatcher to make sure we have one
-            var currentDispatcher = CurrentDispatcher;
+            var currentDispatcher = DispatcherHelper.CurrentDispatcher;
             if (currentDispatcher != null)
             {
                 Log.Debug("Successfully Initialized current dispatcher");
@@ -60,22 +61,55 @@ namespace Catel.Services
         /// <para />
         /// Internally, this property uses the <see cref="DispatcherHelper"/>, but can be overriden if required.
         /// </summary>
-        public virtual Dispatcher CurrentDispatcher
+        protected virtual Dispatcher CurrentDispatcher
         {
             get { return DispatcherHelper.CurrentDispatcher; }
         }
 #endif
 
+#if NET
         /// <summary>
-        /// Executes the specified action with the specified arguments synchronously on the thread the Dispatcher is associated with.
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
         /// <param name="action">The action.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "void Invoke(Action action, bool onlyInvokeWhenNoAccess);", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public void Invoke(Action action)
+        /// <returns>The task representing the action.</returns>
+        public Task InvokeAsync(Action action)
         {
-            Invoke(action, true);
+            var dispatcher = CurrentDispatcher;
+
+#if NET40
+            return DispatcherExtensions.InvokeAsync(dispatcher, action);
+#else
+            return dispatcher.InvokeAsync(action).Task;
+#endif
         }
+
+        /// <summary>
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <param name="args">The arguments to pass into the method.</param>
+        /// <returns>The task representing the action.</returns>
+        public Task InvokeAsync(Delegate method, params object[] args)
+        {
+            var dispatcher = CurrentDispatcher;
+
+            return DispatcherExtensions.InvokeAsync(dispatcher, method, args);
+        }
+
+        /// <summary>
+        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
+        /// </summary>
+        /// <typeparam name="T">The type of the result.</typeparam>
+        /// <param name="func">The function.</param>
+        /// <returns>The task representing the action.</returns>
+        public Task<T> InvokeAsync<T>(Func<T> func)
+        {
+            var dispatcher = CurrentDispatcher;
+
+            return DispatcherExtensions.InvokeAsync(dispatcher, func);
+        }
+#endif
 
         /// <summary>
         /// Executes the specified action with the specified arguments synchronously on the thread the Dispatcher is associated with.
@@ -84,7 +118,7 @@ namespace Catel.Services
         /// <param name="onlyInvokeWhenNoAccess">If set to <c>true</c>, the action will be executed directly if possible. Otherwise, 
         /// <c>Dispatcher.BeginInvoke</c> will be used.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
-        public void Invoke(Action action, bool onlyInvokeWhenNoAccess)
+        public void Invoke(Action action, bool onlyInvokeWhenNoAccess = true)
         {
             Argument.IsNotNull("action", action);
 #if XAMARIN_FORMS
@@ -105,7 +139,7 @@ namespace Catel.Services
         /// <param name="action">The action.</param>
         /// <param name="onlyBeginInvokeWhenNoAccess">If set to <c>true</c>, the action will be executed directly if possible. Otherwise, 
         /// <c>Dispatcher.BeginInvoke</c> will be used.</param>
-        public void BeginInvoke(Action action, bool onlyBeginInvokeWhenNoAccess)
+        public void BeginInvoke(Action action, bool onlyBeginInvokeWhenNoAccess = true)
         {
             Argument.IsNotNull("action", action);
 #if XAMARIN_FORMS

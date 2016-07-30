@@ -34,25 +34,11 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="property">The property.</param>
-        /// <returns><c>true</c> if the property is a public property on the specified object; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "IsPublicProperty(object, string, property)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        public static bool IsPublicProperty(object obj, string property)
-        {
-            return IsPublicProperty(obj, property, false);
-        }
-
-        /// <summary>
-        /// Determines whether the specified property is a public property on the specified object.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="property">The property.</param>
         /// <param name="ignoreCase">if set to <c>true</c>, ignore case when searching for the property name.</param>
         /// <returns><c>true</c> if the property is a public property on the specified object; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
-        public static bool IsPublicProperty(object obj, string property, bool ignoreCase)
+        public static bool IsPublicProperty(object obj, string property, bool ignoreCase = false)
         {
             Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
@@ -81,25 +67,11 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="property">The property.</param>
-        /// <returns><c>true</c> if the property exists on the object type; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "IsPropertyAvailable(object, string, property)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        public static bool IsPropertyAvailable(object obj, string property)
-        {
-            return IsPropertyAvailable(obj, property, false);
-        }
-
-        /// <summary>
-        /// Determines whether the specified property is available on the object.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="property">The property.</param>
         /// <param name="ignoreCase">if set to <c>true</c>, ignore case when searching for the property name.</param>
         /// <returns><c>true</c> if the property exists on the object type; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
-        public static bool IsPropertyAvailable(object obj, string property, bool ignoreCase)
+        public static bool IsPropertyAvailable(object obj, string property, bool ignoreCase = false)
         {
             Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
@@ -188,29 +160,13 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="obj">The object.</param>
         /// <param name="property">The property.</param>
-        /// <returns>The property value or <c>null</c> if no property can be found.</returns>
-        /// <exception cref="PropertyNotFoundException">The <paramref name="obj" /> is not found or not publicly available.</exception>
-        /// <exception cref="CannotGetPropertyValueException">The property value cannot be read.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetPropertyValue(object, string, bool)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        public static object GetPropertyValue(object obj, string property)
-        {
-            return GetPropertyValue(obj, property, false);
-        }
-
-        /// <summary>
-        /// Gets the property value of a specific object.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="property">The property.</param>
         /// <param name="ignoreCase">if set to <c>true</c>, ignore case when searching for the property name.</param>
         /// <returns>The property value or <c>null</c> if no property can be found.</returns>
         /// <exception cref="PropertyNotFoundException">The <paramref name="obj" /> is not found or not publicly available.</exception>
         /// <exception cref="CannotGetPropertyValueException">The property value cannot be read.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
-        public static object GetPropertyValue(object obj, string property, bool ignoreCase)
+        public static object GetPropertyValue(object obj, string property, bool ignoreCase = false)
         {
             return GetPropertyValue<object>(obj, property, ignoreCase);
         }
@@ -221,30 +177,13 @@ namespace Catel.Reflection
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="obj">The object.</param>
         /// <param name="property">The property.</param>
-        /// <returns>The property value or <c>null</c> if no property can be found.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="PropertyNotFoundException">The <paramref name="obj" /> is not found or not publicly available.</exception>
-        /// <exception cref="CannotGetPropertyValueException">The property value cannot be read.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetPropertyValue<TValue>(object, string, bool)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        public static TValue GetPropertyValue<TValue>(object obj, string property)
-        {
-            return GetPropertyValue<TValue>(obj, property, false);
-        }
-
-        /// <summary>
-        /// Gets the property value of a specific object.
-        /// </summary>
-        /// <typeparam name="TValue">The type of the value.</typeparam>
-        /// <param name="obj">The object.</param>
-        /// <param name="property">The property.</param>
         /// <param name="ignoreCase">if set to <c>true</c>, ignore case when searching for the property name.</param>
         /// <returns>The property value or <c>null</c> if no property can be found.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
         /// <exception cref="PropertyNotFoundException">The <paramref name="obj" /> is not found or not publicly available.</exception>
         /// <exception cref="CannotGetPropertyValueException">The property value cannot be read.</exception>
-        public static TValue GetPropertyValue<TValue>(object obj, string property, bool ignoreCase)
+        public static TValue GetPropertyValue<TValue>(object obj, string property, bool ignoreCase = false)
         {
             TValue returnValue;
 
@@ -313,27 +252,11 @@ namespace Catel.Reflection
         /// <param name="obj">The object.</param>
         /// <param name="property">The property.</param>
         /// <param name="value">The value.</param>
-        /// <returns><c>true</c> if the method succeeds; otherwise <c>false</c>.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "TrySetPropertyValue<TValue>(object, string, object, bool)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        public static bool TrySetPropertyValue(object obj, string property, object value)
-        {
-            return TrySetPropertyValue(obj, property, value, false);
-        }
-
-        /// <summary>
-        /// Tries to set the property value. If it fails, no exceptions will be thrown, but <c>false</c> will
-        /// be returned.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="property">The property.</param>
-        /// <param name="value">The value.</param>
         /// <param name="ignoreCase">if set to <c>true</c>, ignore case when searching for the property name.</param>
         /// <returns><c>true</c> if the method succeeds; otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
-        public static bool TrySetPropertyValue(object obj, string property, object value, bool ignoreCase)
+        public static bool TrySetPropertyValue(object obj, string property, object value, bool ignoreCase = false)
         {
             return TrySetPropertyValue(obj, property, value, ignoreCase, false);
         }
@@ -344,28 +267,12 @@ namespace Catel.Reflection
         /// <param name="obj">The object.</param>
         /// <param name="property">The property.</param>
         /// <param name="value">The value.</param>
-        /// <exception cref="PropertyNotFoundException">The <paramref name="obj" /> is not found or not publicly available.</exception>
-        /// <exception cref="CannotSetPropertyValueException">The the property value cannot be written.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "SetPropertyValue<TValue>(object, string, object, bool)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        public static void SetPropertyValue(object obj, string property, object value)
-        {
-            SetPropertyValue(obj, property, value, false);
-        }
-
-        /// <summary>
-        /// Sets the property value of a specific object.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="property">The property.</param>
-        /// <param name="value">The value.</param>
         /// <param name="ignoreCase">if set to <c>true</c>, ignore case when searching for the property name.</param>
         /// <exception cref="PropertyNotFoundException">The <paramref name="obj" /> is not found or not publicly available.</exception>
         /// <exception cref="CannotSetPropertyValueException">The the property value cannot be written.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="obj" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="property" /> is <c>null</c> or whitespace.</exception>
-        public static void SetPropertyValue(object obj, string property, object value, bool ignoreCase)
+        public static void SetPropertyValue(object obj, string property, object value, bool ignoreCase = false)
         {
             TrySetPropertyValue(obj, property, value, ignoreCase, true);
         }
@@ -464,7 +371,7 @@ namespace Catel.Reflection
         /// <param name="property">The property.</param>
         /// <param name="ignoreCase">if set to <c>true</c>, ignore case.</param>
         /// <returns>PropertyInfo.</returns>
-        public static PropertyInfo GetPropertyInfo(object obj, string property, bool ignoreCase)
+        public static PropertyInfo GetPropertyInfo(object obj, string property, bool ignoreCase = false)
         {
             string cacheKey = $"{obj.GetType().FullName}_{property}_{ignoreCase}";
             return _availableProperties.GetFromCacheOrFetch(cacheKey, () =>

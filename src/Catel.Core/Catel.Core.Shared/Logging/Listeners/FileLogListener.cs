@@ -42,7 +42,7 @@ namespace Catel.Logging
         private Assembly _assembly;
         private string _filePath;
 
-#region Constructors
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="FileLogListener" /> class.
         /// </summary>
@@ -70,9 +70,9 @@ namespace Catel.Logging
             FilePath = filePath;
             MaxSizeInKiloBytes = maxSizeInKiloBytes;
         }
-#endregion
+        #endregion
 
-#region Properties
+        #region Properties
         /// <summary>
         /// Gets or sets the file path.
         /// </summary>
@@ -88,9 +88,9 @@ namespace Catel.Logging
         /// </summary>
         /// <value>The maximum size information kilo bytes.</value>
         public int MaxSizeInKiloBytes { get; set; }
-#endregion
+        #endregion
 
-#region Methods
+        #region Methods
         /// <summary>
         /// Determines the real file path.
         /// </summary>
@@ -114,12 +114,12 @@ namespace Catel.Logging
 
             if (_assembly != null)
             {
-                dataDirectory = isWebApp ? IO.Path.GetApplicationDataDirectoryForAllUsers(_assembly.Company(), _assembly.Product()) 
+                dataDirectory = isWebApp ? IO.Path.GetApplicationDataDirectoryForAllUsers(_assembly.Company(), _assembly.Product())
                                          : IO.Path.GetApplicationDataDirectory(_assembly.Company(), _assembly.Product());
             }
             else
             {
-                dataDirectory = isWebApp ? IO.Path.GetApplicationDataDirectoryForAllUsers() 
+                dataDirectory = isWebApp ? IO.Path.GetApplicationDataDirectoryForAllUsers()
                                          : IO.Path.GetApplicationDataDirectory();
             }
 
@@ -160,9 +160,9 @@ namespace Catel.Logging
 
             if (filePath.Contains(AppDataLocal))
             {
-                var dataDirectoryLocal = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserLocal, 
-                                                                                                 _assembly.Company(), 
-                                                                                                 _assembly.Product()) 
+                var dataDirectoryLocal = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserLocal,
+                                                                                                 _assembly.Company(),
+                                                                                                 _assembly.Product())
                                                             : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserLocal);
 
 
@@ -171,9 +171,9 @@ namespace Catel.Logging
 
             if (filePath.Contains(AppDataRoaming))
             {
-                var dataDirectoryRoaming = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming, 
-                                                                                                   _assembly.Company(), 
-                                                                                                   _assembly.Product()) 
+                var dataDirectoryRoaming = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming,
+                                                                                                   _assembly.Company(),
+                                                                                                   _assembly.Product())
                                                              : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming);
 
 
@@ -182,9 +182,9 @@ namespace Catel.Logging
 
             if (filePath.Contains(AppDataMachine))
             {
-                var dataDirectoryMachine = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.Machine, 
-                                                                                                   _assembly.Company(), 
-                                                                                                   _assembly.Product()) 
+                var dataDirectoryMachine = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.Machine,
+                                                                                                   _assembly.Company(),
+                                                                                                   _assembly.Product())
                                                              : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.Machine);
 
                 filePath = filePath.Replace(AppDataMachine, dataDirectoryMachine);
@@ -209,7 +209,7 @@ namespace Catel.Logging
         /// Writes the batch of entries.
         /// </summary>
         /// <param name="batchEntries">The batch entries.</param>
-        protected override async Task WriteBatch(System.Collections.Generic.List<LogBatchEntry> batchEntries)
+        protected override async Task WriteBatchAsync(System.Collections.Generic.List<LogBatchEntry> batchEntries)
         {
             try
             {
@@ -233,7 +233,7 @@ namespace Catel.Logging
                     {
                         foreach (var batchEntry in batchEntries)
                         {
-                            var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Time);
+                            var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Data, batchEntry.Time);
 
                             writer.WriteLine(message);
                         }
@@ -250,12 +250,12 @@ namespace Catel.Logging
 
         private void Initialize(bool initFilePath, Assembly assembly = null)
         {
-           _assembly = assembly ?? AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
+            _assembly = assembly ?? AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
 
             if (initFilePath && string.IsNullOrWhiteSpace(_filePath))
             {
                 _filePath = DetermineFilePath(AutoLogFileName);
-            }            
+            }
         }
 
         private void CreateCopyOfCurrentLogFile(string filePath)
@@ -269,7 +269,7 @@ namespace Catel.Logging
                 }
             }
         }
-#endregion
+        #endregion
     }
 }
 

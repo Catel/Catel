@@ -33,7 +33,7 @@ namespace Catel
                 if (ex is OutOfMemoryException || 
                     ex is BadImageFormatException
 
-#if NET || SILVERLIGHT || XAMARIN
+#if NET || XAMARIN
                     || ex is AppDomainUnloadedException || 
                     ex is CannotUnloadAppDomainException || 
                     ex is InvalidProgramException || 
