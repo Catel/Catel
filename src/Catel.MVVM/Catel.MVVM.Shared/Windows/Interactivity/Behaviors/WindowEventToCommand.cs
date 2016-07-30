@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5
+#if NET
 
 namespace Catel.Windows.Interactivity
 {
@@ -193,7 +193,7 @@ namespace Catel.Windows.Interactivity
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         /// <remarks>
-        /// This method is public to allow the WeakEventListener to support this in Silverlight.
+        /// This method is public to allow the WeakEventListener to subscribe.
         /// </remarks>
         public void OnEventOccurred(object sender, EventArgs e)
         {

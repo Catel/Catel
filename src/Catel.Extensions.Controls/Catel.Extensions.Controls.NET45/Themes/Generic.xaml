@@ -4,9 +4,7 @@
 
         <ResourceDictionary Source="/Catel.Extensions.Controls;component/themes/generic/generic.xaml" />
 
-        <ResourceDictionary Source="/Catel.Extensions.Controls;component/themes/LinkLabel.generic.xaml" />
         <ResourceDictionary Source="/Catel.Extensions.Controls;component/themes/TabControl.generic.xaml" />
-        <ResourceDictionary Source="/Catel.Extensions.Controls;component/themes/WatermarkTextBox.generic.xaml" />
 
         <ResourceDictionary Source="/Catel.MVVM;component/themes/generic.xaml" />
 

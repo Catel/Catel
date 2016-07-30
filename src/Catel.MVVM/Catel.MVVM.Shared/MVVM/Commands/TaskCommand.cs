@@ -10,7 +10,7 @@ namespace Catel.MVVM
     using System.Threading;
     using System.Threading.Tasks;
 
-#if NET40 || SILVERLIGHT
+#if NET40
     using Microsoft;
 #endif
 
@@ -259,7 +259,7 @@ namespace Catel.MVVM
             }
             else
             {
-                RaiseExecuted(parameter);
+                await RaiseExecutedAsync(parameter);
             }
 
             RaiseCanExecuteChanged();

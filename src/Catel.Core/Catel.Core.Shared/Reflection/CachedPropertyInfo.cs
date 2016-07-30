@@ -71,7 +71,7 @@ namespace Catel.Reflection
 
             return _decoratedWithAttributeCache.GetFromCacheOrFetch(attributeType, () =>
             {
-                return AttributeHelper.IsDecoratedWithAttribute(PropertyInfo, attributeType);
+                return PropertyInfo.IsDecoratedWithAttribute(attributeType);
             });
         }
 

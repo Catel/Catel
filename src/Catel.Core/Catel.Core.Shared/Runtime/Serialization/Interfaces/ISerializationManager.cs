@@ -118,5 +118,23 @@ namespace Catel.Runtime.Serialization
         /// <returns>An array containing the modifiers. Never <c>null</c>, but can be an empty array.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         ISerializerModifier[] GetSerializerModifiers(Type type);
+
+        /// <summary>
+        /// Adds the serializer modifier for a specific type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="serializerModifierType">Type of the serializer modifier.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="serializerModifierType"/> is <c>null</c>.</exception>
+        void AddSerializerModifier(Type type, Type serializerModifierType);
+
+        /// <summary>
+        /// Removes the serializer modifier for a specific type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="serializerModifierType">Type of the serializer modifier.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="serializerModifierType"/> is <c>null</c>.</exception>
+        void RemoveSerializerModifier(Type type, Type serializerModifierType);
     }
 }

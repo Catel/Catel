@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5
+#if NET
 
 namespace Catel.Windows.Media.Effects
 {
@@ -56,11 +56,7 @@ namespace Catel.Windows.Media.Effects
         /// Property definition for <see cref="DesaturationFactor"/>.
         /// </summary>
         public static readonly DependencyProperty DesaturationFactorProperty = DependencyProperty.Register("DesaturationFactor", typeof(double),
-#if SILVERLIGHT
-            typeof(GrayscaleEffect), new PropertyMetadata(0.0, OnDesaturationFactorChanged));
-#else
             typeof(GrayscaleEffect), new PropertyMetadata(0.0, OnDesaturationFactorChanged, CoerceDesaturationFactor));
-#endif
         #endregion
 
         #region Methods
@@ -83,11 +79,7 @@ namespace Catel.Windows.Media.Effects
         /// </remarks>
         private static void OnDesaturationFactorChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-#if SILVERLIGHT
-            PixelShaderConstantCallback((int)CoerceDesaturationFactor((DependencyObject)sender, e.NewValue));
-#else
             PixelShaderConstantCallback(0).Invoke((DependencyObject)sender, e);
-#endif
         }
 
         /// <summary>

@@ -10,7 +10,7 @@ namespace Catel.Threading
     using System;
     using System.Threading.Tasks;
 
-#if NET40 || SL5
+#if NET40
     using Microsoft.Runtime.CompilerServices;
 #else
     using System.Runtime.CompilerServices;

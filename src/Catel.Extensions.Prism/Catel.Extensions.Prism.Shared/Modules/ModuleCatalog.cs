@@ -16,12 +16,14 @@ namespace Catel.Modules
     using System.Net;
     using System.Windows.Markup;
     using Logging;
+
 #if PRISM6
     using Prism.Modularity;
 #else
     using Microsoft.Practices.Prism;
     using Microsoft.Practices.Prism.Modularity;
 #endif
+
     using Threading;
 
     /// <summary>
@@ -253,17 +255,7 @@ namespace Catel.Modules
             // Note: create custom module catalog that users can use prism example xaml code as well
             var moduleCatalog = new ModuleCatalog();
 
-#if SILVERLIGHT
-            string xaml;
-            using (var reader = new StreamReader(xamlStream))
-            {
-                xaml = reader.ReadToEnd();
-            }
-
-            var temporaryModuleCatalog = XamlReader.Load(xaml) as IModuleCatalog;
-#else
             var temporaryModuleCatalog = XamlReader.Load(xamlStream) as IModuleCatalog;
-#endif
             if (temporaryModuleCatalog != null)
             {
                 foreach (var module in temporaryModuleCatalog.Modules)

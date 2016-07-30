@@ -106,7 +106,7 @@ namespace Catel.Data
 #endif
         private static readonly Dictionary<Type, HashSet<string>> _propertyValuesIgnoredOrFailedForValidation = new Dictionary<Type, HashSet<string>>();
 
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
+#if !NETFX_CORE && !PCL
 
 #if NET
         [field: NonSerialized]
@@ -155,7 +155,7 @@ namespace Catel.Data
         /// <value>
         /// <c>true</c> if the object is validating; otherwise, <c>false</c>.
         /// </value>
-#if NET || SILVERLIGHT
+#if NET
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -164,7 +164,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets or sets a value indicating whether this object is validated or not.
         /// </summary>
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
+#if !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -176,7 +176,7 @@ namespace Catel.Data
         /// By default, this value retrieves the default validator from them <see cref="IValidatorProvider"/> if it is
         /// registered in the <see cref="Catel.IoC.ServiceLocator"/>.
         /// </summary>
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
+#if !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -190,7 +190,7 @@ namespace Catel.Data
         /// Gets the validation context which contains all information about the validation.
         /// </summary>
         /// <value>The validation context.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
+#if !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -203,7 +203,7 @@ namespace Catel.Data
         /// Gets the number of field warnings.
         /// </summary>
         /// <value>The field warning count.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
+#if !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -221,7 +221,7 @@ namespace Catel.Data
         /// Gets the number of business rule warnings.
         /// </summary>
         /// <value>The business rule warning count.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
+#if !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -239,7 +239,7 @@ namespace Catel.Data
         /// Gets the number of field errors.
         /// </summary>
         /// <value>The field error count.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
+#if !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -257,7 +257,7 @@ namespace Catel.Data
         /// Gets the number of business rule errors.
         /// </summary>
         /// <value>The business rule error count.</value>
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
+#if !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -279,7 +279,7 @@ namespace Catel.Data
         /// Unlike the <see cref="HideValidationResults"/> property, this property will prevent validation. If you want validation
         /// and the ability to query results, but simply hide the validation results, use the <see cref="HideValidationResults"/> property.
         /// </remarks>
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
+#if !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         protected bool SuspendValidation
@@ -337,7 +337,7 @@ namespace Catel.Data
         /// Unlike the <see cref="SuspendValidation"/> property, this property will not prevent validation. It will only
         /// prevent the error interfaces to not expose them.
         /// </remarks>
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
+#if !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         protected bool HideValidationResults { get; set; }
@@ -486,7 +486,7 @@ namespace Catel.Data
                 return true;
             }
 
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
+#if !NETFX_CORE && !PCL
             var type = GetType();
 
             try
@@ -516,7 +516,7 @@ namespace Catel.Data
                         // Checking via reflection is faster than catching the exception
                         if (!Reflection.PropertyHelper.IsPublicProperty(this, propertyName))
                         {
-                            Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in silverlight", propertyName);
+                            Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in the current platform", propertyName);
 
                             _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
                             return false;
@@ -564,43 +564,12 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Sets the field validation result.
-        /// </summary>
-        /// <param name="validationResult">The field validation result.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="validationResult"/> is <c>null</c>.</exception>
-        [ObsoleteEx(Message = "Use ValidateFields(valiationResults) instead to populate the validation results", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected void SetFieldValidationResult(IFieldValidationResult validationResult)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
         /// Validates the business rules of this object. Override this method to enable
         /// validation of business rules.
         /// </summary>
         /// <param name="validationResults">The validation results, add additional results to this list.</param>
         protected virtual void ValidateBusinessRules(List<IBusinessRuleValidationResult> validationResults)
         {
-        }
-
-        /// <summary>
-        /// Sets the business rule validation result.
-        /// </summary>
-        /// <param name="validationResult">The business rule validation result.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="validationResult"/> is <c>null</c>.</exception>
-        [ObsoleteEx(Message = "Use ValidateBusinessRules(valiationResults) instead to populate the validation results", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected void SetBusinessRuleValidationResult(IBusinessRuleValidationResult validationResult)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Called when the object is validating.
-        /// </summary>
-        [ObsoleteEx(Message = "Use OnValidating(IValidationContext) instead", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected virtual void OnValidating()
-        {
-            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -619,28 +588,10 @@ namespace Catel.Data
         /// <summary>
         /// Called when the object is validating the fields.
         /// </summary>
-        [ObsoleteEx(Message = "Use OnValidatingFields(IValidationContext) instead", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected virtual void OnValidatingFields()
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Called when the object is validating the fields.
-        /// </summary>
         /// <param name="validationContext">The validation context.</param>
         protected virtual void OnValidatingFields(IValidationContext validationContext)
         {
             ValidatingFields.SafeInvoke(this);
-        }
-
-        /// <summary>
-        /// Called when the object has validated the fields.
-        /// </summary>
-        [ObsoleteEx(Message = "Use OnValidatedFields(IValidationContext) instead", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected virtual void OnValidatedFields()
-        {
-            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -655,15 +606,6 @@ namespace Catel.Data
         /// <summary>
         /// Called when the object is validating the business rules.
         /// </summary>
-        [ObsoleteEx(Message = "Use OnValidatingBusinessRules(IValidationContext) instead", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected virtual void OnValidatingBusinessRules()
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Called when the object is validating the business rules.
-        /// </summary>
         /// <param name="validationContext">The validation context.</param>
         protected virtual void OnValidatingBusinessRules(IValidationContext validationContext)
         {
@@ -673,28 +615,10 @@ namespace Catel.Data
         /// <summary>
         /// Called when the object has validated the business rules.
         /// </summary>
-        [ObsoleteEx(Message = "Use OnValidatedBusinessRules(IValidationContext) instead", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected virtual void OnValidatedBusinessRules()
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Called when the object has validated the business rules.
-        /// </summary>
         /// <param name="validationContext">The validation context.</param>
         protected virtual void OnValidatedBusinessRules(IValidationContext validationContext)
         {
             ValidatedBusinessRules.SafeInvoke(this);
-        }
-
-        /// <summary>
-        /// Called when the object is validated.
-        /// </summary>
-        [ObsoleteEx(Message = "Use OnValidatedBusinessRules(IValidationContext) instead", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        protected virtual void OnValidated()
-        {
-            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -807,7 +731,7 @@ namespace Catel.Data
                     ValidatePropertyUsingAnnotations(propertyData.Key, propertyValue, propertyData.Value);
                 }
 
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
+#if !NETFX_CORE && !PCL
                 // Validate non-catel properties as well for attribute validation
                 foreach (var propertyInfo in catelTypeInfo.GetNonCatelProperties())
                 {
@@ -868,7 +792,7 @@ namespace Catel.Data
                         validator.ValidateFields(this, fieldValidationResults);
                     }
 
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL && !NET35
+#if !NETFX_CORE && !PCL
                     // Support annotation validation
                     fieldValidationResults.AddRange(from fieldAnnotationValidation in _dataAnnotationValidationResults
                                                     where !string.IsNullOrEmpty(fieldAnnotationValidation.Value)
@@ -1217,7 +1141,7 @@ namespace Catel.Data
         /// <value>
         /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
         /// </value>
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
+#if !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -1294,7 +1218,7 @@ namespace Catel.Data
         /// <value>
         /// <c>true</c> if this instance has warnings; otherwise, <c>false</c>.
         /// </value>
-#if !WINDOWS_PHONE && !NETFX_CORE && !PCL
+#if !NETFX_CORE && !PCL
         [Browsable(false)]
 #endif
         [XmlIgnore]

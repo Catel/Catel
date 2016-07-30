@@ -1,8 +1,7 @@
 Catel readme
 ============
 
-Catel is an application development platform with the focus on MVVM (WPF, Silverlight, Windows Phone, WinRT, Xamarin.Android
-and Xamarin.iOS) and MVC (ASP.NET MVC). 
+Catel is an application development platform with the focus on MVVM (WPF, UWP, Xamarin.Android and Xamarin.iOS). 
 The goal of Catel is to provide a complete set of modular functionality for Line of Business applications written in any .NET 
 technology, from client to server.
 

@@ -254,7 +254,7 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Called when the <see cref="ViewModelBase.CommandExecuted"/> event is raised.
+        /// Called when the <see cref="ViewModelBase.CommandExecutedAsync"/> event is raised.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="Catel.MVVM.CommandExecutedEventArgs"/> instance containing the event data.</param>
@@ -286,7 +286,7 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Called when the <see cref="ViewModelBase.Saving"/> event is raised.
+        /// Called when the <see cref="ViewModelBase.SavingAsync"/> event is raised.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -298,7 +298,7 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Called when the <see cref="ViewModelBase.Saved"/> event is raised.
+        /// Called when the <see cref="ViewModelBase.SavedAsync"/> event is raised.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -310,7 +310,7 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Called when the <see cref="ViewModelBase.Canceling"/> event is raised.
+        /// Called when the <see cref="ViewModelBase.CancelingAsync"/> event is raised.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -322,7 +322,7 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Called when the <see cref="ViewModelBase.Canceled"/> event is raised.
+        /// Called when the <see cref="ViewModelBase.CanceledAsync"/> event is raised.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -334,7 +334,7 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Called when the <see cref="ViewModelBase.Canceled"/> event is raised.
+        /// Called when the <see cref="ViewModelBase.CanceledAsync"/> event is raised.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -346,7 +346,7 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Called when the <see cref="ViewModelBase.Closed"/> event is raised.
+        /// Called when the <see cref="ViewModelBase.ClosedAsync"/> event is raised.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>

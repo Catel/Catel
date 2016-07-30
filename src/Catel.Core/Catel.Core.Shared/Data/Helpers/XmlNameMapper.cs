@@ -170,14 +170,14 @@ namespace Catel.Data
                     var propertyInfo = cachedPropertyInfo.PropertyInfo;
 
                     // 1st, check if XmlIgnore is used
-                    if (AttributeHelper.IsDecoratedWithAttribute<XmlIgnoreAttribute>(propertyInfo))
+                    if (propertyInfo.IsDecoratedWithAttribute<XmlIgnoreAttribute>())
                     {
                         continue;
                     }
 
                     // 2nd, check if XmlAttribute is used
                     XmlAttributeAttribute xmlAttributeAttribute = null;
-                    AttributeHelper.TryGetAttribute(propertyInfo, out xmlAttributeAttribute);
+                    propertyInfo.TryGetAttribute(out xmlAttributeAttribute);
                     if (InitializeXmlAttributeAttribute(type, xmlAttributeAttribute, propertyData.Key))
                     {
                         continue;
@@ -185,7 +185,7 @@ namespace Catel.Data
 
                     // 3rd, check if XmlElement is used
                     XmlElementAttribute xmlElementAttribute = null;
-                    AttributeHelper.TryGetAttribute(propertyInfo, out xmlElementAttribute);
+                    propertyInfo.TryGetAttribute(out xmlElementAttribute);
                     if (InitializeXmlElementAttribute(type, xmlElementAttribute, propertyData.Key))
                     {
                         continue;

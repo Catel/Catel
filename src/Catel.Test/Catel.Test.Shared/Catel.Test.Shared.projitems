@@ -250,6 +250,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\NonCatelTestModels.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\TestModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\TestModelWithKeyValuePair.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\TestModelWithParsableMembers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\KnownTypesSerializationFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSerializationFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scoping\ScopeManagerFacts.cs" />

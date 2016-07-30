@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !SL5
-
 namespace Catel.Collections
 {
     using System.Collections;
@@ -48,5 +46,3 @@ namespace Catel.Collections
         public IList<int> Indices { get; private set; }
     }
 }
-
-#endif

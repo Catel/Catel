@@ -30,7 +30,7 @@ namespace Catel.ExceptionHandling
         {
             Argument.IsNotNull("exceptionService", exceptionService);
 
-            return TaskHelper.Run(() => exceptionService.HandleException(exception), cancellationToken);
+            return TaskHelper.Run(() => exceptionService.HandleException(exception), cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Catel.ExceptionHandling
             Argument.IsNotNull("exceptionService", exceptionService);
             Argument.IsNotNull("action", action);
 
-            return TaskHelper.Run(() => exceptionService.ProcessWithRetry(action), cancellationToken);
+            return TaskHelper.Run(() => exceptionService.ProcessWithRetry(action), cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Catel.ExceptionHandling
             Argument.IsNotNull("exceptionService", exceptionService);
             Argument.IsNotNull("action", action);
 
-            return TaskHelper.Run(() => exceptionService.ProcessWithRetry(action), cancellationToken);
+            return TaskHelper.Run(() => exceptionService.ProcessWithRetry(action), cancellationToken: cancellationToken);
         }
 
         /// <summary>

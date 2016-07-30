@@ -57,15 +57,6 @@
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\NET40\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Prism, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\NET40\Microsoft.Practices.Prism.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Prism.Interactivity, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\lib\Prism.4.1.0.0\lib\NET40\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\..\..\lib\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\..\..\lib\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -185,14 +176,6 @@
     <ProjectReference Include="..\..\Catel.Extensions.Memento\Catel.Extensions.Memento.NET40\Catel.Extensions.Memento.NET40.csproj">
       <Project>{918b3e4e-eda7-44d0-99ca-d1f40cd59e9d}</Project>
       <Name>Catel.Extensions.Memento.NET40</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism4\Catel.Extensions.Prism4.NET40\Catel.Extensions.Prism4.NET40.csproj">
-      <Project>{C9EAD437-56BA-45BB-A982-845AD72FE1C8}</Project>
-      <Name>Catel.Extensions.Prism4.NET40</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Catel.Extensions.Wcf.Server\Catel.Extensions.Wcf.Server.NET40\Catel.Extensions.Wcf.Server.NET40.csproj">
-      <Project>{bd187286-74f3-4c79-9f4c-4b0102947ea8}</Project>
-      <Name>Catel.Extensions.Wcf.Server.NET40</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.NET40\Catel.MVVM.NET40.csproj">
       <Project>{D9112D3C-62D2-401E-8EA1-86AC28A71C22}</Project>

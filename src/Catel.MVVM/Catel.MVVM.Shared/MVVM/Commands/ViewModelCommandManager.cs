@@ -112,9 +112,9 @@ namespace Catel.MVVM
         #region Methods
         /// <summary>
         /// Registers the commands in a specific <see cref="IViewModel" /> instance. By subscribing
-        /// to all commands, the <see cref="IViewModel.CommandExecuted" /> can be intercepted.
+        /// to all commands, the <see cref="IViewModel.CommandExecutedAsync" /> can be intercepted.
         /// <para />
-        /// This method will automatically subscribe to the <see cref="IViewModel.Closed"/> event and unsubscribe all commands
+        /// This method will automatically subscribe to the <see cref="IViewModel.ClosedAsync"/> event and unsubscribe all commands
         /// at that time.
         /// </summary>
         /// <param name="viewModel">The view model.</param>
@@ -144,9 +144,9 @@ namespace Catel.MVVM
 
         /// <summary>
         /// Registers the commands in a specific <see cref="IViewModel" /> instance. By subscribing
-        /// to all commands, the <see cref="IViewModel.CommandExecuted" /> can be intercepted.
+        /// to all commands, the <see cref="IViewModel.CommandExecutedAsync" /> can be intercepted.
         /// <para />
-        /// This method will automatically subscribe to the <see cref="IViewModel.Closed"/> event and unsubscribe all commands
+        /// This method will automatically subscribe to the <see cref="IViewModel.ClosedAsync"/> event and unsubscribe all commands
         /// at that time.
         /// </summary>
         /// <param name="force">If <c>true</c>, the already registered commands are cleared and all are registered again.</param>
@@ -204,22 +204,6 @@ namespace Catel.MVVM
                 }
 
                 Log.Debug("Registered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, _viewModel.UniqueIdentifier);
-            }
-        }
-
-        /// <summary>
-        /// Adds a new handler when a command is executed on the specified view model.
-        /// </summary>
-        /// <param name="handler">The handler to execute when a command is executed.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "AddHandler with async func", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public void AddHandler(CommandHandler handler)
-        {
-            Argument.IsNotNull("handler", handler);
-
-            lock (_lock)
-            {
-                _commandHandlers.Add(handler);
             }
         }
 

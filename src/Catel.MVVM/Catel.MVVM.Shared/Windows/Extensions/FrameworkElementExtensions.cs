@@ -15,6 +15,7 @@ namespace Catel.Windows
     using System.Windows;
     using Logging;
     using MVVM.Views;
+
 #if NETFX_CORE
     using global::Windows.UI;
     using global::Windows.UI.Xaml;
@@ -36,12 +37,6 @@ namespace Catel.Windows
     using System.Runtime.InteropServices;
     using System.Windows.Interop;
     using System.Windows.Documents;
-#endif
-
-#if SILVERLIGHT
-    using Reflection;
-    using System.Threading;
-    using System.Windows.Markup;
 #endif
 
     /// <summary>
@@ -242,80 +237,6 @@ namespace Catel.Windows
             }
 
             return GetParentBindingGroup(LogicalTreeHelper.GetParent(frameworkElement) as FrameworkElement);
-        }
-#endif
-
-#if SILVERLIGHT
-        /// <summary>
-        /// Fixes the UI language bug in Silverlight.
-        /// </summary>
-        /// <param name="frameworkElement">The framework element.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="frameworkElement"/> is <c>null</c>.</exception>
-        public static void FixUILanguageBug(this FrameworkElement frameworkElement)
-        {
-            Argument.IsNotNull("frameworkElement", frameworkElement);
-
-            frameworkElement.Language = XmlLanguage.GetLanguage(Thread.CurrentThread.CurrentCulture.Name);
-        }
-
-        /// <summary>
-        /// Tries to find the resource. WPF (of course) already has an implementation for this, Silverlight doesn't.
-        /// </summary>
-        /// <param name="frameworkElement">The framework element.</param>
-        /// <param name="resourceKey">The resource key.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        /// The resource or <c>null</c> if the resource is not found.
-        /// </returns>
-        public static bool TryFindResource<T>(this FrameworkElement frameworkElement, object resourceKey, out T value)
-        {
-            while (frameworkElement != null)
-            {
-                if (frameworkElement.Resources.TryFindResource(resourceKey, out value))
-                {
-                    return true;
-                }
-
-                frameworkElement = frameworkElement.GetParent();
-            }
-
-            return Application.Current.Resources.TryFindResource(resourceKey, out value);
-        }
-
-        /// <summary>
-        /// Tries to find the resource in the resource dictionary. WPF (of course) already has an implementation for this, Silverlight doesn't.
-        /// </summary>
-        /// <param name="dictionary">The resource dictionary.</param>
-        /// <param name="resourceKey">The resource key.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>
-        /// The resource or <c>null</c> if the resource is not found.
-        /// </returns>
-        public static bool TryFindResource<T>(this ResourceDictionary dictionary, object resourceKey, out T value)
-        {
-            if (dictionary != null)
-            {
-                if (dictionary.Contains(resourceKey))
-                {
-                    var val = dictionary[resourceKey];
-                    if ((val != null) && (val.GetType().IsAssignableFrom(typeof(T))))
-                    {
-                        value = (T)val;
-                        return true;
-                    }
-                }
-
-                foreach (var mergedDictionary in dictionary.MergedDictionaries)
-                {
-                    if (mergedDictionary.TryFindResource(resourceKey, out value))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            value = default(T);
-            return false;
         }
 #endif
         #endregion

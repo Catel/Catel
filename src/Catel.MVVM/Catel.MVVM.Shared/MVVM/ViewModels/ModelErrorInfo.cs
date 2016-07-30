@@ -11,7 +11,7 @@ namespace Catel.MVVM
     using System.Collections.Generic;
     using System.ComponentModel;
 
-#if !WINDOWS_PHONE && !NET35 && !XAMARIN_FORMS
+#if !XAMARIN_FORMS
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
@@ -46,12 +46,10 @@ namespace Catel.MVVM
         /// </summary>
         private readonly List<string> _businessRuleWarnings = new List<string>();
 
-#if !WINDOWS_PHONE && !NET35
         /// <summary>
         /// List of field that were initialized with an error.
         /// </summary>
         private readonly HashSet<string> _initialErrorFields = new HashSet<string>();
-#endif
         #endregion
 
         #region Constructors
@@ -368,7 +366,7 @@ namespace Catel.MVVM
                 return objAsString;
             }
 
-#if !WINDOWS_PHONE && !NET35 && !XAMARIN_FORMS
+#if !XAMARIN_FORMS
             var objAsValidationResult = obj as ValidationResult;
             if (objAsValidationResult != null)
             {
@@ -379,7 +377,7 @@ namespace Catel.MVVM
             return null;
         }
 
-#if !WINDOWS_PHONE && !NET35 && !XAMARIN_FORMS
+#if !XAMARIN_FORMS
         /// <summary>
         /// Initializes the default errors.
         /// </summary>

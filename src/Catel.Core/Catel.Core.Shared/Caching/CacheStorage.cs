@@ -83,18 +83,6 @@ namespace Catel.Caching
         /// </summary>
         /// <param name="defaultExpirationPolicyInitCode">The default expiration policy initialization code.</param>
         /// <param name="storeNullValues">Allow store null values on the cache.</param>
-        [ObsoleteEx(Message = "Use other ctor, this is kept to not introduce breaking changes",
-            ReplacementTypeOrMember = "ctor(Func<ExpirationPolicy>, bool, IEqualityComparer<TKey>)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        public CacheStorage(Func<ExpirationPolicy> defaultExpirationPolicyInitCode, bool storeNullValues)
-            : this(defaultExpirationPolicyInitCode, storeNullValues, null)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CacheStorage{TKey,TValue}" /> class.
-        /// </summary>
-        /// <param name="defaultExpirationPolicyInitCode">The default expiration policy initialization code.</param>
-        /// <param name="storeNullValues">Allow store null values on the cache.</param>
         /// <param name="equalityComparer">The equality comparer.</param>
         public CacheStorage(Func<ExpirationPolicy> defaultExpirationPolicyInitCode = null, bool storeNullValues = false,
             IEqualityComparer<TKey> equalityComparer = null)
@@ -374,42 +362,6 @@ namespace Catel.Caching
         public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<Task<TValue>> code, bool @override = false, TimeSpan expiration = default(TimeSpan))
         {
             return GetFromCacheOrFetchAsync(key, code, ExpirationPolicy.Duration(expiration), @override);
-        }
-
-        /// <summary>
-        /// Adds a value to the cache associated with to a key asynchronously.
-        /// <para />
-        /// Note that this is a wrapper around <see cref="GetFromCacheOrFetch(TKey,System.Func{TValue},ExpirationPolicy,bool)"/>.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="code">The deferred initialization code of the value.</param>
-        /// <param name="expirationPolicy">The expiration policy.</param>
-        /// <param name="override">Indicates if the key exists the value will be overridden.</param>
-        /// <returns>The instance initialized by the <paramref name="code" />.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        [ObsoleteEx(Message = "Member will be removed because it's not truly asynchronous", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<TValue> code, ExpirationPolicy expirationPolicy, bool @override = false)
-        {
-            return TaskHelper.Run(() => GetFromCacheOrFetch(key, code, expirationPolicy, @override));
-        }
-
-        /// <summary>
-        /// Adds a value to the cache associated with to a key asynchronously.
-        /// <para />
-        /// Note that this is a wrapper around <see cref="GetFromCacheOrFetch(TKey,System.Func{TValue},bool,TimeSpan)"/>.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="code">The deferred initialization code of the value.</param>
-        /// <param name="override">Indicates if the key exists the value will be overridden.</param>
-        /// <param name="expiration">The timespan in which the cache item should expire when added.</param>
-        /// <returns>The instance initialized by the <paramref name="code" />.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="key" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="code" /> is <c>null</c>.</exception>
-        [ObsoleteEx(Message = "Member will be removed because it's not truly asynchronous", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public Task<TValue> GetFromCacheOrFetchAsync(TKey key, Func<TValue> code, bool @override = false, TimeSpan expiration = default(TimeSpan))
-        {
-            return TaskHelper.Run(() => GetFromCacheOrFetch(key, code, @override, expiration));
         }
 
         /// <summary>

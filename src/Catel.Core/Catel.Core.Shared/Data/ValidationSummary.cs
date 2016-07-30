@@ -196,16 +196,6 @@ namespace Catel.Data
         /// Gets a collection of business rule warnings.
         /// </summary>
         /// <value>The business warnings.</value>
-        [ObsoleteEx(ReplacementTypeOrMember = "BusinessRuleWarnings", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        public ReadOnlyCollection<IBusinessRuleValidationResult> BusinessWarnings
-        {
-            get { return BusinessRuleWarnings; }
-        }
-
-        /// <summary>
-        /// Gets a collection of business rule warnings.
-        /// </summary>
-        /// <value>The business warnings.</value>
         public ReadOnlyCollection<IBusinessRuleValidationResult> BusinessRuleWarnings
         {
             get
@@ -261,7 +251,7 @@ namespace Catel.Data
             stringBuilder.AppendLine("===============================");
 
             var warnings = new List<IValidationResult>();
-            warnings.AddRange(BusinessWarnings);
+            warnings.AddRange(BusinessRuleWarnings);
             warnings.AddRange(FieldWarnings);
 
             if (warnings.Count == 0)

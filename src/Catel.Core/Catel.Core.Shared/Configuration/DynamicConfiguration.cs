@@ -25,7 +25,7 @@ namespace Catel.Configuration
         /// <param name="name">The name.</param>
         public void RegisterConfigurationKey(string name)
         {
-            if (IsConfigurationKeyAvailable(name))
+            if (IsConfigurationValueSet(name))
             {
                 return;
             }
@@ -33,17 +33,6 @@ namespace Catel.Configuration
             var propertyData = RegisterProperty(name, typeof(object));
 
             InitializePropertyAfterConstruction(propertyData);
-        }
-
-        /// <summary>
-        /// Determines whether the specified configuration key is available.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns><c>true</c> if the specified configuration key is available; otherwise, <c>false</c>.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "IsConfigurationValueSet", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public bool IsConfigurationKeyAvailable(string name)
-        {
-            return IsPropertyRegistered(GetType(), name);
         }
 
         /// <summary>

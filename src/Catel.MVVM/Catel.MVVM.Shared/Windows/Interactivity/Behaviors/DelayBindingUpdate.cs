@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !WIN80 && !XAMARIN
+#if !XAMARIN
 
 namespace Catel.Windows.Interactivity
 {
@@ -111,8 +111,7 @@ namespace Catel.Windows.Interactivity
         public string DependencyPropertyName { get; set; }
 
         /// <summary>
-        /// Gets the name of the used dependency property. This property is introduced because a <see cref="DependencyProperty"/> in Silverlight
-        /// doesn't have a name.
+        /// Gets the name of the used dependency property.
         /// </summary>
         /// <value>The name of the used property or <c>null</c> if no property is used.</value>
         private string UsedDependencyPropertyName

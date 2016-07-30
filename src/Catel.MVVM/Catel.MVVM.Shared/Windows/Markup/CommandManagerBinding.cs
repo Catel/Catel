@@ -86,8 +86,9 @@ namespace Catel.Windows.Markup
         /// <summary>
         /// Provides the dynamic value.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <returns>System.Object.</returns>
-        protected override object ProvideDynamicValue()
+        protected override object ProvideDynamicValue(IServiceProvider serviceProvider)
         {
             if (_commandManager == null)
             {

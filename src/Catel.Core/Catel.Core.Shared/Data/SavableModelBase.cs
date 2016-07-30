@@ -80,7 +80,7 @@ namespace Catel.Data
         /// Gets the bytes of the current binary serialized data object.
         /// </summary>
         /// <value>The bytes.</value>
-#if NET || SILVERLIGHT
+#if NET
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -93,7 +93,7 @@ namespace Catel.Data
         /// Gets the <see cref="SerializationMode"/> of this object.
         /// </summary>
         /// <value>The serialization mode.</value>
-#if NET || SILVERLIGHT
+#if NET
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -246,21 +246,6 @@ namespace Catel.Data
         }
 #elif PCL
         // Not supported in Portable Class Library
-#elif SILVERLIGHT
-        /// <summary>
-        /// Loads the object from a file using a specific formatting.
-        /// </summary>
-        /// <param name="fileStream">File stream of the file that contains the serialized data of this object.</param>
-        /// <param name="mode"><see cref="SerializationMode"/> to use.</param>
-        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
-        /// <remarks>
-        /// When enableRedirects is enabled, loading will take more time. Only set
-        /// the parameter to <c>true</c> when the deserialization without redirects fails.
-        /// </remarks>
-        public static T Load(IsolatedStorageFileStream fileStream, SerializationMode mode)
-        {
-            return Load<T>(fileStream, mode);
-        }
 #endif
 
         /// <summary>

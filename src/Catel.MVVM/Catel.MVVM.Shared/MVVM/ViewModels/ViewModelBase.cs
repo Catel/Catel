@@ -20,6 +20,7 @@ namespace Catel.MVVM
     using Logging;
     using Reflection;
     using Services;
+    using Threading;
 
     #region Enums
     /// <summary>
@@ -74,9 +75,8 @@ namespace Catel.MVVM
     /// View model base for MVVM implementations. This class is based on the <see cref="ModelBase" />, and supports all
     /// common interfaces used by WPF.
     /// </summary>
-    /// <remarks>This view model base does not add any services. The technique specific implementation should take care of that
-    /// (such as WPF, Silverlight, etc).</remarks>
-    public abstract partial class ViewModelBase : ModelBase, IViewModel, INotifyableViewModel, IRelationalViewModel, IUniqueIdentifyable
+    /// <remarks>This view model base does not add any services.</remarks>
+    public abstract partial class ViewModelBase : ModelBase, INotifyableViewModel, IRelationalViewModel, IUniqueIdentifyable
     {
         #region Fields
         /// <summary>
@@ -114,7 +114,7 @@ namespace Catel.MVVM
         private readonly bool _ignoreMultipleModelsWarning;
 
         /// <summary>
-        /// Value indicating whether the view model is already initialized via a call to <see cref="InitializeViewModel" />.
+        /// Value indicating whether the view model is already initialized via a call to <see cref="InitializeViewModelAsync" />.
         /// </summary>
 #if NET
         [field: NonSerialized]
@@ -282,17 +282,13 @@ namespace Catel.MVVM
             _dispatcherService = DependencyResolver.Resolve<IDispatcherService>();
 #endif
 
-            // In silverlight, automatically invalidate commands when property changes
-#if !WINDOWS_PHONE && !NET35
             ValidateModelsOnInitialization = true;
-#endif
 
             ViewModelCommandManager = MVVM.ViewModelCommandManager.Create(this);
             ViewModelCommandManager.AddHandler(async (viewModel, propertyName, command, commandParameter) =>
             {
                 var eventArgs = new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName);
 
-                CommandExecuted.SafeInvoke(this, eventArgs);
                 await CommandExecutedAsync.SafeInvokeAsync(this, eventArgs);
             });
 
@@ -329,19 +325,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Occurs when the view model has been initialized.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "InitializedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<EventArgs> Initialized;
-
-        /// <summary>
-        /// Occurs when the view model has been initialized.
-        /// </summary>
         public event AsyncEventHandler<EventArgs> InitializedAsync;
-
-        /// <summary>
-        /// Occurs when a command on the view model has been executed.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "CommandExecutedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<CommandExecutedEventArgs> CommandExecuted;
 
         /// <summary>
         /// Occurs when a command on the view model has been executed.
@@ -351,19 +335,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Occurs when the view model is about to be saved.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "SavingAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<SavingEventArgs> Saving;
-
-        /// <summary>
-        /// Occurs when the view model is about to be saved.
-        /// </summary>
         public event AsyncEventHandler<SavingEventArgs> SavingAsync;
-
-        /// <summary>
-        /// Occurs when the view model is saved successfully.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "SavedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<EventArgs> Saved;
 
         /// <summary>
         /// Occurs when the view model is saved successfully.
@@ -373,19 +345,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Occurs when the view model is about to be canceled.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "CancelingAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<CancelingEventArgs> Canceling;
-
-        /// <summary>
-        /// Occurs when the view model is about to be canceled.
-        /// </summary>
         public event AsyncEventHandler<CancelingEventArgs> CancelingAsync;
-
-        /// <summary>
-        /// Occurrs when the view model is canceled.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "CanceledAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<EventArgs> Canceled;
 
         /// <summary>
         /// Occurrs when the view model is canceled.
@@ -395,19 +355,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Occurs when the view model is being closed.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "ClosingAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<EventArgs> Closing;
-
-        /// <summary>
-        /// Occurs when the view model is being closed.
-        /// </summary>
         public event AsyncEventHandler<EventArgs> ClosingAsync;
-
-        /// <summary>
-        /// Occurs when the view model has just been closed.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "ClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<ViewModelClosedEventArgs> Closed;
 
         /// <summary>
         /// Occurs when the view model has just been closed.
@@ -485,7 +433,7 @@ namespace Catel.MVVM
 
         /// <summary>
         /// Gets a value indicating whether this instance is closed. If a view model is closed, calling
-        /// <see cref="CancelViewModel"/>, <see cref="SaveViewModel"/> or <see cref="CloseViewModel"/>
+        /// <see cref="CancelViewModelAsync"/>, <see cref="SaveViewModelAsync"/> or <see cref="CloseViewModelAsync"/>
         /// will have no effect.
         /// </summary>
         /// <value><c>true</c> if the view model is closed; otherwise, <c>false</c>.</value>
@@ -827,7 +775,7 @@ namespace Catel.MVVM
                     childViewModels.Add(childViewModel);
 
                     childViewModel.PropertyChanged += OnChildViewModelPropertyChanged;
-                    childViewModel.Closed += OnChildViewModelClosed;
+                    childViewModel.ClosedAsync += OnChildViewModelClosedAsync;
                 }
 
                 var validate = false;
@@ -881,9 +829,11 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnChildViewModelClosed(object sender, EventArgs e)
+        private Task OnChildViewModelClosedAsync(object sender, EventArgs e)
         {
             ((IRelationalViewModel)this).UnregisterChildViewModel((IViewModel)sender);
+
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -905,7 +855,7 @@ namespace Catel.MVVM
                 }
 
                 childViewModel.PropertyChanged -= OnChildViewModelPropertyChanged;
-                childViewModel.Closed -= OnChildViewModelClosed;
+                childViewModel.ClosedAsync -= OnChildViewModelClosedAsync;
 
                 ChildViewModels.RemoveAt(index);
             }
@@ -1059,7 +1009,7 @@ namespace Catel.MVVM
                                 var viewModelValue = GetValue(e.PropertyName);
                                 var propertiesToSet = mapping.ValueProperties;
 
-#if !WINDOWS_PHONE && !NET35 && !XAMARIN_FORMS
+#if !XAMARIN_FORMS
                                 if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
                                 {
                                     mapping.ValueProperties.ForEach(_modelErrorInfo[mapping.ModelProperty].ClearDefaultErrors);
@@ -1300,7 +1250,7 @@ namespace Catel.MVVM
                 }
             }
 
-#if (NET || SL5) && !NET35
+#if NET
             if (ValidateModelsOnInitialization)
             {
                 var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
@@ -1417,34 +1367,9 @@ namespace Catel.MVVM
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        [ObsoleteEx(Message = "Use Async overload instead, the return value of this method will be changed to bool", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual async Task<bool> Cancel()
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// Cancels the editing of the data.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if successful; otherwise <c>false</c>.
-        /// </returns>
         protected virtual Task<bool> CancelAsync()
         {
-            // Note: should be converted to a sync method in v5`
-            return Cancel();
-        }
-
-        /// <summary>
-        /// Saves the data.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if successful; otherwise <c>false</c>.
-        /// </returns>
-        [ObsoleteEx(Message = "Use Async overload instead, the return value of this method will be changed to bool", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual async Task<bool> Save()
-        {
-            return true;
+            return TaskHelper<bool>.FromResult(true);
         }
 
         /// <summary>
@@ -1455,71 +1380,36 @@ namespace Catel.MVVM
         /// </returns>
         protected virtual Task<bool> SaveAsync()
         {
-            // Note: should be converted to a sync method in v5
-            return Save();
+            return TaskHelper<bool>.FromResult(true);
         }
 
         /// <summary>
         /// Called when the view model is about to be closed.
         /// <para />
-        /// This method also raises the <see cref="Closing" /> event.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnClosingAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual void OnClosing()
-        {
-            OnClosingAsync().Wait();
-        }
-
-        /// <summary>
-        /// Called when the view model is about to be closed.
-        /// <para />
-        /// This method also raises the <see cref="Closing"/> event.
+        /// This method also raises the <see cref="ClosingAsync"/> event.
         /// </summary>
         protected virtual Task OnClosingAsync()
         {
-            Closing.SafeInvoke(this);
             return ClosingAsync.SafeInvokeAsync(this);
         }
 
         /// <summary>
-        /// Closes this instance. Always called after the <see cref="Cancel"/> of <see cref="Save"/> method.
-        /// </summary>
-        [ObsoleteEx(Message = "Use Async overload instead, the return value of this method will be changed to void", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual async Task Close()
-        {
-        }
-
-        /// <summary>
-        /// Closes this instance. Always called after the <see cref="Cancel"/> of <see cref="Save"/> method.
+        /// Closes this instance. Always called after the <see cref="CancelAsync"/> of <see cref="SaveAsync"/> method.
         /// </summary>
         protected virtual Task CloseAsync()
         {
-            // Note: should be converted to a sync method in v5
-            return Close();
+            return TaskHelper.Completed;
         }
 
         /// <summary>
         /// Called when the view model has just been closed.
         /// <para />
-        /// This method also raises the <see cref="Closed"/> event.
-        /// </summary>
-        /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual void OnClosed(bool? result)
-        {
-            OnClosedAsync(result).Wait();
-        }
-
-        /// <summary>
-        /// Called when the view model has just been closed.
-        /// <para />
-        /// This method also raises the <see cref="Closed"/> event.
+        /// This method also raises the <see cref="ClosedAsync"/> event.
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
         protected virtual Task OnClosedAsync(bool? result)
         {
             var eventArgs = new ViewModelClosedEventArgs(this, result);
-            Closed.SafeInvoke(this, eventArgs);
             return ClosedAsync.SafeInvokeAsync(this, eventArgs);
         }
 
@@ -1566,24 +1456,6 @@ namespace Catel.MVVM
         /// similar.
         /// <para />
         /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public Task InitializeViewModel()
-        {
-            return InitializeViewModelAsync();
-        }
-
-        /// <summary>
-        /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
-        /// to a state where the associated UI element (user control, window, ...) is actually loaded.
-        /// <para />
-        /// This method is called as soon as the associated UI element is loaded.
-        /// </summary>
-        /// <returns>The task.</returns>
-        /// <remarks>It's not recommended to implement the initialization of properties in this method. The initialization of properties
-        /// should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
-        /// similar.
-        /// <para />
-        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
         public async Task InitializeViewModelAsync()
         {
             if (!_isViewModelInitialized)
@@ -1592,7 +1464,6 @@ namespace Catel.MVVM
 
                 await InitializeAsync();
 
-                Initialized.SafeInvoke(this);
                 await InitializedAsync.SafeInvokeAsync(this);
             }
         }
@@ -1610,38 +1481,9 @@ namespace Catel.MVVM
         /// <para />
         /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
         /// </remarks>
-        [ObsoleteEx(Message = "Use Async overload instead, the return value of this method will be changed to void", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual async Task Initialize()
+        protected virtual Task InitializeAsync()
         {
-        }
-
-        /// <summary>
-        /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
-        /// to a state where the associated UI element (user control, window, ...) is actually loaded.
-        /// <para />
-        /// This method is called as soon as the associated UI element is loaded.
-        /// </summary>
-        /// <remarks>
-        /// It's not recommended to implement the initialization of properties in this method. The initialization of properties
-        /// should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
-        /// similar.
-        /// <para />
-        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
-        /// </remarks>
-        protected virtual async Task InitializeAsync()
-        {
-            // Note: should be converted to a sync method in v5
-            await Initialize();
-        }
-
-        /// <summary>
-        /// Cancels the editing of the data.
-        /// </summary>
-        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public Task<bool> CancelViewModel()
-        {
-            return CancelViewModelAsync();
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -1658,7 +1500,6 @@ namespace Catel.MVVM
             IsCanceling = true;
 
             var eventArgs = new CancelingEventArgs();
-            Canceling.SafeInvoke(this, eventArgs);
             await CancelingAsync.SafeInvokeAsync(this, eventArgs);
 
             if (eventArgs.Cancel)
@@ -1687,32 +1528,11 @@ namespace Catel.MVVM
 
             Log.Info("Canceled view model '{0}'", GetType());
 
-            Canceled.SafeInvoke(this);
             await CanceledAsync.SafeInvokeAsync(this);
 
             IsCanceling = false;
 
             return true;
-        }
-
-        /// <summary>
-        /// Cancels the editing of the data, but also closes the view model in the same call.
-        /// </summary>
-        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async extension method", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public Task<bool> CancelAndCloseViewModel()
-        {
-            return this.CancelAndCloseViewModelAsync();
-        }
-
-        /// <summary>
-        /// Saves the data.
-        /// </summary>
-        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public Task<bool> SaveViewModel()
-        {
-            return SaveViewModelAsync();
         }
 
         /// <summary>
@@ -1742,7 +1562,6 @@ namespace Catel.MVVM
             }
 
             var eventArgs = new SavingEventArgs();
-            Saving.SafeInvoke(this, eventArgs);
             await SavingAsync.SafeInvokeAsync(this, eventArgs);
 
             if (eventArgs.Cancel)
@@ -1767,7 +1586,6 @@ namespace Catel.MVVM
                     }
                 }
 
-                Saved.SafeInvoke(this);
                 await SavedAsync.SafeInvokeAsync(this);
             }
 
@@ -1777,27 +1595,7 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Saves the data, but also closes the view model in the same call if the save succeeds.
-        /// </summary>
-        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async extension method", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public Task<bool> SaveAndCloseViewModel()
-        {
-            return this.SaveAndCloseViewModelAsync();
-        }
-
-        /// <summary>
-        /// Closes this instance. Always called after the <see cref="Cancel"/> of <see cref="Save"/> method.
-        /// </summary>
-        /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public Task CloseViewModel(bool? result)
-        {
-            return CloseViewModelAsync(result);
-        }
-
-        /// <summary>
-        /// Closes this instance. Always called after the <see cref="Cancel"/> of <see cref="Save"/> method.
+        /// Closes this instance. Always called after the <see cref="CancelAsync"/> of <see cref="SaveAsync"/> method.
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
         public async Task CloseViewModelAsync(bool? result)

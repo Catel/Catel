@@ -122,7 +122,6 @@
             Assert.AreEqual(Age2.ToString(), viewModel.Age);
         }
 
-#if !WINDOWS_PHONE
         [TestCase]
         public void ViewModelWithViewModelToModelMappings_FieldErrors()
         {
@@ -252,7 +251,6 @@
             Assert.AreNotEqual(0, person.GetValidationContext().GetValidationCount());
             Assert.AreNotEqual(0, viewModel.GetValidationContext().GetValidationCount());
         }
-#endif
 
         [TestCase]
         public async Task ViewModelWithViewModelToModelMappings_DoNotMapWhenViewModelIsClosed()
@@ -708,7 +706,6 @@
         //    Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)viewModel)["FirstName"]);
         //}
 
-#if !WINDOWS_PHONE
         [TestCase]
         public void ModelValidation_NotifyDataErrorInfo_FieldErrors()
         {
@@ -794,7 +791,6 @@
 
             Assert.IsFalse(validation.HasWarnings);
         }
-#endif
 
         [TestCase]
         public void ValidationToViewModel_WithoutTagFiltering()
@@ -919,20 +915,5 @@
 
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
         }
-
-#if WINDOWS_PHONE
-        [TestCase]
-        public void Tombstoning_AutomaticRecovery()
-        {
-            var vm = new TestViewModel();
-            vm.FirstName = "John";
-            vm.LastName = "Doe";
-
-            var data = vm.SerializeForTombstoning();
-            var recoveredVm = ViewModelBase.DeserializeFromTombstoning(typeof(TestViewModel), data);
-
-            Assert.AreEqual(vm, recoveredVm);
-        }
-#endif
     }
 }

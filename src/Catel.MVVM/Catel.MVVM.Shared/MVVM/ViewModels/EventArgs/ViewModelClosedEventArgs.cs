@@ -9,7 +9,7 @@ namespace Catel.MVVM
     using System;
 
     /// <summary>
-    /// <see cref="EventArgs"/> implementation for the <see cref="IViewModel.Closed"/> event.
+    /// <see cref="EventArgs"/> implementation for the <see cref="IViewModel.ClosedAsync"/> event.
     /// </summary>
     public class ViewModelClosedEventArgs : EventArgs
     {

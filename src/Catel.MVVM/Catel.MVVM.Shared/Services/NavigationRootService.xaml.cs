@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5 || WINDOWS_PHONE || NETFX_CORE
+#if NET || NETFX_CORE
 
 namespace Catel.Services
 {
@@ -12,19 +12,10 @@ namespace Catel.Services
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Navigation;
-#elif WINDOWS_PHONE
-    using System.Windows;
-    using System.Windows.Navigation;
-    using System.Net;
-    using Microsoft.Phone.Controls;
-#elif SILVERLIGHT
-    using Catel.Windows;
-    using System.Windows;
-    using System.Windows.Navigation;
-    using System.Windows.Browser;
 #else
     using System.Windows;
-    using System.Windows.Navigation;
+    using System.Windows.Controls;
+    using Windows;
 #endif
 
     public partial class NavigationRootService
@@ -56,53 +47,26 @@ namespace Catel.Services
 
             return _rootFrame as Frame;
         }
-#elif WINDOWS_PHONE
-        /// <summary>
-        /// Gets the application root frame.
-        /// </summary>
-        protected virtual Microsoft.Phone.Controls.PhoneApplicationFrame GetApplicationRootFrame()
-        {
-            if (_rootFrame == null)
-            {
-                _rootFrame = Application.Current.RootVisual as Microsoft.Phone.Controls.PhoneApplicationFrame;
-            }
-
-            return _rootFrame as Microsoft.Phone.Controls.PhoneApplicationFrame;
-        }
-#elif SILVERLIGHT
-        /// <summary>
-        /// Gets the application root frame.
-        /// </summary>
-        protected virtual System.Windows.Controls.Frame GetApplicationRootFrame()
-        {
-            if (_rootFrame == null)
-            {
-                if (Application.Current != null)
-                {
-                    if (Application.Current.RootVisual != null)
-                    {
-                        _rootFrame = Application.Current.RootVisual.FindVisualDescendant(e => e is System.Windows.Controls.Frame) as System.Windows.Controls.Frame;
-                    }
-                }
-            }
-
-            return _rootFrame as System.Windows.Controls.Frame;
-        }
 #else
         /// <summary>
         /// Gets the application root frame.
         /// </summary>
-        protected virtual NavigationWindow GetApplicationRootFrame()
+        protected virtual Frame GetApplicationRootFrame()
         {
             if (_rootFrame == null)
             {
-                if (Application.Current != null)
+                var application = Application.Current;
+                if (application != null)
                 {
-                    _rootFrame = Application.Current.MainWindow as NavigationWindow;
+                    var mainWindow = application.MainWindow;
+                    if (mainWindow != null)
+                    {
+                        _rootFrame = mainWindow.FindVisualDescendant(e => e is Frame) as Frame;
+                    }
                 }
             }
 
-            return _rootFrame as NavigationWindow;
+            return _rootFrame as Frame;
         }
 #endif
     }

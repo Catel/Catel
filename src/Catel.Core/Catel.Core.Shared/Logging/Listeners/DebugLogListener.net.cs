@@ -13,16 +13,17 @@ namespace Catel.Logging
     public partial class DebugLogListener
     {
         /// <summary>
-        /// Called when any message is written to the log.
+        /// Writes the specified log.
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="message">The message.</param>
         /// <param name="logEvent">The log event.</param>
         /// <param name="extraData">The extra data.</param>
+        /// <param name="logData">The log data.</param>
         /// <param name="time">The time.</param>
-        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, DateTime time)
+        protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
-            string consoleMessage = FormatLogEvent(log, message, logEvent, extraData, time);
+            var consoleMessage = FormatLogEvent(log, message, logEvent, extraData, logData, time);
 
             switch (logEvent)
             {

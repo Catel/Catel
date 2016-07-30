@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5
+#if NET
 
 namespace Catel.Test
 {
@@ -23,23 +23,15 @@ namespace Catel.Test
         /// <param name="control">Control to show in a window.</param>
         public static void ShowControlInWindow(UIElement control)
         {
-#if SILVERLIGHT
             // Create window
-            ChildWindow window = new ChildWindow();
-
-            // Set as window content
-            window.Content = control;
-#else
-            // Create window
-            Window window = new Window();
+            var window = new Window();
 
             // Create a stack panel
-            StackPanel stackPanel = new StackPanel();
+            var stackPanel = new StackPanel();
             stackPanel.Children.Add(control);
 
             // Set as window content
             window.Content = stackPanel;
-#endif
 
             // Set title
             window.Title = "Test window";

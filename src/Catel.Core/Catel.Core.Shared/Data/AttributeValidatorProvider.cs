@@ -30,7 +30,7 @@ namespace Catel.Data
             return _validatorPerType.GetFromCacheOrFetch(targetType, () =>
             {
                 ValidateModelAttribute attribute;
-                if (AttributeHelper.TryGetAttribute(targetType, out attribute))
+                if (targetType.TryGetAttribute(out attribute))
                 {
                     var validator = TypeFactory.Default.CreateInstance(attribute.ValidatorType) as IValidator;
                     return validator;

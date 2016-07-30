@@ -10,10 +10,6 @@ namespace Catel.MVVM.Views
     using System.Collections.Generic;
     using System.Threading;
 
-#if SILVERLIGHT
-    using System.Windows;
-#endif
-
     /// <summary>
     /// Available view load state events.
     /// </summary>
@@ -68,19 +64,10 @@ namespace Catel.MVVM.Views
     ///   <item><description>LayoutUpdated (UC 3).</description></item>
     /// </list>
     /// </summary>
-    /// <remarks>
-    /// To get the best performance, this class will only execute logic on silverlight systems. All other systems correctly
-    /// support the loaded event.
-    /// </remarks>
     public class ViewLoadManager : IViewLoadManager
     {
         #region Fields
-#if SILVERLIGHT
-        private readonly List<ViewStack> _viewStacks = new List<ViewStack>();
-        private readonly Dictionary<FrameworkElement, UninitializedViewInfo> _uninitializedViews = new Dictionary<FrameworkElement, UninitializedViewInfo>();
-#else
         private readonly List<WeakViewInfo> _views = new List<WeakViewInfo>();
-#endif
 
         private ViewLoadStateEvent _lastInvokedViewLoadStateEvent;
 
@@ -129,111 +116,13 @@ namespace Catel.MVVM.Views
         {
             Argument.IsNotNull("viewLoadState", viewLoadState);
 
-#if SILVERLIGHT
-            var frameworkElement = viewLoadState.View as FrameworkElement;
-            if (frameworkElement != null)
-            {
-                _uninitializedViews[frameworkElement] = new UninitializedViewInfo(viewLoadState);
-
-                frameworkElement.Loaded += OnFrameworkElementLoaded;
-            }
-#else
             var viewInfo = new WeakViewInfo(viewLoadState.View);
             viewInfo.Loaded += OnViewInfoLoaded;
             viewInfo.Unloaded += OnViewInfoUnloaded;
 
             _views.Add(viewInfo);
-#endif
         }
 
-#if SILVERLIGHT
-        private void OnFrameworkElementLoaded(object sender, EventArgs e)
-        {
-            var frameworkElement = (FrameworkElement)sender;
-
-            frameworkElement.Loaded -= OnFrameworkElementLoaded;
-
-            var uninitializedViewInfo = _uninitializedViews[frameworkElement];
-
-            AddViewAfterLoaded(uninitializedViewInfo);
-
-            _uninitializedViews.Remove(frameworkElement);
-        }
-
-        private void AddViewAfterLoaded(UninitializedViewInfo uninitializedViewInfo)
-        {
-            var isTopViewStack = true;
-
-            var viewLoadState = uninitializedViewInfo.ViewLoadState;
-            var view = viewLoadState.View;
-            ViewStack viewStack = null;
-
-            var parent = view.FindParentByPredicate(x => x is IView) as FrameworkElement;
-            if (parent != null)
-            {
-                if (_uninitializedViews.ContainsKey(parent))
-                {
-                    // We have a different uninitialized view that is the parent
-                    var uninitializedParent = _uninitializedViews[parent];
-                    uninitializedParent.ViewStack.AddChild(uninitializedViewInfo.ViewStack, uninitializedParent.ViewStack);
-
-                    isTopViewStack = false;
-                }
-                else
-                {
-                    // We are now listed to be added to the visual tree
-                    foreach (var existingViewStack in _viewStacks)
-                    {
-                        if (existingViewStack.ContainsView((IView)parent))
-                        {
-                            var viewAsFrameworkElement = view as FrameworkElement;
-                            if (viewAsFrameworkElement != null && _uninitializedViews.ContainsKey(viewAsFrameworkElement))
-                            {
-                                // This happens when we are called from OnFrameworkElementLoaded but out parent wasn't updated yet
-                                existingViewStack.AddChild(_uninitializedViews[viewAsFrameworkElement].ViewStack, existingViewStack);
-                            }
-                            else
-                            {
-                                existingViewStack.AddChild(view, existingViewStack);
-                            }
-                            
-
-                            viewStack = existingViewStack;
-                            isTopViewStack = false;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (isTopViewStack)
-            {
-                var topViewStack = uninitializedViewInfo.ViewStack;
-
-                topViewStack.ViewStackLoaded += OnViewStackLoaded;
-                topViewStack.ViewStackUnloaded += OnViewStackUnloaded;
-
-                _viewStacks.Add(topViewStack);
-
-                viewStack = topViewStack;
-            }
-
-            if (viewStack != null)
-            {
-                viewStack.NotifyThatParentIsReadyToAcceptLoadedMessages();
-            }
-        }
-
-        private void OnViewStackLoaded(object sender, ViewStackPartEventArgs e)
-        {
-            RaiseLoaded(e.View);
-        }
-
-        private void OnViewStackUnloaded(object sender, ViewStackPartEventArgs e)
-        {
-            RaiseUnloaded(e.View);
-        }
-#else
         private void OnViewInfoLoaded(object sender, EventArgs e)
         {
             // Just forward
@@ -245,32 +134,12 @@ namespace Catel.MVVM.Views
             // Just forward
             RaiseUnloaded(((WeakViewInfo)sender).View);
         }
-#endif
 
         /// <summary>
         /// Cleans up the dead links.
         /// </summary>
         public void CleanUp()
         {
-#if SILVERLIGHT
-            for (int i = 0; i < _viewStacks.Count; i++)
-            {
-                var viewStack = _viewStacks[i];
-                if (viewStack.IsOutdated)
-                {
-                    viewStack.ViewStackLoaded -= OnViewStackLoaded;
-                    viewStack.ViewStackUnloaded -= OnViewStackUnloaded;
-
-                    viewStack.Dispose();
-
-                    _viewStacks.RemoveAt(i--);
-                }
-                else
-                {
-                    viewStack.CheckForOutdatedChildren();
-                }
-            }
-#else
             for (int i = 0; i < _views.Count; i++)
             {
                 var view = _views[i];
@@ -282,7 +151,6 @@ namespace Catel.MVVM.Views
                     _views.RemoveAt(i--);
                 }
             }
-#endif
         }
 
         private void RaiseLoaded(IView view)
@@ -349,21 +217,5 @@ namespace Catel.MVVM.Views
             _lastInvokedViewLoadStateEvent = viewLoadStateEvent;
         }
         #endregion
-
-#if SILVERLIGHT
-        private class UninitializedViewInfo
-        {
-            public UninitializedViewInfo(IViewLoadState viewLoadState)
-            {
-                ViewLoadState = viewLoadState;
-
-                ViewStack = new ViewStack(viewLoadState.View, false);
-            }
-
-            public IViewLoadState ViewLoadState { get; private set; }
-
-            public ViewStack ViewStack { get; private set; }
-        }
-#endif
     }
 }

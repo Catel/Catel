@@ -46,7 +46,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Interfaces\Enums\SuspensionMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Interfaces\ISuspendChangeNotificationsCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\ListDictionary.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\BackgroundWorker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\DisplayNameAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\BeginEditEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\CancelEditCompletedEventArgs.cs" />
@@ -236,7 +235,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)IoC\TypeRequestPath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IO\Extensions\StreamExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IO\Path.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Linq\ExpressionUtil.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\BatchLogListenerBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Configuration\LoggingConfigurationSection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Configuration\LogListenerConfiguration.cs" />
@@ -260,9 +258,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.ios.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.net.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.sl.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.winrt.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.wp.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\DebugLogListener.uap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\EtwLogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\EventLogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\FileLogListener.cs" />
@@ -307,7 +303,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\ReflectionExtensions.typeinfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Extensions\TypeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\AssemblyHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\AttributeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\BindingFlagsHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\DelegateHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\PropertyHelper.cs" />
@@ -335,12 +330,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\EventArgs\MemberSerializationEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\EventArgs\SerializationEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Extensions\ISerializationContextExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Extensions\ISerializationManagerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Extensions\ISerializerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Helpers\SerializationContextHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\IObjectAdapter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\IPropertySerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\IFieldSerializable.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\IModelBaseSerializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializationContextInfoFactory.cs" />
@@ -408,7 +403,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\ThreadHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Interfaces\IAsyncWaitQueue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Internal\Deque.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Threading\ReaderWriterLockSlim.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\SynchronizationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Timer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\Interfaces\IExecute.cs" />
@@ -421,5 +415,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)ComponentModel\DataAnnotations\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Linq\" />
   </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5
+#if NET
 
 namespace Catel.Services
 {
@@ -332,7 +332,7 @@ namespace Catel.Services
 
                 if (_progressNotifyableViewModel != null && CloseViewModelOnTerminated)
                 {
-                    _dispatcherService.Invoke(() => _progressNotifyableViewModel.CloseViewModel(null));
+                    _dispatcherService.Invoke(async () => await _progressNotifyableViewModel.CloseViewModelAsync(null));
                 }
 
                 if (_completedCallback != null)
@@ -367,9 +367,9 @@ namespace Catel.Services
 
                         Execute();
                     });
-#if !SILVERLIGHT
+
                 _thread.SetApartmentState(ApartmentState.STA);
-#endif                
+
                 _completedCallback = completedCallback;
                 _thread.Start();
             }
