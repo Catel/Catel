@@ -28,7 +28,7 @@ namespace Catel.MVVM
             Argument.IsNotNull("viewModelManager", viewModelManager);
             Argument.IsNotNull("predicate", predicate);
 
-            var activeViewModels = viewModelManager.ActiveViewModels.ToList();
+            var activeViewModels = viewModelManager.ActiveViewModels;
             foreach (var viewModel in activeViewModels)
             {
                 if (predicate(viewModel))
@@ -51,7 +51,7 @@ namespace Catel.MVVM
             Argument.IsNotNull("viewModelManager", viewModelManager);
             Argument.IsNotNull("predicate", predicate);
 
-            var activeViewModels = viewModelManager.ActiveViewModels.ToList();
+            var activeViewModels = viewModelManager.ActiveViewModels;
             foreach (var viewModel in activeViewModels)
             {
                 if (predicate(viewModel))
