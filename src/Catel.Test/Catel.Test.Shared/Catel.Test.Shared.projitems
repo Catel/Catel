@@ -95,16 +95,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Interception\PropertyInterceptionTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Interception\TestClasses\ITestService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Interception\TestClasses\TestService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Memento\ActionUndoFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Memento\BatchFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Memento\CollectionChangeUndoFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Memento\CollectionObserverFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Memento\MementoServiceFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Memento\Mocks\MockModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Memento\Mocks\MockUndo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Memento\ObjectObserverFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Memento\OperationSetFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Memento\PropertyChangeUndoFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\BootstrapperBaseTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\CompositeModuleCatalogFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\LogExtensionsTests.cs" />
