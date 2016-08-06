@@ -60,6 +60,7 @@ Added/fixed:
 (+) CTL-907 Support classes that implement Parse(string, IFormatProvider) and ToString(IFormatProvider) in the serializers 
 (*) CTL-903 Only support Frame and not NavigationWindow for WPF navigation
 (*) CTL-905 Always log Argument logging (even when Catel logging is being ignored)
+(*) CTL-911 Refactor UrlHelper to extension methods
 (x) CTL-899 Navigation in WPF is not working when using custom frame
 (x) CTL-906 Clear current navigation context when (re)navigating to the same view in WPF
 (x) CTL-910 Introduce special lock for null keys in CacheStorage to prevent ArgumentNullException
