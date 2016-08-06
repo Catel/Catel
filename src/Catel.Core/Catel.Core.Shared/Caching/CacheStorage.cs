@@ -52,6 +52,11 @@ namespace Catel.Caching
         private readonly Dictionary<TKey, AsyncLock> _locksByKey = new Dictionary<TKey, AsyncLock>();
 
         /// <summary>
+        /// The lock used when the key is <c>null</c>.
+        /// </summary>
+        private readonly AsyncLock _nullKeyLock = new AsyncLock();
+
+        /// <summary>
         /// The timer that is being executed to invalidate the cache.
         /// </summary>
         private Catel.Threading.Timer _expirationTimer;
@@ -561,19 +566,25 @@ namespace Catel.Caching
         private
         AsyncLock GetLockByKey(TKey key)
         {
-            // Note: we never clear items from the key locks, but this is so they can be re-used in the future without the cost 
-            // of garbage collection
-
-            lock (_syncObj)
+            if (ReferenceEquals(null, key))
             {
-                var containsKey = _locksByKey.ContainsKey(key);
-                if (!containsKey)
-                {
-                    _locksByKey[key] = new AsyncLock();
-                }
+                return _nullKeyLock;
             }
 
-            return _locksByKey[key];
+            // Note: we never clear items from the key locks, but this is so they can be re-used in the future without the cost 
+            // of garbage collection
+            lock (_syncObj)
+            {
+                AsyncLock asyncLock = null;
+
+                if (!_locksByKey.TryGetValue(key, out asyncLock))
+                {
+                    asyncLock = new AsyncLock();
+                    _locksByKey[key] = new AsyncLock();
+                }
+
+                return asyncLock;
+            }
         }
 
         /// <summary>
