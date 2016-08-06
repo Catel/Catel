@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UrlHelper.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
+// <copyright file="UriExtensions.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -10,18 +10,17 @@ namespace Catel
     using System;
 
     /// <summary>
-    /// Url helper class.
+    /// Uri extension methods.
     /// </summary>
-    public static class UrlHelper
+    public static class UriExtensions
     {
-        #region Methods
         /// <summary>
         /// Gets the safe URI string.
         /// </summary>
         /// <param name="uri">The URI.</param>
         /// <returns>The safe URI string.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="uri" /> is <c>null</c>.</exception>
-        public static string GetSafeUriString(Uri uri)
+        public static string GetSafeUriString(this Uri uri)
         {
             Argument.IsNotNull("uri", uri);
 
@@ -41,13 +40,12 @@ namespace Catel
         /// <param name="url">The URL.</param>
         /// <returns><c>true</c> if the specified url is an absolute url; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="url"/> is <c>null</c>.</exception>
-        public static bool IsAbsoluteUrl(string url)
+        public static bool IsAbsoluteUrl(this string url)
         {
             Argument.IsNotNull("url", url);
 
             Uri result;
             return Uri.TryCreate(url, UriKind.Absolute, out result);
         }
-        #endregion
     }
 }

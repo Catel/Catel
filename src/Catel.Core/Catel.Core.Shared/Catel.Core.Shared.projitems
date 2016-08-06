@@ -166,6 +166,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\ProcessExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.slug.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\UriExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Factories\ExceptionFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositeFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositePredicate.cs" />
@@ -183,7 +184,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\StringToObjectHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\TagHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\UniqueIdentifierHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Helpers\UrlHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IDisposableToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUniqueIdentifyable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Attributes\InjectAttribute.cs" />
@@ -413,8 +413,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)ComponentModel\DataAnnotations\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Devices\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Devices\Helpers\" />
     <Folder Include="$(MSBuildThisFileDirectory)Linq\" />
   </ItemGroup>
 </Project>
