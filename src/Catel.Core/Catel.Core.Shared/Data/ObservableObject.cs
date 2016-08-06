@@ -43,7 +43,6 @@ namespace Catel.Data
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
-
         #region Methods
         /// <summary>
         /// Raises the <see cref="PropertyChanging"/> event.
