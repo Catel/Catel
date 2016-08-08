@@ -91,10 +91,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\ViewModels\NoFluentValidatorViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\ViewModels\PersonViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\ViewModels\PersonViewModelWithModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Interception\MethodInterceptionTests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Interception\PropertyInterceptionTests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Interception\TestClasses\ITestService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Interception\TestClasses\TestService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\BootstrapperBaseTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\CompositeModuleCatalogFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\LogExtensionsTests.cs" />

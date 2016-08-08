@@ -168,10 +168,6 @@
       <Project>{c30b4f98-084a-4fc4-910e-2deae3505ad9}</Project>
       <Name>Catel.Extensions.FluentValidation.NET45</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Catel.Extensions.Interception\Catel.Extensions.Interception.NET45\Catel.Extensions.Interception.NET45.csproj">
-      <Project>{6bcc1122-5f7e-4322-9d18-c28e86b7f459}</Project>
-      <Name>Catel.Extensions.Interception.NET45</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism5\Catel.Extensions.Prism5.NET45\Catel.Extensions.Prism5.NET45.csproj">
       <Project>{3604ff18-b278-4508-aa83-88d34f6c026d}</Project>
       <Name>Catel.Extensions.Prism5.NET45</Name>

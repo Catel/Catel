@@ -169,10 +169,6 @@
       <Project>{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}</Project>
       <Name>Catel.Extensions.FluentValidation.NET40</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Catel.Extensions.Interception\Catel.Extensions.Interception.NET40\Catel.Extensions.Interception.NET40.csproj">
-      <Project>{9b000dc9-7110-4173-bf97-e975ed77c24b}</Project>
-      <Name>Catel.Extensions.Interception.NET40</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.NET40\Catel.MVVM.NET40.csproj">
       <Project>{D9112D3C-62D2-401E-8EA1-86AC28A71C22}</Project>
       <Name>Catel.MVVM.NET40</Name>

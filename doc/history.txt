@@ -42,6 +42,7 @@ Dropped support for the following components:
 * Catel.Extensions.CSLA
 * Catel.Extensions.Wcf.Server
 * Catel.Extensions.Prism4
+* Catel.Extensions.Interception
 * Catel.Extensions.Memento (moved to Orc.Memento)
 * Catel.Extensions.MVC4
 * Catel.Extensions.MVC5
