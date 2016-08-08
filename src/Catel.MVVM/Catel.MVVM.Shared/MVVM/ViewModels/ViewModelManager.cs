@@ -10,6 +10,7 @@ namespace Catel.MVVM
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+    using Catel.Threading.Extensions;
     using Logging;
     using Reflection;
 
@@ -78,16 +79,7 @@ namespace Catel.MVVM
             _managedViewModelsLock = new ReaderWriterLockSlim();
             _managedViewModels = new Dictionary<Type, ManagedViewModel>();
 
-            _instancesLock.EnterWriteLock();
-            try
-            {
-                _instances.Add(this);
-            }
-            finally
-            {
-                _instancesLock.ExitWriteLock();
-            }
-            
+            _instancesLock.PerformWrite(() => _instances.Add(this));            
             Log.Debug("ViewModelManager instantiated");
         }
         #endregion
@@ -101,11 +93,9 @@ namespace Catel.MVVM
         {
             get
             {
-                var count = 0;
-
-                _managedViewModelsLock.EnterReadLock();
-                try
+                return _managedViewModelsLock.PerformRead(() =>
                 {
+                    var count = 0;
                     foreach (var managedViewModel in _managedViewModels)
                     {
                         if (managedViewModel.Value != null)
@@ -113,13 +103,8 @@ namespace Catel.MVVM
                             count += managedViewModel.Value.ViewModelCount;
                         }
                     }
-                }
-                finally
-                {
-                    _managedViewModelsLock.ExitReadLock();
-                }
-
-                return count;
+                    return count;
+                });
             }
         }
 
@@ -130,15 +115,10 @@ namespace Catel.MVVM
         {
             get
             {
-                _managedViewModelsLock.EnterReadLock();
-                try
+                return _managedViewModelsLock.PerformRead(() =>
                 {
                     return GetAllViewModels(_managedViewModels).ToList();
-                }
-                finally
-                {
-                    _managedViewModelsLock.ExitReadLock();
-                }
+                });
             }
         }
         #endregion
@@ -284,8 +264,7 @@ namespace Catel.MVVM
         {
             Log.Debug("Searching for the instance of view model with unique identifier '{0}'", uniqueIdentifier);
 
-            _managedViewModelsLock.EnterReadLock();
-            try
+            return _managedViewModelsLock.PerformRead(() =>
             {
                 foreach (var managedViewModel in _managedViewModels)
                 {
@@ -299,15 +278,9 @@ namespace Catel.MVVM
                         }
                     }
                 }
-            }
-            finally
-            {
-                _managedViewModelsLock.ExitReadLock();
-            }
-
-            Log.Debug("Did not find the instance of view model with unique identifier '{0}'. It is either not registered or not alive.", uniqueIdentifier);
-
-            return null;
+                Log.Debug("Did not find the instance of view model with unique identifier '{0}'. It is either not registered or not alive.", uniqueIdentifier);
+                return null;
+            });
         }
 
         /// <summary>
@@ -335,20 +308,14 @@ namespace Catel.MVVM
         /// <exception cref="System.ArgumentException">The <paramref name="viewModelType"/> is not of type <see cref="IViewModel"/>.</exception>
         public IViewModel GetFirstOrDefaultInstance(Type viewModelType)
         {
-            Argument.IsOfType("viewModelType", viewModelType, typeof (IViewModel));
+            Argument.IsOfType("viewModelType", viewModelType, typeof(IViewModel));
 
-            _managedViewModelsLock.EnterReadLock();
-            try
+            return _managedViewModelsLock.PerformRead(() =>
             {
-                return 
-                    GetAllViewModels(_managedViewModels)
-                    .FirstOrDefault(viewModel => ObjectHelper.AreEqual(viewModel.GetType(), viewModelType));
-            }
-            finally
-            {
-                _managedViewModelsLock.ExitReadLock();
-            }
-            
+                return
+                     GetAllViewModels(_managedViewModels)
+                     .FirstOrDefault(viewModel => ObjectHelper.AreEqual(viewModel.GetType(), viewModelType));
+            });
         }
 
         /// <summary>
@@ -372,20 +339,14 @@ namespace Catel.MVVM
         /// <returns>The child view models.</returns>
         public IEnumerable<IRelationalViewModel> GetChildViewModels(int parentUniqueIdentifier)
         {
-            _managedViewModelsLock.EnterReadLock();
-            try
+            return _managedViewModelsLock.PerformRead(() =>
             {
                 var relationalViewModels = GetAllViewModels(_managedViewModels).OfType<IRelationalViewModel>();
 
                 var childViewModels = relationalViewModels.Where(viewModel => viewModel.ParentViewModel != null && viewModel.ParentViewModel.UniqueIdentifier == parentUniqueIdentifier);
 
                 return childViewModels.ToList();
-            }
-            finally
-            {
-                _managedViewModelsLock.ExitReadLock();
-            }
-            
+            });
         }
 
         /// <summary>
@@ -396,18 +357,13 @@ namespace Catel.MVVM
         /// </remarks>
         internal static void ClearAll()
         {
-            _instancesLock.EnterReadLock();
-            try
+            _instancesLock.PerformRead(() =>
             {
                 foreach (var manager in _instances)
                 {
                     manager.Clear();
                 }
-            }
-            finally
-            {
-                _instancesLock.ExitReadLock();
-            }
+            });
         }
 
         /// <summary>
@@ -418,8 +374,7 @@ namespace Catel.MVVM
         /// </remarks>
         internal void Clear()
         {
-            _managedViewModelsLock.EnterWriteLock();
-            try
+            _managedViewModelsLock.PerformWrite(() =>
             {
                 foreach (var viewModel in _managedViewModels)
                 {
@@ -427,11 +382,7 @@ namespace Catel.MVVM
                 }
 
                 _managedViewModels.Clear();
-            }
-            finally
-            {
-                _managedViewModelsLock.ExitWriteLock();
-            }
+            });        
         }
 
         /// <summary>
@@ -558,8 +509,7 @@ namespace Catel.MVVM
         /// <returns>The <see cref="ManagedViewModel"/> of the specified type.</returns>
         private ManagedViewModel GetManagedViewModel(Type viewModelType)
         {
-            _managedViewModelsLock.EnterUpgradeableReadLock();
-            try
+            return _managedViewModelsLock.PerformUpgradableRead(() =>
             {
                 ManagedViewModel result;
                 if (_managedViewModels.TryGetValue(viewModelType, out result))
@@ -568,22 +518,14 @@ namespace Catel.MVVM
                 }
 
                 result = new ManagedViewModel(viewModelType);
-                _managedViewModelsLock.EnterWriteLock();
-                try
-                {                    
-                    _managedViewModels.Add(viewModelType, result);
-                }
-                finally
-                {
-                    _managedViewModelsLock.ExitWriteLock();
-                }
 
-                return result;                
-            }
-            finally
-            {
-                _managedViewModelsLock.ExitUpgradeableReadLock();
-            }
+                _managedViewModelsLock.PerformWrite(() =>
+                {
+                    _managedViewModels.Add(viewModelType, result);
+                });
+
+                return result;
+            });
         }
         #endregion
     }
