@@ -56,14 +56,13 @@ namespace Catel.Threading
         {
             Task<T> task;
 
-            if (!_fromResultCache.ContainsKey(value))
+            lock (_fromResultCache)
             {
-                task = TaskShim.FromResult(value);
-                _fromResultCache[value] = task;
-            }
-            else
-            {
-                task = _fromResultCache[value];
+                if (!_fromResultCache.TryGetValue(value, out task))
+                {
+                    task = TaskShim.FromResult(value);
+                    _fromResultCache[value] = task;
+                }
             }
 
             return task;
