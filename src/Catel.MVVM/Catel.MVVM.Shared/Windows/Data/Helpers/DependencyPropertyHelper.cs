@@ -29,6 +29,8 @@ namespace Catel.Windows.Data
     /// </summary>
     public static class DependencyPropertyHelper
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Cache containing all dependency properties of a specific type.
         /// </summary>
@@ -168,60 +170,75 @@ namespace Catel.Windows.Data
 
             foreach (var member in typeMembers)
             {
-                var fieldInfo = member as FieldInfo;
-                var propertyInfo = member as PropertyInfo;
-
-                if (fieldInfo != null)
+                try
                 {
-                    if (!typeof(DependencyProperty).IsAssignableFromEx(fieldInfo.FieldType))
+                    var fieldInfo = member as FieldInfo;
+                    var propertyInfo = member as PropertyInfo;
+
+                    if (fieldInfo != null)
+                    {
+                        if (!typeof(DependencyProperty).IsAssignableFromEx(fieldInfo.FieldType))
+                        {
+                            continue;
+                        }
+                    }
+                    else if (propertyInfo != null)
+                    {
+                        if (!typeof(DependencyProperty).IsAssignableFromEx(propertyInfo.PropertyType))
+                        {
+                            continue;
+                        }
+                    }
+
+                    string name = member.Name;
+
+                    int propertyPostfixIndex = name.LastIndexOf("Property", StringComparison.Ordinal);
+                    if (propertyPostfixIndex != -1)
+                    {
+                        name = name.Substring(0, propertyPostfixIndex);
+                    }
+
+                    if (string.Equals(name, "__Direct") || string.Equals(name, "DirectDependency"))
                     {
                         continue;
                     }
-                }
-                else if (propertyInfo != null)
-                {
-                    if (!typeof(DependencyProperty).IsAssignableFromEx(propertyInfo.PropertyType))
+
+                    DependencyProperty dependencyProperty;
+                    if (fieldInfo != null)
                     {
-                        continue;
+                        var fieldValue = fieldInfo.GetValue(null);
+                        dependencyProperty = fieldValue as DependencyProperty;
                     }
-                }
-
-                string name = member.Name;
-
-                int propertyPostfixIndex = name.LastIndexOf("Property", StringComparison.Ordinal);
-                if (propertyPostfixIndex != -1)
-                {
-                    name = name.Substring(0, propertyPostfixIndex);
-                }
-
-                if (string.Equals(name, "__Direct") || string.Equals(name, "DirectDependency"))
-                {
-                    continue;
-                }
-
-                DependencyProperty dependencyProperty;
-                if (fieldInfo != null)
-                {
-                    dependencyProperty = (DependencyProperty)fieldInfo.GetValue(null);
-                }
-                else if (propertyInfo != null)
-                {
+                    else if (propertyInfo != null)
+                    {
 #if NETFX_CORE
-                    dependencyProperty = (DependencyProperty)propertyInfo.GetValue(null);
+                        var propertyValue = propertyInfo.GetValue(null);
+                        dependencyProperty = propertyValue as DependencyProperty;
 #else
-                    dependencyProperty = (DependencyProperty)propertyInfo.GetValue(null, null);
+                        var propertyValue = propertyInfo.GetValue(null, null);
+                        dependencyProperty = propertyValue as DependencyProperty;
 #endif
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    if (dependencyProperty == null)
+                    {
+                        continue;
+                    }
+
+                    properties.Add(new DependencyPropertyInfo(dependencyProperty, name));
+
+                    string propertyKey = GetDependencyPropertyCacheKey(viewType, name);
+                    _cacheByPropertyName[propertyKey] = dependencyProperty;
+                    _cacheByDependencyProperty[dependencyProperty] = name;
                 }
-                else
+                catch (Exception ex)
                 {
-                    continue;
+                    Log.Warning(ex, $"Failed to enumerate member '{member.Name}' as dependency property");
                 }
-
-                properties.Add(new DependencyPropertyInfo(dependencyProperty, name));
-
-                string propertyKey = GetDependencyPropertyCacheKey(viewType, name);
-                _cacheByPropertyName[propertyKey] = dependencyProperty;
-                _cacheByDependencyProperty[dependencyProperty] = name;
             }
 
             _cacheByParentType[viewType] = properties;
