@@ -952,9 +952,10 @@
             var flatenSortedIdentifiers =
                 allViewModels
                 .SelectMany(o => o)
-                .OrderBy(o => o.UniqueIdentifier);
+                .Select(o => o.UniqueIdentifier)
+                .OrderBy(o => o);
 
-            Assert.That(flatenSortedIdentifiers, Is.EquivalentTo(Enumerable.Range(0, personsPerThread * threadAmount)));
+            Assert.That(flatenSortedIdentifiers, Is.EquivalentTo(Enumerable.Range(1, personsPerThread * threadAmount)));
         }
     }
 }
