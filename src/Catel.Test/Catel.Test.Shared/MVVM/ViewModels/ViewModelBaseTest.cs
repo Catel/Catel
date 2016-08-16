@@ -6,6 +6,7 @@
     using Catel.MVVM.Auditing;
     using System;
     using System.ComponentModel;
+    using System.Linq;
     using System.Threading;
     using Catel.MVVM;
     using Catel.Services;
@@ -914,6 +915,46 @@
             await vm.CloseViewModelAsync(null);
 
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
+        }
+
+        [Test]
+        public void MultipleViewModelsCanBeCreatedConcurrently()
+        {
+            const int personsPerThread = 50;
+            const int threadAmount = 10;
+            var threads = new Thread[threadAmount];
+
+            var allViewModels = new TestViewModel[threadAmount][];
+
+            for (int i = 0; i < threadAmount; i++)
+            {
+                threads[i] = new Thread((index) =>
+                {
+                    var localViewModels = new TestViewModel[personsPerThread];
+                    for (int j = 0; j < personsPerThread; j++)
+                    {
+                        localViewModels[j] = new TestViewModel();
+                    }
+                    allViewModels[(int)index] = localViewModels;
+                });
+            }
+
+            for (int i = 0; i < threadAmount; i++)
+            {
+                threads[i].Start(i);
+            }
+
+            for (int i = 0; i < threadAmount; i++)
+            {
+                threads[i].Join();
+            }
+
+            var flatenSortedIdentifiers =
+                allViewModels
+                .SelectMany(o => o)
+                .OrderBy(o => o.UniqueIdentifier);
+
+            Assert.That(flatenSortedIdentifiers, Is.EquivalentTo(Enumerable.Range(0, personsPerThread * threadAmount)));
         }
     }
 }
