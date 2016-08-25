@@ -354,7 +354,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, TSerializationContext context, 
+        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, TSerializationContext context,
             SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("type", modelType);
@@ -395,7 +395,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, Stream stream, 
+        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, Stream stream,
             SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("type", modelType);
@@ -437,7 +437,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        protected virtual ISerializationContext<TSerializationContext> GetContext(object model, Type modelType, 
+        protected virtual ISerializationContext<TSerializationContext> GetContext(object model, Type modelType,
             TSerializationContext context, SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("modelType", modelType);
@@ -460,7 +460,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        protected abstract ISerializationContext<TSerializationContext> GetContext(object model, Type modelType, Stream stream, 
+        protected abstract ISerializationContext<TSerializationContext> GetContext(object model, Type modelType, Stream stream,
             SerializationContextMode contextMode, ISerializationConfiguration configuration);
 
         /// <summary>
@@ -694,7 +694,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>
         ///   <c>true</c> if the member should be serialized using parse.
         /// </returns>
-        protected virtual bool ShouldSerializeUsingParse(MemberValue memberValue, bool checkActualMemberType)
+        protected virtual bool ShouldSerializeUsingParseAndToString(MemberValue memberValue, bool checkActualMemberType)
         {
             var cacheKey = $"{memberValue.ModelTypeName}|{memberValue.MemberTypeName}|{checkActualMemberType}";
 
@@ -702,13 +702,42 @@ namespace Catel.Runtime.Serialization
             {
                 var serializerModifiers = SerializationManager.GetSerializerModifiers(memberValue.ModelType);
 
+                var useParseAndToString = false;
+
+                var fieldInfo = memberValue.ModelType.GetFieldEx(memberValue.Name);
+                if (fieldInfo != null)
+                {
+                    useParseAndToString = AttributeHelper.IsDecoratedWithAttribute<SerializeUsingParseAndToStringAttribute>(fieldInfo);
+                }
+
+                if (!useParseAndToString)
+                {
+                    var propertyInfo = memberValue.ModelType.GetPropertyEx(memberValue.Name);
+                    if (propertyInfo != null)
+                    {
+                        useParseAndToString = AttributeHelper.IsDecoratedWithAttribute<SerializeUsingParseAndToStringAttribute>(propertyInfo);
+                    }
+                }
+
+                // Note: serializer modifiers can always win
                 foreach (var serializerModifier in serializerModifiers)
                 {
                     var value = serializerModifier.ShouldSerializeMemberUsingParse(memberValue);
-                    if (value.HasValue && !value.Value)
+                    if (value.HasValue)
                     {
-                        return false;
+                        if (!value.Value)
+                        {
+                            return false;
+                        }
+
+                        // At least 1 serializer modifier wants this to be using parse and tostring
+                        useParseAndToString = true;
                     }
+                }
+
+                if (!useParseAndToString)
+                {
+                    return false;
                 }
 
                 var memberType = checkActualMemberType ? memberValue.ActualMemberType : memberValue.MemberType;

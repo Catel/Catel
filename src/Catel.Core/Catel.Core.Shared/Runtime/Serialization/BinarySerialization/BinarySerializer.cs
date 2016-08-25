@@ -174,7 +174,7 @@ namespace Catel.Runtime.Serialization.Binary
 
             if (finalMemberValue != null)
             {
-                if (finalMemberValue.Value is string && ShouldSerializeUsingParse(memberValue, false))
+                if (finalMemberValue.Value is string && ShouldSerializeUsingParseAndToString(memberValue, false))
                 {
                     var tempValue = memberValue.Value;
                     memberValue.Value = finalMemberValue.Value;

@@ -311,7 +311,7 @@ namespace Catel.Runtime.Serialization
                         serializerModifier.SerializeMember(context, member);
                     }
 
-                    if (ShouldSerializeUsingParse(member, true))
+                    if (ShouldSerializeUsingParseAndToString(member, true))
                     {
                         var objectToStringValue = SerializeUsingObjectToString(context, member);
                         if (!string.IsNullOrWhiteSpace(objectToStringValue))
@@ -343,7 +343,7 @@ namespace Catel.Runtime.Serialization
 
             try
             {
-                var stringValue = (string) toStringMethod.Invoke(memberValue.Value, new object[] {CultureInfo.InvariantCulture});
+                var stringValue = (string)toStringMethod.Invoke(memberValue.Value, new object[] { context.Configuration.Culture });
                 return stringValue;
             }
             catch (Exception ex)

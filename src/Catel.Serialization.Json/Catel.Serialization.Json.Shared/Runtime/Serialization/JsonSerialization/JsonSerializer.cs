@@ -590,7 +590,7 @@ namespace Catel.Runtime.Serialization.Json
                             try
                             {
                                 var isDeserialized = false;
-                                if (jsonValue.Type == JTokenType.String && ShouldSerializeUsingParse(memberValue, false))
+                                if (jsonValue.Type == JTokenType.String && ShouldSerializeUsingParseAndToString(memberValue, false))
                                 {
                                     var tempValue = memberValue.Value;
                                     memberValue.Value = (string)jsonValue;
@@ -731,6 +731,16 @@ namespace Catel.Runtime.Serialization.Json
 
                 default:
                     throw new ArgumentOutOfRangeException("contextMode");
+            }
+
+            if (jsonReader != null)
+            {
+                jsonReader.Culture = configuration.Culture;
+            }
+
+            if (jsonWriter != null)
+            {
+                jsonWriter.Culture = configuration.Culture;
             }
 
             return GetContext(model, modelType, jsonReader, jsonWriter, contextMode, null, null, configuration);

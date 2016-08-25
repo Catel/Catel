@@ -325,6 +325,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\SerializeAsCollectionAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\SerializerModifierAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\SerializeUsingParseAndToStringAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\Attributes\RedirectTypeAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\BinarySerializationContextInfoFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\BinarySerializationContextInfo.cs" />

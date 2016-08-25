@@ -631,7 +631,7 @@ namespace Catel.Runtime.Serialization
             
             try
             {
-                var obj = parseMethod.Invoke(null, new object[] { memberValueAsString, CultureInfo.InvariantCulture });
+                var obj = parseMethod.Invoke(null, new object[] { memberValueAsString, context.Configuration.Culture });
                 return obj;
             }
             catch (Exception ex)
