@@ -8,6 +8,7 @@
 namespace Catel.Runtime.Serialization.Json
 {
     using System;
+    using System.Globalization;
     using Data;
     using Newtonsoft.Json;
 
@@ -30,19 +31,44 @@ namespace Catel.Runtime.Serialization.Json
         /// <value><c>true</c> if type info should be written; otherwise, <c>false</c>.</value>
         bool WriteTypeInfo { get; set; }
 
+        ///// <summary>
+        ///// Serializes the specified model to the json writer.
+        ///// </summary>
+        ///// <param name="model">The model.</param>
+        ///// <param name="jsonWriter">The json writer.</param>
+        //[ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, JsonWriter, ISerializationConfiguration)",
+        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        //void Serialize(object model, JsonWriter jsonWriter);
+
         /// <summary>
         /// Serializes the specified model to the json writer.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="jsonWriter">The json writer.</param>
-        void Serialize(object model, JsonWriter jsonWriter);
+        /// <param name="configuration">The configuration.</param>
+        void Serialize(object model, JsonWriter jsonWriter, ISerializationConfiguration configuration);
+
+        ///// <summary>
+        ///// Deserializes the specified model from the json reader.
+        ///// </summary>
+        ///// <param name="modelType">Type of the model.</param>
+        ///// <param name="jsonReader">The json reader.</param>
+        ///// <returns>
+        ///// ModelBase.
+        ///// </returns>
+        //[ObsoleteEx(ReplacementTypeOrMember = "Deserialize(object, JsonWriter, ISerializationConfiguration)",
+        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        //object Deserialize(Type modelType, JsonReader jsonReader);
 
         /// <summary>
         /// Deserializes the specified model from the json reader.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="jsonReader">The json reader.</param>
-        /// <returns>ModelBase.</returns>
-        object Deserialize(Type modelType, JsonReader jsonReader);
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// ModelBase.
+        /// </returns>
+        object Deserialize(Type modelType, JsonReader jsonReader, ISerializationConfiguration configuration);
     }
 }

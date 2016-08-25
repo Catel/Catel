@@ -68,11 +68,11 @@ namespace Catel.Test.Extensions.DynamicObjects
                 using (var memoryStream = new MemoryStream())
                 {
                     var dynamicModel = (DynamicModel)model;
-                    serializer.Serialize(dynamicModel, memoryStream);
+                    serializer.Serialize(dynamicModel, memoryStream, null);
 
                     memoryStream.Position = 0L;
 
-                    dynamic deserializedModel = serializer.Deserialize(typeof(DynamicModel), memoryStream);
+                    dynamic deserializedModel = serializer.Deserialize(typeof(DynamicModel), memoryStream, null);
                     var deserializedDynamicModel = (DynamicModel) deserializedModel;
 
                     Assert.IsTrue(deserializedDynamicModel.IsPropertyRegistered("NonExistingProperty"));

@@ -10,6 +10,7 @@ namespace Catel.Runtime.Serialization.Binary
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Runtime.Serialization;
@@ -67,52 +68,63 @@ namespace Catel.Runtime.Serialization.Binary
         /// <summary>
         /// Deserializes the specified model type.
         /// </summary>
-        /// <remarks>
-        /// When deserializing a stream, the binary serializer must use the <see cref="BinaryFormatter"/> because this will
-        /// inject the right <see cref="SerializationInfo"/> into a new serializer.
-        /// </remarks>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
-        /// <returns>The serialized object.</returns>
-        public override object Deserialize(Type modelType, Stream stream)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The serialized object.
+        /// </returns>
+        /// <remarks>
+        /// When deserializing a stream, the binary serializer must use the <see cref="BinaryFormatter" /> because this will
+        /// inject the right <see cref="SerializationInfo" /> into a new serializer.
+        /// </remarks>
+        public override object Deserialize(Type modelType, Stream stream, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("modelType", modelType);
 
             // Note: although this looks like an unnecessary overload, it's required to prevent duplicate scopes
 
             var model = CreateModelInstance(modelType);
-            return Deserialize(model, stream);
+            return Deserialize(model, stream, configuration);
         }
 
         /// <summary>
         /// Deserializes the specified model.
         /// </summary>
-        /// <remarks>
-        /// When deserializing a stream, the binary serializer must use the <see cref="BinaryFormatter"/> because this will
-        /// inject the right <see cref="SerializationInfo"/> into a new serializer.
-        /// </remarks>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
-        public override object Deserialize(object model, Stream stream)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// When deserializing a stream, the binary serializer must use the <see cref="BinaryFormatter" /> because this will
+        /// inject the right <see cref="SerializationInfo" /> into a new serializer.
+        /// </remarks>
+        public override object Deserialize(object model, Stream stream, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("model", model);
 
-            using (var context = (SerializationContext<BinarySerializationContextInfo>)GetContext(model, model.GetType(), stream, SerializationContextMode.Deserialization))
+            using (GetCurrentSerializationScopeManager(configuration))
             {
-                var referenceManager = context.ReferenceManager;
-                if (referenceManager.Count == 0)
+                configuration = GetCurrentSerializationConfiguration(configuration);
+
+                using (var context = (SerializationContext<BinarySerializationContextInfo>) GetContext(model, model.GetType(),
+                    stream, SerializationContextMode.Deserialization, configuration))
                 {
-                    Log.Debug("Reference manager contains no objects yet, adding initial reference which is the first model in the graph");
+                    var referenceManager = context.ReferenceManager;
+                    if (referenceManager.Count == 0)
+                    {
+                        Log.Debug("Reference manager contains no objects yet, adding initial reference which is the first model in the graph");
 
-                    referenceManager.GetInfo(context.Model);
+                        referenceManager.GetInfo(context.Model);
+                    }
+
+                    var binaryFormatter = CreateBinaryFormatter(SerializationContextMode.Deserialization);
+                    var propertyValues = (List<PropertyValue>) binaryFormatter.Deserialize(stream);
+                    var memberValues = ConvertPropertyValuesToMemberValues(context, model.GetType(), propertyValues);
+                    context.Context.MemberValues.AddRange(memberValues);
+
+                    return Deserialize(model, context.Context, context.Configuration);
                 }
-
-                var binaryFormatter = CreateBinaryFormatter(SerializationContextMode.Deserialization);
-                var propertyValues = (List<PropertyValue>)binaryFormatter.Deserialize(stream);
-                var memberValues = ConvertPropertyValuesToMemberValues(context, model.GetType(), propertyValues);
-                context.Context.MemberValues.AddRange(memberValues);
-
-                return Deserialize(model, context.Context);
             }
         }
         #endregion
@@ -191,10 +203,14 @@ namespace Catel.Runtime.Serialization.Binary
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
-        /// <returns>ISerializationContext{SerializationInfo}.</returns>
-        protected override ISerializationContext<BinarySerializationContextInfo> GetContext(object model, Type modelType, Stream stream, SerializationContextMode contextMode)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// ISerializationContext{SerializationInfo}.
+        /// </returns>
+        protected override ISerializationContext<BinarySerializationContextInfo> GetContext(object model, Type modelType, Stream stream,
+            SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
-            return GetContext(model, modelType, stream, contextMode, null);
+            return GetContext(model, modelType, stream, contextMode, null, configuration);
         }
 
         /// <summary>
@@ -205,8 +221,12 @@ namespace Catel.Runtime.Serialization.Binary
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
         /// <param name="memberValues">The member values.</param>
-        /// <returns>The serialization context.</returns>
-        private ISerializationContext<BinarySerializationContextInfo> GetContext(object model, Type modelType, Stream stream, SerializationContextMode contextMode, List<MemberValue> memberValues)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The serialization context.
+        /// </returns>
+        private ISerializationContext<BinarySerializationContextInfo> GetContext(object model, Type modelType, Stream stream, 
+            SerializationContextMode contextMode, List<MemberValue> memberValues, ISerializationConfiguration configuration)
         {
             var serializationInfo = new SerializationInfo(model.GetType(), new FormatterConverter());
             var binaryFormatter = CreateBinaryFormatter(contextMode);
@@ -218,7 +238,7 @@ namespace Catel.Runtime.Serialization.Binary
 
             var contextInfo = new BinarySerializationContextInfo(serializationInfo, memberValues, binaryFormatter);
 
-            return new SerializationContext<BinarySerializationContextInfo>(model, modelType, contextInfo, contextMode);
+            return new SerializationContext<BinarySerializationContextInfo>(model, modelType, contextInfo, contextMode, configuration);
         }
 
         /// <summary>

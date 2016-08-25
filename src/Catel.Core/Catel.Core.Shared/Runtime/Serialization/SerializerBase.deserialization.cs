@@ -18,6 +18,7 @@ namespace Catel.Runtime.Serialization
     using Logging;
     using Data;
     using Reflection;
+    using Scoping;
 
     /// <summary>
     /// Base class for all serializers.
@@ -89,45 +90,102 @@ namespace Catel.Runtime.Serialization
         }
 
         #region Methods
+        ///// <summary>
+        ///// Deserializes the specified model.
+        ///// </summary>
+        ///// <param name="model">The model.</param>
+        ///// <param name="stream">The stream.</param>
+        //[ObsoleteEx(ReplacementTypeOrMember = "Deserialize(object, Stream, ISerializationConfiguration)",
+        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        //public virtual object Deserialize(object model, Stream stream)
+        //{
+        //    return Deserialize(model, stream, null);
+        //}
+
         /// <summary>
         /// Deserializes the specified model.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
-        public virtual object Deserialize(object model, Stream stream)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The deserialized model.
+        /// </returns>
+        public virtual object Deserialize(object model, Stream stream, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
 
-            using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Deserialization))
+            using (GetCurrentSerializationScopeManager(configuration))
             {
-                return Deserialize(model, context);
+                configuration = GetCurrentSerializationConfiguration(configuration);
+
+                using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Deserialization, configuration))
+                {
+                    return Deserialize(model, context);
+                }
             }
         }
 
-        /// <summary>
-        /// Deserializes the specified model.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="serializationContext">The serialization context.</param>
-        public object Deserialize(object model, ISerializationContextInfo serializationContext)
-        {
-            return Deserialize(model, (TSerializationContext)serializationContext);
-        }
+        ///// <summary>
+        ///// Deserializes the specified model.
+        ///// </summary>
+        ///// <param name="model">The model.</param>
+        ///// <param name="serializationContext">The serialization context.</param>
+        ///// <returns>The deserialized model.</returns>
+        //[ObsoleteEx(ReplacementTypeOrMember = "Deserialize(object, ISerializationContextInfo, ISerializationConfiguration)",
+        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        //public object Deserialize(object model, ISerializationContextInfo serializationContext)
+        //{
+        //    return Deserialize(model, serializationContext, null);
+        //}
 
         /// <summary>
         /// Deserializes the specified model.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="serializationContext">The serialization context.</param>
-        public virtual object Deserialize(object model, TSerializationContext serializationContext)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The deserialized model.
+        /// </returns>
+        public object Deserialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration)
+        {
+            return Deserialize(model, (TSerializationContext)serializationContext, configuration);
+        }
+
+        ///// <summary>
+        ///// Deserializes the specified model.
+        ///// </summary>
+        ///// <param name="model">The model.</param>
+        ///// <param name="serializationContext">The serialization context.</param>
+        //[ObsoleteEx(ReplacementTypeOrMember = "Deserialize(object, TSerializationContext, ISerializationConfiguration)",
+        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        //public virtual object Deserialize(object model, TSerializationContext serializationContext)
+        //{
+        //    return Deserialize(model, serializationContext, null);
+        //}
+
+        /// <summary>
+        /// Deserializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="serializationContext">The serialization context.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns></returns>
+        public virtual object Deserialize(object model, TSerializationContext serializationContext, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", serializationContext);
 
-            using (var finalContext = GetContext(model, model.GetType(), serializationContext, SerializationContextMode.Deserialization))
+            using (GetCurrentSerializationScopeManager(configuration))
             {
-                return Deserialize(model, finalContext);
+                configuration = GetCurrentSerializationConfiguration(configuration);
+
+                using (var finalContext = GetContext(model, model.GetType(), serializationContext, SerializationContextMode.Deserialization, configuration))
+                {
+                    return Deserialize(model, finalContext);
+                }
             }
         }
 
@@ -173,94 +231,208 @@ namespace Catel.Runtime.Serialization
             return model;
         }
 
+        ///// <summary>
+        ///// Deserializes the specified model type.
+        ///// </summary>
+        ///// <param name="modelType">Type of the model.</param>
+        ///// <param name="stream">The stream.</param>
+        ///// <returns>The deserialized <see cref="object"/>.</returns>
+        //[ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, Stream, ISerializationConfiguration)",
+        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        //public virtual object Deserialize(Type modelType, Stream stream)
+        //{
+        //    return Deserialize(modelType, stream, null);
+        //}
+
         /// <summary>
         /// Deserializes the specified model type.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
-        /// <returns>The deserialized <see cref="object"/>.</returns>
-        public virtual object Deserialize(Type modelType, Stream stream)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The deserialized <see cref="object" />.
+        /// </returns>
+        public virtual object Deserialize(Type modelType, Stream stream, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("stream", stream);
 
-            using (var context = GetContext(modelType, stream, SerializationContextMode.Deserialization))
+            using (GetCurrentSerializationScopeManager(configuration))
             {
-                return Deserialize(context.Model, context.Context);
+                configuration = GetCurrentSerializationConfiguration(configuration);
+
+                using (var context = GetContext(modelType, stream, SerializationContextMode.Deserialization, configuration))
+                {
+                    return Deserialize(context.Model, context.Context, configuration);
+                }
             }
         }
 
-        /// <summary>
-        /// Deserializes the specified model type.
-        /// </summary>
-        /// <param name="modelType">Type of the model.</param>
-        /// <param name="serializationContext">The serialization context.</param>
-        /// <returns>The deserialized <see cref="object"/>.</returns>
-        public object Deserialize(Type modelType, ISerializationContextInfo serializationContext)
-        {
-            return Deserialize(modelType, (TSerializationContext)serializationContext);
-        }
+        ///// <summary>
+        ///// Deserializes the specified model type.
+        ///// </summary>
+        ///// <param name="modelType">Type of the model.</param>
+        ///// <param name="serializationContext">The serialization context.</param>
+        ///// <returns>The deserialized <see cref="object"/>.</returns>
+        //[ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, ISerializationContextInfo, ISerializationConfiguration)",
+        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        //public object Deserialize(Type modelType, ISerializationContextInfo serializationContext)
+        //{
+        //    return Deserialize(modelType, serializationContext, null);
+        //}
 
         /// <summary>
         /// Deserializes the specified model type.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="serializationContext">The serialization context.</param>
-        /// <returns>The deserialized <see cref="object"/>.</returns>
-        public virtual object Deserialize(Type modelType, TSerializationContext serializationContext)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The deserialized <see cref="object" />.
+        /// </returns>
+        public object Deserialize(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration)
+        {
+            return Deserialize(modelType, (TSerializationContext)serializationContext, configuration);
+        }
+
+        ///// <summary>
+        ///// Deserializes the specified model type.
+        ///// </summary>
+        ///// <param name="modelType">Type of the model.</param>
+        ///// <param name="serializationContext">The serialization context.</param>
+        ///// <returns>The deserialized <see cref="object"/>.</returns>
+        //[ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, TSerializationContext, ISerializationConfiguration)",
+        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        //public virtual object Deserialize(Type modelType, TSerializationContext serializationContext)
+        //{
+        //    return Deserialize(modelType, serializationContext, null);
+        //}
+
+        /// <summary>
+        /// Deserializes the specified model type.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="serializationContext">The serialization context.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The deserialized <see cref="object" />.
+        /// </returns>
+        public virtual object Deserialize(Type modelType, TSerializationContext serializationContext, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", serializationContext);
 
             var model = TypeFactory.CreateInstance(modelType);
 
-            Deserialize(model, serializationContext);
+            Deserialize(model, serializationContext, configuration);
 
             return model;
         }
+
+        ///// <summary>
+        ///// Deserializes the members.
+        ///// </summary>
+        ///// <param name="modelType">Type of the model.</param>
+        ///// <param name="stream">The stream.</param>
+        ///// <returns>The deserialized list of member values.</returns>
+        //[ObsoleteEx(ReplacementTypeOrMember = "DeserializeMembers(Type, Stream, ISerializationConfiguration)",
+        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        //public virtual List<MemberValue> DeserializeMembers(Type modelType, Stream stream)
+        //{
+        //    return DeserializeMembers(modelType, stream, null);
+        //}
 
         /// <summary>
         /// Deserializes the members.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
-        /// <returns>The deserialized list of member values.</returns>
-        public virtual List<MemberValue> DeserializeMembers(Type modelType, Stream stream)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The deserialized list of member values.
+        /// </returns>
+        public virtual List<MemberValue> DeserializeMembers(Type modelType, Stream stream, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("stream", stream);
 
-            using (var context = GetContext(modelType, stream, SerializationContextMode.Deserialization))
+            using (GetCurrentSerializationScopeManager(configuration))
             {
-                return DeserializeMembers(context);
+                configuration = GetCurrentSerializationConfiguration(configuration);
+
+                using (var context = GetContext(modelType, stream, SerializationContextMode.Deserialization, configuration))
+                {
+                    return DeserializeMembers(context);
+                }
             }
         }
 
+        ///// <summary>
+        ///// Deserializes the members.
+        ///// </summary>
+        ///// <param name="modelType">Type of the model.</param>
+        ///// <param name="serializationContext">The serialized context.</param>
+        ///// <returns>The deserialized list of member values.</returns>
+        ////[ObsoleteEx(ReplacementTypeOrMember = "DeserializeMembers(Type, ISerializationContextInfo, ISerializationConfiguration)",
+        ////    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        //public List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializationContext)
+        //{
+        //    return DeserializeMembers(modelType, serializationContext, null);
+        //}
+
         /// <summary>
         /// Deserializes the members.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
-        /// <param name="serializedContext">The serialized context.</param>
-        /// <returns>The deserialized list of member values.</returns>
-        public List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializedContext)
+        /// <param name="serializationContextInfo">The serialization context information.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The deserialized list of member values.
+        /// </returns>
+        public List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializationContextInfo, ISerializationConfiguration configuration)
         {
-            return DeserializeMembers(modelType, (TSerializationContext)serializedContext);
+            return DeserializeMembers(modelType, (TSerializationContext)serializationContextInfo, configuration);
         }
 
+        ///// <summary>
+        ///// Deserializes the members.
+        ///// </summary>
+        ///// <param name="modelType">Type of the model.</param>
+        ///// <param name="serializationContext">The serialized context.</param>
+        ///// <param name="configuration">The configuration.</param>
+        ///// <returns>
+        ///// The deserialized list of member values.
+        ///// </returns>
+        //[ObsoleteEx(ReplacementTypeOrMember = "DeserializeMembers(Type, TSerializationContext, ISerializationConfiguration)",
+        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        //public virtual List<MemberValue> DeserializeMembers(Type modelType, TSerializationContext serializationContext, ISerializationConfiguration configuration)
+        //{
+        //    return DeserializeMembers(modelType, serializationContext, null);
+        //}
+
         /// <summary>
         /// Deserializes the members.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
-        /// <param name="serializedContext">The serialized context.</param>
-        /// <returns>The deserialized list of member values.</returns>
-        public virtual List<MemberValue> DeserializeMembers(Type modelType, TSerializationContext serializedContext)
+        /// <param name="serializationContext">The serialized context.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The deserialized list of member values.
+        /// </returns>
+        public virtual List<MemberValue> DeserializeMembers(Type modelType, TSerializationContext serializationContext, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("modelType", modelType);
-            Argument.IsNotNull("context", serializedContext);
+            Argument.IsNotNull("context", serializationContext);
 
-            using (var finalContext = GetContext(modelType, serializedContext, SerializationContextMode.Deserialization))
+            using (GetCurrentSerializationScopeManager(configuration))
             {
-                return DeserializeMembers(finalContext);
+                configuration = GetCurrentSerializationConfiguration(configuration);
+
+                using (var finalContext = GetContext(modelType, serializationContext, SerializationContextMode.Deserialization, configuration))
+                {
+                    return DeserializeMembers(finalContext);
+                }
             }
         }
 

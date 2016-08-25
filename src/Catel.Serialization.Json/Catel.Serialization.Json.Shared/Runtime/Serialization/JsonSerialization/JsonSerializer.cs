@@ -83,28 +83,64 @@ namespace Catel.Runtime.Serialization.Json
         #endregion
 
         #region Methods
+        ///// <summary>
+        ///// Serializes the specified model to the json writer.
+        ///// </summary>
+        ///// <param name="model">The model.</param>
+        ///// <param name="jsonWriter">The json writer.</param>
+        //[ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, JsonWriter, ISerializationConfiguration)",
+        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        //public void Serialize(object model, JsonWriter jsonWriter)
+        //{
+        //    Serialize(model, jsonWriter, null);
+        //}
+
         /// <summary>
         /// Serializes the specified model to the json writer.
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="jsonWriter">The json writer.</param>
-        public void Serialize(object model, JsonWriter jsonWriter)
+        /// <param name="configuration">The configuration.</param>
+        public void Serialize(object model, JsonWriter jsonWriter, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("model", model);
 
-            using (var context = GetContext(model, model.GetType(), null, jsonWriter, SerializationContextMode.Serialization, null, null))
+            using (GetCurrentSerializationScopeManager(configuration))
             {
-                base.Serialize(model, context.Context);
+                configuration = GetCurrentSerializationConfiguration(configuration);
+
+                using (var context = GetContext(model, model.GetType(), null, jsonWriter, SerializationContextMode.Serialization, null, null, configuration))
+                {
+                    base.Serialize(model, context.Context, configuration);
+                }
             }
         }
+
+        ///// <summary>
+        ///// Deserializes the specified model from the json reader.
+        ///// </summary>
+        ///// <param name="modelType">Type of the model.</param>
+        ///// <param name="jsonReader">The json reader.</param>
+        ///// <returns>
+        ///// The model.
+        ///// </returns>
+        //[ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, JsonReader, ISerializationConfiguration)",
+        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        //public object Deserialize(Type modelType, JsonReader jsonReader)
+        //{
+        //    return Deserialize(modelType, jsonReader, null);
+        //}
 
         /// <summary>
         /// Deserializes the specified model from the json reader.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="jsonReader">The json reader.</param>
-        /// <returns>The model.</returns>
-        public object Deserialize(Type modelType, JsonReader jsonReader)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The model.
+        /// </returns>
+        public object Deserialize(Type modelType, JsonReader jsonReader, ISerializationConfiguration configuration)
         {
             Dictionary<string, JProperty> jsonProperties = null;
             JArray jsonArray = null;
@@ -164,9 +200,15 @@ namespace Catel.Runtime.Serialization.Json
 
             var model = CreateModelInstance(modelType);
 
-            using (var context = GetContext(model, modelType, jsonReader, null, SerializationContextMode.Deserialization, jsonProperties, jsonArray))
+            using (GetCurrentSerializationScopeManager(configuration))
             {
-                model = base.Deserialize(model, context.Context);
+                configuration = GetCurrentSerializationConfiguration(configuration);
+
+                using (var context = GetContext(model, modelType, jsonReader, null, SerializationContextMode.Deserialization,
+                    jsonProperties, jsonArray, configuration))
+                {
+                    model = base.Deserialize(model, context.Context, configuration);
+                }
             }
 
             return model;
@@ -314,7 +356,7 @@ namespace Catel.Runtime.Serialization.Json
                             }
                             else
                             {
-                                Serialize(item, jsonWriter);
+                                Serialize(item, jsonWriter, context.Configuration);
                             }
                         }
                     }
@@ -338,7 +380,7 @@ namespace Catel.Runtime.Serialization.Json
                         }
                         else
                         {
-                            Serialize(item, jsonWriter);
+                            Serialize(item, jsonWriter, context.Configuration);
                         }
                     }
                 }
@@ -347,7 +389,7 @@ namespace Catel.Runtime.Serialization.Json
             }
             else
             {
-                Serialize(memberValue.Value, jsonWriter);
+                Serialize(memberValue.Value, jsonWriter, context.Configuration);
             }
         }
 
@@ -518,7 +560,7 @@ namespace Catel.Runtime.Serialization.Json
                         }
                         else
                         {
-                            deserializedItem = Deserialize(valueType, jsonProperty.Value.CreateReader());
+                            deserializedItem = Deserialize(valueType, jsonProperty.Value.CreateReader(), context.Configuration);
                         }
 
                         dictionary[key] = deserializedItem;
@@ -574,7 +616,7 @@ namespace Catel.Runtime.Serialization.Json
                                     }
                                     else if (ShouldSerializeAsCollection(memberValue))
                                     {
-                                        finalMemberValue = Deserialize(valueType, jsonProperty.Value.CreateReader());
+                                        finalMemberValue = Deserialize(valueType, jsonProperty.Value.CreateReader(), context.Configuration);
                                     }
                                     else
                                     {
@@ -589,7 +631,7 @@ namespace Catel.Runtime.Serialization.Json
                                             }
 
                                             // Serialize ourselves
-                                            finalMemberValue = Deserialize(finalValueType, jsonValue.CreateReader());
+                                            finalMemberValue = Deserialize(finalValueType, jsonValue.CreateReader(), context.Configuration);
                                         }
                                     }
                                 }
@@ -646,7 +688,7 @@ namespace Catel.Runtime.Serialization.Json
                         }
                         else
                         {
-                            deserializedItem = Deserialize(collectionItemType, item.CreateReader());
+                            deserializedItem = Deserialize(collectionItemType, item.CreateReader(), context.Configuration);
                         }
 
                         collection.Add(deserializedItem);
@@ -666,9 +708,13 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
-        /// <returns>ISerializationContext{SerializationInfo}.</returns>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// ISerializationContext{SerializationInfo}.
+        /// </returns>
         /// <exception cref="System.ArgumentOutOfRangeException">contextMode</exception>
-        protected override ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, Stream stream, SerializationContextMode contextMode)
+        protected override ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, Stream stream, 
+            SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             JsonReader jsonReader = null;
             JsonWriter jsonWriter = null;
@@ -687,7 +733,7 @@ namespace Catel.Runtime.Serialization.Json
                     throw new ArgumentOutOfRangeException("contextMode");
             }
 
-            return GetContext(model, modelType, jsonReader, jsonWriter, contextMode, null, null);
+            return GetContext(model, modelType, jsonReader, jsonWriter, contextMode, null, null, configuration);
         }
 
         /// <summary>
@@ -700,13 +746,16 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="contextMode">The context mode.</param>
         /// <param name="jsonProperties">The json properties.</param>
         /// <param name="jsonArray">The json array.</param>
-        /// <returns>ISerializationContext&lt;JsonSerializationContextInfo&gt;.</returns>
-        protected virtual ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, JsonReader jsonReader, JsonWriter jsonWriter, SerializationContextMode contextMode,
-            Dictionary<string, JProperty> jsonProperties, JArray jsonArray)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// ISerializationContext&lt;JsonSerializationContextInfo&gt;.
+        /// </returns>
+        protected virtual ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, JsonReader jsonReader, JsonWriter jsonWriter, 
+            SerializationContextMode contextMode, Dictionary<string, JProperty> jsonProperties, JArray jsonArray, ISerializationConfiguration configuration)
         {
             var jsonSerializer = new Newtonsoft.Json.JsonSerializer();
             jsonSerializer.ContractResolver = new CatelJsonContractResolver();
-            jsonSerializer.Converters.Add(new CatelJsonConverter(this));
+            jsonSerializer.Converters.Add(new CatelJsonConverter(this, configuration));
 
             var contextInfo = new JsonSerializationContextInfo(jsonSerializer, jsonReader, jsonWriter);
             if (jsonProperties != null)
@@ -719,7 +768,7 @@ namespace Catel.Runtime.Serialization.Json
                 contextInfo.JsonArray = jsonArray;
             }
 
-            var context = new SerializationContext<JsonSerializationContextInfo>(model, modelType, contextInfo, contextMode);
+            var context = new SerializationContext<JsonSerializationContextInfo>(model, modelType, contextInfo, contextMode, configuration);
             return context;
         }
 

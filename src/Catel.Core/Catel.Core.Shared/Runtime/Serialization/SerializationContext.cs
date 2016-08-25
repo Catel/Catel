@@ -4,13 +4,12 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Runtime.Serialization;
-using Catel.Reflection;
-
 namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Collections.Generic;
+    using System.Runtime.Serialization;
+    using Catel.Reflection;
     using Catel.Scoping;
 
     /// <summary>
@@ -25,6 +24,22 @@ namespace Catel.Runtime.Serialization
         private ScopeManager<ReferenceManager> _referenceManagerScopeManager;
         private int? _depth;
 
+        ///// <summary>
+        ///// Initializes a new instance of the <see cref="SerializationContext{TContext}" /> class.
+        ///// </summary>
+        ///// <param name="model">The model, can be <c>null</c> for value types.</param>
+        ///// <param name="modelType">Type of the model.</param>
+        ///// <param name="context">The context.</param>
+        ///// <param name="contextMode">The context mode.</param>
+        ///// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        ///// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
+        //[ObsoleteEx(ReplacementTypeOrMember = "SerializationContext(object, Type, TContext, SerializationContextMode, ISerializationConfiguration)", 
+        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
+        //public SerializationContext(object model, Type modelType, TContext context, SerializationContextMode contextMode)
+        //    : this(model, modelType, context, contextMode, null)
+        //{
+        //}
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializationContext{TContext}" /> class.
         /// </summary>
@@ -32,12 +47,16 @@ namespace Catel.Runtime.Serialization
         /// <param name="modelType">Type of the model.</param>
         /// <param name="context">The context.</param>
         /// <param name="contextMode">The context mode.</param>
+        /// <param name="configuration">The configuration.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
-        public SerializationContext(object model, Type modelType, TContext context, SerializationContextMode contextMode)
+        /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
+        public SerializationContext(object model, Type modelType, TContext context, 
+            SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", context);
+            Argument.IsNotNull("configuration", configuration);
 
             Model = model;
             ModelType = modelType;
@@ -45,6 +64,7 @@ namespace Catel.Runtime.Serialization
             Context = context;
             ContextMode = contextMode;
             TypeStack = new Stack<Type>();
+            Configuration = configuration;
 
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
 
@@ -98,7 +118,12 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// Gets the type stack inside the current scope.
         /// </summary>
-        public Stack<Type> TypeStack { get; private set; } 
+        public Stack<Type> TypeStack { get; private set; }
+
+        /// <summary>
+        /// Gets the serialization configuration.
+        /// </summary>
+        public ISerializationConfiguration Configuration { get; private set; }
 
         /// <summary>
         /// Gets the context mode.

@@ -920,7 +920,7 @@ namespace Catel.Test.Runtime.Serialization
 
                             if ((parameterName != null) && parameterNames.TryGetValue(parameterName, out parameterIndex))
                             {
-                                parameters[parameterIndex] = serializer.Deserialize(parameterTypes[parameterIndex], jsonReader);
+                                parameters[parameterIndex] = serializer.Deserialize(parameterTypes[parameterIndex], jsonReader, null);
                             }
                             else
                             {

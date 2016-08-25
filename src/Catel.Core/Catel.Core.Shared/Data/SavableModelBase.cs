@@ -84,9 +84,10 @@ namespace Catel.Data
         [Browsable(false)]
 #endif
         [XmlIgnore]
+        [ObsoleteEx(TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public byte[] Bytes
         {
-            get { return ToByteArray(); }
+            get { return ToByteArray(null); }
         }
 
         /// <summary>
@@ -105,11 +106,25 @@ namespace Catel.Data
         /// Serializes the object to and xml object.
         /// </summary>
         /// <returns><see cref="XDocument"/> containing the serialized data.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "ToXml(ISerializationConfiguration)",
+             TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public XDocument ToXml()
+        {
+            return ToXml(null);
+        }
+
+        /// <summary>
+        /// Serializes the object to and xml object.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        ///   <see cref="XDocument" /> containing the serialized data.
+        /// </returns>
+        public XDocument ToXml(ISerializationConfiguration configuration)
         {
             using (var memoryStream = new MemoryStream())
             {
-                Save(memoryStream, SerializationMode.Xml);
+                Save(memoryStream, SerializationMode.Xml, configuration);
 
                 memoryStream.Position = 0L;
 
@@ -124,14 +139,25 @@ namespace Catel.Data
         /// Serializes the object to a byte array.
         /// </summary>
         /// <returns>Byte array containing the serialized data.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "ToByteArray(ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public byte[] ToByteArray()
+        {
+            return ToByteArray(null);
+        }
+
+        /// <summary>
+        /// Serializes the object to a byte array.
+        /// </summary>
+        /// <returns>Byte array containing the serialized data.</returns>
+        public byte[] ToByteArray(ISerializationConfiguration configuration)
         {
             using (var memoryStream = new MemoryStream())
             {
 #if NET
-                Save(memoryStream, SerializationMode.Binary);
+                Save(memoryStream, SerializationMode.Binary, configuration);
 #else
-                Save(memoryStream, SerializationMode.Xml);
+                Save(memoryStream, SerializationMode.Xml, configuration);
 #endif
 
                 return memoryStream.ToArray();
@@ -144,17 +170,42 @@ namespace Catel.Data
         /// Saves the object to a file using the default formatting.
         /// </summary>
         /// <param name="fileName">Filename of the file that will contain the serialized data of this object.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Save(string, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public void Save(string fileName)
         {
-            Save(fileName, Mode);
+            Save(fileName, null);
+        }
+
+        /// <summary>
+        /// Saves the object to a file using the default formatting.
+        /// </summary>
+        /// <param name="fileName">Filename of the file that will contain the serialized data of this object.</param>
+        /// <param name="configuration">The configuration.</param>
+        public void Save(string fileName, ISerializationConfiguration configuration)
+        {
+            Save(fileName, Mode, configuration);
         }
 
         /// <summary>
         /// Saves the object to a file using a specific formatting.
         /// </summary>
         /// <param name="fileName">Filename of the file that will contain the serialized data of this object.</param>
-        /// <param name="mode"><see cref="SerializationMode"/> to use.</param>
+        /// <param name="mode"><see cref="SerializationMode" /> to use.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Save(string, SerializationMode, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public void Save(string fileName, SerializationMode mode)
+        {
+            Save(fileName, mode, null);
+        }
+
+        /// <summary>
+        /// Saves the object to a file using a specific formatting.
+        /// </summary>
+        /// <param name="fileName">Filename of the file that will contain the serialized data of this object.</param>
+        /// <param name="mode"><see cref="SerializationMode" /> to use.</param>
+        /// <param name="configuration">The configuration.</param>
+        public void Save(string fileName, SerializationMode mode, ISerializationConfiguration configuration)
         {
             var fileInfo = new FileInfo(fileName);
             if (!Directory.Exists(fileInfo.DirectoryName))
@@ -164,7 +215,7 @@ namespace Catel.Data
 
             using (Stream stream = new FileStream(fileName, FileMode.Create))
             {
-                Save(stream, mode);
+                Save(stream, mode, configuration);
             }
         }
 #elif NETFX_CORE
@@ -174,7 +225,7 @@ namespace Catel.Data
         /// <param name="fileStream">Stream that will contain the serialized data of this object.</param>
         public void Save(IRandomAccessStream fileStream)
         {
-            Save((Stream)fileStream);
+            Save((Stream)fileStream, null);
         }
 #elif PCL
         // Not supported in Portable Class Library
@@ -185,7 +236,7 @@ namespace Catel.Data
         /// <param name="fileStream">Stream that will contain the serialized data of this object.</param>
         public void Save(IsolatedStorageFileStream fileStream)
         {
-            Save((Stream)fileStream);
+            Save((Stream)fileStream, null);
         }
 #endif
 
@@ -193,9 +244,21 @@ namespace Catel.Data
         /// Saves the object to a stream using the default formatting.
         /// </summary>
         /// <param name="stream">Stream that will contain the serialized data of this object.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Save(Stream, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public void Save(Stream stream)
         {
-            Save(stream, Mode);
+            Save(stream, null);
+        }
+
+        /// <summary>
+        /// Saves the object to a stream using the default formatting.
+        /// </summary>
+        /// <param name="stream">Stream that will contain the serialized data of this object.</param>
+        /// <param name="configuration">The configuration.</param>
+        public void Save(Stream stream, ISerializationConfiguration configuration)
+        {
+            Save(stream, Mode, configuration);
         }
 
         /// <summary>
@@ -203,7 +266,20 @@ namespace Catel.Data
         /// </summary>
         /// <param name="stream">Stream that will contain the serialized data of this object.</param>
         /// <param name="mode"><see cref="SerializationMode"/> to use.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Save(Stream, SerializationMode, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public void Save(Stream stream, SerializationMode mode)
+        {
+            Save(stream, mode, null);
+        }
+
+        /// <summary>
+        /// Saves the object to a stream using a specific formatting.
+        /// </summary>
+        /// <param name="stream">Stream that will contain the serialized data of this object.</param>
+        /// <param name="mode"><see cref="SerializationMode" /> to use.</param>
+        /// <param name="configuration">The configuration.</param>
+        public void Save(Stream stream, SerializationMode mode, ISerializationConfiguration configuration)
         {
             Log.Debug("Saving object '{0}' as '{1}'", GetType().Name, mode);
 
@@ -212,13 +288,13 @@ namespace Catel.Data
 #if NET
                 case SerializationMode.Binary:
                     var binarySerializer = SerializationFactory.GetBinarySerializer();
-                    binarySerializer.Serialize(this, stream);
+                    binarySerializer.Serialize(this, stream, configuration);
                     break;
 #endif
 
                 case SerializationMode.Xml:
                     var xmlSerializer = SerializationFactory.GetXmlSerializer();
-                    xmlSerializer.Serialize(this, stream);
+                    xmlSerializer.Serialize(this, stream, configuration);
                     break;
             }
 
@@ -242,7 +318,7 @@ namespace Catel.Data
         /// </remarks>
         public static T Load(IRandomAccessStream fileStream, SerializationMode mode)
         {
-            return Load<T>((Stream)fileStream, mode);
+            return Load<T>((Stream)fileStream, mode, null);
         }
 #elif PCL
         // Not supported in Portable Class Library
@@ -259,7 +335,7 @@ namespace Catel.Data
         /// </remarks>
         public static T Load(IsolatedStorageFileStream fileStream, SerializationMode mode)
         {
-            return Load<T>(fileStream, mode);
+            return Load<T>(fileStream, mode, null);
         }
 #endif
 
@@ -281,9 +357,29 @@ namespace Catel.Data
         /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
         /// <remarks>When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.</remarks>
+        [ObsoleteEx(ReplacementTypeOrMember = "Load(Stream, SerializationMode, ISerializationConfiguration)",
+                    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
         public static T Load(Stream stream, SerializationMode mode)
         {
-            return Load<T>(stream, mode);
+            return Load(stream, mode, null);
+        }
+
+        /// <summary>
+        /// Loads the object from a stream using a specific formatting.
+        /// </summary>
+        /// <param name="stream">Stream that contains the serialized data of this object.</param>
+        /// <param name="mode"><see cref="SerializationMode" /> to use.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.
+        /// </returns>
+        /// <remarks>
+        /// When enableRedirects is enabled, loading will take more time. Only set
+        /// the parameter to <c>true</c> when the deserialization without redirects fails.
+        /// </remarks>
+        public static T Load(Stream stream, SerializationMode mode, ISerializationConfiguration configuration)
+        {
+            return Load<T>(stream, mode, configuration);
         }
         #endregion
         #endregion

@@ -33,7 +33,7 @@ namespace Catel.Test.Runtime.Serialization
                 testModel.ExcludedCatelProperty = "excluded";
                 testModel.IncludedCatelProperty = "included";
 
-                var json = testModel.ToJson();
+                var json = testModel.ToJson(null);
 
                 Assert.IsFalse(json.Contains("Excluded"));
             }

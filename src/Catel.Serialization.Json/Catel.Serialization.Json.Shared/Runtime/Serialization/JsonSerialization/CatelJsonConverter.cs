@@ -23,14 +23,17 @@ namespace Catel.Runtime.Serialization.JsonSerialization
     public class CatelJsonConverter : JsonConverter
     {
         private readonly IJsonSerializer _jsonSerializer;
+        private readonly ISerializationConfiguration _configuration;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CatelJsonConverter" /> class.
         /// </summary>
         /// <param name="jsonSerializer">The json serializer.</param>
-        public CatelJsonConverter(IJsonSerializer jsonSerializer)
+        /// <param name="configuration">The configuration.</param>
+        public CatelJsonConverter(IJsonSerializer jsonSerializer, ISerializationConfiguration configuration)
         {
             _jsonSerializer = jsonSerializer;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -65,7 +68,7 @@ namespace Catel.Runtime.Serialization.JsonSerialization
 
             if (serialize)
             {
-                _jsonSerializer.Serialize((ModelBase)value, writer);
+                _jsonSerializer.Serialize((ModelBase)value, writer, _configuration);
             }
         }
 
@@ -79,7 +82,7 @@ namespace Catel.Runtime.Serialization.JsonSerialization
         /// <returns>System.Object.</returns>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var obj = _jsonSerializer.Deserialize(objectType, reader);
+            var obj = _jsonSerializer.Deserialize(objectType, reader, _configuration);
             return obj;
         }
 
