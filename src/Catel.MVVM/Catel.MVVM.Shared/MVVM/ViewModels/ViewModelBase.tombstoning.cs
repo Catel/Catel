@@ -87,7 +87,7 @@ namespace Catel.MVVM
             using (var memoryStream = new MemoryStream())
             {
                 var xmlSerializer = SerializationFactory.GetXmlSerializer();
-                xmlSerializer.SerializeMembers(this, memoryStream, null);
+                xmlSerializer.SerializeMembers(this, memoryStream, null, new string[] { });
 
                 return memoryStream.ToArray();
             }
