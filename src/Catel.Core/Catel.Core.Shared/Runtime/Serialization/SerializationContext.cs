@@ -24,21 +24,21 @@ namespace Catel.Runtime.Serialization
         private ScopeManager<ReferenceManager> _referenceManagerScopeManager;
         private int? _depth;
 
-        ///// <summary>
-        ///// Initializes a new instance of the <see cref="SerializationContext{TContext}" /> class.
-        ///// </summary>
-        ///// <param name="model">The model, can be <c>null</c> for value types.</param>
-        ///// <param name="modelType">Type of the model.</param>
-        ///// <param name="context">The context.</param>
-        ///// <param name="contextMode">The context mode.</param>
-        ///// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
-        ///// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
-        //[ObsoleteEx(ReplacementTypeOrMember = "SerializationContext(object, Type, TContext, SerializationContextMode, ISerializationConfiguration)", 
-        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public SerializationContext(object model, Type modelType, TContext context, SerializationContextMode contextMode)
-        //    : this(model, modelType, context, contextMode, null)
-        //{
-        //}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SerializationContext{TContext}" /> class.
+        /// </summary>
+        /// <param name="model">The model, can be <c>null</c> for value types.</param>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="context">The context.</param>
+        /// <param name="contextMode">The context mode.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "SerializationContext(object, Type, TContext, SerializationContextMode, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public SerializationContext(object model, Type modelType, TContext context, SerializationContextMode contextMode)
+            : this(model, modelType, context, contextMode, null)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializationContext{TContext}" /> class.

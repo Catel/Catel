@@ -44,17 +44,17 @@ namespace Catel.Runtime.Serialization
         #endregion
 
         #region ISerializer<TSerializationContext> Members
-        ///// <summary>
-        ///// Serializes the specified model.
-        ///// </summary>
-        ///// <param name="model">The model.</param>
-        ///// <param name="stream">The stream.</param>
-        //[ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, Stream, ISerializationConfiguration)",
-        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public virtual void Serialize(object model, Stream stream)
-        //{
-        //    Serialize(model, stream, null);
-        //}
+        /// <summary>
+        /// Serializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="stream">The stream.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, Stream, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public virtual void Serialize(object model, Stream stream)
+        {
+            Serialize(model, stream, null);
+        }
 
         /// <summary>
         /// Serializes the specified model.
@@ -80,17 +80,17 @@ namespace Catel.Runtime.Serialization
             }
         }
 
-        ///// <summary>
-        ///// Serializes the specified model.
-        ///// </summary>
-        ///// <param name="model">The model.</param>
-        ///// <param name="context">The context.</param>
-        //[ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, ISerializationContextInfo, ISerializationConfiguration)",
-        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public void Serialize(object model, ISerializationContextInfo context)
-        //{
-        //    Serialize(model, (TSerializationContext)context, null);
-        //}
+        /// <summary>
+        /// Serializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="context">The context.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, ISerializationContextInfo, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public void Serialize(object model, ISerializationContextInfo context)
+        {
+            Serialize(model, (TSerializationContext)context, null);
+        }
 
         /// <summary>
         /// Serializes the specified model.
@@ -103,17 +103,17 @@ namespace Catel.Runtime.Serialization
             Serialize(model, (TSerializationContext)context, configuration);
         }
 
-        ///// <summary>
-        ///// Serializes the specified model.
-        ///// </summary>
-        ///// <param name="model">The model.</param>
-        ///// <param name="context">The context.</param>
-        //[ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, TSerializationContext, ISerializationConfiguration)",
-        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public virtual void Serialize(object model, TSerializationContext context)
-        //{
-        //    return Serialize(model, context, null);
-        //}
+        /// <summary>
+        /// Serializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="context">The context.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, TSerializationContext, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public virtual void Serialize(object model, TSerializationContext context)
+        {
+            Serialize(model, context, null);
+        }
 
         /// <summary>
         /// Serializes the specified model.
@@ -176,18 +176,18 @@ namespace Catel.Runtime.Serialization
             Serialized.SafeInvoke(this, serializingEventArgs);
         }
 
-        ///// <summary>
-        ///// Serializes the members.
-        ///// </summary>
-        ///// <param name="model">The model.</param>
-        ///// <param name="stream">The stream.</param>
-        ///// <param name="membersToIgnore">The members to ignore.</param>
-        //[ObsoleteEx(ReplacementTypeOrMember = "SerializeMembers(object, Stream, ISerializationConfiguration, params string[])",
-        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public virtual void SerializeMembers(object model, Stream stream, params string[] membersToIgnore)
-        //{
-        //    SerializeMembers(model, stream, null, membersToIgnore);
-        //}
+        /// <summary>
+        /// Serializes the members.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <param name="membersToIgnore">The members to ignore.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "SerializeMembers(object, Stream, ISerializationConfiguration, params string[])",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public virtual void SerializeMembers(object model, Stream stream, params string[] membersToIgnore)
+        {
+            SerializeMembers(model, stream, null, membersToIgnore);
+        }
 
         /// <summary>
         /// Serializes the members.

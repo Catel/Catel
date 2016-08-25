@@ -83,17 +83,17 @@ namespace Catel.Runtime.Serialization.Json
         #endregion
 
         #region Methods
-        ///// <summary>
-        ///// Serializes the specified model to the json writer.
-        ///// </summary>
-        ///// <param name="model">The model.</param>
-        ///// <param name="jsonWriter">The json writer.</param>
-        //[ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, JsonWriter, ISerializationConfiguration)",
-        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public void Serialize(object model, JsonWriter jsonWriter)
-        //{
-        //    Serialize(model, jsonWriter, null);
-        //}
+        /// <summary>
+        /// Serializes the specified model to the json writer.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="jsonWriter">The json writer.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, JsonWriter, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public void Serialize(object model, JsonWriter jsonWriter)
+        {
+            Serialize(model, jsonWriter, null);
+        }
 
         /// <summary>
         /// Serializes the specified model to the json writer.
@@ -116,20 +116,20 @@ namespace Catel.Runtime.Serialization.Json
             }
         }
 
-        ///// <summary>
-        ///// Deserializes the specified model from the json reader.
-        ///// </summary>
-        ///// <param name="modelType">Type of the model.</param>
-        ///// <param name="jsonReader">The json reader.</param>
-        ///// <returns>
-        ///// The model.
-        ///// </returns>
-        //[ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, JsonReader, ISerializationConfiguration)",
-        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public object Deserialize(Type modelType, JsonReader jsonReader)
-        //{
-        //    return Deserialize(modelType, jsonReader, null);
-        //}
+        /// <summary>
+        /// Deserializes the specified model from the json reader.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="jsonReader">The json reader.</param>
+        /// <returns>
+        /// The model.
+        /// </returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, JsonReader, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public object Deserialize(Type modelType, JsonReader jsonReader)
+        {
+            return Deserialize(modelType, jsonReader, null);
+        }
 
         /// <summary>
         /// Deserializes the specified model from the json reader.

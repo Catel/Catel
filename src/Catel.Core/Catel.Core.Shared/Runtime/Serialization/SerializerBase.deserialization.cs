@@ -90,17 +90,17 @@ namespace Catel.Runtime.Serialization
         }
 
         #region Methods
-        ///// <summary>
-        ///// Deserializes the specified model.
-        ///// </summary>
-        ///// <param name="model">The model.</param>
-        ///// <param name="stream">The stream.</param>
-        //[ObsoleteEx(ReplacementTypeOrMember = "Deserialize(object, Stream, ISerializationConfiguration)",
-        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public virtual object Deserialize(object model, Stream stream)
-        //{
-        //    return Deserialize(model, stream, null);
-        //}
+        /// <summary>
+        /// Deserializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="stream">The stream.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Deserialize(object, Stream, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public virtual object Deserialize(object model, Stream stream)
+        {
+            return Deserialize(model, stream, null);
+        }
 
         /// <summary>
         /// Deserializes the specified model.
@@ -127,18 +127,18 @@ namespace Catel.Runtime.Serialization
             }
         }
 
-        ///// <summary>
-        ///// Deserializes the specified model.
-        ///// </summary>
-        ///// <param name="model">The model.</param>
-        ///// <param name="serializationContext">The serialization context.</param>
-        ///// <returns>The deserialized model.</returns>
-        //[ObsoleteEx(ReplacementTypeOrMember = "Deserialize(object, ISerializationContextInfo, ISerializationConfiguration)",
-        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public object Deserialize(object model, ISerializationContextInfo serializationContext)
-        //{
-        //    return Deserialize(model, serializationContext, null);
-        //}
+        /// <summary>
+        /// Deserializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="serializationContext">The serialization context.</param>
+        /// <returns>The deserialized model.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Deserialize(object, ISerializationContextInfo, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public object Deserialize(object model, ISerializationContextInfo serializationContext)
+        {
+            return Deserialize(model, serializationContext, null);
+        }
 
         /// <summary>
         /// Deserializes the specified model.
@@ -154,17 +154,17 @@ namespace Catel.Runtime.Serialization
             return Deserialize(model, (TSerializationContext)serializationContext, configuration);
         }
 
-        ///// <summary>
-        ///// Deserializes the specified model.
-        ///// </summary>
-        ///// <param name="model">The model.</param>
-        ///// <param name="serializationContext">The serialization context.</param>
-        //[ObsoleteEx(ReplacementTypeOrMember = "Deserialize(object, TSerializationContext, ISerializationConfiguration)",
-        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public virtual object Deserialize(object model, TSerializationContext serializationContext)
-        //{
-        //    return Deserialize(model, serializationContext, null);
-        //}
+        /// <summary>
+        /// Deserializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="serializationContext">The serialization context.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Deserialize(object, TSerializationContext, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public virtual object Deserialize(object model, TSerializationContext serializationContext)
+        {
+            return Deserialize(model, serializationContext, null);
+        }
 
         /// <summary>
         /// Deserializes the specified model.
@@ -231,18 +231,18 @@ namespace Catel.Runtime.Serialization
             return model;
         }
 
-        ///// <summary>
-        ///// Deserializes the specified model type.
-        ///// </summary>
-        ///// <param name="modelType">Type of the model.</param>
-        ///// <param name="stream">The stream.</param>
-        ///// <returns>The deserialized <see cref="object"/>.</returns>
-        //[ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, Stream, ISerializationConfiguration)",
-        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public virtual object Deserialize(Type modelType, Stream stream)
-        //{
-        //    return Deserialize(modelType, stream, null);
-        //}
+        /// <summary>
+        /// Deserializes the specified model type.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <returns>The deserialized <see cref="object"/>.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, Stream, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public virtual object Deserialize(Type modelType, Stream stream)
+        {
+            return Deserialize(modelType, stream, null);
+        }
 
         /// <summary>
         /// Deserializes the specified model type.
@@ -269,18 +269,18 @@ namespace Catel.Runtime.Serialization
             }
         }
 
-        ///// <summary>
-        ///// Deserializes the specified model type.
-        ///// </summary>
-        ///// <param name="modelType">Type of the model.</param>
-        ///// <param name="serializationContext">The serialization context.</param>
-        ///// <returns>The deserialized <see cref="object"/>.</returns>
-        //[ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, ISerializationContextInfo, ISerializationConfiguration)",
-        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public object Deserialize(Type modelType, ISerializationContextInfo serializationContext)
-        //{
-        //    return Deserialize(modelType, serializationContext, null);
-        //}
+        /// <summary>
+        /// Deserializes the specified model type.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="serializationContext">The serialization context.</param>
+        /// <returns>The deserialized <see cref="object"/>.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, ISerializationContextInfo, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public object Deserialize(Type modelType, ISerializationContextInfo serializationContext)
+        {
+            return Deserialize(modelType, serializationContext, null);
+        }
 
         /// <summary>
         /// Deserializes the specified model type.
@@ -296,18 +296,18 @@ namespace Catel.Runtime.Serialization
             return Deserialize(modelType, (TSerializationContext)serializationContext, configuration);
         }
 
-        ///// <summary>
-        ///// Deserializes the specified model type.
-        ///// </summary>
-        ///// <param name="modelType">Type of the model.</param>
-        ///// <param name="serializationContext">The serialization context.</param>
-        ///// <returns>The deserialized <see cref="object"/>.</returns>
-        //[ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, TSerializationContext, ISerializationConfiguration)",
-        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public virtual object Deserialize(Type modelType, TSerializationContext serializationContext)
-        //{
-        //    return Deserialize(modelType, serializationContext, null);
-        //}
+        /// <summary>
+        /// Deserializes the specified model type.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="serializationContext">The serialization context.</param>
+        /// <returns>The deserialized <see cref="object"/>.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, TSerializationContext, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public virtual object Deserialize(Type modelType, TSerializationContext serializationContext)
+        {
+            return Deserialize(modelType, serializationContext, null);
+        }
 
         /// <summary>
         /// Deserializes the specified model type.
@@ -330,18 +330,18 @@ namespace Catel.Runtime.Serialization
             return model;
         }
 
-        ///// <summary>
-        ///// Deserializes the members.
-        ///// </summary>
-        ///// <param name="modelType">Type of the model.</param>
-        ///// <param name="stream">The stream.</param>
-        ///// <returns>The deserialized list of member values.</returns>
-        //[ObsoleteEx(ReplacementTypeOrMember = "DeserializeMembers(Type, Stream, ISerializationConfiguration)",
-        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public virtual List<MemberValue> DeserializeMembers(Type modelType, Stream stream)
-        //{
-        //    return DeserializeMembers(modelType, stream, null);
-        //}
+        /// <summary>
+        /// Deserializes the members.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <returns>The deserialized list of member values.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "DeserializeMembers(Type, Stream, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public virtual List<MemberValue> DeserializeMembers(Type modelType, Stream stream)
+        {
+            return DeserializeMembers(modelType, stream, null);
+        }
 
         /// <summary>
         /// Deserializes the members.
@@ -368,18 +368,18 @@ namespace Catel.Runtime.Serialization
             }
         }
 
-        ///// <summary>
-        ///// Deserializes the members.
-        ///// </summary>
-        ///// <param name="modelType">Type of the model.</param>
-        ///// <param name="serializationContext">The serialized context.</param>
-        ///// <returns>The deserialized list of member values.</returns>
-        ////[ObsoleteEx(ReplacementTypeOrMember = "DeserializeMembers(Type, ISerializationContextInfo, ISerializationConfiguration)",
-        ////    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializationContext)
-        //{
-        //    return DeserializeMembers(modelType, serializationContext, null);
-        //}
+        /// <summary>
+        /// Deserializes the members.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="serializationContext">The serialized context.</param>
+        /// <returns>The deserialized list of member values.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "DeserializeMembers(Type, ISerializationContextInfo, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializationContext)
+        {
+            return DeserializeMembers(modelType, serializationContext, null);
+        }
 
         /// <summary>
         /// Deserializes the members.
@@ -395,21 +395,20 @@ namespace Catel.Runtime.Serialization
             return DeserializeMembers(modelType, (TSerializationContext)serializationContextInfo, configuration);
         }
 
-        ///// <summary>
-        ///// Deserializes the members.
-        ///// </summary>
-        ///// <param name="modelType">Type of the model.</param>
-        ///// <param name="serializationContext">The serialized context.</param>
-        ///// <param name="configuration">The configuration.</param>
-        ///// <returns>
-        ///// The deserialized list of member values.
-        ///// </returns>
-        //[ObsoleteEx(ReplacementTypeOrMember = "DeserializeMembers(Type, TSerializationContext, ISerializationConfiguration)",
-        //    TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        //public virtual List<MemberValue> DeserializeMembers(Type modelType, TSerializationContext serializationContext, ISerializationConfiguration configuration)
-        //{
-        //    return DeserializeMembers(modelType, serializationContext, null);
-        //}
+        /// <summary>
+        /// Deserializes the members.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="serializationContext">The serialized context.</param>
+        /// <returns>
+        /// The deserialized list of member values.
+        /// </returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "DeserializeMembers(Type, TSerializationContext, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        public virtual List<MemberValue> DeserializeMembers(Type modelType, TSerializationContext serializationContext)
+        {
+            return DeserializeMembers(modelType, serializationContext, null);
+        }
 
         /// <summary>
         /// Deserializes the members.
