@@ -186,8 +186,7 @@ namespace Catel.Data
                         Log.Warning("Received NotifyCollectionChangedAction.Reset for '{0}', but the type does not implement ICollection", sender.GetType().GetSafeFullName(false));
                     }
                 }
-
-                if (e.NewItems != null)
+                else if (e.NewItems != null)
                 {
                     foreach (var item in e.NewItems)
                     {
@@ -270,12 +269,12 @@ namespace Catel.Data
                     }
 
                     collectionItems.Clear();
+                }
 
-                    var newItems = collection.Cast<object>().ToArray();
-                    foreach (var item in newItems)
-                    {
-                        SubscribeNotifyChangedEvents(item, collection);
-                    }
+                var newItems = collection.Cast<object>().ToArray();
+                foreach (var item in newItems)
+                {
+                    SubscribeNotifyChangedEvents(item, collection);
                 }
             }
         }

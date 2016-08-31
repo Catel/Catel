@@ -56,6 +56,7 @@ Added/fixed:
 (+) CTL-915 Add ISerializationConfiguration to all serialization methods. The serialization of members using 
     ToString / Parse has been changed to opt-in. This can either be achieved via a SerializerModifier or by 
     decorating the member using the SerializeUsingParseAndToStringAttribute
+(x) CTL-917 Improve ChangeNotificationWrapper handling of NotifyCollectionChangedAction.Reset
 
 Roadmap:
 ========
