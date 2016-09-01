@@ -233,7 +233,7 @@ namespace Catel.Runtime.Serialization.Xml
                     var collection = ConvertDictionaryToCollection(memberValue.Value);
                     if (collection != null)
                     {
-                        Serialize(collection, context.Context);
+                        Serialize(collection, context.Context, context.Configuration);
                     }
                     return;
                 }
@@ -487,8 +487,12 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
-        /// <returns>The serialization context.</returns>
-        protected override ISerializationContext<XmlSerializationContextInfo> GetContext(object model, Type modelType, Stream stream, SerializationContextMode contextMode)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The serialization context.
+        /// </returns>
+        protected override ISerializationContext<XmlSerializationContextInfo> GetContext(object model, Type modelType, Stream stream, 
+            SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             XDocument document = null;
 
@@ -520,7 +524,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             var contextInfo = new XmlSerializationContextInfo(document.Root, model);
-            var context = new SerializationContext<XmlSerializationContextInfo>(model, modelType, contextInfo, contextMode);
+            var context = new SerializationContext<XmlSerializationContextInfo>(model, modelType, contextInfo, contextMode, configuration);
 
             if (isNewDocument)
             {
@@ -606,7 +610,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             var isDeserialized = false;
 
-            if (propertyTypeToDeserialize == typeof(string) && ShouldSerializeUsingParse(memberValue, false))
+            if (propertyTypeToDeserialize == typeof(string) && ShouldSerializeUsingParseAndToString(memberValue, false))
             {
                 var tempValue = memberValue.Value;
                 memberValue.Value = element.Value;

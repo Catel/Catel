@@ -63,12 +63,15 @@ namespace Catel.Test.Runtime.Serialization
         /// <typeparam name="TModel">The type of the T model.</typeparam>
         /// <param name="model">The model.</param>
         /// <param name="serializer">The serializer.</param>
-        /// <returns>System.Object.</returns>
-        public static TModel SerializeAndDeserialize<TModel>(TModel model, ISerializer serializer)
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// System.Object.
+        /// </returns>
+        public static TModel SerializeAndDeserialize<TModel>(TModel model, ISerializer serializer, ISerializationConfiguration configuration = null)
         {
             using (var memoryStream = new MemoryStream())
             {
-                serializer.Serialize(model, memoryStream);
+                serializer.Serialize(model, memoryStream, configuration);
 
                 memoryStream.Position = 0L;
 
@@ -85,7 +88,7 @@ namespace Catel.Test.Runtime.Serialization
                     }
                 }
 
-                return (TModel)serializer.Deserialize(typeof(TModel), memoryStream);
+                return (TModel)serializer.Deserialize(typeof(TModel), memoryStream, configuration);
             }
         }
 
@@ -96,7 +99,7 @@ namespace Catel.Test.Runtime.Serialization
             using (var memoryStream = new MemoryStream())
             {
                 var xmlSerializer = SerializationFactory.GetXmlSerializer();
-                xmlSerializer.Serialize(model, memoryStream);
+                xmlSerializer.Serialize(model, memoryStream, null);
 
                 memoryStream.Position = 0L;
                 using (var xmlReader = XmlReader.Create(memoryStream))
@@ -123,7 +126,7 @@ namespace Catel.Test.Runtime.Serialization
                 memoryStream.Position = 0L;
 
                 var xmlSerializer = SerializationFactory.GetXmlSerializer();
-                return (T)xmlSerializer.Deserialize(typeof(T), memoryStream);
+                return (T)xmlSerializer.Deserialize(typeof(T), memoryStream, null);
             }
         }
 

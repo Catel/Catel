@@ -70,6 +70,11 @@ namespace Catel.Runtime.Serialization
         /// Gets the type stack inside the current scope.
         /// </summary>
         Stack<Type> TypeStack { get; }
+
+        /// <summary>
+        /// Gets the configuration used during serialization.
+        /// </summary>
+        ISerializationConfiguration Configuration { get; }
     }
 
     /// <summary>

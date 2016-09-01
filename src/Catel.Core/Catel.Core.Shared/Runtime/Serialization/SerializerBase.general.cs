@@ -10,6 +10,7 @@ namespace Catel.Runtime.Serialization
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Reflection;
     using Catel.ApiCop;
@@ -19,11 +20,12 @@ namespace Catel.Runtime.Serialization
     using Catel.IoC;
     using Catel.Logging;
     using Catel.Reflection;
+    using Scoping;
 
     /// <summary>
     /// Base class for serializers that can serialize any object.
     /// </summary>
-    /// <typeparam name="TSerializationContext">The type of the T serialization context.</typeparam>
+    /// <typeparam name="TSerializationContext">The type of the serialization context.</typeparam>
     public abstract partial class SerializerBase<TSerializationContext> : ISerializer
         where TSerializationContext : class
     {
@@ -37,6 +39,14 @@ namespace Catel.Runtime.Serialization
         /// The API cop.
         /// </summary>
         private static readonly IApiCop ApiCop = ApiCopManager.GetCurrentClassApiCop();
+
+        /// <summary>
+        /// The default serialization configuration.
+        /// </summary>
+        private static readonly ISerializationConfiguration DefaultSerializationConfiguration = new SerializationConfiguration
+        {
+            Culture = CultureInfo.InvariantCulture
+        };
 
         /// <summary>
         /// The root object name.
@@ -264,6 +274,45 @@ namespace Catel.Runtime.Serialization
         protected abstract void Warmup(Type type);
 
         /// <summary>
+        /// Gets the current serialization scope.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns></returns>
+        protected virtual ScopeManager<SerializationScope> GetCurrentSerializationScopeManager(ISerializationConfiguration configuration)
+        {
+            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+            var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(this, configuration ?? DefaultSerializationConfiguration));
+            return scopeManager;
+        }
+
+        /// <summary>
+        /// Gets the current serialization configuration.
+        /// </summary>
+        /// <param name="configuration">The configuration that might override the existing scope configuration.</param>
+        /// <returns></returns>
+        protected virtual ISerializationConfiguration GetCurrentSerializationConfiguration(ISerializationConfiguration configuration)
+        {
+            using (var scopeManager = GetCurrentSerializationScopeManager(configuration))
+            {
+                var scopeObject = scopeManager.ScopeObject;
+
+                if (configuration != null)
+                {
+                    scopeObject.Configuration = configuration;
+                }
+                else
+                {
+                    if (scopeObject.Configuration == null)
+                    {
+                        scopeObject.Configuration = DefaultSerializationConfiguration;
+                    }
+                }
+
+                return scopeObject.Configuration;
+            }
+        }
+
+        /// <summary>
         /// Determines whether the specified member on the specified model should be ignored by the serialization engine.
         /// </summary>
         /// <param name="model">The model.</param>
@@ -285,13 +334,34 @@ namespace Catel.Runtime.Serialization
         /// <returns>The serialization context.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "GetContext(Type, TSerializationContext, SerializationContextMode, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         protected ISerializationContext<TSerializationContext> GetContext(Type modelType, TSerializationContext context, SerializationContextMode contextMode)
+        {
+            return GetContext(modelType, context, contextMode, null);
+        }
+
+        /// <summary>
+        /// Gets the context for the specified model type.
+        /// <para />
+        /// Use this method when no model instance is available. This method will create one.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="context">The context.</param>
+        /// <param name="contextMode">The context mode.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>The serialization context.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
+        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, TSerializationContext context,
+            SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("type", modelType);
             Argument.IsNotNull("context", context);
 
             var model = CreateModelInstance(modelType);
-            return GetContext(model, modelType, context, contextMode);
+            return GetContext(model, modelType, context, contextMode, configuration);
         }
 
         /// <summary>
@@ -305,13 +375,34 @@ namespace Catel.Runtime.Serialization
         /// <returns>The serialization context.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "GetContext(Type, Stream, SerializationContextMode, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         protected ISerializationContext<TSerializationContext> GetContext(Type modelType, Stream stream, SerializationContextMode contextMode)
+        {
+            return GetContext(modelType, stream, contextMode, null);
+        }
+
+        /// <summary>
+        /// Gets the context for the specified model type.
+        /// <para />
+        /// Use this method when no model instance is available. This method will create one.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <param name="contextMode">The context mode.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>The serialization context.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
+        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, Stream stream,
+            SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("type", modelType);
             Argument.IsNotNull("stream", stream);
 
             var model = CreateModelInstance(modelType);
-            return GetContext(model, modelType, stream, contextMode);
+            return GetContext(model, modelType, stream, contextMode, configuration);
         }
 
         /// <summary>
@@ -324,12 +415,35 @@ namespace Catel.Runtime.Serialization
         /// <returns>The serialization context.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
-        protected virtual ISerializationContext<TSerializationContext> GetContext(object model, Type modelType, TSerializationContext context, SerializationContextMode contextMode)
+        [ObsoleteEx(ReplacementTypeOrMember = "GetContext(object, Type, TSerializationContext, SerializationContextMode, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
+        protected virtual ISerializationContext<TSerializationContext> GetContext(object model, Type modelType,
+            TSerializationContext context, SerializationContextMode contextMode)
+        {
+            return GetContext(model, modelType, context, contextMode, null);
+        }
+
+        /// <summary>
+        /// Gets the context for the specified model instance.
+        /// </summary>
+        /// <param name="model">The model, can be <c>null</c> for value types.</param>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="context">The context.</param>
+        /// <param name="contextMode">The context mode.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The serialization context.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
+        protected virtual ISerializationContext<TSerializationContext> GetContext(object model, Type modelType,
+            TSerializationContext context, SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", context);
 
-            return new SerializationContext<TSerializationContext>(model, modelType, context, contextMode);
+            return new SerializationContext<TSerializationContext>(model, modelType, context, contextMode, configuration);
         }
 
         /// <summary>
@@ -339,10 +453,15 @@ namespace Catel.Runtime.Serialization
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
-        /// <returns>The serialization context.</returns>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The serialization context.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
-        protected abstract ISerializationContext<TSerializationContext> GetContext(object model, Type modelType, Stream stream, SerializationContextMode contextMode);
+        /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
+        protected abstract ISerializationContext<TSerializationContext> GetContext(object model, Type modelType, Stream stream,
+            SerializationContextMode contextMode, ISerializationConfiguration configuration);
 
         /// <summary>
         /// Appends the serialization context to the specified stream. This way each serializer can handle the serialization
@@ -432,7 +551,6 @@ namespace Catel.Runtime.Serialization
 
             return null;
         }
-
 
         /// <summary>
         /// Returns whether the model should be serialized as collection. Note that this method will
@@ -576,7 +694,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>
         ///   <c>true</c> if the member should be serialized using parse.
         /// </returns>
-        protected virtual bool ShouldSerializeUsingParse(MemberValue memberValue, bool checkActualMemberType)
+        protected virtual bool ShouldSerializeUsingParseAndToString(MemberValue memberValue, bool checkActualMemberType)
         {
             var cacheKey = $"{memberValue.ModelTypeName}|{memberValue.MemberTypeName}|{checkActualMemberType}";
 
@@ -584,13 +702,42 @@ namespace Catel.Runtime.Serialization
             {
                 var serializerModifiers = SerializationManager.GetSerializerModifiers(memberValue.ModelType);
 
+                var useParseAndToString = false;
+
+                var fieldInfo = memberValue.ModelType.GetFieldEx(memberValue.Name);
+                if (fieldInfo != null)
+                {
+                    useParseAndToString = AttributeHelper.IsDecoratedWithAttribute<SerializeUsingParseAndToStringAttribute>(fieldInfo);
+                }
+
+                if (!useParseAndToString)
+                {
+                    var propertyInfo = memberValue.ModelType.GetPropertyEx(memberValue.Name);
+                    if (propertyInfo != null)
+                    {
+                        useParseAndToString = AttributeHelper.IsDecoratedWithAttribute<SerializeUsingParseAndToStringAttribute>(propertyInfo);
+                    }
+                }
+
+                // Note: serializer modifiers can always win
                 foreach (var serializerModifier in serializerModifiers)
                 {
                     var value = serializerModifier.ShouldSerializeMemberUsingParse(memberValue);
-                    if (value.HasValue && !value.Value)
+                    if (value.HasValue)
                     {
-                        return false;
+                        if (!value.Value)
+                        {
+                            return false;
+                        }
+
+                        // At least 1 serializer modifier wants this to be using parse and tostring
+                        useParseAndToString = true;
                     }
+                }
+
+                if (!useParseAndToString)
+                {
+                    return false;
                 }
 
                 var memberType = checkActualMemberType ? memberValue.ActualMemberType : memberValue.MemberType;

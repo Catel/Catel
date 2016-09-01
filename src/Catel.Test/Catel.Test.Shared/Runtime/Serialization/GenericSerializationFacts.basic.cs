@@ -200,15 +200,16 @@ namespace Catel.Test.Runtime.Serialization
         public class GenericBasicSerializationFacts
         {
             [TestCase]
-            public void SerializesModelsWithParsableObjects()
+            public void SerializesModelsWithParsableObjectsWithAttributes()
             {
-                var originalObject = new TestModelWithParsableMembers();
+                var originalObject = new TestModelWithParsableMembersWithAttributes();
                 originalObject.Vector = new Vector(1, 2, 3);
 
                 TestSerializationOnAllSerializers((serializer, description) =>
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
 
+                    Assert.IsTrue(clonedObject.Vector.UsedParse);
                     Assert.AreEqual(originalObject.Vector.X, clonedObject.Vector.X, description);
                     Assert.AreEqual(originalObject.Vector.Y, clonedObject.Vector.Y, description);
                     Assert.AreEqual(originalObject.Vector.Z, clonedObject.Vector.Z, description);
@@ -216,18 +217,36 @@ namespace Catel.Test.Runtime.Serialization
             }
 
             [TestCase]
-            public void SerializesModelsWithParsableObjectsAndSerializerModifierUsingParse()
+            public void SerializesModelsWithParsableObjectsWithoutAttributes()
             {
-                var originalObject = new TestModelWithParsableMembers();
+                var originalObject = new TestModelWithParsableMembersWithoutAttributes();
                 originalObject.Vector = new Vector(1, 2, 3);
-
-                var serializationManager = new SerializationManager();
-                serializationManager.AddSerializerModifier<TestModelWithParsableMembers, TestModelWithParsableMembersUsingParseSerializerModifier>();
 
                 TestSerializationOnAllSerializers((serializer, description) =>
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
 
+                    Assert.IsFalse(clonedObject.Vector.UsedParse);
+                    Assert.AreEqual(originalObject.Vector.X, clonedObject.Vector.X, description);
+                    Assert.AreEqual(originalObject.Vector.Y, clonedObject.Vector.Y, description);
+                    Assert.AreEqual(originalObject.Vector.Z, clonedObject.Vector.Z, description);
+                });
+            }
+
+            [TestCase]
+            public void SerializesModelsWithParsableObjectsWithoutAttributesAndSerializerModifierUsingParse()
+            {
+                var originalObject = new TestModelWithParsableMembersWithoutAttributes();
+                originalObject.Vector = new Vector(1, 2, 3);
+
+                var serializationManager = new SerializationManager();
+                serializationManager.AddSerializerModifier<TestModelWithParsableMembersWithoutAttributes, TestModelWithParsableMembersUsingParseSerializerModifier>();
+
+                TestSerializationOnAllSerializers((serializer, description) =>
+                {
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+
+                    Assert.IsTrue(clonedObject.Vector.UsedParse);
                     Assert.AreEqual(originalObject.Vector.X, clonedObject.Vector.X, description);
                     Assert.AreEqual(originalObject.Vector.Y, clonedObject.Vector.Y, description);
                     Assert.AreEqual(originalObject.Vector.Z, clonedObject.Vector.Z, description);
@@ -237,16 +256,17 @@ namespace Catel.Test.Runtime.Serialization
             [TestCase]
             public void SerializesModelsWithParsableObjectsAndSerializerModifierNotUsingParse()
             {
-                var originalObject = new TestModelWithParsableMembers();
+                var originalObject = new TestModelWithParsableMembersWithoutAttributes();
                 originalObject.Vector = new Vector(1, 2, 3);
 
                 var serializationManager = new SerializationManager();
-                serializationManager.AddSerializerModifier<TestModelWithParsableMembers, TestModelWithParsableMembersNotUsingParseSerializerModifier>();
+                serializationManager.AddSerializerModifier<TestModelWithParsableMembersWithoutAttributes, TestModelWithParsableMembersNotUsingParseSerializerModifier>();
 
                 TestSerializationOnAllSerializers((serializer, description) =>
                 {
                     var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
 
+                    Assert.IsFalse(clonedObject.Vector.UsedParse);
                     Assert.AreEqual(originalObject.Vector.X, clonedObject.Vector.X, description);
                     Assert.AreEqual(originalObject.Vector.Y, clonedObject.Vector.Y, description);
                     Assert.AreEqual(originalObject.Vector.Z, clonedObject.Vector.Z, description);

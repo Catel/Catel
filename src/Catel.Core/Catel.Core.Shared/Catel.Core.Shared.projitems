@@ -318,6 +318,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\SerializeAsCollectionAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\SerializerModifierAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\SerializeUsingParseAndToStringAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\Attributes\RedirectTypeAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\BinarySerializationContextInfoFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\BinarySerializationContextInfo.cs" />
@@ -335,6 +336,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\IPropertySerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\IFieldSerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializationConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializationContextInfoFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Interfaces\ISerializationContextInfo.cs" />
@@ -346,12 +348,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Models\SerializableKeyValuePair.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Modifiers\KeyValuePairSerializerModifier.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\ObjectAdapter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationInfo\SerializationInfoSerializationContextInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationModelInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationScope.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializerBase.deserialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializerBase.general.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializerBase.serialization.cs" />

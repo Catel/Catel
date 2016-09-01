@@ -143,9 +143,9 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
 
             using (var memoryStream = new MemoryStream())
             {
-                dictionary.Save(memoryStream, SerializationMode.Xml);
+                dictionary.Save(memoryStream, SerializationMode.Xml, null);
                 memoryStream.Position = 0L;
-                var dictionary2 = DictionaryTestClass.Load(memoryStream, SerializationMode.Xml);
+                var dictionary2 = DictionaryTestClass.Load(memoryStream, SerializationMode.Xml, null);
 
                 Assert.AreEqual(dictionary, dictionary2);
 
@@ -176,9 +176,9 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
 
             using (var memoryStream = new MemoryStream())
             {
-                c.Save(memoryStream, SerializationMode.Xml);
+                c.Save(memoryStream, SerializationMode.Xml, null);
                 memoryStream.Position = 0L;
-                var c2 = ContainerInterfaces.Load(memoryStream, SerializationMode.Xml);
+                var c2 = ContainerInterfaces.Load(memoryStream, SerializationMode.Xml, null);
                 Assert.AreEqual(c, c2);
             }
         }
@@ -198,10 +198,10 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
 
             using (var memoryStream = new MemoryStream())
             {
-                c.Save(memoryStream, SerializationMode.Xml);
+                c.Save(memoryStream, SerializationMode.Xml, null);
                 memoryStream.Position = 0L;
 
-                var c2 = ContainerAbstractClasses.Load(memoryStream, SerializationMode.Xml);
+                var c2 = ContainerAbstractClasses.Load(memoryStream, SerializationMode.Xml, null);
                 Assert.AreEqual(c, c2);
             }
         }

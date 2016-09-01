@@ -484,9 +484,9 @@ namespace Catel.Data
         [XmlIgnore]
         protected bool DeserializationSucceeded { get; private set; }
 
-#endregion
+        #endregion
 
-#region Methods
+        #region Methods
         /// <summary>
         /// Allows the initialization of custom properties. This is a virtual method that is called
         /// inside the constructor before the object is fully constructed.
@@ -809,9 +809,9 @@ namespace Catel.Data
 
             SetDirtyAndAutomaticallyValidate(string.Empty, true);
         }
-#endregion
+        #endregion
 
-#region INotifyPropertyChanged Members
+        #region INotifyPropertyChanged Members
         /// <summary>
         /// Invokes the property changed for all registered properties.
         /// </summary>
@@ -979,6 +979,6 @@ namespace Catel.Data
                 Validate();
             }
         }
-#endregion
+        #endregion
     }
 }

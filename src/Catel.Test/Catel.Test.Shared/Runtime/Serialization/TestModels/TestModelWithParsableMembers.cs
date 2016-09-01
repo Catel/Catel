@@ -12,11 +12,29 @@ namespace Catel.Test.Runtime.Serialization.TestModels
     using Catel.Data;
     using Catel.Runtime.Serialization;
 
-    public class TestModelWithParsableMembers : ModelBase
+    public class TestModelWithParsableMembersWithoutAttributes : ModelBase
     {
         /// <summary>
         /// Gets or sets the property value.
         /// </summary>
+        public Vector Vector
+        {
+            get { return GetValue<Vector>(VectorProperty); }
+            set { SetValue(VectorProperty, value); }
+        }
+
+        /// <summary>
+        /// Register the Vector property so it is known in the class.
+        /// </summary>
+        public static readonly PropertyData VectorProperty = RegisterProperty("Vector", typeof(Vector), null);
+    }
+
+    public class TestModelWithParsableMembersWithAttributes : ModelBase
+    {
+        /// <summary>
+        /// Gets or sets the property value.
+        /// </summary>
+        [SerializeUsingParseAndToString]
         public Vector Vector
         {
             get { return GetValue<Vector>(VectorProperty); }
@@ -35,12 +53,14 @@ namespace Catel.Test.Runtime.Serialization.TestModels
         public double X;
         public double Y;
         public double Z;
+        public bool UsedParse;
 
         public Vector(double x, double y, double z)
         {
             X = x;
             Y = y;
             Z = z;
+            UsedParse = false;
         }
 
         public string ToString(IFormatProvider formatProvider)
@@ -56,11 +76,14 @@ namespace Catel.Test.Runtime.Serialization.TestModels
             var y = double.Parse(splitted[1], formatProvider);
             var z = double.Parse(splitted[2], formatProvider);
 
-            return new Vector(x, y, z);
+            var vector = new Vector(x, y, z);
+            vector.UsedParse = true;
+
+            return vector;
         }
     }
 
-    public abstract class TestModelWithParsableMembersSerializerModifierBase : SerializerModifierBase<TestModelWithParsableMembers>
+    public abstract class TestModelWithParsableMembersSerializerModifierBase : SerializerModifierBase<TestModelWithParsableMembersWithoutAttributes>
     {
         private readonly bool _serializeUsingParse;
 
@@ -83,10 +106,13 @@ namespace Catel.Test.Runtime.Serialization.TestModels
         {
             base.SerializeMember(context, memberValue);
 
-            if (memberValue.Name == "Vector")
+            if (!_serializeUsingParse)
             {
-                var vector = (Vector)memberValue.Value;
-                memberValue.Value = $"{vector.X}|{vector.Y}|{vector.Z}";
+                if (memberValue.Name == "Vector")
+                {
+                    var vector = (Vector) memberValue.Value;
+                    memberValue.Value = $"{vector.X}|{vector.Y}|{vector.Z}";
+                }
             }
         }
 
@@ -94,13 +120,16 @@ namespace Catel.Test.Runtime.Serialization.TestModels
         {
             base.DeserializeMember(context, memberValue);
 
-            if (memberValue.Name == "Vector")
+            if (!_serializeUsingParse)
             {
-                var vectorString = (string)memberValue.Value;
-                var parsedValues = vectorString.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                if (memberValue.Name == "Vector")
+                {
+                    var vectorString = (string) memberValue.Value;
+                    var parsedValues = vectorString.Split(new[] {"|"}, StringSplitOptions.RemoveEmptyEntries);
 
-                memberValue.Value = new Vector(StringToObjectHelper.ToDouble(parsedValues[0]), StringToObjectHelper.ToDouble(parsedValues[1]),
-                    StringToObjectHelper.ToDouble(parsedValues[2]));
+                    memberValue.Value = new Vector(StringToObjectHelper.ToDouble(parsedValues[0]), StringToObjectHelper.ToDouble(parsedValues[1]),
+                        StringToObjectHelper.ToDouble(parsedValues[2]));
+                }
             }
         }
     }

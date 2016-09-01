@@ -94,7 +94,7 @@ namespace Catel.Data
                     var serializer = _object.Serializer;
                     if (serializer != null)
                     {
-                        serializer.SerializeMembers(_object, stream, propertiesToIgnore);
+                        serializer.SerializeMembers(_object, stream, null, propertiesToIgnore);
                     }
 
                     _propertyValuesBackup = stream.ToByteArray();
@@ -120,7 +120,7 @@ namespace Catel.Data
                         var serializer = _object.Serializer;
                         if (serializer != null)
                         {
-                            properties = serializer.DeserializeMembers(_object.GetType(), stream);
+                            properties = serializer.DeserializeMembers(_object.GetType(), stream, null);
                         }
 
                         oldPropertyValues = properties.ToDictionary(property => property.Name, property => property.Value);

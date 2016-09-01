@@ -14,6 +14,7 @@ namespace Catel.Data
     using Catel.Runtime.Serialization.Xml;
     using Logging;
     using Runtime.Serialization;
+    using Scoping;
 
     public partial class ModelBase
     {
@@ -40,10 +41,14 @@ namespace Catel.Data
                 return;
             }
 
-            var serializer = SerializationFactory.GetXmlSerializer();
             var contextInfo = new XmlSerializationContextInfo(reader, this);
 
-            serializer.Deserialize(this, contextInfo);
+            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetXmlSerializer(), null)))
+            {
+                var serializer = scopeManager.ScopeObject.Serializer;
+                serializer.Deserialize(this, contextInfo, scopeManager.ScopeObject.Configuration);
+            }
         }
 
         /// <summary>
@@ -52,38 +57,41 @@ namespace Catel.Data
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"/> stream to which the object is serialized.</param>
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
-            var type = GetType();
-
-            var element = new XElement(type.Name);
-            var serializer = SerializationFactory.GetXmlSerializer();
-            serializer.Serialize(this, new XmlSerializationContextInfo(element, this));
-
-            // The serializer gives us the full element, but we only need the actual content. According to
-            // http://stackoverflow.com/questions/3793/best-way-to-get-innerxml-of-an-xelement, this method is the fastest:
-            var reader = element.CreateReader();
-            reader.MoveToContent();
-
-            // CTL-710: fix attributes on top level elements
-            if (reader.HasAttributes)
+            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetXmlSerializer(), null)))
             {
-                for (int i = 0; i < reader.AttributeCount; i++)
+                var type = GetType();
+                var element = new XElement(type.Name);
+                var serializer = scopeManager.ScopeObject.Serializer;
+                serializer.Serialize(this, new XmlSerializationContextInfo(element, this), scopeManager.ScopeObject.Configuration);
+
+                // The serializer gives us the full element, but we only need the actual content. According to
+                // http://stackoverflow.com/questions/3793/best-way-to-get-innerxml-of-an-xelement, this method is the fastest:
+                var reader = element.CreateReader();
+                reader.MoveToContent();
+
+                // CTL-710: fix attributes on top level elements
+                if (reader.HasAttributes)
                 {
-                    reader.MoveToAttribute(i);
+                    for (int i = 0; i < reader.AttributeCount; i++)
+                    {
+                        reader.MoveToAttribute(i);
 
-                    var attributePrefix = reader.Prefix;
-                    var attributeLocalName = reader.LocalName;
-                    var attributeNs = reader.NamespaceURI;
-                    var attributeValue = reader.Value;
+                        var attributePrefix = reader.Prefix;
+                        var attributeLocalName = reader.LocalName;
+                        var attributeNs = reader.NamespaceURI;
+                        var attributeValue = reader.Value;
 
-                    writer.WriteAttributeString(attributePrefix, attributeLocalName, attributeNs, attributeValue);
+                        writer.WriteAttributeString(attributePrefix, attributeLocalName, attributeNs, attributeValue);
+                    }
+
+                    reader.MoveToElement();
                 }
 
-                reader.MoveToElement();
+                var elementContent = reader.ReadInnerXml();
+
+                writer.WriteRaw(elementContent);
             }
-
-            var elementContent = reader.ReadInnerXml();
-
-            writer.WriteRaw(elementContent);
         }
     }
 }

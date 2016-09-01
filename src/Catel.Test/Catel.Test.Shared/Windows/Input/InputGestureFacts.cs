@@ -34,11 +34,11 @@ namespace Catel.Test.Windows.Input
                 var xmlSerializer = SerializationFactory.GetXmlSerializer();
                 using (var memoryStream = new MemoryStream())
                 {
-                    xmlSerializer.Serialize(inputGesture, memoryStream);
+                    xmlSerializer.Serialize(inputGesture, memoryStream, null);
 
                     memoryStream.Position = 0L;
 
-                    var finalInputGesture = xmlSerializer.Deserialize(typeof (InputGesture), memoryStream);
+                    var finalInputGesture = xmlSerializer.Deserialize(typeof (InputGesture), memoryStream, null);
 
                     Assert.AreEqual(inputGesture, finalInputGesture);
                 }

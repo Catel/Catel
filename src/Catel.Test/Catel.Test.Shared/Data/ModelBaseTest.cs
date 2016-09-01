@@ -6,7 +6,7 @@
     using System.ComponentModel;
     using System.IO;
     using Catel.Data;
-
+    using Catel.Runtime.Serialization;
     using NUnit.Framework;
 
     [TestFixture]
@@ -156,11 +156,11 @@
 
             using (var memoryStream = new MemoryStream())
             {
-                parent.Save(memoryStream, SerializationMode.Binary);
+                parent.Save(memoryStream, SerializationMode.Binary, null);
 
                 memoryStream.Position = 0L;
 
-                var loadedParent = ModelBase.Load<Parent>(memoryStream, SerializationMode.Binary);
+                var loadedParent = ModelBase.Load<Parent>(memoryStream, SerializationMode.Binary, null);
 
                 Assert.AreEqual(parent, ((IParent)loadedParent.Children[0]).Parent);
             }
@@ -181,11 +181,11 @@
             Parent loadedParent;
             using (var memoryStream = new MemoryStream())
             {
-                parent.Save(memoryStream, SerializationMode.Xml);
+                parent.Save(memoryStream, SerializationMode.Xml, null);
 
                 memoryStream.Position = 0L;
 
-                loadedParent = ModelBase.Load<Parent>(memoryStream, SerializationMode.Xml);
+                loadedParent = ModelBase.Load<Parent>(memoryStream, SerializationMode.Xml, null);
             }
 
             Assert.AreEqual(parent, ((IParent)loadedParent.Children[0]).Parent);
@@ -866,14 +866,15 @@
         #endregion
 
         /// <summary>
-        /// Saves the object to memory stream so the <see cref="IModel.IsDirty"/> property is set to false.
+        /// Saves the object to memory stream so the <see cref="IModel.IsDirty" /> property is set to false.
         /// </summary>
         /// <param name="obj">The object.</param>
-        internal static void SaveObjectToMemoryStream(ISavableModel obj)
+        /// <param name="configuration">The configuration.</param>
+        internal static void SaveObjectToMemoryStream(ISavableModel obj, ISerializationConfiguration configuration = null)
         {
             using (var memoryStream = new MemoryStream())
             {
-                obj.Save(memoryStream);
+                obj.Save(memoryStream, configuration);
             }
         }
     }
