@@ -331,31 +331,13 @@ namespace Catel.Runtime.Serialization
         /// <param name="modelType">Type of the model.</param>
         /// <param name="context">The context.</param>
         /// <param name="contextMode">The context mode.</param>
-        /// <returns>The serialization context.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetContext(Type, TSerializationContext, SerializationContextMode, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, TSerializationContext context, SerializationContextMode contextMode)
-        {
-            return GetContext(modelType, context, contextMode, null);
-        }
-
-        /// <summary>
-        /// Gets the context for the specified model type.
-        /// <para />
-        /// Use this method when no model instance is available. This method will create one.
-        /// </summary>
-        /// <param name="modelType">Type of the model.</param>
-        /// <param name="context">The context.</param>
-        /// <param name="contextMode">The context mode.</param>
         /// <param name="configuration">The configuration.</param>
         /// <returns>The serialization context.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
         protected ISerializationContext<TSerializationContext> GetContext(Type modelType, TSerializationContext context,
-            SerializationContextMode contextMode, ISerializationConfiguration configuration)
+            SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
         {
             Argument.IsNotNull("type", modelType);
             Argument.IsNotNull("context", context);
@@ -372,55 +354,19 @@ namespace Catel.Runtime.Serialization
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
-        /// <returns>The serialization context.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetContext(Type, Stream, SerializationContextMode, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, Stream stream, SerializationContextMode contextMode)
-        {
-            return GetContext(modelType, stream, contextMode, null);
-        }
-
-        /// <summary>
-        /// Gets the context for the specified model type.
-        /// <para />
-        /// Use this method when no model instance is available. This method will create one.
-        /// </summary>
-        /// <param name="modelType">Type of the model.</param>
-        /// <param name="stream">The stream.</param>
-        /// <param name="contextMode">The context mode.</param>
         /// <param name="configuration">The configuration.</param>
         /// <returns>The serialization context.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
         protected ISerializationContext<TSerializationContext> GetContext(Type modelType, Stream stream,
-            SerializationContextMode contextMode, ISerializationConfiguration configuration)
+            SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
         {
             Argument.IsNotNull("type", modelType);
             Argument.IsNotNull("stream", stream);
 
             var model = CreateModelInstance(modelType);
             return GetContext(model, modelType, stream, contextMode, configuration);
-        }
-
-        /// <summary>
-        /// Gets the context for the specified model instance.
-        /// </summary>
-        /// <param name="model">The model, can be <c>null</c> for value types.</param>
-        /// <param name="modelType">Type of the model.</param>
-        /// <param name="context">The context.</param>
-        /// <param name="contextMode">The context mode.</param>
-        /// <returns>The serialization context.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetContext(object, Type, TSerializationContext, SerializationContextMode, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        protected virtual ISerializationContext<TSerializationContext> GetContext(object model, Type modelType,
-            TSerializationContext context, SerializationContextMode contextMode)
-        {
-            return GetContext(model, modelType, context, contextMode, null);
         }
 
         /// <summary>
@@ -438,7 +384,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
         protected virtual ISerializationContext<TSerializationContext> GetContext(object model, Type modelType,
-            TSerializationContext context, SerializationContextMode contextMode, ISerializationConfiguration configuration)
+            TSerializationContext context, SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
         {
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", context);
@@ -707,7 +653,7 @@ namespace Catel.Runtime.Serialization
                 var fieldInfo = memberValue.ModelType.GetFieldEx(memberValue.Name);
                 if (fieldInfo != null)
                 {
-                    useParseAndToString = AttributeHelper.IsDecoratedWithAttribute<SerializeUsingParseAndToStringAttribute>(fieldInfo);
+                    useParseAndToString = fieldInfo.IsDecoratedWithAttribute<SerializeUsingParseAndToStringAttribute>();
                 }
 
                 if (!useParseAndToString)
@@ -715,7 +661,7 @@ namespace Catel.Runtime.Serialization
                     var propertyInfo = memberValue.ModelType.GetPropertyEx(memberValue.Name);
                     if (propertyInfo != null)
                     {
-                        useParseAndToString = AttributeHelper.IsDecoratedWithAttribute<SerializeUsingParseAndToStringAttribute>(propertyInfo);
+                        useParseAndToString = propertyInfo.IsDecoratedWithAttribute<SerializeUsingParseAndToStringAttribute>();
                     }
                 }
 

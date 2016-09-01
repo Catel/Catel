@@ -201,23 +201,6 @@ namespace Catel.Data
         /// <typeparam name="T">Type of the object that should be loaded.</typeparam>
         /// <param name="stream">Stream that contains the serialized data of this object.</param>
         /// <param name="mode"><see cref="SerializationMode" /> to use.</param>
-        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
-        /// <remarks>When enableRedirects is enabled, loading will take more time. Only set
-        /// the parameter to <c>true</c> when the deserialization without redirects fails.</remarks>
-        [ObsoleteEx(ReplacementTypeOrMember = "Load<T>(Stream, SerializationMode, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        public static T Load<T>(Stream stream, SerializationMode mode)
-            where T : class
-        {
-            return Load<T>(stream, mode, null);
-        }
-
-        /// <summary>
-        /// Loads the object from a stream using a specific formatting.
-        /// </summary>
-        /// <typeparam name="T">Type of the object that should be loaded.</typeparam>
-        /// <param name="stream">Stream that contains the serialized data of this object.</param>
-        /// <param name="mode"><see cref="SerializationMode" /> to use.</param>
         /// <param name="configuration">The configuration.</param>
         /// <returns>
         /// Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.
@@ -226,7 +209,7 @@ namespace Catel.Data
         /// When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.
         /// </remarks>
-        public static T Load<T>(Stream stream, SerializationMode mode, ISerializationConfiguration configuration)
+        public static T Load<T>(Stream stream, SerializationMode mode, ISerializationConfiguration configuration = null)
             where T : class
         {
             return (T)Load(typeof(T), stream, mode, configuration);
@@ -238,22 +221,6 @@ namespace Catel.Data
         /// <param name="type">The type.</param>
         /// <param name="stream">Stream that contains the serialized data of this object.</param>
         /// <param name="mode"><see cref="SerializationMode" /> to use.</param>
-        /// <returns>Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.</returns>
-        /// <remarks>When enableRedirects is enabled, loading will take more time. Only set
-        /// the parameter to <c>true</c> when the deserialization without redirects fails.</remarks>
-        [ObsoleteEx(ReplacementTypeOrMember = "Load(Type, Stream, SerializationMode, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        public static IModel Load(Type type, Stream stream, SerializationMode mode)
-        {
-            return Load(type, stream, mode, null);
-        }
-
-        /// <summary>
-        /// Loads the object from a stream using a specific formatting.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <param name="stream">Stream that contains the serialized data of this object.</param>
-        /// <param name="mode"><see cref="SerializationMode" /> to use.</param>
         /// <param name="configuration">The configuration.</param>
         /// <returns>
         /// Deserialized instance of the object. If the deserialization fails, <c>null</c> is returned.
@@ -262,7 +229,7 @@ namespace Catel.Data
         /// When enableRedirects is enabled, loading will take more time. Only set
         /// the parameter to <c>true</c> when the deserialization without redirects fails.
         /// </remarks>
-        public static IModel Load(Type type, Stream stream, SerializationMode mode, ISerializationConfiguration configuration)
+        public static IModel Load(Type type, Stream stream, SerializationMode mode, ISerializationConfiguration configuration = null)
         {
             Argument.IsNotNull("type", type);
 

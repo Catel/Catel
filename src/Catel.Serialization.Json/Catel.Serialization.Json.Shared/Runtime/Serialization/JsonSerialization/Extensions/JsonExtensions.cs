@@ -26,23 +26,11 @@ namespace Catel
         /// Converters the specified model to a json string.
         /// </summary>
         /// <param name="model">The model.</param>
-        /// <returns>System.String.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "ToJson(ModelBase, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        public static string ToJson(this ModelBase model)
-        {
-            return ToJson(model, null);
-        }
-
-        /// <summary>
-        /// Converters the specified model to a json string.
-        /// </summary>
-        /// <param name="model">The model.</param>
         /// <param name="configuration">The configuration.</param>
         /// <returns>
         /// System.String.
         /// </returns>
-        public static string ToJson(this ModelBase model, ISerializationConfiguration configuration)
+        public static string ToJson(this ModelBase model, ISerializationConfiguration configuration = null)
         {
             var jsonSerializer = new JsonSerializer(SerializationManager, TypeFactory.Default, ObjectAdapter);
 

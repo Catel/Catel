@@ -18,17 +18,6 @@ namespace Catel.Runtime.Serialization
         /// <param name="serializer">The serializer.</param>
         /// <param name="model">The model.</param>
         /// <param name="data">The data.</param>
-        /// <returns>ISerializationContext.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetSerializationContextInfo(ISerializer, object, object, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        ISerializationContextInfo GetSerializationContextInfo(ISerializer serializer, object model, object data);
-
-        /// <summary>
-        /// Gets the serialization context based on the specific info.
-        /// </summary>
-        /// <param name="serializer">The serializer.</param>
-        /// <param name="model">The model.</param>
-        /// <param name="data">The data.</param>
         /// <param name="configuration">The configuration.</param>
         /// <returns>
         /// ISerializationContext.

@@ -88,20 +88,8 @@ namespace Catel.Runtime.Serialization.Json
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="jsonWriter">The json writer.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, JsonWriter, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        public void Serialize(object model, JsonWriter jsonWriter)
-        {
-            Serialize(model, jsonWriter, null);
-        }
-
-        /// <summary>
-        /// Serializes the specified model to the json writer.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="jsonWriter">The json writer.</param>
         /// <param name="configuration">The configuration.</param>
-        public void Serialize(object model, JsonWriter jsonWriter, ISerializationConfiguration configuration)
+        public void Serialize(object model, JsonWriter jsonWriter, ISerializationConfiguration configuration = null)
         {
             Argument.IsNotNull("model", model);
 
@@ -121,26 +109,11 @@ namespace Catel.Runtime.Serialization.Json
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="jsonReader">The json reader.</param>
-        /// <returns>
-        /// The model.
-        /// </returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, JsonReader, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        public object Deserialize(Type modelType, JsonReader jsonReader)
-        {
-            return Deserialize(modelType, jsonReader, null);
-        }
-
-        /// <summary>
-        /// Deserializes the specified model from the json reader.
-        /// </summary>
-        /// <param name="modelType">Type of the model.</param>
-        /// <param name="jsonReader">The json reader.</param>
         /// <param name="configuration">The configuration.</param>
         /// <returns>
         /// The model.
         /// </returns>
-        public object Deserialize(Type modelType, JsonReader jsonReader, ISerializationConfiguration configuration)
+        public object Deserialize(Type modelType, JsonReader jsonReader, ISerializationConfiguration configuration = null)
         {
             Dictionary<string, JProperty> jsonProperties = null;
             JArray jsonArray = null;

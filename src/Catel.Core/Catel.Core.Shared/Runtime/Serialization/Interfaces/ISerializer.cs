@@ -74,33 +74,11 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="stream"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, Stream, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        void Serialize(object model, Stream stream);
-
-        /// <summary>
-        /// Serializes the specified model.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="stream">The stream.</param>
         /// <param name="configuration">The configuration.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        void Serialize(object model, Stream stream, ISerializationConfiguration configuration);
-
-        /// <summary>
-        /// Serializes the specified model.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="serializationContext">The serialization context.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, ISerializationContextInfo, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        void Serialize(object model, ISerializationContextInfo serializationContext);
+        void Serialize(object model, Stream stream, ISerializationConfiguration configuration = null);
 
         /// <summary>
         /// Serializes the specified model.
@@ -111,19 +89,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        void Serialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration);
-
-        /// <summary>
-        /// Serializes the members.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="stream">The stream.</param>
-        /// <param name="membersToIgnore">The members to ignore.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="membersToIgnore"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "SerializeMembers(object, Stream, ISerializationConfiguration, params string[])",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        void SerializeMembers(object model, Stream stream, params string[] membersToIgnore);
+        void Serialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration = null);
 
         /// <summary>
         /// Serializes the members.
@@ -142,36 +108,12 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
-        /// <returns>The deserialized model.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Deserialize(object, Stream, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        object Deserialize(object model, Stream stream);
-
-        /// <summary>
-        /// Deserializes the specified model. The deserialized values will be set in the specified model.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="stream">The stream.</param>
         /// <param name="configuration">The configuration.</param>
         /// <returns>The deserialized model.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        object Deserialize(object model, Stream stream, ISerializationConfiguration configuration);
-
-        /// <summary>
-        /// Deserializes the specified model. The deserialized values will be set in the specified model.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="serializationContext">The context.</param>
-        /// <returns>The deserialized model.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Deserialize(object, Stream, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        object Deserialize(object model, ISerializationContextInfo serializationContext);
+        object Deserialize(object model, Stream stream, ISerializationConfiguration configuration = null);
 
         /// <summary>
         /// Deserializes the specified model. The deserialized values will be set in the specified model.
@@ -183,19 +125,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        object Deserialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration);
-
-        /// <summary>
-        /// Deserializes the specified model type.
-        /// </summary>
-        /// <param name="modelType">Type of the model.</param>
-        /// <param name="stream">The stream.</param>
-        /// <returns>The deserialized model.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="stream"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, Stream, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        object Deserialize(Type modelType, Stream stream);
+        object Deserialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration = null);
 
         /// <summary>
         /// Deserializes the specified model type.
@@ -207,19 +137,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        object Deserialize(Type modelType, Stream stream, ISerializationConfiguration configuration);
-
-        /// <summary>
-        /// Deserializes the specified model type.
-        /// </summary>
-        /// <param name="modelType">Type of the model.</param>
-        /// <param name="serializationContext">The serialization context.</param>
-        /// <returns>The deserialized model.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, ISerializationContextInfo, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        object Deserialize(Type modelType, ISerializationContextInfo serializationContext);
+        object Deserialize(Type modelType, Stream stream, ISerializationConfiguration configuration = null);
 
         /// <summary>
         /// Deserializes the specified model type.
@@ -231,17 +149,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        object Deserialize(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration);
-
-        /// <summary>
-        /// Deserializes the members of the specified model.
-        /// </summary>
-        /// <param name="modelType">Type of the model.</param>
-        /// <param name="stream">The stream.</param>
-        /// <returns>The list of members that have been deserialized.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "DeserializeMembers(Type, Stream, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        List<MemberValue> DeserializeMembers(Type modelType, Stream stream);
+        object Deserialize(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration = null);
 
         /// <summary>
         /// Deserializes the members of the specified model.
@@ -253,19 +161,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        List<MemberValue> DeserializeMembers(Type modelType, Stream stream, ISerializationConfiguration configuration);
-
-        /// <summary>
-        /// Deserializes the members of the specified model.
-        /// </summary>
-        /// <param name="modelType">Type of the model.</param>
-        /// <param name="serializationContext">The serialization context.</param>
-        /// <returns>The list of members that have been deserialized.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "DeserializeMembers(Type, ISerializationContextInfo, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializationContext);
+        List<MemberValue> DeserializeMembers(Type modelType, Stream stream, ISerializationConfiguration configuration = null);
 
         /// <summary>
         /// Deserializes the members of the specified model.
@@ -277,6 +173,6 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="modelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationContext"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration);
+        List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration = null);
     }
 }

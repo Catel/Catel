@@ -20,13 +20,6 @@ namespace Catel.Data
     {
         #region Properties
         /// <summary>
-        /// Gets the bytes of the current binary serialized data object.
-        /// </summary>
-        /// <value>The bytes that represent the object data.</value>
-        [ObsoleteEx(TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        byte[] Bytes { get; }
-
-        /// <summary>
         /// Gets or sets the <see cref="SerializationMode"/> of this object.
         /// </summary>
         /// <value>The serialization mode.</value>
@@ -39,25 +32,8 @@ namespace Catel.Data
         /// Saves the object to a file using the default formatting.
         /// </summary>
         /// <param name="fileName">Filename of the file that will contain the serialized data of this object.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "Save(string, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        void Save(string fileName);
-
-        /// <summary>
-        /// Saves the object to a file using the default formatting.
-        /// </summary>
-        /// <param name="fileName">Filename of the file that will contain the serialized data of this object.</param>
         /// <param name="configuration">The configuration.</param>
-        void Save(string fileName, ISerializationConfiguration configuration);
-
-        /// <summary>
-        /// Saves the object to a file using a specific formatting.
-        /// </summary>
-        /// <param name="fileName">Filename of the file that will contain the serialized data of this object.</param>
-        /// <param name="mode"><see cref="SerializationMode"/> to use.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "Save(string, SerializationMode, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        void Save(string fileName, SerializationMode mode);
+        void Save(string fileName, ISerializationConfiguration configuration = null);
 
         /// <summary>
         /// Saves the object to a file using a specific formatting.
@@ -65,7 +41,7 @@ namespace Catel.Data
         /// <param name="fileName">Filename of the file that will contain the serialized data of this object.</param>
         /// <param name="mode"><see cref="SerializationMode" /> to use.</param>
         /// <param name="configuration">The configuration.</param>
-        void Save(string fileName, SerializationMode mode, ISerializationConfiguration configuration);
+        void Save(string fileName, SerializationMode mode, ISerializationConfiguration configuration = null);
 
 #elif NETFX_CORE
         /// <summary>
@@ -87,25 +63,8 @@ namespace Catel.Data
         /// Saves the object to a stream using the default formatting.
         /// </summary>
         /// <param name="stream">Stream that will contain the serialized data of this object.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "Save(Stream, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        void Save(Stream stream);
-
-        /// <summary>
-        /// Saves the object to a stream using the default formatting.
-        /// </summary>
-        /// <param name="stream">Stream that will contain the serialized data of this object.</param>
         /// <param name="configuration">The configuration.</param>
-        void Save(Stream stream, ISerializationConfiguration configuration);
-
-        /// <summary>
-        /// Saves the object to a stream using a specific formatting.
-        /// </summary>
-        /// <param name="stream">Stream that will contain the serialized data of this object.</param>
-        /// <param name="mode"><see cref="SerializationMode"/> to use.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "Save(Stream, SerializationMode, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        void Save(Stream stream, SerializationMode mode);
+        void Save(Stream stream, ISerializationConfiguration configuration = null);
 
         /// <summary>
         /// Saves the object to a stream using a specific formatting.
@@ -113,7 +72,7 @@ namespace Catel.Data
         /// <param name="stream">Stream that will contain the serialized data of this object.</param>
         /// <param name="mode"><see cref="SerializationMode" /> to use.</param>
         /// <param name="configuration">The configuration.</param>
-        void Save(Stream stream, SerializationMode mode, ISerializationConfiguration configuration);
+        void Save(Stream stream, SerializationMode mode, ISerializationConfiguration configuration = null);
         #endregion
     }
 }
