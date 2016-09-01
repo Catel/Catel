@@ -106,8 +106,9 @@ namespace Catel.Test.Runtime.Serialization
 
                 var propertiesToSerialize = serializationManager.GetCatelPropertiesToSerialize(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(1, propertiesToSerialize.Length);
-                Assert.AreEqual("IncludedCatelProperty", propertiesToSerialize[0].Key);
+                Assert.AreEqual(2, propertiesToSerialize.Length);
+                Assert.AreEqual("DateTimeProperty", propertiesToSerialize[0].Key);
+                Assert.AreEqual("IncludedCatelProperty", propertiesToSerialize[1].Key);
             }
         }
 
@@ -129,10 +130,12 @@ namespace Catel.Test.Runtime.Serialization
 
                 var properties = serializationManager.GetCatelPropertyNames(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(3, properties.Length);
-                Assert.AreEqual("IncludedCatelProperty", properties[0]);
-                Assert.AreEqual("ExcludedCatelProperty", properties[1]);
-                Assert.AreEqual("ExcludedProtectedCatelProperty", properties[2]);
+                Assert.AreEqual(4, properties.Length);
+
+                Assert.AreEqual("DateTimeProperty", properties[0]);
+                Assert.AreEqual("IncludedCatelProperty", properties[1]);
+                Assert.AreEqual("ExcludedCatelProperty", properties[2]);
+                Assert.AreEqual("ExcludedProtectedCatelProperty", properties[3]);
             }
         }
 
@@ -154,15 +157,19 @@ namespace Catel.Test.Runtime.Serialization
 
                 var properties = serializationManager.GetCatelProperties(typeof(TestModel)).ToArray();
 
-                Assert.AreEqual(3, properties.Length);
-                Assert.AreEqual("IncludedCatelProperty", properties[0].Key);
+                Assert.AreEqual(4, properties.Length);
+
+                Assert.AreEqual("DateTimeProperty", properties[0].Key);
                 Assert.AreEqual(SerializationMemberGroup.CatelProperty, properties[0].Value.MemberGroup);
 
-                Assert.AreEqual("ExcludedCatelProperty", properties[1].Key);
+                Assert.AreEqual("IncludedCatelProperty", properties[1].Key);
                 Assert.AreEqual(SerializationMemberGroup.CatelProperty, properties[1].Value.MemberGroup);
 
-                Assert.AreEqual("ExcludedProtectedCatelProperty", properties[2].Key);
+                Assert.AreEqual("ExcludedCatelProperty", properties[2].Key);
                 Assert.AreEqual(SerializationMemberGroup.CatelProperty, properties[2].Value.MemberGroup);
+
+                Assert.AreEqual("ExcludedProtectedCatelProperty", properties[3].Key);
+                Assert.AreEqual(SerializationMemberGroup.CatelProperty, properties[3].Value.MemberGroup);
             }
         }
 

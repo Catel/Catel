@@ -46,10 +46,10 @@ namespace Catel.Test.Data
             using (var memoryStream = new MemoryStream())
             {
                 var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-                originalObject.Save(memoryStream, SerializationMode.Binary);
+                originalObject.Save(memoryStream, SerializationMode.Binary, null);
 
                 memoryStream.Position = 0L;
-                var loadedObject = IniFile.Load(memoryStream, SerializationMode.Binary);
+                var loadedObject = IniFile.Load(memoryStream, SerializationMode.Binary, null);
 
                 Assert.AreEqual(originalObject, loadedObject);
             }
@@ -62,10 +62,10 @@ namespace Catel.Test.Data
             using (var memoryStream = new MemoryStream())
             {
                 var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-                originalObject.Save(memoryStream, SerializationMode.Xml);
+                originalObject.Save(memoryStream, SerializationMode.Xml, null);
 
                 memoryStream.Position = 0L;
-                var loadedObject = IniFile.Load(memoryStream, SerializationMode.Xml);
+                var loadedObject = IniFile.Load(memoryStream, SerializationMode.Xml, null);
 
                 Assert.AreEqual(originalObject, loadedObject);
             }
@@ -77,7 +77,7 @@ namespace Catel.Test.Data
         {
             var iniFile = ModelBaseTestHelper.CreateIniFileObject();
 
-            XDocument document = iniFile.ToXml();
+            XDocument document = iniFile.ToXml(null);
             var loadedObject = IniFile.Load(document);
 
             Assert.AreEqual(iniFile, loadedObject);

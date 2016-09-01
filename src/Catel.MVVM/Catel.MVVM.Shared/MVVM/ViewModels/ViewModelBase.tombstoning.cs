@@ -87,7 +87,7 @@ namespace Catel.MVVM
             using (var memoryStream = new MemoryStream())
             {
                 var xmlSerializer = SerializationFactory.GetXmlSerializer();
-                xmlSerializer.SerializeMembers(this, memoryStream);
+                xmlSerializer.SerializeMembers(this, memoryStream, null, new string[] { });
 
                 return memoryStream.ToArray();
             }
@@ -104,7 +104,7 @@ namespace Catel.MVVM
                 using (var memoryStream = new MemoryStream(data))
                 {
                     var xmlSerializer = SerializationFactory.GetXmlSerializer();
-                    var propertyValues = xmlSerializer.DeserializeMembers(GetType(), memoryStream);
+                    var propertyValues = xmlSerializer.DeserializeMembers(GetType(), memoryStream, null);
 
                     LeanAndMeanModel = true;
 

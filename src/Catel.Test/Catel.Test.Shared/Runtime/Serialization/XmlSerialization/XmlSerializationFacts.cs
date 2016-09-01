@@ -117,7 +117,7 @@ namespace Catel.Test.Runtime.Serialization
             {
                 var obj = new ObjectWithXmlMappings();
 
-                var xml = obj.ToXml().ToString();
+                var xml = obj.ToXml(null).ToString();
 
                 Assert.IsFalse(xml.Contains("IgnoredProperty"));
             }
@@ -143,7 +143,7 @@ namespace Catel.Test.Runtime.Serialization
             public void RespectsTheXmlRootAndXmlElementAttribute()
             {
                 var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
-                var xmlDocument = person.ToXml();
+                var xmlDocument = person.ToXml(null);
 
                 var personElement = xmlDocument.Element("MappedPerson");
                 Assert.IsNotNull(personElement);
@@ -170,7 +170,7 @@ namespace Catel.Test.Runtime.Serialization
             public void RespectsTheXmlAttributeAttribute()
             {
                 var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
-                var xmlDocument = person.ToXml();
+                var xmlDocument = person.ToXml(null);
 
                 var personElement = xmlDocument.Element("MappedPerson");
                 Assert.IsNotNull(personElement);
@@ -235,7 +235,7 @@ namespace Catel.Test.Runtime.Serialization
             public void RespectsTheXmlIgnoreAttribute()
             {
                 var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
-                var xmlDocument = person.ToXml();
+                var xmlDocument = person.ToXml(null);
 
                 var personElement = xmlDocument.Element("MappedPerson");
                 Assert.IsNotNull(personElement);
@@ -261,7 +261,7 @@ namespace Catel.Test.Runtime.Serialization
                 root.Items = new ObservableCollection<ModelBaseFacts.Item>();
                 root.Items.Add(child);
 
-                var xmlDocument = root.ToXml();
+                var xmlDocument = root.ToXml(null);
 
                 var newRoot = ModelBaseFacts.Group.Load<ModelBaseFacts.Group>(xmlDocument);
                 Assert.IsNotNull(newRoot);

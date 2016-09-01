@@ -49,16 +49,34 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, Stream, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         public virtual void Serialize(object model, Stream stream)
+        {
+            Serialize(model, stream, null);
+        }
+
+        /// <summary>
+        /// Serializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <param name="configuration">The configuration.</param>
+        public virtual void Serialize(object model, Stream stream, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
 
-            using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Serialization))
+            using (GetCurrentSerializationScopeManager(configuration))
             {
-                Serialize(model, context);
+                configuration = GetCurrentSerializationConfiguration(configuration);
 
-                AppendContextToStream(context, stream);
+                using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Serialization, configuration))
+                {
+                    Serialize(model, context);
+
+                    AppendContextToStream(context, stream);
+                }
             }
         }
 
@@ -67,9 +85,11 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="context">The context.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, ISerializationContextInfo, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         public void Serialize(object model, ISerializationContextInfo context)
         {
-            Serialize(model, (TSerializationContext)context);
+            Serialize(model, (TSerializationContext)context, null);
         }
 
         /// <summary>
@@ -77,15 +97,40 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="context">The context.</param>
+        /// <param name="configuration">The configuration.</param>
+        public void Serialize(object model, ISerializationContextInfo context, ISerializationConfiguration configuration)
+        {
+            Serialize(model, (TSerializationContext)context, configuration);
+        }
+
+        /// <summary>
+        /// Serializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="context">The context.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, TSerializationContext, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         public virtual void Serialize(object model, TSerializationContext context)
+        {
+            Serialize(model, context, null);
+        }
+
+        /// <summary>
+        /// Serializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="context">The context.</param>
+        /// <param name="configuration">The configuration.</param>
+        public virtual void Serialize(object model, TSerializationContext context, ISerializationConfiguration configuration)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", context);
 
-            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (ScopeManager<ISerializer>.GetScopeManager(scopeName, () => this))
+            using (GetCurrentSerializationScopeManager(configuration))
             {
-                using (var finalContext = GetContext(model, model.GetType(), context, SerializationContextMode.Serialization))
+                configuration = GetCurrentSerializationConfiguration(configuration);
+
+                using (var finalContext = GetContext(model, model.GetType(), context, SerializationContextMode.Serialization, configuration))
                 {
                     Serialize(model, finalContext);
                 }
@@ -137,22 +182,41 @@ namespace Catel.Runtime.Serialization
         /// <param name="model">The model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="membersToIgnore">The members to ignore.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "SerializeMembers(object, Stream, ISerializationConfiguration, params string[])",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         public virtual void SerializeMembers(object model, Stream stream, params string[] membersToIgnore)
+        {
+            SerializeMembers(model, stream, null, membersToIgnore);
+        }
+
+        /// <summary>
+        /// Serializes the members.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <param name="membersToIgnore">The members to ignore.</param>
+        public virtual void SerializeMembers(object model, Stream stream, ISerializationConfiguration configuration, params string[] membersToIgnore)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("stream", stream);
 
-            using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Serialization))
+            using (GetCurrentSerializationScopeManager(configuration))
             {
-                var members = GetSerializableMembers(context, model, membersToIgnore);
-                if (members.Count == 0)
+                configuration = GetCurrentSerializationConfiguration(configuration);
+
+                using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Serialization, configuration))
                 {
-                    return;
+                    var members = GetSerializableMembers(context, model, membersToIgnore);
+                    if (members.Count == 0)
+                    {
+                        return;
+                    }
+
+                    SerializeMembers(context, members);
+
+                    AppendContextToStream(context, stream);
                 }
-
-                SerializeMembers(context, members);
-
-                AppendContextToStream(context, stream);
             }
         }
         #endregion
@@ -215,8 +279,7 @@ namespace Catel.Runtime.Serialization
                 return;
             }
 
-            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (ScopeManager<ISerializer>.GetScopeManager(scopeName, () => this))
+            using (GetCurrentSerializationScopeManager(context.Configuration))
             {
                 var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType);
 
@@ -248,7 +311,7 @@ namespace Catel.Runtime.Serialization
                         serializerModifier.SerializeMember(context, member);
                     }
 
-                    if (ShouldSerializeUsingParse(member, true))
+                    if (ShouldSerializeUsingParseAndToString(member, true))
                     {
                         var objectToStringValue = SerializeUsingObjectToString(context, member);
                         if (!string.IsNullOrWhiteSpace(objectToStringValue))
@@ -280,7 +343,7 @@ namespace Catel.Runtime.Serialization
 
             try
             {
-                var stringValue = (string) toStringMethod.Invoke(memberValue.Value, new object[] {CultureInfo.InvariantCulture});
+                var stringValue = (string)toStringMethod.Invoke(memberValue.Value, new object[] { context.Configuration.Culture });
                 return stringValue;
             }
             catch (Exception ex)

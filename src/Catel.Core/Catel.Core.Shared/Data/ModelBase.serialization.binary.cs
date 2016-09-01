@@ -92,15 +92,16 @@ namespace Catel.Data
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<ISerializer>.GetScopeManager(scopeName, SerializationFactory.GetBinarySerializer))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetBinarySerializer(), null)))
             {
-                var serializer = scopeManager.ScopeObject;
+                var serializer = scopeManager.ScopeObject.Serializer;
+                var configuration = scopeManager.ScopeObject.Configuration;
 
                 var dependencyResolver = this.GetDependencyResolver();
                 var serializationContextInfoFactory = dependencyResolver.Resolve<ISerializationContextInfoFactory>(serializer.GetType());
 
-                var serializationContext = serializationContextInfoFactory.GetSerializationContextInfo(serializer, this, info);
-                serializer.Serialize(this, serializationContext);
+                var serializationContext = serializationContextInfoFactory.GetSerializationContextInfo(serializer, this, info, configuration);
+                serializer.Serialize(this, serializationContext, configuration);
             }
         }
 
@@ -120,15 +121,16 @@ namespace Catel.Data
             }
 
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<ISerializer>.GetScopeManager(scopeName, SerializationFactory.GetBinarySerializer))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetBinarySerializer(), null)))
             {
-                var serializer = scopeManager.ScopeObject;
+                var serializer = scopeManager.ScopeObject.Serializer;
+                var configuration = scopeManager.ScopeObject.Configuration;
 
                 var dependencyResolver = this.GetDependencyResolver();
                 var serializationContextInfoFactory = dependencyResolver.Resolve<ISerializationContextInfoFactory>(serializer.GetType());
 
-                var serializationContext = serializationContextInfoFactory.GetSerializationContextInfo(serializer, this, _serializationInfo);
-                serializer.Deserialize(this, serializationContext);
+                var serializationContext = serializationContextInfoFactory.GetSerializationContextInfo(serializer, this, _serializationInfo, configuration);
+                serializer.Deserialize(this, serializationContext, configuration);
             }
 
             DeserializationSucceeded = true;

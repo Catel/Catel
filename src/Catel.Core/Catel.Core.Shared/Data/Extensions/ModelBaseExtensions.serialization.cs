@@ -35,7 +35,7 @@ namespace Catel.Data
             Argument.IsNotNull("stream", stream);
             Argument.IsNotNull("serializer", serializer);
 
-            serializer.Serialize(model, stream);
+            serializer.Serialize(model, stream, null);
         }
 
 #if NET

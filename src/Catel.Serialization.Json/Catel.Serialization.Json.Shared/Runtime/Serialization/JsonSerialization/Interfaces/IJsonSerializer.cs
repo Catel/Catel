@@ -8,6 +8,7 @@
 namespace Catel.Runtime.Serialization.Json
 {
     using System;
+    using System.Globalization;
     using Data;
     using Newtonsoft.Json;
 
@@ -35,14 +36,39 @@ namespace Catel.Runtime.Serialization.Json
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="jsonWriter">The json writer.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, JsonWriter, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         void Serialize(object model, JsonWriter jsonWriter);
+
+        /// <summary>
+        /// Serializes the specified model to the json writer.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="jsonWriter">The json writer.</param>
+        /// <param name="configuration">The configuration.</param>
+        void Serialize(object model, JsonWriter jsonWriter, ISerializationConfiguration configuration);
 
         /// <summary>
         /// Deserializes the specified model from the json reader.
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="jsonReader">The json reader.</param>
-        /// <returns>ModelBase.</returns>
+        /// <returns>
+        /// ModelBase.
+        /// </returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "Deserialize(object, JsonWriter, ISerializationConfiguration)",
+            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
         object Deserialize(Type modelType, JsonReader jsonReader);
+
+        /// <summary>
+        /// Deserializes the specified model from the json reader.
+        /// </summary>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="jsonReader">The json reader.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// ModelBase.
+        /// </returns>
+        object Deserialize(Type modelType, JsonReader jsonReader, ISerializationConfiguration configuration);
     }
 }
