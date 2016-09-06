@@ -25,7 +25,7 @@
 /// </summary>
 #if NETFX_CORE
 [DataContract]
-#elif !SILVERLIGHT
+#else
 [Serializable]
 #endif
 public class $name$ : ModelBase
@@ -39,7 +39,7 @@ public class $name$ : ModelBase
     /// </summary>
     public $name$() { }
 
-#if !SILVERLIGHT	&& !NETFX_CORE
+#if !NETFX_CORE
     /// <summary>
     /// Initializes a new object based on <see cref="SerializationInfo"/>.
     /// </summary>
