@@ -23,7 +23,9 @@
 /// $name$ model which fully supports serialization, property changed notifications,
 /// backwards compatibility and error checking.
 /// </summary>
-#if !SILVERLIGHT
+#if NETFX_CORE
+[DataContract]
+#elif !SILVERLIGHT
 [Serializable]
 #endif
 public class $name$ : ModelBase
@@ -37,7 +39,7 @@ public class $name$ : ModelBase
     /// </summary>
     public $name$() { }
 
-#if !SILVERLIGHT	
+#if !SILVERLIGHT	&& !NETFX_CORE
     /// <summary>
     /// Initializes a new object based on <see cref="SerializationInfo"/>.
     /// </summary>
