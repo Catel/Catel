@@ -427,7 +427,7 @@ namespace Catel.IoC
                 }
 
                 // If a type is registered, the original container is always known
-                return ResolveTypeFromKnownContainer(serviceType, tag);
+                return ResolveTypeFromKnownContainer(serviceInfo);
             }
         }
 
@@ -722,18 +722,19 @@ namespace Catel.IoC
         /// <summary>
         /// Resolves the type from a known container.
         /// </summary>
-        /// <param name="serviceType">Type of the service.</param>
-        /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
-        /// <returns>An instance of the type registered on the service.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
+        /// <param name="serviceInfo">The service information.</param>
+        /// <returns>
+        /// An instance of the type registered on the service.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceInfo" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The type is not found in any container.</exception>
-        private object ResolveTypeFromKnownContainer(Type serviceType, object tag)
+        private object ResolveTypeFromKnownContainer(ServiceInfo serviceInfo)
         {
-            Argument.IsNotNull("serviceType", serviceType);
+            Argument.IsNotNull("serviceInfo", serviceInfo);
 
             lock (this)
             {
-                var typeRequestInfo = new TypeRequestInfo(serviceType, tag);
+                var typeRequestInfo = new TypeRequestInfo(serviceInfo.Type, serviceInfo.Tag);
                 if (_currentTypeRequestPath == null)
                 {
                     _currentTypeRequestPath = new TypeRequestPath(typeRequestInfo, name: "ServiceLocator");
@@ -753,10 +754,12 @@ namespace Catel.IoC
                     }
                 }
 
-                var serviceInfo = new ServiceInfo(serviceType, tag);
                 var registeredTypeInfo = _registeredTypes[serviceInfo];
 
-                object instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
+                var serviceType = serviceInfo.Type;
+                var tag = serviceInfo.Tag;
+
+                var instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
                 if (instance == null)
                 {
                     ThrowTypeNotRegisteredException(serviceType);
