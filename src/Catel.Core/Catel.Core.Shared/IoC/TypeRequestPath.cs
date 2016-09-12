@@ -101,7 +101,15 @@ namespace Catel.IoC
         /// <value>The first type.</value>
         public TypeRequestInfo FirstType
         {
-            get { return _typePath[0]; }
+            get
+            {
+                if (_typePath.Count <= 0)
+                {
+                    return null;
+                }
+
+                return _typePath[0];
+            }
         }
 
         /// <summary>
@@ -110,7 +118,16 @@ namespace Catel.IoC
         /// <value>The last type.</value>
         public TypeRequestInfo LastType
         {
-            get { return _typePath[_typePath.Count - 1]; }
+            get
+            {
+                var index = _typePath.Count - 1;
+                if (index < 0 || index >= _typePath.Count)
+                {
+                    return null;
+                }
+
+                return _typePath[index];
+            }
         }
 
         /// <summary>

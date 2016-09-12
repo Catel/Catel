@@ -228,9 +228,12 @@ namespace Catel.IoC
             {
                 if (_currentTypeRequestPath != null)
                 {
-                    if (_currentTypeRequestPath.LastType == typeRequestInfoForTypeJustConstructed)
+                    if (_currentTypeRequestPath.TypeCount > 0)
                     {
-                        _currentTypeRequestPath.MarkTypeAsCreated(typeRequestInfoForTypeJustConstructed);
+                        if (_currentTypeRequestPath.LastType == typeRequestInfoForTypeJustConstructed)
+                        {
+                            _currentTypeRequestPath.MarkTypeAsCreated(typeRequestInfoForTypeJustConstructed);
+                        }
                     }
 
                     if (_currentTypeRequestPath.TypeCount == 0)
