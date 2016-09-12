@@ -51,7 +51,7 @@ namespace Catel.Test.IoC.Configuration
         [TestCase]
         public void InitializeServiceLocatorFromNonDefaultConfiguration()
         {
-            Configuration openExeConfiguration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var openExeConfiguration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var configurationSection = openExeConfiguration.GetSection<IoCConfigurationSection>("ioc", "catel");
             var serviceLocatorConfiguration = configurationSection.GetServiceLocatorConfiguration("test");
             Assert.IsNotNull(serviceLocatorConfiguration);
