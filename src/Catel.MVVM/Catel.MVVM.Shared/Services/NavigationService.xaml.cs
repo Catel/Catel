@@ -37,8 +37,6 @@ namespace Catel.Services
         private bool _appClosingByMainWindow;
         private bool _appClosedFromService;
 #endif
-
-        private RootFrameType _rootFrame;
         #endregion
 
         #region Properties
@@ -70,12 +68,9 @@ namespace Catel.Services
         {
             get
             {
-                if (_rootFrame == null)
-                {
-                    _rootFrame = _navigationRootService.GetNavigationRoot() as RootFrameType;
-                }
-
-                return _rootFrame;
+                // Note: don't cache, it might change dynamically
+                var rootFrame = _navigationRootService.GetNavigationRoot() as RootFrameType;
+                return rootFrame;
             }
         }
 
