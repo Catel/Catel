@@ -371,7 +371,7 @@ namespace Catel.Logging
         /// <returns>The formatted log event.</returns>
         protected virtual string FormatLogEvent(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
-            var logMessage = string.Format("{0} => [{1}] [{2}] [{3}] {4}", time.ToString(_timeFormat), LogEventStrings[logEvent], log.TargetType.FullName, ThreadHelper.GetCurrentThreadId(), message);
+            var logMessage = string.Format("{0} => [{1}] [{2}] [{3}] {4}", time.ToString(_timeFormat), LogEventStrings[logEvent], log.Name, ThreadHelper.GetCurrentThreadId(), message);
             return logMessage;
         }
 

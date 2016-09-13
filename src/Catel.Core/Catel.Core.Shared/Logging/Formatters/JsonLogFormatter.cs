@@ -12,7 +12,6 @@ namespace Catel.Logging
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
-    using System.Reflection;
     using Reflection;
 
     /// <summary>
@@ -107,6 +106,7 @@ namespace Catel.Logging
             var pdelim = string.Empty;
             WriteJsonProperty("ApplicationName", ApplicationName, ref pdelim, textWriter);
             WriteJsonProperty("ApplicationVersion", ApplicationVersion, ref pdelim, textWriter);
+            WriteJsonProperty("Name", log.Name, ref pdelim, textWriter);
             WriteJsonProperty("TargetType", log.TargetType.FullName, ref pdelim, textWriter);
 
             textWriter.Write("}");
