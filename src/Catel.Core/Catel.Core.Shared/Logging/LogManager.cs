@@ -11,9 +11,7 @@ namespace Catel.Logging
     using System.Linq;
     using System.Reflection;
     using System.Runtime.CompilerServices;
-    using System.Threading.Tasks;
     using Reflection;
-    using Threading;
 #if NET
     using System.Configuration;
     using Catel.Configuration;
@@ -222,7 +220,7 @@ namespace Catel.Logging
         /// <summary>
         /// Dictionary containing the logs per type.
         /// </summary>
-        private static readonly Dictionary<Type, ILog> _loggers = new Dictionary<Type, ILog>();
+        private static readonly Dictionary<string, ILog> _loggers = new Dictionary<string, ILog>();
 
         /// <summary>
         /// Logging of the class. Must be declared after the log listeners and loggers.
@@ -464,26 +462,73 @@ namespace Catel.Logging
         }
 
         /// <summary>
+        /// Gets the logger for the specified generic type.
+        /// </summary>
+        /// <typeparam name="T">The type.</typeparam>
+        /// <returns>The <see cref="ILog"/> object for the specified type.</returns>
+        public static ILog GetLogger<T>()
+        {
+            lock (_loggers)
+            {
+                var key = typeof(T).ToString();
+                if (!_loggers.ContainsKey(key))
+                {
+                    var log = new Log(typeof(T));
+                    log.LogMessage += OnLogMessage;
+
+                    _loggers.Add(key, log);
+                }
+
+                return _loggers[key];
+            }
+        }
+
+        /// <summary>
         /// Gets the logger for the specified type.
         /// </summary>
         /// <param name="type">The type.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        /// <returns>The <see cref="ILog"/> object for the specified type.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="type"/> is <c>null</c>.</exception>
         public static ILog GetLogger(Type type)
         {
             Argument.IsNotNull("type", type);
 
             lock (_loggers)
             {
-                if (!_loggers.ContainsKey(type))
+                var key = type.ToString();
+                if (!_loggers.ContainsKey(key))
                 {
                     var log = new Log(type);
                     log.LogMessage += OnLogMessage;
 
-                    _loggers.Add(type, log);
+                    _loggers.Add(key, log);
                 }
 
-                return _loggers[type];
+                return _loggers[key];
+            }
+        }
+
+        /// <summary>
+        /// Gets the logger with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the logger.</param>
+        /// <returns>The <see cref="ILog"/> object with the specified name.</returns>
+        /// <exception cref="ArgumentException">If <paramref name="name"/> is null or a whitespace.</exception>
+        public static ILog GetLogger(string name)
+        {
+            Argument.IsNotNullOrWhitespace("name", name);
+
+            lock (_loggers)
+            {
+                if (!_loggers.ContainsKey(name))
+                {
+                    var log = new Log(name);
+                    log.LogMessage += OnLogMessage;
+
+                    _loggers.Add(name, log);
+                }
+
+                return _loggers[name];
             }
         }
 

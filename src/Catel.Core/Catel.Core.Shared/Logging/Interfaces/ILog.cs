@@ -15,6 +15,11 @@ namespace Catel.Logging
     {
         #region Properties
         /// <summary>
+        /// Gets the name of the logger.
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
         /// Gets the target type of the log. This is the type where the log is created for.
         /// </summary>
         /// <value>The type of the target.</value>
