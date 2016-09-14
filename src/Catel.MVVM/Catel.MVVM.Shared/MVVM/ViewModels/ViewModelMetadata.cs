@@ -8,6 +8,7 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     /// <summary>
     /// Class containing meta data for a view model type.
@@ -25,8 +26,8 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="models"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="mappings"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="validations"/> is <c>null</c>.</exception>
-        internal ViewModelMetadata(Type viewModelType, IReadOnlyDictionary<string, ModelInfo> models, IReadOnlyDictionary<string, ViewModelToModelMapping> mappings,
-            IReadOnlyDictionary<string, ValidationToViewModelAttribute> validations)
+        internal ViewModelMetadata(Type viewModelType, Dictionary<string, ModelInfo> models, Dictionary<string, ViewModelToModelMapping> mappings,
+            Dictionary<string, ValidationToViewModelAttribute> validations)
         {
             Argument.IsNotNull("viewModelType", viewModelType);
             Argument.IsNotNull("models", models);
@@ -47,16 +48,16 @@ namespace Catel.MVVM
         /// <summary>
         /// Gets the models.
         /// </summary>
-        public IReadOnlyDictionary<string, ModelInfo> Models { get; private set; }
+        public Dictionary<string, ModelInfo> Models { get; private set; }
 
         /// <summary>
         /// Gets the mappings.
         /// </summary>
-        public IReadOnlyDictionary<string, ViewModelToModelMapping> Mappings { get; private set; }
+        public Dictionary<string, ViewModelToModelMapping> Mappings { get; private set; }
 
         /// <summary>
         /// Gets the validations.
         /// </summary>
-        public IReadOnlyDictionary<string, ValidationToViewModelAttribute> Validations { get; private set; }
+        public Dictionary<string, ValidationToViewModelAttribute> Validations { get; private set; }
     }
 }

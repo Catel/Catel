@@ -21,6 +21,7 @@ namespace Catel.MVVM
     using Reflection;
     using Services;
     using System.Collections.Concurrent;
+    using System.Collections.ObjectModel;
     using Threading;
     
     #region Enums
@@ -620,8 +621,8 @@ namespace Catel.MVVM
 
             return new ViewModelMetadata(
                 viewModelType, 
-                modelObjectsInfo, 
-                viewModelToModelMap, 
+                modelObjectsInfo,
+                viewModelToModelMap,
                 validationSummaries);
         }
 

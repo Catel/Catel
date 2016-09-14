@@ -1,8 +1,14 @@
-﻿using System;
-using System.Threading;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ReaderWriterLockSlimExtensions.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Catel.Threading.Extensions
 {
+    using System;
+    using System.Threading;
+
     /// <summary>
     /// Provides extensions for <see cref="System.Threading.ReaderWriterLockSlim"/>.
     /// </summary>
@@ -15,10 +21,7 @@ namespace Catel.Threading.Extensions
         /// <param name="criticalOperation">Performed operation.</param>
         public static void PerformRead(this ReaderWriterLockSlim lockSlim, Action criticalOperation)
         {
-            if (criticalOperation == null)
-            {
-                throw new ArgumentNullException("criticalOperation");
-            }
+            Argument.IsNotNull("criticalOperation", criticalOperation);
 
             lockSlim.EnterReadLock();
             try
@@ -40,10 +43,8 @@ namespace Catel.Threading.Extensions
         /// <returns>Performed operation result.</returns>
         public static T PerformRead<T>(this ReaderWriterLockSlim lockSlim, Func<T> criticalOperation)
         {
-            if (criticalOperation == null)
-            {
-                throw new ArgumentNullException("criticalOperation");
-            }
+            Argument.IsNotNull("criticalOperation", criticalOperation);
+
             lockSlim.EnterReadLock();
             try
             {
@@ -62,10 +63,8 @@ namespace Catel.Threading.Extensions
         /// <param name="criticalOperation">Performed operation.</param>
         public static void PerformWrite(this ReaderWriterLockSlim lockSlim, Action criticalOperation)
         {
-            if (criticalOperation == null)
-            {
-                throw new ArgumentNullException("criticalOperation");
-            }
+            Argument.IsNotNull("criticalOperation", criticalOperation);
+
             lockSlim.EnterWriteLock();
             try
             {
@@ -84,10 +83,8 @@ namespace Catel.Threading.Extensions
         /// <param name="criticalOperation">Performed operation.</param>
         public static void PerformUpgradableRead(this ReaderWriterLockSlim lockSlim, Action criticalOperation)
         {
-            if (criticalOperation == null)
-            {
-                throw new ArgumentNullException("criticalOperation");
-            }
+            Argument.IsNotNull("criticalOperation", criticalOperation);
+
             lockSlim.EnterUpgradeableReadLock();
             try
             {
@@ -108,10 +105,8 @@ namespace Catel.Threading.Extensions
         /// <returns>Performed operation result.</returns>
         public static T PerformUpgradableRead<T>(this ReaderWriterLockSlim lockSlim, Func<T> criticalOperation)
         {
-            if (criticalOperation == null)
-            {
-                throw new ArgumentNullException("criticalOperation");
-            }
+            Argument.IsNotNull("criticalOperation", criticalOperation);
+
             lockSlim.EnterUpgradeableReadLock();
             try
             {

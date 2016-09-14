@@ -438,7 +438,6 @@ namespace Catel.MVVM
         /// <returns></returns>
         private static IEnumerable<IViewModel> GetAllViewModels(Dictionary<Type, ManagedViewModel> managedViewModels)
         {
-            // TODO: refactor to internal extension method if necessary
             return managedViewModels.SelectMany(row => row.Value.ViewModels).ToList();
         }
 
