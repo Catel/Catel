@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Threading.Extensions
+namespace Catel.Threading
 {
     using System;
     using System.Threading;
