@@ -12,9 +12,11 @@ namespace System
 
     using Collections.Generic;
     using Reflection;
+    using System.Linq;
 
 #if NETFX_CORE
     using global::Windows.ApplicationModel;
+    using Catel;
 #endif
 
     /// <summary>
@@ -22,20 +24,13 @@ namespace System
     /// </summary>
     public sealed class AppDomain
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        /// The known assemblies to ignore.
-        /// </summary>
-        private static readonly HashSet<string> KnownAssembliesToIgnore = new HashSet<string>(); 
+        private static readonly HashSet<string> KnownPrefixesToIgnore = new HashSet<string>();
 
-        /// <summary>
-        /// List of loaded assemblies.
-        /// </summary>
-        private List<Assembly> _loadedAssemblies;
+        private readonly List<Assembly> _loadedAssemblies = new List<Assembly>();
+        private readonly object _lock = new object();
+        private bool _isInitialized;
 
         #region Constructors
         /// <summary>
@@ -45,7 +40,11 @@ namespace System
         {
             CurrentDomain = new AppDomain();
 
-            KnownAssembliesToIgnore.Add("ClrCompression.dll");
+            KnownPrefixesToIgnore.Add("clrcompression");
+            KnownPrefixesToIgnore.Add("clrjit");
+            KnownPrefixesToIgnore.Add("ucrtbased");
+            KnownPrefixesToIgnore.Add("methodtimer");
+            KnownPrefixesToIgnore.Add("catel.fody.attributes");
         }
         #endregion
 
@@ -64,48 +63,61 @@ namespace System
         /// <returns></returns>
         public Assembly[] GetAssemblies()
         {
-            if (_loadedAssemblies == null)
+            lock (_lock)
             {
-                _loadedAssemblies = new List<Assembly>();
-
+                if (!_isInitialized)
+                { 
 #if NETFX_CORE
-                var folder = Package.Current.InstalledLocation;
+                    var folder = Package.Current.InstalledLocation;
 
-                var operation = folder.GetFilesAsync();
-                var task = operation.AsTask();
-                task.Wait();
+                    // Note: normally it's bad practice to use task.Wait(), but GetAssemblies must be blocking to cache it all
+                    var operation = folder.GetFilesAsync();
+                    var task = operation.AsTask();
+                    task.Wait();
 
-                foreach (var file in task.Result)
-                {
-                    if (file.FileType == ".dll" || file.FileType == ".exe")
+                    var files = task.Result.ToList();
+
+                    var allowedTypes = new [] { ".dll", ".exe" };
+                    var arrayToIgnore = KnownPrefixesToIgnore.ToArray();
+
+                    foreach (var file in files)
                     {
-                        try
+                        if (file.FileType.EqualsAnyIgnoreCase(allowedTypes))
                         {
-                            if (KnownAssembliesToIgnore.Contains(file.Name))
+                            try
                             {
-                                continue;
-                            }
+                                if (file.Name.StartsWithAnyIgnoreCase(arrayToIgnore))
+                                { 
+                                    continue;
+                                }
 
-                            var filename = file.Name.Substring(0, file.Name.Length - file.FileType.Length);
-                            var name = new AssemblyName { Name = filename };
-                            var asm = Assembly.Load(name);
-                            _loadedAssemblies.Add(asm);
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Warning(ex, "Failed to load assembly '{0}'", file.Name);
+                                var filename = file.Name.Substring(0, file.Name.Length - file.FileType.Length);
+                                var name = new AssemblyName
+                                {
+                                    Name = filename
+                                };
+
+                                var assembly = Assembly.Load(name);
+                                _loadedAssemblies.Add(assembly);
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Warning(ex, $"Failed to load assembly '{file.Name}'");
+                            }
                         }
                     }
-                }
 #else
-                var currentdomain = typeof(string).GetTypeInfo().Assembly.GetType("System.AppDomain").GetRuntimeProperty("CurrentDomain").GetMethod.Invoke(null, new object[] { });
-                var method = currentdomain.GetType().GetRuntimeMethod("GetAssemblies", new Type[] { });
-                var assemblies = method.Invoke(currentdomain, new object[] { }) as Assembly[];
-                _loadedAssemblies.AddRange(assemblies);
+                    var currentdomain = typeof(string).GetTypeInfo().Assembly.GetType("System.AppDomain").GetRuntimeProperty("CurrentDomain").GetMethod.Invoke(null, new object[] { });
+                    var method = currentdomain.GetType().GetRuntimeMethod("GetAssemblies", new Type[] { });
+                    var assemblies = method.Invoke(currentdomain, new object[] { }) as Assembly[];
+                    _loadedAssemblies.AddRange(assemblies);
 #endif
-            }
 
-            return _loadedAssemblies.ToArray();
+                    _isInitialized = true;
+                }
+
+                return _loadedAssemblies.ToArray();
+            }
         }
         #endregion
     }
