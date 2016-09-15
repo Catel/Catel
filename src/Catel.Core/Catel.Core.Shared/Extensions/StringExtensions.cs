@@ -121,6 +121,150 @@ namespace Catel
             filterText = filterText.ToLower().Trim();
             return filterText;
         }
+
+        /// <summary>
+        /// Determines whether the string equals any of the values.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="values">The values to check for.</param>
+        /// <returns><c>true</c> if the string equals any of the values, <c>false</c> otherwise.</returns>
+        public static bool EqualsAny(this string str, params string[] values)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return false;
+            }
+
+            foreach (var value in values)
+            {
+                if (str.Equals(value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the string equals with any of the values.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="values">The values to check for.</param>
+        /// <returns><c>true</c> if the string equals any of the values, <c>false</c> otherwise.</returns>
+        public static bool EqualsAnyIgnoreCase(this string str, params string[] values)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return false;
+            }
+
+            foreach (var value in values)
+            {
+                if (str.EqualsIgnoreCase(value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the string starts with any of the values.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="values">The values to check for.</param>
+        /// <returns><c>true</c> if the string starts with any of the values, <c>false</c> otherwise.</returns>
+        public static bool StartsWithAny(this string str, params string[] values)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return false;
+            }
+
+            foreach (var value in values)
+            {
+                if (str.StartsWith(value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the string starts with any of the values.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="values">The values to check for.</param>
+        /// <returns><c>true</c> if the string starts with any of the values, <c>false</c> otherwise.</returns>
+        public static bool StartsWithAnyIgnoreCase(this string str, params string[] values)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return false;
+            }
+
+            foreach (var value in values)
+            {
+                if (str.StartsWithIgnoreCase(value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the string ends with any of the values.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="values">The values to check for.</param>
+        /// <returns><c>true</c> if the string ends with any of the values, <c>false</c> otherwise.</returns>
+        public static bool EndsWithAny(this string str, params string[] values)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return false;
+            }
+
+            foreach (var value in values)
+            {
+                if (str.EndsWith(value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the string ends with any of the values.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="values">The values to check for.</param>
+        /// <returns><c>true</c> if the string ends with any of the values, <c>false</c> otherwise.</returns>
+        public static bool EndsWithAnyIgnoreCase(this string str, params string[] values)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return false;
+            }
+
+            foreach (var value in values)
+            {
+                if (str.EndsWithIgnoreCase(value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
         #endregion
     }
 }
