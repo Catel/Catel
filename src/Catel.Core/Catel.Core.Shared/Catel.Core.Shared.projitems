@@ -398,6 +398,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Threading\AwaitableDisposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\DefaultAsyncWaitQueue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Extensions\AsyncWaitQueueExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Extensions\ReaderWriterLockSlimExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Extensions\SynchronizationContextExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Extensions\TaskExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\TaskHelper.cs" />

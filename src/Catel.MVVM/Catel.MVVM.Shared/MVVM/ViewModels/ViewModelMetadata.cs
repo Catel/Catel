@@ -8,6 +8,7 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     /// <summary>
     /// Class containing meta data for a view model type.

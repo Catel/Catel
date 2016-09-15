@@ -20,8 +20,10 @@ namespace Catel.MVVM
     using Logging;
     using Reflection;
     using Services;
+    using System.Collections.Concurrent;
+    using System.Collections.ObjectModel;
     using Threading;
-
+    
     #region Enums
     /// <summary>
     /// Available clean up models for a model.
@@ -93,7 +95,7 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
-        private static readonly Dictionary<Type, ViewModelMetadata> _metaData = new Dictionary<Type, ViewModelMetadata>();
+        private static readonly ConcurrentDictionary<Type, ViewModelMetadata> _metaData = new ConcurrentDictionary<Type, ViewModelMetadata>();
 
 #if !XAMARIN
         /// <summary>
@@ -523,7 +525,7 @@ namespace Catel.MVVM
         {
             var viewModelType = GetType();
 
-            var metaData = InitializeViewModelMetaData(viewModelType);
+            var metaData = GetViewModelMetaData(viewModelType);
 
             lock (_modelLock)
             {
@@ -543,13 +545,13 @@ namespace Catel.MVVM
         /// <param name="viewModelType">Type of the view model.</param>
         /// <returns>ViewModelMetadata.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
-        private static ViewModelMetadata InitializeViewModelMetaData(Type viewModelType)
+        private static ViewModelMetadata GetViewModelMetaData(Type viewModelType)
         {
-            if (_metaData.ContainsKey(viewModelType))
-            {
-                return _metaData[viewModelType];
-            }
+            return _metaData.GetOrAdd(viewModelType, CreateViewModelMetaData);
+        }
 
+        private static ViewModelMetadata CreateViewModelMetaData(Type viewModelType)
+        {
             var properties = new List<PropertyInfo>();
             var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, false, true);
             properties.AddRange(viewModelType.GetPropertiesEx(bindingFlags));
@@ -617,9 +619,11 @@ namespace Catel.MVVM
                 #endregion
             }
 
-            _metaData.Add(viewModelType, new ViewModelMetadata(viewModelType, modelObjectsInfo, viewModelToModelMap, validationSummaries));
-
-            return _metaData[viewModelType];
+            return new ViewModelMetadata(
+                viewModelType, 
+                modelObjectsInfo,
+                viewModelToModelMap,
+                validationSummaries);
         }
 
         /// <summary>

@@ -6,6 +6,7 @@
     using Catel.MVVM.Auditing;
     using System;
     using System.ComponentModel;
+    using System.Linq;
     using System.Threading;
     using Catel.MVVM;
     using Catel.Services;
@@ -914,6 +915,145 @@
             await vm.CloseViewModelAsync(null);
 
             Assert.AreEqual(false, auditor.OnViewModelClosedCalled);
+        }
+
+        [Test]
+        public void MultipleViewModelsCanBeCreatedConcurrently()
+        {
+            const int personsPerThread = 50;
+            const int threadAmount = 10;
+            var threads = new Thread[threadAmount];
+
+            var allViewModels = new TestViewModel[threadAmount][];
+            
+            for (int i = 0; i < threadAmount; i++)
+            {
+                threads[i] = new Thread((index) =>
+                {
+                    var localViewModels = new TestViewModel[personsPerThread];
+                    for (int j = 0; j < personsPerThread; j++)
+                    {
+                        localViewModels[j] = new TestViewModel();
+                    }
+                    allViewModels[(int)index] = localViewModels;
+                });
+            }
+
+            for (int i = 0; i < threadAmount; i++)
+            {
+                threads[i].Start(i);
+            }
+
+            for (int i = 0; i < threadAmount; i++)
+            {
+                threads[i].Join();
+            }
+
+            var flatenSortedIdentifiers =
+                allViewModels
+                .SelectMany(o => o)
+                .Select(o => o.UniqueIdentifier)
+                .OrderBy(o => o)
+                .ToArray();
+
+            var firstId = flatenSortedIdentifiers[0];
+
+            Assert.That(flatenSortedIdentifiers, Is.EquivalentTo(Enumerable.Range(firstId, personsPerThread * threadAmount)));
+        }
+
+        [Test]
+        public void PropertiesCanBeSetConcurrentlyWithObjectCreation()
+        {
+            const int personsPerThread = 50;
+            const int threadAmount = 10;
+            var threads = new Thread[threadAmount];
+
+            var allViewModels = new TestViewModel[threadAmount][];
+
+            for (int i = 0; i < threadAmount; i++)
+            {
+                threads[i] = new Thread((index) =>
+                {
+                    var localViewModels = new TestViewModel[personsPerThread];
+                    for (int j = 0; j < personsPerThread; j++)
+                    {
+                        var viewModel = new TestViewModel();
+                        viewModel.Age = "18";
+                        viewModel.Age = "19";
+                        localViewModels[j] = viewModel;
+
+                    }
+                    allViewModels[(int)index] = localViewModels;
+                });
+            }
+
+            for (int i = 0; i < threadAmount; i++)
+            {
+                threads[i].Start(i);
+            }
+
+            for (int i = 0; i < threadAmount; i++)
+            {
+                threads[i].Join();
+            }
+
+            var flatenSortedIdentifiers =
+                allViewModels
+                .SelectMany(o => o)
+                .Select(o => o.UniqueIdentifier)
+                .OrderBy(o => o)
+                .ToArray();
+
+            var firstId = flatenSortedIdentifiers[0];
+
+            Assert.That(flatenSortedIdentifiers, Is.EquivalentTo(Enumerable.Range(firstId, personsPerThread * threadAmount)));
+        }
+
+        [Test]
+        public void CommandsCanBeCalledConcurrentlyWithObjectCreation()
+        {
+            const int personsPerThread = 50;
+            const int threadAmount = 10;
+            var threads = new Thread[threadAmount];
+
+            var allViewModels = new TestViewModel[threadAmount][];
+
+            for (int i = 0; i < threadAmount; i++)
+            {
+                threads[i] = new Thread((index) =>
+                {
+                    var localViewModels = new TestViewModel[personsPerThread];
+                    for (int j = 0; j < personsPerThread; j++)
+                    {
+                        var viewModel = new TestViewModel();
+                        viewModel.GenerateData.Execute();
+                        localViewModels[j] = viewModel;
+
+                    }
+                    allViewModels[(int)index] = localViewModels;
+                });
+            }
+
+            for (int i = 0; i < threadAmount; i++)
+            {
+                threads[i].Start(i);
+            }
+
+            for (int i = 0; i < threadAmount; i++)
+            {
+                threads[i].Join();
+            }
+
+            var flatenSortedIdentifiers =
+                allViewModels
+                .SelectMany(o => o)
+                .Select(o => o.UniqueIdentifier)
+                .OrderBy(o => o)
+                .ToArray();
+
+            var firstId = flatenSortedIdentifiers[0];
+
+            Assert.That(flatenSortedIdentifiers, Is.EquivalentTo(Enumerable.Range(firstId, personsPerThread * threadAmount)));
         }
     }
 }
