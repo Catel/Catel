@@ -558,7 +558,14 @@ namespace Catel.MVVM
 #if PCL
             lock (_metaData)
             {
-                return _metaData.GetOrAdd(viewModelType, CreateViewModelMetaData);
+                ViewModelMetadata data = null;
+                if (!_metaData.TryGetValue(viewModelType, out data))
+                {
+                    data = CreateViewModelMetaData(viewModelType);
+                    _metaData[viewModelType] = data;
+                }
+
+                return data;
             }
 #else
             return _metaData.GetOrAdd(viewModelType, CreateViewModelMetaData);
