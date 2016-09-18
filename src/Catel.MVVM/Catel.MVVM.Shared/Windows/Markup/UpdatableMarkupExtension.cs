@@ -36,6 +36,8 @@ namespace Catel.Windows.Markup
         private object _targetProperty;
         private bool _isFrameworkElementLoaded;
         private IServiceProvider _serviceProvider;
+
+        private bool _hasBeenLoadedOnce = false;
         #endregion
 
         #region Constructors
@@ -132,6 +134,13 @@ namespace Catel.Windows.Markup
 
             OnTargetObjectLoaded();
 
+            // CTL-925: if an item has been loaded at least once, update the value next time it is being loaded
+            if (_hasBeenLoadedOnce)
+            {
+                UpdateValue();
+            }
+
+            _hasBeenLoadedOnce = true;
             _isFrameworkElementLoaded = true;
         }
 

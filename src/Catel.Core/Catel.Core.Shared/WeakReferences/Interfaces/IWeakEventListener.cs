@@ -81,7 +81,7 @@ namespace Catel
         /// Gets a value indicating whether this instance represents a static event.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this instance represents a static event; otherwise, <c>false</c>.
+        /// <c>true</c> if this instance represents a static event; otherwise, <c>false</c>.
         /// </value>
         bool IsStaticEvent { get; }
 
