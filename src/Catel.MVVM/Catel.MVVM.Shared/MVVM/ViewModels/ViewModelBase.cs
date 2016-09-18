@@ -20,10 +20,13 @@ namespace Catel.MVVM
     using Logging;
     using Reflection;
     using Services;
-    using System.Collections.Concurrent;
     using System.Collections.ObjectModel;
     using Threading;
-    
+
+#if !PCL
+    using System.Collections.Concurrent;
+#endif
+
     #region Enums
     /// <summary>
     /// Available clean up models for a model.
@@ -95,7 +98,12 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
+
+#if !PCL
         private static readonly ConcurrentDictionary<Type, ViewModelMetadata> _metaData = new ConcurrentDictionary<Type, ViewModelMetadata>();
+#else
+        private static readonly Dictionary<Type, ViewModelMetadata> _metaData = new Dictionary<Type, ViewModelMetadata>();
+#endif
 
 #if !XAMARIN
         /// <summary>
@@ -226,7 +234,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        protected ViewModelBase() 
+        protected ViewModelBase()
             : this(true, false, false)
         {
         }
@@ -547,7 +555,14 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
         private static ViewModelMetadata GetViewModelMetaData(Type viewModelType)
         {
+#if PCL
+            lock (_metaData)
+            {
+                return _metaData.GetOrAdd(viewModelType, CreateViewModelMetaData);
+            }
+#else
             return _metaData.GetOrAdd(viewModelType, CreateViewModelMetaData);
+#endif
         }
 
         private static ViewModelMetadata CreateViewModelMetaData(Type viewModelType)
@@ -566,15 +581,15 @@ namespace Catel.MVVM
 
             foreach (var propertyInfo in properties)
             {
-                #region Model attributes
+#region Model attributes
                 var modelAttribute = propertyInfo.GetCustomAttributeEx(typeof(ModelAttribute), true) as ModelAttribute;
                 if (modelAttribute != null)
                 {
                     modelObjectsInfo.Add(propertyInfo.Name, new ModelInfo(propertyInfo.Name, modelAttribute));
                 }
-                #endregion
+#endregion
 
-                #region ViewModelToModel attributes
+#region ViewModelToModel attributes
                 var viewModelToModelAttribute = propertyInfo.GetCustomAttributeEx(typeof(ViewModelToModelAttribute), true) as ViewModelToModelAttribute;
                 if (viewModelToModelAttribute != null)
                 {
@@ -601,9 +616,9 @@ namespace Catel.MVVM
                         viewModelToModelMap.Add(propertyInfo.Name, new ViewModelToModelMapping(propertyInfo.Name, viewModelToModelAttribute));
                     }
                 }
-                #endregion
+#endregion
 
-                #region ValidationToViewModel attributes
+#region ValidationToViewModel attributes
                 var validationToViewModelAttribute = propertyInfo.GetCustomAttributeEx(typeof(ValidationToViewModelAttribute), true) as ValidationToViewModelAttribute;
                 if (validationToViewModelAttribute != null)
                 {
@@ -616,11 +631,11 @@ namespace Catel.MVVM
 
                     Log.Debug("Registered property '{0}' as validation summary", propertyInfo.Name);
                 }
-                #endregion
+#endregion
             }
 
             return new ViewModelMetadata(
-                viewModelType, 
+                viewModelType,
                 modelObjectsInfo,
                 viewModelToModelMap,
                 validationSummaries);
@@ -1433,9 +1448,9 @@ namespace Catel.MVVM
 
             return _modelObjects.ContainsKey(name);
         }
-        #endregion
+#endregion
 
-        #region Services
+#region Services
         /// <summary>
         /// Registers the default view model services.
         /// </summary>
@@ -1445,9 +1460,9 @@ namespace Catel.MVVM
         {
             ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
         }
-        #endregion
+#endregion
 
-        #region IViewModel Members
+#region IViewModel Members
         /// <summary>
         /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
         /// to a state where the associated UI element (user control, window, ...) is actually loaded.

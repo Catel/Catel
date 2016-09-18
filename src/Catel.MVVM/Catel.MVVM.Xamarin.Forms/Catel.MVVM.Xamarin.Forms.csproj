@@ -23,7 +23,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\output\debug\Xamarin.Forms\Catel.MVVM\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;XAMARIN;XAMARIN_FORMS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;XAMARIN;XAMARIN_FORMS;PCL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\..\output\debug\Xamarin.Forms\Catel.MVVM.XML</DocumentationFile>
@@ -33,7 +33,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\output\release\Xamarin.Forms\Catel.MVVM\</OutputPath>
-    <DefineConstants>TRACE;XAMARIN;XAMARIN_FORMS</DefineConstants>
+    <DefineConstants>TRACE;XAMARIN;XAMARIN_FORMS;PCL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\..\output\release\Xamarin.Forms\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>

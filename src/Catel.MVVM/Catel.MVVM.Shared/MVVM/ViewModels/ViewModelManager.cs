@@ -10,9 +10,9 @@ namespace Catel.MVVM
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
-    using Catel.Threading.Extensions;
     using Logging;
     using Reflection;
+    using Threading;
 
     /// <summary>
     /// Manager for view models. Thanks to this manager, it is possible to subscribe to other view models and be able to respond
@@ -79,7 +79,8 @@ namespace Catel.MVVM
             _managedViewModelsLock = new ReaderWriterLockSlim();
             _managedViewModels = new Dictionary<Type, ManagedViewModel>();
 
-            _instancesLock.PerformWrite(() => _instances.Add(this));            
+            _instancesLock.PerformWrite(() => _instances.Add(this));
+
             Log.Debug("ViewModelManager instantiated");
         }
         #endregion
@@ -290,7 +291,7 @@ namespace Catel.MVVM
         /// <returns>
         /// The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.
         /// </returns>
-        public TViewModel GetFirstOrDefaultInstance<TViewModel>() 
+        public TViewModel GetFirstOrDefaultInstance<TViewModel>()
             where TViewModel : IViewModel
         {
             var viewModelType = typeof(TViewModel);
@@ -382,7 +383,7 @@ namespace Catel.MVVM
                 }
 
                 _managedViewModels.Clear();
-            });        
+            });
         }
 
         /// <summary>
