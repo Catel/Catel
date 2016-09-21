@@ -468,19 +468,7 @@ namespace Catel.Logging
         /// <returns>The <see cref="ILog"/> object for the specified type.</returns>
         public static ILog GetLogger<T>()
         {
-            lock (_loggers)
-            {
-                var key = typeof(T).ToString();
-                if (!_loggers.ContainsKey(key))
-                {
-                    var log = new Log(typeof(T));
-                    log.LogMessage += OnLogMessage;
-
-                    _loggers.Add(key, log);
-                }
-
-                return _loggers[key];
-            }
+            return GetLogger(typeof(T));
         }
 
         /// <summary>
@@ -488,24 +476,12 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>The <see cref="ILog"/> object for the specified type.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         public static ILog GetLogger(Type type)
         {
             Argument.IsNotNull("type", type);
 
-            lock (_loggers)
-            {
-                var key = type.ToString();
-                if (!_loggers.ContainsKey(key))
-                {
-                    var log = new Log(type);
-                    log.LogMessage += OnLogMessage;
-
-                    _loggers.Add(key, log);
-                }
-
-                return _loggers[key];
-            }
+            return GetLogger(type.FullName);
         }
 
         /// <summary>
@@ -520,15 +496,16 @@ namespace Catel.Logging
 
             lock (_loggers)
             {
-                if (!_loggers.ContainsKey(name))
+                ILog log;
+                if (!_loggers.TryGetValue(name, out log))
                 {
-                    var log = new Log(name);
+                    log = new Log(name);
                     log.LogMessage += OnLogMessage;
 
                     _loggers.Add(name, log);
                 }
 
-                return _loggers[name];
+                return log;
             }
         }
 
