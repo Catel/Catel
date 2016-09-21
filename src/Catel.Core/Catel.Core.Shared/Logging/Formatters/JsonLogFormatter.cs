@@ -107,7 +107,7 @@ namespace Catel.Logging
             WriteJsonProperty("ApplicationName", ApplicationName, ref pdelim, textWriter);
             WriteJsonProperty("ApplicationVersion", ApplicationVersion, ref pdelim, textWriter);
             WriteJsonProperty("Name", log.Name, ref pdelim, textWriter);
-            WriteJsonProperty("TargetType", log.TargetType.FullName, ref pdelim, textWriter);
+            WriteJsonProperty("TargetType", log.TargetType?.FullName ?? string.Empty, ref pdelim, textWriter);
 
             textWriter.Write("}");
 
