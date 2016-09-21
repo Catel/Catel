@@ -25,14 +25,9 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="targetType">The type for which this logger is intended.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="targetType"/> is <c>null</c>.</exception>
-        public Log(Type targetType)
+        public Log(Type targetType) : this(targetType?.FullName, targetType)
         {
             Argument.IsNotNull("targetType", targetType);
-
-            Name = targetType.FullName;
-            TargetType = targetType;
-
-            IsCatelLogging = targetType.IsCatelType();
         }
 
         /// <summary>
@@ -40,14 +35,8 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="name">The name of this logger.</param>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is null or a whitespace.</exception>
-        public Log(string name)
+        public Log(string name) : this(name, null)
         {
-            Argument.IsNotNullOrWhitespace("name", name);
-
-            Name = name;
-            TargetType = null;
-
-            IsCatelLogging = false;
         }
 
         /// <summary>
@@ -56,11 +45,9 @@ namespace Catel.Logging
         /// <param name="name">The name of this logger.</param>
         /// <param name="targetType">The type for which this logger is intended.</param>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is null or a whitespace.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="targetType"/> is <c>null</c>.</exception>
         public Log(string name, Type targetType)
         {
             Argument.IsNotNullOrWhitespace("name", name);
-            Argument.IsNotNull("targetType", targetType);
 
             Name = name;
             TargetType = targetType;
