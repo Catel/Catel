@@ -24,10 +24,9 @@ namespace Catel.Logging
         /// Initializes a new instance of the <see cref="Log"/> class.
         /// </summary>
         /// <param name="targetType">The type for which this logger is intended.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="targetType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">If <paramref name="targetType"/> is <c>null</c>.</exception>
         public Log(Type targetType) : this(targetType?.FullName, targetType)
         {
-            Argument.IsNotNull("targetType", targetType);
         }
 
         /// <summary>
@@ -83,7 +82,7 @@ namespace Catel.Logging
         /// <value>
         /// 	<c>true</c> if this instance is a Catel logger; otherwise, <c>false</c>.
         /// </value>
-        public bool IsCatelLogging { get; }
+        public virtual bool IsCatelLogging { get; }
 
         /// <summary>
         /// Gets or sets the size of the indent.

@@ -177,7 +177,7 @@ namespace Catel.Test.Logging
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new Log((Type) null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log((Type) null));
             }
 
             [TestCase]
@@ -202,12 +202,6 @@ namespace Catel.Test.Logging
             public void ThrowsArgumentExceptionForWhitespaceString_WithStringAndType()
             {
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log(String.Empty, typeof(object)));
-            }
-
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullType_WithStringAndType()
-            {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new Log("log", null));
             }
 
             [TestCase]

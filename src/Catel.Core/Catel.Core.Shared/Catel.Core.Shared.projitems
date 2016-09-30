@@ -234,6 +234,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)IO\Extensions\StreamExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IO\Path.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\BatchLogListenerBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\CatelLog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Configuration\LoggingConfigurationSection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Configuration\LogListenerConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Configuration\LogListenerConfigurationCollection.cs" />
@@ -249,6 +250,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Formatters\Interfaces\IJsonLogFormatter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Formatters\JsonLogFormatter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Interfaces\IBatchLogListener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\Interfaces\ICatelLog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Interfaces\ILog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Interfaces\ILogListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\ConsoleLogListener.cs" />

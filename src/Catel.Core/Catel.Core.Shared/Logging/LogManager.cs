@@ -11,6 +11,7 @@ namespace Catel.Logging
     using System.Linq;
     using System.Reflection;
     using System.Runtime.CompilerServices;
+    using Interfaces;
     using Reflection;
 #if NET
     using System.Configuration;
@@ -481,7 +482,7 @@ namespace Catel.Logging
         {
             Argument.IsNotNull("type", type);
 
-            return GetLogger(type.FullName);
+            return GetLogger(type.FullName, type);
         }
 
         /// <summary>
@@ -506,6 +507,68 @@ namespace Catel.Logging
                 }
 
                 return log;
+            }
+        }
+
+        /// <summary>
+        /// Gets the logger with the specified name and type.
+        /// </summary>
+        /// <param name="name">The name of the logger.</param>
+        /// <param name="type">The type.</param>
+        /// <returns>The <see cref="ILog"/> object with the specified name.</returns>
+        /// <exception cref="ArgumentException">If <paramref name="name"/> is null or a whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        public static ILog GetLogger(string name, Type type)
+        {
+            Argument.IsNotNullOrWhitespace("name", name);
+            Argument.IsNotNull("type", type);
+
+            lock (_loggers)
+            {
+                ILog log;
+                if (!_loggers.TryGetValue(name, out log))
+                {
+                    log = new Log(name, type);
+                    log.LogMessage += OnLogMessage;
+
+                    _loggers.Add(name, log);
+                }
+
+                return log;
+            }
+        }
+
+        /// <summary>
+        /// Gets the catel logger with the specified name.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="alwaysLog">The flag indicating wether or not the logger should always write logging statements regardless of log filter settings.</param>
+        /// <returns>The <see cref="ICatelLog"/> object for the specified type.</returns>
+        /// <exception cref="ArgumentException">An element with the same key already exists in the <see cref="LogManager"/> and does not implement <see cref="ICatelLog"/>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        internal static ICatelLog GetCatelLogger(Type type, bool alwaysLog = false)
+        {
+            Argument.IsNotNull("type", type);
+
+            var name = type.FullName;
+
+            lock (_loggers)
+            {
+                ILog log;
+                if (!_loggers.TryGetValue(name, out log))
+                {
+                    log = new CatelLog(name, alwaysLog);
+                    log.LogMessage += OnLogMessage;
+
+                    _loggers.Add(name, log);
+                }
+                else if (!(log is ICatelLog))
+                {
+                    // Handle the unlikely event where a logger with the same name is initialized before the catel logger.
+                    throw new ArgumentException(string.Format("An element with the same key already exists in the {0} and does not implement {1}.", typeof(LogManager).Name, typeof(ICatelLog).Name));
+                }
+
+                return (CatelLog) log;
             }
         }
 
