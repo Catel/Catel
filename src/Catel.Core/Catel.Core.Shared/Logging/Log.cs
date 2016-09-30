@@ -52,7 +52,7 @@ namespace Catel.Logging
             Name = name;
             TargetType = targetType;
 
-            IsCatelLogging = targetType.IsCatelType();
+            IsCatelLogging = targetType?.IsCatelType() ?? false;
         }
         #endregion
 
