@@ -587,6 +587,12 @@ namespace Catel.Logging
 
             lock (_loggers)
             {
+                ILog log;
+                if (!_loggers.TryGetValue(name, out log))
+                    return false;
+
+                log.LogMessage -= OnLogMessage;
+
                 return _loggers.Remove(name);
             }
         }
