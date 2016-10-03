@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Logging.Interfaces
+namespace Catel.Logging
 {
     /// <summary>
     /// Log interface used internally for Catel.

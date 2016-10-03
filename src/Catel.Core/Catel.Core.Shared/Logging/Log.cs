@@ -25,7 +25,8 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="targetType">The type for which this logger is intended.</param>
         /// <exception cref="ArgumentException">If <paramref name="targetType"/> is <c>null</c>.</exception>
-        public Log(Type targetType) : this(targetType?.FullName, targetType)
+        public Log(Type targetType)
+            : this(targetType?.FullName, targetType)
         {
         }
 
@@ -34,7 +35,8 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="name">The name of this logger.</param>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is null or a whitespace.</exception>
-        public Log(string name) : this(name, null)
+        public Log(string name)
+            : this(name, null)
         {
         }
 

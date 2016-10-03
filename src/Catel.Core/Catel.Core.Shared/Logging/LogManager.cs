@@ -11,7 +11,6 @@ namespace Catel.Logging
     using System.Linq;
     using System.Reflection;
     using System.Runtime.CompilerServices;
-    using Interfaces;
     using Reflection;
 #if NET
     using System.Configuration;
@@ -562,10 +561,14 @@ namespace Catel.Logging
 
                     _loggers.Add(name, log);
                 }
-                else if (!(log is ICatelLog))
+                else
                 {
-                    // Handle the unlikely event where a logger with the same name is initialized before the catel logger.
-                    throw new ArgumentException(string.Format("An element with the same key already exists in the {0} and does not implement {1}.", typeof(LogManager).Name, typeof(ICatelLog).Name));
+                    var catelLog = log as ICatelLog;
+                    if (catelLog == null)
+                    {
+                        // Handle the unlikely event where a logger with the same name is initialized before the catel logger.
+                        throw new ArgumentException(string.Format("An element with the same key already exists in the {0} and does not implement {1}.", typeof(LogManager).Name, typeof(ICatelLog).Name));
+                    }
                 }
 
                 return (CatelLog) log;

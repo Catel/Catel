@@ -1,10 +1,14 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CatelLog.cs" company="Catel development team">
+//   Copyright (c) 2016 - 2016 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
 
 
 namespace Catel.Logging
 {
-    using Interfaces;
-
     /// <summary>
     /// Logging class used internally for Catel. 
     /// </summary>
@@ -16,7 +20,8 @@ namespace Catel.Logging
         /// <param name="name">The name of this logger.</param>
         /// <param name="alwaysLog">Flag indicating whether this log should always write logging statements regardless of log filter settings.</param>
         /// <exception cref="ArgumentException">If <paramref name="name"/> is null or a whitespace.</exception>
-        public CatelLog(string name, bool alwaysLog) : base(name, null)
+        public CatelLog(string name, bool alwaysLog)
+            : base(name, null)
         {
             AlwaysLog = alwaysLog;
         }
