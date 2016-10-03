@@ -561,17 +561,15 @@ namespace Catel.Logging
 
                     _loggers.Add(name, log);
                 }
-                else
+
+                var catelLog = log as ICatelLog;
+                if (catelLog == null)
                 {
-                    var catelLog = log as ICatelLog;
-                    if (catelLog == null)
-                    {
-                        // Handle the unlikely event where a logger with the same name is initialized before the catel logger.
-                        throw new ArgumentException(string.Format("An element with the same key already exists in the {0} and does not implement {1}.", typeof(LogManager).Name, typeof(ICatelLog).Name));
-                    }
+                    // Handle the unlikely event where a logger with the same name is initialized before the catel logger.
+                    throw new ArgumentException(string.Format("An element with the same key already exists in the {0} and does not implement {1}.", typeof(LogManager).Name, typeof(ICatelLog).Name));
                 }
 
-                return (CatelLog) log;
+                return catelLog;
             }
         }
 
@@ -589,7 +587,9 @@ namespace Catel.Logging
             {
                 ILog log;
                 if (!_loggers.TryGetValue(name, out log))
+                {
                     return false;
+                }
 
                 log.LogMessage -= OnLogMessage;
 
