@@ -576,6 +576,22 @@ namespace Catel.Logging
         }
 
         /// <summary>
+        /// Removes the logger with the specified name from the <see cref="LogManager"/>.
+        /// </summary>
+        /// <param name="name">The name of the logger.</param>
+        /// <returns>true if the logger is successfully found and removed; otherwise, false. This method returns false if <paramref name="name"/> is not found in the <see cref="LogManager"/>.</returns>
+        /// <exception cref="ArgumentException">If <paramref name="name"/> is null or a whitespace.</exception>
+        internal static bool RemoveLogger(string name)
+        {
+            Argument.IsNotNullOrWhitespace("name", name);
+
+            lock (_loggers)
+            {
+                return _loggers.Remove(name);
+            }
+        }
+
+        /// <summary>
         /// Flushes all listeners that implement the <see cref="IBatchLogListener" /> by calling <see cref="IBatchLogListener.Flush" />.
         /// </summary>
         public static void FlushAll()

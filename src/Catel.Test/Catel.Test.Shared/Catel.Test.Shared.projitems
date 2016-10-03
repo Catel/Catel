@@ -129,6 +129,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)IoC\TypeRequestPathFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IO\Extensions\StreamExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IO\PathTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\CatelLogFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Configuration\LoggingConfigurationSectionFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\EventArgs\LogMessageEventArgsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Listeners\FileLogListenerFacts.cs" />
