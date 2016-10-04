@@ -212,16 +212,37 @@ namespace Catel.Test.Logging
         }
 
         [TestCase]
-        public void GetLogger_Null()
+        public void GetLogger_NullType()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => LogManager.GetLogger(null));
+            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => LogManager.GetLogger((Type) null));
         }
 
         [TestCase]
-        public void GetLogger_CheckIfSameLogIsReturned()
+        public void GetLogger_NullString()
+        {
+            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => LogManager.GetLogger((string) null));
+        }
+
+        [TestCase]
+        public void GetLogger_EmptyString()
+        {
+            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => LogManager.GetLogger(String.Empty));
+        }
+
+        [TestCase]
+        public void GetLogger_Type_CheckIfSameLogIsReturned()
         {
             var log1 = LogManager.GetLogger(typeof(int));
             var log2 = LogManager.GetLogger(typeof(int));
+
+            Assert.IsTrue(ReferenceEquals(log1, log2));
+        }
+
+        [TestCase]
+        public void GetLogger_String_CheckIfSameLogIsReturned()
+        {
+            var log1 = LogManager.GetLogger("log");
+            var log2 = LogManager.GetLogger("log");
 
             Assert.IsTrue(ReferenceEquals(log1, log2));
         }

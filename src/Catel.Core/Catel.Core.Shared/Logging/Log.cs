@@ -23,25 +23,52 @@ namespace Catel.Logging
         /// <summary>
         /// Initializes a new instance of the <see cref="Log"/> class.
         /// </summary>
-        /// <param name="targetType">The type for which this log is intented.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="targetType"/> is <c>null</c>.</exception>
+        /// <param name="targetType">The type for which this logger is intended.</param>
+        /// <exception cref="ArgumentException">If <paramref name="targetType"/> is <c>null</c>.</exception>
         public Log(Type targetType)
+            : this(targetType?.FullName, targetType)
         {
-            Argument.IsNotNull("targetType", targetType);
+        }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Log"/> class.
+        /// </summary>
+        /// <param name="name">The name of this logger.</param>
+        /// <exception cref="ArgumentException">If <paramref name="name"/> is null or a whitespace.</exception>
+        public Log(string name)
+            : this(name, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Log"/> class.
+        /// </summary>
+        /// <param name="name">The name of this logger.</param>
+        /// <param name="targetType">The type for which this logger is intended.</param>
+        /// <exception cref="ArgumentException">If <paramref name="name"/> is null or a whitespace.</exception>
+        public Log(string name, Type targetType)
+        {
+            Argument.IsNotNullOrWhitespace("name", name);
+
+            Name = name;
             TargetType = targetType;
-            Tag = targetType.FullName;
 
-            IsCatelLogging = targetType.IsCatelType();
+            IsCatelLogging = targetType?.IsCatelType() ?? false;
         }
         #endregion
 
         #region Properties
         /// <summary>
+        /// Gets the name of the logger.
+        /// </summary>
+        /// <value>The name of the logger.</value>
+        public string Name { get; }
+
+        /// <summary>
         /// Gets the target type of the log. This is the type where the log is created for.
         /// </summary>
         /// <value>The type of the target.</value>
-        public Type TargetType { get; private set; }
+        public Type TargetType { get; }
 
         /// <summary>
         /// Gets or sets the tag.
@@ -57,7 +84,7 @@ namespace Catel.Logging
         /// <value>
         /// 	<c>true</c> if this instance is a Catel logger; otherwise, <c>false</c>.
         /// </value>
-        public bool IsCatelLogging { get; private set; }
+        public virtual bool IsCatelLogging { get; }
 
         /// <summary>
         /// Gets or sets the size of the indent.

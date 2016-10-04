@@ -20,8 +20,6 @@ namespace Catel.Logging
         /// The log event strings.
         /// </summary>
         protected static readonly Dictionary<LogEvent, string> LogEventStrings;
-
-        private static readonly Type ArgumentType = typeof(Argument);
         #endregion
 
         #region Fields
@@ -164,9 +162,9 @@ namespace Catel.Logging
         /// <param name="time">The time.</param>
         void ILogListener.Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
-            // We always want the Argument class logging, no matter what
-            var isArgumentLog = log.TargetType == ArgumentType;
-            if (!isArgumentLog)
+            // If the log is a catel log and the AlwaysLog flag is set, skip additional checks and log the message.
+            var catelLog = log as ICatelLog;
+            if (catelLog == null || !catelLog.AlwaysLog)
             {
                 if (IgnoreCatelLogging && log.IsCatelLogging)
                 {
@@ -194,9 +192,9 @@ namespace Catel.Logging
         /// <param name="time">The time.</param>
         void ILogListener.Debug(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
-            // We always want the Argument class logging, no matter what
-            var isArgumentLog = log.TargetType == ArgumentType;
-            if (!isArgumentLog)
+            // If the log is a catel log and the AlwaysLog flag is set, skip additional checks and log the message.
+            var catelLog = log as ICatelLog;
+            if (catelLog == null || !catelLog.AlwaysLog)
             {
                 if (IgnoreCatelLogging && log.IsCatelLogging)
                 {
@@ -222,9 +220,9 @@ namespace Catel.Logging
         /// <param name="time">The time.</param>
         void ILogListener.Info(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
-            // We always want the Argument class logging, no matter what
-            var isArgumentLog = log.TargetType == ArgumentType;
-            if (!isArgumentLog)
+            // If the log is a catel log and the AlwaysLog flag is set, skip additional checks and log the message.
+            var catelLog = log as ICatelLog;
+            if (catelLog == null || !catelLog.AlwaysLog)
             {
                 if (IgnoreCatelLogging && log.IsCatelLogging)
                 {
@@ -250,9 +248,9 @@ namespace Catel.Logging
         /// <param name="time">The time.</param>
         void ILogListener.Warning(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
-            // We always want the Argument class logging, no matter what
-            var isArgumentLog = log.TargetType == ArgumentType;
-            if (!isArgumentLog)
+            // If the log is a catel log and the AlwaysLog flag is set, skip additional checks and log the message.
+            var catelLog = log as ICatelLog;
+            if (catelLog == null || !catelLog.AlwaysLog)
             {
                 if (IgnoreCatelLogging && log.IsCatelLogging)
                 {
@@ -278,9 +276,9 @@ namespace Catel.Logging
         /// <param name="time">The ti me.</param>
         void ILogListener.Error(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
-            // We always want the Argument class logging, no matter what
-            var isArgumentLog = log.TargetType == ArgumentType;
-            if (!isArgumentLog)
+            // If the log is a catel log and the AlwaysLog flag is set, skip additional checks and log the message.
+            var catelLog = log as ICatelLog;
+            if (catelLog == null || !catelLog.AlwaysLog)
             {
                 if (IgnoreCatelLogging && log.IsCatelLogging)
                 {
@@ -306,9 +304,9 @@ namespace Catel.Logging
         /// <param name="time">The ti me.</param>
         void ILogListener.Status(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
-            // We always want the Argument class logging, no matter what
-            var isArgumentLog = log.TargetType == ArgumentType;
-            if (!isArgumentLog)
+            // If the log is a catel log and the AlwaysLog flag is set, skip additional checks and log the message.
+            var catelLog = log as ICatelLog;
+            if (catelLog == null || !catelLog.AlwaysLog)
             {
                 if (IgnoreCatelLogging && log.IsCatelLogging)
             {
@@ -371,7 +369,7 @@ namespace Catel.Logging
         /// <returns>The formatted log event.</returns>
         protected virtual string FormatLogEvent(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
-            var logMessage = string.Format("{0} => [{1}] [{2}] [{3}] {4}", time.ToString(_timeFormat), LogEventStrings[logEvent], log.TargetType.FullName, ThreadHelper.GetCurrentThreadId(), message);
+            var logMessage = string.Format("{0} => [{1}] [{2}] [{3}] {4}", time.ToString(_timeFormat), LogEventStrings[logEvent], log.Name, ThreadHelper.GetCurrentThreadId(), message);
             return logMessage;
         }
 

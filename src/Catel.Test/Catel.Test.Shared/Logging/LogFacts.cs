@@ -177,7 +177,31 @@ namespace Catel.Test.Logging
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new Log(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log((Type) null));
+            }
+
+            [TestCase]
+            public void ThrowsArgumentExceptionForNullString()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log((string)null));
+            }
+
+            [TestCase]
+            public void ThrowsArgumentExceptionForWhitespaceString()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log(String.Empty));
+            }
+
+            [TestCase]
+            public void ThrowsArgumentExceptionForNullString_WithStringAndType()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log(null, typeof(object)));
+            }
+
+            [TestCase]
+            public void ThrowsArgumentExceptionForWhitespaceString_WithStringAndType()
+            {
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log(String.Empty, typeof(object)));
             }
 
             [TestCase]
@@ -186,6 +210,26 @@ namespace Catel.Test.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
+                Assert.AreEqual(typeof(int), log.TargetType);
+            }
+
+            [TestCase]
+            public void CreatesLogForString()
+            {
+                LogManager.AddDebugListener();
+                var log = new Log("log");
+
+                Assert.AreEqual("log", log.Name);
+                Assert.IsNull(log.TargetType);
+            }
+
+            [TestCase]
+            public void CreatesLogForStringAndType()
+            {
+                LogManager.AddDebugListener();
+                var log = new Log("log", typeof(int));
+
+                Assert.AreEqual("log", log.Name);
                 Assert.AreEqual(typeof(int), log.TargetType);
             }
         }

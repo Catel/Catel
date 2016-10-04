@@ -77,7 +77,7 @@ namespace Catel.Logging
         /// <returns>The formatted log event.</returns>
         protected override string FormatLogEvent(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
-            var logMessage = string.Format("[{0}] {1}", log.TargetType.FullName, message);
+            var logMessage = string.Format("[{0}] {1}", log.Name, message);
             return logMessage;
         }
 

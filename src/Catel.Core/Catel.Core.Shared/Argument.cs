@@ -27,7 +27,8 @@ namespace Catel
         /// <summary>
         /// The <see cref="ILog">log</see> object.
         /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = LogManager.GetCatelLogger(typeof(Argument), true);
+
         #endregion
 
         #region Methods
