@@ -25,18 +25,63 @@ namespace Catel.Logging
     /// </summary>
     public class FileLogListener : BatchLogListenerBase
     {
-        private const string AppData = "{AppData}";
-        private const string AppDataLocal = "{AppDataLocal}";
-        private const string AppDataRoaming = "{AppDataRoaming}";
-        private const string AppDataMachine = "{AppDataMachine}";
-        private const string AppDir = "{AppDir}";
-        private const string Date = "{Date}";
-        private const string Time = "{Time}";
-        private const string AssemblyName = "{AssemblyName}";
-        private const string AssemblyCompany = "{AssemblyCompany}";
-        private const string AssemblyProduct = "{AssemblyProduct}";
-        private const string ProcessId = "{ProcessId}";
-        private const string AutoLogFileName = "{AutoLogFileName}";
+        /// <summary>
+        /// Keyword that can be used within the <see cref="FilePath"/> to create a log with the following format: 
+        /// <para/>
+        /// <c>{AssemblyName}_{Date}_{Time}_{ProcessId}</c>
+        /// </summary>
+        public const string AutoLogFileName = "{AutoLogFileName}";
+        /// <summary>
+        /// Keyword that can be used within the <see cref="FilePath"/> to insert <c>%ProgramData%</c> or <c>%AppData%</c> into the filepath.
+        /// <para/>
+        /// If the application is a web app (System.Web is referenced); then <c>%ProgramData%</c> is used; otherwise <c>%AppData%</c> is used.
+        /// </summary>
+        public const string AppData = "{AppData}";
+        /// <summary>
+        /// Keyword that can be used within the <see cref="FilePath"/> to insert <c>%LocalAppData%</c> into the filepath.
+        /// </summary>
+        public const string AppDataLocal = "{AppDataLocal}";
+        /// <summary>
+        /// Keyword that can be used within the <see cref="FilePath"/> to insert <c>%AppData%</c> into the filepath.
+        /// </summary>
+        public const string AppDataRoaming = "{AppDataRoaming}";
+        /// <summary>
+        /// Keyword that can be used within the <see cref="FilePath"/> to insert <c>%ProgramData%</c> into the filepath.
+        /// </summary>
+        public const string AppDataMachine = "{AppDataMachine}";
+        /// <summary>
+        /// Keyword that can be used within the <see cref="FilePath"/> to insert the <c>AppDomain.CurrentDomain.BaseDirectory</c> into the filepath.
+        /// </summary>
+        public const string AppDir = "{AppDir}";
+        /// <summary>
+        /// Keyword that can be used within the <see cref="FilePath"/> to insert the <c>Assembly.Company()</c> value.
+        /// </summary>
+        public const string AssemblyCompany = "{AssemblyCompany}";
+        /// <summary>
+        /// Keyword that can be used within the <see cref="FilePath"/> to insert the <c>Assembly.GetName().Name</c> value.
+        /// </summary>
+        public const string AssemblyName = "{AssemblyName}";
+        /// <summary>
+        /// Keyword that can be used within the <see cref="FilePath"/> to insert the <c>Assembly.Product()</c> value.
+        /// </summary>
+        public const string AssemblyProduct = "{AssemblyProduct}";
+        /// <summary>
+        /// Keyword that can be used within the <see cref="FilePath"/> to insert the date as <c>yyyy-MM-dd</c>.
+        /// </summary>
+        public const string Date = "{Date}";
+        /// <summary>
+        /// Keyword that can be used within the <see cref="FilePath"/> to insert the time as <c>HHmmss</c>.
+        /// </summary>
+        public const string Time = "{Time}";
+        /// <summary>
+        /// Keyword that can be used within the <see cref="FilePath"/> to insert the <c>Process.GetCurrentProcess().Id</c> value.
+        /// </summary>
+        public const string ProcessId = "{ProcessId}";
+        /// <summary>
+        /// Keyword that can be used within the <see cref="FilePath"/> to insert the <c>Directory.GetCurrentDirectory()</c> value.
+        /// </summary>
+        public const string WorkDir = "{WorkDir}";
+
         private readonly string AutoLogFileNameReplacement = string.Format("{0}_{1}_{2}_{3}", AssemblyName, Date, Time, ProcessId);
 
         private Assembly _assembly;
@@ -193,6 +238,11 @@ namespace Catel.Logging
             if (filePath.Contains(AppDir))
             {
                 filePath = filePath.Replace(AppDir, AppDomain.CurrentDomain.BaseDirectory);
+            }
+
+            if (filePath.Contains(WorkDir))
+            {
+                filePath = filePath.Replace(WorkDir, Directory.GetCurrentDirectory());
             }
 
             filePath = IO.Path.GetFullPath(filePath, dataDirectory);
