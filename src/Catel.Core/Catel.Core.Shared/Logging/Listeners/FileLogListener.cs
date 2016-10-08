@@ -25,19 +25,82 @@ namespace Catel.Logging
     /// </summary>
     public class FileLogListener : BatchLogListenerBase
     {
-        private const string AppData = "{AppData}";
-        private const string AppDataLocal = "{AppDataLocal}";
-        private const string AppDataRoaming = "{AppDataRoaming}";
-        private const string AppDataMachine = "{AppDataMachine}";
-        private const string AppDir = "{AppDir}";
-        private const string Date = "{Date}";
-        private const string Time = "{Time}";
-        private const string AssemblyName = "{AssemblyName}";
-        private const string AssemblyCompany = "{AssemblyCompany}";
-        private const string AssemblyProduct = "{AssemblyProduct}";
-        private const string ProcessId = "{ProcessId}";
-        private const string AutoLogFileName = "{AutoLogFileName}";
-        private readonly string AutoLogFileNameReplacement = string.Format("{0}_{1}_{2}_{3}", AssemblyName, Date, Time, ProcessId);
+        /// <summary>
+        /// Defines the keywords that can be used in the <see cref="FilePath"/> property to inject different values.
+        /// </summary>
+        public static class FilePathKeyword
+        {
+            /// <summary>
+            /// Keyword that can be used within the <see cref="FilePath"/> to create a log with the following format: 
+            /// <para/>
+            /// <c>{AssemblyName}_{Date}_{Time}_{ProcessId}</c>
+            /// </summary>
+            public const string AutoLogFileName = "{AutoLogFileName}";
+
+            /// <summary>
+            /// Keyword that can be used within the <see cref="FilePath"/> to insert <c>%ProgramData%</c> or <c>%AppData%</c> into the filepath.
+            /// <para/>
+            /// If the application is a web app (System.Web is referenced); then <c>%ProgramData%</c> is used; otherwise <c>%AppData%</c> is used.
+            /// </summary>
+            public const string AppData = "{AppData}";
+
+            /// <summary>
+            /// Keyword that can be used within the <see cref="FilePath"/> to insert <c>%LocalAppData%</c> into the filepath.
+            /// </summary>
+            public const string AppDataLocal = "{AppDataLocal}";
+
+            /// <summary>
+            /// Keyword that can be used within the <see cref="FilePath"/> to insert <c>%AppData%</c> into the filepath.
+            /// </summary>
+            public const string AppDataRoaming = "{AppDataRoaming}";
+
+            /// <summary>
+            /// Keyword that can be used within the <see cref="FilePath"/> to insert <c>%ProgramData%</c> into the filepath.
+            /// </summary>
+            public const string AppDataMachine = "{AppDataMachine}";
+
+            /// <summary>
+            /// Keyword that can be used within the <see cref="FilePath"/> to insert the <c>AppDomain.CurrentDomain.BaseDirectory</c> into the filepath.
+            /// </summary>
+            public const string AppDir = "{AppDir}";
+
+            /// <summary>
+            /// Keyword that can be used within the <see cref="FilePath"/> to insert the <c>Assembly.Company()</c> value.
+            /// </summary>
+            public const string AssemblyCompany = "{AssemblyCompany}";
+
+            /// <summary>
+            /// Keyword that can be used within the <see cref="FilePath"/> to insert the <c>Assembly.GetName().Name</c> value.
+            /// </summary>
+            public const string AssemblyName = "{AssemblyName}";
+
+            /// <summary>
+            /// Keyword that can be used within the <see cref="FilePath"/> to insert the <c>Assembly.Product()</c> value.
+            /// </summary>
+            public const string AssemblyProduct = "{AssemblyProduct}";
+
+            /// <summary>
+            /// Keyword that can be used within the <see cref="FilePath"/> to insert the date as <c>yyyy-MM-dd</c>.
+            /// </summary>
+            public const string Date = "{Date}";
+
+            /// <summary>
+            /// Keyword that can be used within the <see cref="FilePath"/> to insert the time as <c>HHmmss</c>.
+            /// </summary>
+            public const string Time = "{Time}";
+
+            /// <summary>
+            /// Keyword that can be used within the <see cref="FilePath"/> to insert the <c>Process.GetCurrentProcess().Id</c> value.
+            /// </summary>
+            public const string ProcessId = "{ProcessId}";
+
+            /// <summary>
+            /// Keyword that can be used within the <see cref="FilePath"/> to insert the <c>Directory.GetCurrentDirectory()</c> value.
+            /// </summary>
+            public const string WorkDir = "{WorkDir}";
+        }
+
+        private readonly string AutoLogFileNameReplacement = string.Format("{0}_{1}_{2}_{3}", FilePathKeyword.AssemblyName, FilePathKeyword.Date, FilePathKeyword.Time, FilePathKeyword.ProcessId);
 
         private Assembly _assembly;
         private string _filePath;
@@ -103,9 +166,9 @@ namespace Catel.Logging
                 filePath = string.Empty;
             }
 
-            if (filePath.Contains(AutoLogFileName))
+            if (filePath.Contains(FilePathKeyword.AutoLogFileName))
             {
-                filePath = filePath.Replace(AutoLogFileName, AutoLogFileNameReplacement);
+                filePath = filePath.Replace(FilePathKeyword.AutoLogFileName, AutoLogFileNameReplacement);
             }
 
             var isWebApp = HttpContextHelper.HasHttpContext();
@@ -123,42 +186,42 @@ namespace Catel.Logging
                                          : IO.Path.GetApplicationDataDirectory();
             }
 
-            if (filePath.Contains(AssemblyName))
+            if (filePath.Contains(FilePathKeyword.AssemblyName))
             {
-                filePath = filePath.Replace(AssemblyName, _assembly.GetName().Name);
+                filePath = filePath.Replace(FilePathKeyword.AssemblyName, _assembly.GetName().Name);
             }
 
-            if (filePath.Contains(AssemblyProduct))
+            if (filePath.Contains(FilePathKeyword.AssemblyProduct))
             {
-                filePath = filePath.Replace(AssemblyProduct, _assembly.Product());
+                filePath = filePath.Replace(FilePathKeyword.AssemblyProduct, _assembly.Product());
             }
 
-            if (filePath.Contains(AssemblyCompany))
+            if (filePath.Contains(FilePathKeyword.AssemblyCompany))
             {
-                filePath = filePath.Replace(AssemblyCompany, _assembly.Company());
+                filePath = filePath.Replace(FilePathKeyword.AssemblyCompany, _assembly.Company());
             }
 
-            if (filePath.Contains(ProcessId))
+            if (filePath.Contains(FilePathKeyword.ProcessId))
             {
-                filePath = filePath.Replace(ProcessId, Process.GetCurrentProcess().Id.ToString());
+                filePath = filePath.Replace(FilePathKeyword.ProcessId, Process.GetCurrentProcess().Id.ToString());
             }
 
-            if (filePath.Contains(Date))
+            if (filePath.Contains(FilePathKeyword.Date))
             {
-                filePath = filePath.Replace(Date, DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+                filePath = filePath.Replace(FilePathKeyword.Date, DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
             }
 
-            if (filePath.Contains(Time))
+            if (filePath.Contains(FilePathKeyword.Time))
             {
-                filePath = filePath.Replace(Time, DateTime.Now.ToString("HHmmss", CultureInfo.InvariantCulture));
+                filePath = filePath.Replace(FilePathKeyword.Time, DateTime.Now.ToString("HHmmss", CultureInfo.InvariantCulture));
             }
 
-            if (filePath.Contains(AppData))
+            if (filePath.Contains(FilePathKeyword.AppData))
             {
-                filePath = filePath.Replace(AppData, dataDirectory);
+                filePath = filePath.Replace(FilePathKeyword.AppData, dataDirectory);
             }
 
-            if (filePath.Contains(AppDataLocal))
+            if (filePath.Contains(FilePathKeyword.AppDataLocal))
             {
                 var dataDirectoryLocal = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserLocal,
                                                                                                  _assembly.Company(),
@@ -166,10 +229,10 @@ namespace Catel.Logging
                                                             : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserLocal);
 
 
-                filePath = filePath.Replace(AppDataLocal, dataDirectoryLocal);
+                filePath = filePath.Replace(FilePathKeyword.AppDataLocal, dataDirectoryLocal);
             }
 
-            if (filePath.Contains(AppDataRoaming))
+            if (filePath.Contains(FilePathKeyword.AppDataRoaming))
             {
                 var dataDirectoryRoaming = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming,
                                                                                                    _assembly.Company(),
@@ -177,22 +240,27 @@ namespace Catel.Logging
                                                              : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming);
 
 
-                filePath = filePath.Replace(AppDataRoaming, dataDirectoryRoaming);
+                filePath = filePath.Replace(FilePathKeyword.AppDataRoaming, dataDirectoryRoaming);
             }
 
-            if (filePath.Contains(AppDataMachine))
+            if (filePath.Contains(FilePathKeyword.AppDataMachine))
             {
                 var dataDirectoryMachine = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.Machine,
                                                                                                    _assembly.Company(),
                                                                                                    _assembly.Product())
                                                              : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.Machine);
 
-                filePath = filePath.Replace(AppDataMachine, dataDirectoryMachine);
+                filePath = filePath.Replace(FilePathKeyword.AppDataMachine, dataDirectoryMachine);
             }
 
-            if (filePath.Contains(AppDir))
+            if (filePath.Contains(FilePathKeyword.AppDir))
             {
-                filePath = filePath.Replace(AppDir, AppDomain.CurrentDomain.BaseDirectory);
+                filePath = filePath.Replace(FilePathKeyword.AppDir, AppDomain.CurrentDomain.BaseDirectory);
+            }
+
+            if (filePath.Contains(FilePathKeyword.WorkDir))
+            {
+                filePath = filePath.Replace(FilePathKeyword.WorkDir, Directory.GetCurrentDirectory());
             }
 
             filePath = IO.Path.GetFullPath(filePath, dataDirectory);
@@ -254,7 +322,7 @@ namespace Catel.Logging
 
             if (initFilePath && string.IsNullOrWhiteSpace(_filePath))
             {
-                _filePath = DetermineFilePath(AutoLogFileName);
+                _filePath = DetermineFilePath(FilePathKeyword.AutoLogFileName);
             }
         }
 
