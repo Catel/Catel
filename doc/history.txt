@@ -60,6 +60,7 @@ Added/fixed:
 (*) CTL-904 Allow view models to be created on multiple threads (thread-safe view model factory)
 (+) CTL-902 Allow custom management of serializer modifiers in the ISerializerManager
 (+) CTL-907 Support classes that implement Parse(string, IFormatProvider) and ToString(IFormatProvider) in the serializers 
+(+) CTL-929 Add Additional {WorkDir} as FileLogListener Keyword
 (*) CTL-903 Only support Frame and not NavigationWindow for WPF navigation
 (*) CTL-905 Always log Argument logging (even when Catel logging is being ignored)
 (*) CTL-911 Refactor UrlHelper to extension methods
