@@ -9,8 +9,11 @@ namespace Catel.Test.Runtime.Serialization
 {
     using System;
     using System.Globalization;
+    using Catel.IoC;
     using Catel.Runtime.Serialization;
+    using Catel.Runtime.Serialization.Json;
     using NUnit.Framework;
+    using TestModels;
 
     public class JsonSerializationFacts
     {
@@ -22,6 +25,53 @@ namespace Catel.Test.Runtime.Serialization
         [TestFixture]
         public class AdvancedSerializationFacts
         {
+            [TestCase]
+            public void CorrectlySerializesObjectsImplementingICustomJsonSerializable_Simple()
+            {
+                var serviceLocator = ServiceLocator.Default;
+                var serializer = serviceLocator.ResolveType<IJsonSerializer>();
+
+                var model = new CustomJsonSerializationModel
+                {
+                    FirstName = "Geert"
+                };
+
+                var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
+
+                // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
+                Assert.IsTrue(model.IsCustomSerialized);
+                Assert.IsTrue(clonedModel.IsCustomDeserialized);
+
+                Assert.AreEqual(model.FirstName, clonedModel.FirstName);
+            }
+
+            [TestCase]
+            public void CorrectlySerializesObjectsImplementingICustomJsonSerializable_Nested()
+            {
+                var serviceLocator = ServiceLocator.Default;
+                var serializer = serviceLocator.ResolveType<IJsonSerializer>();
+
+                var model = new CustomJsonSerializationModelWithNesting
+                {
+                    Name = "Test model with nesting",
+                    NestedModel = new CustomJsonSerializationModel
+                    {
+                        FirstName = "Geert"
+                    }
+                };
+
+                var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
+
+                Assert.IsNotNull(clonedModel.NestedModel);
+
+                // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
+                Assert.IsTrue(model.NestedModel.IsCustomSerialized);
+                Assert.IsTrue(clonedModel.NestedModel.IsCustomDeserialized);
+
+                Assert.AreEqual(model.Name, clonedModel.Name);
+                Assert.AreEqual(model.NestedModel.FirstName, clonedModel.NestedModel.FirstName);
+            }
+
             [TestCase]
             public void CorrectlySerializesToJsonString()
             {

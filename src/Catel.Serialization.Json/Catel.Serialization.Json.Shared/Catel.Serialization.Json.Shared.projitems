@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\JsonSerialization\Interfaces\ICustomJsonSerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\JsonSerialization\JsonSerializationContextInfoFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\JsonSerialization\CatelJsonContractResolver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\JsonSerialization\CatelJsonConverter.cs" />

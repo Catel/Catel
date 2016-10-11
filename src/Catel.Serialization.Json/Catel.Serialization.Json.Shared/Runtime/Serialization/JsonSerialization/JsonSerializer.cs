@@ -12,6 +12,7 @@ namespace Catel.Runtime.Serialization.Json
     using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Runtime.Serialization;
     using System.Text;
     using Caching;
     using Data;
@@ -84,6 +85,41 @@ namespace Catel.Runtime.Serialization.Json
 
         #region Methods
         /// <summary>
+        /// Serializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="context">The context.</param>
+        protected override void Serialize(object model, ISerializationContext<JsonSerializationContextInfo> context)
+        {
+            var customJsonSerializable = model as ICustomJsonSerializable;
+            if (customJsonSerializable != null)
+            {
+                customJsonSerializable.Serialize(context.Context.JsonWriter);
+                return;
+            }
+
+            base.Serialize(model, context);
+        }
+
+        /// <summary>
+        /// Deserializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
+        protected override object Deserialize(object model, ISerializationContext<JsonSerializationContextInfo> context)
+        {
+            var customJsonSerializable = model as ICustomJsonSerializable;
+            if (customJsonSerializable != null)
+            {
+                customJsonSerializable.Deserialize(context.Context.JsonReader);
+                return customJsonSerializable;
+            }
+
+            return base.Deserialize(model, context);
+        }
+
+        /// <summary>
         /// Serializes the specified model to the json writer.
         /// </summary>
         /// <param name="model">The model.</param>
@@ -145,7 +181,18 @@ namespace Catel.Runtime.Serialization.Json
             Dictionary<string, JProperty> jsonProperties = null;
             JArray jsonArray = null;
 
-            if (ShouldSerializeAsCollection(modelType))
+            if (modelType.ImplementsInterfaceEx<ICustomJsonSerializable>())
+            {
+                var customModel = CreateModelInstance(modelType) as ICustomJsonSerializable;
+                if (customModel == null)
+                {
+                    throw Log.ErrorAndCreateException<SerializationException>($"'{modelType.GetSafeFullName(false)}' implements ICustomJsonSerializable but could not be instantiated");
+                }
+
+                customModel.Deserialize(jsonReader);
+                return customModel;
+            }
+            else if (ShouldSerializeAsCollection(modelType))
             {
                 jsonArray = JArray.Load(jsonReader);
             }
@@ -400,7 +447,12 @@ namespace Catel.Runtime.Serialization.Json
         protected override void BeforeDeserialization(ISerializationContext<JsonSerializationContextInfo> context)
         {
             var serializationContext = context.Context;
-            if (ShouldSerializeAsDictionary(context.ModelType))
+
+            if (context.ModelType.ImplementsInterfaceEx<ICustomJsonSerializable>())
+            {
+                // No initialization needed, this is the fastest deserialization option available
+            }
+            else if (ShouldSerializeAsDictionary(context.ModelType))
             {
                 if (serializationContext.JsonProperties == null)
                 {
@@ -631,7 +683,8 @@ namespace Catel.Runtime.Serialization.Json
                                             }
 
                                             // Serialize ourselves
-                                            finalMemberValue = Deserialize(finalValueType, jsonValue.CreateReader(), context.Configuration);
+                                            var reader = jsonValue.CreateReader();
+                                            finalMemberValue = Deserialize(finalValueType, reader, context.Configuration);
                                         }
                                     }
                                 }
