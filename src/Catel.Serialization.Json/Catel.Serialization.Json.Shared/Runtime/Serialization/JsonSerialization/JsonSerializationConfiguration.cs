@@ -7,6 +7,9 @@
 
 namespace Catel.Runtime.Serialization.Json
 {
+    using System;
+    using Newtonsoft.Json;
+
     /// <summary>
     /// Serialization configuration with additional json configuration.
     /// </summary>
@@ -19,5 +22,29 @@ namespace Catel.Runtime.Serialization.Json
         ///   <c>true</c> if bson should be used instead of json; otherwise, <c>false</c>.
         /// </value>
         public bool UseBson { get; set; }
+
+        /// <summary>
+        /// Gets or sets the kind of the date time.
+        /// </summary>
+        /// <value>
+        /// The kind of the date time.
+        /// </value>
+        public DateTimeKind DateTimeKind { get; set; }
+
+        /// <summary>
+        /// Gets or sets the date parse handling.
+        /// </summary>
+        /// <value>
+        /// The date parse handling.
+        /// </value>
+        public DateParseHandling DateParseHandling { get; set; }
+
+        /// <summary>
+        /// Gets or sets the date time zone handling.
+        /// </summary>
+        /// <value>
+        /// The date time zone handling.
+        /// </value>
+        public DateTimeZoneHandling DateTimeZoneHandling { get; set; }
     }
 }

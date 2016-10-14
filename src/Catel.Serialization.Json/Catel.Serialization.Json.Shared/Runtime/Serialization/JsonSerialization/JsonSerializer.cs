@@ -773,11 +773,17 @@ namespace Catel.Runtime.Serialization.Json
             JsonWriter jsonWriter = null;
 
             var useBson = false;
+            var dateTimeKind = DateTimeKind.Unspecified;
+            var dateParseHandling = DateParseHandling.None;
+            var dateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
 
             var jsonConfiguration = configuration as JsonSerializationConfiguration;
             if (jsonConfiguration != null)
             {
                 useBson = jsonConfiguration.UseBson;
+                dateTimeKind = jsonConfiguration.DateTimeKind;
+                dateParseHandling = jsonConfiguration.DateParseHandling;
+                dateTimeZoneHandling = jsonConfiguration.DateTimeZoneHandling;
             }
 
             switch (contextMode)
@@ -797,7 +803,9 @@ namespace Catel.Runtime.Serialization.Json
                 case SerializationContextMode.Deserialization:
                     if (useBson)
                     {
-                        jsonReader = new BsonReader(stream);
+                        var shouldSerializeAsCollection = ShouldSerializeAsCollection(modelType);
+                        var shouldSerializeAsDictionary = ShouldSerializeAsDictionary(modelType);
+                        jsonReader = new BsonReader(stream, shouldSerializeAsCollection || shouldSerializeAsDictionary, dateTimeKind);
                     }
                     else
                     {
@@ -813,11 +821,14 @@ namespace Catel.Runtime.Serialization.Json
             if (jsonReader != null)
             {
                 jsonReader.Culture = configuration.Culture;
+                jsonReader.DateParseHandling = dateParseHandling;
+                jsonReader.DateTimeZoneHandling = dateTimeZoneHandling;
             }
 
             if (jsonWriter != null)
             {
                 jsonWriter.Culture = configuration.Culture;
+                jsonWriter.DateTimeZoneHandling = dateTimeZoneHandling;
             }
 
             return GetContext(model, modelType, jsonReader, jsonWriter, contextMode, null, null, configuration);
