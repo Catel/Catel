@@ -671,9 +671,9 @@ namespace Catel.Test.Runtime.Serialization
                 countrylist.Add(new Country { IsoCode = "AF", Description = "Afghanistan" });
                 countrylist.Add(new Country { IsoCode = "AG", Description = "Agypt" });
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(countrylist, serializer);
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(countrylist, serializer, config);
 
                     Assert.AreEqual(countrylist.Count, deserializedObject.Count, description);
 
@@ -704,9 +704,9 @@ namespace Catel.Test.Runtime.Serialization
                 bc.Add(b2);
                 bc.Add(b3);
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(bc, serializer);
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(bc, serializer, config);
 
                     Assert.AreEqual(bc.Count, deserializedObject.Count, description);
 
@@ -736,9 +736,9 @@ namespace Catel.Test.Runtime.Serialization
                 bc.Add(b2);
                 bc.Add(b3);
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(bc, serializer);
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(bc, serializer, config);
 
                     Assert.AreEqual(bc.Count, deserializedObject.Count, description);
 
@@ -761,9 +761,9 @@ namespace Catel.Test.Runtime.Serialization
                     new Country {IsoCode = "AG", Description = "Agypt"},
                 };
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(countrylist, serializer);
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(countrylist, serializer, config);
 
                     Assert.AreEqual(countrylist.GetType(), deserializedObject.GetType(), description);
                     Assert.AreEqual(countrylist.Length, deserializedObject.Length, description);
@@ -787,9 +787,9 @@ namespace Catel.Test.Runtime.Serialization
                 dictionary.Add("take", 2);
                 dictionary.Add("some other string", 3);
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(dictionary, serializer);
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(dictionary, serializer, config);
 
                     Assert.AreEqual(dictionary.Count, deserializedObject.Count, description);
 
@@ -808,9 +808,9 @@ namespace Catel.Test.Runtime.Serialization
             [TestCase(true)]
             public void CanSerializeBasicTypes<T>(T value)
             {
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(value, serializer);
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(value, serializer, config);
 
                     Assert.AreEqual(value, deserializedObject);
                 });
@@ -827,9 +827,9 @@ namespace Catel.Test.Runtime.Serialization
                 dataSourceResult.Total = 243;
                 dataSourceResult.Data = countrylist;
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(dataSourceResult, serializer);
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(dataSourceResult, serializer, config);
 
                     Assert.AreEqual(243, deserializedObject.Total, description);
 
