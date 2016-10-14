@@ -54,9 +54,9 @@ we will remove the features in the next major release.
 Added/fixed:
 ============
 (+) CTL-932 Support custom serialization of models via special interfaces
+(+) CTL-934 Support Bson in Json serializer
 (x) CTL-933 Use culture from parent json reader in subreaders for json serialization
 (x) CTL-931 TaskHelper.Run(async () => { }) has unexpected result and returns Task<Task> instead of Task
-
 
 Roadmap:
 ========

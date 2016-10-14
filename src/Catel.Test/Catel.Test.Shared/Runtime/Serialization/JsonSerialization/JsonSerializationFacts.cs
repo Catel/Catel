@@ -86,7 +86,36 @@ namespace Catel.Test.Runtime.Serialization
                 testModel.ExcludedCatelProperty = "excluded";
                 testModel.IncludedCatelProperty = "included";
 
-                var json = testModel.ToJson(null);
+                var configuration = new JsonSerializationConfiguration
+                {
+                    UseBson = true
+                };
+
+                var json = testModel.ToJson(configuration);
+
+                Assert.IsFalse(json.Contains("Excluded"));
+            }
+
+            [TestCase]
+            public void CorrectlySerializesToBsonString()
+            {
+                var testModel = new TestModel();
+
+                testModel._excludedField = "excluded";
+                testModel._includedField = "included";
+
+                testModel.ExcludedRegularProperty = "excluded";
+                testModel.IncludedRegularProperty = "included";
+
+                testModel.ExcludedCatelProperty = "excluded";
+                testModel.IncludedCatelProperty = "included";
+
+                var configuration = new JsonSerializationConfiguration
+                {
+                    UseBson = true
+                };
+
+                var json = testModel.ToJson(configuration);
 
                 Assert.IsFalse(json.Contains("Excluded"));
             }

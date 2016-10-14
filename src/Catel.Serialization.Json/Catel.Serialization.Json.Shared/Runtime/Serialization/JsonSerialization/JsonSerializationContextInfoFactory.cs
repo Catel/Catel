@@ -7,10 +7,9 @@
 
 #if NET
 
-namespace Catel.Runtime.Serialization.Binary
+namespace Catel.Runtime.Serialization.Json
 {
     using Json;
-    using JsonSerialization;
 
     /// <summary>
     /// Json serialization context factory.

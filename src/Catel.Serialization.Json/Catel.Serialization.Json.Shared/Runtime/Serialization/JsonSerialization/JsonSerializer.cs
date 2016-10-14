@@ -14,12 +14,10 @@ namespace Catel.Runtime.Serialization.Json
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Text;
-    using Caching;
-    using Data;
     using IoC;
-    using JsonSerialization;
     using Logging;
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Bson;
     using Newtonsoft.Json.Linq;
     using Reflection;
     using Scoping;
@@ -774,14 +772,38 @@ namespace Catel.Runtime.Serialization.Json
             JsonReader jsonReader = null;
             JsonWriter jsonWriter = null;
 
+            var useBson = false;
+
+            var jsonConfiguration = configuration as JsonSerializationConfiguration;
+            if (jsonConfiguration != null)
+            {
+                useBson = jsonConfiguration.UseBson;
+            }
+
             switch (contextMode)
             {
                 case SerializationContextMode.Serialization:
-                    jsonWriter = new JsonTextWriter(new StreamWriter(stream, Encoding.UTF8));
+                    if (useBson)
+                    {
+                        jsonWriter = new BsonWriter(stream);
+                    }
+                    else
+                    {
+                        var streamWriter = new StreamWriter(stream, Encoding.UTF8);
+                        jsonWriter = new JsonTextWriter(streamWriter);
+                    }
                     break;
 
                 case SerializationContextMode.Deserialization:
-                    jsonReader = new JsonTextReader(new StreamReader(stream, Encoding.UTF8));
+                    if (useBson)
+                    {
+                        jsonReader = new BsonReader(stream);
+                    }
+                    else
+                    {
+                        var streamReader = new StreamReader(stream, Encoding.UTF8);
+                        jsonReader = new JsonTextReader(streamReader);
+                    }
                     break;
 
                 default:
