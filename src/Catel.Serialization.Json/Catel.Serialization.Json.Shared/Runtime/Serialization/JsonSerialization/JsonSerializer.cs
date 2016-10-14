@@ -612,7 +612,10 @@ namespace Catel.Runtime.Serialization.Json
                         }
                         else
                         {
-                            deserializedItem = Deserialize(valueType, jsonProperty.Value.CreateReader(), context.Configuration);
+                            var reader = jsonProperty.Value.CreateReader(context.Configuration);
+                            reader.Culture = context.Configuration.Culture;
+
+                            deserializedItem = Deserialize(valueType, reader, context.Configuration);
                         }
 
                         dictionary[key] = deserializedItem;
@@ -668,7 +671,7 @@ namespace Catel.Runtime.Serialization.Json
                                     }
                                     else if (ShouldSerializeAsCollection(memberValue))
                                     {
-                                        finalMemberValue = Deserialize(valueType, jsonProperty.Value.CreateReader(), context.Configuration);
+                                        finalMemberValue = Deserialize(valueType, jsonProperty.Value.CreateReader(context.Configuration), context.Configuration);
                                     }
                                     else
                                     {
@@ -683,8 +686,7 @@ namespace Catel.Runtime.Serialization.Json
                                             }
 
                                             // Serialize ourselves
-                                            var reader = jsonValue.CreateReader();
-                                            finalMemberValue = Deserialize(finalValueType, reader, context.Configuration);
+                                            finalMemberValue = Deserialize(finalValueType, jsonValue.CreateReader(context.Configuration), context.Configuration);
                                         }
                                     }
                                 }
@@ -741,7 +743,7 @@ namespace Catel.Runtime.Serialization.Json
                         }
                         else
                         {
-                            deserializedItem = Deserialize(collectionItemType, item.CreateReader(), context.Configuration);
+                            deserializedItem = Deserialize(collectionItemType, item.CreateReader(context.Configuration), context.Configuration);
                         }
 
                         collection.Add(deserializedItem);
