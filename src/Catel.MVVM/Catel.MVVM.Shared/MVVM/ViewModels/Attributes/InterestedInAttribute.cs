@@ -13,6 +13,7 @@ namespace Catel.MVVM
 	/// receive property change notifications for the view models.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
+    [ObsoleteEx(Message = "Use services instead", RemoveInVersion = "5.0", TreatAsErrorFromVersion = "5.0")]
 	public class InterestedInAttribute : Attribute
 	{
         /// <summary>

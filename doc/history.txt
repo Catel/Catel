@@ -50,6 +50,7 @@ we will remove the features in the next major release.
 * CTL-808 Marked AsynchronousCommand as obsolete, use TaskCommand instead
 * CTL-810 Marked QueryableExtensions.Include(Expression) as obsolete for EF6 and higher, use the default EF implementation
 * CTL-849 Marked ExpressionUtil obsolete, use ExpressionHelper instead
+* CTL-935 Marked InterestedIn attribute obsolete, use services instead to communicate between view models
 
 Added/fixed:
 ============
