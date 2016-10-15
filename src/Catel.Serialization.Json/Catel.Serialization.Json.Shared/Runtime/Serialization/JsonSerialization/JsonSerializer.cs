@@ -190,7 +190,8 @@ namespace Catel.Runtime.Serialization.Json
                 customModel.Deserialize(jsonReader);
                 return customModel;
             }
-            else if (ShouldSerializeAsCollection(modelType))
+
+            if (ShouldSerializeAsCollection(modelType))
             {
                 jsonArray = JArray.Load(jsonReader);
             }
@@ -803,9 +804,15 @@ namespace Catel.Runtime.Serialization.Json
                 case SerializationContextMode.Deserialization:
                     if (useBson)
                     {
-                        var shouldSerializeAsCollection = ShouldSerializeAsCollection(modelType);
+                        var shouldSerializeAsCollection = false;
                         var shouldSerializeAsDictionary = ShouldSerializeAsDictionary(modelType);
-                        jsonReader = new BsonReader(stream, shouldSerializeAsCollection || shouldSerializeAsDictionary, dateTimeKind);
+                        if (!shouldSerializeAsDictionary)
+                        {
+                            // Only check if we should deserialize as collection if we are not a dictionary
+                            shouldSerializeAsCollection = ShouldSerializeAsCollection(modelType);
+                        }
+
+                        jsonReader = new BsonReader(stream, shouldSerializeAsCollection, dateTimeKind);
                     }
                     else
                     {

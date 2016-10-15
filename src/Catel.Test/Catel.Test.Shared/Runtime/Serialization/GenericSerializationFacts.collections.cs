@@ -789,16 +789,6 @@ namespace Catel.Test.Runtime.Serialization
 
                 TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var jsonSerializationConfig = config as JsonSerializationConfiguration;
-                    if (jsonSerializationConfig != null)
-                    {
-                        // Note: we don't support dictionaries yet for bson
-                        if (jsonSerializationConfig.UseBson)
-                        {
-                            return;
-                        }
-                    }
-
                     var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(dictionary, serializer, config);
 
                     Assert.AreEqual(dictionary.Count, deserializedObject.Count, description);
