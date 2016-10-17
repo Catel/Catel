@@ -245,6 +245,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializationObjectFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\SerializerModifierFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\CircularTestModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\CustomSerializationModels.xml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\CustomSerializationModels.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\CustomSerializationModels.json.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\ReusedCollectionsModel.cs" />

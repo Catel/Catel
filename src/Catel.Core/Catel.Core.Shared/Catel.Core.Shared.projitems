@@ -372,6 +372,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\DataContractSerializerFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Helpers\XmlSchemaHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Interfaces\ICustomXmlSerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Interfaces\IXmlNamespaceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs" />

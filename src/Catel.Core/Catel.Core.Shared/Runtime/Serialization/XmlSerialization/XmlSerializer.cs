@@ -90,6 +90,41 @@ namespace Catel.Runtime.Serialization.Xml
 
         #region Methods
         /// <summary>
+        /// Serializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="context">The context.</param>
+        protected override void Serialize(object model, ISerializationContext<XmlSerializationContextInfo> context)
+        {
+            var customXmlSerializable = model as ICustomXmlSerializable;
+            if (customXmlSerializable != null)
+            {
+                customXmlSerializable.Serialize(context.Context.Element);
+                return;
+            }
+
+            base.Serialize(model, context);
+        }
+
+        /// <summary>
+        /// Deserializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
+        protected override object Deserialize(object model, ISerializationContext<XmlSerializationContextInfo> context)
+        {
+            var customXmlSerializable = model as ICustomXmlSerializable;
+            if (customXmlSerializable != null)
+            {
+                customXmlSerializable.Deserialize(context.Context.Element);
+                return customXmlSerializable;
+            }
+
+            return base.Deserialize(model, context);
+        }
+
+        /// <summary>
         /// Warms up the specified type.
         /// </summary>
         /// <param name="type">The type to warmup.</param>
@@ -151,7 +186,7 @@ namespace Catel.Runtime.Serialization.Xml
                         break;
                 }
 
-                string xmlName = memberName;
+                var xmlName = memberName;
                 if (propertyDataManager.IsPropertyNameMappedToXmlElement(type, memberName))
                 {
                     xmlName = propertyDataManager.MapPropertyNameToXmlElementName(type, memberName);
