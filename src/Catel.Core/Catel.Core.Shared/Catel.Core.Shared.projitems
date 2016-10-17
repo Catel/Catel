@@ -376,12 +376,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Interfaces\IXmlNamespaceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSerializationConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSerializationContextInfoFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlNamespace.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlNamespaceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSerializationContextInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSerializerOptimalizationMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scoping\EventArgs\ScopeClosedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scoping\ScopeManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IObjectConverterServiceExtensions.cs" />

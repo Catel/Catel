@@ -7,33 +7,12 @@
 namespace Catel.Runtime.Serialization.Xml
 {
     /// <summary>
-    /// Possible xml serializer optimalization modes
-    /// </summary>
-    public enum XmlSerializerOptimalizationMode
-    {
-        /// <summary>
-        /// If pretty xml is required (for display reasons), pick this one.
-        /// </summary>
-        PrettyXml,
-
-        /// <summary>
-        /// If pretty xml is required (for display reasons), pick this one. This will remove all namespaces instead of only the root ones.
-        /// </summary>
-        PrettyXmlAgressive,
-
-        /// <summary>
-        /// If duplicate namespaces are irrelevant, pick this for speed.
-        /// </summary>
-        Performance
-    }
-
-    /// <summary>
     /// Interface for the xml serializer.
     /// </summary>
     public interface IXmlSerializer : ISerializer
     {
         /// <summary>
-        /// Gets or sets the optimalization mode.
+        /// Gets or sets the default fallback optimalization mode if it's not specified via <see cref="XmlSerializationConfiguration"/>.
         /// <para />
         /// The default value is <see cref="XmlSerializerOptimalizationMode.Performance"/>.
         /// </summary>
