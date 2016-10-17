@@ -526,6 +526,7 @@ namespace Catel.Data
         private void Initialize()
         {
             Serializer = DefaultSerializer;
+            SerializationConfiguration = DefaultSerializationConfiguration;
             SuspendValidation = DefaultSuspendValidationValue;
             ValidateUsingDataAnnotations = DefaultValidateUsingDataAnnotationsValue;
             DisableEventSubscriptionsOfChildValues = DefaultDisableEventSubscriptionsOfChildValuesValue;
