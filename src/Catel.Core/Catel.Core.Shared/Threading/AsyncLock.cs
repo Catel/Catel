@@ -40,7 +40,7 @@ namespace Catel.Threading
         /// <summary>
         /// The semi-unique identifier for this instance. This is 0 if the id has not yet been created.
         /// </summary>
-        private int _id = UniqueIdentifierHelper.GetUniqueIdentifier<AsyncLock>();
+        private readonly int _id = UniqueIdentifierHelper.GetUniqueIdentifier<AsyncLock>();
 
         /// <summary>
         /// Whether the lock is taken by a task.
