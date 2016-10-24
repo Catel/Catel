@@ -679,9 +679,13 @@ namespace Catel.Reflection
 
             var instanceType = objectToCheck.GetType();
 
-            if (_convertableDictionary.ContainsKey(type) && _convertableDictionary[type].Contains(instanceType))
+            HashSet<Type> convertableHashSet;
+            if (_convertableDictionary.TryGetValue(type, out convertableHashSet))
             {
-                return true;
+                if (convertableHashSet.Contains(instanceType))
+                {
+                    return true;
+                }
             }
 
             if (type.IsAssignableFromEx(instanceType))

@@ -737,7 +737,7 @@ namespace Catel.Data
                 {
                     if (_firstAnnotationValidation)
                     {
-                        if (propertyInfo.Value.IsDecoratedWithAttribute(typeof(ExcludeFromValidationAttribute)))
+                        if (propertyInfo.Value.IsDecoratedWithAttribute<ExcludeFromValidationAttribute>())
                         {
                             ignoredOrFailedPropertyValidations.Add(propertyInfo.Key);
                         }

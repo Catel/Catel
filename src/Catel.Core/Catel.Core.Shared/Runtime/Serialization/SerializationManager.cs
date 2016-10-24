@@ -187,7 +187,7 @@ namespace Catel.Runtime.Serialization
                     {
                         // CTL-550
                         var cachedPropertyInfo = propertyData.GetPropertyInfo(type);
-                        if (cachedPropertyInfo.PropertyInfo.IsDecoratedWithAttribute<IncludeInSerializationAttribute>())
+                        if (cachedPropertyInfo.IsDecoratedWithAttribute<IncludeInSerializationAttribute>())
                         {
                             isSerializable = true;
                         }
@@ -208,7 +208,7 @@ namespace Catel.Runtime.Serialization
                     var propertyInfo = propertyData.GetPropertyInfo(type);
                     if (propertyInfo != null)
                     {
-                        if (!propertyInfo.PropertyInfo.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>())
+                        if (!propertyInfo.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>())
                         {
                             serializableMembers.Add(modelProperty.Key, memberMetadata);
                         }

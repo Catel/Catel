@@ -170,7 +170,7 @@ namespace Catel.Data
                     var propertyInfo = cachedPropertyInfo.PropertyInfo;
 
                     // 1st, check if XmlIgnore is used
-                    if (propertyInfo.IsDecoratedWithAttribute<XmlIgnoreAttribute>())
+                    if (cachedPropertyInfo.IsDecoratedWithAttribute<XmlIgnoreAttribute>())
                     {
                         continue;
                     }

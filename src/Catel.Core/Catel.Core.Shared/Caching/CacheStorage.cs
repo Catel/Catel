@@ -22,7 +22,7 @@ namespace Catel.Caching
     public class CacheStorage<TKey, TValue> : ICacheStorage<TKey, TValue>
     {
         #region Fields
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        //private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly Func<ExpirationPolicy> _defaultExpirationPolicyInitCode;
 

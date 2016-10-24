@@ -451,7 +451,13 @@ namespace Catel.IoC
         /// <returns><c>true</c> if this instance [can constructor be used] the specified constructor; otherwise, <c>false</c>.</returns>
         private bool CanConstructorBeUsed(ConstructorInfo constructor, object tag, bool autoCompleteDependencies, params object[] parameters)
         {
-            Log.Debug("Checking if constructor '{0}' can be used", constructor.GetSignature());
+            // Some loging like .GetSignature are expensive
+            var logDebug = LogManager.LogInfo.IsDebugEnabled && !LogManager.LogInfo.IgnoreCatelLogging;
+
+            if (logDebug)
+            {
+                Log.Debug("Checking if constructor '{0}' can be used", constructor.GetSignature());
+            }
 
             if (constructor.IsStatic)
             {
@@ -468,8 +474,11 @@ namespace Catel.IoC
 
                 if (!IsValidParameterValue(ctorParameterType, parameters[i]))
                 {
-                    Log.Debug("Constructor is not valid because value '{0}' cannot be used for parameter '{0}'",
-                        ObjectToStringHelper.ToString(parameters[i]), ctorParameter.Name);
+                    if (logDebug)
+                    {
+                        Log.Debug("Constructor is not valid because value '{0}' cannot be used for parameter '{0}'",
+                            ObjectToStringHelper.ToString(parameters[i]), ctorParameter.Name);
+                    }
 
                     validConstructor = false;
                     break;
@@ -488,7 +497,10 @@ namespace Catel.IoC
 
                         if (!_serviceLocator.IsTypeRegistered(parameterTypeToResolve))
                         {
-                            Log.Debug("Constructor is not valid because parameter '{0}' cannot be resolved from the dependency resolver", parameterToResolve.Name);
+                            if (logDebug)
+                            {
+                                Log.Debug("Constructor is not valid because parameter '{0}' cannot be resolved from the dependency resolver", parameterToResolve.Name);
+                            }
 
                             validConstructor = false;
                             break;
@@ -510,8 +522,8 @@ namespace Catel.IoC
         private bool IsValidParameterValue(Type parameterType, object parameterValue)
         {
             // 1: check if value is null and if the ctor accepts that
-            bool isParameterNull = (parameterValue == null);
-            bool isCtorParameterValueType = parameterType.IsValueTypeEx();
+            var isParameterNull = (parameterValue == null);
+            var isCtorParameterValueType = parameterType.IsValueTypeEx();
             if (isParameterNull && isCtorParameterValueType)
             {
                 return false;
@@ -632,8 +644,13 @@ namespace Catel.IoC
                 throw;
             }
 
-            Log.Debug("Failed to create instance using dependency injection for type '{0}' using constructor '{1}'",
-                      typeToConstruct.FullName, constructor.GetSignature());
+            // Some loging like .GetSignature are expensive
+            var logDebug = LogManager.LogInfo.IsDebugEnabled && !LogManager.LogInfo.IgnoreCatelLogging;
+            if (logDebug)
+            {
+                Log.Debug("Failed to create instance using dependency injection for type '{0}' using constructor '{1}'",
+                    typeToConstruct.FullName, constructor.GetSignature());
+            }
 
             return null;
         }

@@ -19,6 +19,9 @@ namespace Catel.Reflection
     /// </summary>
     public static class TypeCache
     {
+        private const int DefaultCollectionSizeForTypes = 10 * 1000;
+        private const int DefaultCollectionSizeForAssemblies = 50;
+
         /// <summary>
         ///   The <see cref = "ILog">log</see> object.
         /// </summary>
@@ -41,25 +44,25 @@ namespace Catel.Reflection
         /// <summary>
         /// Cache containing all the types implementing a specific interface.
         /// </summary>
-        private static readonly Dictionary<Type, HashSet<Type>> _typesByInterface = new Dictionary<Type, HashSet<Type>>();
+        private static readonly Dictionary<Type, Type[]> _typesByInterface = new Dictionary<Type, Type[]>(500);
 
         /// <summary>
         /// Cache containing all the types by assembly. This means that the first dictionary contains the assembly name
         /// and all types contained by that assembly.
         /// </summary>
-        private static Dictionary<string, Dictionary<string, Type>> _typesByAssembly;
+        private static readonly Dictionary<string, Dictionary<string, Type>> _typesByAssembly = new Dictionary<string, Dictionary<string, Type>>(DefaultCollectionSizeForAssemblies);
 
         /// <summary>
         /// Cache containing all the types based on a string. This way, it is easy to retrieve a type based on a 
         /// string containing the type name and assembly without the overhead, such as <c>Catel.TypeHelper, Catel.Core</c>.
         /// </summary>
-        private static Dictionary<string, Type> _typesWithAssembly;
+        private static readonly Dictionary<string, Type> _typesWithAssembly = new Dictionary<string, Type>(DefaultCollectionSizeForTypes);
 
         /// <summary>
         /// Cache containing all the types based on a string. This way, it is easy to retrieve a type based on a 
         /// string containing the type name and assembly without the overhead, such as <c>Catel.TypeHelper, Catel.Core</c>.
         /// </summary>
-        private static Dictionary<string, Type> _typesWithAssemblyLowerCase;
+        private static readonly Dictionary<string, Type> _typesWithAssemblyLowerCase = new Dictionary<string, Type>(DefaultCollectionSizeForTypes);
 
         /// <summary>
         /// Cache containing all the types based without an assembly. This means that a type with this format:
@@ -67,7 +70,7 @@ namespace Catel.Reflection
         /// <para />
         /// The values resolved from this dictionary can be used as key in the <see cref="_typesWithAssembly"/> dictionary.
         /// </summary>
-        private static Dictionary<string, string> _typesWithoutAssembly;
+        private static readonly Dictionary<string, string> _typesWithoutAssembly = new Dictionary<string, string>(DefaultCollectionSizeForTypes);
 
         /// <summary>
         /// Cache containing all the types based without an assembly. This means that a type with this format:
@@ -75,7 +78,7 @@ namespace Catel.Reflection
         /// <para />
         /// The values resolved from this dictionary can be used as key in the <see cref="_typesWithAssembly"/> dictionary.
         /// </summary>
-        private static Dictionary<string, string> _typesWithoutAssemblyLowerCase;
+        private static readonly Dictionary<string, string> _typesWithoutAssemblyLowerCase = new Dictionary<string, string>(DefaultCollectionSizeForTypes);
 
         /// <summary>
         /// The list of loaded assemblies which do not required additional initialization again.
@@ -291,16 +294,19 @@ namespace Catel.Reflection
                 var typeNameWithAssembly = string.IsNullOrEmpty(assemblyName) ? null : TypeHelper.FormatType(assemblyName, typeName);
                 if (typeNameWithAssembly == null)
                 {
-                    if (typesWithoutAssembly.ContainsKey(typeName))
+                    // If we have a mapping, use that instead
+                    string typeNameMapping;
+                    if (typesWithoutAssembly.TryGetValue(typeName, out typeNameMapping))
                     {
-                        return typesWithAssembly[typesWithoutAssembly[typeName]];
+                        typeName = typeNameMapping;
                     }
 
                     // Note that lazy-loaded types (a few lines below) are added to the types *with* assemblies so we have
                     // a direct access cache
-                    if (typesWithAssembly.ContainsKey(typeName))
+                    Type cachedType;
+                    if (typesWithAssembly.TryGetValue(typeName, out cachedType))
                     {
-                        return typesWithAssembly[typeName];
+                        return cachedType;
                     }
 
                     var fallbackType = GetTypeBySplittingInternals(typeName);
@@ -313,17 +319,20 @@ namespace Catel.Reflection
                     return fallbackType;
                 }
 
-                if (typesWithAssembly.ContainsKey(typeNameWithAssembly))
+                Type typeWithAssembly;
+                if (typesWithAssembly.TryGetValue(typeNameWithAssembly, out typeWithAssembly))
                 {
-                    return typesWithAssembly[typeNameWithAssembly];
+                    return typeWithAssembly;
                 }
 
                 // Try to remove version info from assembly info
                 var assemblyNameWithoutOverhead = TypeHelper.GetAssemblyNameWithoutOverhead(assemblyName);
                 var typeNameWithoutAssemblyOverhead = TypeHelper.FormatType(assemblyNameWithoutOverhead, typeName);
-                if (typesWithAssembly.ContainsKey(typeNameWithoutAssemblyOverhead))
+
+                Type typeWithoutAssembly;
+                if (typesWithAssembly.TryGetValue(typeNameWithoutAssemblyOverhead, out typeWithoutAssembly))
                 {
-                    return typesWithAssembly[typeNameWithoutAssemblyOverhead];
+                    return typeWithoutAssembly;
                 }
 
                 // Fallback to GetType
@@ -336,7 +345,7 @@ namespace Catel.Reflection
 #endif
                     if (type != null)
                     {
-                        typesWithAssembly.Add(typeNameWithAssembly, type);
+                        typesWithAssembly[typeNameWithAssembly] = type;
                         return type;
                     }
                 }
@@ -354,14 +363,15 @@ namespace Catel.Reflection
                 // Fallback for this assembly only
                 InitializeTypes(false, assemblyName);
 
-                if (typesWithAssembly.ContainsKey(typeNameWithAssembly))
+                Type finalType;
+                if (typesWithAssembly.TryGetValue(typeNameWithAssembly, out finalType))
                 {
-                    return typesWithAssembly[typeNameWithAssembly];
+                    return finalType;
                 }
 
-                if (typesWithAssembly.ContainsKey(typeNameWithoutAssemblyOverhead))
+                if (typesWithAssembly.TryGetValue(typeNameWithoutAssemblyOverhead, out finalType))
                 {
-                    return typesWithAssembly[typeNameWithoutAssemblyOverhead];
+                    return finalType;
                 }
             }
 
@@ -441,7 +451,7 @@ namespace Catel.Reflection
             {
                 if (!_typesByInterface.ContainsKey(interfaceType))
                 {
-                    _typesByInterface[interfaceType] = new HashSet<Type>(GetTypes(x =>
+                    _typesByInterface[interfaceType] = GetTypes(x =>
                     {
                         if (x == interfaceType)
                         {
@@ -449,10 +459,10 @@ namespace Catel.Reflection
                         }
 
                         return x.ImplementsInterfaceEx(interfaceType);
-                    }));
+                    }).ToArray();
                 }
 
-                return _typesByInterface[interfaceType].ToArray();
+                return _typesByInterface[interfaceType];
             }
         }
 
@@ -495,16 +505,12 @@ namespace Catel.Reflection
             // async stuff which can deadlock). Keep it simple without calls to other code. Do any type initialization *outside* 
             // the lock and make sure not to make calls to other methods
 
-            Dictionary<string, Type> typeSource = null;
-
             lock (_lockObject)
             {
+                Dictionary<string, Type> typeSource = null;
                 if (!string.IsNullOrWhiteSpace(assemblyName))
                 {
-                    if (_typesByAssembly.ContainsKey(assemblyName))
-                    {
-                        typeSource = _typesByAssembly[assemblyName];
-                    }
+                    _typesByAssembly.TryGetValue(assemblyName, out typeSource);
                 }
                 else
                 {
@@ -556,7 +562,9 @@ namespace Catel.Reflection
 
             lock (_lockObject)
             {
-                foreach (var assembly in AssemblyHelper.GetLoadedAssemblies())
+                var loadedAssemblies = AssemblyHelper.GetLoadedAssemblies();
+
+                foreach (var assembly in loadedAssemblies)
                 {
                     try
                     {
@@ -583,9 +591,9 @@ namespace Catel.Reflection
         /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
         public static void InitializeTypes(Assembly assembly = null, bool forceFullInitialization = false)
         {
-            bool checkSingleAssemblyOnly = assembly != null;
+            var checkSingleAssemblyOnly = assembly != null;
 
-            if (!forceFullInitialization && !checkSingleAssemblyOnly && (_typesWithAssembly != null))
+            if (!forceFullInitialization && !checkSingleAssemblyOnly && _typesWithAssembly.Count > 0)
             {
                 return;
             }
@@ -596,61 +604,11 @@ namespace Catel.Reflection
                 if (forceFullInitialization && assembly == null)
                 {
                     _loadedAssemblies.Clear();
-
-                    if (_typesByAssembly != null)
-                    {
-                        _typesByAssembly.Clear();
-                        _typesByAssembly = null;
-                    }
-
-                    if (_typesWithAssembly != null)
-                    {
-                        _typesWithAssembly.Clear();
-                        _typesWithAssembly = null;
-                    }
-
-                    if (_typesWithAssemblyLowerCase != null)
-                    {
-                        _typesWithAssemblyLowerCase.Clear();
-                        _typesWithAssemblyLowerCase = null;
-                    }
-
-                    if (_typesWithoutAssembly != null)
-                    {
-                        _typesWithoutAssembly.Clear();
-                        _typesWithoutAssembly = null;
-                    }
-
-                    if (_typesWithoutAssemblyLowerCase != null)
-                    {
-                        _typesWithoutAssemblyLowerCase.Clear();
-                        _typesWithoutAssemblyLowerCase = null;
-                    }
-                }
-
-                if (_typesByAssembly == null)
-                {
-                    _typesByAssembly = new Dictionary<string, Dictionary<string, Type>>();
-                }
-
-                if (_typesWithAssembly == null)
-                {
-                    _typesWithAssembly = new Dictionary<string, Type>();
-                }
-
-                if (_typesWithAssemblyLowerCase == null)
-                {
-                    _typesWithAssemblyLowerCase = new Dictionary<string, Type>();
-                }
-
-                if (_typesWithoutAssembly == null)
-                {
-                    _typesWithoutAssembly = new Dictionary<string, string>();
-                }
-
-                if (_typesWithoutAssemblyLowerCase == null)
-                {
-                    _typesWithoutAssemblyLowerCase = new Dictionary<string, string>();
+                    _typesByAssembly?.Clear();
+                    _typesWithAssembly?.Clear();
+                    _typesWithAssemblyLowerCase?.Clear();
+                    _typesWithoutAssembly?.Clear();
+                    _typesWithoutAssemblyLowerCase?.Clear();
                 }
 
                 var assembliesToInitialize = checkSingleAssemblyOnly ? new List<Assembly>(new[] { assembly }) : AssemblyHelper.GetLoadedAssemblies();
@@ -667,12 +625,13 @@ namespace Catel.Reflection
                 foreach (var assembly in assemblies)
                 {
                     var loadedAssemblyFullName = assembly.FullName;
-                    if (!force && _loadedAssemblies.Contains(loadedAssemblyFullName))
+                    var containsLoadedAssembly = _loadedAssemblies.Contains(loadedAssemblyFullName);
+                    if (!force && containsLoadedAssembly)
                     {
                         continue;
                     }
 
-                    if (!_loadedAssemblies.Contains(loadedAssemblyFullName))
+                    if (!containsLoadedAssembly)
                     {
                         _loadedAssemblies.Add(loadedAssemblyFullName);
                     }
@@ -740,12 +699,13 @@ namespace Catel.Reflection
             var newAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName);
             var newFullType = TypeHelper.FormatType(newAssemblyName, type.FullName);
 
-            if (!_typesByAssembly.ContainsKey(newAssemblyName))
+            Dictionary<string, Type> typesByAssembly;
+            if (!_typesByAssembly.TryGetValue(newAssemblyName, out typesByAssembly))
             {
-                _typesByAssembly[newAssemblyName] = new Dictionary<string, Type>();
+                typesByAssembly = new Dictionary<string, Type>();
+                _typesByAssembly[newAssemblyName] = typesByAssembly;
             }
 
-            var typesByAssembly = _typesByAssembly[newAssemblyName];
             if (!typesByAssembly.ContainsKey(newFullType))
             {
                 typesByAssembly[newFullType] = type;
@@ -756,17 +716,6 @@ namespace Catel.Reflection
                 var typeNameWithoutAssembly = TypeHelper.GetTypeName(newFullType);
                 _typesWithoutAssembly[typeNameWithoutAssembly] = newFullType;
                 _typesWithoutAssemblyLowerCase[typeNameWithoutAssembly.ToLowerInvariant()] = newFullType.ToLowerInvariant();
-
-                //var interfaces = type.GetInterfacesEx();
-                //foreach (var iface in interfaces)
-                //{
-                //    if (!_typesByInterface.ContainsKey(iface))
-                //    {
-                //        _typesByInterface.Add(iface, new HashSet<Type>());
-                //    }
-
-                //    _typesByInterface[iface].Add(type);
-                //}
             }
         }
 
@@ -830,6 +779,10 @@ namespace Catel.Reflection
 
             // Ignore useless types
             if (typeName.Contains("<PrivateImplementationDetails>") ||
+                typeName.Contains("+<") || // C# compiler generated classes
+                typeName.Contains("+_Closure") || // VB.NET compiler generated classes
+                typeName.Contains(".__") || // System.Runtime.CompilerServices.*
+                typeName.Contains("Interop+") || // System.IO.FileSystem, System.Net.Sockets, etc
                 typeName.Contains("c__DisplayClass") ||
                 typeName.Contains("d__") ||
                 typeName.Contains("f__AnonymousType") ||
