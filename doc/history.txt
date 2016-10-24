@@ -66,6 +66,7 @@ Added/fixed:
 (*) CTL-911 Refactor UrlHelper to extension methods
 (*) CTL-919 Replace parameters in ServiceLocator.ResolveTypeFromKnownContainer by ServiceInfo
 (*) CTL-922 Don't cache RootFrame in NavigationService to allow dynamic navigation frames
+(*) CTL-941 Update to json.net 9.x
 (x) CTL-899 Navigation in WPF is not working when using custom frame
 (x) CTL-906 Clear current navigation context when (re)navigating to the same view in WPF
 (x) CTL-910 Introduce special lock for null keys in CacheStorage to prevent ArgumentNullException
