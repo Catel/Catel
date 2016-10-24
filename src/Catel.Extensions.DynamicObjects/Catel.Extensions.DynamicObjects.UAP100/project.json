@@ -3,8 +3,8 @@
     "Catel.Fody": "2.14.0",
     "Fody": "1.29.4",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
-    "ModuleInit.Fody": "1.5.8",
-    "Obsolete.Fody": "4.0.3"
+    "ModuleInit.Fody": "1.5.9",
+    "Obsolete.Fody": "4.1.0"
   },
   "frameworks": {
     "uap10.0": {}
