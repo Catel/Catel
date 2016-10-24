@@ -127,7 +127,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\ModelBase.validation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ModelEqualityComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ObservableObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\PropertyBag.boxing.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\PropertyBag.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\BoxingCache.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\PropertyData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\PropertyDataManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\PropertyValue.cs" />

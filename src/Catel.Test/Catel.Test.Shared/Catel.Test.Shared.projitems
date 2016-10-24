@@ -29,6 +29,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationServiceFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\DynamicConfigurationFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Contexts\ProgressContextFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\BoxingCacheFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\CatelTypeInfoFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ChangeNotificationWrapperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\CompositeValidatorFacts.cs" />
