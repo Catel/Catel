@@ -260,7 +260,7 @@ namespace Catel.Data
                 InitializeProperty(propertyData);
             }
 
-            lock (_initializedTypesLock)
+            lock (_initializedTypes)
             {
                 // No need to check if already existing
                 _initializedTypes.Add(type);
@@ -339,7 +339,7 @@ namespace Catel.Data
                     "Property '{0}' is not nullable, please provide a valid (not null) default value", name);
             }
 
-            lock (_initializedTypesLock)
+            lock (_initializedTypes)
             {
                 if (!_initializedTypes.Contains(objectType) || lateRegistration)
                 {
@@ -360,7 +360,7 @@ namespace Catel.Data
                 }
             }
 
-            lock (_propertyValuesLock)
+            lock (_lock)
             {
                 if (!_propertyBag.IsPropertyAvailable(name))
                 {

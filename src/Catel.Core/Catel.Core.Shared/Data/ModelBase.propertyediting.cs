@@ -105,7 +105,7 @@ namespace Catel.Data
             var notify = false;
             object oldValue = null;
 
-            lock (_propertyValuesLock)
+            lock (_lock)
             {
                 oldValue = GetValueFast<object>(property.Name);
                 var areOldAndNewValuesEqual = ObjectHelper.AreEqualReferences(oldValue, value);
@@ -154,7 +154,7 @@ namespace Catel.Data
         /// <param name="value">The value.</param>
         private void SetValueFast(string propertyName, object value)
         {
-            lock (_propertyValuesLock)
+            lock (_lock)
             {
                 _propertyBag.SetPropertyValue(propertyName, value);
 
@@ -175,7 +175,7 @@ namespace Catel.Data
         /// <returns>The value of the property.</returns>
         private T GetValueFast<T>(string propertyName)
         {
-            lock (_propertyValuesLock)
+            lock (_lock)
             {
                 return _propertyBag.GetPropertyValue<T>(propertyName);
             }

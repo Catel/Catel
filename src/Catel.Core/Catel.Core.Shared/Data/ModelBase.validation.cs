@@ -71,14 +71,6 @@ namespace Catel.Data
         private IValidator _validator;
 
         /// <summary>
-        /// Lock object to make sure that multiple validations at the same time are not allowed.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private readonly object _validationLock = new object();
-
-        /// <summary>
         /// The validation context, which can contain in-between validation info.
         /// </summary>
 #if NET
@@ -95,7 +87,7 @@ namespace Catel.Data
 #if NET
         [field: NonSerialized]
 #endif
-        private readonly HashSet<string> _propertiesNotCheckedDuringDisabledValidation = new HashSet<string>();
+        private HashSet<string> _propertiesNotCheckedDuringDisabledValidation = new HashSet<string>();
 
         /// <summary>
         /// The property names that failed to validate and should be skipped next time for NET 4.0 
@@ -774,7 +766,7 @@ namespace Catel.Data
 
             if (!IsValidated || force)
             {
-                lock (_validationLock)
+                lock (_validationContext)
                 {
                     var fieldValidationResults = new List<IFieldValidationResult>();
                     var businessRuleValidationResults = new List<IBusinessRuleValidationResult>();

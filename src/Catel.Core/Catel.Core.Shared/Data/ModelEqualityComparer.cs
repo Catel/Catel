@@ -101,7 +101,7 @@ namespace Catel.Data
                 return false;
             }
 
-            lock (x._propertyValuesLock)
+            lock (x._lock)
             {
                 foreach (var propertyValue in x._propertyBag.GetAllProperties())
                 {

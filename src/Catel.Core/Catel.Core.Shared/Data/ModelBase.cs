@@ -46,13 +46,6 @@ namespace Catel.Data
 #endif
     public abstract partial class ModelBase : ObservableObject, IModel
     {
-        #region Constants
-        /// <summary>
-        /// The type that is used for internal serialization.
-        /// </summary>
-        internal static readonly Type InternalSerializationType = typeof(List<PropertyValue>);
-        #endregion
-
         #region Fields
         /// <summary>
         /// The log.
@@ -79,14 +72,6 @@ namespace Catel.Data
         private static readonly HashSet<Type> _initializedTypes = new HashSet<Type>();
 
         /// <summary>
-        /// Lock object for the <see cref="_initializedTypes"/> field.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private static readonly object _initializedTypesLock = new object();
-
-        /// <summary>
         /// The property values.
         /// </summary>
 #if NET
@@ -100,15 +85,15 @@ namespace Catel.Data
 #if NET
         [field: NonSerialized]
 #endif
-        private readonly Dictionary<string, ChangeNotificationWrapper> _propertyValueChangeNotificationWrappers = new Dictionary<string, ChangeNotificationWrapper>();
+        private Dictionary<string, ChangeNotificationWrapper> _propertyValueChangeNotificationWrappers;
 
         /// <summary>
-        /// Lock object for the <see cref="_propertyBag"/> field.
+        /// Lock object.
         /// </summary>
 #if NET
         [field: NonSerialized]
 #endif
-        internal readonly object _propertyValuesLock = new object();
+        internal readonly object _lock = new object();
 
         /// <summary>
         /// The parent object of the current object.
@@ -576,7 +561,7 @@ namespace Catel.Data
             {
                 if (propertyData.Value.SetParent)
                 {
-                    lock (_propertyValuesLock)
+                    lock (_lock)
                     {
                         var propertyValue = GetValueFast<object>(propertyData.Key);
                         var propertyValueAsModelBase = propertyValue as ModelBase;
@@ -738,9 +723,14 @@ namespace Catel.Data
                 return;
             }
 
-            lock (_propertyValuesLock)
+            lock (_lock)
             {
                 ChangeNotificationWrapper oldWrapper;
+
+                if (_propertyValueChangeNotificationWrappers == null)
+                {
+                    _propertyValueChangeNotificationWrappers = new Dictionary<string, ChangeNotificationWrapper>();
+                }
 
                 if (_propertyValueChangeNotificationWrappers.TryGetValue(propertyName, out oldWrapper))
                 {
