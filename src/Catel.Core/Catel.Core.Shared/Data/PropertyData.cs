@@ -7,9 +7,9 @@
 namespace Catel.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Reflection;
     using System.Xml.Serialization;
-    using Catel.Caching;
     using Catel.Reflection;
 
     /// <summary>
@@ -37,7 +37,12 @@ namespace Catel.Data
 #if NET
         [field: NonSerialized]
 #endif
-        private readonly ICacheStorage<Type, CachedPropertyInfo> _cachedPropertyInfo = new CacheStorage<Type, CachedPropertyInfo>(storeNullValues: true);
+        private CachedPropertyInfo _cachedPropertyInfo;
+
+#if NET
+        [field: NonSerialized]
+#endif
+        private bool _updatedCachedPropertyInfo;
         #endregion
 
         #region Constructors
@@ -211,16 +216,15 @@ namespace Catel.Data
         {
             Argument.IsNotNull("containingType", containingType);
 
-            return _cachedPropertyInfo.GetFromCacheOrFetch(containingType, () =>
+            if (!_updatedCachedPropertyInfo)
             {
-                var propertyInfo = containingType.GetPropertyEx(Name, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                if (propertyInfo == null)
-                {
-                    return null;
-                }
+                _updatedCachedPropertyInfo = true;
 
-                return new CachedPropertyInfo(propertyInfo);
-            });
+                var propertyInfo = containingType.GetPropertyEx(Name, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                _cachedPropertyInfo = (propertyInfo == null) ? null : new CachedPropertyInfo(propertyInfo);
+            }
+
+            return _cachedPropertyInfo;
         }
         #endregion
     }
