@@ -15,28 +15,37 @@ namespace Catel.Test.Reflection
         [TestFixture]
         public class TheGetTypeMethod
         {
-            [TestCase]
-            public void ReturnsTypeFromMsCorlib()
+            [TestCase("System.String", false, typeof(string))]
+            [TestCase("System.String", true, typeof(string))]
+            [TestCase("sYstEm.StRing", false, null)]
+            [TestCase("sYstEm.StRing", true, typeof(string))]
+            public void ReturnsTypeFromMsCorlib(string typeName, bool ignoreCase, Type expectedType)
             {
-                var type = TypeCache.GetType("System.String");
+                var type = TypeCache.GetType(typeName, ignoreCase);
 
-                Assert.AreEqual(typeof(string), type);
+                Assert.AreEqual(expectedType, type);
             }
 
-            [TestCase]
-            public void ReturnsTypeFromSystem()
+            [TestCase("System.Uri", false, typeof(Uri))]
+            [TestCase("System.Uri", true, typeof(Uri))]
+            [TestCase("sYstEm.uRi", false, null)]
+            [TestCase("sYstEm.uRi", true, typeof(Uri))]
+            public void ReturnsTypeFromSystem(string typeName, bool ignoreCase, Type expectedType)
             {
-                var type = TypeCache.GetType("System.Uri");
+                var type = TypeCache.GetType(typeName, ignoreCase);
 
-                Assert.AreEqual(typeof(Uri), type);
+                Assert.AreEqual(expectedType, type);
             }
 
-            [TestCase]
-            public void ReturnsTypeFromSystemCore()
+            [TestCase("System.Lazy`1", false, typeof(Lazy<>))]
+            [TestCase("System.Lazy`1", true, typeof(Lazy<>))]
+            [TestCase("sYstEm.lAzY`1", false, null)]
+            [TestCase("sYstEm.lAzY`1", true, typeof(Lazy<>))]
+            public void ReturnsTypeFromSystemCore(string typeName, bool ignoreCase, Type expectedType)
             {
-                var type = TypeCache.GetType("System.Lazy`1");
+                var type = TypeCache.GetType(typeName, ignoreCase);
 
-                Assert.AreEqual(typeof(Lazy<>), type);
+                Assert.AreEqual(expectedType, type);
             }
 
             [TestCase]
