@@ -56,13 +56,13 @@ namespace Catel.Reflection
         /// Cache containing all the types based on a string. This way, it is easy to retrieve a type based on a 
         /// string containing the type name and assembly without the overhead, such as <c>Catel.TypeHelper, Catel.Core</c>.
         /// </summary>
-        private static readonly Dictionary<string, Type> _typesWithAssembly = new Dictionary<string, Type>(DefaultCollectionSizeForTypes);
+        private static readonly Dictionary<string, Type> _typesWithAssembly = new Dictionary<string, Type>(DefaultCollectionSizeForTypes, StringComparer.Ordinal);
 
         /// <summary>
         /// Cache containing all the types based on a string. This way, it is easy to retrieve a type based on a 
         /// string containing the type name and assembly without the overhead, such as <c>Catel.TypeHelper, Catel.Core</c>.
         /// </summary>
-        private static readonly Dictionary<string, Type> _typesWithAssemblyLowerCase = new Dictionary<string, Type>(DefaultCollectionSizeForTypes);
+        private static readonly Dictionary<string, Type> _typesWithAssemblyLowerCase = new Dictionary<string, Type>(DefaultCollectionSizeForTypes, StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Cache containing all the types based without an assembly. This means that a type with this format:
@@ -70,7 +70,7 @@ namespace Catel.Reflection
         /// <para />
         /// The values resolved from this dictionary can be used as key in the <see cref="_typesWithAssembly"/> dictionary.
         /// </summary>
-        private static readonly Dictionary<string, string> _typesWithoutAssembly = new Dictionary<string, string>(DefaultCollectionSizeForTypes);
+        private static readonly Dictionary<string, string> _typesWithoutAssembly = new Dictionary<string, string>(DefaultCollectionSizeForTypes, StringComparer.Ordinal);
 
         /// <summary>
         /// Cache containing all the types based without an assembly. This means that a type with this format:
@@ -78,7 +78,7 @@ namespace Catel.Reflection
         /// <para />
         /// The values resolved from this dictionary can be used as key in the <see cref="_typesWithAssembly"/> dictionary.
         /// </summary>
-        private static readonly Dictionary<string, string> _typesWithoutAssemblyLowerCase = new Dictionary<string, string>(DefaultCollectionSizeForTypes);
+        private static readonly Dictionary<string, string> _typesWithoutAssemblyLowerCase = new Dictionary<string, string>(DefaultCollectionSizeForTypes, StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// The list of loaded assemblies which do not required additional initialization again.
@@ -285,11 +285,6 @@ namespace Catel.Reflection
             {
                 var typesWithoutAssembly = ignoreCase ? _typesWithoutAssemblyLowerCase : _typesWithoutAssembly;
                 var typesWithAssembly = ignoreCase ? _typesWithAssemblyLowerCase : _typesWithAssembly;
-
-                if (ignoreCase)
-                {
-                    typeName = typeName.ToLowerInvariant();
-                }
 
                 var typeNameWithAssembly = string.IsNullOrEmpty(assemblyName) ? null : TypeHelper.FormatType(assemblyName, typeName);
                 if (typeNameWithAssembly == null)
@@ -711,11 +706,11 @@ namespace Catel.Reflection
                 typesByAssembly[newFullType] = type;
 
                 _typesWithAssembly[newFullType] = type;
-                _typesWithAssemblyLowerCase[newFullType.ToLowerInvariant()] = type;
+                _typesWithAssemblyLowerCase[newFullType] = type;
 
                 var typeNameWithoutAssembly = TypeHelper.GetTypeName(newFullType);
                 _typesWithoutAssembly[typeNameWithoutAssembly] = newFullType;
-                _typesWithoutAssemblyLowerCase[typeNameWithoutAssembly.ToLowerInvariant()] = newFullType.ToLowerInvariant();
+                _typesWithoutAssemblyLowerCase[typeNameWithoutAssembly] = newFullType;
             }
         }
 
