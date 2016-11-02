@@ -675,7 +675,7 @@ namespace Catel.Reflection
             var types = (from assembly in assemblies
                          select new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assembly.GetAllTypesSafely())));
 
-#if PCL
+#if PCL || SL
             var results = types;
 #else
             var results = types.AsParallel();
