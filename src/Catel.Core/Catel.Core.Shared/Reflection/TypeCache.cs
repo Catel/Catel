@@ -335,6 +335,11 @@ namespace Catel.Reflection
                 {
 #if NETFX_CORE || PCL
                     var type = Type.GetType(typeNameWithAssembly, false);
+#elif SILVERLIGHT
+                    // Due to a FileLoadException when loading types without a specific version, we need to map the assembly version here
+                    var assemblyNameWithVersion = AssemblyHelper.GetAssemblyNameWithVersion(assemblyName);
+                    var typeNameWithAssemblyNameWithVersion = TypeHelper.FormatType(assemblyNameWithVersion, typeName);
+                    var type = Type.GetType(typeNameWithAssemblyNameWithVersion, false, ignoreCase);
 #else
                     var type = Type.GetType(typeNameWithAssembly, false, ignoreCase);
 #endif
@@ -582,6 +587,20 @@ namespace Catel.Reflection
         /// <para/>
         /// The types initialized by this method are used by <see cref="object.GetType"/>.
         /// </summary>
+        /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
+        /// <param name="assembly">The assembly to initialize the types from. If <c>null</c>, all assemblies will be checked.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "InitializeTypes(Assembly, bool)", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
+        public static void InitializeTypes(bool forceFullInitialization, Assembly assembly = null)
+        {
+            InitializeTypes(assembly, forceFullInitialization);
+        }
+
+        /// <summary>
+        /// Initializes the types in the specified assembly. It does this by looping through all loaded assemblies and
+        /// registering the type by type name and assembly name.
+        /// <para/>
+        /// The types initialized by this method are used by <see cref="object.GetType"/>.
+        /// </summary>
         /// <param name="assembly">The assembly to initialize the types from. If <c>null</c>, all assemblies will be checked.</param>
         /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
         public static void InitializeTypes(Assembly assembly = null, bool forceFullInitialization = false)
@@ -675,7 +694,7 @@ namespace Catel.Reflection
             var types = (from assembly in assemblies
                          select new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assembly.GetAllTypesSafely())));
 
-#if PCL || SL
+#if SILVERLIGHT || PCL
             var results = types;
 #else
             var results = types.AsParallel();
