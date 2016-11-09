@@ -244,6 +244,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scoping\ScopeManagerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\EventArgs\UICompletedEventArgsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Exceptions\WindowNotRegisteredExceptionTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IPleaseWaitServiceExtensionsTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IStartupInfoProviderExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Fixtures\LanguageServiceFixture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Fixtures\StartupInfoProviderFixture.cs" />

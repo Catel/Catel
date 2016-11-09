@@ -45,6 +45,7 @@ namespace Catel.Services
         /// This is a great way to safely show a busy indicator and ensure that the indicator hides, even when an exception occurs.
         /// </summary>
         /// <param name="pleaseWaitService">The please wait service.</param>
+        /// <param name="status">The status to change the text to.</param>
         /// <returns>IDisposable.</returns>
         /// <example>
         /// <![CDATA[
@@ -54,11 +55,11 @@ namespace Catel.Services
         /// }
         /// ]]>
         /// </example>
-        public static IDisposable PushInScope(this IPleaseWaitService pleaseWaitService)
+        public static IDisposable PushInScope(this IPleaseWaitService pleaseWaitService, string status = "")
         {
             Argument.IsNotNull("pleaseWaitService", pleaseWaitService);
 
-            return new DisposableToken<IPleaseWaitService>(pleaseWaitService, token => token.Instance.Push(), token => token.Instance.Pop());
+            return new DisposableToken<IPleaseWaitService>(pleaseWaitService, token => token.Instance.Push(status), token => token.Instance.Pop());
         }
     }
 }
