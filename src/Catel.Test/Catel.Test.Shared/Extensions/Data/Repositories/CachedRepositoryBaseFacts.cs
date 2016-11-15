@@ -74,10 +74,10 @@ namespace Catel.Test.Extensions.Data.Repositories
             public void IsValidWhenDataIsLoaded()
             {
                 var completion = new ManualResetEvent(false);
-                DateTime dateTime = DateTime.MinValue;
+                var dateTime = DateTime.MinValue;
 
                 var repository = new TestCachedRepository();
-                repository.GetData(items => dateTime = DateTime.Now);
+                repository.GetData(items => dateTime = FastDateTime.Now);
 
                 completion.WaitOne(1000);
 

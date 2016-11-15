@@ -115,6 +115,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\UIVisualizerServiceExtensionsTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Factories\ExceptionFactoryFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FastDateTimeFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GlobalInitialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ConsoleHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ExpressionHelperFacts.cs" />

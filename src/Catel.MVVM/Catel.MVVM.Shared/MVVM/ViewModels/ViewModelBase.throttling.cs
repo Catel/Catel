@@ -177,7 +177,7 @@ namespace Catel.MVVM
             {
                 lock (_throttlingLockObject)
                 {
-                    _throttlingQueue[e.PropertyName] = DateTime.Now;
+                    _throttlingQueue[e.PropertyName] = FastDateTime.Now;
                 }
 
                 return;

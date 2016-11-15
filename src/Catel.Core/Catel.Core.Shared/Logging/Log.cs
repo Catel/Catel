@@ -7,7 +7,6 @@
 namespace Catel.Logging
 {
     using System;
-    using System.Collections.Generic;
     using Reflection;
 
     /// <summary>
@@ -321,7 +320,8 @@ namespace Catel.Logging
             var logMessage = LogMessage;
             if (logMessage != null)
             {
-                var eventArgs = new LogMessageEventArgs(this, string.Format("{0}{1}", new string(' ', IndentLevel * IndentSize), message ?? string.Empty), extraData, logData, logEvent, DateTime.Now);
+                var now = FastDateTime.Now;
+                var eventArgs = new LogMessageEventArgs(this, string.Format("{0}{1}", new string(' ', IndentLevel * IndentSize), message ?? string.Empty), extraData, logData, logEvent, now);
                 logMessage(this, eventArgs);
             }
         }

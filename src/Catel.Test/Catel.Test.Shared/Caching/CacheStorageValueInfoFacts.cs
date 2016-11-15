@@ -57,15 +57,15 @@ namespace Catel.Test.Caching
             public void ReturnsFalseWhileTheValueIsReadAndSlidingPolicyIsUsed()
             {
                 var valueInfo = new CacheStorageValueInfo<int>(0, new SlidingExpirationPolicy(new TimeSpan(0, 0, 1)));
-                DateTime startTime = DateTime.Now;
+                var startTime = FastDateTime.Now;
                 do
                 {
 #pragma warning disable 168
-                    int value = valueInfo.Value;
+                    var value = valueInfo.Value;
 #pragma warning restore 168
                     Assert.IsFalse(valueInfo.IsExpired);
                 }
-                while (DateTime.Now.Subtract(startTime).TotalSeconds < 3);
+                while (FastDateTime.Now.Subtract(startTime).TotalSeconds < 3);
             }
 
             [TestCase]

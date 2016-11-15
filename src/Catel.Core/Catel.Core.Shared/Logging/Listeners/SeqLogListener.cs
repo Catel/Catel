@@ -90,7 +90,7 @@ namespace Catel.Logging
                 textWriter.Write("{\"events\":[");
 
                 var logEntries = batchEntries.Select(
-                    batchEntry => FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, DateTime.Now))
+                    batchEntry => FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, FastDateTime.Now))
                     .Aggregate((log1, log2) => string.Format("{0},{1}", log1, log2));
 
                 textWriter.Write(logEntries);
