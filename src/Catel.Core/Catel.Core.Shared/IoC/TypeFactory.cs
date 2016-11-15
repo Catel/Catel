@@ -202,7 +202,7 @@ namespace Catel.IoC
         /// <param name="typeRequestInfoForTypeJustConstructed">The type request info for type just constructed.</param>
         private void CloseCurrentTypeIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
         {
-            lock (_serviceLocator)
+            lock (_serviceLocator.LockObject)
             {
                 if (_currentTypeRequestPath != null)
                 {
@@ -224,7 +224,7 @@ namespace Catel.IoC
         /// <param name="typeRequestInfoForTypeJustConstructed">The type request info.</param>
         private void CompleteTypeRequestPathIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
         {
-            lock (_serviceLocator)
+            lock (_serviceLocator.LockObject)
             {
                 if (_currentTypeRequestPath != null)
                 {
@@ -308,7 +308,7 @@ namespace Catel.IoC
                 parameters = new object[] { };
             }
 
-            lock (_serviceLocator)
+            lock (_serviceLocator.LockObject)
             {
                 TypeRequestInfo typeRequestInfo = null;
 
@@ -426,7 +426,7 @@ namespace Catel.IoC
         /// <returns>The <see cref="TypeMetaData"/>.</returns>
         private TypeMetaData GetTypeMetaData(Type type)
         {
-            lock (_serviceLocator)
+            lock (_serviceLocator.LockObject)
             {
                 if (!_typeConstructorsMetadata.ContainsKey(type))
                 {

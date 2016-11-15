@@ -188,6 +188,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\UniqueIdentifierHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\UrlHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IDisposableToken.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ILockable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUniqueIdentifyable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Attributes\InjectAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Attributes\InjectionConstructorAttribute.cs" />

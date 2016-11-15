@@ -57,6 +57,7 @@ Added/fixed:
 (+) CTL-932 Support custom serialization of models via special interfaces
 (+) CTL-934 Support Bson (and more) in Json serializer via JsonSerializationConfiguration
 (+) CTL-937 Support XmlSerializationOptimalization per model via XmlSerializationConfiguration
+(+) CTL-946 Add ILockable interface to allow external locking on some objects
 (*) CTL-947 Decrease memory footprint of TypeCache
 (x) CTL-933 Use culture from parent json reader in subreaders for json serialization
 (x) CTL-931 TaskHelper.Run(async () => { }) has unexpected result and returns Task<Task> instead of Task
