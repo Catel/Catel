@@ -268,23 +268,25 @@ namespace Catel.ExceptionHandling
                                 _exceptionCounter.Add(exceptionHandler.Key, new Queue<DateTime>());
                             }
 
-                            _exceptionCounter[exceptionHandler.Key].Enqueue(DateTime.Now);
+                            var now = FastDateTime.Now;
+
+                            _exceptionCounter[exceptionHandler.Key].Enqueue(now);
 
                             if (_exceptionCounter[exceptionHandler.Key].Count <= exceptionHandler.Value.BufferPolicy.NumberOfTimes)
                             {
-                                OnExceptionBuffered(exception, DateTime.Now);
-                                Log.Debug("[{0}] '{1}' buffered for the '{2}' times", DateTime.Now, exceptionType.Name, _exceptionCounter[exceptionHandler.Key].Count);
+                                OnExceptionBuffered(exception, now);
+                                Log.Debug("[{0}] '{1}' buffered for the '{2}' times", now, exceptionType.Name, _exceptionCounter[exceptionHandler.Key].Count);
                                 continue;
                             }
 
                             var dateTime = _exceptionCounter[exceptionHandler.Key].Dequeue();
 
-                            var duration = (DateTime.Now - dateTime);
+                            var duration = (now - dateTime);
 
                             if (duration >= exceptionHandler.Value.BufferPolicy.Interval && exceptionHandler.Value.BufferPolicy.Interval != TimeSpan.Zero)
                             {
-                                OnExceptionBuffered(exception, DateTime.Now);
-                                Log.Debug("[{0}] '{1}' buffered for the '{2}' times", DateTime.Now, exceptionType.Name, _exceptionCounter[exceptionHandler.Key].Count);
+                                OnExceptionBuffered(exception, now);
+                                Log.Debug("[{0}] '{1}' buffered for the '{2}' times", now, exceptionType.Name, _exceptionCounter[exceptionHandler.Key].Count);
                                 continue;
                             }
                             _exceptionCounter[exceptionHandler.Key].Clear();

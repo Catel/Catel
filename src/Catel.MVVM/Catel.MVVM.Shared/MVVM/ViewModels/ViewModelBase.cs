@@ -271,7 +271,7 @@ namespace Catel.MVVM
             bool skipViewModelAttributesInitialization = false)
         {
             UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<ViewModelBase>();
-            ViewModelConstructionTime = DateTime.Now;
+            ViewModelConstructionTime = FastDateTime.Now;
 
             if (CatelEnvironment.IsInDesignMode)
             {

@@ -63,7 +63,7 @@ namespace Catel.Data
         /// <param name="fieldValidationResults">The field validation results. Can be <c>null</c> to add no field validation results.</param>
         /// <param name="businessRuleValidationResults">The business rule validation results. Can be <c>null</c> to add no business rule validations.</param>
         public ValidationContext(IEnumerable<IFieldValidationResult> fieldValidationResults, IEnumerable<IBusinessRuleValidationResult> businessRuleValidationResults)
-            : this(fieldValidationResults, businessRuleValidationResults, DateTime.Now)
+            : this(fieldValidationResults, businessRuleValidationResults, FastDateTime.Now)
         { }
 
         /// <summary>
@@ -795,7 +795,7 @@ namespace Catel.Data
             {
                 _fieldValidations.Add(fieldValidationResult);
 
-                UpdateLastModificationStamp(DateTime.Now);
+                UpdateLastModificationStamp(FastDateTime.Now);
             }
         }
 
@@ -812,7 +812,7 @@ namespace Catel.Data
             {
                 _fieldValidations.Remove(fieldValidationResult);
 
-                UpdateLastModificationStamp(DateTime.Now);
+                UpdateLastModificationStamp(FastDateTime.Now);
             }
         }
 
@@ -829,7 +829,7 @@ namespace Catel.Data
             {
                 _businessRuleValidations.Add(businessRuleValidationResult);
 
-                UpdateLastModificationStamp(DateTime.Now);
+                UpdateLastModificationStamp(FastDateTime.Now);
             }
         }
 
@@ -846,7 +846,7 @@ namespace Catel.Data
             {
                 _businessRuleValidations.Remove(businessRuleValidationResult);
 
-                UpdateLastModificationStamp(DateTime.Now);
+                UpdateLastModificationStamp(FastDateTime.Now);
             }
         }
 

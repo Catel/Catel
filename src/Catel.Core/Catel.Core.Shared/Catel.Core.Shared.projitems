@@ -170,6 +170,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.slug.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\UriExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Factories\ExceptionFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FastDateTime.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositeFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositePredicate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\Interfaces\ICompositeFilter.cs" />
