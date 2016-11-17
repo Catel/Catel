@@ -22,9 +22,9 @@ namespace Catel.Test.Runtime.Serialization
             {
                 var originalObject = ModelBaseTestHelper.CreateIniEntryObject();
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
                     Assert.AreEqual(originalObject, clonedObject, description);
                 });
@@ -35,9 +35,9 @@ namespace Catel.Test.Runtime.Serialization
             {
                 var originalObject = ModelBaseTestHelper.CreateIniFileObject();
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
                     Assert.AreEqual(originalObject, clonedObject, description);
                 });
@@ -48,9 +48,9 @@ namespace Catel.Test.Runtime.Serialization
             {
                 var originalObject = ModelBaseTestHelper.CreateComputerSettingsObject();
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
                     Assert.AreEqual(originalObject, clonedObject, description);
                 });
@@ -61,9 +61,9 @@ namespace Catel.Test.Runtime.Serialization
             {
                 var originalObject = ModelBaseTestHelper.CreateHierarchicalGraphWithInheritance();
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
                     Assert.AreEqual(originalObject, clonedObject, description);
                 }, false);
@@ -76,9 +76,9 @@ namespace Catel.Test.Runtime.Serialization
                 originalObject.FirstName = "Test";
                 originalObject.Gender = Gender.Female;
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
                     Assert.AreEqual(originalObject, clonedObject, description);
                 });
@@ -91,9 +91,9 @@ namespace Catel.Test.Runtime.Serialization
                 var originalObject = new ObjectWithPrivateMembers("My private member");
                 originalObject.PublicMember = "My public member";
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
                     Assert.AreEqual(originalObject, clonedObject, description);
                 });
@@ -105,9 +105,9 @@ namespace Catel.Test.Runtime.Serialization
             {
                 var complexHierarchy = ComplexSerializationHierarchy.CreateComplexHierarchy();
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(complexHierarchy, serializer);
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(complexHierarchy, serializer, config);
 
                     Assert.IsTrue(complexHierarchy == deserializedObject, description);
                 });
@@ -124,9 +124,9 @@ namespace Catel.Test.Runtime.Serialization
                 originalObject.FirstName = "Test";
                 originalObject.LastName = "Subject";
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
                     Assert.AreEqual(originalObject.FirstName, clonedObject.FirstName, description);
                     Assert.AreEqual(originalObject.LastName, clonedObject.LastName, description);
@@ -140,9 +140,9 @@ namespace Catel.Test.Runtime.Serialization
                 originalObject.FirstName = "Test";
                 originalObject.LastName = "Subject";
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
                     Assert.IsTrue(originalObject.GetViaInterface, description);
                     Assert.IsTrue(clonedObject.SetViaInterface, description);
@@ -159,9 +159,9 @@ namespace Catel.Test.Runtime.Serialization
                 originalObject.FirstName = "Test";
                 originalObject.LastName = "Subject";
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
                     Assert.IsTrue(originalObject.GetViaInterface, description);
                     Assert.IsTrue(clonedObject.SetViaInterface, description);
@@ -176,9 +176,9 @@ namespace Catel.Test.Runtime.Serialization
             {
                 var complexHierarchy = ComplexSerializationHierarchy.CreateComplexNonCatelHierarchy();
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(complexHierarchy, serializer);
+                    var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(complexHierarchy, serializer, config);
 
                     Assert.AreEqual(complexHierarchy.LastName, deserializedObject.LastName, description);
                     Assert.AreEqual(complexHierarchy.Persons.Count, deserializedObject.Persons.Count, description);
@@ -205,9 +205,9 @@ namespace Catel.Test.Runtime.Serialization
                 var originalObject = new TestModelWithParsableMembersWithAttributes();
                 originalObject.Vector = new Vector(1, 2, 3);
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
                     Assert.IsTrue(clonedObject.Vector.UsedParse);
                     Assert.AreEqual(originalObject.Vector.X, clonedObject.Vector.X, description);
@@ -222,9 +222,9 @@ namespace Catel.Test.Runtime.Serialization
                 var originalObject = new TestModelWithParsableMembersWithoutAttributes();
                 originalObject.Vector = new Vector(1, 2, 3);
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
                     Assert.IsFalse(clonedObject.Vector.UsedParse);
                     Assert.AreEqual(originalObject.Vector.X, clonedObject.Vector.X, description);
@@ -242,9 +242,9 @@ namespace Catel.Test.Runtime.Serialization
                 var serializationManager = new SerializationManager();
                 serializationManager.AddSerializerModifier<TestModelWithParsableMembersWithoutAttributes, TestModelWithParsableMembersUsingParseSerializerModifier>();
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
                     Assert.IsTrue(clonedObject.Vector.UsedParse);
                     Assert.AreEqual(originalObject.Vector.X, clonedObject.Vector.X, description);
@@ -262,9 +262,9 @@ namespace Catel.Test.Runtime.Serialization
                 var serializationManager = new SerializationManager();
                 serializationManager.AddSerializerModifier<TestModelWithParsableMembersWithoutAttributes, TestModelWithParsableMembersNotUsingParseSerializerModifier>();
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer);
+                    var clonedObject = SerializationTestHelper.SerializeAndDeserialize(originalObject, serializer, config);
 
                     Assert.IsFalse(clonedObject.Vector.UsedParse);
                     Assert.AreEqual(originalObject.Vector.X, clonedObject.Vector.X, description);

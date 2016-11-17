@@ -5,17 +5,13 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Runtime.Serialization.JsonSerialization
+namespace Catel.Runtime.Serialization.Json
 {
     using System;
-    using System.Linq;
     using Data;
-    using IoC;
-    using Json;
     using Newtonsoft.Json;
     using Reflection;
     using Scoping;
-    using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 
     /// <summary>
     /// Converts Catel models manually using the Catel serializer.
@@ -42,7 +38,7 @@ namespace Catel.Runtime.Serialization.JsonSerialization
         /// <param name="writer">The writer.</param>
         /// <param name="value">The value.</param>
         /// <param name="serializer">The serializer.</param>
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
         {
             var serialize = true;
 
@@ -80,7 +76,7 @@ namespace Catel.Runtime.Serialization.JsonSerialization
         /// <param name="existingValue">The existing value.</param>
         /// <param name="serializer">The serializer.</param>
         /// <returns>System.Object.</returns>
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
             var obj = _jsonSerializer.Deserialize(objectType, reader, _configuration);
             return obj;

@@ -122,9 +122,9 @@ namespace Catel.Test.Runtime.Serialization
 
                 testModel.SetValue(TestModel.ExcludedProtectedCatelPropertyProperty, "excluded");
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedModel = SerializationTestHelper.SerializeAndDeserialize(testModel, serializer);
+                    var clonedModel = SerializationTestHelper.SerializeAndDeserialize(testModel, serializer, config);
 
                     Assert.AreEqual(null, clonedModel._excludedField, description);
                     Assert.AreEqual("included", clonedModel._includedField, description);
@@ -145,9 +145,9 @@ namespace Catel.Test.Runtime.Serialization
                 var model = new CTL550Model();
                 model.Color = Colors.Red;
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer);
+                    var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, config);
 
                     Assert.AreEqual(Colors.Red, clonedModel.Color, description);
                 });
@@ -159,9 +159,9 @@ namespace Catel.Test.Runtime.Serialization
                 var collection = new CatelModelAdvancedSerializationFacts.ContainerClass();
                 collection.Items.Add(new CatelModelAdvancedSerializationFacts.DerivedClass { Name = "item 1" });
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(collection, serializer);
+                    var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(collection, serializer, config);
 
                     Assert.AreEqual(collection, clonedGraph, description);
                 }, false);
@@ -189,9 +189,9 @@ namespace Catel.Test.Runtime.Serialization
             {
                 var graph = SerializationTestHelper.CreateComplexCircularTestModelGraph();
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(graph, serializer);
+                    var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(graph, serializer, config);
 
                     Assert.IsNotNull(clonedGraph, description);
                     Assert.IsTrue(ReferenceEquals(clonedGraph, clonedGraph.CircularModel.CircularModel), description);
@@ -203,9 +203,9 @@ namespace Catel.Test.Runtime.Serialization
             {
                 var graph = new ReusedCollectionsModel();
 
-                TestSerializationOnAllSerializers((serializer, description) =>
+                TestSerializationOnAllSerializers((serializer, config, description) =>
                 {
-                    var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(graph, serializer);
+                    var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(graph, serializer, config);
 
                     Assert.IsNotNull(clonedGraph.Collection1, description);
                     Assert.IsNotNull(clonedGraph.Collection2, description);

@@ -13,11 +13,13 @@ namespace Catel.Test.Runtime.Serialization
     using System.Linq;
     using System.Xml.Serialization;
     using Catel.Data;
+    using Catel.IoC;
     using Catel.Logging;
     using Catel.Runtime.Serialization;
     using Catel.Runtime.Serialization.Xml;
     using Data;
     using NUnit.Framework;
+    using TestModels;
 
     public class XmlSerializerFacts
     {
@@ -274,6 +276,54 @@ namespace Catel.Test.Runtime.Serialization
         [TestFixture]
         public class AdvancedSerializationFacts
         {
+            [TestCase]
+            public void CorrectlySerializesObjectsImplementingICustomXmlSerializable_Simple()
+            {
+                var serviceLocator = ServiceLocator.Default;
+                var serializer = serviceLocator.ResolveType<IXmlSerializer>();
+
+                var model = new CustomXmlSerializationModel
+                {
+                    FirstName = "Geert"
+                };
+
+                var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
+
+                // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
+                Assert.IsTrue(model.IsCustomSerialized);
+                Assert.IsTrue(clonedModel.IsCustomDeserialized);
+
+                Assert.AreEqual(model.FirstName, clonedModel.FirstName);
+            }
+
+            [TestCase]
+            public void CorrectlySerializesObjectsImplementingICustomXmlSerializable_Nested()
+            {
+                var serviceLocator = ServiceLocator.Default;
+                var serializer = serviceLocator.ResolveType<IXmlSerializer>();
+
+                var model = new CustomXmlSerializationModelWithNesting
+                {
+                    Name = "Test model with nesting",
+                    NestedModel = new CustomXmlSerializationModel
+                    {
+                        FirstName = "Geert"
+                    }
+                };
+
+                var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
+
+                Assert.IsNotNull(clonedModel.NestedModel);
+
+                // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
+                Assert.IsTrue(model.NestedModel.IsCustomSerialized);
+                Assert.IsTrue(clonedModel.NestedModel.IsCustomDeserialized);
+
+                Assert.AreEqual(model.Name, clonedModel.Name);
+                Assert.AreEqual(model.NestedModel.FirstName, clonedModel.NestedModel.FirstName);
+            }
+
+
             [TestCase]
             public void CorrectlySerializesToXmlString()
             {

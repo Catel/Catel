@@ -12,19 +12,45 @@ namespace Catel.Test.Runtime.Serialization
     using Catel.Logging;
     using Catel.Reflection;
     using Catel.Runtime.Serialization;
+    using Catel.Runtime.Serialization.Binary;
+    using Catel.Runtime.Serialization.Json;
     using Catel.Runtime.Serialization.Xml;
 
     public partial class GenericSerializationFacts
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static void TestSerializationOnAllSerializers(Action<ISerializer, string> action, bool testWithoutGraphIdsAsWell = true, 
-            ISerializationManager serializationManager = null)
+        private static void TestSerializationOnAllSerializers(Action<ISerializer, ISerializationConfiguration, string> action, 
+            bool testWithoutGraphIdsAsWell = true, ISerializationManager serializationManager = null)
         {
             if (serializationManager == null)
             {
                 serializationManager = new SerializationManager();
             }
+
+            var serializerConfigurations = new Dictionary<Type, List<ISerializationConfiguration>>();
+
+            serializerConfigurations[typeof(XmlSerializer)] = new List<ISerializationConfiguration>(new[]
+            {
+                new SerializationConfiguration()
+            });
+
+            serializerConfigurations[typeof(BinarySerializer)] = new List<ISerializationConfiguration>(new[]
+            {
+                new SerializationConfiguration()
+            });
+
+            serializerConfigurations[typeof(JsonSerializer)] = new List<ISerializationConfiguration>(new[]
+            {
+                new JsonSerializationConfiguration
+                {
+                    UseBson = false
+                },
+                new JsonSerializationConfiguration
+                {
+                    UseBson = true
+                },
+            });
 
             var serializers = new List<ISerializer>();
 
@@ -43,17 +69,22 @@ namespace Catel.Test.Runtime.Serialization
 
             foreach (var serializer in serializers)
             {
-                var typeName = serializer.GetType().GetSafeFullName(false);
+                var type = serializer.GetType();
+                var typeName = type.GetSafeFullName(false);
 
-                Log.Info();
-                Log.Info();
-                Log.Info();
-                Log.Info("=== TESTING SERIALIZER: {0} ===", typeName);
-                Log.Info();
-                Log.Info();
-                Log.Info();
+                var configurations = serializerConfigurations[type];
+                foreach (var configuration in configurations)
+                {
+                    Log.Info();
+                    Log.Info();
+                    Log.Info();
+                    Log.Info("=== TESTING SERIALIZER: {0} ===", typeName);
+                    Log.Info();
+                    Log.Info();
+                    Log.Info();
 
-                action(serializer, typeName);
+                    action(serializer, configuration, typeName);
+                }
             }
         }
     }

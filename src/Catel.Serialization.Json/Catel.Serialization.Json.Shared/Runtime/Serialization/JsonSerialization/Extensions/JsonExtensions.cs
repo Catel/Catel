@@ -7,12 +7,15 @@
 
 namespace Catel
 {
+    using System.Globalization;
     using System.IO;
     using System.Text;
     using Data;
     using IoC;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
     using Runtime.Serialization;
-    using Runtime.Serialization.Json;
+    using JsonSerializer = Runtime.Serialization.Json.JsonSerializer;
 
     /// <summary>
     /// Json extensions.
@@ -45,6 +48,22 @@ namespace Catel
                     return streamReader.ReadToEnd();
                 }
             }
+        }
+
+        /// <summary>
+        /// Creates a json reader with the right configuration.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The json reader.
+        /// </returns>
+        public static JsonReader CreateReader(this JToken token, ISerializationConfiguration configuration)
+        {
+            var reader = token.CreateReader();
+            reader.Culture = configuration.Culture;
+
+            return reader;
         }
     }
 }
