@@ -72,6 +72,7 @@ Added/fixed:
 (x) CTL-910 Introduce special lock for null keys in CacheStorage to prevent ArgumentNullException
 (x) CTL-925 LanguageBinding markup now uses weak events to allow specific controls (such as the ComboBox with ComboBoxItem 
     elements) to be updated after they have been collapsed
+(-) CTL-935 Remove InterestedIn attributes because services are a better way to communicate 
 (-) Removed test implementations of services
 
 Roadmap:

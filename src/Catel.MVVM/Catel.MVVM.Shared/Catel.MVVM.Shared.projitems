@@ -145,7 +145,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Tasks\Interfaces\ITask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Tasks\Interfaces\ITaskProgressTracker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Tasks\TaskBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\InterestedInAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\ModelAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\ValidationToViewModelAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\EventArgs\CancelingEventArgs.cs" />
@@ -156,7 +155,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\IViewModelFactoryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\ViewModelExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\INotifyableViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\IProgressNotifyableViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\IRelationalViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\IViewModel.cs" />

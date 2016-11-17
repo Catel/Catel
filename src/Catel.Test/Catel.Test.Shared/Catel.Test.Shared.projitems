@@ -183,14 +183,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\UrlLocatorFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\ViewLocatorFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\ViewModelLocatorFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\InterestedInAttributeFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\ModelAttributeFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\ViewModelToModelAttributeFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\ViewModelExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ManagedViewModelTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\NamedViewModelToModelCrashTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\InterestedViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\InterestingViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\Person.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\SpecialValidationModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\TestViewModel.cs" />
@@ -236,6 +233,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\CircularTestModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\CustomSerializationModels.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\CustomSerializationModels.json.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\CustomSerializationModels.xml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\ReusedCollectionsModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\SerializerModifierModels.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\TestModels\NonCatelTestModels.cs" />

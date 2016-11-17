@@ -43,37 +43,6 @@ namespace Catel.MVVM
         /// </summary>
         EndEdit
     }
-
-    /// <summary>
-    /// Available view model events that can be retrieved via the <see cref="InterestedInAttribute"/>.
-    /// </summary>
-    public enum ViewModelEvent
-    {
-        /// <summary>
-        /// Saving event, invoked when a view model is about to be saved.
-        /// </summary>
-        Saving,
-
-        /// <summary>
-        /// Saved event, invoked when a view model has been saved successfully.
-        /// </summary>
-        Saved,
-
-        /// <summary>
-        /// Canceling event, invoked when a view model is about to be canceled.
-        /// </summary>
-        Canceling,
-
-        /// <summary>
-        /// Canceled event, invoked when a view model has been canceled.
-        /// </summary>
-        Canceled,
-
-        /// <summary>
-        /// Closed event, invoked when the view model is closed.
-        /// </summary>
-        Closed
-    }
     #endregion
 
     /// <summary>
@@ -81,7 +50,7 @@ namespace Catel.MVVM
     /// common interfaces used by WPF.
     /// </summary>
     /// <remarks>This view model base does not add any services.</remarks>
-    public abstract partial class ViewModelBase : ModelBase, INotifyableViewModel, IRelationalViewModel, IUniqueIdentifyable
+    public abstract partial class ViewModelBase : ModelBase, IRelationalViewModel, IUniqueIdentifyable
     {
         #region Fields
         /// <summary>
@@ -314,12 +283,6 @@ namespace Catel.MVVM
             }
 
             ViewModelManager.RegisterViewModelInstance(this);
-
-            object[] interestedInAttributes = GetType().GetCustomAttributesEx(typeof(InterestedInAttribute), true);
-            foreach (InterestedInAttribute interestedInAttribute in interestedInAttributes)
-            {
-                ViewModelManager.AddInterestedViewModelInstance(interestedInAttribute.ViewModelType, this);
-            }
 
             InitializeThrottling();
 
@@ -588,15 +551,15 @@ namespace Catel.MVVM
 
             foreach (var propertyInfo in properties)
             {
-#region Model attributes
+                #region Model attributes
                 var modelAttribute = propertyInfo.GetCustomAttributeEx(typeof(ModelAttribute), true) as ModelAttribute;
                 if (modelAttribute != null)
                 {
                     modelObjectsInfo.Add(propertyInfo.Name, new ModelInfo(propertyInfo.Name, modelAttribute));
                 }
-#endregion
+                #endregion
 
-#region ViewModelToModel attributes
+                #region ViewModelToModel attributes
                 var viewModelToModelAttribute = propertyInfo.GetCustomAttributeEx(typeof(ViewModelToModelAttribute), true) as ViewModelToModelAttribute;
                 if (viewModelToModelAttribute != null)
                 {
@@ -623,9 +586,9 @@ namespace Catel.MVVM
                         viewModelToModelMap.Add(propertyInfo.Name, new ViewModelToModelMapping(propertyInfo.Name, viewModelToModelAttribute));
                     }
                 }
-#endregion
+                #endregion
 
-#region ValidationToViewModel attributes
+                #region ValidationToViewModel attributes
                 var validationToViewModelAttribute = propertyInfo.GetCustomAttributeEx(typeof(ValidationToViewModelAttribute), true) as ValidationToViewModelAttribute;
                 if (validationToViewModelAttribute != null)
                 {
@@ -638,7 +601,7 @@ namespace Catel.MVVM
 
                     Log.Debug("Registered property '{0}' as validation summary", propertyInfo.Name);
                 }
-#endregion
+                #endregion
             }
 
             return new ViewModelMetadata(
@@ -1080,93 +1043,6 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Called when a property has changed for a view model type that the current view model is interested in. This can
-        /// be accomplished by decorating the view model with the <see cref="InterestedInAttribute"/>.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <remarks>
-        /// This method should only be called by Catel so the <see cref="ManagedViewModel"/> can invoke it. This method is only used as a pass-through
-        /// to the actual <see cref="OnViewModelPropertyChanged"/> method.
-        /// </remarks>
-        void INotifyableViewModel.ViewModelPropertyChanged(IViewModel viewModel, string propertyName)
-        {
-            Log.Debug("A view model ('{0}') the current view model ('{1}') is interested in has changed a property ('{2}')",
-                viewModel.GetType(), GetType(), propertyName);
-
-            OnViewModelPropertyChanged(viewModel, propertyName);
-        }
-
-        /// <summary>
-        /// Called when a property has changed for a view model type that the current view model is interested in. This can
-        /// be accomplished by decorating the view model with the <see cref="InterestedInAttribute"/>.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        protected virtual void OnViewModelPropertyChanged(IViewModel viewModel, string propertyName)
-        {
-        }
-
-        /// <summary>
-        /// Called when a command for a view model type that the current view model is interested in has been executed. This can
-        /// be accomplished by decorating the view model with the <see cref="InterestedInAttribute"/>.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="command">The command that has been executed.</param>
-        /// <param name="commandParameter">The command parameter used during the execution.</param>
-        /// <remarks>
-        /// This method should only be called by Catel so the <see cref="ManagedViewModel"/> can invoke it. This method is only used as a pass-through
-        /// to the actual <see cref="OnViewModelCommandExecuted"/> method.
-        /// </remarks>
-        void INotifyableViewModel.ViewModelCommandExecuted(IViewModel viewModel, ICatelCommand command, object commandParameter)
-        {
-            Log.Debug("A view model ('{0}') the current view model ('{1}') is interested in has executed a command with tag '{2}'",
-                viewModel.GetType(), GetType(), ObjectToStringHelper.ToString(command.Tag));
-
-            OnViewModelCommandExecuted(viewModel, command, commandParameter);
-        }
-
-        /// <summary>
-        /// Called when a command for a view model type that the current view model is interested in has been executed. This can
-        /// be accomplished by decorating the view model with the <see cref="InterestedInAttribute"/>.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="command">The command that has been executed.</param>
-        /// <param name="commandParameter">The command parameter used during the execution.</param>
-        protected virtual void OnViewModelCommandExecuted(IViewModel viewModel, ICatelCommand command, object commandParameter)
-        {
-        }
-
-        /// <summary>
-        /// Views the model event.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="viewModelEvent">The view model event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// This method should only be called by Catel so the <see cref="ManagedViewModel"/> can invoke it. This method is only used as a pass-through
-        /// to the actual <see cref="OnViewModelEvent"/> method.
-        /// </remarks>
-        void INotifyableViewModel.ViewModelEvent(IViewModel viewModel, ViewModelEvent viewModelEvent, EventArgs e)
-        {
-            Log.Debug("A view model ('{0}') the current view model ('{1}') is interested in has raised an event ('{2}')",
-                viewModel.GetType(), GetType(), viewModelEvent.ToString());
-
-            OnViewModelEvent(viewModel, viewModelEvent, e);
-        }
-
-        /// <summary>
-        /// Called when an event for a view model type that the current view model is interested in has been raised. This can
-        /// be accomplished by decorating the view model with the <see cref="InterestedInAttribute"/>.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="viewModelEvent">The view model event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnViewModelEvent(IViewModel viewModel, ViewModelEvent viewModelEvent, EventArgs e)
-        {
-        }
-
-        /// <summary>
         /// Called when a property on one of the registered models has changed.
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -1455,9 +1331,9 @@ namespace Catel.MVVM
 
             return _modelObjects.ContainsKey(name);
         }
-#endregion
+        #endregion
 
-#region Services
+        #region Services
         /// <summary>
         /// Registers the default view model services.
         /// </summary>
@@ -1467,9 +1343,9 @@ namespace Catel.MVVM
         {
             ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
         }
-#endregion
+        #endregion
 
-#region IViewModel Members
+        #region IViewModel Members
         /// <summary>
         /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
         /// to a state where the associated UI element (user control, window, ...) is actually loaded.
@@ -1654,6 +1530,6 @@ namespace Catel.MVVM
 
             ViewModelManager.UnregisterViewModelInstance(this);
         }
-#endregion
+        #endregion
     }
 }
