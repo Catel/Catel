@@ -203,6 +203,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PlatformsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\AppDomainExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\AssemblyExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\PropertyHelperFacts.cs" />

@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\FrameRateCounter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\StackGrid\EmptyCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\StackGrid\EmptyColumn.cs" />

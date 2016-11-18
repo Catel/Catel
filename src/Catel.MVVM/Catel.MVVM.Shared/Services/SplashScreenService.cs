@@ -333,7 +333,9 @@ namespace Catel.Services
 
                 if (_progressNotifyableViewModel != null && CloseViewModelOnTerminated)
                 {
+#pragma warning disable AvoidAsyncVoid // Avoid async void
                     _dispatcherService.Invoke(async () => await _progressNotifyableViewModel.CloseViewModelAsync(null));
+#pragma warning restore AvoidAsyncVoid // Avoid async void
                 }
 
                 if (_completedCallback != null)

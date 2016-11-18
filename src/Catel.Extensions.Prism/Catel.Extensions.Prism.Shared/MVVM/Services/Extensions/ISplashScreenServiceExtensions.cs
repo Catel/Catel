@@ -8,6 +8,7 @@
 namespace Catel.Services
 {
     using System;
+    using System.Threading.Tasks;
     using Catel.IoC;
     using Catel.MVVM;
 
@@ -25,7 +26,7 @@ namespace Catel.Services
         /// <param name="viewModel">The view model.</param>
         /// <param name="regionName">The region name.</param>
         /// <param name="completedCallback">The completed callback.</param>
-        public static void CommitAsync<TViewModel>(this ISplashScreenService @this, TViewModel viewModel, string regionName, Action completedCallback = null) 
+        public static Task CommitAsync<TViewModel>(this ISplashScreenService @this, TViewModel viewModel, string regionName, Action completedCallback = null) 
             where TViewModel : IProgressNotifyableViewModel
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
@@ -33,7 +34,7 @@ namespace Catel.Services
 
             uiCompositionService.Activate(viewModel, regionName);
 
-            @this.CommitAsync(viewModel: viewModel, show: false, completedCallback: completedCallback);
+            return @this.CommitAsync(viewModel: viewModel, show: false, completedCallback: completedCallback);
         }
 
         /// <summary>
@@ -45,7 +46,7 @@ namespace Catel.Services
         /// <param name="parentViewModel">The parent view model.</param>
         /// <param name="regionName">The region name.</param>
         /// <param name="completedCallback">The completed callback.</param>
-        public static void CommitAsync<TViewModel>(this ISplashScreenService @this, TViewModel viewModel, IViewModel parentViewModel, string regionName, Action completedCallback = null)
+        public static Task CommitAsync<TViewModel>(this ISplashScreenService @this, TViewModel viewModel, IViewModel parentViewModel, string regionName, Action completedCallback = null)
             where TViewModel : IProgressNotifyableViewModel
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
@@ -53,7 +54,7 @@ namespace Catel.Services
 
             uiCompositionService.Activate(viewModel, parentViewModel, regionName);
 
-            @this.CommitAsync(viewModel: viewModel, show: false, completedCallback: completedCallback);
+            return @this.CommitAsync(viewModel: viewModel, show: false, completedCallback: completedCallback);
         }
         #endregion
     }
