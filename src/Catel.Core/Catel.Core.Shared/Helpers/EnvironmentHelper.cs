@@ -186,10 +186,10 @@ namespace Catel
                 return false;
             }
 
-            var currentProcessName = currentProcess.ProcessName.ToLower();
+            var currentProcessName = currentProcess.ProcessName;
             if (supportParentProcesses)
             {
-                if (currentProcessName.Contains("vshost"))
+                if (currentProcessName.ContainsIgnoreCase("vshost"))
                 {
                     currentProcess = currentProcess.GetParent();
                     if (currentProcess == null)
@@ -197,11 +197,11 @@ namespace Catel
                         return false;
                     }
 
-                    currentProcessName = currentProcess.ProcessName.ToLower();
+                    currentProcessName = currentProcess.ProcessName;
                 }
             }
 
-            var isHosted = currentProcessName.StartsWith(processName, StringComparison.OrdinalIgnoreCase);
+            var isHosted = currentProcessName.StartsWithIgnoreCase(processName);
             return isHosted;
         }
 #endif
