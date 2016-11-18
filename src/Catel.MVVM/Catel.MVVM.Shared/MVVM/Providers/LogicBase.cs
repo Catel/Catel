@@ -717,7 +717,9 @@ namespace Catel.MVVM.Providers
         /// This method will call the <see cref="OnTargetViewLoadedAsync"/> which can be overriden for custom 
         /// behavior. This method is required to protect from duplicate loaded events.
         /// </remarks>
+#pragma warning disable AvoidAsyncVoid // Avoid async void
         private async void OnTargetViewLoadedInternal(object sender, EventArgs e)
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             if (!CanLoad)
             {
@@ -828,7 +830,9 @@ namespace Catel.MVVM.Providers
         /// This method will call the <see cref="OnTargetViewUnloadedAsync"/> which can be overriden for custom 
         /// behavior. This method is required to protect from duplicate unloaded events.
         /// </remarks>
+#pragma warning disable AvoidAsyncVoid // Avoid async void
         private async void OnTargetViewUnloadedInternal(object sender, EventArgs e)
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             if (!CanUnload)
             {

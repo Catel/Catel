@@ -28,7 +28,7 @@ namespace Catel.Threading
         /// Creates a new entry and queues it to this wait queue. The returned task must support both synchronous and asynchronous waits.
         /// </summary>
         /// <returns>The queued task.</returns>
-        Task<T> Enqueue();
+        Task<T> EnqueueAsync();
 
         /// <summary>
         /// Removes a single entry in the wait queue. Returns a disposable that completes that entry.

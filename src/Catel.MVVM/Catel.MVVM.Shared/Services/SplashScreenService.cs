@@ -11,12 +11,13 @@ namespace Catel.Services
     using System;
     using System.Collections.Generic;
     using System.Threading;
+    using System.Threading.Tasks;
     using System.Windows;
 
-    using Catel.ExceptionHandling;
-    using Catel.Logging;
-    using Catel.MVVM;
-    using Catel.MVVM.Tasks;
+    using ExceptionHandling;
+    using Logging;
+    using MVVM;
+    using MVVM.Tasks;
 
     /// <summary>
     /// The splash screen service.
@@ -187,7 +188,7 @@ namespace Catel.Services
         /// <param name="viewModel">The view model instance.</param>
         /// <param name="show">Indicates whether the view model will be shown. If the view model is <c>null</c> then this argument will be ignored.</param>
         /// <exception cref="InvalidOperationException">If the batch is already committed and the execution is in progress or committing via async way.</exception>
-        public void CommitAsync<TViewModel>(Action completedCallback = null, TViewModel viewModel = default(TViewModel), bool show = true) 
+        public async Task CommitAsync<TViewModel>(Action completedCallback = null, TViewModel viewModel = default(TViewModel), bool show = true) 
             where TViewModel : IProgressNotifyableViewModel
         {
             if (!ReferenceEquals(viewModel, default(TViewModel)))
@@ -196,7 +197,7 @@ namespace Catel.Services
             }
             else
             {
-                CommitAsync(completedCallback, typeof(TViewModel));
+                await CommitAsync(completedCallback, typeof(TViewModel));
             }
         }
 
@@ -207,7 +208,7 @@ namespace Catel.Services
         /// <param name="viewModelType">The vie model type.</param>
         /// <exception cref="InvalidOperationException">If the batch is already committed and the execution is in progress or committing via async way.</exception>
         /// <exception cref="System.ArgumentException">The <paramref name="viewModelType" /> is not of type <see cref="IProgressNotifyableViewModel" />.</exception>
-        public void CommitAsync(Action completedCallback = null, Type viewModelType = null)
+        public async Task CommitAsync(Action completedCallback = null, Type viewModelType = null)
         {
             CommitUsingViewModel(TryCreateProgressNotifyableViewModelFrom(viewModelType), true, true, completedCallback);
         }

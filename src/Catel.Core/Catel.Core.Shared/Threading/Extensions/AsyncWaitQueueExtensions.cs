@@ -26,14 +26,14 @@ namespace Catel.Threading
         /// <param name="syncObject">A synchronization object taken while cancelling the entry.</param>
         /// <param name="token">The token used to cancel the wait.</param>
         /// <returns>The queued task.</returns>
-        public static Task<T> Enqueue<T>(this IAsyncWaitQueue<T> @this, object syncObject, CancellationToken token)
+        public static Task<T> EnqueueAsync<T>(this IAsyncWaitQueue<T> @this, object syncObject, CancellationToken token)
         {
             if (token.IsCancellationRequested)
             {
                 return TaskHelper<T>.Canceled;
             }
 
-            var ret = @this.Enqueue();
+            var ret = @this.EnqueueAsync();
             if (!token.CanBeCanceled)
             {
                 return ret;

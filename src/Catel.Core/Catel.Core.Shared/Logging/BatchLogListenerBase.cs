@@ -68,9 +68,8 @@ namespace Catel.Logging
 
                 if (_logBatch.Count >= MaximumBatchCount)
                 {
-                    // TODO: remove pragma in 5.0.0
 #pragma warning disable 4014
-                    Flush();
+                    FlushAsync();
 #pragma warning restore 4014
                 }
             }
@@ -82,9 +81,8 @@ namespace Catel.Logging
             {
                 if (_logBatch.Count > 0)
                 {
-                    // TODO: remove pragma in 5.0.0
 #pragma warning disable 4014
-                    Flush();
+                    FlushAsync();
 #pragma warning restore 4014
                 }
             }
@@ -94,8 +92,7 @@ namespace Catel.Logging
         /// Flushes the current queue asynchronous.
         /// </summary>
         /// <returns>Task so it can be awaited.</returns>
-        // TODO: change to public void in 5.0.0
-        public async Task Flush()
+        public async Task FlushAsync()
         {
             List<LogBatchEntry> batchToSubmit;
 

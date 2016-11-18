@@ -468,7 +468,9 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+#pragma warning disable AvoidAsyncVoid // Avoid async void
         public override async void OnTargetViewDataContextChanged(object sender, Catel.MVVM.Views.DataContextChangedEventArgs e)
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             if (IsCurrentDataContext(e))
             {

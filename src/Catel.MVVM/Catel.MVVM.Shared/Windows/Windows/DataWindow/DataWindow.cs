@@ -618,7 +618,7 @@ namespace Catel.Windows
             ViewModelChanged.SafeInvoke(this);
             PropertyChanged.SafeInvoke(this, () => new PropertyChangedEventArgs("ViewModel"));
         }
-        
+
         /// <summary>
         /// Invoked when an unhandled <see cref="Keyboard.KeyDownEvent"/> attached event reaches an element in its route that is derived from this class. Implement this method to add class handling for this event.
         /// </summary>
@@ -862,7 +862,9 @@ namespace Catel.Windows
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="args">The <see cref="System.ComponentModel.CancelEventArgs"/> instance containing the event data.</param>
+#pragma warning disable AvoidAsyncVoid // Avoid async void
         private async void OnDataWindowClosing(object sender, CancelEventArgs args)
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             if (!_forceClose && !ClosedByButton)
             {

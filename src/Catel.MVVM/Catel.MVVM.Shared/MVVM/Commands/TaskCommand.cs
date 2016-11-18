@@ -31,7 +31,7 @@ namespace Catel.MVVM
 
         private readonly Action<TProgress> _reportProgress;
 
-        private readonly Func<TExecuteParameter, CancellationToken, IProgress<TProgress>, Task> _execute;
+        private readonly Func<TExecuteParameter, CancellationToken, IProgress<TProgress>, Task> _executeAsync;
 
         private readonly Progress<TProgress> _progress;
 
@@ -49,7 +49,7 @@ namespace Catel.MVVM
         public TaskCommand(Func<Task> execute, Func<bool> canExecute = null, object tag = null)
             : this(canExecuteWithoutParameter: canExecute, tag: tag)
         {
-            _execute = (executeParameter, cancellationToken, progress) => execute();
+            _executeAsync = (executeParameter, cancellationToken, progress) => execute();
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Catel.MVVM
         public TaskCommand(Func<CancellationToken, Task> execute, Func<bool> canExecute = null, object tag = null)
             : this(canExecuteWithoutParameter: canExecute, tag: tag)
         {
-            _execute = (executeParameter, cancellationToken, progress) => execute(cancellationToken);
+            _executeAsync = (executeParameter, cancellationToken, progress) => execute(cancellationToken);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace Catel.MVVM
         public TaskCommand(Func<CancellationToken, IProgress<TProgress>, Task> execute, Func<bool> canExecute = null, Action<TProgress> reportProgress = null, object tag = null)
             : this(canExecuteWithoutParameter: canExecute, reportProgress: reportProgress, tag: tag)
         {
-            _execute = (executeParameter, cancellationToken, progress) => execute(cancellationToken, progress);
+            _executeAsync = (executeParameter, cancellationToken, progress) => execute(cancellationToken, progress);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Catel.MVVM
         public TaskCommand(Func<TExecuteParameter, Task> execute, Func<TCanExecuteParameter, bool> canExecute = null, object tag = null)
             : this(canExecuteWithParameter: canExecute, tag: tag)
         {
-            _execute = (executeParameter, cancellationToken, progress) => execute(executeParameter);
+            _executeAsync = (executeParameter, cancellationToken, progress) => execute(executeParameter);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Catel.MVVM
         public TaskCommand(Func<TExecuteParameter, CancellationToken, Task> execute, Func<TCanExecuteParameter, bool> canExecute = null, object tag = null)
             : this(canExecuteWithParameter: canExecute, tag: tag)
         {
-            _execute = (executeParameter, cancellationToken, progress) => execute(executeParameter, cancellationToken);
+            _executeAsync = (executeParameter, cancellationToken, progress) => execute(executeParameter, cancellationToken);
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace Catel.MVVM
             Action<TProgress> reportProgress = null, object tag = null)
             : this(canExecuteWithParameter: canExecute, reportProgress: reportProgress, tag: tag)
         {
-            _execute = execute;
+            _executeAsync = execute;
         }
 
         /// <summary>
@@ -207,10 +207,12 @@ namespace Catel.MVVM
         /// be set to null.</param>
         /// <param name="ignoreCanExecuteCheck">if set to <c>true</c>, the check on <see cref="Command{TExecuteParameter, TCanExecuteParameter}.CanExecute()" /> will be used before
         /// actually executing the action.</param>
-        protected override async void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
+        protected override async Task ExecuteAsync(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
         {
+            var executeAsync = _executeAsync;
+
             // Double check whether execution is allowed, some controls directly call Execute
-            if (_execute == null || IsExecuting || (!ignoreCanExecuteCheck && !CanExecute(parameter)))
+            if (executeAsync == null || IsExecuting || (!ignoreCanExecuteCheck && !CanExecute(parameter)))
             {
                 return;
             }
@@ -231,7 +233,7 @@ namespace Catel.MVVM
 
             RaiseCanExecuteChanged();
 
-            var executionTask = _execute(parameter, _cancellationTokenSource.Token, _progress);
+            var executionTask = executeAsync(parameter, _cancellationTokenSource.Token, _progress);
 
             try
             {

@@ -15,10 +15,10 @@ namespace Catel.Services
 
     using global::Xamarin.Forms;
 
-    using Catel.IoC;
-    using Catel.MVVM;
-    using Catel.MVVM.Views;
-    using Catel.Windows.Controls;
+    using IoC;
+    using MVVM;
+    using MVVM.Views;
+    using Windows.Controls;
     
     using ContentPage = Windows.Controls.ContentPage;
 
@@ -164,7 +164,7 @@ namespace Catel.Services
                 Text = _languageService.GetString("OK")
             };
 
-            okButton.Clicked += async (sender, args) =>
+            okButton.Clicked += (sender, args) =>
             {
                 result = true;
                 OnOkButtonClicked(viewModel, completedProc);
@@ -175,7 +175,7 @@ namespace Catel.Services
                 Text = _languageService.GetString("Cancel")
             };
 
-            cancelButton.Clicked += async (sender, args) =>
+            cancelButton.Clicked += (sender, args) =>
             {
                 result = false;
                 OnCancelButtonClicked(viewModel, completedProc);
@@ -203,9 +203,9 @@ namespace Catel.Services
             contentLayout.Children.Add(view);
             contentLayout.Children.Add(buttonsStackLayout);
 
-            if (!await TryDisplayAsPopup(viewModel, completedProc, contentLayout))
+            if (!await TryDisplayAsPopupAsync(viewModel, completedProc, contentLayout))
             {
-                await DisplayUsingNavigation(viewModel, completedProc, contentLayout);
+                await DisplayUsingNavigationAsync(viewModel, completedProc, contentLayout);
             }
 
             return result;
@@ -218,7 +218,7 @@ namespace Catel.Services
         /// <param name="completedProc"></param>
         /// <param name="contentLayout"></param>
         /// <returns></returns>
-        private async Task DisplayUsingNavigation(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc, StackLayout contentLayout)
+        private async Task DisplayUsingNavigationAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc, StackLayout contentLayout)
         {
             var contentPage = new ContentPage
             {
@@ -236,10 +236,8 @@ namespace Catel.Services
         /// <param name="viewModel"></param>
         /// <param name="completedProc"></param>
         /// <param name="contentLayout"></param>
-        /// <param name="view"></param>
-        /// <param name="buttonsStackLayout"></param>
         /// <returns></returns>
-        private async Task<bool> TryDisplayAsPopup(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc, StackLayout contentLayout)
+        private async Task<bool> TryDisplayAsPopupAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc, StackLayout contentLayout)
         {
             bool result = false;
             var currentPage = Application.Current.CurrentPage() as ContentPage;
@@ -254,7 +252,7 @@ namespace Catel.Services
                     contentLayout.HeightRequest = contentLayout.Children[0].HeightRequest + contentLayout.Children[1].HeightRequest;
                     contentLayout.WidthRequest = contentLayout.Children[0].WidthRequest;
                     result = true;
-                    await popupLayout.ShowPopup(contentLayout);
+                    await popupLayout.ShowPopupAsync(contentLayout);
                 }
             }
 
@@ -266,18 +264,20 @@ namespace Catel.Services
         /// </summary>
         /// <param name="viewModel"></param>
         /// <param name="completedProc"></param>
+#pragma warning disable AvoidAsyncVoid // Avoid async void
         private async void OnOkButtonClicked(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc)
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             await viewModel.SaveAndCloseViewModelAsync();
             completedProc?.SafeInvoke(this, new UICompletedEventArgs(viewModel, true));
-            await CloseModal();
+            await CloseModalAsync();
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        private static async Task CloseModal()
+        private static async Task CloseModalAsync()
         {
             var currentPage = Application.Current.CurrentPage() as ContentPage;
             if (currentPage != null)
@@ -285,7 +285,7 @@ namespace Catel.Services
                 var popupLayout = currentPage.Content as PopupLayout;
                 if (popupLayout != null && popupLayout.IsPopupActive)
                 {
-                    await popupLayout.DismissPopup();
+                    await popupLayout.DismissPopupAsync();
                 }
                 else
                 {
@@ -299,11 +299,13 @@ namespace Catel.Services
         /// </summary>
         /// <param name="viewModel"></param>
         /// <param name="completedProc"></param>
+#pragma warning disable AvoidAsyncVoid // Avoid async void
         private async void OnCancelButtonClicked(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc)
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             await viewModel.CancelAndCloseViewModelAsync();
             completedProc?.SafeInvoke(this, new UICompletedEventArgs(viewModel, false));
-            await CloseModal();
+            await CloseModalAsync();
         }
 
         /// <summary>
@@ -437,12 +439,9 @@ namespace Catel.Services
             throw new MustBeImplementedException();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+#pragma warning disable AvoidAsyncVoid // Avoid async void
         private async void OnBackButtonPressed(object sender, EventArgs e)
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             var contentPage = sender as ContentPage;
             if (contentPage != null)
@@ -451,7 +450,7 @@ namespace Catel.Services
                 if (popupLayout != null && popupLayout.IsPopupActive)
                 {
                     _callbacks[contentPage]?.Item2?.SafeInvoke(this, new UICompletedEventArgs(_callbacks[contentPage].Item1, null));
-                    await popupLayout.DismissPopup();
+                    await popupLayout.DismissPopupAsync();
                 }
 
                 if (popupLayout == null)

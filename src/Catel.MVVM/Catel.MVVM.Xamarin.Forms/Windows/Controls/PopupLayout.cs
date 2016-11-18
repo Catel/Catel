@@ -64,11 +64,11 @@ namespace Catel.Windows.Controls
         /// <returns>
         /// </returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="view" /> is <c>null</c>.</exception>
-        public async Task<bool> ShowPopup(View view)
+        public async Task<bool> ShowPopupAsync(View view)
         {
             Argument.IsNotNull(() => view);
 
-            await DismissPopup();
+            await DismissPopupAsync();
 
             _popupView = view;
             _content.InputTransparent = true;
@@ -117,7 +117,7 @@ namespace Catel.Windows.Controls
         ///     Dismiss popup.
         /// </summary>
         /// <returns></returns>
-        public async Task DismissPopup()
+        public async Task DismissPopupAsync()
         {
             try
             {

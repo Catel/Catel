@@ -359,9 +359,9 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private async void OnSaved(object sender, EventArgs e)
+        private void OnSaved(object sender, EventArgs e)
         {
-            await Logic.SaveViewModelAsync();
+            Logic.SaveViewModelAsync();
         }
 
         /// <summary>
@@ -369,9 +369,11 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private async void OnSavedAndClosed(object sender, EventArgs e)
+        private void OnSavedAndClosed(object sender, EventArgs e)
         {
-            await Logic.SaveAndCloseViewModelAsync();
+#pragma warning disable 4014
+            Logic.SaveAndCloseViewModelAsync();
+#pragma warning restore 4014
         }
 
         /// <summary>
@@ -379,9 +381,9 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private async void OnCanceled(object sender, EventArgs e)
+        private void OnCanceled(object sender, EventArgs e)
         {
-            await Logic.CancelViewModelAsync();
+            Logic.CancelViewModelAsync();
         }
 
         /// <summary>
@@ -389,9 +391,11 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private async void OnCanceledAndClosed(object sender, EventArgs e)
+        private void OnCanceledAndClosed(object sender, EventArgs e)
         {
-            await Logic.CancelAndCloseViewModelAsync();
+#pragma warning disable 4014
+            Logic.CancelAndCloseViewModelAsync();
+#pragma warning restore 4014
         }
 
         /// <summary>
@@ -399,9 +403,11 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private async void OnClosed(object sender, EventArgs e)
+        private void OnClosed(object sender, EventArgs e)
         {
-            await Logic.CloseViewModelAsync(null);
+#pragma warning disable 4014
+            Logic.CloseViewModelAsync(null);
+#pragma warning restore 4014
         }
         #endregion
     }

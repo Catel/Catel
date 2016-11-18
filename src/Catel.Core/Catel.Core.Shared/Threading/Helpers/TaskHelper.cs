@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#pragma warning disable UseAsyncSuffix // Use Async suffix
+
 namespace Catel.Threading
 {
     using System;

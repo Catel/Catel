@@ -53,7 +53,9 @@ namespace Catel.Windows
         /// <param name="text">The text.</param>
         /// <param name="executeAsync">The async execute delegate.</param>
         /// <param name="canExecute">The can execute delegate.</param>
+#pragma warning disable AvoidAsyncSuffix // Avoid Async suffix
         public static DataWindowButton FromAsync(string text, Func<Task> executeAsync, Func<bool> canExecute = null)
+#pragma warning restore AvoidAsyncSuffix // Avoid Async suffix
         {
             return new DataWindowButton(text, new TaskCommand(executeAsync, canExecute));
         }
@@ -69,7 +71,9 @@ namespace Catel.Windows
         /// <param name="visibilityBindingPath">The binding path expression of the visibility to bind to.</param>
         /// <param name="visibilityValueConverter">The value converter used with visibility binding.</param>
         /// <remarks>Text is ignored when contentBindingPath is set.</remarks>
+#pragma warning disable AvoidAsyncSuffix // Avoid Async suffix
         public static DataWindowButton FromAsync(string text, Func<Task> executeAsync, Func<bool> canExecute = null, string contentBindingPath = null, IValueConverter contentValueConverter = null, string visibilityBindingPath = null, IValueConverter visibilityValueConverter = null)
+#pragma warning restore AvoidAsyncSuffix // Avoid Async suffix
         {
             return new DataWindowButton(text, new TaskCommand(executeAsync, canExecute), contentBindingPath, contentValueConverter, visibilityBindingPath, visibilityValueConverter);
         }
