@@ -59,8 +59,8 @@ namespace Catel.Data
         {
             Argument.IsNotNull("propertyExpression", propertyExpression);
 
-            object sender = ExpressionHelper.GetOwner(propertyExpression) ?? this;
-            string propertyName = ExpressionHelper.GetPropertyName(propertyExpression);
+            var sender = ExpressionHelper.GetOwner(propertyExpression) ?? this;
+            var propertyName = ExpressionHelper.GetPropertyName(propertyExpression);
 
             RaisePropertyChanging(sender, propertyName);
         }
@@ -129,8 +129,8 @@ namespace Catel.Data
         {
             Argument.IsNotNull("propertyExpression", propertyExpression);
 
-            object sender = ExpressionHelper.GetOwner(propertyExpression) ?? this;
-            string propertyName = ExpressionHelper.GetPropertyName(propertyExpression);
+            var sender = ExpressionHelper.GetOwner(propertyExpression) ?? this;
+            var propertyName = ExpressionHelper.GetPropertyName(propertyExpression);
 
             RaisePropertyChanged(sender, propertyName);
         }
@@ -151,8 +151,8 @@ namespace Catel.Data
         {
             Argument.IsNotNull("propertyExpression", propertyExpression);
 
-            object sender = ExpressionHelper.GetOwner(propertyExpression) ?? this;
-            string propertyName = ExpressionHelper.GetPropertyName(propertyExpression);
+            var sender = ExpressionHelper.GetOwner(propertyExpression) ?? this;
+            var propertyName = ExpressionHelper.GetPropertyName(propertyExpression);
 
             RaisePropertyChanged(sender, propertyName, newValue);
         }
@@ -174,8 +174,8 @@ namespace Catel.Data
         {
             Argument.IsNotNull("propertyExpression", propertyExpression);
 
-            object sender = ExpressionHelper.GetOwner(propertyExpression) ?? this;
-            string propertyName = ExpressionHelper.GetPropertyName(propertyExpression);
+            var sender = ExpressionHelper.GetOwner(propertyExpression) ?? this;
+            var propertyName = ExpressionHelper.GetPropertyName(propertyExpression);
 
             RaisePropertyChanged(sender, propertyName, oldValue, newValue);
         }

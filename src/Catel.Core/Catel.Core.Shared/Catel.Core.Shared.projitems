@@ -79,11 +79,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)CoreModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Attributes\ExcludeFromValidationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Attributes\ValidateModelAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\AttributeValidatorProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\AttributeValidatorProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\CatelTypeInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ChangeNotificationWrapper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\CompositeValidator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\CompositeValidatorProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\CompositeValidator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\CompositeValidatorProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\AdvancedPropertyChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\AdvancedPropertyChangingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\ValidationEventArgs.cs" />
@@ -134,11 +134,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\PropertyDataManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\PropertyValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\SavableModelBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationContext.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationResult.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationSummary.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatorBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatorProviderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\ValidationContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\ValidationResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\ValidationSummary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\ValidatorBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\ValidatorProviderBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DisposableToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DynamicEventListener.cs" />
@@ -427,6 +427,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)ComponentModel\DataAnnotations\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Data\Validation\" />
     <Folder Include="$(MSBuildThisFileDirectory)Linq\" />
   </ItemGroup>
 </Project>

@@ -369,7 +369,7 @@ namespace Catel
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex, "Failed to invoke event handler at index '{0}'", i);
+                    Log.Error(ex, $"Failed to invoke event handler at index '{i}'");
                     throw;
                 }
             }
