@@ -594,7 +594,7 @@ namespace Catel.Reflection
 
             lock (_lockObject)
             {
-                if (!_hasInitializedOnce && !forceFullInitialization && !checkSingleAssemblyOnly)
+                if (_hasInitializedOnce && !forceFullInitialization && !checkSingleAssemblyOnly)
                 {
                     return;
                 }
