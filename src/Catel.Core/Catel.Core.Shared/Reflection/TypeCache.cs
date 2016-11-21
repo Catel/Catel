@@ -11,6 +11,7 @@ namespace Catel.Reflection
     using System.Linq;
     using System.Reflection;
     using System.Threading;
+    using System.Threading.Tasks;
     using Logging;
     using Threading;
 
@@ -680,6 +681,35 @@ namespace Catel.Reflection
 
         private static Dictionary<Assembly, HashSet<Type>> GetAssemblyTypes(List<Assembly> assemblies)
         {
+            //var tasks = new List<Task<KeyValuePair<Assembly, HashSet<Type>>>>();
+
+            //// Multithreaded invocation, .AsParallel wasn't making any difference
+            //for (int i = 0; i < assemblies.Count; i++)
+            //{
+            //    var assembly = assemblies[i];
+
+            //    var task = TaskHelper.Run(() =>
+            //    {
+            //        var assemblyTypes = assembly.GetAllTypesSafely();
+            //        return new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assemblyTypes));
+            //    });
+
+            //    tasks.Add(task);
+            //}
+
+            //var waitTask = TaskShim.WhenAll(tasks);
+            //waitTask.Wait();
+
+            //var dictionary = new Dictionary<Assembly, HashSet<Type>>();
+
+            //foreach (var task in tasks)
+            //{
+            //    var result = task.Result;
+            //    dictionary[result.Key] = result.Value;
+            //}
+
+            //return dictionary;
+
             // Multithreaded invocation
             var types = (from assembly in assemblies
                          select new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assembly.GetAllTypesSafely())));
