@@ -92,6 +92,8 @@ namespace Catel.Reflection
         /// </summary>
         private static readonly object _lockObject = new object();
 
+        private static bool _hasInitializedOnce;
+
         static TypeCache()
         {
             ShouldIgnoreAssemblyEvaluators = new List<Func<Assembly, bool>>();
@@ -356,7 +358,7 @@ namespace Catel.Reflection
                 }
 
                 // Fallback for this assembly only
-                InitializeTypes(false, assemblyName);
+                InitializeTypes(assemblyName, false);
 
                 Type finalType;
                 if (typesWithAssembly.TryGetValue(typeNameWithAssembly, out finalType))
@@ -471,8 +473,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("assembly", assembly);
 
-            var assemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName);
-            return GetTypesPrefilteredByAssembly(assemblyName, predicate);
+            return GetTypesPrefilteredByAssembly(assembly, predicate);
         }
 
         /// <summary>
@@ -489,20 +490,23 @@ namespace Catel.Reflection
         /// <summary>
         /// Gets the types prefiltered by assembly. If types must be retrieved from a single assembly only, this method is very fast.
         /// </summary>
-        /// <param name="assemblyName">Name of the assembly.</param>
+        /// <param name="assembly">Name of the assembly.</param>
         /// <param name="predicate">The predicate.</param>
         /// <returns>System.Type[].</returns>
-        private static Type[] GetTypesPrefilteredByAssembly(string assemblyName, Func<Type, bool> predicate)
+        private static Type[] GetTypesPrefilteredByAssembly(Assembly assembly, Func<Type, bool> predicate)
         {
-            InitializeTypes();
+            InitializeTypes(assembly);
+
+            var assemblyName = (assembly != null) ? TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName) : string.Empty;
 
             // IMPORTANT NOTE!!!! DON'T USE LOGGING IN THE CODE BELOW BECAUSE IT MIGHT CAUSE DEADLOCK (BatchLogListener will load
             // async stuff which can deadlock). Keep it simple without calls to other code. Do any type initialization *outside* 
             // the lock and make sure not to make calls to other methods
 
+            Dictionary<string, Type> typeSource = null;
+
             lock (_lockObject)
             {
-                Dictionary<string, Type> typeSource = null;
                 if (!string.IsNullOrWhiteSpace(assemblyName))
                 {
                     _typesByAssembly.TryGetValue(assemblyName, out typeSource);
@@ -511,33 +515,33 @@ namespace Catel.Reflection
                 {
                     typeSource = _typesWithAssembly;
                 }
+            }
 
-                if (typeSource == null)
-                {
-                    return new Type[] { };
-                }
-
-                int retryCount = 3;
-                while (retryCount > 0)
-                {
-                    retryCount--;
-
-                    try
-                    {
-                        if (predicate != null)
-                        {
-                            return typeSource.Values.Where(predicate).ToArray();
-                        }
-
-                        return typeSource.Values.ToArray();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-
+            if (typeSource == null)
+            {
                 return new Type[] { };
             }
+
+            var retryCount = 3;
+            while (retryCount > 0)
+            {
+                retryCount--;
+
+                try
+                {
+                    if (predicate != null)
+                    {
+                        return typeSource.Values.Where(predicate).ToArray();
+                    }
+
+                    return typeSource.Values.ToArray();
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            return new Type[] { };
 
             // IMPORTANT NOTE: READ NOTE ABOVE BEFORE EDITING THIS METHOD!!!!
         }
@@ -548,10 +552,10 @@ namespace Catel.Reflection
         /// <para/>
         /// The types initialized by this method are used by <see cref="object.GetType"/>.
         /// </summary>
-        /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
         /// <param name="assemblyName">Name of the assembly. If <c>null</c>, all assemblies will be checked.</param>
+        /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
         /// <exception cref="ArgumentException">The <paramref name="assemblyName"/> is <c>null</c> or whitespace.</exception>
-        public static void InitializeTypes(bool forceFullInitialization, string assemblyName)
+        public static void InitializeTypes(string assemblyName, bool forceFullInitialization)
         {
             Argument.IsNotNullOrWhitespace("assemblyName", assemblyName);
 
@@ -570,7 +574,7 @@ namespace Catel.Reflection
                     }
                     catch (Exception ex)
                     {
-                        Log.Warning(ex, "Failed to get all types in assembly '{0}'", assembly.FullName);
+                        Log.Warning(ex, $"Failed to get all types in assembly '{assembly.FullName}'");
                     }
                 }
             }
@@ -588,13 +592,18 @@ namespace Catel.Reflection
         {
             var checkSingleAssemblyOnly = assembly != null;
 
-            if (!forceFullInitialization && !checkSingleAssemblyOnly && _typesWithAssembly.Count > 0)
-            {
-                return;
-            }
-
             lock (_lockObject)
             {
+                if (!_hasInitializedOnce && !forceFullInitialization && !checkSingleAssemblyOnly)
+                {
+                    return;
+                }
+
+                if (!checkSingleAssemblyOnly)
+                {
+                    _hasInitializedOnce = true;
+                }
+
                 // CTL-877 Only clear when assembly != null
                 if (forceFullInitialization && assembly == null)
                 {

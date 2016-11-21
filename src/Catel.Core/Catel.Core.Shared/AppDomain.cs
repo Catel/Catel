@@ -16,6 +16,7 @@ namespace System
 
 #if NETFX_CORE
     using global::Windows.ApplicationModel;
+    using global::Windows.Storage.Search;
     using Catel;
 #endif
 
@@ -27,10 +28,9 @@ namespace System
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private static readonly HashSet<string> KnownPrefixesToIgnore = new HashSet<string>();
-
-        private readonly List<Assembly> _loadedAssemblies = new List<Assembly>();
         private readonly object _lock = new object();
-        private bool _isInitialized;
+
+        private Assembly[] _loadedAssemblies;
 
         #region Constructors
         /// <summary>
@@ -65,58 +65,59 @@ namespace System
         {
             lock (_lock)
             {
-                if (!_isInitialized)
-                { 
+                if (_loadedAssemblies == null)
+                {
+                    var loadedAssemblies = new List<Assembly>();
+
 #if NETFX_CORE
                     var folder = Package.Current.InstalledLocation;
 
                     // Note: normally it's bad practice to use task.Wait(), but GetAssemblies must be blocking to cache it all
-                    var operation = folder.GetFilesAsync();
-                    var task = operation.AsTask();
+
+                    var queryOptions = new QueryOptions(CommonFileQuery.OrderByName, new[] { ".dll", ".exe" });
+                    var queryResult = folder.CreateFileQueryWithOptions(queryOptions);
+
+                    var task = queryResult.GetFilesAsync().AsTask();
                     task.Wait();
 
                     var files = task.Result.ToList();
 
-                    var allowedTypes = new [] { ".dll", ".exe" };
                     var arrayToIgnore = KnownPrefixesToIgnore.ToArray();
 
                     foreach (var file in files)
                     {
-                        if (file.FileType.EqualsAnyIgnoreCase(allowedTypes))
+                        try
                         {
-                            try
+                            if (file.Name.StartsWithAnyIgnoreCase(arrayToIgnore))
                             {
-                                if (file.Name.StartsWithAnyIgnoreCase(arrayToIgnore))
-                                { 
-                                    continue;
-                                }
-
-                                var filename = file.Name.Substring(0, file.Name.Length - file.FileType.Length);
-                                var name = new AssemblyName
-                                {
-                                    Name = filename
-                                };
-
-                                var assembly = Assembly.Load(name);
-                                _loadedAssemblies.Add(assembly);
+                                continue;
                             }
-                            catch (Exception ex)
+
+                            var filename = file.Name.Substring(0, file.Name.Length - file.FileType.Length);
+                            var name = new AssemblyName
                             {
-                                Log.Warning(ex, $"Failed to load assembly '{file.Name}'");
-                            }
+                                Name = filename
+                            };
+
+                            var assembly = Assembly.Load(name);
+                            loadedAssemblies.Add(assembly);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Warning(ex, $"Failed to load assembly '{file.Name}'");
                         }
                     }
 #else
                     var currentdomain = typeof(string).GetTypeInfo().Assembly.GetType("System.AppDomain").GetRuntimeProperty("CurrentDomain").GetMethod.Invoke(null, new object[] { });
                     var method = currentdomain.GetType().GetRuntimeMethod("GetAssemblies", new Type[] { });
                     var assemblies = method.Invoke(currentdomain, new object[] { }) as Assembly[];
-                    _loadedAssemblies.AddRange(assemblies);
+                    loadedAssemblies.AddRange(assemblies);
 #endif
 
-                    _isInitialized = true;
+                    _loadedAssemblies = loadedAssemblies.ToArray();
                 }
 
-                return _loadedAssemblies.ToArray();
+                return _loadedAssemblies;
             }
         }
         #endregion
