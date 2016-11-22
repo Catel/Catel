@@ -681,46 +681,83 @@ namespace Catel.Reflection
 
         private static Dictionary<Assembly, HashSet<Type>> GetAssemblyTypes(List<Assembly> assemblies)
         {
-            //var tasks = new List<Task<KeyValuePair<Assembly, HashSet<Type>>>>();
+            // We try to use multiple threads since GetAllTypesSafely() is an expensive operation, try to multithread
+            // without causing to much expansive context switching going on. Using .AsParallel wasn't doing a lot.
+            // 
+            // After some manual performance benchmarking, the optimum for UWP apps (the most important for performance)
+            // is between 15 and 25 threads
+            const int PreferredNumberOfThreads = 20;
 
-            //// Multithreaded invocation, .AsParallel wasn't making any difference
-            //for (int i = 0; i < assemblies.Count; i++)
-            //{
-            //    var assembly = assemblies[i];
+            var tasks = new List<Task<List<KeyValuePair<Assembly, HashSet<Type>>>>>();
+            var taskLists = new List<List<Assembly>>();
 
-            //    var task = TaskHelper.Run(() =>
-            //    {
-            //        var assemblyTypes = assembly.GetAllTypesSafely();
-            //        return new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assemblyTypes));
-            //    });
+            var assemblyCount = assemblies.Count;
+            var assembliesPerBatch = (int)Math.Ceiling(assemblyCount / (double)PreferredNumberOfThreads);
+            var batchCount = (int)Math.Ceiling(assemblyCount / (double)assembliesPerBatch);
 
-            //    tasks.Add(task);
-            //}
+            for (var i = 0; i < batchCount; i++)
+            {
+                var taskList = new List<Assembly>();
 
-            //var waitTask = TaskShim.WhenAll(tasks);
-            //waitTask.Wait();
+                var startIndex = (assembliesPerBatch * i);
+                var endIndex = Math.Min(assembliesPerBatch * (i + 1), assemblyCount);
 
-            //var dictionary = new Dictionary<Assembly, HashSet<Type>>();
+                for (var j = startIndex; j < endIndex; j++)
+                {
+                    taskList.Add(assemblies[j]);
+                }
 
-            //foreach (var task in tasks)
-            //{
-            //    var result = task.Result;
-            //    dictionary[result.Key] = result.Value;
-            //}
+                taskLists.Add(taskList);
+            }
 
-            //return dictionary;
+            for (var i = 0; i < taskLists.Count; i++)
+            {
+                var taskList = taskLists[i];
 
-            // Multithreaded invocation
-            var types = (from assembly in assemblies
-                         select new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assembly.GetAllTypesSafely())));
+                var task = TaskHelper.Run(() =>
+                {
+                    var taskResults = new List<KeyValuePair<Assembly, HashSet<Type>>>();
 
-#if PCL
-            var results = types;
-#else
-            var results = types.AsParallel();
-#endif
+                    foreach (var assembly in taskList)
+                    {
+                        var assemblyTypes = assembly.GetAllTypesSafely();
+                        taskResults.Add(new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assemblyTypes)));
+                    }
 
-            return results.ToDictionary(p => p.Key, p => p.Value);
+                    return taskResults;
+                });
+
+                tasks.Add(task);
+            }
+
+            var waitTask = TaskShim.WhenAll(tasks);
+            waitTask.Wait();
+
+            var dictionary = new Dictionary<Assembly, HashSet<Type>>();
+
+            foreach (var task in tasks)
+            {
+                var results = task.Result;
+
+                foreach (var result in results)
+                {
+                    dictionary[result.Key] = result.Value;
+                }
+            }
+
+            return dictionary;
+
+            //            // Multithreaded invocation
+            //            var types = (from assembly in assemblies
+            //                         select new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assembly.GetAllTypesSafely())));
+
+            //#if PCL
+            //            var results = types;
+            //#else
+            //            var results = types.AsParallel();
+            //#endif
+
+            //            return results.ToDictionary(p => p.Key, p => p.Value);
         }
 
         private static void InitializeType(Assembly assembly, Type type)
