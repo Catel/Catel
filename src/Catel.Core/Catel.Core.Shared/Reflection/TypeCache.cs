@@ -555,8 +555,9 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="assemblyName">Name of the assembly. If <c>null</c>, all assemblies will be checked.</param>
         /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
+        /// <param name="allowMultithreadedInitialization">If <c>true</c>, allow multithreaded initialization.</param>
         /// <exception cref="ArgumentException">The <paramref name="assemblyName"/> is <c>null</c> or whitespace.</exception>
-        public static void InitializeTypes(string assemblyName, bool forceFullInitialization)
+        public static void InitializeTypes(string assemblyName, bool forceFullInitialization, bool allowMultithreadedInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("assemblyName", assemblyName);
 
@@ -570,7 +571,7 @@ namespace Catel.Reflection
                     {
                         if (assembly.FullName.Contains(assemblyName))
                         {
-                            InitializeTypes(assembly, forceFullInitialization);
+                            InitializeTypes(assembly, forceFullInitialization, allowMultithreadedInitialization);
                         }
                     }
                     catch (Exception ex)
@@ -589,7 +590,8 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="assembly">The assembly to initialize the types from. If <c>null</c>, all assemblies will be checked.</param>
         /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
-        public static void InitializeTypes(Assembly assembly = null, bool forceFullInitialization = false)
+        /// <param name="allowMultithreadedInitialization">If <c>true</c>, allow multithreaded initialization.</param>
+        public static void InitializeTypes(Assembly assembly = null, bool forceFullInitialization = false, bool allowMultithreadedInitialization = true)
         {
             var checkSingleAssemblyOnly = assembly != null;
 
@@ -617,11 +619,11 @@ namespace Catel.Reflection
                 }
 
                 var assembliesToInitialize = checkSingleAssemblyOnly ? new List<Assembly>(new[] { assembly }) : AssemblyHelper.GetLoadedAssemblies();
-                InitializeAssemblies(assembliesToInitialize, forceFullInitialization);
+                InitializeAssemblies(assembliesToInitialize, forceFullInitialization, allowMultithreadedInitialization);
             }
         }
 
-        private static void InitializeAssemblies(IEnumerable<Assembly> assemblies, bool force)
+        private static void InitializeAssemblies(IEnumerable<Assembly> assemblies, bool force, bool allowMultithreadedInitialization = true)
         {
             lock (_lockObject)
             {
@@ -649,7 +651,7 @@ namespace Catel.Reflection
                     assembliesToRetrieve.Add(assembly);
                 }
 
-                var typesToAdd = GetAssemblyTypes(assembliesToRetrieve);
+                var typesToAdd = GetAssemblyTypes(assembliesToRetrieve, allowMultithreadedInitialization);
                 foreach (var assemblyWithTypes in typesToAdd)
                 {
                     foreach (var type in assemblyWithTypes.Value)
@@ -679,85 +681,89 @@ namespace Catel.Reflection
             }
         }
 
-        private static Dictionary<Assembly, HashSet<Type>> GetAssemblyTypes(List<Assembly> assemblies)
+        private static Dictionary<Assembly, HashSet<Type>> GetAssemblyTypes(List<Assembly> assemblies, bool allowMultithreadedInitialization = true)
         {
-            // We try to use multiple threads since GetAllTypesSafely() is an expensive operation, try to multithread
-            // without causing to much expansive context switching going on. Using .AsParallel wasn't doing a lot.
-            // 
-            // After some manual performance benchmarking, the optimum for UWP apps (the most important for performance)
-            // is between 15 and 25 threads
-            const int PreferredNumberOfThreads = 20;
-
-            var tasks = new List<Task<List<KeyValuePair<Assembly, HashSet<Type>>>>>();
-            var taskLists = new List<List<Assembly>>();
-
-            var assemblyCount = assemblies.Count;
-            var assembliesPerBatch = (int)Math.Ceiling(assemblyCount / (double)PreferredNumberOfThreads);
-            var batchCount = (int)Math.Ceiling(assemblyCount / (double)assembliesPerBatch);
-
-            for (var i = 0; i < batchCount; i++)
-            {
-                var taskList = new List<Assembly>();
-
-                var startIndex = (assembliesPerBatch * i);
-                var endIndex = Math.Min(assembliesPerBatch * (i + 1), assemblyCount);
-
-                for (var j = startIndex; j < endIndex; j++)
-                {
-                    taskList.Add(assemblies[j]);
-                }
-
-                taskLists.Add(taskList);
-            }
-
-            for (var i = 0; i < taskLists.Count; i++)
-            {
-                var taskList = taskLists[i];
-
-                var task = TaskHelper.Run(() =>
-                {
-                    var taskResults = new List<KeyValuePair<Assembly, HashSet<Type>>>();
-
-                    foreach (var assembly in taskList)
-                    {
-                        var assemblyTypes = assembly.GetAllTypesSafely();
-                        taskResults.Add(new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assemblyTypes)));
-                    }
-
-                    return taskResults;
-                });
-
-                tasks.Add(task);
-            }
-
-            var waitTask = TaskShim.WhenAll(tasks);
-            waitTask.Wait();
-
             var dictionary = new Dictionary<Assembly, HashSet<Type>>();
 
-            foreach (var task in tasks)
+            if (allowMultithreadedInitialization)
             {
-                var results = task.Result;
+                // We try to use multiple threads since GetAllTypesSafely() is an expensive operation, try to multithread
+                // without causing to much expansive context switching going on. Using .AsParallel wasn't doing a lot.
+                // 
+                // After some manual performance benchmarking, the optimum for UWP apps (the most important for performance)
+                // is between 15 and 25 threads
+                const int PreferredNumberOfThreads = 20;
 
-                foreach (var result in results)
+                var tasks = new List<Task<List<KeyValuePair<Assembly, HashSet<Type>>>>>();
+                var taskLists = new List<List<Assembly>>();
+
+                var assemblyCount = assemblies.Count;
+                var assembliesPerBatch = (int) Math.Ceiling(assemblyCount / (double) PreferredNumberOfThreads);
+                var batchCount = (int) Math.Ceiling(assemblyCount / (double) assembliesPerBatch);
+
+                for (var i = 0; i < batchCount; i++)
                 {
-                    dictionary[result.Key] = result.Value;
+                    var taskList = new List<Assembly>();
+
+                    var startIndex = (assembliesPerBatch * i);
+                    var endIndex = Math.Min(assembliesPerBatch * (i + 1), assemblyCount);
+
+                    for (var j = startIndex; j < endIndex; j++)
+                    {
+                        taskList.Add(assemblies[j]);
+                    }
+
+                    taskLists.Add(taskList);
                 }
+
+                for (var i = 0; i < taskLists.Count; i++)
+                {
+                    var taskList = taskLists[i];
+
+                    var task = TaskHelper.Run(() =>
+                    {
+                        var taskResults = new List<KeyValuePair<Assembly, HashSet<Type>>>();
+
+                        foreach (var assembly in taskList)
+                        {
+                            var assemblyTypes = assembly.GetAllTypesSafely();
+                            taskResults.Add(new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assemblyTypes)));
+                        }
+
+                        return taskResults;
+                    });
+
+                    tasks.Add(task);
+                }
+
+                var waitTask = TaskShim.WhenAll(tasks);
+                waitTask.Wait();
+
+                foreach (var task in tasks)
+                {
+                    var results = task.Result;
+
+                    foreach (var result in results)
+                    {
+                        dictionary[result.Key] = result.Value;
+                    }
+                }
+            }
+            else
+            {
+                var types = (from assembly in assemblies
+                             select new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assembly.GetAllTypesSafely())));
+
+#if PCL
+                var results = types;
+#else
+                var results = types.AsParallel();
+#endif
+
+                return results.ToDictionary(p => p.Key, p => p.Value);
             }
 
             return dictionary;
-
-            //            // Multithreaded invocation
-            //            var types = (from assembly in assemblies
-            //                         select new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assembly.GetAllTypesSafely())));
-
-            //#if PCL
-            //            var results = types;
-            //#else
-            //            var results = types.AsParallel();
-            //#endif
-
-            //            return results.ToDictionary(p => p.Key, p => p.Value);
         }
 
         private static void InitializeType(Assembly assembly, Type type)
