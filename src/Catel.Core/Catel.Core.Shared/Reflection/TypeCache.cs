@@ -559,6 +559,8 @@ namespace Catel.Reflection
         /// <exception cref="ArgumentException">The <paramref name="assemblyName"/> is <c>null</c> or whitespace.</exception>
         public static void InitializeTypes(string assemblyName, bool forceFullInitialization, bool allowMultithreadedInitialization = true)
         {
+            // Important note: only allow explicit multithreaded initialization
+
             Argument.IsNotNullOrWhitespace("assemblyName", assemblyName);
 
             lock (_lockObject)
@@ -590,9 +592,11 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="assembly">The assembly to initialize the types from. If <c>null</c>, all assemblies will be checked.</param>
         /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
-        /// <param name="allowMultithreadedInitialization">If <c>true</c>, allow multithreaded initialization.</param>
-        public static void InitializeTypes(Assembly assembly = null, bool forceFullInitialization = false, bool allowMultithreadedInitialization = true)
+        /// <param name="allowMultithreadedInitialization">If <c>true</c>, allow multithreaded initialization. The default value is <c>false</c>.</param>
+        public static void InitializeTypes(Assembly assembly = null, bool forceFullInitialization = false, bool allowMultithreadedInitialization = false)
         {
+            // Important note: only allow explicit multithreaded initialization
+
             var checkSingleAssemblyOnly = assembly != null;
 
             lock (_lockObject)
@@ -623,8 +627,10 @@ namespace Catel.Reflection
             }
         }
 
-        private static void InitializeAssemblies(IEnumerable<Assembly> assemblies, bool force, bool allowMultithreadedInitialization = true)
+        private static void InitializeAssemblies(IEnumerable<Assembly> assemblies, bool force, bool allowMultithreadedInitialization = false)
         {
+            // Important note: only allow explicit multithreaded initialization
+
             lock (_lockObject)
             {
                 var assembliesToRetrieve = new List<Assembly>();
@@ -675,14 +681,16 @@ namespace Catel.Reflection
 
                 if (lateLoadedAssemblies.Count > 0)
                 {
-                    InitializeAssemblies(lateLoadedAssemblies, false);
+                    InitializeAssemblies(lateLoadedAssemblies, false, false);
                 }
 #endif
             }
         }
 
-        private static Dictionary<Assembly, HashSet<Type>> GetAssemblyTypes(List<Assembly> assemblies, bool allowMultithreadedInitialization = true)
+        private static Dictionary<Assembly, HashSet<Type>> GetAssemblyTypes(List<Assembly> assemblies, bool allowMultithreadedInitialization = false)
         {
+            // Important note: only allow explicit multithreaded initialization
+
             var dictionary = new Dictionary<Assembly, HashSet<Type>>();
 
             if (allowMultithreadedInitialization)
