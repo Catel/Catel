@@ -133,6 +133,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\PropertyDataManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\PropertyValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\SavableModelBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\SuspensionContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationSummary.cs" />
