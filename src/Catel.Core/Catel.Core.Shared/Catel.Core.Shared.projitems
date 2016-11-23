@@ -285,6 +285,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Messages\MessageBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Messages\SimpleMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pooling\Interfaces\IPoolable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pooling\Interfaces\IPoolManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pooling\Poolables\Buffer4096Poolable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pooling\Poolables\BufferPoolableBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pooling\Poolables\PoolableBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pooling\PoolManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\BindingFlags.cs" />

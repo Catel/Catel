@@ -201,6 +201,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewToViewModelMappingContainerTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewToViewModelMappingTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlatformsFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pooling\PoolManagerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\GlobalSuppressions.cs" />
