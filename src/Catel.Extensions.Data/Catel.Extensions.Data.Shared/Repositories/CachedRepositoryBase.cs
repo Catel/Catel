@@ -39,7 +39,8 @@ namespace Catel.Data.Repositories
             Expiration = new TimeSpan();
             DataLoadedTimestamp = DateTime.MinValue;
 
-            _timer = new Catel.Threading.Timer(OnTimerElapsed, null, 1000, 1000);
+            var timeout = TimeSpan.FromSeconds(1);
+            _timer = new Catel.Threading.Timer(OnTimerElapsed, null, timeout, timeout);
         }
         #endregion
 

@@ -180,12 +180,11 @@ namespace Catel.Caching
 
                     if (_expirationTimer == null)
                     {
-                        _expirationTimer = new Catel.Threading.Timer(OnTimerElapsed, null, timeSpan, timeSpan);
+                        // Always create timers with infinite, then update them later so we always have a populated timer field
+                        _expirationTimer = new Catel.Threading.Timer(OnTimerElapsed, null, Timeout.Infinite, Timeout.Infinite);
                     }
-                    else
-                    {
-                        _expirationTimer.Change(timeSpan, timeSpan);
-                    }
+
+                    _expirationTimer.Change(timeSpan, timeSpan);
                 }
             }
         }
