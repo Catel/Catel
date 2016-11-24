@@ -79,6 +79,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CoreModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Attributes\ExcludeFromValidationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Attributes\ValidateModelAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\SuspensionContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\AttributeValidatorProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\CatelTypeInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ChangeNotificationWrapper.cs" />

@@ -56,8 +56,6 @@ namespace Catel.Data
         /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
         protected internal void SetValue(PropertyData property, object value)
         {
-            Argument.IsNotNull("property", property);
-
             SetValue(property, value, true, true);
         }
 
@@ -96,7 +94,7 @@ namespace Catel.Data
                 {
                     if (!value.GetType().IsCOMObjectEx())
                     {
-                        throw Log.ErrorAndCreateException(msg => new InvalidPropertyValueException(property.Name, property.Type, value.GetType()), 
+                        throw Log.ErrorAndCreateException(msg => new InvalidPropertyValueException(property.Name, property.Type, value.GetType()),
                             "Cannot set value '{0}' to property '{1}' of type '{2}', the value is invalid", value, property.Name, GetType().FullName);
                     }
                 }
@@ -107,18 +105,23 @@ namespace Catel.Data
 
             lock (_lock)
             {
+                var changeNotificationsSuspensionContext = _changeNotificationsSuspensionContext;
+
                 oldValue = GetValueFast<object>(property.Name);
                 var areOldAndNewValuesEqual = ObjectHelper.AreEqualReferences(oldValue, value);
 
                 if (notifyOnChange && (AlwaysInvokeNotifyChanged || !areOldAndNewValuesEqual) && !LeanAndMeanModel)
                 {
-                    var propertyChangingEventArgs = new AdvancedPropertyChangingEventArgs(property.Name);
-                    RaisePropertyChanging(this, propertyChangingEventArgs);
-
-                    if (propertyChangingEventArgs.Cancel)
+                    if (changeNotificationsSuspensionContext == null)
                     {
-                        Log.Debug("Change of property '{0}.{1}' is canceled in PropertyChanging event", GetType().FullName, property.Name);
-                        return;
+                        var propertyChangingEventArgs = new AdvancedPropertyChangingEventArgs(property.Name);
+                        RaisePropertyChanging(this, propertyChangingEventArgs);
+
+                        if (propertyChangingEventArgs.Cancel)
+                        {
+                            Log.Debug("Change of property '{0}.{1}' is canceled in PropertyChanging event", GetType().FullName, property.Name);
+                            return;
+                        }
                     }
                 }
 
@@ -134,6 +137,12 @@ namespace Catel.Data
                 }
 
                 notify = (notifyOnChange && (AlwaysInvokeNotifyChanged || !areOldAndNewValuesEqual) && !LeanAndMeanModel);
+
+                if (changeNotificationsSuspensionContext != null)
+                {
+                    changeNotificationsSuspensionContext.Add(property.Name);
+                    notify = false;
+                }
             }
 
             // Notify outside lock

@@ -130,6 +130,11 @@ namespace Catel.Data
 #if NET
         [field: NonSerialized]
 #endif
+        private SuspensionContext _changeNotificationsSuspensionContext;
+
+#if NET
+        [field: NonSerialized]
+#endif
         private event EventHandler<EventArgs> _initialized;
         #endregion
 
@@ -799,6 +804,61 @@ namespace Catel.Data
             }
 
             SetDirtyAndAutomaticallyValidate(string.Empty, true);
+        }
+
+
+        /// <summary>
+        /// Suspends the change notifications until the disposed object has been released.
+        /// </summary>
+        /// <param name="raiseOnResume">if set to <c>true</c>, the notifications are invoked on resume.</param>
+        /// <returns>A disposable object.</returns>
+        public IDisposable SuspendChangeNotifications(bool raiseOnResume = true)
+        {
+            var token = new DisposableToken<ModelBase>(this, x =>
+            {
+                lock (_lock)
+                {
+                    if (_changeNotificationsSuspensionContext == null)
+                    {
+                        _changeNotificationsSuspensionContext = new SuspensionContext();
+                    }
+
+                    _changeNotificationsSuspensionContext.Increment();
+                }
+            },
+            x =>
+            {
+                SuspensionContext suspensionContext;
+
+                lock (_lock)
+                {
+                    suspensionContext = _changeNotificationsSuspensionContext;
+                    if (suspensionContext != null)
+                    {
+                        suspensionContext.Decrement();
+
+                        if (suspensionContext.Counter == 0)
+                        {
+                            _changeNotificationsSuspensionContext = null;
+                        }
+                    }
+                }
+
+                if (raiseOnResume)
+                {
+                    if (suspensionContext != null && suspensionContext.Counter == 0)
+                    {
+                        var properties = suspensionContext.Properties;
+
+                        foreach (var property in properties)
+                        {
+                            RaisePropertyChanged(property);
+                        }
+                    }
+                }
+            });
+
+            return token;
         }
         #endregion
 
