@@ -7,10 +7,12 @@
 
 namespace Catel.Test.Data.TestClasses
 {
+    using System.ComponentModel.DataAnnotations;
     using Catel.Data;
 
     public class SuspendableTestModel : ModelBase
     {
+        [Required]
         public string FirstName
         {
             get { return GetValue<string>(FirstNameProperty); }
@@ -27,7 +29,7 @@ namespace Catel.Test.Data.TestClasses
             IsFirstNameCallbackInvoked = true;
         }
 
-
+        [Required]
         public string LastName
         {
             get { return GetValue<string>(LastNameProperty); }
