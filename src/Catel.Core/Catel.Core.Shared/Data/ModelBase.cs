@@ -130,6 +130,11 @@ namespace Catel.Data
 #if NET
         [field: NonSerialized]
 #endif
+        private SuspensionContext _changeCallbacksSuspensionContext;
+
+#if NET
+        [field: NonSerialized]
+#endif
         private SuspensionContext _changeNotificationsSuspensionContext;
 
 #if NET
@@ -806,6 +811,47 @@ namespace Catel.Data
             SetDirtyAndAutomaticallyValidate(string.Empty, true);
         }
 
+        /// <summary>
+        /// Suspends the change callbacks whenever a property has been called. This is very useful when
+        /// there are expensive property change callbacks registered with a property that need to be
+        /// temporarily disabled.
+        /// </summary>
+        /// <returns></returns>
+        public IDisposable SuspendChangeCallbacks()
+        {
+            var token = new DisposableToken<ModelBase>(this, x =>
+            {
+                lock (_lock)
+                {
+                    if (_changeCallbacksSuspensionContext == null)
+                    {
+                        _changeCallbacksSuspensionContext = new SuspensionContext();
+                    }
+
+                    _changeCallbacksSuspensionContext.Increment();
+                }
+            },
+            x =>
+            {
+                lock (_lock)
+                {
+                    var suspensionContext = _changeCallbacksSuspensionContext;
+                    if (suspensionContext != null)
+                    {
+                        suspensionContext.Decrement();
+
+                        if (suspensionContext.Counter == 0)
+                        {
+                            _changeCallbacksSuspensionContext = null;
+                        }
+                    }
+                }
+
+                // Note: don't invoke the "missed" callbacks
+            });
+
+            return token;
+        }
 
         /// <summary>
         /// Suspends the change notifications until the disposed object has been released.
@@ -973,12 +1019,25 @@ namespace Catel.Data
 
                     if (!isRefreshCallOnly)
                     {
-                        if (IsPropertyRegistered(e.PropertyName))
+                        SuspensionContext callbackSuspensionContext;
+
+                        lock (_lock)
+                        {
+                            callbackSuspensionContext = _changeCallbacksSuspensionContext;
+                        }
+
+                        if (callbackSuspensionContext != null)
+                        {
+                            callbackSuspensionContext.Add(e.PropertyName);
+                        }
+                        else if (IsPropertyRegistered(e.PropertyName))
                         {
                             var propertyData = GetPropertyData(e.PropertyName);
-                            if (propertyData.PropertyChangedEventHandler != null)
+
+                            var handler = propertyData.PropertyChangedEventHandler;
+                            if (handler != null)
                             {
-                                propertyData.PropertyChangedEventHandler(this, eventArgs);
+                                handler(this, eventArgs);
                             }
                         }
                     }

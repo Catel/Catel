@@ -61,6 +61,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\LeanAndMeanModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ModelWithRuntimeProperties.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\PersonTestModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\SuspendableTestModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\TestModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationContextFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationResultFacts.cs" />
