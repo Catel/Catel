@@ -596,7 +596,7 @@ namespace Catel.Test.Data
             }
 
             [TestCase]
-            public void SuspendsValidatesAndRaisesPropertiesOnResume()
+            public void SuspendsValidationsAndValidatesOnResume()
             {
                 var model = new SuspendableTestModel();
 
@@ -620,7 +620,7 @@ namespace Catel.Test.Data
             }
 
             [TestCase]
-            public void SuspendsChangeNotificationsAndRaisesPropertiesOnResumeWithScopes()
+            public void SuspendsValidationsAndValidatesOnResumeWithScopes()
             {
                 var model = new SuspendableTestModel();
 
