@@ -97,6 +97,11 @@ namespace Catel.Data
 #endif
         private readonly HashSet<string> _propertiesNotCheckedDuringDisabledValidation = new HashSet<string>();
 
+#if NET
+        [field: NonSerialized]
+#endif
+        private SuspensionContext _validationSuspensionContext;
+
         /// <summary>
         /// The property names that failed to validate and should be skipped next time for NET 4.0 
         /// attribute validation.
@@ -403,6 +408,62 @@ namespace Catel.Data
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Suspends the validation until the disposable token has been disposed.
+        /// </summary>
+        /// <returns></returns>
+        public IDisposable SuspendValidations(bool validateOnResume = true)
+        {
+            var token = new DisposableToken<ModelBase>(this, x =>
+            {
+                lock (_validationLock)
+                {
+                    if (_validationSuspensionContext == null)
+                    {
+                        _validationSuspensionContext = new SuspensionContext();
+                    }
+
+                    _validationSuspensionContext.Increment();
+                }
+            },
+            x =>
+            {
+                SuspensionContext suspensionContext;
+
+                lock (_validationLock)
+                {
+                    suspensionContext = _validationSuspensionContext;
+                    if (suspensionContext != null)
+                    {
+                        suspensionContext.Decrement();
+
+                        if (suspensionContext.Counter == 0)
+                        {
+                            _validationSuspensionContext = null;
+                        }
+                    }
+                }
+
+                if (validateOnResume)
+                {
+                    if (suspensionContext != null && suspensionContext.Counter == 0)
+                    {
+                        //var properties = suspensionContext.Properties;
+
+                        // TODO: In v5, replace with context and smart validation
+                        Validate(true, true);
+
+                        //foreach (var property in properties)
+                        //{
+                        //    Validate(property);
+                        //}
+                    }
+                }
+            });
+
+            return token;
+        }
+
         /// <summary>
         /// Ensures the validation is up to date.
         /// </summary>
@@ -751,6 +812,16 @@ namespace Catel.Data
         /// TODO: Try to revert to internal but is required by XAMARIN_FORMS
         public void Validate(bool force, bool validateDataAnnotations)
         {
+            lock (_validationLock)
+            {
+                // Note: in v5 we should check the actual properties we missed
+                var validationSuspensionContext = _validationSuspensionContext;
+                if (validationSuspensionContext != null)
+                {
+                    return;
+                }
+            }
+
             if (SuspendValidation)
             {
                 return;
@@ -769,8 +840,8 @@ namespace Catel.Data
                 existingValidationContext = new ValidationContext();
             }
 
-            bool hasErrors = existingValidationContext.HasErrors;
-            bool hasWarnings = existingValidationContext.HasWarnings;
+            var hasErrors = existingValidationContext.HasErrors;
+            var hasWarnings = existingValidationContext.HasWarnings;
 
             var validationContext = new ValidationContext();
             var changes = new List<ValidationContextChange>();
