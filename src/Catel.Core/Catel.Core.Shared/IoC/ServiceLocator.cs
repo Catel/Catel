@@ -40,13 +40,14 @@ namespace Catel.IoC
         [DebuggerDisplay("{Type} ({Tag})")]
         private class ServiceInfo
         {
-            private int _hash;
+            private readonly int _hash;
 
             #region Constructors
             public ServiceInfo(Type type, object tag)
             {
                 Type = type;
                 Tag = tag;
+                _hash = HashHelper.CombineHash(Type.GetHashCode(), Tag != null ? Tag.GetHashCode() : 0);
             }
             #endregion
 
@@ -54,25 +55,13 @@ namespace Catel.IoC
             public Type Type { get; private set; }
 
             public object Tag { get; private set; }
-
-            public int Hash
-            {
-                get
-                {
-                    if (_hash == 0)
-                    {
-                        _hash = HashHelper.CombineHash(Type.GetHashCode(), Tag != null ? Tag.GetHashCode() : 0);
-                    }
-
-                    return _hash;
-                }
-            }
+            
             #endregion
 
             #region Methods
             public override int GetHashCode()
             {
-                return Hash;
+                return _hash;
             }
 
             public override bool Equals(object obj)
@@ -83,7 +72,16 @@ namespace Catel.IoC
                     return false;
                 }
 
-                return objAsServiceInfo.Hash == Hash;
+                if (objAsServiceInfo._hash != _hash)
+                {
+                    return false;
+                }
+                if (objAsServiceInfo.Type != Type)
+                {
+                    return false;
+                }
+
+                return Equals(objAsServiceInfo.Tag, Tag);
             }
             #endregion
         }
