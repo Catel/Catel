@@ -25,7 +25,7 @@ namespace Catel.MVVM
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly ITypeFactory _typeFactory;
-        private readonly IDependencyResolver _dependencyResolver;
+        private readonly IServiceLocator _serviceLocator;
 
         private readonly ICacheStorage<Type, bool> _viewModelInjectionCache = new CacheStorage<Type, bool>();
 
@@ -33,15 +33,15 @@ namespace Catel.MVVM
         /// Initializes a new instance of the <see cref="ViewModelFactory" /> class.
         /// </summary>
         /// <param name="typeFactory">The type factory.</param>
-        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <param name="serviceLocator">The service locator.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
-        public ViewModelFactory(ITypeFactory typeFactory, IDependencyResolver dependencyResolver)
+        public ViewModelFactory(ITypeFactory typeFactory, IServiceLocator serviceLocator)
         {
             Argument.IsNotNull("typeFactory", typeFactory);
-            Argument.IsNotNull("dependencyResolver", dependencyResolver);
+            Argument.IsNotNull("serviceLocator", serviceLocator);
 
             _typeFactory = typeFactory;
-            _dependencyResolver = dependencyResolver;
+            _serviceLocator = serviceLocator;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Catel.MVVM
                     var firstParameter = constructor.GetParameters().FirstOrDefault();
                     if (firstParameter != null)
                     {
-                        if (!_dependencyResolver.CanResolve(firstParameter.ParameterType))
+                        if (!_serviceLocator.IsTypeRegistered(firstParameter.ParameterType))
                         {
                             return true;
                         }
