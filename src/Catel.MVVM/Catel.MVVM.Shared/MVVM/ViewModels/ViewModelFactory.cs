@@ -7,6 +7,8 @@
 namespace Catel.MVVM
 {
     using System;
+    using System.Linq;
+    using Caching;
     using IoC;
     using Logging;
     using Reflection;
@@ -20,26 +22,59 @@ namespace Catel.MVVM
     /// </summary>
     public class ViewModelFactory : IViewModelFactory
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        /// The type factory to use.
-        /// </summary>
         private readonly ITypeFactory _typeFactory;
+        private readonly IDependencyResolver _dependencyResolver;
+
+        private readonly ICacheStorage<Type, bool> _viewModelInjectionCache = new CacheStorage<Type, bool>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelFactory" /> class.
         /// </summary>
         /// <param name="typeFactory">The type factory.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="typeFactory"/> is <c>null</c>.</exception>
-        public ViewModelFactory(ITypeFactory typeFactory)
+        /// <param name="dependencyResolver">The dependency resolver.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
+        public ViewModelFactory(ITypeFactory typeFactory, IDependencyResolver dependencyResolver)
         {
             Argument.IsNotNull("typeFactory", typeFactory);
+            Argument.IsNotNull("dependencyResolver", dependencyResolver);
 
             _typeFactory = typeFactory;
+            _dependencyResolver = dependencyResolver;
+        }
+
+        /// <summary>
+        /// Determines whether the specified view model is a view model with model inject. A view model is
+        /// considered a model injection if the first parameter of one of the constructors is not registered inside
+        /// the dependency resolver.
+        /// </summary>
+        /// <param name="viewModelType">Type of the view model.</param>
+        /// <returns>
+        ///   <c>true</c> if the view model is a view model with model injection; otherwise, <c>false</c>.
+        /// </returns>
+        public virtual bool IsViewModelWithModelInjection(Type viewModelType)
+        {
+            var isViewModelWithModelInjection = _viewModelInjectionCache.GetFromCacheOrFetch(viewModelType, () =>
+            {
+                var constructors = viewModelType.GetConstructorsEx();
+
+                foreach (var constructor in constructors)
+                {
+                    var firstParameter = constructor.GetParameters().FirstOrDefault();
+                    if (firstParameter != null)
+                    {
+                        if (!_dependencyResolver.CanResolve(firstParameter.ParameterType))
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            });
+
+            return isViewModelWithModelInjection;
         }
 
         /// <summary>

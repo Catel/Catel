@@ -15,6 +15,17 @@ namespace Catel.MVVM
     public interface IViewModelFactory
     {
         /// <summary>
+        /// Determines whether the specified view model is a view model with model inject. A view model is
+        /// considered a model injection if the first parameter of one of the constructors is not registered inside
+        /// the dependency resolver.
+        /// </summary>
+        /// <param name="viewModelType">Type of the view model.</param>
+        /// <returns>
+        ///   <c>true</c> if the view model is a view model with model injection; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsViewModelWithModelInjection(Type viewModelType);
+
+        /// <summary>
         /// Determines whether the specified view model as data context can be reused and allow the view to set itself as
         /// owner of the inherited view model.
         /// <para />

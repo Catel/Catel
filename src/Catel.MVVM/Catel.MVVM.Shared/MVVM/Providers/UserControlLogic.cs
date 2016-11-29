@@ -694,39 +694,57 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
+            var currentViewModel = ViewModel;
+            object modelToInject = null;
+            var constructNewViewModel = false;
+
             if (newDataContext != null)
             {
                 var dataContextAsViewModel = newDataContext as IViewModel;
                 if (dataContextAsViewModel != null)
                 {
                     // If the DataContext is a view model, only create a new view model if required
-                    if (ViewModel == null)
+                    if (currentViewModel == null)
                     {
                         ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(newDataContext);
                     }
                 }
                 else if (!newDataContext.GetType().IsAssignableFromEx(ViewModelType))
                 {
-                    if (ViewModel != null)
-                    {
-                        bool? result = GetViewModelResultValueFromUnloadBehavior();
-                        await CloseAndDisposeViewModelAsync(result);
-                    }
-
-                    ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(newDataContext);
+                    constructNewViewModel = true;
+                    modelToInject = newDataContext;
                 }
             }
             else
             {
-                if (ViewModel != null)
-                {
-                    bool? result = GetViewModelResultValueFromUnloadBehavior();
-                    await CloseAndDisposeViewModelAsync(result);
-                }
+                constructNewViewModel = true;
 
                 // We closed our previous view-model, but it might be possible to construct a new view-model
                 // with an empty constructor, so try that now
-                ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(null);
+                modelToInject = null;
+            }
+
+            if (constructNewViewModel)
+            {
+                if (currentViewModel != null)
+                {
+                    var viewModelType = ViewModelType;
+
+                    var canKeepViewModel = !ViewModelFactory.IsViewModelWithModelInjection(viewModelType);
+                    if (canKeepViewModel)
+                    {
+                        Log.Debug($"DataContext has changed, but view model '{viewModelType}' is a view model without model injection, keeping current view model");
+                        return;
+                    }
+                }
+
+                if (currentViewModel != null)
+                {
+                    var result = GetViewModelResultValueFromUnloadBehavior();
+                    await CloseAndDisposeViewModelAsync(result);
+                }
+
+                ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(modelToInject);
             }
         }
 

@@ -63,29 +63,11 @@ namespace Catel.MVVM.Providers
     public abstract class LogicBase : ObservableObject, IViewLoadState, IUniqueIdentifyable
     {
         #region Fields
-        /// <summary>
-        /// The log.
-        /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        /// The view model factory.
-        /// </summary>
         private static IViewModelFactory _viewModelFactory;
-
-        /// <summary>
-        /// The view model locator.
-        /// </summary>
         private static readonly IViewModelLocator _viewModelLocator;
-
-        /// <summary>
-        /// The view manager.
-        /// </summary>
         private static readonly IViewManager _viewManager;
-
-        /// <summary>
-        /// The view property selector.
-        /// </summary>
         private static readonly IViewPropertySelector _viewPropertySelector;
 
         /// <summary>
@@ -95,24 +77,18 @@ namespace Catel.MVVM.Providers
         /// </summary>
         private IViewModel _viewModel;
 
-        /// <summary>
-        /// Boolean representing whether this is the first validation after the control has been loaded.
-        /// </summary>
         private bool _isFirstValidationAfterLoaded = true;
 
         /// <summary>
-        /// The view loaded manager.
+        /// The view load manager
         /// </summary>
         protected static readonly IViewLoadManager ViewLoadManager;
 
         /// <summary>
-        /// The lock object.
+        /// The lock object
         /// </summary>
         protected readonly object _lockObject = new object();
 
-        /// <summary>
-        /// The target view.
-        /// </summary>
         private IView _targetView;
         #endregion
 
