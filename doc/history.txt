@@ -88,6 +88,67 @@ See http://www.catelproject.com/support/issue-tracker
 **********************************************************
 
 ==================
+Version 4.5.4
+==================
+
+For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
+
+Release date:
+=============
+2016/11/29
+
+Added/fixed (BREAKING CHANGES):
+===============================
+No breaking changes, but made a lot of preparations for the "async big bang" that will happen in Catel 5.0. We are
+currently trying to index all members that might need async members in the future. Most of these members are now
+marked as obsolete and have an async handler which must be used in the future.
+
+Platform support changes:
+=========================
+[none]
+
+Classes / members marked as obsolete:
+=====================================
+Our mission is to make Catel easier to maintain in the future. One way to achieve this is to remove unused
+features and components. We are actively removing features by marking them obsolete. If nobody complains,
+we will remove the features in the next major release.
+
+* CTL-671 Marked Catel.Extensions.CSLA as obsolete to minimize maintenance costs of Catel
+* CTL-672 Marked Catel.Extensions.Wcf.Server as obsolete to minimize maintenance costs of Catel
+* CTL-740 Marked IMessageMediator.SendMessageAsync as obsolete because it's not truly async
+* CTL-755 Marked Catel.Windows.Controls.ScrollViewerProperties as obsolete to minimize maintenance costs of Catel
+* CTL-756 Marked Catel.Windows.Controls.RichToolTip as obsolete to minimize maintenance costs of Catel
+* CTL-784 Marked AttributeHelper as obsolete, use reflection extensions instead
+* CTL-808 Marked AsynchronousCommand as obsolete, use TaskCommand instead
+* CTL-810 Marked QueryableExtensions.Include(Expression) as obsolete for EF6 and higher, use the default EF implementation
+* CTL-849 Marked ExpressionUtil obsolete, use ExpressionHelper instead
+* CTL-935 Marked InterestedIn attribute obsolete, use services instead to communicate between view models
+
+Added/fixed:
+============
+(+) CTL-932 Support custom serialization of models via special interfaces
+(+) CTL-934 Support Bson (and more) in Json serializer via JsonSerializationConfiguration
+(+) CTL-937 Support XmlSerializationOptimalization per model via XmlSerializationConfiguration
+(+) CTL-946 Add ILockable interface to allow external locking on some objects
+(+) CTL-977 Add intelligent ModelBase.SuspendChangeNotifications (to avoid String.Empty)
+(+) CTL-978 Add ModelBase.SuspendChangeCallbacks to temporarily disable calls to catel property change callbacks 
+(+) CTL-984 Add ModelBase.SuspendValidations to temporarily suspend validations
+(*) CTL-947 Decrease memory footprint of TypeCache
+(*) CTL-950 Improve performance of DateTime.Now by calculating manually
+(x) CTL-933 Use culture from parent json reader in subreaders for json serialization
+(x) CTL-931 TaskHelper.Run(async () => { }) has unexpected result and returns Task<Task> instead of Task
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 4.5.3
 ==================
 
