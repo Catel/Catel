@@ -240,6 +240,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IDispatcherServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IPleaseWaitServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IStartUpInfoProviderExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IStateServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\FileServiceBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IAccelerometerService.cs" />
@@ -281,6 +282,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\MessageService.uap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\MessageService.wpf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Models\AccelerometerValue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Models\Interfaces\IState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Models\Location.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Models\Size.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NamingConvention.cs" />
