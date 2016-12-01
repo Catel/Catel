@@ -76,6 +76,7 @@ Added/fixed:
     elements) to be updated after they have been collapsed
 (x) CTL-991 Equals method in ServiceLocator.ServiceInfo class returns false positives
 (-) CTL-935 Remove InterestedIn attributes because services are a better way to communicate 
+(-) CTL-987 Delete MVVM logic behaviors (should only be available as logic)
 (-) Removed test implementations of services
 
 Roadmap:

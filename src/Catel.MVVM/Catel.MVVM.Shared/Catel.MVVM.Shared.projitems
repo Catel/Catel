@@ -129,10 +129,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Navigation\NavigationAdapterBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Navigation\NavigationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Navigation\NavigationMode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Providers\Behaviors\MVVMBehaviorBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Providers\Behaviors\NavigationPageBehavior.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Providers\Behaviors\UserControlBehavior.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Providers\Behaviors\WindowBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Providers\EventArgs\DetermineViewModelInstanceEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Providers\EventArgs\DetermineViewModelTypeEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Providers\Extensions\LogicExtensions.cs" />
