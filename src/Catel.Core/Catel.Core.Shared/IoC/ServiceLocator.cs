@@ -751,8 +751,7 @@ namespace Catel.IoC
                 var typeRequestInfo = new TypeRequestInfo(serviceInfo.Type, serviceInfo.Tag);
                 if (_currentTypeRequestPath == null)
                 {
-                    _currentTypeRequestPath = new TypeRequestPath(typeRequestInfo, name: "ServiceLocator");
-                    _currentTypeRequestPath.IgnoreDuplicateRequestsDirectlyAfterEachother = false;
+                    _currentTypeRequestPath = new TypeRequestPath(typeRequestInfo, name: "ServiceLocator", ignoreDuplicateRequestsDirectlyAfterEachother: false);
                 }
                 else
                 {

@@ -322,7 +322,7 @@ namespace Catel.IoC
                         typeRequestInfo = new TypeRequestInfo(typeToConstruct);
                         if (_currentTypeRequestPath == null)
                         {
-                            _currentTypeRequestPath = new TypeRequestPath(typeRequestInfo, name: TypeRequestPathName);
+                            _currentTypeRequestPath = new TypeRequestPath(typeRequestInfo, name: TypeRequestPathName, ignoreDuplicateRequestsDirectlyAfterEachother: true);
                         }
                         else
                         {
