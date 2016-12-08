@@ -73,9 +73,9 @@ namespace Catel.Test.IoC
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullAndEmptyTypeRequestInfos()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new TypeRequestPath((TypeRequestInfo)null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new TypeRequestPath((TypeRequestInfo[])null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new TypeRequestPath(new TypeRequestInfo[] { }));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new TypeRequestPath((TypeRequestInfo)null, true));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new TypeRequestPath((TypeRequestInfo[])null, true));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new TypeRequestPath(new TypeRequestInfo[] { }, true));
             }
 
             [TestCase]
@@ -83,7 +83,7 @@ namespace Catel.Test.IoC
             {
                 var typeArray = CreateArrayWithOnlyValueTypes();
 
-                var path = new TypeRequestPath(typeArray);
+                var path = new TypeRequestPath(typeArray, true);
 
                 for (int i = 0; i < typeArray.Length; i++)
                 {
@@ -99,7 +99,7 @@ namespace Catel.Test.IoC
             {
                 var typeArray = CreateArrayWithOnlyReferenceTypes();
 
-                var path = new TypeRequestPath(typeArray);
+                var path = new TypeRequestPath(typeArray, true);
 
                 for (int i = 0; i < typeArray.Length; i++)
                 {
@@ -115,7 +115,7 @@ namespace Catel.Test.IoC
             {
                 var typeArray = CreateMixedArray();
 
-                var path = new TypeRequestPath(typeArray);
+                var path = new TypeRequestPath(typeArray, true);
 
                 for (int i = 0; i < typeArray.Length; i++)
                 {
@@ -134,7 +134,7 @@ namespace Catel.Test.IoC
             public void ReturnsRightType()
             {
                 var typeArray = CreateArrayWithOnlyValueTypes();
-                var path = new TypeRequestPath(typeArray);
+                var path = new TypeRequestPath(typeArray, true);
 
                 Assert.AreEqual(typeArray[0], path.FirstType);
             }
@@ -147,7 +147,7 @@ namespace Catel.Test.IoC
             public void ReturnsRightType()
             {
                 var typeArray = CreateArrayWithOnlyValueTypes();
-                var path = new TypeRequestPath(typeArray);
+                var path = new TypeRequestPath(typeArray, true);
 
                 Assert.AreEqual(typeArray[typeArray.Length - 1], path.LastType);
             }
@@ -160,7 +160,7 @@ namespace Catel.Test.IoC
             public void ReturnsTrueForValidPath()
             {
                 var typeArray = CreateMixedArray();
-                var path = new TypeRequestPath(typeArray);
+                var path = new TypeRequestPath(typeArray, true);
              
                 Assert.IsTrue(path.IsValid);
             }
@@ -169,7 +169,7 @@ namespace Catel.Test.IoC
             public void ReturnsFalseForInvalidPath()
             {
                 var typeArray = CreateInvalidPath();
-                var path = new TypeRequestPath(typeArray);
+                var path = new TypeRequestPath(typeArray, true);
 
                 Assert.IsFalse(path.IsValid);
             }
@@ -182,7 +182,7 @@ namespace Catel.Test.IoC
             public void ThrowsArgumentNullExceptionForNullTypeRequestInfo()
             {
                 var typeArray = CreateMixedArray();
-                var path = new TypeRequestPath(typeArray);
+                var path = new TypeRequestPath(typeArray, true);
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => path.PushType(null, false));
             }
@@ -191,7 +191,7 @@ namespace Catel.Test.IoC
             public void DoesThrowCircularDependencyExceptionForDuplicateTypeIfSpecified()
             {
                 var typeArray = CreateMixedArray();
-                var path = new TypeRequestPath(typeArray);
+                var path = new TypeRequestPath(typeArray, true);
 
                 ExceptionTester.CallMethodAndExpectException<CircularDependencyException>(() => path.PushType(new TypeRequestInfo(typeof(X)), true));
             }
@@ -200,7 +200,7 @@ namespace Catel.Test.IoC
             public void DoesNotThrowCircularDependencyExceptionForDuplicateTypeIfNotSpecified()
             {
                 var typeArray = CreateMixedArray();
-                var path = new TypeRequestPath(typeArray);
+                var path = new TypeRequestPath(typeArray, true);
 
                 path.PushType(new TypeRequestInfo(typeof(X)), false);
 
@@ -211,7 +211,7 @@ namespace Catel.Test.IoC
             public void DoesIgnoreValueTypesIfIgnoreValueTypesIsTrue()
             {
                 var firstType = new TypeRequestInfo(typeof(X));
-                var path = new TypeRequestPath(firstType);
+                var path = new TypeRequestPath(firstType, true);
 
                 path.PushType(new TypeRequestInfo(typeof(DateTime)), false);
                 Assert.AreEqual(firstType, path.LastType);
@@ -227,7 +227,7 @@ namespace Catel.Test.IoC
             public void DoesNotIgnoreValueTypesIfIgnoreValueTypesIsFalse()
             {
                 var firstType = new TypeRequestInfo(typeof(X));
-                var path = new TypeRequestPath(firstType, false);
+                var path = new TypeRequestPath(firstType, true, false);
 
                 path.PushType(new TypeRequestInfo(typeof(DateTime)), false);
                 Assert.AreEqual(typeof(DateTime), path.LastType.Type);
@@ -247,7 +247,7 @@ namespace Catel.Test.IoC
             public void ThrowsInvalidOperationExceptionWhenTypeRequestPathOnlyContainsOneType()
             {
                 var typeArray = CreateMixedArray();
-                var path = new TypeRequestPath(typeArray);
+                var path = new TypeRequestPath(typeArray, true);
 
                 while (path.AllTypes.Length > 1)
                 {
@@ -265,7 +265,7 @@ namespace Catel.Test.IoC
             public void ThrowsArgumentNullExceptionForNullTypeRequestInfo()
             {
                 var typeArray = CreateMixedArray();
-                var path = new TypeRequestPath(typeArray);
+                var path = new TypeRequestPath(typeArray, true);
 
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => path.MarkTypeAsNotCreated(null));
             }
@@ -273,7 +273,7 @@ namespace Catel.Test.IoC
             [TestCase]
             public void RemovesTypeRangeUntilSpecificType()
             {
-                var path = new TypeRequestPath(new TypeRequestInfo(typeof(X)));
+                var path = new TypeRequestPath(new TypeRequestInfo(typeof(X)), true);
                 path.PushType(new TypeRequestInfo(typeof(object)), false);
                 path.PushType(new TypeRequestInfo(typeof(Y)), false);
                 path.PushType(new TypeRequestInfo(typeof(object)), false);
