@@ -70,7 +70,7 @@ namespace Catel.IoC
         /// <summary>
         /// The current type request path.
         /// </summary>
-        private TypeRequestPath _currentTypeRequestPath;
+        private readonly ThreadLocal<TypeRequestPath> _currentTypeRequestPath;
         #endregion
 
         #region Constructors
@@ -87,6 +87,8 @@ namespace Catel.IoC
         public TypeFactory(IServiceLocator serviceLocator)
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
+
+            _currentTypeRequestPath = new ThreadLocal<TypeRequestPath>(() => TypeRequestPath.Root(TypeRequestPathName));
 
             _serviceLocator = serviceLocator;
             _serviceLocator.TypeRegistered += OnServiceLocatorTypeRegistered;
@@ -194,56 +196,7 @@ namespace Catel.IoC
 
             return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, parameters, true);
         }
-
-        /// <summary>
-        /// Marks the specified type as not being created. If this was the only type being constructed, the type request
-        /// path will be closed.
-        /// </summary>
-        /// <param name="typeRequestInfoForTypeJustConstructed">The type request info for type just constructed.</param>
-        private void CloseCurrentTypeIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
-        {
-            lock (_serviceLocator.LockObject)
-            {
-                if (_currentTypeRequestPath != null)
-                {
-                    _currentTypeRequestPath.MarkTypeAsNotCreated(typeRequestInfoForTypeJustConstructed);
-
-                    if (_currentTypeRequestPath.TypeCount == 1)
-                    {
-                        // We failed to create the only type in the request path, exit
-                        _currentTypeRequestPath = null;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Completes the type request path by checking if the currently created type is the same as the first
-        /// type meaning that the type is successfully created and the current type request path can be set to <c>null</c>.
-        /// </summary>
-        /// <param name="typeRequestInfoForTypeJustConstructed">The type request info.</param>
-        private void CompleteTypeRequestPathIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
-        {
-            lock (_serviceLocator.LockObject)
-            {
-                if (_currentTypeRequestPath != null)
-                {
-                    if (_currentTypeRequestPath.TypeCount > 0)
-                    {
-                        if (_currentTypeRequestPath.LastType == typeRequestInfoForTypeJustConstructed)
-                        {
-                            _currentTypeRequestPath.MarkTypeAsCreated(typeRequestInfoForTypeJustConstructed);
-                        }
-                    }
-
-                    if (_currentTypeRequestPath.TypeCount == 0)
-                    {
-                        _currentTypeRequestPath = null;
-                    }
-                }
-            }
-        }
-
+        
         /// <summary>
         /// Initializes the created object after its construction.
         /// </summary>
@@ -298,11 +251,10 @@ namespace Catel.IoC
         /// <param name="tag">The preferred tag when resolving dependencies.</param>
         /// <param name="parameters">The parameters to inject.</param>
         /// <param name="autoCompleteDependencies">if set to <c>true</c>, the additional dependencies will be auto completed.</param>
-        /// <param name="preventCircularDependencies">if set to <c>true</c>, prevent circular dependencies using the <see cref="TypeRequestPath" />.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
         private object CreateInstanceWithSpecifiedParameters(Type typeToConstruct, object tag, object[] parameters,
-            bool autoCompleteDependencies, bool preventCircularDependencies = true)
+            bool autoCompleteDependencies)
         {
             Argument.IsNotNull("typeToConstruct", typeToConstruct);
 
@@ -313,23 +265,12 @@ namespace Catel.IoC
 
             lock (_serviceLocator.LockObject)
             {
-                TypeRequestInfo typeRequestInfo = null;
-
+                var previousRequestPath = _currentTypeRequestPath.Value;
                 try
                 {
-                    if (preventCircularDependencies)
-                    {
-                        typeRequestInfo = new TypeRequestInfo(typeToConstruct);
-                        if (_currentTypeRequestPath == null)
-                        {
-                            _currentTypeRequestPath = new TypeRequestPath(typeRequestInfo, name: TypeRequestPathName, ignoreDuplicateRequestsDirectlyAfterEachother: true);
-                        }
-                        else
-                        {
-                            _currentTypeRequestPath.PushType(typeRequestInfo, true);
-                        }
-                    }
-
+                    var typeRequestInfo = new TypeRequestInfo(typeToConstruct);
+                    _currentTypeRequestPath.Value = TypeRequestPath.Branch(previousRequestPath, typeRequestInfo);
+                    
                     var constructorCache = GetConstructorCache(autoCompleteDependencies);
                     var constructorCacheKey = new ConstructorCacheKey(typeToConstruct, parameters);
 
@@ -339,11 +280,6 @@ namespace Catel.IoC
                         var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, cachedConstructor, tag, parameters, false, false);
                         if (instanceCreatedWithInjection != null)
                         {
-                            if (preventCircularDependencies)
-                            {
-                                CompleteTypeRequestPathIfRequired(typeRequestInfo);
-                            }
-
                             return instanceCreatedWithInjection;
                         }
 
@@ -364,11 +300,6 @@ namespace Catel.IoC
                         var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, constructor, tag, parameters, true, i < constructors.Count - 1);
                         if (instanceCreatedWithInjection != null)
                         {
-                            if (preventCircularDependencies)
-                            {
-                                CompleteTypeRequestPathIfRequired(typeRequestInfo);
-                            }
-
                             // We found a constructor that works, cache it
                             constructorCache[constructorCacheKey] = constructor;
 
@@ -388,19 +319,13 @@ namespace Catel.IoC
                 }
                 catch (Exception ex)
                 {
-                    if (preventCircularDependencies)
-                    {
-                        CloseCurrentTypeIfRequired(typeRequestInfo);
-                    }
-
                     Log.Warning(ex, "Failed to construct type '{0}'", typeToConstruct.FullName);
 
                     throw;
                 }
-
-                if (preventCircularDependencies)
+                finally
                 {
-                    CloseCurrentTypeIfRequired(typeRequestInfo);
+                    _currentTypeRequestPath.Value = previousRequestPath;
                 }
 
                 return null;
