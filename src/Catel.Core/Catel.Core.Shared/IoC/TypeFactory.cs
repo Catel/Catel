@@ -201,7 +201,7 @@ namespace Catel.IoC
 
             return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, parameters, true);
         }
-
+        
         /// <summary>
         /// Initializes the created object after its construction.
         /// </summary>
