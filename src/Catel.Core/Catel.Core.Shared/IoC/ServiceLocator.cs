@@ -10,6 +10,7 @@ namespace Catel.IoC
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using System.Threading;
     using Logging;
     using Reflection;
 
@@ -115,7 +116,7 @@ namespace Catel.IoC
         /// <summary>
         /// The current type request path.
         /// </summary>
-        private TypeRequestPath _currentTypeRequestPath;
+        private ThreadLocal<TypeRequestPath> _currentTypeRequestPath;
 
         /// <summary>
         /// The type factory.
@@ -134,6 +135,8 @@ namespace Catel.IoC
         /// </summary>
         public ServiceLocator()
         {
+            _currentTypeRequestPath = new ThreadLocal<TypeRequestPath>(() => TypeRequestPath.Root("ServiceLocator"));
+
             // Must be registered first, already resolved by TypeFactory
             RegisterInstance(typeof(IServiceLocator), this);
             RegisterInstance(typeof(IDependencyResolver), IoCFactory.CreateDependencyResolverFunc(this));
@@ -748,44 +751,34 @@ namespace Catel.IoC
 
             lock (_lockObject)
             {
-                var typeRequestInfo = new TypeRequestInfo(serviceInfo.Type, serviceInfo.Tag);
-                if (_currentTypeRequestPath == null)
+                var previousTypeRequestPath = _currentTypeRequestPath.Value;
+                try
                 {
-                    _currentTypeRequestPath = new TypeRequestPath(typeRequestInfo, name: "ServiceLocator", ignoreDuplicateRequestsDirectlyAfterEachother: false);
-                }
-                else
-                {
-                    _currentTypeRequestPath.PushType(typeRequestInfo, false);
+                    var typeRequestInfo = new TypeRequestInfo(serviceInfo.Type, serviceInfo.Tag);
+                    _currentTypeRequestPath.Value = TypeRequestPath.Branch(previousTypeRequestPath, typeRequestInfo);
 
-                    if (!_currentTypeRequestPath.IsValid)
+                    var registeredTypeInfo = _registeredTypes[serviceInfo];
+
+                    var serviceType = serviceInfo.Type;
+                    var tag = serviceInfo.Tag;
+
+                    var instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
+                    if (instance == null)
                     {
-                        // Reset path for next types that are being resolved
-                        var typeRequestPath = _currentTypeRequestPath;
-                        _currentTypeRequestPath = null;
-
-                        typeRequestPath.ThrowsExceptionIfInvalid();
+                        ThrowTypeNotRegisteredException(serviceType);
                     }
+
+                    if (IsTypeRegisteredAsSingleton(serviceType, tag))
+                    {
+                        RegisterInstance(serviceType, instance, tag, this);
+                    }
+
+                    return instance;
                 }
-
-                var registeredTypeInfo = _registeredTypes[serviceInfo];
-
-                var serviceType = serviceInfo.Type;
-                var tag = serviceInfo.Tag;
-
-                var instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
-                if (instance == null)
+                finally
                 {
-                    ThrowTypeNotRegisteredException(serviceType);
+                    _currentTypeRequestPath.Value = previousTypeRequestPath;
                 }
-
-                if (IsTypeRegisteredAsSingleton(serviceType, tag))
-                {
-                    RegisterInstance(serviceType, instance, tag, this);
-                }
-
-                CompleteTypeRequestPathIfRequired(typeRequestInfo);
-
-                return instance;
             }
         }
 
@@ -811,34 +804,7 @@ namespace Catel.IoC
 
             return instance;
         }
-
-        /// <summary>
-        /// Completes the type request path by checking if the currently created type is the same as the first
-        /// type meaning that the type is successfully created and the current type request path can be set to <c>null</c>.
-        /// </summary>
-        /// <param name="typeRequestInfoForTypeJustConstructed">The type request info.</param>
-        private void CompleteTypeRequestPathIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
-        {
-            lock (_lockObject)
-            {
-                if (_currentTypeRequestPath != null)
-                {
-                    if (_currentTypeRequestPath.TypeCount > 0)
-                    {
-                        if (_currentTypeRequestPath.LastType == typeRequestInfoForTypeJustConstructed)
-                        {
-                            _currentTypeRequestPath.MarkTypeAsCreated(typeRequestInfoForTypeJustConstructed);
-                        }
-                    }
-
-                    if (_currentTypeRequestPath.TypeCount == 0)
-                    {
-                        _currentTypeRequestPath = null;
-                    }
-                }
-            }
-        }
-
+        
         /// <summary>
         /// Throws the <see cref="TypeNotRegisteredException" /> but will also reset the current type request path.
         /// </summary>
