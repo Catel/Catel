@@ -16,7 +16,7 @@ namespace Catel.IoC
     using Caching;
     using Logging;
     using Reflection;
-
+    using Threading;
 #if !XAMARIN
     using System.Dynamic;
 #endif
@@ -56,6 +56,11 @@ namespace Catel.IoC
         /// Cache containing all last used constructors for a type with auto-completion.
         /// </summary>
         private readonly Dictionary<ConstructorCacheKey, ConstructorInfo> _specificConstructorCacheWithAutoCompletion = new Dictionary<ConstructorCacheKey, ConstructorInfo>();
+
+        /// <summary>
+        /// Provides thread safe access to type constructors
+        /// </summary>
+        private readonly ReaderWriterLockSlim _typeConstructorsMetadataLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         /// <summary>
         /// Cache containing all the metadata of a specific type so this doesn't have to be queried multiple times.
@@ -354,16 +359,23 @@ namespace Catel.IoC
         /// <returns>The <see cref="TypeMetaData"/>.</returns>
         private TypeMetaData GetTypeMetaData(Type type)
         {
-            lock (_serviceLocator.LockObject)
+            return _typeConstructorsMetadataLock.PerformUpgradableRead(() =>
             {
-                if (!_typeConstructorsMetadata.ContainsKey(type))
+                TypeMetaData result;
+                if (_typeConstructorsMetadata.TryGetValue(type, out result))
                 {
-                    _typeConstructorsMetadata.Add(type, new TypeMetaData(type));
+                    return result;
                 }
 
-                var typeConstructorsMetadata = _typeConstructorsMetadata[type];
-                return typeConstructorsMetadata;
-            }
+                result = new TypeMetaData(type);
+                
+                _typeConstructorsMetadataLock.PerformWrite(() =>
+                {
+                    _typeConstructorsMetadata.Add(type, result);
+                });
+                
+                return result;
+            });
         }
 
         /// <summary>
