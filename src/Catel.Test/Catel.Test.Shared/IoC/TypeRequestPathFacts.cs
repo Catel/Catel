@@ -208,5 +208,20 @@ namespace Catel.Test.IoC
                 Assert.AreEqual(typeArray[typeArray.Length - 1], path.LastType);
             }
         }
+
+        [TestFixture]
+        public class ToStringMethod
+        {
+            [TestCase]
+            public void PathOfThreeTypesReturnExpectedString()
+            {
+                var typeArray = CreateArrayWithOnlyReferenceTypes();
+                var path = MapRequestInfoArrayIntoPath(typeArray);
+
+                const string expected = "X => Y => Z";
+                Assert.AreEqual(path.ToString(), expected);
+            }
+
+        }
     }
 }
