@@ -21,7 +21,7 @@ namespace Catel.IoC
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly TypeRequestInfo[] _typePath;
-
+        
         private TypeRequestPath(TypeRequestInfo[] typePath, string name)
         {
             _typePath = typePath;
@@ -48,10 +48,15 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("parent", parent);
             Argument.IsNotNull("typeRequestInfo", typeRequestInfo);
-            if (parent._typePath.Any(o => o.Equals(typeRequestInfo)))
+            //if (parent._typePath.Inde(o => o.Equals(typeRequestInfo)))
+            int previousIndex = Array.IndexOf(parent._typePath, typeRequestInfo);
+            if (previousIndex >= 0)
             {
-                throw Log.ErrorAndCreateException(msg => new CircularDependencyException(parent, string.Format("{0}. For more information, view the enclosed TypeRequestPath", msg)),
-                    "Found a circular dependency while resolving '{0}', it is used by '{1}'", parent.FirstType, parent.LastType);
+                string circlePath = FormatPath(parent._typePath, previousIndex);
+                circlePath += " => " + typeRequestInfo.Type.Name;
+
+                throw Log.ErrorAndCreateException(msg => new CircularDependencyException(typeRequestInfo, parent, string.Format("{0}. For more information, view the enclosed TypeRequestPath", msg)),
+                    "Found a circular dependency '{0}' while resolving '{1}'", circlePath, parent.FirstType);
             }
 
             var parentTypePath = parent._typePath;
@@ -59,6 +64,23 @@ namespace Catel.IoC
             Array.Copy(parentTypePath, typePath, parentTypePath.Length);
             typePath[typePath.Length - 1] = typeRequestInfo;
             return new TypeRequestPath(typePath, parent.Name);
+        }
+
+        private static string FormatPath(TypeRequestInfo[] typePath, int startIndex = 0)
+        {
+            var stringBuilder = new StringBuilder();
+
+            for (int i = startIndex; i < typePath.Length; i++)
+            {
+                if (i != 0)
+                {
+                    stringBuilder.Append(" => ");
+                }
+
+                stringBuilder.Append(typePath[i].Type.Name);
+            }
+
+            return stringBuilder.ToString();
         }
 
         /// <summary>
@@ -126,19 +148,7 @@ namespace Catel.IoC
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
-            var stringBuilder = new StringBuilder();
-            
-            for (int i = 0; i < _typePath.Length; i++)
-            {
-                if (i != 0)
-                {
-                    stringBuilder.Append(" => ");
-                }
-
-                stringBuilder.Append(_typePath[i].Type.Name);
-            }
-
-            return stringBuilder.ToString();
+            return FormatPath(_typePath);
         }
     }
 }

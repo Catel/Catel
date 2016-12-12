@@ -17,7 +17,8 @@ namespace Catel.Test.IoC.Exceptions
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullTypePath()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new CircularDependencyException(null, string.Empty));
+                TypeRequestInfo requestInfo = new TypeRequestInfo(typeof(object));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new CircularDependencyException(requestInfo, null, string.Empty));
             }
         }
     }
