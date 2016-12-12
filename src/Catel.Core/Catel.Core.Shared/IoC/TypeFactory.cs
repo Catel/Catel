@@ -265,17 +265,17 @@ namespace Catel.IoC
 
             if (parameters == null)
             {
-                parameters = new object[] { };
+                parameters = new object[] {};
             }
 
-            lock (_serviceLocator.LockObject)
+            var previousRequestPath = _currentTypeRequestPath.Value;
+            try
             {
-                var previousRequestPath = _currentTypeRequestPath.Value;
-                try
+                var typeRequestInfo = new TypeRequestInfo(typeToConstruct);
+                _currentTypeRequestPath.Value = TypeRequestPath.Branch(previousRequestPath, typeRequestInfo);
+
+                lock (_serviceLocator.LockObject)
                 {
-                    var typeRequestInfo = new TypeRequestInfo(typeToConstruct);
-                    _currentTypeRequestPath.Value = TypeRequestPath.Branch(previousRequestPath, typeRequestInfo);
-                    
                     var constructorCache = GetConstructorCache(autoCompleteDependencies);
                     var constructorCacheKey = new ConstructorCacheKey(typeToConstruct, parameters);
 
@@ -317,24 +317,25 @@ namespace Catel.IoC
                     }
 
                     Log.Debug("No constructor could be used, cannot construct type '{0}' with the specified parameters", typeToConstruct.FullName);
-                }
-                catch (CircularDependencyException)
-                {
-                    throw;
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning(ex, "Failed to construct type '{0}'", typeToConstruct.FullName);
 
-                    throw;
                 }
-                finally
-                {
-                    _currentTypeRequestPath.Value = previousRequestPath;
-                }
-
-                return null;
             }
+            catch (CircularDependencyException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to construct type '{0}'", typeToConstruct.FullName);
+
+                throw;
+            }
+            finally
+            {
+                _currentTypeRequestPath.Value = previousRequestPath;
+            }
+
+            return null;
         }
 
         /// <summary>
