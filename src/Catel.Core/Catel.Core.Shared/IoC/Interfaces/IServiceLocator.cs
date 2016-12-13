@@ -42,7 +42,7 @@ namespace Catel.IoC
     /// the type the service locator is looking for. By setting the <see cref="MissingTypeEventArgs.ImplementingInstance"/> or 
     /// <see cref="MissingTypeEventArgs.ImplementingType"/> in the handler, the service locator will resolve the type.
     /// </summary>
-    public interface IServiceLocator : IServiceProvider, IDisposable, ILockable
+    public interface IServiceLocator : IServiceProvider, IDisposable
     {
         #region Properties
         /// <summary>
