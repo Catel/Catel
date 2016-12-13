@@ -592,7 +592,6 @@ namespace Catel.IoC
 
         private void SetConstructor(ConstructorCacheKey cacheKey, ConstructorCacheValue previousCacheValue, ConstructorInfo constructorInfo)
         {
-            var cacheValue = ConstructorCacheValue.Next(previousCacheValue, constructorInfo);
             // Currently I choose last-win strategy but maybe other should be used
             _constructorCacheLock.PerformWrite(() =>
             {
@@ -615,6 +614,8 @@ namespace Catel.IoC
                     // TODO: Maybe exception should be thrown
                     Log.Debug("Something strange have happend. Deep log analyze required.");
                 }
+                // I'm not sure storedValue or previousCacheValue should be passed in here
+                var cacheValue = ConstructorCacheValue.Next(storedValue, constructorInfo);
                 _constructorCache[cacheKey] = cacheValue;
             });
         }
