@@ -116,7 +116,7 @@ namespace Catel.IoC
         /// <summary>
         /// The current type request path.
         /// </summary>
-        private ThreadLocal<TypeRequestPath> _currentTypeRequestPath;
+        private readonly ThreadLocal<TypeRequestPath> _currentTypeRequestPath;
 
         /// <summary>
         /// The type factory.
@@ -802,9 +802,6 @@ namespace Catel.IoC
         /// <param name="message">The message.</param>
         private void ThrowTypeNotRegisteredException(Type type, string message = null)
         {
-            _currentTypeRequestPath = null;
-            // or _currentTypeRequestPath.PopType();
-
             throw Log.ErrorAndCreateException(msg => new TypeNotRegisteredException(type, msg),
                 "The type '{0}' is not registered", type.GetSafeFullName(true));
         }
