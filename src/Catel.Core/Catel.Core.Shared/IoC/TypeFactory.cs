@@ -63,7 +63,7 @@ namespace Catel.IoC
         private readonly ReaderWriterLockSlim _typeConstructorsMetadataLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         /// <summary>
-        /// Provides thread safe access to type constructors
+        /// Provides thread safe access to type constructors.
         /// </summary>
         private readonly ReaderWriterLockSlim _typeConstructorsMetadataLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
