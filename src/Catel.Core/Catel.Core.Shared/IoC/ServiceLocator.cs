@@ -169,17 +169,7 @@ namespace Catel.IoC
                 return IoCConfiguration.DefaultServiceLocator;
             }
         }
-
-        /// <summary>
-        /// Gets the lock object.
-        /// </summary>
-        /// <value>
-        /// The lock object.
-        /// </value>
-        object ILockable.LockObject
-        {
-            get { return _lockObject; }
-        }
+        
         #endregion
 
         #region IServiceLocator Members
