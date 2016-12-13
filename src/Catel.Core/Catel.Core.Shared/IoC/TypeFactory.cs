@@ -785,25 +785,34 @@ namespace Catel.IoC
 
             public Dictionary<PropertyInfo, InjectAttribute> GetInjectedProperties()
             {
+                if (_injectedProperties != null)
+                {
+                    return _injectedProperties;
+                }
+
+                Thread.MemoryBarrier();
+                
                 lock (_lockObject)
                 {
-                    if (_injectedProperties == null)
+                    if (_injectedProperties != null)
                     {
-                        _injectedProperties = new Dictionary<PropertyInfo, InjectAttribute>();
+                        return _injectedProperties;
+                    }
 
-                        var properties = Type.GetPropertiesEx();
-                        foreach (var property in properties)
+                    _injectedProperties = new Dictionary<PropertyInfo, InjectAttribute>();
+
+                    var properties = Type.GetPropertiesEx();
+                    foreach (var property in properties)
+                    {
+                        var injectAttribute = property.GetCustomAttributeEx(typeof(InjectAttribute), false) as InjectAttribute;
+                        if (injectAttribute != null)
                         {
-                            var injectAttribute = property.GetCustomAttributeEx(typeof(InjectAttribute), false) as InjectAttribute;
-                            if (injectAttribute != null)
+                            if (injectAttribute.Type == null)
                             {
-                                if (injectAttribute.Type == null)
-                                {
-                                    injectAttribute.Type = property.PropertyType;
-                                }
-
-                                _injectedProperties.Add(property, injectAttribute);
+                                injectAttribute.Type = property.PropertyType;
                             }
+
+                            _injectedProperties.Add(property, injectAttribute);
                         }
                     }
                 }
