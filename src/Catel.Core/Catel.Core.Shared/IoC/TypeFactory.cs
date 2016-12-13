@@ -201,12 +201,13 @@ namespace Catel.IoC
 
             return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, parameters, true);
         }
-        
+
         /// <summary>
         /// Initializes the created object after its construction.
         /// </summary>
         /// <param name="obj">The object to initialize.</param>
-        private void InitializeAfterConstruction(object obj)
+        /// <param name="typeMetaData">Metadata about object to initialize</param>
+        private void InitializeAfterConstruction(object obj, TypeMetaData typeMetaData)
         {
             if (obj == null)
             {
@@ -225,7 +226,6 @@ namespace Catel.IoC
             Log.Debug("Injecting properties into type '{0}' after construction", objectType);
 
             var type = obj.GetType();
-            var typeMetaData = GetTypeMetaData(type);
             foreach (var injectedProperty in typeMetaData.GetInjectedProperties())
             {
                 var propertyInfo = injectedProperty.Key;
@@ -274,15 +274,17 @@ namespace Catel.IoC
                 var typeRequestInfo = new TypeRequestInfo(typeToConstruct);
                 _currentTypeRequestPath.Value = TypeRequestPath.Branch(previousRequestPath, typeRequestInfo);
 
+                var constructorCache = GetConstructorCache(autoCompleteDependencies);
+                var constructorCacheKey = new ConstructorCacheKey(typeToConstruct, parameters);
+
+                var typeConstructorsMetadata = GetTypeMetaData(typeToConstruct);
+
                 lock (_serviceLocator.LockObject)
                 {
-                    var constructorCache = GetConstructorCache(autoCompleteDependencies);
-                    var constructorCacheKey = new ConstructorCacheKey(typeToConstruct, parameters);
-
                     if (constructorCache.ContainsKey(constructorCacheKey))
                     {
                         var cachedConstructor = constructorCache[constructorCacheKey];
-                        var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, cachedConstructor, tag, parameters, false, false);
+                        var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, cachedConstructor, tag, parameters, false, false, typeConstructorsMetadata);
                         if (instanceCreatedWithInjection != null)
                         {
                             return instanceCreatedWithInjection;
@@ -294,15 +296,14 @@ namespace Catel.IoC
                     }
 
                     Log.Debug("Creating instance of type '{0}' using specific parameters. No constructor found in the cache, so searching for the right one", typeToConstruct.FullName);
-
-                    var typeConstructorsMetadata = GetTypeMetaData(typeToConstruct);
+                    
                     var constructors = typeConstructorsMetadata.GetConstructors(parameters.Count(), !autoCompleteDependencies);
 
                     for (int i = 0; i < constructors.Count; i++)
                     {
                         var constructor = constructors[i];
 
-                        var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, constructor, tag, parameters, true, i < constructors.Count - 1);
+                        var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, constructor, tag, parameters, true, i < constructors.Count - 1, typeConstructorsMetadata);
                         if (instanceCreatedWithInjection != null)
                         {
                             // We found a constructor that works, cache it
@@ -507,12 +508,13 @@ namespace Catel.IoC
         /// <param name="parameters">The parameters to pass into the constructor.</param>
         /// <param name="checkConstructor">if set to <c>true</c>, check whether the constructor can be used before using it.</param>
         /// <param name="hasMoreConstructorsLeft">if set to <c>true</c>, more constructors are left so don't throw exceptions.</param>
+        /// <param name="typeMetaData">Metadata about type beiing constructed.</param>
         /// <returns>The instantiated service or <c>null</c> if the instantiation fails.</returns>
         /// <remarks>Note that this method does not require an implementation of
         /// <see cref="TypeRequestPath" /> because this already has the parameter values
         /// and thus cannot lead to invalid circular dependencies.</remarks>
         private object TryCreateToConstruct(Type typeToConstruct, ConstructorInfo constructor, object tag, object[] parameters,
-            bool checkConstructor, bool hasMoreConstructorsLeft)
+            bool checkConstructor, bool hasMoreConstructorsLeft, TypeMetaData typeMetaData)
         {
             // Check if this constructor is even possible
             if (checkConstructor)
@@ -551,7 +553,7 @@ namespace Catel.IoC
 
                 var instance = constructor.Invoke(finalParametersArray);
 
-                InitializeAfterConstruction(instance);
+                InitializeAfterConstruction(instance, typeMetaData);
 
                 return instance;
             }
