@@ -773,7 +773,7 @@ namespace Catel.IoC
         private class TypeMetaData
         {
             private readonly ICacheStorage<string, List<ConstructorInfo>> _callCache = new CacheStorage<string, List<ConstructorInfo>>();
-            private Dictionary<PropertyInfo, InjectAttribute> _injectedProperties;
+            private volatile Dictionary<PropertyInfo, InjectAttribute> _injectedProperties;
             private readonly object _lockObject = new object();
 
             public TypeMetaData(Type type)
@@ -789,8 +789,6 @@ namespace Catel.IoC
                 {
                     return _injectedProperties;
                 }
-
-                Thread.MemoryBarrier();
                 
                 lock (_lockObject)
                 {
