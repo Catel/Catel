@@ -34,12 +34,6 @@ namespace Catel.IoC
             Name = name;
         }
 
-        private TypeRequestPath(TypeRequestInfo[] typePath, string name)
-        {
-            _typePath = typePath;
-            Name = name;
-        }
-
         /// <summary>
         /// Creates root of type request path
         /// </summary>
