@@ -7,10 +7,12 @@
 namespace Catel.Test.IoC
 {
     using System;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Threading;
     using Catel.IoC;
     using Catel.Messaging;
     using Catel.Services;
-    using Catel.Test.MVVM.ViewModels.TestClasses;
     using Data;
     using NUnit.Framework;
 
@@ -369,6 +371,49 @@ namespace Catel.Test.IoC
                 var instance = typeFactory.CreateInstance<ClassWithPropertyInjection>();
 
                 Assert.IsNotNull(instance.UiVisualizerService);
+            }
+
+            [TestCase]
+            public void IfTypeFactoryIsCalledConcurrentlyItRunsFasterThatSerial()
+            {
+                const int itemsPerThread = 50;
+                const int threadAmount = 10;
+
+                var typeFactory = TypeFactory.Default;
+
+                var serialStopWatch = new Stopwatch();
+                serialStopWatch.Start();
+                for (int i = 0; i < itemsPerThread * threadAmount; i++)
+                {
+                    typeFactory.CreateInstanceWithParametersAndAutoCompletion(typeof(AdvancedDependencyInjectionTestClass), 30);
+                }
+                serialStopWatch.Stop();
+
+                // Skip Thread creation in benchmark
+                var paralellStopWatch = new Stopwatch();
+                paralellStopWatch.Start();
+
+                var threads = new Thread[threadAmount];
+                for (int i = 0; i < threadAmount; i++)
+                {
+                    threads[i] = new Thread((index) =>
+                    {
+                        typeFactory.CreateInstanceWithParametersAndAutoCompletion(typeof(AdvancedDependencyInjectionTestClass), 30);
+                    });
+                }
+                
+                for (int i = 0; i < threadAmount; i++)
+                {
+                    threads[i].Start(i);
+                }
+
+                for (int i = 0; i < threadAmount; i++)
+                {
+                    threads[i].Join();
+                }
+                paralellStopWatch.Stop();
+                
+                Assert.That(paralellStopWatch.ElapsedMilliseconds, Is.LessThan(serialStopWatch.ElapsedMilliseconds / 5));
             }
         }
 
