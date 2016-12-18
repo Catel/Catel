@@ -75,6 +75,8 @@ namespace System
                     // Note: normally it's bad practice to use task.Wait(), but GetAssemblies must be blocking to cache it all
 
                     var queryOptions = new QueryOptions(CommonFileQuery.OrderByName, new[] { ".dll", ".exe" });
+                    queryOptions.FolderDepth = FolderDepth.Shallow;
+
                     var queryResult = folder.CreateFileQueryWithOptions(queryOptions);
 
                     var task = queryResult.GetFilesAsync().AsTask();
