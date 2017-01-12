@@ -35,6 +35,7 @@ namespace Catel.Reflection
 
         private static readonly object _lockObject = new object();
 
+        private static readonly HashSet<Assembly> _registeredAssemblies = new HashSet<Assembly>();
         private static readonly Dictionary<string, string> _assemblyMappings = new Dictionary<string, string>();
 
         /// <summary>
@@ -116,16 +117,12 @@ namespace Catel.Reflection
         {
             Argument.IsNotNullOrWhitespace("assemblyNameWithoutVersion", assemblyNameWithoutVersion);
 
-            if (assemblyNameWithoutVersion.Contains(", Version="))
-            {
-                return assemblyNameWithoutVersion;
-            }
-
             lock (_lockObject)
             {
-                if (_assemblyMappings.ContainsKey(assemblyNameWithoutVersion))
+                string assemblyNameWithVersion = null;
+                if (_assemblyMappings.TryGetValue(assemblyNameWithoutVersion, out assemblyNameWithVersion))
                 {
-                    return _assemblyMappings[assemblyNameWithoutVersion];
+                    return assemblyNameWithVersion;
                 }
 
                 return null;
@@ -260,12 +257,17 @@ namespace Catel.Reflection
 
         private static void RegisterAssemblyWithVersionInfo(Assembly assembly)
         {
-            Argument.IsNotNull("assembly", assembly);
-
             lock (_lockObject)
             {
                 try
                 {
+                    if (_registeredAssemblies.Contains(assembly))
+                    {
+                        return;
+                    }
+
+                    _registeredAssemblies.Add(assembly);
+
                     var assemblyNameWithVersion = assembly.FullName;
                     var assemblyNameWithoutVersion = TypeHelper.GetAssemblyNameWithoutOverhead(assemblyNameWithVersion);
                     _assemblyMappings[assemblyNameWithoutVersion] = assemblyNameWithVersion;
@@ -293,6 +295,12 @@ namespace Catel.Reflection
             }
 
             return false;
+        }
+
+        struct AssemblyMetaData
+        {
+            public string NameWithVersion { get; set; }
+            public string NameWithoutVersion { get; set; }
         }
 
 #if NET

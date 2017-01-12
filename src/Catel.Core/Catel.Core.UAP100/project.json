@@ -1,10 +1,12 @@
 ﻿{
   "dependencies": {
+    "AsyncUsageAnalyzers": "1.0.0-alpha003",
     "Catel.Fody": "2.14.0",
     "Fody": "1.29.4",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
     "ModuleInit.Fody": "1.5.9",
-    "Obsolete.Fody": "4.1.0"
+    "Obsolete.Fody": "4.1.0",
+    "WpfAnalyzers": "0.2.4-dev"
   },
   "frameworks": {
     "uap10.0": {}

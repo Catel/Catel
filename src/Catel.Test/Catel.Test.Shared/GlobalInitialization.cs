@@ -6,6 +6,7 @@
 
 
 using System.Linq;
+using Catel.Reflection;
 using NUnit.Framework;
 
 /// <summary>
@@ -19,6 +20,9 @@ public class GlobalInitialization
     public static void SetUp()
     {
         //System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+
+        // Required since we do multithreaded initialization
+        TypeCache.InitializeTypes(allowMultithreadedInitialization: false);
 
 #if NET && !SKIP_EF
         using (var dbContext = new Catel.Test.EntityFramework5.DbContextTest.TestDbContextContainer())

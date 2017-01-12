@@ -129,10 +129,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Navigation\NavigationAdapterBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Navigation\NavigationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Navigation\NavigationMode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Providers\Behaviors\MVVMBehaviorBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Providers\Behaviors\NavigationPageBehavior.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Providers\Behaviors\UserControlBehavior.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Providers\Behaviors\WindowBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Providers\EventArgs\DetermineViewModelInstanceEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Providers\EventArgs\DetermineViewModelTypeEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Providers\Extensions\LogicExtensions.cs" />
@@ -145,7 +141,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Tasks\Interfaces\ITask.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Tasks\Interfaces\ITaskProgressTracker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Tasks\TaskBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\InterestedInAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\ModelAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\ValidationToViewModelAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\EventArgs\CancelingEventArgs.cs" />
@@ -156,7 +151,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\IViewModelFactoryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\ViewModelExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Extensions\ViewModelManagerExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\INotifyableViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\IProgressNotifyableViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\IRelationalViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Interfaces\IViewModel.cs" />
@@ -216,6 +210,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\WeakViewInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\AccelerometerService.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\AccelerometerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\AccelerometerService.ios.cs" />
@@ -241,6 +236,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IDispatcherServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IPleaseWaitServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IStartUpInfoProviderExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IStateServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IUIVisualizerServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\FileServiceBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IAccelerometerService.cs" />
@@ -282,6 +278,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\MessageService.uap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\MessageService.wpf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Models\AccelerometerValue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Models\Interfaces\IState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Models\Location.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Models\Size.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NamingConvention.cs" />

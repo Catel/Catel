@@ -22,7 +22,7 @@ namespace Catel.Logging
         /// <param name="logData">The log data.</param>
         /// <param name="logEvent">The log event.</param>
         public LogMessageEventArgs(ILog log, string message, object extraData, LogData logData, LogEvent logEvent)
-            : this(log, message, extraData, logData, logEvent, DateTime.Now) { }
+            : this(log, message, extraData, logData, logEvent, FastDateTime.Now) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LogMessageEventArgs" /> class.

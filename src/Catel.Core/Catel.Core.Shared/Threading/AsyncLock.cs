@@ -94,7 +94,9 @@ namespace Catel.Threading
         /// </summary>
         /// <param name="cancellationToken">The cancellation token used to cancel the lock. If this is already set, then this method will attempt to take the lock immediately (succeeding if the lock is currently available).</param>
         /// <returns>A disposable that releases the lock when disposed.</returns>
+#pragma warning disable AvoidAsyncSuffix // Avoid Async suffix
         public AwaitableDisposable<IDisposable> LockAsync(CancellationToken cancellationToken)
+#pragma warning restore AvoidAsyncSuffix // Avoid Async suffix
         {
             Task<IDisposable> ret;
 
@@ -109,7 +111,7 @@ namespace Catel.Threading
                 else
                 {
                     // Wait for the lock to become available or cancellation.
-                    ret = _queue.Enqueue(_mutex, cancellationToken);
+                    ret = _queue.EnqueueAsync(_mutex, cancellationToken);
                 }
 
                 //Enlightenment.Trace.AsyncLock_TrackLock(this, ret);
@@ -134,7 +136,7 @@ namespace Catel.Threading
                     return _cachedKeyTask.Result;
                 }
 
-                enqueuedTask = _queue.Enqueue(_mutex, cancellationToken);
+                enqueuedTask = _queue.EnqueueAsync(_mutex, cancellationToken);
             }
 
             return enqueuedTask.WaitAndUnwrapException();
@@ -144,7 +146,9 @@ namespace Catel.Threading
         /// Asynchronously acquires the lock. Returns a disposable that releases the lock when disposed.
         /// </summary>
         /// <returns>A disposable that releases the lock when disposed.</returns>
+#pragma warning disable AvoidAsyncSuffix // Avoid Async suffix
         public AwaitableDisposable<IDisposable> LockAsync()
+#pragma warning restore AvoidAsyncSuffix // Avoid Async suffix
         {
             return LockAsync(CancellationToken.None);
         }

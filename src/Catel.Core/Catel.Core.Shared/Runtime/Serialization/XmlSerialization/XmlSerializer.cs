@@ -80,7 +80,7 @@ namespace Catel.Runtime.Serialization.Xml
 
         #region Properties
         /// <summary>
-        /// Gets or sets the optimalization mode.
+        /// Gets or sets the default fallback optimalization mode if it's not specified via <see cref="XmlSerializationConfiguration"/>.
         /// <para />
         /// The default value is <see cref="XmlSerializerOptimalizationMode.Performance"/>.
         /// </summary>
@@ -89,6 +89,41 @@ namespace Catel.Runtime.Serialization.Xml
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Serializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="context">The context.</param>
+        protected override void Serialize(object model, ISerializationContext<XmlSerializationContextInfo> context)
+        {
+            var customXmlSerializable = model as ICustomXmlSerializable;
+            if (customXmlSerializable != null)
+            {
+                customXmlSerializable.Serialize(context.Context.Element);
+                return;
+            }
+
+            base.Serialize(model, context);
+        }
+
+        /// <summary>
+        /// Deserializes the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
+        protected override object Deserialize(object model, ISerializationContext<XmlSerializationContextInfo> context)
+        {
+            var customXmlSerializable = model as ICustomXmlSerializable;
+            if (customXmlSerializable != null)
+            {
+                customXmlSerializable.Deserialize(context.Context.Element);
+                return customXmlSerializable;
+            }
+
+            return base.Deserialize(model, context);
+        }
+
         /// <summary>
         /// Warms up the specified type.
         /// </summary>
@@ -151,7 +186,7 @@ namespace Catel.Runtime.Serialization.Xml
                         break;
                 }
 
-                string xmlName = memberName;
+                var xmlName = memberName;
                 if (propertyDataManager.IsPropertyNameMappedToXmlElement(type, memberName))
                 {
                     xmlName = propertyDataManager.MapPropertyNameToXmlElementName(type, memberName);
@@ -383,7 +418,7 @@ namespace Catel.Runtime.Serialization.Xml
             var element = context.Context.Element;
             var document = new XDocument(element);
 
-            OptimizeXDocument(document);
+            OptimizeXDocument(document, context);
 
             if (ShouldSerializeAsCollection(context.ModelType))
             {
@@ -427,37 +462,63 @@ namespace Catel.Runtime.Serialization.Xml
         }
 
         /// <summary>
+        /// Gets the XML optimalization mode. First, the value will be retrieved from the <c>context.Configuration</c> value if
+        /// it's of type <c>XmlSerializationConfiguration</c>. Otherwise the <see cref="OptimalizationMode"/> will be used.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
+        protected virtual XmlSerializerOptimalizationMode GetXmlOptimalizationMode(ISerializationContext<XmlSerializationContextInfo> context)
+        {
+            XmlSerializerOptimalizationMode? optimalizationMode = null;
+
+            var xmlSerializationConfiguration = context.Configuration as XmlSerializationConfiguration;
+            if (xmlSerializationConfiguration != null)
+            {
+                optimalizationMode = xmlSerializationConfiguration.OptimalizationMode;
+            }
+            else
+            {
+                optimalizationMode = OptimalizationMode;
+            }
+
+            return optimalizationMode.Value;
+        }
+
+        /// <summary>
         /// Optimizes the xml document.
         /// </summary>
         /// <param name="document">The document.</param>
-        protected virtual void OptimizeXDocument(XDocument document)
+        /// <param name="context">The context.</param>
+        protected virtual void OptimizeXDocument(XDocument document, ISerializationContext<XmlSerializationContextInfo> context)
         {
-            if (OptimalizationMode == XmlSerializerOptimalizationMode.Performance)
+            var optimalizationMode = GetXmlOptimalizationMode(context);
+            if (optimalizationMode == XmlSerializerOptimalizationMode.Performance)
             {
                 return;
             }
 
-            OptimizeXElement(document.Root);
+            OptimizeXElement(document.Root, optimalizationMode);
         }
 
         /// <summary>
         /// Optimizes the xml element.
         /// </summary>
         /// <param name="element">The element.</param>
-        protected virtual void OptimizeXElement(XElement element)
+        /// <param name="optimalizationMode">The optimalization mode.</param>
+        protected virtual void OptimizeXElement(XElement element, XmlSerializerOptimalizationMode optimalizationMode)
         {
-            if (OptimalizationMode == XmlSerializerOptimalizationMode.Performance)
+            if (optimalizationMode == XmlSerializerOptimalizationMode.Performance)
             {
                 return;
             }
 
-            var agressive = (OptimalizationMode == XmlSerializerOptimalizationMode.PrettyXmlAgressive);
+            var agressive = (optimalizationMode == XmlSerializerOptimalizationMode.PrettyXmlAgressive);
             if (agressive)
             {
                 // Important: children first
                 foreach (var child in element.Elements())
                 {
-                    OptimizeXElement(child);
+                    OptimizeXElement(child, optimalizationMode);
                 }
             }
 

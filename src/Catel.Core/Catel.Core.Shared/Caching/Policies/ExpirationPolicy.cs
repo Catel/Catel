@@ -56,7 +56,7 @@ namespace Catel.Caching.Policies
         /// <remarks>The cache item will expire on the absolute expiration date time.</remarks>
         public static ExpirationPolicy Absolute(DateTime absoluteExpirationDateTime, bool force = false)
         {
-            return force || DateTime.Now < absoluteExpirationDateTime ? new AbsoluteExpirationPolicy(absoluteExpirationDateTime) : null;
+            return force || FastDateTime.Now < absoluteExpirationDateTime ? new AbsoluteExpirationPolicy(absoluteExpirationDateTime) : null;
         }
 
         /// <summary>

@@ -21,8 +21,8 @@ namespace Catel.Test.MVVM.ViewModels
         [TestCase]
         public void Constructor()
         {
-            var viewModel = new ManagedViewModel(typeof (InterestingViewModel));
-            Assert.AreEqual(typeof (InterestingViewModel), viewModel.ViewModelType);
+            var viewModel = new ManagedViewModel(typeof (TestViewModel));
+            Assert.AreEqual(typeof (TestViewModel), viewModel.ViewModelType);
         }
 
         [TestCase]
@@ -30,7 +30,7 @@ namespace Catel.Test.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (InterestingViewModel));
+            var viewModel = new ManagedViewModel(typeof (TestViewModel));
 
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModel.AddViewModelInstance(null));
         }
@@ -40,18 +40,18 @@ namespace Catel.Test.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (InterestingViewModel));
+            var viewModel = new ManagedViewModel(typeof (TestViewModel));
 
             try
             {
-                viewModel.AddViewModelInstance(new InterestedViewModel());
+                viewModel.AddViewModelInstance(new TestViewModelWithDeferredValidation());
 
                 Assert.Fail("Expected WrongViewModelTypeException");
             }
             catch (WrongViewModelTypeException ex)
             {
-                Assert.AreEqual(ex.ActualType, typeof (InterestedViewModel));
-                Assert.AreEqual(ex.ExpectedType, typeof (InterestingViewModel));
+                Assert.AreEqual(ex.ActualType, typeof (TestViewModelWithDeferredValidation));
+                Assert.AreEqual(ex.ExpectedType, typeof (TestViewModel));
             }
         }
 
@@ -60,8 +60,8 @@ namespace Catel.Test.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (InterestingViewModel));
-            viewModel.AddViewModelInstance(new InterestingViewModel());
+            var viewModel = new ManagedViewModel(typeof (TestViewModel));
+            viewModel.AddViewModelInstance(new TestViewModel());
         }
 
         [TestCase]
@@ -69,7 +69,7 @@ namespace Catel.Test.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (InterestingViewModel));
+            var viewModel = new ManagedViewModel(typeof (TestViewModel));
 
             ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModel.RemoveViewModelInstance(null));
         }
@@ -79,8 +79,8 @@ namespace Catel.Test.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (InterestingViewModel));
-            viewModel.RemoveViewModelInstance(new InterestingViewModel());
+            var viewModel = new ManagedViewModel(typeof (TestViewModel));
+            viewModel.RemoveViewModelInstance(new TestViewModel());
         }
 
         [TestCase]
@@ -88,173 +88,11 @@ namespace Catel.Test.MVVM.ViewModels
         {
             ViewModelManager.ClearAll();
 
-            var viewModel = new ManagedViewModel(typeof (InterestingViewModel));
+            var viewModel = new ManagedViewModel(typeof (TestViewModel));
 
-            var interestingViewModel = new InterestingViewModel();
+            var interestingViewModel = new TestViewModel();
             viewModel.AddViewModelInstance(interestingViewModel);
             viewModel.RemoveViewModelInstance(interestingViewModel);
-        }
-
-        [TestCase]
-        public void AddInterestedViewModel_Null()
-        {
-            ViewModelManager.ClearAll();
-
-            var viewModel = new ManagedViewModel(typeof (InterestingViewModel));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModel.AddInterestedViewModel(null));
-        }
-
-        [TestCase]
-        public void RemoveInterestedViewModel_Null()
-        {
-            ViewModelManager.ClearAll();
-
-            var viewModel = new ManagedViewModel(typeof (InterestingViewModel));
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModel.RemoveInterestedViewModel(null));
-        }
-
-        [TestCase]
-        public async Task InterestingViewModelPropertyChanged()
-        {
-            ViewModelManager.ClearAll();
-
-            var viewModel = new ManagedViewModel(typeof (InterestingViewModel));
-
-            var interestingViewModel = new InterestingViewModel();
-            var interestedViewModel = new InterestedViewModel();
-
-            viewModel.AddViewModelInstance(interestingViewModel);
-            viewModel.AddInterestedViewModel(interestedViewModel);
-
-            interestingViewModel.InterestingValue = "new value";
-            Assert.AreEqual("new value", interestedViewModel.InterestedValue);
-
-            await interestingViewModel.CloseViewModelAsync(false);
-            await interestedViewModel.CloseViewModelAsync(false);
-        }
-
-        [TestCase]
-        public async Task InterestingViewModelCommandExecuted()
-        {
-            ViewModelManager.ClearAll();
-
-            var viewModel = new ManagedViewModel(typeof (InterestingViewModel));
-
-            var interestingViewModel = new InterestingViewModel();
-            var interestedViewModel = new InterestedViewModel();
-
-            viewModel.AddViewModelInstance(interestingViewModel);
-            viewModel.AddInterestedViewModel(interestedViewModel);
-
-            interestingViewModel.TestCommand.Execute(null);
-
-            Assert.AreEqual(true, interestedViewModel.CommandHasBeenExecuted);
-            Assert.AreEqual(false, interestedViewModel.CommandHasBeenExecutedWithParameter);
-
-            await interestingViewModel.CloseViewModelAsync(false);
-            await interestedViewModel.CloseViewModelAsync(false);
-        }
-
-        [TestCase]
-        public async Task InterestingViewModelCommandExecutedWithCommandParameter()
-        {
-            ViewModelManager.ClearAll();
-
-            var viewModel = new ManagedViewModel(typeof (InterestingViewModel));
-
-            var interestingViewModel = new InterestingViewModel();
-            var interestedViewModel = new InterestedViewModel();
-
-            viewModel.AddViewModelInstance(interestingViewModel);
-            viewModel.AddInterestedViewModel(interestedViewModel);
-
-            interestingViewModel.TestCommand.Execute("parameter");
-            Assert.AreEqual(true, interestedViewModel.CommandHasBeenExecuted);
-            Assert.AreEqual(true, interestedViewModel.CommandHasBeenExecutedWithParameter);
-
-            await interestingViewModel.CloseViewModelAsync(false);
-            await interestedViewModel.CloseViewModelAsync(false);
-        }
-
-        [TestCase]
-        public async Task InterestedViewModelAutomaticallyBeingRemovedWhenClosed()
-        {
-            ViewModelManager.ClearAll();
-
-            var viewModel = new ManagedViewModel(typeof (InterestingViewModel));
-
-            var interestingViewModel = new InterestingViewModel();
-            var interestedViewModel = new InterestedViewModel();
-
-            viewModel.AddViewModelInstance(interestingViewModel);
-            viewModel.AddInterestedViewModel(interestedViewModel);
-
-            interestingViewModel.InterestingValue = "new value";
-            Assert.AreEqual("new value", interestedViewModel.InterestedValue);
-
-            await interestedViewModel.CloseViewModelAsync(null);
-
-            interestingViewModel.InterestingValue = "new value which has changed";
-            Assert.AreNotEqual("new value which has changed", interestedViewModel.InterestedValue);
-            Assert.AreEqual("new value", interestedViewModel.InterestedValue);
-
-            await interestingViewModel.CloseViewModelAsync(false);
-            await interestedViewModel.CloseViewModelAsync(false);
-        }
-
-        [TestCase]
-        public async Task InterestingViewModel_Event_SavingAndSaved()
-        {
-            ViewModelManager.ClearAll();
-
-            var interestingViewModel = new InterestingViewModel();
-            var interestedViewModel = new InterestedViewModel();
-
-            await interestingViewModel.SaveViewModelAsync();
-
-            Assert.AreEqual(2, interestedViewModel.ViewModelEvents.Count);
-            Assert.AreEqual(ViewModelEvent.Saving, interestedViewModel.ViewModelEvents[0]);
-            Assert.AreEqual(ViewModelEvent.Saved, interestedViewModel.ViewModelEvents[1]);
-
-            await interestingViewModel.CloseViewModelAsync(false);
-            await interestedViewModel.CloseViewModelAsync(false);
-        }
-
-        [TestCase]
-        public async Task InterestingViewModel_Event_CancelingAndCanceled()
-        {
-            ViewModelManager.ClearAll();
-
-            var interestingViewModel = new InterestingViewModel();
-            var interestedViewModel = new InterestedViewModel();
-
-            await interestingViewModel.CancelViewModelAsync();
-
-            Assert.AreEqual(2, interestedViewModel.ViewModelEvents.Count);
-            Assert.AreEqual(ViewModelEvent.Canceling, interestedViewModel.ViewModelEvents[0]);
-            Assert.AreEqual(ViewModelEvent.Canceled, interestedViewModel.ViewModelEvents[1]);
-
-            await interestingViewModel.CloseViewModelAsync(false);
-            await interestedViewModel.CloseViewModelAsync(false);
-        }
-
-        [TestCase]
-        public async Task InterestingViewModel_Event_Closed()
-        {
-            ViewModelManager.ClearAll();
-
-            var interestingViewModel = new InterestingViewModel();
-            var interestedViewModel = new InterestedViewModel();
-
-            await interestingViewModel.CloseViewModelAsync(null);
-
-            Assert.AreEqual(1, interestedViewModel.ViewModelEvents.Count);
-            Assert.AreEqual(ViewModelEvent.Closed, interestedViewModel.ViewModelEvents[0]);
-
-            await interestingViewModel.CloseViewModelAsync(false);
-            await interestedViewModel.CloseViewModelAsync(false);
         }
         #endregion
     }

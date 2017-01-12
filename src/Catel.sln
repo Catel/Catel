@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.25914.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{58F62039-8645-499C-B264-66048F4F0F75}"
 EndProject
@@ -23,6 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{EF395E12-0
 		Catel.snk = Catel.snk
 		Catel.vsmdi = Catel.vsmdi
 		CustomDictionary.xml = CustomDictionary.xml
+		GlobalSuppressions.cs = GlobalSuppressions.cs
 		nuget.config = nuget.config
 		Settings.StyleCop = Settings.StyleCop
 		SolutionAssemblyInfo.cs = SolutionAssemblyInfo.cs
@@ -985,9 +986,6 @@ Global
 		{5E7A99E8-8B88-4E44-8183-CF67C9818CE9} = {7CC94A52-F2F1-4CB9-9D12-18D87E79688F}
 		{E0D994CA-D553-4009-A159-33542A16C4D0} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
 		{6040C547-F6C9-4526-A164-554A2EF9E1E5} = {DA48A112-2316-4576-84F7-2665282C75BE}
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35

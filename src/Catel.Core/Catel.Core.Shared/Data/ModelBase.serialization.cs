@@ -67,6 +67,22 @@ namespace Catel.Data
         /// </summary>
         /// <value>The default serializer.</value>
         public static ISerializer DefaultSerializer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the serialization configuration.
+        /// </summary>
+        /// <value>
+        /// The serialization configuration.
+        /// </value>
+        protected ISerializationConfiguration SerializationConfiguration { get; set; }
+
+        /// <summary>
+        /// Gets or sets the default serialization configuration.
+        /// </summary>
+        /// <value>
+        /// The default serialization configuration.
+        /// </value>
+        public static ISerializationConfiguration DefaultSerializationConfiguration { get; set; }
         #endregion
 
         #region Events

@@ -420,7 +420,7 @@
         public void SetParentviewModel()
         {
             var viewModel = new TestViewModel();
-            var parentViewModel = new InterestedViewModel();
+            var parentViewModel = new TestViewModel();
 
             Assert.IsNull(viewModel.GetParentViewModelForTest());
             ((IRelationalViewModel)viewModel).SetParentViewModel(parentViewModel);

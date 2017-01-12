@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#pragma warning disable UseAsyncSuffix // Use Async suffix
+
 #if NET40
 #define USE_TASKEX
 #endif

@@ -39,7 +39,8 @@ namespace Catel.Data.Repositories
             Expiration = new TimeSpan();
             DataLoadedTimestamp = DateTime.MinValue;
 
-            _timer = new Catel.Threading.Timer(OnTimerElapsed, null, 1000, 1000);
+            var timeout = TimeSpan.FromSeconds(1);
+            _timer = new Catel.Threading.Timer(OnTimerElapsed, null, timeout, timeout);
         }
         #endregion
 
@@ -144,7 +145,7 @@ namespace Catel.Data.Repositories
                 IsLoadingData = false;
                 IsDataLoaded = true;
 
-                DataLoadedTimestamp = DateTime.Now;
+                DataLoadedTimestamp = FastDateTime.Now;
 
                 _data = new List<TModel>(items);
 
@@ -182,7 +183,7 @@ namespace Catel.Data.Repositories
                     return;
                 }
 
-                var isExpired = DataLoadedTimestamp.Add(Expiration) < DateTime.Now;
+                var isExpired = DataLoadedTimestamp.Add(Expiration) < FastDateTime.Now;
                 if (isExpired)
                 {
                     Log.Info("Cached repository for '{0}' has expired, clearing cached data", typeof(TModel).FullName);

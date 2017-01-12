@@ -226,6 +226,34 @@ namespace Catel.Windows.Interactivity
             var text = AssociatedObject.Text;
             if (!string.IsNullOrWhiteSpace(text))
             {
+                // CTL-1000 NumericTextBox behavior doesn't allow some values (e.g. 2.05)
+                var separator = Math.Max(text.IndexOf(CommaCharacter), text.IndexOf(PeriodCharacter));
+                if (separator >= 0)
+                {
+                    var resetUpdate = true;
+
+                    for (int i = separator + 1; i < text.Length; i++)
+                    {
+                        if (text[i] != '0')
+                        {
+                            resetUpdate = false;
+                            break;
+                        }
+                    }
+
+                    if (resetUpdate)
+                    {
+                        update = false;
+                    }
+                }
+
+                // CTL-761
+                if (string.Equals(text, "-0"))
+                {
+                    // User is typing -0 (whould would result in 0, which we don't want yet, maybe they are typing -0.5)
+                    update = false;
+                }
+
                 if (text.StartsWith(CommaCharacter) || text.EndsWith(CommaCharacter) ||
                     text.StartsWith(PeriodCharacter) || text.EndsWith(PeriodCharacter))
                 {
@@ -233,10 +261,10 @@ namespace Catel.Windows.Interactivity
                     update = false;
                 }
 
-                // CTL-761
-                if (string.Equals(text, "-0"))
+                if (text.StartsWith(CommaCharacter) || text.EndsWith(CommaCharacter) ||
+                    text.StartsWith(PeriodCharacter) || text.EndsWith(PeriodCharacter))
                 {
-                    // User is typing -0 (whould would result in 0, which we don't want yet, maybe they are typing -0.5)
+                    // User is typing a . or , don't update
                     update = false;
                 }
             }

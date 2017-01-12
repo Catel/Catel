@@ -79,11 +79,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)CoreModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Attributes\ExcludeFromValidationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Attributes\ValidateModelAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\AttributeValidatorProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\SuspensionContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\AttributeValidatorProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\CatelTypeInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ChangeNotificationWrapper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\CompositeValidator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\CompositeValidatorProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\CompositeValidator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\CompositeValidatorProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\AdvancedPropertyChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\AdvancedPropertyChangingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\ValidationEventArgs.cs" />
@@ -134,11 +135,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\PropertyDataManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\PropertyValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\SavableModelBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationContext.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationResult.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\ValidationSummary.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatorBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatorProviderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\ValidationContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\ValidationResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\ValidationSummary.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\ValidatorBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\ValidatorProviderBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DisposableToken.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DynamicEventListener.cs" />
@@ -170,6 +171,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensions.slug.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\UriExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Factories\ExceptionFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FastDateTime.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositeFilter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\CompositePredicate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filtering\Interfaces\ICompositeFilter.cs" />
@@ -187,6 +189,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\TagHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\UniqueIdentifierHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IDisposableToken.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ILockable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IUniqueIdentifyable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Attributes\InjectAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IoC\Attributes\InjectionConstructorAttribute.cs" />
@@ -283,6 +286,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Messages\MessageBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\Messages\SimpleMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pooling\Interfaces\IPoolable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pooling\Interfaces\IPoolManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pooling\Poolables\Buffer4096Poolable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pooling\Poolables\BufferPoolableBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pooling\Poolables\PoolableBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pooling\PoolManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\BindingFlags.cs" />
@@ -368,15 +377,18 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\DataContractSerializerFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Helpers\XmlHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Helpers\XmlSchemaHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Interfaces\ICustomXmlSerializable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Interfaces\IDataContractSerializerFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Interfaces\IXmlNamespaceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\Interfaces\IXmlSerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSerializationConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSerializationContextInfoFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlNamespace.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlNamespaceManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSchemaManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSerializationContextInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSerializer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\XmlSerialization\XmlSerializerOptimalizationMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scoping\EventArgs\ScopeClosedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scoping\ScopeManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IObjectConverterServiceExtensions.cs" />
@@ -422,6 +434,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)ComponentModel\DataAnnotations\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Data\Validation\" />
     <Folder Include="$(MSBuildThisFileDirectory)Linq\" />
   </ItemGroup>
 </Project>

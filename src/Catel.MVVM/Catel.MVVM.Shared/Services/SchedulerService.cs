@@ -60,12 +60,12 @@ namespace Catel.Services
             Argument.IsNotNull("action", action);
             Argument.IsNotNull("dateTime", dateTime);
 
-            if (dateTime <= DateTime.Now)
+            if (dateTime <= FastDateTime.Now)
             {
                 throw new ArgumentOutOfRangeException("dateTime", "The date/time cannot be in the past");
             }
 
-            Schedule(action, dateTime - DateTime.Now);
+            Schedule(action, dateTime - FastDateTime.Now);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Catel.Logging
         /// Flushes the current queue asynchronous.
         /// </summary>
         /// <returns>Task so it can be awaited.</returns>
-        Task Flush();
+        Task FlushAsync();
         #endregion
     }
 }

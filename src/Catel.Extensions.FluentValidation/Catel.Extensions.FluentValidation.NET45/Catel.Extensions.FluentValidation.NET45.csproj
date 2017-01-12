@@ -77,6 +77,11 @@
   <ItemGroup>
     <Compile Include="ModuleInitializer.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\..\lib\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />
+    <Analyzer Include="..\..\..\lib\WpfAnalyzers.0.2.4.0-dev\analyzers\dotnet\cs\WpfAnalyzers.Analyzers.dll" />
+    <Analyzer Include="..\..\..\lib\WpfAnalyzers.0.2.4.0-dev\analyzers\dotnet\cs\WpfAnalyzers.CodeFixes.dll" />
+  </ItemGroup>
   <Import Project="..\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.projitems')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

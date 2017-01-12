@@ -41,7 +41,7 @@ namespace Catel.Threading
             get { return Count == 0; }
         }
 
-        Task<T> IAsyncWaitQueue<T>.Enqueue()
+        Task<T> IAsyncWaitQueue<T>.EnqueueAsync()
         {
             var tcs = new TaskCompletionSource<T>();
 

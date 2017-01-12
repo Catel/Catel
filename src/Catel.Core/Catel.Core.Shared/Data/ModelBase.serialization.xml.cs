@@ -44,7 +44,7 @@ namespace Catel.Data
             var contextInfo = new XmlSerializationContextInfo(reader, this);
 
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetXmlSerializer(), null)))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetXmlSerializer(), SerializationConfiguration)))
             {
                 var serializer = scopeManager.ScopeObject.Serializer;
                 serializer.Deserialize(this, contextInfo, scopeManager.ScopeObject.Configuration);
@@ -58,7 +58,7 @@ namespace Catel.Data
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetXmlSerializer(), null)))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetXmlSerializer(), SerializationConfiguration)))
             {
                 var type = GetType();
                 var element = new XElement(type.Name);

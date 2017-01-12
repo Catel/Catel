@@ -7,6 +7,7 @@
 namespace Catel.Services
 {
     using System;
+    using System.Threading.Tasks;
     using Catel.MVVM;
     using Catel.MVVM.Tasks;
 
@@ -42,7 +43,7 @@ namespace Catel.Services
         /// <param name="completedCallback">The completed callback.</param>
         /// <param name="viewModelType">The view mode type.</param>
         /// <exception cref="InvalidOperationException">If the batch is already committed and the execution is in progress or committing via async way.</exception>
-        void CommitAsync(Action completedCallback = null, Type viewModelType = null);
+        Task CommitAsync(Action completedCallback = null, Type viewModelType = null);
 
         /// <summary>
         /// The commit.
@@ -54,7 +55,7 @@ namespace Catel.Services
         /// Indicates whether the view model will be shown. If the view model is <c>null</c> then this argument will be ignored. 
         /// </param>
         /// <exception cref="InvalidOperationException">If the batch is already committed and the execution is in progress or committing via async way.</exception>
-        void CommitAsync<TViewModel>(Action completedCallback = null, TViewModel viewModel = default(TViewModel), bool show = true) 
+        Task CommitAsync<TViewModel>(Action completedCallback = null, TViewModel viewModel = default(TViewModel), bool show = true) 
             where TViewModel : IProgressNotifyableViewModel;
 
         /// <summary>

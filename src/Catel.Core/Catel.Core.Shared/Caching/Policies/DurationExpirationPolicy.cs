@@ -35,7 +35,7 @@ namespace Catel.Caching.Policies
         /// The can reset.
         /// </param>
         protected DurationExpirationPolicy(TimeSpan durationTimeSpan, bool canReset)
-            : base(DateTime.Now.Add(durationTimeSpan), canReset)
+            : base(FastDateTime.Now.Add(durationTimeSpan), canReset)
         {
             DurationTimeSpan = durationTimeSpan;
         }

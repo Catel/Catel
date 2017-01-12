@@ -16,6 +16,7 @@ namespace Catel.Test.Data
     using Catel.Reflection;
 
     using NUnit.Framework;
+    using TestClasses;
 
     public partial class ModelBaseFacts
     {
@@ -573,6 +574,82 @@ namespace Catel.Test.Data
                 model.SuspendValidationWrapper = false;
 
                 Assert.IsTrue(validation.HasErrors);
+            }
+        }
+
+        [TestFixture]
+        public class TheSuspendValidationsFacts
+        {
+            [TestCase]
+            public void CorrectlyValidates()
+            {
+                var model = new SuspendableTestModel();
+
+                model.Validate(true, true);
+
+                var validationContext = model.GetValidationContext();
+                var errors = validationContext.GetErrors();
+
+                Assert.IsTrue(validationContext.HasErrors);
+                Assert.AreEqual("FirstName", ((FieldValidationResult)errors[0]).PropertyName);
+                Assert.AreEqual("LastName", ((FieldValidationResult)errors[1]).PropertyName);
+            }
+
+            [TestCase]
+            public void SuspendsValidationsAndValidatesOnResume()
+            {
+                var model = new SuspendableTestModel();
+
+                using (model.SuspendValidations())
+                {
+                    model.Validate(true, true);
+
+                    var innerValidationContext = model.GetValidationContext();
+
+                    Assert.IsFalse(innerValidationContext.HasErrors);
+                }
+
+                //model.Validate(true, true);
+
+                var validationContext = model.GetValidationContext();
+                var errors = validationContext.GetErrors();
+
+                Assert.IsTrue(validationContext.HasErrors);
+                Assert.AreEqual("FirstName", ((FieldValidationResult)errors[0]).PropertyName);
+                Assert.AreEqual("LastName", ((FieldValidationResult)errors[1]).PropertyName);
+            }
+
+            [TestCase]
+            public void SuspendsValidationsAndValidatesOnResumeWithScopes()
+            {
+                var model = new SuspendableTestModel();
+
+                using (model.SuspendValidations())
+                {
+                    using (model.SuspendValidations())
+                    {
+                        model.Validate(true, true);
+
+                        var innerValidationContext1 = model.GetValidationContext();
+
+                        Assert.IsFalse(innerValidationContext1.HasErrors);
+                    }
+
+                    model.Validate(true, true);
+
+                    var innerValidationContext2 = model.GetValidationContext();
+
+                    Assert.IsFalse(innerValidationContext2.HasErrors);
+                }
+
+                //model.Validate(true, true);
+
+                var validationContext = model.GetValidationContext();
+                var errors = validationContext.GetErrors();
+
+                Assert.IsTrue(validationContext.HasErrors);
+                Assert.AreEqual("FirstName", ((FieldValidationResult)errors[0]).PropertyName);
+                Assert.AreEqual("LastName", ((FieldValidationResult)errors[1]).PropertyName);
             }
         }
 

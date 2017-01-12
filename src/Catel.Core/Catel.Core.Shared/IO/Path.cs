@@ -283,16 +283,16 @@ namespace Catel.IO
             }
 #endif
 
-            fullPath = RemoveTrailingSlashes(fullPath.ToLower());
-            basePath = RemoveTrailingSlashes(basePath.ToLower());
+            fullPath = RemoveTrailingSlashes(fullPath);
+            basePath = RemoveTrailingSlashes(basePath);
 
             // Check if the base path is really the full path (not just a subpath, for example "C:\MyTes" in "C:\MyTest")
-            string fullPathWithTrailingBackslash = AppendTrailingSlash(fullPath);
-            string basePathWithTrailingBackslash = AppendTrailingSlash(basePath);
+            var fullPathWithTrailingBackslash = AppendTrailingSlash(fullPath).ToLower();
+            var basePathWithTrailingBackslash = AppendTrailingSlash(basePath).ToLower();
 
-            if (fullPathWithTrailingBackslash.IndexOf(basePathWithTrailingBackslash) > -1)
+            if (fullPathWithTrailingBackslash.IndexOfIgnoreCase(basePathWithTrailingBackslash) > -1)
             {
-                string result = fullPath.Replace(basePath, string.Empty);
+                var result = fullPath.Replace(basePath, string.Empty);
                 if (result.StartsWith("\\"))
                 {
                     result = result.Remove(0, 1);
@@ -301,15 +301,15 @@ namespace Catel.IO
                 return result;
             }
 
-            string backDirs = string.Empty;
-            string partialPath = basePath;
-            int index = partialPath.LastIndexOf("\\");
+            var backDirs = string.Empty;
+            var partialPath = basePath;
+            var index = partialPath.LastIndexOf("\\");
             while (index > 0)
             {
                 partialPath = AppendTrailingSlash(partialPath.Substring(0, index));
                 backDirs = backDirs + "..\\";
 
-                if (fullPathWithTrailingBackslash.IndexOf(partialPath) > -1)
+                if (fullPathWithTrailingBackslash.IndexOfIgnoreCase(partialPath) > -1)
                 {
                     partialPath = RemoveTrailingSlashes(partialPath);
                     fullPath = RemoveTrailingSlashes(fullPath);

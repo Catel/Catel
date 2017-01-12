@@ -241,7 +241,9 @@ namespace Catel.MVVM
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
         public void Execute(TExecuteParameter parameter)
         {
-            Execute(parameter, false);
+#pragma warning disable 4014
+            ExecuteAsync(parameter, false);
+#pragma warning restore 4014
         }
 
         /// <summary>
@@ -249,7 +251,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
         /// <param name="ignoreCanExecuteCheck">if set to <c>true</c>, the check on <see cref="CanExecute()"/> will be used before actually executing the action.</param>
-        protected virtual async void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
+        protected virtual async Task ExecuteAsync(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
         {
             // Double check whether execution is allowed, some controls directly call Execute
             if (!ignoreCanExecuteCheck && !CanExecute(parameter))
@@ -310,7 +312,7 @@ namespace Catel.MVVM
         {
             if (AutomaticallyDispatchEvents)
             {
-                DispatcherService.BeginInvokeIfRequired(async () => await action());
+                DispatcherService.BeginInvokeIfRequired(action);
             }
             else
             {

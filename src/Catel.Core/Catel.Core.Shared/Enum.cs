@@ -50,7 +50,7 @@ namespace Catel
             Argument.IsNotNull("inputEnumValue", inputEnumValue);
             Argument.IsOfType("inputEnumValue", inputEnumValue, typeof(Enum));
 
-            string value = inputEnumValue.ToString();
+            var value = inputEnumValue.ToString();
 
             return (TEnum)Enum.Parse(typeof(TEnum), value, true);
         }

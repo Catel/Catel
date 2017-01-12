@@ -309,7 +309,7 @@ namespace Catel.Test.MVVM.ViewModels
         public void RegisterViewModelInstance_ViewModel()
         {
             var manager = new ViewModelManager();
-            manager.RegisterViewModelInstance(new InterestingViewModel());
+            manager.RegisterViewModelInstance(new TestViewModel());
         }
 
         [TestCase]
@@ -324,7 +324,7 @@ namespace Catel.Test.MVVM.ViewModels
         public void UnregisterViewModelInstance_ExistingViewModel()
         {
             var manager = new ViewModelManager();
-            var viewModel = new InterestingViewModel();
+            var viewModel = new TestViewModel();
 
             manager.RegisterViewModelInstance(viewModel);
             manager.UnregisterViewModelInstance(viewModel);
@@ -334,95 +334,7 @@ namespace Catel.Test.MVVM.ViewModels
         public void UnregisterViewModelInstance_NotExistingViewModel()
         {
             var manager = new ViewModelManager();
-            manager.UnregisterViewModelInstance(new InterestingViewModel());
-        }
-
-        [TestCase]
-        public void AddInterestedViewModelInstance_FirstArgumentNull()
-        {
-            var manager = new ViewModelManager();
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => manager.AddInterestedViewModelInstance(null, null));
-        }
-
-        [TestCase]
-        public void AddInterestedViewModelInstance_SecondArgumentNull()
-        {
-            var manager = new ViewModelManager();
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => manager.AddInterestedViewModelInstance(typeof(InterestingViewModel), null));
-        }
-
-        [TestCase]
-        public void AddInterestedViewModelInstance_ViewModelForExistingInterestedInViewModel()
-        {
-            var manager = new ViewModelManager();
-
-            var interestingViewModel = new InterestingViewModel();
-            var interestedViewModel = new InterestedViewModel();
-
-            manager.RegisterViewModelInstance(interestingViewModel);
-            manager.AddInterestedViewModelInstance(typeof(InterestingViewModel), interestedViewModel);
-        }
-
-        [TestCase]
-        public void AddInterestedViewModelInstance_ViewModelForNotExistingInterestedInViewModel()
-        {
-            var manager = new ViewModelManager();
-
-            var interestedViewModel = new InterestedViewModel();
-
-            manager.AddInterestedViewModelInstance(typeof(InterestingViewModel), interestedViewModel);
-        }
-
-        [TestCase]
-        public void RemoveInterestedViewModelInstance_FirstArgumentNull()
-        {
-            var manager = new ViewModelManager();
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => manager.RemoveInterestedViewModelInstance(null, null));
-        }
-
-        [TestCase]
-        public void RemoveInterestedViewModelInstance_SecondArgumentNull()
-        {
-            var manager = new ViewModelManager();
-
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => manager.RemoveInterestedViewModelInstance(typeof(InterestingViewModel), null));
-        }
-
-        [TestCase]
-        public void RemoveInterestedViewModelInstance_ViewModelForExistingInterestedInViewModel()
-        {
-            var manager = new ViewModelManager();
-
-            var interestingViewModel = new InterestingViewModel();
-            var interestedViewModel = new InterestedViewModel();
-
-            manager.RegisterViewModelInstance(interestingViewModel);
-            manager.AddInterestedViewModelInstance(typeof(InterestingViewModel), interestedViewModel);
-            manager.RemoveInterestedViewModelInstance(typeof(InterestingViewModel), interestedViewModel);
-        }
-
-        [TestCase]
-        public void RemoveInterestedViewModelInstance_ViewModelForNotExistingInterestedInViewModel()
-        {
-            var manager = new ViewModelManager();
-
-            var interestedViewModel = new InterestedViewModel();
-
-            manager.AddInterestedViewModelInstance(typeof(InterestingViewModel), interestedViewModel);
-            manager.RemoveInterestedViewModelInstance(typeof(InterestingViewModel), interestedViewModel);
-        }
-
-        [TestCase]
-        public void RemoveInterestedViewModelInstance_ViewModelForNotRegisteredInterestedInViewModel()
-        {
-            var manager = new ViewModelManager();
-
-            var interestedViewModel = new InterestedViewModel();
-
-            manager.RemoveInterestedViewModelInstance(typeof(InterestingViewModel), interestedViewModel);
+            manager.UnregisterViewModelInstance(new TestViewModel());
         }
     }
 }

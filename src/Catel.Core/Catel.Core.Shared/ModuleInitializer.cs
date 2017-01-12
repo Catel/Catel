@@ -137,7 +137,7 @@ namespace Catel.Core
                 return false;
             }
 
-            return value.ToLower().Contains(".vshost.");
+            return value.ContainsIgnoreCase(".vshost.");
         }
 #endif
     }

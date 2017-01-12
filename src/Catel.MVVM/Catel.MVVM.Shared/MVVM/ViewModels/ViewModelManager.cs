@@ -441,67 +441,7 @@ namespace Catel.MVVM
         {
             return managedViewModels.SelectMany(row => row.Value.ViewModels).ToList();
         }
-
-        /// <summary>
-        /// Adds an interested view model instance. The <see cref="IViewModel"/> class will automatically register
-        /// itself to the manager by using this method when decorated with the <see cref="InterestedInAttribute"/>.
-        /// </summary>
-        /// <param name="viewModelType">Type of the view model the <paramref name="viewModel"/> is interested in.</param>
-        /// <param name="viewModel">The view model instance.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        public void AddInterestedViewModelInstance(Type viewModelType, IViewModel viewModel)
-        {
-            AddInterestedViewModelInstanceInternal(viewModelType, viewModel);
-        }
-
-        /// <summary>
-        /// Adds an interested view model instance. The <see cref="IViewModel"/> class will automatically register
-        /// itself to the manager by using this method when decorated with the <see cref="InterestedInAttribute"/>.
-        /// </summary>
-        /// <param name="viewModelType">Type of the view model the <paramref name="viewModel"/> is interested in.</param>
-        /// <param name="viewModel">The view model instance.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        private void AddInterestedViewModelInstanceInternal(Type viewModelType, IViewModel viewModel)
-        {
-            Argument.IsNotNull("viewModelType", viewModelType);
-            Argument.IsNotNull("viewModel", viewModel);
-
-            var managedViewModel = GetManagedViewModel(viewModelType);
-            managedViewModel.AddInterestedViewModel(viewModel);
-        }
-
-        /// <summary>
-        /// Removes an interested view model instance. The <see cref="IViewModel"/> class will automatically unregister
-        /// itself from the manager by using this method when decorated with the <see cref="InterestedInAttribute"/>.
-        /// </summary>
-        /// <param name="viewModelType">Type of the view model the <paramref name="viewModel"/> was interested in.</param>
-        /// <param name="viewModel">The view model instance.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        public void RemoveInterestedViewModelInstance(Type viewModelType, IViewModel viewModel)
-        {
-            RemoveInterestedViewModelInstanceInternal(viewModelType, viewModel);
-        }
-
-        /// <summary>
-        /// Removes an interested view model instance. The <see cref="IViewModel"/> class will automatically unregister
-        /// itself from the manager by using this method when decorated with the <see cref="InterestedInAttribute"/>.
-        /// </summary>
-        /// <param name="viewModelType">Type of the view model the <paramref name="viewModel"/> was interested in.</param>
-        /// <param name="viewModel">The view model instance.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        private void RemoveInterestedViewModelInstanceInternal(Type viewModelType, IViewModel viewModel)
-        {
-            Argument.IsNotNull("viewModelType", viewModelType);
-            Argument.IsNotNull("viewModel", viewModel);
-
-            var managedViewModel = GetManagedViewModel(viewModelType);
-            managedViewModel.RemoveInterestedViewModel(viewModel);
-        }
-
+        
         /// <summary>
         /// Gets the managed view model for a specific view model type.
         /// </summary>

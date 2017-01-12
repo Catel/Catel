@@ -179,9 +179,11 @@ namespace Catel.MVVM.Providers
         /// <remarks>
         /// Public to allow the generated ILGenerator to access this method.
         /// </remarks>
+#pragma warning disable AvoidAsyncVoid // Avoid async void
         // ReSharper disable UnusedMember.Local
         public async void OnTargetWindowClosed()
         // ReSharper restore UnusedMember.Local
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             if (_closeInitiatedByViewModel == null)
             {
