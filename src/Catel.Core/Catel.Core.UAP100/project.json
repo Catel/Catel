@@ -3,6 +3,7 @@
     "AsyncUsageAnalyzers": "1.0.0-alpha003",
     "Catel.Fody": "2.14.0",
     "Fody": "1.29.4",
+    "MethodTimer.Fody": "1.16.0",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
     "ModuleInit.Fody": "1.5.9",
     "Obsolete.Fody": "4.1.0",

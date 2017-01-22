@@ -46,6 +46,10 @@
       <HintPath>..\..\..\lib\Catel.Fody.2.14.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MethodTimer, Version=1.16.0.0, Culture=neutral, PublicKeyToken=cb1364609f40a1dc, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\MethodTimer.Fody.1.16.0.0\Lib\dotnet\MethodTimer.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Obsolete, Version=4.1.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\Obsolete.Fody.4.1.0\Lib\dotnet\Obsolete.dll</HintPath>
       <Private>False</Private>

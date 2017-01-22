@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)..\..\MethodTimeLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ValidationType.cs" />
   </ItemGroup>
 </Project>

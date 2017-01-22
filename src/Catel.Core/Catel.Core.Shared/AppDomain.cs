@@ -13,7 +13,8 @@ namespace System
     using Collections.Generic;
     using Reflection;
     using System.Linq;
-
+    using Catel.Reflection;
+    using MethodTimer;
 #if NETFX_CORE
     using global::Windows.ApplicationModel;
     using global::Windows.Storage.Search;
@@ -61,6 +62,7 @@ namespace System
         /// Gets the assemblies in the current application domain.
         /// </summary>
         /// <returns></returns>
+        [Time]
         public Assembly[] GetAssemblies()
         {
             lock (_lock)
@@ -88,25 +90,15 @@ namespace System
 
                     foreach (var file in files)
                     {
-                        try
+                        if (file.Name.StartsWithAnyIgnoreCase(arrayToIgnore))
                         {
-                            if (file.Name.StartsWithAnyIgnoreCase(arrayToIgnore))
-                            {
-                                continue;
-                            }
-
-                            var filename = file.Name.Substring(0, file.Name.Length - file.FileType.Length);
-                            var name = new AssemblyName
-                            {
-                                Name = filename
-                            };
-
-                            var assembly = Assembly.Load(name);
-                            loadedAssemblies.Add(assembly);
+                            continue;
                         }
-                        catch (Exception ex)
+
+                        var assembly = LoadAssemblyFromFile(file);
+                        if (assembly != null)
                         {
-                            Log.Warning(ex, $"Failed to load assembly '{file.Name}'");
+                            loadedAssemblies.Add(assembly);
                         }
                     }
 #else
@@ -122,6 +114,54 @@ namespace System
                 return _loadedAssemblies;
             }
         }
+
+#if NETFX_CORE
+        //[Time]
+        private Assembly LoadAssemblyFromFile(global::Windows.Storage.StorageFile file)
+        {
+            try
+            {
+                var assemblyName = file.Name.Substring(0, file.Name.Length - file.FileType.Length);
+                var name = new AssemblyName
+                {
+                    Name = assemblyName
+                };
+
+                Assembly assembly = null;
+
+                // Step 1: try to fast load if already in memory via Fody type
+                var expectedTypeName = $"ProcessedByFody, {assemblyName}";
+                var expectedType = Type.GetType(expectedTypeName);
+                if (expectedType != null)
+                {
+                    assembly = expectedType.GetAssemblyEx();
+                }
+                else
+                {
+                    // Step 2: try different type
+                    expectedTypeName = $"<Module>, {assemblyName}";
+                    expectedType = Type.GetType(expectedTypeName);
+                    if (expectedType != null)
+                    {
+                        assembly = expectedType.GetAssemblyEx();
+                    }
+                }
+
+                // Step 3: load the assembly from file (slowest)
+                if (assembly == null)
+                {
+                    assembly = Assembly.Load(name);
+                }
+
+                return assembly;
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, $"Failed to load assembly '{file.Name}'");
+                return null;
+            }
+        }
+#endif
         #endregion
     }
 }

@@ -2,4 +2,5 @@
 <Weavers VerifyAssembly="true">
   <ModuleInit />
   <Obsolete />
+  <MethodTimer />
 </Weavers>
