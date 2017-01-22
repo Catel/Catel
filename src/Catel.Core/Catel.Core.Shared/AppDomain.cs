@@ -76,7 +76,7 @@ namespace System
 
                     // Note: normally it's bad practice to use task.Wait(), but GetAssemblies must be blocking to cache it all
 
-                    var queryOptions = new QueryOptions(CommonFileQuery.OrderByName, new[] { ".dll", ".exe" });
+                    var queryOptions = new QueryOptions(CommonFileQuery.OrderByName, new[] { ".dll", ".exe", ".winmd" });
                     queryOptions.FolderDepth = FolderDepth.Shallow;
 
                     var queryResult = folder.CreateFileQueryWithOptions(queryOptions);
@@ -129,23 +129,23 @@ namespace System
 
                 Assembly assembly = null;
 
-                // Step 1: try to fast load if already in memory via Fody type
-                var expectedTypeName = $"ProcessedByFody, {assemblyName}";
-                var expectedType = Type.GetType(expectedTypeName);
-                if (expectedType != null)
-                {
-                    assembly = expectedType.GetAssemblyEx();
-                }
-                else
-                {
-                    // Step 2: try different type
-                    expectedTypeName = $"<Module>, {assemblyName}";
-                    expectedType = Type.GetType(expectedTypeName);
-                    if (expectedType != null)
-                    {
-                        assembly = expectedType.GetAssemblyEx();
-                    }
-                }
+                //// Step 1: try to fast load if already in memory via Fody type
+                //var expectedTypeName = $"ProcessedByFody, {assemblyName}";
+                //var expectedType = Type.GetType(expectedTypeName);
+                //if (expectedType != null)
+                //{
+                //    assembly = expectedType.GetAssemblyEx();
+                //}
+                //else
+                //{
+                //    // Step 2: try different type
+                //    expectedTypeName = $"<Module>, {assemblyName}";
+                //    expectedType = Type.GetType(expectedTypeName);
+                //    if (expectedType != null)
+                //    {
+                //        assembly = expectedType.GetAssemblyEx();
+                //    }
+                //}
 
                 // Step 3: load the assembly from file (slowest)
                 if (assembly == null)

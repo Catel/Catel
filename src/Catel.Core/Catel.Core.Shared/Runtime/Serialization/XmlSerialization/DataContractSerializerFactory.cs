@@ -177,7 +177,7 @@ namespace Catel.Runtime.Serialization.Xml
 
                     if (isAbstract)
                     {
-                        var typesDerivingFromClass = TypeCache.GetTypes(type.IsAssignableFromEx);
+                        var typesDerivingFromClass = TypeCache.GetTypes(type.IsAssignableFromEx, false);
                         foreach (var typeDerivingFromClass in typesDerivingFromClass)
                         {
                             if (typeDerivingFromClass != type)

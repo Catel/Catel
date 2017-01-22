@@ -474,18 +474,19 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("assembly", assembly);
 
-            return GetTypesPrefilteredByAssembly(assembly, predicate);
+            return GetTypesPrefilteredByAssembly(assembly, predicate, true);
         }
 
         /// <summary>
         /// Gets all the types from the current <see cref="AppDomain"/> where the <paramref name="predicate"/> returns true.
         /// </summary>
         /// <param name="predicate">The predicate where the type should apply to.</param>
+        /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>An array containing all the <see cref="Type"/> that match the predicate.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="predicate"/> is <c>null</c>.</exception>
-        public static Type[] GetTypes(Func<Type, bool> predicate = null)
+        public static Type[] GetTypes(Func<Type, bool> predicate = null, bool allowInitialization = true)
         {
-            return GetTypesPrefilteredByAssembly(null, predicate);
+            return GetTypesPrefilteredByAssembly(null, predicate, allowInitialization);
         }
 
         /// <summary>
@@ -493,10 +494,14 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="assembly">Name of the assembly.</param>
         /// <param name="predicate">The predicate.</param>
+        /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>System.Type[].</returns>
-        private static Type[] GetTypesPrefilteredByAssembly(Assembly assembly, Func<Type, bool> predicate)
+        private static Type[] GetTypesPrefilteredByAssembly(Assembly assembly, Func<Type, bool> predicate, bool allowInitialization)
         {
-            InitializeTypes(assembly);
+            if (allowInitialization)
+            {
+                InitializeTypes(assembly);
+            }
 
             var assemblyName = (assembly != null) ? TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName) : string.Empty;
 
