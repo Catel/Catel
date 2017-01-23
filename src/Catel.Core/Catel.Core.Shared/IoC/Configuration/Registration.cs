@@ -100,7 +100,7 @@ namespace Catel.IoC
         /// </summary>
         public Type InterfaceType
         {
-            get { return TypeCache.GetType(InterfaceTypeName); }
+            get { return TypeCache.GetType(InterfaceTypeName, allowInitialization: false); }
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace Catel.IoC
         /// </summary>
         public Type ImplementationType
         {
-            get { return TypeCache.GetType(ImplementationTypeName); }
+            get { return TypeCache.GetType(ImplementationTypeName, allowInitialization: false); }
         }
         #endregion
     }

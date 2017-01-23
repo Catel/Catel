@@ -19,7 +19,7 @@ namespace Catel.Services
     /// </summary>
     public partial class NavigationService
     {
-        #region Properties
+#region Properties
         /// <summary>
         /// Gets the can go back.
         /// </summary>
@@ -37,9 +37,9 @@ namespace Catel.Services
         {
             get { throw new MustBeImplementedException(); }
         }
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
         /// <summary>
         /// Resolves the navigation target.
         /// </summary>
@@ -103,7 +103,7 @@ namespace Catel.Services
             throw new MustBeImplementedException();
             //var context = Catel.Android.ContextHelper.CurrentContext;
 
-            //var navigationTargetType = TypeCache.GetType(uri);
+            //var navigationTargetType = TypeCache.GetType(uri, allowInitialization: false);
             //var intent = new Intent(context, navigationTargetType);
             //foreach (var parameter in parameters)
             //{
@@ -120,7 +120,7 @@ namespace Catel.Services
         {
             NavigateWithParameters(uri.ToString(), new Dictionary<string, object>());
         }
-        #endregion
+#endregion
     }
 }
 

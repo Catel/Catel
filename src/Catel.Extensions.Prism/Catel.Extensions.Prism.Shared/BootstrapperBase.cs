@@ -527,7 +527,7 @@ namespace Catel
         {
             Argument.IsNotNull("moduleInfo", moduleInfo);
 
-            var moduleType = TypeCache.GetType(moduleInfo.ModuleType);
+            var moduleType = TypeCache.GetType(moduleInfo.ModuleType, allowInitialization: false);
             if (moduleType == null)
             {
                 Logger.Log(string.Format("Cannot register module type '{0}' automatically, type not found", moduleInfo.ModuleType), Category.Warn, Priority.High);

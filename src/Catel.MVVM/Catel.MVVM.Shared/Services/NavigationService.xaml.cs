@@ -159,7 +159,7 @@ namespace Catel.Services
             Log.Debug($"Navigating to '{uri}'");
 
 #if NETFX_CORE
-            var type = Reflection.TypeCache.GetType(uri);
+            var type = Reflection.TypeCache.GetType(uri, allowInitialization: false);
             var result = RootFrame.Navigate(type, parameters);
             if (result)
             {

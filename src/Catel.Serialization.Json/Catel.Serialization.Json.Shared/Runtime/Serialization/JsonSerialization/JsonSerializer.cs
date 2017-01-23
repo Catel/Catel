@@ -204,7 +204,7 @@ namespace Catel.Runtime.Serialization.Json
                 if (jsonProperties.ContainsKey(TypeName))
                 {
                     var modelTypeOverrideValue = (string)jsonProperties[TypeName].Value;
-                    var modelTypeOverride = TypeCache.GetTypeWithoutAssembly(modelTypeOverrideValue);
+                    var modelTypeOverride = TypeCache.GetTypeWithoutAssembly(modelTypeOverrideValue, allowInitialization: false);
                     if (modelTypeOverride == null)
                     {
                         Log.Warning("Object was serialized as '{0}', but the type is not available. Using original type '{1}'", modelTypeOverrideValue, modelType.GetSafeFullName(false));
@@ -653,7 +653,7 @@ namespace Catel.Runtime.Serialization.Json
                                             var typeNameValue = jsonValue.Value<string>(TypeName);
                                             if (!string.IsNullOrWhiteSpace(typeNameValue))
                                             {
-                                                finalValueType = TypeCache.GetType(typeNameValue);
+                                                finalValueType = TypeCache.GetType(typeNameValue, allowInitialization: false);
                                             }
 
                                             // Serialize ourselves
