@@ -48,7 +48,6 @@ namespace Catel.Test.Services
             // ARRANGE
             Assert.AreEqual(0, Target.ShowCounter);
 
-
             // ACT
             try
             {
