@@ -66,10 +66,10 @@ Added/fixed:
 (*) CTL-905 Always log Argument logging (even when Catel logging is being ignored)
 (*) CTL-911 Refactor UrlHelper to extension methods
 (*) CTL-919 Replace parameters in ServiceLocator.ResolveTypeFromKnownContainer by ServiceInfo
+(*) CTL-921 TypeFactory optimizations for multi-thread usage
 (*) CTL-922 Don't cache RootFrame in NavigationService to allow dynamic navigation frames
 (*) CTL-941 Update to json.net 9.x
 (*) CTL-988 Allow view models without model injection to stay alive on DataContext changes
-(*) CTL-921 TypeFactory optimizations for multi-thread usage
 (x) CTL-899 Navigation in WPF is not working when using custom frame
 (x) CTL-906 Clear current navigation context when (re)navigating to the same view in WPF
 (x) CTL-910 Introduce special lock for null keys in CacheStorage to prevent ArgumentNullException

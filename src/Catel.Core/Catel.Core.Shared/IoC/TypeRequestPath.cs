@@ -6,7 +6,6 @@
 namespace Catel.IoC
 {
     using System;
-    using System.Linq;
     using System.Text;
     using Logging;
 
@@ -20,6 +19,8 @@ namespace Catel.IoC
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private static readonly TypeRequestInfo[] Empty = new TypeRequestInfo[0];
+
         private readonly TypeRequestInfo[] _typePath;
         
         private TypeRequestPath(TypeRequestInfo[] typePath, string name)
@@ -27,25 +28,19 @@ namespace Catel.IoC
             _typePath = typePath;
             Name = name;
         }
-
-        private TypeRequestPath(TypeRequestInfo[] typePath, string name)
-        {
-            _typePath = typePath;
-            Name = name;
-        }
-
+        
         /// <summary>
-        /// Creates root of type request path
+        /// Creates root of type request path.
         /// </summary>
         /// <param name="name">Path's name</param>
         /// <returns></returns>
         public static TypeRequestPath Root(string name = null)
         {
-            return new TypeRequestPath(new TypeRequestInfo[0], name);
+            return new TypeRequestPath(Empty, name);
         }
 
         /// <summary>
-        /// Creates branch of type request path
+        /// Creates branch of type request path.
         /// </summary>
         /// <param name="parent">Parent path</param>
         /// <param name="typeRequestInfo">Appended path item</param>
@@ -61,8 +56,8 @@ namespace Catel.IoC
                 string circlePath = FormatPath(parent._typePath, previousIndex);
                 circlePath += " => " + typeRequestInfo.Type.Name;
 
-                throw Log.ErrorAndCreateException(msg => new CircularDependencyException(typeRequestInfo, parent, string.Format("{0}. For more information, view the enclosed TypeRequestPath", msg)),
-                    "Found a circular dependency '{0}' while resolving '{1}'", circlePath, parent.FirstType);
+                throw Log.ErrorAndCreateException(msg => new CircularDependencyException(typeRequestInfo, parent, msg),
+                    $"Found a circular dependency '{circlePath}' while resolving '{parent.FirstType}. For more information, view the enclosed TypeRequestPath'");
             }
 
             var parentTypePath = parent._typePath;

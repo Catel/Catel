@@ -18,24 +18,24 @@ namespace Catel.IoC
         /// <summary>
         /// Initializes a new instance of the <see cref="CircularDependencyException" /> class.
         /// </summary>
-        /// <param name="duplicatedRequestInfo">Duplicated type request.</param>
+        /// <param name="duplicateRequestInfo">Type request that occurred second time.</param>
         /// <param name="typePath">The type path.</param>
         /// <param name="message">The message.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="typePath"/> is <c>null</c>.</exception>
-        internal CircularDependencyException(TypeRequestInfo duplicatedRequestInfo, ITypeRequestPath typePath, string message)
+        internal CircularDependencyException(TypeRequestInfo duplicateRequestInfo, ITypeRequestPath typePath, string message)
             : base(message)
         {
-            Argument.IsNotNull("duplicatedRequestInfo", duplicatedRequestInfo);
+            Argument.IsNotNull("duplicateRequestInfo", duplicateRequestInfo);
             Argument.IsNotNull("typePath", typePath);
 
-            DuplicatedRequestInfo = duplicatedRequestInfo;
+            DuplicateRequestInfo = duplicateRequestInfo;
             TypePath = typePath;
         }
 
         /// <summary>
         /// Duplicated type request
         /// </summary>
-        public TypeRequestInfo DuplicatedRequestInfo { get; set; }
+        public TypeRequestInfo DuplicateRequestInfo { get; private set; }
         
         /// <summary>
         /// Gets the type path.

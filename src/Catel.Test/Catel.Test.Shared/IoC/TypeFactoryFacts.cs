@@ -262,7 +262,7 @@ namespace Catel.Test.IoC
 
                 Assert.AreEqual(3, ex.TypePath.AllTypes.Length);
                 Assert.AreEqual(typeof(X), ex.TypePath.FirstType.Type);
-                Assert.AreEqual(typeof(X), ex.DuplicatedRequestInfo.Type);
+                Assert.AreEqual(typeof(X), ex.DuplicateRequestInfo.Type);
             }
         }
 
@@ -374,7 +374,7 @@ namespace Catel.Test.IoC
             }
 
             [TestCase]
-            public void IfTypeFactoryIsCalledConcurrentlyItRunsFasterThatSerial()
+            public void IfTypeFactoryIsCalledConcurrentlyItRunsFasterThanSerial()
             {
                 const int itemsPerThread = 50;
                 const int threadAmount = 10;
