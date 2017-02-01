@@ -26,7 +26,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\output\debug\NET45\Test\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET; NET45; TEST</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET; NET45; TEST;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
