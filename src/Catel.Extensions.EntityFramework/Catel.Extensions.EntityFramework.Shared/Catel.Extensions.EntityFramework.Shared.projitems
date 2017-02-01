@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)..\..\MethodTimeLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ConnectionStringManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ContextFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ContextManager.cs" />

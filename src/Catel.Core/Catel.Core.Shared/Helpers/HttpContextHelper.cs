@@ -23,7 +23,7 @@ namespace Catel
 
         public static object GetHttpContext()
         {
-            var httpContextType = TypeCache.GetTypeWithoutAssembly("System.Web.HttpContext");
+            var httpContextType = TypeCache.GetTypeWithoutAssembly("System.Web.HttpContext", allowInitialization: false);
             if (httpContextType != null)
             {
                 var currentPropertyInfo = httpContextType.GetProperty("Current", BindingFlags.Public | BindingFlags.Static);

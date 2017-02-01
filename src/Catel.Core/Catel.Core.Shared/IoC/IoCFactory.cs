@@ -172,7 +172,7 @@ namespace Catel.IoC
                 {
                     if (_serviceLocatorInitializers == null)
                     {
-                        _serviceLocatorInitializers = new List<Type>(TypeCache.GetTypes(x => !x.IsInterfaceEx() & x.ImplementsInterfaceEx<IServiceLocatorInitializer>()));
+                        _serviceLocatorInitializers = new List<Type>(TypeCache.GetTypes(x => !x.IsInterfaceEx() & x.ImplementsInterfaceEx<IServiceLocatorInitializer>(), false));
                     }
 
                     foreach (var serviceLocatorInitializer in _serviceLocatorInitializers)

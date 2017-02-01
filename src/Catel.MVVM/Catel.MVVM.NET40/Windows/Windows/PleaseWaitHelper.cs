@@ -112,7 +112,7 @@ namespace Catel.Windows
         {
             UpdateStatus(status);
 
-            Dispatcher.Invoke(() => Instance.ShowWindow(-1));
+            Dispatcher.BeginInvokeIfRequired(() => Instance.ShowWindow(-1));
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Catel.Windows
         /// <param name="totalItems">The total items.</param>
         public static void Show(string statusFormat, int currentItem, int totalItems)
         {
-            Dispatcher.Invoke(() => UpdateStatus(statusFormat, currentItem, totalItems));
+            Dispatcher.BeginInvokeIfRequired(() => UpdateStatus(statusFormat, currentItem, totalItems));
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace Catel.Windows
         /// <param name="windowWidth">Width of the window.</param>
         public static void Show(PleaseWaitWorkDelegate workDelegate, RunWorkerCompletedEventHandler runWorkerCompletedDelegate = null, string status = "", double windowWidth = double.NaN)
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.BeginInvokeIfRequired(() =>
             {
                 UpdateStatus(status, windowWidth);
 
@@ -171,7 +171,7 @@ namespace Catel.Windows
                 runWorkerCompletedDelegate(null, null);
             }
 
-            Dispatcher.Invoke(() => Hide());
+            Dispatcher.BeginInvokeIfRequired(() => Hide());
         }
 
         /// <summary>
@@ -185,7 +185,7 @@ namespace Catel.Windows
                 status = Resources.PleaseWait;
             }
 
-            Dispatcher.Invoke(() => Instance.UpdateStatusText(status, double.NaN));
+            Dispatcher.BeginInvokeIfRequired(() => Instance.UpdateStatusText(status, double.NaN));
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace Catel.Windows
         /// <param name="width">The width.</param>
         public static void UpdateStatus(string status, double width)
         {
-            Dispatcher.Invoke(() => Instance.UpdateStatusText(status, width));
+            Dispatcher.BeginInvokeIfRequired(() => Instance.UpdateStatusText(status, width));
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace Catel.Windows
         /// <param name="totalItems">The total items.</param>
         public static void UpdateStatus(string statusFormat, int currentItem, int totalItems)
         {
-            Dispatcher.Invoke(() =>
+            Dispatcher.BeginInvokeIfRequired(() =>
             {
                 if (currentItem > totalItems)
                 {
@@ -227,7 +227,7 @@ namespace Catel.Windows
         /// </summary>
         public static void Hide()
         {
-            Dispatcher.Invoke(() => Instance.HideWindow());
+            Dispatcher.BeginInvokeIfRequired(() => Instance.HideWindow());
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace Catel.Windows
                 return;
             }
 
-            Dispatcher.Invoke(() =>
+            Dispatcher.BeginInvokeIfRequired(() =>
             {
                 PleaseWaitWindow.Text = _currentStatusText;
                 PleaseWaitWindow.MinWidth = double.IsNaN(_currentWindowWidth) ? 0d : _currentWindowWidth;
@@ -331,7 +331,7 @@ namespace Catel.Windows
                 return;
             }
 
-            Dispatcher.Invoke(() =>
+            Dispatcher.BeginInvokeIfRequired(() =>
             {
                 Log.Debug("Hiding please wait window");
 

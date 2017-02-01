@@ -67,8 +67,8 @@ namespace Catel.Runtime.Serialization
                     var splittedValues = valueAsString.Split(new[] { Splitter }, StringSplitOptions.None);
 
                     var keyValuePairType = typeof(KeyValuePair<,>);
-                    var keyType = TypeCache.GetTypeWithoutAssembly(splittedValues[1]);
-                    var valueType = TypeCache.GetTypeWithoutAssembly(splittedValues[2]);
+                    var keyType = TypeCache.GetTypeWithoutAssembly(splittedValues[1], allowInitialization: false);
+                    var valueType = TypeCache.GetTypeWithoutAssembly(splittedValues[2], allowInitialization: false);
                     var keyValue = splittedValues[3];
                     var valueValue = splittedValues[4];
 

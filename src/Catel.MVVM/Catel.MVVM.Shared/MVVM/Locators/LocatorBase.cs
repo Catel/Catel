@@ -99,7 +99,7 @@ namespace Catel.MVVM
                     var resolvedTypeName = ResolveNamingConvention(assembly, typeToResolveName, namingConvention);
 
                     // First try to retrieve the type without assembly (this allows types in other assemblies)
-                    resolvedType = TypeCache.GetTypeWithoutAssembly(resolvedTypeName);
+                    resolvedType = TypeCache.GetTypeWithoutAssembly(resolvedTypeName, allowInitialization: false);
                     if (resolvedType != null)
                     {
                         break;
@@ -107,7 +107,7 @@ namespace Catel.MVVM
 
                     // Let's try with the assembly
                     resolvedTypeName = TypeHelper.FormatType(assembly, resolvedTypeName);
-                    resolvedType = TypeCache.GetType(resolvedTypeName);
+                    resolvedType = TypeCache.GetType(resolvedTypeName, allowInitialization: false);
                     if (resolvedType != null)
                     {
                         break;
@@ -183,7 +183,7 @@ namespace Catel.MVVM
         /// <param name="fullTypeName">Full name of the type.</param>
         /// <returns>The resolved type or <c>null</c> if the type could not be resolved.</returns>
         /// <remarks>
-        /// Internally, this method uses <see cref="TypeCache.GetType(string, bool)"/>.
+        /// Internally, this method uses <see cref="TypeCache.GetType(string, bool, bool)"/>.
         /// </remarks>
         protected static Type GetTypeFromString(string fullTypeName)
         {
@@ -192,7 +192,7 @@ namespace Catel.MVVM
                 return null;
             }
 
-            return TypeCache.GetType(fullTypeName);
+            return TypeCache.GetType(fullTypeName, allowInitialization: false);
         }
 
         /// <summary>

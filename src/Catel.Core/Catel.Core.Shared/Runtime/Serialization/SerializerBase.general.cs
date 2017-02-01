@@ -252,7 +252,7 @@ namespace Catel.Runtime.Serialization
 
             if (types == null)
             {
-                types = TypeCache.GetTypes(x => x.IsModelBase());
+                types = TypeCache.GetTypes(x => x.IsModelBase(), false);
             }
 
             var allTypes = new List<Type>(types);

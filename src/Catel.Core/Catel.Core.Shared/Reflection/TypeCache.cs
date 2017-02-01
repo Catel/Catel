@@ -223,15 +223,16 @@ namespace Catel.Reflection
         /// <param name="typeName">The name of the type including namespace.</param>
         /// <param name="assemblyName">The name of the type including namespace.</param>
         /// <param name="ignoreCase">A value indicating whether the case should be ignored.</param>
+        /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>The <see cref="Type"/> or <c>null</c> if the type cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="typeName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="assemblyName"/> is <c>null</c> or whitespace.</exception>
-        public static Type GetTypeWithAssembly(string typeName, string assemblyName, bool ignoreCase = false)
+        public static Type GetTypeWithAssembly(string typeName, string assemblyName, bool ignoreCase = false, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeName", typeName);
             Argument.IsNotNullOrWhitespace("assemblyName", assemblyName);
 
-            return GetType(typeName, assemblyName, ignoreCase);
+            return GetType(typeName, assemblyName, ignoreCase, allowInitialization);
         }
 
         /// <summary>
@@ -240,17 +241,18 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="typeNameWithoutAssembly">The type name without assembly.</param>
         /// <param name="ignoreCase">A value indicating whether the case should be ignored.</param>
+        /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>The <see cref="Type"/> or <c>null</c> if the type cannot be found.</returns>
         /// <remarks>
         /// Note that this method can only support one type of "simple type name" resolving. For example, if "Catel.TypeHelper" is located in
         /// multiple assemblies, it will always use the latest known type for resolving the type.
         /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="typeNameWithoutAssembly"/> is <c>null</c> or whitespace.</exception>
-        public static Type GetTypeWithoutAssembly(string typeNameWithoutAssembly, bool ignoreCase = false)
+        public static Type GetTypeWithoutAssembly(string typeNameWithoutAssembly, bool ignoreCase = false, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeNameWithoutAssembly", typeNameWithoutAssembly);
 
-            return GetType(typeNameWithoutAssembly, null, ignoreCase);
+            return GetType(typeNameWithoutAssembly, null, ignoreCase, allowInitialization);
         }
 
         /// <summary>
@@ -258,16 +260,17 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="typeNameWithAssembly">The name of the type including namespace and assembly, formatted with the <see cref="TypeHelper.FormatType"/> method.</param>
         /// <param name="ignoreCase">A value indicating whether the case should be ignored.</param>
+        /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>The <see cref="Type"/> or <c>null</c> if the type cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="typeNameWithAssembly"/> is <c>null</c> or whitespace.</exception>
-        public static Type GetType(string typeNameWithAssembly, bool ignoreCase = false)
+        public static Type GetType(string typeNameWithAssembly, bool ignoreCase = false, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeNameWithAssembly", typeNameWithAssembly);
 
             var typeName = TypeHelper.GetTypeName(typeNameWithAssembly);
             var assemblyName = TypeHelper.GetAssemblyName(typeNameWithAssembly);
 
-            return GetType(typeName, assemblyName, ignoreCase);
+            return GetType(typeName, assemblyName, ignoreCase, allowInitialization);
         }
 
         /// <summary>
@@ -276,13 +279,17 @@ namespace Catel.Reflection
         /// <param name="typeName">Name of the type.</param>
         /// <param name="assemblyName">Name of the assembly. Can be <c>null</c> if no assembly is known.</param>
         /// <param name="ignoreCase">A value indicating whether the case should be ignored.</param>
+        /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>The <see cref="Type"/> or <c>null</c> if the type cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="typeName"/> is <c>null</c> or whitespace.</exception>
-        private static Type GetType(string typeName, string assemblyName, bool ignoreCase)
+        private static Type GetType(string typeName, string assemblyName, bool ignoreCase, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeName", typeName);
 
-            InitializeTypes();
+            if (allowInitialization)
+            {
+                InitializeTypes();
+            }
 
             lock (_lockObject)
             {
@@ -395,7 +402,7 @@ namespace Catel.Reflection
             {
                 // Array type
                 var arrayTypeElementString = typeWithInnerTypes.Replace("[]", string.Empty);
-                var arrayTypeElement = TypeCache.GetType(arrayTypeElementString);
+                var arrayTypeElement = GetType(arrayTypeElementString, allowInitialization: false);
                 if (arrayTypeElement != null)
                 {
                     return arrayTypeElement.MakeArrayType();
@@ -410,7 +417,7 @@ namespace Catel.Reflection
             {
                 foreach (var innerTypesShortName in innerTypesShortNames)
                 {
-                    var innerType = TypeCache.GetType(innerTypesShortName);
+                    var innerType = GetType(innerTypesShortName, allowInitialization: false);
                     if (innerType == null)
                     {
                         return null;
@@ -474,18 +481,19 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("assembly", assembly);
 
-            return GetTypesPrefilteredByAssembly(assembly, predicate);
+            return GetTypesPrefilteredByAssembly(assembly, predicate, true);
         }
 
         /// <summary>
         /// Gets all the types from the current <see cref="AppDomain"/> where the <paramref name="predicate"/> returns true.
         /// </summary>
         /// <param name="predicate">The predicate where the type should apply to.</param>
+        /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>An array containing all the <see cref="Type"/> that match the predicate.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="predicate"/> is <c>null</c>.</exception>
-        public static Type[] GetTypes(Func<Type, bool> predicate = null)
+        public static Type[] GetTypes(Func<Type, bool> predicate = null, bool allowInitialization = true)
         {
-            return GetTypesPrefilteredByAssembly(null, predicate);
+            return GetTypesPrefilteredByAssembly(null, predicate, allowInitialization);
         }
 
         /// <summary>
@@ -493,10 +501,14 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="assembly">Name of the assembly.</param>
         /// <param name="predicate">The predicate.</param>
+        /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>System.Type[].</returns>
-        private static Type[] GetTypesPrefilteredByAssembly(Assembly assembly, Func<Type, bool> predicate)
+        private static Type[] GetTypesPrefilteredByAssembly(Assembly assembly, Func<Type, bool> predicate, bool allowInitialization)
         {
-            InitializeTypes(assembly);
+            if (allowInitialization)
+            {
+                InitializeTypes(assembly);
+            }
 
             var assemblyName = (assembly != null) ? TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName) : string.Empty;
 
@@ -565,6 +577,21 @@ namespace Catel.Reflection
 
             lock (_lockObject)
             {
+                if (_loadedAssemblies.Any(x =>
+                {
+                    var assemblyNameWithoutVersion = TypeHelper.GetAssemblyNameWithoutOverhead(x);
+                    if (string.Equals(assemblyNameWithoutVersion, assemblyName))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }))
+                {
+                    // No need to initialize (or get the loaded assemblies)
+                    return;
+                }
+
                 var loadedAssemblies = AssemblyHelper.GetLoadedAssemblies();
 
                 foreach (var assembly in loadedAssemblies)

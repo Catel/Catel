@@ -121,7 +121,7 @@ namespace Catel.IoC
                     {
                         if (!_hasInspectedTypesAtLeastOnce)
                         {
-                            foreach (var type in TypeCache.GetTypes())
+                            foreach (var type in TypeCache.GetTypes(allowInitialization: false))
                             {
                                 _pendingTypes.Enqueue(type);
                             }

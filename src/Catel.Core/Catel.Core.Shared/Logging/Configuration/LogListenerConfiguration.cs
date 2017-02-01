@@ -88,7 +88,7 @@ namespace Catel.Logging
 
             ILogListener logListener = null;
 
-            var type = TypeCache.GetType(Type);
+            var type = TypeCache.GetType(Type, allowInitialization: false);
             if (type == null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Failed to retrieve type '{0}'", typeAsString);

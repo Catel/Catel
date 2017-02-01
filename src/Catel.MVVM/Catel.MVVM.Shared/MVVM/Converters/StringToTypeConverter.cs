@@ -46,7 +46,7 @@ namespace Catel.MVVM.Converters
                 return null;
             }
 
-            return TypeCache.GetType(typeName);
+            return TypeCache.GetType(typeName, allowInitialization: false);
         }
     }
 }

@@ -654,7 +654,7 @@ namespace Catel.Runtime.Serialization.Xml
             var attributeValue = (typeAttribute != null) ? typeAttribute.Value : null;
             if (!string.IsNullOrEmpty(attributeValue))
             {
-                var typeToDeserialize = TypeCache.GetTypeWithoutAssembly(attributeValue);
+                var typeToDeserialize = TypeCache.GetTypeWithoutAssembly(attributeValue, allowInitialization: false);
                 if (typeToDeserialize != null && propertyTypeToDeserialize != typeToDeserialize)
                 {
                     Log.Debug("Property type for property '{0}' is '{1}' but found type info that it should be deserialized as '{2}'",

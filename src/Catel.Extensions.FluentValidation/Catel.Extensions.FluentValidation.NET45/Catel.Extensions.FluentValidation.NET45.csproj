@@ -47,6 +47,10 @@
       <HintPath>..\..\..\lib\FluentValidation.5.6.2.0\lib\Net45\FluentValidation.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MethodTimer, Version=1.16.0.0, Culture=neutral, PublicKeyToken=cb1364609f40a1dc, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\MethodTimer.Fody.1.16.0.0\Lib\dotnet\MethodTimer.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Obsolete, Version=4.1.0.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\Obsolete.Fody.4.1.0\Lib\dotnet\Obsolete.dll</HintPath>
       <Private>False</Private>

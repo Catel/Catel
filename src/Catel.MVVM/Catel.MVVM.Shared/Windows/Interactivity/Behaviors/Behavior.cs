@@ -28,6 +28,8 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private int _attachedCounter;
+
         #region Properties
         /// <summary>
         /// Gets the <see cref="T:Windows.UI.Xaml.DependencyObject" /> to which the <seealso cref="T:Microsoft.Xaml.Interactivity.IBehavior" /> is attached.
@@ -53,6 +55,12 @@ namespace Catel.Windows.Interactivity
         /// <exception cref="System.InvalidOperationException">The associated object is not of the expected type.</exception>
         void IXamlBehavior.Attach(DependencyObject associatedObject)
         {
+            _attachedCounter++;
+            if (_attachedCounter > 1)
+            {
+                return;
+            }
+
             if (associatedObject != null && typeof(T).IsInstanceOfTypeEx(associatedObject.GetType()))
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Invalid target type '{0}', expected '{1}'", associatedObject.GetType().GetSafeFullName(false), typeof (T).GetSafeFullName(false));
@@ -67,7 +75,18 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         void IXamlBehavior.Detach()
         {
-            OnDetaching();
+            _attachedCounter--;
+            if (_attachedCounter > 0)
+            {
+                return;
+            }
+
+            if (_attachedCounter == 0)
+            {
+                OnDetaching();
+            }
+            
+            _attachedCounter = 0;
 
             // Note: CTL-850 don't set AssociatedObject to null, we need to be able to unsubscribe from events
         }

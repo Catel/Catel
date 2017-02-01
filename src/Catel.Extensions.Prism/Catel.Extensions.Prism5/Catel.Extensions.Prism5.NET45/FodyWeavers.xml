@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Weavers VerifyAssembly="true">
   <Obsolete />
   <ModuleInit />
@@ -8,4 +8,5 @@
     </IncludeAssemblies>
   </Costura>
   <Catel WeaveProperties="false" />
+  <MethodTimer />
 </Weavers>
