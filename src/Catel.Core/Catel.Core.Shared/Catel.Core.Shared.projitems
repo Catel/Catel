@@ -147,7 +147,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)EventHandlerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EventHandlers\AsyncEventHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EventHandlers\Extensions\AsyncEventHandlerExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)EventWrappers\WeakEventHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\EventArgs\BufferedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\EventArgs\RetryingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionHandler.cs" />
@@ -431,6 +430,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\Interfaces\IWeakEventListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\Interfaces\IWeakReference.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\WeakAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\WeakEventHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\WeakEventListener.cs" />
   </ItemGroup>
   <ItemGroup>
