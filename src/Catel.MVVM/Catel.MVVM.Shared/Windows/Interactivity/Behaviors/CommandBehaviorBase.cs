@@ -10,7 +10,6 @@ namespace Catel.Windows.Interactivity
 {
     using System.Windows.Input;
     using Catel.Windows.Input;
-    using EventWrappers;
 #if NETFX_CORE
     using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;

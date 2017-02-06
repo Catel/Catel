@@ -1,4 +1,4 @@
-﻿namespace Catel.EventWrappers
+﻿namespace Catel
 {
     using System;
 
