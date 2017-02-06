@@ -10,7 +10,7 @@ namespace Catel.Windows.Interactivity
 {
     using System.Windows.Input;
     using Catel.Windows.Input;
-
+    using EventWrappers;
 #if NETFX_CORE
     using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;
@@ -37,7 +37,7 @@ namespace Catel.Windows.Interactivity
         #region Fields
         private ICommand _command;
         private object _commandParameter;
-        private bool _isSubscribed;
+        private IDisposable _canExecuteChangedSubscription;
         #endregion
 
         #region Properties
@@ -133,8 +133,9 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         private void SubscribeToCommand()
         {
-            if (_isSubscribed)
+            if (_canExecuteChangedSubscription != null)
             {
+                // It shouldn't happens maybe exception should be thrown.
                 return;
             }
 
@@ -144,9 +145,13 @@ namespace Catel.Windows.Interactivity
                 return;
             }
 
-            command.CanExecuteChanged += OnCommandCanExecuteChangedInternal;
-
-            _isSubscribed = true;
+            _canExecuteChangedSubscription =
+                WeakEventHandler
+                    .Subscribe(
+                        command,
+                        OnCommandCanExecuteChangedInternal,
+                        (c, handler) => c.CanExecuteChanged += handler,
+                        (c, handler) => c.CanExecuteChanged -= handler);
         }
 
         /// <summary>
@@ -154,7 +159,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         private void UnsubscribeFromCommand()
         {
-            if (!_isSubscribed)
+            if (_canExecuteChangedSubscription == null)
             {
                 return;
             }
@@ -162,10 +167,9 @@ namespace Catel.Windows.Interactivity
             var command = _command;
             if (command != null)
             {
-                command.CanExecuteChanged -= OnCommandCanExecuteChangedInternal;
+                _canExecuteChangedSubscription.Dispose();
+                _canExecuteChangedSubscription = null;
             }
-
-            _isSubscribed = false;
         }
 
         /// <summary>
