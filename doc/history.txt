@@ -75,6 +75,7 @@ Added/fixed:
 (x) CTL-925 LanguageBinding markup now uses weak events to allow specific controls (such as the ComboBox with ComboBoxItem 
     elements) to be updated after they have been collapsed
 (x) CTL-991 Equals method in ServiceLocator.ServiceInfo class returns false positives
+(x) CTL-999 DoubleClickToCommand shouldn't cause memory leaks
 (-) CTL-935 Remove InterestedIn attributes because services are a better way to communicate 
 (-) CTL-975 Remove EventHandlerExtensions.SplitInvoke and use regular event invocation
 (-) CTL-987 Delete MVVM logic behaviors (should only be available as logic)
