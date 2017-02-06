@@ -147,6 +147,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)EventHandlerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EventHandlers\AsyncEventHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EventHandlers\Extensions\AsyncEventHandlerExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EventWrappers\WeakEventHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\EventArgs\BufferedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\EventArgs\RetryingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionHandler.cs" />
