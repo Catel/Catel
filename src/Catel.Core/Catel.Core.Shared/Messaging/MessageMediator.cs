@@ -188,6 +188,12 @@ namespace Catel.Messaging
                     {
                         var handlerInfo = messageHandlers[i];
                         var weakAction = (IWeakAction<TMessage>) handlerInfo.Action;
+                        
+                        if (!ReferenceEquals(recipient, weakAction.Target)) 
+                        {
+                            continue;
+                        }
+                        
                         if (TagHelper.AreTagsEqual(tag, handlerInfo.Tag) && AreEqualHandlers(handler, weakAction))
                         {
                             messageHandlers.RemoveAt(i--);

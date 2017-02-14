@@ -388,4 +388,47 @@ namespace Catel.Test.Messaging
         }
         #endregion
     }
+
+    public class Message
+    {
+        public string Text { get; set; }
+    }
+
+    public class ReceiverA
+    {
+        public string Received { get; private set; }
+        public void OnMessageReceived(Message msg)
+        {
+            Received = msg.Text;
+        }
+    }
+
+    public class ReceiverB
+    {
+        public string Received { get; private set; }
+        public void OnMessageReceived(Message msg)
+        {
+            Received = msg.Text;
+        }
+    }
+
+    [TestFixture]
+    public class TestRegistrationOfMethodsWithSameName
+    {
+        [Test]
+        public void SendMessage()
+        {
+            var a = new ReceiverA();
+            var b = new ReceiverB();
+
+            var m = new MessageMediator();
+
+            m.Register<Message>(a, a.OnMessageReceived);
+            m.Register<Message>(b, b.OnMessageReceived);
+            m.Unregister<Message>(b, b.OnMessageReceived); // this actually unregisters a's handler, not b's handler.
+
+            m.SendMessage(new Message {Text = "hello"});
+            Assert.That(a.Received, Is.EqualTo("hello"));
+        }
+    }
 }
