@@ -436,7 +436,7 @@ namespace Catel.Services
                 _progressNotifyableViewModel = viewModelFunc == null ? null : viewModelFunc.Invoke();
                 if (_progressNotifyableViewModel != null && show)
                 {
-                    _dispatcherService.Invoke(() => _uiVisualizerService.Show(_progressNotifyableViewModel));
+                    _dispatcherService.Invoke(() => _uiVisualizerService.ShowAsync(_progressNotifyableViewModel));
                 }
 
                 IsCommitting = true;
