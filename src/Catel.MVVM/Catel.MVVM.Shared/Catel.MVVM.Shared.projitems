@@ -210,7 +210,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\WeakViewInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)..\..\MethodTimeLogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\MethodTimeLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\AccelerometerService.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\AccelerometerService.cs" />
@@ -306,6 +306,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\SplashScreenService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\StartUpInfoProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\StateService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\UIVisualizerService.uap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\UIVisualizerService.wpf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\UIVisualizerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\VibrateService.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\VibrateService.cs" />

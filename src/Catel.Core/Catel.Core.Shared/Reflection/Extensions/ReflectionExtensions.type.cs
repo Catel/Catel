@@ -611,6 +611,36 @@ namespace Catel.Reflection
         }
 
         /// <summary>
+        /// Gets the element type of the specified type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
+        /// <returns>
+        /// Type.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static Type GetInterfaceEx(this Type type, string name, bool ignoreCase)
+        {
+            Argument.IsNotNull("type", type);
+
+#if NETFX_CORE || PCL
+            var interfaces = type.GetInterfacesEx();
+            foreach (var iface in interfaces)
+            {
+                if (string.Equals(iface.FullName, name, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal))
+                {
+                    return iface;
+                }
+            }
+
+            return null;
+#else
+            return type.GetInterface(name, ignoreCase);
+#endif
+        }
+
+        /// <summary>
         /// The get interfaces ex.
         /// </summary>
         /// <param name="type">The type.</param>

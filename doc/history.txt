@@ -61,6 +61,7 @@ Added/fixed:
 (+) CTL-907  Support classes that implement Parse(string, IFormatProvider) and ToString(IFormatProvider) in the serializers 
 (+) CTL-929  Add Additional {WorkDir} as FileLogListener Keyword
 (+) CTL-953  Create pool manager to re-use objects in a pool (e.g. memory streams in serialization)
+(+) CTL-1011 Implement IUIVisualizerService for UWP and removed non-async methods for WPF
 (*) CTL-903  Only support Frame and not NavigationWindow for WPF navigation
 (*) CTL-904  Allow view models to be created on multiple threads (thread-safe view model factory)
 (*) CTL-905  Always log Argument logging (even when Catel logging is being ignored)
