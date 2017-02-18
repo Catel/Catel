@@ -19,7 +19,7 @@ namespace Catel.Services
     /// <summary>
     /// Service that allows scheduling of actions in the future.
     /// </summary>
-    public class SchedulerService : ViewModelServiceBase, ISchedulerService
+    public partial class SchedulerService : ViewModelServiceBase, ISchedulerService
     {
         /// <summary>
         /// Schedules the specified action in a relative <see cref="TimeSpan"/>.

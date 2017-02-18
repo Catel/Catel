@@ -301,6 +301,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.uap.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.wpf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ProcessService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\SaveFileService.uap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\SaveFileService.wpf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SaveFileService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SchedulerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SelectDirectoryService.cs" />

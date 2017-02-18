@@ -75,7 +75,7 @@ namespace Catel.Services
             var view = _viewManager.GetViewsOfViewModel(viewModel).OfType<UIElement>().FirstOrDefault();
             if (view == null)
             {
-                throw Log.ErrorAndCreateException < InvalidOperationException >("There no an active view for this view model of type '{0}'", viewModel.GetType().FullName);
+                throw Log.ErrorAndCreateException<InvalidOperationException>("There no an active view for this view model of type '{0}'", viewModel.GetType().FullName);
             }
 
             var bitmap = CreateImageFromUIElement(view, dpiX, dpiY);
@@ -119,10 +119,12 @@ namespace Catel.Services
         /// The save to file.
         /// </summary>
         /// <param name="bitmap">The bitmap.</param>
-        private void SaveToFile(BitmapSource bitmap)
+#pragma warning disable AvoidAsyncVoid // Avoid async void
+        private async void SaveToFile(BitmapSource bitmap)
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             _saveFileService.Filter = "PNG (*.png) |*.png";
-            if (_saveFileService.DetermineFile())
+            if (await _saveFileService.DetermineFileAsync())
             {
                 string fileName = _saveFileService.FileName;
                 using (var stream = new FileStream(fileName, FileMode.Create))
