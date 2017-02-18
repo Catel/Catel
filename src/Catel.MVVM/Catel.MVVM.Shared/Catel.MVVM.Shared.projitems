@@ -292,6 +292,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\NavigationService.ios.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NavigationService.xaml.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NavigationServiceBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\OpenFileService.uap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\OpenFileService.wpf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\OpenFileService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\PleaseWaitService.cs" />

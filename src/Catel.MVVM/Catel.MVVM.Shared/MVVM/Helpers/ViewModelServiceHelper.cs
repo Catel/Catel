@@ -64,6 +64,7 @@ namespace Catel.MVVM
 
 #if !XAMARIN
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IOpenFileService, OpenFileService>();
 #endif
 
                 serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
@@ -86,7 +87,6 @@ namespace Catel.MVVM
 #endif
 
 #if NET
-                serviceLocator.RegisterTypeIfNotYetRegistered<IOpenFileService, OpenFileService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISaveFileService, SaveFileService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IStartUpInfoProvider, StartUpInfoProvider>();
