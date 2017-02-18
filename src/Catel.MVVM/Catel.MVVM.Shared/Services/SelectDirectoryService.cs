@@ -4,16 +4,14 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if !XAMARIN
 
 namespace Catel.Services
 {
-    using System.Windows.Forms;
-
     /// <summary>
     /// Service to open files.
     /// </summary>
-    public class SelectDirectoryService : ViewModelServiceBase, ISelectDirectoryService
+    public partial class SelectDirectoryService : ViewModelServiceBase, ISelectDirectoryService
     {
         #region ISelectDirectoryService Members
         /// <summary>
@@ -59,46 +57,6 @@ namespace Catel.Services
         /// The filter.
         /// </value>
         public string Filter { get; set; }
-
-        /// <summary>
-        /// Determines the DirectoryName of the Directory what will be used.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if a directory is selected; otherwise <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// If this method returns <c>true</c>, the <see cref="DirectoryName"/> property will be filled with the directory name. Otherwise,
-        /// no changes will occur to the data of this object.
-        /// </remarks>
-        public virtual bool DetermineDirectory()
-        {   
-            var browserDialog = new FolderBrowserDialog();
-            browserDialog.Description = Title;
-            browserDialog.ShowNewFolderButton = ShowNewFolderButton;
-
-            var initialDirectory = InitialDirectory;
-
-            if (!string.IsNullOrEmpty(initialDirectory))
-            {
-                browserDialog.SelectedPath = IO.Path.AppendTrailingSlash(initialDirectory);
-            }
-            else
-            {
-                browserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
-            }
-
-            bool result = browserDialog.ShowDialog() == DialogResult.OK;
-            if (result)
-            {
-                DirectoryName = browserDialog.SelectedPath;
-            }
-            else
-            {
-                DirectoryName = null;
-            }
-
-            return result;
-        }
         #endregion
     }
 }

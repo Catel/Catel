@@ -305,6 +305,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\SaveFileService.wpf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SaveFileService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SchedulerService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\SelectDirectoryService.uap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\SelectDirectoryService.wpf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SelectDirectoryService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SensorServiceBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SplashScreenService.cs" />

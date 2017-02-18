@@ -63,6 +63,7 @@ Added/fixed:
 (+) CTL-953  Create pool manager to re-use objects in a pool (e.g. memory streams in serialization)
 (+) CTL-1011 Implement IUIVisualizerService for UWP and removed non-async methods for WPF
 (+) CTL-1015 Implement IOpenFileService for UWP and make all methods async (also for WPF)
+(+) CTL-1017 Implement ISelectDirectoryService for UWP and make all methods async (also for WPF)
 (+) CTL-1017 Implement ISaveFileService for UWP and make all methods async (also for WPF)
 (*) CTL-903  Only support Frame and not NavigationWindow for WPF navigation
 (*) CTL-904  Allow view models to be created on multiple threads (thread-safe view model factory)

@@ -5,6 +5,12 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel.Services
 {
+    using System.Threading.Tasks;
+
+#if NETFX_CORE
+    using global::Windows.Storage;
+#endif
+
     /// <summary>
     /// Interface for the Select Directory service.
     /// </summary>
@@ -48,6 +54,7 @@ namespace Catel.Services
         #endregion
 
         #region Methods
+#if NETFX_CORE
         /// <summary>
         /// Determines the name of the directory what will be used.
         /// </summary>
@@ -58,7 +65,20 @@ namespace Catel.Services
         /// If this method returns <c>true</c>, the <see cref="DirectoryName"/> property will be filled with the directory name. Otherwise,
         /// no changes will occur to the data of this object.
         /// </remarks>
-        bool DetermineDirectory();
+        Task<StorageFolder> DetermineDirectoryAsync();
+#else
+        /// <summary>
+        /// Determines the name of the directory what will be used.
+        /// </summary>
+        /// <returns>
+        /// <c>true</c> if a directory is selected; otherwise <c>false</c>.
+        /// </returns>
+        /// <remarks>
+        /// If this method returns <c>true</c>, the <see cref="DirectoryName"/> property will be filled with the directory name. Otherwise,
+        /// no changes will occur to the data of this object.
+        /// </remarks>
+        Task<bool> DetermineDirectoryAsync();
+#endif
         #endregion
     }
 }
