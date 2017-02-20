@@ -38,7 +38,13 @@ namespace Catel.Services
             {
                 foreach (var filter in filters)
                 {
-                    fileDialog.FileTypeFilter.Add(filter);
+                    var finalFilter = filter;
+                    if (finalFilter.StartsWith("*"))
+                    {
+                        finalFilter = finalFilter.Replace("*", string.Empty);
+                    }
+
+                    fileDialog.FileTypeFilter.Add(finalFilter);
                 }
             }
 
