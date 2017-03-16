@@ -24,7 +24,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\output\debug\NET40\Test\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET; NET40; TEST;SKIP_EF;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET; NET40; TEST;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
