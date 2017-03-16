@@ -13,6 +13,7 @@ namespace Catel.Runtime.Serialization
     using System.Globalization;
     using System.IO;
     using System.Reflection;
+    using Attributes;
     using Catel.ApiCop;
     using Catel.ApiCop.Rules;
     using Catel.Caching;
@@ -708,6 +709,24 @@ namespace Catel.Runtime.Serialization
             });
         }
 
+
+        /// <summary>
+        /// Returns whether the enum member value should be serialized as string.
+        /// </summary>
+        /// <param name="memberValue"></param>
+        /// <param name="checkActualMemberType"></param>
+        /// <returns></returns>
+        protected virtual bool ShouldSerializeUsingEnumToString(MemberValue memberValue, bool checkActualMemberType)
+        {
+            var propertyInfo = memberValue.ModelType.GetPropertyEx(memberValue.Name);
+            if (propertyInfo != null)
+            {
+                return propertyInfo.IsDecoratedWithAttribute<SerializeUsingEnumAsStringAttribute>();
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Gets the <c>ToString(IFormatProvider)</c> method.
         /// </summary>
@@ -804,6 +823,11 @@ namespace Catel.Runtime.Serialization
                 if (memberType == typeof(IEnumerable))
                 {
                     return false;
+                }
+
+                if (memberType.IsEnum)
+                {
+                    return true;
                 }
 
                 if (!memberType.IsClassType())

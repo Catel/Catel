@@ -344,8 +344,16 @@ namespace Catel.Runtime.Serialization.Json
 
             if (ReferenceEquals(memberValue.Value, null) || ShouldExternalSerializerHandleMember(memberValue))
             {
-                jsonSerializer.Serialize(jsonWriter, memberValue.Value);
+                if (memberValue.MemberType.IsEnumEx() && ShouldSerializeUsingEnumToString(memberValue, false))
+                {
+                    jsonSerializer.Serialize(jsonWriter, memberValue.Value.ToString());
+                }
+                else
+                {
+                    jsonSerializer.Serialize(jsonWriter, memberValue.Value);
+                }
             }
+
             else if (ShouldSerializeAsDictionary(memberValue))
             {
                 // Serialize as an object with properties
@@ -605,10 +613,17 @@ namespace Catel.Runtime.Serialization.Json
                         var valueType = memberValue.GetBestMemberType();
                         if (valueType.IsEnumEx())
                         {
-                            var enumName = Enum.GetName(valueType, (int)jsonValue);
-                            if (!string.IsNullOrWhiteSpace(enumName))
+                            if (ShouldSerializeUsingEnumToString(memberValue, false))
                             {
-                                finalMemberValue = Enum.Parse(valueType, enumName, false);
+                                finalMemberValue = Enum.Parse(valueType, (string)jsonValue, false);
+                            }
+                            else
+                            {
+                                var enumName = Enum.GetName(valueType, (int)jsonValue);
+                                if (!string.IsNullOrWhiteSpace(enumName))
+                                {
+                                    finalMemberValue = Enum.Parse(valueType, enumName, false);
+                                }
                             }
                         }
                         else

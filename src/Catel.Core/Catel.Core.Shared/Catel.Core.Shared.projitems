@@ -293,7 +293,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Pooling\PoolManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)..\..\MethodTimeLogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\MethodTimeLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\BindingFlags.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\CachedPropertyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\EventArgs\AssemblyLoadedEventArgs.cs" />
@@ -330,6 +330,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\ExcludeFromSerializationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\IncludeInSerializationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\SerializeAsCollectionAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\SerializeUsingEnumAsStringAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\SerializerModifierAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\Attributes\SerializeUsingParseAndToStringAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\Attributes\RedirectTypeAttribute.cs" />

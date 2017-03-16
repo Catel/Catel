@@ -9,6 +9,8 @@ namespace Catel.Test.Runtime.Serialization.TestModels
 {
     using System.Linq;
     using Catel.Data;
+    using Catel.Runtime.Serialization;
+    using Catel.Runtime.Serialization.Attributes;
     using Catel.Runtime.Serialization.Json;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -54,5 +56,44 @@ namespace Catel.Test.Runtime.Serialization.TestModels
         }
         
         public static readonly PropertyData NestedModelProperty = RegisterProperty("NestedModel", typeof(CustomJsonSerializationModel), null);
+    }
+
+    public class CustomJsonSerializationModelWithEnum : ModelBase
+    {
+        public string Name
+        {
+            get { return GetValue<string>(NameProperty); }
+            set { SetValue(NameProperty, value); }
+        }
+
+        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+
+        [SerializeUsingEnumAsString]
+        public CustomSerializationEnum EnumWithAttribute
+        {
+            get { return GetValue<CustomSerializationEnum>(EnumWithAttributeProperty); }
+            set { SetValue(EnumWithAttributeProperty, value); }
+        }
+
+        public static readonly PropertyData EnumWithAttributeProperty = RegisterProperty(nameof(EnumWithAttribute), typeof(CustomSerializationEnum));
+        
+
+
+        public CustomSerializationEnum EnumWithoutAttribute
+        {
+            get { return GetValue<CustomSerializationEnum>(EnumWithoutAttributeProperty); }
+            set { SetValue(EnumWithoutAttributeProperty, value); }
+        }
+
+        public static readonly PropertyData EnumWithoutAttributeProperty = RegisterProperty(nameof(EnumWithoutAttribute), typeof(CustomSerializationEnum));
+
+    }
+
+    public enum CustomSerializationEnum
+    {
+        Default = 0,
+        FirstFalue = 1,
+        SecondValue = 2,
+        ThirdValue = 3
     }
 }
