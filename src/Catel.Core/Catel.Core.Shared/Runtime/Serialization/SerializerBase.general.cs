@@ -13,7 +13,6 @@ namespace Catel.Runtime.Serialization
     using System.Globalization;
     using System.IO;
     using System.Reflection;
-    using Attributes;
     using Catel.ApiCop;
     using Catel.ApiCop.Rules;
     using Catel.Caching;
@@ -718,10 +717,18 @@ namespace Catel.Runtime.Serialization
         /// <returns></returns>
         protected virtual bool ShouldSerializeUsingEnumToString(MemberValue memberValue, bool checkActualMemberType)
         {
+            var fieldInfo = memberValue.ModelType.GetFieldEx(memberValue.Name);
+            if (fieldInfo != null)
+            {
+                if (fieldInfo.IsDecoratedWithAttribute<SerializeUsingEnumAsStringAttribute>())
+                    return true;
+            }
+
             var propertyInfo = memberValue.ModelType.GetPropertyEx(memberValue.Name);
             if (propertyInfo != null)
             {
-                return propertyInfo.IsDecoratedWithAttribute<SerializeUsingEnumAsStringAttribute>();
+                if (propertyInfo.IsDecoratedWithAttribute<SerializeUsingEnumAsStringAttribute>())
+                    return true;
             }
 
             return false;
@@ -825,7 +832,7 @@ namespace Catel.Runtime.Serialization
                     return false;
                 }
 
-                if (memberType.IsEnum)
+                if (memberType.IsEnumEx())
                 {
                     return true;
                 }

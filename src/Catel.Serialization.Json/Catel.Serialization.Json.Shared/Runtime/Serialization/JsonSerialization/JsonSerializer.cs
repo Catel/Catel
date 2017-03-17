@@ -613,18 +613,23 @@ namespace Catel.Runtime.Serialization.Json
                         var valueType = memberValue.GetBestMemberType();
                         if (valueType.IsEnumEx())
                         {
+                            var valueToConvert= string.Empty;
+
                             if (ShouldSerializeUsingEnumToString(memberValue, false))
                             {
-                                finalMemberValue = Enum.Parse(valueType, (string)jsonValue, false);
+                                valueToConvert = (string)jsonValue;
+                                
                             }
                             else
                             {
                                 var enumName = Enum.GetName(valueType, (int)jsonValue);
                                 if (!string.IsNullOrWhiteSpace(enumName))
                                 {
-                                    finalMemberValue = Enum.Parse(valueType, enumName, false);
+                                    valueToConvert = enumName;
                                 }
                             }
+
+                            finalMemberValue = Enum.Parse(valueType, valueToConvert, false);
                         }
                         else
                         {

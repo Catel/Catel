@@ -10,7 +10,6 @@ namespace Catel.Test.Runtime.Serialization.TestModels
     using System.Linq;
     using Catel.Data;
     using Catel.Runtime.Serialization;
-    using Catel.Runtime.Serialization.Attributes;
     using Catel.Runtime.Serialization.Json;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;

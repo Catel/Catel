@@ -1,9 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SerializeUsingParseAndToStringAttribute.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Runtime.Serialization.Attributes
+
+namespace Catel.Runtime.Serialization
 {
+    using System;
+
     /// <summary>
     /// Attribute to define that a enum member must be serialized as string.
     /// </summary>
