@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{BE079DB6-FD92-4167-8DF4-CACB2E1422FC}"
 	ProjectSection(SolutionItems) = preProject
@@ -41,8 +41,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Core", "Catel.Core", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.MVVM", "Catel.MVVM", "{162DE45B-B7A2-4D4A-B90D-F1762133C31C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.FluentValidation", "Catel.Extensions.FluentValidation", "{DA48A112-2316-4576-84F7-2665282C75BE}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.Controls", "Catel.Extensions.Controls", "{1F4484D6-CE9B-428E-B640-FB777F260F97}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8C3710FE-B6C7-4261-81B6-897F4B286B2B}"
@@ -58,10 +56,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EF5", "EF5", "{B08AF9A4-DD2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EF", "EF", "{A6B36C41-DB02-43BB-88CA-A5042D6B365B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.Memento", "Catel.Extensions.Memento", "{BD2D9D3A-6266-4D0B-B2B4-DD5726861E36}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.Interception", "Catel.Extensions.Interception", "{A753C3CE-F64F-44AE-B1D7-C40578EF059F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.DynamicObjects", "Catel.Extensions.DynamicObjects", "{B5ED1A50-E238-4C92-996A-08ED76033DF3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.NET40", "Catel.Core\Catel.Core.NET40\Catel.Core.NET40.csproj", "{43147A1A-C8A0-4645-824D-0E7CAF0293FC}"
@@ -72,8 +66,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Controls.N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.NET40", "Catel.MVVM\Catel.MVVM.NET40\Catel.MVVM.NET40.csproj", "{D9112D3C-62D2-401E-8EA1-86AC28A71C22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.FluentValidation.NET40", "Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.NET40\Catel.Extensions.FluentValidation.NET40.csproj", "{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Data.NET40", "Catel.Extensions.Data\Catel.Extensions.Data.NET40\Catel.Extensions.Data.NET40.csproj", "{DB390685-297C-41D9-B4AC-201E58A8364C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.EntityFramework5.NET40", "Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.NET40\Catel.Extensions.EntityFramework5.NET40.csproj", "{2A4AF4D2-E74C-4A8A-947B-1B7CE5BDB67A}"
@@ -81,10 +73,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.EntityFramework5.DbContextTest.NET40", "Catel.Test\Catel.Test.EntityFramework5.DbContextTest.NET40\Catel.Test.EntityFramework5.DbContextTest.NET40.csproj", "{EA3BA85B-4C5F-4140-8FF9-40C98AF2DFED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.EntityFramework5.ObjectContextTest.NET40", "Catel.Test\Catel.Test.EntityFramework5.ObjectContextTest.NET40\Catel.Test.EntityFramework5.ObjectContextTest.NET40.csproj", "{BB30D863-65B0-42BA-8D2C-29DE27C3A5FA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Memento.NET40", "Catel.Extensions.Memento\Catel.Extensions.Memento.NET40\Catel.Extensions.Memento.NET40.csproj", "{918B3E4E-EDA7-44D0-99CA-D1F40CD59E9D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Interception.NET40", "Catel.Extensions.Interception\Catel.Extensions.Interception.NET40\Catel.Extensions.Interception.NET40.csproj", "{9B000DC9-7110-4173-BF97-E975ED77C24B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.DynamicObjects.NET40", "Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.NET40\Catel.Extensions.DynamicObjects.NET40.csproj", "{A1B5D494-32D5-4DCE-8DC1-00CECC821F58}"
 EndProject
@@ -97,12 +85,6 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Extensions.Data.Shared", "Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.shproj", "{41C1B6D9-E16A-4137-B573-1AB9DA17EFF3}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Extensions.DynamicObjects.Shared", "Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.shproj", "{F8820AE3-4021-4622-A0A9-E33876A471B4}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Extensions.FluentValidation.Shared", "Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.shproj", "{C7BC725E-FA25-46A8-9288-C708B69E5BD3}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Extensions.Interception.Shared", "Catel.Extensions.Interception\Catel.Extensions.Interception.Shared\Catel.Extensions.Interception.Shared.shproj", "{5B33158E-5B9E-4099-A300-7A409D392556}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Extensions.Memento.Shared", "Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.shproj", "{C1E36B63-D33E-4F25-844B-0DE262D8A01A}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Extensions.Controls.Shared", "Catel.Extensions.Controls\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.shproj", "{6ED252B8-178A-4349-8940-AFD2CB2B87E3}"
 EndProject
@@ -129,7 +111,6 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{0753484a-6936-4628-9f03-e1614d674544}*SharedItemsImports = 4
-		Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.projitems*{135e7f2b-1fe8-44e1-b1ad-0c80b972459e}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.Shared\Catel.Extensions.EntityFramework5.Shared.projitems*{1740f946-266a-48c2-b4b4-6d3cb4d681e1}*SharedItemsImports = 13
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework.Shared\Catel.Extensions.EntityFramework.Shared.projitems*{1783efdc-8731-4e76-b92c-591a9a7c4ddf}*SharedItemsImports = 13
 		Catel.Extensions.Controls\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems*{27ea5dbf-c871-4f2a-a5a0-5db0f148e6d8}*SharedItemsImports = 4
@@ -138,17 +119,12 @@ Global
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{3743a304-3ee5-4909-bfec-988d59d1b33a}*SharedItemsImports = 13
 		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{41c1b6d9-e16a-4137-b573-1ab9da17eff3}*SharedItemsImports = 13
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{43147a1a-c8a0-4645-824d-0e7caf0293fc}*SharedItemsImports = 4
-		Catel.Extensions.Interception\Catel.Extensions.Interception.Shared\Catel.Extensions.Interception.Shared.projitems*{5b33158e-5b9e-4099-a300-7a409d392556}*SharedItemsImports = 13
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework.Shared\Catel.Extensions.EntityFramework.Shared.projitems*{610e738c-29e2-4dfe-abf1-6ca5fb37f1e5}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework6\Catel.Extensions.EntityFramework6.Shared\Catel.Extensions.EntityFramework6.Shared.projitems*{610e738c-29e2-4dfe-abf1-6ca5fb37f1e5}*SharedItemsImports = 4
 		Catel.Extensions.Controls\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems*{6ed252b8-178a-4349-8940-afd2cb2b87e3}*SharedItemsImports = 13
 		Catel.Test\Catel.Test.Shared\Catel.Test.Shared.projitems*{84191838-c476-4e1a-9129-07d8c906674a}*SharedItemsImports = 13
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{8c7eab82-554b-4761-b67e-7e9b9a306914}*SharedItemsImports = 13
-		Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems*{918b3e4e-eda7-44d0-99ca-d1f40cd59e9d}*SharedItemsImports = 4
-		Catel.Extensions.Interception\Catel.Extensions.Interception.Shared\Catel.Extensions.Interception.Shared.projitems*{9b000dc9-7110-4173-bf97-e975ed77c24b}*SharedItemsImports = 4
 		Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.projitems*{a1b5d494-32d5-4dce-8dc1-00cecc821f58}*SharedItemsImports = 4
-		Catel.Extensions.Memento\Catel.Extensions.Memento.Shared\Catel.Extensions.Memento.Shared.projitems*{c1e36b63-d33e-4f25-844b-0de262d8a01a}*SharedItemsImports = 13
-		Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.Shared\Catel.Extensions.FluentValidation.Shared.projitems*{c7bc725e-fa25-46a8-9288-c708b69e5bd3}*SharedItemsImports = 13
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{d9112d3c-62d2-401e-8ea1-86ac28a71c22}*SharedItemsImports = 4
 		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{db390685-297c-41d9-b4ac-201e58a8364c}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework6\Catel.Extensions.EntityFramework6.Shared\Catel.Extensions.EntityFramework6.Shared.projitems*{e14d5a70-cd76-4b12-8512-d390bea30bd6}*SharedItemsImports = 13
@@ -207,16 +183,6 @@ Global
 		{D9112D3C-62D2-401E-8EA1-86AC28A71C22}.Release|ARM.ActiveCfg = Release|Any CPU
 		{D9112D3C-62D2-401E-8EA1-86AC28A71C22}.Release|x64.ActiveCfg = Release|Any CPU
 		{D9112D3C-62D2-401E-8EA1-86AC28A71C22}.Release|x86.ActiveCfg = Release|Any CPU
-		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Release|ARM.ActiveCfg = Release|Any CPU
-		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Release|x64.ActiveCfg = Release|Any CPU
-		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}.Release|x86.ActiveCfg = Release|Any CPU
 		{DB390685-297C-41D9-B4AC-201E58A8364C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DB390685-297C-41D9-B4AC-201E58A8364C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB390685-297C-41D9-B4AC-201E58A8364C}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -257,26 +223,6 @@ Global
 		{BB30D863-65B0-42BA-8D2C-29DE27C3A5FA}.Release|ARM.ActiveCfg = Release|Any CPU
 		{BB30D863-65B0-42BA-8D2C-29DE27C3A5FA}.Release|x64.ActiveCfg = Release|Any CPU
 		{BB30D863-65B0-42BA-8D2C-29DE27C3A5FA}.Release|x86.ActiveCfg = Release|Any CPU
-		{918B3E4E-EDA7-44D0-99CA-D1F40CD59E9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{918B3E4E-EDA7-44D0-99CA-D1F40CD59E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{918B3E4E-EDA7-44D0-99CA-D1F40CD59E9D}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{918B3E4E-EDA7-44D0-99CA-D1F40CD59E9D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{918B3E4E-EDA7-44D0-99CA-D1F40CD59E9D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{918B3E4E-EDA7-44D0-99CA-D1F40CD59E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{918B3E4E-EDA7-44D0-99CA-D1F40CD59E9D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{918B3E4E-EDA7-44D0-99CA-D1F40CD59E9D}.Release|ARM.ActiveCfg = Release|Any CPU
-		{918B3E4E-EDA7-44D0-99CA-D1F40CD59E9D}.Release|x64.ActiveCfg = Release|Any CPU
-		{918B3E4E-EDA7-44D0-99CA-D1F40CD59E9D}.Release|x86.ActiveCfg = Release|Any CPU
-		{9B000DC9-7110-4173-BF97-E975ED77C24B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9B000DC9-7110-4173-BF97-E975ED77C24B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9B000DC9-7110-4173-BF97-E975ED77C24B}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{9B000DC9-7110-4173-BF97-E975ED77C24B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{9B000DC9-7110-4173-BF97-E975ED77C24B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{9B000DC9-7110-4173-BF97-E975ED77C24B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9B000DC9-7110-4173-BF97-E975ED77C24B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9B000DC9-7110-4173-BF97-E975ED77C24B}.Release|ARM.ActiveCfg = Release|Any CPU
-		{9B000DC9-7110-4173-BF97-E975ED77C24B}.Release|x64.ActiveCfg = Release|Any CPU
-		{9B000DC9-7110-4173-BF97-E975ED77C24B}.Release|x86.ActiveCfg = Release|Any CPU
 		{A1B5D494-32D5-4DCE-8DC1-00CECC821F58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A1B5D494-32D5-4DCE-8DC1-00CECC821F58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1B5D494-32D5-4DCE-8DC1-00CECC821F58}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -314,36 +260,27 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3F661942-9946-4292-9FE7-6B576782D5F9} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{162DE45B-B7A2-4D4A-B90D-F1762133C31C} = {58F62039-8645-499C-B264-66048F4F0F75}
-		{DA48A112-2316-4576-84F7-2665282C75BE} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{1F4484D6-CE9B-428E-B640-FB777F260F97} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{8C3710FE-B6C7-4261-81B6-897F4B286B2B} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{41BA68F9-3422-4FB0-B6DE-7097A22565E5} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{4C1D672F-892E-4AC7-84EA-FE5BE2046000} = {DF031B6B-BD75-4D24-9411-2A691B7241D7}
 		{B08AF9A4-DD22-4ACF-9387-9C3600D487DE} = {04FB2E2C-C216-4270-B397-3C893D1E5CF2}
 		{A6B36C41-DB02-43BB-88CA-A5042D6B365B} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
-		{BD2D9D3A-6266-4D0B-B2B4-DD5726861E36} = {58F62039-8645-499C-B264-66048F4F0F75}
-		{A753C3CE-F64F-44AE-B1D7-C40578EF059F} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{B5ED1A50-E238-4C92-996A-08ED76033DF3} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{43147A1A-C8A0-4645-824D-0E7CAF0293FC} = {3F661942-9946-4292-9FE7-6B576782D5F9}
 		{E7D45C75-2BC2-417F-B797-F1B0B56C0B7B} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
 		{27EA5DBF-C871-4F2A-A5A0-5DB0F148E6D8} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
 		{D9112D3C-62D2-401E-8EA1-86AC28A71C22} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
-		{135E7F2B-1FE8-44E1-B1AD-0C80B972459E} = {DA48A112-2316-4576-84F7-2665282C75BE}
 		{DB390685-297C-41D9-B4AC-201E58A8364C} = {41BA68F9-3422-4FB0-B6DE-7097A22565E5}
 		{2A4AF4D2-E74C-4A8A-947B-1B7CE5BDB67A} = {B08AF9A4-DD22-4ACF-9387-9C3600D487DE}
 		{EA3BA85B-4C5F-4140-8FF9-40C98AF2DFED} = {A6B36C41-DB02-43BB-88CA-A5042D6B365B}
 		{BB30D863-65B0-42BA-8D2C-29DE27C3A5FA} = {A6B36C41-DB02-43BB-88CA-A5042D6B365B}
-		{918B3E4E-EDA7-44D0-99CA-D1F40CD59E9D} = {BD2D9D3A-6266-4D0B-B2B4-DD5726861E36}
-		{9B000DC9-7110-4173-BF97-E975ED77C24B} = {A753C3CE-F64F-44AE-B1D7-C40578EF059F}
 		{A1B5D494-32D5-4DCE-8DC1-00CECC821F58} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
 		{376E61C4-833D-4DAB-B282-913709897142} = {04FB2E2C-C216-4270-B397-3C893D1E5CF2}
 		{610E738C-29E2-4DFE-ABF1-6CA5FB37F1E5} = {376E61C4-833D-4DAB-B282-913709897142}
 		{3743A304-3EE5-4909-BFEC-988D59D1B33A} = {3F661942-9946-4292-9FE7-6B576782D5F9}
 		{41C1B6D9-E16A-4137-B573-1AB9DA17EFF3} = {41BA68F9-3422-4FB0-B6DE-7097A22565E5}
 		{F8820AE3-4021-4622-A0A9-E33876A471B4} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
-		{C7BC725E-FA25-46A8-9288-C708B69E5BD3} = {DA48A112-2316-4576-84F7-2665282C75BE}
-		{5B33158E-5B9E-4099-A300-7A409D392556} = {A753C3CE-F64F-44AE-B1D7-C40578EF059F}
-		{C1E36B63-D33E-4F25-844B-0DE262D8A01A} = {BD2D9D3A-6266-4D0B-B2B4-DD5726861E36}
 		{6ED252B8-178A-4349-8940-AFD2CB2B87E3} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
 		{84191838-C476-4E1A-9129-07D8C906674A} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
 		{8C7EAB82-554B-4761-B67E-7E9B9A306914} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
