@@ -91,15 +91,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\Helpers\IsolationHelperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\Repositories\EntityRepositoryFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\TestClasses\TestConnectionStrings.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\FluentValidatorProviderFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\FluentValidatorToCatelValidatorAdapterFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\Models\Person.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\Validators\PersonModelValidator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\Validators\PersonViewModelValidator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\Validators\PersonViewModelWithModelValidator.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\ViewModels\NoFluentValidatorViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\ViewModels\PersonViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\FluentValidation\ViewModels\PersonViewModelWithModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\BootstrapperBaseTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\CompositeModuleCatalogFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\LogExtensionsTests.cs" />
@@ -212,7 +203,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Pooling\PoolManagerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)..\..\MethodTimeLogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\MethodTimeLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\AppDomainExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\AssemblyExtensionsTest.cs" />

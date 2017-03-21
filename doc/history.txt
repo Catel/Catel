@@ -40,12 +40,13 @@ Dropped support for the following platforms:
 
 Dropped support for the following components:
 * Catel.Extensions.CSLA
-* Catel.Extensions.Wcf.Server
-* Catel.Extensions.Prism4
+* Catel.Extensions.FluentValidation (moved to Orc.FluentValidation)
 * Catel.Extensions.Interception
 * Catel.Extensions.Memento (moved to Orc.Memento)
 * Catel.Extensions.MVC4
 * Catel.Extensions.MVC5
+* Catel.Extensions.Prism4
+* Catel.Extensions.Wcf.Server
 
 Classes / members marked as obsolete:
 =====================================

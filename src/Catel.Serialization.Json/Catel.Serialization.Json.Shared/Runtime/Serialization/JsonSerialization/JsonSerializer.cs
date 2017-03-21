@@ -653,12 +653,18 @@ namespace Catel.Runtime.Serialization.Json
                                             var typeNameValue = jsonValue.Value<string>(TypeName);
                                             if (!string.IsNullOrWhiteSpace(typeNameValue))
                                             {
-                                                finalValueType = TypeCache.GetType(typeNameValue, allowInitialization: false);
+                                                finalValueType = TypeCache.GetType(typeNameValue,
+                                                    allowInitialization: false);
                                             }
 
                                             // Serialize ourselves
                                             var reader = jsonValue.CreateReader(context.Configuration);
                                             finalMemberValue = Deserialize(finalValueType, reader, context.Configuration);
+                                        }
+                                        else
+                                        {
+                                            // CTL-890 Fix for serializer modifiers that are deserialized as string 
+                                            finalMemberValue = jsonValue;
                                         }
                                     }
                                 }

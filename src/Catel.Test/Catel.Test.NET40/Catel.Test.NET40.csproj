@@ -167,10 +167,6 @@
       <Project>{2a4af4d2-e74c-4a8a-947b-1b7ce5bdb67a}</Project>
       <Name>Catel.Extensions.EntityFramework5.NET40</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Catel.Extensions.FluentValidation\Catel.Extensions.FluentValidation.NET40\Catel.Extensions.FluentValidation.NET40.csproj">
-      <Project>{135E7F2B-1FE8-44E1-B1AD-0C80B972459E}</Project>
-      <Name>Catel.Extensions.FluentValidation.NET40</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.NET40\Catel.MVVM.NET40.csproj">
       <Project>{D9112D3C-62D2-401E-8EA1-86AC28A71C22}</Project>
       <Name>Catel.MVVM.NET40</Name>
