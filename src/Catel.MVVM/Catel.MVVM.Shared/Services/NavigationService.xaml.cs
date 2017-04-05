@@ -64,12 +64,15 @@ namespace Catel.Services
         #endregion
 
         #region Methods
-        private RootFrameType RootFrame
+        /// <summary>
+        /// Gets the root frame.
+        /// </summary>
+        protected RootFrameType RootFrame
         {
             get
             {
                 // Note: don't cache, it might change dynamically
-                var rootFrame = _navigationRootService.GetNavigationRoot() as RootFrameType;
+                var rootFrame = NavigationRootService.GetNavigationRoot() as RootFrameType;
                 return rootFrame;
             }
         }
