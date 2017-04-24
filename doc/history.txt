@@ -13,6 +13,8 @@ Issue tracker:   http://www.catelproject.com/support/issue-tracker
 Documentation:   http://www.catelproject.com/support/documentation
 License:         http://www.catelproject.com/about/license
 
+Items prepended with CTL are from JIRA (old issue tracker). Items prepended with a # are from GitHub.
+
 **********************************************************
 
 ==================
@@ -84,6 +86,7 @@ Added/fixed:
 (x) CTL-991  Equals method in ServiceLocator.ServiceInfo class returns false positives
 (x) CTL-1000 NumericTextBox behavior doesn't allow some values (e.g. 2.05)
 (x) CTL-1010 MessageMediator.Unregister has a bug when method names are the same
+(x) #1006    TypeFactory does not respect scope when checking whether types can be resolved 
 (-) CTL-935  Remove InterestedIn attributes because services are a better way to communicate 
 (-) CTL-975  Remove EventHandlerExtensions.SplitInvoke and use regular event invocation
 (-) CTL-987  Delete MVVM logic behaviors (should only be available as logic)

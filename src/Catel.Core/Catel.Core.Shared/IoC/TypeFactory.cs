@@ -416,7 +416,8 @@ namespace Catel.IoC
                         var parameterToResolve = ctorParameters[j];
                         var parameterTypeToResolve = parameterToResolve.ParameterType;
 
-                        if (!_serviceLocator.IsTypeRegistered(parameterTypeToResolve))
+                        if (!_serviceLocator.IsTypeRegistered(parameterTypeToResolve, tag) && 
+                            !_serviceLocator.IsTypeRegistered(parameterTypeToResolve))
                         {
                             if (logDebug)
                             {
