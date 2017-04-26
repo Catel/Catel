@@ -67,7 +67,7 @@ namespace Catel.Test.Runtime.Serialization.TestModels
 
         public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
 
-        [SerializeUsingEnumAsString]
+        [SerializeEnumAsString]
         public CustomSerializationEnum EnumWithAttribute
         {
             get { return GetValue<CustomSerializationEnum>(EnumWithAttributeProperty); }
