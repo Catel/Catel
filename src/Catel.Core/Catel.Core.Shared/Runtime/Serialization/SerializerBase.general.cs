@@ -715,23 +715,42 @@ namespace Catel.Runtime.Serialization
         /// <param name="memberValue"></param>
         /// <param name="checkActualMemberType"></param>
         /// <returns></returns>
-        protected virtual bool ShouldSerializeUsingEnumToString(MemberValue memberValue, bool checkActualMemberType)
+        protected virtual bool ShouldSerializeUsingEnumAsString(MemberValue memberValue, bool checkActualMemberType)
         {
-            var fieldInfo = memberValue.ModelType.GetFieldEx(memberValue.Name);
-            if (fieldInfo != null)
-            {
-                if (fieldInfo.IsDecoratedWithAttribute<SerializeUsingEnumAsStringAttribute>())
-                    return true;
-            }
+            var cacheKey = $"{memberValue.ModelTypeName}|{memberValue.MemberTypeName}|{checkActualMemberType}";
 
-            var propertyInfo = memberValue.ModelType.GetPropertyEx(memberValue.Name);
-            if (propertyInfo != null)
+            return _shouldSerializeUsingParseCache.GetFromCacheOrFetch(cacheKey, () =>
             {
-                if (propertyInfo.IsDecoratedWithAttribute<SerializeUsingEnumAsStringAttribute>())
-                    return true;
-            }
+                var serializerModifiers = SerializationManager.GetSerializerModifiers(memberValue.ModelType);
 
-            return false;
+                // Note: serializer modifiers can always win
+                foreach (var serializerModifier in serializerModifiers)
+                {
+                    var value = serializerModifier.ShouldSerializeEnumMemberUsingToString(memberValue);
+                    if (value.HasValue)
+                        return value.Value;
+                }
+
+                var fieldInfo = memberValue.ModelType.GetFieldEx(memberValue.Name);
+                if (fieldInfo != null)
+                {
+                    if (fieldInfo.IsDecoratedWithAttribute<SerializeUsingEnumAsStringAttribute>())
+                    {
+                        return true;
+                    }
+                }
+
+                var propertyInfo = memberValue.ModelType.GetPropertyEx(memberValue.Name);
+                if (propertyInfo != null)
+                {
+                    if (propertyInfo.IsDecoratedWithAttribute<SerializeUsingEnumAsStringAttribute>())
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
         }
 
         /// <summary>
