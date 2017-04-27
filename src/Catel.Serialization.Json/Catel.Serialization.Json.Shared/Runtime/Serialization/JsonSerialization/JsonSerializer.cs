@@ -344,8 +344,16 @@ namespace Catel.Runtime.Serialization.Json
 
             if (ReferenceEquals(memberValue.Value, null) || ShouldExternalSerializerHandleMember(memberValue))
             {
-                jsonSerializer.Serialize(jsonWriter, memberValue.Value);
+                if (memberValue.MemberType.IsEnumEx() && ShouldSerializeUsingEnumAsString(memberValue, false))
+                {
+                    jsonSerializer.Serialize(jsonWriter, memberValue.Value.ToString());
+                }
+                else
+                {
+                    jsonSerializer.Serialize(jsonWriter, memberValue.Value);
+                }
             }
+
             else if (ShouldSerializeAsDictionary(memberValue))
             {
                 // Serialize as an object with properties
@@ -605,11 +613,23 @@ namespace Catel.Runtime.Serialization.Json
                         var valueType = memberValue.GetBestMemberType();
                         if (valueType.IsEnumEx())
                         {
-                            var enumName = Enum.GetName(valueType, (int)jsonValue);
-                            if (!string.IsNullOrWhiteSpace(enumName))
+                            var valueToConvert= string.Empty;
+
+                            if (ShouldSerializeUsingEnumAsString(memberValue, false))
                             {
-                                finalMemberValue = Enum.Parse(valueType, enumName, false);
+                                valueToConvert = (string)jsonValue;
+                                
                             }
+                            else
+                            {
+                                var enumName = Enum.GetName(valueType, (int)jsonValue);
+                                if (!string.IsNullOrWhiteSpace(enumName))
+                                {
+                                    valueToConvert = enumName;
+                                }
+                            }
+
+                            finalMemberValue = Enum.Parse(valueType, valueToConvert, false);
                         }
                         else
                         {
