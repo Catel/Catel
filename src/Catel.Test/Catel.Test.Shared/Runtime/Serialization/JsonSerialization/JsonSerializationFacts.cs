@@ -8,9 +8,12 @@
 namespace Catel.Test.Runtime.Serialization
 {
     using System;
+    using System.Diagnostics;
     using System.Globalization;
+    using System.IO;
     using Catel.IoC;
     using Catel.Runtime.Serialization;
+    using Catel.Runtime.Serialization.Binary;
     using Catel.Runtime.Serialization.Json;
     using NUnit.Framework;
     using TestModels;
@@ -20,6 +23,54 @@ namespace Catel.Test.Runtime.Serialization
         [TestFixture]
         public class BasicSerializationFacts
         {
+            [TestCase]
+            public void CorrectlySerializesEnumsToString()
+            {
+                var serviceLocator = ServiceLocator.Default;
+                var serializer = serviceLocator.ResolveType<IJsonSerializer>();
+
+                var model = new CustomJsonSerializationModelWithEnum
+                {
+                    Name = "Test model with enum",
+                    EnumWithAttribute = CustomSerializationEnum.SecondValue,
+                    EnumWithoutAttribute = CustomSerializationEnum.SecondValue,
+                };
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    serializer.Serialize(model, memoryStream);
+
+                    memoryStream.Position = 0L;
+
+                    var streamReader = new StreamReader(memoryStream);
+                    var streamAsText = streamReader.ReadToEnd();
+
+                    Assert.True(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithAttribute)}\":\"{CustomSerializationEnum.SecondValue}"));
+                    Assert.True(streamAsText.Contains($"{nameof(CustomJsonSerializationModelWithEnum.EnumWithoutAttribute)}\":{(int)CustomSerializationEnum.SecondValue}"));
+                }
+            }
+
+            [TestCase]
+            public void CorrectlyDeserializesEnumsFromString()
+            {
+                var serviceLocator = ServiceLocator.Default;
+                var serializer = serviceLocator.ResolveType<IJsonSerializer>();
+
+                var model = new CustomJsonSerializationModelWithEnum
+                {
+                    Name = "Test model with enum",
+                    EnumWithAttribute = CustomSerializationEnum.SecondValue,
+                    EnumWithoutAttribute = CustomSerializationEnum.SecondValue,
+
+                };
+
+                var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, null);
+
+                // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
+
+                Assert.AreEqual(model.EnumWithAttribute, clonedModel.EnumWithAttribute);
+                Assert.AreEqual(model.EnumWithoutAttribute, clonedModel.EnumWithoutAttribute);
+            }
         }
 
         [TestFixture]

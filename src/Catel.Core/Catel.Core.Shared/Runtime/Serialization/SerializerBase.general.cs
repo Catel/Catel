@@ -74,6 +74,9 @@ namespace Catel.Runtime.Serialization
 
         private readonly CacheStorage<Type, MethodInfo> _parseMethodCache = new CacheStorage<Type, MethodInfo>();
         private readonly CacheStorage<Type, MethodInfo> _toStringMethodCache = new CacheStorage<Type, MethodInfo>();
+
+        private readonly CacheStorage<string, bool> _shouldSerializeEnumAsStringCache = new CacheStorage<string, bool>();
+
         #endregion
 
         #region Constructors
@@ -694,7 +697,7 @@ namespace Catel.Runtime.Serialization
 
                 var toStringMethod = GetObjectToStringMethod(memberType);
                 if (toStringMethod == null)
-                {
+                {    
                     return false;
                 }
 
@@ -705,6 +708,52 @@ namespace Catel.Runtime.Serialization
                 }
 
                 return true;
+            });
+        }
+
+
+        /// <summary>
+        /// Returns whether the enum member value should be serialized as string.
+        /// </summary>
+        /// <param name="memberValue"></param>
+        /// <param name="checkActualMemberType"></param>
+        /// <returns></returns>
+        protected virtual bool ShouldSerializeEnumAsString(MemberValue memberValue, bool checkActualMemberType)
+        {
+            var cacheKey = $"{memberValue.ModelTypeName}|{memberValue.MemberTypeName}|{checkActualMemberType}";
+
+            return _shouldSerializeEnumAsStringCache.GetFromCacheOrFetch(cacheKey, () =>
+            {
+                var serializerModifiers = SerializationManager.GetSerializerModifiers(memberValue.ModelType);
+
+                var fieldInfo = memberValue.ModelType.GetFieldEx(memberValue.Name);
+                if (fieldInfo != null)
+                {
+                    if (fieldInfo.IsDecoratedWithAttribute<SerializeEnumAsStringAttribute>())
+                    {
+                        return true;
+                    }
+                }
+
+                var propertyInfo = memberValue.ModelType.GetPropertyEx(memberValue.Name);
+                if (propertyInfo != null)
+                {
+                    if (propertyInfo.IsDecoratedWithAttribute<SerializeEnumAsStringAttribute>())
+                    {
+                        return true;
+                    }
+                }
+
+                // Note: serializer modifiers can always win
+                foreach (var serializerModifier in serializerModifiers)
+                {
+                    var value = serializerModifier.ShouldSerializeEnumMemberUsingToString(memberValue);
+                    if (value.HasValue)
+                    {
+                        return value.Value;
+                    }
+                }
+                return false;
             });
         }
 
@@ -804,6 +853,11 @@ namespace Catel.Runtime.Serialization
                 if (memberType == typeof(IEnumerable))
                 {
                     return false;
+                }
+
+                if (memberType.IsEnumEx())
+                {
+                    return true;
                 }
 
                 if (!memberType.IsClassType())

@@ -33,6 +33,13 @@ namespace Catel.Runtime.Serialization
         bool? ShouldSerializeMemberUsingParse(MemberValue memberValue);
 
         /// <summary>
+        /// Returns whether the serializer should serialize the enum member using <c>ToString()</c>.
+        /// </summary>
+        /// <param name="memberValue"></param>
+        /// <returns></returns>
+        bool? ShouldSerializeEnumMemberUsingToString(MemberValue memberValue);
+
+        /// <summary>
         /// Determines whether the specified member should be ignored.
         /// </summary>
         /// <param name="context">The context.</param>
