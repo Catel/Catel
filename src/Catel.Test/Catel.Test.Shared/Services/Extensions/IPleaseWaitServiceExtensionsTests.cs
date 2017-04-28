@@ -11,7 +11,7 @@ namespace Catel.Test.Services
     using Catel.Services;
     using NUnit.Framework;
 
-    [TestFixture, RequiresSTA]
+    [TestFixture, RequiresSTA, Explicit]
     class IPleaseWaitServiceExtensionsTests
     {
         private IPleaseWaitService _target;
