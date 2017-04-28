@@ -42,6 +42,16 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
+        /// Returns whether the serializer should serialize the enum member using <c>ToString()</c>.
+        /// </summary>
+        /// <param name="memberValue"></param>
+        /// <returns></returns>
+        public virtual bool? ShouldSerializeEnumMemberUsingToString(MemberValue memberValue)
+        {
+            return null;
+        }
+
+        /// <summary>
         /// Determines whether the specified member should be ignored.
         /// </summary>
         /// <param name="context">The context.</param>

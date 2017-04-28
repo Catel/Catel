@@ -344,7 +344,7 @@ namespace Catel.Runtime.Serialization.Json
 
             if (ReferenceEquals(memberValue.Value, null) || ShouldExternalSerializerHandleMember(memberValue))
             {
-                if (memberValue.MemberType.IsEnumEx() && ShouldSerializeUsingEnumAsString(memberValue, false))
+                if (memberValue.MemberType.IsEnumEx() && ShouldSerializeEnumAsString(memberValue, false))
                 {
                     jsonSerializer.Serialize(jsonWriter, memberValue.Value.ToString());
                 }
@@ -615,7 +615,7 @@ namespace Catel.Runtime.Serialization.Json
                         {
                             var valueToConvert= string.Empty;
 
-                            if (ShouldSerializeUsingEnumAsString(memberValue, false))
+                            if (ShouldSerializeEnumAsString(memberValue, false))
                             {
                                 valueToConvert = (string)jsonValue;
                                 
