@@ -344,14 +344,46 @@ namespace Catel.Runtime.Serialization.Json
 
             if (ReferenceEquals(memberValue.Value, null) || ShouldExternalSerializerHandleMember(memberValue))
             {
-                if (memberValue.MemberType.IsEnumEx() && ShouldSerializeEnumAsString(memberValue, false))
+                object valueToSerialize = memberValue.Value;
+
+                var isEnum = memberValue.MemberType.IsEnumEx();
+                if (isEnum)
                 {
-                    jsonSerializer.Serialize(jsonWriter, memberValue.Value.ToString());
+                    if (ShouldSerializeEnumAsString(memberValue, false))
+                    {
+                        valueToSerialize = memberValue.Value.ToString();
+                    }
+                    else
+                    {
+                        var underlyingType = Enum.GetUnderlyingType(memberValue.MemberType);
+                        if (underlyingType == typeof(short))
+                        {
+                            valueToSerialize = (short)memberValue.Value;
+                        }
+                        else if (underlyingType == typeof(ushort))
+                        {
+                            valueToSerialize = (ushort)memberValue.Value;
+                        }
+                        else if (underlyingType == typeof(int))
+                        {
+                            valueToSerialize = (int)memberValue.Value;
+                        }
+                        else if(underlyingType == typeof(uint))
+                        {
+                            valueToSerialize = (uint)memberValue.Value;
+                        }
+                        else if(underlyingType == typeof(long))
+                        {
+                            valueToSerialize = (long)memberValue.Value;
+                        }
+                        else if (underlyingType == typeof(ulong))
+                        {
+                            valueToSerialize = (ulong)memberValue.Value;
+                        }
+                    }
                 }
-                else
-                {
-                    jsonSerializer.Serialize(jsonWriter, memberValue.Value);
-                }
+
+                jsonSerializer.Serialize(jsonWriter, valueToSerialize);
             }
 
             else if (ShouldSerializeAsDictionary(memberValue))

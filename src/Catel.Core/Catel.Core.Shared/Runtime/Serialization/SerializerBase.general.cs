@@ -645,7 +645,7 @@ namespace Catel.Runtime.Serialization
         /// </returns>
         protected virtual bool ShouldSerializeUsingParseAndToString(MemberValue memberValue, bool checkActualMemberType)
         {
-            var cacheKey = $"{memberValue.ModelTypeName}|{memberValue.MemberTypeName}|{checkActualMemberType}";
+            var cacheKey = $"{memberValue.ModelTypeName}|{memberValue.Name}|{checkActualMemberType}";
 
             return _shouldSerializeUsingParseCache.GetFromCacheOrFetch(cacheKey, () =>
             {
@@ -720,7 +720,7 @@ namespace Catel.Runtime.Serialization
         /// <returns></returns>
         protected virtual bool ShouldSerializeEnumAsString(MemberValue memberValue, bool checkActualMemberType)
         {
-            var cacheKey = $"{memberValue.ModelTypeName}|{memberValue.MemberTypeName}|{checkActualMemberType}";
+            var cacheKey = $"{memberValue.ModelTypeName}|{memberValue.Name}|{checkActualMemberType}";
 
             return _shouldSerializeEnumAsStringCache.GetFromCacheOrFetch(cacheKey, () =>
             {
@@ -753,6 +753,7 @@ namespace Catel.Runtime.Serialization
                         return value.Value;
                     }
                 }
+
                 return false;
             });
         }
