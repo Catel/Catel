@@ -146,10 +146,6 @@
       <Project>{2156065f-74f7-420c-a7c9-f40b4751e36a}</Project>
       <Name>Catel.Extensions.EntityFramework5.NET45</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Catel.Extensions.Prism\Catel.Extensions.Prism5\Catel.Extensions.Prism5.NET45\Catel.Extensions.Prism5.NET45.csproj">
-      <Project>{3604ff18-b278-4508-aa83-88d34f6c026d}</Project>
-      <Name>Catel.Extensions.Prism5.NET45</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.NET45\Catel.MVVM.NET45.csproj">
       <Project>{bedeb2cb-51ab-4af6-85f9-6a596b4603bb}</Project>
       <Name>Catel.MVVM.NET45</Name>

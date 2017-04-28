@@ -91,14 +91,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\Helpers\IsolationHelperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\Repositories\EntityRepositoryFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\EntityFramework5\TestClasses\TestConnectionStrings.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\BootstrapperBaseTests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\CompositeModuleCatalogFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\LogExtensionsTests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\Modules\Extensions\ModuleInfoExtensions_Facts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\Modules\NuGetBasedModuleCatalogParentChildBehavior_Facts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\Modules\NuGetBasedModuleCatalog_Facts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\ServiceLocatorAdapterTests.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Prism\UIVisualizerServiceExtensionsTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\UriExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Factories\ExceptionFactoryFacts.cs" />
@@ -203,7 +195,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Pooling\PoolManagerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\MethodTimeLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\AppDomainExtensionsTest.cs" />
