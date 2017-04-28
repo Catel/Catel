@@ -4,6 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if !NET40 && !PCL
+#define SUPPORT_BSON
+#endif
+
 namespace Catel.Runtime.Serialization.Json
 {
     using System;
@@ -17,10 +21,13 @@ namespace Catel.Runtime.Serialization.Json
     using IoC;
     using Logging;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Bson;
     using Newtonsoft.Json.Linq;
     using Reflection;
     using Scoping;
+
+#if SUPPORT_BSON
+    using Newtonsoft.Json.Bson;
+#endif
 
     /// <summary>
     /// The binary serializer.
@@ -368,11 +375,11 @@ namespace Catel.Runtime.Serialization.Json
                         {
                             valueToSerialize = (int)memberValue.Value;
                         }
-                        else if(underlyingType == typeof(uint))
+                        else if (underlyingType == typeof(uint))
                         {
                             valueToSerialize = (uint)memberValue.Value;
                         }
-                        else if(underlyingType == typeof(long))
+                        else if (underlyingType == typeof(long))
                         {
                             valueToSerialize = (long)memberValue.Value;
                         }
@@ -645,12 +652,12 @@ namespace Catel.Runtime.Serialization.Json
                         var valueType = memberValue.GetBestMemberType();
                         if (valueType.IsEnumEx())
                         {
-                            var valueToConvert= string.Empty;
+                            var valueToConvert = string.Empty;
 
                             if (ShouldSerializeEnumAsString(memberValue, false))
                             {
                                 valueToConvert = (string)jsonValue;
-                                
+
                             }
                             else
                             {
@@ -798,7 +805,7 @@ namespace Catel.Runtime.Serialization.Json
         /// ISerializationContext{SerializationInfo}.
         /// </returns>
         /// <exception cref="System.ArgumentOutOfRangeException">contextMode</exception>
-        protected override ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, Stream stream, 
+        protected override ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, Stream stream,
             SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             JsonReader jsonReader = null;
@@ -823,9 +830,14 @@ namespace Catel.Runtime.Serialization.Json
                 case SerializationContextMode.Serialization:
                     if (useBson)
                     {
+#if SUPPORT_BSON
+#pragma warning disable 618
                         jsonWriter = new BsonWriter(stream);
+#pragma warning restore 618
+#endif
                     }
-                    else
+
+                    if (jsonWriter == null)
                     {
                         var streamWriter = new StreamWriter(stream, Encoding.UTF8);
                         jsonWriter = new JsonTextWriter(streamWriter);
@@ -835,6 +847,7 @@ namespace Catel.Runtime.Serialization.Json
                 case SerializationContextMode.Deserialization:
                     if (useBson)
                     {
+#if SUPPORT_BSON
                         var shouldSerializeAsCollection = false;
                         var shouldSerializeAsDictionary = ShouldSerializeAsDictionary(modelType);
                         if (!shouldSerializeAsDictionary)
@@ -843,9 +856,13 @@ namespace Catel.Runtime.Serialization.Json
                             shouldSerializeAsCollection = ShouldSerializeAsCollection(modelType);
                         }
 
+#pragma warning disable 618
                         jsonReader = new BsonReader(stream, shouldSerializeAsCollection, dateTimeKind);
+#pragma warning restore 618
+#endif
                     }
-                    else
+
+                    if (jsonReader == null)
                     {
                         var streamReader = new StreamReader(stream, Encoding.UTF8);
                         jsonReader = new JsonTextReader(streamReader);
@@ -886,7 +903,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <returns>
         /// ISerializationContext&lt;JsonSerializationContextInfo&gt;.
         /// </returns>
-        protected virtual ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, JsonReader jsonReader, JsonWriter jsonWriter, 
+        protected virtual ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, JsonReader jsonReader, JsonWriter jsonWriter,
             SerializationContextMode contextMode, Dictionary<string, JProperty> jsonProperties, JArray jsonArray, ISerializationConfiguration configuration)
         {
             var jsonSerializer = new Newtonsoft.Json.JsonSerializer();
@@ -921,6 +938,6 @@ namespace Catel.Runtime.Serialization.Json
                 jsonWriter.Flush();
             }
         }
-        #endregion
+#endregion
     }
 }
