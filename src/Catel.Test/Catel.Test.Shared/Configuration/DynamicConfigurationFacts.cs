@@ -21,7 +21,7 @@ namespace Catel.Test.Configuration
     public class DynamicConfigurationFacts
     {
         private const string ExpectedXml = "﻿<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
-"<DynamicConfiguration graphid=\"1\" xmlns:ctl=\"http://catel.codeplex.com\">\r\n" +
+"<DynamicConfiguration graphid=\"1\" xmlns:ctl=\"http://schemas.catelproject.com\">\r\n" +
 "  <ComplexSetting IsNull=\"true\" />\r\n" +
 "  <KeyX type=\"System.String\">Value X</KeyX>\r\n" +
 "  <KeyY type=\"System.String\">Value Y</KeyY>\r\n" +

@@ -39,10 +39,10 @@ using System.Windows.Markup;
 // XmlnsDefinition is not supported in Windows Phone 7 and WinRT
 #if !NETFX_CORE
 
-[assembly: XmlnsPrefix("http://catel.codeplex.com", "catel")]
+[assembly: XmlnsPrefix("http://schemas.catelproject.com", "catel")]
 
-[assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.Windows")]
-[assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.Windows.Controls")]
-[assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.Windows.Media.Effects")]
+[assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows")]
+[assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows.Controls")]
+[assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows.Media.Effects")]
 
 #endif

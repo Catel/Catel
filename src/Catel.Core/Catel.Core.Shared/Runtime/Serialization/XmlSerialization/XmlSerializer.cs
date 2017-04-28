@@ -650,7 +650,7 @@ namespace Catel.Runtime.Serialization.Xml
                 return referenceInfo.Instance;
             }
 
-            var typeAttribute = element.Attribute("type"); // .GetAttribute("type", "http://catel.codeplex.com");
+            var typeAttribute = element.Attribute("type"); // .GetAttribute("type", "http://schemas.catelproject.com");
             var attributeValue = (typeAttribute != null) ? typeAttribute.Value : null;
             if (!string.IsNullOrEmpty(attributeValue))
             {
@@ -798,7 +798,7 @@ namespace Catel.Runtime.Serialization.Xml
                     xmlWriter.WriteStartElement(elementName);
 
 #if XAMARIN
-                    xmlWriter.WriteAttributeString("xmlns", namespacePrefix, defaultNamespace, "http://catel.codeplex.com");
+                    xmlWriter.WriteAttributeString("xmlns", namespacePrefix, defaultNamespace, "http://schemas.catelproject.com");
 #endif
 
                     xmlWriter.WriteAttributeString(namespacePrefix, "IsNull", null, "true");
@@ -967,7 +967,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns>The namespace.</returns>
         protected virtual string GetNamespaceUrl()
         {
-            return "http://catel.codeplex.com";
+            return "http://schemas.catelproject.com";
         }
         #endregion
     }

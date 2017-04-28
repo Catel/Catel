@@ -87,7 +87,6 @@ namespace Catel.Data
                 return false;
             }
 
-            // Fix for issue 6633 (see http://catel.codeplex.com/workitem/6633)
             // Check types before the "expensive" operation of checking all property values
             var xType = x.GetType();
             var yType = y.GetType();

@@ -27,13 +27,10 @@ Release date:
 =============
 2017/xx/xx
 
-Added/fixed (BREAKING CHANGES):
-===============================
--
-
 Platform support changes:
 =========================
 Dropped support for the following platforms:
+* .NET 4.0
 * Silverlight 5
 * Windows Phone 8.0 (Silverlight)
 * Windows Phone 8.1 (Silverlight)
@@ -42,6 +39,7 @@ Dropped support for the following platforms:
 
 Dropped support for the following components:
 * Catel.Extensions.CSLA
+* Catel.Extensions.EntityFramework (moved to Orc.EntityFramework)
 * Catel.Extensions.FluentValidation (moved to Orc.FluentValidation)
 * Catel.Extensions.Interception
 * Catel.Extensions.Memento (moved to Orc.Memento)
@@ -78,11 +76,12 @@ Added/fixed:
 (*) CTL-941  Update to json.net 9.x
 (*) CTL-948  Allow setting the status in IPleaseWaitServiceExtensions.PushInScope
 (*) CTL-988  Allow view models without model injection to stay alive on DataContext changes
+(*) #1003    Migrate xaml uri from catel.codeplex.com => catelproject.com
 (x) CTL-899  Navigation in WPF is not working when using custom frame
 (x) CTL-906  Clear current navigation context when (re)navigating to the same view in WPF
 (x) CTL-910  Introduce special lock for null keys in CacheStorage to prevent ArgumentNullException
 (x) CTL-925  LanguageBinding markup now uses weak events to allow specific controls (such as the ComboBox with ComboBoxItem 
-    elements) to be updated after they have been collapsed
+             elements) to be updated after they have been collapsed
 (x) CTL-991  Equals method in ServiceLocator.ServiceInfo class returns false positives
 (x) CTL-1000 NumericTextBox behavior doesn't allow some values (e.g. 2.05)
 (x) CTL-1010 MessageMediator.Unregister has a bug when method names are the same
@@ -90,6 +89,7 @@ Added/fixed:
 (-) CTL-935  Remove InterestedIn attributes because services are a better way to communicate 
 (-) CTL-975  Remove EventHandlerExtensions.SplitInvoke and use regular event invocation
 (-) CTL-987  Delete MVVM logic behaviors (should only be available as logic)
+(-) #1008    Remove support for .NET 4.0
 (-) Removed test implementations of services
 
 Roadmap:

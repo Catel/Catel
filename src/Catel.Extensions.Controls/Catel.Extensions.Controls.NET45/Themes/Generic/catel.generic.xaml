@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:effects="clr-namespace:Catel.Windows.Media.Effects"
-                    xmlns:catel="http://catel.codeplex.com">
+                    xmlns:catel="http://schemas.catelproject.com">
 
     <!-- Converters -->
     <catel:BooleanToGrayscaleConverter x:Key="BooleanToGrayscaleConverter" />

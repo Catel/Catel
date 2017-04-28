@@ -40,21 +40,21 @@ using System.Windows.Markup;
     )]
 #endif
 
-// XmlnsDefinition is not supported in Windows Phone 7 and WinRT
+// XmlnsDefinition is not supported in UAP
 #if !NETFX_CORE && !PCL && !XAMARIN
 
-[assembly: XmlnsPrefix("http://catel.codeplex.com", "catel")]
-[assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.MVVM")]
-[assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.MVVM.Converters")]
-[assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.MVVM.Providers")]
-[assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.MVVM.Views")]
-[assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.Windows")]
-[assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.Windows.Controls")]
-[assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.Windows.Interactivity")]
+[assembly: XmlnsPrefix("http://schemas.catelproject.com", "catel")]
+[assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM")]
+[assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM.Converters")]
+[assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM.Providers")]
+[assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM.Views")]
+[assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows")]
+[assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows.Controls")]
+[assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows.Interactivity")]
 
 #if NET
-[assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.Windows.Data")]
-[assembly: XmlnsDefinition("http://catel.codeplex.com", "Catel.Windows.Markup")]
+[assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows.Data")]
+[assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows.Markup")]
 #endif
 
 #endif
