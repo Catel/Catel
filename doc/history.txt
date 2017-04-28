@@ -43,6 +43,8 @@ Dropped support for the following components:
 * Catel.Extensions.FluentValidation (moved to Orc.FluentValidation)
 * Catel.Extensions.Interception
 * Catel.Extensions.Memento (moved to Orc.Memento)
+* Catel.Extensions.Prism5 (moved to Orc.Prism)
+* Catel.Extensions.Prism6 (moved to Orc.Prism)
 * Catel.Extensions.MVC4
 * Catel.Extensions.MVC5
 * Catel.Extensions.Prism4
@@ -89,7 +91,6 @@ Added/fixed:
 (-) CTL-935  Remove InterestedIn attributes because services are a better way to communicate 
 (-) CTL-975  Remove EventHandlerExtensions.SplitInvoke and use regular event invocation
 (-) CTL-987  Delete MVVM logic behaviors (should only be available as logic)
-(-) #1008    Remove support for .NET 4.0
 (-) Removed test implementations of services
 
 Roadmap:
