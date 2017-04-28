@@ -88,20 +88,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\Catel.Extensions.Controls.NET40\Resources\Images\ClearOutput.png">
-      <Link>Resources\Images\ClearOutput.png</Link>
-    </Resource>
-    <Resource Include="..\Catel.Extensions.Controls.NET40\Resources\Images\Error.png">
-      <Link>Resources\Images\Error.png</Link>
-    </Resource>
-    <Resource Include="..\Catel.Extensions.Controls.NET40\Resources\Images\Search.png">
-      <Link>Resources\Images\Search.png</Link>
-    </Resource>
-    <Resource Include="..\Catel.Extensions.Controls.NET40\Resources\Images\Warning.png">
-      <Link>Resources\Images\Warning.png</Link>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -136,38 +122,15 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect\EmptyEffect.cs">
-      <Link>Windows\Media\Effects\EmptyEffect\EmptyEffect.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.cs">
-      <Link>Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.cs</Link>
-    </Compile>
-    <Compile Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\ShaderEffectBase.cs">
-      <Link>Windows\Media\Effects\ShaderEffectBase.cs</Link>
-    </Compile>
     <Compile Include="ModuleInitializer.cs" />
+    <Compile Include="Windows\Media\Effects\EmptyEffect\EmptyEffect.cs" />
+    <Compile Include="Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.cs" />
+    <Compile Include="Windows\Media\Effects\ShaderEffectBase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect\EmptyEffect.fx">
-      <Link>Windows\Media\Effects\EmptyEffect\EmptyEffect.fx</Link>
-    </Content>
     <None Include="FodyWeavers.xml" />
-    <Resource Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect\EmptyEffect.ps">
-      <Link>Windows\Media\Effects\EmptyEffect\EmptyEffect.ps</Link>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.fx">
-      <Link>Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.fx</Link>
-    </Content>
-    <Resource Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.ps">
-      <Link>Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.ps</Link>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="..\Catel.Extensions.Controls.NET40\Windows\Media\Effects\EmptyEffect.fx">
-      <Link>Windows\Media\Effects\EmptyEffect.fx</Link>
-    </Resource>
+    <Resource Include="Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.ps" />
+    <Resource Include="Windows\Media\Effects\EmptyEffect\EmptyEffect.ps" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -176,6 +139,15 @@
     <Analyzer Include="..\..\..\lib\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />
     <Analyzer Include="..\..\..\lib\WpfAnalyzers.0.2.7.10\analyzers\dotnet\cs\WpfAnalyzers.Analyzers.dll" />
     <Analyzer Include="..\..\..\lib\WpfAnalyzers.0.2.7.10\analyzers\dotnet\cs\WpfAnalyzers.CodeFixes.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\Media\Effects\EmptyEffect.fx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\Media\Effects\EmptyEffect\EmptyEffect.fx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Windows\Media\Effects\GrayscaleEffect\GrayscaleEffect.fx" />
   </ItemGroup>
   <Import Project="..\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
