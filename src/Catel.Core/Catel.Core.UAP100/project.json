@@ -4,10 +4,10 @@
     "Catel.Fody": "2.16.2",
     "Fody": "2.0.6",
     "MethodTimer.Fody": "1.19.0",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.3",
     "ModuleInit.Fody": "1.6.0",
     "Obsolete.Fody": "4.2.2",
-    "WpfAnalyzers": "0.2.4-dev"
+    "WpfAnalyzers": "0.2.7.10"
   },
   "frameworks": {
     "uap10.0": {}
