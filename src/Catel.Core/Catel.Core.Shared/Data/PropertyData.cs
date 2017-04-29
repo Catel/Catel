@@ -59,12 +59,13 @@ namespace Catel.Data
         /// <param name="includeInBackup">if set to <c>true</c>, the property should be included in the backup when handling IEditableObject.</param>
         /// <param name="isModelBaseProperty">if set to <c>true</c>, the property is declared by the <see cref="ModelBase" />.</param>
         /// <param name="isCalculatedProperty">if set to <c>true</c>, the property is a calculated property.</param>
+        /// <param name="isDynamicProperty">if set to <c>true</c>, the property is a dynamic property.</param>
         /// <exception cref="ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         internal PropertyData(string name, Type type, object defaultValue, bool setParent, EventHandler<AdvancedPropertyChangedEventArgs> propertyChangedEventHandler,
-            bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool isCalculatedProperty)
+            bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool isCalculatedProperty, bool isDynamicProperty)
             : this(name, type, () => defaultValue, setParent, propertyChangedEventHandler, isSerializable,
-                   includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty) { }
+                   includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty, isDynamicProperty) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyData"/> class.
@@ -80,11 +81,12 @@ namespace Catel.Data
         /// <param name="includeInBackup">if set to <c>true</c>, the property should be included in the backup when handling IEditableObject.</param>
         /// <param name="isModelBaseProperty">if set to <c>true</c>, the property is declared by the <see cref="ModelBase"/>.</param>
         /// <param name="isCalculatedProperty">if set to <c>true</c>, the property is a calculated property.</param>
+        /// <param name="isDynamicProperty">if set to <c>true</c>, the property is a dynamic property.</param>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="createDefaultValue"/> is <c>null</c>.</exception>
         internal PropertyData(string name, Type type, Func<object> createDefaultValue, bool setParent, EventHandler<AdvancedPropertyChangedEventArgs> propertyChangedEventHandler,
-            bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool isCalculatedProperty)
+            bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool isCalculatedProperty, bool isDynamicProperty)
         {
             Argument.IsNotNullOrWhitespace("name", name);
             Argument.IsNotNull("type", type);
@@ -99,6 +101,7 @@ namespace Catel.Data
             IsModelBaseProperty = isModelBaseProperty;
             IncludeInBackup = includeInBackup;
             IsCalculatedProperty = isCalculatedProperty;
+            IsDynamicProperty = isDynamicProperty;
 
             _createDefaultValue = createDefaultValue;
         }
@@ -185,6 +188,12 @@ namespace Catel.Data
         /// <value><c>true</c> if this is a calculated property; otherwise, <c>false</c>.</value>
         [XmlIgnore]
         public bool IsCalculatedProperty { get; internal set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this is a dynamic property.
+        /// </summary>
+        [XmlIgnore]
+        public bool IsDynamicProperty { get; internal set; }
         #endregion
 
         #region Methods
