@@ -44,8 +44,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EF5", "EF5", "{B08AF9A4-DD2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EF", "EF", "{A6B36C41-DB02-43BB-88CA-A5042D6B365B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Extensions.DynamicObjects", "Catel.Extensions.DynamicObjects", "{B5ED1A50-E238-4C92-996A-08ED76033DF3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.NET45", "Catel.Core\Catel.Core.NET45\Catel.Core.NET45.csproj", "{D748BE60-BAD6-4D1B-BE5A-C24943A56594}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.NET45", "Catel.Test\Catel.Test.NET45\Catel.Test.NET45.csproj", "{6AEA0DEC-BAF6-4FDE-98F1-B17121E0D45C}"
@@ -62,8 +60,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.EntityFramework5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Test.EntityFramework5.ObjectContextTest.NET45", "Catel.Test\Catel.Test.EntityFramework5.ObjectContextTest.NET45\Catel.Test.EntityFramework5.ObjectContextTest.NET45.csproj", "{F8982176-FC35-453D-AFAB-60CC3ED474C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.DynamicObjects.NET45", "Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.NET45\Catel.Extensions.DynamicObjects.NET45.csproj", "{A4396138-135C-4ABE-B671-3DC0C041DD37}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EF6", "EF6", "{376E61C4-833D-4DAB-B282-913709897142}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.EntityFramework6.NET45", "Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework6\Catel.Extensions.EntityFramework6.NET45\Catel.Extensions.EntityFramework6.NET45.csproj", "{63025202-610A-4F75-92E7-1C622B5AB2E8}"
@@ -79,8 +75,6 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Core.Shared", "Catel.Core\Catel.Core.Shared\Catel.Core.Shared.shproj", "{3743A304-3EE5-4909-BFEC-988D59D1B33A}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Extensions.Data.Shared", "Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.shproj", "{41C1B6D9-E16A-4137-B573-1AB9DA17EFF3}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Extensions.DynamicObjects.Shared", "Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.shproj", "{F8820AE3-4021-4622-A0A9-E33876A471B4}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.Extensions.Controls.Shared", "Catel.Extensions.Controls\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.shproj", "{6ED252B8-178A-4349-8940-AFD2CB2B87E3}"
 EndProject
@@ -106,8 +100,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.UAP100", "Catel.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Controls.UAP100", "Catel.Extensions.Controls\Catel.Extensions.Controls.UAP100\Catel.Extensions.Controls.UAP100.csproj", "{1E5D5BCC-0735-4FBD-974E-57C52D5D793A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.DynamicObjects.UAP100", "Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.UAP100\Catel.Extensions.DynamicObjects.UAP100.csproj", "{7B37D694-0247-430C-9892-F2DBCD5A65E5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Serialization.Json", "Catel.Serialization.Json", "{85BEBC4F-4020-4045-945B-B8F6F732FC6E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Serialization.Yaml", "Catel.Serialization.Yaml", "{E3580D73-CCCC-4956-8BCD-6F4F9B58310D}"
@@ -130,11 +122,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Data.PCL",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.Data.NET46", "Catel.Extensions.Data\Catel.Extensions.Data.NET46\Catel.Extensions.Data.NET46.csproj", "{3337F3AE-AE8B-414E-93E4-F4FC46940391}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.DynamicObjects.NET46", "Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.NET46\Catel.Extensions.DynamicObjects.NET46.csproj", "{71EE269F-2B50-4A89-A309-D10A1F9D816C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Serialization.Json.NET46", "Catel.Serialization.Json\Catel.Serialization.Json.NET46\Catel.Serialization.Json.NET46.csproj", "{97E093E6-1CF9-4CFF-9201-540A7681BC12}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Extensions.DynamicObjects.PCL", "Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.PCL\Catel.Extensions.DynamicObjects.PCL.csproj", "{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Serialization.Json.UAP100", "Catel.Serialization.Json\Catel.Serialization.Json.UAP100\Catel.Serialization.Json.UAP100.csproj", "{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}"
 EndProject
@@ -161,9 +149,7 @@ Global
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework6\Catel.Extensions.EntityFramework6.Shared\Catel.Extensions.EntityFramework6.Shared.projitems*{63025202-610a-4f75-92e7-1c622b5ab2e8}*SharedItemsImports = 4
 		Catel.Test\Catel.Test.Shared\Catel.Test.Shared.projitems*{6aea0dec-baf6-4fde-98f1-b17121e0d45c}*SharedItemsImports = 4
 		Catel.Extensions.Controls\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems*{6ed252b8-178a-4349-8940-afd2cb2b87e3}*SharedItemsImports = 13
-		Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.projitems*{71ee269f-2b50-4a89-a309-d10a1f9d816c}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{786d0298-2117-4b96-838d-c0e9458d06c2}*SharedItemsImports = 4
-		Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.projitems*{7b37d694-0247-430c-9892-f2dbcd5a65e5}*SharedItemsImports = 4
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{7c69650f-08c8-494c-857f-43b29a4bb20c}*SharedItemsImports = 4
 		Catel.Test\Catel.Test.Shared\Catel.Test.Shared.projitems*{84191838-c476-4e1a-9129-07d8c906674a}*SharedItemsImports = 13
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{8c7eab82-554b-4761-b67e-7e9b9a306914}*SharedItemsImports = 13
@@ -171,7 +157,6 @@ Global
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{97e093e6-1cf9-4cff-9201-540a7681bc12}*SharedItemsImports = 4
 		Catel.Extensions.Data\Catel.Extensions.Data.Shared\Catel.Extensions.Data.Shared.projitems*{9d908408-ca30-447a-bc47-85048e5a2999}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{a23a4481-2432-4743-89a1-6a8f359772a7}*SharedItemsImports = 4
-		Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.projitems*{a4396138-135c-4abe-b671-3dc0c041dd37}*SharedItemsImports = 4
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{b28db9d5-dcab-4d54-b98f-3e8630908954}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{bedeb2cb-51ab-4af6-85f9-6a596b4603bb}*SharedItemsImports = 4
 		Catel.Extensions.Controls\Catel.Extensions.Controls.Shared\Catel.Extensions.Controls.Shared.projitems*{c179d5aa-66a3-4574-8839-cd9e53890937}*SharedItemsImports = 4
@@ -181,9 +166,7 @@ Global
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{e0d994ca-d553-4009-a159-33542a16c4d0}*SharedItemsImports = 4
 		Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework6\Catel.Extensions.EntityFramework6.Shared\Catel.Extensions.EntityFramework6.Shared.projitems*{e14d5a70-cd76-4b12-8512-d390bea30bd6}*SharedItemsImports = 13
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{e686a62c-2e03-40a2-8be6-bdf6d5f19a71}*SharedItemsImports = 13
-		Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.projitems*{f55d14dc-3fa4-4fd9-ae73-a8cdf2bb7c33}*SharedItemsImports = 4
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{f8073034-ce6c-41ad-9852-7aeece9536cc}*SharedItemsImports = 4
-		Catel.Extensions.DynamicObjects\Catel.Extensions.DynamicObjects.Shared\Catel.Extensions.DynamicObjects.Shared.projitems*{f8820ae3-4021-4622-a0a9-e33876a471b4}*SharedItemsImports = 13
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{fc00c799-175f-42ec-a481-24a06cf20508}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -277,16 +260,6 @@ Global
 		{F8982176-FC35-453D-AFAB-60CC3ED474C4}.Release|ARM.ActiveCfg = Release|Any CPU
 		{F8982176-FC35-453D-AFAB-60CC3ED474C4}.Release|x64.ActiveCfg = Release|Any CPU
 		{F8982176-FC35-453D-AFAB-60CC3ED474C4}.Release|x86.ActiveCfg = Release|Any CPU
-		{A4396138-135C-4ABE-B671-3DC0C041DD37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A4396138-135C-4ABE-B671-3DC0C041DD37}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A4396138-135C-4ABE-B671-3DC0C041DD37}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{A4396138-135C-4ABE-B671-3DC0C041DD37}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{A4396138-135C-4ABE-B671-3DC0C041DD37}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A4396138-135C-4ABE-B671-3DC0C041DD37}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A4396138-135C-4ABE-B671-3DC0C041DD37}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A4396138-135C-4ABE-B671-3DC0C041DD37}.Release|ARM.ActiveCfg = Release|Any CPU
-		{A4396138-135C-4ABE-B671-3DC0C041DD37}.Release|x64.ActiveCfg = Release|Any CPU
-		{A4396138-135C-4ABE-B671-3DC0C041DD37}.Release|x86.ActiveCfg = Release|Any CPU
 		{63025202-610A-4F75-92E7-1C622B5AB2E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{63025202-610A-4F75-92E7-1C622B5AB2E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63025202-610A-4F75-92E7-1C622B5AB2E8}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -411,22 +384,6 @@ Global
 		{1E5D5BCC-0735-4FBD-974E-57C52D5D793A}.Release|x64.Build.0 = Release|x64
 		{1E5D5BCC-0735-4FBD-974E-57C52D5D793A}.Release|x86.ActiveCfg = Release|x86
 		{1E5D5BCC-0735-4FBD-974E-57C52D5D793A}.Release|x86.Build.0 = Release|x86
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Debug|ARM.ActiveCfg = Debug|ARM
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Debug|ARM.Build.0 = Debug|ARM
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Debug|x64.ActiveCfg = Debug|x64
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Debug|x64.Build.0 = Debug|x64
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Debug|x86.ActiveCfg = Debug|x86
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Debug|x86.Build.0 = Debug|x86
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Release|ARM.ActiveCfg = Release|ARM
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Release|ARM.Build.0 = Release|ARM
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Release|x64.ActiveCfg = Release|x64
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Release|x64.Build.0 = Release|x64
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Release|x86.ActiveCfg = Release|x86
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5}.Release|x86.Build.0 = Release|x86
 		{7C69650F-08C8-494C-857F-43B29A4BB20C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7C69650F-08C8-494C-857F-43B29A4BB20C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C69650F-08C8-494C-857F-43B29A4BB20C}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -531,22 +488,6 @@ Global
 		{3337F3AE-AE8B-414E-93E4-F4FC46940391}.Release|x64.Build.0 = Release|Any CPU
 		{3337F3AE-AE8B-414E-93E4-F4FC46940391}.Release|x86.ActiveCfg = Release|Any CPU
 		{3337F3AE-AE8B-414E-93E4-F4FC46940391}.Release|x86.Build.0 = Release|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Debug|ARM.Build.0 = Debug|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Debug|x64.Build.0 = Debug|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Debug|x86.Build.0 = Debug|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Release|ARM.ActiveCfg = Release|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Release|ARM.Build.0 = Release|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Release|x64.ActiveCfg = Release|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Release|x64.Build.0 = Release|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Release|x86.ActiveCfg = Release|Any CPU
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C}.Release|x86.Build.0 = Release|Any CPU
 		{97E093E6-1CF9-4CFF-9201-540A7681BC12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{97E093E6-1CF9-4CFF-9201-540A7681BC12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97E093E6-1CF9-4CFF-9201-540A7681BC12}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -563,22 +504,6 @@ Global
 		{97E093E6-1CF9-4CFF-9201-540A7681BC12}.Release|x64.Build.0 = Release|Any CPU
 		{97E093E6-1CF9-4CFF-9201-540A7681BC12}.Release|x86.ActiveCfg = Release|Any CPU
 		{97E093E6-1CF9-4CFF-9201-540A7681BC12}.Release|x86.Build.0 = Release|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|ARM.Build.0 = Debug|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|x64.Build.0 = Debug|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Debug|x86.Build.0 = Debug|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|ARM.ActiveCfg = Release|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|ARM.Build.0 = Release|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|x64.ActiveCfg = Release|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|x64.Build.0 = Release|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|x86.ActiveCfg = Release|Any CPU
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33}.Release|x86.Build.0 = Release|Any CPU
 		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}.Debug|ARM.ActiveCfg = Debug|ARM
@@ -623,7 +548,6 @@ Global
 		{41BA68F9-3422-4FB0-B6DE-7097A22565E5} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{B08AF9A4-DD22-4ACF-9387-9C3600D487DE} = {04FB2E2C-C216-4270-B397-3C893D1E5CF2}
 		{A6B36C41-DB02-43BB-88CA-A5042D6B365B} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
-		{B5ED1A50-E238-4C92-996A-08ED76033DF3} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{D748BE60-BAD6-4D1B-BE5A-C24943A56594} = {3F661942-9946-4292-9FE7-6B576782D5F9}
 		{6AEA0DEC-BAF6-4FDE-98F1-B17121E0D45C} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
 		{C179D5AA-66A3-4574-8839-CD9E53890937} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
@@ -632,7 +556,6 @@ Global
 		{2156065F-74F7-420C-A7C9-F40B4751E36A} = {B08AF9A4-DD22-4ACF-9387-9C3600D487DE}
 		{B0238565-3C5A-4D9D-9938-A2B82770E525} = {A6B36C41-DB02-43BB-88CA-A5042D6B365B}
 		{F8982176-FC35-453D-AFAB-60CC3ED474C4} = {A6B36C41-DB02-43BB-88CA-A5042D6B365B}
-		{A4396138-135C-4ABE-B671-3DC0C041DD37} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
 		{376E61C4-833D-4DAB-B282-913709897142} = {04FB2E2C-C216-4270-B397-3C893D1E5CF2}
 		{63025202-610A-4F75-92E7-1C622B5AB2E8} = {376E61C4-833D-4DAB-B282-913709897142}
 		{0014F9BD-7B73-48D4-828C-FD2A85B0276B} = {3F661942-9946-4292-9FE7-6B576782D5F9}
@@ -641,7 +564,6 @@ Global
 		{DACC943D-DECB-4638-B83B-59DD17237FB9} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
 		{3743A304-3EE5-4909-BFEC-988D59D1B33A} = {3F661942-9946-4292-9FE7-6B576782D5F9}
 		{41C1B6D9-E16A-4137-B573-1AB9DA17EFF3} = {41BA68F9-3422-4FB0-B6DE-7097A22565E5}
-		{F8820AE3-4021-4622-A0A9-E33876A471B4} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
 		{6ED252B8-178A-4349-8940-AFD2CB2B87E3} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
 		{84191838-C476-4E1A-9129-07D8C906674A} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
 		{8C7EAB82-554B-4761-B67E-7E9B9A306914} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
@@ -654,7 +576,6 @@ Global
 		{2CC3B8F3-626E-4A7B-ADC5-A25E28DC219E} = {3F661942-9946-4292-9FE7-6B576782D5F9}
 		{A23A4481-2432-4743-89A1-6A8F359772A7} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
 		{1E5D5BCC-0735-4FBD-974E-57C52D5D793A} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
-		{7B37D694-0247-430C-9892-F2DBCD5A65E5} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
 		{85BEBC4F-4020-4045-945B-B8F6F732FC6E} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{E3580D73-CCCC-4956-8BCD-6F4F9B58310D} = {58F62039-8645-499C-B264-66048F4F0F75}
 		{E686A62C-2E03-40A2-8BE6-BDF6D5F19A71} = {85BEBC4F-4020-4045-945B-B8F6F732FC6E}
@@ -666,9 +587,7 @@ Global
 		{2DC754DD-C7B1-4318-8365-05E6C22DAD41} = {1F4484D6-CE9B-428E-B640-FB777F260F97}
 		{3658EF5E-766F-4D36-B0FC-DFADAE6547DD} = {41BA68F9-3422-4FB0-B6DE-7097A22565E5}
 		{3337F3AE-AE8B-414E-93E4-F4FC46940391} = {41BA68F9-3422-4FB0-B6DE-7097A22565E5}
-		{71EE269F-2B50-4A89-A309-D10A1F9D816C} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
 		{97E093E6-1CF9-4CFF-9201-540A7681BC12} = {85BEBC4F-4020-4045-945B-B8F6F732FC6E}
-		{F55D14DC-3FA4-4FD9-AE73-A8CDF2BB7C33} = {B5ED1A50-E238-4C92-996A-08ED76033DF3}
 		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC} = {85BEBC4F-4020-4045-945B-B8F6F732FC6E}
 		{E0D994CA-D553-4009-A159-33542A16C4D0} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
 	EndGlobalSection
