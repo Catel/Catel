@@ -16,7 +16,7 @@ using NUnit.Framework;
 [SetUpFixture]
 public class GlobalInitialization
 {
-    [SetUp]
+    [OneTimeSetUp]
     public static void SetUp()
     {
         //System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
