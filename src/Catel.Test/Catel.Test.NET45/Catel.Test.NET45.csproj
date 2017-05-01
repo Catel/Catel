@@ -138,10 +138,6 @@
       <Project>{9d908408-ca30-447a-bc47-85048e5a2999}</Project>
       <Name>Catel.Extensions.Data.NET45</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Catel.Extensions.EntityFramework\Catel.Extensions.EntityFramework5\Catel.Extensions.EntityFramework5.NET45\Catel.Extensions.EntityFramework5.NET45.csproj">
-      <Project>{2156065f-74f7-420c-a7c9-f40b4751e36a}</Project>
-      <Name>Catel.Extensions.EntityFramework5.NET45</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.NET45\Catel.MVVM.NET45.csproj">
       <Project>{bedeb2cb-51ab-4af6-85f9-6a596b4603bb}</Project>
       <Name>Catel.MVVM.NET45</Name>
@@ -149,14 +145,6 @@
     <ProjectReference Include="..\..\Catel.Serialization.Json\Catel.Serialization.Json.NET45\Catel.Serialization.Json.NET45.csproj">
       <Project>{7c69650f-08c8-494c-857f-43b29a4bb20c}</Project>
       <Name>Catel.Serialization.Json.NET45</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Catel.Test.EntityFramework5.DbContextTest.NET45\Catel.Test.EntityFramework5.DbContextTest.NET45.csproj">
-      <Project>{b0238565-3c5a-4d9d-9938-a2b82770e525}</Project>
-      <Name>Catel.Test.EntityFramework5.DbContextTest.NET45</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Catel.Test.EntityFramework5.ObjectContextTest.NET45\Catel.Test.EntityFramework5.ObjectContextTest.NET45.csproj">
-      <Project>{f8982176-fc35-453d-afab-60cc3ed474c4}</Project>
-      <Name>Catel.Test.EntityFramework5.ObjectContextTest.NET45</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

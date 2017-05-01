@@ -39,16 +39,17 @@ Dropped support for the following platforms:
 
 Dropped support for the following components:
 * Catel.Extensions.CSLA
+* Catel.Extensions.Controls (moved to Orc.Controls & Orchestra)
 * Catel.Extensions.DynamicObjects (moved to Orc.DynamicObjects)
 * Catel.Extensions.EntityFramework (moved to Orc.EntityFramework)
 * Catel.Extensions.FluentValidation (moved to Orc.FluentValidation)
 * Catel.Extensions.Interception
 * Catel.Extensions.Memento (moved to Orc.Memento)
-* Catel.Extensions.Prism5 (moved to Orc.Prism)
-* Catel.Extensions.Prism6 (moved to Orc.Prism)
 * Catel.Extensions.MVC4
 * Catel.Extensions.MVC5
 * Catel.Extensions.Prism4
+* Catel.Extensions.Prism5 (moved to Orc.Prism)
+* Catel.Extensions.Prism6 (moved to Orc.Prism)
 * Catel.Extensions.Wcf.Server
 
 Classes / members marked as obsolete:
