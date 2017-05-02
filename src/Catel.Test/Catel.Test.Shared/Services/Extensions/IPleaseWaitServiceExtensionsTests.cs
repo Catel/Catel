@@ -8,10 +8,11 @@
 namespace Catel.Test.Services
 {
     using System;
+    using System.Threading;
     using Catel.Services;
     using NUnit.Framework;
 
-    [TestFixture, RequiresSTA, Explicit]
+    [TestFixture, Apartment(ApartmentState.STA), Explicit]
     class IPleaseWaitServiceExtensionsTests
     {
         private IPleaseWaitService _target;
