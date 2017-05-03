@@ -101,10 +101,6 @@
       <Project>{d748be60-bad6-4d1b-be5a-c24943a56594}</Project>
       <Name>Catel.Core.NET45</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Catel.Extensions.Data\Catel.Extensions.Data.NET45\Catel.Extensions.Data.NET45.csproj">
-      <Project>{9d908408-ca30-447a-bc47-85048e5a2999}</Project>
-      <Name>Catel.Extensions.Data.NET45</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Catel.MVVM\Catel.MVVM.NET45\Catel.MVVM.NET45.csproj">
       <Project>{bedeb2cb-51ab-4af6-85f9-6a596b4603bb}</Project>
       <Name>Catel.MVVM.NET45</Name>

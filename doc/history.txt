@@ -40,6 +40,7 @@ Dropped support for the following platforms:
 Dropped support for the following components:
 * Catel.Extensions.CSLA
 * Catel.Extensions.Controls (moved to Orc.Controls & Orchestra)
+* Catel.Extensions.Data
 * Catel.Extensions.DynamicObjects (moved to Orc.DynamicObjects)
 * Catel.Extensions.EntityFramework (moved to Orc.EntityFramework)
 * Catel.Extensions.FluentValidation (moved to Orc.FluentValidation)
