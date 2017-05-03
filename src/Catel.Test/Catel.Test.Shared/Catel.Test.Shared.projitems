@@ -71,11 +71,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionExtensionsTests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionHandlerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExceptionHandling\ExceptionServiceFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Data\Repositories\CachedRepositoryBaseFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Data\Specifications\AndSpecificationFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Data\Specifications\CompositeSpecificationFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Data\Specifications\OrSpecificationFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Data\Specifications\SpecificationTestData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\StringExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\UriExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Factories\ExceptionFactoryFacts.cs" />
