@@ -517,7 +517,7 @@ namespace Catel.MVVM.Providers
 
                 foreach (var propertyToSubscribe in propertiesToSubscribe)
                 {
-                    if (propertiesToSubscribe.Contains(propertyToSubscribe))
+                    if (!finalProperties.Contains(propertyToSubscribe))
                     {
                         finalProperties.Add(propertyToSubscribe);
                     }
