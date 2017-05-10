@@ -39,16 +39,16 @@ namespace Catel.MVVM.Views
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewToViewModelMappingContainer" /> class.
         /// </summary>
-        /// <param name="viewModelContainer">The view.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelContainer" /> is <c>null</c>.</exception>
-        public ViewToViewModelMappingContainer(IViewModelContainer viewModelContainer)
+        /// <param name="viewModelContainerType">The view model container type.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewModelContainerType" /> is <c>null</c>.</exception>
+        public ViewToViewModelMappingContainer(Type viewModelContainerType)
         {
-            Argument.IsNotNull("view", viewModelContainer);
+            Argument.IsNotNull("viewModelContainerType", viewModelContainerType);
 
-            var properties = viewModelContainer.GetType().GetPropertiesEx();
+            var properties = viewModelContainerType.GetPropertiesEx();
             foreach (var property in properties)
             {
-                object[] viewToViewModelAttributes = property.GetCustomAttributesEx(typeof(ViewToViewModelAttribute), false);
+                var viewToViewModelAttributes = property.GetCustomAttributesEx(typeof(ViewToViewModelAttribute), false);
                 if (viewToViewModelAttributes.Length > 0)
                 {
                     Log.Debug("Property '{0}' is decorated with the ViewToViewModelAttribute, creating a mapping", property.Name);

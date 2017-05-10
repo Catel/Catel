@@ -68,7 +68,7 @@ namespace Catel.MVVM.Views
 
             if (!_viewToViewModelMappingContainers.ContainsKey(viewModelContainerType))
             {
-                _viewToViewModelMappingContainers.Add(viewModelContainerType, new ViewToViewModelMappingContainer(viewModelContainer));
+                _viewToViewModelMappingContainers.Add(viewModelContainerType, new ViewToViewModelMappingContainer(viewModelContainerType));
             }
 
             ViewModelContainer.ViewModelChanged += OnViewModelChanged;
