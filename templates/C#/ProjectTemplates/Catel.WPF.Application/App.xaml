@@ -1,0 +1,11 @@
+﻿<Application x:Class="$safeprojectname$.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="/Views/MainWindow.xaml">
+    <Application.Resources>
+    
+        <!-- Generic Catel theme -->
+        <ResourceDictionary Source="/Catel.Extensions.Controls;component/themes/generic.xaml" />
+        
+    </Application.Resources>
+</Application>

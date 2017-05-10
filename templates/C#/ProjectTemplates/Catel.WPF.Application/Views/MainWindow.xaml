@@ -1,0 +1,17 @@
+﻿<catel:Window x:Class="$safeprojectname$.Views.MainWindow"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:catel="http://catel.codeplex.com"
+              ResizeMode="CanResize">
+
+     <catel:StackGrid x:Name="LayoutRoot">
+        <catel:StackGrid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </catel:StackGrid.RowDefinitions>
+        
+        <Label Content="{Binding Title}" />
+        <Label Content="Here goes your real content" />
+    </catel:StackGrid>
+    
+</catel:Window>
