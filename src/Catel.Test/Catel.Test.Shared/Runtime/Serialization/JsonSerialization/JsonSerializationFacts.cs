@@ -171,6 +171,31 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.IsFalse(json.Contains("Excluded"));
             }
 
+            [TestCase]
+            public void CorrectlySerializesObjectsWithFormattedIndents()
+            {
+                var serviceLocator = ServiceLocator.Default;
+                var serializer = serviceLocator.ResolveType<IJsonSerializer>();
+
+                var model = new CustomJsonSerializationModel
+                {
+                    FirstName = "Geert"
+                };
+
+                var configuration = new JsonSerializationConfiguration
+                {
+                    Formatting = Newtonsoft.Json.Formatting.Indented
+                };
+
+                var clonedModel = SerializationTestHelper.SerializeAndDeserialize(model, serializer, configuration);
+
+                // Note: yes, the *model* is serialized, the *clonedModel* is deserialized
+                Assert.IsTrue(model.IsCustomSerialized);
+                Assert.IsTrue(clonedModel.IsCustomDeserialized);
+
+                Assert.AreEqual(model.FirstName, clonedModel.FirstName);
+            }
+
             //[TestCase]
             //public void CorrectlySerializesToJsonStringWithInvariantCulture()
             //{

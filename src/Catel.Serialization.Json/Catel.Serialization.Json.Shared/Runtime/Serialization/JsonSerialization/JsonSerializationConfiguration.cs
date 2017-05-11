@@ -46,5 +46,13 @@ namespace Catel.Runtime.Serialization.Json
         /// The date time zone handling.
         /// </value>
         public DateTimeZoneHandling DateTimeZoneHandling { get; set; }
+
+        /// <summary>
+        /// Gets or sets the json formatting.
+        /// </summary>
+        /// <value>
+        /// The json formatting.
+        /// </value>
+        public Formatting Formatting { get; set; }
     }
 }

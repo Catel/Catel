@@ -67,6 +67,7 @@ Added/fixed:
 (+) CTL-907  Support classes that implement Parse(string, IFormatProvider) and ToString(IFormatProvider) in the serializers 
 (+) CTL-929  Add Additional {WorkDir} as FileLogListener Keyword
 (+) CTL-953  Create pool manager to re-use objects in a pool (e.g. memory streams in serialization)
+(+) CTL-998  JSON Serializer cannot serialize with formatted indents
 (+) CTL-1011 Implement IUIVisualizerService for UWP and removed non-async methods for WPF
 (+) CTL-1015 Implement IOpenFileService for UWP and make all methods async (also for WPF)
 (+) CTL-1016 Implement ISelectDirectoryService for UWP and make all methods async (also for WPF)
