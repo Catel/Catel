@@ -40,7 +40,6 @@ namespace Catel.Windows.Interactivity
     public class AutoCompletion : BehaviorBase<TextBox>
     {
         #region Fields
-        private readonly IAutoCompletionService _autoCompletionService;
         private readonly ListBox _suggestionListBox;
         private readonly Popup _popup;
 
@@ -57,9 +56,6 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         public AutoCompletion()
         {
-            var dependencyResolver = this.GetDependencyResolver();
-            _autoCompletionService = dependencyResolver.Resolve<IAutoCompletionService>();
-
             _suggestionListBox = new ListBox();
             _suggestionListBox.Margin = new Thickness(0d);
 
@@ -283,7 +279,9 @@ namespace Catel.Windows.Interactivity
             {
                 if (UseAutoCompletionService)
                 {
-                    availableSuggestions = _autoCompletionService.GetAutoCompleteValues(PropertyName, text, ItemsSource);
+                    var dependencyResolver = this.GetDependencyResolver();
+                    var autoCompletionService = dependencyResolver.Resolve<IAutoCompletionService>();
+                    availableSuggestions = autoCompletionService.GetAutoCompleteValues(PropertyName, text, ItemsSource);
                 }
                 else
                 {
