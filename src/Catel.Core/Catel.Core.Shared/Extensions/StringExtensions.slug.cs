@@ -32,8 +32,12 @@ namespace Catel
         /// <param name="input">The input.</param>
         /// <param name="spaceReplacement">The space replacement.</param>
         /// <param name="dotReplacement">The dot replacement.</param>
-        /// <returns>System.String.</returns>
-        public static string GetSlug(this string input, string spaceReplacement = "", string dotReplacement = "")
+        /// <param name="makeLowercase">if set to <c>true</c>, make the slug lower case.</param>
+        /// <returns>
+        /// The slug based on the input.
+        /// </returns>
+        public static string GetSlug(this string input, string spaceReplacement = "", string dotReplacement = "",
+            bool makeLowercase = true)
         {
             Argument.IsNotNullOrWhitespace("input", input);
             Argument.IsNotNull("spaceReplacement", spaceReplacement);
@@ -44,7 +48,12 @@ namespace Catel
 #endif
 
             var output = WhiteSpaceRegex.Replace(input, spaceReplacement);
-            output = SlugRegex.Replace(output, string.Empty).ToLowerInvariant();
+            output = SlugRegex.Replace(output, string.Empty);
+
+            if (makeLowercase)
+            {
+                output = output.ToLowerInvariant();
+            }
 
             output = output.Replace(".", dotReplacement);
 
@@ -56,7 +65,6 @@ namespace Catel
         /// Removes the diacritics (special characters) from the string.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <returns>System.String.</returns>
         public static string RemoveDiacritics(this string value)
         {
             var normalizedString = value.Normalize(NormalizationForm.FormD);
