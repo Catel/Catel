@@ -70,7 +70,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\CollectionToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ColorToBrushConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ContainsItemsConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\CountVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\DebugConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\EmptyStringToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\EnumToVisibilityConverter.cs" />

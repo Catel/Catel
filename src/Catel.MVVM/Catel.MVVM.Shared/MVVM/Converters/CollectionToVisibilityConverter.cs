@@ -50,7 +50,7 @@ namespace Catel.MVVM.Converters
         /// <returns><c>true</c> if the specified value is visible; otherwise, <c>false</c>.</returns>
         protected override bool IsVisible(object value, Type targetType, object parameter)
         {
-            bool isVisible = false;
+            var isVisible = false;
 
             var collection = value as ICollection;
             if (collection != null)
@@ -58,10 +58,25 @@ namespace Catel.MVVM.Converters
                 isVisible = collection.Count > 0;
             }
 
+            if (!isVisible && value is long)
+            {
+                isVisible = ((long)value) > 0;
+            }
+
+            if (!isVisible && value is int)
+            {
+                isVisible = ((int)value) > 0;
+            }
+
+            if (!isVisible && value is short)
+            {
+                isVisible = ((short)value) > 0;
+            }
+
             var invertParameter = parameter as string;
             if (!string.IsNullOrWhiteSpace(invertParameter))
             {
-                bool invert = false;
+                var invert = false;
                 bool.TryParse(invertParameter, out invert);
                 if (invert)
                 {
