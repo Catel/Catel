@@ -231,7 +231,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\EventArgs\LocationChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\EventArgs\UICompletedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Exceptions\PageNotRegisteredException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\Exceptions\SplashScreenException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Exceptions\WindowNotRegisteredException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IDispatcherServiceExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IPleaseWaitServiceExtensions.cs" />
@@ -258,7 +257,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISchedulerService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISelectDirectoryService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISensorService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ISplashScreenService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IStartUpInfoProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IStateService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IUIVisualizerService.cs" />
@@ -308,7 +306,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\SelectDirectoryService.wpf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SelectDirectoryService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\SensorServiceBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\SplashScreenService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\StartUpInfoProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\StateService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\UIVisualizerService.uap.cs" />

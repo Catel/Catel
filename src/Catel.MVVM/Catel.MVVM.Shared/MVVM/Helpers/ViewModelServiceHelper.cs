@@ -87,7 +87,6 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IProcessService, ProcessService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IStartUpInfoProvider, StartUpInfoProvider>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<ISplashScreenService, SplashScreenService>(RegistrationType.Transient);
 #endif
 
 #if XAMARIN_FORMS

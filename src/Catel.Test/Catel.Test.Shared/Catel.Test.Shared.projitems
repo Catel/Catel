@@ -226,7 +226,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Fixtures\StartupInfoProviderFixture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LanguageServiceFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NamingConventionTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\SplashScreenServiceTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ViewModelServiceBaseTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Text\StringBuilderExtensionFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\SynchronizationContextFacts.cs" />
