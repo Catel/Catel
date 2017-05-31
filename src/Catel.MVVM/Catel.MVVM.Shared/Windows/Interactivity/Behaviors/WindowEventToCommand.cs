@@ -31,7 +31,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         private Window _currentWindow = null;
 
-        private DynamicEventListener _dynamicEventListener;
+        private Catel.IWeakEventListener _weakEventListener;
         #endregion
 
         #region Constructors
@@ -131,8 +131,7 @@ namespace Catel.Windows.Interactivity
         /// <param name="window">The window instance the eventhandler has to be registered to.</param>
         protected void RegisterEventHandler(Window window)
         {
-            var dynamicEventListener = new DynamicEventListener(window, EventName);
-            dynamicEventListener.EventOccurred += OnEventOccurred;
+            _weakEventListener = this.SubscribeToWeakEvent(window, EventName, (Action) OnEventOccurred);
         }
 
         /// <summary>
@@ -152,11 +151,10 @@ namespace Catel.Windows.Interactivity
         /// <param name="window">The window instance the eventhandler has to be unregistered from.</param>
         protected void UnregisterEventHandler(Window window)
         {
-            if (_dynamicEventListener != null)
+            if (_weakEventListener != null)
             {
-                _dynamicEventListener.EventOccurred -= OnEventOccurred;
-                _dynamicEventListener.UnsubscribeFromEvent();
-                _dynamicEventListener = null;
+                _weakEventListener.Detach();
+                _weakEventListener = null;
             }
         }
 
@@ -190,12 +188,10 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the event occurs.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         /// <remarks>
         /// This method is public to allow the WeakEventListener to subscribe.
         /// </remarks>
-        public void OnEventOccurred(object sender, EventArgs e)
+        public void OnEventOccurred()
         {
             ExecuteCommand();
         }

@@ -53,7 +53,7 @@ namespace Catel.Windows.Interactivity
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
 #if !NETFX_CORE
-        private DynamicEventListener _dynamicEventListener;
+        private Catel.IWeakEventListener _weakEventListener;
 #endif
         #endregion
 
@@ -156,9 +156,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the event on the <see cref="Source" /> has occurred.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnSourceEventOccurred(object sender, EventArgs e)
+        private void OnSourceEventOccurred()
         {
             StartFocus();
         }
@@ -187,12 +185,12 @@ namespace Catel.Windows.Interactivity
                 switch (FocusMoment)
                 {
                     case FocusMoment.Event:
-                        
+
 #if NETFX_CORE
                         throw new NotSupportedInPlatformException("Dynamic events are not supported");
 #else
-                        _dynamicEventListener.EventOccurred -= OnSourceEventOccurred;
-                        _dynamicEventListener.UnsubscribeFromEvent();
+                        _weakEventListener?.Detach();
+                        _weakEventListener = null;
                         break;
 #endif
 
@@ -223,8 +221,7 @@ namespace Catel.Windows.Interactivity
                             throw new InvalidOperationException("Property 'EventName' is required when FocusMode is 'FocusMode.Event'");
                         }
 
-                        _dynamicEventListener = new DynamicEventListener(Source, EventName);
-                        _dynamicEventListener.EventOccurred += OnSourceEventOccurred;
+                        _weakEventListener = this.SubscribeToWeakEvent(Source, EventName, (Action) OnSourceEventOccurred);
                         break;
 #endif
 

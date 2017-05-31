@@ -80,7 +80,7 @@ namespace Catel.Services
             if (isModal)
             {
                 var activeWindow = GetActiveWindow();
-                if (window != activeWindow)
+                if (ReferenceEquals(window, activeWindow))
                 {
                     PropertyHelper.TrySetPropertyValue(window, "Owner", activeWindow, false);
                 }
@@ -97,7 +97,7 @@ namespace Catel.Services
         /// <summary>
         /// Handles the close subscription.
         /// <para />
-        /// The default implementation uses the <see cref="DynamicEventListener"/>.
+        /// The default implementation uses the <see cref="WeakEventListener"/>.
         /// </summary>
         /// <param name="window">The window.</param>
         /// <param name="data">The data that will be set as data context.</param>
@@ -105,21 +105,19 @@ namespace Catel.Services
         /// <param name="isModal">True if this is a ShowDialog request.</param>
         protected virtual void HandleCloseSubscription(object window, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
         {
-            var dynamicEventListener = new DynamicEventListener(window, "Closed");
+            Catel.IWeakEventListener weakEventListener = null;
 
-            EventHandler closed = null;
-            closed = (sender, e) =>
+            Action closed = () =>
             {
                 bool? dialogResult = null;
                 PropertyHelper.TryGetPropertyValue(window, "DialogResult", out dialogResult);
 
                 completedProc(this, new UICompletedEventArgs(data, isModal ? dialogResult : null));
 
-                dynamicEventListener.EventOccurred -= closed;
-                dynamicEventListener.UnsubscribeFromEvent();
+                weakEventListener?.Detach();
             };
 
-            dynamicEventListener.EventOccurred += closed;
+            weakEventListener = this.SubscribeToWeakEvent(window, "Closed", closed);
         }
 
         /// <summary>

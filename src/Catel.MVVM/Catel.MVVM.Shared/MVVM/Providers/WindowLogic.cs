@@ -31,8 +31,7 @@ namespace Catel.MVVM.Providers
         private bool? _closeInitiatedByViewModelResult;
 
         private readonly string _targetWindowClosedEventName;
-
-        private readonly DynamicEventListener _dynamicEventListener;
+        private readonly Catel.IWeakEventListener _targetWindowClosedWeakEventListener;
         #endregion
 
         #region Constructors
@@ -48,21 +47,10 @@ namespace Catel.MVVM.Providers
         {
             var targetWindowType = targetWindow.GetType();
 
-            string eventName;
-
             var closedEvent = targetWindowType.GetEventEx("Closed");
-            if (closedEvent != null)
-            {
-                eventName = "Closed";
+            var eventName = closedEvent != null ? "Closed" : "Unloaded";
 
-                _dynamicEventListener = new DynamicEventListener(targetWindow, "Closed", this, "OnTargetWindowClosed");
-            }
-            else
-            {
-                eventName = "Unloaded";
-
-                _dynamicEventListener = new DynamicEventListener(targetWindow, "Unloaded", this, "OnTargetWindowClosed");
-            }
+            _targetWindowClosedWeakEventListener = this.SubscribeToWeakEvent(targetWindow, eventName, (Action)OnTargetWindowClosed);
 
             _targetWindowClosedEventName = eventName;
 
@@ -198,7 +186,7 @@ namespace Catel.MVVM.Providers
                 await CloseViewModelAsync(dialogResult);
             }
 
-            _dynamicEventListener.UnsubscribeFromEvent();
+            _targetWindowClosedWeakEventListener.Detach();
         }
 
         /// <summary>

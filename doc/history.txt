@@ -101,6 +101,7 @@ Added/fixed:
 (-) CTL-975  Remove EventHandlerExtensions.SplitInvoke and use regular event invocation
 (-) CTL-987  Delete MVVM logic behaviors (should only be available as logic)
 (-) #131     Remove ISplashScreenService
+(-) #974     Drop DynamicEventListener in favor of WeakEventListener
 (-) #1016    Remove CountCollapsedConverter since we already have CollectionToVisibilityConverter
 (-) Removed test implementations of services
 

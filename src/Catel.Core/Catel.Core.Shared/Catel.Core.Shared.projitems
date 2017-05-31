@@ -142,7 +142,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\ValidatorProviderBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Disposable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DisposableToken.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DynamicEventListener.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enum.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EventHandlerExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EventHandlers\AsyncEventHandler.cs" />
@@ -293,7 +292,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Pooling\PoolManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\MethodTimeLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\BindingFlags.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\CachedPropertyInfo.cs" />
