@@ -202,9 +202,14 @@ namespace Catel.Configuration
             key = GetFinalKey(key);
 
             var stringValue = _objectConverterService.ConvertFromObjectToString(value, CultureInfo.InvariantCulture);
+            var existingValue = GetValueFromStore(container, key);
+
             SetValueToStore(container, key, stringValue);
 
-            RaiseConfigurationChanged(container, originalKey, value);
+            if (!string.Equals(stringValue, existingValue))
+            {
+                RaiseConfigurationChanged(container, originalKey, value);
+            }
         }
 
         /// <summary>
