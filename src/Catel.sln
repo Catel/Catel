@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{58F62039-8645-499C-B264-66048F4F0F75}"
 EndProject
@@ -58,11 +58,11 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Catel.MVVM.Shared", "Catel.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.PCL", "Catel.Core\Catel.Core.PCL\Catel.Core.PCL.csproj", "{C35D5DC5-7149-4E56-9F0C-90D8F6A1C495}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.UAP100", "Catel.Core\Catel.Core.UAP100\Catel.Core.UAP100.csproj", "{FC00C799-175F-42EC-A481-24A06CF20508}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.UWP", "Catel.Core\Catel.Core.UWP\Catel.Core.UWP.csproj", "{FC00C799-175F-42EC-A481-24A06CF20508}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.NET46", "Catel.Core\Catel.Core.NET46\Catel.Core.NET46.csproj", "{2CC3B8F3-626E-4A7B-ADC5-A25E28DC219E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.UAP100", "Catel.MVVM\Catel.MVVM.UAP100\Catel.MVVM.UAP100.csproj", "{A23A4481-2432-4743-89A1-6A8F359772A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.UWP", "Catel.MVVM\Catel.MVVM.UWP\Catel.MVVM.UWP.csproj", "{A23A4481-2432-4743-89A1-6A8F359772A7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catel.Serialization.Json", "Catel.Serialization.Json", "{85BEBC4F-4020-4045-945B-B8F6F732FC6E}"
 EndProject
@@ -82,7 +82,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.NET46", "Catel.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Serialization.Json.NET46", "Catel.Serialization.Json\Catel.Serialization.Json.NET46\Catel.Serialization.Json.NET46.csproj", "{97E093E6-1CF9-4CFF-9201-540A7681BC12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Serialization.Json.UAP100", "Catel.Serialization.Json\Catel.Serialization.Json.UAP100\Catel.Serialization.Json.UAP100.csproj", "{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Serialization.Json.UWP", "Catel.Serialization.Json\Catel.Serialization.Json.UWP\Catel.Serialization.Json.UWP.csproj", "{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.Xamarin.Forms", "Catel.MVVM\Catel.MVVM.Xamarin.Forms\Catel.MVVM.Xamarin.Forms.csproj", "{E0D994CA-D553-4009-A159-33542A16C4D0}"
 EndProject

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FC00C799-175F-42EC-A481-24A06CF20508}</ProjectGuid>
+    <ProjectGuid>{A23A4481-2432-4743-89A1-6A8F359772A7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Catel</RootNamespace>
-    <AssemblyName>Catel.Core</AssemblyName>
+    <AssemblyName>Catel.MVVM</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>
@@ -24,33 +24,33 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\output\debug\UAP100\Catel.Core\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NETFX_CORE;UAP;UAP100;WINDOWS_UAP</DefineConstants>
+    <OutputPath>..\..\..\output\debug\UWP\Catel.MVVM\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;UWP;UWP;WINDOWS_UWP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1998</NoWarn>
-    <DocumentationFile>..\..\..\output\debug\UAP100\Catel.Core\Catel.Core.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\debug\UWP\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\output\release\UAP100\Catel.Core\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;UAP;UAP100;WINDOWS_UAP</DefineConstants>
+    <OutputPath>..\..\..\output\release\UWP\Catel.MVVM\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;UWP;UWP;WINDOWS_UWP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\output\release\UAP100\Catel.Core\Catel.Core.XML</DocumentationFile>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1998</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>..\..\..\output\release\UWP\Catel.MVVM\Catel.MVVM.XML</DocumentationFile>
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <PlatformTarget>ARM</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\ARM\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UAP</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>ARM</PlatformTarget>
@@ -61,7 +61,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
     <PlatformTarget>ARM</PlatformTarget>
     <OutputPath>bin\ARM\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UAP</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -74,7 +74,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UAP</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -85,7 +85,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <PlatformTarget>x64</PlatformTarget>
     <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UAP</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -98,7 +98,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UAP</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -109,7 +109,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UAP</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -123,20 +123,59 @@
     <Compile Include="ModuleInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Catel.Core\Catel.Core.UWP\Catel.Core.UWP.csproj">
+      <Project>{fc00c799-175f-42ec-a481-24a06cf20508}</Project>
+      <Name>Catel.Core.UWP</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\de\Resources.resw">
+      <Link>Strings\de\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\en-US\Exceptions.resw">
+      <Link>Strings\en-US\Exceptions.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\en-US\Resources.resw">
+      <Link>Strings\en-US\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\es\Resources.resw">
+      <Link>Strings\es\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\fr\Resources.resw">
+      <Link>Strings\fr\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\it\Resources.resw">
+      <Link>Strings\it\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\nl\Resources.resw">
+      <Link>Strings\nl\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\tr\Resources.resw">
+      <Link>Strings\tr\Resources.resw</Link>
+    </PRIResource>
+    <PRIResource Include="..\Catel.MVVM.Shared\Strings\zh-Hans\Resources.resw">
+      <Link>Strings\zh-Hans\Resources.resw</Link>
+    </PRIResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Catel.Core.rd.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <SDKReference Include="WindowsDesktop, Version=10.0.10240.0">
+      <Name>Windows Desktop Extensions for the UWP</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsMobile, Version=10.0.10240.0">
+      <Name>Windows Mobile Extensions for the UWP</Name>
+    </SDKReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Catel.MVVM.rd.xml" />
+  </ItemGroup>
+  <Import Project="..\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
-  <Import Project="..\Catel.Core.Shared\Catel.Core.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Core.Shared\Catel.Core.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
