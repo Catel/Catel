@@ -82,6 +82,7 @@ Added/fixed:
 (*) CTL-941  Update to json.net 9.x
 (*) CTL-948  Allow setting the status in IPleaseWaitServiceExtensions.PushInScope
 (*) CTL-988  Allow view models without model injection to stay alive on DataContext changes
+(*) #988     Set default value of DeferValidationUntilFirstSaveCall to true
 (*) #1003    Migrate xaml uri from catel.codeplex.com => catelproject.com
 (*) #1021    Add parameter to create an overload for GetSlug to not make the value lowercase 
 (*) #1029    Check for existing values and only raise changed event in ConfigurationService

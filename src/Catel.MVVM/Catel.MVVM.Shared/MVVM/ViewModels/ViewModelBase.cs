@@ -271,6 +271,7 @@ namespace Catel.MVVM
                 await CommandExecutedAsync.SafeInvokeAsync(this, eventArgs);
             });
 
+            DeferValidationUntilFirstSaveCall = true;
             InvalidateCommandsOnPropertyChanged = true;
             SupportIEditableObject = supportIEditableObject;
 

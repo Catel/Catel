@@ -21,7 +21,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{EF395E12-0C90-4CE1-921A-A276AF0DC28A}"
 	ProjectSection(SolutionItems) = preProject
 		Catel.snk = Catel.snk
-		Catel.vsmdi = Catel.vsmdi
 		CustomDictionary.xml = CustomDictionary.xml
 		GlobalSuppressions.cs = GlobalSuppressions.cs
 		MethodTimeLogger.cs = MethodTimeLogger.cs
