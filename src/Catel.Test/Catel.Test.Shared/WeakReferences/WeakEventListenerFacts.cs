@@ -452,7 +452,7 @@ namespace Catel.Test
                 var source = new EventSource();
                 var listener = new EventListener();
 
-                var weakEventListener = WeakEventListener<EventListener, EventSource, NotifyCollectionChangedEventArgs>.SubscribeToWeakCollectionChangedEvent(listener, source, listener.OnCollectionChangedEvent, "CollectionChanged");
+                var weakEventListener = WeakEventListener<EventListener, EventSource, NotifyCollectionChangedEventArgs>.SubscribeToWeakCollectionChangedEvent(listener, source, listener.OnCollectionChangedEvent, eventName: "CollectionChanged");
 
                 Assert.AreEqual(0, listener.CollectionChangedEventCount);
 
@@ -523,7 +523,7 @@ namespace Catel.Test
                 var source = new EventSource();
                 var listener = new EventListener();
 
-                var weakEventListener = WeakEventListener<EventListener, EventSource, PropertyChangedEventArgs>.SubscribeToWeakPropertyChangedEvent(listener, source, listener.OnPropertyChangedEvent, "PropertyChanged");
+                var weakEventListener = WeakEventListener<EventListener, EventSource, PropertyChangedEventArgs>.SubscribeToWeakPropertyChangedEvent(listener, source, listener.OnPropertyChangedEvent, eventName: "PropertyChanged");
 
                 Assert.AreEqual(0, listener.PropertyChangedEventCount);
 
