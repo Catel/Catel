@@ -32,7 +32,18 @@ namespace Catel.Test.Runtime.Serialization
 
             serializerConfigurations[typeof(XmlSerializer)] = new List<ISerializationConfiguration>(new[]
             {
-                new SerializationConfiguration()
+                new XmlSerializationConfiguration
+                {
+                    OptimalizationMode = XmlSerializerOptimalizationMode.Performance
+                },
+                new XmlSerializationConfiguration
+                {
+                    OptimalizationMode = XmlSerializerOptimalizationMode.PrettyXml
+                },
+                //new XmlSerializationConfiguration
+                //{
+                //    OptimalizationMode = XmlSerializerOptimalizationMode.PrettyXmlAgressive
+                //},
             });
 
             serializerConfigurations[typeof(BinarySerializer)] = new List<ISerializationConfiguration>(new[]
@@ -54,8 +65,7 @@ namespace Catel.Test.Runtime.Serialization
 
             var serializers = new List<ISerializer>();
 
-            serializers.Add(SerializationTestHelper.GetXmlSerializer(XmlSerializerOptimalizationMode.Performance, serializationManager));
-            serializers.Add(SerializationTestHelper.GetXmlSerializer(XmlSerializerOptimalizationMode.PrettyXml, serializationManager));
+            serializers.Add(SerializationTestHelper.GetXmlSerializer(serializationManager));
             serializers.Add(SerializationTestHelper.GetBinarySerializer(serializationManager));
             serializers.Add(SerializationTestHelper.GetJsonSerializer(serializationManager));
 

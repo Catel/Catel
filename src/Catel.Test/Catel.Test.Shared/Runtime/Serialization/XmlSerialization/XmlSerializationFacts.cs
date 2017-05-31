@@ -199,7 +199,11 @@ namespace Catel.Test.Runtime.Serialization
                     Gender = Gender.Male 
                 });
 
-                var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, SerializationTestHelper.GetXmlSerializer(mode));
+                var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, SerializationTestHelper.GetXmlSerializer(),
+                    new XmlSerializationConfiguration
+                    {
+                        OptimalizationMode = mode
+                    });
 
                 Assert.AreEqual(family.LastName, newFamily.LastName);
                 Assert.AreEqual(1, newFamily.Persons.Count);
@@ -223,7 +227,11 @@ namespace Catel.Test.Runtime.Serialization
                     FirstName = "Geert",
                 });
 
-                var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, SerializationTestHelper.GetXmlSerializer(mode));
+                var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, SerializationTestHelper.GetXmlSerializer(),
+                    new XmlSerializationConfiguration
+                    {
+                        OptimalizationMode = mode
+                    });
 
                 Assert.AreEqual(family.LastName, newFamily.LastName);
                 Assert.AreEqual(1, newFamily.ModelsWithAttributesOnly.Count);

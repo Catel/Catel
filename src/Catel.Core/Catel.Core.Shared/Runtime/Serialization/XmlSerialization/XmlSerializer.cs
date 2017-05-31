@@ -15,11 +15,12 @@ namespace Catel.Runtime.Serialization.Xml
     using System.Xml;
     using System.Xml.Linq;
     using System.Xml.Serialization;
-    using Catel.Caching;
-    using Catel.Data;
-    using Catel.IoC;
-    using Catel.Logging;
-    using Catel.Reflection;
+
+    using Caching;
+    using Data;
+    using IoC;
+    using Logging;
+    using Reflection;
 
     /// <summary>
     /// The xml serializer.
@@ -73,19 +74,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             _dataContractSerializerFactory = dataContractSerializerFactory;
             _xmlNamespaceManager = xmlNamespaceManager;
-
-            OptimalizationMode = XmlSerializerOptimalizationMode.Performance;
         }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets or sets the default fallback optimalization mode if it's not specified via <see cref="XmlSerializationConfiguration"/>.
-        /// <para />
-        /// The default value is <see cref="XmlSerializerOptimalizationMode.Performance"/>.
-        /// </summary>
-        /// <value>The optimalization mode.</value>
-        public XmlSerializerOptimalizationMode OptimalizationMode { get; set; }
         #endregion
 
         #region Methods
@@ -463,25 +452,21 @@ namespace Catel.Runtime.Serialization.Xml
 
         /// <summary>
         /// Gets the XML optimalization mode. First, the value will be retrieved from the <c>context.Configuration</c> value if
-        /// it's of type <c>XmlSerializationConfiguration</c>. Otherwise the <see cref="OptimalizationMode"/> will be used.
+        /// it's of type <c>XmlSerializationConfiguration</c>.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns></returns>
         protected virtual XmlSerializerOptimalizationMode GetXmlOptimalizationMode(ISerializationContext<XmlSerializationContextInfo> context)
         {
-            XmlSerializerOptimalizationMode? optimalizationMode = null;
+            var optimalizationMode = XmlSerializerOptimalizationMode.Performance;
 
             var xmlSerializationConfiguration = context.Configuration as XmlSerializationConfiguration;
             if (xmlSerializationConfiguration != null)
             {
                 optimalizationMode = xmlSerializationConfiguration.OptimalizationMode;
             }
-            else
-            {
-                optimalizationMode = OptimalizationMode;
-            }
 
-            return optimalizationMode.Value;
+            return optimalizationMode;
         }
 
         /// <summary>
