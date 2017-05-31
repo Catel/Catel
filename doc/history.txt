@@ -85,6 +85,7 @@ Added/fixed:
 (*) #807     Exceptions in TaskCommand are now longer swallowed by default. Pre 5.0 behavior can be mimmicked by setting
              the TaskCommand.SwallowExceptions property to true
 (*) #988     Set default value of DeferValidationUntilFirstSaveCall to true
+(*) #998     Remove Catel.Services.Models namespace, use Catel.Services instead
 (*) #1003    Migrate xaml uri from catel.codeplex.com => catelproject.com
 (*) #1021    Add parameter to create an overload for GetSlug to not make the value lowercase 
 (*) #1029    Check for existing values and only raise changed event in ConfigurationService

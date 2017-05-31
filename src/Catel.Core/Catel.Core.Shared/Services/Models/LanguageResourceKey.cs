@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Services.Models
+namespace Catel.Services
 {
     using System;
     using System.Globalization;
