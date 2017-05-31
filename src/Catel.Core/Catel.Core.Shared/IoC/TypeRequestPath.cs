@@ -71,7 +71,7 @@ namespace Catel.IoC
         {
             var stringBuilder = new StringBuilder();
 
-            for (int i = startIndex; i < typePath.Length; i++)
+            for (var i = startIndex; i < typePath.Length; i++)
             {
                 if (i != 0)
                 {

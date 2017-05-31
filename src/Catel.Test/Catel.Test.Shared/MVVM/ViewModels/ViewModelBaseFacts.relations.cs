@@ -65,6 +65,10 @@ namespace Catel.Test.MVVM.ViewModels
                 var parentVm = new ParentViewModel();
                 var childVm = new ChildViewModel();
 
+                grantParentVm.DeferValidationUntilFirstSaveValue = false;
+                parentVm.DeferValidationUntilFirstSaveValue = false;
+                childVm.DeferValidationUntilFirstSaveValue = false;
+
                 ((IRelationalViewModel)grantParentVm).RegisterChildViewModel(parentVm);
                 ((IRelationalViewModel)parentVm).RegisterChildViewModel(childVm);
 

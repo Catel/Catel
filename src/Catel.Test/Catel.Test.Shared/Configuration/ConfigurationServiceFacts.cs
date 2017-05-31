@@ -140,12 +140,14 @@ namespace Catel.Test.Configuration
                     receivedValue = e.NewValue;
                 };
 
-                configurationService.SetValue(container, "key", "value");
+                var guid = Guid.NewGuid();
+
+                configurationService.SetValue(container, "key", guid.ToString());
 
                 Assert.IsTrue(invoked);
                 Assert.AreEqual(container, receivedContainer);
                 Assert.AreEqual("key", receivedKey);
-                Assert.AreEqual("value", (string)receivedValue);
+                Assert.AreEqual(guid.ToString(), (string)receivedValue);
             }
 
             [TestCase(ConfigurationContainer.Local)]

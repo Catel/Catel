@@ -566,7 +566,8 @@
 
             var viewModel = new TestViewModel(person);
 
-            object[] models = viewModel.GetAllModelsForTest();
+            var models = viewModel.GetAllModelsForTest();
+
             Assert.AreEqual(2, models.Length);
             Assert.AreEqual(person, models[0]);
         }

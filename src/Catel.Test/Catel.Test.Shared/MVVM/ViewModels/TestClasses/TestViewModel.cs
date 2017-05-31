@@ -75,6 +75,8 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
 
             GenerateData = new Command<object, object>(OnGenerateDataExecute, OnGenerateDataCanExecute);
             GenerateData.AutomaticallyDispatchEvents = false;
+
+            DeferValidationUntilFirstSaveCall = false;
         }
         #endregion
 
@@ -371,6 +373,11 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
     /// </summary>
     public class TestViewModelWithValidationTags : ViewModelBase
     {
+        public TestViewModelWithValidationTags()
+        {
+            DeferValidationUntilFirstSaveCall = false;
+        }
+
         #region Constants
         /// <summary>
         /// Register the FirstName property so it is known in the class.
