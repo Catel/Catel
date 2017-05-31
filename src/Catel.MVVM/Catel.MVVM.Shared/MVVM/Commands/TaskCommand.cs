@@ -16,6 +16,7 @@ namespace Catel.MVVM
 
     using Catel.Logging;
     using Services;
+    using Threading;
 
     /// <summary>
     /// Class to implement asynchronous task commands in the <see cref="ViewModelBase" />.
@@ -36,6 +37,7 @@ namespace Catel.MVVM
         private readonly Progress<TProgress> _progress;
 
         private CancellationTokenSource _cancellationTokenSource;
+        private Task _task;
 
         #endregion
 
@@ -165,6 +167,17 @@ namespace Catel.MVVM
         #region Properties
 
         /// <summary>
+        /// Gets or sets a value indicating whether to swallow exceptions that happen in the task command. This property can be used
+        /// to use the behavior of Catel 4.x to swallow exceptions.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the task exceptions should be swallowed; otherwise, <c>false</c>.
+        /// </value>
+        public bool SwallowExceptions { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is executing.
         /// </summary>
         /// <value><c>true</c> if this instance is executing; otherwise, <c>false</c>.</value>
@@ -187,6 +200,17 @@ namespace Catel.MVVM
         /// </summary>
         /// <value>The cancel command.</value>
         public Command CancelCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the asynchronous result that can be awaited.
+        /// </summary>
+        /// <value>
+        /// The asynchronous result.
+        /// </value>
+        public Task Task
+        {
+            get { return _task ?? TaskHelper.Completed; }
+        }
         #endregion
 
         #region Methods
@@ -235,27 +259,41 @@ namespace Catel.MVVM
 
             var executionTask = executeAsync(parameter, _cancellationTokenSource.Token, _progress);
 
+            // Use TaskCompletionSource to create a separate task that will not contain the
+            // exception that might be thrown. This allows us to let the users await the task
+            // but still respect the SwallowExceptions property
+            var tcs = new TaskCompletionSource<object>();
+            _task = tcs.Task;
+
             try
             {
-                Log.Info("Executing task command...");
+                Log.Debug("Executing task command");
 
                 await executionTask.ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
-                Log.Info("Task was canceled.");
+                Log.Debug("Task was canceled");
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Task ended with exception.");
+                Log.Error(ex, "Task ended with exception");
+
+                if (!SwallowExceptions)
+                {
+                    throw;
+                }
             }
             finally
             {
                 _cancellationTokenSource.Dispose();
                 _cancellationTokenSource = null;
+
+                tcs.TrySetResult(null);
+                _task = null;
             }
 
-            if (executionTask.IsCanceled || executionTask.IsFaulted)
+            if (executionTask.IsCanceled)
             {
                 Canceled.SafeInvoke(this, () => new CommandEventArgs(parameter));
             }

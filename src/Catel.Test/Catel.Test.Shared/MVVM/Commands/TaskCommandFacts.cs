@@ -21,7 +21,7 @@ namespace Catel.Test.MVVM.Commands
     public class TaskCommandFacts
     {
         #region Constants
-        private static readonly TimeSpan TaskDelay = TimeSpan.FromSeconds(9);
+        private static readonly TimeSpan TaskDelay = TimeSpan.FromSeconds(5);
         #endregion
 
         #region Methods
@@ -47,6 +47,89 @@ namespace Catel.Test.MVVM.Commands
             Assert.IsFalse(taskCommand.IsCancellationRequested);
         }
 
+        [TestCase]
+        public async Task TestCommandExceptions_SwallowExceptionsAsync()
+        {
+            var taskCommand = new TaskCommand(TestExecuteWithExceptionAsync)
+            {
+                SwallowExceptions = true
+            };
+
+            Assert.IsFalse(taskCommand.IsExecuting);
+            Assert.IsFalse(taskCommand.IsCancellationRequested);
+
+            try
+            {
+                taskCommand.Execute();
+
+                Assert.IsTrue(taskCommand.IsExecuting);
+
+                await taskCommand.Task;
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"No exception expected, should be swallowed, but got '{ex}'");
+            }
+
+            Assert.IsFalse(taskCommand.IsExecuting);
+        }
+
+        [TestCase]
+        public async Task TestCommandExceptions_DontSwallowExceptionsAsync()
+        {
+            var taskCommand = new TaskCommand(TestExecuteWithExceptionAsync)
+            {
+                SwallowExceptions = false
+            };
+
+            Assert.IsFalse(taskCommand.IsExecuting);
+            Assert.IsFalse(taskCommand.IsCancellationRequested);
+
+            try
+            {
+                taskCommand.Execute();
+
+                Assert.IsTrue(taskCommand.IsExecuting);
+
+                await taskCommand.Task;
+
+                Assert.Fail("Expected exception");
+            }
+            catch (Exception)
+            {
+            }
+
+            Assert.IsFalse(taskCommand.IsExecuting);
+        }
+
+        [TestCase]
+        public async Task TestCommandExceptions_DontSwallowExceptionsWithoutAwaitAsync()
+        {
+            var taskCommand = new TaskCommand(TestExecuteWithExceptionAsync)
+            {
+                SwallowExceptions = false
+            };
+
+            Assert.IsFalse(taskCommand.IsExecuting);
+            Assert.IsFalse(taskCommand.IsCancellationRequested);
+
+            try
+            {
+                taskCommand.Execute();
+
+                Assert.IsTrue(taskCommand.IsExecuting);
+
+                await Task.Delay(1000);
+
+                Assert.Fail("Expected exception");
+            }
+            catch (Exception)
+            {
+            }
+
+            Assert.IsFalse(taskCommand.IsExecuting);
+        }
+
         private static async Task TestExecuteAsync(CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -54,6 +137,15 @@ namespace Catel.Test.MVVM.Commands
             await TaskShim.Delay(TaskDelay, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
+        }
+
+        private static async Task TestExecuteWithExceptionAsync(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            await TaskShim.Delay(500, cancellationToken);
+
+            throw new Exception("This is an expected exception");
         }
         #endregion
     }
