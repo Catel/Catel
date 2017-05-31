@@ -40,7 +40,7 @@ using System.Windows.Markup;
     )]
 #endif
 
-// XmlnsDefinition is not supported in UAP
+// XmlnsDefinition is not supported in UWP
 #if !NETFX_CORE && !PCL && !XAMARIN
 
 [assembly: XmlnsPrefix("http://schemas.catelproject.com", "catel")]

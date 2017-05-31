@@ -130,7 +130,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\BooleanToVisibilityConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ColorToBrushConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\ContainsItemsConverterTest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\CountVisibilityConverterTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\CollectionToVisibilityConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\EmptyStringToVisibilityConverterTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\EnumToVisibilityConverterFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Converters\FormattingConverterTest.cs" />

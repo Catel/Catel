@@ -58,6 +58,11 @@ namespace Catel.MVVM.Converters
                 isVisible = collection.Count > 0;
             }
 
+            if (!isVisible && value is string)
+            {
+                isVisible = ((string)value).Length > 0;
+            }
+
             if (!isVisible && value is long)
             {
                 isVisible = ((long)value) > 0;

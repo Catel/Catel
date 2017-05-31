@@ -70,10 +70,7 @@ namespace Catel
                     return currentPlatform == SupportedPlatforms.NET50;
 
                 case KnownPlatforms.WindowsUniversal:
-                    return currentPlatform == SupportedPlatforms.WindowsUniversal100;
-
-                case KnownPlatforms.WindowsUniversal100:
-                    return currentPlatform == SupportedPlatforms.WindowsUniversal100;
+                    return currentPlatform == SupportedPlatforms.WindowsUniversal;
 
                 case KnownPlatforms.Xamarin:
                     return currentPlatform == SupportedPlatforms.Android ||
@@ -108,8 +105,8 @@ namespace Catel
             return SupportedPlatforms.NET46;
 #elif NET50
             return SupportedPlatforms.NET50;
-#elif UAP100
-            return SupportedPlatforms.WindowsUniversal100;
+#elif UWP
+            return SupportedPlatforms.WindowsUniversal;
 #elif ANDROID
             return SupportedPlatforms.Android;
 #elif IOS
@@ -150,7 +147,7 @@ namespace Catel
         /// <summary>
         /// Windows Universal 10.0.
         /// </summary>
-        WindowsUniversal100,
+        WindowsUniversal,
 
         /// <summary>
         /// The Android platform.
@@ -212,11 +209,6 @@ namespace Catel
         /// Any Windows Universal platform.
         /// </summary>
         WindowsUniversal,
-
-        /// <summary>
-        /// Windows Universal 10.0.
-        /// </summary>
-        WindowsUniversal100,
 
         /// <summary>
         /// Any Xamarin platform.

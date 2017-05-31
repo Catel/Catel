@@ -48,8 +48,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("NET46, Debug")]
 #elif NET50
 [assembly: AssemblyConfiguration("NET50, Debug")]
-#elif UAP100
-[assembly: AssemblyConfiguration("Universal Windows 10.0, Debug")]
+#elif UWP
+[assembly: AssemblyConfiguration("Universal Windows Platform 10.0, Debug")]
 #elif PCL
 [assembly: AssemblyConfiguration("PCL, Debug")]
 #elif XAMARIN && ANDROID
@@ -70,8 +70,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("NET46, Release")]
 #elif NET50
 [assembly: AssemblyConfiguration("NET50, Release")]
-#elif UAP100
-[assembly: AssemblyConfiguration("Universal Windows 10.0, Release")]
+#elif UWP
+[assembly: AssemblyConfiguration("Universal Windows Platform 10.0, Release")]
 #elif PCL
 [assembly: AssemblyConfiguration("PCL, Release")]
 #elif XAMARIN && ANDROID
@@ -90,59 +90,22 @@ using System.Runtime.CompilerServices;
 //#endif
 
 #if STRONGNAME_ASSEMBLIES
-
-// Exclude external libs not strong-named
-#if !FLUENT_VALIDATION
 // Sign assembly (this is relative to the obj output directory)
 #if X86 || X64
 [assembly: AssemblyKeyFile(@"..\..\..\..\..\Catel.snk")]
 #else
 [assembly: AssemblyKeyFile(@"..\..\..\..\Catel.snk")]
 #endif
-#endif
 
 #endif
 
 #if STRONGNAME_ASSEMBLIES
 [assembly: InternalsVisibleTo("Catel.Core, PublicKey=002400000480000094000000060200000024000052534131000400000100010099d04b18e032ce24bae6ede7b654e09745bf0c7268b5aac1582bcfb349808123a34748ddfc67c884a03d4b8e4e9377d33ed53d7810973bc80d69335ac8c76f03d6250f5b916e2d8b3107ba83501339a6f94757200fa40c002131dd227fbadbe0331b89a6afd3242c21f88a3abe5d91304d5a26cc3103126f077542278669b5a2")]
-
 [assembly: InternalsVisibleTo("Catel.MVVM, PublicKey=002400000480000094000000060200000024000052534131000400000100010099d04b18e032ce24bae6ede7b654e09745bf0c7268b5aac1582bcfb349808123a34748ddfc67c884a03d4b8e4e9377d33ed53d7810973bc80d69335ac8c76f03d6250f5b916e2d8b3107ba83501339a6f94757200fa40c002131dd227fbadbe0331b89a6afd3242c21f88a3abe5d91304d5a26cc3103126f077542278669b5a2")]
-
-[assembly: InternalsVisibleTo("Catel.MVC5, PublicKey=002400000480000094000000060200000024000052534131000400000100010099d04b18e032ce24bae6ede7b654e09745bf0c7268b5aac1582bcfb349808123a34748ddfc67c884a03d4b8e4e9377d33ed53d7810973bc80d69335ac8c76f03d6250f5b916e2d8b3107ba83501339a6f94757200fa40c002131dd227fbadbe0331b89a6afd3242c21f88a3abe5d91304d5a26cc3103126f077542278669b5a2")]
-
-[assembly: InternalsVisibleTo("Catel.Extensions.Controls, PublicKey=002400000480000094000000060200000024000052534131000400000100010099d04b18e032ce24bae6ede7b654e09745bf0c7268b5aac1582bcfb349808123a34748ddfc67c884a03d4b8e4e9377d33ed53d7810973bc80d69335ac8c76f03d6250f5b916e2d8b3107ba83501339a6f94757200fa40c002131dd227fbadbe0331b89a6afd3242c21f88a3abe5d91304d5a26cc3103126f077542278669b5a2")]
-
-[assembly: InternalsVisibleTo("Catel.Extensions.DynamicObjects, PublicKey=002400000480000094000000060200000024000052534131000400000100010099d04b18e032ce24bae6ede7b654e09745bf0c7268b5aac1582bcfb349808123a34748ddfc67c884a03d4b8e4e9377d33ed53d7810973bc80d69335ac8c76f03d6250f5b916e2d8b3107ba83501339a6f94757200fa40c002131dd227fbadbe0331b89a6afd3242c21f88a3abe5d91304d5a26cc3103126f077542278669b5a2")]
-
-[assembly: InternalsVisibleTo("Catel.Extensions.EntityFramework5, PublicKey=002400000480000094000000060200000024000052534131000400000100010099d04b18e032ce24bae6ede7b654e09745bf0c7268b5aac1582bcfb349808123a34748ddfc67c884a03d4b8e4e9377d33ed53d7810973bc80d69335ac8c76f03d6250f5b916e2d8b3107ba83501339a6f94757200fa40c002131dd227fbadbe0331b89a6afd3242c21f88a3abe5d91304d5a26cc3103126f077542278669b5a2")]
-
-[assembly: InternalsVisibleTo("Catel.Extensions.EntityFramework6, PublicKey=002400000480000094000000060200000024000052534131000400000100010099d04b18e032ce24bae6ede7b654e09745bf0c7268b5aac1582bcfb349808123a34748ddfc67c884a03d4b8e4e9377d33ed53d7810973bc80d69335ac8c76f03d6250f5b916e2d8b3107ba83501339a6f94757200fa40c002131dd227fbadbe0331b89a6afd3242c21f88a3abe5d91304d5a26cc3103126f077542278669b5a2")]
-
-// Fluent validation has no strong name
-//[assembly: InternalsVisibleTo("Catel.Extensions.FluentValidation, PublicKey=002400000480000094000000060200000024000052534131000400000100010099d04b18e032ce24bae6ede7b654e09745bf0c7268b5aac1582bcfb349808123a34748ddfc67c884a03d4b8e4e9377d33ed53d7810973bc80d69335ac8c76f03d6250f5b916e2d8b3107ba83501339a6f94757200fa40c002131dd227fbadbe0331b89a6afd3242c21f88a3abe5d91304d5a26cc3103126f077542278669b5a2")]
-
-[assembly: InternalsVisibleTo("Catel.Extensions.Interception, PublicKey=002400000480000094000000060200000024000052534131000400000100010099d04b18e032ce24bae6ede7b654e09745bf0c7268b5aac1582bcfb349808123a34748ddfc67c884a03d4b8e4e9377d33ed53d7810973bc80d69335ac8c76f03d6250f5b916e2d8b3107ba83501339a6f94757200fa40c002131dd227fbadbe0331b89a6afd3242c21f88a3abe5d91304d5a26cc3103126f077542278669b5a2")]
-
-[assembly: InternalsVisibleTo("Catel.Extensions.Memento, PublicKey=002400000480000094000000060200000024000052534131000400000100010099d04b18e032ce24bae6ede7b654e09745bf0c7268b5aac1582bcfb349808123a34748ddfc67c884a03d4b8e4e9377d33ed53d7810973bc80d69335ac8c76f03d6250f5b916e2d8b3107ba83501339a6f94757200fa40c002131dd227fbadbe0331b89a6afd3242c21f88a3abe5d91304d5a26cc3103126f077542278669b5a2")]
-
-[assembly: InternalsVisibleTo("Catel.Extensions.Prism, PublicKey=002400000480000094000000060200000024000052534131000400000100010099d04b18e032ce24bae6ede7b654e09745bf0c7268b5aac1582bcfb349808123a34748ddfc67c884a03d4b8e4e9377d33ed53d7810973bc80d69335ac8c76f03d6250f5b916e2d8b3107ba83501339a6f94757200fa40c002131dd227fbadbe0331b89a6afd3242c21f88a3abe5d91304d5a26cc3103126f077542278669b5a2")]
-
 [assembly: InternalsVisibleTo("Catel.Test, PublicKey=002400000480000094000000060200000024000052534131000400000100010099d04b18e032ce24bae6ede7b654e09745bf0c7268b5aac1582bcfb349808123a34748ddfc67c884a03d4b8e4e9377d33ed53d7810973bc80d69335ac8c76f03d6250f5b916e2d8b3107ba83501339a6f94757200fa40c002131dd227fbadbe0331b89a6afd3242c21f88a3abe5d91304d5a26cc3103126f077542278669b5a2")]
 #else
 [assembly: InternalsVisibleTo("Catel.Core")]
 [assembly: InternalsVisibleTo("Catel.MVVM")]
-[assembly: InternalsVisibleTo("Catel.Mvc")]
-
-[assembly: InternalsVisibleTo("Catel.Extensions.Controls")]
-[assembly: InternalsVisibleTo("Catel.Extensions.CSLA")]
-[assembly: InternalsVisibleTo("Catel.Extensions.Data")]
-[assembly: InternalsVisibleTo("Catel.Extensions.DynamicObjects")]
-[assembly: InternalsVisibleTo("Catel.Extensions.EntityFramework5")]
-[assembly: InternalsVisibleTo("Catel.Extensions.FluentValidation")]
-[assembly: InternalsVisibleTo("Catel.Extensions.Interception")]
-[assembly: InternalsVisibleTo("Catel.Extensions.Memento")]
-[assembly: InternalsVisibleTo("Catel.Extensions.Prism")]
-[assembly: InternalsVisibleTo("Catel.Extensions.Prism5")]
 
 [assembly: InternalsVisibleTo("Catel.Test")]
 #endif
