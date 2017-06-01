@@ -396,8 +396,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Markup\MarkupExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Markup\ServiceDependencyExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Markup\UpdatableMarkupExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\MediaElementThreadFactory.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\MediaElementThreadInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\DispatcherOperation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Extensions\DispatcherExtensions.tasks.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Extensions\DispatcherExtensions.begininvoke.cs" />
