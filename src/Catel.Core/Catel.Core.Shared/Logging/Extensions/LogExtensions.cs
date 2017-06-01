@@ -145,7 +145,7 @@ namespace Catel.Logging
                 return;
             }
 
-            string message = messageFormat ?? string.Empty;
+            var message = messageFormat ?? string.Empty;
             if (args != null && args.Length > 0)
             {
                 message = string.Format(message, args);
@@ -340,6 +340,7 @@ namespace Catel.Logging
             Argument.IsNotNull("exception", exception);
 
             var formattedException = $"[{exception.GetType().Name}] {exception}";
+
             if (string.IsNullOrEmpty(message))
             {
                 return formattedException;

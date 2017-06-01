@@ -326,6 +326,29 @@ namespace Catel.Test.Logging
             }
 
             [TestCase]
+            public void Debug_Exception_Aggregated()
+            {
+                LogManager.AddDebugListener();
+                var log = new Log(typeof(int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new AggregateException("log test", new []
+                {
+                    new ArgumentNullException("arg1"),
+                    new ArgumentNullException("arg2"),
+                });
+
+                log.Debug(exception);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
+                Assert.AreEqual("[AggregateException] System.AggregateException: log test ---> System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1\r\n   --- End of inner exception stack trace ---\r\n---> (Inner Exception #0) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1<---\r\n\r\n---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg2<---\r\n", eventArgs.Message);
+            }
+
+            [TestCase]
             public void Debug_ExceptionWithMessage_ExceptionNull()
             {
                 LogManager.AddDebugListener();
@@ -491,6 +514,30 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
                 Assert.AreEqual(string.Format("{0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+            }
+
+
+            [TestCase]
+            public void Info_Exception_Aggregated()
+            {
+                LogManager.AddDebugListener();
+                var log = new Log(typeof(int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new AggregateException("log test", new[]
+                {
+                    new ArgumentNullException("arg1"),
+                    new ArgumentNullException("arg2"),
+                });
+
+                log.Info(exception);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
+                Assert.AreEqual("[AggregateException] System.AggregateException: log test ---> System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1\r\n   --- End of inner exception stack trace ---\r\n---> (Inner Exception #0) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1<---\r\n\r\n---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg2<---\r\n", eventArgs.Message);
             }
 
             [TestCase]
@@ -662,6 +709,29 @@ namespace Catel.Test.Logging
             }
 
             [TestCase]
+            public void Warning_Exception_Aggregated()
+            {
+                LogManager.AddDebugListener();
+                var log = new Log(typeof(int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new AggregateException("log test", new[]
+                {
+                    new ArgumentNullException("arg1"),
+                    new ArgumentNullException("arg2"),
+                });
+
+                log.Warning(exception);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
+                Assert.AreEqual("[AggregateException] System.AggregateException: log test ---> System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1\r\n   --- End of inner exception stack trace ---\r\n---> (Inner Exception #0) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1<---\r\n\r\n---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg2<---\r\n", eventArgs.Message);
+            }
+
+            [TestCase]
             public void Warning_ExceptionWithMessage_ExceptionNull()
             {
                 LogManager.AddDebugListener();
@@ -827,6 +897,29 @@ namespace Catel.Test.Logging
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
                 Assert.AreEqual(string.Format("{0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+            }
+
+            [TestCase]
+            public void Debug_Exception_Aggregated()
+            {
+                LogManager.AddDebugListener();
+                var log = new Log(typeof(int));
+
+                LogMessageEventArgs eventArgs = null;
+                log.LogMessage += (sender, e) => eventArgs = e;
+
+                var exception = new AggregateException("log test", new[]
+                {
+                    new ArgumentNullException("arg1"),
+                    new ArgumentNullException("arg2"),
+                });
+
+                log.Error(exception);
+
+                Assert.IsNotNull(eventArgs);
+                Assert.AreEqual(log, eventArgs.Log);
+                Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
+                Assert.AreEqual("[AggregateException] System.AggregateException: log test ---> System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1\r\n   --- End of inner exception stack trace ---\r\n---> (Inner Exception #0) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1<---\r\n\r\n---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg2<---\r\n", eventArgs.Message);
             }
 
             [TestCase]
