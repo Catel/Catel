@@ -342,7 +342,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Extensions\FrameworkElementExtensions.layout.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Extensions\UIElementExtensions.focus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Extensions\WindowExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\CommandLineHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\DataContextChangedHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\EffectsHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\PopupHelper.cs" />
