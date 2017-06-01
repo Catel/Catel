@@ -327,7 +327,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\InfoBarMessageControl\InfoBarMessageControlVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\Page.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\UserControl.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\VisualWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Controls\WarningAndErrorValidator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Data\BindingEvaluator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Data\BindingWithValidation.cs" />
