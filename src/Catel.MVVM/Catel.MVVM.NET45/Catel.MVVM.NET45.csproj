@@ -93,13 +93,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ModuleInitializer.cs" />
-    <Compile Include="Windows\Windows\LoaderAnimation.xaml.cs">
-      <DependentUpon>LoaderAnimation.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\Windows\PleaseWaitHelper.cs" />
-    <Compile Include="Windows\Windows\PleaseWaitWindow.xaml.cs">
-      <DependentUpon>PleaseWaitWindow.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\DataWindow.generic.xaml">
@@ -111,14 +104,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\InfoBarMessageControl.generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Windows\LoaderAnimation.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\Windows\PleaseWaitWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

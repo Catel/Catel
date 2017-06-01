@@ -18,18 +18,22 @@ namespace Catel.Services
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly ILanguageService _languageService;
+        private readonly IDispatcherService _dispatcherService;
 
         private string _lastStatus = string.Empty;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PleaseWaitService"/> class.
+        /// Initializes a new instance of the <see cref="PleaseWaitService" /> class.
         /// </summary>
         /// <param name="languageService">The language service.</param>
-        public PleaseWaitService(ILanguageService languageService)
+        /// <param name="dispatcherService">The dispatcher service.</param>
+        public PleaseWaitService(ILanguageService languageService, IDispatcherService dispatcherService)
         {
             Argument.IsNotNull("languageService", languageService);
+            Argument.IsNotNull("dispatcherService", dispatcherService);
 
             _languageService = languageService;
+            _dispatcherService = dispatcherService;
         }
 
         /// <summary>

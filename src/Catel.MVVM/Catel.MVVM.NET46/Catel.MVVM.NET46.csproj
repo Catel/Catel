@@ -87,13 +87,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="ModuleInitializer.cs" />
-    <Compile Include="Windows\LoaderAnimation.xaml.cs">
-      <DependentUpon>LoaderAnimation.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\PleaseWaitHelper.cs" />
-    <Compile Include="Windows\PleaseWaitWindow.xaml.cs">
-      <DependentUpon>PleaseWaitWindow.xaml</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Exceptions.resx">
       <Link>Properties\Exceptions.resx</Link>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -175,14 +168,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\InfoBarMessageControl.generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\LoaderAnimation.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\PleaseWaitWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

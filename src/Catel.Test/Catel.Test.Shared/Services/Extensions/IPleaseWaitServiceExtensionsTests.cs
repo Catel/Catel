@@ -18,7 +18,7 @@ namespace Catel.Test.Services
         private IPleaseWaitService _target;
         private IPleaseWaitService Target
         {
-            get { return _target ?? (_target = new PleaseWaitService(FakeLanguageService)); }
+            get { return _target ?? (_target = new PleaseWaitService(FakeLanguageService, new DispatcherService())); }
             set { _target = value; }
         }
 

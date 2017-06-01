@@ -104,6 +104,7 @@ Added/fixed:
 (-) #131     Remove ISplashScreenService
 (-) #916     Remove IXmlSerializer.OptimalizationMode in favor of ISerializationConfiguration.OptimalizationMode
 (-) #974     Drop DynamicEventListener in favor of WeakEventListener
+(-) #1010    Drop PleaseWaitHelper and use busy indicator instead 
 (-) #1016    Remove CountCollapsedConverter since we already have CollectionToVisibilityConverter
 (-) Removed test implementations of services
 
