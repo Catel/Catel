@@ -26,16 +26,6 @@ namespace Catel.Windows
         /// </returns>
         public static System.Windows.Window GetActiveWindow(this System.Windows.Application application)
         {
-            if (application != null)
-            {
-                return application.Dispatcher.Invoke(new Func<System.Windows.Window>(() => GetActiveWindowForApplication(application))) as System.Windows.Window;
-            }
-
-            return null;
-        }
-
-        private static System.Windows.Window GetActiveWindowForApplication(this System.Windows.Application application)
-        {
             System.Windows.Window activeWindow = null;
 
             // CTL-687: Only allow windows that have an actual size (been shown at least once)

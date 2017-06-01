@@ -33,37 +33,6 @@ namespace Catel.Windows
     public static class DependencyObjectExtensions
     {
         /// <summary>
-        /// Returns the ancestory object of a <see cref="DependencyObject"/>.
-        /// </summary>
-        /// <typeparam name="T">Ancestor object.</typeparam>
-        /// <param name="visualObject">Visual object to get the ancestor object for.</param>
-        /// <returns><see cref="DependencyObject"/> or null if no ancestor object is found.</returns>
-        /// <remarks>
-        ///		If visualObject was of type T it was returned as ancestor, this is changed.
-        ///		GetAncestorObject wil not return supplied parameter anymore.
-        /// </remarks>
-        public static T GetAncestorObject<T>(this DependencyObject visualObject)
-        {
-            object ancestorObject = null;
-
-            if (visualObject != null)
-            {
-                var parentVisualObject = visualObject.GetVisualParent();
-
-                if (parentVisualObject is T)
-                {
-                    ancestorObject = parentVisualObject;
-                }
-                else
-                {
-                    ancestorObject = GetAncestorObject<T>(parentVisualObject);
-                }
-            }
-
-            return (T)ancestorObject;
-        }
-
-        /// <summary>
         /// Finds the logical or visual ancestor according to the predicate.
         /// </summary>
         /// <param name="startElement">The start element.</param>
@@ -92,7 +61,7 @@ namespace Catel.Windows
             var visualParent = startElement.GetVisualParent();
             if (visualParent != null)
             {
-                object lastResortVisualAncestor = FindLogicalOrVisualAncestor(visualParent, condition);
+                var lastResortVisualAncestor = FindLogicalOrVisualAncestor(visualParent, condition, maxDepth > 0 ? maxDepth - 1 : -1);
                 if (lastResortVisualAncestor != null)
                 {
                     return lastResortVisualAncestor;
@@ -110,7 +79,7 @@ namespace Catel.Windows
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
         public static T FindLogicalOrVisualAncestorByType<T>(this DependencyObject startElement)
         {
-            return (T)FindLogicalOrVisualAncestor(startElement, o => (o is T));
+            return (T)FindLogicalOrVisualAncestor(startElement, o => o is T);
         }
 
         /// <summary>
@@ -142,71 +111,6 @@ namespace Catel.Windows
         }
 
         /// <summary>
-        /// Finds the logical ancestor by type.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="startElement">The start element.</param>
-        /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static T FindLogicalAncestorByType<T>(this DependencyObject startElement)
-        {
-            return (T)FindLogicalAncestor(startElement, o => (o is T));
-        }
-
-        /// <summary>
-        /// Finds the logical root.
-        /// </summary>
-        /// <param name="startElement">The start element.</param>
-        /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static DependencyObject FindLogicalRoot(this DependencyObject startElement)
-        {
-            var obj = startElement;
-            while (startElement != null)
-            {
-                obj = startElement;
-                startElement = startElement.GetLogicalParent();
-            }
-
-            return obj;
-        }
-
-        /// <summary>
-        /// Gets the logical parent of the specified dependency object.
-        /// </summary>
-        /// <param name="element">The element to retrieve the parent from.</param>
-        /// <returns>The parent or <c>null</c> if the parent could not be found.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="element"/> is <c>null</c>.</exception>
-        public static DependencyObject GetLogicalParent(this DependencyObject element)
-        {
-            Argument.IsNotNull("element", element);
-
-#if NET
-            return LogicalTreeHelper.GetParent(element);
-#else
-            return VisualTreeHelper.GetParent(element);
-#endif
-        }
-
-        /// <summary>
-        /// Gets the logical parent of the specified dependency object.
-        /// </summary>
-        /// <param name="element">The element to retrieve the parent from.</param>
-        /// <returns>The parent or <c>null</c> if the parent could not be found.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="element"/> is <c>null</c>.</exception>
-        public static DependencyObject GetVisualParent(this DependencyObject element)
-        {
-            Argument.IsNotNull("element", element);
-
-            try
-            {
-                return VisualTreeHelper.GetParent(element);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
         /// Finds the visual ancestor according to the predicate.
         /// </summary>
         /// <param name="startElement">The start element.</param>
@@ -234,6 +138,17 @@ namespace Catel.Windows
         }
 
         /// <summary>
+        /// Finds the logical ancestor by type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="startElement">The start element.</param>
+        /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
+        public static T FindLogicalAncestorByType<T>(this DependencyObject startElement)
+        {
+            return (T)FindLogicalAncestor(startElement, o => o is T);
+        }
+
+        /// <summary>
         /// Finds the visual ancestor by type.
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -241,7 +156,87 @@ namespace Catel.Windows
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
         public static T FindVisualAncestorByType<T>(this DependencyObject startElement)
         {
-            return (T)FindVisualAncestor(startElement, o => (o is T));
+            return (T)FindVisualAncestor(startElement, o => o is T);
+        }
+
+        /// <summary>
+        /// Finds the logical root.
+        /// </summary>
+        /// <param name="startElement">The start element.</param>
+        /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
+        public static DependencyObject FindLogicalRoot(this DependencyObject startElement)
+        {
+            var obj = startElement;
+            while (startElement != null)
+            {
+                obj = startElement;
+                startElement = startElement.GetLogicalParent();
+            }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Finds the visual root.
+        /// </summary>
+        /// <param name="startElement">The start element.</param>
+        /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
+        public static object FindVisualRoot(this DependencyObject startElement)
+        {
+            return FindVisualAncestor(startElement, delegate (object o)
+            {
+                var dependencyObject = o as DependencyObject;
+                if (dependencyObject == null)
+                {
+                    return false;
+                }
+
+                return (dependencyObject.GetVisualParent() == null);
+            });
+        }
+
+        /// <summary>
+        /// Gets the logical parent of the specified dependency object.
+        /// </summary>
+        /// <param name="element">The element to retrieve the parent from.</param>
+        /// <returns>The parent or <c>null</c> if the parent could not be found.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="element"/> is <c>null</c>.</exception>
+        public static DependencyObject GetLogicalParent(this DependencyObject element)
+        {
+            Argument.IsNotNull("element", element);
+
+            try
+            {
+#if NET
+                return LogicalTreeHelper.GetParent(element);
+#else
+                return VisualTreeHelper.GetParent(element);
+#endif
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the logical parent of the specified dependency object.
+        /// </summary>
+        /// <param name="element">The element to retrieve the parent from.</param>
+        /// <returns>The parent or <c>null</c> if the parent could not be found.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="element"/> is <c>null</c>.</exception>
+        public static DependencyObject GetVisualParent(this DependencyObject element)
+        {
+            Argument.IsNotNull("element", element);
+
+            try
+            {
+                return VisualTreeHelper.GetParent(element);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -274,21 +269,21 @@ namespace Catel.Windows
                 var startElementAsBorder = startElement as Border;
                 if (startElementAsBorder != null)
                 {
-                    return FindVisualDescendant(startElementAsBorder.Child as DependencyObject, condition);
+                    return FindVisualDescendant(startElementAsBorder.Child, condition);
                 }
 
 #if NET
                 var startElementAsDecorator = startElement as Decorator;
                 if (startElementAsDecorator != null)
                 {
-                    return FindVisualDescendant(startElementAsDecorator.Child as DependencyObject, condition);
+                    return FindVisualDescendant(startElementAsDecorator.Child, condition);
                 }
 #endif
 
                 // If the element has children, loop the children
                 var children = new List<DependencyObject>();
 
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(startElement); i++)
+                for (var i = 0; i < VisualTreeHelper.GetChildrenCount(startElement); i++)
                 {
                     children.Add(VisualTreeHelper.GetChild(startElement, i));
                 }
@@ -340,71 +335,19 @@ namespace Catel.Windows
         }
 
         /// <summary>
-        /// Finds the visual root.
-        /// </summary>
-        /// <param name="startElement">The start element.</param>
-        /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
-        public static object FindVisualRoot(this DependencyObject startElement)
-        {
-            return FindVisualAncestor(startElement, delegate(object o)
-            {
-                var dependencyObject = o as DependencyObject;
-                if (dependencyObject == null)
-                {
-                    return false;
-                }
-
-                return (dependencyObject.GetVisualParent() == null);
-            });
-        }
-
-        /// <summary>
-        /// Gets the visual children.
+        /// Gets the direct children from the visual tree.
         /// </summary>
         /// <param name="parent">The parent.</param>
         /// <returns>
         /// 	<see cref="IEnumerable{DependencyObject}"/> of all children.
         /// </returns>
-        public static IEnumerable<DependencyObject> GetVisualChildren(this DependencyObject parent)
+        public static IEnumerable<DependencyObject> GetChildren(this DependencyObject parent)
         {
-            int count = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < count; ++i)
+            var count = VisualTreeHelper.GetChildrenCount(parent);
+            for (var i = 0; i < count; ++i)
             {
                 yield return VisualTreeHelper.GetChild(parent, i);
             }
-        }
-
-        /// <summary>
-        /// Finds a logical node in the tree of the specified <see cref="DependencyObject"/>.
-        /// </summary>
-        /// <param name="dependencyObject">The dependency object.</param>
-        /// <param name="name">The name of the control to find.</param>
-        /// <returns>Child as <see cref="DependencyObject"/> or <c>null</c> if the child cannot be found.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="dependencyObject"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static DependencyObject FindLogicalNode(this DependencyObject dependencyObject, string name)
-        {
-            Argument.IsNotNull("dependencyObject", dependencyObject);
-            Argument.IsNotNullOrWhitespace("name", name);
-
-            // Check if the object is the node itself
-            if (IsElementWithName(dependencyObject, name))
-            {
-                return dependencyObject;
-            }
-
-            // Search all child nodes
-            var children = new List<DependencyObject>(dependencyObject.GetVisualChildren());
-            foreach (var child in children)
-            {
-                if (IsElementWithName(child, name))
-                {
-                    return child;
-                }
-            }
-
-            // Since we didn't find anything, check the childs of all childs
-            return children.Select(child => FindLogicalNode(child, name)).FirstOrDefault(foundChild => foundChild != null);
         }
 
         /// <summary>

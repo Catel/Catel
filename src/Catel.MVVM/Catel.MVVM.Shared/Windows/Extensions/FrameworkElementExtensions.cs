@@ -44,40 +44,6 @@ namespace Catel.Windows
     /// </summary>
     public static partial class FrameworkElementExtensions
     {
-#if NET
-        #region Win32
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern bool BringWindowToTop(IntPtr hWnd);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern bool BringWindowToTop(HandleRef hWnd);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-        [DllImport("user32.dll")]
-        static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, IntPtr ProcessId);
-
-        /// <summary>
-        /// The GetForegroundWindow function returns a handle to the foreground window.
-        /// </summary>
-        [DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindow();
-
-        [DllImport("kernel32.dll")]
-        static extern IntPtr GetCurrentThreadId();
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern bool AttachThreadInput(IntPtr idAttach, IntPtr idAttachTo, bool fAttach);
-
-        [DllImport("user32.dll")]
-        static extern IntPtr GetLastActivePopup(IntPtr hWnd);
-
-        [DllImport("user32.dll")]
-        static extern IntPtr SetActiveWindow(IntPtr hWnd);
-        #endregion
-#endif
-
         #region Fields
         /// <summary>
         /// The log.
@@ -134,7 +100,6 @@ namespace Catel.Windows
             Log.Debug("Transferred styles and transitions");
         }
 
-
         /// <summary>
         /// Hides the validation adorner.
         /// </summary>
@@ -159,86 +124,6 @@ namespace Catel.Windows
             Validation.SetErrorTemplate(frameworkElement, null);
 #endif
         }
-
-#if NET
-        /// <summary>
-        /// Activates the window this framework element contains to.
-        /// </summary>
-        /// <param name="frameworkElement">Reference to the current <see cref="FrameworkElement"/>.</param>
-        public static void BringWindowToTop(this FrameworkElement frameworkElement)
-        {
-            if (frameworkElement == null)
-            {
-                return;
-            }
-
-            try
-            {
-                // Get the handle (of the window or process)
-                var ownerWindow = frameworkElement.FindVisualAncestorByType<Window>();
-                var windowHandle = (ownerWindow != null) ? new WindowInteropHelper(ownerWindow).Handle : Process.GetCurrentProcess().MainWindowHandle;
-                if (windowHandle != IntPtr.Zero)
-                {
-                    SetForegroundWindowEx(windowHandle);
-                }
-            }
-            catch (Exception)
-            {
-            }
-        }
-
-        /// <summary>
-        /// Sets the foreground window (some "dirty" win32 stuff).
-        /// </summary>
-        /// <param name="hWnd">Handle of the window to set to the front.</param>
-        /// <remarks>
-        /// This method takes over the input thread for the window. This means that you are unable
-        /// to debug the code between "Attach" and "Detach" since the input thread of Visual Studio
-        /// will be attached to the thread of the application.
-        /// </remarks>
-        private static void SetForegroundWindowEx(IntPtr hWnd)
-        {
-            var foregroundWindowThreadID = GetWindowThreadProcessId(GetForegroundWindow(), IntPtr.Zero);
-            var currentThreadID = GetCurrentThreadId();
-
-            if (!AttachThreadInput(foregroundWindowThreadID, currentThreadID, true))
-            {
-                Log.Warning("Failed to attach to input thread (Win32 code '{0}')", Marshal.GetLastWin32Error());
-                return;
-            }
-
-            var lastActivePopupWindow = GetLastActivePopup(hWnd);
-            SetActiveWindow(lastActivePopupWindow);
-
-            if (!AttachThreadInput(foregroundWindowThreadID, currentThreadID, false))
-            {
-                Log.Warning("Failed to detach from input thread");
-                return;
-            }
-
-            BringWindowToTop(hWnd);
-        }
-
-        /// <summary>
-        /// Get first parent binding group from specified element.
-        /// </summary>
-        /// <param name="frameworkElement">Reference to the current <see cref="FrameworkElement"/>.</param>
-        /// <returns>The first parent BindingGroup or null when not exists.</returns>
-        public static System.Windows.Data.BindingGroup GetParentBindingGroup(this FrameworkElement frameworkElement)
-        {
-            if (frameworkElement == null)
-            {
-                return null;
-            }
-
-            if (frameworkElement.BindingGroup != null)
-            {
-                return frameworkElement.BindingGroup;
-            }
-
-            return GetParentBindingGroup(LogicalTreeHelper.GetParent(frameworkElement) as FrameworkElement);
-        }
-#endif
         #endregion
     }
 }

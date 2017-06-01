@@ -64,7 +64,7 @@ namespace Catel.Windows
         {
             Argument.IsNotNull("element", element);
 
-            var container = element.GetRelevantParent<FrameworkElement>();
+            var container = GetRelevantParent<FrameworkElement>(element);
             if (container != null)
             {
                 var visible = element.IsVisibleToUser(container);
@@ -114,12 +114,12 @@ namespace Catel.Windows
         }
 
         /// <summary>
-        /// Gets the relevant parent.
+        /// Gets the relevant parent which is either a content presenter or panel.
         /// </summary>
         /// <typeparam name="T">Type of the relevant parent</typeparam>
         /// <param name="obj">The object.</param>
         /// <returns>The relevant parent.</returns>
-        private static FrameworkElement GetRelevantParent<T>(this FrameworkElement obj)
+        private static FrameworkElement GetRelevantParent<T>(FrameworkElement obj)
             where T : FrameworkElement
         {
             var container = VisualTreeHelper.GetParent(obj) as FrameworkElement;
