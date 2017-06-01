@@ -413,7 +413,7 @@ namespace Catel.Windows
                 throw new ArgumentOutOfRangeException("controlName");
             }
 
-            return wrappedGrid.FindLogicalNode(controlName) as FrameworkElement;
+            return wrappedGrid.FindVisualDescendantByName(controlName) as FrameworkElement;
         }
 
         /// <summary>

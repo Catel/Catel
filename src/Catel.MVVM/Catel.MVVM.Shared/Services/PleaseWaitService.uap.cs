@@ -17,7 +17,6 @@ namespace Catel.Services
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Controls.Primitives;
     using global::Windows.UI.Xaml.Media;
-    using EffectsHelper = Windows.EffectsHelper;
 
     public partial class PleaseWaitService
     {
@@ -113,7 +112,8 @@ namespace Catel.Services
                 {
                     windowContent.UpdateLayout();
                     windowContent.IsHitTestVisible = false;
-                    EffectsHelper.Dimm(windowContent);
+                    //EffectsHelper.Dimm(windowContent);
+                    windowContent.Opacity = 1;
                 }
             }
 
@@ -138,7 +138,8 @@ namespace Catel.Services
                 var windowContent = currentWindow.Content as FrameworkElement;
                 if (windowContent != null)
                 {
-                    EffectsHelper.Undimm(windowContent);
+                    windowContent.Opacity = 0;
+                    //EffectsHelper.Undimm(windowContent);
                     windowContent.IsHitTestVisible = true;
                 }
             }

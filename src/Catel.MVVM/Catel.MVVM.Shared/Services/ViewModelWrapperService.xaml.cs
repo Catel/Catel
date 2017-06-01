@@ -109,11 +109,6 @@ namespace Catel.Services
                 }
 #endif
 
-                if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.TransferStylesAndTransitionsToViewModelGrid))
-                {
-                    content.TransferStylesAndTransitions(vmGrid);
-                }
-
                 SetContent(view, null);
                 vmGrid.Children.Add(content);
                 SetContent(view, vmGrid);

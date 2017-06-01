@@ -71,10 +71,6 @@ namespace Catel.MVVM.Providers
             DefaultSupportParentViewModelContainersValue = true;
             DefaultUnloadBehaviorValue = UnloadBehavior.SaveAndCloseViewModel;
 
-#if !XAMARIN
-            DefaultTransferStylesAndTransitionsToViewModelGridValue = false;
-#endif
-
 #if NET
             DefaultCreateWarningAndErrorValidatorForViewModelValue = true;
 #endif
@@ -98,10 +94,6 @@ namespace Catel.MVVM.Providers
             SupportParentViewModelContainers = DefaultSupportParentViewModelContainersValue;
             UnloadBehavior = DefaultUnloadBehaviorValue;
             CloseViewModelOnUnloaded = true;
-
-#if !XAMARIN
-            TransferStylesAndTransitionsToViewModelGrid = DefaultTransferStylesAndTransitionsToViewModelGridValue;
-#endif
 
 #if NET
             SkipSearchingForInfoBarMessageControl = DefaultSkipSearchingForInfoBarMessageControlValue;
@@ -170,27 +162,6 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <value>The unload behavior.</value>
         public static UnloadBehavior DefaultUnloadBehaviorValue { get; set; }
-
-#if !XAMARIN
-        /// <summary>
-        /// Gets or sets a value indicating whether the styles and transitions from the content of the target control
-        /// should be transfered to the view model grid which is created dynamically,.
-        /// <para />
-        /// The transfer is required to enable visual state transitions on root elements (which is replaced by this logic implementation).
-        /// <para />
-        /// The default value is <c>false</c>.
-        /// </summary>
-        /// <value><c>true</c> if the styles and transitions should be transfered to the view model grid; otherwise, <c>false</c>.</value>
-        public bool TransferStylesAndTransitionsToViewModelGrid { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value for the <see cref="TransferStylesAndTransitionsToViewModelGrid"/> property. This way, the behavior
-        /// can be changed an entire application to prevent disabling it on every control.
-        /// <para />
-        /// The default value is <c>false</c>.
-        /// </summary>
-        public static bool DefaultTransferStylesAndTransitionsToViewModelGridValue { get; set; }
-#endif
 
 #if NET
         /// <summary>
@@ -316,13 +287,6 @@ namespace Catel.MVVM.Providers
                 if (CreateWarningAndErrorValidatorForViewModel)
                 {
                     wrapOptions |= WrapOptions.CreateWarningAndErrorValidatorForViewModel;
-                }
-#endif
-
-#if !XAMARIN
-                if (TransferStylesAndTransitionsToViewModelGrid)
-                {
-                    wrapOptions |= WrapOptions.TransferStylesAndTransitionsToViewModelGrid;
                 }
 #endif
 
