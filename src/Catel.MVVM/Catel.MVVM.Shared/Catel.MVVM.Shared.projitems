@@ -343,10 +343,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Extensions\UIElementExtensions.focus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Extensions\WindowExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\DataContextChangedHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\EffectsHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\PopupHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\ResourceHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\VisualTargetPresentationSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\WrapControlHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Input\Extensions\InputGestureExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Input\Helpers\KeyboardHelper.cs" />
