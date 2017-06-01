@@ -205,11 +205,13 @@ namespace Catel.Collections
         {
             Argument.IsNotNull("collection", collection);
 
+            var list = (IList)this;
+
             using (SuspendChangeNotifications(SuspensionMode.Adding))
             {
                 foreach (var item in collection)
                 {
-                    ((IList)this).Insert(index++, item);
+                    list.Insert(index++, item);
                 }
             }
         }
@@ -260,11 +262,13 @@ namespace Catel.Collections
         {
             Argument.IsNotNull("collection", collection);
 
+            var list = (IList)this;
+
             using (SuspendChangeNotifications(SuspensionMode.Adding))
             {
                 foreach (var item in collection)
                 {
-                    ((IList)this).Add(item);
+                    list.Add(item);
                 }
             }
         }
@@ -300,11 +304,13 @@ namespace Catel.Collections
         {
             Argument.IsNotNull("collection", collection);
 
+            var list = (IList)this;
+
             using (SuspendChangeNotifications(SuspensionMode.Removing))
             {
                 foreach (var item in collection)
                 {
-                    ((IList)this).Remove(item);
+                    list.Remove(item);
                 }
             }
         }
