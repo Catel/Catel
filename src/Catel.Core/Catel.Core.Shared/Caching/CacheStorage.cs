@@ -236,42 +236,38 @@ namespace Catel.Caching
 
             return ExecuteInLock(key, () =>
             {
-                TValue value;
-
-                var containsKey = _dictionary.ContainsKey(key);
-                if (!containsKey || @override)
+                CacheStorageValueInfo<TValue> cacheStorageValueInfo;
+                if (!@override && _dictionary.TryGetValue(key, out cacheStorageValueInfo))
                 {
-                    value = code.Invoke();
-                    if (!ReferenceEquals(value, null) || _storeNullValues)
+                    return cacheStorageValueInfo.Value;
+                }
+
+                var value = code();
+                if (!ReferenceEquals(value, null) || _storeNullValues)
+                {
+                    if (expirationPolicy == null && _defaultExpirationPolicyInitCode != null)
                     {
-                        if (expirationPolicy == null && _defaultExpirationPolicyInitCode != null)
-                        {
-                            expirationPolicy = _defaultExpirationPolicyInitCode.Invoke();
-                        }
+                        expirationPolicy = _defaultExpirationPolicyInitCode();
+                    }
 
-                        var valueInfo = new CacheStorageValueInfo<TValue>(value, expirationPolicy);
-                        lock (_syncObj)
-                        {
-                            _dictionary[key] = valueInfo;
-                        }
+                    var valueInfo = new CacheStorageValueInfo<TValue>(value, expirationPolicy);
+                    lock (_syncObj)
+                    {
+                        _dictionary[key] = valueInfo;
+                    }
 
-                        if (valueInfo.CanExpire)
-                        {
-                            _checkForExpiredItems = true;
-                        }
+                    if (valueInfo.CanExpire)
+                    {
+                        _checkForExpiredItems = true;
+                    }
 
-                        if (expirationPolicy != null)
+                    if (expirationPolicy != null)
+                    {
+                        if (_expirationTimer == null)
                         {
-                            if (_expirationTimer == null)
-                            {
-                                UpdateTimer();
-                            }
+                            UpdateTimer();
                         }
                     }
-                }
-                else
-                {
-                    value = _dictionary[key].Value;
                 }
 
                 return value;
@@ -312,19 +308,19 @@ namespace Catel.Caching
 
             return ExecuteInLockAsync(key, async () =>
             {
-                var containsKey = _dictionary.ContainsKey(key);
-                if (containsKey && !@override)
+                CacheStorageValueInfo<TValue> cacheStorageValueInfo;
+                if (!@override && _dictionary.TryGetValue(key, out cacheStorageValueInfo))
                 {
-                    return _dictionary[key].Value;
+                    return cacheStorageValueInfo.Value;
                 }
 
-                var value = await code.Invoke();
+                var value = await code();
 
                 if (!ReferenceEquals(value, null) || _storeNullValues)
                 {
                     if (expirationPolicy == null && _defaultExpirationPolicyInitCode != null)
                     {
-                        expirationPolicy = _defaultExpirationPolicyInitCode.Invoke();
+                        expirationPolicy = _defaultExpirationPolicyInitCode();
                     }
 
                     var valueInfo = new CacheStorageValueInfo<TValue>(value, expirationPolicy);
@@ -413,15 +409,7 @@ namespace Catel.Caching
 
             ExecuteInLock(key, () =>
             {
-                if (_dictionary.ContainsKey(key))
-                {
-                    if (action != null)
-                    {
-                        action.Invoke();
-                    }
-
-                    RemoveItem(key, false);
-                }
+                RemoveItem(key, false, action);
             });
         }
 
@@ -562,8 +550,7 @@ namespace Catel.Caching
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>The lock object.</returns>
-        private
-        AsyncLock GetLockByKey(TKey key)
+        private AsyncLock GetLockByKey(TKey key)
         {
             if (ReferenceEquals(null, key))
             {
@@ -574,12 +561,11 @@ namespace Catel.Caching
             // of garbage collection
             lock (_syncObj)
             {
-                AsyncLock asyncLock = null;
+                AsyncLock asyncLock;
 
                 if (!_locksByKey.TryGetValue(key, out asyncLock))
                 {
-                    asyncLock = new AsyncLock();
-                    _locksByKey[key] = new AsyncLock();
+                    _locksByKey[key] = asyncLock = new AsyncLock();
                 }
 
                 return asyncLock;
@@ -607,8 +593,9 @@ namespace Catel.Caching
         /// </summary>
         /// <param name="key">The key.</param>
         /// <param name="raiseEvents">Indicates whether events should be raised.</param>
+        /// <param name="action">The action that need to be executed in synchronization with the item cache removal.</param>
         /// <returns>The value indicating whether the item was removed.</returns>
-        private bool RemoveItem(TKey key, bool raiseEvents)
+        private bool RemoveItem(TKey key, bool raiseEvents, Action action = null)
         {
             // Try to get item, if there is no item by that key then return true to indicate that item was removed.
             var item = default(CacheStorageValueInfo<TValue>);
@@ -616,6 +603,8 @@ namespace Catel.Caching
             {
                 return true;
             }
+
+            action?.Invoke();
 
             var cancel = false;
             var expirationPolicy = item.ExpirationPolicy;
