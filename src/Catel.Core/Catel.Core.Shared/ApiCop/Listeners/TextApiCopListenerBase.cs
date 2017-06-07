@@ -17,7 +17,7 @@ namespace Catel.ApiCop
     /// </summary>
     public abstract class TextApiCopListenerBase : ApiCopListenerBase
     {
-        private const string DocumentationUrl = "https://catelproject.atlassian.net/wiki/display/CTL/ApiCop";
+        private const string DocumentationUrl = "http://docs.catelproject.com/vnext/ApiCop.htm";
 
         private DateTime _startTime;
         private DateTime _endTime;

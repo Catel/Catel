@@ -86,7 +86,7 @@ namespace Catel.Runtime.Serialization
         static SerializerBase()
         {
             ApiCop.RegisterRule(new InitializationApiCopRule("SerializerBase.WarmupAtStartup", "It is recommended to warm up the serializers at application startup", ApiCopRuleLevel.Hint, InitializationMode.Eager,
-                "https://catelproject.atlassian.net/wiki/display/CTL/Introduction+to+serialization#Introductiontoserialization-Warmingupserialization"));
+                "http://docs.catelproject.com/vnext/catel-core/serialization/introduction.htm#warming-up-serialization"));
         }
 
         /// <summary>

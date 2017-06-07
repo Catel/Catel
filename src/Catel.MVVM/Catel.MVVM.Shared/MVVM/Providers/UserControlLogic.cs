@@ -60,13 +60,13 @@ namespace Catel.MVVM.Providers
         static UserControlLogic()
         {
             ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.InfoBarMessageControl", "The InfoBarMessageControl is not found in the visual tree. This will have a negative impact on performance. Consider setting the SkipSearchingForInfoBarMessageControl or DefaultSkipSearchingForInfoBarMessageControlValue to true.", ApiCopRuleLevel.Error,
-                "https://catelproject.atlassian.net/wiki/display/CTL/Performance+considerations"));
+                "http://docs.catelproject.com/vnext/faq/performance-considerations.htm"));
 
             ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.CreateWarningAndErrorValidator", "The InfoBarMessageControl is not found in the visual tree. Only use this feature in combination with the InfoBarMessageControl or a customized class which uses the WarningAndErrorValidator. Consider setting the CreateWarningAndErrorValidatorForViewModel or DefaultCreateWarningAndErrorValidatorForViewModelValue to false.", ApiCopRuleLevel.Error,
-                "https://catelproject.atlassian.net/wiki/display/CTL/Performance+considerations"));
+                "http://docs.catelproject.com/vnext/faq/performance-considerations.htm"));
 
             ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.SupportParentViewModelContainers", "No parent IViewModelContainer is found in the visual tree. Only use this feature when there are parent IViewModelContainer instances. Consider setting the SupportParentViewModelContainers to false.", ApiCopRuleLevel.Error,
-                "https://catelproject.atlassian.net/wiki/display/CTL/Performance+considerations"));
+                "http://docs.catelproject.com/vnext/faq/performance-considerations.htm"));
 
             DefaultSupportParentViewModelContainersValue = true;
             DefaultUnloadBehaviorValue = UnloadBehavior.SaveAndCloseViewModel;
