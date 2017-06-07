@@ -21,15 +21,4 @@ to be built. Among these extensions are support for Dynamic Objects, Entity Fram
 
 <a href="https://pledgie.com/campaigns/26956"><img alt="Click here to lend your support to: Catel and make a donation at pledgie.com !" src="https://pledgie.com/campaigns/26956.png?skin_name=chrome" border="0" /></a>
 
-
-## Official website 
-
-The official website can be found at http://www.catelproject.com
-
-## Documentation
-
-Documentation can be found at http://www.catelproject.com
-
-## Issue tracking
-
-The issue tracker including a roadmap can be found at http://www.catelproject.com
+For documentation, please visit the [documentation portal](http://docs.catelproject.com)
