@@ -30,7 +30,7 @@ namespace Catel.Windows
     /// Available wrap options that can be used in the <see cref="WrapControlHelper"/>.
     /// </summary>
     [Flags]
-    [ObsoleteEx(ReplacementTypeOrMember = "Catel.Windows.Serivce.WrapOptions", RemoveInVersion = "5.5")]
+    [ObsoleteEx(ReplacementTypeOrMember = "Catel.Service.WrapControlServiceWrapOptions", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
     public enum WrapOptions
     {
         /// <summary>
@@ -58,7 +58,7 @@ namespace Catel.Windows
     /// <summary>
     /// An helper to wrap controls and windows with several controls, such as the <see cref="InfoBarMessageControl"/>.
     /// </summary>
-    [ObsoleteEx(ReplacementTypeOrMember = "Catel.Windows.Serivce.WrapControlService", RemoveInVersion = "5.5")]
+    [ObsoleteEx(ReplacementTypeOrMember = "Catel.Service.WrapControlService", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
     public static class WrapControlHelper
     {
         

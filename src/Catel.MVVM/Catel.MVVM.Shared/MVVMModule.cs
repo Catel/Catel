@@ -7,7 +7,6 @@
 
 namespace Catel
 {
-    using Windows.Services;
     using MVVM;
     using MVVM.Views;
     using Services;

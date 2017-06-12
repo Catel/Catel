@@ -4,18 +4,20 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Windows.Services
+namespace Catel.Services
 {
     using System;
     using System.Windows;
     using System.Windows.Controls;
-    using Controls;
+
+    using Catel.Windows;
+    using Catel.Windows.Controls;
 
     /// <summary>
-    /// Available wrap options that can be used in the <see cref="WrapControlHelper"/>.
+    /// Available wrap options that can be used in the <see cref="IWrapControlService"/>.
     /// </summary>
     [Flags]
-    public enum WrapOptions
+    public enum WrapControlServiceWrapOptions
     {
         /// <summary>
         /// Generates an inline <see cref="InfoBarMessageControl"/> around the element to wrap.
@@ -109,7 +111,7 @@ namespace Catel.Windows.Services
         /// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
         /// is passed.
         /// </remarks>
-        Grid Wrap(FrameworkElement frameworkElement, WrapOptions wrapOptions, ContentControl parentContentControl = null);
+        Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, ContentControl parentContentControl = null);
 
         /// <summary>
         /// Wraps the specified framework element.
@@ -125,33 +127,33 @@ namespace Catel.Windows.Services
         /// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
         /// is passed.
         /// </remarks>
-        Grid Wrap(FrameworkElement frameworkElement, WrapOptions wrapOptions, DataWindowButton[] buttons, ContentControl parentContentControl);
+        Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, DataWindowButton[] buttons, ContentControl parentContentControl);
 
         /// <summary>
         /// Gets a wrapped element mapped by the <paramref name="wrapOption"/>.
         /// </summary>
         /// <typeparam name="T">Type of the control to return.</typeparam>
         /// <param name="wrappedGrid">The wrapped grid.</param>
-        /// <param name="wrapOption">The wrap option that is used, which will be mapped to the control. The value <see cref="Windows.WrapOptions.All"/> is not allowed and will throw an exception.</param>
+        /// <param name="wrapOption">The wrap option that is used, which will be mapped to the control. The value <see cref="WrapControlServiceWrapOptions.All"/> is not allowed and will throw an exception.</param>
         /// <returns>
         /// 	<see cref="FrameworkElement"/> or <c>null</c> if the element is not found.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="wrapOption"/> is <see cref="Windows.WrapOptions.All"/>.</exception>
-        T GetWrappedElement<T>(Grid wrappedGrid, WrapOptions wrapOption)
+        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="wrapOption"/> is <see cref="WrapControlServiceWrapOptions.All"/>.</exception>
+        T GetWrappedElement<T>(Grid wrappedGrid, WrapControlServiceWrapOptions wrapOption)
             where T : FrameworkElement;
 
         /// <summary>
         /// Gets a wrapped element mapped by the <paramref name="wrapOption"/>.
         /// </summary>
         /// <param name="wrappedGrid">The wrapped grid.</param>
-        /// <param name="wrapOption">The wrap option that is used, which will be mapped to the control. The value <see cref="Windows.WrapOptions.All"/> is not allowed and will throw an exception.</param>
+        /// <param name="wrapOption">The wrap option that is used, which will be mapped to the control. The value <see cref="WrapControlServiceWrapOptions.All"/> is not allowed and will throw an exception.</param>
         /// <returns>
         /// 	<see cref="FrameworkElement"/> or <c>null</c> if the element is not found.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="wrapOption"/> is <see cref="Windows.WrapOptions.All"/>.</exception>
-        FrameworkElement GetWrappedElement(Grid wrappedGrid, WrapOptions wrapOption);
+        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="wrapOption"/> is <see cref="WrapControlServiceWrapOptions.All"/>.</exception>
+        FrameworkElement GetWrappedElement(Grid wrappedGrid, WrapControlServiceWrapOptions wrapOption);
 
         /// <summary>
         /// Gets a wrapped element by name.

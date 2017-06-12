@@ -6,12 +6,14 @@
 
 #if NET
 
-namespace Catel.Windows.Services
+namespace Catel.Services
 {
     using System;
     using System.Windows;
     using Windows;
-    using Controls;
+
+    using Catel.Windows.Controls;
+
     using Reflection;
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
@@ -71,7 +73,7 @@ namespace Catel.Windows.Services
         /// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
         /// is passed.
         /// </remarks>
-        public Grid Wrap(FrameworkElement frameworkElement, WrapOptions wrapOptions, ContentControl parentContentControl = null)
+        public Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, ContentControl parentContentControl = null)
         {
             return Wrap(frameworkElement, wrapOptions, new DataWindowButton[] { }, parentContentControl);
         }
@@ -90,7 +92,7 @@ namespace Catel.Windows.Services
         /// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
         /// is passed.
         /// </remarks>
-        public Grid Wrap(FrameworkElement frameworkElement, WrapOptions wrapOptions, DataWindowButton[] buttons, ContentControl parentContentControl)
+        public Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, DataWindowButton[] buttons, ContentControl parentContentControl)
         {
             Argument.IsNotNull("frameworkElement", frameworkElement);
             Argument.IsNotNull("buttons", buttons);
@@ -213,7 +215,7 @@ namespace Catel.Windows.Services
             #endregion
 
             #region Generate WarningAndErrorValidator
-            if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateWarningAndErrorValidatorForDataContext))
+            if (Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.GenerateWarningAndErrorValidatorForDataContext))
             {
                 // Create warning and error validator
                 var warningAndErrorValidator = new WarningAndErrorValidator();
@@ -227,15 +229,15 @@ namespace Catel.Windows.Services
 
             #region Generate InfoBarMessageControl
 #if !NETFX_CORE
-            if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateInlineInfoBarMessageControl) ||
-                Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateOverlayInfoBarMessageControl))
+            if (Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.GenerateInlineInfoBarMessageControl) ||
+                Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.GenerateOverlayInfoBarMessageControl))
             {
                 // Create info bar message control
                 var infoBarMessageControl = new InfoBarMessageControl();
                 infoBarMessageControl.Name = WrapControlServiceControlNames.InfoBarMessageControlName;
                 infoBarMessageControl.Content = mainContent;
 
-                if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateOverlayInfoBarMessageControl))
+                if (Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.GenerateOverlayInfoBarMessageControl))
                 {
                     infoBarMessageControl.Mode = InfoBarMessageControlMode.Overlay;
                 }
@@ -262,13 +264,13 @@ namespace Catel.Windows.Services
         /// </summary>
         /// <typeparam name="T">Type of the control to return.</typeparam>
         /// <param name="wrappedGrid">The wrapped grid.</param>
-        /// <param name="wrapOption">The wrap option that is used, which will be mapped to the control. The value <see cref="Windows.WrapOptions.All"/> is not allowed and will throw an exception.</param>
+        /// <param name="wrapOption">The wrap option that is used, which will be mapped to the control. The value <see cref="WrapControlServiceWrapOptions.All"/> is not allowed and will throw an exception.</param>
         /// <returns>
         /// 	<see cref="FrameworkElement"/> or <c>null</c> if the element is not found.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="wrapOption"/> is <see cref="Windows.WrapOptions.All"/>.</exception>
-        public T GetWrappedElement<T>(Grid wrappedGrid, WrapOptions wrapOption)
+        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="wrapOption"/> is <see cref="WrapControlServiceWrapOptions.All"/>.</exception>
+        public T GetWrappedElement<T>(Grid wrappedGrid, WrapControlServiceWrapOptions wrapOption)
             where T : FrameworkElement
         {
             return GetWrappedElement(wrappedGrid, wrapOption) as T;
@@ -278,27 +280,27 @@ namespace Catel.Windows.Services
         /// Gets a wrapped element mapped by the <paramref name="wrapOption"/>.
         /// </summary>
         /// <param name="wrappedGrid">The wrapped grid.</param>
-        /// <param name="wrapOption">The wrap option that is used, which will be mapped to the control. The value <see cref="Windows.WrapOptions.All"/> is not allowed and will throw an exception.</param>
+        /// <param name="wrapOption">The wrap option that is used, which will be mapped to the control. The value <see cref="WrapControlServiceWrapOptions.All"/> is not allowed and will throw an exception.</param>
         /// <returns>
         /// 	<see cref="FrameworkElement"/> or <c>null</c> if the element is not found.
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="wrappedGrid"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="wrapOption"/> is <see cref="Windows.WrapOptions.All"/>.</exception>
-        public FrameworkElement GetWrappedElement(Grid wrappedGrid, WrapOptions wrapOption)
+        /// <exception cref="ArgumentOutOfRangeException">The <paramref name="wrapOption"/> is <see cref="WrapControlServiceWrapOptions.All"/>.</exception>
+        public FrameworkElement GetWrappedElement(Grid wrappedGrid, WrapControlServiceWrapOptions wrapOption)
         {
             Argument.IsNotNull("wrappedGrid", wrappedGrid);
 
-            if (wrapOption == WrapOptions.All)
+            if (wrapOption == WrapControlServiceWrapOptions.All)
             {
                 throw new ArgumentOutOfRangeException("wrapOption");
             }
 
             switch (wrapOption)
             {
-                case WrapOptions.GenerateInlineInfoBarMessageControl:
+                case WrapControlServiceWrapOptions.GenerateInlineInfoBarMessageControl:
                     return GetWrappedElement(wrappedGrid, WrapControlServiceControlNames.InfoBarMessageControlName);
 
-                case WrapOptions.GenerateWarningAndErrorValidatorForDataContext:
+                case WrapControlServiceWrapOptions.GenerateWarningAndErrorValidatorForDataContext:
                     return GetWrappedElement(wrappedGrid, WrapControlServiceControlNames.WarningAndErrorValidatorName);
             }
 

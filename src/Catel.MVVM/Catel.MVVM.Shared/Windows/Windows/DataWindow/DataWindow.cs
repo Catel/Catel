@@ -29,7 +29,6 @@ namespace Catel.Windows
     using Catel.Threading;
     using Threading;
     using IoC;
-    using Services;
 
     /// <summary>
     /// Mode of the <see cref="DataWindow"/>.
@@ -119,6 +118,8 @@ namespace Catel.Windows
 
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private static readonly IWrapControlService WrapControlService = ServiceLocator.Default.ResolveType<IWrapControlService>();
 
         private bool _isWrapped;
         private bool _forceClose;
@@ -771,10 +772,8 @@ namespace Catel.Windows
                 return;
             }
 
-            var wrapControlService = ServiceLocator.Default.ResolveType<IWrapControlService>();
-
             var newContentAsFrameworkElement = newContent as FrameworkElement;
-            if (_isWrapped || !wrapControlService.CanBeWrapped(newContentAsFrameworkElement))
+            if (_isWrapped || !WrapControlService.CanBeWrapped(newContentAsFrameworkElement))
             {
                 return;
             }
@@ -811,24 +810,24 @@ namespace Catel.Windows
                 _commands.Add(button.Command);
             }
 
-            var wrapOptions = Services.WrapOptions.GenerateWarningAndErrorValidatorForDataContext;
+            var wrapOptions = WrapControlServiceWrapOptions.GenerateWarningAndErrorValidatorForDataContext;
             switch (_infoBarMessageControlGenerationMode)
             {
                 case InfoBarMessageControlGenerationMode.None:
                     break;
 
                 case InfoBarMessageControlGenerationMode.Inline:
-                    wrapOptions |= Services.WrapOptions.GenerateInlineInfoBarMessageControl;
+                    wrapOptions |= WrapControlServiceWrapOptions.GenerateInlineInfoBarMessageControl;
                     break;
 
                 case InfoBarMessageControlGenerationMode.Overlay:
-                    wrapOptions |= Services.WrapOptions.GenerateOverlayInfoBarMessageControl;
+                    wrapOptions |= WrapControlServiceWrapOptions.GenerateOverlayInfoBarMessageControl;
                     break;
             }
 
             _isWrapped = true;
 
-            var contentGrid = wrapControlService.Wrap(newContentAsFrameworkElement, wrapOptions, _buttons.ToArray(), this);
+            var contentGrid = WrapControlService.Wrap(newContentAsFrameworkElement, wrapOptions, _buttons.ToArray(), this);
 
             var internalGrid = contentGrid.FindVisualDescendant(obj => (obj is FrameworkElement) && string.Equals(((FrameworkElement)obj).Name, WrapControlServiceControlNames.InternalGridName)) as Grid;
             if (internalGrid != null)
@@ -840,7 +839,7 @@ namespace Catel.Windows
                 _defaultOkCommand = (from button in _buttons
                                      where button.IsDefault
                                      select button.Command).FirstOrDefault();
-                _defaultOkElement = wrapControlService.GetWrappedElement<ButtonBase>(contentGrid, WrapControlServiceControlNames.DefaultOkButtonName);
+                _defaultOkElement = WrapControlService.GetWrappedElement<ButtonBase>(contentGrid, WrapControlServiceControlNames.DefaultOkButtonName);
 
                 _defaultCancelCommand = (from button in _buttons
                                          where button.IsCancel
