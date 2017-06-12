@@ -24,9 +24,10 @@ namespace Catel.Windows
     using Logging;
     using MVVM;
     using Exceptions = MVVM.Properties.Exceptions;
-    using Catel.MVVM.Providers;
+    using MVVM.Providers;
+    using Catel.Services;
     using Catel.Threading;
-    using Catel.Windows.Threading;
+    using Threading;
     using IoC;
     using Services;
 
@@ -770,8 +771,10 @@ namespace Catel.Windows
                 return;
             }
 
+            var wrapControlService = ServiceLocator.Default.ResolveType<IWrapControlService>();
+
             var newContentAsFrameworkElement = newContent as FrameworkElement;
-            if (_isWrapped || !WrapControlHelper.CanBeWrapped(newContentAsFrameworkElement))
+            if (_isWrapped || !wrapControlService.CanBeWrapped(newContentAsFrameworkElement))
             {
                 return;
             }
@@ -781,7 +784,7 @@ namespace Catel.Windows
             if (IsOKButtonAvailable)
             {
                 var button = DataWindowButton.FromAsync(languageService.GetString("OK"), OnOkExecuteAsync, OnOkCanExecute);
-                button.IsDefault = (DefaultButton == DataWindowDefaultButton.OK);
+                button.IsDefault = DefaultButton == DataWindowDefaultButton.OK;
                 _buttons.Add(button);
             }
             if (IsCancelButtonAvailable)
@@ -793,13 +796,13 @@ namespace Catel.Windows
             if (IsApplyButtonAvailable)
             {
                 var button = DataWindowButton.FromAsync(languageService.GetString("Apply"), OnApplyExecuteAsync, OnApplyCanExecute);
-                button.IsDefault = (DefaultButton == DataWindowDefaultButton.Apply);
+                button.IsDefault = DefaultButton == DataWindowDefaultButton.Apply;
                 _buttons.Add(button);
             }
             if (IsCloseButtonAvailable)
             {
                 var button = DataWindowButton.FromSync(languageService.GetString("Close"), OnCloseExecute, OnCloseCanExecute);
-                button.IsDefault = (DefaultButton == DataWindowDefaultButton.Close);
+                button.IsDefault = DefaultButton == DataWindowDefaultButton.Close;
                 _buttons.Add(button);
             }
 
@@ -808,26 +811,26 @@ namespace Catel.Windows
                 _commands.Add(button.Command);
             }
 
-            var wrapOptions = WrapOptions.GenerateWarningAndErrorValidatorForDataContext;
+            var wrapOptions = Services.WrapOptions.GenerateWarningAndErrorValidatorForDataContext;
             switch (_infoBarMessageControlGenerationMode)
             {
                 case InfoBarMessageControlGenerationMode.None:
                     break;
 
                 case InfoBarMessageControlGenerationMode.Inline:
-                    wrapOptions |= WrapOptions.GenerateInlineInfoBarMessageControl;
+                    wrapOptions |= Services.WrapOptions.GenerateInlineInfoBarMessageControl;
                     break;
 
                 case InfoBarMessageControlGenerationMode.Overlay:
-                    wrapOptions |= WrapOptions.GenerateOverlayInfoBarMessageControl;
+                    wrapOptions |= Services.WrapOptions.GenerateOverlayInfoBarMessageControl;
                     break;
             }
 
             _isWrapped = true;
 
-            var contentGrid = WrapControlHelper.Wrap(newContentAsFrameworkElement, wrapOptions, _buttons.ToArray(), this);
+            var contentGrid = wrapControlService.Wrap(newContentAsFrameworkElement, wrapOptions, _buttons.ToArray(), this);
 
-            var internalGrid = contentGrid.FindVisualDescendant(obj => (obj is FrameworkElement) && string.Equals(((FrameworkElement)obj).Name, WrapControlHelper.InternalGridName)) as Grid;
+            var internalGrid = contentGrid.FindVisualDescendant(obj => (obj is FrameworkElement) && string.Equals(((FrameworkElement)obj).Name, WrapControlServiceControlNames.InternalGridName)) as Grid;
             if (internalGrid != null)
             {
                 internalGrid.SetResourceReference(StyleProperty, "WindowGridStyle");
@@ -837,7 +840,7 @@ namespace Catel.Windows
                 _defaultOkCommand = (from button in _buttons
                                      where button.IsDefault
                                      select button.Command).FirstOrDefault();
-                _defaultOkElement = WrapControlHelper.GetWrappedElement<ButtonBase>(contentGrid, WrapControlHelper.DefaultOkButtonName);
+                _defaultOkElement = wrapControlService.GetWrappedElement<ButtonBase>(contentGrid, WrapControlServiceControlNames.DefaultOkButtonName);
 
                 _defaultCancelCommand = (from button in _buttons
                                          where button.IsCancel
