@@ -215,6 +215,116 @@ namespace Catel.Services
             window.Dispatcher.InvokeIfRequired(() => result = (bool?)activateMethodInfo.Invoke(window, null));
             return result;
         }
+
+
+        /// <summary>
+        /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
+        /// </summary>
+        /// <param name="uiVisualizerService">
+        /// The uiVisualizerService
+        /// </param>
+        /// <param name="dataContext">
+        /// The data context.
+        /// </param>
+        /// <param name="scope">
+        /// The scope. 
+        /// </param>
+        /// <typeparam name="TViewModel">
+        /// The view model type.
+        /// </typeparam>
+        /// <returns>
+        /// A task.
+        /// </returns>
+        public static async Task ShowOrActivateAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object dataContext = null, object scope = null)
+            where TViewModel : IViewModel
+        {
+            var viewModelManager = uiVisualizerService.GetDependencyResolver().Resolve<IViewModelManager>();
+            var viewModelFactory = uiVisualizerService.GetDependencyResolver().Resolve<IViewModelFactory>();
+
+            var existingViewModel = viewModelManager.GetFirstOrDefaultInstance<TViewModel>();
+            if (existingViewModel != null)
+            {
+                await uiVisualizerService.ShowOrActivateAsync<TViewModel>(dataContext, scope);
+            }
+            else
+            {
+                var vm = viewModelFactory.CreateViewModel(typeof(TViewModel), dataContext, scope);
+                await uiVisualizerService.ShowAsync(vm);
+            }
+        }
+
+        /// <summary>
+        /// Shows the window in modal state and creates the view model automatically using the specified model.
+        /// </summary>
+        /// <param name="uiVisualizerService">
+        /// The uiVisualizerService
+        /// </param>
+        /// <param name="dataContext">
+        /// The data context.
+        /// </param>
+        /// <param name="scope">
+        /// The scope. 
+        /// </param>
+        /// <typeparam name="TViewModel">
+        /// The view model type.
+        /// </typeparam>
+        /// <returns>
+        /// A task.
+        /// </returns>
+        public static async Task ShowDialogAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object dataContext = null, object scope = null)
+            where TViewModel : IViewModel
+        {
+            var viewModelManager = uiVisualizerService.GetDependencyResolver().Resolve<IViewModelManager>();
+            var viewModelFactory = uiVisualizerService.GetDependencyResolver().Resolve<IViewModelFactory>();
+
+            var existingViewModel = viewModelManager.GetFirstOrDefaultInstance<TViewModel>();
+            if (existingViewModel != null)
+            {
+                await uiVisualizerService.ShowDialogAsync<TViewModel>(dataContext, scope);
+            }
+            else
+            {
+                var vm = viewModelFactory.CreateViewModel(typeof(TViewModel), dataContext, scope);
+                await uiVisualizerService.ShowDialogAsync(vm);
+            }
+        }
+
+        /// <summary>
+        /// Shows the window in non-modal state and creates the view model automatically using the specified model.
+        /// </summary>
+        /// <param name="uiVisualizerService">
+        /// The uiVisualizerService
+        /// </param>
+        /// <param name="dataContext">
+        /// The data context.
+        /// </param>
+        /// <param name="scope">
+        /// The scope. 
+        /// </param>
+        /// <typeparam name="TViewModel">
+        /// The view model type.
+        /// </typeparam>
+        /// <returns>
+        /// A task.
+        /// </returns>
+        public static async Task ShowAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object dataContext = null, object scope = null)
+            where TViewModel : IViewModel
+        {
+            var viewModelManager = uiVisualizerService.GetDependencyResolver().Resolve<IViewModelManager>();
+            var viewModelFactory = uiVisualizerService.GetDependencyResolver().Resolve<IViewModelFactory>();
+
+            var existingViewModel = viewModelManager.GetFirstOrDefaultInstance<TViewModel>();
+            if (existingViewModel != null)
+            {
+                await uiVisualizerService.ShowAsync<TViewModel>(dataContext, scope);
+            }
+            else
+            {
+                var vm = viewModelFactory.CreateViewModel(typeof(TViewModel), dataContext, scope);
+                await uiVisualizerService.ShowAsync(vm);
+            }
+        }
+
 #endif
     }
 }
