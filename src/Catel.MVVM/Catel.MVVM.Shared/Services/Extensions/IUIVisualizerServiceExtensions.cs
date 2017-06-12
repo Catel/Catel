@@ -238,8 +238,9 @@ namespace Catel.Services
         public static async Task ShowOrActivateAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object dataContext = null, object scope = null)
             where TViewModel : IViewModel
         {
-            var viewModelManager = uiVisualizerService.GetDependencyResolver().Resolve<IViewModelManager>();
-            var viewModelFactory = uiVisualizerService.GetDependencyResolver().Resolve<IViewModelFactory>();
+            var dependencyResolver = uiVisualizerService.GetDependencyResolver();
+            var viewModelManager = dependencyResolver.Resolve<IViewModelManager>();
+            var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
 
             var existingViewModel = viewModelManager.GetFirstOrDefaultInstance<TViewModel>();
             if (existingViewModel != null)
@@ -274,8 +275,9 @@ namespace Catel.Services
         public static async Task ShowDialogAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object dataContext = null, object scope = null)
             where TViewModel : IViewModel
         {
-            var viewModelManager = uiVisualizerService.GetDependencyResolver().Resolve<IViewModelManager>();
-            var viewModelFactory = uiVisualizerService.GetDependencyResolver().Resolve<IViewModelFactory>();
+            var dependencyResolver = uiVisualizerService.GetDependencyResolver();
+            var viewModelManager = dependencyResolver.Resolve<IViewModelManager>();
+            var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
 
             var existingViewModel = viewModelManager.GetFirstOrDefaultInstance<TViewModel>();
             if (existingViewModel != null)
@@ -310,8 +312,9 @@ namespace Catel.Services
         public static async Task ShowAsync<TViewModel>(this IUIVisualizerService uiVisualizerService, object dataContext = null, object scope = null)
             where TViewModel : IViewModel
         {
-            var viewModelManager = uiVisualizerService.GetDependencyResolver().Resolve<IViewModelManager>();
-            var viewModelFactory = uiVisualizerService.GetDependencyResolver().Resolve<IViewModelFactory>();
+            var dependencyResolver = uiVisualizerService.GetDependencyResolver();
+            var viewModelManager = dependencyResolver.Resolve<IViewModelManager>();
+            var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
 
             var existingViewModel = viewModelManager.GetFirstOrDefaultInstance<TViewModel>();
             if (existingViewModel != null)
