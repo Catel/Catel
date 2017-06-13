@@ -4,11 +4,19 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if NET
+
 namespace Catel.Services
 {
     using System;
+
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+    using global::Windows.UI.Xaml.Controls;
+#else
     using System.Windows;
     using System.Windows.Controls;
+#endif
 
     using Catel.Windows;
     using Catel.Windows.Controls;
@@ -20,12 +28,12 @@ namespace Catel.Services
     public enum WrapControlServiceWrapOptions
     {
         /// <summary>
-        /// Generates an inline <see cref="InfoBarMessageControl"/> around the element to wrap.
+        /// Generates an inline InfoBarMessageControl around the element to wrap.
         /// </summary>
         GenerateInlineInfoBarMessageControl = 1,
 
         /// <summary>
-        /// Generates an overlay <see cref="InfoBarMessageControl"/> around the element to wrap.
+        /// Generates an overlay InfoBarMessageControl around the element to wrap.
         /// </summary>
         GenerateOverlayInfoBarMessageControl = 2,
 
@@ -106,7 +114,7 @@ namespace Catel.Services
         /// </returns>
         /// <remarks>
         /// The framework element that is passed must be disconnected from the parent first. It is recommended to first check whether a
-        /// framework element can be wrapped by using the <see cref="WrapControlService.CanBeWrapped"/> method.
+        /// framework element can be wrapped by using the <see cref="IWrapControlService.CanBeWrapped"/> method.
         /// <para />
         /// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
         /// is passed.
@@ -123,7 +131,7 @@ namespace Catel.Services
         /// <returns><see cref="Grid"/> that contains the wrapped content.</returns>
         /// <remarks>
         /// The framework element that is passed must be disconnected from the parent first. It is recommended to first check whether a
-        /// framework element can be wrapped by using the <see cref="WrapControlService.CanBeWrapped"/> method.
+        /// framework element can be wrapped by using the <see cref="IWrapControlService.CanBeWrapped"/> method.
         /// This method will automatically handle the disconnecting of the framework element from the parent is the <paramref name="parentContentControl"/>
         /// is passed.
         /// </remarks>
@@ -184,3 +192,5 @@ namespace Catel.Services
         FrameworkElement GetWrappedElement(Grid wrappedGrid, string controlName);
     }
 }
+
+#endif

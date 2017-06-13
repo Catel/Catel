@@ -34,7 +34,9 @@ namespace Catel
             serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelManager, ViewModelManager>();
             serviceLocator.RegisterTypeIfNotYetRegistered<IAutoCompletionService, AutoCompletionService>();
 
+#if NET
             serviceLocator.RegisterTypeIfNotYetRegistered<IWrapControlService, WrapControlService>();
+#endif
 
             ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
 
