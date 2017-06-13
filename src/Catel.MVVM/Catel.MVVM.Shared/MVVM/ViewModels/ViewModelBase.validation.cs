@@ -13,10 +13,6 @@ namespace Catel.MVVM
     using Catel.Reflection;
     using Logging;
 
-#if NET40
-    using System.ComponentModel.DataAnnotations;
-#endif
-
     public partial class ViewModelBase
     {
         #region Fields

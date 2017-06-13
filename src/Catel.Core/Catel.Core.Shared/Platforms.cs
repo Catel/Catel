@@ -52,19 +52,19 @@ namespace Catel
                     return false;
 
                 case KnownPlatforms.NET:
-                    return currentPlatform == SupportedPlatforms.NET40 ||
-                           currentPlatform == SupportedPlatforms.NET45 ||
+                    return currentPlatform == SupportedPlatforms.NET45 ||
                            currentPlatform == SupportedPlatforms.NET46 ||
+                           currentPlatform == SupportedPlatforms.NET47 ||
                            currentPlatform == SupportedPlatforms.NET50;
-
-                case KnownPlatforms.NET40:
-                    return currentPlatform == SupportedPlatforms.NET40;
 
                 case KnownPlatforms.NET45:
                     return currentPlatform == SupportedPlatforms.NET45;
 
                 case KnownPlatforms.NET46:
                     return currentPlatform == SupportedPlatforms.NET46;
+
+                case KnownPlatforms.NET47:
+                    return currentPlatform == SupportedPlatforms.NET47;
 
                 case KnownPlatforms.NET50:
                     return currentPlatform == SupportedPlatforms.NET50;
@@ -97,12 +97,12 @@ namespace Catel
         {
 #if PCL
             return SupportedPlatforms.PCL;
-#elif NET40
-            return SupportedPlatforms.NET40;
 #elif NET45
             return SupportedPlatforms.NET45;
 #elif NET46
             return SupportedPlatforms.NET46;
+#elif NET47
+            return SupportedPlatforms.NET47;
 #elif NET50
             return SupportedPlatforms.NET50;
 #elif UWP
@@ -125,11 +125,6 @@ namespace Catel
     public enum SupportedPlatforms
     {
         /// <summary>
-        /// .NET framework 4.0.
-        /// </summary>
-        NET40,
-
-        /// <summary>
         /// .NET framework 4.5.
         /// </summary>
         NET45,
@@ -138,6 +133,11 @@ namespace Catel
         /// .NET framework 4.6.
         /// </summary>
         NET46,
+
+        /// <summary>
+        /// .NET framework 4.7.
+        /// </summary>
+        NET47,
 
         /// <summary>
         /// .NET framework 5.0.
@@ -186,11 +186,6 @@ namespace Catel
         NET,
 
         /// <summary>
-        /// .NET framework 4.0.
-        /// </summary>
-        NET40,
-
-        /// <summary>
         /// .NET framework 4.5.
         /// </summary>
         NET45,
@@ -199,6 +194,11 @@ namespace Catel
         /// .NET framework 4.6.
         /// </summary>
         NET46,
+
+        /// <summary>
+        /// .NET framework 4.7.
+        /// </summary>
+        NET47,
 
         /// <summary>
         /// .NET framework 5.0.

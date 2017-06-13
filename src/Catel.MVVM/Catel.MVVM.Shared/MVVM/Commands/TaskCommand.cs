@@ -10,10 +10,6 @@ namespace Catel.MVVM
     using System.Threading;
     using System.Threading.Tasks;
 
-#if NET40
-    using Microsoft;
-#endif
-
     using Catel.Logging;
     using Services;
     using Threading;

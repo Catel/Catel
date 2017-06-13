@@ -52,7 +52,9 @@ namespace Catel.Test.MVVM.Auditing
             TestCommand = new Command<string>(OnTestCommandExecute);
             TestCommand.AutomaticallyDispatchEvents = false;
 
+#pragma warning disable 4014
             InitializeViewModelAsync();
+#pragma warning restore 4014
         }
         #endregion
 

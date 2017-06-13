@@ -142,31 +142,6 @@ namespace Catel.MVVM.Auditing
         }
 
         /// <summary>
-        /// Must be called when the property of a view model is about to change.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <param name="oldValue">The old property value.</param>
-        internal static void OnPropertyChanging(IViewModel viewModel, string propertyName, object oldValue)
-        {
-            lock (_instance._auditors)
-            {
-                foreach (var auditor in _instance._auditors)
-                {
-                    if (auditor.PropertiesToIgnore != null)
-                    {
-                        if (auditor.PropertiesToIgnore.Contains(propertyName))
-                        {
-                            continue;
-                        }
-                    }
-
-                    auditor.OnPropertyChanging(viewModel, propertyName, oldValue);
-                }
-            }
-        }
-
-        /// <summary>
         /// Must be called when the property of a view model has just changed.
         /// </summary>
         /// <param name="viewModel">The view model.</param>

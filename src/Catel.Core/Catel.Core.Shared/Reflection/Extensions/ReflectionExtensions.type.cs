@@ -1157,56 +1157,5 @@ namespace Catel.Reflection
             return type.GetTypeInfo().GetMethods(bindingFlags);
 #endif
         }
-
-#if NET40
-
-        /// <summary>
-        /// The type infos cache.
-        /// </summary>
-        private static readonly Dictionary<Type, TypeInfo> _typeInfos = new Dictionary<Type, TypeInfo>();
-
-        /// <summary>
-        /// The _sync obj.
-        /// </summary>
-        private static readonly object _syncObj = new object();
-
-        /// <summary>
-        /// Gets the type info.
-        /// </summary>
-        /// <param name="this">The this.</param>
-        /// <returns>The <see cref="TypeInfo" /> instance of the current <see cref="Type" />.</returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="this" /> is <c>null</c>.</exception>
-        public static TypeInfo GetTypeInfo(this Type @this)
-        {
-            Argument.IsNotNull("@this", @this);
-            TypeInfo typeInfo;
-
-            // TODO: Create with this code for a readonly cache storage. 
-            if (!_typeInfos.ContainsKey(@this))
-            {
-                // NOTE: Use MultipleReaderExclusiveWriterSynchronizer here!!!.
-                lock (_syncObj)
-                {
-                    if (_typeInfos.ContainsKey(@this))
-                    {
-                        typeInfo = _typeInfos[@this];
-                    }
-                    else
-                    {
-                        typeInfo = new TypeInfo(@this);
-                        _typeInfos.Add(@this, typeInfo);
-                    }
-                }
-            }
-            else
-            {
-                // The cache is readonly and never is cleared so we can do this out of lock.
-                typeInfo = _typeInfos[@this];
-            }
-
-            // TODO: Evaluate if just do 'return new TypeInfo(@this);' is enough
-            return typeInfo;
-        }
-#endif
     }
 }

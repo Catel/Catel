@@ -110,21 +110,6 @@ namespace Catel.Data
                 oldValue = GetValueFast<object>(property.Name);
                 var areOldAndNewValuesEqual = ObjectHelper.AreEqualReferences(oldValue, value);
 
-                if (notifyOnChange && (AlwaysInvokeNotifyChanged || !areOldAndNewValuesEqual) && !LeanAndMeanModel)
-                {
-                    if (changeNotificationsSuspensionContext == null)
-                    {
-                        var propertyChangingEventArgs = new AdvancedPropertyChangingEventArgs(property.Name);
-                        RaisePropertyChanging(this, propertyChangingEventArgs);
-
-                        if (propertyChangingEventArgs.Cancel)
-                        {
-                            Log.Debug("Change of property '{0}.{1}' is canceled in PropertyChanging event", GetType().FullName, property.Name);
-                            return;
-                        }
-                    }
-                }
-
                 // Validate before assigning, dynamic properties will cause exception
                 if (validateAttributes && !LeanAndMeanModel)
                 {

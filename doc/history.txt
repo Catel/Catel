@@ -106,6 +106,7 @@ Added/fixed:
 (-) #131     Remove ISplashScreenService
 (-) #916     Remove IXmlSerializer.OptimalizationMode in favor of ISerializationConfiguration.OptimalizationMode
 (-) #974     Remove DynamicEventListener in favor of WeakEventListener
+(-) #983     Remove INotifyPropertyChanging and only support INotifyPropertyChanged 
 (-) #1010    Remove PleaseWaitHelper and use busy indicator instead 
 (-) #1016    Remove CountCollapsedConverter since we already have CollectionToVisibilityConverter
 (-) #1030    Remove CommandLineHelper in favor of Orc.CommandLine

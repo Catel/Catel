@@ -40,12 +40,12 @@ using System.Runtime.CompilerServices;
 
 #if DEBUG
 
-#if NET40
-[assembly: AssemblyConfiguration("NET40, Debug")]
-#elif NET45
+#if NET45
 [assembly: AssemblyConfiguration("NET45, Debug")]
 #elif NET46
 [assembly: AssemblyConfiguration("NET46, Debug")]
+#elif NET47
+[assembly: AssemblyConfiguration("NET47, Debug")]
 #elif NET50
 [assembly: AssemblyConfiguration("NET50, Debug")]
 #elif UWP
@@ -62,12 +62,12 @@ using System.Runtime.CompilerServices;
 
 #else
 
-#if NET40
-[assembly: AssemblyConfiguration("NET40, Release")]
-#elif NET45
+#if NET45
 [assembly: AssemblyConfiguration("NET45, Release")]
 #elif NET46
 [assembly: AssemblyConfiguration("NET46, Release")]
+#elif NET47
+[assembly: AssemblyConfiguration("NET47, Release")]
 #elif NET50
 [assembly: AssemblyConfiguration("NET50, Release")]
 #elif UWP

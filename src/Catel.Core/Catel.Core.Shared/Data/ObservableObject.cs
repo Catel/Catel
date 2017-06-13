@@ -16,24 +16,16 @@ namespace Catel.Data
 #endif
 
     /// <summary>
-    /// Very basic class implementing the <see cref="INotifyPropertyChanging"/> and <see cref="INotifyPropertyChanged"/> interfaces.
+    /// Very basic class implementing the <see cref="INotifyPropertyChanged"/> interfaces.
     /// </summary>
 #if NET
     [Serializable]
 #else
     [DataContract]
 #endif
-    public class ObservableObject : IAdvancedNotifyPropertyChanging, IAdvancedNotifyPropertyChanged
+    public class ObservableObject : IAdvancedNotifyPropertyChanged
     {
         #region Events
-        /// <summary>
-        /// Occurs when a property of this object is changing.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        public event PropertyChangingEventHandler PropertyChanging;
-
         /// <summary>
         /// Occurs when a property of this object has changed.
         /// </summary>
@@ -44,76 +36,6 @@ namespace Catel.Data
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Raises the <see cref="PropertyChanging"/> event.
-        /// </summary>
-        /// <typeparam name="TProperty">The type of the object holding the property.</typeparam>
-        /// <param name="propertyExpression">The property expression.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="propertyExpression"/> is <c>null</c>.</exception>
-        /// <example>
-        /// <![CDATA[
-        ///     RaisePropertyChanging(() => IsDirty);
-        /// ]]>
-        /// </example>
-        protected internal void RaisePropertyChanging<TProperty>(Expression<Func<TProperty>> propertyExpression)
-        {
-            Argument.IsNotNull("propertyExpression", propertyExpression);
-
-            var sender = ExpressionHelper.GetOwner(propertyExpression) ?? this;
-            var propertyName = ExpressionHelper.GetPropertyName(propertyExpression);
-
-            RaisePropertyChanging(sender, propertyName);
-        }
-
-        /// <summary>
-        /// Raises the <see cref="PropertyChanging"/> event.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        protected internal void RaisePropertyChanging(string propertyName)
-        {
-            RaisePropertyChanging(this, propertyName);
-        }
-
-        /// <summary>
-        /// Raises the <see cref="PropertyChanging"/> event.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        protected internal void RaisePropertyChanging(object sender, string propertyName)
-        {
-            RaisePropertyChanging(sender, new AdvancedPropertyChangingEventArgs(propertyName));
-        }
-
-        /// <summary>
-        /// Raises the <see cref="PropertyChanging"/> event.
-        /// <para />
-        /// This is the one and only method that actually raises the <see cref="PropertyChanging"/> event. All other
-        /// methods are (and should be) just overloads that eventually call this method.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangingEventArgs"/> instance containing the event data.</param>
-        protected virtual void RaisePropertyChanging(object sender, AdvancedPropertyChangingEventArgs e)
-        {
-            var handler = PropertyChanging;
-            if (handler != null)
-            {
-                handler(sender, e);
-            }
-
-            if (ReferenceEquals(this, sender))
-            {
-                OnPropertyChanging(e);
-            }
-        }
-
-        /// <summary>
-        /// Called when the <see cref="PropertyChanging"/> event occurs.
-        /// </summary>
-        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangingEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyChanging(AdvancedPropertyChangingEventArgs e)
-        {
-        }
-
         /// <summary>
         /// Raises the <see cref="PropertyChanged"/> event.
         /// </summary>

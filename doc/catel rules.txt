@@ -3,10 +3,9 @@ Defines
 
 All debug versions have DEBUG
 
-NET35		NET, NET35
-NET40		NET, NET40
 NET45		NET, NET45
 NET46		NET, NET46
+NET47		NET, NET47
 PCL			PCL
 
 Note that defines must be set for Debug and Release configurations

@@ -9,12 +9,7 @@ namespace Catel.Threading
 {
     using System;
     using System.Threading.Tasks;
-
-#if NET40
-    using Microsoft.Runtime.CompilerServices;
-#else
     using System.Runtime.CompilerServices;
-#endif
 
     /// <summary>
     /// An awaitable wrapper around a task whose result is disposable. The wrapper is not disposable, so this prevents usage errors like "using (MyAsync())" when the appropriate usage should be "using (await MyAsync())".

@@ -50,19 +50,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\BeginEditEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\CancelEditCompletedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\CancelEditEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\DataErrorsChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\EditEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\EndEditEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\PropertyChangingEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\EventArgs\RunWorkerCompletedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\Extensions\PropertyChangedEventArgsExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\IAdvancedEditableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\IDataErrorInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\IDataWarningInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\INotifyDataErrorInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\INotifyDataWarningInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\INotifyPropertyChanging.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ComponentModel\RunWorkerCompletedEventHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationService.net.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ConfigurationService.cs" />
@@ -86,7 +80,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\CompositeValidator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\CompositeValidatorProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\AdvancedPropertyChangedEventArgs.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\AdvancedPropertyChangingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\ValidationEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\InvalidPropertyException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\InvalidPropertyValueException.cs" />
@@ -104,7 +97,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Helpers\ValidationContextHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Helpers\XmlNameMapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IAdvancedNotifyPropertyChanged.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IAdvancedNotifyPropertyChanging.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelEditor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelEqualityComparer.cs" />

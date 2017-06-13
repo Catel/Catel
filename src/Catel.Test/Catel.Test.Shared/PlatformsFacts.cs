@@ -15,11 +15,13 @@ namespace Catel.Test
         [TestFixture]
         public class TheIsPlatformSupportedMethod
         {
-            [TestCase(KnownPlatforms.NET, SupportedPlatforms.NET40)]
             [TestCase(KnownPlatforms.NET, SupportedPlatforms.NET45)]
+            [TestCase(KnownPlatforms.NET, SupportedPlatforms.NET46)]
+            [TestCase(KnownPlatforms.NET, SupportedPlatforms.NET47)]
             [TestCase(KnownPlatforms.NET, SupportedPlatforms.NET50)]
-            [TestCase(KnownPlatforms.NET40, SupportedPlatforms.NET40)]
             [TestCase(KnownPlatforms.NET45, SupportedPlatforms.NET45)]
+            [TestCase(KnownPlatforms.NET46, SupportedPlatforms.NET46)]
+            [TestCase(KnownPlatforms.NET47, SupportedPlatforms.NET47)]
             [TestCase(KnownPlatforms.NET50, SupportedPlatforms.NET50)]
             [TestCase(KnownPlatforms.Xamarin, SupportedPlatforms.Android)]
             [TestCase(KnownPlatforms.Xamarin, SupportedPlatforms.iOS)]
@@ -31,7 +33,7 @@ namespace Catel.Test
                 Assert.IsTrue(Platforms.IsPlatformSupported(platformToCheck, currentPlatform));
             }
 
-            [TestCase(KnownPlatforms.WindowsUniversal, SupportedPlatforms.NET40)]
+            [TestCase(KnownPlatforms.WindowsUniversal, SupportedPlatforms.NET47)]
             public void ReturnsFalseForUnsupportedPlatform(KnownPlatforms platformToCheck, SupportedPlatforms currentPlatform)
             {
                 Assert.IsFalse(Platforms.IsPlatformSupported(platformToCheck, currentPlatform));

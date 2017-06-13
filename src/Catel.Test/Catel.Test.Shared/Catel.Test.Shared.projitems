@@ -35,7 +35,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\CompositeValidatorFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\CompositeValidatorProviderFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\AdvancedPropertyChangedEventArgsFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\EventArgs\AdvancedPropertyChangingEventArgsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\InvalidPropertyExceptionFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\InvalidPropertyValueExceptionFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\PropertyAlreadyRegisteredExceptionFacts.cs" />

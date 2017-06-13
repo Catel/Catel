@@ -70,12 +70,6 @@ namespace Catel.MVVM.Auditing
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-            var viewModelAsPropertyChanging = viewModel as INotifyPropertyChanging;
-            if (viewModelAsPropertyChanging != null)
-            {
-                viewModelAsPropertyChanging.PropertyChanging += OnViewModelPropertyChanging;
-            }
-
             viewModel.PropertyChanged += OnViewModelPropertyChanged;
             viewModel.CommandExecutedAsync += OnViewModelCommandExecutedAsync;
             viewModel.SavingAsync += OnViewModelSavingAsync;
@@ -95,12 +89,6 @@ namespace Catel.MVVM.Auditing
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-            var viewModelAsPropertyChanging = viewModel as INotifyPropertyChanging;
-            if (viewModelAsPropertyChanging != null)
-            {
-                viewModelAsPropertyChanging.PropertyChanging -= OnViewModelPropertyChanging;
-            }
-
             viewModel.PropertyChanged -= OnViewModelPropertyChanged;
             viewModel.CommandExecutedAsync -= OnViewModelCommandExecutedAsync;
             viewModel.SavingAsync -= OnViewModelSavingAsync;
@@ -109,24 +97,6 @@ namespace Catel.MVVM.Auditing
             viewModel.CanceledAsync -= OnViewModelCanceledAsync;
             viewModel.ClosingAsync -= OnViewModelClosingAsync;
             viewModel.ClosedAsync -= OnViewModelClosedAsync;
-        }
-
-        private static void OnViewModelPropertyChanging(object sender, PropertyChangingEventArgs e)
-        {
-            if (!AuditingManager.IsAuditingEnabled)
-            {
-                return;
-            }
-
-            var viewModel = (IViewModel)sender;
-
-            object propertyValue = null;
-            if (!string.IsNullOrEmpty(e.PropertyName))
-            {
-                PropertyHelper.TryGetPropertyValue(viewModel, e.PropertyName, out propertyValue);
-            }
-
-            AuditingManager.OnPropertyChanging(viewModel, e.PropertyName, propertyValue);
         }
 
         private static void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)

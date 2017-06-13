@@ -77,11 +77,7 @@ namespace Catel.Services
         {
             var dispatcher = CurrentDispatcher;
 
-#if NET40
-            return DispatcherExtensions.InvokeAsync(dispatcher, action);
-#else
             return dispatcher.InvokeAsync(action).Task;
-#endif
         }
 
         /// <summary>

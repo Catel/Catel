@@ -40,19 +40,6 @@ namespace Catel.Test.MVVM.Auditing
             OnViewModelCreatedType = viewModel.GetType();
         }
 
-        public bool OnPropertyChangingCalled { get; set; }
-        public IViewModel OnPropertyChangingViewModel { get; set; }
-        public string OnPropertyChangingPropertyName { get; set; }
-        public object OnPropertyChangingOldValue { get; set; }
-
-        public override void OnPropertyChanging(IViewModel viewModel, string propertyName, object oldValue)
-        {
-            OnPropertyChangingCalled = true;
-            OnPropertyChangingViewModel = viewModel;
-            OnPropertyChangingPropertyName = propertyName;
-            OnPropertyChangingOldValue = oldValue;
-        }
-
         public bool OnPropertyChangedCalled { get; set; }
         public IViewModel OnPropertyChangedViewModel { get; set; }
         public string OnPropertyChangedPropertyName { get; set; }
