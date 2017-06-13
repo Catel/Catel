@@ -50,7 +50,7 @@ namespace Catel.MVVM.Providers
             var closedEvent = targetWindowType.GetEventEx("Closed");
             var eventName = closedEvent != null ? "Closed" : "Unloaded";
 
-            _targetWindowClosedWeakEventListener = this.SubscribeToWeakEvent(targetWindow, eventName, (Action)OnTargetWindowClosed);
+            _targetWindowClosedWeakEventListener = this.SubscribeToWeakGenericEvent<EventArgs>(targetWindow, eventName, OnTargetWindowClosed);
 
             _targetWindowClosedEventName = eventName;
 
@@ -169,7 +169,7 @@ namespace Catel.MVVM.Providers
         /// </remarks>
 #pragma warning disable AvoidAsyncVoid // Avoid async void
         // ReSharper disable UnusedMember.Local
-        public async void OnTargetWindowClosed()
+        public async void OnTargetWindowClosed(object sender, EventArgs e)
         // ReSharper restore UnusedMember.Local
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
