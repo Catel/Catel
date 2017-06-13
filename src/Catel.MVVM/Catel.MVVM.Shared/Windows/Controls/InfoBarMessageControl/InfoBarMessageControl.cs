@@ -13,9 +13,9 @@ namespace Catel.Windows.Controls
     using System.Collections.ObjectModel;
     using System.Windows;
     using System.Windows.Controls;
+    using Catel.Services;
     using IoC;
     using Logging;
-    using Services;
 #if NET
     using System.ComponentModel;
     using System.Windows.Data;

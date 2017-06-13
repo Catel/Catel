@@ -10,8 +10,8 @@ namespace Catel.Windows.Interactivity
 {
     using System.Collections.Generic;
     using System.Collections;
+    using Catel.Services;
     using IoC;
-    using Services;
     using Input;
 
 #if NETFX_CORE
@@ -27,7 +27,6 @@ namespace Catel.Windows.Interactivity
     using Key = global::Windows.System.VirtualKey;
     using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
 #else
-    using System;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;

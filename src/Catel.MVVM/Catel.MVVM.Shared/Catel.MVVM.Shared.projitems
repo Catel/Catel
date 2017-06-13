@@ -344,6 +344,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\DataContextChangedHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\PopupHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\ResourceHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IWrapControlService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\WrapControlService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\WrapControlHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Input\Extensions\InputGestureExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Input\Helpers\KeyboardHelper.cs" />
