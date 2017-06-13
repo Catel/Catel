@@ -1208,7 +1208,7 @@ namespace Catel.Data
         [Browsable(false)]
 #endif
         [XmlIgnore]
-        bool INotifyDataErrorInfo.HasErrors
+        public virtual bool HasErrors
         {
             get
             {
@@ -1285,7 +1285,7 @@ namespace Catel.Data
         [Browsable(false)]
 #endif
         [XmlIgnore]
-        bool INotifyDataWarningInfo.HasWarnings
+        public virtual bool HasWarnings
         {
             get
             {

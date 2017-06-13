@@ -426,7 +426,7 @@ namespace Catel.MVVM
             {
                 _title = value;
 
-                RaisePropertyChanged("Title");
+                RaisePropertyChanged(nameof(Title));
             }
         }
 
@@ -437,9 +437,22 @@ namespace Catel.MVVM
         /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
         /// </value>
         [ExcludeFromValidation]
-        public bool HasErrors
+        public override bool HasErrors
         {
-            get { return ((INotifyDataErrorInfo)this).HasErrors || _childViewModelsHaveErrors; }
+            get
+            {
+                if (base.HasErrors)
+                {
+                    return true;
+                }
+
+                if (_childViewModelsHaveErrors)
+                {
+                    return true;
+                }
+
+                return false;
+            }
         }
 
         /// <summary>
