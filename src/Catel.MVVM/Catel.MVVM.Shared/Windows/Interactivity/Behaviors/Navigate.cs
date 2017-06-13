@@ -11,8 +11,8 @@ namespace Catel.Windows.Interactivity
     using System.Windows.Documents;
     using System.Windows.Interactivity;
     using IoC;
-    using Services;
     using System.Windows.Navigation;
+    using Catel.Services;
 
     /// <summary>
     /// Navigate behavior to allow the execution of an url in non-pages for WPF.
