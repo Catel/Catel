@@ -91,21 +91,22 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Gets or sets the full name.
         /// </summary>
-        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] { "LastName" }, ConverterType = typeof(CollapsMapping))]
+        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] { "LastName" }, 
+            ConverterType = typeof(CollapsMapping))]
         public string FullName
         {
             get { return GetValue<string>(FullNameProperty); }
             set { SetValue(FullNameProperty, value); }
         }
-
+        
         /// <summary>Register the FullName property so it is known in the class.</summary>
         public static readonly PropertyData FullNameProperty = RegisterProperty<TestViewModelWithMappingConverters, string>(model => model.FullName);
 
         /// <summary>
         /// Gets or sets the full name with separated names with ';'.
         /// </summary>
-        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] { "LastName" }, ConverterType = typeof(CollapsMapping),
-            AdditionalConstructorArgs = new object[] { ';' })]
+        [ViewModelToModel("Person", "FirstName", AdditionalPropertiesToWatch = new[] { "LastName" }, 
+            ConverterType = typeof(CollapsMapping), AdditionalConstructorArgs = new object[] { ';' })]
         public string FullNameWithCustomSeparator
         {
             get { return GetValue<string>(FullNameWithCustomSeparatorProperty); }

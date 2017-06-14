@@ -116,8 +116,8 @@ namespace Catel.Test.MVVM.ViewModels
         [TestCase]
         public void ViewModelWithMappingConverters()
         {
-            const string FirstName = "first name";
-            const string LastName = "last name";
+            const string FirstName = "first_name";
+            const string LastName = "last_name";
             const uint Age1 = 1;
             const uint Age2 = 2;
 
