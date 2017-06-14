@@ -816,7 +816,7 @@ namespace Catel.MVVM
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnChildViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if ((e.PropertyName == "INotifyDataErrorInfo.HasErrors") || (e.PropertyName == "INotifyDataWarningInfo.HasWarnings"))
+            if (e.PropertyName == nameof(HasErrors) || e.PropertyName == nameof(HasWarnings))
             {
                 Validate();
             }
@@ -938,6 +938,8 @@ namespace Catel.MVVM
             {
                 return;
             }
+
+			base.OnPropertyChanged(e);
 
             lock (_modelLock)
             {
@@ -1471,7 +1473,7 @@ namespace Catel.MVVM
             }
 
             // Force validation before saving
-            if (!ValidateViewModel(true, false))
+            if (!ValidateViewModel(true))
             {
                 IsSaving = false;
 

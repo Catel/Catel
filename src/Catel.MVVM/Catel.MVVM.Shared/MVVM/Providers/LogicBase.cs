@@ -753,7 +753,7 @@ namespace Catel.MVVM.Providers
                 }
                 else
                 {
-                    viewModel.ValidateViewModel(true, false);
+                    viewModel.ValidateViewModel(true);
                 }
 
                 _isFirstValidationAfterLoaded = true;
@@ -986,7 +986,7 @@ namespace Catel.MVVM.Providers
                 return false;
             }
 
-            var result = ViewModel.ValidateViewModel(_isFirstValidationAfterLoaded, false);
+            var result = ViewModel.ValidateViewModel(_isFirstValidationAfterLoaded);
 
             _isFirstValidationAfterLoaded = false;
 
