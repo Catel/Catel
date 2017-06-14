@@ -151,8 +151,8 @@ namespace Catel.Test.MVVM.ViewModels
                     for (int j = 0; j < personsPerThread; j++)
                     {
                         var viewModel = new TestViewModel();
-                        viewModel.Age = "18";
-                        viewModel.Age = "19";
+                        viewModel.Age = 18;
+                        viewModel.Age = 19;
                         localViewModels[j] = viewModel;
                     }
                     allViewModels[(int) index] = localViewModels;

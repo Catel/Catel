@@ -181,7 +181,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelBaseFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelBaseFacts.validation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelFactoryFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelManagerTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelManagerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Attributes\ViewToViewModelAttributeTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Helpers\ViewToViewModelMappingHelperTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewToViewModelMappingContainerTest.cs" />

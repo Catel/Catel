@@ -92,7 +92,7 @@ namespace Catel.Test.MVVM.ViewModels
             Assert.AreEqual(string.Empty, viewModel.LastName);
 
             Assert.AreEqual(0, person.Age);
-            Assert.AreEqual("0", viewModel.Age);
+            Assert.AreEqual(0, viewModel.Age);
 
             // Model to view model mapping
             person.FirstName = FirstName;
@@ -106,11 +106,11 @@ namespace Catel.Test.MVVM.ViewModels
 
             person.Age = Age1;
             Assert.AreEqual(Age1, person.Age);
-            Assert.AreEqual(Age1.ToString(), viewModel.Age);
+            Assert.AreEqual(Age1, viewModel.Age);
 
-            viewModel.Age = Age2.ToString();
+            viewModel.Age = Age2;
             Assert.AreEqual(Age2, person.Age);
-            Assert.AreEqual(Age2.ToString(), viewModel.Age);
+            Assert.AreEqual(Age2, viewModel.Age);
         }
 
         [TestCase]
@@ -122,7 +122,7 @@ namespace Catel.Test.MVVM.ViewModels
             const uint Age2 = 2;
 
             var person = new Person();
-            var viewModel = new TestViewModelWithMappingConverters();
+            var viewModel = new TestViewModelWithMappingConverters(person);
 
             Assert.AreEqual(string.Empty, person.FirstName);
             Assert.AreEqual(string.Empty, viewModel.FirstName);

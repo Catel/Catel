@@ -15,7 +15,7 @@ namespace Catel.Test.MVVM.ViewModels
     using NUnit.Framework;
 
     [TestFixture]
-    public class ViewModelManagerTest
+    public class ViewModelManagerFacts
     {
         [TestFixture]
         public class TheRegisterModelMethod

@@ -12,6 +12,11 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
 
     public class TestViewModelWithMappingConverters : ViewModelBase
     {
+        public TestViewModelWithMappingConverters(Person person = null)
+        {
+            Person = person;
+        }
+
         [Model]
         public Person Person
         {

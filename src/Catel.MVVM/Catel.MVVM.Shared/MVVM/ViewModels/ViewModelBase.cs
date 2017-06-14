@@ -963,8 +963,8 @@ namespace Catel.MVVM
                     // Since the model has been changed, copy all values from the model to the view model
                     foreach (KeyValuePair<string, ViewModelToModelMapping> viewModelToModelMap in _viewModelToModelMap)
                     {
-                        ViewModelToModelMapping mapping = viewModelToModelMap.Value;
-                        IViewModelToModelConverter converter = mapping.Converter;
+                        var mapping = viewModelToModelMap.Value;
+                        var converter = mapping.Converter;
                         if (string.CompareOrdinal(mapping.ModelProperty, e.PropertyName) == 0)
                         {
                             var values = new object[mapping.ValueProperties.Length];

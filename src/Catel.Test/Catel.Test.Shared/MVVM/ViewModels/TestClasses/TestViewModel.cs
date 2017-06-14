@@ -165,7 +165,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         public static readonly PropertyData BusinessRuleWarningWhenEmptyProperty = RegisterProperty("BusinessRuleWarningWhenEmpty", typeof(string));
 
         /// <summary>Register the Age property so it is known in the class.</summary>
-        public static readonly PropertyData AgeProperty = RegisterProperty<TestViewModel, string>(model => model.Age);
+        public static readonly PropertyData AgeProperty = RegisterProperty<TestViewModel, uint>(model => model.Age);
         #endregion
 
         #region Properties
@@ -200,9 +200,9 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         }
 
         [ViewModelToModel("Person")]
-        public string Age
+        public uint Age
         {
-            get { return GetValue<string>(AgeProperty); }
+            get { return GetValue<uint>(AgeProperty); }
             set { SetValue(AgeProperty, value); }
         }
 

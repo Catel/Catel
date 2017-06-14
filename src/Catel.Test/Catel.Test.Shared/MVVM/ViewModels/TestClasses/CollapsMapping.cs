@@ -18,6 +18,12 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         #endregion
 
         #region Constructors
+        // Note: keep the constructor, it's used in the tests
+        public CollapsMapping(string[] propertyNames)
+            : this(propertyNames, ' ')
+        {
+        }
+
         public CollapsMapping(string[] propertyNames, char separator = ' ')
             : base(propertyNames)
         {
