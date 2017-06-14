@@ -86,6 +86,7 @@ Added/fixed:
              the TaskCommand.SwallowExceptions property to true
 (*) #901     Clean up FrameworkElement and DependencyObject extension methods
 (*) #988     Set default value of DeferValidationUntilFirstSaveCall to true
+(*) #995     Split ModelBase into ModelBase (without validation) and ValidatableModelBase
 (*) #998     Remove Catel.Services.Models namespace, use Catel.Services instead
 (*) #1003    Migrate xaml uri from catel.codeplex.com => catelproject.com
 (*) #1021    Add parameter to create an overload for GetSlug to not make the value lowercase 
