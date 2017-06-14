@@ -8,14 +8,18 @@
 namespace Catel.MVVM
 {
     using System;
+    using System.Collections.Generic;
     using Windows.Interactivity.DragDropHelpers;
     using IoC;
+    using Logging;
 
     /// <summary>
     /// Model value class to store the mapping of the View Model to a Model mapping.
     /// </summary>
     public class ViewModelToModelMapping
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelToModelMapping"/> class.
@@ -39,10 +43,12 @@ namespace Catel.MVVM
         /// <param name="additionalConstructorArgs">Constructor args</param>
         /// <param name="additionalPropertiesToWatch"></param>
         /// <exception cref="ArgumentException">The <paramref name="viewModelProperty"/> is <c>null</c> or whitespace.</exception>
-        public ViewModelToModelMapping(string viewModelProperty, string modelProperty, string valueProperty, ViewModelToModelMode mode, Type converterType, object[] additionalConstructorArgs, string[] additionalPropertiesToWatch)
+        public ViewModelToModelMapping(string viewModelProperty, string modelProperty, string valueProperty, 
+            ViewModelToModelMode mode, Type converterType, object[] additionalConstructorArgs, string[] additionalPropertiesToWatch)
         {
             Argument.IsNotNullOrWhitespace("viewModelProperty", viewModelProperty);
 
+            IgnoredProperties = new HashSet<string>();
             ViewModelProperty = viewModelProperty;
             ModelProperty = modelProperty;
             Mode = mode;
@@ -53,20 +59,42 @@ namespace Catel.MVVM
             ValueProperties[0] = valueProperty;
 
             if (propertiesLength > 1)
+            {
                 additionalPropertiesToWatch.CopyTo(ValueProperties, 1);
+            }
 
             var argsLength = 1 + (additionalConstructorArgs == null ? 0 : additionalConstructorArgs.Length);
             var args = new object[argsLength];
             args[0] = ValueProperties;
 
             if (argsLength > 1)
+            {
                 additionalConstructorArgs.CopyTo(args, 1);
+            }
 
-            Converter = (IViewModelToModelConverter)this.GetTypeFactory().CreateInstanceWithParameters(ConverterType, args);
+            var typeFactory = this.GetTypeFactory();
+            var converter = (IViewModelToModelConverter)typeFactory.CreateInstanceWithParameters(ConverterType, args);
+            if (converter == null)
+            {
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Failed to create converter '{ConverterType}'");
+            }
+
+            Converter = converter;
         }
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets the ignored properties.
+        /// </summary>
+        /// <value>
+        /// The ignored properties.
+        /// </value>
+        public HashSet<string> IgnoredProperties
+        {
+            get; private set;
+        }
+
         /// <summary>
         /// Gets the property name of the mapping of the view model.
         /// </summary>

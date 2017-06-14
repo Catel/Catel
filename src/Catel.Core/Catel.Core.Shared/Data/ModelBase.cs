@@ -152,7 +152,6 @@ namespace Catel.Data
         {
             PropertyDataManager = PropertyDataManager.Default;
 
-            DefaultValidateUsingDataAnnotationsValue = true;
             DefaultDisableEventSubscriptionsOfChildValuesValue = false;
             DefaultSerializer = IoCConfiguration.DefaultDependencyResolver.Resolve<ISerializer>();
         }
@@ -163,6 +162,8 @@ namespace Catel.Data
         /// </summary>
         protected ModelBase()
         {
+            // Note: this initializes the model without serialization context
+
             OnInitializing();
 
             Initialize();
@@ -179,7 +180,7 @@ namespace Catel.Data
         /// Must have a public constructor in order to be serializable.
         /// </remarks>
         // ReSharper disable PublicConstructorInAbstractClass
-        public ModelBase()
+        protected ModelBase()
             // ReSharper restore PublicConstructorInAbstractClass
             : this(null, EmptyStreamingContext)
         {
@@ -270,7 +271,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets or sets a value indicating whether this model should behave as a lean and mean model.
         /// <para />
-        /// A lean and mean model will not handle any validation code, nor will it raise any change notification events.
+        /// A lean and mean model will not raise any change notification events.
         /// </summary>
         /// <value><c>true</c> if this is a lean and mean model; otherwise, <c>false</c>.</value>
 #if NET
@@ -382,15 +383,6 @@ namespace Catel.Data
         [Browsable(false)]
 #endif
         protected bool HandlePropertyAndCollectionChanges { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this object should automatically validate itself when a property value
-        /// has changed.
-        /// </summary>
-#if NET
-        [Browsable(false)]
-#endif
-        protected bool AutomaticallyValidateOnPropertyChanged { get; set; }
 
         /// <summary>
         /// Gets the parent.
@@ -522,40 +514,10 @@ namespace Catel.Data
         {
             Serializer = DefaultSerializer;
             SerializationConfiguration = DefaultSerializationConfiguration;
-            SuspendValidation = DefaultSuspendValidationValue;
-            ValidateUsingDataAnnotations = DefaultValidateUsingDataAnnotationsValue;
             DisableEventSubscriptionsOfChildValues = DefaultDisableEventSubscriptionsOfChildValuesValue;
             DeserializationSucceeded = false;
             HandlePropertyAndCollectionChanges = true;
             AlwaysInvokeNotifyChanged = false;
-            AutomaticallyValidateOnPropertyChanged = true;
-
-            var type = GetType();
-
-#if !NETFX_CORE && !PCL
-            lock (_propertyValuesIgnoredOrFailedForValidation)
-            {
-                if (!_propertyValuesIgnoredOrFailedForValidation.ContainsKey(type))
-                {
-                    _propertyValuesIgnoredOrFailedForValidation.Add(type, new HashSet<string>());
-
-                    // Ignore modelbase properties
-                    _propertyValuesIgnoredOrFailedForValidation[type].Add("EqualityComparer");
-                    _propertyValuesIgnoredOrFailedForValidation[type].Add("LeanAndMeanModel");
-                    _propertyValuesIgnoredOrFailedForValidation[type].Add("DisableEventSubscriptionsOfChildValues");
-                    _propertyValuesIgnoredOrFailedForValidation[type].Add("IsInitializing");
-                    _propertyValuesIgnoredOrFailedForValidation[type].Add("IsInitialized");
-                    _propertyValuesIgnoredOrFailedForValidation[type].Add("ContainsNonSerializableMembers");
-                    _propertyValuesIgnoredOrFailedForValidation[type].Add("AlwaysInvokeNotifyChanged");
-                    _propertyValuesIgnoredOrFailedForValidation[type].Add("HandlePropertyAndCollectionChanges");
-                    _propertyValuesIgnoredOrFailedForValidation[type].Add("AutomaticallyValidateOnPropertyChanged");
-                    _propertyValuesIgnoredOrFailedForValidation[type].Add("DeserializationSucceeded");
-                    _propertyValuesIgnoredOrFailedForValidation[type].Add("IsValidating");
-                    _propertyValuesIgnoredOrFailedForValidation[type].Add("SuspendValidation");
-                    _propertyValuesIgnoredOrFailedForValidation[type].Add("HideValidationResults");
-                }
-            }
-#endif
 
             InitializeProperties();
 
@@ -792,7 +754,7 @@ namespace Catel.Data
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnPropertyObjectCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            SetDirtyAndAutomaticallyValidate(string.Empty, true);
+            SetDirty(string.Empty);
         }
 
         /// <summary>
@@ -808,7 +770,7 @@ namespace Catel.Data
                 return;
             }
 
-            SetDirtyAndAutomaticallyValidate(string.Empty, true);
+            SetDirty(string.Empty);
         }
 
         /// <summary>
@@ -913,9 +875,7 @@ namespace Catel.Data
         /// Invokes the property changed for all registered properties.
         /// </summary>
         /// <remarks>
-        /// Using this method does not set the <see cref="IsDirty"/> property to <c>true</c>, nor will
-        /// it cause the object to validate itself automatically, even when the <see cref="AutomaticallyValidateOnPropertyChanged"/>
-        /// is set to <c>true</c>.
+        /// Using this method does not set the <see cref="IsDirty"/> property to <c>true</c>.
         /// </remarks>
         internal void RaisePropertyChangedForAllRegisteredProperties()
         {
@@ -951,10 +911,10 @@ namespace Catel.Data
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        /// <param name="setDirtyAndAllowAutomaticValidation">if set to <c>true</c>, the <see cref="IsDirty"/> property is set and automatic validation is allowed.</param>
+        /// <param name="updateIsDirty">if set to <c>true</c>, the <see cref="IsDirty"/> property is set and automatic validation is allowed.</param>
         /// <param name="isRefreshCallOnly">if set to <c>true</c>, the call is only to refresh updates (for example, for the IDataErrorInfo 
         /// implementation). If this value is <c>false</c>, the custom change handlers will not be called.</param>
-        private void RaisePropertyChanged(object sender, PropertyChangedEventArgs e, bool setDirtyAndAllowAutomaticValidation, bool isRefreshCallOnly)
+        protected void RaisePropertyChanged(object sender, PropertyChangedEventArgs e, bool updateIsDirty, bool isRefreshCallOnly)
         {
             if (string.IsNullOrEmpty(e.PropertyName))
             {
@@ -1050,7 +1010,10 @@ namespace Catel.Data
                 }
             }
 
-            SetDirtyAndAutomaticallyValidate(e.PropertyName, setDirtyAndAllowAutomaticValidation);
+            if (updateIsDirty)
+            {
+                SetDirty(e.PropertyName);
+            }
         }
 
         /// <summary>
@@ -1059,34 +1022,23 @@ namespace Catel.Data
         /// <returns><c>true</c> if <c>IsDirty</c> should be set to <c>true</c> when the specified property has changed, <c>false</c> otherwise.</returns>
         protected virtual bool ShouldPropertyChangeUpdateIsDirty(string propertyName)
         {
+            if (propertyName.Equals(nameof(IsDirty)))
+            {
+                return false;
+            }
+
             return true;
         }
 
         /// <summary>
-        /// Sets the <see cref="IsDirty"/> property and automatically validate if required.
+        /// Sets the <see cref="IsDirty"/> property.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
-        /// <param name="setDirtyAndAllowAutomaticValidation">If set to <c>true</c>, the <see cref="IsDirty"/> property is set and automatic validation is allowed.</param>
-        protected virtual void SetDirtyAndAutomaticallyValidate(string propertyName, bool setDirtyAndAllowAutomaticValidation)
+        protected virtual void SetDirty(string propertyName)
         {
-            // Are we not validating or is this a warning or error message?
-            if (setDirtyAndAllowAutomaticValidation && !IsValidating &&
-                (string.CompareOrdinal(propertyName, WarningMessageProperty) != 0) &&
-                (string.CompareOrdinal(propertyName, HasWarningsMessageProperty) != 0) &&
-                (string.CompareOrdinal(propertyName, ErrorMessageProperty) != 0) &&
-                (string.CompareOrdinal(propertyName, HasErrorsMessageProperty) != 0))
+            if (ShouldPropertyChangeUpdateIsDirty(propertyName))
             {
-                if (ShouldPropertyChangeUpdateIsDirty(propertyName))
-                {
-                    IsDirty = true;
-                }
-
-                IsValidated = false;
-            }
-
-            if (AutomaticallyValidateOnPropertyChanged && setDirtyAndAllowAutomaticValidation)
-            {
-                Validate();
+                IsDirty = true;
             }
         }
         #endregion

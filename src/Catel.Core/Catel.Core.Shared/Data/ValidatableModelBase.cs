@@ -1,27 +1,31 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ModelBase.validation.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
+// <copyright file="ValidatableModelBase.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.Data
 {
-    using Runtime.Serialization;
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
     using System.Xml.Serialization;
-    using IoC;
 
+    using IoC;
     using Logging;
+    using Reflection;
 
 #if NET
-    using Reflection;
+    using System.Runtime.Serialization;
 #endif
 
-    public partial class ModelBase
+    /// <summary>
+    /// ModelBase implementation that supports validation.
+    /// </summary>
+    public abstract class ValidatableModelBase : ModelBase, IValidatableModel
     {
         #region Constants
         /// <summary>
@@ -32,7 +36,7 @@ namespace Catel.Data
         /// <summary>
         /// The name of the <see cref="INotifyDataWarningInfo.HasWarnings"/> property.
         /// </summary>
-        private const string HasWarningsMessageProperty = "INotifyDataWarningInfo.HasWarnings";
+        private const string HasWarningsMessageProperty = "HasWarnings";
 
         /// <summary>
         /// The name of the <see cref="IDataErrorInfo.Error"/> property.
@@ -42,10 +46,12 @@ namespace Catel.Data
         /// <summary>
         /// The name of the <see cref="INotifyDataErrorInfo.HasErrors"/> property.
         /// </summary>
-        private const string HasErrorsMessageProperty = "INotifyDataErrorInfo.HasErrors";
+        private const string HasErrorsMessageProperty = "HasErrors";
         #endregion
 
         #region Fields
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Backing field for the <see cref="SuspendValidation"/> property. Because it has custom logic, it needs a backing field.
         /// </summary>
@@ -63,7 +69,7 @@ namespace Catel.Data
         private bool _hasRetrievedValidatorOnce;
 
         /// <summary>
-        /// The backing field for the <see cref="IModelValidation.Validator"/> property.
+        /// The backing field for the <see cref="IValidatable.Validator"/> property.
         /// </summary>
 #if NET
         [field: NonSerialized]
@@ -102,6 +108,11 @@ namespace Catel.Data
         [field: NonSerialized]
 #endif
         private static readonly Dictionary<Type, HashSet<string>> _propertyValuesIgnoredOrFailedForValidation = new Dictionary<Type, HashSet<string>>();
+
+#if NET
+        [field: NonSerialized]
+#endif
+        private readonly HashSet<string> _propertiesCurrentlyBeingValidated = new HashSet<string>();
 
 #if !NETFX_CORE && !PCL
 
@@ -145,6 +156,37 @@ namespace Catel.Data
         private event EventHandler<ValidationEventArgs> _validated;
         #endregion
 
+        #region Constructors
+        /// <summary>
+        /// Initializes the <see cref="ValidatableModelBase"/> class.
+        /// </summary>
+        static ValidatableModelBase()
+        {
+            DefaultValidateUsingDataAnnotationsValue = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidatableModelBase"/> class.
+        /// </summary>
+        protected ValidatableModelBase()
+        {
+            InitializeModelValidation();
+        }
+
+#if NET
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidatableModelBase"/> class.
+        /// </summary>
+        /// <param name="info">The information.</param>
+        /// <param name="context">The context.</param>
+        protected ValidatableModelBase(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            InitializeModelValidation();
+        }
+#endif
+        #endregion
+
         #region Properties
         /// <summary>
         /// Gets a value indicating whether the object is currently validating. During validation, no validation will be invoked.
@@ -177,7 +219,7 @@ namespace Catel.Data
         [Browsable(false)]
 #endif
         [XmlIgnore]
-        IValidator IModelValidation.Validator
+        IValidator IValidatable.Validator
         {
             get { return GetValidator(); }
             set { _validator = value; }
@@ -191,81 +233,9 @@ namespace Catel.Data
         [Browsable(false)]
 #endif
         [XmlIgnore]
-        IValidationContext IModelValidation.ValidationContext
+        IValidationContext IValidatable.ValidationContext
         {
             get { return _validationContext; }
-        }
-
-        /// <summary>
-        /// Gets the number of field warnings.
-        /// </summary>
-        /// <value>The field warning count.</value>
-#if !NETFX_CORE && !PCL
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        int IModelValidation.FieldWarningCount
-        {
-            get
-            {
-                EnsureValidationIsUpToDate();
-
-                return _validationContext.GetFieldWarningCount();
-            }
-        }
-
-        /// <summary>
-        /// Gets the number of business rule warnings.
-        /// </summary>
-        /// <value>The business rule warning count.</value>
-#if !NETFX_CORE && !PCL
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        int IModelValidation.BusinessRuleWarningCount
-        {
-            get
-            {
-                EnsureValidationIsUpToDate();
-
-                return _validationContext.GetBusinessRuleWarningCount();
-            }
-        }
-
-        /// <summary>
-        /// Gets the number of field errors.
-        /// </summary>
-        /// <value>The field error count.</value>
-#if !NETFX_CORE && !PCL
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        int IModelValidation.FieldErrorCount
-        {
-            get
-            {
-                EnsureValidationIsUpToDate();
-
-                return _validationContext.GetFieldErrorCount();
-            }
-        }
-
-        /// <summary>
-        /// Gets the number of business rule errors.
-        /// </summary>
-        /// <value>The business rule error count.</value>
-#if !NETFX_CORE && !PCL
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        int IModelValidation.BusinessRuleErrorCount
-        {
-            get
-            {
-                EnsureValidationIsUpToDate();
-
-                return _validationContext.GetBusinessRuleErrorCount();
-            }
         }
 
         /// <summary>
@@ -320,6 +290,15 @@ namespace Catel.Data
         public static bool SuspendValidationForAllModels { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this object should automatically validate itself when a property value
+        /// has changed.
+        /// </summary>
+#if NET
+        [Browsable(false)]
+#endif
+        protected bool AutomaticallyValidateOnPropertyChanged { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the validation results should be hidden. This means that 
         /// the <see cref="ValidationContext"/> should be filled, but the <see cref="IDataErrorInfo"/> and 
         /// <see cref="INotifyDataErrorInfo"/> should not expose any of the validation ressults.
@@ -344,14 +323,14 @@ namespace Catel.Data
         /// hides its validation results, it is still possible to retrieve the validation results using the
         /// <see cref="ValidationContext"/>.
         /// </summary>
-        bool IModelValidation.IsHidingValidationResults { get { return HideValidationResults; } }
+        bool IValidatable.IsHidingValidationResults { get { return HideValidationResults; } }
         #endregion
 
         #region Events
         /// <summary>
         /// Occurs when the object is validating.
         /// </summary>
-        event EventHandler<ValidationEventArgs> IModelValidation.Validating
+        event EventHandler<ValidationEventArgs> IValidatable.Validating
         {
             add { _validating += value; }
             remove { _validating -= value; }
@@ -392,7 +371,7 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when the object is validated.
         /// </summary>
-        event EventHandler<ValidationEventArgs> IModelValidation.Validated
+        event EventHandler<ValidationEventArgs> IValidatable.Validated
         {
             add { _validated += value; }
             remove { _validated -= value; }
@@ -400,6 +379,53 @@ namespace Catel.Data
         #endregion
 
         #region Methods
+        private void InitializeModelValidation()
+        {
+            var type = GetType();
+
+            AutomaticallyValidateOnPropertyChanged = true;
+            SuspendValidation = DefaultSuspendValidationValue;
+            ValidateUsingDataAnnotations = DefaultValidateUsingDataAnnotationsValue;
+
+#if !NETFX_CORE && !PCL
+            lock (_propertyValuesIgnoredOrFailedForValidation)
+            {
+                if (!_propertyValuesIgnoredOrFailedForValidation.ContainsKey(type))
+                {
+                    var hashSet = new HashSet<string>();
+
+                    // Ignore modelbase properties
+                    hashSet.Add(nameof(EqualityComparer));
+                    hashSet.Add(nameof(LeanAndMeanModel));
+                    hashSet.Add(nameof(DisableEventSubscriptionsOfChildValues));
+                    hashSet.Add(nameof(IsInitializing));
+                    hashSet.Add(nameof(IsInitialized));
+                    hashSet.Add(nameof(AlwaysInvokeNotifyChanged));
+                    hashSet.Add(nameof(HandlePropertyAndCollectionChanges));
+                    hashSet.Add(nameof(AutomaticallyValidateOnPropertyChanged));
+                    hashSet.Add(nameof(DeserializationSucceeded));
+                    hashSet.Add(nameof(IsValidating));
+                    hashSet.Add(nameof(SuspendValidation));
+                    hashSet.Add(nameof(HideValidationResults));
+                    hashSet.Add(nameof(HasWarnings));
+                    hashSet.Add(nameof(HasErrors));
+
+                    var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(type);
+
+                    foreach (var property in catelTypeInfo.GetCatelProperties())
+                    {
+                        if (property.Value.IsModelBaseProperty)
+                        {
+                            hashSet.Add(property.Key);
+                        }
+                    }
+
+                    _propertyValuesIgnoredOrFailedForValidation.Add(type, hashSet);
+                }
+            }
+#endif
+        }
+
         /// <summary>
         /// Suspends the validation until the disposable token has been disposed.
         /// </summary>
@@ -407,51 +433,51 @@ namespace Catel.Data
         public IDisposable SuspendValidations(bool validateOnResume = true)
         {
             var token = new DisposableToken<ModelBase>(this, x =>
-            {
-                lock (_lock)
                 {
-                    if (_validationSuspensionContext == null)
+                    lock (_lock)
                     {
-                        _validationSuspensionContext = new SuspensionContext();
-                    }
-
-                    _validationSuspensionContext.Increment();
-                }
-            },
-            x =>
-            {
-                SuspensionContext suspensionContext;
-
-                lock (_lock)
-                {
-                    suspensionContext = _validationSuspensionContext;
-                    if (suspensionContext != null)
-                    {
-                        suspensionContext.Decrement();
-
-                        if (suspensionContext.Counter == 0)
+                        if (_validationSuspensionContext == null)
                         {
-                            _validationSuspensionContext = null;
+                            _validationSuspensionContext = new SuspensionContext();
+                        }
+
+                        _validationSuspensionContext.Increment();
+                    }
+                },
+                x =>
+                {
+                    SuspensionContext suspensionContext;
+
+                    lock (_lock)
+                    {
+                        suspensionContext = _validationSuspensionContext;
+                        if (suspensionContext != null)
+                        {
+                            suspensionContext.Decrement();
+
+                            if (suspensionContext.Counter == 0)
+                            {
+                                _validationSuspensionContext = null;
+                            }
                         }
                     }
-                }
 
-                if (validateOnResume)
-                {
-                    if (suspensionContext != null && suspensionContext.Counter == 0)
+                    if (validateOnResume)
                     {
-                        //var properties = suspensionContext.Properties;
+                        if (suspensionContext != null && suspensionContext.Counter == 0)
+                        {
+                            //var properties = suspensionContext.Properties;
 
-                        // TODO: In v5, replace with context and smart validation
-                        Validate(true, true);
+                            // TODO: In v5, replace with context and smart validation
+                            Validate(true, true);
 
-                        //foreach (var property in properties)
-                        //{
-                        //    Validate(property);
-                        //}
+                            //foreach (var property in properties)
+                            //{
+                            //    Validate(property);
+                            //}
+                        }
                     }
-                }
-            });
+                });
 
             return token;
         }
@@ -497,6 +523,59 @@ namespace Catel.Data
         }
 
         /// <summary>
+        /// Raises the <see cref="E:PropertyChanged" /> event.
+        /// </summary>
+        /// <param name="e">The <see cref="AdvancedPropertyChangedEventArgs"/> instance containing the event data.</param>
+        protected override void OnPropertyChanged(AdvancedPropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(e);
+
+            IsValidated = false;
+
+            if (AutomaticallyValidateOnPropertyChanged)
+            {
+                var propertyName = e.PropertyName;
+                if (!string.IsNullOrWhiteSpace(propertyName))
+                {
+                    lock (_propertiesCurrentlyBeingValidated)
+                    {
+                        if (_propertiesCurrentlyBeingValidated.Contains(propertyName))
+                        {
+                            return;
+                        }
+                    }
+
+                    ValidatePropertyUsingAnnotations(propertyName);
+                }
+
+                Validate();
+            }
+        }
+
+        /// <summary>
+        /// Shoulds the property change update is dirty.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns></returns>
+        protected override bool ShouldPropertyChangeUpdateIsDirty(string propertyName)
+        {
+            if (!base.ShouldPropertyChangeUpdateIsDirty(propertyName))
+            {
+                return false;
+            }
+
+            if ((string.CompareOrdinal(propertyName, WarningMessageProperty) == 0) ||
+                (string.CompareOrdinal(propertyName, HasWarningsMessageProperty) == 0) ||
+                (string.CompareOrdinal(propertyName, ErrorMessageProperty) == 0) ||
+                (string.CompareOrdinal(propertyName, HasErrorsMessageProperty) == 0))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Catches up with suspended annotations validation.
         /// <para />
         /// This method will take care of unvalidated properties that have been changed during
@@ -510,9 +589,7 @@ namespace Catel.Data
 
                 foreach (var property in _propertiesNotCheckedDuringDisabledValidation)
                 {
-                    var propertyData = GetPropertyData(property);
-                    var propertyValue = GetValueFast<object>(propertyData.Name);
-                    ValidatePropertyUsingAnnotations(property, propertyValue, propertyData);
+                    ValidatePropertyUsingAnnotations(property);
                 }
 
                 _propertiesNotCheckedDuringDisabledValidation.Clear();
@@ -523,10 +600,8 @@ namespace Catel.Data
         /// Validates the property using data annotations.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
-        /// <param name="value">The value to validate.</param>
-        /// <param name="catelPropertyData">The catel property data. Can be <c>null</c> for non-Catel properties.</param>
         /// <returns><c>true</c> if no errors using data annotations are found; otherwise <c>false</c>.</returns>
-        private bool ValidatePropertyUsingAnnotations(string propertyName, object value, PropertyData catelPropertyData)
+        private bool ValidatePropertyUsingAnnotations(string propertyName)
         {
             if (!ValidateUsingDataAnnotations)
             {
@@ -546,35 +621,38 @@ namespace Catel.Data
             {
                 if (!_propertyValuesIgnoredOrFailedForValidation[type].Contains(propertyName))
                 {
-                    if (catelPropertyData != null)
+                    object value = null;
+                    var handled = false;
+
+                    var propertyDataManager = PropertyDataManager;
+                    if (propertyDataManager.IsPropertyRegistered(type, propertyName))
                     {
-                        var propertyInfo = catelPropertyData.GetPropertyInfo(type);
-                        if (propertyInfo == null || !propertyInfo.HasPublicGetter)
+                        var catelPropertyData = PropertyDataManager.GetPropertyData(type, propertyName);
+                        if (catelPropertyData != null)
                         {
-                            _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
-                            return false;
+                            var propertyInfo = catelPropertyData.GetPropertyInfo(type);
+                            if (propertyInfo == null || !propertyInfo.HasPublicGetter)
+                            {
+                                _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
+                                return false;
+                            }
+
+                            value = GetValue(catelPropertyData);
+                            handled = true;
                         }
                     }
-                    else
-                    {
-#if NET
-                        if (type.GetPropertyEx(propertyName) == null)
-                        {
-                            Log.Debug("Property '{0}' cannot be found via reflection, ignoring this property for type '{1}'", propertyName, type.FullName);
 
-                            _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
-                            return false;
-                        }
-#else
-                        // Checking via reflection is faster than catching the exception
-                        if (!Reflection.PropertyHelper.IsPublicProperty(this, propertyName))
+                    if (!handled)
+                    {
+                        if (!PropertyHelper.IsPublicProperty(this, propertyName))
                         {
                             Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in the current platform", propertyName);
 
                             _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
                             return false;
                         }
-#endif
+
+                        value = PropertyHelper.GetPropertyValue(this, propertyName);
                     }
 
                     if (!_dataAnnotationsValidationContext.ContainsKey(propertyName))
@@ -697,22 +775,7 @@ namespace Catel.Data
         /// <remarks>
         /// To check whether this object contains any errors, use the <see cref="INotifyDataErrorInfo.HasErrors"/> property.
         /// </remarks>
-        void IModelValidation.Validate(bool force)
-        {
-            Validate(force);
-        }
-
-        /// <summary>
-        /// Validates the current object for field and business rule errors.
-        /// </summary>
-        /// <param name="force">If set to <c>true</c>, a validation is forced. When the validation is not forced, it means 
-        /// that when the object is already validated, and no properties have been changed, no validation actually occurs 
-        /// since there is no reason for any values to have changed.
-        /// </param>
-        /// <remarks>
-        /// To check whether this object contains any errors, use the <see cref="INotifyDataErrorInfo.HasErrors"/> property.
-        /// </remarks>
-        protected void Validate(bool force = false)
+        public void Validate(bool force = false)
         {
             Validate(force, ValidateUsingDataAnnotations);
         }
@@ -725,8 +788,7 @@ namespace Catel.Data
         /// <remarks>
         /// To check whether this object contains any errors, use the <see cref="INotifyDataErrorInfo.HasErrors"/> property.
         /// </remarks>
-        /// TODO: Try to revert to internal but is required by XAMARIN_FORMS
-        public void Validate(bool force, bool validateDataAnnotations)
+        internal void Validate(bool force, bool validateDataAnnotations)
         {
             lock (_lock)
             {
@@ -782,6 +844,11 @@ namespace Catel.Data
                 var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(type);
                 foreach (var propertyData in catelTypeInfo.GetCatelProperties())
                 {
+                    if (propertyData.Value.IsModelBaseProperty)
+                    {
+                        continue;
+                    }
+
                     var propertyInfo = propertyData.Value.GetPropertyInfo(type);
                     if (propertyInfo == null || !propertyInfo.HasPublicGetter)
                     {
@@ -790,8 +857,7 @@ namespace Catel.Data
                         continue;
                     }
 
-                    var propertyValue = GetValue(propertyData.Value);
-                    ValidatePropertyUsingAnnotations(propertyData.Key, propertyValue, propertyData.Value);
+                    ValidatePropertyUsingAnnotations(propertyData.Key);
                 }
 
 #if !NETFX_CORE && !PCL
@@ -821,8 +887,7 @@ namespace Catel.Data
 
                     try
                     {
-                        var propertyValue = propertyInfo.Value.PropertyInfo.GetValue(this, null);
-                        ValidatePropertyUsingAnnotations(propertyInfo.Key, propertyValue, null);
+                        ValidatePropertyUsingAnnotations(propertyInfo.Key);
                     }
                     catch (Exception ex)
                     {
@@ -927,8 +992,8 @@ namespace Catel.Data
             }
 
             #region Notify changes
-            bool hasNotifiedBusinessWarningsChanged = false;
-            bool hasNotifiedBusinessErrorsChanged = false;
+            var hasNotifiedBusinessWarningsChanged = false;
+            var hasNotifiedBusinessErrorsChanged = false;
             foreach (var change in changes)
             {
                 var changeAsFieldValidationResult = change.ValidationResult as IFieldValidationResult;
@@ -978,12 +1043,14 @@ namespace Catel.Data
 
             if (_validationContext.HasWarnings != hasWarnings)
             {
-                RaisePropertyChanged(HasWarningsMessageProperty);
+                RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(HasWarnings)), false, false);
+                RaisePropertyChanged(this, new PropertyChangedEventArgs(HasWarningsMessageProperty), false, false);
             }
 
             if (_validationContext.HasErrors != hasErrors)
             {
-                RaisePropertyChanged(HasErrorsMessageProperty);
+                RaisePropertyChanged(this, new PropertyChangedEventArgs(nameof(HasErrors)), false, false);
+                RaisePropertyChanged(this, new PropertyChangedEventArgs(HasErrorsMessageProperty), false, false);
             }
             #endregion
 
@@ -999,22 +1066,37 @@ namespace Catel.Data
         /// <param name="notifyHasErrors">if set to <c>true</c>, the <see cref="INotifyDataErrorInfo.HasErrors"/> property will be notified as well.</param>
         private void NotifyErrorsChanged(string propertyName, bool notifyHasErrors)
         {
-            if (string.IsNullOrEmpty(propertyName))
+            try
             {
-                RaisePropertyChanged(ErrorMessageProperty);
+                lock (_propertiesCurrentlyBeingValidated)
+                {
+                    _propertiesCurrentlyBeingValidated.Add(propertyName);
+                }
 
-                _errorsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(string.Empty));
+                if (string.IsNullOrEmpty(propertyName))
+                {
+                    RaisePropertyChanged(ErrorMessageProperty);
+
+                    _errorsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(string.Empty));
+                }
+                else
+                {
+                    RaisePropertyChanged(this, new PropertyChangedEventArgs(propertyName), false, true);
+
+                    _errorsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(propertyName));
+                }
+
+                if (notifyHasErrors)
+                {
+                    RaisePropertyChanged(HasErrorsMessageProperty);
+                }
             }
-            else
+            finally
             {
-                RaisePropertyChanged(this, new PropertyChangedEventArgs(propertyName), false, true);
-
-                _errorsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(propertyName));
-            }
-
-            if (notifyHasErrors)
-            {
-                RaisePropertyChanged(HasErrorsMessageProperty);
+                lock (_propertiesCurrentlyBeingValidated)
+                {
+                    _propertiesCurrentlyBeingValidated.Remove(propertyName);
+                }
             }
         }
 
@@ -1027,83 +1109,38 @@ namespace Catel.Data
         /// <param name="notifyHasWarnings">if set to <c>true</c>, the <see cref="INotifyDataWarningInfo.HasWarnings"/> property will be notified as well.</param>
         private void NotifyWarningsChanged(string propertyName, bool notifyHasWarnings)
         {
-            if (string.IsNullOrEmpty(propertyName))
+            try
             {
-                RaisePropertyChanged(WarningMessageProperty);
+                lock (_propertiesCurrentlyBeingValidated)
+                {
+                    _propertiesCurrentlyBeingValidated.Add(propertyName);
+                }
 
-                _warningsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(string.Empty));
+                if (string.IsNullOrEmpty(propertyName))
+                {
+                    RaisePropertyChanged(WarningMessageProperty);
+
+                    _warningsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(string.Empty));
+                }
+                else
+                {
+                    RaisePropertyChanged(this, new PropertyChangedEventArgs(propertyName), false, true);
+
+                    _warningsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(propertyName));
+                }
+
+                if (notifyHasWarnings)
+                {
+                    RaisePropertyChanged(HasWarningsMessageProperty);
+                }
             }
-            else
+            finally
             {
-                RaisePropertyChanged(this, new PropertyChangedEventArgs(propertyName), false, true);
-
-                _warningsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(propertyName));
+                lock (_propertiesCurrentlyBeingValidated)
+                {
+                    _propertiesCurrentlyBeingValidated.Remove(propertyName);
+                }
             }
-
-            if (notifyHasWarnings)
-            {
-                RaisePropertyChanged(HasWarningsMessageProperty);
-            }
-        }
-
-        /// <summary>
-        /// Gets the current business warnings.
-        /// </summary>
-        /// <returns>The warnings or <see cref="string.Empty"/> if no warning is available.</returns>
-        protected virtual string GetBusinessRuleWarnings()
-        {
-            var warning = (from businessRuleWarning in _validationContext.GetBusinessRuleWarnings()
-                           select businessRuleWarning.Message).FirstOrDefault();
-
-            return warning ?? string.Empty;
-        }
-
-        /// <summary>
-        /// Gets the warnings for a specific column.
-        /// </summary>
-        /// <param name="columnName">Column name.</param>
-        /// <returns>The warnings or <see cref="string.Empty"/> if no warning is available.</returns>
-        protected virtual string GetFieldWarnings(string columnName)
-        {
-            if (string.IsNullOrEmpty(columnName))
-            {
-                return string.Empty;
-            }
-
-            var warning = (from fieldWarning in _validationContext.GetFieldWarnings(columnName)
-                           select fieldWarning.Message).FirstOrDefault();
-
-            return warning ?? string.Empty;
-        }
-
-        /// <summary>
-        /// Gets the current errors errors.
-        /// </summary>
-        /// <returns>The errors or <see cref="string.Empty"/> if no error is available.</returns>
-        protected virtual string GetBusinessRuleErrors()
-        {
-            var error = (from businessRuleError in _validationContext.GetBusinessRuleErrors()
-                         select businessRuleError.Message).FirstOrDefault();
-
-            return error ?? string.Empty;
-        }
-
-        /// <summary>
-        /// Gets the errors for a specific column.
-        /// </summary>
-        /// <param name="columnName">Column name.</param>
-        /// <returns>The errors or <see cref="string.Empty"/> if no error is available.</returns>
-        protected virtual string GetFieldErrors(string columnName)
-        {
-            if (string.IsNullOrEmpty(columnName))
-            {
-                return string.Empty;
-            }
-
-            var error = (from fieldError in _validationContext.GetFieldErrors(columnName)
-                         select fieldError.Message).FirstOrDefault();
-
-            return error ?? string.Empty;
         }
         #endregion
 
@@ -1122,7 +1159,7 @@ namespace Catel.Data
 
                 EnsureValidationIsUpToDate(AutomaticallyValidateOnPropertyChanged);
 
-                return GetBusinessRuleWarnings() ?? string.Empty;
+                return this.GetBusinessRuleWarnings() ?? string.Empty;
             }
         }
 
@@ -1147,7 +1184,7 @@ namespace Catel.Data
 
                 EnsureValidationIsUpToDate(AutomaticallyValidateOnPropertyChanged);
 
-                return GetFieldWarnings(columnName) ?? string.Empty;
+                return this.GetFieldWarnings(columnName) ?? string.Empty;
             }
         }
         #endregion
@@ -1167,7 +1204,7 @@ namespace Catel.Data
 
                 EnsureValidationIsUpToDate(AutomaticallyValidateOnPropertyChanged);
 
-                return GetBusinessRuleErrors() ?? string.Empty;
+                return this.GetBusinessRuleErrors() ?? string.Empty;
             }
         }
 
@@ -1192,7 +1229,7 @@ namespace Catel.Data
 
                 EnsureValidationIsUpToDate(AutomaticallyValidateOnPropertyChanged);
 
-                return GetFieldErrors(columnName) ?? string.Empty;
+                return this.GetFieldErrors(columnName) ?? string.Empty;
             }
         }
         #endregion

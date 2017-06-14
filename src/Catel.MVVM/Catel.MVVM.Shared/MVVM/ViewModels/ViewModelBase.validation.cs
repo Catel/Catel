@@ -9,9 +9,8 @@ namespace Catel.MVVM
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-    using Catel.Data;
-    using Catel.Reflection;
-    using Logging;
+    using Data;
+    using Reflection;
 
     public partial class ViewModelBase
     {
@@ -95,16 +94,13 @@ namespace Catel.MVVM
         /// Validates the specified notify changed properties only.
         /// </summary>
         /// <param name="force">If set to <c>true</c>, a validation is forced (even if the object knows it is already validated).</param>
-        /// <param name="notifyChangedPropertiesOnly">if set to <c>true</c> only the properties for which the warnings or errors have been changed
-        /// will be updated via <see cref="INotifyPropertyChanged.PropertyChanged"/>; otherwise all the properties that
-        /// had warnings or errors but not anymore and properties still containing warnings or errors will be updated.</param>
         /// <returns>
         /// <c>true</c> if validation succeeds; otherwise <c>false</c>.
         /// </returns>
         /// <remarks>
         /// This method is useful when the view model is initialized before the window, and therefore WPF does not update the errors and warnings.
         /// </remarks>
-        public bool ValidateViewModel(bool force = false, bool notifyChangedPropertiesOnly = true)
+        public bool ValidateViewModel(bool force = false)
         {
             if (IsClosed)
             {
@@ -116,7 +112,7 @@ namespace Catel.MVVM
                 return true;
             }
 
-            Validate(force, notifyChangedPropertiesOnly);
+            Validate(force);
 
             if (DeferValidationUntilFirstSaveCall)
             {
@@ -143,10 +139,10 @@ namespace Catel.MVVM
                         continue;
                     }
 
-                    var modelValueAsModelBaseBase = model.Value as IModelValidation;
-                    if (modelValueAsModelBaseBase != null)
+                    var validatable = model.Value as IValidatable;
+                    if (validatable != null)
                     {
-                        modelValueAsModelBaseBase.Validate();
+                        validatable.Validate();
                     }
                 }
             }
@@ -201,7 +197,7 @@ namespace Catel.MVVM
                     {
                         if (!string.IsNullOrEmpty(dataErrorInfo[modelProperty]))
                         {
-                        validationContext.AddFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, dataErrorInfo[modelProperty]));
+                            validationContext.AddFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, dataErrorInfo[modelProperty]));
 
                             hasSetFieldError = true;
                         }
@@ -213,7 +209,7 @@ namespace Catel.MVVM
                     {
                         if (!string.IsNullOrEmpty(dataWarningInfo[modelProperty]))
                         {
-                        validationContext.AddFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, dataWarningInfo[modelProperty]));
+                            validationContext.AddFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, dataWarningInfo[modelProperty]));
 
                             hasSetFieldWarning = true;
                         }
@@ -230,7 +226,7 @@ namespace Catel.MVVM
                             {
                                 if (!string.IsNullOrEmpty(error))
                                 {
-                                validationContext.AddFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, error));
+                                    validationContext.AddFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, error));
                                     break;
                                 }
                             }
@@ -242,7 +238,7 @@ namespace Catel.MVVM
                             {
                                 if (!string.IsNullOrEmpty(warning))
                                 {
-                                validationContext.AddFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, warning));
+                                    validationContext.AddFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, warning));
                                     break;
                                 }
                             }
@@ -303,13 +299,13 @@ namespace Catel.MVVM
         /// <param name="validationContext">The validation context.</param>
         protected override void OnValidated(IValidationContext validationContext)
         {
-            bool updatedValidationSummaries = false;
+            var updatedValidationSummaries = false;
 
             foreach (var validationSummaryInfo in _validationSummaries)
             {
                 var isSummaryUpdateRequired = false;
                 var lastUpdated = _validationSummariesUpdateStamps.ContainsKey(validationSummaryInfo.Key) ? _validationSummariesUpdateStamps[validationSummaryInfo.Key] : 0L;
-                
+
                 isSummaryUpdateRequired = this.IsValidationSummaryOutdated(lastUpdated, validationSummaryInfo.Value.IncludeChildViewModels);
                 if (!isSummaryUpdateRequired)
                 {

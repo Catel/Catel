@@ -50,7 +50,7 @@ namespace Catel.MVVM
     /// common interfaces used by WPF.
     /// </summary>
     /// <remarks>This view model base does not add any services.</remarks>
-    public abstract partial class ViewModelBase : ModelBase, IRelationalViewModel, IUniqueIdentifyable
+    public abstract partial class ViewModelBase : ValidatableModelBase, IRelationalViewModel, IUniqueIdentifyable
     {
         #region Fields
         /// <summary>
@@ -792,7 +792,7 @@ namespace Catel.MVVM
                 }
                 else
                 {
-                    var validationContext = ((IModelValidation)childViewModel).ValidationContext;
+                    var validationContext = ((IValidatableModel)childViewModel).ValidationContext;
                     if (validationContext != null)
                     {
                         if (validationContext.HasErrors || validationContext.HasWarnings)
@@ -816,7 +816,7 @@ namespace Catel.MVVM
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnChildViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if ((e.PropertyName == "INotifyDataErrorInfo.HasErrors") || (e.PropertyName == "INotifyDataWarningInfo.HasWarnings"))
+            if (e.PropertyName == nameof(HasErrors) || e.PropertyName == nameof(HasWarnings))
             {
                 Validate();
             }
@@ -939,6 +939,8 @@ namespace Catel.MVVM
                 return;
             }
 
+			base.OnPropertyChanged(e);
+
             lock (_modelLock)
             {
                 if (_modelObjects.ContainsKey(e.PropertyName))
@@ -961,8 +963,8 @@ namespace Catel.MVVM
                     // Since the model has been changed, copy all values from the model to the view model
                     foreach (KeyValuePair<string, ViewModelToModelMapping> viewModelToModelMap in _viewModelToModelMap)
                     {
-                        ViewModelToModelMapping mapping = viewModelToModelMap.Value;
-                        IViewModelToModelConverter converter = mapping.Converter;
+                        var mapping = viewModelToModelMap.Value;
+                        var converter = mapping.Converter;
                         if (string.CompareOrdinal(mapping.ModelProperty, e.PropertyName) == 0)
                         {
                             var values = new object[mapping.ValueProperties.Length];
@@ -989,7 +991,7 @@ namespace Catel.MVVM
 
                             values[0] = converter.Convert(values, this);
 
-                            SetValue(mapping.ViewModelProperty, values[0], true, ValidateModelsOnInitialization);
+                            SetValue(mapping.ViewModelProperty, values[0], true);
                         }
                     }
                 }
@@ -1028,15 +1030,28 @@ namespace Catel.MVVM
                                         Log.Error("Properties - values count mismatch, properties '{0}', values '{1}'",
                                             string.Join(", ", propertiesToSet), string.Join(", ", valuesToSet));
                                     }
-                                    for (int index = 0; index < propertiesToSet.Length && index < valuesToSet.Length; index++)
+
+                                    for (var index = 0; index < propertiesToSet.Length && index < valuesToSet.Length; index++)
                                     {
-                                        if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index], false))
+                                        try
                                         {
-                                            Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
+                                            mapping.IgnoredProperties.AddRange(propertiesToSet);
+
+                                            if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index], false))
+                                            {
+                                                Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
+                                            }
+                                            else
+                                            {
+                                                Log.Warning("Failed to set property '{0}' on model type '{1}'", propertiesToSet[index], model.GetType().Name);
+                                            }
                                         }
-                                        else
+                                        finally
                                         {
-                                            Log.Warning("Failed to set property '{0}' on model type '{1}'", propertiesToSet[index], model.GetType().Name);
+                                            foreach (var propertyToSet in propertiesToSet)
+                                            {
+                                                mapping.IgnoredProperties.Remove(propertyToSet);
+                                            }
                                         }
                                     }
                                 }
@@ -1078,14 +1093,22 @@ namespace Catel.MVVM
             foreach (var map in _viewModelToModelMap)
             {
                 var mapping = map.Value;
-                IViewModelToModelConverter converter = mapping.Converter;
+
+                var converter = mapping.Converter;
                 if (converter.ShouldConvert(e.PropertyName))
                 {
                     // Check if this is the right model (duplicate mappings might exist)
-                    if (_modelObjects[mapping.ModelProperty] == sender)
+                    if (ReferenceEquals(_modelObjects[mapping.ModelProperty], sender))
                     {
+                        var propertyName = e.PropertyName ?? string.Empty;
+                        if (mapping.IgnoredProperties.Contains(propertyName))
+                        {
+                            continue;
+                        }
+
                         // Only OneWay, TwoWay or Explicit (yes, only VM => M is explicit) should be mapped
-                        if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWay) ||
+                        if ((mapping.Mode == ViewModelToModelMode.TwoWay) || 
+                            (mapping.Mode == ViewModelToModelMode.OneWay) ||
                             (mapping.Mode == ViewModelToModelMode.Explicit))
                         {
                             var values = new object[mapping.ValueProperties.Length];
@@ -1176,6 +1199,7 @@ namespace Catel.MVVM
                 _modelErrorInfo[modelProperty].InitializeDefaultErrors(validationResults);
             }
 #endif
+
             InitializeModel(modelProperty, model);
         }
 
@@ -1470,7 +1494,7 @@ namespace Catel.MVVM
             }
 
             // Force validation before saving
-            if (!ValidateViewModel(true, false))
+            if (!ValidateViewModel(true))
             {
                 IsSaving = false;
 

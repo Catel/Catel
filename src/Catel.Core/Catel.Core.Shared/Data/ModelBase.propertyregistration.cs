@@ -348,14 +348,6 @@ namespace Catel.Data
                         var propertyData = new PropertyData(name, type, defaultValue, setParent, propertyChangedEventHandler,
                             isSerializable, includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty);
                         PropertyDataManager.RegisterProperty(objectType, name, propertyData);
-
-#if !NETFX_CORE && !PCL
-                        // Skip validation for modelbase properties
-                        if (propertyData.IsModelBaseProperty)
-                        {
-                            _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyData.Name);
-                        }
-#endif
                     }
                 }
             }

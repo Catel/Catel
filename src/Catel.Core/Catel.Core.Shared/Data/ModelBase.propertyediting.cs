@@ -9,8 +9,9 @@ namespace Catel.Data
 {
     using System;
     using System.ComponentModel;
-    using Catel.Logging;
-    using Catel.Reflection;
+
+    using Logging;
+    using Reflection;
 
     public partial class ModelBase
     {
@@ -22,7 +23,7 @@ namespace Catel.Data
         /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
         protected internal void SetValue(string name, object value)
         {
-            SetValue(name, value, true, true);
+            SetValue(name, value, true);
         }
 
         /// <summary>
@@ -31,11 +32,10 @@ namespace Catel.Data
         /// <param name="name">Name of the property.</param>
         /// <param name="value">Value of the property.</param>
         /// <param name="notifyOnChange">If <c>true</c>, the <see cref="INotifyPropertyChanged.PropertyChanged"/> event will be invoked.</param>
-        /// <param name="validateAttributes">If set to <c>true</c>, the validation attributes on the property will be validated.</param>
         /// <exception cref="PropertyNotNullableException">The property is not nullable, but <paramref name="value"/> is <c>null</c>.</exception>
         /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
         //// TODO: turn in back to internal if is possible.
-        public void SetValue(string name, object value, bool notifyOnChange, bool validateAttributes)
+        public void SetValue(string name, object value, bool notifyOnChange)
         {
             var property = GetPropertyData(name);
             if ((value == null) && !property.Type.IsNullableType())
@@ -44,7 +44,7 @@ namespace Catel.Data
                     "Property '{0}' on type '{1}' is not nullable, cannot set value to null", name, GetType().FullName);
             }
 
-            SetValue(property, value, notifyOnChange, validateAttributes);
+            SetValue(property, value, notifyOnChange);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Catel.Data
         /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
         protected internal void SetValue(PropertyData property, object value)
         {
-            SetValue(property, value, true, true);
+            SetValue(property, value, true);
         }
 
         /// <summary>
@@ -65,10 +65,9 @@ namespace Catel.Data
         /// <param name="property">The property to set.</param>
         /// <param name="value">Value of the property.</param>
         /// <param name="notifyOnChange">If <c>true</c>, the <see cref="INotifyPropertyChanged.PropertyChanged"/> event will be invoked.</param>
-        /// <param name="validateAttributes">If set to <c>true</c>, the validation attributes on the property will be validated.</param>
         /// <exception cref="PropertyNotNullableException">The property is not nullable, but <paramref name="value"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
-        internal void SetValue(PropertyData property, object value, bool notifyOnChange, bool validateAttributes)
+        internal void SetValue(PropertyData property, object value, bool notifyOnChange)
         {
             Argument.IsNotNull("property", property);
 
@@ -110,12 +109,6 @@ namespace Catel.Data
                 oldValue = GetValueFast<object>(property.Name);
                 var areOldAndNewValuesEqual = ObjectHelper.AreEqualReferences(oldValue, value);
 
-                // Validate before assigning, dynamic properties will cause exception
-                if (validateAttributes && !LeanAndMeanModel)
-                {
-                    ValidatePropertyUsingAnnotations(property.Name, value, property);
-                }
-
                 if (!areOldAndNewValuesEqual)
                 {
                     SetValueFast(property.Name, value);
@@ -153,8 +146,6 @@ namespace Catel.Data
                 _propertyBag.SetPropertyValue(propertyName, value);
 
                 HandleObjectEventsSubscription(propertyName, value);
-
-                IsValidated = false;
             }
         }
 

@@ -10,7 +10,7 @@ namespace Catel.Test.Data
     using System.ComponentModel.DataAnnotations;
     using Catel.Data;
 
-    public class LeanAndMeanModel : ModelBase
+    public class LeanAndMeanModel : ValidatableModelBase
     {
         public bool LeanAndMeanModelWrapper
         {

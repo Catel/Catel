@@ -41,7 +41,7 @@ namespace Catel.MVVM
         /// <returns><c>true</c> if the property name should be converted, <c>false</c> otherwise.</returns>
         public bool ShouldConvert(string propertyName)
         {
-            foreach (string x in PropertyNames)
+            foreach (var x in PropertyNames)
             {
                 if (string.CompareOrdinal(propertyName, x) == 0)
                 {
