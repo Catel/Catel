@@ -188,11 +188,12 @@ namespace Catel.Scoping
             {
                 ScopeManager<T> scopeManager;
 
-                if (_instances.ContainsKey(scopeName))
+                object scopeManagerStoredInstance;
+                if (_instances.TryGetValue(scopeName, out scopeManagerStoredInstance))
                 {
                     Log.Debug("Returning existing scope for type '{0}' with name '{1}'", TypeName, scopeName);
 
-                    scopeManager = (ScopeManager<T>)(_instances[scopeName]);
+                    scopeManager = (ScopeManager<T>) scopeManagerStoredInstance;
                 }
                 else
                 {
