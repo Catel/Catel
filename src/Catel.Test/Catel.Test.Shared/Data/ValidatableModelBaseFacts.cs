@@ -446,7 +446,7 @@ namespace Catel.Test.Data
         public class TheValidateModelAttribute
         {
             [ValidateModel(typeof(TestValidator))]
-            public class TestValidatorModel : ModelBase
+            public class TestValidatorModel : ValidatableModelBase
             {
                 /// <summary>
                 /// Gets or sets the property value.
@@ -497,7 +497,7 @@ namespace Catel.Test.Data
             public void AutomaticallyCreatesValidator()
             {
                 ServiceLocator.Default.RegisterType<IValidatorProvider, AttributeValidatorProvider>();
-                var testValidatorModel = new TestValidatorModel() as IValidatable;
+                var testValidatorModel = (IValidatable)new TestValidatorModel();
 
                 Assert.IsNotNull(testValidatorModel.Validator);
 
@@ -842,8 +842,8 @@ namespace Catel.Test.Data
 
                 public bool HasNotValidatedProperties()
                 {
-                    var t = typeof(ModelBase);
-                    var f = t.GetFieldEx("_propertiesNotCheckedDuringDisabledValidation", BindingFlags.Instance | BindingFlags.NonPublic);
+                    var t = typeof(ValidatableModelBase);
+                    var f = t.GetFieldEx("_propertiesNotCheckedDuringDisabledValidation", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
                     var v = f.GetValue(this) as HashSet<string>;
 
                     return v.Count != 0;

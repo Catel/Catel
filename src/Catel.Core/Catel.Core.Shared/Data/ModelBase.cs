@@ -271,7 +271,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets or sets a value indicating whether this model should behave as a lean and mean model.
         /// <para />
-        /// A lean and mean model will not handle any validation code, nor will it raise any change notification events.
+        /// A lean and mean model will not raise any change notification events.
         /// </summary>
         /// <value><c>true</c> if this is a lean and mean model; otherwise, <c>false</c>.</value>
 #if NET
@@ -383,15 +383,6 @@ namespace Catel.Data
         [Browsable(false)]
 #endif
         protected bool HandlePropertyAndCollectionChanges { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this object should automatically validate itself when a property value
-        /// has changed.
-        /// </summary>
-#if NET
-        [Browsable(false)]
-#endif
-        protected bool AutomaticallyValidateOnPropertyChanged { get; set; }
 
         /// <summary>
         /// Gets the parent.
@@ -527,7 +518,6 @@ namespace Catel.Data
             DeserializationSucceeded = false;
             HandlePropertyAndCollectionChanges = true;
             AlwaysInvokeNotifyChanged = false;
-            AutomaticallyValidateOnPropertyChanged = true;
 
             InitializeProperties();
 
@@ -885,9 +875,7 @@ namespace Catel.Data
         /// Invokes the property changed for all registered properties.
         /// </summary>
         /// <remarks>
-        /// Using this method does not set the <see cref="IsDirty"/> property to <c>true</c>, nor will
-        /// it cause the object to validate itself automatically, even when the <see cref="AutomaticallyValidateOnPropertyChanged"/>
-        /// is set to <c>true</c>.
+        /// Using this method does not set the <see cref="IsDirty"/> property to <c>true</c>.
         /// </remarks>
         internal void RaisePropertyChangedForAllRegisteredProperties()
         {
@@ -1043,7 +1031,7 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Sets the <see cref="IsDirty"/> property and automatically validate if required.
+        /// Sets the <see cref="IsDirty"/> property.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         protected virtual void SetDirty(string propertyName)
