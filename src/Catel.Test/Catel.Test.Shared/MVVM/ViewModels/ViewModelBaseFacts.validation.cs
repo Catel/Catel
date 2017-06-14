@@ -116,7 +116,7 @@ namespace Catel.Test.MVVM.ViewModels
         public void ValidationToViewModel_WithoutTagFiltering()
         {
             var viewModel = new TestViewModelWithValidationTags();
-            viewModel.ValidateViewModel();
+            viewModel.Validate();
 
             var summary = viewModel.ValidationSummaryWithoutTagFiltering;
 
@@ -129,7 +129,7 @@ namespace Catel.Test.MVVM.ViewModels
         public void ValidationToViewModel_NullTag()
         {
             var viewModel = new TestViewModelWithValidationTags();
-            viewModel.ValidateViewModel();
+            viewModel.Validate();
 
             var summary = viewModel.ValidationSummaryWithNullTag;
 
@@ -142,7 +142,7 @@ namespace Catel.Test.MVVM.ViewModels
         public void ValidationToViewModel_NonExistingTag()
         {
             var viewModel = new TestViewModelWithValidationTags();
-            viewModel.ValidateViewModel();
+            viewModel.Validate();
 
             var summary = viewModel.ValidationSummaryWithNonExistingTag;
 
@@ -155,7 +155,7 @@ namespace Catel.Test.MVVM.ViewModels
         public void ValidationToViewModel_ExistingTag()
         {
             var viewModel = new TestViewModelWithValidationTags();
-            viewModel.ValidateViewModel();
+            viewModel.Validate();
 
             var summary = viewModel.PersonValidationSummary;
 

@@ -54,7 +54,7 @@ namespace Catel.Data
         /// since there is no reason for any values to have changed.
         /// </param>
         /// <remarks>
-        /// To check wether this object contains any errors, use the <see cref="INotifyDataErrorInfo.HasErrors"/> property.
+        /// To check wether this object contains any errors, use the ValidationContext property.
         /// </remarks>
         void Validate(bool force = false);
     }

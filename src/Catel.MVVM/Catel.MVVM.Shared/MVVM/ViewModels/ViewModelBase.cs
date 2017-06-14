@@ -476,7 +476,16 @@ namespace Catel.MVVM
 
                 lock (ChildViewModels)
                 {
-                    return ChildViewModels.Any(childViewModel => childViewModel.HasDirtyModel);
+                    return ChildViewModels.Any(childViewModel =>
+                    {
+                        var viewModelBase = childViewModel as ViewModelBase;
+                        if (viewModelBase == null)
+                        {
+                            return false;
+                        }
+
+                        return viewModelBase.HasDirtyModel;
+                    });
                 }
             }
         }
@@ -1494,11 +1503,17 @@ namespace Catel.MVVM
             }
 
             // Force validation before saving
-            if (!ValidateViewModel(true))
-            {
-                IsSaving = false;
+            Validate(true);
 
-                return false;
+            if (!SuspendValidation)
+            {
+                var validationContext = ((IValidatable) this).ValidationContext;
+                if (validationContext.HasErrors)
+                {
+                    IsSaving = false;
+
+                    return false;
+                }
             }
 
             var eventArgs = new SavingEventArgs();

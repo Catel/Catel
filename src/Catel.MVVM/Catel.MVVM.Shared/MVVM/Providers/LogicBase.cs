@@ -753,7 +753,7 @@ namespace Catel.MVVM.Providers
                 }
                 else
                 {
-                    viewModel.ValidateViewModel(true);
+                    viewModel.Validate(true);
                 }
 
                 _isFirstValidationAfterLoaded = true;
@@ -978,19 +978,17 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Validates the view model.
         /// </summary>
-        /// <returns><c>true</c> if the <see cref="ViewModel"/> is valid; otherwise <c>false</c>.</returns>
-        public virtual bool ValidateViewModel()
+        public virtual void ValidateViewModel()
         {
-            if (ViewModel == null)
+            var vm = ViewModel;
+            if (vm == null)
             {
-                return false;
+                return;
             }
 
-            var result = ViewModel.ValidateViewModel(_isFirstValidationAfterLoaded);
+            vm.Validate(_isFirstValidationAfterLoaded);
 
             _isFirstValidationAfterLoaded = false;
-
-            return result;
         }
 
         /// <summary>

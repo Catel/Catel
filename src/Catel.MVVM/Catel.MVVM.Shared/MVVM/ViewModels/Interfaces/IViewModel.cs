@@ -9,19 +9,14 @@ namespace Catel.MVVM
     using System;
     using System.ComponentModel;
     using System.Threading.Tasks;
+    using Data;
 
     /// <summary>
     /// View model interface.
     /// </summary>
-    public interface IViewModel : INotifyPropertyChanged
+    public interface IViewModel : IValidatable, INotifyPropertyChanged
     {
         #region Properties
-        /// <summary>
-        /// Gets a value indicating whether this instance has a dirty model.
-        /// </summary>
-        /// <value><c>true</c> if this instance has a dirty model; otherwise, <c>false</c>.</value>
-        bool HasDirtyModel { get; }
-
         /// <summary>
         /// Gets a value indicating whether this instance is closed. If a view model is closed, calling
         /// <see cref="CancelViewModelAsync"/>, <see cref="SaveViewModelAsync"/> or <see cref="CloseViewModelAsync"/>
@@ -41,12 +36,6 @@ namespace Catel.MVVM
         /// </summary>
         /// <value>The unique identifier.</value>
         int UniqueIdentifier { get; }
-
-        /// <summary>
-        /// Gets the view model construction time, which is used to get unique instances of view models.
-        /// </summary>
-        /// <value>The view model construction time.</value>
-        DateTime ViewModelConstructionTime { get; }
         #endregion
 
         #region Events
@@ -93,18 +82,6 @@ namespace Catel.MVVM
 
         #region Methods
         /// <summary>
-        /// Validates the specified notify changed properties only.
-        /// </summary>
-        /// <param name="force">if set to <c>true</c>, a validation is forced (even if the object knows it is already validated).</param>
-        /// <returns>
-        /// <c>true</c> if validation succeeds; otherwise <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// This method is useful when the view model is initialized before the window, and therefore WPF does not update the errors and warnings.
-        /// </remarks>
-        bool ValidateViewModel(bool force = false);
-
-        /// <summary>
         /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
         /// to a state where the associated UI element (user control, window, ...) is actually loaded.
         /// <para />
@@ -138,7 +115,6 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
         Task CloseViewModelAsync(bool? result);
-
         #endregion
     }
 }

@@ -773,9 +773,9 @@ namespace Catel.Data
         /// since there is no reason for any values to have changed.
         /// </param>
         /// <remarks>
-        /// To check whether this object contains any errors, use the <see cref="INotifyDataErrorInfo.HasErrors"/> property.
+        /// To check whether this object contains any errors, use the ValidationContext property.
         /// </remarks>
-        public void Validate(bool force = false)
+        public virtual void Validate(bool force = false)
         {
             Validate(force, ValidateUsingDataAnnotations);
         }
@@ -786,7 +786,7 @@ namespace Catel.Data
         /// <param name="force">If set to <c>true</c>, a validation is forced (even if the object knows it is already validated).</param>
         /// <param name="validateDataAnnotations">If set to <c>true</c>, the data annotations will be checked. This value is only used if <paramref name="force"/> is set to <c>true</c>.</param>
         /// <remarks>
-        /// To check whether this object contains any errors, use the <see cref="INotifyDataErrorInfo.HasErrors"/> property.
+        /// To check whether this object contains any errors, use the ValidationContext property.
         /// </remarks>
         internal void Validate(bool force, bool validateDataAnnotations)
         {

@@ -907,8 +907,16 @@ namespace Catel.Windows
         /// <returns>True if successful, otherwise false.</returns>
         protected virtual bool ValidateData()
         {
-            var result = _logic.ValidateViewModel();
-            return result;
+            _logic.ValidateViewModel();
+
+            var vm = _logic.ViewModel;
+            if (vm == null)
+            {
+                return true;
+            }
+
+            var validationContext = vm.ValidationContext;
+            return !validationContext.HasErrors;
         }
 
         /// <summary>

@@ -91,35 +91,23 @@ namespace Catel.MVVM
 
         #region Methods
         /// <summary>
-        /// Validates the specified notify changed properties only.
+        /// Validates the current object for field and business rule errors.
         /// </summary>
-        /// <param name="force">If set to <c>true</c>, a validation is forced (even if the object knows it is already validated).</param>
-        /// <returns>
-        /// <c>true</c> if validation succeeds; otherwise <c>false</c>.
-        /// </returns>
+        /// <param name="force">If set to <c>true</c>, a validation is forced. When the validation is not forced, it means 
+        /// that when the object is already validated, and no properties have been changed, no validation actually occurs 
+        /// since there is no reason for any values to have changed.
+        /// </param>
         /// <remarks>
-        /// This method is useful when the view model is initialized before the window, and therefore WPF does not update the errors and warnings.
+        /// To check whether this object contains any errors, use the ValidationContext property.
         /// </remarks>
-        public bool ValidateViewModel(bool force = false)
+        public override void Validate(bool force = false)
         {
             if (IsClosed)
             {
-                return true;
+                return;
             }
 
-            if (SuspendValidation)
-            {
-                return true;
-            }
-
-            Validate(force);
-
-            if (DeferValidationUntilFirstSaveCall)
-            {
-                return true;
-            }
-
-            return !HasErrors;
+            base.Validate(force);
         }
 
         /// <summary>
@@ -156,7 +144,7 @@ namespace Catel.MVVM
                 var childViewModels = ChildViewModels.ToArray();
                 foreach (var childViewModel in childViewModels)
                 {
-                    childViewModel.ValidateViewModel();
+                    childViewModel.Validate();
                     if (((INotifyDataErrorInfo)childViewModel).HasErrors)
                     {
                         _childViewModelsHaveErrors = true;
