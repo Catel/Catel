@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IModelValidation.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
+// <copyright file="IValidatable.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -11,9 +11,9 @@ namespace Catel.Data
     using System.ComponentModel;
 
     /// <summary>
-    /// Defines all validation members for the models.
+    /// Interface defining a validatable object.
     /// </summary>
-    public interface IModelValidation : INotifyDataErrorInfo, INotifyDataWarningInfo, IDataErrorInfo, IDataWarningInfo
+    public interface IValidatable : INotifyDataErrorInfo, INotifyDataWarningInfo, IDataErrorInfo, IDataWarningInfo
     {
         /// <summary>
         /// Gets or sets the validator to use.
@@ -28,30 +28,6 @@ namespace Catel.Data
         /// </summary>
         /// <value>The validation context.</value>
         IValidationContext ValidationContext { get; }
-
-        /// <summary>
-        /// Gets the number of field warnings.
-        /// </summary>
-        /// <value>The field warning count.</value>
-        int FieldWarningCount { get; }
-
-        /// <summary>
-        /// Gets the number of business rule warnings.
-        /// </summary>
-        /// <value>The business rule warning count.</value>
-        int BusinessRuleWarningCount { get; }
-
-        /// <summary>
-        /// Gets the number of field errors.
-        /// </summary>
-        /// <value>The field error count.</value>
-        int FieldErrorCount { get; }
-
-        /// <summary>
-        /// Gets the number of business rule errors.
-        /// </summary>
-        /// <value>The business rule error count.</value>
-        int BusinessRuleErrorCount { get; }
 
         /// <summary>
         /// Gets a value indicating whether the object is currently hiding its validation results. If the object

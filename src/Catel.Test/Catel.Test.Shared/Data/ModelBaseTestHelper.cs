@@ -126,7 +126,7 @@ namespace Catel.Test.Data
 #if NET
     [Serializable]
 #endif
-    public class ValidationTest : ModelBase
+    public class ValidationTest : ValidatableModelBase
     {
         #region Fields
         #endregion
@@ -445,24 +445,6 @@ namespace Catel.Test.Data
             IsReadOnly = isReadOnly;
         }
 
-        protected override void ValidateFields(List<IFieldValidationResult> validationResults)
-        {
-            if (string.IsNullOrEmpty(Group))
-            {
-                validationResults.Add(FieldValidationResult.CreateError(GroupProperty, "Group is mandator"));
-            }
-
-            if (string.IsNullOrEmpty(Key))
-            {
-                validationResults.Add(FieldValidationResult.CreateError(KeyProperty, "Key is mandator"));
-            }
-
-            if (string.IsNullOrEmpty(Value))
-            {
-                validationResults.Add(FieldValidationResult.CreateError(ValueProperty, "Value is mandator"));
-            }
-        }
-
         public void SetValue<TValue>(string propertyName, TValue value)
         {
             base.SetValue(propertyName, value);
@@ -618,16 +600,6 @@ namespace Catel.Test.Data
         ///   Register the property so it is known in the class.
         /// </summary>
         public static readonly PropertyData IniEntryCollectionProperty = RegisterProperty("IniEntryCollection", typeof(List<IniEntry>), null);
-        #endregion
-
-        #region Methods
-        protected override void ValidateFields(List<IFieldValidationResult> validationResults)
-        {
-            if (string.IsNullOrEmpty(FileName))
-            {
-                validationResults.Add(FieldValidationResult.CreateError(FileNameProperty, "File name is mandatory"));
-            }
-        }
         #endregion
     }
 
@@ -1318,7 +1290,7 @@ namespace Catel.Test.Data
 #if NET
     [Serializable]
 #endif
-    public class ObjectWithValidation : ModelBase
+    public class ObjectWithValidation : ValidatableModelBase
     {
         #region Constants
         public const string ValueThatHasNoWarningsOrErrors = "NoWarningsOrErrors";
@@ -1682,7 +1654,7 @@ namespace Catel.Test.Data
     /// ClassWithValidator Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-    public class ClassWithValidator : ModelBase
+    public class ClassWithValidator : ValidatableModelBase
     {
         /// <summary>
         /// Gets or sets the warning property.

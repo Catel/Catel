@@ -73,7 +73,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)CoreModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Attributes\ExcludeFromValidationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Attributes\ValidateModelAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IValidatableExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IValidatableModelExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IValidationContextExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IValidatable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\SuspensionContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatableModelBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Validation\AttributeValidatorProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\CatelTypeInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ChangeNotificationWrapper.cs" />
@@ -86,7 +91,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\PropertyAlreadyRegisteredException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\PropertyNotNullableException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\PropertyNotRegisteredException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IModelValidationExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IParentExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\ModelBaseExtensions.serialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\ModelBaseExtensions.cs" />
@@ -101,7 +105,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelEditor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelEqualityComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelSerialization.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelValidation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IValidatableModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IParent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\ISavableModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IValidationContext.cs" />
@@ -117,7 +121,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\ModelBase.serialization.binary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ModelBase.serialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ModelBase.serialization.xml.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\ModelBase.validation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ModelEqualityComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\PropertyBag.boxing.cs" />

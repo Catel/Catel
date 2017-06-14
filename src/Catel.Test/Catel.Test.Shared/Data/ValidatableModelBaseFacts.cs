@@ -18,7 +18,7 @@ namespace Catel.Test.Data
     using NUnit.Framework;
     using TestClasses;
 
-    public partial class ModelBaseFacts
+    public partial class ValidatableModelBaseFacts
     {
         [TestFixture]
         public class OldStyleUnitTests
@@ -28,49 +28,33 @@ namespace Catel.Test.Data
             public void ValidationWithWarnings()
             {
                 var validationObject = new ObjectWithValidation();
-                var validation = validationObject as IModelValidation;
+                var validation = (IValidatableModel)validationObject;
 
                 // Check if the object now has warnings
                 Assert.AreEqual(false, validation.HasWarnings);
                 Assert.AreEqual(false, validation.HasErrors);
-                Assert.AreEqual(0, validation.FieldWarningCount);
-                Assert.AreEqual(0, validation.FieldErrorCount);
-                Assert.AreEqual(0, validation.BusinessRuleWarningCount);
-                Assert.AreEqual(0, validation.BusinessRuleErrorCount);
 
                 // Now set a field warning and check it
                 validationObject.ValueToValidate = ObjectWithValidation.ValueThatCausesFieldWarning;
                 Assert.AreEqual(true, validation.HasWarnings);
                 Assert.AreEqual(false, validation.HasErrors);
-                Assert.AreEqual(1, validation.FieldWarningCount);
-                Assert.AreEqual(0, validation.FieldErrorCount);
-                Assert.AreEqual(0, validation.BusinessRuleWarningCount);
-                Assert.AreEqual(0, validation.BusinessRuleErrorCount);
 
                 // Now set a business warning and check it
                 validationObject.ValueToValidate = ObjectWithValidation.ValueThatCausesBusinessWarning;
                 Assert.AreEqual(true, validation.HasWarnings);
                 Assert.AreEqual(false, validation.HasErrors);
-                Assert.AreEqual(0, validation.FieldWarningCount);
-                Assert.AreEqual(0, validation.FieldErrorCount);
-                Assert.AreEqual(1, validation.BusinessRuleWarningCount);
-                Assert.AreEqual(0, validation.BusinessRuleErrorCount);
 
                 // Clear warning
                 validationObject.ValueToValidate = ObjectWithValidation.ValueThatHasNoWarningsOrErrors;
                 Assert.AreEqual(false, validation.HasWarnings);
                 Assert.AreEqual(false, validation.HasErrors);
-                Assert.AreEqual(0, validation.FieldWarningCount);
-                Assert.AreEqual(0, validation.FieldErrorCount);
-                Assert.AreEqual(0, validation.BusinessRuleWarningCount);
-                Assert.AreEqual(0, validation.BusinessRuleErrorCount);
             }
 
             [TestCase]
             public void ValidationUsingAnnotationsForCatelProperties()
             {
                 var validationObject = new ObjectWithValidation();
-                var validation = validationObject as IModelValidation;
+                var validation = (IValidatableModel)validationObject;
 
                 Assert.IsFalse(validation.HasErrors);
 
@@ -104,7 +88,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void ValidationUsingAnnotationsForNonCatelCalculatedProperties()
             {
-                var validationObject = new ObjectWithValidation() as IModelValidation;
+                var validationObject = new ObjectWithValidation();
 
                 Assert.IsFalse(validationObject.HasErrors);
             }
@@ -115,7 +99,7 @@ namespace Catel.Test.Data
             public void IDataErrorInfo_FieldWithError()
             {
                 var obj = new ValidationTest();
-                var validation = obj as IModelValidation;
+                var validation = (IValidatableModel) obj;
 
                 obj.ErrorWhenEmpty = string.Empty;
 
@@ -134,7 +118,7 @@ namespace Catel.Test.Data
             public void INotifyDataErrorInfo_FieldWithError()
             {
                 var obj = new ValidationTest();
-                var validation = obj as IModelValidation;
+                var validation = (IValidatableModel) obj;
                 bool isInvoked = false;
                 int count = 0;
 
@@ -175,7 +159,7 @@ namespace Catel.Test.Data
             public void INotifyDataErrorInfo_Null()
             {
                 var obj = new ValidationTest();
-                var validation = obj as IModelValidation;
+                var validation = (IValidatableModel)obj;
                 bool isInvoked = false;
                 int count = 0;
 
@@ -216,7 +200,7 @@ namespace Catel.Test.Data
             public void INotifyDataErrorInfo_EmptyString()
             {
                 var obj = new ValidationTest();
-                var validation = obj as IModelValidation;
+                var validation = (IValidatableModel)obj;
                 bool isInvoked = false;
                 int count = 0;
 
@@ -259,7 +243,7 @@ namespace Catel.Test.Data
             public void IDataWarningInfo_FieldWithWarning()
             {
                 var obj = new ValidationTest();
-                var validation = obj as IModelValidation;
+                var validation = (IValidatableModel)obj;
 
                 obj.WarningWhenEmpty = string.Empty;
 
@@ -278,7 +262,7 @@ namespace Catel.Test.Data
             public void INotifyDataWarningInfo_FieldWithWarning()
             {
                 var obj = new ValidationTest();
-                var validation = obj as IModelValidation;
+                var validation = (IValidatableModel)obj;
                 bool isInvoked = false;
                 int count = 0;
 
@@ -319,7 +303,7 @@ namespace Catel.Test.Data
             public void INotifyDataWarningInfo_Null()
             {
                 var obj = new ValidationTest();
-                var validation = obj as IModelValidation;
+                var validation = (IValidatableModel)obj;
                 bool isInvoked = false;
                 int count = 0;
 
@@ -360,7 +344,7 @@ namespace Catel.Test.Data
             public void INotifyDataWarningInfo_EmptyString()
             {
                 var obj = new ValidationTest();
-                var validation = obj as IModelValidation;
+                var validation = (IValidatableModel)obj;
                 bool isInvoked = false;
                 int count = 0;
 
@@ -404,7 +388,7 @@ namespace Catel.Test.Data
             {
                 var validator = new TestValidator();
 
-                var classWithValidator = new ClassWithValidator() as IModelValidation;
+                var classWithValidator = new ClassWithValidator() as IValidatable;
                 classWithValidator.Validator = validator;
 
                 classWithValidator.Validate(true);
@@ -429,7 +413,7 @@ namespace Catel.Test.Data
             {
                 var validator = new TestValidator();
 
-                var classWithValidator = new ClassWithValidator() as IModelValidation;
+                var classWithValidator = new ClassWithValidator() as IValidatable;
                 classWithValidator.Validator = validator;
 
                 classWithValidator.Validate(true);
@@ -446,7 +430,7 @@ namespace Catel.Test.Data
             {
                 var validator = new TestValidator();
 
-                var classWithValidator = new ClassWithValidator() as IModelValidation;
+                var classWithValidator = new ClassWithValidator() as IValidatable;
                 classWithValidator.Validator = validator;
 
                 classWithValidator.Validate(true);
@@ -513,7 +497,7 @@ namespace Catel.Test.Data
             public void AutomaticallyCreatesValidator()
             {
                 ServiceLocator.Default.RegisterType<IValidatorProvider, AttributeValidatorProvider>();
-                var testValidatorModel = new TestValidatorModel() as IModelValidation;
+                var testValidatorModel = new TestValidatorModel() as IValidatable;
 
                 Assert.IsNotNull(testValidatorModel.Validator);
 
@@ -524,9 +508,81 @@ namespace Catel.Test.Data
         }
 
         [TestFixture]
+        public class TheHideValidationResultsProperty
+        {
+            [TestCase]
+            public void HidesTheFieldErrorsWhenTrue()
+            {
+                var obj = new ValidationTest();
+                var validation = obj;
+                obj.HideValidationResults = true;
+
+                obj.ErrorWhenEmpty = string.Empty;
+
+                Assert.IsFalse(validation.HasErrors);
+                Assert.AreEqual(string.Empty, ((IDataErrorInfo)obj)["ErrorWhenEmpty"]);
+
+                obj.HideValidationResults = false;
+
+                Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)obj)["ErrorWhenEmpty"]);
+            }
+
+            [TestCase]
+            public void HidesTheBusinessRuleErrorsWhenTrue()
+            {
+                var obj = new ValidationTest();
+                var validation = obj;
+                obj.HideValidationResults = true;
+
+                obj.BusinessRuleErrorWhenEmpty = string.Empty;
+
+                Assert.IsFalse(validation.HasErrors);
+                Assert.AreEqual(string.Empty, ((IDataErrorInfo)obj).Error);
+
+                obj.HideValidationResults = false;
+
+                Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)obj).Error);
+            }
+
+            [TestCase]
+            public void HidesTheFieldWarningsWhenTrue()
+            {
+                var obj = new ValidationTest();
+                var validation = obj;
+                obj.HideValidationResults = true;
+
+                obj.WarningWhenEmpty = string.Empty;
+
+                Assert.IsFalse(validation.HasWarnings);
+                Assert.AreEqual(string.Empty, ((IDataWarningInfo)obj)["WarningWhenEmpty"]);
+
+                obj.HideValidationResults = false;
+
+                Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)obj)["WarningWhenEmpty"]);
+            }
+
+            [TestCase]
+            public void HidesTheBusinessRuleWarningsWhenTrue()
+            {
+                var obj = new ValidationTest();
+                var validation = obj;
+                obj.HideValidationResults = true;
+
+                obj.BusinessRuleWarningWhenEmpty = string.Empty;
+
+                Assert.IsFalse(validation.HasWarnings);
+                Assert.AreEqual(string.Empty, ((IDataWarningInfo)obj).Warning);
+
+                obj.HideValidationResults = false;
+
+                Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)obj).Warning);
+            }
+        }
+
+        [TestFixture]
         public class TheSuspendValidationProperty
         {
-            public class SuspendValidationModel : ModelBase
+            public class SuspendValidationModel : ValidatableModelBase
             {
                 public bool SuspendValidationWrapper
                 {
@@ -548,7 +604,7 @@ namespace Catel.Test.Data
             public void PreventsAttributeBasedValidation()
             {
                 var model = new SuspendValidationModel();
-                var validation = model as IModelValidation;
+                var validation = model as IValidatable;
 
                 Assert.IsFalse(validation.HasErrors);
 
@@ -562,7 +618,7 @@ namespace Catel.Test.Data
             public void CorrectlyValidatesUnvalidatedPropertiesWhenSetToTrue()
             {
                 var model = new SuspendValidationModel();
-                var validation = model as IModelValidation;
+                var validation = model;
 
                 Assert.IsFalse(validation.HasErrors);
 
@@ -658,7 +714,7 @@ namespace Catel.Test.Data
         [TestFixture]
         public class ValidationOfNonCatelProperties
         {
-            public class ModelWithCalculatedPropertiesValidation : ModelBase
+            public class ModelWithCalculatedPropertiesValidation : ValidatableModelBase
             {
                 [System.ComponentModel.DataAnnotations.Range(1, 10)]
                 public int Weight
@@ -670,7 +726,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void CorrectlyValidatesNonCatelProperties()
             {
-                var model = new ModelWithCalculatedPropertiesValidation() as IModelValidation;
+                var model = new ModelWithCalculatedPropertiesValidation();
                 model.Validate(true);
 
                 Assert.IsTrue(model.HasErrors);
@@ -691,7 +747,7 @@ namespace Catel.Test.Data
             /// how many times property was requested to check annotation validation,
             /// because every annotation validation get property value.
             /// </summary>
-            public class ModelWithoutAnnotation : ModelBase
+            public class ModelWithoutAnnotation : ValidatableModelBase
             {
                 int _counter;
 
@@ -740,15 +796,15 @@ namespace Catel.Test.Data
             public void OnStaticPropertyIgnoreDataAnnotationSkipAnnotationValidation()
             {
                 // store original value
-                var oldValue = ModelBase.DefaultValidateUsingDataAnnotationsValue;
+                var oldValue = ValidatableModelBase.DefaultValidateUsingDataAnnotationsValue;
 
-                ModelBase.DefaultValidateUsingDataAnnotationsValue = false;
+                ValidatableModelBase.DefaultValidateUsingDataAnnotationsValue = false;
                 var model = new ModelWithoutAnnotation();
 
                 model.Validate(true);
 
                 // store original value
-                ModelBase.DefaultValidateUsingDataAnnotationsValue = oldValue;
+                ValidatableModelBase.DefaultValidateUsingDataAnnotationsValue = oldValue;
 
                 Assert.AreEqual(0, model.Counter);
             }
@@ -768,7 +824,7 @@ namespace Catel.Test.Data
         [TestFixture]
         public class IgnoreDataAnnotationValidationOnSetValue
         {
-            public class ModelWithoutAnnotation : ModelBase
+            public class ModelWithoutAnnotation : ValidatableModelBase
             {
                 public static readonly PropertyData CounterProperty = RegisterProperty<ModelWithoutAnnotation, int>(model => model.Counter);
 
@@ -797,8 +853,8 @@ namespace Catel.Test.Data
             [TestCase]
             public void OnInstancePropertyIgnoreDataAnnotationSkipAnnotationValidation()
             {
-                var oldSuspension = Model.SuspendValidationForAllModels;
-                Model.SuspendValidationForAllModels = true;
+                var oldSuspension = ValidatableModelBase.SuspendValidationForAllModels;
+                ValidatableModelBase.SuspendValidationForAllModels = true;
 
                 // Set intance property to skip data annotations validation
                 var model = new ModelWithoutAnnotation();
@@ -808,15 +864,15 @@ namespace Catel.Test.Data
 
                 Assert.AreEqual(false, model.HasNotValidatedProperties());
 
-                Model.SuspendValidationForAllModels = oldSuspension;
+                ValidatableModelBase.SuspendValidationForAllModels = oldSuspension;
             }
 
 
             [TestCase]
             public void ByDefaultValidateDataAnnotationOnSetValue()
             {
-                var oldSuspension = Model.SuspendValidationForAllModels;
-                Model.SuspendValidationForAllModels = true;
+                var oldSuspension = ValidatableModelBase.SuspendValidationForAllModels;
+                ValidatableModelBase.SuspendValidationForAllModels = true;
 
                 // By default instance property set to check annotation validation
                 var model = new ModelWithoutAnnotation();
@@ -825,7 +881,7 @@ namespace Catel.Test.Data
 
                 Assert.AreEqual(true, model.HasNotValidatedProperties());
 
-                Model.SuspendValidationForAllModels = oldSuspension;
+                ValidatableModelBase.SuspendValidationForAllModels = oldSuspension;
             }
         }
 #endif

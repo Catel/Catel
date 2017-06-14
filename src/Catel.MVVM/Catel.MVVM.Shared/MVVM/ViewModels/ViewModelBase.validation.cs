@@ -9,9 +9,8 @@ namespace Catel.MVVM
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-    using Catel.Data;
-    using Catel.Reflection;
-    using Logging;
+    using Data;
+    using Reflection;
 
     public partial class ViewModelBase
     {
@@ -143,10 +142,10 @@ namespace Catel.MVVM
                         continue;
                     }
 
-                    var modelValueAsModelBaseBase = model.Value as IModelValidation;
-                    if (modelValueAsModelBaseBase != null)
+                    var validatable = model.Value as IValidatable;
+                    if (validatable != null)
                     {
-                        modelValueAsModelBaseBase.Validate();
+                        validatable.Validate();
                     }
                 }
             }

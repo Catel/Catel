@@ -155,7 +155,7 @@
             person.FirstName = "first name";
             person.LastName = "last name";
 
-            var validation = viewModel as IModelValidation;
+            var validation = (IValidatableModel)viewModel;
 
             Assert.IsFalse(validation.HasErrors);
             Assert.IsTrue(validation.HasWarnings);
@@ -218,7 +218,7 @@
             var person = new PersonWithDataAnnotations();
             var viewModel = new TestViewModel(person, true);
 
-            ((IModelValidation)person).Validate(true);
+            ((IValidatableModel)person).Validate(true);
 
             Assert.AreNotEqual(0, viewModel.GetValidationContext().GetValidationCount());
         }
@@ -455,7 +455,7 @@
             Assert.IsFalse(childViewModel.HasErrors);
 
             ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
-            ((IModelValidation)viewModel).Validating += delegate
+            ((IValidatable)viewModel).Validating += delegate
             {
                 validationTriggered = true;
                 validatedEvent.Set();
@@ -503,7 +503,7 @@
             Assert.IsFalse(childViewModel.HasErrors);
 
             ((IRelationalViewModel)viewModel).RegisterChildViewModel(childViewModel);
-            ((IModelValidation)viewModel).Validating += delegate
+            ((IValidatable)viewModel).Validating += delegate
             {
                 validationTriggered = true;
                 validatedEvent.Set();
@@ -754,7 +754,7 @@
         public void ModelValidation_NotifyDataWarningInfo_FieldWarnings()
         {
             var testViewModel = new TestViewModel();
-            var validation = testViewModel as IModelValidation;
+            var validation = testViewModel;
 
             Assert.IsFalse(validation.HasWarnings);
 
@@ -776,7 +776,7 @@
         public void ModelValidation_NotifyDataWarningInfo_BusinessWarnings()
         {
             var testViewModel = new TestViewModel();
-            var validation = testViewModel as IModelValidation;
+            var validation = testViewModel;
 
             Assert.IsFalse(validation.HasWarnings);
 

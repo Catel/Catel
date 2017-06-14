@@ -306,26 +306,6 @@
         }
         #endregion
 
-        #region Attribute validation
-#if NET
-        [TestCase]
-        public void AttributeValidation_DoNotValidate()
-        {
-            var instance = new ObjectWithValidation();
-
-            instance.SetValue(ObjectWithValidation.ValueWithAnnotationsProperty.Name, string.Empty, true, false);
-            var fieldValidations = instance.GetValidationContext().GetFieldValidations(ObjectWithValidation.ValueWithAnnotationsProperty.Name);
-
-            Assert.AreEqual(0, fieldValidations.Count);
-
-            instance.SetValue(ObjectWithValidation.ValueWithAnnotationsProperty.Name, null, true, true);
-            fieldValidations = instance.GetValidationContext().GetFieldValidations(ObjectWithValidation.ValueWithAnnotationsProperty.Name);
-
-            Assert.AreEqual(1, fieldValidations.Count);
-        }
-#endif
-        #endregion
-
         #region INotifyPropertyChanged tests
         [TestCase]
         public void NotifyPropertyChanged_Automatic()
@@ -468,78 +448,6 @@
             }
         }
         #endregion
-
-        [TestFixture]
-        public class TheHideValidationResultsProperty
-        {
-            [TestCase]
-            public void HidesTheFieldErrorsWhenTrue()
-            {
-                var obj = new ValidationTest();
-                var validation = obj as IModelValidation;
-                obj.HideValidationResults = true;
-
-                obj.ErrorWhenEmpty = string.Empty;
-
-                Assert.IsFalse(validation.HasErrors);
-                Assert.AreEqual(string.Empty, ((IDataErrorInfo)obj)["ErrorWhenEmpty"]);
-
-                obj.HideValidationResults = false;
-
-                Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)obj)["ErrorWhenEmpty"]);
-            }
-
-            [TestCase]
-            public void HidesTheBusinessRuleErrorsWhenTrue()
-            {
-                var obj = new ValidationTest();
-                var validation = obj as IModelValidation;
-                obj.HideValidationResults = true;
-
-                obj.BusinessRuleErrorWhenEmpty = string.Empty;
-
-                Assert.IsFalse(validation.HasErrors);
-                Assert.AreEqual(string.Empty, ((IDataErrorInfo)obj).Error);
-
-                obj.HideValidationResults = false;
-
-                Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)obj).Error);
-            }
-
-            [TestCase]
-            public void HidesTheFieldWarningsWhenTrue()
-            {
-                var obj = new ValidationTest();
-                var validation = obj as IModelValidation;
-                obj.HideValidationResults = true;
-
-                obj.WarningWhenEmpty = string.Empty;
-
-                Assert.IsFalse(validation.HasWarnings);
-                Assert.AreEqual(string.Empty, ((IDataWarningInfo)obj)["WarningWhenEmpty"]);
-
-                obj.HideValidationResults = false;
-
-                Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)obj)["WarningWhenEmpty"]);
-            }
-
-            [TestCase]
-            public void HidesTheBusinessRuleWarningsWhenTrue()
-            {
-                var obj = new ValidationTest();
-                var validation = obj as IModelValidation;
-                obj.HideValidationResults = true;
-
-                obj.BusinessRuleWarningWhenEmpty = string.Empty;
-
-                Assert.IsFalse(validation.HasWarnings);
-                Assert.AreEqual(string.Empty, ((IDataWarningInfo)obj).Warning);
-
-                obj.HideValidationResults = false;
-
-                Assert.AreNotEqual(string.Empty, ((IDataWarningInfo)obj).Warning);
-            }
-        }
 
         [TestFixture]
         public class TheIsDirtyProperty

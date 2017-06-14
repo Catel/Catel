@@ -29,7 +29,7 @@ namespace Catel.Test.Data
             public void SuspendsValidation()
             {
                 var model = new LeanAndMeanModel();
-                var validation = model as IModelValidation;
+                var validation = model as IValidatableModel;
 
                 model.LeanAndMeanModelWrapper = true;
 
@@ -127,7 +127,7 @@ namespace Catel.Test.Data
                 }
             }
 
-            public class LatePropertyRegistrationModel : ModelBase
+            public class LatePropertyRegistrationModel : ValidatableModelBase
             {
                 protected override void InitializeCustomProperties()
                 {
@@ -150,7 +150,7 @@ namespace Catel.Test.Data
             public void CorrectlyHandlesLateRegistrationOfCalculatedProperties()
             {
                 var model = new LatePropertyRegistrationModel();
-                var validation = model as IModelValidation;
+                var validation = model as IValidatableModel;
 
                 validation.Validate(true);
                 Assert.IsFalse(validation.HasErrors);

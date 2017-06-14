@@ -50,7 +50,7 @@ namespace Catel.MVVM
     /// common interfaces used by WPF.
     /// </summary>
     /// <remarks>This view model base does not add any services.</remarks>
-    public abstract partial class ViewModelBase : ModelBase, IRelationalViewModel, IUniqueIdentifyable
+    public abstract partial class ViewModelBase : ValidatableModelBase, IRelationalViewModel, IUniqueIdentifyable
     {
         #region Fields
         /// <summary>
@@ -792,7 +792,7 @@ namespace Catel.MVVM
                 }
                 else
                 {
-                    var validationContext = ((IModelValidation)childViewModel).ValidationContext;
+                    var validationContext = ((IValidatableModel)childViewModel).ValidationContext;
                     if (validationContext != null)
                     {
                         if (validationContext.HasErrors || validationContext.HasWarnings)
@@ -989,7 +989,7 @@ namespace Catel.MVVM
 
                             values[0] = converter.Convert(values, this);
 
-                            SetValue(mapping.ViewModelProperty, values[0], true, ValidateModelsOnInitialization);
+                            SetValue(mapping.ViewModelProperty, values[0], true);
                         }
                     }
                 }
@@ -1176,6 +1176,7 @@ namespace Catel.MVVM
                 _modelErrorInfo[modelProperty].InitializeDefaultErrors(validationResults);
             }
 #endif
+
             InitializeModel(modelProperty, model);
         }
 

@@ -47,7 +47,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\ModelBaseFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ModelBaseFacts.editableobject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ModelBaseFacts.serialization.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\ModelBaseFacts.validation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatableModelBaseFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ModelBaseTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ModelBaseTestHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\PropertyBagFacts.cs" />
