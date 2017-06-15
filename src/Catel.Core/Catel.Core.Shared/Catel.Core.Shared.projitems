@@ -424,9 +424,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\Interfaces\IExecuteWithObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\Interfaces\IWeakAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\Interfaces\IWeakEventListener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\Interfaces\IWeakFunc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\Interfaces\IWeakReference.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\WeakAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\WeakEventListener.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\WeakFunc.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)ComponentModel\DataAnnotations\" />
