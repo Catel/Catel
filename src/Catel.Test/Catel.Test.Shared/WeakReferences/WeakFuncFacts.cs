@@ -1,3 +1,9 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="WeakFuncFacts.cs" company="Catel development team">
+//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 namespace Catel.Test
 {
     using System;
@@ -5,7 +11,7 @@ namespace Catel.Test
     using NUnit.Framework;
 
     [TestFixture]
-    public class WeakFuncTest
+    public class WeakFuncFacts
     {
         #region Test classes
         public class FuncTarget
@@ -23,25 +29,25 @@ namespace Catel.Test
             #region Methods
             public bool PublicFuncToExecute()
             {
-                this.PublicFuncExecutedCount++;
+                PublicFuncExecutedCount++;
                 return true;
             }
 
             public bool PrivateFuncToExecute()
             {
-                this.PrivateFuncExecutedCount++;
+                PrivateFuncExecutedCount++;
                 return true;
             }
 
             public bool PublicFuncWithParameterToExecute(int parameter)
             {
-                this.PublicFuncWithParameterExecutedCount++;
+                PublicFuncWithParameterExecutedCount++;
                 return true;
             }
 
             public bool PrivateFuncWithParameterToExecute(int parameter)
             {
-                this.PrivateFuncWithParameterExecutedCount++;
+                PrivateFuncWithParameterExecutedCount++;
                 return true;
             }
             #endregion
