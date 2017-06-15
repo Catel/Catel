@@ -231,6 +231,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Threading\TaskHelperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\WeakActionTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\WeakEventListenerFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\WeakFuncTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Helpers\ResourceHelperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Input\InputGestureFacts.cs" />
   </ItemGroup>

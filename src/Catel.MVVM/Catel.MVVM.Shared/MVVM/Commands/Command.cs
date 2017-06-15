@@ -57,8 +57,8 @@ namespace Catel.MVVM
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private Func<TCanExecuteParameter, bool> _canExecuteWithParameter;
-        private Func<bool> _canExecuteWithoutParameter;
+        private WeakFunc<TCanExecuteParameter, bool> _canExecuteWithParameter;
+        private WeakFunc<bool> _canExecuteWithoutParameter;
         private Action<TExecuteParameter> _executeWithParameter;
         private Action _executeWithoutParameter;
         #endregion
@@ -143,8 +143,9 @@ namespace Catel.MVVM
         protected void InitializeActions(Action<TExecuteParameter> executeWithParameter, Action executeWithoutParameter,
             Func<TCanExecuteParameter, bool> canExecuteWithParameter, Func<bool> canExecuteWithoutParameter)
         {
-            _canExecuteWithParameter = canExecuteWithParameter;
-            _canExecuteWithoutParameter = canExecuteWithoutParameter;
+            _canExecuteWithParameter = canExecuteWithParameter != null ? new WeakFunc<TCanExecuteParameter, bool>(canExecuteWithParameter.Target, canExecuteWithParameter) : null;
+            _canExecuteWithoutParameter = canExecuteWithoutParameter != null ? new WeakFunc<bool>(canExecuteWithoutParameter.Target, canExecuteWithoutParameter) : null;
+
             _executeWithParameter = executeWithParameter;
             _executeWithoutParameter = executeWithoutParameter;
         }
@@ -196,15 +197,16 @@ namespace Catel.MVVM
                     return false;
                 }
             }
+            bool result;
 
-            if (_canExecuteWithParameter != null)
+            if (_canExecuteWithParameter != null && _canExecuteWithParameter.Execute(parameter, out result))
             {
-                return _canExecuteWithParameter(parameter);
+                return result;
             }
 
-            if (_canExecuteWithoutParameter != null)
+            if (_canExecuteWithoutParameter != null && _canExecuteWithoutParameter.Execute(out result))
             {
-                return _canExecuteWithoutParameter();
+                return result;
             }
 
             return true;
