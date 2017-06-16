@@ -73,6 +73,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)CoreModule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Attributes\ExcludeFromValidationAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Attributes\ValidateModelAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IModelExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IModelExtensions.serialization.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\ISavableModelExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IValidatableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IValidatableModelExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IValidationContextExtensions.cs" />

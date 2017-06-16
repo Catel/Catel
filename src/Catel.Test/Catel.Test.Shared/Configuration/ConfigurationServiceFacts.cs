@@ -18,7 +18,7 @@ namespace Catel.Test.Configuration
     {
         private static ConfigurationService GetConfigurationService()
         {
-            return new ConfigurationService(new SerializationManager(), new ObjectConverterService());
+            return new ConfigurationService(new SerializationManager(), new ObjectConverterService(), SerializationFactory.GetXmlSerializer());
         }
 
         [TestFixture]

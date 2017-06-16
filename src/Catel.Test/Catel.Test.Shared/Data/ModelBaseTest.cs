@@ -156,11 +156,13 @@
 
             using (var memoryStream = new MemoryStream())
             {
-                parent.Save(memoryStream, SerializationMode.Binary, null);
+                var serializer = SerializationFactory.GetBinarySerializer();
+
+                parent.Save(memoryStream, serializer, null);
 
                 memoryStream.Position = 0L;
 
-                var loadedParent = ModelBase.Load<Parent>(memoryStream, SerializationMode.Binary, null);
+                var loadedParent = SavableModelBase<Parent>.Load(memoryStream, serializer, null);
 
                 Assert.AreEqual(parent, ((IParent)loadedParent.Children[0]).Parent);
             }
@@ -181,11 +183,13 @@
             Parent loadedParent;
             using (var memoryStream = new MemoryStream())
             {
-                parent.Save(memoryStream, SerializationMode.Xml, null);
+                var serializer = SerializationFactory.GetXmlSerializer();
+
+                parent.Save(memoryStream, serializer, null);
 
                 memoryStream.Position = 0L;
 
-                loadedParent = ModelBase.Load<Parent>(memoryStream, SerializationMode.Xml, null);
+                loadedParent = SavableModelBase<Parent>.Load(memoryStream, serializer, null);
             }
 
             Assert.AreEqual(parent, ((IParent)loadedParent.Children[0]).Parent);
@@ -476,7 +480,7 @@
         {
             // Create a collection
             var computerSettings = ModelBaseTestHelper.CreateComputerSettingsObject();
-            SaveObjectToMemoryStream(computerSettings);
+            SaveObjectToMemoryStream(computerSettings, SerializationFactory.GetXmlSerializer());
             Assert.IsFalse(computerSettings.IsDirty);
 
             // Make a chance in the lowest level (but only if ObservableCollection, that is the only supported type)
@@ -485,7 +489,7 @@
             Assert.IsTrue(computerSettings.IsDirty);
 
             // Save the lowest level (so the parent stays dirty)
-            SaveObjectToMemoryStream(computerSettings.IniFileCollection[0].IniEntryCollection[0]);
+            SaveObjectToMemoryStream(computerSettings.IniFileCollection[0].IniEntryCollection[0], SerializationFactory.GetXmlSerializer());
             Assert.IsFalse(computerSettings.IniFileCollection[0].IniEntryCollection[0].IsDirty);
             Assert.IsTrue(computerSettings.IsDirty);
         }
@@ -495,7 +499,7 @@
         {
             // Create a collection
             var computerSettings = ModelBaseTestHelper.CreateComputerSettingsObject();
-            SaveObjectToMemoryStream(computerSettings);
+            SaveObjectToMemoryStream(computerSettings, SerializationFactory.GetXmlSerializer());
             Assert.IsFalse(computerSettings.IsDirty);
 
             // Make a chance in the lowest level (but only if ObservableCollection, that is the only supported type)
@@ -504,7 +508,7 @@
             Assert.IsTrue(computerSettings.IsDirty);
 
             // Save the top level
-            SaveObjectToMemoryStream(computerSettings);
+            SaveObjectToMemoryStream(computerSettings, SerializationFactory.GetXmlSerializer());
             Assert.IsFalse(computerSettings.IniFileCollection[0].IniEntryCollection[0].IsDirty);
             Assert.IsFalse(computerSettings.IsDirty);
         }
@@ -682,12 +686,13 @@
         /// Saves the object to memory stream so the <see cref="IModel.IsDirty" /> property is set to false.
         /// </summary>
         /// <param name="obj">The object.</param>
+        /// <param name="serializer">The serializer.</param>
         /// <param name="configuration">The configuration.</param>
-        internal static void SaveObjectToMemoryStream(ISavableModel obj, ISerializationConfiguration configuration = null)
+        internal static void SaveObjectToMemoryStream(ISavableModel obj, ISerializer serializer, ISerializationConfiguration configuration = null)
         {
             using (var memoryStream = new MemoryStream())
             {
-                obj.Save(memoryStream, configuration);
+                obj.Save(memoryStream, serializer, configuration);
             }
         }
     }

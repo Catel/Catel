@@ -15,7 +15,7 @@ namespace Catel.Configuration
     using System.Runtime.Serialization;
     using Data;
     using Catel.Logging;
-
+    using Runtime.Serialization.Xml;
 #if PCL
     // Not supported
 #elif NETFX_CORE
@@ -38,6 +38,7 @@ namespace Catel.Configuration
 
         private readonly ISerializationManager _serializationManager;
         private readonly IObjectConverterService _objectConverterService;
+        private readonly ISerializer _serializer;
 
 #if NET
         private readonly DynamicConfiguration _localConfiguration;
@@ -58,13 +59,29 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="objectConverterService">The object converter service.</param>
-        public ConfigurationService(ISerializationManager serializationManager, IObjectConverterService objectConverterService)
+        /// <param name="serializer">The serializer.</param>
+        public ConfigurationService(ISerializationManager serializationManager,
+            IObjectConverterService objectConverterService, IXmlSerializer serializer)
+            : this(serializationManager, objectConverterService, (ISerializer)serializer)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConfigurationService" /> class.
+        /// </summary>
+        /// <param name="serializationManager">The serialization manager.</param>
+        /// <param name="objectConverterService">The object converter service.</param>
+        /// <param name="serializer">The serializer.</param>
+        public ConfigurationService(ISerializationManager serializationManager, 
+            IObjectConverterService objectConverterService, ISerializer serializer)
         {
             Argument.IsNotNull("serializationManager", serializationManager);
             Argument.IsNotNull("objectConverterService", objectConverterService);
+            Argument.IsNotNull("serializer", serializer);
 
             _serializationManager = serializationManager;
             _objectConverterService = objectConverterService;
+            _serializer = serializer;
 
 #if NET
             _localConfigFilePath = Path.Combine(Path.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserLocal), "configuration.xml");
@@ -75,7 +92,7 @@ namespace Catel.Configuration
                 {
                     using (var fileStream = new FileStream(_localConfigFilePath, FileMode.Open))
                     {
-                        _localConfiguration = ModelBase.Load<DynamicConfiguration>(fileStream, SerializationMode.Xml);
+                        _localConfiguration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _serializer);
                     }
                 }
             }
@@ -97,7 +114,7 @@ namespace Catel.Configuration
                 {
                     using (var fileStream = new FileStream(_roamingConfigFilePath, FileMode.Open))
                     {
-                        _roamingConfiguration = ModelBase.Load<DynamicConfiguration>(fileStream, SerializationMode.Xml);
+                        _roamingConfiguration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _serializer);
                     }
                 }
             }

@@ -18,26 +18,6 @@ namespace Catel.Data
     using Logging;
     using Runtime.Serialization;
 
-    #region Enums
-    /// <summary>
-    /// Enumeration containing all the available serialization modes for the <see cref="ModelBase"/> class.
-    /// </summary>
-    public enum SerializationMode
-    {
-#if NET
-        /// <summary>
-        /// Serialize using the <see cref="System.Runtime.Serialization.Formatters.Binary.BinaryFormatter"/>.
-        /// </summary>
-        Binary,
-#endif
-
-        /// <summary>
-        /// Serialize using the <see cref="DataContractSerializer"/>.
-        /// </summary>
-        Xml
-    }
-    #endregion
-
     /// <summary>
     /// Abstract class that serves as a base class for serializable objects.
     /// </summary>

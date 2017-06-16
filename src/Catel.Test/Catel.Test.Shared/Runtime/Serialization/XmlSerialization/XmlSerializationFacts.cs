@@ -10,6 +10,7 @@ namespace Catel.Test.Runtime.Serialization
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.IO;
     using System.Linq;
     using System.Xml.Serialization;
     using Catel.Data;
@@ -117,9 +118,11 @@ namespace Catel.Test.Runtime.Serialization
             [TestCase]
             public void XmlSerializationWithXmlIgnore()
             {
+                var serializer = SerializationFactory.GetXmlSerializer();
+
                 var obj = new ObjectWithXmlMappings();
 
-                var xml = obj.ToXml(null).ToString();
+                var xml = obj.ToXml(serializer).ToString();
 
                 Assert.IsFalse(xml.Contains("IgnoredProperty"));
             }
@@ -144,8 +147,10 @@ namespace Catel.Test.Runtime.Serialization
             [TestCase]
             public void RespectsTheXmlRootAndXmlElementAttribute()
             {
+                var serializer = SerializationFactory.GetXmlSerializer();
+
                 var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
-                var xmlDocument = person.ToXml(null);
+                var xmlDocument = person.ToXml(serializer);
 
                 var personElement = xmlDocument.Element("MappedPerson");
                 Assert.IsNotNull(personElement);
@@ -162,17 +167,30 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.IsNotNull(lastNameElement);
                 Assert.AreEqual("Horrik", lastNameElement.Value);
 
-                var deserializedPerson = ModelBaseFacts.Person.Load(xmlDocument);
-                Assert.AreEqual("Geert", deserializedPerson.FirstName);
-                Assert.AreEqual("van", deserializedPerson.MiddleName);
-                Assert.AreEqual("Horrik", deserializedPerson.LastName);
+                using (var memoryStream = new MemoryStream())
+                {
+                    using (var streamWriter = new StreamWriter(memoryStream))
+                    {
+                        streamWriter.Write(xmlDocument.ToString());
+                        streamWriter.Flush();
+
+                        memoryStream.Position = 0L;
+
+                        var deserializedPerson = ModelBaseFacts.Person.Load(memoryStream, serializer);
+                        Assert.AreEqual("Geert", deserializedPerson.FirstName);
+                        Assert.AreEqual("van", deserializedPerson.MiddleName);
+                        Assert.AreEqual("Horrik", deserializedPerson.LastName);
+                    }
+                }
             }
 
             [TestCase]
             public void RespectsTheXmlAttributeAttribute()
             {
+                var serializer = SerializationFactory.GetXmlSerializer();
+
                 var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
-                var xmlDocument = person.ToXml(null);
+                var xmlDocument = person.ToXml(serializer);
 
                 var personElement = xmlDocument.Element("MappedPerson");
                 Assert.IsNotNull(personElement);
@@ -181,8 +199,19 @@ namespace Catel.Test.Runtime.Serialization
                 Assert.IsNotNull(ageAttribute);
                 Assert.AreEqual("42", ageAttribute.Value);
 
-                var deserializedPerson = ModelBaseFacts.Person.Load(xmlDocument);
-                Assert.AreEqual(42, deserializedPerson.Age);
+                using (var memoryStream = new MemoryStream())
+                {
+                    using (var streamWriter = new StreamWriter(memoryStream))
+                    {
+                        streamWriter.Write(xmlDocument.ToString());
+                        streamWriter.Flush();
+
+                        memoryStream.Position = 0L;
+
+                        var deserializedPerson = ModelBaseFacts.Person.Load(memoryStream, serializer);
+                        Assert.AreEqual(42, deserializedPerson.Age);
+                    }
+                }
             }
 
             [TestCase(XmlSerializerOptimalizationMode.PrettyXml)]
@@ -244,8 +273,10 @@ namespace Catel.Test.Runtime.Serialization
             [TestCase]
             public void RespectsTheXmlIgnoreAttribute()
             {
+                var serializer = SerializationFactory.GetXmlSerializer();
+
                 var person = new ModelBaseFacts.Person("Geert", "van", "Horrik", 42);
-                var xmlDocument = person.ToXml(null);
+                var xmlDocument = person.ToXml(serializer);
 
                 var personElement = xmlDocument.Element("MappedPerson");
                 Assert.IsNotNull(personElement);
@@ -256,7 +287,7 @@ namespace Catel.Test.Runtime.Serialization
             [TestCase]
             public void SupportsNestedHierarchySerialization()
             {
-                LogManager.AddDebugListener();
+                var serializer = SerializationFactory.GetXmlSerializer();
 
                 var root = new ModelBaseFacts.Group()
                 {
@@ -271,9 +302,7 @@ namespace Catel.Test.Runtime.Serialization
                 root.Items = new ObservableCollection<ModelBaseFacts.Item>();
                 root.Items.Add(child);
 
-                var xmlDocument = root.ToXml(null);
-
-                var newRoot = ModelBaseFacts.Group.Load<ModelBaseFacts.Group>(xmlDocument);
+                var newRoot = SerializationTestHelper.SerializeAndDeserialize(root, serializer);
                 Assert.IsNotNull(newRoot);
                 Assert.AreEqual("myRoot", newRoot.Name);
                 Assert.AreEqual(1, newRoot.Items.Count);

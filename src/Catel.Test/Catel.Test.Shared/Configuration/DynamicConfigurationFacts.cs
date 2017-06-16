@@ -109,7 +109,7 @@ namespace Catel.Test.Configuration
 
                     memoryStream.Position = 0L;
 
-                    var configuration = ModelBase.Load<DynamicConfiguration>(memoryStream, SerializationMode.Xml, null);
+                    var configuration = SavableModelBase<DynamicConfiguration>.Load(memoryStream, SerializationFactory.GetXmlSerializer());
 
                     Assert.IsTrue(configuration.IsConfigurationValueSet("KeyX"));
                     Assert.IsTrue(configuration.IsConfigurationValueSet("KeyY"));
@@ -130,7 +130,7 @@ namespace Catel.Test.Configuration
 
                     memoryStream.Position = 0L;
 
-                    var configuration = ModelBase.Load<DynamicConfiguration>(memoryStream, SerializationMode.Xml, null);
+                    var configuration = SavableModelBase<DynamicConfiguration>.Load(memoryStream, SerializationFactory.GetXmlSerializer());
 
                     Assert.IsTrue(configuration.IsConfigurationValueSet("KeyX"));
                     Assert.IsTrue(configuration.IsConfigurationValueSet("KeyY"));
@@ -179,7 +179,7 @@ namespace Catel.Test.Configuration
 
                 memoryStream.Position = 0L;
 
-                var newDynamicConfiguration = ModelBase.Load<DynamicConfiguration>(memoryStream, SerializationMode.Xml, null);
+                var newDynamicConfiguration = SavableModelBase<DynamicConfiguration>.Load(memoryStream, SerializationFactory.GetXmlSerializer());
                 var newComplexSetting = newDynamicConfiguration.GetConfigurationValue<ComplexSetting>("ComplexSetting", null);
 
                 Assert.AreEqual(newComplexSetting.FirstName, complexSetting.FirstName);

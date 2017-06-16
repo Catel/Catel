@@ -16,6 +16,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
     using System.Runtime.Serialization;
     using Catel.Collections;
     using Catel.Data;
+    using Catel.Runtime.Serialization;
     using Catel.Runtime.Serialization.Xml;
     using Catel.Test.Data;
     using NUnit.Framework;
@@ -143,9 +144,11 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
 
             using (var memoryStream = new MemoryStream())
             {
-                dictionary.Save(memoryStream, SerializationMode.Xml, null);
+                var serializer = SerializationFactory.GetXmlSerializer();
+
+                dictionary.Save(memoryStream, serializer, null);
                 memoryStream.Position = 0L;
-                var dictionary2 = DictionaryTestClass.Load(memoryStream, SerializationMode.Xml, null);
+                var dictionary2 = DictionaryTestClass.Load(memoryStream, serializer, null);
 
                 Assert.AreEqual(dictionary, dictionary2);
 
@@ -176,9 +179,11 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
 
             using (var memoryStream = new MemoryStream())
             {
-                c.Save(memoryStream, SerializationMode.Xml, null);
+                var serializer = SerializationFactory.GetXmlSerializer();
+
+                c.Save(memoryStream, serializer);
                 memoryStream.Position = 0L;
-                var c2 = ContainerInterfaces.Load(memoryStream, SerializationMode.Xml, null);
+                var c2 = ContainerInterfaces.Load(memoryStream, serializer);
                 Assert.AreEqual(c, c2);
             }
         }
@@ -198,10 +203,12 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
 
             using (var memoryStream = new MemoryStream())
             {
-                c.Save(memoryStream, SerializationMode.Xml, null);
+                var serializer = SerializationFactory.GetXmlSerializer();
+
+                c.Save(memoryStream, serializer);
                 memoryStream.Position = 0L;
 
-                var c2 = ContainerAbstractClasses.Load(memoryStream, SerializationMode.Xml, null);
+                var c2 = ContainerAbstractClasses.Load(memoryStream, serializer);
                 Assert.AreEqual(c, c2);
             }
         }
