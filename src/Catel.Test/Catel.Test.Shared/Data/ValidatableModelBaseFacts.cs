@@ -23,6 +23,21 @@ namespace Catel.Test.Data
         [TestFixture]
         public class OldStyleUnitTests
         {
+            [TestCase("IsDirty", true)]
+            public void DoesNotCauseValidationWhenKnownModelBasePropertiesChange(string propertyName, object propertyValue)
+            {
+                var validationObject = (IValidatable)new ObjectWithValidation();
+
+                validationObject.Validate();
+
+                Assert.IsTrue(validationObject.IsValidated);
+
+                var modelEditor = (IModelEditor) validationObject;
+                modelEditor.SetValue(propertyName, propertyValue);
+
+                Assert.IsTrue(validationObject.IsValidated);
+            }
+
             #region Validation
             [TestCase]
             public void ValidationWithWarnings()

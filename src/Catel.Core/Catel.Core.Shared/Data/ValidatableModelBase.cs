@@ -52,13 +52,15 @@ namespace Catel.Data
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        /// Backing field for the <see cref="SuspendValidation"/> property. Because it has custom logic, it needs a backing field.
-        /// </summary>
 #if NET
         [field: NonSerialized]
 #endif
         private bool _suspendValidation;
+
+#if NET
+        [field: NonSerialized]
+#endif
+        private bool _isValidated;
 
         /// <summary>
         /// Field that determines whether a validator has been retrieved yet.
@@ -207,7 +209,7 @@ namespace Catel.Data
         [Browsable(false)]
 #endif
         [XmlIgnore]
-        private bool IsValidated { get; set; }
+        bool IValidatable.IsValidated { get { return _isValidated; } }
 
         /// <summary>
         /// Gets or sets the validator to use.
@@ -404,11 +406,12 @@ namespace Catel.Data
                     hashSet.Add(nameof(HandlePropertyAndCollectionChanges));
                     hashSet.Add(nameof(AutomaticallyValidateOnPropertyChanged));
                     hashSet.Add(nameof(DeserializationSucceeded));
-                    hashSet.Add(nameof(IsValidating));
                     hashSet.Add(nameof(SuspendValidation));
                     hashSet.Add(nameof(HideValidationResults));
                     hashSet.Add(nameof(HasWarnings));
                     hashSet.Add(nameof(HasErrors));
+                    hashSet.Add(nameof(IsValidating));
+                    hashSet.Add("IsValidated");
 
                     var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(type);
 
@@ -488,7 +491,7 @@ namespace Catel.Data
         /// <param name="constraint">if set to <c>true</c>, the validation will be updated if not up to date.</param>
         private void EnsureValidationIsUpToDate(bool constraint = true)
         {
-            if (constraint && !IsValidated)
+            if (constraint && !_isValidated)
             {
                 Validate();
             }
@@ -530,11 +533,22 @@ namespace Catel.Data
         {
             base.OnPropertyChanged(e);
 
-            IsValidated = false;
+            var propertyName = e.PropertyName;
+            if (!string.IsNullOrWhiteSpace(propertyName))
+            {
+                if (_propertyValuesIgnoredOrFailedForValidation.TryGetValue(GetType(), out HashSet<string> ignoredProperties))
+                {
+                    if (ignoredProperties.Contains(propertyName))
+                    {
+                        return;
+                    }
+                }
+            }
+
+            _isValidated = false;
 
             if (AutomaticallyValidateOnPropertyChanged)
             {
-                var propertyName = e.PropertyName;
                 if (!string.IsNullOrWhiteSpace(propertyName))
                 {
                     lock (_propertiesCurrentlyBeingValidated)
@@ -900,7 +914,7 @@ namespace Catel.Data
 #endif
             }
 
-            if (!IsValidated || force)
+            if (!_isValidated || force)
             {
                 lock (_validationContext)
                 {
@@ -977,7 +991,7 @@ namespace Catel.Data
                         validator.Validate(this, validationContext);
                     }
 
-                    IsValidated = true;
+                    _isValidated = true;
 
                     // Manual sync to get the changes
                     changes = existingValidationContext.SynchronizeWithContext(validationContext);

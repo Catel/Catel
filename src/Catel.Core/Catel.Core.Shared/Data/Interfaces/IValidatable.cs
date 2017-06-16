@@ -37,6 +37,11 @@ namespace Catel.Data
         bool IsHidingValidationResults { get; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this object is validated or not.
+        /// </summary>
+        bool IsValidated { get; }
+
+        /// <summary>
         /// Occurs when the object is validating.
         /// </summary>
         event EventHandler<ValidationEventArgs> Validating;
