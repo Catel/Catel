@@ -108,14 +108,6 @@ namespace Catel.MVVM
 #endif
         private bool _areViewModelAttributesIntialized;
 
-        /// <summary>
-        /// Value indicating whether the specified models are dirty.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private readonly Dictionary<string, bool> _modelsDirtyFlags = new Dictionary<string, bool>();
-
 #if NET
         [field: NonSerialized]
 #endif
@@ -452,41 +444,6 @@ namespace Catel.MVVM
                 }
 
                 return false;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance has a dirty model.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has a dirty model; otherwise, <c>false</c>.
-        /// </value>
-        [ExcludeFromValidation]
-        public virtual bool HasDirtyModel
-        {
-            get
-            {
-                var hasDirtyModels = (from dirtyModelFlag in _modelsDirtyFlags
-                                      where dirtyModelFlag.Value
-                                      select dirtyModelFlag).Any();
-                if (hasDirtyModels)
-                {
-                    return true;
-                }
-
-                lock (ChildViewModels)
-                {
-                    return ChildViewModels.Any(childViewModel =>
-                    {
-                        var viewModelBase = childViewModel as ViewModelBase;
-                        if (viewModelBase == null)
-                        {
-                            return false;
-                        }
-
-                        return viewModelBase.HasDirtyModel;
-                    });
-                }
             }
         }
 
@@ -1134,14 +1091,6 @@ namespace Catel.MVVM
                 }
             }
 
-            var modelNameOnViewModel = (from modelObject in _modelObjects
-                                        where ObjectHelper.AreEqualReferences(modelObject.Value, sender)
-                                        select modelObject.Key).FirstOrDefault();
-            if (!string.IsNullOrEmpty(modelNameOnViewModel))
-            {
-                _modelsDirtyFlags[modelNameOnViewModel] = true;
-            }
-
             OnModelPropertyChanged(sender, e);
 
             Validate();
@@ -1177,7 +1126,6 @@ namespace Catel.MVVM
                 ViewModelManager.RegisterModel(this, model);
             }
 
-            _modelsDirtyFlags[modelProperty] = false;
             _modelErrorInfo[modelProperty] = new ModelErrorInfo(model);
             _modelErrorInfo[modelProperty].Updated += OnModelErrorInfoUpdated;
 

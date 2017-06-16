@@ -117,6 +117,7 @@ Added/fixed:
 (-) #1030    Remove CommandLineHelper in favor of Orc.CommandLine
 (-) #1031    Remove EffectsHelper & VisualTargetPresentationSource
 (-) #1032    Remove TransferStylesAndTransitions - use special wrapper grid name instead
+(-) #1047    Remove ViewModelBase.HasDirtyModels
 (-) Remove test implementations of services
 
 Roadmap:
