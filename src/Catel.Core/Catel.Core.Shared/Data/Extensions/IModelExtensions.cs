@@ -35,6 +35,10 @@ namespace Catel.Data
         {
             var objAsModelBase = obj as IModel;
             var objAsIEnumerable = obj as IEnumerable;
+            if (objAsIEnumerable is string)
+            {
+                objAsIEnumerable = null;
+            }
 
             if (objAsModelBase != null)
             {

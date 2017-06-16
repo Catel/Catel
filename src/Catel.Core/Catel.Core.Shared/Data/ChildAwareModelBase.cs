@@ -80,7 +80,7 @@ namespace Catel.Data
 
         /// <summary>
         /// Gets or sets a value indicating whether this object should handle (thus invoke the specific events) when
-        /// a property of collection value has changed.
+        /// a property or collection value has changed.
         /// </summary>
 #if NET
         [Browsable(false)]
@@ -96,54 +96,6 @@ namespace Catel.Data
         {
             HandlePropertyAndCollectionChanges = true;
             DisableEventSubscriptionsOfChildValues = DefaultDisableEventSubscriptionsOfChildValuesValue;
-        }
-
-        /// <summary>
-        /// Raises the <see cref="E:PropertyChanged" /> event.
-        /// </summary>
-        /// <param name="e">The <see cref="AdvancedPropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected override void OnPropertyChanged(AdvancedPropertyChangedEventArgs e)
-        {
-            base.OnPropertyChanged(e);
-
-            if (HandlePropertyAndCollectionChanges)
-            {
-                var sender = e.OriginalSender;
-
-                if (ReferenceEquals(this, sender))
-                {
-                    //if (!isRefreshCallOnly)
-                    //{
-                        SuspensionContext callbackSuspensionContext;
-
-                        lock (_lock)
-                        {
-                            callbackSuspensionContext = _changeCallbacksSuspensionContext;
-                        }
-
-                        if (callbackSuspensionContext != null)
-                        {
-                            callbackSuspensionContext.Add(e.PropertyName);
-                        }
-                        else if (IsPropertyRegistered(e.PropertyName))
-                        {
-                            var propertyData = GetPropertyData(e.PropertyName);
-
-                            var handler = propertyData.PropertyChangedEventHandler;
-                            if (handler != null)
-                            {
-                                handler(this, e);
-                            }
-                        }
-                    //}
-
-                    if (!DisablePropertyChangeNotifications)
-                    {
-                        // Explicitly call base because we have overridden the behavior
-                        base.RaisePropertyChanged(this, e);
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -251,6 +203,5 @@ namespace Catel.Data
 
             SetDirty(string.Empty);
         }
-
     }
 }

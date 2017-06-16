@@ -764,6 +764,51 @@ namespace Catel.Data
                 }
             }
 
+            if (ReferenceEquals(this, sender))
+            {
+                AdvancedPropertyChangedEventArgs eventArgs;
+                var advancedEventArgs = e as AdvancedPropertyChangedEventArgs;
+                if (advancedEventArgs != null)
+                {
+                    eventArgs = new AdvancedPropertyChangedEventArgs(this, advancedEventArgs);
+                }
+                else
+                {
+                    eventArgs = new AdvancedPropertyChangedEventArgs(sender, this, e.PropertyName);
+                }
+
+                if (!isRefreshCallOnly)
+                {
+                    SuspensionContext callbackSuspensionContext;
+
+                    lock (_lock)
+                    {
+                        callbackSuspensionContext = _changeCallbacksSuspensionContext;
+                    }
+
+                    if (callbackSuspensionContext != null)
+                    {
+                        callbackSuspensionContext.Add(e.PropertyName);
+                    }
+                    else if (IsPropertyRegistered(e.PropertyName))
+                    {
+                        var propertyData = GetPropertyData(e.PropertyName);
+
+                        var handler = propertyData.PropertyChangedEventHandler;
+                        if (handler != null)
+                        {
+                            handler(this, eventArgs);
+                        }
+                    }
+                }
+
+                if (!DisablePropertyChangeNotifications)
+                {
+                    // Explicitly call base because we have overridden the behavior
+                    base.RaisePropertyChanged(this, eventArgs);
+                }
+            }
+
             if (updateIsDirty)
             {
                 SetDirty(e.PropertyName);
