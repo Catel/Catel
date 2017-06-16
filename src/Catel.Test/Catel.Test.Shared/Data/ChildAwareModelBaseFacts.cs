@@ -13,6 +13,7 @@ namespace Catel.Test.Data
     using System.Windows.Data;
     using Catel.Data;
     using Catel.MVVM;
+    using Catel.Runtime.Serialization;
     using NUnit.Framework;
 
     [TestFixture]
@@ -96,6 +97,44 @@ namespace Catel.Test.Data
             model.Collection.Add(4);
 
             Assert.IsTrue(model.HasCollectionChanged);
+        }
+
+        [TestCase]
+        public void IsDirtyWithChildrenWhenSavingChild()
+        {
+            // Create a collection
+            var computerSettings = ModelBaseTestHelper.CreateComputerSettingsObject();
+            computerSettings.SaveObjectToDummyMemoryStream(SerializationFactory.GetXmlSerializer());
+            Assert.IsFalse(computerSettings.IsDirty);
+
+            // Make a chance in the lowest level (but only if ObservableCollection, that is the only supported type)
+            computerSettings.IniFileCollection[0].FileName = "is dirty should be enabled now";
+            Assert.IsTrue(computerSettings.IniFileCollection[0].IsDirty);
+            Assert.IsTrue(computerSettings.IsDirty);
+
+            // Save the lowest level (so the parent stays dirty)
+            computerSettings.IniFileCollection[0].IniEntryCollection[0].SaveObjectToDummyMemoryStream(SerializationFactory.GetXmlSerializer());
+            Assert.IsFalse(computerSettings.IniFileCollection[0].IniEntryCollection[0].IsDirty);
+            Assert.IsTrue(computerSettings.IsDirty);
+        }
+
+        [TestCase]
+        public void IsDirtyWithChildrenWhenSavingParent()
+        {
+            // Create a collection
+            var computerSettings = ModelBaseTestHelper.CreateComputerSettingsObject();
+            computerSettings.SaveObjectToDummyMemoryStream(SerializationFactory.GetXmlSerializer());
+            Assert.IsFalse(computerSettings.IsDirty);
+
+            // Make a chance in the lowest level (but only if ObservableCollection, that is the only supported type)
+            computerSettings.IniFileCollection[0].FileName = "is dirty should be enabled now 2";
+            Assert.IsTrue(computerSettings.IniFileCollection[0].IsDirty);
+            Assert.IsTrue(computerSettings.IsDirty);
+
+            // Save the top level
+            computerSettings.SaveObjectToDummyMemoryStream(SerializationFactory.GetXmlSerializer());
+            Assert.IsFalse(computerSettings.IniFileCollection[0].IniEntryCollection[0].IsDirty);
+            Assert.IsFalse(computerSettings.IsDirty);
         }
     }
 }

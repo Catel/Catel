@@ -113,7 +113,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void IDataErrorInfo_FieldWithError()
             {
-                var obj = new ValidationTest();
+                var obj = new ValidationTestModel();
                 var validation = (IValidatableModel) obj;
 
                 obj.ErrorWhenEmpty = string.Empty;
@@ -132,7 +132,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void INotifyDataErrorInfo_FieldWithError()
             {
-                var obj = new ValidationTest();
+                var obj = new ValidationTestModel();
                 var validation = (IValidatableModel) obj;
                 bool isInvoked = false;
                 int count = 0;
@@ -173,7 +173,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void INotifyDataErrorInfo_Null()
             {
-                var obj = new ValidationTest();
+                var obj = new ValidationTestModel();
                 var validation = (IValidatableModel)obj;
                 bool isInvoked = false;
                 int count = 0;
@@ -214,7 +214,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void INotifyDataErrorInfo_EmptyString()
             {
-                var obj = new ValidationTest();
+                var obj = new ValidationTestModel();
                 var validation = (IValidatableModel)obj;
                 bool isInvoked = false;
                 int count = 0;
@@ -257,7 +257,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void IDataWarningInfo_FieldWithWarning()
             {
-                var obj = new ValidationTest();
+                var obj = new ValidationTestModel();
                 var validation = (IValidatableModel)obj;
 
                 obj.WarningWhenEmpty = string.Empty;
@@ -276,7 +276,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void INotifyDataWarningInfo_FieldWithWarning()
             {
-                var obj = new ValidationTest();
+                var obj = new ValidationTestModel();
                 var validation = (IValidatableModel)obj;
                 bool isInvoked = false;
                 int count = 0;
@@ -317,7 +317,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void INotifyDataWarningInfo_Null()
             {
-                var obj = new ValidationTest();
+                var obj = new ValidationTestModel();
                 var validation = (IValidatableModel)obj;
                 bool isInvoked = false;
                 int count = 0;
@@ -358,7 +358,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void INotifyDataWarningInfo_EmptyString()
             {
-                var obj = new ValidationTest();
+                var obj = new ValidationTestModel();
                 var validation = (IValidatableModel)obj;
                 bool isInvoked = false;
                 int count = 0;
@@ -528,7 +528,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void HidesTheFieldErrorsWhenTrue()
             {
-                var obj = new ValidationTest();
+                var obj = new ValidationTestModel();
                 var validation = obj;
                 obj.HideValidationResults = true;
 
@@ -545,7 +545,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void HidesTheBusinessRuleErrorsWhenTrue()
             {
-                var obj = new ValidationTest();
+                var obj = new ValidationTestModel();
                 var validation = obj;
                 obj.HideValidationResults = true;
 
@@ -562,7 +562,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void HidesTheFieldWarningsWhenTrue()
             {
-                var obj = new ValidationTest();
+                var obj = new ValidationTestModel();
                 var validation = obj;
                 obj.HideValidationResults = true;
 
@@ -579,7 +579,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void HidesTheBusinessRuleWarningsWhenTrue()
             {
-                var obj = new ValidationTest();
+                var obj = new ValidationTestModel();
                 var validation = obj;
                 obj.HideValidationResults = true;
 

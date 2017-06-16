@@ -474,46 +474,6 @@
             }
         }
 
-        #region IsDirty with children test
-        [TestCase]
-        public void IsDirtyWithChildrenWhenSavingChild()
-        {
-            // Create a collection
-            var computerSettings = ModelBaseTestHelper.CreateComputerSettingsObject();
-            SaveObjectToMemoryStream(computerSettings, SerializationFactory.GetXmlSerializer());
-            Assert.IsFalse(computerSettings.IsDirty);
-
-            // Make a chance in the lowest level (but only if ObservableCollection, that is the only supported type)
-            computerSettings.IniFileCollection[0].FileName = "is dirty should be enabled now";
-            Assert.IsTrue(computerSettings.IniFileCollection[0].IsDirty);
-            Assert.IsTrue(computerSettings.IsDirty);
-
-            // Save the lowest level (so the parent stays dirty)
-            SaveObjectToMemoryStream(computerSettings.IniFileCollection[0].IniEntryCollection[0], SerializationFactory.GetXmlSerializer());
-            Assert.IsFalse(computerSettings.IniFileCollection[0].IniEntryCollection[0].IsDirty);
-            Assert.IsTrue(computerSettings.IsDirty);
-        }
-
-        [TestCase]
-        public void IsDirtyWithChildrenWhenSavingParent()
-        {
-            // Create a collection
-            var computerSettings = ModelBaseTestHelper.CreateComputerSettingsObject();
-            SaveObjectToMemoryStream(computerSettings, SerializationFactory.GetXmlSerializer());
-            Assert.IsFalse(computerSettings.IsDirty);
-
-            // Make a chance in the lowest level (but only if ObservableCollection, that is the only supported type)
-            computerSettings.IniFileCollection[0].FileName = "is dirty should be enabled now 2";
-            Assert.IsTrue(computerSettings.IniFileCollection[0].IsDirty);
-            Assert.IsTrue(computerSettings.IsDirty);
-
-            // Save the top level
-            SaveObjectToMemoryStream(computerSettings, SerializationFactory.GetXmlSerializer());
-            Assert.IsFalse(computerSettings.IniFileCollection[0].IniEntryCollection[0].IsDirty);
-            Assert.IsFalse(computerSettings.IsDirty);
-        }
-        #endregion
-
         #region Get/set value
         [TestCase]
         public void GetValue_Null()
@@ -681,19 +641,5 @@
         }
 #endif
         #endregion
-
-        /// <summary>
-        /// Saves the object to memory stream so the <see cref="IModel.IsDirty" /> property is set to false.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="serializer">The serializer.</param>
-        /// <param name="configuration">The configuration.</param>
-        internal static void SaveObjectToMemoryStream(ISavableModel obj, ISerializer serializer, ISerializationConfiguration configuration = null)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                obj.Save(memoryStream, serializer, configuration);
-            }
-        }
     }
 }
