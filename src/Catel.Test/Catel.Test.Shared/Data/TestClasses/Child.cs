@@ -24,9 +24,6 @@ namespace Catel.Test.Data
         /// <param name = "name">The name.</param>
         public Child(Parent parent, string name)
         {
-            // Set parent
-            SetParent(parent);
-
             // Store values
             Name = name;
         }

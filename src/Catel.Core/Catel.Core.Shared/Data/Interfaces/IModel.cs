@@ -15,8 +15,7 @@ namespace Catel.Data
     /// <remarks>
     /// This interface defines all the non-generic interfaces that the <see cref="ModelBase"/> class implements.
     /// </remarks>
-    public interface IModel : INotifyPropertyChanged, IParent, IAdvancedEditableObject, 
-        IModelEditor, IModelSerialization
+    public interface IModel : INotifyPropertyChanged, IAdvancedEditableObject, IModelEditor, IModelSerialization
     {
         #region Properties
         /// <summary>

@@ -95,7 +95,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\PropertyAlreadyRegisteredException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\PropertyNotNullableException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Exceptions\PropertyNotRegisteredException.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\IParentExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\ModelBaseExtensions.serialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\ModelBaseExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Extensions\ModelBaseExtensions.validation.cs" />
@@ -110,7 +109,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelEqualityComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IModelSerialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IValidatableModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IParent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\ISavableModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IValidationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Interfaces\IValidationResult.cs" />

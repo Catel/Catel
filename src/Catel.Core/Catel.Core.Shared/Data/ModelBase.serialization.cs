@@ -158,8 +158,6 @@ namespace Catel.Data
             // Data is now considered deserialized
             IsDeserialized = true;
 
-            FinishInitializationAfterConstructionOrDeserialization();
-
             IsDirty = false;
 
             LeanAndMeanModel = false;

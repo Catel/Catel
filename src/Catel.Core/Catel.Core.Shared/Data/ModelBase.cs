@@ -60,14 +60,6 @@ namespace Catel.Data
         internal readonly object _lock = new object();
 
         /// <summary>
-        /// The parent object of the current object.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private IParent _parent;
-
-        /// <summary>
         /// Backing field for the <see cref="LeanAndMeanModel"/> property. Because it has custom logic, it needs a backing field.
         /// </summary>
 #if NET
@@ -123,8 +115,6 @@ namespace Catel.Data
             // Note: this initializes the model without serialization context
 
             Initialize();
-
-            FinishInitializationAfterConstructionOrDeserialization();
         }
 #else
         /// <summary>
@@ -282,19 +272,6 @@ namespace Catel.Data
         protected bool AlwaysInvokeNotifyChanged { get; set; }
 
         /// <summary>
-        /// Gets the parent.
-        /// </summary>
-        /// <value>The parent.</value>
-#if NET
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        IParent IParent.Parent
-        {
-            get { return _parent; }
-        }
-
-        /// <summary>
         /// Gets the name of the object. By default, this is the hash code of all the properties combined.
         /// </summary>
         /// <value>The name of the key.</value>
@@ -336,7 +313,7 @@ namespace Catel.Data
         /// <summary>
         /// Register the IsDirty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData IsDirtyProperty = RegisterProperty("IsDirty", typeof(bool), false, false, null, false, true, true);
+        public static readonly PropertyData IsDirtyProperty = RegisterProperty("IsDirty", typeof(bool), false, null, false, true, true);
 
         /// <summary>
         /// Gets or sets a value indicating whether this object is currently read-only. When the object is read-only, values can only be read, not set.
@@ -355,7 +332,7 @@ namespace Catel.Data
         /// <summary>
         /// Register the IsReadOnly property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData IsReadOnlyProperty = RegisterProperty("IsReadOnly", typeof(bool), false, false,
+        public static readonly PropertyData IsReadOnlyProperty = RegisterProperty("IsReadOnly", typeof(bool), false,
             (sender, e) => ((ModelBase)sender).RaisePropertyChanged("IsEditable"), false, true, true);
 
         /// <summary>
@@ -399,55 +376,6 @@ namespace Catel.Data
             InitializeProperties();
 
             InitializeCustomProperties();
-        }
-
-        /// <summary>
-        /// Finishes the initialization after construction or deserialization.
-        /// </summary>
-        private void FinishInitializationAfterConstructionOrDeserialization()
-        {
-            var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(GetType());
-            foreach (var propertyData in catelTypeInfo.GetCatelProperties())
-            {
-                if (propertyData.Value.SetParent)
-                {
-                    lock (_lock)
-                    {
-                        var propertyValue = GetValueFromPropertyBag<object>(propertyData.Key);
-                        var propertyValueAsModelBase = propertyValue as ModelBase;
-                        var propertyValueAsIEnumerable = propertyValue as IEnumerable;
-
-                        if (propertyValueAsModelBase != null)
-                        {
-                            propertyValueAsModelBase.SetParent(this);
-                        }
-                        else if (propertyValueAsIEnumerable != null)
-                        {
-                            foreach (var obj in propertyValueAsIEnumerable)
-                            {
-                                var objAsModelBase = obj as ModelBase;
-                                if (objAsModelBase != null)
-                                {
-                                    objAsModelBase.SetParent(this);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            //SubscribeAllObjectsToNotifyChangedEvents();
-        }
-
-        /// <summary>
-        /// Sets the new parent of this object.
-        /// </summary>
-        /// <param name="parent">The new parent.</param>
-        protected void SetParent(IParent parent)
-        {
-            _parent = parent;
-
-            RaisePropertyChanged("Parent");
         }
 
         /// <summary>

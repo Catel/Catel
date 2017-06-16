@@ -41,11 +41,7 @@ namespace Catel.Data
             Initialize();
 
             // Make sure this is not a first time call or custom call with null
-            if (info == null)
-            {
-                FinishInitializationAfterConstructionOrDeserialization();
-            }
-            else
+            if (info != null)
             {
                 _serializationInfo = info;
 
