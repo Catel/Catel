@@ -8,11 +8,30 @@
 namespace Catel.Test.MVVM.ViewModels
 {
     using System.ComponentModel;
+    using System.Threading.Tasks;
     using NUnit.Framework;
     using TestClasses;
 
     public partial class ViewModelBaseFacts
     {
+        [TestCase]
+        public async Task CanSaveViewModelWithSuspendedValidationAsync()
+        {
+            var person = new Person();
+            var vm = new TestViewModel(person);
+
+            vm.Validate();
+
+            Assert.IsTrue(vm.HasErrors);
+
+            using (vm.SuspendValidations())
+            {
+                var hasSaved = await vm.SaveViewModelAsync();
+
+                Assert.IsTrue(hasSaved);
+            }
+        }
+
         //[TestCase]
         //public void DeferredValidation()
         //{

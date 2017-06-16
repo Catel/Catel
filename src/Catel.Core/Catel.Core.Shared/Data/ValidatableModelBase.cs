@@ -253,7 +253,24 @@ namespace Catel.Data
 #endif
         protected bool SuspendValidation
         {
-            get { return _suspendValidation || SuspendValidationForAllModels || LeanAndMeanModel; }
+            get
+            {
+                if (_suspendValidation || SuspendValidationForAllModels || LeanAndMeanModel)
+                {
+                    return true;
+                }
+
+                var context = _validationSuspensionContext;
+                if (context != null)
+                {
+                    if (context.Counter > 0)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
             set
             {
                 _suspendValidation = value;
