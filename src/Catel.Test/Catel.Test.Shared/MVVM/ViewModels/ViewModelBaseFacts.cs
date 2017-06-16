@@ -20,6 +20,14 @@ namespace Catel.Test.MVVM.ViewModels
     public partial class ViewModelBaseFacts
     {
         [TestCase]
+        public async Task IsNotDirtyAtStartupAsync()
+        {
+            var vm = new TestViewModel();
+
+            Assert.IsFalse(vm.IsDirty);
+        }
+
+        [TestCase]
         public async Task CancelAfterCloseProtection()
         {
             var auditor = new TestAuditor();
