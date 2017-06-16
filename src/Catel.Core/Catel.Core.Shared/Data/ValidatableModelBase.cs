@@ -52,6 +52,15 @@ namespace Catel.Data
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        /// <summary>
+        /// The property names that failed to validate and should be skipped next time for NET 4.0 
+        /// attribute validation.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        protected static readonly Dictionary<Type, HashSet<string>> PropertiesNotCausingValidation = new Dictionary<Type, HashSet<string>>();
+
 #if NET
         [field: NonSerialized]
 #endif
@@ -101,15 +110,6 @@ namespace Catel.Data
         [field: NonSerialized]
 #endif
         private SuspensionContext _validationSuspensionContext;
-
-        /// <summary>
-        /// The property names that failed to validate and should be skipped next time for NET 4.0 
-        /// attribute validation.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private static readonly Dictionary<Type, HashSet<string>> _propertyValuesIgnoredOrFailedForValidation = new Dictionary<Type, HashSet<string>>();
 
 #if NET
         [field: NonSerialized]
@@ -406,18 +406,15 @@ namespace Catel.Data
             SuspendValidation = DefaultSuspendValidationValue;
             ValidateUsingDataAnnotations = DefaultValidateUsingDataAnnotationsValue;
 
-#if !NETFX_CORE && !PCL
-            lock (_propertyValuesIgnoredOrFailedForValidation)
+            lock (PropertiesNotCausingValidation)
             {
-                if (!_propertyValuesIgnoredOrFailedForValidation.ContainsKey(type))
+                if (!PropertiesNotCausingValidation.ContainsKey(type))
                 {
                     var hashSet = new HashSet<string>();
 
                     // Ignore modelbase properties
                     hashSet.Add(nameof(EqualityComparer));
                     hashSet.Add(nameof(LeanAndMeanModel));
-                    hashSet.Add(nameof(IsInitializing));
-                    hashSet.Add(nameof(IsInitialized));
                     hashSet.Add(nameof(AlwaysInvokeNotifyChanged));
                     hashSet.Add(nameof(AutomaticallyValidateOnPropertyChanged));
                     hashSet.Add(nameof(DeserializationSucceeded));
@@ -438,10 +435,9 @@ namespace Catel.Data
                         }
                     }
 
-                    _propertyValuesIgnoredOrFailedForValidation.Add(type, hashSet);
+                    PropertiesNotCausingValidation.Add(type, hashSet);
                 }
             }
-#endif
         }
 
         /// <summary>
@@ -551,7 +547,7 @@ namespace Catel.Data
             var propertyName = e.PropertyName;
             if (!string.IsNullOrWhiteSpace(propertyName))
             {
-                if (_propertyValuesIgnoredOrFailedForValidation.TryGetValue(GetType(), out HashSet<string> ignoredProperties))
+                if (PropertiesNotCausingValidation.TryGetValue(GetType(), out HashSet<string> ignoredProperties))
                 {
                     if (ignoredProperties.Contains(propertyName))
                     {
@@ -648,7 +644,7 @@ namespace Catel.Data
 
             try
             {
-                if (!_propertyValuesIgnoredOrFailedForValidation[type].Contains(propertyName))
+                if (!PropertiesNotCausingValidation[type].Contains(propertyName))
                 {
                     object value = null;
                     var handled = false;
@@ -662,7 +658,7 @@ namespace Catel.Data
                             var propertyInfo = catelPropertyData.GetPropertyInfo(type);
                             if (propertyInfo == null || !propertyInfo.HasPublicGetter)
                             {
-                                _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
+                                PropertiesNotCausingValidation[type].Add(propertyName);
                                 return false;
                             }
 
@@ -677,7 +673,7 @@ namespace Catel.Data
                         {
                             Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in the current platform", propertyName);
 
-                            _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
+                            PropertiesNotCausingValidation[type].Add(propertyName);
                             return false;
                         }
 
@@ -705,7 +701,7 @@ namespace Catel.Data
             }
             catch (Exception ex)
             {
-                _propertyValuesIgnoredOrFailedForValidation[type].Add(propertyName);
+                PropertiesNotCausingValidation[type].Add(propertyName);
 
                 Log.Warning(ex, "Failed to validate property '{0}' via Validator (property does not exists?)", propertyName);
             }
@@ -867,7 +863,7 @@ namespace Catel.Data
             {
                 var type = GetType();
 
-                var ignoredOrFailedPropertyValidations = _propertyValuesIgnoredOrFailedForValidation[type];
+                var ignoredOrFailedPropertyValidations = PropertiesNotCausingValidation[type];
 
                 // In forced mode, validate all registered properties for annotations
                 var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(type);

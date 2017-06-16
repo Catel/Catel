@@ -93,14 +93,6 @@ namespace Catel.MVVM
         private readonly bool _ignoreMultipleModelsWarning;
 
         /// <summary>
-        /// Value indicating whether the view model is already initialized via a call to <see cref="InitializeViewModelAsync" />.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private bool _isViewModelInitialized;
-
-        /// <summary>
         /// Value indicating whether the view model attributes are initialized. 
         /// </summary>
 #if NET
@@ -239,16 +231,18 @@ namespace Catel.MVVM
                 return;
             }
 
-            Log.Debug("Creating view model of type '{0}' with unique identifier {1}", GetType().Name, UniqueIdentifier);
+            var type = GetType();
+
+            Log.Debug("Creating view model of type '{0}' with unique identifier {1}", type.Name, UniqueIdentifier);
 
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
+#if !XAMARIN
             if (serviceLocator == null)
             {
                 serviceLocator = ServiceLocator.Default;
             }
 
-#if !XAMARIN
             DependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
             _dispatcherService = DependencyResolver.Resolve<IDispatcherService>();
 #endif
@@ -378,6 +372,24 @@ namespace Catel.MVVM
         /// </value>
         [ExcludeFromValidation]
         private bool SupportIEditableObject { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this object is currently initializing.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this object is currently initializing; otherwise, <c>false</c>.
+        /// </value>
+        [ExcludeFromValidation]
+        protected bool IsInitializing { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this object is initialized.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this object is initialized; otherwise, <c>false</c>.
+        /// </value>
+        [ExcludeFromValidation]
+        protected bool IsInitialized { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is currently canceling.
@@ -1355,13 +1367,16 @@ namespace Catel.MVVM
         /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
         public async Task InitializeViewModelAsync()
         {
-            if (!_isViewModelInitialized)
+            if (!IsInitializing && !IsInitialized)
             {
-                _isViewModelInitialized = true;
+                IsInitializing = true;
 
                 await InitializeAsync();
 
                 await InitializedAsync.SafeInvokeAsync(this);
+
+                IsInitializing = false;
+                IsInitialized = true;
             }
         }
 

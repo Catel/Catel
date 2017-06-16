@@ -38,8 +38,6 @@ namespace Catel.Data
         /// </remarks>
         protected ModelBase(SerializationInfo info, StreamingContext context)
         {
-            OnInitializing();
-
             Initialize();
 
             // Make sure this is not a first time call or custom call with null
@@ -76,8 +74,6 @@ namespace Catel.Data
                     }
                 }
             }
-
-            OnInitialized();
         }
 
         /// <summary>

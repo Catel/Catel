@@ -100,11 +100,6 @@ namespace Catel.Data
         [field: NonSerialized]
 #endif
         internal SuspensionContext _changeNotificationsSuspensionContext;
-
-#if NET
-        [field: NonSerialized]
-#endif
-        private event EventHandler<EventArgs> _initialized;
         #endregion
 
         #region Constructors
@@ -127,13 +122,9 @@ namespace Catel.Data
         {
             // Note: this initializes the model without serialization context
 
-            OnInitializing();
-
             Initialize();
 
             FinishInitializationAfterConstructionOrDeserialization();
-
-            OnInitialized();
         }
 #else
         /// <summary>
@@ -151,17 +142,6 @@ namespace Catel.Data
             // OnInitializing or OnInitialized methods instead.
         }
 #endif
-        #endregion
-
-        #region Events
-        /// <summary>
-        /// Occurs when the object is initialized.
-        /// </summary>
-        event EventHandler<EventArgs> IModel.Initialized
-        {
-            add { _initialized += value; }
-            remove { _initialized -= value; }
-        }
         #endregion
 
         #region Operators
@@ -267,30 +247,6 @@ namespace Catel.Data
 #endif
         [XmlIgnore]
         internal static PropertyDataManager PropertyDataManager { get; private set; }
-
-        /// <summary>
-        /// Gets a value indicating whether this object is currently initializing.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this object is currently initializing; otherwise, <c>false</c>.
-        /// </value>
-#if NET
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        protected bool IsInitializing { get; private set; }
-
-        /// <summary>
-        /// Gets a value indicating whether this object is initialized.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this object is initialized; otherwise, <c>false</c>.
-        /// </value>
-#if NET
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        protected bool IsInitialized { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the deserialized data is available, which means that
@@ -427,25 +383,6 @@ namespace Catel.Data
         /// </remarks>
         protected virtual void InitializeCustomProperties()
         {
-        }
-
-        /// <summary>
-        /// Called when the object is being initialized.
-        /// </summary>
-        protected virtual void OnInitializing()
-        {
-            IsInitializing = true;
-        }
-
-        /// <summary>
-        /// Called when the object is initialized.
-        /// </summary>
-        protected virtual void OnInitialized()
-        {
-            IsInitializing = false;
-            IsInitialized = true;
-
-            _initialized.SafeInvoke(this);
         }
 
         /// <summary>

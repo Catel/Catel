@@ -40,13 +40,6 @@ namespace Catel.Data
         bool IsInEditSession { get; }
         #endregion
 
-        #region Events
-        /// <summary>
-        /// Occurs when the object is initialized.
-        /// </summary>
-        event EventHandler<EventArgs> Initialized;
-        #endregion
-
         #region Methods
         /// <summary>
         /// Returns the default value of a specific property.
