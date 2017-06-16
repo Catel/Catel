@@ -44,14 +44,6 @@ namespace Catel.Data
 #endif
 
         /// <summary>
-        /// Dictionary of initialized types.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private static readonly HashSet<Type> _initializedTypes = new HashSet<Type>();
-
-        /// <summary>
         /// The property values.
         /// </summary>
 #if NET

@@ -259,12 +259,6 @@ namespace Catel.Data
 
                 InitializeProperty(propertyData);
             }
-
-            lock (_initializedTypes)
-            {
-                // No need to check if already existing
-                _initializedTypes.Add(type);
-            }
         }
 
         /// <summary>
@@ -339,17 +333,11 @@ namespace Catel.Data
                     "Property '{0}' is not nullable, please provide a valid (not null) default value", name);
             }
 
-            lock (_initializedTypes)
+            if (!IsPropertyRegistered(name))
             {
-                if (!_initializedTypes.Contains(objectType) || lateRegistration)
-                {
-                    if (!IsPropertyRegistered(name))
-                    {
-                        var propertyData = new PropertyData(name, type, defaultValue, setParent, propertyChangedEventHandler,
-                            isSerializable, includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty);
-                        PropertyDataManager.RegisterProperty(objectType, name, propertyData);
-                    }
-                }
+                var propertyData = new PropertyData(name, type, defaultValue, setParent, propertyChangedEventHandler,
+                    isSerializable, includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty);
+                PropertyDataManager.RegisterProperty(objectType, name, propertyData);
             }
 
             lock (_lock)
