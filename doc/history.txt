@@ -95,6 +95,8 @@ Added/fixed:
 (*) #1029    Check for existing values and only raise changed event in ConfigurationService
 (*) #1045    Clean up IViewModel interface (remove HasDirtyModel, ViewModelConstructionTime & ValidateViewModel)
 (*) #1050    Replace ISavableModel.SerializationMode with ISerializer and remove some overloads
+(*) #1052    Move property value change notifications wrappers (for child objects & collections) from ModelBase 
+             to ChildAwareModelBase 
 (x) CTL-899  Navigation in WPF is not working when using custom frame
 (x) CTL-906  Clear current navigation context when (re)navigating to the same view in WPF
 (x) CTL-910  Introduce special lock for null keys in CacheStorage to prevent ArgumentNullException

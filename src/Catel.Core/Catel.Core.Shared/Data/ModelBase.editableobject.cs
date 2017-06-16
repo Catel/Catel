@@ -30,15 +30,6 @@ namespace Catel.Data
 #endif
         private class BackupData
         {
-            #region Constants
-
-            /// <summary>
-            /// The name of the <see cref="ModelBase.IsDirty"/> property.
-            /// </summary>
-            private const string IsDirty = "IsDirty";
-
-            #endregion
-
             #region Fields
 
             /// <summary>
@@ -101,7 +92,7 @@ namespace Catel.Data
                 }
 
                 _objectValuesBackup = new Dictionary<string, object>();
-                _objectValuesBackup.Add(IsDirty, _object.IsDirty);
+                _objectValuesBackup.Add(nameof(ModelBase.IsDirty), _object.IsDirty);
             }
 
             /// <summary>
@@ -145,7 +136,7 @@ namespace Catel.Data
                     }
                 }
 
-                _object.IsDirty = (bool)_objectValuesBackup[IsDirty];
+                _object.IsDirty = (bool)_objectValuesBackup[nameof(ModelBase.IsDirty)];
             }
             #endregion
         }

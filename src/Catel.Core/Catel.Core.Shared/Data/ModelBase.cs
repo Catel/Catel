@@ -8,15 +8,15 @@ namespace Catel.Data
 {
     using System;
     using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.ComponentModel;
-    using System.IO;
-    using System.Runtime.Serialization;
     using System.Xml.Serialization;
     using IoC;
     using Logging;
     using Runtime.Serialization;
+
+#if NET
+    using System.Runtime.Serialization;
+#endif
 
     /// <summary>
     /// Abstract class that serves as a base class for serializable objects.
@@ -50,14 +50,6 @@ namespace Catel.Data
         [field: NonSerialized]
 #endif
         internal readonly PropertyBag _propertyBag = new PropertyBag();
-
-        /// <summary>
-        /// The change notification wrappers for all property values.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private Dictionary<string, ChangeNotificationWrapper> _propertyValueChangeNotificationWrappers;
 
         /// <summary>
         /// Lock object.
@@ -102,12 +94,12 @@ namespace Catel.Data
 #if NET
         [field: NonSerialized]
 #endif
-        private SuspensionContext _changeCallbacksSuspensionContext;
+        internal SuspensionContext _changeCallbacksSuspensionContext;
 
 #if NET
         [field: NonSerialized]
 #endif
-        private SuspensionContext _changeNotificationsSuspensionContext;
+        internal SuspensionContext _changeNotificationsSuspensionContext;
 
 #if NET
         [field: NonSerialized]
@@ -124,7 +116,6 @@ namespace Catel.Data
         {
             PropertyDataManager = PropertyDataManager.Default;
 
-            DefaultDisableEventSubscriptionsOfChildValuesValue = false;
             DefaultSerializer = IoCConfiguration.DefaultDependencyResolver.Resolve<ISerializer>();
         }
 
@@ -268,19 +259,6 @@ namespace Catel.Data
         public static bool DisablePropertyChangeNotifications { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether event subscriptions of child values should be disabled.
-        /// <para />
-        /// The default value is <c>false</c>.
-        /// </summary>
-        /// <value><c>true</c> if event subscriptions of child values should be disabled; otherwise, <c>false</c>.</value>
-        protected bool DisableEventSubscriptionsOfChildValues { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether event subscriptions of child values should be disabled.
-        /// </summary>
-        public static bool DefaultDisableEventSubscriptionsOfChildValuesValue { get; set; }
-
-        /// <summary>
         /// Gets the property data manager that manages the properties of this object.
         /// </summary>
         /// <value>The property data manager.</value>
@@ -348,15 +326,6 @@ namespace Catel.Data
         protected bool AlwaysInvokeNotifyChanged { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this object should handle (thus invoke the specific events) when
-        /// a property of collection value has changed.
-        /// </summary>
-#if NET
-        [Browsable(false)]
-#endif
-        protected bool HandlePropertyAndCollectionChanges { get; set; }
-
-        /// <summary>
         /// Gets the parent.
         /// </summary>
         /// <value>The parent.</value>
@@ -403,8 +372,8 @@ namespace Catel.Data
         [XmlIgnore]
         public bool IsDirty
         {
-            // Note: we know what we are doing, use GetValueFast (but not SetValueFast)
-            get { return GetValueFast<bool>(IsDirtyProperty.Name); }
+            // Note: we know what we are doing, use GetValueFromPropertyBag (but not SetValueFast)
+            get { return GetValueFromPropertyBag<bool>(IsDirtyProperty.Name); }
             protected set { SetValue(IsDirtyProperty, value); }
         }
 
@@ -422,8 +391,8 @@ namespace Catel.Data
         [XmlIgnore]
         public bool IsReadOnly
         {
-            // Note: we know what we are doing, use GetValueFast (but not SetValueFast)
-            get { return GetValueFast<bool>(IsReadOnlyProperty.Name); }
+            // Note: we know what we are doing, use GetValueFromPropertyBag (but not SetValueFast)
+            get { return GetValueFromPropertyBag<bool>(IsReadOnlyProperty.Name); }
             protected set { SetValue(IsReadOnlyProperty, value); }
         }
 
@@ -486,9 +455,8 @@ namespace Catel.Data
         {
             Serializer = DefaultSerializer;
             SerializationConfiguration = DefaultSerializationConfiguration;
-            DisableEventSubscriptionsOfChildValues = DefaultDisableEventSubscriptionsOfChildValuesValue;
             DeserializationSucceeded = false;
-            HandlePropertyAndCollectionChanges = true;
+            
             AlwaysInvokeNotifyChanged = false;
 
             InitializeProperties();
@@ -508,7 +476,7 @@ namespace Catel.Data
                 {
                     lock (_lock)
                     {
-                        var propertyValue = GetValueFast<object>(propertyData.Key);
+                        var propertyValue = GetValueFromPropertyBag<object>(propertyData.Key);
                         var propertyValueAsModelBase = propertyValue as ModelBase;
                         var propertyValueAsIEnumerable = propertyValue as IEnumerable;
 
@@ -606,144 +574,6 @@ namespace Catel.Data
         }
 
         // ReSharper restore RedundantOverridenMember
-
-        /// <summary>
-        /// Clears the <see cref="IsDirty"/> on all childs.
-        /// </summary>
-        protected void ClearIsDirtyOnAllChilds()
-        {
-            ClearIsDirtyOnAllChilds(this, new HashSet<IModel>());
-        }
-
-        /// <summary>
-        /// Clears the <see cref="IsDirty"/> on all childs.
-        /// </summary>
-        /// <param name="obj">The object.</param>
-        /// <param name="handledReferences">The already handled references, required to prevent circular stackoverflows.</param>
-        private static void ClearIsDirtyOnAllChilds(object obj, HashSet<IModel> handledReferences)
-        {
-            var objAsModelBase = obj as ModelBase;
-            var objAsIEnumerable = obj as IEnumerable;
-
-            if (objAsModelBase != null)
-            {
-                if (handledReferences.Contains(objAsModelBase))
-                {
-                    return;
-                }
-
-                objAsModelBase.IsDirty = false;
-                handledReferences.Add(objAsModelBase);
-
-                var catelTypeInfo = PropertyDataManager.GetCatelTypeInfo(obj.GetType());
-                foreach (var property in catelTypeInfo.GetCatelProperties())
-                {
-                    object value = objAsModelBase.GetValue(property.Value);
-
-                    ClearIsDirtyOnAllChilds(value, handledReferences);
-                }
-            }
-            else if (objAsIEnumerable != null)
-            {
-                foreach (var childItem in objAsIEnumerable)
-                {
-                    if (childItem is ModelBase)
-                    {
-                        ClearIsDirtyOnAllChilds(childItem, handledReferences);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Handles the object events subscription. This means that the old value will be removed from the event subscriptions, and
-        /// the new value will be subscribed to.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <param name="propertyValue">The property value.</param>
-        private void HandleObjectEventsSubscription(string propertyName, object propertyValue)
-        {
-            if (DisableEventSubscriptionsOfChildValues)
-            {
-                return;
-            }
-
-            lock (_lock)
-            {
-                ChangeNotificationWrapper oldWrapper;
-
-                if (_propertyValueChangeNotificationWrappers == null)
-                {
-                    _propertyValueChangeNotificationWrappers = new Dictionary<string, ChangeNotificationWrapper>();
-                }
-
-                if (_propertyValueChangeNotificationWrappers.TryGetValue(propertyName, out oldWrapper))
-                {
-                    oldWrapper.PropertyChanged -= OnPropertyObjectPropertyChanged;
-                    oldWrapper.CollectionChanged -= OnPropertyObjectCollectionChanged;
-                    oldWrapper.CollectionItemPropertyChanged -= OnPropertyObjectCollectionItemPropertyChanged;
-                    oldWrapper.UnsubscribeFromAllEvents();
-                }
-
-                if (!ChangeNotificationWrapper.IsUsefulForObject(propertyValue))
-                {
-                    if (oldWrapper != null)
-                    {
-                        _propertyValueChangeNotificationWrappers.Remove(propertyName);
-                    }
-                }
-                else
-                {
-                    var wrapper = new ChangeNotificationWrapper(propertyValue);
-                    wrapper.PropertyChanged += OnPropertyObjectPropertyChanged;
-                    wrapper.CollectionChanged += OnPropertyObjectCollectionChanged;
-                    wrapper.CollectionItemPropertyChanged += OnPropertyObjectCollectionItemPropertyChanged;
-                    _propertyValueChangeNotificationWrappers[propertyName] = wrapper;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Called when a property that implements <see cref="INotifyPropertyChanged"/> raises the event.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyObjectPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            // It is possible that the sender used string.Empty or null for the property name, then exit
-            if (string.IsNullOrEmpty(e.PropertyName))
-            {
-                return;
-            }
-
-            RaisePropertyChanged(sender, e, true, false);
-        }
-
-        /// <summary>
-        /// Called when a property that implements <see cref="INotifyCollectionChanged"/> raises the event.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyObjectCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            SetDirty(string.Empty);
-        }
-
-        /// <summary>
-        /// Called when a property inside a collection that implements <see cref="INotifyCollectionChanged"/> that implements
-        /// <see cref="INotifyPropertyChanged"/> raises the event.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (string.Equals(e.PropertyName, "IsDirty", StringComparison.Ordinal))
-            {
-                return;
-            }
-
-            SetDirty(string.Empty);
-        }
 
         /// <summary>
         /// Suspends the change callbacks whenever a property has been called. This is very useful when
@@ -931,54 +761,6 @@ namespace Catel.Data
                     }
 
                     return;
-                }
-            }
-
-            if (HandlePropertyAndCollectionChanges)
-            {
-                if (ReferenceEquals(this, sender))
-                {
-                    AdvancedPropertyChangedEventArgs eventArgs;
-                    var advancedEventArgs = e as AdvancedPropertyChangedEventArgs;
-                    if (advancedEventArgs != null)
-                    {
-                        eventArgs = new AdvancedPropertyChangedEventArgs(this, advancedEventArgs);
-                    }
-                    else
-                    {
-                        eventArgs = new AdvancedPropertyChangedEventArgs(sender, this, e.PropertyName);
-                    }
-
-                    if (!isRefreshCallOnly)
-                    {
-                        SuspensionContext callbackSuspensionContext;
-
-                        lock (_lock)
-                        {
-                            callbackSuspensionContext = _changeCallbacksSuspensionContext;
-                        }
-
-                        if (callbackSuspensionContext != null)
-                        {
-                            callbackSuspensionContext.Add(e.PropertyName);
-                        }
-                        else if (IsPropertyRegistered(e.PropertyName))
-                        {
-                            var propertyData = GetPropertyData(e.PropertyName);
-
-                            var handler = propertyData.PropertyChangedEventHandler;
-                            if (handler != null)
-                            {
-                                handler(this, eventArgs);
-                            }
-                        }
-                    }
-
-                    if (!DisablePropertyChangeNotifications)
-                    {
-                        // Explicitly call base because we have overridden the behavior
-                        base.RaisePropertyChanged(this, eventArgs);
-                    }
                 }
             }
 

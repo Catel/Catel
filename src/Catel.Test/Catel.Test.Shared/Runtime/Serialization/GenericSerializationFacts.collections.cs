@@ -241,7 +241,7 @@ namespace Catel.Test.Runtime.Serialization
 
             [Serializable]
             [DebuggerDisplay("Count = {Count}")]
-            public abstract class ModelObservableCollectionBase<T> : ModelBase, IObservableCollection<T>, IList
+            public abstract class ModelObservableCollectionBase<T> : ChildAwareModelBase, IObservableCollection<T>, IList
                 where T : class
             {
                 #region Constants and Fields
@@ -487,7 +487,6 @@ namespace Catel.Test.Runtime.Serialization
                 #endregion
 
                 #region Methods
-
                 protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
                 {
                     Contract.Requires(e != null);

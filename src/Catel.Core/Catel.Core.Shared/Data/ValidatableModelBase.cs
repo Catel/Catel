@@ -416,11 +416,9 @@ namespace Catel.Data
                     // Ignore modelbase properties
                     hashSet.Add(nameof(EqualityComparer));
                     hashSet.Add(nameof(LeanAndMeanModel));
-                    hashSet.Add(nameof(DisableEventSubscriptionsOfChildValues));
                     hashSet.Add(nameof(IsInitializing));
                     hashSet.Add(nameof(IsInitialized));
                     hashSet.Add(nameof(AlwaysInvokeNotifyChanged));
-                    hashSet.Add(nameof(HandlePropertyAndCollectionChanges));
                     hashSet.Add(nameof(AutomaticallyValidateOnPropertyChanged));
                     hashSet.Add(nameof(DeserializationSucceeded));
                     hashSet.Add(nameof(SuspendValidation));

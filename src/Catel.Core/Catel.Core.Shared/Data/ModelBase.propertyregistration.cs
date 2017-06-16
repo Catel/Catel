@@ -344,7 +344,7 @@ namespace Catel.Data
             {
                 if (!_propertyBag.IsPropertyAvailable(name))
                 {
-                    SetValueFast(name, defaultValue);
+                    SetValueToPropertyBag(name, defaultValue);
                 }
             }
         }

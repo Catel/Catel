@@ -112,7 +112,7 @@ namespace Catel.Data
 
             serializer.Serialize(this, stream, configuration);
 
-            ClearIsDirtyOnAllChilds();
+            this.ClearIsDirtyOnAllChilds();
         }
         #endregion
 
