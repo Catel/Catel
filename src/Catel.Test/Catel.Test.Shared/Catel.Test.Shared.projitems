@@ -32,6 +32,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\BoxingCacheFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\CatelTypeInfoFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ChangeNotificationWrapperFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\ComparableModelBaseFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ClassWithoutPropertiesA.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ClassWithoutPropertiesB.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ClassWithValidator.cs" />

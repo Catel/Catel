@@ -12,7 +12,7 @@
     [Serializable]
 #endif
     [KnownType(typeof(ModelA)), KnownType(typeof(ModelB))]
-    public class ModelC : SavableModelBase<ModelC>
+    public class ModelC : ComparableModelBase
     {
         #region Fields
         #endregion

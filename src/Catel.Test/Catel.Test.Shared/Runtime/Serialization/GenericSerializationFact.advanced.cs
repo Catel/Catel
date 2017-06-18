@@ -43,7 +43,7 @@ namespace Catel.Test.Runtime.Serialization
         public class CatelModelAdvancedSerializationFacts
         {
             [Serializable]
-            public abstract class AbstractBase : ModelBase
+            public abstract class AbstractBase : ComparableModelBase
             {
                 public AbstractBase()
                 {
@@ -83,7 +83,7 @@ namespace Catel.Test.Runtime.Serialization
             }
 
             [Serializable]
-            public class ContainerClass : ModelBase
+            public class ContainerClass : ComparableModelBase
             {
                 public ContainerClass()
                 {

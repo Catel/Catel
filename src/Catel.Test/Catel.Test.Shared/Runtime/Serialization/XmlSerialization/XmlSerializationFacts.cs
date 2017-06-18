@@ -176,7 +176,8 @@ namespace Catel.Test.Runtime.Serialization
 
                         memoryStream.Position = 0L;
 
-                        var deserializedPerson = ModelBaseFacts.Person.Load(memoryStream, serializer);
+                        var deserializedPerson = serializer.Deserialize<ModelBaseFacts.Person>(memoryStream);
+
                         Assert.AreEqual("Geert", deserializedPerson.FirstName);
                         Assert.AreEqual("van", deserializedPerson.MiddleName);
                         Assert.AreEqual("Horrik", deserializedPerson.LastName);
@@ -208,7 +209,8 @@ namespace Catel.Test.Runtime.Serialization
 
                         memoryStream.Position = 0L;
 
-                        var deserializedPerson = ModelBaseFacts.Person.Load(memoryStream, serializer);
+                        var deserializedPerson = serializer.Deserialize<ModelBaseFacts.Person>(memoryStream);
+
                         Assert.AreEqual(42, deserializedPerson.Age);
                     }
                 }

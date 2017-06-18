@@ -113,6 +113,8 @@ Added/fixed:
 (-) CTL-987  Delete MVVM logic behaviors (should only be available as logic)
 (-) #129     Remove MediaElementThreadInfo since it was only used by PleaseWaitHelper 
 (-) #131     Remove ISplashScreenService
+(-) #776     Remove implementation of ModelBase.Equals and ModelBase.GetHashCode to improve out-of-the-box performance of
+             the ModelBase. To implement comparison, one has to override it manually or derive from ComparableModelBase
 (-) #916     Remove IXmlSerializer.OptimalizationMode in favor of ISerializationConfiguration.OptimalizationMode
 (-) #974     Remove DynamicEventListener in favor of WeakEventListener
 (-) #983     Remove INotifyPropertyChanging and only support INotifyPropertyChanged

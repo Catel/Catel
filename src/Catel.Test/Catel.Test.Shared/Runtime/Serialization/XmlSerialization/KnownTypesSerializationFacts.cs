@@ -31,7 +31,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
     // plugins which are not known in advance. Is there a way to do this dynamically,
     // by making a request to the plugin manager?
     [KnownType("KnownTypes")]
-    public class ParamsBase : SavableModelBase<ParamsBase>, IParams
+    public class ParamsBase : ComparableModelBase, IParams
     {
         // This method returns the array of known types.
         static Type[] KnownTypes()
@@ -72,7 +72,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
         }
     }
 
-    public class ContainerInterfaces : SavableModelBase<ContainerInterfaces>
+    public class ContainerInterfaces : ComparableModelBase
     {
         #region Property: Parameters
         public ObservableCollection<IParams> Parameters
@@ -85,7 +85,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
         #endregion
     }
 
-    public class ContainerAbstractClasses : SavableModelBase<ContainerAbstractClasses>
+    public class ContainerAbstractClasses : ComparableModelBase
     {
         #region Property: Parameters
         public ObservableCollection<ParamsBase> Parameters
@@ -99,7 +99,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
     }
 
     [KnownType("KnownTypes")]
-    public class DictionaryTestClass : SavableModelBase<DictionaryTestClass>
+    public class DictionaryTestClass : ComparableModelBase
     {
         // This method returns the array of known types.
         static Type[] KnownTypes()
@@ -145,10 +145,11 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
             using (var memoryStream = new MemoryStream())
             {
                 var serializer = SerializationFactory.GetXmlSerializer();
+                serializer.Serialize(dictionary, memoryStream);
 
-                dictionary.Save(memoryStream, serializer, null);
                 memoryStream.Position = 0L;
-                var dictionary2 = DictionaryTestClass.Load(memoryStream, serializer, null);
+
+                var dictionary2 = serializer.Deserialize<DictionaryTestClass>(memoryStream);
 
                 Assert.AreEqual(dictionary, dictionary2);
 
@@ -183,7 +184,9 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
 
                 c.Save(memoryStream, serializer);
                 memoryStream.Position = 0L;
-                var c2 = ContainerInterfaces.Load(memoryStream, serializer);
+
+                var c2 = serializer.Deserialize<ContainerInterfaces>(memoryStream);
+
                 Assert.AreEqual(c, c2);
             }
         }
@@ -208,7 +211,8 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
                 c.Save(memoryStream, serializer);
                 memoryStream.Position = 0L;
 
-                var c2 = ContainerAbstractClasses.Load(memoryStream, serializer);
+                var c2 = serializer.Deserialize<ContainerAbstractClasses>(memoryStream);
+
                 Assert.AreEqual(c, c2);
             }
         }

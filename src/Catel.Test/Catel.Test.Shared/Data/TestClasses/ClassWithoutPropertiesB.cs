@@ -7,7 +7,7 @@
 #if NET
     [Serializable]
 #endif
-    public class ClassWithoutPropertiesB : ModelBase
+    public class ClassWithoutPropertiesB : ComparableModelBase
     {
         #region Fields
         #endregion

@@ -134,7 +134,7 @@ namespace Catel.Test.Data
 #if NET
     [Serializable]
 #endif
-    public class ScheduleAssistantSettings : SavableModelBase<ScheduleAssistantSettings>
+    public class ScheduleAssistantSettings : ComparableModelBase
     {
         public ScheduleAssistantSettings()
         {
@@ -223,7 +223,7 @@ namespace Catel.Test.Data
 #if NET
     [Serializable]
 #endif
-    public class GridSettings : ModelBase
+    public class GridSettings : ComparableModelBase
     {
         public GridSettings()
         {

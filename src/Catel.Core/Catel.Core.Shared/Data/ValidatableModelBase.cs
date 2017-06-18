@@ -413,7 +413,6 @@ namespace Catel.Data
                     var hashSet = new HashSet<string>();
 
                     // Ignore modelbase properties
-                    hashSet.Add(nameof(EqualityComparer));
                     hashSet.Add(nameof(LeanAndMeanModel));
                     hashSet.Add(nameof(AlwaysInvokeNotifyChanged));
                     hashSet.Add(nameof(AutomaticallyValidateOnPropertyChanged));

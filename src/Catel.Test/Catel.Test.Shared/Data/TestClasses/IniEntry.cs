@@ -12,7 +12,7 @@ namespace Catel.Test.Data
 #if NET
     [Serializable]
 #endif
-    public class IniEntry : SavableModelBase<IniEntry>
+    public class IniEntry : ComparableModelBase
     {
         #region Fields
         #endregion

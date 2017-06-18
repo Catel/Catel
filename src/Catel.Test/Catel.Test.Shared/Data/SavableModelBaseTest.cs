@@ -40,15 +40,18 @@ namespace Catel.Test.Data
         [TestCase]
         public void Load_Stream_SerializationMode_Binary()
         {
+            // Note: in a perfect world, we would have real models deriving from SavableModelBase
+
             using (var memoryStream = new MemoryStream())
             {
                 var serializer = SerializationFactory.GetBinarySerializer();
 
                 var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-                originalObject.Save(memoryStream, serializer, null);
+                serializer.Serialize(originalObject, memoryStream);
 
                 memoryStream.Position = 0L;
-                var loadedObject = IniFile.Load(memoryStream, serializer, null);
+
+                var loadedObject = serializer.Deserialize(typeof(IniFile), memoryStream);
 
                 Assert.AreEqual(originalObject, loadedObject);
             }
@@ -58,15 +61,17 @@ namespace Catel.Test.Data
         [TestCase]
         public void Load_Stream_SerializationMode_Xml()
         {
+            // Note: in a perfect world, we would have real models deriving from SavableModelBase
+
             using (var memoryStream = new MemoryStream())
             {
                 var serializer = SerializationFactory.GetBinarySerializer();
 
                 var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-                originalObject.Save(memoryStream, serializer, null);
+                serializer.Serialize(originalObject, memoryStream);
 
                 memoryStream.Position = 0L;
-                var loadedObject = IniFile.Load(memoryStream, serializer, null);
+                var loadedObject = serializer.Deserialize(typeof(IniFile), memoryStream);
 
                 Assert.AreEqual(originalObject, loadedObject);
             }

@@ -11,7 +11,7 @@
 #if NET
     [KnownType(typeof(ModelA)), KnownType(typeof(ModelB)), Serializable]
 #endif
-    public class Model : SavableModelBase<Model>
+    public class Model : ComparableModelBase
     {
         #region Fields
         #endregion

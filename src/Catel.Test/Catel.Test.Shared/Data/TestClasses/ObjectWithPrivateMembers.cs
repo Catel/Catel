@@ -7,7 +7,7 @@ namespace Catel.Test.Data
 #if NET
     [Serializable]
 #endif
-    public class ObjectWithPrivateMembers : SavableModelBase<ObjectWithPrivateMembers>
+    public class ObjectWithPrivateMembers : ComparableModelBase
     {
         #region Fields
         #endregion

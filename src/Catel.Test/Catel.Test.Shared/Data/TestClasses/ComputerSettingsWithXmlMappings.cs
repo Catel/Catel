@@ -13,7 +13,7 @@ namespace Catel.Test.Data
 #if NET
     [Serializable]
 #endif
-    public class ComputerSettingsWithXmlMappings : SavableModelBase<ComputerSettingsWithXmlMappings>
+    public class ComputerSettingsWithXmlMappings : ComparableModelBase
     {
         #region Fields
         #endregion

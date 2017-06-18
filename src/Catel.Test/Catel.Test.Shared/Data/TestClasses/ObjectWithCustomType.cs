@@ -7,7 +7,7 @@ namespace Catel.Test.Data
 #if NET
     [Serializable]
 #endif
-    public class ObjectWithCustomType : SavableModelBase<ObjectWithCustomType>
+    public class ObjectWithCustomType : ComparableModelBase
     {
         #region Fields
         #endregion
