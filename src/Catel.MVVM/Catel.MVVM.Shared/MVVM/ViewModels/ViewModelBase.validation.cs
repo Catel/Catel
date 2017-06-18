@@ -5,34 +5,13 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel.MVVM
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
     using Data;
-    using Reflection;
 
     public partial class ViewModelBase
     {
-        #region Fields
-        /// <summary>
-        /// Dictionary of properties that are decorated with the <see cref="ValidationToViewModelAttribute"/>. These properties should be
-        /// updated after each validation sequence.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private readonly Dictionary<string, ValidationToViewModelAttribute> _validationSummaries = new Dictionary<string, ValidationToViewModelAttribute>();
-
-        /// <summary>
-        /// A date/time with the latest update stamp of each validation summary.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private readonly Dictionary<string, long> _validationSummariesUpdateStamps = new Dictionary<string, long>();
-        #endregion
-
         #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether all validation should be deferred until the first call to <see cref="SaveViewModelAsync"/>.
@@ -145,7 +124,7 @@ namespace Catel.MVVM
                 foreach (var childViewModel in childViewModels)
                 {
                     childViewModel.Validate();
-                    if (((INotifyDataErrorInfo)childViewModel).HasErrors)
+                    if (childViewModel.HasErrors)
                     {
                         _childViewModelsHaveErrors = true;
                         RaisePropertyChanged(() => HasErrors);
@@ -281,48 +260,6 @@ namespace Catel.MVVM
             }
         }
 
-        /// <summary>
-        /// Called when the object is validated.
-        /// </summary>
-        /// <param name="validationContext">The validation context.</param>
-        protected override void OnValidated(IValidationContext validationContext)
-        {
-            var updatedValidationSummaries = false;
-
-            foreach (var validationSummaryInfo in _validationSummaries)
-            {
-                var isSummaryUpdateRequired = false;
-                var lastUpdated = _validationSummariesUpdateStamps.ContainsKey(validationSummaryInfo.Key) ? _validationSummariesUpdateStamps[validationSummaryInfo.Key] : 0L;
-
-                isSummaryUpdateRequired = this.IsValidationSummaryOutdated(lastUpdated, validationSummaryInfo.Value.IncludeChildViewModels);
-                if (!isSummaryUpdateRequired)
-                {
-                    continue;
-                }
-
-                IValidationSummary validationSummary;
-                if (validationSummaryInfo.Value.UseTagToFilter)
-                {
-                    validationSummary = this.GetValidationSummary(validationSummaryInfo.Value.IncludeChildViewModels, validationSummaryInfo.Value.Tag);
-                }
-                else
-                {
-                    validationSummary = this.GetValidationSummary(validationSummaryInfo.Value.IncludeChildViewModels);
-                }
-
-                PropertyHelper.SetPropertyValue(this, validationSummaryInfo.Key, validationSummary, false);
-                _validationSummariesUpdateStamps[validationSummaryInfo.Key] = validationSummary.LastModifiedTicks;
-
-                updatedValidationSummaries = true;
-            }
-
-            if (updatedValidationSummaries)
-            {
-                ViewModelCommandManager.InvalidateCommands();
-            }
-
-            base.OnValidated(validationContext);
-        }
         #endregion
     }
 }

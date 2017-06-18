@@ -496,7 +496,6 @@ namespace Catel.MVVM
             }
 
             _viewModelToModelMap.AddRange(metaData.Mappings);
-            _validationSummaries.AddRange(metaData.Validations);
         }
 
         /// <summary>
@@ -535,7 +534,6 @@ namespace Catel.MVVM
 
             var modelObjectsInfo = new Dictionary<string, ModelInfo>();
             var viewModelToModelMap = new Dictionary<string, ViewModelToModelMapping>();
-            var validationSummaries = new Dictionary<string, ValidationToViewModelAttribute>();
 
             var modelNames = (from propertyInfo in properties
                               where propertyInfo.IsDecoratedWithAttribute<ModelAttribute>()
@@ -579,28 +577,12 @@ namespace Catel.MVVM
                     }
                 }
                 #endregion
-
-                #region ValidationToViewModel attributes
-                var validationToViewModelAttribute = propertyInfo.GetCustomAttributeEx(typeof(ValidationToViewModelAttribute), true) as ValidationToViewModelAttribute;
-                if (validationToViewModelAttribute != null)
-                {
-                    if (propertyInfo.PropertyType != typeof(IValidationSummary))
-                    {
-                        throw Log.ErrorAndCreateException<InvalidOperationException>("A property decorated with the ValidationToViewModel attribute must be of type IValidationSummary, but '{0}' is not", propertyInfo.Name);
-                    }
-
-                    validationSummaries.Add(propertyInfo.Name, validationToViewModelAttribute);
-
-                    Log.Debug("Registered property '{0}' as validation summary", propertyInfo.Name);
-                }
-                #endregion
             }
 
             return new ViewModelMetadata(
                 viewModelType,
                 modelObjectsInfo,
-                viewModelToModelMap,
-                validationSummaries);
+                viewModelToModelMap);
         }
 
         /// <summary>

@@ -141,7 +141,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Tasks\Interfaces\ITaskProgressTracker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Tasks\TaskBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\ModelAttribute.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\Attributes\ValidationToViewModelAttribute.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\EventArgs\CancelingEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\EventArgs\CancellableEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\EventArgs\SavingEventArgs.cs" />
