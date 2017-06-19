@@ -8,6 +8,7 @@ namespace Catel.Test.Messaging
 {
     using System;
     using Catel.Messaging;
+    using Catel.Reflection;
     using NUnit.Framework;
 
     public class MessageMediatorHelperFacts

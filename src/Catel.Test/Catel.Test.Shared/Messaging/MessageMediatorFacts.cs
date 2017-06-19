@@ -387,6 +387,36 @@ namespace Catel.Test.Messaging
             #endregion
         }
         #endregion
+
+    
+        [TestFixture]
+        public class TheIsRegisteredMethod
+        {
+ 
+            [Test]
+            public void ReturnsTrueAfterRegistration()
+            {
+                var recipient = new MessageRecipient();
+                var messageMediator = new MessageMediator();
+                messageMediator.Register<string>(recipient, recipient.OnMessage);
+                Assert.IsTrue(messageMediator.IsRegistered<string>(recipient, recipient.OnMessage));
+            }
+
+            [Test]
+            public void ReturnsFalseAfterGarbageCollected()
+            {
+                var recipient = new MessageRecipient();
+                var messageMediator = new MessageMediator();
+                messageMediator.Register<string>(recipient, recipient.OnMessage);
+
+                recipient = null;
+
+                GC.Collect();
+
+                recipient = new MessageRecipient();
+                Assert.IsFalse(messageMediator.IsRegistered<string>(recipient, recipient.OnMessage));
+            }
+        }
     }
 
     public class Message
