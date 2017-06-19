@@ -117,7 +117,7 @@ namespace Catel.Services
                 weakEventListener?.Detach();
             };
 
-            weakEventListener = this.SubscribeToWeakEvent(window, "Closed", closed);
+            weakEventListener = SubscribeToWeakEvent(window, "Closed", closed);
         }
 
         /// <summary>
@@ -126,34 +126,36 @@ namespace Catel.Services
         /// <param name="window">The window.</param>
         /// <param name="showModal">If <c>true</c>, the window should be shown as modal.</param>
         /// <returns><c>true</c> if the window is closed with success; otherwise <c>false</c> or <c>null</c>.</returns>
-        protected virtual bool? ShowWindow(FrameworkElement window, bool showModal)
+        protected virtual Task<bool?> ShowSystemWindowAsync(FrameworkElement window, bool showModal)
         {
             Argument.InheritsFrom<System.Windows.Window>("window", window);
 
-            if (showModal)
-            {
-                // Child window does not have a ShowDialog, so not null is allowed
-                bool? result = null;
+            return Task.Run(() => {
+                    if (showModal)
+                    {
+                        // Child window does not have a ShowDialog, so not null is allowed
+                        bool? result = null;
 
-                window.Dispatcher.BeginInvoke(() =>
-                {
-                    // Safety net to prevent crashes when this is the main window
-                    try
-                    {
-                        result = ((System.Windows.Window) window).ShowDialog();
+                        window.Dispatcher.BeginInvoke(() =>
+                            {
+                                // Safety net to prevent crashes when this is the main window
+                                try
+                                {
+                                    result = ((System.Windows.Window)window).ShowDialog();
+                                }
+                                catch (Exception ex)
+                                {
+                                    Log.Warning(ex, $"An error occurred while showing window '{window.GetType().GetSafeFullName(true)}'");
+                                }
+                            });
+
+                        return result;
                     }
-                    catch (Exception ex)
-                    {
-                        Log.Warning(ex, $"An error occurred while showing window '{window.GetType().GetSafeFullName(true)}'");
-                    }
+
+                    window.Dispatcher.BeginInvoke(() => ((System.Windows.Window)window).Show());
+
+                    return null;
                 });
-
-                return result;
-            }
-
-            window.Dispatcher.BeginInvoke(() => ((System.Windows.Window)window).Show());
-
-            return null;
         }
 
         /// <summary>
@@ -170,11 +172,11 @@ namespace Catel.Services
             {
                 var tcs = new TaskCompletionSource<bool?>();
                 HandleCloseSubscription(window, null, (s, e) => tcs.SetResult(e.Result), true);   // complete the task with DialogResult when dialog is closed
-                ShowWindow(window, true);
+                ShowSystemWindowAsync(window, true);
                 return tcs.Task;
             }
 
-            return TaskHelper.Run(() => ShowWindow(window, false), true);
+            return TaskHelper.Run(() => ShowWindowAsync(window, false), true);
         }
 #endregion
     }
