@@ -128,40 +128,31 @@ namespace Catel.Services
         /// <returns><c>true</c> if the window is closed with success; otherwise <c>false</c> or <c>null</c>.</returns>
         protected virtual bool? ShowWindow(FrameworkElement window, bool showModal)
         {
+            Argument.InheritsFrom<System.Windows.Window>("window", window);
+
             if (showModal)
             {
-                var showDialogMethodInfo = window.GetType().GetMethodEx("ShowDialog");
-                if (showDialogMethodInfo != null)
+                // Child window does not have a ShowDialog, so not null is allowed
+                bool? result = null;
+
+                window.Dispatcher.InvokeIfRequired(() =>
                 {
-                    // Child window does not have a ShowDialog, so not null is allowed
-                    bool? result = null;
-
-                    window.Dispatcher.InvokeIfRequired(() =>
+                    // Safety net to prevent crashes when this is the main window
+                    try
                     {
-                        // Safety net to prevent crashes when this is the main window
-                        try
-                        {
-                            result = showDialogMethodInfo.Invoke(window, null) as bool?;
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Warning(ex, "An error occurred, returning null since we don't know the result");
-                        }
-                    });
+                        result = ((System.Windows.Window) window).ShowDialog();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Warning(ex, "An error occurred, returning null since we don't know the result");
+                    }
+                });
 
-                    return result;
-                }
-
-                Log.Warning("Method 'ShowDialog' not found on '{0}', falling back to 'Show'", window.GetType().Name);
+                return result;
             }
 
-            var showMethodInfo = window.GetType().GetMethodEx("Show");
-            if (showMethodInfo == null)
-            {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Method 'Show' not found on '{0}', cannot show the window", window.GetType().Name);
-            }
+            window.Dispatcher.InvokeIfRequired(() => ((System.Windows.Window)window).Show());
 
-            window.Dispatcher.InvokeIfRequired(() => showMethodInfo.Invoke(window, null));
             return null;
         }
 
@@ -183,7 +174,7 @@ namespace Catel.Services
                 return tcs.Task;
             }
 
-            return TaskHelper.Run(() => ShowWindow(window, showModal), true);
+            return TaskHelper.Run(() => ShowWindow(window, false), true);
         }
 #endregion
     }
