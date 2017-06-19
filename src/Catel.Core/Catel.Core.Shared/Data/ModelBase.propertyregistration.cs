@@ -10,8 +10,8 @@ namespace Catel.Data
     using System;
     using System.Linq.Expressions;
     using System.Reflection;
-    using Catel.Logging;
-    using Catel.Reflection;
+    using Logging;
+    using Reflection;
 
     public partial class ModelBase
     {
@@ -374,19 +374,6 @@ namespace Catel.Data
         /// <summary>
         /// Returns whether a specific property is registered.
         /// </summary>
-        /// <typeparam name="T">Type of the object for which to check.</typeparam>
-        /// <param name="name">Name of the property.</param>
-        /// <returns>
-        /// True if the property is registered, otherwise false.
-        /// </returns>
-        protected static bool IsPropertyRegistered<T>(string name)
-        {
-            return IsPropertyRegistered(typeof(T), name);
-        }
-
-        /// <summary>
-        /// Returns whether a specific property is registered.
-        /// </summary>
         /// <param name="type">The type of the object for which to check.</param>
         /// <param name="name">Name of the property.</param>
         /// <returns>
@@ -409,26 +396,6 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Gets the <see cref="PropertyInfo"/> for the specified property.
-        /// </summary>
-        /// <param name="property">The property.</param>
-        /// <returns><see cref="PropertyInfo"/> or <c>null</c> if no property info is found.</returns>
-        protected PropertyInfo GetPropertyInfo(PropertyData property)
-        {
-            return GetPropertyInfo(property.Name);
-        }
-
-        /// <summary>
-        /// Gets the <see cref="PropertyInfo"/> for the specified property.
-        /// </summary>
-        /// <param name="property">The name of the property.</param>
-        /// <returns><see cref="PropertyInfo"/> or <c>null</c> if no property info is found.</returns>
-        protected PropertyInfo GetPropertyInfo(string property)
-        {
-            return GetType().GetPropertyEx(property, BindingFlagsHelper.GetFinalBindingFlags(true, false));
-        }
-
-        /// <summary>
         /// Returns the type of a specific property.
         /// </summary>
         /// <param name="name">The name of the property.</param>
@@ -437,17 +404,6 @@ namespace Catel.Data
         Type IModel.GetPropertyType(string name)
         {
             return GetPropertyData(name).Type;
-        }
-
-        /// <summary>
-        /// Returns the type of a specific property.
-        /// </summary>
-        /// <param name="property"><see cref="PropertyData"/> of the property.</param>
-        /// <returns>Type of the property.</returns>
-        /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
-        Type IModel.GetPropertyType(PropertyData property)
-        {
-            return ((IModel)this).GetPropertyType(property.Name);
         }
     }
 }

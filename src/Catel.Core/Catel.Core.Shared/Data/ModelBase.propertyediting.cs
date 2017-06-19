@@ -282,20 +282,6 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Returns the default value of a specific property.
-        /// </summary>
-        /// <param name="property"><see cref="PropertyData"/> of the property.</param>
-        /// <returns>Default value of the property.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
-        /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
-        object IModel.GetDefaultValue(PropertyData property)
-        {
-            Argument.IsNotNull("property", property);
-
-            return ((IModel)this).GetDefaultValue(property.Name);
-        }
-
-        /// <summary>
         /// Returns the typed default value of a specific property.
         /// </summary>
         /// <typeparam name="TValue">The type of the 1.</typeparam>
@@ -308,21 +294,5 @@ namespace Catel.Data
 
             return (obj is TValue) ? (TValue)obj : default(TValue);
         }
-
-        /// <summary>
-        /// Returns the typed default value of a specific property.
-        /// </summary>
-        /// <typeparam name="TValue">The type of the 1.</typeparam>
-        /// <param name="property"><see cref="PropertyData"/> of the property.</param>
-        /// <returns>Default value of the property.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
-        /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
-        TValue IModel.GetDefaultValue<TValue>(PropertyData property)
-        {
-            Argument.IsNotNull("property", property);
-
-            return ((IModel)this).GetDefaultValue<TValue>(property.Name);
-        }
-
     }
 }
