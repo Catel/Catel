@@ -135,7 +135,7 @@ namespace Catel.Services
                 // Child window does not have a ShowDialog, so not null is allowed
                 bool? result = null;
 
-                window.Dispatcher.InvokeIfRequired(() =>
+                window.Dispatcher.BeginInvoke(() =>
                 {
                     // Safety net to prevent crashes when this is the main window
                     try
@@ -144,14 +144,14 @@ namespace Catel.Services
                     }
                     catch (Exception ex)
                     {
-                        Log.Warning(ex, "An error occurred, returning null since we don't know the result");
+                        Log.Warning(ex, $"An error occurred while showing window '{window.GetType().GetSafeFullName(true)}'");
                     }
                 });
 
                 return result;
             }
 
-            window.Dispatcher.InvokeIfRequired(() => ((System.Windows.Window)window).Show());
+            window.Dispatcher.BeginInvoke(() => ((System.Windows.Window)window).Show());
 
             return null;
         }
