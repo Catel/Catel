@@ -117,7 +117,7 @@ namespace Catel.Services
                 weakEventListener?.Detach();
             };
 
-            weakEventListener = SubscribeToWeakEvent(window, "Closed", closed);
+            weakEventListener = this.SubscribeToWeakEvent(window, "Closed", closed);
         }
 
         /// <summary>
@@ -130,32 +130,34 @@ namespace Catel.Services
         {
             Argument.InheritsFrom<System.Windows.Window>("window", window);
 
-            return Task.Run(() => {
-                    if (showModal)
-                    {
-                        // Child window does not have a ShowDialog, so not null is allowed
-                        bool? result = null;
+            var tsc = new TaskCompletionSource<bool?>();
+            
+                if (showModal)
+                {
+                    // Child window does not have a ShowDialog, so not null is allowed
+                    bool? result;
 
-                        window.Dispatcher.BeginInvoke(() =>
+                    window.Dispatcher.BeginInvoke(() =>
+                        {
+                            // Safety net to prevent crashes when this is the main window
+                            try
                             {
-                                // Safety net to prevent crashes when this is the main window
-                                try
-                                {
-                                    result = ((System.Windows.Window)window).ShowDialog();
-                                }
-                                catch (Exception ex)
-                                {
-                                    Log.Warning(ex, $"An error occurred while showing window '{window.GetType().GetSafeFullName(true)}'");
-                                }
-                            });
+                                result = ((System.Windows.Window)window).ShowDialog();
+                                tsc.SetResult(result);
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Warning(ex, $"An error occurred while showing window '{window.GetType().GetSafeFullName(true)}'");
+                                tsc.SetResult(null);
+                            }
+                        });
 
-                        return result;
-                    }
+                    return tsc.Task;
+                }
 
-                    window.Dispatcher.BeginInvoke(() => ((System.Windows.Window)window).Show());
-
-                    return null;
-                });
+                window.Dispatcher.BeginInvoke(() => ((System.Windows.Window)window).Show());
+                tsc.SetResult(null);
+                return tsc.Task;
         }
 
         /// <summary>
@@ -170,13 +172,13 @@ namespace Catel.Services
 
             if (showModal)  // CTL-648 async modal fix
             {
-                var tcs = new TaskCompletionSource<bool?>();
-                HandleCloseSubscription(window, null, (s, e) => tcs.SetResult(e.Result), true);   // complete the task with DialogResult when dialog is closed
-                ShowSystemWindowAsync(window, true);
-                return tcs.Task;
+                // var tcs = new TaskCompletionSource<bool?>();
+                // HandleCloseSubscription(window, null, (s, e) => tcs.SetResult(e.Result), true);   // complete the task with DialogResult when dialog is closed
+                return ShowSystemWindowAsync(window, true);
+                // return tcs.Task;
             }
 
-            return TaskHelper.Run(() => ShowWindowAsync(window, false), true);
+            return ShowWindowAsync(window, false);
         }
 #endregion
     }
