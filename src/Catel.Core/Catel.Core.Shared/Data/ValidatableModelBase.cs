@@ -416,7 +416,6 @@ namespace Catel.Data
                     hashSet.Add(nameof(LeanAndMeanModel));
                     hashSet.Add(nameof(AlwaysInvokeNotifyChanged));
                     hashSet.Add(nameof(AutomaticallyValidateOnPropertyChanged));
-                    hashSet.Add(nameof(DeserializationSucceeded));
                     hashSet.Add(nameof(SuspendValidation));
                     hashSet.Add(nameof(HideValidationResults));
                     hashSet.Add(nameof(HasWarnings));

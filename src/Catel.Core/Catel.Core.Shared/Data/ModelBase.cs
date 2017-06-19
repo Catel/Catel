@@ -171,25 +171,6 @@ namespace Catel.Data
         internal static PropertyDataManager PropertyDataManager { get; private set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the deserialized data is available, which means that
-        /// OnDeserialized is invoked.
-        /// </summary>
-#if NET
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        private bool IsDeserializedDataAvailable { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the object is fully deserialized.
-        /// </summary>
-#if NET
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        private bool IsDeserialized { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether this object should always invoke the <see cref="ObservableObject.PropertyChanged"/> event,
         /// even when the actual value of a property has not changed.
         /// <para />
@@ -266,17 +247,6 @@ namespace Catel.Data
         /// </summary>
         public static readonly PropertyData IsReadOnlyProperty = RegisterProperty("IsReadOnly", typeof(bool), false,
             (sender, e) => ((ModelBase)sender).RaisePropertyChanged("IsEditable"), false, true, true);
-
-        /// <summary>
-        /// Gets a value indicating whether the deserialization has succeeded. If automatic deserialization fails, the object
-        /// should try to deserialize manually.
-        /// </summary>
-#if NET
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        protected bool DeserializationSucceeded { get; private set; }
-
         #endregion
 
         #region Methods
@@ -301,8 +271,7 @@ namespace Catel.Data
         {
             Serializer = DefaultSerializer;
             SerializationConfiguration = DefaultSerializationConfiguration;
-            DeserializationSucceeded = false;
-            
+
             AlwaysInvokeNotifyChanged = false;
 
             InitializeProperties();

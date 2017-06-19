@@ -155,9 +155,6 @@ namespace Catel.Data
         {
             _deserialized.SafeInvoke(this);
 
-            // Data is now considered deserialized
-            IsDeserialized = true;
-
             IsDirty = false;
 
             LeanAndMeanModel = false;

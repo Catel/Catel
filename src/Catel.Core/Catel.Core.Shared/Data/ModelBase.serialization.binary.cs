@@ -104,8 +104,6 @@ namespace Catel.Data
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            IsDeserializedDataAvailable = true;
-
             if (_serializationInfo == null)
             {
                 // Probably a custom serializer which will populate us in a different way
@@ -124,8 +122,6 @@ namespace Catel.Data
                 var serializationContext = serializationContextInfoFactory.GetSerializationContextInfo(serializer, this, _serializationInfo, configuration);
                 serializer.Deserialize(this, serializationContext, configuration);
             }
-
-            DeserializationSucceeded = true;
         }
     }
 }
