@@ -86,33 +86,6 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
             set { SetValue(LastNameProperty, value); }
         }
 
-        /// <summary>
-        /// Gets or sets the person validation summary.
-        /// </summary>
-        /// <value>The person validation summary.</value>
-        [ValidationToViewModel(Tag = "PersonValidation")]
-        public IValidationSummary PersonValidationSummary { get; set; }
-
-        /// <summary>
-        /// Gets or sets the validation summary with null tag.
-        /// </summary>
-        /// <value>The validation summary with null tag.</value>
-        [ValidationToViewModel()]
-        public IValidationSummary ValidationSummaryWithNullTag { get; set; }
-
-        /// <summary>
-        /// Gets or sets the validation summary with non existing tag.
-        /// </summary>
-        /// <value>The validation summary with non existing tag.</value>
-        [ValidationToViewModel(Tag = "NoValidationExistsForThisTag")]
-        public IValidationSummary ValidationSummaryWithNonExistingTag { get; set; }
-
-        /// <summary>
-        /// Gets or sets the validation summary without tag filtering.
-        /// </summary>
-        /// <value>The validation summary without tag filtering.</value>
-        [ValidationToViewModel(UseTagToFilter = false)]
-        public IValidationSummary ValidationSummaryWithoutTagFiltering { get; set; }
         #endregion
     }
 }

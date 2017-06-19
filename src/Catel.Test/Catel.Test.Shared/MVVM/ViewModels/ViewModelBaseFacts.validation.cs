@@ -9,6 +9,7 @@ namespace Catel.Test.MVVM.ViewModels
 {
     using System.ComponentModel;
     using System.Threading.Tasks;
+    using Catel.MVVM;
     using NUnit.Framework;
     using TestClasses;
 
@@ -132,12 +133,12 @@ namespace Catel.Test.MVVM.ViewModels
         }
 
         [TestCase]
-        public void ValidationToViewModel_WithoutTagFiltering()
+        public void GetValidationSummary_WithoutTagFiltering()
         {
             var viewModel = new TestViewModelWithValidationTags();
             viewModel.Validate();
 
-            var summary = viewModel.ValidationSummaryWithoutTagFiltering;
+            var summary = viewModel.GetValidationSummary(true);
 
             Assert.IsTrue(viewModel.HasErrors);
             Assert.IsNotNull(summary);
@@ -145,12 +146,12 @@ namespace Catel.Test.MVVM.ViewModels
         }
 
         [TestCase]
-        public void ValidationToViewModel_NullTag()
+        public void GetValidationSummary_NullTag()
         {
             var viewModel = new TestViewModelWithValidationTags();
             viewModel.Validate();
 
-            var summary = viewModel.ValidationSummaryWithNullTag;
+            var summary = viewModel.GetValidationSummary(true, null);
 
             Assert.IsTrue(viewModel.HasErrors);
             Assert.IsNotNull(summary);
@@ -158,12 +159,12 @@ namespace Catel.Test.MVVM.ViewModels
         }
 
         [TestCase]
-        public void ValidationToViewModel_NonExistingTag()
+        public void GetValidationSummary_NonExistingTag()
         {
             var viewModel = new TestViewModelWithValidationTags();
             viewModel.Validate();
 
-            var summary = viewModel.ValidationSummaryWithNonExistingTag;
+            var summary = viewModel.GetValidationSummary(true, "NonExistingTag");
 
             Assert.IsTrue(viewModel.HasErrors);
             Assert.IsNotNull(summary);
@@ -171,12 +172,12 @@ namespace Catel.Test.MVVM.ViewModels
         }
 
         [TestCase]
-        public void ValidationToViewModel_ExistingTag()
+        public void GetValidationSummary_ExistingTag()
         {
             var viewModel = new TestViewModelWithValidationTags();
             viewModel.Validate();
 
-            var summary = viewModel.PersonValidationSummary;
+            var summary = viewModel.GetValidationSummary(true, "PersonValidation");
 
             Assert.IsTrue(viewModel.HasErrors);
             Assert.IsNotNull(summary);
