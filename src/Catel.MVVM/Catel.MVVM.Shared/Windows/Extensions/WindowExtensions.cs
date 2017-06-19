@@ -144,9 +144,10 @@ namespace Catel.Windows
         /// <param name="window">Reference to the current window.</param>
         /// <param name="forceNewOwner">If true, the new owner will be forced. Otherwise, if the
         /// window currently has an owner, that owner will be respected (and thus not changed).</param>
-        public static void SetOwnerWindowAndFocus(this SystemWindow window, bool forceNewOwner = false)
+        /// <param name="focusFirstControl"></param>
+        public static void SetOwnerWindowAndFocus(this SystemWindow window, bool forceNewOwner = false, bool focusFirstControl = true)
         {
-            SetOwnerWindow(window, forceNewOwner, true);
+            SetOwnerWindow(window, forceNewOwner, focusFirstControl);
         }
         #endregion
 

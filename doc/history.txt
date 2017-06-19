@@ -72,6 +72,7 @@ Added/fixed:
 (+) CTL-1015 Implement IOpenFileService for UWP and make all methods async (also for WPF)
 (+) CTL-1016 Implement ISelectDirectoryService for UWP and make all methods async (also for WPF)
 (+) CTL-1017 Implement ISaveFileService for UWP and make all methods async (also for WPF)
+(+) #912     Add focusFirstControl argument to DataWindow constructor
 (*) CTL-903  Only support Frame and not NavigationWindow for WPF navigation
 (*) CTL-904  Allow view models to be created on multiple threads (thread-safe view model factory)
 (*) CTL-905  Always log Argument logging (even when Catel logging is being ignored)

@@ -158,10 +158,11 @@ namespace Catel.Windows
         /// <param name="defaultButton">The default button.</param>
         /// <param name="setOwnerAndFocus">if set to <c>true</c>, set the main window as owner window and focus the window.</param>
         /// <param name="infoBarMessageControlGenerationMode">The info bar message control generation mode.</param>
+        /// <param name="focusFirstControl">if set to <c>true</c>, the first control will get the focus.</param>
         public DataWindow(DataWindowMode mode, IEnumerable<DataWindowButton> additionalButtons = null,
             DataWindowDefaultButton defaultButton = DataWindowDefaultButton.OK, bool setOwnerAndFocus = true,
-            InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline)
-            : this(null, mode, additionalButtons, defaultButton, setOwnerAndFocus, infoBarMessageControlGenerationMode)
+            InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline, bool focusFirstControl = true)
+            : this(null, mode, additionalButtons, defaultButton, setOwnerAndFocus, infoBarMessageControlGenerationMode, focusFirstControl)
         { }
 
         /// <summary>
@@ -187,9 +188,10 @@ namespace Catel.Windows
         /// <param name="defaultButton">The default button.</param>
         /// <param name="setOwnerAndFocus">if set to <c>true</c>, set the main window as owner window and focus the window.</param>
         /// <param name="infoBarMessageControlGenerationMode">The info bar message control generation mode.</param>
+        /// <param name="focusFirstControl">if set to <c>true</c>, the first control will get the focus.</param>
         public DataWindow(IViewModel viewModel, DataWindowMode mode, IEnumerable<DataWindowButton> additionalButtons = null,
             DataWindowDefaultButton defaultButton = DataWindowDefaultButton.OK, bool setOwnerAndFocus = true,
-            InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline)
+            InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = InfoBarMessageControlGenerationMode.Inline, bool focusFirstControl = true)
         {
             if (CatelEnvironment.IsInDesignMode)
             {
@@ -270,9 +272,9 @@ namespace Catel.Windows
 
             if (setOwnerAndFocus)
             {
-                this.SetOwnerWindowAndFocus();
+                this.SetOwnerWindowAndFocus(focusFirstControl: focusFirstControl);
             }
-            else
+            else if(focusFirstControl)
             {
                 this.FocusFirstControl();
             }
