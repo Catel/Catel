@@ -84,6 +84,7 @@ Added/fixed:
 (*) CTL-948  Allow setting the status in IPleaseWaitServiceExtensions.PushInScope
 (*) CTL-988  Allow view models without model injection to stay alive on DataContext changes
 (*) #123     Command CanExecute listeners are referenced with weak references
+(*) #130     Simplify UIVisualizerService for WPF by using less reflection (force use of Window class)
 (*) #135     Use NuGet dependency for System.Windows.Interactivity instead
 (*) #807     Exceptions in TaskCommand are now longer swallowed by default. Pre 5.0 behavior can be mimmicked by setting
              the TaskCommand.SwallowExceptions property to true
