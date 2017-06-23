@@ -235,14 +235,6 @@ namespace Catel.Data
         public static bool DefaultValidateUsingDataAnnotationsValue { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the validation for all classes deriving from <see cref="ModelBase"/> should be suspended.
-        /// <para />
-        /// This is a good way to improve performance for a specific operation where validation only causes overhead.
-        /// </summary>
-        /// <value><c>true</c> if validation should be suspended for all models; otherwise, <c>false</c>.</value>
-        public static bool SuspendValidationForAllModels { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether this object should automatically validate itself when a property value
         /// has changed.
         /// </summary>
@@ -288,11 +280,6 @@ namespace Catel.Data
         {
             get
             {
-                if (SuspendValidationForAllModels)
-                {
-                    return true;
-                }
-
                 var context = _validationSuspensionContext;
                 if (context != null)
                 {
@@ -435,16 +422,20 @@ namespace Catel.Data
 
                     if (suspensionContext != null && suspensionContext.Counter == 0)
                     {
-                        var properties = suspensionContext.Properties;
-
-                        foreach (var property in properties)
+                        if (!validateOnResume)
                         {
-                            ValidatePropertyUsingAnnotations(property);
+                            // Only catch up what we missed
+                            var properties = suspensionContext.Properties;
+
+                            foreach (var property in properties)
+                            {
+                                ValidatePropertyUsingAnnotations(property);
+                            }
                         }
-
-                        if (validateOnResume)
+                        else
                         {
-                            Validate(true, false);
+                            // We need to force validation on attributes again with this flag
+                            Validate(true, true);
                         }
                     }
                 });
@@ -751,16 +742,12 @@ namespace Catel.Data
         /// </remarks>
         internal void Validate(bool force, bool validateDataAnnotations)
         {
-            lock (_lock)
+            if (IsValidating)
             {
-                var validationSuspensionContext = _validationSuspensionContext;
-                if (validationSuspensionContext != null)
-                {
-                    return;
-                }
+                return;
             }
 
-            if (IsValidating)
+            if (IsValidationSuspended)
             {
                 return;
             }
