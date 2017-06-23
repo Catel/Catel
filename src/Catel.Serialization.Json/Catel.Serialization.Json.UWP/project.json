@@ -6,7 +6,7 @@
     "MethodTimer.Fody": "1.19.0",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.3",
     "ModuleInit.Fody": "1.6.0",
-    "Newtonsoft.Json": "10.0.2",
+    "Newtonsoft.Json": "10.0.3",
     "Newtonsoft.Json.Bson": "1.0.1",
     "Obsolete.Fody": "4.2.2",
     "WpfAnalyzers": "0.2.7.10"
