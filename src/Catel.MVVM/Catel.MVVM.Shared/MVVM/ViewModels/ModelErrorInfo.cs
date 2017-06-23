@@ -169,9 +169,10 @@ namespace Catel.MVVM
         {
             lock (_fieldErrors)
             {
-                if (_fieldErrors.ContainsKey(propertyName))
+                List<string> fieldErrors;
+                if (_fieldErrors.TryGetValue(propertyName, out fieldErrors))
                 {
-                    _fieldErrors[propertyName].Clear();
+                    fieldErrors.Clear();
                 }
                 else
                 {
@@ -241,9 +242,10 @@ namespace Catel.MVVM
         {
             lock (_fieldWarnings)
             {
-                if (_fieldWarnings.ContainsKey(propertyName))
+                List<string> fieldWarnings;
+                if (_fieldWarnings.TryGetValue(propertyName, out fieldWarnings))
                 {
-                    _fieldWarnings[propertyName].Clear();
+                    fieldWarnings.Clear();
                 }
                 else
                 {
@@ -284,9 +286,10 @@ namespace Catel.MVVM
             {
                 lock (_fieldErrors)
                 {
-                    if (_fieldErrors.ContainsKey(propertyName))
+                    List<string> fieldErrors;
+                    if (_fieldErrors.TryGetValue(propertyName, out fieldErrors))
                     {
-                        errors.AddRange(_fieldErrors[propertyName]);
+                        errors.AddRange(fieldErrors);
                     }
                 }
             }
@@ -317,9 +320,10 @@ namespace Catel.MVVM
             {
                 lock (_fieldWarnings)
                 {
-                    if (_fieldWarnings.ContainsKey(propertyName))
+                    List<string> fieldWarnings;
+                    if (_fieldWarnings.TryGetValue(propertyName, out fieldWarnings))
                     {
-                        errors.AddRange(_fieldWarnings[propertyName]);
+                        errors.AddRange(fieldWarnings);
                     }
                 }
             }
@@ -427,9 +431,10 @@ namespace Catel.MVVM
                     {
                         lock (_fieldErrors)
                         {
-                            if (_fieldErrors.ContainsKey(propertyName))
+                            List<string> fieldErrors;
+                            if (_fieldErrors.TryGetValue(propertyName, out fieldErrors))
                             {
-                                _fieldErrors[propertyName].Clear();
+                                fieldErrors.Clear();
                             }
                         }
 
