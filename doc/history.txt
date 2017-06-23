@@ -130,6 +130,7 @@ Added/fixed:
 (-) #1043    Remove validation summaries in the view model
 (-) #1047    Remove ViewModelBase.HasDirtyModels
 (-) #1051    Remove IParent interface & Parent / Children elements from ModelBase
+(-) #1059    Remove ISerializable.Serialized & ISerializable.Deserialized events 
 (-) Remove test implementations of services
 
 Roadmap:

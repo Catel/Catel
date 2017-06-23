@@ -6,21 +6,8 @@
 
 namespace Catel.Data
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Runtime.Serialization;
-    using System.Xml;
-    using System.Xml.Linq;
-    using System.Xml.Schema;
-    using System.Xml.Serialization;
-
     using Logging;
 
-    using Runtime.Serialization;
-    using Catel.Reflection;
     using ISerializable = Catel.Runtime.Serialization.ISerializable;
 
 #if !NET
@@ -43,71 +30,6 @@ namespace Catel.Data
 
     public partial class ModelBase
     {
-        #region Fields
-#if NET
-        [field: NonSerialized]
-#endif
-        private event EventHandler<EventArgs> _serialized;
-
-#if NET
-        [field: NonSerialized]
-#endif
-        private event EventHandler<EventArgs> _deserialized;
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets or sets the serializer used for internal model serialization (such as backups).
-        /// </summary>
-        /// <value>The serializer.</value>
-        protected ISerializer Serializer { get; set; }
-
-        /// <summary>
-        /// Gets or sets the default serializer that will be used for the <see cref="Serializer"/> property.
-        /// </summary>
-        /// <value>The default serializer.</value>
-        public static ISerializer DefaultSerializer { get; set; }
-
-        /// <summary>
-        /// Gets or sets the serialization configuration.
-        /// </summary>
-        /// <value>
-        /// The serialization configuration.
-        /// </value>
-        protected ISerializationConfiguration SerializationConfiguration { get; set; }
-
-        /// <summary>
-        /// Gets or sets the default serialization configuration.
-        /// </summary>
-        /// <value>
-        /// The default serialization configuration.
-        /// </value>
-        public static ISerializationConfiguration DefaultSerializationConfiguration { get; set; }
-        #endregion
-
-        #region Events
-        /// <summary>
-        /// Occurs when the object is serialized.
-        /// </summary>
-        event EventHandler<EventArgs> ISerializable.Serialized
-        {
-            add { _serialized += value; }
-            remove { _serialized -= value; }
-        }
-
-        /// <summary>
-        /// Occurs when the object is deserialized.
-        /// </summary>
-        event EventHandler<EventArgs> ISerializable.Deserialized
-        {
-            add { _deserialized += value; }
-            remove { _deserialized -= value; }
-        }
-        #endregion
-
-        #region Events
-        #endregion
-
         #region Methods
         /// <summary>
         /// Called when the object is being serialized.
@@ -121,7 +43,7 @@ namespace Catel.Data
         /// </summary>
         protected virtual void OnSerialized()
         {
-            _serialized.SafeInvoke(this);
+            
         }
 
         /// <summary>
@@ -153,8 +75,6 @@ namespace Catel.Data
         /// </summary>
         protected virtual void OnDeserialized()
         {
-            _deserialized.SafeInvoke(this);
-
             IsDirty = false;
 
             LeanAndMeanModel = false;
