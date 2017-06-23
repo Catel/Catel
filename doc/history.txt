@@ -99,9 +99,10 @@ Added/fixed:
 (*) #1050    Replace ISavableModel.SerializationMode with ISerializer and remove some overloads
 (*) #1052    Move property value change notifications wrappers (for child objects & collections) from ModelBase 
              to ChildAwareModelBase 
-(*) 	     Improve ShowWindowAsync implementation at UIVisualizerService
+(*) #986     Replace (Validatable0ModelBase.SuspendValidation by SuspendValidations method 
+(*)          Improve ShowWindowAsync implementation at UIVisualizerService
 (x) #815     MessageMediator registers new recipients after previous registration of same type of recipient were 
-	     garbage collected
+             garbage collected
 (x) CTL-899  Navigation in WPF is not working when using custom frame
 (x) CTL-906  Clear current navigation context when (re)navigating to the same view in WPF
 (x) CTL-910  Introduce special lock for null keys in CacheStorage to prevent ArgumentNullException

@@ -261,20 +261,18 @@ namespace Catel.MVVM
             InvalidateCommandsOnPropertyChanged = true;
             SupportIEditableObject = supportIEditableObject;
 
-            // Temporarily suspend validation, will be enabled at the end of constructor again
-            SuspendValidation = true;
-
-            if (!skipViewModelAttributesInitialization)
+            // Temporarily suspend validation
+            using (SuspendValidations(false))
             {
-                InitializeViewModelAttributes();
+                if (!skipViewModelAttributesInitialization)
+                {
+                    InitializeViewModelAttributes();
+                }
+
+                ViewModelManager.RegisterViewModelInstance(this);
+
+                InitializeThrottling();
             }
-
-            ViewModelManager.RegisterViewModelInstance(this);
-
-            InitializeThrottling();
-
-            // Enable validation again like we promised some lines of code ago
-            SuspendValidation = false;
 
             // As a last step, enable the auditors (we don't need change notifications of previous properties, etc)
             AuditingHelper.RegisterViewModel(this);
@@ -647,52 +645,51 @@ namespace Catel.MVVM
 
             _areViewModelAttributesIntialized = true;
 
-            SuspendValidation = true;
-
-            InitializePropertiesWithAttributes();
-
-            lock (_modelLock)
+            using (SuspendValidations(false))
             {
-                foreach (var modelInfo in _modelObjectsInfo)
-                {
-                    _modelObjects.Add(modelInfo.Key, null);
-                }
-            }
+                InitializePropertiesWithAttributes();
 
-            if (SupportIEditableObject)
-            {
                 lock (_modelLock)
                 {
-                    foreach (var modelKeyValuePair in _modelObjects)
+                    foreach (var modelInfo in _modelObjectsInfo)
                     {
-                        if (_modelObjectsInfo[modelKeyValuePair.Key].SupportIEditableObject)
+                        _modelObjects.Add(modelInfo.Key, null);
+                    }
+                }
+
+                if (SupportIEditableObject)
+                {
+                    lock (_modelLock)
+                    {
+                        foreach (var modelKeyValuePair in _modelObjects)
                         {
-                            var modelKeyValuePairValueAsModelBaseBase = modelKeyValuePair.Value as IModel;
-                            if ((modelKeyValuePairValueAsModelBaseBase == null) || !modelKeyValuePairValueAsModelBaseBase.IsInEditSession)
+                            if (_modelObjectsInfo[modelKeyValuePair.Key].SupportIEditableObject)
                             {
-                                EditableObjectHelper.BeginEditObject(modelKeyValuePair.Value);
+                                var modelKeyValuePairValueAsModelBaseBase = modelKeyValuePair.Value as IModel;
+                                if ((modelKeyValuePairValueAsModelBaseBase == null) || !modelKeyValuePairValueAsModelBaseBase.IsInEditSession)
+                                {
+                                    EditableObjectHelper.BeginEditObject(modelKeyValuePair.Value);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            ValidateViewModelToModelMappings();
+                ValidateViewModelToModelMappings();
 
-            if (!_ignoreMultipleModelsWarning)
-            {
-                lock (_modelLock)
+                if (!_ignoreMultipleModelsWarning)
                 {
-                    if (_modelObjects.Count > 1)
+                    lock (_modelLock)
                     {
-                        Log.Warning("The view model {0} implements {1} models.\n\n" +
-                                    "Normally, a view model only implements 1 model so make sure you are using the Model attribute correctly. If the Model attribute is used correctly (on models only), this warning can be ignored by using a constructor overload.",
-                            GetType().Name, _modelObjects.Count);
+                        if (_modelObjects.Count > 1)
+                        {
+                            Log.Warning("The view model {0} implements {1} models.\n\n" +
+                                        "Normally, a view model only implements 1 model so make sure you are using the Model attribute correctly. If the Model attribute is used correctly (on models only), this warning can be ignored by using a constructor overload.",
+                                GetType().Name, _modelObjects.Count);
+                        }
                     }
                 }
             }
-
-            SuspendValidation = false;
         }
 
         /// <summary>
@@ -899,7 +896,7 @@ namespace Catel.MVVM
                 return;
             }
 
-			base.OnPropertyChanged(e);
+            base.OnPropertyChanged(e);
 
             lock (_modelLock)
             {
@@ -1067,7 +1064,7 @@ namespace Catel.MVVM
                         }
 
                         // Only OneWay, TwoWay or Explicit (yes, only VM => M is explicit) should be mapped
-                        if ((mapping.Mode == ViewModelToModelMode.TwoWay) || 
+                        if ((mapping.Mode == ViewModelToModelMode.TwoWay) ||
                             (mapping.Mode == ViewModelToModelMode.OneWay) ||
                             (mapping.Mode == ViewModelToModelMode.Explicit))
                         {
@@ -1450,9 +1447,9 @@ namespace Catel.MVVM
             // Force validation before saving
             Validate(true);
 
-            if (!SuspendValidation)
+            if (!IsValidationSuspended)
             {
-                var validationContext = ((IValidatable) this).ValidationContext;
+                var validationContext = ((IValidatable)this).ValidationContext;
                 if (validationContext.HasErrors)
                 {
                     IsSaving = false;
@@ -1514,8 +1511,6 @@ namespace Catel.MVVM
             ViewModelManager.UnregisterAllModels(this);
 
             await CloseAsync();
-
-            SuspendValidation = true;
 
             // Note: important to set *before* calling the event (the handler might need to check
             // if the vm is closed)

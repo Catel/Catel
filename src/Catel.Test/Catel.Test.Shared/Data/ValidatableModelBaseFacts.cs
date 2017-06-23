@@ -599,12 +599,6 @@ namespace Catel.Test.Data
         {
             public class SuspendValidationModel : ValidatableModelBase
             {
-                public bool SuspendValidationWrapper
-                {
-                    get { return SuspendValidation; }
-                    set { SuspendValidation = value; }
-                }
-
                 [Required]
                 public string FirstName
                 {
@@ -623,10 +617,12 @@ namespace Catel.Test.Data
 
                 Assert.IsFalse(validation.HasErrors);
 
-                model.SuspendValidationWrapper = true;
-                model.FirstName = null;
+                using (model.SuspendValidations())
+                {
+                    model.FirstName = null;
 
-                Assert.IsFalse(validation.HasErrors);
+                    Assert.IsFalse(validation.HasErrors);
+                }
             }
 
             [TestCase]
@@ -637,12 +633,12 @@ namespace Catel.Test.Data
 
                 Assert.IsFalse(validation.HasErrors);
 
-                model.SuspendValidationWrapper = true;
-                model.FirstName = null;
+                using (model.SuspendValidations())
+                {
+                    model.FirstName = null;
 
-                Assert.IsFalse(validation.HasErrors);
-
-                model.SuspendValidationWrapper = false;
+                    Assert.IsFalse(validation.HasErrors);
+                }
 
                 Assert.IsTrue(validation.HasErrors);
             }
