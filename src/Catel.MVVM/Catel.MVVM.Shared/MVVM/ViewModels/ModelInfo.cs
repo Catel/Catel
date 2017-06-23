@@ -9,6 +9,8 @@ namespace Catel.MVVM
     using System;
     using System.ComponentModel;
 
+    using Catel.Data;
+
     /// <summary>
     /// Class containing information about a specific model decorated with the <see cref="ModelAttribute"/>.
     /// </summary>
@@ -28,7 +30,18 @@ namespace Catel.MVVM
 
             Name = name;
             SupportIEditableObject = attribute.SupportIEditableObject;
+            SupportValidation = attribute.SupportValidation;
         }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the model validation mapping is enabled.
+        /// <para />
+        /// The default value is <c>true</c>.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if the model validation mapping is enabled; otherwise, <c>false</c>.
+        /// </value>
+        public bool SupportValidation { get; set; }
 
         /// <summary>
         /// Gets the name of the model property.

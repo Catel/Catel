@@ -12,7 +12,6 @@ namespace Catel.MVVM
     using System.ComponentModel;
 
 #if !XAMARIN_FORMS
-    using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 #endif
@@ -169,9 +168,10 @@ namespace Catel.MVVM
         {
             lock (_fieldErrors)
             {
-                if (_fieldErrors.ContainsKey(propertyName))
+                List<string> fieldErrors;
+                if (_fieldErrors.TryGetValue(propertyName, out fieldErrors))
                 {
-                    _fieldErrors[propertyName].Clear();
+                    fieldErrors.Clear();
                 }
                 else
                 {
@@ -241,9 +241,10 @@ namespace Catel.MVVM
         {
             lock (_fieldWarnings)
             {
-                if (_fieldWarnings.ContainsKey(propertyName))
+                List<string> fieldWarnings;
+                if (_fieldWarnings.TryGetValue(propertyName, out fieldWarnings))
                 {
-                    _fieldWarnings[propertyName].Clear();
+                    fieldWarnings.Clear();
                 }
                 else
                 {
@@ -284,9 +285,10 @@ namespace Catel.MVVM
             {
                 lock (_fieldErrors)
                 {
-                    if (_fieldErrors.ContainsKey(propertyName))
+                    List<string> fieldErrors;
+                    if (_fieldErrors.TryGetValue(propertyName, out fieldErrors))
                     {
-                        errors.AddRange(_fieldErrors[propertyName]);
+                        errors.AddRange(fieldErrors);
                     }
                 }
             }
@@ -317,9 +319,10 @@ namespace Catel.MVVM
             {
                 lock (_fieldWarnings)
                 {
-                    if (_fieldWarnings.ContainsKey(propertyName))
+                    List<string> fieldWarnings;
+                    if (_fieldWarnings.TryGetValue(propertyName, out fieldWarnings))
                     {
-                        errors.AddRange(_fieldWarnings[propertyName]);
+                        errors.AddRange(fieldWarnings);
                     }
                 }
             }
@@ -386,7 +389,7 @@ namespace Catel.MVVM
         {
             foreach (var validationResult in validationResults)
             {
-                if (validationResult.MemberNames.Count() == 0)
+                if (!validationResult.MemberNames.Any())
                 {
                     HandleBusinessRuleErrors(new object[] { validationResult });
                 }
@@ -417,7 +420,10 @@ namespace Catel.MVVM
         {
             if (string.IsNullOrEmpty(propertyName))
             {
-                _businessRuleErrors.Clear();
+                lock (_businessRuleErrors)
+                {
+                    _businessRuleErrors.Clear();
+                }
             }
             else
             {
@@ -427,9 +433,10 @@ namespace Catel.MVVM
                     {
                         lock (_fieldErrors)
                         {
-                            if (_fieldErrors.ContainsKey(propertyName))
+                            List<string> fieldErrors;
+                            if (_fieldErrors.TryGetValue(propertyName, out fieldErrors))
                             {
-                                _fieldErrors[propertyName].Clear();
+                                fieldErrors.Clear();
                             }
                         }
 
