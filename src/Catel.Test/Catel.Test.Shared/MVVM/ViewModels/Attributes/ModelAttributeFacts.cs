@@ -16,11 +16,19 @@ namespace Catel.Test.MVVM.ViewModels.Attributes
         public class TheConstructor
         {
             [TestCase]
-            public void CorrectlySetsDefaultValues()
+            public void CorrectlySetsDefaultValue_SupportIEditableObject()
             {
                 var modelAttribute = new ModelAttribute();
 
                 Assert.AreEqual(true, modelAttribute.SupportIEditableObject);
+            }
+
+            [TestCase]
+            public void CorrectlySetsDefault_SupportValidation()
+            {
+                var modelAttribute = new ModelAttribute();
+
+                Assert.AreEqual(true, modelAttribute.SupportValidation);
             }
         }
     }

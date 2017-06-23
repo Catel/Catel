@@ -106,6 +106,11 @@ namespace Catel.MVVM
                         continue;
                     }
 
+                    if (!_modelObjectsInfo[model.Key].SupportValidation)
+                    {
+                        continue;
+                    }
+
                     var validatable = model.Value as IValidatable;
                     if (validatable != null)
                     {
