@@ -6,13 +6,11 @@
 
 namespace Catel.Data
 {
-    using System.Net;
     using System.Xml;
     using System.Xml.Linq;
     using System.Xml.Schema;
     using System.Xml.Serialization;
-    using Catel.Runtime.Serialization.Xml;
-    using Logging;
+    using Runtime.Serialization.Xml;
     using Runtime.Serialization;
     using Scoping;
 
@@ -44,7 +42,7 @@ namespace Catel.Data
             var contextInfo = new XmlSerializationContextInfo(reader, this);
 
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetXmlSerializer(), SerializationConfiguration)))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetXmlSerializer(), null)))
             {
                 var serializer = scopeManager.ScopeObject.Serializer;
                 serializer.Deserialize(this, contextInfo, scopeManager.ScopeObject.Configuration);
@@ -58,7 +56,7 @@ namespace Catel.Data
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetXmlSerializer(), SerializationConfiguration)))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetXmlSerializer(), null)))
             {
                 var type = GetType();
                 var element = new XElement(type.Name);
@@ -73,7 +71,7 @@ namespace Catel.Data
                 // CTL-710: fix attributes on top level elements
                 if (reader.HasAttributes)
                 {
-                    for (int i = 0; i < reader.AttributeCount; i++)
+                    for (var i = 0; i < reader.AttributeCount; i++)
                     {
                         reader.MoveToAttribute(i);
 

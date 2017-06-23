@@ -23,39 +23,6 @@ namespace Catel.Test.Data
     public partial class ModelBaseFacts
     {
         [TestFixture]
-        public class TheLeanAndMeanModelProperty
-        {
-            [TestCase]
-            public void SuspendsValidation()
-            {
-                var model = new LeanAndMeanModel();
-                var validation = model as IValidatableModel;
-
-                model.LeanAndMeanModelWrapper = true;
-
-                Assert.IsFalse(validation.HasErrors);
-
-                model.FirstName = null;
-
-                Assert.IsFalse(validation.HasErrors);
-            }
-
-            [TestCase]
-            public void SuspendsChangeNotifications()
-            {
-                var counter = 0;
-
-                var model = new LeanAndMeanModel();
-                model.PropertyChanged += (sender, e) => counter++;
-                model.LeanAndMeanModelWrapper = true;
-
-                model.FirstName = "Geert";
-
-                Assert.AreEqual(0, counter);
-            }
-        }
-
-        [TestFixture]
         public class TheUnregisterPropertyMethod
         {
             [TestCase]
@@ -79,7 +46,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void DoesNotLeakForModelBaseWithPropertiesThatSupportPropertyChanged()
             {
-                var model = new TestModel();
+                var model = new PersonTestModel();
                 var weakReference = new WeakReference(model);
 
                 Assert.IsTrue(weakReference.IsAlive);

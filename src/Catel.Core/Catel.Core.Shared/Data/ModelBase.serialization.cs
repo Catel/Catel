@@ -67,7 +67,6 @@ namespace Catel.Data
         /// </summary>
         protected virtual void OnDeserializing()
         {
-            LeanAndMeanModel = true;
         }
 
         /// <summary>
@@ -76,8 +75,6 @@ namespace Catel.Data
         protected virtual void OnDeserialized()
         {
             IsDirty = false;
-
-            LeanAndMeanModel = false;
         }
 
         /// <summary>

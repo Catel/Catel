@@ -255,7 +255,7 @@ namespace Catel.Data
         {
             get
             {
-                if (_suspendValidation || SuspendValidationForAllModels || LeanAndMeanModel)
+                if (_suspendValidation || SuspendValidationForAllModels)
                 {
                     return true;
                 }
@@ -413,7 +413,6 @@ namespace Catel.Data
                     var hashSet = new HashSet<string>();
 
                     // Ignore modelbase properties
-                    hashSet.Add(nameof(LeanAndMeanModel));
                     hashSet.Add(nameof(AlwaysInvokeNotifyChanged));
                     hashSet.Add(nameof(AutomaticallyValidateOnPropertyChanged));
                     hashSet.Add(nameof(SuspendValidation));
