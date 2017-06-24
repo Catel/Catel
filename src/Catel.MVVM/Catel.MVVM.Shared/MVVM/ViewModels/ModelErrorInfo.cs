@@ -12,7 +12,6 @@ namespace Catel.MVVM
     using System.ComponentModel;
 
 #if !XAMARIN_FORMS
-    using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 #endif
@@ -390,7 +389,7 @@ namespace Catel.MVVM
         {
             foreach (var validationResult in validationResults)
             {
-                if (validationResult.MemberNames.Count() == 0)
+                if (!validationResult.MemberNames.Any())
                 {
                     HandleBusinessRuleErrors(new object[] { validationResult });
                 }
@@ -421,7 +420,10 @@ namespace Catel.MVVM
         {
             if (string.IsNullOrEmpty(propertyName))
             {
-                _businessRuleErrors.Clear();
+                lock (_businessRuleErrors)
+                {
+                    _businessRuleErrors.Clear();
+                }
             }
             else
             {

@@ -6,6 +6,7 @@
 
 namespace Catel.Test.MVVM.ViewModels
 {
+    using Catel.MVVM;
     using NUnit.Framework;
     using TestClasses;
 
@@ -30,6 +31,26 @@ namespace Catel.Test.MVVM.ViewModels
             vm.Validate();
 
             Assert.True(vm.HasErrors);
+        }
+
+        [Test]
+        public void HasWarnings_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_Supended()
+        {
+            var vm = new TestViewModelWithSuspendedModelValidation(new Person());
+
+            vm.Validate();
+
+            Assert.IsFalse(vm.HasWarnings);
+        }
+
+        [Test]
+        public void HasWarnings_Returns_True_If_Model_Contains_Errors_But_Model_Validation_Is_Supended()
+        {
+            var vm = new TestViewModelWithEnabledModelValidation(new Person());
+
+            vm.Validate();
+
+            Assert.True(vm.HasWarnings);
         }
     }
 }
