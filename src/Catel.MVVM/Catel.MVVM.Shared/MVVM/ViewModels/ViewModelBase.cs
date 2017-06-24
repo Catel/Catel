@@ -1176,9 +1176,9 @@ namespace Catel.MVVM
                 ViewModelManager.UnregisterModel(this, model);
             }
 
-            if (_modelErrorInfo.ContainsKey(modelProperty))
+            ModelErrorInfo modelErrorInfo;
+            if (_modelErrorInfo.TryGetValue(modelProperty, out modelErrorInfo))
             {
-                var modelErrorInfo = _modelErrorInfo[modelProperty];
                 modelErrorInfo.Updated -= OnModelErrorInfoUpdated;
                 modelErrorInfo.CleanUp();
 

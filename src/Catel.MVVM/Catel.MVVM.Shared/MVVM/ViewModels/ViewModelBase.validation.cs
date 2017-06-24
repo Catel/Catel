@@ -136,7 +136,7 @@ namespace Catel.MVVM
                     }
                 }
 
-                if (!_childViewModelsHaveErrors && (_childViewModelsHaveErrors != previousValue))
+                if (!_childViewModelsHaveErrors && _childViewModelsHaveErrors != previousValue)
                 {
                     RaisePropertyChanged(() => HasErrors);
                 }
@@ -155,6 +155,15 @@ namespace Catel.MVVM
             foreach (var viewModelToModelMap in _viewModelToModelMap)
             {
                 var mapping = viewModelToModelMap.Value;
+
+                lock (_modelLock)
+                {
+                    if (!_modelObjectsInfo[mapping.ModelProperty].SupportValidation)
+                    {
+                        continue;
+                    }
+                }
+
                 var model = GetValue(mapping.ModelProperty);
                 string[] modelProperties = mapping.ValueProperties;
 
@@ -165,33 +174,27 @@ namespace Catel.MVVM
 
                     // IDataErrorInfo
                     var dataErrorInfo = model as IDataErrorInfo;
-                    if (dataErrorInfo != null)
+                    if (dataErrorInfo != null && !string.IsNullOrEmpty(dataErrorInfo[modelProperty]))
                     {
-                        if (!string.IsNullOrEmpty(dataErrorInfo[modelProperty]))
-                        {
-                            validationContext.AddFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, dataErrorInfo[modelProperty]));
+                        validationContext.AddFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, dataErrorInfo[modelProperty]));
 
-                            hasSetFieldError = true;
-                        }
+                        hasSetFieldError = true;
                     }
 
                     // IDataWarningInfo
                     var dataWarningInfo = model as IDataWarningInfo;
-                    if (dataWarningInfo != null)
+                    if (dataWarningInfo != null && !string.IsNullOrEmpty(dataWarningInfo[modelProperty]))
                     {
-                        if (!string.IsNullOrEmpty(dataWarningInfo[modelProperty]))
-                        {
-                            validationContext.AddFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, dataWarningInfo[modelProperty]));
+                        validationContext.AddFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, dataWarningInfo[modelProperty]));
 
-                            hasSetFieldWarning = true;
-                        }
+                        hasSetFieldWarning = true;
                     }
 
                     // INotifyDataErrorInfo & INotifyDataWarningInfo
-                    if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
-                    {
-                        var modelErrorInfo = _modelErrorInfo[mapping.ModelProperty];
 
+                    ModelErrorInfo modelErrorInfo;
+                    if (_modelErrorInfo.TryGetValue(mapping.ModelProperty, out modelErrorInfo))
+                    {
                         if (!hasSetFieldError)
                         {
                             foreach (string error in modelErrorInfo.GetErrors(modelProperty))
@@ -232,25 +235,29 @@ namespace Catel.MVVM
             {
                 foreach (var modelObject in _modelObjects)
                 {
+                    if (!_modelObjectsInfo[modelObject.Key].SupportValidation)
+                    {
+                        continue;
+                    }
+
                     // IDataErrorInfo
                     var dataErrorInfo = modelObject.Value as IDataErrorInfo;
-                    if ((dataErrorInfo != null) && !string.IsNullOrEmpty(dataErrorInfo.Error))
+                    if (dataErrorInfo != null && !string.IsNullOrEmpty(dataErrorInfo.Error))
                     {
                         validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(dataErrorInfo.Error));
                     }
 
                     // IDataWarningInfo
                     var dataWarningInfo = modelObject.Value as IDataWarningInfo;
-                    if ((dataWarningInfo != null) && !string.IsNullOrEmpty(dataWarningInfo.Warning))
+                    if (dataWarningInfo != null && !string.IsNullOrEmpty(dataWarningInfo.Warning))
                     {
                         validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateWarning(dataWarningInfo.Warning));
                     }
 
                     // INotifyDataErrorInfo & INotifyDataWarningInfo
-                    if (_modelErrorInfo.ContainsKey(modelObject.Key))
+                    ModelErrorInfo modelErrorInfo;
+                    if (_modelErrorInfo.TryGetValue(modelObject.Key, out modelErrorInfo))
                     {
-                        var modelErrorInfo = _modelErrorInfo[modelObject.Key];
-
                         foreach (var error in modelErrorInfo.GetErrors(string.Empty))
                         {
                             validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(error));

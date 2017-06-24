@@ -206,6 +206,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\ViewModelFactoryTestViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\ViewModelFactoryTestViewModelWithOnlyDefaultConstructor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\ViewModelWithInvalidMappings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\TestViewModelWithEnabledModelValidation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\TestClasses\TestViewModelWithSuspendedModelValidation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelBaseFacts.commands.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelBaseFacts.mappings.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelBaseFacts.models.cs" />
@@ -214,6 +216,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelBaseFacts.validation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelFactoryFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelManagerFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\ViewModels\ViewModelBaseFacts.mappings-validation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Attributes\ViewToViewModelAttributeTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\Helpers\ViewToViewModelMappingHelperTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Views\ViewToViewModelMappingContainerTest.cs" />
