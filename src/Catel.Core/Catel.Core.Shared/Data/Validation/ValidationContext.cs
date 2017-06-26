@@ -787,7 +787,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="fieldValidationResult">The field validation result.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResult"/> is <c>null</c>.</exception>
-        public void AddFieldValidationResult(IFieldValidationResult fieldValidationResult)
+        public void Add(IFieldValidationResult fieldValidationResult)
         {
             Argument.IsNotNull("fieldValidationResult", fieldValidationResult);
 
@@ -804,7 +804,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="fieldValidationResult">The field validation result.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResult"/> is <c>null</c>.</exception>
-        public void RemoveFieldValidationResult(IFieldValidationResult fieldValidationResult)
+        public void Remove(IFieldValidationResult fieldValidationResult)
         {
             Argument.IsNotNull("fieldValidationResult", fieldValidationResult);
 
@@ -817,11 +817,33 @@ namespace Catel.Data
         }
 
         /// <summary>
+        /// Adds the field validation result.
+        /// </summary>
+        /// <param name="fieldValidationResult">The field validation result.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResult"/> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Add(IFieldValidationResult)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        public void AddFieldValidationResult(IFieldValidationResult fieldValidationResult)
+        {
+            Add(fieldValidationResult);
+        }
+
+        /// <summary>
+        /// Removes the field validation result.
+        /// </summary>
+        /// <param name="fieldValidationResult">The field validation result.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="fieldValidationResult"/> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Remove(IFieldValidationResult)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        public void RemoveFieldValidationResult(IFieldValidationResult fieldValidationResult)
+        {
+            Remove(fieldValidationResult);
+        }
+
+        /// <summary>
         /// Adds the business rule validation result.
         /// </summary>
         /// <param name="businessRuleValidationResult">The business rule validation result.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResult"/> is <c>null</c>.</exception>
-        public void AddBusinessRuleValidationResult(IBusinessRuleValidationResult businessRuleValidationResult)
+        public void Add(IBusinessRuleValidationResult businessRuleValidationResult)
         {
             Argument.IsNotNull("businessRuleValidationResult", businessRuleValidationResult);
 
@@ -838,7 +860,7 @@ namespace Catel.Data
         /// </summary>
         /// <param name="businessRuleValidationResult">The business rule validation result.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResult"/> is <c>null</c>.</exception>
-        public void RemoveBusinessRuleValidationResult(IBusinessRuleValidationResult businessRuleValidationResult)
+        public void Remove(IBusinessRuleValidationResult businessRuleValidationResult)
         {
             Argument.IsNotNull("businessRuleValidationResult", businessRuleValidationResult);
 
@@ -848,6 +870,28 @@ namespace Catel.Data
 
                 UpdateLastModificationStamp(FastDateTime.Now);
             }
+        }
+
+        /// <summary>
+        /// Adds the business rule validation result.
+        /// </summary>
+        /// <param name="businessRuleValidationResult">The business rule validation result.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResult"/> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Add(IBusinessRuleValidationResult)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        public void AddBusinessRuleValidationResult(IBusinessRuleValidationResult businessRuleValidationResult)
+        {
+            Add(businessRuleValidationResult);
+        }
+
+        /// <summary>
+        /// Removes the business rule validation result.
+        /// </summary>
+        /// <param name="businessRuleValidationResult">The business rule validation result.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="businessRuleValidationResult"/> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "Remove(IBusinessRuleValidationResult)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        public void RemoveBusinessRuleValidationResult(IBusinessRuleValidationResult businessRuleValidationResult)
+        {
+            Remove(businessRuleValidationResult);
         }
 
         private void UpdateLastModificationStamp(DateTime dateTime, bool resetLastModifiedTicksToZero = false)

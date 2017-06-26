@@ -100,6 +100,8 @@ Added/fixed:
 (*) #1052    Move property value change notifications wrappers (for child objects & collections) from ModelBase 
              to ChildAwareModelBase 
 (*) #986     Replace (Validatable0ModelBase.SuspendValidation by SuspendValidations method 
+(*) #1062    Add ValidationContext.Add() methods and mark AddFieldValidationResult and AddBusinessRuleValidationResult 
+             as obsolete 
 (*)          Improve ShowWindowAsync implementation at UIVisualizerService
 (x) #815     MessageMediator registers new recipients after previous registration of same type of recipient were 
              garbage collected
