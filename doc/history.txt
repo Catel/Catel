@@ -75,6 +75,7 @@ Added/fixed:
 (+) CTL-1015 Implement IOpenFileService for UWP and make all methods async (also for WPF)
 (+) CTL-1016 Implement ISelectDirectoryService for UWP and make all methods async (also for WPF)
 (+) CTL-1017 Implement ISaveFileService for UWP and make all methods async (also for WPF)
+(+) #603     Add overloads for logging
 (+) #912     Add focusFirstControl argument to DataWindow constructor
 (+) #1044    Add SupportValidation to ModelAttribute to disable model validation mapping
 (*) CTL-903  Only support Frame and not NavigationWindow for WPF navigation

@@ -7,8 +7,6 @@
 
 namespace Catel.Logging
 {
-    using System;
-
     /// <summary>
     /// Extensions to the <see cref="ILog" /> interface.
     /// </summary>

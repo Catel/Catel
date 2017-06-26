@@ -7,6 +7,8 @@
 namespace Catel.Logging
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Reflection;
 
     /// <summary>
@@ -93,6 +95,114 @@ namespace Catel.Logging
             Write(log, LogEvent.Info, "**************************************************************************");
             Write(log, LogEvent.Info, string.Empty);
         }
+
+
+        /// <summary>
+        /// Writes the specified message as the specified log event.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="s1">The formatting argument 1.</param>
+        public static void Write(this ILog log, LogEvent logEvent, string messageFormat, object s1)
+        {
+            if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
+            {
+                return;
+            }
+
+            log?.WriteWithData(string.Format(messageFormat, s1), null, logEvent);
+        }
+
+        /// <summary>
+        /// Writes the specified message as the specified log event.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="s1">The formatting argument 1.</param>
+        /// <param name="s2">The formatting argument 2.</param>
+        public static void Write(this ILog log, LogEvent logEvent, string messageFormat, object s1, object s2)
+        {
+            if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
+            {
+                return;
+            }
+
+            log?.WriteWithData(string.Format(messageFormat, s1, s2), null, logEvent);
+        }
+
+        /// <summary>
+        /// Writes the specified message as the specified log event.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="s1">The formatting argument 1.</param>
+        /// <param name="s2">The formatting argument 2.</param>
+        /// <param name="s3">The formatting argument 3.</param>
+        public static void Write(this ILog log, LogEvent logEvent, string messageFormat, object s1, object s2, object s3)
+        {
+            if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
+            {
+                return;
+            }
+
+            log?.WriteWithData(string.Format(messageFormat, s1, s2, s3), null, logEvent);
+        }
+
+        /// <summary>
+        /// Writes the specified message as the specified log event.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="s1">The formatting argument 1.</param>
+        /// <param name="s2">The formatting argument 2.</param>
+        /// <param name="s3">The formatting argument 3.</param>
+        /// <param name="s4">The formatting argument 4.</param>
+        public static void Write(this ILog log, LogEvent logEvent, string messageFormat, object s1, object s2, object s3, object s4)
+        {
+            if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
+            {
+                return;
+            }
+
+            log?.WriteWithData(string.Format(messageFormat, s1, s2, s3, s4), null, logEvent);
+        }
+
+        /// <summary>
+        /// Writes the specified message as the specified log event.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="s1">The formatting argument 1.</param>
+        /// <param name="s2">The formatting argument 2.</param>
+        /// <param name="s3">The formatting argument 3.</param>
+        /// <param name="s4">The formatting argument 4.</param>
+        /// <param name="s5">The formatting argument 5.</param>
+        /// <param name="others">The formatting arguments.</param>
+        public static void Write(this ILog log, LogEvent logEvent, string messageFormat, object s1, object s2, object s3, object s4, object s5, params object[] others)
+        {
+            if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
+            {
+                return;
+            }
+
+            if (others != null && others.Length > 0)
+            {
+                object[] args = {s1, s2, s3, s4, s5};
+                Array.Resize(ref args, 5 + others.Length);
+                Array.Copy(others, 0, args, 5, others.Length);
+
+                log?.WriteWithData(string.Format(messageFormat, args), null, logEvent);
+            }
+            else
+            {
+                log?.WriteWithData(string.Format(messageFormat, s1, s2, s3, s4, s5), null, logEvent);
+            }
+        }       
 
         /// <summary>
         /// Writes the specified message as the specified log event.

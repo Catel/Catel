@@ -23,6 +23,73 @@ namespace Catel.Logging
         /// </summary>
         /// <param name="log">The log.</param>
         /// <param name="messageFormat">The message format.</param>
+        /// <param name="s1">The formatting arguments.</param>
+        public static void Status(this ILog log, string messageFormat, object s1)
+        {
+            Write(log, LogEvent.Status, messageFormat, s1);
+        }
+
+        /// <summary>
+        /// Writes the specified message as status message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="s1">The formatting argument 1.</param>
+        /// <param name="s2">The formatting argument 2.</param>
+        public static void Status(this ILog log, string messageFormat, object s1, object s2)
+        {
+            Write(log, LogEvent.Status, messageFormat, s1, s2);
+        }
+
+        /// <summary>
+        /// Writes the specified message as status message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="s1">The formatting argument 1.</param>
+        /// <param name="s2">The formatting argument 2.</param>
+        /// <param name="s3">The formatting argument 3.</param>
+        public static void Status(this ILog log, string messageFormat, object s1, object s2, object s3)
+        {
+            Write(log, LogEvent.Status, messageFormat, s1, s2, s3);
+        }
+
+        /// <summary>
+        /// Writes the specified message as status message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="s1">The formatting argument 1.</param>
+        /// <param name="s2">The formatting argument 2.</param>
+        /// <param name="s3">The formatting argument 3.</param>
+        /// <param name="s4">The formatting argument 4.</param>
+        public static void Status(this ILog log, string messageFormat, object s1, object s2, object s3, object s4)
+        {
+            Write(log, LogEvent.Status, messageFormat, s1, s2, s3, s4);
+        }
+
+        /// <summary>
+        /// Writes the specified message as status message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="s1">The formatting argument 1.</param>
+        /// <param name="s2">The formatting argument 2.</param>
+        /// <param name="s3">The formatting argument 3.</param>
+        /// <param name="s4">The formatting argument 4.</param>
+        /// <param name="s5">The formatting argument 5.</param>
+        /// <param name="others">The formatting arguments.</param>
+        public static void Status(this ILog log, string messageFormat, object s1, object s2, object s3, object s4, object s5, params object[] others)
+        {
+            Write(log, LogEvent.Status, messageFormat, s1, s2, s3, s4, s5, others);
+        }
+
+
+        /// <summary>
+        /// Writes the specified message as status message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="messageFormat">The message format.</param>
         /// <param name="args">The formatting arguments.</param>
         public static void Status(this ILog log, string messageFormat, params object[] args)
         {
