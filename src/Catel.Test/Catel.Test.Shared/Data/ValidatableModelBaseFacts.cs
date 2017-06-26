@@ -9,6 +9,7 @@ namespace Catel.Test.Data
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
     using System.Reflection;
 
     using Catel.Data;
@@ -599,12 +600,6 @@ namespace Catel.Test.Data
         {
             public class SuspendValidationModel : ValidatableModelBase
             {
-                public bool SuspendValidationWrapper
-                {
-                    get { return SuspendValidation; }
-                    set { SuspendValidation = value; }
-                }
-
                 [Required]
                 public string FirstName
                 {
@@ -623,10 +618,12 @@ namespace Catel.Test.Data
 
                 Assert.IsFalse(validation.HasErrors);
 
-                model.SuspendValidationWrapper = true;
-                model.FirstName = null;
+                using (model.SuspendValidations())
+                {
+                    model.FirstName = null;
 
-                Assert.IsFalse(validation.HasErrors);
+                    Assert.IsFalse(validation.HasErrors);
+                }
             }
 
             [TestCase]
@@ -637,12 +634,12 @@ namespace Catel.Test.Data
 
                 Assert.IsFalse(validation.HasErrors);
 
-                model.SuspendValidationWrapper = true;
-                model.FirstName = null;
+                using (model.SuspendValidations())
+                {
+                    model.FirstName = null;
 
-                Assert.IsFalse(validation.HasErrors);
-
-                model.SuspendValidationWrapper = false;
+                    Assert.IsFalse(validation.HasErrors);
+                }
 
                 Assert.IsTrue(validation.HasErrors);
             }
@@ -680,8 +677,6 @@ namespace Catel.Test.Data
                     Assert.IsFalse(innerValidationContext.HasErrors);
                 }
 
-                //model.Validate(true, true);
-
                 var validationContext = model.GetValidationContext();
                 var errors = validationContext.GetErrors();
 
@@ -706,14 +701,10 @@ namespace Catel.Test.Data
                         Assert.IsFalse(innerValidationContext1.HasErrors);
                     }
 
-                    model.Validate(true, true);
-
                     var innerValidationContext2 = model.GetValidationContext();
 
                     Assert.IsFalse(innerValidationContext2.HasErrors);
                 }
-
-                //model.Validate(true, true);
 
                 var validationContext = model.GetValidationContext();
                 var errors = validationContext.GetErrors();
@@ -858,45 +849,41 @@ namespace Catel.Test.Data
                 public bool HasNotValidatedProperties()
                 {
                     var t = typeof(ValidatableModelBase);
-                    var f = t.GetFieldEx("_propertiesNotCheckedDuringDisabledValidation", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
-                    var v = f.GetValue(this) as HashSet<string>;
+                    var vscf = t.GetFieldEx("_validationSuspensionContext", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
+                    var vsc = vscf.GetValue(this) as SuspensionContext;
 
-                    return v.Count != 0;
+                    return vsc.Properties.Count() != 0;
                 }
             }
 
             [TestCase]
             public void OnInstancePropertyIgnoreDataAnnotationSkipAnnotationValidation()
             {
-                var oldSuspension = ValidatableModelBase.SuspendValidationForAllModels;
-                ValidatableModelBase.SuspendValidationForAllModels = true;
-
                 // Set intance property to skip data annotations validation
                 var model = new ModelWithoutAnnotation();
-                model.SetValidateUsingDataAnnotations(false);
 
-                model.Counter = 1;
+                using (model.SuspendValidations())
+                {
+                    model.SetValidateUsingDataAnnotations(false);
 
-                Assert.AreEqual(false, model.HasNotValidatedProperties());
+                    model.Counter = 1;
 
-                ValidatableModelBase.SuspendValidationForAllModels = oldSuspension;
+                    Assert.AreEqual(false, model.HasNotValidatedProperties());
+                }
             }
-
 
             [TestCase]
             public void ByDefaultValidateDataAnnotationOnSetValue()
             {
-                var oldSuspension = ValidatableModelBase.SuspendValidationForAllModels;
-                ValidatableModelBase.SuspendValidationForAllModels = true;
-
                 // By default instance property set to check annotation validation
                 var model = new ModelWithoutAnnotation();
 
-                model.Counter = 1;
+                using (model.SuspendValidations())
+                {
+                    model.Counter = 1;
 
-                Assert.AreEqual(true, model.HasNotValidatedProperties());
-
-                ValidatableModelBase.SuspendValidationForAllModels = oldSuspension;
+                    Assert.AreEqual(true, model.HasNotValidatedProperties());
+                }
             }
         }
 #endif

@@ -64,11 +64,6 @@ namespace Catel.Data
 #if NET
         [field: NonSerialized]
 #endif
-        private bool _suspendValidation;
-
-#if NET
-        [field: NonSerialized]
-#endif
         private bool _isValidated;
 
         /// <summary>
@@ -94,17 +89,6 @@ namespace Catel.Data
         [field: NonSerialized]
 #endif
         private readonly ValidationContext _validationContext = new ValidationContext();
-
-        /// <summary>
-        /// List of property names that were changed, but not checked for validation because validation was suspended at that
-        /// time.
-        /// <para />
-        /// As soon as validation is activated again, these properties should be validated.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private readonly HashSet<string> _propertiesNotCheckedDuringDisabledValidation = new HashSet<string>();
 
 #if NET
         [field: NonSerialized]
@@ -241,56 +225,6 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the validation should be suspended. A call to <see cref="Validate(bool)"/> will be returned immediately.
-        /// </summary>
-        /// <value><c>true</c> if validation should be suspended; otherwise, <c>false</c>.</value>
-        /// <remarks>
-        /// Unlike the <see cref="HideValidationResults"/> property, this property will prevent validation. If you want validation
-        /// and the ability to query results, but simply hide the validation results, use the <see cref="HideValidationResults"/> property.
-        /// </remarks>
-#if !NETFX_CORE && !PCL
-        [Browsable(false)]
-#endif
-        protected bool SuspendValidation
-        {
-            get
-            {
-                if (_suspendValidation || SuspendValidationForAllModels || LeanAndMeanModel)
-                {
-                    return true;
-                }
-
-                var context = _validationSuspensionContext;
-                if (context != null)
-                {
-                    if (context.Counter > 0)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-            set
-            {
-                _suspendValidation = value;
-
-                if (!_suspendValidation)
-                {
-                    CatchUpWithSuspendedAnnotationsValidation();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value for the <see cref="SuspendValidation"/> for each model.
-        /// <para />
-        /// By default, this value is <c>false</c>.
-        /// </summary>
-        /// <value><c>true</c> if the validation must be suspended by default; otherwise, <c>false</c>.</value>
-        public static bool DefaultSuspendValidationValue { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether the validation should not try to process data annotations.
         /// </summary>
         protected bool ValidateUsingDataAnnotations { get; set; }
@@ -299,14 +233,6 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether the validation should not try to process data annotations.
         /// </summary>
         public static bool DefaultValidateUsingDataAnnotationsValue { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the validation for all classes deriving from <see cref="ModelBase"/> should be suspended.
-        /// <para />
-        /// This is a good way to improve performance for a specific operation where validation only causes overhead.
-        /// </summary>
-        /// <value><c>true</c> if validation should be suspended for all models; otherwise, <c>false</c>.</value>
-        public static bool SuspendValidationForAllModels { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this object should automatically validate itself when a property value
@@ -329,7 +255,7 @@ namespace Catel.Data
         /// </summary>
         /// <value><c>true</c> if the validation should be hidden; otherwise, <c>false</c>.</value>
         /// <remarks>
-        /// Unlike the <see cref="SuspendValidation"/> property, this property will not prevent validation. It will only
+        /// Unlike the <see cref="SuspendValidations"/> method, this property will not prevent validation. It will only
         /// prevent the error interfaces to not expose them.
         /// </remarks>
 #if !NETFX_CORE && !PCL
@@ -343,6 +269,29 @@ namespace Catel.Data
         /// <see cref="ValidationContext"/>.
         /// </summary>
         bool IValidatable.IsHidingValidationResults { get { return HideValidationResults; } }
+
+        /// <summary>
+        /// Gets a value indicating whether validation is suspended.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if validation is suspended; otherwise, <c>false</c>.
+        /// </value>
+        protected bool IsValidationSuspended
+        {
+            get
+            {
+                var context = _validationSuspensionContext;
+                if (context != null)
+                {
+                    if (context.Counter > 0)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
         #endregion
 
         #region Events
@@ -403,7 +352,6 @@ namespace Catel.Data
             var type = GetType();
 
             AutomaticallyValidateOnPropertyChanged = true;
-            SuspendValidation = DefaultSuspendValidationValue;
             ValidateUsingDataAnnotations = DefaultValidateUsingDataAnnotationsValue;
 
             lock (PropertiesNotCausingValidation)
@@ -413,10 +361,8 @@ namespace Catel.Data
                     var hashSet = new HashSet<string>();
 
                     // Ignore modelbase properties
-                    hashSet.Add(nameof(LeanAndMeanModel));
                     hashSet.Add(nameof(AlwaysInvokeNotifyChanged));
                     hashSet.Add(nameof(AutomaticallyValidateOnPropertyChanged));
-                    hashSet.Add(nameof(SuspendValidation));
                     hashSet.Add(nameof(HideValidationResults));
                     hashSet.Add(nameof(HasWarnings));
                     hashSet.Add(nameof(HasErrors));
@@ -474,19 +420,22 @@ namespace Catel.Data
                         }
                     }
 
-                    if (validateOnResume)
+                    if (suspensionContext != null && suspensionContext.Counter == 0)
                     {
-                        if (suspensionContext != null && suspensionContext.Counter == 0)
+                        if (!validateOnResume)
                         {
-                            //var properties = suspensionContext.Properties;
+                            // Only catch up what we missed
+                            var properties = suspensionContext.Properties;
 
-                            // TODO: In v5, replace with context and smart validation
+                            foreach (var property in properties)
+                            {
+                                ValidatePropertyUsingAnnotations(property);
+                            }
+                        }
+                        else
+                        {
+                            // We need to force validation on attributes again with this flag
                             Validate(true, true);
-
-                            //foreach (var property in properties)
-                            //{
-                            //    Validate(property);
-                            //}
                         }
                     }
                 });
@@ -599,27 +548,6 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Catches up with suspended annotations validation.
-        /// <para />
-        /// This method will take care of unvalidated properties that have been changed during
-        /// the suspended validation state of this model.
-        /// </summary>
-        private void CatchUpWithSuspendedAnnotationsValidation()
-        {
-            if (_propertiesNotCheckedDuringDisabledValidation.Count > 0)
-            {
-                Log.Debug("Validation was suspended, and properties were not checked during this suspended time, checking them now");
-
-                foreach (var property in _propertiesNotCheckedDuringDisabledValidation)
-                {
-                    ValidatePropertyUsingAnnotations(property);
-                }
-
-                _propertiesNotCheckedDuringDisabledValidation.Clear();
-            }
-        }
-
-        /// <summary>
         /// Validates the property using data annotations.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
@@ -631,9 +559,10 @@ namespace Catel.Data
                 return true;
             }
 
-            if (SuspendValidation)
+            var validationSuspensionContext = _validationSuspensionContext;
+            if (validationSuspensionContext != null)
             {
-                _propertiesNotCheckedDuringDisabledValidation.Add(propertyName);
+                validationSuspensionContext.Add(propertyName);
                 return true;
             }
 
@@ -813,22 +742,12 @@ namespace Catel.Data
         /// </remarks>
         internal void Validate(bool force, bool validateDataAnnotations)
         {
-            lock (_lock)
-            {
-                // Note: in v5 we should check the actual properties we missed
-                var validationSuspensionContext = _validationSuspensionContext;
-                if (validationSuspensionContext != null)
-                {
-                    return;
-                }
-            }
-
-            if (SuspendValidation)
+            if (IsValidating)
             {
                 return;
             }
 
-            if (IsValidating)
+            if (IsValidationSuspended)
             {
                 return;
             }
@@ -854,8 +773,6 @@ namespace Catel.Data
             }
 
             OnValidating(validationContext);
-
-            CatchUpWithSuspendedAnnotationsValidation();
 
             if (force && validateDataAnnotations)
             {

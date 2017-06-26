@@ -947,7 +947,7 @@ namespace Catel.Test.Data
             {
                 var validationContext = new ValidationContext();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.AddFieldValidationResult(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.Add((IFieldValidationResult)null));
             }
 
             [TestCase]
@@ -958,7 +958,7 @@ namespace Catel.Test.Data
 
                 Assert.AreEqual(0, validationContext.GetFieldValidationCount());
 
-                validationContext.AddFieldValidationResult(fieldValidation);
+                validationContext.Add(fieldValidation);
 
                 Assert.AreEqual(1, validationContext.GetFieldValidationCount());
             }
@@ -969,11 +969,11 @@ namespace Catel.Test.Data
                 var validationContext = new ValidationContext();
                 var fieldValidation = FieldValidationResult.CreateError("MyProperty", "MyError");
 
-                validationContext.AddFieldValidationResult(fieldValidation);
+                validationContext.Add(fieldValidation);
 
                 Assert.AreEqual(1, validationContext.GetFieldValidationCount());
 
-                validationContext.AddFieldValidationResult(fieldValidation);
+                validationContext.Add(fieldValidation);
 
                 Assert.AreEqual(2, validationContext.GetFieldValidationCount());
             }
@@ -987,7 +987,7 @@ namespace Catel.Test.Data
             {
                 var validationContext = new ValidationContext();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.RemoveFieldValidationResult(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.Remove((IFieldValidationResult)null));
             }
 
             [TestCase]
@@ -996,11 +996,11 @@ namespace Catel.Test.Data
                 var validationContext = new ValidationContext();
                 var fieldValidation = FieldValidationResult.CreateError("MyProperty", "MyError");
 
-                validationContext.AddFieldValidationResult(fieldValidation);
+                validationContext.Add(fieldValidation);
 
                 Assert.AreEqual(1, validationContext.GetFieldValidationCount());
 
-                validationContext.RemoveFieldValidationResult(fieldValidation);
+                validationContext.Remove(fieldValidation);
 
                 Assert.AreEqual(0, validationContext.GetFieldValidationCount());
             }
@@ -1013,7 +1013,7 @@ namespace Catel.Test.Data
 
                 Assert.AreEqual(0, validationContext.GetFieldValidationCount());
 
-                validationContext.RemoveFieldValidationResult(fieldValidation);
+                validationContext.Remove(fieldValidation);
 
                 Assert.AreEqual(0, validationContext.GetFieldValidationCount());
             }
@@ -1027,7 +1027,7 @@ namespace Catel.Test.Data
             {
                 var validationContext = new ValidationContext();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.AddBusinessRuleValidationResult(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.Add((IBusinessRuleValidationResult)null));
             }
 
             [TestCase]
@@ -1038,7 +1038,7 @@ namespace Catel.Test.Data
 
                 Assert.AreEqual(0, validationContext.GetBusinessRuleValidationCount());
 
-                validationContext.AddBusinessRuleValidationResult(businessRuleValidation);
+                validationContext.Add(businessRuleValidation);
 
                 Assert.AreEqual(1, validationContext.GetBusinessRuleValidationCount());
             }
@@ -1049,11 +1049,11 @@ namespace Catel.Test.Data
                 var validationContext = new ValidationContext();
                 var businessRuleValidation = BusinessRuleValidationResult.CreateError("MyProperty");
 
-                validationContext.AddBusinessRuleValidationResult(businessRuleValidation);
+                validationContext.Add(businessRuleValidation);
 
                 Assert.AreEqual(1, validationContext.GetBusinessRuleValidationCount());
 
-                validationContext.AddBusinessRuleValidationResult(businessRuleValidation);
+                validationContext.Add(businessRuleValidation);
 
                 Assert.AreEqual(2, validationContext.GetBusinessRuleValidationCount());
             }
@@ -1067,7 +1067,7 @@ namespace Catel.Test.Data
             {
                 var validationContext = new ValidationContext();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.RemoveBusinessRuleValidationResult(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.Remove((IBusinessRuleValidationResult)null));
             }
 
             [TestCase]
@@ -1076,11 +1076,11 @@ namespace Catel.Test.Data
                 var validationContext = new ValidationContext();
                 var businessRuleValidation = BusinessRuleValidationResult.CreateError("MyError");
 
-                validationContext.AddBusinessRuleValidationResult(businessRuleValidation);
+                validationContext.Add(businessRuleValidation);
 
                 Assert.AreEqual(1, validationContext.GetBusinessRuleValidationCount());
 
-                validationContext.RemoveBusinessRuleValidationResult(businessRuleValidation);
+                validationContext.Remove(businessRuleValidation);
 
                 Assert.AreEqual(0, validationContext.GetBusinessRuleValidationCount());
             }
@@ -1093,7 +1093,7 @@ namespace Catel.Test.Data
 
                 Assert.AreEqual(0, validationContext.GetBusinessRuleValidationCount());
 
-                validationContext.RemoveBusinessRuleValidationResult(businessRuleValidation);
+                validationContext.Remove(businessRuleValidation);
 
                 Assert.AreEqual(0, validationContext.GetBusinessRuleValidationCount());
             }

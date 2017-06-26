@@ -7,12 +7,9 @@
 namespace Catel.Data
 {
     using System;
-    using System.Collections;
     using System.ComponentModel;
     using System.Xml.Serialization;
-    using IoC;
     using Logging;
-    using Runtime.Serialization;
 
 #if NET
     using System.Runtime.Serialization;
@@ -59,14 +56,6 @@ namespace Catel.Data
 #endif
         internal readonly object _lock = new object();
 
-        /// <summary>
-        /// Backing field for the <see cref="LeanAndMeanModel"/> property. Because it has custom logic, it needs a backing field.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private bool _leanAndMeanModel;
-
 #if NET
         [field: NonSerialized]
 #endif
@@ -86,8 +75,6 @@ namespace Catel.Data
         static ModelBase()
         {
             PropertyDataManager = PropertyDataManager.Default;
-
-            DefaultSerializer = IoCConfiguration.DefaultDependencyResolver.Resolve<ISerializer>();
         }
 
 #if !NET
@@ -119,36 +106,6 @@ namespace Catel.Data
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets or sets a value indicating whether all models should behave as a lean and mean model.
-        /// <para />
-        /// To find out what lean and mean means, see <see cref="LeanAndMeanModel"/>.
-        /// <para />
-        /// The default value is <c>false</c>.
-        /// </summary>
-        /// <value><c>true</c> if all models should behave as lean and mean; otherwise, <c>false</c>.</value>
-#if NET
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        public static bool GlobalLeanAndMeanModel { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this model should behave as a lean and mean model.
-        /// <para />
-        /// A lean and mean model will not raise any change notification events.
-        /// </summary>
-        /// <value><c>true</c> if this is a lean and mean model; otherwise, <c>false</c>.</value>
-#if NET
-        [Browsable(false)]
-#endif
-        [XmlIgnore]
-        protected internal bool LeanAndMeanModel
-        {
-            get { return _leanAndMeanModel || GlobalLeanAndMeanModel; }
-            set { _leanAndMeanModel = value; }
-        }
-
         /// <summary>
         /// Gets or sets a value indicating whether property change notifications are currently disabled for all instances.
         /// </summary>
@@ -269,9 +226,6 @@ namespace Catel.Data
         /// </summary>
         private void Initialize()
         {
-            Serializer = DefaultSerializer;
-            SerializationConfiguration = DefaultSerializationConfiguration;
-
             AlwaysInvokeNotifyChanged = false;
 
             InitializeProperties();

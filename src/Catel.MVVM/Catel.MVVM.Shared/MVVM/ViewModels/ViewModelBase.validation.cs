@@ -176,7 +176,7 @@ namespace Catel.MVVM
                     var dataErrorInfo = model as IDataErrorInfo;
                     if (dataErrorInfo != null && !string.IsNullOrEmpty(dataErrorInfo[modelProperty]))
                     {
-                        validationContext.AddFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, dataErrorInfo[modelProperty]));
+                        validationContext.Add(FieldValidationResult.CreateError(mapping.ViewModelProperty, dataErrorInfo[modelProperty]));
 
                         hasSetFieldError = true;
                     }
@@ -185,7 +185,7 @@ namespace Catel.MVVM
                     var dataWarningInfo = model as IDataWarningInfo;
                     if (dataWarningInfo != null && !string.IsNullOrEmpty(dataWarningInfo[modelProperty]))
                     {
-                        validationContext.AddFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, dataWarningInfo[modelProperty]));
+                        validationContext.Add(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, dataWarningInfo[modelProperty]));
 
                         hasSetFieldWarning = true;
                     }
@@ -201,7 +201,7 @@ namespace Catel.MVVM
                             {
                                 if (!string.IsNullOrEmpty(error))
                                 {
-                                    validationContext.AddFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, error));
+                                    validationContext.Add(FieldValidationResult.CreateError(mapping.ViewModelProperty, error));
                                     break;
                                 }
                             }
@@ -213,7 +213,7 @@ namespace Catel.MVVM
                             {
                                 if (!string.IsNullOrEmpty(warning))
                                 {
-                                    validationContext.AddFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, warning));
+                                    validationContext.Add(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, warning));
                                     break;
                                 }
                             }
@@ -244,14 +244,14 @@ namespace Catel.MVVM
                     var dataErrorInfo = modelObject.Value as IDataErrorInfo;
                     if (dataErrorInfo != null && !string.IsNullOrEmpty(dataErrorInfo.Error))
                     {
-                        validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(dataErrorInfo.Error));
+                        validationContext.Add(BusinessRuleValidationResult.CreateError(dataErrorInfo.Error));
                     }
 
                     // IDataWarningInfo
                     var dataWarningInfo = modelObject.Value as IDataWarningInfo;
                     if (dataWarningInfo != null && !string.IsNullOrEmpty(dataWarningInfo.Warning))
                     {
-                        validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateWarning(dataWarningInfo.Warning));
+                        validationContext.Add(BusinessRuleValidationResult.CreateWarning(dataWarningInfo.Warning));
                     }
 
                     // INotifyDataErrorInfo & INotifyDataWarningInfo
@@ -260,12 +260,12 @@ namespace Catel.MVVM
                     {
                         foreach (var error in modelErrorInfo.GetErrors(string.Empty))
                         {
-                            validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(error));
+                            validationContext.Add(BusinessRuleValidationResult.CreateError(error));
                         }
 
                         foreach (var warning in modelErrorInfo.GetWarnings(string.Empty))
                         {
-                            validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateWarning(warning));
+                            validationContext.Add(BusinessRuleValidationResult.CreateWarning(warning));
                         }
                     }
                 }

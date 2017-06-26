@@ -14,7 +14,6 @@ namespace Catel.Data
     using System.Runtime.Serialization;
     using System.Security;
     using Catel.Runtime;
-    using Catel.Runtime.Serialization.Binary;
     using Catel.Scoping;
     using Runtime.Serialization;
 
@@ -84,7 +83,7 @@ namespace Catel.Data
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetBinarySerializer(), SerializationConfiguration)))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetBinarySerializer(), null)))
             {
                 var serializer = scopeManager.ScopeObject.Serializer;
                 var configuration = scopeManager.ScopeObject.Configuration;
@@ -111,7 +110,7 @@ namespace Catel.Data
             }
 
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetBinarySerializer(), SerializationConfiguration)))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetBinarySerializer(), null)))
             {
                 var serializer = scopeManager.ScopeObject.Serializer;
                 var configuration = scopeManager.ScopeObject.Configuration;

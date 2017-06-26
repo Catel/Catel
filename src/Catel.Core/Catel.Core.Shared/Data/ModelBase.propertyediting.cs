@@ -34,7 +34,7 @@ namespace Catel.Data
 
             SetValue(property, value, notifyOnChange);
         }
-        
+
         /// <summary>
         /// Sets the value of a specific property.
         /// </summary>
@@ -63,15 +63,12 @@ namespace Catel.Data
                 return;
             }
 
-            if (!LeanAndMeanModel)
+            if ((value != null) && !property.Type.IsInstanceOfTypeEx(value))
             {
-                if ((value != null) && !property.Type.IsInstanceOfTypeEx(value))
+                if (!value.GetType().IsCOMObjectEx())
                 {
-                    if (!value.GetType().IsCOMObjectEx())
-                    {
-                        throw Log.ErrorAndCreateException(msg => new InvalidPropertyValueException(property.Name, property.Type, value.GetType()),
-                            "Cannot set value '{0}' to property '{1}' of type '{2}', the value is invalid", value, property.Name, GetType().FullName);
-                    }
+                    throw Log.ErrorAndCreateException(msg => new InvalidPropertyValueException(property.Name, property.Type, value.GetType()),
+                        "Cannot set value '{0}' to property '{1}' of type '{2}', the value is invalid", value, property.Name, GetType().FullName);
                 }
             }
 
@@ -90,7 +87,7 @@ namespace Catel.Data
                     SetValueToPropertyBag(property.Name, value);
                 }
 
-                notify = (notifyOnChange && (AlwaysInvokeNotifyChanged || !areOldAndNewValuesEqual) && !LeanAndMeanModel);
+                notify = (notifyOnChange && (AlwaysInvokeNotifyChanged || !areOldAndNewValuesEqual));
 
                 if (changeNotificationsSuspensionContext != null)
                 {
@@ -290,7 +287,7 @@ namespace Catel.Data
         /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
         TValue IModel.GetDefaultValue<TValue>(string name)
         {
-            object obj = ((IModel)this).GetDefaultValue(name);
+            var obj = ((IModel)this).GetDefaultValue(name);
 
             return (obj is TValue) ? (TValue)obj : default(TValue);
         }

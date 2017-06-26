@@ -44,8 +44,8 @@
     <DocumentationFile>..\..\..\output\release\Xamarin.Android\Catel.Serialization.Json\Catel.Serialization.Json.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Catel.Fody.Attributes, Version=2.16.2.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
-      <HintPath>..\..\..\lib\Catel.Fody.2.16.2\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+    <Reference Include="Catel.Fody.Attributes, Version=2.17.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Catel.Fody.2.17.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
     </Reference>
     <Reference Include="MethodTimer, Version=1.19.0.0, Culture=neutral, PublicKeyToken=cb1364609f40a1dc, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\MethodTimer.Fody.1.19.0\Lib\dotnet\MethodTimer.dll</HintPath>
@@ -55,7 +55,7 @@
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\lib\Newtonsoft.Json.10.0.2\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\lib\Newtonsoft.Json.10.0.3\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json.Bson, Version=1.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\Newtonsoft.Json.Bson.1.0.1\lib\netstandard1.3\Newtonsoft.Json.Bson.dll</HintPath>
@@ -96,12 +96,12 @@
   </ItemGroup>
   <Import Project="..\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
-  <Import Project="..\..\..\lib\Fody.2.0.6\build\netstandard1.4\Fody.targets" Condition="Exists('..\..\..\lib\Fody.2.0.6\build\netstandard1.4\Fody.targets')" />
+  <Import Project="..\..\..\lib\Fody.2.1.0\build\netstandard1.0\Fody.targets" Condition="Exists('..\..\..\lib\Fody.2.1.0\build\netstandard1.0\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\lib\Fody.2.0.6\build\netstandard1.4\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.2.0.6\build\netstandard1.4\Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\Fody.2.1.0\build\netstandard1.0\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.2.1.0\build\netstandard1.0\Fody.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

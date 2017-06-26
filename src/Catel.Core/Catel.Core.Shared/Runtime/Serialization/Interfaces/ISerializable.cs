@@ -7,23 +7,11 @@
 
 namespace Catel.Runtime.Serialization
 {
-    using System;
-
     /// <summary>
     /// Additional features for serializable objects.
     /// </summary>
     public interface ISerializable
     {
-        /// <summary>
-        /// Occurs when the object has been serialized.
-        /// </summary>
-        event EventHandler<EventArgs> Serialized;
-
-        /// <summary>
-        /// Occurs when the object has been deserialized.
-        /// </summary>
-        event EventHandler<EventArgs> Deserialized;
-
         /// <summary>
         /// Starts the serialization.
         /// </summary>
