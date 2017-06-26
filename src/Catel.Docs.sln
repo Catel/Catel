@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{58F62039-8645-499C-B264-66048F4F0F75}"
 EndProject
@@ -79,14 +79,22 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Serialization.Json.UW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.Xamarin.Forms", "Catel.MVVM\Catel.MVVM.Xamarin.Forms\Catel.MVVM.Xamarin.Forms.csproj", "{E0D994CA-D553-4009-A159-33542A16C4D0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Core.NET47", "Catel.Core\Catel.Core.NET47\Catel.Core.NET47.csproj", "{77C9202E-B477-446D-AFDF-F8AE922F83CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.MVVM.NET47", "Catel.MVVM\Catel.MVVM.NET47\Catel.MVVM.NET47.csproj", "{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catel.Serialization.Json.NET47", "Catel.Serialization.Json\Catel.Serialization.Json.NET47\Catel.Serialization.Json.NET47.csproj", "{10B3AA18-86BB-40A8-BB0B-43EFDB022403}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{0014f9bd-7b73-48d4-828c-fd2a85b0276b}*SharedItemsImports = 4
+		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{10b3aa18-86bb-40a8-bb0b-43efdb022403}*SharedItemsImports = 4
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{2cc3b8f3-626e-4a7b-adc5-a25e28dc219e}*SharedItemsImports = 4
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{3743a304-3ee5-4909-bfec-988d59d1b33a}*SharedItemsImports = 13
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{461e63d9-fd22-49bf-94ed-af5ac870c348}*SharedItemsImports = 4
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{56a6ccba-fd9f-48e9-9d1c-dc5d92a0f9f9}*SharedItemsImports = 4
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{5a6cf7d5-9bbc-44b5-8a73-2146d03c3c1e}*SharedItemsImports = 4
+		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{77c9202e-b477-446d-afdf-f8ae922f83cc}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{786d0298-2117-4b96-838d-c0e9458d06c2}*SharedItemsImports = 4
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{7c69650f-08c8-494c-857f-43b29a4bb20c}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{8c7eab82-554b-4761-b67e-7e9b9a306914}*SharedItemsImports = 13
@@ -100,6 +108,7 @@ Global
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{dacc943d-decb-4638-b83b-59dd17237fb9}*SharedItemsImports = 4
 		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{e0d994ca-d553-4009-a159-33542a16c4d0}*SharedItemsImports = 4
 		Catel.Serialization.Json\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems*{e686a62c-2e03-40a2-8be6-bdf6d5f19a71}*SharedItemsImports = 13
+		Catel.MVVM\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems*{ec29d7e3-3a47-4ecf-9107-aebfdeb1f1a5}*SharedItemsImports = 4
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{f8073034-ce6c-41ad-9852-7aeece9536cc}*SharedItemsImports = 4
 		Catel.Core\Catel.Core.Shared\Catel.Core.Shared.projitems*{fc00c799-175f-42ec-a481-24a06cf20508}*SharedItemsImports = 4
 	EndGlobalSection
@@ -336,6 +345,54 @@ Global
 		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|x64.Build.0 = Release|Any CPU
 		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|x86.ActiveCfg = Release|Any CPU
 		{E0D994CA-D553-4009-A159-33542A16C4D0}.Release|x86.Build.0 = Release|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Debug|ARM.Build.0 = Debug|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Debug|x64.Build.0 = Debug|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Debug|x86.Build.0 = Debug|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Release|ARM.ActiveCfg = Release|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Release|ARM.Build.0 = Release|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Release|x64.ActiveCfg = Release|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Release|x64.Build.0 = Release|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Release|x86.ActiveCfg = Release|Any CPU
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC}.Release|x86.Build.0 = Release|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Debug|ARM.Build.0 = Debug|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Debug|x64.Build.0 = Debug|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Debug|x86.Build.0 = Debug|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Release|ARM.ActiveCfg = Release|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Release|ARM.Build.0 = Release|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Release|x64.ActiveCfg = Release|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Release|x64.Build.0 = Release|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Release|x86.ActiveCfg = Release|Any CPU
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5}.Release|x86.Build.0 = Release|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Debug|ARM.Build.0 = Debug|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Debug|x64.Build.0 = Debug|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Debug|x86.Build.0 = Debug|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Release|ARM.ActiveCfg = Release|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Release|ARM.Build.0 = Release|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Release|x64.ActiveCfg = Release|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Release|x64.Build.0 = Release|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Release|x86.ActiveCfg = Release|Any CPU
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -366,6 +423,9 @@ Global
 		{97E093E6-1CF9-4CFF-9201-540A7681BC12} = {85BEBC4F-4020-4045-945B-B8F6F732FC6E}
 		{917AF08F-4BD5-468A-BDB0-4C0ECDAD71EC} = {85BEBC4F-4020-4045-945B-B8F6F732FC6E}
 		{E0D994CA-D553-4009-A159-33542A16C4D0} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
+		{77C9202E-B477-446D-AFDF-F8AE922F83CC} = {3F661942-9946-4292-9FE7-6B576782D5F9}
+		{EC29D7E3-3A47-4ECF-9107-AEBFDEB1F1A5} = {162DE45B-B7A2-4D4A-B90D-F1762133C31C}
+		{10B3AA18-86BB-40A8-BB0B-43EFDB022403} = {85BEBC4F-4020-4045-945B-B8F6F732FC6E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35
