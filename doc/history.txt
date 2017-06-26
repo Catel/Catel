@@ -29,6 +29,9 @@ Release date:
 
 Platform support changes:
 =========================
+Added support for the following platforms:
+* .NET 4.7
+
 Dropped support for the following platforms:
 * .NET 4.0
 * Silverlight 5
