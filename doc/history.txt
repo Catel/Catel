@@ -91,6 +91,7 @@ Added/fixed:
 (*) #135     Use NuGet dependency for System.Windows.Interactivity instead
 (*) #807     Exceptions in TaskCommand are now longer swallowed by default. Pre 5.0 behavior can be mimmicked by setting
              the TaskCommand.SwallowExceptions property to true
+(*) #853     Improve Mixed mode in FastObservableCollection 
 (*) #901     Clean up FrameworkElement and DependencyObject extension methods
 (*) #988     Set default value of DeferValidationUntilFirstSaveCall to true
 (*) #995     Split ModelBase into ModelBase (without validation) and ValidatableModelBase
