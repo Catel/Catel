@@ -988,6 +988,12 @@ namespace Catel.MVVM
                                             string.Join(", ", propertiesToSet), string.Join(", ", valuesToSet));
                                     }
 
+                                    
+                                    if (modelInfo.SupportIEditableObject)
+                                    {
+                                        (model as IEditableObject)?.BeginEdit();
+                                    }
+
                                     for (var index = 0; index < propertiesToSet.Length && index < valuesToSet.Length; index++)
                                     {
                                         try
@@ -1411,10 +1417,19 @@ namespace Catel.MVVM
 
             lock (_modelLock)
             {
+                bool isDirty = false;
+
                 foreach (var modelKeyValuePair in _modelObjects)
                 {
                     UninitializeModelInternal(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.CancelEdit);
+                    var model = modelKeyValuePair.Value as IModel;
+                    if (model != null)
+                    {
+                        isDirty |= model.IsDirty;
+                    }
                 }
+
+                IsDirty = isDirty;
             }
 
             Log.Info("Canceled view model '{0}'", GetType());
@@ -1477,10 +1492,19 @@ namespace Catel.MVVM
             {
                 lock (_modelLock)
                 {
+                    bool isDirty = false;
                     foreach (KeyValuePair<string, object> modelKeyValuePair in _modelObjects)
                     {
                         UninitializeModelInternal(modelKeyValuePair.Key, modelKeyValuePair.Value, ModelCleanUpMode.EndEdit);
+
+                        var model = modelKeyValuePair.Value as IModel;
+                        if (model != null)
+                        {
+                            isDirty |= model.IsDirty;
+                        }
                     }
+
+                    IsDirty = isDirty;
                 }
 
                 await SavedAsync.SafeInvokeAsync(this);

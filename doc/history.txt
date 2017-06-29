@@ -109,6 +109,7 @@ Added/fixed:
 (*)          Improve ShowWindowAsync implementation at UIVisualizerService
 (x) #815     MessageMediator registers new recipients after previous registration of same type of recipient were 
              garbage collected
+(x) #892     ModelBase CancelEdit puts Model into dirty state
 (x) CTL-899  Navigation in WPF is not working when using custom frame
 (x) CTL-906  Clear current navigation context when (re)navigating to the same view in WPF
 (x) CTL-910  Introduce special lock for null keys in CacheStorage to prevent ArgumentNullException
