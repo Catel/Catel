@@ -11,11 +11,7 @@ namespace Catel.Collections
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Collections.Specialized;
     using System.ComponentModel;
-    using System.Diagnostics;
-
     using Catel.Logging;
 
     using IoC;
@@ -242,7 +238,7 @@ namespace Catel.Collections
         {
             Argument.IsNotNull("collection", collection);
 
-            using (SuspendChangeNotifications(SuspensionMode.Adding))
+            using (SuspendChangeNotifications(_suspensionContext?.Mode ?? SuspensionMode.Adding))
             {
                 foreach (var item in collection)
                 {
@@ -264,7 +260,7 @@ namespace Catel.Collections
 
             var list = (IList)this;
 
-            using (SuspendChangeNotifications(SuspensionMode.Adding))
+            using (SuspendChangeNotifications(_suspensionContext?.Mode ?? SuspensionMode.Adding))
             {
                 foreach (var item in collection)
                 {
@@ -284,7 +280,7 @@ namespace Catel.Collections
         {
             Argument.IsNotNull("collection", collection);
 
-            using (SuspendChangeNotifications(SuspensionMode.Removing))
+            using (SuspendChangeNotifications(_suspensionContext?.Mode ?? SuspensionMode.Removing))
             {
                 foreach (var item in collection)
                 {
@@ -306,7 +302,7 @@ namespace Catel.Collections
 
             var list = (IList)this;
 
-            using (SuspendChangeNotifications(SuspensionMode.Removing))
+            using (SuspendChangeNotifications(_suspensionContext?.Mode ?? SuspensionMode.Removing))
             {
                 foreach (var item in collection)
                 {
@@ -410,28 +406,28 @@ namespace Catel.Collections
             Action action = () =>
             {
                 // Create event args
-                ListChangedEventArgs eventArgs = null;
-                if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Adding)
+                List<ListChangedEventArgs> eventArgsList = new List<ListChangedEventArgs>();
+
+                var suspensionContext = _suspensionContext;
+                if (suspensionContext != null)
                 {
-                    if (_suspensionContext.NewItems.Count != 0)
+                    if (suspensionContext.NewItems.Count != 0)
                     {
-                        eventArgs = new NotifyRangedListChangedEventArgs(NotifyRangedListChangedAction.Add, _suspensionContext.NewItems, _suspensionContext.NewItemIndices);
+                        eventArgsList.Add(new NotifyRangedListChangedEventArgs(NotifyRangedListChangedAction.Add, suspensionContext.NewItems, suspensionContext.NewItemIndices));
                     }
-                }
-                else if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
-                {
-                    if (_suspensionContext.OldItems.Count != 0)
+
+                    if (suspensionContext.OldItems.Count != 0)
                     {
-                        eventArgs = new NotifyRangedListChangedEventArgs(NotifyRangedListChangedAction.Remove, _suspensionContext.OldItems, _suspensionContext.OldItemIndices);
+                        eventArgsList.Add(new NotifyRangedListChangedEventArgs(NotifyRangedListChangedAction.Remove, suspensionContext.OldItems, suspensionContext.OldItemIndices));
                     }
                 }
                 else
                 {
-                    eventArgs = new NotifyListChangedEventArgs(ListChangedType.Reset);
+                    eventArgsList.Add(new NotifyListChangedEventArgs(ListChangedType.Reset));
                 }
 
                 // Fire events
-                if (eventArgs != null)
+                foreach (var eventArgs in eventArgsList)
                 {
                     OnListChanged(eventArgs);
                 }
@@ -552,8 +548,18 @@ namespace Catel.Collections
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, current mode is '{_suspensionContext.Mode}'.");
             }
 
-            // Call base
-            base.ClearItems();
+            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.None)
+            {
+                while (Count > 0)
+                {
+                    RemoveItem(0);
+                }
+            }
+            else
+            {
+                // Call base
+                base.ClearItems();
+            }
         }
 
         /// <summary>
@@ -595,7 +601,8 @@ namespace Catel.Collections
         protected override void InsertItem(int index, T item)
         {
             // Check
-            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
+            var suspensionContext = _suspensionContext;
+            if (suspensionContext != null && suspensionContext.Mode == SuspensionMode.Removing)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
             }
@@ -603,11 +610,15 @@ namespace Catel.Collections
             // Call base
             var oldValue = RaiseListChangedEvents;
             RaiseListChangedEvents = false;
+
+            bool? removed;
             try
             {
+                removed = suspensionContext?.TryRemoveItemFromOldItems(index, item);
+
                 base.InsertItem(index, item);
 
-                if (!NotificationsSuspended)
+                if (suspensionContext == null)
                 {
                     OnListChanged(new NotifyListChangedEventArgs(ListChangedType.ItemAdded, index, item));
                 }
@@ -617,11 +628,11 @@ namespace Catel.Collections
                 RaiseListChangedEvents = oldValue;
             }
 
-            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Adding)
+            if (removed != null && !removed.Value)
             {
                 // Remember
-                _suspensionContext.NewItems.Add(item);
-                _suspensionContext.NewItemIndices.Add(index);
+                suspensionContext.NewItems.Add(item);
+                suspensionContext.NewItemIndices.Add(index);
             }
         }
 
@@ -643,8 +654,11 @@ namespace Catel.Collections
             // Call base
             var oldValue = RaiseListChangedEvents;
             RaiseListChangedEvents = false;
+
+            bool? removed;
             try
             {
+                removed = _suspensionContext?.TryRemoveItemFromNewItems(index, item);
                 base.RemoveItem(index);
 
                 if (!NotificationsSuspended)
@@ -657,7 +671,7 @@ namespace Catel.Collections
                 RaiseListChangedEvents = oldValue;
             }
 
-            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
+            if (removed != null && !removed.Value)
             {
                 // Remember
                 _suspensionContext.OldItems.Add(item);

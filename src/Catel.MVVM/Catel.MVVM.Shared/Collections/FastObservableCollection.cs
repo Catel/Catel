@@ -474,7 +474,7 @@ namespace Catel.Collections
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             var suspensionContext = _suspensionContext;
-            if (suspensionContext == null || (suspensionContext != null && suspensionContext.Count == 0))
+            if (suspensionContext == null || suspensionContext.Count == 0)
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {
@@ -488,7 +488,7 @@ namespace Catel.Collections
                 return;
             }
 
-            if (suspensionContext != null && suspensionContext.Count != 0)
+            if (suspensionContext.Count != 0)
             {
                 IsDirty = true;
             }
@@ -501,7 +501,7 @@ namespace Catel.Collections
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             var suspensionContext = _suspensionContext;
-            if (suspensionContext == null || suspensionContext != null && suspensionContext.Count == 0)
+            if (suspensionContext == null || suspensionContext.Count == 0)
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {
@@ -527,8 +527,18 @@ namespace Catel.Collections
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, current mode is '{suspensionContext.Mode}'");
             }
 
-            // Call base
-            base.ClearItems();
+            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.None)
+            {
+                while (Count > 0)
+                {
+                    RemoveItem(0);
+                }
+            }
+            else
+            {
+                // Call base
+                base.ClearItems();
+            }
         }
 
         /// <summary>
@@ -544,30 +554,12 @@ namespace Catel.Collections
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
             }
 
-            bool restored = false;
-            if (suspensionContext != null && suspensionContext.Mode == SuspensionMode.None)
-            {
-                var oldIdx = suspensionContext.OldItems.LastIndexOf(item);
-                if (oldIdx > -1 && suspensionContext.OldItemIndices[oldIdx] == index)
-                {
-                    suspensionContext.OldItems.RemoveAt(oldIdx);
-                    suspensionContext.OldItemIndices.RemoveAt(oldIdx);
-                    for (var i = 0; i < suspensionContext.OldItemIndices.Count; i++)
-                    {
-                        if (suspensionContext.OldItemIndices[i] >= index)
-                        {
-                            suspensionContext.OldItemIndices[i]++;
-                        }
-                    }
-
-                    restored = true;
-                }
-            }
+            bool? removed = suspensionContext?.TryRemoveItemFromOldItems(index, item);
 
             // Call base
             base.InsertItem(index, item);
 
-            if (suspensionContext != null && !restored)
+            if (removed != null && !removed.Value)
             {
                 // Remember
                 suspensionContext.NewItems.Add(item);
@@ -607,29 +599,12 @@ namespace Catel.Collections
             // Get item
             T item = this[index];
 
-            bool restored = false;
-            if (suspensionContext != null && suspensionContext.Mode == SuspensionMode.None)
-            {
-                var newIdx = suspensionContext.NewItems.LastIndexOf(item);
-                if (newIdx > -1 && suspensionContext.NewItemIndices[newIdx] == index)
-                {
-                    suspensionContext.NewItems.RemoveAt(newIdx);
-                    suspensionContext.NewItemIndices.RemoveAt(newIdx);
-                    for (var i = 0; i < suspensionContext.NewItemIndices.Count; i++)
-                    {
-                        if (suspensionContext.NewItemIndices[i] >= index)
-                        {
-                            suspensionContext.NewItemIndices[i]--;
-                        }
-                    }
-                    restored = true;
-                }
-            }
+            bool? removed = suspensionContext?.TryRemoveItemFromNewItems(index, item);
 
             // Call base
             base.RemoveItem(index);
 
-            if (suspensionContext != null && !restored)
+            if (removed != null && !removed.Value)
             {
                 // Remember
                 suspensionContext.OldItems.Add(item);
@@ -652,6 +627,7 @@ namespace Catel.Collections
             // Call base
             base.SetItem(index, item);
         }
+
         #endregion Overrides of ObservableCollection
 
         private NotifyRangedCollectionChangedEventArgs CreateEventArgs(NotifyCollectionChangedAction action, IList changedItems = null, IList<int> changedIndices = null)

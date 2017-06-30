@@ -18,6 +18,7 @@ namespace Catel.Test.Collections
     using NUnit.Framework;
     using System.ComponentModel;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
 
     public class FastBindingListFacts
     {
@@ -196,7 +197,7 @@ namespace Catel.Test.Collections
                     fastCollection.Remove(1);
                 }
 
-                Assert.AreEqual(1, counter);
+                Assert.AreEqual(0, counter);
             }
         }
 
@@ -632,7 +633,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(1, counter);
                 Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
                 Assert.AreEqual(NotifyRangedListChangedAction.Remove, eventArgs.Action);
-                CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
+                CollectionAssert.AreEqual(eventArgs.OldItems, new[] { 1, 2, 3, 4, 5 });
             }
 
             private SuspensionContext<T> GetSuspensionContext<T>(FastBindingList<T> collection)
@@ -718,6 +719,78 @@ namespace Catel.Test.Collections
                 {
                     Assert.Throws<InvalidOperationException>(() => { using (fastCollection.SuspendChangeNotifications(SuspensionMode.Removing)) { } });
                 }
+            }
+        }
+
+        [TestFixture]
+        public class TheMixedMode
+        {
+            [Test]
+            public void RaisesSingleAddEventIfTheRemovedItemsAreASubSetOfTheAddedItems()
+            {
+                var count = 0;
+                NotifyRangedListChangedEventArgs eventArgs = null;
+                var fastCollection = new FastBindingList<int>();
+                fastCollection.ListChanged += (sender, args) =>
+                {
+                    count++;
+                    eventArgs = args as NotifyRangedListChangedEventArgs;
+                };
+                using (fastCollection.SuspendChangeNotifications())
+                {
+                    fastCollection.AddItems(new[] { 1, 2, 3, 4 });
+                    fastCollection.RemoveItems(new[] { 2, 3 });
+                }
+
+                Assert.AreEqual(NotifyRangedListChangedAction.Add, eventArgs.Action);
+                Assert.AreEqual(1, count);
+                Assert.AreEqual(new[] { 1, 4 }, eventArgs.NewItems.OfType<int>().ToArray());
+            }
+
+            [Test]
+            public void RaisesSingleRemoveEventIfTheAddedItemsAreASubSetOfTheRemovedItems()
+            {
+                var count = 0;
+                NotifyRangedListChangedEventArgs eventArgs = null;
+                var fastCollection = new FastBindingList<int>();
+                fastCollection.AddItems(new[] { 1, 2, 3, 4 });
+
+                fastCollection.ListChanged += (sender, args) =>
+                {
+                    count++;
+                    eventArgs = args as NotifyRangedListChangedEventArgs;
+                };
+
+                using (fastCollection.SuspendChangeNotifications())
+                {
+                    fastCollection.RemoveItems(new[] { 4, 2, 3 });
+                    fastCollection.AddItems(new[] { 2 });
+                }
+
+                Assert.AreEqual(NotifyRangedListChangedAction.Remove, eventArgs.Action);
+                Assert.AreEqual(1, count);
+                Assert.AreEqual(new[] { 4, 3 }, eventArgs.OldItems.OfType<int>().ToArray());
+            }
+
+            [Test]
+            public void RaisesTwoEvents()
+            {
+                var eventArgsList = new List<NotifyRangedListChangedEventArgs>();
+                var fastCollection = new FastBindingList<int>();
+                fastCollection.AddItems(new[] { 1, 2, 3, 4 });
+
+                fastCollection.ListChanged += (sender, args) => { eventArgsList.Add(args as NotifyRangedListChangedEventArgs); };
+
+                using (fastCollection.SuspendChangeNotifications())
+                {
+                    fastCollection.RemoveItems(new[] { 4 });
+                    fastCollection.AddItems(new[] { 5 });
+                }
+
+                Assert.AreEqual(2, eventArgsList.Count);
+
+                Assert.Contains(5, eventArgsList.First(args =>  args.Action == NotifyRangedListChangedAction.Add).NewItems);
+                Assert.Contains(4, eventArgsList.First(args => args.Action == NotifyRangedListChangedAction.Remove).OldItems);
             }
         }
     }
