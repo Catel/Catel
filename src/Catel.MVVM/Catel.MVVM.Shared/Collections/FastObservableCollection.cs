@@ -45,9 +45,6 @@ namespace Catel.Collections
         [field: NonSerialized]
 #endif
         private SuspensionContext<T> _suspensionContext;
-
-        private readonly Stack<CollectionChangeEventArgs> _collectionEventArgs = new Stack<CollectionChangeEventArgs>();
-
         #endregion
 
         #region Constructors
