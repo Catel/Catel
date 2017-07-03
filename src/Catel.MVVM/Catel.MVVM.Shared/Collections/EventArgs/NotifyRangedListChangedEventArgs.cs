@@ -41,9 +41,19 @@ namespace Catel.Collections
         {
             Action = action;
 
-            NewItems = changedItems;
-            NewStartingIndex = (indices != null && indices.Count != 0) ? indices[0] : -1;
-            OldStartingIndex = -1;
+            var startingIndex = indices != null && indices.Count != 0 ? indices[0] : -1;
+            if (action == NotifyRangedListChangedAction.Add)
+            {
+                NewItems = changedItems;
+                NewStartingIndex = startingIndex;
+                OldStartingIndex = -1;
+            }
+            else
+            {
+                OldItems = changedItems;
+                OldStartingIndex = startingIndex;
+                NewStartingIndex = -1;
+            }
 
             Indices = indices;
         }
