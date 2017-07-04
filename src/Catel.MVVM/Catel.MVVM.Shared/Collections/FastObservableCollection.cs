@@ -394,7 +394,7 @@ namespace Catel.Collections
                 // Create new context
                 _suspensionContext = new SuspensionContext<T>(mode);
             }
-            else if (_suspensionContext != null && _suspensionContext.Mode != mode)
+            else if (_suspensionContext != null && (_suspensionContext.Mode != mode && _suspensionContext.Mode != SuspensionMode.Mixed))
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot change mode during another active suspension.");
             }
@@ -439,7 +439,10 @@ namespace Catel.Collections
                     // See https://github.com/Catel/Catel/issues/1066 for details
                     if (suspensionContext.Mode == SuspensionMode.None)
                     {
-                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, null, null));
+                        if (suspensionContext.NewItems.Count > 0 || suspensionContext.OldItems.Count > 0)
+                        {
+                            eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, null, null));
+                        }
                     }
                     else
                     {
@@ -536,12 +539,12 @@ namespace Catel.Collections
         {
             // Check
             var suspensionContext = _suspensionContext;
-            if (suspensionContext != null && suspensionContext.Mode != SuspensionMode.None)
+            if (suspensionContext != null && suspensionContext.Mode != SuspensionMode.None && suspensionContext.Mode != SuspensionMode.Mixed)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, current mode is '{suspensionContext.Mode}'");
             }
 
-            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.None)
+            if (_suspensionContext != null && (_suspensionContext.Mode == SuspensionMode.None || _suspensionContext.Mode == SuspensionMode.Mixed))
             {
                 while (Count > 0)
                 {
@@ -588,7 +591,7 @@ namespace Catel.Collections
         protected override void MoveItem(int oldIndex, int newIndex)
         {
             // Check
-            if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None)
+            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Mixed))
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, current mode is '{_suspensionContext.Mode}'");
             }
@@ -633,7 +636,7 @@ namespace Catel.Collections
         protected override void SetItem(int index, T item)
         {
             // Check
-            if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None)
+            if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Mixed)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, current mode is '{_suspensionContext.Mode}'");
             }
