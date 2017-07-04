@@ -435,17 +435,21 @@ namespace Catel.Collections
                 {
                     if (suspensionContext.NewItems.Count != 0)
                     {
-                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Add, suspensionContext.NewItems, suspensionContext.NewItemIndices));
+                        // Note: ultimately, we would like to use NotifyCollectionChangedAction.Add, but this seems to break
+                        // the UI components in UWP (& maybe other platforms as well). See https://github.com/Catel/Catel/issues/1066
+                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, suspensionContext.NewItems, suspensionContext.NewItemIndices));
                     }
 
                     if (suspensionContext.OldItems.Count != 0)
                     {
-                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Remove, suspensionContext.OldItems, suspensionContext.OldItemIndices));
+                        // Note: ultimately, we would like to use NotifyCollectionChangedAction.Add, but this seems to break
+                        // the UI components in UWP (& maybe other platforms as well). See https://github.com/Catel/Catel/issues/1066
+                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, suspensionContext.OldItems, suspensionContext.OldItemIndices));
                     }
                 }
                 else
                 {
-                    eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset));
+                    eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, null, null));
                 }
 
                 if (eventArgsList.Count > 0)
@@ -630,8 +634,23 @@ namespace Catel.Collections
             // Call base
             base.SetItem(index, item);
         }
-
         #endregion Overrides of ObservableCollection
+
+        private NotifyRangedCollectionChangedEventArgs CreateEventArgs(NotifyCollectionChangedAction action, T changedItem = default(T), int changedIndex = -1)
+        {
+            NotifyRangedCollectionChangedEventArgs eventArgs;
+
+            if (changedItem == null)
+            {
+                eventArgs = new NotifyRangedCollectionChangedEventArgs(action);
+            }
+            else
+            {
+                eventArgs = new NotifyRangedCollectionChangedEventArgs(action, new List<T>() { changedItem }, new List<int>() { changedIndex });
+            }
+
+            return eventArgs;
+        }
 
         private NotifyRangedCollectionChangedEventArgs CreateEventArgs(NotifyCollectionChangedAction action, IList changedItems = null, IList<int> changedIndices = null)
         {
