@@ -433,18 +433,26 @@ namespace Catel.Collections
                 var suspensionContext = _suspensionContext;
                 if (suspensionContext != null)
                 {
-                    if (suspensionContext.NewItems.Count != 0)
+                    // Special case: if suspension mode == None, we raise a .Reset (default behavior).
+                    if (suspensionContext.Mode == SuspensionMode.None)
                     {
-                        // Note: ultimately, we would like to use NotifyCollectionChangedAction.Add, but this seems to break
-                        // the UI components in UWP (& maybe other platforms as well). See https://github.com/Catel/Catel/issues/1066
-                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, suspensionContext.NewItems, suspensionContext.NewItemIndices));
+                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, suspensionContext.NewItems, suspensionContext.OldItems, suspensionContext.OldItemIndices));
                     }
-
-                    if (suspensionContext.OldItems.Count != 0)
+                    else
                     {
-                        // Note: ultimately, we would like to use NotifyCollectionChangedAction.Add, but this seems to break
-                        // the UI components in UWP (& maybe other platforms as well). See https://github.com/Catel/Catel/issues/1066
-                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, suspensionContext.OldItems, suspensionContext.OldItemIndices));
+                        if (suspensionContext.NewItems.Count != 0)
+                        {
+                            // Note: ultimately, we would like to use NotifyCollectionChangedAction.Add, but this seems to break
+                            // the UI components in UWP (& maybe other platforms as well). See https://github.com/Catel/Catel/issues/1066
+                            eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Add, suspensionContext.NewItems, suspensionContext.NewItemIndices));
+                        }
+
+                        if (suspensionContext.OldItems.Count != 0)
+                        {
+                            // Note: ultimately, we would like to use NotifyCollectionChangedAction.Add, but this seems to break
+                            // the UI components in UWP (& maybe other platforms as well). See https://github.com/Catel/Catel/issues/1066
+                            eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Remove, suspensionContext.OldItems, suspensionContext.OldItemIndices));
+                        }
                     }
                 }
                 else
@@ -663,6 +671,22 @@ namespace Catel.Collections
             else
             {
                 eventArgs = new NotifyRangedCollectionChangedEventArgs(action, changedItems, changedIndices);
+            }
+
+            return eventArgs;
+        }
+
+        private NotifyRangedCollectionChangedEventArgs CreateEventArgs(NotifyCollectionChangedAction action, IList newItems = null, IList removedItems = null, IList<int> changedIndices = null)
+        {
+            NotifyRangedCollectionChangedEventArgs eventArgs;
+
+            if (newItems == null && removedItems == null && changedIndices == null)
+            {
+                eventArgs = new NotifyRangedCollectionChangedEventArgs(action);
+            }
+            else
+            {
+                eventArgs = new NotifyRangedCollectionChangedEventArgs(action, newItems, removedItems, changedIndices);
             }
 
             return eventArgs;
