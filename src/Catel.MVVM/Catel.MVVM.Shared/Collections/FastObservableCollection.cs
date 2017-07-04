@@ -172,7 +172,7 @@ namespace Catel.Collections
         {
             Argument.IsNotNull("collection", collection);
 
-            var list = (IList) this;
+            var list = (IList)this;
 
             using (SuspendChangeNotifications(mode))
             {
@@ -240,6 +240,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void AddItems(IEnumerable collection)
         {
+            // Don't create overload, keep as is
             AddItems(collection, SuspensionMode.None);
         }
 
@@ -275,6 +276,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void RemoveItems(IEnumerable<T> collection)
         {
+            // Don't create overload, keep as is
             RemoveItems(collection, SuspensionMode.None);
         }
 
@@ -308,6 +310,7 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="collection"/> is <c>null</c>.</exception>
         public void RemoveItems(IEnumerable collection)
         {
+            // Don't create overload, keep as is
             RemoveItems(collection, SuspensionMode.None);
         }
 
@@ -425,7 +428,7 @@ namespace Catel.Collections
         {
             Action action = () =>
             {
-                List<NotifyCollectionChangedEventArgs> eventArgsList = new List<NotifyCollectionChangedEventArgs>();
+                var eventArgsList = new List<NotifyCollectionChangedEventArgs>();
 
                 var suspensionContext = _suspensionContext;
                 if (suspensionContext != null)
@@ -445,13 +448,16 @@ namespace Catel.Collections
                     eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset));
                 }
 
-                foreach (var eventArgs in eventArgsList)
+                if (eventArgsList.Count > 0)
                 {
-                    OnCollectionChanged(eventArgs);
-                }
+                    OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+                    OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
 
-                OnPropertyChanged(new PropertyChangedEventArgs("Count"));
-                OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+                    foreach (var eventArgs in eventArgsList)
+                    {
+                        OnCollectionChanged(eventArgs);
+                    }
+                }
             };
 
             if (AutomaticallyDispatchChangeNotifications)
