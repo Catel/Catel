@@ -435,6 +435,8 @@ namespace Catel.Collections
                 {
                     // Special case: if suspension mode == None, we raise a .Reset (default behavior). We would love to pass in the 
                     // right items (e.g. Reset or MassiveUpdate), but the UI components don't support this, hence the .Reset.
+                    //
+                    // See https://github.com/Catel/Catel/issues/1066 for details
                     if (suspensionContext.Mode == SuspensionMode.None)
                     {
                         eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, null, null));
@@ -443,15 +445,11 @@ namespace Catel.Collections
                     {
                         if (suspensionContext.NewItems.Count != 0)
                         {
-                            // Note: ultimately, we would like to use NotifyCollectionChangedAction.Add, but this seems to break
-                            // the UI components in UWP (& maybe other platforms as well). See https://github.com/Catel/Catel/issues/1066
                             eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Add, suspensionContext.NewItems, suspensionContext.NewItemIndices));
                         }
 
                         if (suspensionContext.OldItems.Count != 0)
                         {
-                            // Note: ultimately, we would like to use NotifyCollectionChangedAction.Add, but this seems to break
-                            // the UI components in UWP (& maybe other platforms as well). See https://github.com/Catel/Catel/issues/1066
                             eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Remove, suspensionContext.OldItems, suspensionContext.OldItemIndices));
                         }
                     }
