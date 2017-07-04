@@ -433,10 +433,11 @@ namespace Catel.Collections
                 var suspensionContext = _suspensionContext;
                 if (suspensionContext != null)
                 {
-                    // Special case: if suspension mode == None, we raise a .Reset (default behavior).
+                    // Special case: if suspension mode == None, we raise a .Reset (default behavior). We would love to pass in the 
+                    // right items (e.g. Reset or MassiveUpdate), but the UI components don't support this, hence the .Reset.
                     if (suspensionContext.Mode == SuspensionMode.None)
                     {
-                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, suspensionContext.NewItems, suspensionContext.OldItems, suspensionContext.OldItemIndices));
+                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, null, null));
                     }
                     else
                     {
