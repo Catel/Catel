@@ -47,6 +47,8 @@ namespace Catel.Test
 
             public static int StaticEventHandlerCounter { get; private set; }
 
+            public int PublicActionCounter { get; private set; }
+
             public int PublicEventCounter { get; private set; }
 
             public int PrivateEventCounter { get; private set; }
@@ -66,6 +68,11 @@ namespace Catel.Test
             public static void OnEventStaticHandler(object sender, EventArgs e)
             {
                 StaticEventHandlerCounter++;
+            }
+
+            public void OnPublicAction()
+            {
+                PublicActionCounter++;
             }
 
             public void OnPublicEvent(object sender, ViewModelClosedEventArgs e)
@@ -615,6 +622,32 @@ namespace Catel.Test
                 int count = 0;
 
                 ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(listener, source, "PublicEvent", (sender, e) => count++));
+            }
+
+            [TestCase]
+            public void DoesNotLeakWithPublicActions()
+            {
+                var source = new EventSource();
+                var listener = new EventListener();
+
+                var weakEventListener = WeakEventListener.SubscribeToWeakEvent(listener, source, "PublicEvent", listener.OnPublicAction);
+
+                Assert.AreEqual(0, listener.PublicActionCounter);
+
+                source.RaisePublicEvent();
+
+                Assert.AreEqual(1, listener.PublicActionCounter);
+
+                // Some dummy code to make sure the previous listener is removed
+                listener = new EventListener();
+                GC.Collect();
+                var type = listener.GetType();
+
+                Assert.IsTrue(weakEventListener.IsSourceAlive);
+                Assert.IsFalse(weakEventListener.IsTargetAlive);
+
+                // Some dummy code to make sure the source stays in memory
+                source.GetType();
             }
 
             [TestCase]
