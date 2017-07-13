@@ -651,6 +651,36 @@ namespace Catel.Test
             }
 
             [TestCase]
+            public void DoesNotLeakWithActionsDefinedInDisplayClass()
+            {
+                var source = new EventSource();
+
+                var counter = 0;
+
+                Action action = () =>
+                {
+                    counter++;
+                };
+
+                var weakEventListener = WeakEventListener.SubscribeToWeakEvent(this, source, "PublicEvent", action);
+
+                Assert.AreEqual(0, counter);
+
+                source.RaisePublicEvent();
+
+                Assert.AreEqual(1, counter);
+
+                // Some dummy code to make sure the previous listener is removed
+                GC.Collect();
+
+                //Assert.IsTrue(weakEventListener.IsSourceAlive);
+                //Assert.IsFalse(weakEventListener.IsTargetAlive);
+
+                // Some dummy code to make sure the source stays in memory
+                source.GetType();
+            }
+
+            [TestCase]
             public void DoesNotLeakWithPublicEvents()
             {
                 var source = new EventSource();

@@ -365,7 +365,10 @@ namespace Catel
             var methodInfo = handler.GetMethodInfoEx();
             if ((methodInfo.Name.Contains("_AnonymousDelegate>")) || (methodInfo.DeclaringType.FullName.Contains("__DisplayClass")))
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
+                if (target.GetType() != methodInfo.DeclaringType)
+                {
+                    throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
+                }
             }
 
             var weakListener = new WeakEventListener<TTarget, TSource, TEventArgs>(target, source, typeof(TExplicitSourceType));
@@ -1048,7 +1051,7 @@ namespace Catel
         {
             Argument.IsNotNull("source", source);
 
-            return SubscribeToWeakEvent(target, source, eventName, handler, source.GetType(), throwWhenSubscriptionFails);
+            return SubscribeToWeakEvent(handler.Target, source, eventName, handler, source.GetType(), throwWhenSubscriptionFails);
         }
 
         /// <summary>
