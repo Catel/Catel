@@ -28,7 +28,7 @@ namespace Catel.Services
     /// </summary>
     public partial class UIVisualizerService
     {
-#region Methods
+        #region Methods
         /// <summary>
         /// Gets the active window to use as parent window of new windows.
         /// <para />
@@ -70,7 +70,9 @@ namespace Catel.Services
         /// <param name="data">The data that will be set as data context.</param>
         /// <param name="completedProc">The completed callback.</param>
         /// <param name="isModal">True if this is a ShowDialog request.</param>
-        /// <returns>The created window.</returns>
+        /// <returns>
+        /// The created window.
+        /// </returns>
         protected virtual FrameworkElement CreateWindow(Type windowType, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
         {
             var window = ViewHelper.ConstructViewWithViewModel(windowType, data);
@@ -173,7 +175,7 @@ namespace Catel.Services
 
             return tcs.Task;
         }
-#endregion
+        #endregion
     }
 }
 
