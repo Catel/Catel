@@ -38,7 +38,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Initializes a new instance of the <see cref="WindowEventToCommand"/> class.
         /// </summary>
-        protected WindowEventToCommand()
+        public WindowEventToCommand()
             : this(null)
         {
         }
@@ -48,7 +48,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="action">The action to execute on double click. This is very useful when the behavior is added
         /// via code and an action must be invoked instead of a command.</param>
-        protected WindowEventToCommand(Action<Window> action)
+        public WindowEventToCommand(Action<Window> action)
         {
             _action = action;
         }
