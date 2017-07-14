@@ -21,7 +21,7 @@ Items prepended with CTL are from JIRA (old issue tracker). Items prepended with
 Version 5.0.0
 ==================
 
-For an upgrade guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
+For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/update-guides/
 
 Release date:
 =============
@@ -32,7 +32,7 @@ Platform support changes:
 Added support for the following platforms:
 * .NET 4.7
 
-Dropped support for the following platforms:
+Removed support for the following platforms:
 * .NET 4.0
 * Silverlight 5
 * Windows Phone 8.0 (Silverlight)
@@ -40,7 +40,7 @@ Dropped support for the following platforms:
 * Windows Phone 8.1 (Runtime)
 * Windows 8.1 (Runtime)
 
-Dropped support for the following components:
+Removed support for the following components:
 * Catel.Extensions.CSLA
 * Catel.Extensions.Controls (moved to Orc.Controls & Orchestra)
 * Catel.Extensions.Data
