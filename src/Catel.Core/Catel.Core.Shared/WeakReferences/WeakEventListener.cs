@@ -884,9 +884,9 @@ namespace Catel
                     var eventHandlerType = typeof(TSource).GetEventEx(eventName)?.EventHandlerType;
                     if (eventHandlerType != null)
                     {
-                        if (eventHandlerType.ContainsGenericParameters)
+                        if (eventHandlerType.ContainsGenericParametersEx())
                         {
-                            type = eventHandlerType.GetGenericArguments()[0];
+                            type = eventHandlerType.GetGenericArgumentsEx()[0];
                         }
                         else
                         {
