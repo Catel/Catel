@@ -58,9 +58,6 @@ namespace Catel
     public class WeakEventListener<TTarget, TSource, TEventArgs> : IWeakEventListener
         where TTarget : class
         where TSource : class
-#if !NETFX_CORE && !PCL
-        where TEventArgs : EventArgsBase
-#endif
     {
         #region Fields
         /// <summary>
@@ -883,7 +880,24 @@ namespace Catel
                 }
                 else if (handlerType == typeof(Action))
                 {
-                    type = typeof(EventArgsBase);
+                    // We must have the right event args, so get the right ones using reflection (cached anyway)
+                    var eventHandlerType = typeof(TSource).GetEventEx(eventName)?.EventHandlerType;
+                    if (eventHandlerType != null)
+                    {
+                        if (eventHandlerType.ContainsGenericParameters)
+                        {
+                            type = eventHandlerType.GetGenericArguments()[0];
+                        }
+                        else
+                        {
+                            var invokeMethod = eventHandlerType.GetMethodEx("Invoke");
+                            type = invokeMethod.GetParameters()[1].ParameterType;
+                        }
+                    }
+                    else
+                    {
+                        type = typeof(EventArgsBase);
+                    }
                 }
 
                 return type;

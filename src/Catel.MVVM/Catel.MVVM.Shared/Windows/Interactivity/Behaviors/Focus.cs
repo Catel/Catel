@@ -221,7 +221,7 @@ namespace Catel.Windows.Interactivity
                             throw new InvalidOperationException("Property 'EventName' is required when FocusMode is 'FocusMode.Event'");
                         }
 
-                        _weakEventListener = this.SubscribeToWeakEvent(Source, EventName, (Action) OnSourceEventOccurred);
+                        _weakEventListener = this.SubscribeToWeakEvent(Source, EventName, OnSourceEventOccurred);
                         break;
 #endif
 
