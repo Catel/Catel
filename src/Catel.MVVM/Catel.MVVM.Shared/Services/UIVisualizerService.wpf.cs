@@ -105,19 +105,30 @@ namespace Catel.Services
         /// <param name="isModal">True if this is a ShowDialog request.</param>
         protected virtual void HandleCloseSubscription(object window, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
         {
-            Catel.IWeakEventListener weakEventListener = null;
-
-            Action closed = () =>
+            var eventInfo = window.GetType().GetEvent("Closed");
+            if (eventInfo != null && eventInfo.AddMethod != null)
             {
-                bool? dialogResult = null;
-                PropertyHelper.TryGetPropertyValue(window, "DialogResult", out dialogResult);
+                EventHandler eventHandler = null;
+                void Closed(object s, EventArgs e)
+                {
+                    bool? dialogResult;
+                    PropertyHelper.TryGetPropertyValue(window, "DialogResult", out dialogResult);
+                    try
+                    {
+                        completedProc(this, new UICompletedEventArgs(data, isModal ? dialogResult : null));
+                    }
+                    finally
+                    {
+                        if (eventInfo.RemoveMethod != null)
+                        {
+                            eventInfo.RemoveMethod.Invoke(window, new object[] { eventHandler });
+                        }
+                    }
+                }
 
-                completedProc(this, new UICompletedEventArgs(data, isModal ? dialogResult : null));
-
-                weakEventListener?.Detach();
-            };
-
-            weakEventListener = this.SubscribeToWeakEvent(window, "Closed", closed);
+                eventHandler = Closed;
+                eventInfo.AddMethod.Invoke(window, new object[] { eventHandler });
+            }
         }
 
         /// <summary>
@@ -131,7 +142,7 @@ namespace Catel.Services
             // Note: no async/await because we use a TaskCompletionSource
             var tcs = new TaskCompletionSource<bool?>();
 
-            HandleCloseSubscription(window, "Closed", (sender, args) => { tcs.SetResult(args.Result); }, showModal);
+            HandleCloseSubscription(window, "Closed", (sender, args) => tcs.SetResult(args.Result), showModal);
 
             var showMethodInfo = showModal ? window.GetType().GetMethodEx("ShowDialog") : window.GetType().GetMethodEx("Show");
             if (showModal && showMethodInfo == null)
