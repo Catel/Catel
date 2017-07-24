@@ -120,6 +120,7 @@ Added/fixed:
 (x) CTL-991  Equals method in ServiceLocator.ServiceInfo class returns false positives
 (x) CTL-1000 NumericTextBox behavior doesn't allow some values (e.g. 2.05)
 (x) CTL-1010 MessageMediator.Unregister has a bug when method names are the same
+(x) #950     TaskCommand binding to IsExecuting does not reflect the right state when using the Executing event
 (x) #1006    TypeFactory does not respect scope when checking whether types can be resolved 
 (x) #1038    Stack overflow when ViewModel class also implements ISavableModel
 (x) #1071    Mono 5.0.x, stops Catel.Core (TypeCache) from working

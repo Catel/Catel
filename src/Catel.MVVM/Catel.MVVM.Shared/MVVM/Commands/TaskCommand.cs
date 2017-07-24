@@ -237,6 +237,13 @@ namespace Catel.MVVM
                 return;
             }
 
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Dispose();
+            }
+
+            _cancellationTokenSource = new CancellationTokenSource();
+
             var args = new CommandCanceledEventArgs(parameter);
             Executing.SafeInvoke(this, args);
 
@@ -244,12 +251,6 @@ namespace Catel.MVVM
             {
                 return;
             }
-
-            if (_cancellationTokenSource != null)
-            {
-                _cancellationTokenSource.Dispose();
-            }
-            _cancellationTokenSource = new CancellationTokenSource();
 
             RaiseCanExecuteChanged();
 
