@@ -148,11 +148,9 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override void ValidateRequiredProperties()
         {
-            Argument.IsNotNullOrWhitespace("PropertyName", PropertyName);
-
             if (GetDependencyProperty() == null)
             {
-                throw new InvalidOperationException("Dependency property is not found on the associated object, make sure to set the PropertyName or DependencyPropertyName");
+                Log.ErrorAndCreateException<InvalidOperationException>("Dependency property is not found on the associated object, make sure to set the PropertyName or DependencyPropertyName");
             }
         }
 
@@ -256,8 +254,10 @@ namespace Catel.Windows.Interactivity
 
             var dependencyProperty = GetDependencyProperty();
             var bindingExpression = AssociatedObject.GetBindingExpression(dependencyProperty);
-
-            bindingExpression.UpdateSource();
+            if (bindingExpression != null)
+            {
+                bindingExpression.UpdateSource();
+            }
         }
 
         /// <summary>
@@ -301,15 +301,12 @@ namespace Catel.Windows.Interactivity
         /// <returns>The <see cref="DependencyProperty"/> or <c>null</c> if the dependency property is not found.</returns>
         private DependencyProperty GetDependencyProperty(string dependencyPropertyName)
         {
-            DependencyProperty property = null;
-
-            var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
-            var fieldInfo = AssociatedObject.GetType().GetFieldEx(dependencyPropertyName, bindingFlags);
-            if (fieldInfo != null)
+            if (dependencyPropertyName.EndsWith("Property"))
             {
-                property = fieldInfo.GetValue(null) as DependencyProperty;
+                dependencyPropertyName = dependencyPropertyName.Substring(0, dependencyPropertyName.Length - "Property".Length);
             }
 
+            var property = AssociatedObject.GetDependencyPropertyByName(dependencyPropertyName);
             if (property == null)
             {
                 Log.Error("Failed to retrieve dependency property '{0}' from object '{1}'", dependencyPropertyName, AssociatedObject.GetType());
