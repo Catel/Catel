@@ -254,10 +254,13 @@ namespace Catel.Windows.Interactivity
 
             var dependencyProperty = GetDependencyProperty();
             var bindingExpression = AssociatedObject.GetBindingExpression(dependencyProperty);
-            if (bindingExpression != null)
+            if (bindingExpression == null)
             {
-                bindingExpression.UpdateSource();
+                Log.Warning($"Binding expression is null, make sure the binding to '{DependencyPropertyName ?? PropertyName}' is TwoWay");
+                return;
             }
+
+            bindingExpression.UpdateSource();
         }
 
         /// <summary>
