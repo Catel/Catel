@@ -427,27 +427,38 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns>System.String.</returns>
         protected string GetXmlElementName(Type modelType, object model, string memberName)
         {
+            string xmlElementName = null;
+
             if (ShouldSerializeAsCollection(modelType))
             {
-                return CollectionName;
+                xmlElementName = CollectionName;
             }
 
-            XmlRootAttribute xmlRootAttribute;
-            if (modelType.TryGetAttribute(out xmlRootAttribute))
+            else if (modelType.TryGetAttribute(out XmlRootAttribute xmlRootAttribute))
             {
-                return xmlRootAttribute.ElementName;
+                xmlElementName = xmlRootAttribute.ElementName;
             }
 
-            if (!string.IsNullOrWhiteSpace(memberName))
+            else if (!string.IsNullOrWhiteSpace(memberName))
             {
                 var propertyDataManager = PropertyDataManager.Default;
                 if (propertyDataManager.IsPropertyNameMappedToXmlElement(modelType, memberName))
                 {
-                    return propertyDataManager.MapPropertyNameToXmlElementName(modelType, memberName);
+                    xmlElementName = propertyDataManager.MapPropertyNameToXmlElementName(modelType, memberName);
                 }
             }
+            else
+            {
+                xmlElementName = modelType.Name;
+            }
 
-            return modelType.Name;
+            // Fix for https://github.com/Catel/Catel/issues/1073
+            if (!string.IsNullOrWhiteSpace(xmlElementName))
+            {
+                xmlElementName = XmlConvert.EncodeName(xmlElementName);
+            }
+
+            return xmlElementName;
         }
 
         /// <summary>
@@ -537,7 +548,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns>
         /// The serialization context.
         /// </returns>
-        protected override ISerializationContext<XmlSerializationContextInfo> GetContext(object model, Type modelType, Stream stream, 
+        protected override ISerializationContext<XmlSerializationContextInfo> GetContext(object model, Type modelType, Stream stream,
             SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             XDocument document = null;

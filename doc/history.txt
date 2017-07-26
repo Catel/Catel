@@ -124,6 +124,8 @@ Added/fixed:
 (x) #1006    TypeFactory does not respect scope when checking whether types can be resolved 
 (x) #1038    Stack overflow when ViewModel class also implements ISavableModel
 (x) #1071    Mono 5.0.x, stops Catel.Core (TypeCache) from working
+(x) #1073    Serialization of generics fails for XmlSerializer (The '`' character, hexadecimal value 0x60, cannot be 
+             included in a name)
 (-) CTL-935  Remove InterestedIn attributes because services are a better way to communicate 
 (-) CTL-975  Remove EventHandlerExtensions.SplitInvoke and use regular event invocation
 (-) CTL-987  Delete MVVM logic behaviors (should only be available as logic)
