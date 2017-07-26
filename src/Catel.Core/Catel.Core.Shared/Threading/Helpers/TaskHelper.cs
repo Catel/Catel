@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#pragma warning disable UseAsyncSuffix // Use Async suffix
+
 namespace Catel.Threading
 {
     using System;
@@ -56,14 +58,13 @@ namespace Catel.Threading
         {
             Task<T> task;
 
-            if (!_fromResultCache.ContainsKey(value))
+            lock (_fromResultCache)
             {
-                task = TaskShim.FromResult(value);
-                _fromResultCache[value] = task;
-            }
-            else
-            {
-                task = _fromResultCache[value];
+                if (!_fromResultCache.TryGetValue(value, out task))
+                {
+                    task = TaskShim.FromResult(value);
+                    _fromResultCache[value] = task;
+                }
             }
 
             return task;
@@ -100,42 +101,6 @@ namespace Catel.Threading
         public const bool DefaultConfigureAwaitValue = false;
 
         /// <summary>
-        /// Runs the specified action using Task.Run if available.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <returns>Task.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Run(Action, bool, CancellationToken)", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public static Task Run(Action action)
-        {
-            return Run(action, DefaultConfigureAwaitValue, CancellationToken.None);
-        }
-
-        /// <summary>
-        /// Runs the specified action using Task.Run if available.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>Task.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Run(Action, bool, CancellationToken)", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public static Task Run(Action action, CancellationToken cancellationToken)
-        {
-            return Run(action, DefaultConfigureAwaitValue, cancellationToken);
-        }
-
-        /// <summary>
-        /// Runs the specified action using Task.Run if available.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <param name="configureAwait">The value to be passed into ConfigureAwait.</param>
-        /// <returns>Task.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Run(Action, bool, CancellationToken)", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public static Task Run(Action action, CancellationToken cancellationToken, bool configureAwait)
-        {
-            return Run(action, configureAwait, cancellationToken);
-        }
-
-        /// <summary>
         /// Runs the specified function using Task.Run if available.
         /// </summary>
         /// <param name="action">The action.</param>
@@ -159,40 +124,21 @@ namespace Catel.Threading
         /// <summary>
         /// Runs the specified function using Task.Run if available.
         /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="func">The function.</param>
-        /// <returns>Task&lt;T&gt;.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Run<TResult>(Func<TResult>, bool, CancellationToken)", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public static Task<TResult> Run<TResult>(Func<TResult> func)
-        {
-            return Run(func, DefaultConfigureAwaitValue, CancellationToken.None);
-        }
-
-        /// <summary>
-        /// Runs the specified function using Task.Run if available.
-        /// </summary>
         /// <typeparam name="TResult">Type of the result.</typeparam>
         /// <param name="func">The function.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>Task&lt;T&gt;.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Run<TResult>(Func<TResult>, bool, CancellationToken)", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public static Task<TResult> Run<TResult>(Func<TResult> func, CancellationToken cancellationToken)
-        {
-            return Run(func, DefaultConfigureAwaitValue, cancellationToken);
-        }
-
-        /// <summary>
-        /// Runs the specified function using Task.Run if available.
-        /// </summary>
-        /// <typeparam name="TResult">Type of the result.</typeparam>
-        /// <param name="func">The function.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
         /// <param name="configureAwait">The value to be passed into ConfigureAwait.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>Task&lt;T&gt;.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Run<TResult>(Func<TResult>, bool, CancellationToken)", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public static Task<TResult> Run<TResult>(Func<TResult> func, CancellationToken cancellationToken, bool configureAwait)
+        public static async Task<TResult> Run<TResult>(Func<TResult> func, bool configureAwait = DefaultConfigureAwaitValue, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return Run(func, configureAwait, cancellationToken);
+            var task = TaskShim.Run(func, cancellationToken);
+
+            if (!configureAwait)
+            {
+                return await task.ConfigureAwait(false);
+            }
+
+            return await task;
         }
 
         /// <summary>
@@ -212,26 +158,6 @@ namespace Catel.Threading
             }
 
             await task;
-        }
-
-        /// <summary>
-        /// Runs the specified function using Task.Run if available.
-        /// </summary>
-        /// <typeparam name="TResult">Type of the result.</typeparam>
-        /// <param name="func">The function.</param>
-        /// <param name="configureAwait">The value to be passed into ConfigureAwait.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>Task&lt;T&gt;.</returns>
-        public static async Task<TResult> Run<TResult>(Func<TResult> func, bool configureAwait = DefaultConfigureAwaitValue, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            var task = TaskShim.Run(func, cancellationToken);
-
-            if (!configureAwait)
-            {
-                return await task.ConfigureAwait(false);
-            }
-
-            return await task;
         }
 
         /// <summary>
@@ -263,9 +189,7 @@ namespace Catel.Threading
         {
             Argument.IsNotNull("actions", actions);
 
-#if !SILVERLIGHT && !PCL
-            Parallel.Invoke(actions);
-#elif PCL
+#if PCL
             var list = actions.ToList();
             var tasks = new List<Task>();
             for (int i = 0; i < list.Count; i++)
@@ -277,31 +201,7 @@ namespace Catel.Threading
 
             Task.WaitAll(tasks.ToArray());
 #else
-            var list = actions.ToList();
-            var handles = new ManualResetEvent[list.Count];
-            for (var i = 0; i < list.Count; i++)
-            {
-                handles[i] = new ManualResetEvent(false);
-
-                var currentAction = list[i];
-                var currentHandle = handles[i];
-
-                Action wrappedAction = () =>
-                {
-                    try
-                    {
-                        currentAction();
-                    }
-                    finally
-                    {
-                        currentHandle.Set();
-                    }
-                };
-
-                ThreadPool.QueueUserWorkItem(x => wrappedAction());
-            }
-
-            WaitHandle.WaitAll(handles);
+            Parallel.Invoke(actions);
 #endif
         }
 

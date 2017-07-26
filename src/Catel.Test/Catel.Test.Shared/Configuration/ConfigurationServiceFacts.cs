@@ -18,7 +18,7 @@ namespace Catel.Test.Configuration
     {
         private static ConfigurationService GetConfigurationService()
         {
-            return new ConfigurationService(new SerializationManager(), new ObjectConverterService());
+            return new ConfigurationService(new SerializationManager(), new ObjectConverterService(), SerializationFactory.GetXmlSerializer());
         }
 
         [TestFixture]
@@ -127,8 +127,8 @@ namespace Catel.Test.Configuration
             {
                 var configurationService = GetConfigurationService();
 
-                bool invoked = false;
-                ConfigurationContainer receivedContainer = ConfigurationContainer.Roaming;
+                var invoked = false;
+                var receivedContainer = ConfigurationContainer.Roaming;
                 string receivedKey = null;
                 object receivedValue = null;
 
@@ -140,12 +140,33 @@ namespace Catel.Test.Configuration
                     receivedValue = e.NewValue;
                 };
 
-                configurationService.SetValue(container, "key", "value");
+                var guid = Guid.NewGuid();
+
+                configurationService.SetValue(container, "key", guid.ToString());
 
                 Assert.IsTrue(invoked);
                 Assert.AreEqual(container, receivedContainer);
                 Assert.AreEqual("key", receivedKey);
-                Assert.AreEqual("value", (string)receivedValue);
+                Assert.AreEqual(guid.ToString(), (string)receivedValue);
+            }
+
+            [TestCase(ConfigurationContainer.Local)]
+            [TestCase(ConfigurationContainer.Roaming)]
+            public void IsNotInvokedDuringSetValueMethodForEqualValues(ConfigurationContainer container)
+            {
+                var configurationService = GetConfigurationService();
+                var invoked = false;
+
+                configurationService.SetValue(container, "key", "value");
+
+                configurationService.ConfigurationChanged += (sender, e) =>
+                {
+                    invoked = true;
+                };
+
+                configurationService.SetValue(container, "key", "value");
+
+                Assert.IsFalse(invoked);
             }
         }
     }

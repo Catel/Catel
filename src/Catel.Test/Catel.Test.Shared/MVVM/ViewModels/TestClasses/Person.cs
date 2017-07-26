@@ -42,7 +42,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
 #if NET
     [Serializable]
 #endif
-    public class Person : ModelBase, IPerson
+    public class Person : ValidatableModelBase, IPerson
     {
         #region Fields
         #endregion
@@ -195,7 +195,7 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
 #if NET
     [Serializable]
 #endif
-    public class PersonWithDataAnnotations : ModelBase, IPerson
+    public class PersonWithDataAnnotations : ValidatableModelBase, IPerson
     {
         #region Constructors
         /// <summary>

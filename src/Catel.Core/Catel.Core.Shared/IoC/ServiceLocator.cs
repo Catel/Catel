@@ -10,6 +10,7 @@ namespace Catel.IoC
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using System.Threading;
     using Logging;
     using Reflection;
 
@@ -40,13 +41,14 @@ namespace Catel.IoC
         [DebuggerDisplay("{Type} ({Tag})")]
         private class ServiceInfo
         {
-            private int _hash;
+            private readonly int _hash;
 
             #region Constructors
             public ServiceInfo(Type type, object tag)
             {
                 Type = type;
                 Tag = tag;
+                _hash = HashHelper.CombineHash(Type.GetHashCode(), Tag != null ? Tag.GetHashCode() : 0);
             }
             #endregion
 
@@ -54,25 +56,13 @@ namespace Catel.IoC
             public Type Type { get; private set; }
 
             public object Tag { get; private set; }
-
-            public int Hash
-            {
-                get
-                {
-                    if (_hash == 0)
-                    {
-                        _hash = HashHelper.CombineHash(Type.GetHashCode(), Tag != null ? Tag.GetHashCode() : 0);
-                    }
-
-                    return _hash;
-                }
-            }
+            
             #endregion
 
             #region Methods
             public override int GetHashCode()
             {
-                return Hash;
+                return _hash;
             }
 
             public override bool Equals(object obj)
@@ -83,7 +73,16 @@ namespace Catel.IoC
                     return false;
                 }
 
-                return objAsServiceInfo.Hash == Hash;
+                if (objAsServiceInfo._hash != _hash)
+                {
+                    return false;
+                }
+                if (objAsServiceInfo.Type != Type)
+                {
+                    return false;
+                }
+
+                return Equals(objAsServiceInfo.Tag, Tag);
             }
             #endregion
         }
@@ -117,7 +116,7 @@ namespace Catel.IoC
         /// <summary>
         /// The current type request path.
         /// </summary>
-        private TypeRequestPath _currentTypeRequestPath;
+        private readonly ThreadLocal<TypeRequestPath> _currentTypeRequestPath;
 
         /// <summary>
         /// The type factory.
@@ -136,6 +135,8 @@ namespace Catel.IoC
         /// </summary>
         public ServiceLocator()
         {
+            _currentTypeRequestPath = new ThreadLocal<TypeRequestPath>(() => TypeRequestPath.Root("ServiceLocator"));
+
             // Must be registered first, already resolved by TypeFactory
             RegisterInstance(typeof(IServiceLocator), this);
             RegisterInstance(typeof(IDependencyResolver), IoCFactory.CreateDependencyResolverFunc(this));
@@ -168,11 +169,7 @@ namespace Catel.IoC
                 return IoCConfiguration.DefaultServiceLocator;
             }
         }
-
-        object ILockable.LockObject
-        {
-            get { return _lockObject; }
-        }
+        
         #endregion
 
         #region IServiceLocator Members
@@ -333,15 +330,16 @@ namespace Catel.IoC
 
                 var serviceInfo = new ServiceInfo(serviceType, tag);
 
-
-                if (_registeredInstances.ContainsKey(serviceInfo))
+                RegisteredInstanceInfo instanceInfo;
+                if (_registeredInstances.TryGetValue(serviceInfo, out instanceInfo))
                 {
-                    return _registeredInstances[serviceInfo].RegistrationType == RegistrationType.Singleton;
+                    return instanceInfo.RegistrationType == RegistrationType.Singleton;
                 }
 
-                if (_registeredTypes.ContainsKey(serviceInfo))
+                ServiceLocatorRegistration registration;
+                if (_registeredTypes.TryGetValue(serviceInfo, out registration))
                 {
-                    return _registeredTypes[serviceInfo].RegistrationType == RegistrationType.Singleton;
+                    return registration.RegistrationType == RegistrationType.Singleton;
                 }
             }
 
@@ -437,7 +435,7 @@ namespace Catel.IoC
                 }
 
                 // If a type is registered, the original container is always known
-                return ResolveTypeFromKnownContainer(serviceType, tag);
+                return ResolveTypeFromKnownContainer(serviceInfo);
             }
         }
 
@@ -732,54 +730,46 @@ namespace Catel.IoC
         /// <summary>
         /// Resolves the type from a known container.
         /// </summary>
-        /// <param name="serviceType">Type of the service.</param>
-        /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
-        /// <returns>An instance of the type registered on the service.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
+        /// <param name="serviceInfo">The service information.</param>
+        /// <returns>
+        /// An instance of the type registered on the service.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceInfo" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">The type is not found in any container.</exception>
-        private object ResolveTypeFromKnownContainer(Type serviceType, object tag)
+        private object ResolveTypeFromKnownContainer(ServiceInfo serviceInfo)
         {
-            Argument.IsNotNull("serviceType", serviceType);
+            Argument.IsNotNull("serviceInfo", serviceInfo);
 
             lock (_lockObject)
             {
-                var typeRequestInfo = new TypeRequestInfo(serviceType, tag);
-                if (_currentTypeRequestPath == null)
+                var previousTypeRequestPath = _currentTypeRequestPath.Value;
+                try
                 {
-                    _currentTypeRequestPath = new TypeRequestPath(typeRequestInfo, name: "ServiceLocator");
-                    _currentTypeRequestPath.IgnoreDuplicateRequestsDirectlyAfterEachother = false;
-                }
-                else
-                {
-                    _currentTypeRequestPath.PushType(typeRequestInfo, false);
+                    var typeRequestInfo = new TypeRequestInfo(serviceInfo.Type, serviceInfo.Tag);
+                    _currentTypeRequestPath.Value = TypeRequestPath.Branch(previousTypeRequestPath, typeRequestInfo);
 
-                    if (!_currentTypeRequestPath.IsValid)
+                    var registeredTypeInfo = _registeredTypes[serviceInfo];
+
+                    var serviceType = serviceInfo.Type;
+                    var tag = serviceInfo.Tag;
+
+                    var instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
+                    if (instance == null)
                     {
-                        // Reset path for next types that are being resolved
-                        var typeRequestPath = _currentTypeRequestPath;
-                        _currentTypeRequestPath = null;
-
-                        typeRequestPath.ThrowsExceptionIfInvalid();
+                        ThrowTypeNotRegisteredException(serviceType);
                     }
+
+                    if (IsTypeRegisteredAsSingleton(serviceType, tag))
+                    {
+                        RegisterInstance(serviceType, instance, tag, this);
+                    }
+
+                    return instance;
                 }
-
-                var serviceInfo = new ServiceInfo(serviceType, tag);
-                var registeredTypeInfo = _registeredTypes[serviceInfo];
-
-                object instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
-                if (instance == null)
+                finally
                 {
-                    ThrowTypeNotRegisteredException(serviceType);
+                    _currentTypeRequestPath.Value = previousTypeRequestPath;
                 }
-
-                if (IsTypeRegisteredAsSingleton(serviceType, tag))
-                {
-                    RegisterInstance(serviceType, instance, tag, this);
-                }
-
-                CompleteTypeRequestPathIfRequired(typeRequestInfo);
-
-                return instance;
             }
         }
 
@@ -805,34 +795,7 @@ namespace Catel.IoC
 
             return instance;
         }
-
-        /// <summary>
-        /// Completes the type request path by checking if the currently created type is the same as the first
-        /// type meaning that the type is successfully created and the current type request path can be set to <c>null</c>.
-        /// </summary>
-        /// <param name="typeRequestInfoForTypeJustConstructed">The type request info.</param>
-        private void CompleteTypeRequestPathIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
-        {
-            lock (_lockObject)
-            {
-                if (_currentTypeRequestPath != null)
-                {
-                    if (_currentTypeRequestPath.TypeCount > 0)
-                    {
-                        if (_currentTypeRequestPath.LastType == typeRequestInfoForTypeJustConstructed)
-                        {
-                            _currentTypeRequestPath.MarkTypeAsCreated(typeRequestInfoForTypeJustConstructed);
-                        }
-                    }
-
-                    if (_currentTypeRequestPath.TypeCount == 0)
-                    {
-                        _currentTypeRequestPath = null;
-                    }
-                }
-            }
-        }
-
+        
         /// <summary>
         /// Throws the <see cref="TypeNotRegisteredException" /> but will also reset the current type request path.
         /// </summary>
@@ -840,9 +803,6 @@ namespace Catel.IoC
         /// <param name="message">The message.</param>
         private void ThrowTypeNotRegisteredException(Type type, string message = null)
         {
-            _currentTypeRequestPath = null;
-            // or _currentTypeRequestPath.PopType();
-
             throw Log.ErrorAndCreateException(msg => new TypeNotRegisteredException(type, msg),
                 "The type '{0}' is not registered", type.GetSafeFullName(true));
         }

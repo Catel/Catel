@@ -14,7 +14,6 @@ namespace Catel.Data
     using System.Runtime.Serialization;
     using System.Security;
     using Catel.Runtime;
-    using Catel.Runtime.Serialization.Binary;
     using Catel.Scoping;
     using Runtime.Serialization;
 
@@ -38,16 +37,10 @@ namespace Catel.Data
         /// </remarks>
         protected ModelBase(SerializationInfo info, StreamingContext context)
         {
-            OnInitializing();
-
             Initialize();
 
             // Make sure this is not a first time call or custom call with null
-            if (info == null)
-            {
-                FinishInitializationAfterConstructionOrDeserialization();
-            }
-            else
+            if (info != null)
             {
                 _serializationInfo = info;
 
@@ -76,8 +69,6 @@ namespace Catel.Data
                     }
                 }
             }
-
-            OnInitialized();
         }
 
         /// <summary>
@@ -92,7 +83,7 @@ namespace Catel.Data
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetBinarySerializer(), SerializationConfiguration)))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetBinarySerializer(), null)))
             {
                 var serializer = scopeManager.ScopeObject.Serializer;
                 var configuration = scopeManager.ScopeObject.Configuration;
@@ -112,8 +103,6 @@ namespace Catel.Data
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            IsDeserializedDataAvailable = true;
-
             if (_serializationInfo == null)
             {
                 // Probably a custom serializer which will populate us in a different way
@@ -121,7 +110,7 @@ namespace Catel.Data
             }
 
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetBinarySerializer(), SerializationConfiguration)))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetBinarySerializer(), null)))
             {
                 var serializer = scopeManager.ScopeObject.Serializer;
                 var configuration = scopeManager.ScopeObject.Configuration;
@@ -132,8 +121,6 @@ namespace Catel.Data
                 var serializationContext = serializationContextInfoFactory.GetSerializationContextInfo(serializer, this, _serializationInfo, configuration);
                 serializer.Deserialize(this, serializationContext, configuration);
             }
-
-            DeserializationSucceeded = true;
         }
     }
 }

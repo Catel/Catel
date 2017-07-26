@@ -7,9 +7,6 @@
 namespace Catel.Test.Data
 {
     using System.IO;
-    using System.Xml.Linq;
-    using System.Xml.Serialization;
-    using Catel.Data;
     using Catel.Runtime.Serialization;
     using Catel.Test.Runtime.Serialization;
 
@@ -43,13 +40,18 @@ namespace Catel.Test.Data
         [TestCase]
         public void Load_Stream_SerializationMode_Binary()
         {
+            // Note: in a perfect world, we would have real models deriving from SavableModelBase
+
             using (var memoryStream = new MemoryStream())
             {
+                var serializer = SerializationFactory.GetBinarySerializer();
+
                 var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-                originalObject.Save(memoryStream, SerializationMode.Binary, null);
+                serializer.Serialize(originalObject, memoryStream);
 
                 memoryStream.Position = 0L;
-                var loadedObject = IniFile.Load(memoryStream, SerializationMode.Binary, null);
+
+                var loadedObject = serializer.Deserialize(typeof(IniFile), memoryStream);
 
                 Assert.AreEqual(originalObject, loadedObject);
             }
@@ -59,28 +61,21 @@ namespace Catel.Test.Data
         [TestCase]
         public void Load_Stream_SerializationMode_Xml()
         {
+            // Note: in a perfect world, we would have real models deriving from SavableModelBase
+
             using (var memoryStream = new MemoryStream())
             {
+                var serializer = SerializationFactory.GetBinarySerializer();
+
                 var originalObject = ModelBaseTestHelper.CreateIniFileObject();
-                originalObject.Save(memoryStream, SerializationMode.Xml, null);
+                serializer.Serialize(originalObject, memoryStream);
 
                 memoryStream.Position = 0L;
-                var loadedObject = IniFile.Load(memoryStream, SerializationMode.Xml, null);
+                var loadedObject = serializer.Deserialize(typeof(IniFile), memoryStream);
 
                 Assert.AreEqual(originalObject, loadedObject);
             }
         }
         #endregion
-
-        [TestCase]
-        public void ToXml()
-        {
-            var iniFile = ModelBaseTestHelper.CreateIniFileObject();
-
-            XDocument document = iniFile.ToXml(null);
-            var loadedObject = IniFile.Load(document);
-
-            Assert.AreEqual(iniFile, loadedObject);
-        }
     }
 }

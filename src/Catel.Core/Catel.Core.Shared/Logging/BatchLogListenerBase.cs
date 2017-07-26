@@ -9,7 +9,6 @@ namespace Catel.Logging
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading;
     using System.Threading.Tasks;
     using Threading;
 
@@ -69,9 +68,8 @@ namespace Catel.Logging
 
                 if (_logBatch.Count >= MaximumBatchCount)
                 {
-                    // TODO: remove pragma in 5.0.0
 #pragma warning disable 4014
-                    Flush();
+                    FlushAsync();
 #pragma warning restore 4014
                 }
             }
@@ -83,9 +81,8 @@ namespace Catel.Logging
             {
                 if (_logBatch.Count > 0)
                 {
-                    // TODO: remove pragma in 5.0.0
 #pragma warning disable 4014
-                    Flush();
+                    FlushAsync();
 #pragma warning restore 4014
                 }
             }
@@ -95,8 +92,7 @@ namespace Catel.Logging
         /// Flushes the current queue asynchronous.
         /// </summary>
         /// <returns>Task so it can be awaited.</returns>
-        // TODO: change to public void in 5.0.0
-        public async Task Flush()
+        public async Task FlushAsync()
         {
             List<LogBatchEntry> batchToSubmit;
 
@@ -110,19 +106,8 @@ namespace Catel.Logging
             if (batchToSubmit.Count > 0)
             {
                 await WriteBatchAsync(batchToSubmit);
-
-                // TODO: remove in 5.0.0
-                await WriteBatch(batchToSubmit);
             }
         }
-
-        /// <summary>
-        /// Writes the batch of entries.
-        /// </summary>
-        /// <param name="batchEntries">The batch entries.</param>
-        /// <returns>Task so this can be done asynchronously.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "WriteBatchAsync", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        protected abstract Task WriteBatch(List<LogBatchEntry> batchEntries);
 
         /// <summary>
         /// Writes the batch of entries.

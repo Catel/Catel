@@ -17,7 +17,7 @@ namespace Catel.Test.Reflection
     [TestFixture]
     public class AssemblyExtensionsTest
     {
-        private const string VersionPrefix = "4.5.4";
+        private const string VersionPrefix = "5.0";
 
         private static readonly Assembly Assembly = typeof(AssemblyExtensionsTest).GetAssemblyEx();
 
@@ -35,7 +35,7 @@ namespace Catel.Test.Reflection
         [TestCase]
         public void VersionAutomatic()
         {
-            string expected = VersionPrefix + ".0";
+            string expected = VersionPrefix + ".0.0";
 
             var result = Assembly.Version();
 
@@ -45,7 +45,7 @@ namespace Catel.Test.Reflection
         [TestCase]
         public void VersionWithSeparatorAutomatic()
         {
-            string expected = "4.5";
+            string expected = VersionPrefix;
 
             var result = Assembly.Version(1);
 
@@ -55,7 +55,7 @@ namespace Catel.Test.Reflection
         [TestCase]
         public void VersionWithSeparatorAutomaticWhereSeparatorCountIsTooHigh()
         {
-            string expected = VersionPrefix + ".0";
+            string expected = VersionPrefix + ".0.0";
 
             var result = Assembly.Version(8);
 

@@ -47,6 +47,8 @@ namespace Catel.Test
 
             public static int StaticEventHandlerCounter { get; private set; }
 
+            public int PublicActionCounter { get; private set; }
+
             public int PublicEventCounter { get; private set; }
 
             public int PrivateEventCounter { get; private set; }
@@ -66,6 +68,11 @@ namespace Catel.Test
             public static void OnEventStaticHandler(object sender, EventArgs e)
             {
                 StaticEventHandlerCounter++;
+            }
+
+            public void OnPublicAction()
+            {
+                PublicActionCounter++;
             }
 
             public void OnPublicEvent(object sender, ViewModelClosedEventArgs e)
@@ -452,7 +459,7 @@ namespace Catel.Test
                 var source = new EventSource();
                 var listener = new EventListener();
 
-                var weakEventListener = WeakEventListener<EventListener, EventSource, NotifyCollectionChangedEventArgs>.SubscribeToWeakCollectionChangedEvent(listener, source, listener.OnCollectionChangedEvent, "CollectionChanged");
+                var weakEventListener = WeakEventListener<EventListener, EventSource, NotifyCollectionChangedEventArgs>.SubscribeToWeakCollectionChangedEvent(listener, source, listener.OnCollectionChangedEvent, eventName: "CollectionChanged");
 
                 Assert.AreEqual(0, listener.CollectionChangedEventCount);
 
@@ -523,7 +530,7 @@ namespace Catel.Test
                 var source = new EventSource();
                 var listener = new EventListener();
 
-                var weakEventListener = WeakEventListener<EventListener, EventSource, PropertyChangedEventArgs>.SubscribeToWeakPropertyChangedEvent(listener, source, listener.OnPropertyChangedEvent, "PropertyChanged");
+                var weakEventListener = WeakEventListener<EventListener, EventSource, PropertyChangedEventArgs>.SubscribeToWeakPropertyChangedEvent(listener, source, listener.OnPropertyChangedEvent, eventName: "PropertyChanged");
 
                 Assert.AreEqual(0, listener.PropertyChangedEventCount);
 
@@ -608,13 +615,75 @@ namespace Catel.Test
             }
 
             [TestCase]
-            public void ThrowsNotSupportedExceptionForAnonymousHandler()
+            public void DoesNotLeakWithAnonymousHandlers()
             {
                 var source = new EventSource();
                 var listener = new EventListener();
                 int count = 0;
 
-                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(listener, source, "PublicEvent", (sender, e) => count++));
+                WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(listener, source, "PublicEvent", (sender, e) => count++);
+
+                Assert.AreEqual(0, count);
+
+                source.RaisePublicEvent();
+
+                Assert.AreEqual(1, count);
+            }
+
+            [TestCase]
+            public void DoesNotLeakWithPublicActions()
+            {
+                var source = new EventSource();
+                var listener = new EventListener();
+
+                var weakEventListener = WeakEventListener.SubscribeToWeakEvent(listener, source, "PublicEvent", listener.OnPublicAction);
+
+                Assert.AreEqual(0, listener.PublicActionCounter);
+
+                source.RaisePublicEvent();
+
+                Assert.AreEqual(1, listener.PublicActionCounter);
+
+                // Some dummy code to make sure the previous listener is removed
+                listener = new EventListener();
+                GC.Collect();
+                var type = listener.GetType();
+
+                Assert.IsTrue(weakEventListener.IsSourceAlive);
+                Assert.IsFalse(weakEventListener.IsTargetAlive);
+
+                // Some dummy code to make sure the source stays in memory
+                source.GetType();
+            }
+
+            [TestCase]
+            public void DoesNotLeakWithActionsDefinedInDisplayClass()
+            {
+                var source = new EventSource();
+
+                var counter = 0;
+
+                Action action = () =>
+                {
+                    counter++;
+                };
+
+                var weakEventListener = WeakEventListener.SubscribeToWeakEvent(this, source, "PublicEvent", action);
+
+                Assert.AreEqual(0, counter);
+
+                source.RaisePublicEvent();
+
+                Assert.AreEqual(1, counter);
+
+                // Some dummy code to make sure the previous listener is removed
+                GC.Collect();
+
+                //Assert.IsTrue(weakEventListener.IsSourceAlive);
+                //Assert.IsFalse(weakEventListener.IsTargetAlive);
+
+                // Some dummy code to make sure the source stays in memory
+                source.GetType();
             }
 
             [TestCase]

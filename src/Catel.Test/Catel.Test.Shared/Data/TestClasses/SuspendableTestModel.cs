@@ -10,7 +10,7 @@ namespace Catel.Test.Data.TestClasses
     using System.ComponentModel.DataAnnotations;
     using Catel.Data;
 
-    public class SuspendableTestModel : ModelBase
+    public class SuspendableTestModel : ValidatableModelBase
     {
         [Required]
         public string FirstName

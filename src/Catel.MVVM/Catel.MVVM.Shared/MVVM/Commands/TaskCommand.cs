@@ -10,12 +10,9 @@ namespace Catel.MVVM
     using System.Threading;
     using System.Threading.Tasks;
 
-#if NET40 || SILVERLIGHT
-    using Microsoft;
-#endif
-
     using Catel.Logging;
     using Services;
+    using Threading;
 
     /// <summary>
     /// Class to implement asynchronous task commands in the <see cref="ViewModelBase" />.
@@ -31,11 +28,12 @@ namespace Catel.MVVM
 
         private readonly Action<TProgress> _reportProgress;
 
-        private readonly Func<TExecuteParameter, CancellationToken, IProgress<TProgress>, Task> _execute;
+        private readonly Func<TExecuteParameter, CancellationToken, IProgress<TProgress>, Task> _executeAsync;
 
         private readonly Progress<TProgress> _progress;
 
         private CancellationTokenSource _cancellationTokenSource;
+        private Task _task;
 
         #endregion
 
@@ -49,7 +47,7 @@ namespace Catel.MVVM
         public TaskCommand(Func<Task> execute, Func<bool> canExecute = null, object tag = null)
             : this(canExecuteWithoutParameter: canExecute, tag: tag)
         {
-            _execute = (executeParameter, cancellationToken, progress) => execute();
+            _executeAsync = (executeParameter, cancellationToken, progress) => execute();
         }
 
         /// <summary>
@@ -61,7 +59,7 @@ namespace Catel.MVVM
         public TaskCommand(Func<CancellationToken, Task> execute, Func<bool> canExecute = null, object tag = null)
             : this(canExecuteWithoutParameter: canExecute, tag: tag)
         {
-            _execute = (executeParameter, cancellationToken, progress) => execute(cancellationToken);
+            _executeAsync = (executeParameter, cancellationToken, progress) => execute(cancellationToken);
         }
 
         /// <summary>
@@ -74,7 +72,7 @@ namespace Catel.MVVM
         public TaskCommand(Func<CancellationToken, IProgress<TProgress>, Task> execute, Func<bool> canExecute = null, Action<TProgress> reportProgress = null, object tag = null)
             : this(canExecuteWithoutParameter: canExecute, reportProgress: reportProgress, tag: tag)
         {
-            _execute = (executeParameter, cancellationToken, progress) => execute(cancellationToken, progress);
+            _executeAsync = (executeParameter, cancellationToken, progress) => execute(cancellationToken, progress);
         }
 
         /// <summary>
@@ -86,7 +84,7 @@ namespace Catel.MVVM
         public TaskCommand(Func<TExecuteParameter, Task> execute, Func<TCanExecuteParameter, bool> canExecute = null, object tag = null)
             : this(canExecuteWithParameter: canExecute, tag: tag)
         {
-            _execute = (executeParameter, cancellationToken, progress) => execute(executeParameter);
+            _executeAsync = (executeParameter, cancellationToken, progress) => execute(executeParameter);
         }
 
         /// <summary>
@@ -98,7 +96,7 @@ namespace Catel.MVVM
         public TaskCommand(Func<TExecuteParameter, CancellationToken, Task> execute, Func<TCanExecuteParameter, bool> canExecute = null, object tag = null)
             : this(canExecuteWithParameter: canExecute, tag: tag)
         {
-            _execute = (executeParameter, cancellationToken, progress) => execute(executeParameter, cancellationToken);
+            _executeAsync = (executeParameter, cancellationToken, progress) => execute(executeParameter, cancellationToken);
         }
 
         /// <summary>
@@ -113,7 +111,7 @@ namespace Catel.MVVM
             Action<TProgress> reportProgress = null, object tag = null)
             : this(canExecuteWithParameter: canExecute, reportProgress: reportProgress, tag: tag)
         {
-            _execute = execute;
+            _executeAsync = execute;
         }
 
         /// <summary>
@@ -165,6 +163,17 @@ namespace Catel.MVVM
         #region Properties
 
         /// <summary>
+        /// Gets or sets a value indicating whether to swallow exceptions that happen in the task command. This property can be used
+        /// to use the behavior of Catel 4.x to swallow exceptions.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the task exceptions should be swallowed; otherwise, <c>false</c>.
+        /// </value>
+        public bool SwallowExceptions { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is executing.
         /// </summary>
         /// <value><c>true</c> if this instance is executing; otherwise, <c>false</c>.</value>
@@ -187,6 +196,17 @@ namespace Catel.MVVM
         /// </summary>
         /// <value>The cancel command.</value>
         public Command CancelCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the asynchronous result that can be awaited.
+        /// </summary>
+        /// <value>
+        /// The asynchronous result.
+        /// </value>
+        public Task Task
+        {
+            get { return _task ?? TaskHelper.Completed; }
+        }
         #endregion
 
         #region Methods
@@ -207,13 +227,22 @@ namespace Catel.MVVM
         /// be set to null.</param>
         /// <param name="ignoreCanExecuteCheck">if set to <c>true</c>, the check on <see cref="Command{TExecuteParameter, TCanExecuteParameter}.CanExecute()" /> will be used before
         /// actually executing the action.</param>
-        protected override async void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
+        protected override async Task ExecuteAsync(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
         {
+            var executeAsync = _executeAsync;
+
             // Double check whether execution is allowed, some controls directly call Execute
-            if (_execute == null || IsExecuting || (!ignoreCanExecuteCheck && !CanExecute(parameter)))
+            if (executeAsync == null || IsExecuting || (!ignoreCanExecuteCheck && !CanExecute(parameter)))
             {
                 return;
             }
+
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Dispose();
+            }
+
+            _cancellationTokenSource = new CancellationTokenSource();
 
             var args = new CommandCanceledEventArgs(parameter);
             Executing.SafeInvoke(this, args);
@@ -223,43 +252,51 @@ namespace Catel.MVVM
                 return;
             }
 
-            if (_cancellationTokenSource != null)
-            {
-                _cancellationTokenSource.Dispose();
-            }
-            _cancellationTokenSource = new CancellationTokenSource();
-
             RaiseCanExecuteChanged();
 
-            var executionTask = _execute(parameter, _cancellationTokenSource.Token, _progress);
+            var executionTask = executeAsync(parameter, _cancellationTokenSource.Token, _progress);
+
+            // Use TaskCompletionSource to create a separate task that will not contain the
+            // exception that might be thrown. This allows us to let the users await the task
+            // but still respect the SwallowExceptions property
+            var tcs = new TaskCompletionSource<object>();
+            _task = tcs.Task;
 
             try
             {
-                Log.Info("Executing task command...");
+                Log.Debug("Executing task command");
 
                 await executionTask.ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
-                Log.Info("Task was canceled.");
+                Log.Debug("Task was canceled");
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Task ended with exception.");
+                Log.Error(ex, "Task ended with exception");
+
+                if (!SwallowExceptions)
+                {
+                    throw;
+                }
             }
             finally
             {
                 _cancellationTokenSource.Dispose();
                 _cancellationTokenSource = null;
+
+                tcs.TrySetResult(null);
+                _task = null;
             }
 
-            if (executionTask.IsCanceled || executionTask.IsFaulted)
+            if (executionTask.IsCanceled)
             {
                 Canceled.SafeInvoke(this, () => new CommandEventArgs(parameter));
             }
             else
             {
-                RaiseExecuted(parameter);
+                await RaiseExecutedAsync(parameter);
             }
 
             RaiseCanExecuteChanged();

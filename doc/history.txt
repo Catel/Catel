@@ -13,6 +13,149 @@ Issue tracker:   http://www.catelproject.com/support/issue-tracker
 Documentation:   http://www.catelproject.com/support/documentation
 License:         http://www.catelproject.com/about/license
 
+Items prepended with CTL are from JIRA (old issue tracker). Items prepended with a # are from GitHub.
+
+**********************************************************
+
+==================
+Version 5.0.0
+==================
+
+For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date:
+=============
+2017/07/26
+
+Platform support changes:
+=========================
+Added support for the following platforms:
+* .NET 4.7
+
+Removed support for the following platforms:
+* .NET 4.0
+* Silverlight 5
+* Windows Phone 8.0 (Silverlight)
+* Windows Phone 8.1 (Silverlight)
+* Windows Phone 8.1 (Runtime)
+* Windows 8.1 (Runtime)
+
+Removed support for the following components:
+* Catel.Extensions.CSLA
+* Catel.Extensions.Controls (moved to Orc.Controls & Orchestra)
+* Catel.Extensions.Data
+* Catel.Extensions.DynamicObjects (moved to Orc.DynamicObjects)
+* Catel.Extensions.EntityFramework (moved to Orc.EntityFramework)
+* Catel.Extensions.FluentValidation (moved to Orc.FluentValidation)
+* Catel.Extensions.Interception
+* Catel.Extensions.Memento (moved to Orc.Memento)
+* Catel.Extensions.MVC4
+* Catel.Extensions.MVC5
+* Catel.Extensions.Prism4
+* Catel.Extensions.Prism5 (moved to Orc.Prism)
+* Catel.Extensions.Prism6 (moved to Orc.Prism)
+* Catel.Extensions.Wcf.Server
+
+Classes / members marked as obsolete:
+=====================================
+Our mission is to make Catel easier to maintain in the future. One way to achieve this is to remove unused
+features and components. We are actively removing features by marking them obsolete. If nobody complains,
+we will remove the features in the next major release.
+
+-
+
+Added/fixed:
+============
+(+) CTL-902  Allow custom management of serializer modifiers in the ISerializerManager
+(+) CTL-907  Support classes that implement Parse(string, IFormatProvider) and ToString(IFormatProvider) in the serializers 
+(+) CTL-929  Add Additional {WorkDir} as FileLogListener Keyword
+(+) CTL-953  Create pool manager to re-use objects in a pool (e.g. memory streams in serialization)
+(+) CTL-998  JSON Serializer cannot serialize with formatted indents
+(+) CTL-1011 Implement IUIVisualizerService for UWP and removed non-async methods for WPF
+(+) CTL-1015 Implement IOpenFileService for UWP and make all methods async (also for WPF)
+(+) CTL-1016 Implement ISelectDirectoryService for UWP and make all methods async (also for WPF)
+(+) CTL-1017 Implement ISaveFileService for UWP and make all methods async (also for WPF)
+(+) #603     Add overloads for logging
+(+) #912     Add focusFirstControl argument to DataWindow constructor
+(+) #1044    Add SupportValidation to ModelAttribute to disable model validation mapping
+(*) CTL-903  Only support Frame and not NavigationWindow for WPF navigation
+(*) CTL-904  Allow view models to be created on multiple threads (thread-safe view model factory)
+(*) CTL-905  Always log Argument logging (even when Catel logging is being ignored)
+(*) CTL-911  Refactor UrlHelper to extension methods
+(*) CTL-919  Replace parameters in ServiceLocator.ResolveTypeFromKnownContainer by ServiceInfo
+(*) CTL-921  TypeFactory optimizations for multi-thread usage
+(*) CTL-922  Don't cache RootFrame in NavigationService to allow dynamic navigation frames
+(*) CTL-941  Update to json.net 9.x
+(*) CTL-948  Allow setting the status in IPleaseWaitServiceExtensions.PushInScope
+(*) CTL-988  Allow view models without model injection to stay alive on DataContext changes
+(*) #123     Command CanExecute listeners are referenced with weak references
+(*) #135     Use NuGet dependency for System.Windows.Interactivity instead
+(*) #807     Exceptions in TaskCommand are now longer swallowed by default. Pre 5.0 behavior can be mimmicked by setting
+             the TaskCommand.SwallowExceptions property to true
+(*) #853     Improve Mixed mode in FastObservableCollection and FastBindingList
+(*) #901     Clean up FrameworkElement and DependencyObject extension methods
+(*) #988     Set default value of DeferValidationUntilFirstSaveCall to true
+(*) #995     Split ModelBase into ModelBase (without validation) and ValidatableModelBase
+(*) #998     Remove Catel.Services.Models namespace, use Catel.Services instead
+(*) #1003    Migrate xaml uri from catel.codeplex.com => catelproject.com
+(*) #1021    Add parameter to create an overload for GetSlug to not make the value lowercase 
+(*) #1029    Check for existing values and only raise changed event in ConfigurationService
+(*) #1045    Clean up IViewModel interface (remove HasDirtyModel, ViewModelConstructionTime & ValidateViewModel)
+(*) #1046    Remove IsInitializing & IsInitialized from ModelBase so it can be used by ViewModelBase
+(*) #1050    Replace ISavableModel.SerializationMode with ISerializer and remove some overloads
+(*) #1052    Move property value change notifications wrappers (for child objects & collections) from ModelBase 
+             to ChildAwareModelBase 
+(*) #986     Replace (Validatable0ModelBase.SuspendValidation by SuspendValidations method 
+(*) #1062    Add ValidationContext.Add() methods and mark AddFieldValidationResult and AddBusinessRuleValidationResult 
+             as obsolete 
+(*) #1067    WeakEventListener now supports Action delegates (even the ones on a DisplayClass instance)
+(*)          Improve ShowWindowAsync implementation at UIVisualizerService
+(x) #815     MessageMediator registers new recipients after previous registration of same type of recipient were 
+             garbage collected
+(x) CTL-899  Navigation in WPF is not working when using custom frame
+(x) CTL-906  Clear current navigation context when (re)navigating to the same view in WPF
+(x) CTL-910  Introduce special lock for null keys in CacheStorage to prevent ArgumentNullException
+(x) CTL-925  LanguageBinding markup now uses weak events to allow specific controls (such as the ComboBox with ComboBoxItem 
+             elements) to be updated after they have been collapsed
+(x) CTL-991  Equals method in ServiceLocator.ServiceInfo class returns false positives
+(x) CTL-1000 NumericTextBox behavior doesn't allow some values (e.g. 2.05)
+(x) CTL-1010 MessageMediator.Unregister has a bug when method names are the same
+(x) #950     TaskCommand binding to IsExecuting does not reflect the right state when using the Executing event
+(x) #1006    TypeFactory does not respect scope when checking whether types can be resolved 
+(x) #1038    Stack overflow when ViewModel class also implements ISavableModel
+(x) #1071    Mono 5.0.x, stops Catel.Core (TypeCache) from working
+(x) #1073    Serialization of generics fails for XmlSerializer (The '`' character, hexadecimal value 0x60, cannot be 
+             included in a name)
+(-) CTL-935  Remove InterestedIn attributes because services are a better way to communicate 
+(-) CTL-975  Remove EventHandlerExtensions.SplitInvoke and use regular event invocation
+(-) CTL-987  Delete MVVM logic behaviors (should only be available as logic)
+(-) #129     Remove MediaElementThreadInfo since it was only used by PleaseWaitHelper 
+(-) #131     Remove ISplashScreenService
+(-) #776     Remove implementation of ModelBase.Equals and ModelBase.GetHashCode to improve out-of-the-box performance of
+             the ModelBase. To implement comparison, one has to override it manually or derive from ComparableModelBase
+(-) #916     Remove IXmlSerializer.OptimalizationMode in favor of ISerializationConfiguration.OptimalizationMode
+(-) #974     Remove DynamicEventListener in favor of WeakEventListener
+(-) #983     Remove INotifyPropertyChanging and only support INotifyPropertyChanged
+(-) #1010    Remove PleaseWaitHelper and use busy indicator instead 
+(-) #1016    Remove CountCollapsedConverter since we already have CollectionToVisibilityConverter
+(-) #1030    Remove CommandLineHelper in favor of Orc.CommandLine
+(-) #1031    Remove EffectsHelper & VisualTargetPresentationSource
+(-) #1032    Remove TransferStylesAndTransitions - use special wrapper grid name instead
+(-) #1043    Remove validation summaries in the view model
+(-) #1047    Remove ViewModelBase.HasDirtyModels
+(-) #1051    Remove IParent interface & Parent / Children elements from ModelBase
+(-) #1059    Remove ISerializable.Serialized & ISerializable.Deserialized events
+(-) #1060    Remove ModelBase.LeanAndMean (models should be lean by design now)
+(-) Remove test implementations of services
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
 **********************************************************
 
 ==================
@@ -184,7 +327,7 @@ See http://www.catelproject.com/support/issue-tracker
 Version 4.5.1
 ==================
 
-For an update guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
+For an upgrade guide, visit https://catelproject.atlassian.net/wiki/display/CTL/Update+guides
 
 Release date:
 =============

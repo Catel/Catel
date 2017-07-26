@@ -43,6 +43,11 @@
                 <![CDATA[/// <summary>
 /// $description$.
 /// </summary>
+#if NETFX_CORE
+[DataMember]
+// TODO: use the following line instead of the one above, if you want to ignore the property for (de)serialization
+//[IgnoreDataMember]
+#endif
 public $type$ $name$
 {
 	get { return GetValue<$type$>($name$Property); }

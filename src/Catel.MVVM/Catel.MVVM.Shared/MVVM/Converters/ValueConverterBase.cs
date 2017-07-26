@@ -18,7 +18,7 @@ namespace Catel.MVVM.Converters
     using System.ComponentModel;
 #endif
 
-#if NET || SL5
+#if NET
     using System.Windows.Markup;
 #endif
 
@@ -42,7 +42,7 @@ namespace Catel.MVVM.Converters
     /// </summary>
     /// <typeparam name="TConvert">The type of the convert input.</typeparam>
     /// <typeparam name="TConvertBack">The type of the convert back input.</typeparam>
-#if NET || SL5
+#if NET
     public abstract class ValueConverterBase<TConvert, TConvertBack> : MarkupExtension, IValueConverter
 #else
     public abstract class ValueConverterBase<TConvert, TConvertBack> : IValueConverter
@@ -258,7 +258,7 @@ namespace Catel.MVVM.Converters
             return ConverterHelper.UnsetValue;
         }
 
-#if NET || SL5
+#if NET
         /// <summary>
         /// When implemented in a derived class, returns an object that is set as the value of the target property for this markup extension.
         /// </summary>

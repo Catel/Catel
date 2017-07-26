@@ -99,7 +99,7 @@ namespace Catel.Services
                 vmGrid = new Grid();
                 vmGrid.Name = InnerWrapperName.GetUniqueControlName();
 
-#if NET || SL5
+#if NET
                 if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.CreateWarningAndErrorValidatorForViewModel))
                 {
                     var warningAndErrorValidator = new WarningAndErrorValidator();
@@ -108,11 +108,6 @@ namespace Catel.Services
                     vmGrid.Children.Add(warningAndErrorValidator);
                 }
 #endif
-
-                if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.TransferStylesAndTransitionsToViewModelGrid))
-                {
-                    content.TransferStylesAndTransitions(vmGrid);
-                }
 
                 SetContent(view, null);
                 vmGrid.Children.Add(content);

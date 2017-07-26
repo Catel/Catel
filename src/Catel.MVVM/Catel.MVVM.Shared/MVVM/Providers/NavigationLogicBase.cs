@@ -163,7 +163,9 @@ namespace Catel.MVVM.Providers
         /// Called when the control has just been navigated away from the page.
         /// </summary>
         /// <param name="e">The <see cref="NavigatingEventArgs"/> instance containing the event data.</param>
+#pragma warning disable AvoidAsyncVoid // Avoid async void
         protected async virtual void OnNavigatingAwayFromPage(NavigatingEventArgs e)
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             bool? result = true;
 

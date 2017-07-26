@@ -35,9 +35,13 @@ namespace Catel.MVVM
         /// <typeparam name="T">The type of the view to return.</typeparam>
         /// <param name="viewType">Type of the view to instantiate.</param>
         /// <param name="dataContext">The data context to inject into the view. In most cases, this will be a view model.</param>
-        /// <returns>The constructed view or <c>null</c> if it was not possible to construct the view.</returns>
-        /// <remarks>Internally uses the <see cref="ConstructViewWithViewModel"/> method and casts the result.</remarks>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
+        /// <returns>
+        /// The constructed view or <c>null</c> if it was not possible to construct the view.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewType" /> is <c>null</c>.</exception>
+        /// <remarks>
+        /// Internally uses the <see cref="ConstructViewWithViewModel" /> method and casts the result.
+        /// </remarks>
         public static T ConstructViewWithViewModel<T>(Type viewType, object dataContext)
             where T : FrameworkElement
         {
@@ -51,8 +55,10 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="viewType">Type of the view to instantiate.</param>
         /// <param name="dataContext">The data context to inject into the view. In most cases, this will be a view model.</param>
-        /// <returns>The constructed view or <c>null</c> if it was not possible to construct the view.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewType"/> is <c>null</c>.</exception>
+        /// <returns>
+        /// The constructed view or <c>null</c> if it was not possible to construct the view.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="viewType" /> is <c>null</c>.</exception>
         public static FrameworkElement ConstructViewWithViewModel(Type viewType, object dataContext)
         {
             Argument.IsNotNull("viewType", viewType);

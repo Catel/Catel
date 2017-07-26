@@ -98,7 +98,6 @@ namespace Catel.Windows.Controls
 #endif
             };
 
-            _logic.ViewModelClosed += OnViewModelClosed;
             _logic.ViewModelClosedAsync += OnViewModelClosedAsync;
             _logic.ViewModelChanged += (sender, e) => RaiseViewModelChanged();
 
@@ -230,34 +229,7 @@ namespace Catel.Windows.Controls
             set { UserControlLogic.DefaultUnloadBehaviorValue = value; }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the styles and transitions from the content of the target control
-        /// should be transfered to the view model grid which is created dynamically,.
-        /// <para />
-        /// The transfer is required to enable visual state transitions on root elements (which is replaced by this logic implementation).
-        /// <para />
-        /// The default value is <c>true</c>/
-        /// </summary>
-        /// <value><c>true</c> if the styles and transitions should be transfered to the view model grid; otherwise, <c>false</c>.</value>
-        public bool TransferStylesAndTransitionsToViewModelGrid
-        {
-            get { return _logic.GetValue<UserControlLogic, bool>(x => x.TransferStylesAndTransitionsToViewModelGrid, false); }
-            set { _logic.SetValue<UserControlLogic>(x => x.TransferStylesAndTransitionsToViewModelGrid = value); }
-        }
-
-        /// <summary>
-        /// Gets or sets a value for the <see cref="TransferStylesAndTransitionsToViewModelGrid"/> property. This way, the behavior
-        /// can be changed an entire application to prevent disabling it on every control.
-        /// <para />
-        /// The default value is <c>false</c>.
-        /// </summary>
-        public static bool DefaultTransferStylesAndTransitionsToViewModelGridValue
-        {
-            get { return UserControlLogic.DefaultTransferStylesAndTransitionsToViewModelGridValue; }
-            set { UserControlLogic.DefaultTransferStylesAndTransitionsToViewModelGridValue = value; }
-        }
-
-#if NET || SL5
+#if NET
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <see cref="InfoBarMessageControl"/> that can be found. 
@@ -424,16 +396,6 @@ namespace Catel.Windows.Controls
         /// </summary>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
-        {
-        }
-
-        /// <summary>
-        /// Called when the <see cref="ViewModel"/> has been closed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnViewModelClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual void OnViewModelClosed(object sender, ViewModelClosedEventArgs e)
         {
         }
 

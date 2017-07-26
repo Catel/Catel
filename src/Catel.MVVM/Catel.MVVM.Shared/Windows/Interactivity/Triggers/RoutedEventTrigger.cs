@@ -39,9 +39,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the <see cref="EventTriggerBase{T}.AssociatedObject"/> is loaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectLoaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectLoaded()
         {
             if (RoutedEvent != null)
             {
@@ -52,16 +50,14 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the <see cref="EventTriggerBase{T}.AssociatedObject"/> is unloaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectUnloaded(object sender, EventArgs e)
+        protected override void OnAssociatedObjectUnloaded()
         {
             if (RoutedEvent != null)
             {
                 AssociatedObject.RemoveHandler(RoutedEvent, new RoutedEventHandler(OnRoutedEvent));
             }
 
-            base.OnAssociatedObjectUnloaded(sender, e);
+            base.OnAssociatedObjectUnloaded();
         }
 
         /// <summary>

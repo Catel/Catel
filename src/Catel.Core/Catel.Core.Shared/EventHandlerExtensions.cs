@@ -9,15 +9,12 @@ namespace Catel
     using System;
     using System.Collections.Specialized;
     using System.ComponentModel;
-    using Logging;
 
     /// <summary>
     /// Extensions for event handlers.
     /// </summary>
     public static class EventHandlerExtensions
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         /// <summary>
         /// Unsubscribes all the handlers from the specified event.
         /// </summary>
@@ -121,7 +118,7 @@ namespace Catel
         {
             if (handler != null)
             {
-                SplitInvoke<EventHandler>(handler.GetInvocationList(), x => x(sender, e), sender, e);
+                handler(sender, e);
                 return true;
             }
 
@@ -158,13 +155,12 @@ namespace Catel
         {
             if (handler != null)
             {
-                SplitInvoke<EventHandler<TEventArgs>>(handler.GetInvocationList(), x => x(sender, e), sender, e);
+                handler(sender, e);
                 return true;
             }
 
             return false;
         }
-
 
         /// <summary>
         /// Invokes the specified <paramref name="handler"/> in a thread-safe manner. Where normally one
@@ -196,7 +192,8 @@ namespace Catel
         {
             if (handler != null)
             {
-                return SafeInvoke(handler, sender, fE());
+                handler(sender, fE());
+                return true;
             }
 
             return false;
@@ -230,7 +227,7 @@ namespace Catel
         {
             if (handler != null)
             {
-                SplitInvoke<PropertyChangedEventHandler>(handler.GetInvocationList(), x => x(sender, e), sender, e);
+                handler(sender, e);
                 return true;
             }
 
@@ -265,7 +262,8 @@ namespace Catel
         {
             if (handler != null)
             {
-                return SafeInvoke(handler, sender, fE());
+                handler(sender, fE());
+                return true;
             }
 
             return false;
@@ -299,7 +297,7 @@ namespace Catel
         {
             if (handler != null)
             {
-                SplitInvoke<NotifyCollectionChangedEventHandler>(handler.GetInvocationList(), x => x(sender, e), sender, e);
+                handler(sender, e);
                 return true;
             }
 
@@ -334,45 +332,11 @@ namespace Catel
         {
             if (handler != null)
             {
-                return SafeInvoke(handler, sender, fE());
+                handler(sender, fE());
+                return true;
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Invokes the invocation list one by one. This way it is easy to determine which subscription on a specific event handler  
-        /// is causing issues.
-        /// </summary>
-        /// <param name="invocationList">The invocationList.</param>
-        /// <param name="handler">The handler.</param>
-        /// <param name="sender">The sender.</param>
-        /// <param name="eventArgs">The event args.</param>
-
-        private static void SplitInvoke<THandler>(Delegate[] invocationList, Action<THandler> handler, object sender, object eventArgs)
-            where THandler : class
-        {
-            for (var i = 0; i < invocationList.Length; i++)
-            {
-                try
-                {
-                    var invocationItem = invocationList[i] as THandler;
-                    if (invocationItem != null)
-                    {
-                        handler(invocationItem);
-                    }
-                    else
-                    {
-                        var args = new [] { sender, eventArgs };
-                        invocationList[i].DynamicInvoke(args);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Failed to invoke event handler at index '{0}'", i);
-                    throw;
-                }
-            }
         }
     }
 }

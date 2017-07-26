@@ -15,14 +15,12 @@ namespace Catel
     /// </summary>
     public static class FastDateTime
     {
-#if !SILVERLIGHT		
         private static DateTime UtcStartTime;
         private static DateTime StartTime;
-		
         private static readonly Stopwatch Stopwatch;
 
         static FastDateTime()
-        {		
+        {
             var stopwatch = Stopwatch.StartNew();
             var now = DateTime.Now;
 
@@ -30,7 +28,6 @@ namespace Catel
             StartTime = now;
             UtcStartTime = now.ToUniversalTime();
         }
-#endif
 
         /// <summary>
         /// Gets the current date/time.
@@ -42,12 +39,8 @@ namespace Catel
         {
             get
             {
-#if !SILVERLIGHT				
                 var final = GetCurrent(ref StartTime);
                 return final;
-#else
-				return DateTime.Now;
-#endif
             }
         }
 
@@ -61,19 +54,14 @@ namespace Catel
         {
             get
             {
-#if !SILVERLIGHT					
                 // Returning DateTime.Utc is faster, see Catel.Benchmarks
                 return DateTime.UtcNow;
 
                 //var final = GetCurrent(ref UtcStartTime);
                 //return final;
-#else
-				return DateTime.UtcNow;
-#endif				
             }
         }
 
-#if !SILVERLIGHT			
         private static DateTime GetCurrent(ref DateTime startTime)
         {
             var elapsed = Stopwatch.ElapsedMilliseconds;
@@ -81,6 +69,5 @@ namespace Catel
             var final = startTime.AddMilliseconds(elapsed);
             return final;
         }
-#endif
     }
 }

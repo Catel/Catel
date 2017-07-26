@@ -76,7 +76,7 @@ namespace Catel.Test.Data
         private static void RegisterProperty<T>(PropertyDataManager propertyDataManager, string name, T defaultValue)
         {
             propertyDataManager.RegisterProperty(typeof (PropertyDataManagerFacts), name,
-                new PropertyData(name, typeof (T), defaultValue, false, null, false, false, false, false, false));
+                new PropertyData(name, typeof (T), defaultValue, null, false, false, false, false, false));
         }
         #endregion
 

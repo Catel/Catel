@@ -33,14 +33,6 @@ namespace Catel.MVVM.Auditing
         void OnViewModelCreated(IViewModel viewModel);
 
         /// <summary>
-        /// Called when the property of a view model is about to change.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <param name="oldValue">The old property value.</param>
-        void OnPropertyChanging(IViewModel viewModel, string propertyName, object oldValue);
-
-        /// <summary>
         /// Called when the property of a view model has just changed.
         /// </summary>
         /// <param name="viewModel">The view model.</param>

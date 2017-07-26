@@ -12,7 +12,6 @@ namespace Catel.Services
     using System.Globalization;
     using Caching;
     using Logging;
-    using Models;
 
     /// <summary>
     /// Service to implement the retrieval of language services.

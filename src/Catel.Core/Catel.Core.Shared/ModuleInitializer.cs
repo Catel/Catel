@@ -84,7 +84,7 @@ namespace Catel.Core
 
                 // All via reflection because we are support .NET 4.0 client profile, reflection equals this call:
                 //   config = Configuration.WebConfigurationManager.OpenWebConfiguration("~");
-                var webConfigurationManagerType = TypeCache.GetTypeWithoutAssembly("System.Web.Configuration.WebConfigurationManager");
+                var webConfigurationManagerType = TypeCache.GetTypeWithoutAssembly("System.Web.Configuration.WebConfigurationManager", allowInitialization: false);
                 var openWebConfigurationMethodInfo = webConfigurationManagerType.GetMethodEx("OpenWebConfiguration", new[] { typeof(string) }, allowStaticMembers: true);
                 config = (Configuration)openWebConfigurationMethodInfo.Invoke(null, new[] { "~" });
             }
@@ -137,7 +137,7 @@ namespace Catel.Core
                 return false;
             }
 
-            return value.ToLower().Contains(".vshost.");
+            return value.ContainsIgnoreCase(".vshost.");
         }
 #endif
     }

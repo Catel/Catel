@@ -9,6 +9,7 @@ namespace Catel.MVVM
 {
     using System;
     using System.Linq;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Extensions for the <see cref="IViewModelManager"/> interface.
@@ -23,17 +24,17 @@ namespace Catel.MVVM
         /// <param name="predicate">The predicate.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelManager" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelManager" /> is <c>null</c>.</exception>
-        public static void SaveAndCloseViewModels(this IViewModelManager viewModelManager, Func<IViewModel, bool> predicate)
+        public static async Task SaveAndCloseViewModelsAsync(this IViewModelManager viewModelManager, Func<IViewModel, bool> predicate)
         {
             Argument.IsNotNull("viewModelManager", viewModelManager);
             Argument.IsNotNull("predicate", predicate);
 
-            var activeViewModels = viewModelManager.ActiveViewModels.ToList();
+            var activeViewModels = viewModelManager.ActiveViewModels;
             foreach (var viewModel in activeViewModels)
             {
                 if (predicate(viewModel))
                 {
-                    viewModel.SaveAndCloseViewModel();
+                    await viewModel.SaveAndCloseViewModelAsync();
                 }
             }
         }
@@ -46,17 +47,17 @@ namespace Catel.MVVM
         /// <param name="predicate">The predicate.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelManager" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelManager" /> is <c>null</c>.</exception>
-        public static void CancelAndCloseViewModels(this IViewModelManager viewModelManager, Func<IViewModel, bool> predicate)
+        public static async Task CancelAndCloseViewModelsAsync(this IViewModelManager viewModelManager, Func<IViewModel, bool> predicate)
         {
             Argument.IsNotNull("viewModelManager", viewModelManager);
             Argument.IsNotNull("predicate", predicate);
 
-            var activeViewModels = viewModelManager.ActiveViewModels.ToList();
+            var activeViewModels = viewModelManager.ActiveViewModels;
             foreach (var viewModel in activeViewModels)
             {
                 if (predicate(viewModel))
                 {
-                    viewModel.CancelAndCloseViewModel();
+                    await viewModel.CancelAndCloseViewModelAsync();
                 }
             }
         }

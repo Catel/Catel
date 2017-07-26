@@ -20,22 +20,7 @@
 	<!--<iconUrl>file://content/icon.png</iconUrl>-->
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
     
-    <dependencies>
-        <group targetFramework="net40">
-          <dependency id="Microsoft.Bcl" version="[replaced]" />
-          <dependency id="Microsoft.Bcl.Async" version="[replaced]" />
-          <dependency id="Microsoft.Bcl.Build" version="[replaced]" />
-        </group>
-        
-        <!-- Required to make sure NET45 doesn't pick up BCL dependency from NET40, see  -->
-        <group targetFramework="net45">
-        </group>        
-        
-        <group targetFramework="sl50">
-          <dependency id="Microsoft.Bcl" version="[replaced]" />
-          <dependency id="Microsoft.Bcl.Async" version="[replaced]" />
-          <dependency id="Microsoft.Bcl.Build" version="[replaced]" />
-        </group>        
+    <dependencies>    
     </dependencies>      
   </metadata>
 </package>

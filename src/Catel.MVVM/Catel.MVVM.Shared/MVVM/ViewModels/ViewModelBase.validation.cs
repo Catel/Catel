@@ -5,44 +5,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel.MVVM
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-    using Catel.Data;
-    using Catel.Reflection;
-    using Logging;
-
-#if NET40 || SILVERLIGHT && !WINDOWS_PHONE
-    using System.ComponentModel.DataAnnotations;
-#endif
+    using Data;
 
     public partial class ViewModelBase
     {
-        #region Fields
-        /// <summary>
-        /// Dictionary of properties that are decorated with the <see cref="ValidationToViewModelAttribute"/>. These properties should be
-        /// updated after each validation sequence.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private readonly Dictionary<string, ValidationToViewModelAttribute> _validationSummaries = new Dictionary<string, ValidationToViewModelAttribute>();
-
-        /// <summary>
-        /// A date/time with the latest update stamp of each validation summary.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private readonly Dictionary<string, long> _validationSummariesUpdateStamps = new Dictionary<string, long>();
-        #endregion
-
         #region Properties
         /// <summary>
-        /// Gets or sets a value indicating whether all validation should be deferred until the first call to <see cref="SaveViewModel"/>.
+        /// Gets or sets a value indicating whether all validation should be deferred until the first call to <see cref="SaveViewModelAsync"/>.
         /// <para />
-        /// If this value is <c>true</c>, all validation will be suspended. As soon as the first call is made to the <see cref="SaveViewModel"/>,
+        /// If this value is <c>true</c>, all validation will be suspended. As soon as the first call is made to the <see cref="SaveViewModelAsync"/>,
         /// the validation will no longer be suspended and activated.
         /// <para />
         /// The default value is <c>false</c>.
@@ -96,38 +70,23 @@ namespace Catel.MVVM
 
         #region Methods
         /// <summary>
-        /// Validates the specified notify changed properties only.
+        /// Validates the current object for field and business rule errors.
         /// </summary>
-        /// <param name="force">If set to <c>true</c>, a validation is forced (even if the object knows it is already validated).</param>
-        /// <param name="notifyChangedPropertiesOnly">if set to <c>true</c> only the properties for which the warnings or errors have been changed
-        /// will be updated via <see cref="INotifyPropertyChanged.PropertyChanged"/>; otherwise all the properties that
-        /// had warnings or errors but not anymore and properties still containing warnings or errors will be updated.</param>
-        /// <returns>
-        /// <c>true</c> if validation succeeds; otherwise <c>false</c>.
-        /// </returns>
+        /// <param name="force">If set to <c>true</c>, a validation is forced. When the validation is not forced, it means 
+        /// that when the object is already validated, and no properties have been changed, no validation actually occurs 
+        /// since there is no reason for any values to have changed.
+        /// </param>
         /// <remarks>
-        /// This method is useful when the view model is initialized before the window, and therefore WPF does not update the errors and warnings.
+        /// To check whether this object contains any errors, use the ValidationContext property.
         /// </remarks>
-        public bool ValidateViewModel(bool force = false, bool notifyChangedPropertiesOnly = true)
+        public override void Validate(bool force = false)
         {
             if (IsClosed)
             {
-                return true;
+                return;
             }
 
-            if (SuspendValidation)
-            {
-                return true;
-            }
-
-            Validate(force, notifyChangedPropertiesOnly);
-
-            if (DeferValidationUntilFirstSaveCall)
-            {
-                return true;
-            }
-
-            return !HasErrors;
+            base.Validate(force);
         }
 
         /// <summary>
@@ -147,10 +106,15 @@ namespace Catel.MVVM
                         continue;
                     }
 
-                    var modelValueAsModelBaseBase = model.Value as IModelValidation;
-                    if (modelValueAsModelBaseBase != null)
+                    if (!_modelObjectsInfo[model.Key].SupportValidation)
                     {
-                        modelValueAsModelBaseBase.Validate();
+                        continue;
+                    }
+
+                    var validatable = model.Value as IValidatable;
+                    if (validatable != null)
+                    {
+                        validatable.Validate();
                     }
                 }
             }
@@ -164,15 +128,15 @@ namespace Catel.MVVM
                 var childViewModels = ChildViewModels.ToArray();
                 foreach (var childViewModel in childViewModels)
                 {
-                    childViewModel.ValidateViewModel();
-                    if (((INotifyDataErrorInfo)childViewModel).HasErrors)
+                    childViewModel.Validate();
+                    if (childViewModel.HasErrors)
                     {
                         _childViewModelsHaveErrors = true;
                         RaisePropertyChanged(() => HasErrors);
                     }
                 }
 
-                if (!_childViewModelsHaveErrors && (_childViewModelsHaveErrors != previousValue))
+                if (!_childViewModelsHaveErrors && _childViewModelsHaveErrors != previousValue)
                 {
                     RaisePropertyChanged(() => HasErrors);
                 }
@@ -191,6 +155,15 @@ namespace Catel.MVVM
             foreach (var viewModelToModelMap in _viewModelToModelMap)
             {
                 var mapping = viewModelToModelMap.Value;
+
+                lock (_modelLock)
+                {
+                    if (!_modelObjectsInfo[mapping.ModelProperty].SupportValidation)
+                    {
+                        continue;
+                    }
+                }
+
                 var model = GetValue(mapping.ModelProperty);
                 string[] modelProperties = mapping.ValueProperties;
 
@@ -201,40 +174,34 @@ namespace Catel.MVVM
 
                     // IDataErrorInfo
                     var dataErrorInfo = model as IDataErrorInfo;
-                    if (dataErrorInfo != null)
+                    if (dataErrorInfo != null && !string.IsNullOrEmpty(dataErrorInfo[modelProperty]))
                     {
-                        if (!string.IsNullOrEmpty(dataErrorInfo[modelProperty]))
-                        {
-                        validationContext.AddFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, dataErrorInfo[modelProperty]));
+                        validationContext.Add(FieldValidationResult.CreateError(mapping.ViewModelProperty, dataErrorInfo[modelProperty]));
 
-                            hasSetFieldError = true;
-                        }
+                        hasSetFieldError = true;
                     }
 
                     // IDataWarningInfo
                     var dataWarningInfo = model as IDataWarningInfo;
-                    if (dataWarningInfo != null)
+                    if (dataWarningInfo != null && !string.IsNullOrEmpty(dataWarningInfo[modelProperty]))
                     {
-                        if (!string.IsNullOrEmpty(dataWarningInfo[modelProperty]))
-                        {
-                        validationContext.AddFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, dataWarningInfo[modelProperty]));
+                        validationContext.Add(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, dataWarningInfo[modelProperty]));
 
-                            hasSetFieldWarning = true;
-                        }
+                        hasSetFieldWarning = true;
                     }
 
                     // INotifyDataErrorInfo & INotifyDataWarningInfo
-                    if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
-                    {
-                        var modelErrorInfo = _modelErrorInfo[mapping.ModelProperty];
 
+                    ModelErrorInfo modelErrorInfo;
+                    if (_modelErrorInfo.TryGetValue(mapping.ModelProperty, out modelErrorInfo))
+                    {
                         if (!hasSetFieldError)
                         {
                             foreach (string error in modelErrorInfo.GetErrors(modelProperty))
                             {
                                 if (!string.IsNullOrEmpty(error))
                                 {
-                                validationContext.AddFieldValidationResult(FieldValidationResult.CreateError(mapping.ViewModelProperty, error));
+                                    validationContext.Add(FieldValidationResult.CreateError(mapping.ViewModelProperty, error));
                                     break;
                                 }
                             }
@@ -246,7 +213,7 @@ namespace Catel.MVVM
                             {
                                 if (!string.IsNullOrEmpty(warning))
                                 {
-                                validationContext.AddFieldValidationResult(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, warning));
+                                    validationContext.Add(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, warning));
                                     break;
                                 }
                             }
@@ -268,81 +235,43 @@ namespace Catel.MVVM
             {
                 foreach (var modelObject in _modelObjects)
                 {
+                    if (!_modelObjectsInfo[modelObject.Key].SupportValidation)
+                    {
+                        continue;
+                    }
+
                     // IDataErrorInfo
                     var dataErrorInfo = modelObject.Value as IDataErrorInfo;
-                    if ((dataErrorInfo != null) && !string.IsNullOrEmpty(dataErrorInfo.Error))
+                    if (dataErrorInfo != null && !string.IsNullOrEmpty(dataErrorInfo.Error))
                     {
-                        validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(dataErrorInfo.Error));
+                        validationContext.Add(BusinessRuleValidationResult.CreateError(dataErrorInfo.Error));
                     }
 
                     // IDataWarningInfo
                     var dataWarningInfo = modelObject.Value as IDataWarningInfo;
-                    if ((dataWarningInfo != null) && !string.IsNullOrEmpty(dataWarningInfo.Warning))
+                    if (dataWarningInfo != null && !string.IsNullOrEmpty(dataWarningInfo.Warning))
                     {
-                        validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateWarning(dataWarningInfo.Warning));
+                        validationContext.Add(BusinessRuleValidationResult.CreateWarning(dataWarningInfo.Warning));
                     }
 
                     // INotifyDataErrorInfo & INotifyDataWarningInfo
-                    if (_modelErrorInfo.ContainsKey(modelObject.Key))
+                    ModelErrorInfo modelErrorInfo;
+                    if (_modelErrorInfo.TryGetValue(modelObject.Key, out modelErrorInfo))
                     {
-                        var modelErrorInfo = _modelErrorInfo[modelObject.Key];
-
                         foreach (var error in modelErrorInfo.GetErrors(string.Empty))
                         {
-                            validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateError(error));
+                            validationContext.Add(BusinessRuleValidationResult.CreateError(error));
                         }
 
                         foreach (var warning in modelErrorInfo.GetWarnings(string.Empty))
                         {
-                            validationContext.AddBusinessRuleValidationResult(BusinessRuleValidationResult.CreateWarning(warning));
+                            validationContext.Add(BusinessRuleValidationResult.CreateWarning(warning));
                         }
                     }
                 }
             }
         }
 
-        /// <summary>
-        /// Called when the object is validated.
-        /// </summary>
-        /// <param name="validationContext">The validation context.</param>
-        protected override void OnValidated(IValidationContext validationContext)
-        {
-            bool updatedValidationSummaries = false;
-
-            foreach (var validationSummaryInfo in _validationSummaries)
-            {
-                var isSummaryUpdateRequired = false;
-                var lastUpdated = _validationSummariesUpdateStamps.ContainsKey(validationSummaryInfo.Key) ? _validationSummariesUpdateStamps[validationSummaryInfo.Key] : 0L;
-                
-                isSummaryUpdateRequired = this.IsValidationSummaryOutdated(lastUpdated, validationSummaryInfo.Value.IncludeChildViewModels);
-                if (!isSummaryUpdateRequired)
-                {
-                    continue;
-                }
-
-                IValidationSummary validationSummary;
-                if (validationSummaryInfo.Value.UseTagToFilter)
-                {
-                    validationSummary = this.GetValidationSummary(validationSummaryInfo.Value.IncludeChildViewModels, validationSummaryInfo.Value.Tag);
-                }
-                else
-                {
-                    validationSummary = this.GetValidationSummary(validationSummaryInfo.Value.IncludeChildViewModels);
-                }
-
-                PropertyHelper.SetPropertyValue(this, validationSummaryInfo.Key, validationSummary, false);
-                _validationSummariesUpdateStamps[validationSummaryInfo.Key] = validationSummary.LastModifiedTicks;
-
-                updatedValidationSummaries = true;
-            }
-
-            if (updatedValidationSummaries)
-            {
-                ViewModelCommandManager.InvalidateCommands();
-            }
-
-            base.OnValidated(validationContext);
-        }
         #endregion
     }
 }

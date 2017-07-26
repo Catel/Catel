@@ -72,11 +72,7 @@ namespace Catel.Runtime.Serialization.Xml
             var xmlContent = xmlReader.ReadInnerXml();
             if (xmlContent.StartsWith("&lt;"))
             {
-#if SL5
-                xmlContent = System.Windows.Browser.HttpUtility.HtmlDecode(xmlContent);
-#else
                 xmlContent = System.Net.WebUtility.HtmlDecode(xmlContent);
-#endif
             }
 
             var elementEnd = string.Format("</{0}>", modelType.Name);

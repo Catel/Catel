@@ -57,8 +57,8 @@ namespace Catel.MVVM
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private Func<TCanExecuteParameter, bool> _canExecuteWithParameter;
-        private Func<bool> _canExecuteWithoutParameter;
+        private WeakFunc<TCanExecuteParameter, bool> _canExecuteWithParameter;
+        private WeakFunc<bool> _canExecuteWithoutParameter;
         private Action<TExecuteParameter> _executeWithParameter;
         private Action _executeWithoutParameter;
         #endregion
@@ -143,8 +143,9 @@ namespace Catel.MVVM
         protected void InitializeActions(Action<TExecuteParameter> executeWithParameter, Action executeWithoutParameter,
             Func<TCanExecuteParameter, bool> canExecuteWithParameter, Func<bool> canExecuteWithoutParameter)
         {
-            _canExecuteWithParameter = canExecuteWithParameter;
-            _canExecuteWithoutParameter = canExecuteWithoutParameter;
+            _canExecuteWithParameter = canExecuteWithParameter != null ? new WeakFunc<TCanExecuteParameter, bool>(canExecuteWithParameter.Target, canExecuteWithParameter) : null;
+            _canExecuteWithoutParameter = canExecuteWithoutParameter != null ? new WeakFunc<bool>(canExecuteWithoutParameter.Target, canExecuteWithoutParameter) : null;
+
             _executeWithParameter = executeWithParameter;
             _executeWithoutParameter = executeWithoutParameter;
         }
@@ -196,15 +197,16 @@ namespace Catel.MVVM
                     return false;
                 }
             }
+            bool result;
 
-            if (_canExecuteWithParameter != null)
+            if (_canExecuteWithParameter != null && _canExecuteWithParameter.Execute(parameter, out result))
             {
-                return _canExecuteWithParameter(parameter);
+                return result;
             }
 
-            if (_canExecuteWithoutParameter != null)
+            if (_canExecuteWithoutParameter != null && _canExecuteWithoutParameter.Execute(out result))
             {
-                return _canExecuteWithoutParameter();
+                return result;
             }
 
             return true;
@@ -241,7 +243,9 @@ namespace Catel.MVVM
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
         public void Execute(TExecuteParameter parameter)
         {
-            Execute(parameter, false);
+#pragma warning disable 4014
+            ExecuteAsync(parameter, false);
+#pragma warning restore 4014
         }
 
         /// <summary>
@@ -249,7 +253,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
         /// <param name="ignoreCanExecuteCheck">if set to <c>true</c>, the check on <see cref="CanExecute()"/> will be used before actually executing the action.</param>
-        protected virtual void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
+        protected virtual async Task ExecuteAsync(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
         {
             // Double check whether execution is allowed, some controls directly call Execute
             if (!ignoreCanExecuteCheck && !CanExecute(parameter))
@@ -260,12 +264,12 @@ namespace Catel.MVVM
             if (_executeWithParameter != null)
             {
                 _executeWithParameter(parameter);
-                RaiseExecuted(parameter);
+                await RaiseExecutedAsync(parameter);
             }
             else if (_executeWithoutParameter != null)
             {
                 _executeWithoutParameter();
-                RaiseExecuted(parameter);
+                await RaiseExecutedAsync(parameter);
             }
 
             RaiseCanExecuteChanged();
@@ -290,16 +294,6 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Raises the <see cref="Executed"/> event.
-        /// </summary>
-        /// <param name="parameter">The parameter.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "RaiseExecutedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected void RaiseExecuted(object parameter)
-        {
-            RaiseExecutedAsync(parameter);
-        }
-
-        /// <summary>
         /// Raises the <see cref="Executed" /> event.
         /// </summary>
         /// <param name="parameter">The parameter.</param>
@@ -320,7 +314,7 @@ namespace Catel.MVVM
         {
             if (AutomaticallyDispatchEvents)
             {
-                DispatcherService.BeginInvokeIfRequired(async () => await action());
+                DispatcherService.BeginInvokeIfRequired(action);
             }
             else
             {

@@ -16,7 +16,7 @@ namespace Catel.IoC
     using Caching;
     using Logging;
     using Reflection;
-
+    using Threading;
 #if !XAMARIN
     using System.Dynamic;
 #endif
@@ -48,15 +48,20 @@ namespace Catel.IoC
 
         #region Fields
         /// <summary>
-        /// Cache containing all last used constructors for a type without auto-completion.
+        /// Provides thread safe access to constructors cache.
         /// </summary>
-        private readonly Dictionary<ConstructorCacheKey, ConstructorInfo> _specificConstructorCacheWithoutAutoCompletion = new Dictionary<ConstructorCacheKey, ConstructorInfo>();
+        private readonly ReaderWriterLockSlim _constructorCacheLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
         /// <summary>
-        /// Cache containing all last used constructors for a type with auto-completion.
+        /// Cache containing all last used constructors.
         /// </summary>
-        private readonly Dictionary<ConstructorCacheKey, ConstructorInfo> _specificConstructorCacheWithAutoCompletion = new Dictionary<ConstructorCacheKey, ConstructorInfo>();
-
+        private readonly Dictionary<ConstructorCacheKey, ConstructorCacheValue> _constructorCache = new Dictionary<ConstructorCacheKey, ConstructorCacheValue>();
+        
+        /// <summary>
+        /// Provides thread safe access to type constructors.
+        /// </summary>
+        private readonly ReaderWriterLockSlim _typeConstructorsMetadataLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+        
         /// <summary>
         /// Cache containing all the metadata of a specific type so this doesn't have to be queried multiple times.
         /// </summary>
@@ -70,7 +75,7 @@ namespace Catel.IoC
         /// <summary>
         /// The current type request path.
         /// </summary>
-        private TypeRequestPath _currentTypeRequestPath;
+        private readonly ThreadLocal<TypeRequestPath> _currentTypeRequestPath;
         #endregion
 
         #region Constructors
@@ -87,6 +92,8 @@ namespace Catel.IoC
         public TypeFactory(IServiceLocator serviceLocator)
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
+
+            _currentTypeRequestPath = new ThreadLocal<TypeRequestPath>(() => TypeRequestPath.Root(TypeRequestPathName));
 
             _serviceLocator = serviceLocator;
             _serviceLocator.TypeRegistered += OnServiceLocatorTypeRegistered;
@@ -194,58 +201,13 @@ namespace Catel.IoC
 
             return CreateInstanceWithSpecifiedParameters(typeToConstruct, tag, parameters, true);
         }
-
-        /// <summary>
-        /// Marks the specified type as not being created. If this was the only type being constructed, the type request
-        /// path will be closed.
-        /// </summary>
-        /// <param name="typeRequestInfoForTypeJustConstructed">The type request info for type just constructed.</param>
-        private void CloseCurrentTypeIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
-        {
-            lock (_serviceLocator.LockObject)
-            {
-                if (_currentTypeRequestPath != null)
-                {
-                    _currentTypeRequestPath.MarkTypeAsNotCreated(typeRequestInfoForTypeJustConstructed);
-
-                    if (_currentTypeRequestPath.TypeCount == 1)
-                    {
-                        // We failed to create the only type in the request path, exit
-                        _currentTypeRequestPath = null;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Completes the type request path by checking if the currently created type is the same as the first
-        /// type meaning that the type is successfully created and the current type request path can be set to <c>null</c>.
-        /// </summary>
-        /// <param name="typeRequestInfoForTypeJustConstructed">The type request info.</param>
-        private void CompleteTypeRequestPathIfRequired(TypeRequestInfo typeRequestInfoForTypeJustConstructed)
-        {
-            lock (_serviceLocator.LockObject)
-            {
-                if (_currentTypeRequestPath != null)
-                {
-                    if (_currentTypeRequestPath.LastType == typeRequestInfoForTypeJustConstructed)
-                    {
-                        _currentTypeRequestPath.MarkTypeAsCreated(typeRequestInfoForTypeJustConstructed);
-                    }
-
-                    if (_currentTypeRequestPath.TypeCount == 0)
-                    {
-                        _currentTypeRequestPath = null;
-                    }
-                }
-            }
-        }
-
+        
         /// <summary>
         /// Initializes the created object after its construction.
         /// </summary>
         /// <param name="obj">The object to initialize.</param>
-        private void InitializeAfterConstruction(object obj)
+        /// <param name="typeMetaData">Metadata about object to initialize</param>
+        private void InitializeAfterConstruction(object obj, TypeMetaData typeMetaData)
         {
             if (obj == null)
             {
@@ -264,7 +226,6 @@ namespace Catel.IoC
             Log.Debug("Injecting properties into type '{0}' after construction", objectType);
 
             var type = obj.GetType();
-            var typeMetaData = GetTypeMetaData(type);
             foreach (var injectedProperty in typeMetaData.GetInjectedProperties())
             {
                 var propertyInfo = injectedProperty.Key;
@@ -295,130 +256,86 @@ namespace Catel.IoC
         /// <param name="tag">The preferred tag when resolving dependencies.</param>
         /// <param name="parameters">The parameters to inject.</param>
         /// <param name="autoCompleteDependencies">if set to <c>true</c>, the additional dependencies will be auto completed.</param>
-        /// <param name="preventCircularDependencies">if set to <c>true</c>, prevent circular dependencies using the <see cref="TypeRequestPath" />.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
         private object CreateInstanceWithSpecifiedParameters(Type typeToConstruct, object tag, object[] parameters,
-            bool autoCompleteDependencies, bool preventCircularDependencies = true)
+            bool autoCompleteDependencies)
         {
             Argument.IsNotNull("typeToConstruct", typeToConstruct);
 
             if (parameters == null)
             {
-                parameters = new object[] { };
+                parameters = new object[] {};
             }
 
-            lock (_serviceLocator.LockObject)
+            var previousRequestPath = _currentTypeRequestPath.Value;
+            try
             {
-                TypeRequestInfo typeRequestInfo = null;
+                var typeRequestInfo = new TypeRequestInfo(typeToConstruct);
+                _currentTypeRequestPath.Value = TypeRequestPath.Branch(previousRequestPath, typeRequestInfo);
 
-                try
+                var constructorCacheKey = new ConstructorCacheKey(typeToConstruct, autoCompleteDependencies, parameters);
+
+                var typeConstructorsMetadata = GetTypeMetaData(typeToConstruct);
+
+                var constructorCacheValue = GetConstructor(constructorCacheKey);
+
+                if (constructorCacheValue.ConstructorInfo != null)
                 {
-                    if (preventCircularDependencies)
+                    var cachedConstructor = constructorCacheValue.ConstructorInfo;
+                    var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, cachedConstructor, tag, parameters, false, false, typeConstructorsMetadata);
+                    if (instanceCreatedWithInjection != null)
                     {
-                        typeRequestInfo = new TypeRequestInfo(typeToConstruct);
-                        if (_currentTypeRequestPath == null)
-                        {
-                            _currentTypeRequestPath = new TypeRequestPath(typeRequestInfo, name: TypeRequestPathName);
-                        }
-                        else
-                        {
-                            _currentTypeRequestPath.PushType(typeRequestInfo, true);
-                        }
+                        return instanceCreatedWithInjection;
                     }
 
-                    var constructorCache = GetConstructorCache(autoCompleteDependencies);
-                    var constructorCacheKey = new ConstructorCacheKey(typeToConstruct, parameters);
+                    Log.Warning("Found constructor for type '{0}' in constructor, but it failed to create an instance. Removing the constructor from the cache", typeToConstruct.FullName);
 
-                    if (constructorCache.ContainsKey(constructorCacheKey))
-                    {
-                        var cachedConstructor = constructorCache[constructorCacheKey];
-                        var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, cachedConstructor, tag, parameters, false, false);
-                        if (instanceCreatedWithInjection != null)
-                        {
-                            if (preventCircularDependencies)
-                            {
-                                CompleteTypeRequestPathIfRequired(typeRequestInfo);
-                            }
-
-                            return instanceCreatedWithInjection;
-                        }
-
-                        Log.Warning("Found constructor for type '{0}' in constructor, but it failed to create an instance. Removing the constructor from the cache", typeToConstruct.FullName);
-
-                        constructorCache.Remove(constructorCacheKey);
-                    }
-
-                    Log.Debug("Creating instance of type '{0}' using specific parameters. No constructor found in the cache, so searching for the right one", typeToConstruct.FullName);
-
-                    var typeConstructorsMetadata = GetTypeMetaData(typeToConstruct);
-                    var constructors = typeConstructorsMetadata.GetConstructors(parameters.Count(), !autoCompleteDependencies);
-
-                    for (int i = 0; i < constructors.Count; i++)
-                    {
-                        var constructor = constructors[i];
-
-                        var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, constructor, tag, parameters, true, i < constructors.Count - 1);
-                        if (instanceCreatedWithInjection != null)
-                        {
-                            if (preventCircularDependencies)
-                            {
-                                CompleteTypeRequestPathIfRequired(typeRequestInfo);
-                            }
-
-                            // We found a constructor that works, cache it
-                            constructorCache[constructorCacheKey] = constructor;
-
-                            // Only update the rule when using a constructor for the first time, not when using it from the cache
-                            ApiCop.UpdateRule<TooManyDependenciesApiCopRule>("TypeFactory.LimitDependencyInjection",
-                                x => x.SetNumberOfDependenciesInjected(typeToConstruct, constructor.GetParameters().Count()));
-
-                            return instanceCreatedWithInjection;
-                        }
-                    }
-
-                    Log.Debug("No constructor could be used, cannot construct type '{0}' with the specified parameters", typeToConstruct.FullName);
+                    SetConstructor(constructorCacheKey, constructorCacheValue, null);
                 }
-                catch (CircularDependencyException)
+
+                Log.Debug("Creating instance of type '{0}' using specific parameters. No constructor found in the cache, so searching for the right one", typeToConstruct.FullName);
+
+                var constructors = typeConstructorsMetadata.GetConstructors(parameters.Length, !autoCompleteDependencies);
+
+                for (int i = 0; i < constructors.Count; i++)
                 {
-                    throw;
-                }
-                catch (Exception ex)
-                {
-                    if (preventCircularDependencies)
+                    var constructor = constructors[i];
+
+                    var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, constructor, tag, parameters, true, i < constructors.Count - 1, typeConstructorsMetadata);
+                    if (instanceCreatedWithInjection != null)
                     {
-                        CloseCurrentTypeIfRequired(typeRequestInfo);
+                        // We found a constructor that works, cache it
+                        SetConstructor(constructorCacheKey, constructorCacheValue, constructor);
+
+                        // Only update the rule when using a constructor for the first time, not when using it from the cache
+                        ApiCop.UpdateRule<TooManyDependenciesApiCopRule>("TypeFactory.LimitDependencyInjection",
+                            x => x.SetNumberOfDependenciesInjected(typeToConstruct, constructor.GetParameters().Count()));
+
+                        return instanceCreatedWithInjection;
                     }
-
-                    Log.Warning(ex, "Failed to construct type '{0}'", typeToConstruct.FullName);
-
-                    throw;
                 }
 
-                if (preventCircularDependencies)
-                {
-                    CloseCurrentTypeIfRequired(typeRequestInfo);
-                }
-
-                return null;
+                Log.Debug("No constructor could be used, cannot construct type '{0}' with the specified parameters", typeToConstruct.FullName);
             }
-        }
-
-        /// <summary>
-        /// Gets the constructor cache depending on whether the dependencies should be auto completed.
-        /// </summary>
-        /// <param name="autoCompleteDependencies">if set to <c>true</c>, the dependencies should be auto completed.</param>
-        /// <returns>The correct dictionary.</returns>
-        private Dictionary<ConstructorCacheKey, ConstructorInfo> GetConstructorCache(bool autoCompleteDependencies)
-        {
-            if (autoCompleteDependencies)
+            catch (CircularDependencyException)
             {
-                return _specificConstructorCacheWithAutoCompletion;
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(ex, "Failed to construct type '{0}'", typeToConstruct.FullName);
+
+                throw;
+            }
+            finally
+            {
+                _currentTypeRequestPath.Value = previousRequestPath;
             }
 
-            return _specificConstructorCacheWithoutAutoCompletion;
+            return null;
         }
-
+        
         /// <summary>
         /// Gets the constructors metadata.
         /// </summary>
@@ -426,16 +343,23 @@ namespace Catel.IoC
         /// <returns>The <see cref="TypeMetaData"/>.</returns>
         private TypeMetaData GetTypeMetaData(Type type)
         {
-            lock (_serviceLocator.LockObject)
+            return _typeConstructorsMetadataLock.PerformUpgradableRead(() =>
             {
-                if (!_typeConstructorsMetadata.ContainsKey(type))
+                TypeMetaData result;
+                if (_typeConstructorsMetadata.TryGetValue(type, out result))
                 {
-                    _typeConstructorsMetadata.Add(type, new TypeMetaData(type));
+                    return result;
                 }
 
-                var typeConstructorsMetadata = _typeConstructorsMetadata[type];
-                return typeConstructorsMetadata;
-            }
+                result = new TypeMetaData(type);
+                
+                _typeConstructorsMetadataLock.PerformWrite(() =>
+                {
+                    _typeConstructorsMetadata.Add(type, result);
+                });
+                
+                return result;
+            });
         }
 
         /// <summary>
@@ -448,7 +372,13 @@ namespace Catel.IoC
         /// <returns><c>true</c> if this instance [can constructor be used] the specified constructor; otherwise, <c>false</c>.</returns>
         private bool CanConstructorBeUsed(ConstructorInfo constructor, object tag, bool autoCompleteDependencies, params object[] parameters)
         {
-            Log.Debug("Checking if constructor '{0}' can be used", constructor.GetSignature());
+            // Some loging like .GetSignature are expensive
+            var logDebug = LogManager.LogInfo.IsDebugEnabled && !LogManager.LogInfo.IgnoreCatelLogging;
+
+            if (logDebug)
+            {
+                Log.Debug("Checking if constructor '{0}' can be used", constructor.GetSignature());
+            }
 
             if (constructor.IsStatic)
             {
@@ -465,8 +395,11 @@ namespace Catel.IoC
 
                 if (!IsValidParameterValue(ctorParameterType, parameters[i]))
                 {
-                    Log.Debug("Constructor is not valid because value '{0}' cannot be used for parameter '{0}'",
-                        ObjectToStringHelper.ToString(parameters[i]), ctorParameter.Name);
+                    if (logDebug)
+                    {
+                        Log.Debug("Constructor is not valid because value '{0}' cannot be used for parameter '{0}'",
+                            ObjectToStringHelper.ToString(parameters[i]), ctorParameter.Name);
+                    }
 
                     validConstructor = false;
                     break;
@@ -483,9 +416,13 @@ namespace Catel.IoC
                         var parameterToResolve = ctorParameters[j];
                         var parameterTypeToResolve = parameterToResolve.ParameterType;
 
-                        if (!_serviceLocator.IsTypeRegistered(parameterTypeToResolve))
+                        if (!_serviceLocator.IsTypeRegistered(parameterTypeToResolve, tag) && 
+                            !_serviceLocator.IsTypeRegistered(parameterTypeToResolve))
                         {
-                            Log.Debug("Constructor is not valid because parameter '{0}' cannot be resolved from the dependency resolver", parameterToResolve.Name);
+                            if (logDebug)
+                            {
+                                Log.Debug("Constructor is not valid because parameter '{0}' cannot be resolved from the dependency resolver", parameterToResolve.Name);
+                            }
 
                             validConstructor = false;
                             break;
@@ -507,8 +444,8 @@ namespace Catel.IoC
         private bool IsValidParameterValue(Type parameterType, object parameterValue)
         {
             // 1: check if value is null and if the ctor accepts that
-            bool isParameterNull = (parameterValue == null);
-            bool isCtorParameterValueType = parameterType.IsValueTypeEx();
+            var isParameterNull = (parameterValue == null);
+            var isCtorParameterValueType = parameterType.IsValueTypeEx();
             if (isParameterNull && isCtorParameterValueType)
             {
                 return false;
@@ -554,12 +491,13 @@ namespace Catel.IoC
         /// <param name="parameters">The parameters to pass into the constructor.</param>
         /// <param name="checkConstructor">if set to <c>true</c>, check whether the constructor can be used before using it.</param>
         /// <param name="hasMoreConstructorsLeft">if set to <c>true</c>, more constructors are left so don't throw exceptions.</param>
+        /// <param name="typeMetaData">Metadata about type beiing constructed.</param>
         /// <returns>The instantiated service or <c>null</c> if the instantiation fails.</returns>
         /// <remarks>Note that this method does not require an implementation of
         /// <see cref="TypeRequestPath" /> because this already has the parameter values
         /// and thus cannot lead to invalid circular dependencies.</remarks>
         private object TryCreateToConstruct(Type typeToConstruct, ConstructorInfo constructor, object tag, object[] parameters,
-            bool checkConstructor, bool hasMoreConstructorsLeft)
+            bool checkConstructor, bool hasMoreConstructorsLeft, TypeMetaData typeMetaData)
         {
             // Check if this constructor is even possible
             if (checkConstructor)
@@ -576,7 +514,7 @@ namespace Catel.IoC
                 var ctorParameters = constructor.GetParameters();
                 for (int i = parameters.Length; i < ctorParameters.Length; i++)
                 {
-                    object ctorParameterValue = null;
+                    object ctorParameterValue;
 
                     if (tag != null && _serviceLocator.IsTypeRegistered(ctorParameters[i].ParameterType, tag))
                     {
@@ -598,7 +536,7 @@ namespace Catel.IoC
 
                 var instance = constructor.Invoke(finalParametersArray);
 
-                InitializeAfterConstruction(instance);
+                InitializeAfterConstruction(instance, typeMetaData);
 
                 return instance;
             }
@@ -629,10 +567,58 @@ namespace Catel.IoC
                 throw;
             }
 
-            Log.Debug("Failed to create instance using dependency injection for type '{0}' using constructor '{1}'",
-                      typeToConstruct.FullName, constructor.GetSignature());
+            // Some loging like .GetSignature are expensive
+            var logDebug = LogManager.LogInfo.IsDebugEnabled && !LogManager.LogInfo.IgnoreCatelLogging;
+            if (logDebug)
+            {
+                Log.Debug("Failed to create instance using dependency injection for type '{0}' using constructor '{1}'",
+                    typeToConstruct.FullName, constructor.GetSignature());
+            }
 
             return null;
+        }
+
+        private ConstructorCacheValue GetConstructor(ConstructorCacheKey cacheKey)
+        {
+            return _constructorCacheLock.PerformRead(() =>
+            {
+                ConstructorCacheValue result;
+                if (_constructorCache.TryGetValue(cacheKey, out result))
+                {
+                    return result;
+                }
+                return ConstructorCacheValue.First();
+            });
+        }
+
+        private void SetConstructor(ConstructorCacheKey cacheKey, ConstructorCacheValue previousCacheValue, ConstructorInfo constructorInfo)
+        {
+            // Currently I choose last-win strategy but maybe other should be used
+            _constructorCacheLock.PerformWrite(() =>
+            {
+                ConstructorCacheValue storedValue;
+                if (!_constructorCache.TryGetValue(cacheKey, out storedValue))
+                {
+                    storedValue = ConstructorCacheValue.First();
+                }
+
+                if (storedValue.Version == previousCacheValue.Version)
+                {
+                    // Log.Debug("Everything is fine");
+                }
+                else if (storedValue.Version > previousCacheValue.Version)
+                {
+                    Log.Debug("Data in cache have been changed between read & write.");
+                }
+                else
+                {
+                    // TODO: Maybe exception should be thrown
+                    Log.Debug("Something strange have happend. Deep log analyze required.");
+                }
+                // I'm not sure storedValue or previousCacheValue should be passed in here
+                var cacheValue = ConstructorCacheValue.Next(storedValue, constructorInfo);
+                _constructorCache[cacheKey] = cacheValue;
+            });
         }
 
         /// <summary>
@@ -650,20 +636,18 @@ namespace Catel.IoC
             // a type and loads an assembly, but thread y is also loading an assembly. Thread x will lock because it's creating the type, 
             // thread y will lock because it wants to clear the cache because new types were added. In that case ignore clearing the cache
 
-            if (Monitor.TryEnter(_serviceLocator))
+            // Edit: Probability of loading assembly inside of lock have been drastically reduced so comment above probably isn't relevant
+            _constructorCacheLock.PerformWrite(() =>
             {
-                try
+                var array = _constructorCache.ToArray();
+                foreach (var keyValuePair in array)
                 {
-                    _specificConstructorCacheWithoutAutoCompletion.Clear();
-                    _specificConstructorCacheWithAutoCompletion.Clear();
+                    _constructorCache[keyValuePair.Key] = ConstructorCacheValue.Next(keyValuePair.Value, null);
                 }
-                finally
-                {
-                    Monitor.Exit(_serviceLocator);
-                }
-            }
+            });
 
-            //Log.Debug("Cleared type constructor cache");
+            // This log entry makes sence in optimistic lock scenarios
+            Log.Debug("Cleared type constructor cache");
         }
 
         /// <summary>
@@ -692,7 +676,7 @@ namespace Catel.IoC
             private readonly int _hashCode;
 
             #region Constructors
-            public ConstructorCacheKey(Type type, object[] parameters)
+            public ConstructorCacheKey(Type type, bool autoCompleteDependecies, object[] parameters)
             {
                 string key = type.GetSafeFullName(true);
                 foreach (var parameter in parameters)
@@ -701,12 +685,16 @@ namespace Catel.IoC
                 }
 
                 Key = key;
+                AutoCompleteDependecies = autoCompleteDependecies;
                 _hashCode = Key.GetHashCode();
             }
             #endregion
 
             #region Properties
             public string Key { get; private set; }
+
+            public bool AutoCompleteDependecies { get; private set; }
+
             #endregion
 
             #region Methods
@@ -723,6 +711,11 @@ namespace Catel.IoC
 
             private bool Equals(ConstructorCacheKey other)
             {
+                if (AutoCompleteDependecies != other.AutoCompleteDependecies)
+                {
+                    return false;
+                }
+
                 return string.Equals(Key, other.Key, StringComparison.Ordinal);
             }
 
@@ -733,10 +726,56 @@ namespace Catel.IoC
             #endregion
         }
 
+        private class ConstructorCacheValue
+        {
+            private static readonly ConstructorCacheValue FirstValue = new ConstructorCacheValue(null, 0);
+
+            /// <summary>
+            /// Creates first entry in cache for key.
+            /// </summary>
+            /// <returns></returns>
+            public static ConstructorCacheValue First()
+            {
+                return FirstValue;
+            }
+
+            /// <summary>
+            /// Creates entry that replaces previous entry in cache for key.
+            /// </summary>
+            /// <param name="previousValue">Previously used constructor.</param>
+            /// <param name="constructorInfo">Creates first entry in cache for key.</param>
+            /// <returns></returns>
+            public static ConstructorCacheValue Next(ConstructorCacheValue previousValue, ConstructorInfo constructorInfo)
+            {
+                return new ConstructorCacheValue(constructorInfo, previousValue.Version + 1);
+            }
+
+            /// <summary>
+            /// Creates new instance of <see cref="ConstructorCacheValue"/>
+            /// </summary>
+            /// <param name="constructorInfo">Constructor info used to creating new instances</param>
+            /// <param name="version">Flag used for detecting race-conditions</param>
+            private ConstructorCacheValue(ConstructorInfo constructorInfo, uint version)
+            {
+                // TODO: Think about using Func<object> it should work faster than calling reflection
+                ConstructorInfo = constructorInfo;
+                Version = version;
+            }
+
+            #region Properties
+
+            public ConstructorInfo ConstructorInfo { get; private set; }
+
+            public uint Version { get; private set; }
+            #endregion
+
+            // TODO: Equals & GetHashCode currently are redundant
+        }
+
         private class TypeMetaData
         {
             private readonly ICacheStorage<string, List<ConstructorInfo>> _callCache = new CacheStorage<string, List<ConstructorInfo>>();
-            private Dictionary<PropertyInfo, InjectAttribute> _injectedProperties;
+            private volatile Dictionary<PropertyInfo, InjectAttribute> _injectedProperties;
             private readonly object _lockObject = new object();
 
             public TypeMetaData(Type type)
@@ -748,25 +787,32 @@ namespace Catel.IoC
 
             public Dictionary<PropertyInfo, InjectAttribute> GetInjectedProperties()
             {
+                if (_injectedProperties != null)
+                {
+                    return _injectedProperties;
+                }
+                
                 lock (_lockObject)
                 {
-                    if (_injectedProperties == null)
+                    if (_injectedProperties != null)
                     {
-                        _injectedProperties = new Dictionary<PropertyInfo, InjectAttribute>();
+                        return _injectedProperties;
+                    }
 
-                        var properties = Type.GetPropertiesEx();
-                        foreach (var property in properties)
+                    _injectedProperties = new Dictionary<PropertyInfo, InjectAttribute>();
+
+                    var properties = Type.GetPropertiesEx();
+                    foreach (var property in properties)
+                    {
+                        var injectAttribute = property.GetCustomAttributeEx(typeof(InjectAttribute), false) as InjectAttribute;
+                        if (injectAttribute != null)
                         {
-                            var injectAttribute = property.GetCustomAttributeEx(typeof(InjectAttribute), false) as InjectAttribute;
-                            if (injectAttribute != null)
+                            if (injectAttribute.Type == null)
                             {
-                                if (injectAttribute.Type == null)
-                                {
-                                    injectAttribute.Type = property.PropertyType;
-                                }
-
-                                _injectedProperties.Add(property, injectAttribute);
+                                injectAttribute.Type = property.PropertyType;
                             }
+
+                            _injectedProperties.Add(property, injectAttribute);
                         }
                     }
                 }
@@ -816,13 +862,13 @@ namespace Catel.IoC
                 if (decoratedWithInjectionConstructorAttribute)
                 {
                     constructors = (from ctor in constructors
-                                    where AttributeHelper.IsDecoratedWithAttribute<InjectionConstructorAttribute>(ctor)
+                                    where ctor.IsDecoratedWithAttribute<InjectionConstructorAttribute>()
                                     select ctor).ToList();
                 }
                 else
                 {
                     constructors = (from ctor in constructors
-                                    where !AttributeHelper.IsDecoratedWithAttribute<InjectionConstructorAttribute>(ctor)
+                                    where !ctor.IsDecoratedWithAttribute<InjectionConstructorAttribute>()
                                     select ctor).ToList();
                 }
 

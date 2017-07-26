@@ -101,10 +101,9 @@ namespace Catel
             ViewModelServiceHelper.RegisterDefaultViewModelServices(ServiceLocator.Default);
         }
 
-#if !WINDOWS_PHONE && !PCL && !XAMARIN
+#if !PCL && !XAMARIN
         /// <summary>
-        /// Gets the main window of the application. This is a convenience call to easily allow the retrieval of the main window
-        /// for each target framework (WPF, Silverlight, Windows Phone, etc).
+        /// Gets the main window of the application.
         /// </summary>
         public static Window MainWindow
         {
@@ -132,18 +131,6 @@ namespace Catel
             }
         }
 #endif
-
-        /// <summary>
-        /// Gets whether the software is currently in design mode.
-        /// <para />
-        /// Note that unless the <see cref="IsInDesignMode"/>, the value is not cached but always determined at runtime.
-        /// </summary>
-        /// <returns><c>true</c> if the software is in design mode, <c>false</c> otherwise.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetIsInDesignMode(bool)", TreatAsErrorFromVersion = "4.3", RemoveInVersion = "5.0")]
-        public static bool GetIsInDesignMode()
-        {
-            return GetIsInDesignMode(true);
-        }
 
         /// <summary>
         /// Gets whether the software is currently in design mode.

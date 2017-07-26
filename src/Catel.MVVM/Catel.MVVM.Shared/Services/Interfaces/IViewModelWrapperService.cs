@@ -25,11 +25,6 @@ namespace Catel.Services
         /// Create warning and error validator for view model.
         /// </summary>
         CreateWarningAndErrorValidatorForViewModel = 1,
-
-        /// <summary>
-        /// Transfer styles and transitions to view model grid.
-        /// </summary>
-        TransferStylesAndTransitionsToViewModelGrid = 2
     }
 
     /// <summary>

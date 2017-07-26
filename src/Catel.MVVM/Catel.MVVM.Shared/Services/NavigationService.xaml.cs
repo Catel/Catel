@@ -4,7 +4,7 @@
 // </copyright>>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5 || WINDOWS_PHONE || NETFX_CORE
+#if NET || NETFX_CORE
 
 namespace Catel.Services
 {
@@ -22,15 +22,6 @@ namespace Catel.Services
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Navigation;
     using RootFrameType = global::Windows.UI.Xaml.Controls.Frame;
-#elif WINDOWS_PHONE
-    using System.Windows.Navigation;
-    using System.Net;
-    using Microsoft.Phone.Controls;
-    using RootFrameType = Microsoft.Phone.Controls.PhoneApplicationFrame;
-#elif SILVERLIGHT
-    using System.Windows.Navigation;
-    using System.Windows.Browser;
-    using RootFrameType = System.Windows.Controls.Frame;
 #else
     using System.Windows.Navigation;
     using RootFrameType = System.Windows.Controls.Frame;
@@ -42,12 +33,10 @@ namespace Catel.Services
     public partial class NavigationService
     {
         #region Fields
-#if NET || SL5
+#if NET
         private bool _appClosingByMainWindow;
         private bool _appClosedFromService;
 #endif
-
-        private RootFrameType _rootFrame;
         #endregion
 
         #region Properties
@@ -75,22 +64,22 @@ namespace Catel.Services
         #endregion
 
         #region Methods
-        private RootFrameType RootFrame
+        /// <summary>
+        /// Gets the root frame.
+        /// </summary>
+        protected RootFrameType RootFrame
         {
             get
             {
-                if (_rootFrame == null)
-                {
-                    _rootFrame = _navigationRootService.GetNavigationRoot() as RootFrameType;
-                }
-
-                return _rootFrame;
+                // Note: don't cache, it might change dynamically
+                var rootFrame = NavigationRootService.GetNavigationRoot() as RootFrameType;
+                return rootFrame;
             }
         }
 
         partial void Initialize()
         {
-#if NET || SL5
+#if NET
             var mainWindow = CatelEnvironment.MainWindow;
             if (mainWindow != null)
             {
@@ -119,7 +108,7 @@ namespace Catel.Services
 
         partial void CloseMainWindow()
         {
-#if NET || SL5
+#if NET
             _appClosedFromService = true;
 
             var mainWindow = CatelEnvironment.MainWindow;
@@ -173,7 +162,7 @@ namespace Catel.Services
             Log.Debug($"Navigating to '{uri}'");
 
 #if NETFX_CORE
-            var type = Reflection.TypeCache.GetType(uri);
+            var type = Reflection.TypeCache.GetType(uri, allowInitialization: false);
             var result = RootFrame.Navigate(type, parameters);
             if (result)
             {
@@ -183,9 +172,6 @@ namespace Catel.Services
             {
                 Log.Error($"Failed to navigate to '{uri}'");
             }
-#elif SILVERLIGHT || WINDOWS_PHONE
-            string finalUri = string.Format("{0}{1}", uri, ToQueryString(parameters));
-            Navigate(new Uri(finalUri, UriKind.RelativeOrAbsolute));
 #else
             RootFrame.Navigate(new Uri(uri, UriKind.RelativeOrAbsolute), parameters);
 #endif
@@ -220,10 +206,6 @@ namespace Catel.Services
         {
 #if NETFX_CORE
             return RootFrame.BackStackDepth;
-#elif WINDOWS_PHONE
-            return RootFrame.BackStack.Cast<object>().Count();
-#elif SILVERLIGHT
-            throw new NotSupportedInPlatformException();
 #else
             return RootFrame.BackStack.Cast<object>().Count();
 #endif
@@ -236,18 +218,12 @@ namespace Catel.Services
         {
             Log.Debug("Removing last back entry");
 
-#if NETFX_CORE && !WIN80
+#if NETFX_CORE
             var lastItem = RootFrame.BackStack.LastOrDefault();
             if (lastItem != null)
             {
                 RootFrame.BackStack.Remove(lastItem);
             }
-#elif NETFX_CORE // WIN80
-            throw new NotSupportedInPlatformException();
-#elif WINDOWS_PHONE
-            RootFrame.RemoveBackEntry();
-#elif SILVERLIGHT
-            throw new NotSupportedInPlatformException();
 #else
             RootFrame.RemoveBackEntry();
 #endif
@@ -262,53 +238,12 @@ namespace Catel.Services
 
 #if NETFX_CORE
             RootFrame.BackStack.Clear();
-#elif WINDOWS_PHONE
-            while (RootFrame.RemoveBackEntry() != null)
-            {
-            }
-#elif SILVERLIGHT
-            throw new NotSupportedInPlatformException();
 #else
             while (RootFrame.RemoveBackEntry() != null)
             {
             }
 #endif
         }
-
-#if SILVERLIGHT
-        /// <summary>
-        /// Converts a dictionary to query string parameters.
-        /// </summary>
-        /// <param name="parameters">The parameters.</param>
-        /// <returns>String containing the paramets as query string. <c>null</c> values will be removed.</returns>
-        /// <remarks>
-        /// This method uses the <see cref="Object.ToString"/> method to convert values to a parameter value. Make sure
-        /// that the objects passed correctly support this.
-        /// </remarks>
-        private static string ToQueryString(Dictionary<string, object> parameters)
-        {
-            string url = string.Empty;
-
-            foreach (var parameter in parameters)
-            {
-                if (parameter.Value != null)
-                {
-                    if (string.IsNullOrEmpty(url))
-                    {
-                        url = "?";
-                    }
-                    else
-                    {
-                        url += "&";
-                    }
-
-                    url += string.Format("{0}={1}", HttpUtility.UrlEncode(parameter.Key), HttpUtility.UrlEncode(parameter.Value.ToString()));
-                }
-            }
-
-            return url;
-        }
-#endif
         #endregion
     }
 }

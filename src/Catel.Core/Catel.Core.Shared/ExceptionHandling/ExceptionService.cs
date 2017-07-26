@@ -55,11 +55,7 @@ namespace Catel.ExceptionHandling
         /// <summary>
         /// The _exception handlers
         /// </summary>
-#if !SL5
         private readonly SortedDictionary<Type, IExceptionHandler> _exceptionHandlers = new SortedDictionary<Type, IExceptionHandler>(new ExceptionInheritanceComparer());
-#else
-        private readonly Dictionary<Type, IExceptionHandler> _exceptionHandlers = new Dictionary<Type, IExceptionHandler>();
-#endif
         #endregion
 
         #region Properties
@@ -159,21 +155,6 @@ namespace Catel.ExceptionHandling
             var exceptionType = typeof(TException);
 
             return GetHandler(exceptionType);
-        }
-
-        /// <summary>
-        /// Registers a specific exception including the handler.
-        /// </summary>
-        /// <typeparam name="TException">The type of the exception.</typeparam>
-        /// <param name="handler">The action to execute when the exception occurs.</param>
-        /// <returns>The handler to use.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        /// <exception cref="Exception">A delegate callback throws an exception.</exception>
-        [ObsoleteEx(Message = "Use Register<TException>(Action<TException> handler, Func<TException, bool> exceptionPredicate = null) instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        public IExceptionHandler Register<TException>(Action<TException> handler)
-            where TException : Exception
-        {
-            return Register(handler, null);
         }
 
         /// <summary>
@@ -528,33 +509,6 @@ namespace Catel.ExceptionHandling
         }
 
         /// <summary>
-        /// Processes the specified action. The action will be executed asynchronously.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        [ObsoleteEx(Message = "Member will be removed because it's not truly asynchronous", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public Task ProcessAsync(Action action, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            Argument.IsNotNull("action", action);
-
-            try
-            {
-                return TaskHelper.Run(action, cancellationToken);
-            }
-            catch (Exception exception)
-            {
-                if (!HandleException(exception))
-                {
-                    throw;
-                }
-            }
-
-            return TaskHelper.Completed;
-        }
-
-        /// <summary>
         /// Processes the specified action.
         /// </summary>
         /// <param name="action">The action.</param>
@@ -614,7 +568,7 @@ namespace Catel.ExceptionHandling
 
             try
             {
-                return TaskHelper.Run(action, cancellationToken);
+                return TaskHelper.Run(action, cancellationToken: cancellationToken);
             }
             catch (Exception exception)
             {

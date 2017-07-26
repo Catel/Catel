@@ -13,7 +13,7 @@ namespace Catel.Data
     /// <summary>
     /// Class that is able to manage all properties of a specific object in a thread-safe manner.
     /// </summary>
-    public class PropertyBag : INotifyPropertyChanged
+    public partial class PropertyBag : INotifyPropertyChanged
     {
         #region Fields
         private readonly object _lockObject = new object();

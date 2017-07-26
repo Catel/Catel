@@ -9,10 +9,7 @@ namespace Catel.MVVM.Views
     using System;
     using Logging;
 
-#if NETFX_CORE && WIN80
-    using LoadedEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-    using LayoutUpdatedEventArgs = System.Object;
-#elif NETFX_CORE
+#if NETFX_CORE
     using LoadedEventArgs = System.Object;
     using LayoutUpdatedEventArgs = System.Object;
 #else
@@ -113,13 +110,6 @@ namespace Catel.MVVM.Views
         /// Occurs when the view is unloaded.
         /// </summary>
         public event EventHandler<EventArgs> Unloaded;
-
-#if SILVERLIGHT
-        /// <summary>
-        /// Occurs when the view layout is updated.
-        /// </summary>
-        public event EventHandler<EventArgs> LayoutUpdated;
-#endif
         #endregion
 
         #region Methods
@@ -144,11 +134,6 @@ namespace Catel.MVVM.Views
 
                 ((IView)viewObject).Unloaded += OnViewLoadStateUnloaded;
             }
-
-#if SILVERLIGHT
-            var view = View;
-            this.SubscribeToWeakGenericEvent<LayoutUpdatedEventArgs>(view, "LayoutUpdated", OnLayoutUpdated);
-#endif
         }
 
         /// <summary>
@@ -222,22 +207,6 @@ namespace Catel.MVVM.Views
                 unloaded(this, EventArgs.Empty);
             }
         }
-
-#if SILVERLIGHT
-        /// <summary>
-        /// Called when the view layout is updated.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void OnLayoutUpdated(object sender, LayoutUpdatedEventArgs e)
-        {
-            var layoutUpdated = LayoutUpdated;
-            if (layoutUpdated != null)
-            {
-                layoutUpdated(this, EventArgs.Empty);
-            }
-        }
-#endif
         #endregion
     }
 }

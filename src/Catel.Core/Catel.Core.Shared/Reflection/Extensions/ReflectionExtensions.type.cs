@@ -140,17 +140,6 @@ namespace Catel.Reflection
         /// Gets the full name of the type in a safe way. This means it checks for null first.
         /// </summary>
         /// <param name="type">The type.</param>
-        /// <returns>The safe full name.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetSafeFullName(Type, bool)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        public static string GetSafeFullName(this Type type)
-        {
-            return GetSafeFullName(type, false);
-        }
-
-        /// <summary>
-        /// Gets the full name of the type in a safe way. This means it checks for null first.
-        /// </summary>
-        /// <param name="type">The type.</param>
         /// <param name="fullyQualifiedAssemblyName">if set to <c>true</c>, include the assembly name in the type name.</param>
         /// <returns>The safe full name.</returns>
         public static string GetSafeFullName(this Type type, bool fullyQualifiedAssemblyName /* in v5, set = false */)
@@ -622,6 +611,36 @@ namespace Catel.Reflection
         }
 
         /// <summary>
+        /// Gets the element type of the specified type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="ignoreCase">if set to <c>true</c> [ignore case].</param>
+        /// <returns>
+        /// Type.
+        /// </returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static Type GetInterfaceEx(this Type type, string name, bool ignoreCase)
+        {
+            Argument.IsNotNull("type", type);
+
+#if NETFX_CORE || PCL
+            var interfaces = type.GetInterfacesEx();
+            foreach (var iface in interfaces)
+            {
+                if (string.Equals(iface.FullName, name, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal))
+                {
+                    return iface;
+                }
+            }
+
+            return null;
+#else
+            return type.GetInterface(name, ignoreCase);
+#endif
+        }
+
+        /// <summary>
         /// The get interfaces ex.
         /// </summary>
         /// <param name="type">The type.</param>
@@ -690,9 +709,13 @@ namespace Catel.Reflection
 
             var instanceType = objectToCheck.GetType();
 
-            if (_convertableDictionary.ContainsKey(type) && _convertableDictionary[type].Contains(instanceType))
+            HashSet<Type> convertableHashSet;
+            if (_convertableDictionary.TryGetValue(type, out convertableHashSet))
             {
-                return true;
+                if (convertableHashSet.Contains(instanceType))
+                {
+                    return true;
+                }
             }
 
             if (type.IsAssignableFromEx(instanceType))
@@ -1095,9 +1118,7 @@ namespace Catel.Reflection
 #endif
 
 #else
-#if WP80
-            return type.GetTypeInfo().GetMethod(name, bindingFlags, null, types, null);
-#elif XAMARIN
+#if XAMARIN
             return type.GetTypeInfo().GetMethod(name, types);
 #else
             return type.GetTypeInfo().GetMethod(name, types, bindingFlags);
@@ -1136,56 +1157,5 @@ namespace Catel.Reflection
             return type.GetTypeInfo().GetMethods(bindingFlags);
 #endif
         }
-
-#if NET40 || SILVERLIGHT
-
-        /// <summary>
-        /// The type infos cache.
-        /// </summary>
-        private static readonly Dictionary<Type, TypeInfo> _typeInfos = new Dictionary<Type, TypeInfo>();
-
-        /// <summary>
-        /// The _sync obj.
-        /// </summary>
-        private static readonly object _syncObj = new object();
-
-        /// <summary>
-        /// Gets the type info.
-        /// </summary>
-        /// <param name="this">The this.</param>
-        /// <returns>The <see cref="TypeInfo" /> instance of the current <see cref="Type" />.</returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="this" /> is <c>null</c>.</exception>
-        public static TypeInfo GetTypeInfo(this Type @this)
-        {
-            Argument.IsNotNull("@this", @this);
-            TypeInfo typeInfo;
-
-            // TODO: Create with this code for a readonly cache storage. 
-            if (!_typeInfos.ContainsKey(@this))
-            {
-                // NOTE: Use MultipleReaderExclusiveWriterSynchronizer here!!!.
-                lock (_syncObj)
-                {
-                    if (_typeInfos.ContainsKey(@this))
-                    {
-                        typeInfo = _typeInfos[@this];
-                    }
-                    else
-                    {
-                        typeInfo = new TypeInfo(@this);
-                        _typeInfos.Add(@this, typeInfo);
-                    }
-                }
-            }
-            else
-            {
-                // The cache is readonly and never is cleared so we can do this out of lock.
-                typeInfo = _typeInfos[@this];
-            }
-
-            // TODO: Evaluate if just do 'return new TypeInfo(@this);' is enough
-            return typeInfo;
-        }
-#endif
     }
 }

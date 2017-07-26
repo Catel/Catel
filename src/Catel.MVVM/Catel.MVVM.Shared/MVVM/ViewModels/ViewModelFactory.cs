@@ -7,6 +7,8 @@
 namespace Catel.MVVM
 {
     using System;
+    using System.Linq;
+    using Caching;
     using IoC;
     using Logging;
     using Reflection;
@@ -20,26 +22,59 @@ namespace Catel.MVVM
     /// </summary>
     public class ViewModelFactory : IViewModelFactory
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        /// The type factory to use.
-        /// </summary>
         private readonly ITypeFactory _typeFactory;
+        private readonly IServiceLocator _serviceLocator;
+
+        private readonly ICacheStorage<Type, bool> _viewModelInjectionCache = new CacheStorage<Type, bool>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelFactory" /> class.
         /// </summary>
         /// <param name="typeFactory">The type factory.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="typeFactory"/> is <c>null</c>.</exception>
-        public ViewModelFactory(ITypeFactory typeFactory)
+        /// <param name="serviceLocator">The service locator.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="typeFactory" /> is <c>null</c>.</exception>
+        public ViewModelFactory(ITypeFactory typeFactory, IServiceLocator serviceLocator)
         {
             Argument.IsNotNull("typeFactory", typeFactory);
+            Argument.IsNotNull("serviceLocator", serviceLocator);
 
             _typeFactory = typeFactory;
+            _serviceLocator = serviceLocator;
+        }
+
+        /// <summary>
+        /// Determines whether the specified view model is a view model with model inject. A view model is
+        /// considered a model injection if the first parameter of one of the constructors is not registered inside
+        /// the dependency resolver.
+        /// </summary>
+        /// <param name="viewModelType">Type of the view model.</param>
+        /// <returns>
+        ///   <c>true</c> if the view model is a view model with model injection; otherwise, <c>false</c>.
+        /// </returns>
+        public virtual bool IsViewModelWithModelInjection(Type viewModelType)
+        {
+            var isViewModelWithModelInjection = _viewModelInjectionCache.GetFromCacheOrFetch(viewModelType, () =>
+            {
+                var constructors = viewModelType.GetConstructorsEx();
+
+                foreach (var constructor in constructors)
+                {
+                    var firstParameter = constructor.GetParameters().FirstOrDefault();
+                    if (firstParameter != null)
+                    {
+                        if (!_serviceLocator.IsTypeRegistered(firstParameter.ParameterType))
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            });
+
+            return isViewModelWithModelInjection;
         }
 
         /// <summary>
@@ -70,25 +105,11 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="viewModelType">Type of the view model that needs to be created.</param>
         /// <param name="dataContext">The data context of the view model.</param>
-        /// <returns>The newly created <see cref="IViewModel"/> or <c>null</c> if no view model could be created.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="viewModelType"/> does not implement the <see cref="IViewModel"/> interface.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "CreateViewModel(Type, object, object)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        public virtual IViewModel CreateViewModel(Type viewModelType, object dataContext)
-        {
-            return CreateViewModel(viewModelType, dataContext, null);
-        }
-
-        /// <summary>
-        /// Creates a new view model.
-        /// </summary>
-        /// <param name="viewModelType">Type of the view model that needs to be created.</param>
-        /// <param name="dataContext">The data context of the view model.</param>
         /// <param name="tag">The preferred tag to use when resolving dependencies.</param>
         /// <returns>The newly created <see cref="IViewModel"/> or <c>null</c> if no view model could be created.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="viewModelType"/> does not implement the <see cref="IViewModel"/> interface.</exception>
-        public virtual IViewModel CreateViewModel(Type viewModelType, object dataContext, object tag)
+        public virtual IViewModel CreateViewModel(Type viewModelType, object dataContext, object tag = null)
         {
             Argument.IsNotNull("viewModelType", viewModelType);
             Argument.ImplementsInterface("viewModelType", viewModelType, typeof(IViewModel));
@@ -121,23 +142,6 @@ namespace Catel.MVVM
                 viewModelType.FullName, ObjectToStringHelper.ToTypeString(dataContext));
 
             return viewModel;
-        }
-
-        /// <summary>
-        /// Creates a new view model.
-        /// <para />
-        /// This is a convenience wrapper around the <see cref="CreateViewModel(Type, object, object)"/> method. This method cannot be overriden.
-        /// </summary>
-        /// <typeparam name="TViewModel">The type of the view model.</typeparam>
-        /// <param name="dataContext">The data context.</param>
-        /// <returns>The newly created <see cref="IViewModel"/> or <c>null</c> if no view model could be created.</returns>
-        /// <exception cref="ArgumentException">The <c>TViewModel</c> does not implement the <see cref="IViewModel"/> interface.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "CreateViewModel<TViewModel>(Type, object, object)", TreatAsErrorFromVersion = "4.5", RemoveInVersion = "5.0")]
-        public TViewModel CreateViewModel<TViewModel>(object dataContext)
-            where TViewModel : IViewModel
-        {
-            var viewModelType = typeof(TViewModel);
-            return (TViewModel)CreateViewModel(viewModelType, dataContext, null);
         }
     }
 }

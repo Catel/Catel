@@ -56,7 +56,7 @@ namespace Catel.Caching.Policies
         {
             get
             {
-                return DateTime.Now > AbsoluteExpirationDateTime;
+                return FastDateTime.Now > AbsoluteExpirationDateTime;
             }
         }
         #endregion

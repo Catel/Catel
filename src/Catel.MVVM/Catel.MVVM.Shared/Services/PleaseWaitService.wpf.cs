@@ -8,13 +8,17 @@
 
 namespace Catel.Services
 {
+    using System.Windows.Input;
     using Catel.Windows;
+    using Logging;
 
     public partial class PleaseWaitService
     {
+        private Cursor _previousCursor;
+
         partial void SetStatus(string status)
         {
-            PleaseWaitHelper.UpdateStatus(status);
+            // not required
         }
 
         partial void InitializeBusyIndicator()
@@ -24,12 +28,31 @@ namespace Catel.Services
 
         partial void ShowBusyIndicator(bool indeterminate)
         {
-            PleaseWaitHelper.Show(_lastStatus);
+            _dispatcherService.BeginInvokeIfRequired(() =>
+            {
+                var overrideCursor = Mouse.OverrideCursor;
+
+                Log.Debug($"Storing cursor '{overrideCursor}' overriding it to 'Wait'");
+
+                if (_previousCursor == null)
+                {
+                    _previousCursor = overrideCursor;
+                }
+
+                Mouse.OverrideCursor = Cursors.Wait;
+            });
         }
 
         partial void HideBusyIndicator()
         {
-            PleaseWaitHelper.Hide();
+            _dispatcherService.BeginInvokeIfRequired(() =>
+            {
+                Log.Debug($"Restoring cursor '{_previousCursor}'");
+
+                Mouse.OverrideCursor = _previousCursor;
+
+                _previousCursor = null;
+            });
         }
     }
 }

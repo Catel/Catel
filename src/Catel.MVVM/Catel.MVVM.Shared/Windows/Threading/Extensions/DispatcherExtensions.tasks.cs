@@ -25,36 +25,6 @@ namespace Catel.Windows.Threading
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if NET40
-        /// <summary>
-        /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
-        /// </summary>
-        /// <param name="dispatcher">The dispatcher.</param>
-        /// <param name="action">The action.</param>
-        /// <returns>The task representing the action.</returns>
-        public static Task InvokeAsync(this Dispatcher dispatcher, Action action)
-        {
-            var tcs = new TaskCompletionSource<bool>();
-
-            var dispatcherOperation = dispatcher.BeginInvoke(new Action(() =>
-            {
-                try
-                {
-                    action();
-                }
-                catch (Exception ex)
-                {
-                    tcs.SetException(ex);
-                }
-            }), null);
-
-            dispatcherOperation.Completed += (sender, e) => SetResult(tcs, true);
-            dispatcherOperation.Aborted += (sender, e) => SetCanceled(tcs);
-
-            return tcs.Task;
-        }
-#endif
-
 #if NET
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.

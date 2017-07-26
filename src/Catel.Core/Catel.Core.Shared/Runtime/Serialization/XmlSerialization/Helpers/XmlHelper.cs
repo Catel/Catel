@@ -66,7 +66,7 @@ namespace Catel.Runtime.Serialization.Xml
             var dataContractSerializerFactory = dependencyResolver.Resolve<IDataContractSerializerFactory>();
             var dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), objectType, xmlName, null, null);
 
-            var attribute = element.Attribute(XName.Get("type", "http://catel.codeplex.com"));
+            var attribute = element.Attribute(XName.Get("type", "http://schemas.catelproject.com"));
             if (attribute != null)
             {
                 var actualTypeToDeserialize = (from t in dataContractSerializer.KnownTypes

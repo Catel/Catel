@@ -6,13 +6,16 @@
 
 namespace Catel.Collections
 {
+    using System.Collections.Specialized;
+
     /// <summary>
     /// The suspension mode.
     /// </summary>
     public enum SuspensionMode
     {
         /// <summary>
-        /// The mixed.
+        /// No specific mode. When the suspension stops, this will result in a single <see cref="NotifyCollectionChangedAction.Reset"/>
+        /// event with the right added and removed items.
         /// </summary>
         None,
 
@@ -24,6 +27,13 @@ namespace Catel.Collections
         /// <summary>
         /// The removing.
         /// </summary>
-        Removing
+        Removing,
+
+        /// <summary>
+        /// Mixed mode (combination of Adding and Removing). This behaves the same as <see cref="None"/>, except
+        /// that this raises only <see cref="NotifyCollectionChangedAction.Add"/> and <see cref="NotifyCollectionChangedAction.Remove"/>
+        /// instead of <see cref="NotifyCollectionChangedAction.Reset"/> events.
+        /// </summary>
+        Mixed
     }
 }

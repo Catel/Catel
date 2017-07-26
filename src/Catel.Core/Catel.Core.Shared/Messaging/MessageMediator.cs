@@ -102,9 +102,9 @@ namespace Catel.Messaging
 
             lock (_lockObject)
             {
-                if (_registeredHandlers.ContainsKey(messageType))
+                List<WeakActionInfo> messageHandlers;
+                if (_registeredHandlers.TryGetValue(messageType, out messageHandlers))
                 {
-                    var messageHandlers = _registeredHandlers[messageType];
                     return messageHandlers.Any(handlerInfo => TagHelper.AreTagsEqual(tag, handlerInfo.Tag));
                 }
 
@@ -181,13 +181,19 @@ namespace Catel.Messaging
             {
                 var messageType = typeof (TMessage);
 
-                if (_registeredHandlers.ContainsKey(messageType))
+                List<WeakActionInfo> messageHandlers;
+                if (_registeredHandlers.TryGetValue(messageType, out messageHandlers))
                 {
-                    var messageHandlers = _registeredHandlers[messageType];
                     for (int i = 0; i < messageHandlers.Count; i++)
                     {
                         var handlerInfo = messageHandlers[i];
                         var weakAction = (IWeakAction<TMessage>) handlerInfo.Action;
+                        
+                        if (!ReferenceEquals(recipient, weakAction.Target)) 
+                        {
+                            continue;
+                        }
+                        
                         if (TagHelper.AreTagsEqual(tag, handlerInfo.Tag) && AreEqualHandlers(handler, weakAction))
                         {
                             messageHandlers.RemoveAt(i--);
@@ -260,10 +266,11 @@ namespace Catel.Messaging
             {
                 var messageType = typeof (TMessage);
 
-                if (_registeredHandlers.ContainsKey(messageType))
+                List<WeakActionInfo> messageHandlerList;
+                if (_registeredHandlers.TryGetValue(messageType, out messageHandlerList))
                 {
                     // CTL-311: first convert to array, then handle messages
-                    var messageHandlers = _registeredHandlers[messageType].ToArray();
+                    var messageHandlers = messageHandlerList.ToArray();
                     foreach (var handler in messageHandlers)
                     {
                         if (TagHelper.AreTagsEqual(tag, handler.Tag))
@@ -282,21 +289,6 @@ namespace Catel.Messaging
             CleanUp();
 
             return invokedHandlersCount != 0;
-        }
-
-        /// <summary>
-        /// Broadcasts a message to all message targets for a given message tag and passes a parameter, the message targets are all called asynchronously.
-        /// </summary>
-        /// <typeparam name="TMessage">The type of the message.</typeparam>
-        /// <param name="message">The message parameter.</param>
-        /// <param name="tag">The message tag.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="message"/> is <c>null</c>.</exception>
-        [ObsoleteEx(Message = "Not truly async, removing this member in future version", TreatAsErrorFromVersion = "4.4", RemoveInVersion = "5.0")]
-        public void SendMessageAsync<TMessage>(TMessage message, object tag = null)
-        {
-            Func<TMessage, object, bool> sendMessageFunction = SendMessage;
-
-            sendMessageFunction.BeginInvoke(message, tag, null, null);
         }
 
         /// <summary>
@@ -397,13 +389,19 @@ namespace Catel.Messaging
             {
                 var messageType = typeof (TMessage);
 
-                if (_registeredHandlers.ContainsKey(messageType))
+                List<WeakActionInfo> messageHandlers;
+                if (_registeredHandlers.TryGetValue(messageType, out messageHandlers))
                 {
-                    var messageHandlers = _registeredHandlers[messageType];
-                    for (int i = 0; i < messageHandlers.Count; i++)
+                    for (int i = messageHandlers.Count - 1; i >= 0; i--)
                     {
                         var handlerInfo = messageHandlers[i];
                         var weakAction = (IWeakAction<TMessage>) handlerInfo.Action;
+
+                        if (!weakAction.IsTargetAlive)
+                        {
+                            messageHandlers.RemoveAt(i);
+                            continue;
+                        }
 
                         var target = weakAction.Target;
                         if (target != null)
@@ -460,9 +458,9 @@ namespace Catel.Messaging
 
                 var messageType = typeof (TMessage);
 
-                if (_registeredHandlers.ContainsKey(messageType))
-                {
-                    var messageHandlers = _registeredHandlers[messageType];
+                List<WeakActionInfo> messageHandlers;
+                if (_registeredHandlers.TryGetValue(messageType, out messageHandlers))
+                { 
                     for (int i = 0; i < messageHandlers.Count; i++)
                     {
                         registeredHandlers.Add((IWeakAction<TMessage>) messageHandlers[i].Action);

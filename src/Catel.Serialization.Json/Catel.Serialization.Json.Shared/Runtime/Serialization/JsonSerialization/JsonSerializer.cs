@@ -4,6 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if !PCL
+#define SUPPORT_BSON
+#endif
+
 namespace Catel.Runtime.Serialization.Json
 {
     using System;
@@ -17,10 +21,13 @@ namespace Catel.Runtime.Serialization.Json
     using IoC;
     using Logging;
     using Newtonsoft.Json;
-    using Newtonsoft.Json.Bson;
     using Newtonsoft.Json.Linq;
     using Reflection;
     using Scoping;
+
+#if SUPPORT_BSON
+    using Newtonsoft.Json.Bson;
+#endif
 
     /// <summary>
     /// The binary serializer.
@@ -122,20 +129,8 @@ namespace Catel.Runtime.Serialization.Json
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="jsonWriter">The json writer.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "Serialize(object, JsonWriter, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        public void Serialize(object model, JsonWriter jsonWriter)
-        {
-            Serialize(model, jsonWriter, null);
-        }
-
-        /// <summary>
-        /// Serializes the specified model to the json writer.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="jsonWriter">The json writer.</param>
         /// <param name="configuration">The configuration.</param>
-        public void Serialize(object model, JsonWriter jsonWriter, ISerializationConfiguration configuration)
+        public void Serialize(object model, JsonWriter jsonWriter, ISerializationConfiguration configuration = null)
         {
             Argument.IsNotNull("model", model);
 
@@ -155,26 +150,11 @@ namespace Catel.Runtime.Serialization.Json
         /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="jsonReader">The json reader.</param>
-        /// <returns>
-        /// The model.
-        /// </returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Deserialize(Type, JsonReader, ISerializationConfiguration)",
-            TreatAsErrorFromVersion = "5.0", RemoveInVersion = "5.0")]
-        public object Deserialize(Type modelType, JsonReader jsonReader)
-        {
-            return Deserialize(modelType, jsonReader, null);
-        }
-
-        /// <summary>
-        /// Deserializes the specified model from the json reader.
-        /// </summary>
-        /// <param name="modelType">Type of the model.</param>
-        /// <param name="jsonReader">The json reader.</param>
         /// <param name="configuration">The configuration.</param>
         /// <returns>
         /// The model.
         /// </returns>
-        public object Deserialize(Type modelType, JsonReader jsonReader, ISerializationConfiguration configuration)
+        public object Deserialize(Type modelType, JsonReader jsonReader, ISerializationConfiguration configuration = null)
         {
             Dictionary<string, JProperty> jsonProperties = null;
             JArray jsonArray = null;
@@ -190,8 +170,7 @@ namespace Catel.Runtime.Serialization.Json
                 customModel.Deserialize(jsonReader);
                 return customModel;
             }
-
-            if (ShouldSerializeAsCollection(modelType))
+            else if (ShouldSerializeAsCollection(modelType))
             {
                 jsonArray = JArray.Load(jsonReader);
             }
@@ -232,7 +211,7 @@ namespace Catel.Runtime.Serialization.Json
                 if (jsonProperties.ContainsKey(TypeName))
                 {
                     var modelTypeOverrideValue = (string)jsonProperties[TypeName].Value;
-                    var modelTypeOverride = TypeCache.GetTypeWithoutAssembly(modelTypeOverrideValue);
+                    var modelTypeOverride = TypeCache.GetTypeWithoutAssembly(modelTypeOverrideValue, allowInitialization: false);
                     if (modelTypeOverride == null)
                     {
                         Log.Warning("Object was serialized as '{0}', but the type is not available. Using original type '{1}'", modelTypeOverrideValue, modelType.GetSafeFullName(false));
@@ -372,8 +351,48 @@ namespace Catel.Runtime.Serialization.Json
 
             if (ReferenceEquals(memberValue.Value, null) || ShouldExternalSerializerHandleMember(memberValue))
             {
-                jsonSerializer.Serialize(jsonWriter, memberValue.Value);
+                object valueToSerialize = memberValue.Value;
+
+                var isEnum = memberValue.MemberType.IsEnumEx();
+                if (isEnum)
+                {
+                    if (ShouldSerializeEnumAsString(memberValue, false))
+                    {
+                        valueToSerialize = memberValue.Value.ToString();
+                    }
+                    else
+                    {
+                        var underlyingType = Enum.GetUnderlyingType(memberValue.MemberType);
+                        if (underlyingType == typeof(short))
+                        {
+                            valueToSerialize = (short)memberValue.Value;
+                        }
+                        else if (underlyingType == typeof(ushort))
+                        {
+                            valueToSerialize = (ushort)memberValue.Value;
+                        }
+                        else if (underlyingType == typeof(int))
+                        {
+                            valueToSerialize = (int)memberValue.Value;
+                        }
+                        else if (underlyingType == typeof(uint))
+                        {
+                            valueToSerialize = (uint)memberValue.Value;
+                        }
+                        else if (underlyingType == typeof(long))
+                        {
+                            valueToSerialize = (long)memberValue.Value;
+                        }
+                        else if (underlyingType == typeof(ulong))
+                        {
+                            valueToSerialize = (ulong)memberValue.Value;
+                        }
+                    }
+                }
+
+                jsonSerializer.Serialize(jsonWriter, valueToSerialize);
             }
+
             else if (ShouldSerializeAsDictionary(memberValue))
             {
                 // Serialize as an object with properties
@@ -633,11 +652,23 @@ namespace Catel.Runtime.Serialization.Json
                         var valueType = memberValue.GetBestMemberType();
                         if (valueType.IsEnumEx())
                         {
-                            var enumName = Enum.GetName(valueType, (int)jsonValue);
-                            if (!string.IsNullOrWhiteSpace(enumName))
+                            var valueToConvert = string.Empty;
+
+                            if (ShouldSerializeEnumAsString(memberValue, false))
                             {
-                                finalMemberValue = Enum.Parse(valueType, enumName, false);
+                                valueToConvert = (string)jsonValue;
+
                             }
+                            else
+                            {
+                                var enumName = Enum.GetName(valueType, (int)jsonValue);
+                                if (!string.IsNullOrWhiteSpace(enumName))
+                                {
+                                    valueToConvert = enumName;
+                                }
+                            }
+
+                            finalMemberValue = Enum.Parse(valueType, valueToConvert, false);
                         }
                         else
                         {
@@ -681,11 +712,18 @@ namespace Catel.Runtime.Serialization.Json
                                             var typeNameValue = jsonValue.Value<string>(TypeName);
                                             if (!string.IsNullOrWhiteSpace(typeNameValue))
                                             {
-                                                finalValueType = TypeCache.GetType(typeNameValue);
+                                                finalValueType = TypeCache.GetType(typeNameValue,
+                                                    allowInitialization: false);
                                             }
 
                                             // Serialize ourselves
-                                            finalMemberValue = Deserialize(finalValueType, jsonValue.CreateReader(context.Configuration), context.Configuration);
+                                            var reader = jsonValue.CreateReader(context.Configuration);
+                                            finalMemberValue = Deserialize(finalValueType, reader, context.Configuration);
+                                        }
+                                        else
+                                        {
+                                            // CTL-890 Fix for serializer modifiers that are deserialized as string 
+                                            finalMemberValue = jsonValue;
                                         }
                                     }
                                 }
@@ -703,7 +741,7 @@ namespace Catel.Runtime.Serialization.Json
                         {
                             if (PreserveReferences && finalMemberValue.GetType().IsClassType())
                             {
-                                var graphIdPropertyName = string.Format("${0}_{1}", memberValue.NameForSerialization, GraphId);
+                                var graphIdPropertyName = $"${memberValue.NameForSerialization}_{GraphId}";
                                 if (jsonProperties.ContainsKey(graphIdPropertyName))
                                 {
                                     var graphId = (int)jsonProperties[graphIdPropertyName].Value;
@@ -767,7 +805,7 @@ namespace Catel.Runtime.Serialization.Json
         /// ISerializationContext{SerializationInfo}.
         /// </returns>
         /// <exception cref="System.ArgumentOutOfRangeException">contextMode</exception>
-        protected override ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, Stream stream, 
+        protected override ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, Stream stream,
             SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             JsonReader jsonReader = null;
@@ -777,6 +815,7 @@ namespace Catel.Runtime.Serialization.Json
             var dateTimeKind = DateTimeKind.Unspecified;
             var dateParseHandling = DateParseHandling.None;
             var dateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
+            var formatting = Formatting.None;
 
             var jsonConfiguration = configuration as JsonSerializationConfiguration;
             if (jsonConfiguration != null)
@@ -785,6 +824,7 @@ namespace Catel.Runtime.Serialization.Json
                 dateTimeKind = jsonConfiguration.DateTimeKind;
                 dateParseHandling = jsonConfiguration.DateParseHandling;
                 dateTimeZoneHandling = jsonConfiguration.DateTimeZoneHandling;
+                formatting = jsonConfiguration.Formatting;
             }
 
             switch (contextMode)
@@ -792,9 +832,14 @@ namespace Catel.Runtime.Serialization.Json
                 case SerializationContextMode.Serialization:
                     if (useBson)
                     {
+#if SUPPORT_BSON
+#pragma warning disable 618
                         jsonWriter = new BsonWriter(stream);
+#pragma warning restore 618
+#endif
                     }
-                    else
+
+                    if (jsonWriter == null)
                     {
                         var streamWriter = new StreamWriter(stream, Encoding.UTF8);
                         jsonWriter = new JsonTextWriter(streamWriter);
@@ -804,6 +849,7 @@ namespace Catel.Runtime.Serialization.Json
                 case SerializationContextMode.Deserialization:
                     if (useBson)
                     {
+#if SUPPORT_BSON
                         var shouldSerializeAsCollection = false;
                         var shouldSerializeAsDictionary = ShouldSerializeAsDictionary(modelType);
                         if (!shouldSerializeAsDictionary)
@@ -812,9 +858,13 @@ namespace Catel.Runtime.Serialization.Json
                             shouldSerializeAsCollection = ShouldSerializeAsCollection(modelType);
                         }
 
+#pragma warning disable 618
                         jsonReader = new BsonReader(stream, shouldSerializeAsCollection, dateTimeKind);
+#pragma warning restore 618
+#endif
                     }
-                    else
+
+                    if (jsonReader == null)
                     {
                         var streamReader = new StreamReader(stream, Encoding.UTF8);
                         jsonReader = new JsonTextReader(streamReader);
@@ -836,6 +886,7 @@ namespace Catel.Runtime.Serialization.Json
             {
                 jsonWriter.Culture = configuration.Culture;
                 jsonWriter.DateTimeZoneHandling = dateTimeZoneHandling;
+                jsonWriter.Formatting = formatting;
             }
 
             return GetContext(model, modelType, jsonReader, jsonWriter, contextMode, null, null, configuration);
@@ -855,7 +906,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <returns>
         /// ISerializationContext&lt;JsonSerializationContextInfo&gt;.
         /// </returns>
-        protected virtual ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, JsonReader jsonReader, JsonWriter jsonWriter, 
+        protected virtual ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, JsonReader jsonReader, JsonWriter jsonWriter,
             SerializationContextMode contextMode, Dictionary<string, JProperty> jsonProperties, JArray jsonArray, ISerializationConfiguration configuration)
         {
             var jsonSerializer = new Newtonsoft.Json.JsonSerializer();
@@ -890,6 +941,6 @@ namespace Catel.Runtime.Serialization.Json
                 jsonWriter.Flush();
             }
         }
-        #endregion
+#endregion
     }
 }

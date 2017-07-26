@@ -23,39 +23,6 @@ namespace Catel.Test.Data
     public partial class ModelBaseFacts
     {
         [TestFixture]
-        public class TheLeanAndMeanModelProperty
-        {
-            [TestCase]
-            public void SuspendsValidation()
-            {
-                var model = new LeanAndMeanModel();
-                var validation = model as IModelValidation;
-
-                model.LeanAndMeanModelWrapper = true;
-
-                Assert.IsFalse(validation.HasErrors);
-
-                model.FirstName = null;
-
-                Assert.IsFalse(validation.HasErrors);
-            }
-
-            [TestCase]
-            public void SuspendsChangeNotifications()
-            {
-                var counter = 0;
-
-                var model = new LeanAndMeanModel();
-                model.PropertyChanged += (sender, e) => counter++;
-                model.LeanAndMeanModelWrapper = true;
-
-                model.FirstName = "Geert";
-
-                Assert.AreEqual(0, counter);
-            }
-        }
-
-        [TestFixture]
         public class TheUnregisterPropertyMethod
         {
             [TestCase]
@@ -79,7 +46,7 @@ namespace Catel.Test.Data
             [TestCase]
             public void DoesNotLeakForModelBaseWithPropertiesThatSupportPropertyChanged()
             {
-                var model = new TestModel();
+                var model = new PersonTestModel();
                 var weakReference = new WeakReference(model);
 
                 Assert.IsTrue(weakReference.IsAlive);
@@ -127,7 +94,7 @@ namespace Catel.Test.Data
                 }
             }
 
-            public class LatePropertyRegistrationModel : ModelBase
+            public class LatePropertyRegistrationModel : ValidatableModelBase
             {
                 protected override void InitializeCustomProperties()
                 {
@@ -150,7 +117,7 @@ namespace Catel.Test.Data
             public void CorrectlyHandlesLateRegistrationOfCalculatedProperties()
             {
                 var model = new LatePropertyRegistrationModel();
-                var validation = model as IModelValidation;
+                var validation = model as IValidatableModel;
 
                 validation.Validate(true);
                 Assert.IsFalse(validation.HasErrors);
@@ -160,90 +127,6 @@ namespace Catel.Test.Data
             }
         }
 #endif
-
-        [TestFixture]
-        public class ThePropertiesWithEventSubscriptionsChecks
-        {
-            public class ModelWithObservableCollection : ModelBase
-            {
-                /// <summary>
-                /// Gets or sets the property value.
-                /// </summary>
-                public ObservableCollection<int> Collection
-                {
-                    get { return GetValue<ObservableCollection<int>>(CollectionProperty); }
-                    set { SetValue(CollectionProperty, value); }
-                }
-
-                /// <summary>
-                /// Register the Collection property so it is known in the class.
-                /// </summary>
-                public static readonly PropertyData CollectionProperty = RegisterProperty("Collection", typeof(ObservableCollection<int>), () => new ObservableCollection<int>());
-
-                public bool HasCollectionChanged { get; private set; }
-
-                public bool HasPropertyChanged { get; private set; }
-
-                protected override void OnPropertyObjectCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-                {
-                    HasCollectionChanged = true;
-                }
-
-                protected override void OnPropertyObjectPropertyChanged(object sender, PropertyChangedEventArgs e)
-                {
-                    HasPropertyChanged = true;
-                }
-            }
-
-#if NET
-            public class ModelWithCollectionViewSource : ViewModelBase
-            {
-                /// <summary>
-                /// Gets or sets the property value.
-                /// </summary>
-                public CollectionView Collection
-                {
-                    get { return GetValue<CollectionView>(CollectionProperty); }
-                    set { SetValue(CollectionProperty, value); }
-                }
-
-                /// <summary>
-                /// Register the Collection property so it is known in the class.
-                /// </summary>
-                public static readonly PropertyData CollectionProperty = RegisterProperty("Collection", typeof(CollectionView), () => new CollectionView(new List<int>() { 1, 2, 3 }));
-            }
-#endif
-
-            [TestCase]
-            public void AllowsRegistrationOfObservableCollection()
-            {
-                var model = new ModelWithObservableCollection();
-                model.Collection = new ObservableCollection<int>(new List<int>() { 1, 2, 3 });
-
-                model.Collection.Add(4);
-
-                Assert.IsTrue(model.HasCollectionChanged);
-            }
-
-#if NET
-            [TestCase]
-            public void AllowsRegistrationOfCollectionViewSource()
-            {
-                var model = new ModelWithCollectionViewSource();
-                model.Collection = new CollectionView(new List<int>() { 1, 2, 3 });
-            }
-#endif
-
-            [TestCase]
-            public void RegistersChangeNotificationsOfDefaultValues()
-            {
-                var model = new ModelWithObservableCollection();
-
-                model.Collection.Add(4);
-
-                Assert.IsTrue(model.HasCollectionChanged);
-            }
-        }
 
         [TestFixture]
         public class TheEqualsChecks

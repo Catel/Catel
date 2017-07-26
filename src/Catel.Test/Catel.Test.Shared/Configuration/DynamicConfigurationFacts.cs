@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SILVERLIGHT
+#if NET
 
 namespace Catel.Test.Configuration
 {
@@ -21,7 +21,7 @@ namespace Catel.Test.Configuration
     public class DynamicConfigurationFacts
     {
         private const string ExpectedXml = "﻿<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
-"<DynamicConfiguration graphid=\"1\" xmlns:ctl=\"http://catel.codeplex.com\">\r\n" +
+"<DynamicConfiguration graphid=\"1\" xmlns:ctl=\"http://schemas.catelproject.com\">\r\n" +
 "  <ComplexSetting IsNull=\"true\" />\r\n" +
 "  <KeyX type=\"System.String\">Value X</KeyX>\r\n" +
 "  <KeyY type=\"System.String\">Value Y</KeyY>\r\n" +
@@ -109,7 +109,7 @@ namespace Catel.Test.Configuration
 
                     memoryStream.Position = 0L;
 
-                    var configuration = ModelBase.Load<DynamicConfiguration>(memoryStream, SerializationMode.Xml, null);
+                    var configuration = SavableModelBase<DynamicConfiguration>.Load(memoryStream, SerializationFactory.GetXmlSerializer());
 
                     Assert.IsTrue(configuration.IsConfigurationValueSet("KeyX"));
                     Assert.IsTrue(configuration.IsConfigurationValueSet("KeyY"));
@@ -130,7 +130,7 @@ namespace Catel.Test.Configuration
 
                     memoryStream.Position = 0L;
 
-                    var configuration = ModelBase.Load<DynamicConfiguration>(memoryStream, SerializationMode.Xml, null);
+                    var configuration = SavableModelBase<DynamicConfiguration>.Load(memoryStream, SerializationFactory.GetXmlSerializer());
 
                     Assert.IsTrue(configuration.IsConfigurationValueSet("KeyX"));
                     Assert.IsTrue(configuration.IsConfigurationValueSet("KeyY"));
@@ -179,7 +179,7 @@ namespace Catel.Test.Configuration
 
                 memoryStream.Position = 0L;
 
-                var newDynamicConfiguration = ModelBase.Load<DynamicConfiguration>(memoryStream, SerializationMode.Xml, null);
+                var newDynamicConfiguration = SavableModelBase<DynamicConfiguration>.Load(memoryStream, SerializationFactory.GetXmlSerializer());
                 var newComplexSetting = newDynamicConfiguration.GetConfigurationValue<ComplexSetting>("ComplexSetting", null);
 
                 Assert.AreEqual(newComplexSetting.FirstName, complexSetting.FirstName);

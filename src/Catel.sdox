@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<SDConfig>
+  <section guid="feacbce2-8290-4d90-bb05-373b9d7dbbfc">
+    <item key="ConfigFileName" value="Catel" />
+    <item key="ProjectName" value="Catel" />
+    <item key="ProjectUrl" value="" />
+    <InputFile>
+      <Relative>catel.docs.sln</Relative>
+      <Full>C:\Source\Catel\src\Catel.Docs.sln</Full>
+    </InputFile>
+    <OutputPath>
+      <Relative>..\output\docs</Relative>
+      <Full>C:\Source\Catel\output\docs</Full>
+    </OutputPath>
+    <item key="DocLanguage" value="en" />
+    <item key="ExcludePrivate" value="False" />
+    <item key="ExcludeProtected" value="False" />
+    <item key="ExcludeInternal" value="False" />
+    <item key="ExcludedIdentifiers" value="GlobalNamespace.MethodTimeLogger.Log(System.Reflection.MethodBase, System.Int64, System.String);GlobalNamespace.MethodTimeLogger.Log(System.Type, System.String, System.Int64, System.String);GlobalNamespace.MethodTimeLogger;GlobalNamespace" />
+    <item key="ActivatedExporters" value="DocNet" />
+  </section>
+  <section guid="9b4136ab-aabe-41c3-848e-37cc39ed7fbb">
+    <item key="IgnorePrivateMembers" value="True" />
+  </section>
+</SDConfig>

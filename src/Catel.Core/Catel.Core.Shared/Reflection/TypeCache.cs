@@ -11,6 +11,7 @@ namespace Catel.Reflection
     using System.Linq;
     using System.Reflection;
     using System.Threading;
+    using System.Threading.Tasks;
     using Logging;
     using Threading;
 
@@ -91,6 +92,8 @@ namespace Catel.Reflection
         /// The lock object.
         /// </summary>
         private static readonly object _lockObject = new object();
+
+        private static bool _hasInitializedOnce;
 
         static TypeCache()
         {
@@ -220,15 +223,16 @@ namespace Catel.Reflection
         /// <param name="typeName">The name of the type including namespace.</param>
         /// <param name="assemblyName">The name of the type including namespace.</param>
         /// <param name="ignoreCase">A value indicating whether the case should be ignored.</param>
+        /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>The <see cref="Type"/> or <c>null</c> if the type cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="typeName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="assemblyName"/> is <c>null</c> or whitespace.</exception>
-        public static Type GetTypeWithAssembly(string typeName, string assemblyName, bool ignoreCase = false)
+        public static Type GetTypeWithAssembly(string typeName, string assemblyName, bool ignoreCase = false, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeName", typeName);
             Argument.IsNotNullOrWhitespace("assemblyName", assemblyName);
 
-            return GetType(typeName, assemblyName, ignoreCase);
+            return GetType(typeName, assemblyName, ignoreCase, allowInitialization);
         }
 
         /// <summary>
@@ -237,17 +241,18 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="typeNameWithoutAssembly">The type name without assembly.</param>
         /// <param name="ignoreCase">A value indicating whether the case should be ignored.</param>
+        /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>The <see cref="Type"/> or <c>null</c> if the type cannot be found.</returns>
         /// <remarks>
         /// Note that this method can only support one type of "simple type name" resolving. For example, if "Catel.TypeHelper" is located in
         /// multiple assemblies, it will always use the latest known type for resolving the type.
         /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="typeNameWithoutAssembly"/> is <c>null</c> or whitespace.</exception>
-        public static Type GetTypeWithoutAssembly(string typeNameWithoutAssembly, bool ignoreCase = false)
+        public static Type GetTypeWithoutAssembly(string typeNameWithoutAssembly, bool ignoreCase = false, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeNameWithoutAssembly", typeNameWithoutAssembly);
 
-            return GetType(typeNameWithoutAssembly, null, ignoreCase);
+            return GetType(typeNameWithoutAssembly, null, ignoreCase, allowInitialization);
         }
 
         /// <summary>
@@ -255,16 +260,17 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="typeNameWithAssembly">The name of the type including namespace and assembly, formatted with the <see cref="TypeHelper.FormatType"/> method.</param>
         /// <param name="ignoreCase">A value indicating whether the case should be ignored.</param>
+        /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>The <see cref="Type"/> or <c>null</c> if the type cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="typeNameWithAssembly"/> is <c>null</c> or whitespace.</exception>
-        public static Type GetType(string typeNameWithAssembly, bool ignoreCase = false)
+        public static Type GetType(string typeNameWithAssembly, bool ignoreCase = false, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeNameWithAssembly", typeNameWithAssembly);
 
             var typeName = TypeHelper.GetTypeName(typeNameWithAssembly);
             var assemblyName = TypeHelper.GetAssemblyName(typeNameWithAssembly);
 
-            return GetType(typeName, assemblyName, ignoreCase);
+            return GetType(typeName, assemblyName, ignoreCase, allowInitialization);
         }
 
         /// <summary>
@@ -273,13 +279,17 @@ namespace Catel.Reflection
         /// <param name="typeName">Name of the type.</param>
         /// <param name="assemblyName">Name of the assembly. Can be <c>null</c> if no assembly is known.</param>
         /// <param name="ignoreCase">A value indicating whether the case should be ignored.</param>
+        /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>The <see cref="Type"/> or <c>null</c> if the type cannot be found.</returns>
         /// <exception cref="ArgumentException">The <paramref name="typeName"/> is <c>null</c> or whitespace.</exception>
-        private static Type GetType(string typeName, string assemblyName, bool ignoreCase)
+        private static Type GetType(string typeName, string assemblyName, bool ignoreCase, bool allowInitialization = true)
         {
             Argument.IsNotNullOrWhitespace("typeName", typeName);
 
-            InitializeTypes();
+            if (allowInitialization)
+            {
+                InitializeTypes();
+            }
 
             lock (_lockObject)
             {
@@ -335,11 +345,6 @@ namespace Catel.Reflection
                 {
 #if NETFX_CORE || PCL
                     var type = Type.GetType(typeNameWithAssembly, false);
-#elif SILVERLIGHT
-                    // Due to a FileLoadException when loading types without a specific version, we need to map the assembly version here
-                    var assemblyNameWithVersion = AssemblyHelper.GetAssemblyNameWithVersion(assemblyName);
-                    var typeNameWithAssemblyNameWithVersion = TypeHelper.FormatType(assemblyNameWithVersion, typeName);
-                    var type = Type.GetType(typeNameWithAssemblyNameWithVersion, false, ignoreCase);
 #else
                     var type = Type.GetType(typeNameWithAssembly, false, ignoreCase);
 #endif
@@ -361,7 +366,7 @@ namespace Catel.Reflection
                 }
 
                 // Fallback for this assembly only
-                InitializeTypes(false, assemblyName);
+                InitializeTypes(assemblyName, false);
 
                 Type finalType;
                 if (typesWithAssembly.TryGetValue(typeNameWithAssembly, out finalType))
@@ -397,7 +402,7 @@ namespace Catel.Reflection
             {
                 // Array type
                 var arrayTypeElementString = typeWithInnerTypes.Replace("[]", string.Empty);
-                var arrayTypeElement = TypeCache.GetType(arrayTypeElementString);
+                var arrayTypeElement = GetType(arrayTypeElementString, allowInitialization: false);
                 if (arrayTypeElement != null)
                 {
                     return arrayTypeElement.MakeArrayType();
@@ -412,7 +417,7 @@ namespace Catel.Reflection
             {
                 foreach (var innerTypesShortName in innerTypesShortNames)
                 {
-                    var innerType = TypeCache.GetType(innerTypesShortName);
+                    var innerType = GetType(innerTypesShortName, allowInitialization: false);
                     if (innerType == null)
                     {
                         return null;
@@ -476,38 +481,45 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("assembly", assembly);
 
-            var assemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName);
-            return GetTypesPrefilteredByAssembly(assemblyName, predicate);
+            return GetTypesPrefilteredByAssembly(assembly, predicate, true);
         }
 
         /// <summary>
         /// Gets all the types from the current <see cref="AppDomain"/> where the <paramref name="predicate"/> returns true.
         /// </summary>
         /// <param name="predicate">The predicate where the type should apply to.</param>
+        /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>An array containing all the <see cref="Type"/> that match the predicate.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="predicate"/> is <c>null</c>.</exception>
-        public static Type[] GetTypes(Func<Type, bool> predicate = null)
+        public static Type[] GetTypes(Func<Type, bool> predicate = null, bool allowInitialization = true)
         {
-            return GetTypesPrefilteredByAssembly(null, predicate);
+            return GetTypesPrefilteredByAssembly(null, predicate, allowInitialization);
         }
 
         /// <summary>
         /// Gets the types prefiltered by assembly. If types must be retrieved from a single assembly only, this method is very fast.
         /// </summary>
-        /// <param name="assemblyName">Name of the assembly.</param>
+        /// <param name="assembly">Name of the assembly.</param>
         /// <param name="predicate">The predicate.</param>
+        /// <param name="allowInitialization">If set to <c>true</c>, allow initialization of the AppDomain if it hasn't happened yet. If <c>false</c>, deal with the types currently in the cache.</param>
         /// <returns>System.Type[].</returns>
-        private static Type[] GetTypesPrefilteredByAssembly(string assemblyName, Func<Type, bool> predicate)
+        private static Type[] GetTypesPrefilteredByAssembly(Assembly assembly, Func<Type, bool> predicate, bool allowInitialization)
         {
-            InitializeTypes();
+            if (allowInitialization)
+            {
+                InitializeTypes(assembly);
+            }
+
+            var assemblyName = (assembly != null) ? TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName) : string.Empty;
 
             // IMPORTANT NOTE!!!! DON'T USE LOGGING IN THE CODE BELOW BECAUSE IT MIGHT CAUSE DEADLOCK (BatchLogListener will load
             // async stuff which can deadlock). Keep it simple without calls to other code. Do any type initialization *outside* 
             // the lock and make sure not to make calls to other methods
 
+            Dictionary<string, Type> typeSource = null;
+
             lock (_lockObject)
             {
-                Dictionary<string, Type> typeSource = null;
                 if (!string.IsNullOrWhiteSpace(assemblyName))
                 {
                     _typesByAssembly.TryGetValue(assemblyName, out typeSource);
@@ -516,33 +528,33 @@ namespace Catel.Reflection
                 {
                     typeSource = _typesWithAssembly;
                 }
+            }
 
-                if (typeSource == null)
-                {
-                    return new Type[] { };
-                }
-
-                int retryCount = 3;
-                while (retryCount > 0)
-                {
-                    retryCount--;
-
-                    try
-                    {
-                        if (predicate != null)
-                        {
-                            return typeSource.Values.Where(predicate).ToArray();
-                        }
-
-                        return typeSource.Values.ToArray();
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-
+            if (typeSource == null)
+            {
                 return new Type[] { };
             }
+
+            var retryCount = 3;
+            while (retryCount > 0)
+            {
+                retryCount--;
+
+                try
+                {
+                    if (predicate != null)
+                    {
+                        return typeSource.Values.Where(predicate).ToArray();
+                    }
+
+                    return typeSource.Values.ToArray();
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            return new Type[] { };
 
             // IMPORTANT NOTE: READ NOTE ABOVE BEFORE EDITING THIS METHOD!!!!
         }
@@ -553,15 +565,33 @@ namespace Catel.Reflection
         /// <para/>
         /// The types initialized by this method are used by <see cref="object.GetType"/>.
         /// </summary>
-        /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
         /// <param name="assemblyName">Name of the assembly. If <c>null</c>, all assemblies will be checked.</param>
+        /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
+        /// <param name="allowMultithreadedInitialization">If <c>true</c>, allow multithreaded initialization.</param>
         /// <exception cref="ArgumentException">The <paramref name="assemblyName"/> is <c>null</c> or whitespace.</exception>
-        public static void InitializeTypes(bool forceFullInitialization, string assemblyName)
+        public static void InitializeTypes(string assemblyName, bool forceFullInitialization, bool allowMultithreadedInitialization = true)
         {
+            // Important note: only allow explicit multithreaded initialization
+
             Argument.IsNotNullOrWhitespace("assemblyName", assemblyName);
 
             lock (_lockObject)
             {
+                if (_loadedAssemblies.Any(x =>
+                {
+                    var assemblyNameWithoutVersion = TypeHelper.GetAssemblyNameWithoutOverhead(x);
+                    if (string.Equals(assemblyNameWithoutVersion, assemblyName))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }))
+                {
+                    // No need to initialize (or get the loaded assemblies)
+                    return;
+                }
+
                 var loadedAssemblies = AssemblyHelper.GetLoadedAssemblies();
 
                 foreach (var assembly in loadedAssemblies)
@@ -570,12 +600,12 @@ namespace Catel.Reflection
                     {
                         if (assembly.FullName.Contains(assemblyName))
                         {
-                            InitializeTypes(assembly, forceFullInitialization);
+                            InitializeTypes(assembly, forceFullInitialization, allowMultithreadedInitialization);
                         }
                     }
                     catch (Exception ex)
                     {
-                        Log.Warning(ex, "Failed to get all types in assembly '{0}'", assembly.FullName);
+                        Log.Warning(ex, $"Failed to get all types in assembly '{assembly.FullName}'");
                     }
                 }
             }
@@ -587,33 +617,27 @@ namespace Catel.Reflection
         /// <para/>
         /// The types initialized by this method are used by <see cref="object.GetType"/>.
         /// </summary>
-        /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
         /// <param name="assembly">The assembly to initialize the types from. If <c>null</c>, all assemblies will be checked.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "InitializeTypes(Assembly, bool)", TreatAsErrorFromVersion = "4.0", RemoveInVersion = "5.0")]
-        public static void InitializeTypes(bool forceFullInitialization, Assembly assembly = null)
+        /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
+        /// <param name="allowMultithreadedInitialization">If <c>true</c>, allow multithreaded initialization. The default value is <c>false</c>.</param>
+        public static void InitializeTypes(Assembly assembly = null, bool forceFullInitialization = false, bool allowMultithreadedInitialization = false)
         {
-            InitializeTypes(assembly, forceFullInitialization);
-        }
+            // Important note: only allow explicit multithreaded initialization
 
-        /// <summary>
-        /// Initializes the types in the specified assembly. It does this by looping through all loaded assemblies and
-        /// registering the type by type name and assembly name.
-        /// <para/>
-        /// The types initialized by this method are used by <see cref="object.GetType"/>.
-        /// </summary>
-        /// <param name="assembly">The assembly to initialize the types from. If <c>null</c>, all assemblies will be checked.</param>
-        /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
-        public static void InitializeTypes(Assembly assembly = null, bool forceFullInitialization = false)
-        {
             var checkSingleAssemblyOnly = assembly != null;
-
-            if (!forceFullInitialization && !checkSingleAssemblyOnly && _typesWithAssembly.Count > 0)
-            {
-                return;
-            }
 
             lock (_lockObject)
             {
+                if (_hasInitializedOnce && !forceFullInitialization && !checkSingleAssemblyOnly)
+                {
+                    return;
+                }
+
+                if (!checkSingleAssemblyOnly)
+                {
+                    _hasInitializedOnce = true;
+                }
+
                 // CTL-877 Only clear when assembly != null
                 if (forceFullInitialization && assembly == null)
                 {
@@ -626,12 +650,14 @@ namespace Catel.Reflection
                 }
 
                 var assembliesToInitialize = checkSingleAssemblyOnly ? new List<Assembly>(new[] { assembly }) : AssemblyHelper.GetLoadedAssemblies();
-                InitializeAssemblies(assembliesToInitialize, forceFullInitialization);
+                InitializeAssemblies(assembliesToInitialize, forceFullInitialization, allowMultithreadedInitialization);
             }
         }
 
-        private static void InitializeAssemblies(IEnumerable<Assembly> assemblies, bool force)
+        private static void InitializeAssemblies(IEnumerable<Assembly> assemblies, bool force, bool allowMultithreadedInitialization = false)
         {
+            // Important note: only allow explicit multithreaded initialization
+
             lock (_lockObject)
             {
                 var assembliesToRetrieve = new List<Assembly>();
@@ -658,7 +684,7 @@ namespace Catel.Reflection
                     assembliesToRetrieve.Add(assembly);
                 }
 
-                var typesToAdd = GetAssemblyTypes(assembliesToRetrieve);
+                var typesToAdd = GetAssemblyTypes(assembliesToRetrieve, allowMultithreadedInitialization);
                 foreach (var assemblyWithTypes in typesToAdd)
                 {
                     foreach (var type in assemblyWithTypes.Value)
@@ -682,25 +708,97 @@ namespace Catel.Reflection
 
                 if (lateLoadedAssemblies.Count > 0)
                 {
-                    InitializeAssemblies(lateLoadedAssemblies, false);
+                    InitializeAssemblies(lateLoadedAssemblies, false, false);
                 }
 #endif
             }
         }
 
-        private static Dictionary<Assembly, HashSet<Type>> GetAssemblyTypes(List<Assembly> assemblies)
+        private static Dictionary<Assembly, HashSet<Type>> GetAssemblyTypes(List<Assembly> assemblies, bool allowMultithreadedInitialization = false)
         {
-            // Multithreaded invocation
-            var types = (from assembly in assemblies
-                         select new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assembly.GetAllTypesSafely())));
+            // Important note: only allow explicit multithreaded initialization
 
-#if SILVERLIGHT || PCL
-            var results = types;
+            var dictionary = new Dictionary<Assembly, HashSet<Type>>();
+
+            if (allowMultithreadedInitialization)
+            {
+                // We try to use multiple threads since GetAllTypesSafely() is an expensive operation, try to multithread
+                // without causing to much expansive context switching going on. Using .AsParallel wasn't doing a lot.
+                // 
+                // After some manual performance benchmarking, the optimum for UWP apps (the most important for performance)
+                // is between 15 and 25 threads
+                const int PreferredNumberOfThreads = 20;
+
+                var tasks = new List<Task<List<KeyValuePair<Assembly, HashSet<Type>>>>>();
+                var taskLists = new List<List<Assembly>>();
+
+                var assemblyCount = assemblies.Count;
+                var assembliesPerBatch = (int) Math.Ceiling(assemblyCount / (double) PreferredNumberOfThreads);
+                var batchCount = (int) Math.Ceiling(assemblyCount / (double) assembliesPerBatch);
+
+                for (var i = 0; i < batchCount; i++)
+                {
+                    var taskList = new List<Assembly>();
+
+                    var startIndex = (assembliesPerBatch * i);
+                    var endIndex = Math.Min(assembliesPerBatch * (i + 1), assemblyCount);
+
+                    for (var j = startIndex; j < endIndex; j++)
+                    {
+                        taskList.Add(assemblies[j]);
+                    }
+
+                    taskLists.Add(taskList);
+                }
+
+                for (var i = 0; i < taskLists.Count; i++)
+                {
+                    var taskList = taskLists[i];
+
+                    var task = TaskHelper.Run(() =>
+                    {
+                        var taskResults = new List<KeyValuePair<Assembly, HashSet<Type>>>();
+
+                        foreach (var assembly in taskList)
+                        {
+                            var assemblyTypes = assembly.GetAllTypesSafely();
+                            taskResults.Add(new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assemblyTypes)));
+                        }
+
+                        return taskResults;
+                    });
+
+                    tasks.Add(task);
+                }
+
+                var waitTask = TaskShim.WhenAll(tasks);
+                waitTask.Wait();
+
+                foreach (var task in tasks)
+                {
+                    var results = task.Result;
+
+                    foreach (var result in results)
+                    {
+                        dictionary[result.Key] = result.Value;
+                    }
+                }
+            }
+            else
+            {
+                var types = (from assembly in assemblies
+                             select new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assembly.GetAllTypesSafely())));
+
+#if PCL
+                var results = types;
 #else
-            var results = types.AsParallel();
+                var results = types.AsParallel();
 #endif
 
-            return results.ToDictionary(p => p.Key, p => p.Value);
+                return results.ToDictionary(p => p.Key, p => p.Value);
+            }
+
+            return dictionary;
         }
 
         private static void InitializeType(Assembly assembly, Type type)

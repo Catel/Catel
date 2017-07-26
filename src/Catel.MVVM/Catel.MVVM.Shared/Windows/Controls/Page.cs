@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5 || NETFX_CORE
+#if NET || NETFX_CORE
 
 namespace Catel.Windows.Controls
 {

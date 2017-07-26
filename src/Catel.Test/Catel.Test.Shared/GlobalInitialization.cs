@@ -6,6 +6,7 @@
 
 
 using System.Linq;
+using Catel.Reflection;
 using NUnit.Framework;
 
 /// <summary>
@@ -15,40 +16,12 @@ using NUnit.Framework;
 [SetUpFixture]
 public class GlobalInitialization
 {
-    [SetUp]
+    [OneTimeSetUp]
     public static void SetUp()
     {
         //System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
 
-#if NET && !SKIP_EF
-        using (var dbContext = new Catel.Test.EntityFramework5.DbContextTest.TestDbContextContainer())
-        {
-            dbContext.Database.CreateIfNotExists();
-
-            // Delete all data
-            var allOrders = (from x in dbContext.DbContextOrders
-                             select x).ToList();
-            foreach (var x in allOrders)
-            {
-                dbContext.DbContextOrders.Remove(x);
-            }
-
-            var allCustomers = (from x in dbContext.DbContextCustomers
-                                select x).ToList();
-            foreach (var x in allCustomers)
-            {
-                dbContext.DbContextCustomers.Remove(x);
-            }
-
-            var allProducts = (from x in dbContext.DbContextProducts
-                               select x).ToList();
-            foreach (var x in allProducts)
-            {
-                dbContext.DbContextProducts.Remove(x);
-            }
-
-            dbContext.SaveChanges();
-        }
-#endif
+        // Required since we do multithreaded initialization
+        TypeCache.InitializeTypes(allowMultithreadedInitialization: false);
     }
 }

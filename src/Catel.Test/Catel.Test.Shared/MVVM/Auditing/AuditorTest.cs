@@ -41,25 +41,6 @@ namespace Catel.Test.MVVM.Auditing
             Assert.AreEqual(typeof (TestViewModel), auditor.OnViewModelCreatedType);
         }
 
-#if NET
-        [TestCase]
-        public void OnPropertyChanging()
-        {
-            AuditingManager.Clear();
-
-            var auditor = new TestAuditor();
-            AuditingManager.RegisterAuditor(auditor);
-
-            var viewModel = new TestViewModel();
-            viewModel.TestProperty = "test";
-
-            Assert.AreEqual(true, auditor.OnPropertyChangingCalled);
-            Assert.AreEqual(viewModel, auditor.OnPropertyChangingViewModel);
-            Assert.AreEqual("TestProperty", auditor.OnPropertyChangingPropertyName);
-            Assert.AreEqual("defaultvalue", auditor.OnPropertyChangingOldValue);
-        }
-#endif
-
         [TestCase]
         public void OnPropertyChanged()
         {

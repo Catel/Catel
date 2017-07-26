@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SILVERLIGHT
+#if NET
 
 namespace Catel.Windows.Markup
 {
@@ -25,6 +25,7 @@ namespace Catel.Windows.Markup
     public class LanguageBinding : UpdatableMarkupExtension
     {
         private readonly ILanguageService _languageService;
+        private Catel.IWeakEventListener _onLanguageUpdatedWeakListener;
 
         #region Constructors
         /// <summary>
@@ -70,7 +71,15 @@ namespace Catel.Windows.Markup
         public CultureInfo Culture { get; set; }
         #endregion
 
-        private void OnLanguageUpdated(object sender, EventArgs e)
+        /// <summary>
+        /// The language updated event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <remarks>
+        /// Must be public because this uses weak events.
+        /// </remarks>
+        public void OnLanguageUpdated(object sender, EventArgs e)
         {
             UpdateValue();
         }
@@ -78,8 +87,9 @@ namespace Catel.Windows.Markup
         /// <summary>
         /// When implemented in a derived class, returns an object that is provided as the value of the target property for this markup extension.
         /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
         /// <returns>The object value to set on the property where the extension is applied.</returns>
-        protected override object ProvideDynamicValue()
+        protected override object ProvideDynamicValue(IServiceProvider serviceProvider)
         {
             if (_languageService == null)
             {
@@ -131,7 +141,30 @@ namespace Catel.Windows.Markup
         /// </summary>
         protected override void OnTargetObjectLoaded()
         {
-            _languageService.LanguageUpdated += OnLanguageUpdated;
+            // CTL-925 Use weak events so unloaded elements (like a ComboBoxItem) can also update. The usage of 
+            // weak events should prevent memory leaks
+            var listener = _onLanguageUpdatedWeakListener;
+            if (listener != null)
+            {
+                if (!ReferenceEquals(listener.Source, TargetObject))
+                {
+                    listener.Detach();
+                    _onLanguageUpdatedWeakListener = null;
+                }
+
+                if (!listener.IsSourceAlive)
+                {
+                    listener.Detach();
+                    _onLanguageUpdatedWeakListener = null;
+                }
+            }
+
+            if (_onLanguageUpdatedWeakListener == null)
+            {
+                _onLanguageUpdatedWeakListener = this.SubscribeToWeakGenericEvent<EventArgs>(_languageService, "LanguageUpdated", OnLanguageUpdated);
+            }
+
+            //_languageService.LanguageUpdated += OnLanguageUpdated;
         }
 
         /// <summary>
@@ -141,7 +174,7 @@ namespace Catel.Windows.Markup
         /// </summary>
         protected override void OnTargetObjectUnloaded()
         {
-            _languageService.LanguageUpdated -= OnLanguageUpdated;
+            //_languageService.LanguageUpdated -= OnLanguageUpdated;
         }
 
         private bool ShowDesignTimeMessages()

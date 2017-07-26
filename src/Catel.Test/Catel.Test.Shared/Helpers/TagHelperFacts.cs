@@ -42,8 +42,8 @@ namespace Catel.Test
             [TestCase]
             public void ReturnsTrueForEqualInstances()
             {
-                IniEntry firstEntry = ModelBaseTestHelper.CreateIniEntryObject("A", "B", "C");
-                IniEntry secondEntry = ModelBaseTestHelper.CreateIniEntryObject("A", "B", "C");
+                var firstEntry = ModelBaseTestHelper.CreateIniEntryObject("A", "B", "C");
+                var secondEntry = ModelBaseTestHelper.CreateIniEntryObject("A", "B", "C");
 
                 // References equal
                 Assert.IsTrue(TagHelper.AreTagsEqual(firstEntry, firstEntry));
@@ -55,8 +55,8 @@ namespace Catel.Test
             [TestCase]
             public void ReturnsFalseForDifferentInstances()
             {
-                IniEntry firstEntry = ModelBaseTestHelper.CreateIniEntryObject("A", "B", "C");
-                IniEntry secondEntry = ModelBaseTestHelper.CreateIniEntryObject("D", "E", "F");
+                var firstEntry = ModelBaseTestHelper.CreateIniEntryObject("A", "B", "C");
+                var secondEntry = ModelBaseTestHelper.CreateIniEntryObject("D", "E", "F");
 
                 Assert.IsFalse(TagHelper.AreTagsEqual(firstEntry, secondEntry));
             }

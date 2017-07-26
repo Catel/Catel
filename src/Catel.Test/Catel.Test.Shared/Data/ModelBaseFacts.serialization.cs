@@ -100,7 +100,7 @@ namespace Catel.Test.Data
         }
 
         [XmlRoot("MappedPerson")]
-        public class Person : SavableModelBase<Person>
+        public class Person : ComparableModelBase
         {
             public Person()
             {
@@ -189,7 +189,7 @@ namespace Catel.Test.Data
 #if NET
         [Serializable]
 #endif
-        public partial class Customer : ModelBase
+        public partial class Customer : ComparableModelBase
         {
             #region Constructors
             /// <summary>
@@ -275,7 +275,7 @@ namespace Catel.Test.Data
 #if NET
         [Serializable]
 #endif
-        public class Project : ModelBase
+        public class Project : ComparableModelBase
         {
             #region Constructors
             /// <summary>

@@ -15,8 +15,7 @@ namespace Catel.Data
     /// <remarks>
     /// This interface defines all the non-generic interfaces that the <see cref="ModelBase"/> class implements.
     /// </remarks>
-    public interface IModel : INotifyPropertyChanging, INotifyPropertyChanged, IParent, IAdvancedEditableObject, 
-        IModelEditor, IModelValidation, IModelSerialization
+    public interface IModel : INotifyPropertyChanged, IAdvancedEditableObject, IModelEditor, IModelSerialization
     {
         #region Properties
         /// <summary>
@@ -40,13 +39,6 @@ namespace Catel.Data
         bool IsInEditSession { get; }
         #endregion
 
-        #region Events
-        /// <summary>
-        /// Occurs when the object is initialized.
-        /// </summary>
-        event EventHandler<EventArgs> Initialized;
-        #endregion
-
         #region Methods
         /// <summary>
         /// Returns the default value of a specific property.
@@ -55,14 +47,6 @@ namespace Catel.Data
         /// <returns>Default value of the property.</returns>
         /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
         object GetDefaultValue(string name);
-
-        /// <summary>
-        /// Returns the default value of a specific property.
-        /// </summary>
-        /// <param name="property"><see cref="PropertyData"/> of the property.</param>
-        /// <returns>Default value of the property.</returns>
-        /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
-        object GetDefaultValue(PropertyData property);
 
         /// <summary>
         /// Returns the typed default value of a specific property.
@@ -74,29 +58,12 @@ namespace Catel.Data
         TValue GetDefaultValue<TValue>(string name);
 
         /// <summary>
-        /// Returns the typed default value of a specific property.
-        /// </summary>
-        /// <typeparam name="TValue">The type of the value.</typeparam>
-        /// <param name="property"><see cref="PropertyData"/> of the property.</param>
-        /// <returns>Default value of the property.</returns>
-        /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
-        TValue GetDefaultValue<TValue>(PropertyData property);
-
-        /// <summary>
         /// Returns the type of a specific property.
         /// </summary>
         /// <param name="name">Name of the property.</param>
         /// <returns>Type of the property.</returns>
         /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
         Type GetPropertyType(string name);
-
-        /// <summary>
-        /// Returns the type of a specific property.
-        /// </summary>
-        /// <param name="property"><see cref="PropertyData"/> of the property.</param>
-        /// <returns>Type of the property.</returns>
-        /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
-        Type GetPropertyType(PropertyData property);
         #endregion
     }
 }

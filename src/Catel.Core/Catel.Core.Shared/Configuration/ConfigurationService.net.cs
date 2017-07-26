@@ -17,7 +17,7 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="container">The settings container.</param>
         /// <returns>The settings container.</returns>
-        protected DynamicConfiguration GetSettingsContainer(ConfigurationContainer container)
+        protected virtual DynamicConfiguration GetSettingsContainer(ConfigurationContainer container)
         {
             DynamicConfiguration settings = null;
 

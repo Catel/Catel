@@ -67,7 +67,7 @@ namespace Catel.MVVM.Views
         }
 
         /// <summary>
-        /// Gets the parent of the specified element, both for Silverlight and WPF.
+        /// Gets the parent of the specified element.
         /// </summary>
         /// <param name="element">The element.</param>
         /// <returns>The parent <see cref="FrameworkElement"/> or <c>null</c> if there is no parent.</returns>
@@ -79,7 +79,7 @@ namespace Catel.MVVM.Views
         }
 
         /// <summary>
-        /// Gets the possible parents of the specified element, both for Silverlight and WPF.
+        /// Gets the possible parents of the specified element.
         /// </summary>
         /// <param name="element">The element.</param>
         /// <returns>The possible parents <see cref="FrameworkElement"/> or <c>null</c> if there is no parent.</returns>

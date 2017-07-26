@@ -11,6 +11,7 @@ namespace Catel.Data
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
+    using IoC;
     using IO;
     using Logging;
     using Runtime.Serialization;
@@ -30,21 +31,16 @@ namespace Catel.Data
 #endif
         private class BackupData
         {
-            #region Constants
-
-            /// <summary>
-            /// The name of the <see cref="ModelBase.IsDirty"/> property.
-            /// </summary>
-            private const string IsDirty = "IsDirty";
-
-            #endregion
-
             #region Fields
-
             /// <summary>
             /// The <see cref="ModelBase"/> object that this backup is created for.
             /// </summary>
             private readonly ModelBase _object;
+
+            /// <summary>
+            /// The serializer used for this backup instance.
+            /// </summary>
+            private readonly ISerializer _serializer;
 
             /// <summary>
             /// Backup of the property values.
@@ -58,24 +54,18 @@ namespace Catel.Data
             #endregion
 
             #region Constructors
-
             /// <summary>
-            /// Initializes a new instance of the <see cref="ModelBase.BackupData"/> class.
+            /// Initializes a new instance of the <see cref="ModelBase.BackupData" /> class.
             /// </summary>
             /// <param name="obj">Object to backup.</param>
-            public BackupData(ModelBase obj)
+            /// <param name="serializer">The serializer.</param>
+            public BackupData(ModelBase obj, ISerializer serializer)
             {
-                Argument.IsNotNull("obj", obj);
-
                 _object = obj;
+                _serializer = serializer;
 
                 CreateBackup();
             }
-
-            #endregion
-
-            #region Properties
-
             #endregion
 
             #region Methods
@@ -91,17 +81,13 @@ namespace Catel.Data
                                               where !propertyData.Value.IncludeInBackup
                                               select propertyData.Value.Name).ToArray();
 
-                    var serializer = _object.Serializer;
-                    if (serializer != null)
-                    {
-                        serializer.SerializeMembers(_object, stream, null, propertiesToIgnore);
-                    }
+                    _serializer?.SerializeMembers(_object, stream, null, propertiesToIgnore);
 
                     _propertyValuesBackup = stream.ToByteArray();
                 }
 
                 _objectValuesBackup = new Dictionary<string, object>();
-                _objectValuesBackup.Add(IsDirty, _object.IsDirty);
+                _objectValuesBackup.Add(nameof(ModelBase.IsDirty), _object.IsDirty);
             }
 
             /// <summary>
@@ -117,17 +103,16 @@ namespace Catel.Data
                     {
                         var properties = new List<MemberValue>();
 
-                        var serializer = _object.Serializer;
-                        if (serializer != null)
+                        if (_serializer != null)
                         {
-                            properties = serializer.DeserializeMembers(_object.GetType(), stream, null);
+                            properties = _serializer.DeserializeMembers(_object.GetType(), stream, null);
                         }
 
                         oldPropertyValues = properties.ToDictionary(property => property.Name, property => property.Value);
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex, "Failed to deserialize the data for backup, which is weird. However, for Silverlight, Windows Phone and Windows 8 there is no other option");
+                        Log.Error(ex, "Failed to deserialize the data for backup, which is weird");
                     }
                 }
 
@@ -136,7 +121,7 @@ namespace Catel.Data
                     return;
                 }
 
-                foreach (KeyValuePair<string, object> propertyValue in oldPropertyValues)
+                foreach (var propertyValue in oldPropertyValues)
                 {
                     if (PropertyDataManager.IsPropertyRegistered(_object.GetType(), propertyValue.Key))
                     {
@@ -145,7 +130,7 @@ namespace Catel.Data
                     }
                 }
 
-                _object.IsDirty = (bool)_objectValuesBackup[IsDirty];
+                _object.IsDirty = (bool)_objectValuesBackup[nameof(ModelBase.IsDirty)];
             }
             #endregion
         }
@@ -246,6 +231,18 @@ namespace Catel.Data
         }
 
         /// <summary>
+        /// Gets the serializer for the <see cref="IEditableObject"/> interface implementation.
+        /// </summary>
+        /// <returns>The <see cref="ISerializer"/>.</returns>
+        protected ISerializer GetSerializerForIEditableObject()
+        {
+            var dependencyResolver = this.GetDependencyResolver();
+
+            var serializer = dependencyResolver.Resolve<ISerializer>();
+            return serializer;
+        }
+
+        /// <summary>
         /// Begins an edit on an object.
         /// </summary>
         void IEditableObject.BeginEdit()
@@ -268,7 +265,7 @@ namespace Catel.Data
 
             Log.Debug("IEditableObject.BeginEdit");
 
-            _backup = new BackupData(this);
+            _backup = new BackupData(this, GetSerializerForIEditableObject());
         }
 
         /// <summary>

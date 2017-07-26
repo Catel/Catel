@@ -48,7 +48,7 @@ namespace Catel.MVVM.Providers
         private IViewModelContainer _parentViewModelContainer;
         private IViewModel _parentViewModel;
 
-#if NET ||SL5
+#if NET
         private InfoBarMessageControl _infoBarMessageControl;
 #endif
         #endregion
@@ -60,22 +60,18 @@ namespace Catel.MVVM.Providers
         static UserControlLogic()
         {
             ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.InfoBarMessageControl", "The InfoBarMessageControl is not found in the visual tree. This will have a negative impact on performance. Consider setting the SkipSearchingForInfoBarMessageControl or DefaultSkipSearchingForInfoBarMessageControlValue to true.", ApiCopRuleLevel.Error,
-                "https://catelproject.atlassian.net/wiki/display/CTL/Performance+considerations"));
+                "http://docs.catelproject.com/vnext/faq/performance-considerations.htm"));
 
             ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.CreateWarningAndErrorValidator", "The InfoBarMessageControl is not found in the visual tree. Only use this feature in combination with the InfoBarMessageControl or a customized class which uses the WarningAndErrorValidator. Consider setting the CreateWarningAndErrorValidatorForViewModel or DefaultCreateWarningAndErrorValidatorForViewModelValue to false.", ApiCopRuleLevel.Error,
-                "https://catelproject.atlassian.net/wiki/display/CTL/Performance+considerations"));
+                "http://docs.catelproject.com/vnext/faq/performance-considerations.htm"));
 
             ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.SupportParentViewModelContainers", "No parent IViewModelContainer is found in the visual tree. Only use this feature when there are parent IViewModelContainer instances. Consider setting the SupportParentViewModelContainers to false.", ApiCopRuleLevel.Error,
-                "https://catelproject.atlassian.net/wiki/display/CTL/Performance+considerations"));
+                "http://docs.catelproject.com/vnext/faq/performance-considerations.htm"));
 
             DefaultSupportParentViewModelContainersValue = true;
             DefaultUnloadBehaviorValue = UnloadBehavior.SaveAndCloseViewModel;
 
-#if !XAMARIN
-            DefaultTransferStylesAndTransitionsToViewModelGridValue = false;
-#endif
-
-#if NET || SL5
+#if NET
             DefaultCreateWarningAndErrorValidatorForViewModelValue = true;
 #endif
         }
@@ -99,11 +95,7 @@ namespace Catel.MVVM.Providers
             UnloadBehavior = DefaultUnloadBehaviorValue;
             CloseViewModelOnUnloaded = true;
 
-#if !XAMARIN
-            TransferStylesAndTransitionsToViewModelGrid = DefaultTransferStylesAndTransitionsToViewModelGridValue;
-#endif
-
-#if NET || SL5
+#if NET
             SkipSearchingForInfoBarMessageControl = DefaultSkipSearchingForInfoBarMessageControlValue;
             CreateWarningAndErrorValidatorForViewModel = DefaultCreateWarningAndErrorValidatorForViewModelValue;
 #endif
@@ -171,28 +163,7 @@ namespace Catel.MVVM.Providers
         /// <value>The unload behavior.</value>
         public static UnloadBehavior DefaultUnloadBehaviorValue { get; set; }
 
-#if !XAMARIN
-        /// <summary>
-        /// Gets or sets a value indicating whether the styles and transitions from the content of the target control
-        /// should be transfered to the view model grid which is created dynamically,.
-        /// <para />
-        /// The transfer is required to enable visual state transitions on root elements (which is replaced by this logic implementation).
-        /// <para />
-        /// The default value is <c>false</c>.
-        /// </summary>
-        /// <value><c>true</c> if the styles and transitions should be transfered to the view model grid; otherwise, <c>false</c>.</value>
-        public bool TransferStylesAndTransitionsToViewModelGrid { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value for the <see cref="TransferStylesAndTransitionsToViewModelGrid"/> property. This way, the behavior
-        /// can be changed an entire application to prevent disabling it on every control.
-        /// <para />
-        /// The default value is <c>false</c>.
-        /// </summary>
-        public static bool DefaultTransferStylesAndTransitionsToViewModelGridValue { get; set; }
-#endif
-
-#if NET || SL5
+#if NET
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <see cref="InfoBarMessageControl"/> that can be found. 
@@ -312,17 +283,10 @@ namespace Catel.MVVM.Providers
             {
                 var wrapOptions = WrapOptions.None;
 
-#if NET || SL5
+#if NET
                 if (CreateWarningAndErrorValidatorForViewModel)
                 {
                     wrapOptions |= WrapOptions.CreateWarningAndErrorValidatorForViewModel;
-                }
-#endif
-
-#if !XAMARIN
-                if (TransferStylesAndTransitionsToViewModelGrid)
-                {
-                    wrapOptions |= WrapOptions.TransferStylesAndTransitionsToViewModelGrid;
                 }
 #endif
 
@@ -330,7 +294,7 @@ namespace Catel.MVVM.Providers
 
                 // NOTE: Beginning invoke (running async) because setting of TargetControl Content property causes memory faults
                 // when this method called by TargetControlContentChanged handler. No need to await though.
-#if NETFX_CORE && !UAP
+#if NETFX_CORE && !UWP
                 var dispatcher = ((FrameworkElement)TargetView).Dispatcher;
 #pragma warning disable 4014
                 dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { action(); });
@@ -368,7 +332,7 @@ namespace Catel.MVVM.Providers
             // even if the Content property was changed while InitializeComponents() running there is no triggering of a binding update.
             CreateViewModelWrapper();
 
-#if NET || SL5
+#if NET
             if (!SkipSearchingForInfoBarMessageControl)
             {
                 Log.Debug("Searching for an instance of the InfoBarMessageControl");
@@ -468,7 +432,9 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+#pragma warning disable AvoidAsyncVoid // Avoid async void
         public override async void OnTargetViewDataContextChanged(object sender, Catel.MVVM.Views.DataContextChangedEventArgs e)
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             if (IsCurrentDataContext(e))
             {
@@ -692,39 +658,57 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
+            var currentViewModel = ViewModel;
+            object modelToInject = null;
+            var constructNewViewModel = false;
+
             if (newDataContext != null)
             {
                 var dataContextAsViewModel = newDataContext as IViewModel;
                 if (dataContextAsViewModel != null)
                 {
                     // If the DataContext is a view model, only create a new view model if required
-                    if (ViewModel == null)
+                    if (currentViewModel == null)
                     {
                         ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(newDataContext);
                     }
                 }
                 else if (!newDataContext.GetType().IsAssignableFromEx(ViewModelType))
                 {
-                    if (ViewModel != null)
-                    {
-                        bool? result = GetViewModelResultValueFromUnloadBehavior();
-                        await CloseAndDisposeViewModelAsync(result);
-                    }
-
-                    ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(newDataContext);
+                    constructNewViewModel = true;
+                    modelToInject = newDataContext;
                 }
             }
             else
             {
-                if (ViewModel != null)
-                {
-                    bool? result = GetViewModelResultValueFromUnloadBehavior();
-                    await CloseAndDisposeViewModelAsync(result);
-                }
+                constructNewViewModel = true;
 
                 // We closed our previous view-model, but it might be possible to construct a new view-model
                 // with an empty constructor, so try that now
-                ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(null);
+                modelToInject = null;
+            }
+
+            if (constructNewViewModel)
+            {
+                if (currentViewModel != null)
+                {
+                    var viewModelType = ViewModelType;
+
+                    var canKeepViewModel = !ViewModelFactory.IsViewModelWithModelInjection(viewModelType);
+                    if (canKeepViewModel)
+                    {
+                        Log.Debug($"DataContext has changed, but view model '{viewModelType}' is a view model without model injection, keeping current view model");
+                        return;
+                    }
+                }
+
+                if (currentViewModel != null)
+                {
+                    var result = GetViewModelResultValueFromUnloadBehavior();
+                    await CloseAndDisposeViewModelAsync(result);
+                }
+
+                ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(modelToInject);
             }
         }
 
@@ -928,7 +912,7 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
-#if NET || SL5
+#if NET
             if (_infoBarMessageControl != null)
             {
                 _infoBarMessageControl.ClearObjectMessages(obj);

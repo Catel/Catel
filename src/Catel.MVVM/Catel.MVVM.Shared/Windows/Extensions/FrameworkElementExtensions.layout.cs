@@ -49,7 +49,7 @@ namespace Catel.Windows
         {
             Argument.IsNotNull("element", element);
 
-#if NETFX_CORE || SILVERLIGHT
+#if NETFX_CORE
             return element.Visibility == Visibility.Visible;
 #else
             return element.IsVisible;
@@ -64,7 +64,7 @@ namespace Catel.Windows
         {
             Argument.IsNotNull("element", element);
 
-            var container = element.GetRelevantParent<FrameworkElement>();
+            var container = GetRelevantParent<FrameworkElement>(element);
             if (container != null)
             {
                 var visible = element.IsVisibleToUser(container);
@@ -93,7 +93,7 @@ namespace Catel.Windows
                 return false;
             }
 
-#if NETFX_CORE || SILVERLIGHT
+#if NETFX_CORE
             var transform = element.TransformToVisual(container);
 #else
             var transform = element.TransformToAncestor(container);
@@ -102,7 +102,7 @@ namespace Catel.Windows
             var bounds = transform.TransformBounds(new Rect(0.0, 0.0, element.ActualWidth, element.ActualHeight));
             var rect = new Rect(0.0, 0.0, container.ActualWidth, container.ActualHeight);
 
-#if NETFX_CORE || SILVERLIGHT
+#if NETFX_CORE
             var topLeft = new Point(bounds.Left, bounds.Top);
             var bottomRight = new Point(bounds.Right, bounds.Bottom);
 #else
@@ -114,12 +114,12 @@ namespace Catel.Windows
         }
 
         /// <summary>
-        /// Gets the relevant parent.
+        /// Gets the relevant parent which is either a content presenter or panel.
         /// </summary>
         /// <typeparam name="T">Type of the relevant parent</typeparam>
         /// <param name="obj">The object.</param>
         /// <returns>The relevant parent.</returns>
-        private static FrameworkElement GetRelevantParent<T>(this FrameworkElement obj)
+        private static FrameworkElement GetRelevantParent<T>(FrameworkElement obj)
             where T : FrameworkElement
         {
             var container = VisualTreeHelper.GetParent(obj) as FrameworkElement;

@@ -218,7 +218,7 @@ namespace Catel.Test.Data
             }
 
             [TestCase]
-            public void HandlesCollectionChangesByResetCorrectly()
+            public void HandlesCollectionChangesCorrectlyInSuspensionModeMixed()
             {
                 var collection = new FastObservableCollection<TestModel>();
                 var wrapper = new ChangeNotificationWrapper(collection);
@@ -248,14 +248,14 @@ namespace Catel.Test.Data
                     }
                 };
 
-                using (collection.SuspendChangeNotifications())
+                using (collection.SuspendChangeNotifications(SuspensionMode.Mixed))
                 {
                     ((ICollection<TestModel>)collection).ReplaceRange(new [] { new TestModel() });
                 }
 
-                Assert.IsFalse(itemsAdded);
-                Assert.IsFalse(itemsRemoved);
-                Assert.IsTrue(itemsReset);
+                Assert.IsTrue(itemsAdded);
+                Assert.IsTrue(itemsRemoved);
+                Assert.IsFalse(itemsReset);
             }
 
             [TestCase]

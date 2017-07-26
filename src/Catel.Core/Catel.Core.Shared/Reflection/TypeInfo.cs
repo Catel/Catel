@@ -14,7 +14,7 @@ namespace Catel.Reflection
     using System.Runtime.InteropServices;
 #endif
 
-#if NET40 || (!NET && !NETFX_CORE && !PCL)
+#if !NET && !NETFX_CORE && !PCL
 
     /// <summary>
     /// The type info.

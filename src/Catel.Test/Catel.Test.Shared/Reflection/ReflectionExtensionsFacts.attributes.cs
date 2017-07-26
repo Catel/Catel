@@ -11,7 +11,6 @@ namespace Catel.Test.Reflection
 {
     using System;
     using System.Reflection;
-    using Castle.Core.Internal;
     using Catel.Reflection;
     using NUnit.Framework;
 

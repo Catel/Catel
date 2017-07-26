@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5
+#if !XAMARIN
 
 namespace Catel.Services
 {
@@ -23,7 +23,7 @@ namespace Catel.Services
     /// <summary>
     /// Service to open files.
     /// </summary>
-    public class OpenFileService : FileServiceBase, IOpenFileService
+    public partial class OpenFileService : FileServiceBase, IOpenFileService
     {
         #region IFileSupport Members
         /// <summary>
@@ -37,70 +37,6 @@ namespace Catel.Services
         /// </summary>
         /// <value><c>true</c> if this instance is multi select; otherwise, <c>false</c>.</value>
         public bool IsMultiSelect { get; set; }
-
-#if NET
-        /// <summary>
-        /// Determines the filename of the file what will be used.
-        /// </summary>
-        /// <returns><c>true</c> if a file is selected; otherwise <c>false</c>.</returns>
-        /// <remarks>
-        /// If this method returns <c>true</c>, the <c>FileName</c> property will be filled with the filename. Otherwise,
-        /// no changes will occur to the data of this object.
-        /// </remarks>
-        public virtual bool DetermineFile()
-        {
-            var fileDialog = new OpenFileDialog();
-            ConfigureFileDialog(fileDialog);
-
-            fileDialog.Multiselect = IsMultiSelect;
-
-            bool result = fileDialog.ShowDialog() ?? false;
-            if (result)
-            {
-                FileName = fileDialog.FileName;
-                FileNames = fileDialog.FileNames;
-            }
-            else
-            {
-                FileName = null;
-                FileNames = null;
-            }
-
-            return result;
-        }
-#else
-        /// <summary>
-        /// Determines the filename of the file what will be used.
-        /// </summary>
-        /// <returns>The <see cref="Stream"/> of the file or <c>null</c> if no file was selected by the user.</returns>
-        /// <remarks>
-        /// If this method returns a valid <see cref="Stream"/> object, the <c>FileName</c> property will be filled 
-        /// with the safe filename. This can be used for display purposes only.
-        /// </remarks>
-        public virtual Stream[] DetermineFile()
-        {
-            var fileDialog = new OpenFileDialog();
-            fileDialog.Multiselect = IsMultiSelect;
-            fileDialog.Filter = Filter;
-
-            bool result = fileDialog.ShowDialog() ?? false;
-            if (result)
-            {
-                var files = fileDialog.Files.Select(file => file.Name).ToList();
-
-                FileName = (files.Count > 0) ? files[0] : null;
-                FileNames = (files.Count > 0) ? files.ToArray() : null;
-            }
-            else
-            {
-                FileName = null;
-                FileNames = null;
-            }
-
-            var streams = fileDialog.Files.Select(file => file.OpenRead()).Cast<Stream>().ToList();
-            return (streams.Count > 0) ? streams.ToArray() : null;
-        }
-#endif
         #endregion
     }
 }

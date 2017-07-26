@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SL5
+#if NET
 
 namespace Catel.MVVM.Converters
 {
@@ -46,7 +46,7 @@ namespace Catel.MVVM.Converters
                 return null;
             }
 
-            return TypeCache.GetType(typeName);
+            return TypeCache.GetType(typeName, allowInitialization: false);
         }
     }
 }

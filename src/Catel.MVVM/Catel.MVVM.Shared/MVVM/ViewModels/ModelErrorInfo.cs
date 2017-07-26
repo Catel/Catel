@@ -11,8 +11,7 @@ namespace Catel.MVVM
     using System.Collections.Generic;
     using System.ComponentModel;
 
-#if !WINDOWS_PHONE && !NET35 && !XAMARIN_FORMS
-    using System.ComponentModel.DataAnnotations;
+#if !XAMARIN_FORMS
     using System.Linq;
     using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 #endif
@@ -46,12 +45,10 @@ namespace Catel.MVVM
         /// </summary>
         private readonly List<string> _businessRuleWarnings = new List<string>();
 
-#if !WINDOWS_PHONE && !NET35
         /// <summary>
         /// List of field that were initialized with an error.
         /// </summary>
         private readonly HashSet<string> _initialErrorFields = new HashSet<string>();
-#endif
         #endregion
 
         #region Constructors
@@ -171,9 +168,10 @@ namespace Catel.MVVM
         {
             lock (_fieldErrors)
             {
-                if (_fieldErrors.ContainsKey(propertyName))
+                List<string> fieldErrors;
+                if (_fieldErrors.TryGetValue(propertyName, out fieldErrors))
                 {
-                    _fieldErrors[propertyName].Clear();
+                    fieldErrors.Clear();
                 }
                 else
                 {
@@ -243,9 +241,10 @@ namespace Catel.MVVM
         {
             lock (_fieldWarnings)
             {
-                if (_fieldWarnings.ContainsKey(propertyName))
+                List<string> fieldWarnings;
+                if (_fieldWarnings.TryGetValue(propertyName, out fieldWarnings))
                 {
-                    _fieldWarnings[propertyName].Clear();
+                    fieldWarnings.Clear();
                 }
                 else
                 {
@@ -286,9 +285,10 @@ namespace Catel.MVVM
             {
                 lock (_fieldErrors)
                 {
-                    if (_fieldErrors.ContainsKey(propertyName))
+                    List<string> fieldErrors;
+                    if (_fieldErrors.TryGetValue(propertyName, out fieldErrors))
                     {
-                        errors.AddRange(_fieldErrors[propertyName]);
+                        errors.AddRange(fieldErrors);
                     }
                 }
             }
@@ -319,9 +319,10 @@ namespace Catel.MVVM
             {
                 lock (_fieldWarnings)
                 {
-                    if (_fieldWarnings.ContainsKey(propertyName))
+                    List<string> fieldWarnings;
+                    if (_fieldWarnings.TryGetValue(propertyName, out fieldWarnings))
                     {
-                        errors.AddRange(_fieldWarnings[propertyName]);
+                        errors.AddRange(fieldWarnings);
                     }
                 }
             }
@@ -368,7 +369,7 @@ namespace Catel.MVVM
                 return objAsString;
             }
 
-#if !WINDOWS_PHONE && !NET35 && !XAMARIN_FORMS
+#if !XAMARIN_FORMS
             var objAsValidationResult = obj as ValidationResult;
             if (objAsValidationResult != null)
             {
@@ -379,7 +380,7 @@ namespace Catel.MVVM
             return null;
         }
 
-#if !WINDOWS_PHONE && !NET35 && !XAMARIN_FORMS
+#if !XAMARIN_FORMS
         /// <summary>
         /// Initializes the default errors.
         /// </summary>
@@ -388,7 +389,7 @@ namespace Catel.MVVM
         {
             foreach (var validationResult in validationResults)
             {
-                if (validationResult.MemberNames.Count() == 0)
+                if (!validationResult.MemberNames.Any())
                 {
                     HandleBusinessRuleErrors(new object[] { validationResult });
                 }
@@ -419,7 +420,10 @@ namespace Catel.MVVM
         {
             if (string.IsNullOrEmpty(propertyName))
             {
-                _businessRuleErrors.Clear();
+                lock (_businessRuleErrors)
+                {
+                    _businessRuleErrors.Clear();
+                }
             }
             else
             {
@@ -429,9 +433,10 @@ namespace Catel.MVVM
                     {
                         lock (_fieldErrors)
                         {
-                            if (_fieldErrors.ContainsKey(propertyName))
+                            List<string> fieldErrors;
+                            if (_fieldErrors.TryGetValue(propertyName, out fieldErrors))
                             {
-                                _fieldErrors[propertyName].Clear();
+                                fieldErrors.Clear();
                             }
                         }
 

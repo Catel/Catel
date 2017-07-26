@@ -7,6 +7,8 @@
 namespace Catel.Logging
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Reflection;
 
     /// <summary>
@@ -82,11 +84,6 @@ namespace Catel.Logging
             Write(log, LogEvent.Info, "System page size:      {0}", Environment.SystemPageSize);
 #endif
 
-#if WINDOWS_PHONE && !NETFX_CORE
-            Write(log, LogEvent.Info, "Device name:           {0}", Microsoft.Phone.Info.DeviceStatus.DeviceName);
-            Write(log, LogEvent.Info, "Device ID:             {0}", Windows.Phone.System.Analytics.HostInformation.PublisherHostId);
-#endif
-
 #if NETFX_CORE
             var appPackage = Windows.ApplicationModel.Package.Current;
             var packageId = appPackage.Id;
@@ -98,6 +95,114 @@ namespace Catel.Logging
             Write(log, LogEvent.Info, "**************************************************************************");
             Write(log, LogEvent.Info, string.Empty);
         }
+
+
+        /// <summary>
+        /// Writes the specified message as the specified log event.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="s1">The formatting argument 1.</param>
+        public static void Write(this ILog log, LogEvent logEvent, string messageFormat, object s1)
+        {
+            if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
+            {
+                return;
+            }
+
+            log?.WriteWithData(string.Format(messageFormat, s1), null, logEvent);
+        }
+
+        /// <summary>
+        /// Writes the specified message as the specified log event.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="s1">The formatting argument 1.</param>
+        /// <param name="s2">The formatting argument 2.</param>
+        public static void Write(this ILog log, LogEvent logEvent, string messageFormat, object s1, object s2)
+        {
+            if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
+            {
+                return;
+            }
+
+            log?.WriteWithData(string.Format(messageFormat, s1, s2), null, logEvent);
+        }
+
+        /// <summary>
+        /// Writes the specified message as the specified log event.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="s1">The formatting argument 1.</param>
+        /// <param name="s2">The formatting argument 2.</param>
+        /// <param name="s3">The formatting argument 3.</param>
+        public static void Write(this ILog log, LogEvent logEvent, string messageFormat, object s1, object s2, object s3)
+        {
+            if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
+            {
+                return;
+            }
+
+            log?.WriteWithData(string.Format(messageFormat, s1, s2, s3), null, logEvent);
+        }
+
+        /// <summary>
+        /// Writes the specified message as the specified log event.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="s1">The formatting argument 1.</param>
+        /// <param name="s2">The formatting argument 2.</param>
+        /// <param name="s3">The formatting argument 3.</param>
+        /// <param name="s4">The formatting argument 4.</param>
+        public static void Write(this ILog log, LogEvent logEvent, string messageFormat, object s1, object s2, object s3, object s4)
+        {
+            if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
+            {
+                return;
+            }
+
+            log?.WriteWithData(string.Format(messageFormat, s1, s2, s3, s4), null, logEvent);
+        }
+
+        /// <summary>
+        /// Writes the specified message as the specified log event.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="logEvent">The log event.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="s1">The formatting argument 1.</param>
+        /// <param name="s2">The formatting argument 2.</param>
+        /// <param name="s3">The formatting argument 3.</param>
+        /// <param name="s4">The formatting argument 4.</param>
+        /// <param name="s5">The formatting argument 5.</param>
+        /// <param name="others">The formatting arguments.</param>
+        public static void Write(this ILog log, LogEvent logEvent, string messageFormat, object s1, object s2, object s3, object s4, object s5, params object[] others)
+        {
+            if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
+            {
+                return;
+            }
+
+            if (others != null && others.Length > 0)
+            {
+                object[] args = {s1, s2, s3, s4, s5};
+                Array.Resize(ref args, 5 + others.Length);
+                Array.Copy(others, 0, args, 5, others.Length);
+
+                log?.WriteWithData(string.Format(messageFormat, args), null, logEvent);
+            }
+            else
+            {
+                log?.WriteWithData(string.Format(messageFormat, s1, s2, s3, s4, s5), null, logEvent);
+            }
+        }       
 
         /// <summary>
         /// Writes the specified message as the specified log event.
@@ -150,7 +255,7 @@ namespace Catel.Logging
                 return;
             }
 
-            string message = messageFormat ?? string.Empty;
+            var message = messageFormat ?? string.Empty;
             if (args != null && args.Length > 0)
             {
                 message = string.Format(message, args);
@@ -334,32 +439,6 @@ namespace Catel.Logging
         }
 
         /// <summary>
-        /// Writes the specified message as error message and then throws the specified exception.
-        /// <para/>
-        /// The specified exception must have a constructor that accepts a single string as message.
-        /// </summary>
-        /// <typeparam name="TException">The type of the exception.</typeparam>
-        /// <param name="log">The log.</param>
-        /// <param name="messageFormat">The message format.</param>
-        /// <param name="args">The args.</param>
-        /// <example>
-        ///   <code>
-        /// This example logs an error and immediately throws the exception:<para/>
-        ///   <![CDATA[
-        /// Log.ErrorAndThrowException<NotSupportedException>("This action is not supported");
-        /// ]]>
-        ///   </code>
-        ///   </example>
-        /// <exception cref="ArgumentNullException">The <paramref name="log"/> is <c>null</c>.</exception>
-        /// <exception cref="NotSupportedException">The <typeparamref name="TException"/> does not have a constructor accepting a string.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "ErrorAndCreateException", TreatAsErrorFromVersion = "4.3", RemoveInVersion = "5.0")]
-        public static void ErrorAndThrowException<TException>(this ILog log, string messageFormat, params object[] args)
-            where TException : Exception
-        {
-            throw ErrorAndCreateException<TException>(log, messageFormat, args);
-        }
-
-        /// <summary>
         /// Formats the exception for logging with an additional message.
         /// </summary>
         /// <param name="exception">The exception.</param>
@@ -371,6 +450,7 @@ namespace Catel.Logging
             Argument.IsNotNull("exception", exception);
 
             var formattedException = $"[{exception.GetType().Name}] {exception}";
+
             if (string.IsNullOrEmpty(message))
             {
                 return formattedException;

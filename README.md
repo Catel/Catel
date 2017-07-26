@@ -1,14 +1,15 @@
 Catel
 =====
 
-[![Join the chat at https://gitter.im/Catel/Catel](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Catel/Catel?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+Name|Badge
+---|---
+Chat|[![Join the chat at https://gitter.im/catel/catel](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/catel/catel?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+Downloads|![NuGet downloads](https://img.shields.io/nuget/dt/catel.core.svg)
+NuGet stable version|![Version](https://img.shields.io/nuget/v/catel.core.svg)
+NuGet unstable version|![Pre-release version](https://img.shields.io/nuget/vpre/catel.core.svg)
+MyGet unstable version|![Pre-release version](https://img.shields.io/myget/catel/vpre/catel.core.svg)
 
-![License](https://img.shields.io/github/license/catel/catel.svg)
-![NuGet downloads](https://img.shields.io/nuget/dt/catel.core.svg)
-![Version](https://img.shields.io/nuget/v/catel.core.svg)
-![Pre-release version](https://img.shields.io/nuget/vpre/catel.core.svg)
-
-Catel is an application development platform with the focus on MVVM (WPF, Silverlight, Windows Phone, WinRT, Xamarin.Android, Xamarin.iOS and Xamarin.Forms) and MVC (ASP.NET MVC). 
+Catel is an application development platform with the focus on MVVM (WPF, Universal Windows Platform, Xamarin.Android, Xamarin.iOS and Xamarin.Forms) and MVC (ASP.NET MVC). 
 The goal of Catel is to provide a complete set of modular functionality for Line of Business applications written in any .NET 
 technology, from client to server.
 
@@ -21,15 +22,4 @@ to be built. Among these extensions are support for Dynamic Objects, Entity Fram
 
 <a href="https://pledgie.com/campaigns/26956"><img alt="Click here to lend your support to: Catel and make a donation at pledgie.com !" src="https://pledgie.com/campaigns/26956.png?skin_name=chrome" border="0" /></a>
 
-
-## Official website 
-
-The official website can be found at http://www.catelproject.com
-
-## Documentation
-
-Documentation can be found at http://www.catelproject.com
-
-## Issue tracking
-
-The issue tracker including a roadmap can be found at http://www.catelproject.com
+For documentation, please visit the [documentation portal](http://docs.catelproject.com)

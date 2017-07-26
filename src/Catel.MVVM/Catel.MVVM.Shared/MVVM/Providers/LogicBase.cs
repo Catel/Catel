@@ -63,29 +63,11 @@ namespace Catel.MVVM.Providers
     public abstract class LogicBase : ObservableObject, IViewLoadState, IUniqueIdentifyable
     {
         #region Fields
-        /// <summary>
-        /// The log.
-        /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        /// The view model factory.
-        /// </summary>
         private static IViewModelFactory _viewModelFactory;
-
-        /// <summary>
-        /// The view model locator.
-        /// </summary>
         private static readonly IViewModelLocator _viewModelLocator;
-
-        /// <summary>
-        /// The view manager.
-        /// </summary>
         private static readonly IViewManager _viewManager;
-
-        /// <summary>
-        /// The view property selector.
-        /// </summary>
         private static readonly IViewPropertySelector _viewPropertySelector;
 
         /// <summary>
@@ -95,24 +77,18 @@ namespace Catel.MVVM.Providers
         /// </summary>
         private IViewModel _viewModel;
 
-        /// <summary>
-        /// Boolean representing whether this is the first validation after the control has been loaded.
-        /// </summary>
         private bool _isFirstValidationAfterLoaded = true;
 
         /// <summary>
-        /// The view loaded manager.
+        /// The view load manager
         /// </summary>
         protected static readonly IViewLoadManager ViewLoadManager;
 
         /// <summary>
-        /// The lock object.
+        /// The lock object
         /// </summary>
         protected readonly object _lockObject = new object();
 
-        /// <summary>
-        /// The target view.
-        /// </summary>
         private IView _targetView;
         #endregion
 
@@ -164,10 +140,6 @@ namespace Catel.MVVM.Providers
             TargetView = targetView;
             ViewModelType = viewModelType;
             ViewModel = viewModel;
-
-#if SL5
-            Catel.Windows.FrameworkElementExtensions.FixUILanguageBug((System.Windows.FrameworkElement)TargetView);
-#endif
 
             ViewModelBehavior = (viewModel != null) ? LogicViewModelBehavior.Injected : LogicViewModelBehavior.Dynamic;
 
@@ -491,30 +463,12 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> has been canceled.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelCanceledAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<EventArgs> ViewModelCanceled;
-
-        /// <summary>
-        /// Occurs when the <see cref="ViewModel"/> has been canceled.
-        /// </summary>
         public event AsyncEventHandler<EventArgs> ViewModelCanceledAsync;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> has been saved.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelSavedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<EventArgs> ViewModelSaved;
-
-        /// <summary>
-        /// Occurs when the <see cref="ViewModel"/> has been saved.
-        /// </summary>
         public event AsyncEventHandler<EventArgs> ViewModelSavedAsync;
-
-        /// <summary>
-        /// Occurs when the <see cref="ViewModel"/> has been closed.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<ViewModelClosedEventArgs> ViewModelClosed;
 
         /// <summary>
         /// Occurs when the <see cref="ViewModel"/> has been closed.
@@ -563,7 +517,7 @@ namespace Catel.MVVM.Providers
 
                 foreach (var propertyToSubscribe in propertiesToSubscribe)
                 {
-                    if (propertiesToSubscribe.Contains(propertyToSubscribe))
+                    if (!finalProperties.Contains(propertyToSubscribe))
                     {
                         finalProperties.Add(propertyToSubscribe);
                     }
@@ -739,7 +693,9 @@ namespace Catel.MVVM.Providers
         /// This method will call the <see cref="OnTargetViewLoadedAsync"/> which can be overriden for custom 
         /// behavior. This method is required to protect from duplicate loaded events.
         /// </remarks>
+#pragma warning disable AvoidAsyncVoid // Avoid async void
         private async void OnTargetViewLoadedInternal(object sender, EventArgs e)
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             if (!CanLoad)
             {
@@ -797,7 +753,7 @@ namespace Catel.MVVM.Providers
                 }
                 else
                 {
-                    viewModel.ValidateViewModel(true, false);
+                    viewModel.Validate(true);
                 }
 
                 _isFirstValidationAfterLoaded = true;
@@ -850,7 +806,9 @@ namespace Catel.MVVM.Providers
         /// This method will call the <see cref="OnTargetViewUnloadedAsync"/> which can be overriden for custom 
         /// behavior. This method is required to protect from duplicate unloaded events.
         /// </remarks>
+#pragma warning disable AvoidAsyncVoid // Avoid async void
         private async void OnTargetViewUnloadedInternal(object sender, EventArgs e)
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             if (!CanUnload)
             {
@@ -994,7 +952,6 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         public virtual Task OnViewModelCanceledAsync(object sender, EventArgs e)
         {
-            ViewModelCanceled.SafeInvoke(this, e);
             return ViewModelCanceledAsync.SafeInvokeAsync(this, e);
         }
 
@@ -1005,7 +962,6 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         public virtual Task OnViewModelSavedAsync(object sender, EventArgs e)
         {
-            ViewModelSaved.SafeInvoke(this, e);
             return ViewModelSavedAsync.SafeInvokeAsync(this, e);
         }
 
@@ -1016,26 +972,23 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="Catel.MVVM.ViewModelClosedEventArgs"/> instance containing the event data.</param>
         public virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
-            ViewModelClosed.SafeInvoke(this, e);
             return ViewModelClosedAsync.SafeInvokeAsync(this, e);
         }
 
         /// <summary>
         /// Validates the view model.
         /// </summary>
-        /// <returns><c>true</c> if the <see cref="ViewModel"/> is valid; otherwise <c>false</c>.</returns>
-        public virtual bool ValidateViewModel()
+        public virtual void ValidateViewModel()
         {
-            if (ViewModel == null)
+            var vm = ViewModel;
+            if (vm == null)
             {
-                return false;
+                return;
             }
 
-            var result = ViewModel.ValidateViewModel(_isFirstValidationAfterLoaded, false);
+            vm.Validate(_isFirstValidationAfterLoaded);
 
             _isFirstValidationAfterLoaded = false;
-
-            return result;
         }
 
         /// <summary>

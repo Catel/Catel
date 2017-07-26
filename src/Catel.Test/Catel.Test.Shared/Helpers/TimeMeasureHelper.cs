@@ -23,7 +23,7 @@ namespace Catel.Test
                 initializationAction();
             }
 
-#if NET && !NET40
+#if NET
             var oldMode = GCSettings.LatencyMode;
             GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 #endif
@@ -32,24 +32,20 @@ namespace Catel.Test
 
             for (var i = 0; i < timesToInvoke; i++)
             {
-#if !SILVERLIGHT
                 var innerStopwatch = new Stopwatch();
                 innerStopwatch.Start();
-#endif
 
                 action();
 
-#if !SILVERLIGHT
                 innerStopwatch.Stop();
 
                 var elapsed = innerStopwatch.Elapsed.TotalMilliseconds;
                 totalMs += elapsed;
 
                 //ConsoleHelper.Write("{0} => run {1} took {2} ms", description, i + 1, elapsed);
-#endif
             }
 
-#if NET && !NET40
+#if NET
             GCSettings.LatencyMode = oldMode;
 #endif
 

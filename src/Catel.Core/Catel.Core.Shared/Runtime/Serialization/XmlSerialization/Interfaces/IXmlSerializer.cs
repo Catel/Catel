@@ -11,12 +11,6 @@ namespace Catel.Runtime.Serialization.Xml
     /// </summary>
     public interface IXmlSerializer : ISerializer
     {
-        /// <summary>
-        /// Gets or sets the default fallback optimalization mode if it's not specified via <see cref="XmlSerializationConfiguration"/>.
-        /// <para />
-        /// The default value is <see cref="XmlSerializerOptimalizationMode.Performance"/>.
-        /// </summary>
-        /// <value>The optimalization mode.</value>
-        XmlSerializerOptimalizationMode OptimalizationMode { get; set; } 
+
     }
 }

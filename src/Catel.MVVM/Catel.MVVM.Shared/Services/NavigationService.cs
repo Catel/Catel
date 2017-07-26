@@ -26,7 +26,10 @@ namespace Catel.Services
 
         private static readonly Dictionary<string, string> _registeredUris = new Dictionary<string, string>();
 
-        private readonly INavigationRootService _navigationRootService;
+        /// <summary>
+        /// The navigation root service.
+        /// </summary>
+        protected readonly INavigationRootService NavigationRootService;
         #endregion
 
         #region Constructors
@@ -38,7 +41,7 @@ namespace Catel.Services
         {
             Argument.IsNotNull(() => navigationRootService);
 
-            _navigationRootService = navigationRootService;
+            NavigationRootService = navigationRootService;
 
             Initialize();
         }

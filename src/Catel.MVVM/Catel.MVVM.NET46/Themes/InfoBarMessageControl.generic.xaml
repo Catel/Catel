@@ -4,7 +4,7 @@
                     xmlns:localconverters="clr-namespace:Catel.MVVM.Converters">
 
     <!-- Converters -->
-    <localconverters:CountCollapsedConverter x:Key="CountCollapsedConverter"/>
+    <localconverters:CollectionToCollapsingVisibilityConverter x:Key="CollectionToCollapsingVisibilityConverter"/>
 
 	<!-- Brushes -->
 	<SolidColorBrush x:Key="InfoBarMessageBackgroundBrush" Color="LightYellow" />
@@ -35,7 +35,7 @@
 
                                 <!-- Message bar, by default in-line (Grid.Row = 0) -->
                                 <StackPanel Grid.Row="0" x:Name="PART_MessageBar"
-                                            Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:InfoBarMessageControl}}, Path=MessageCount, Converter={StaticResource CountCollapsedConverter}}"
+                                            Visibility="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:InfoBarMessageControl}}, Path=MessageCount, Converter={StaticResource CollectionToCollapsingVisibilityConverter}}"
                                             Width="{Binding ElementName=actualContent, Path=ActualWidth}">
 
                                     <!-- Internal StackPanel, otherwise the whole control will have the background brush -->
@@ -74,7 +74,7 @@
 
 								<!-- List of errors -->
 								<ItemsControl Grid.Row="0" ItemsSource="{Binding ErrorMessageCollection}" Height="Auto" VerticalAlignment="Top"
-											  Visibility="{Binding ErrorMessageCollection.Count, Converter={StaticResource CountCollapsedConverter}}">
+											  Visibility="{Binding ErrorMessageCollection.Count, Converter={StaticResource CollectionToCollapsingVisibilityConverter}}">
 									<ItemsControl.ItemTemplate>
 										<DataTemplate>
 											<Grid>
@@ -94,7 +94,7 @@
 
                                 <!-- List of warnings -->
                                 <ItemsControl Grid.Row="1" ItemsSource="{Binding WarningMessageCollection}" Height="Auto" VerticalAlignment="Top" 
-											  Visibility="{Binding WarningMessageCollection.Count, Converter={StaticResource CountCollapsedConverter}}">
+											  Visibility="{Binding WarningMessageCollection.Count, Converter={StaticResource CollectionToCollapsingVisibilityConverter}}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>

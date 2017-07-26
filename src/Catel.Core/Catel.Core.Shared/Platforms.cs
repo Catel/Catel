@@ -52,13 +52,10 @@ namespace Catel
                     return false;
 
                 case KnownPlatforms.NET:
-                    return currentPlatform == SupportedPlatforms.NET40 ||
-                           currentPlatform == SupportedPlatforms.NET45 ||
+                    return currentPlatform == SupportedPlatforms.NET45 ||
                            currentPlatform == SupportedPlatforms.NET46 ||
+                           currentPlatform == SupportedPlatforms.NET47 ||
                            currentPlatform == SupportedPlatforms.NET50;
-
-                case KnownPlatforms.NET40:
-                    return currentPlatform == SupportedPlatforms.NET40;
 
                 case KnownPlatforms.NET45:
                     return currentPlatform == SupportedPlatforms.NET45;
@@ -66,51 +63,14 @@ namespace Catel
                 case KnownPlatforms.NET46:
                     return currentPlatform == SupportedPlatforms.NET46;
 
+                case KnownPlatforms.NET47:
+                    return currentPlatform == SupportedPlatforms.NET47;
+
                 case KnownPlatforms.NET50:
                     return currentPlatform == SupportedPlatforms.NET50;
 
-                case KnownPlatforms.Silverlight:
-                    return currentPlatform == SupportedPlatforms.Silverlight5;
-
-                case KnownPlatforms.Silverlight5:
-                    return currentPlatform == SupportedPlatforms.Silverlight5;
-
-                case KnownPlatforms.WindowsPhone:
-                    return currentPlatform == SupportedPlatforms.WindowsPhone80 ||
-                           currentPlatform == SupportedPlatforms.WindowsPhone81Silverlight ||
-                           currentPlatform == SupportedPlatforms.WindowsPhone81Runtime;
-
-                case KnownPlatforms.WindowsPhoneSilverlight:
-                    return currentPlatform == SupportedPlatforms.WindowsPhone80 ||
-                           currentPlatform == SupportedPlatforms.WindowsPhone81Silverlight;
-
-                case KnownPlatforms.WindowsPhoneRuntime:
-                    return currentPlatform == SupportedPlatforms.WindowsPhone81Runtime;
-
-                case KnownPlatforms.WindowsPhone80:
-                    return currentPlatform == SupportedPlatforms.WindowsPhone80;
-
-                case KnownPlatforms.WindowsPhone81Silverlight:
-                    return currentPlatform == SupportedPlatforms.WindowsPhone81Silverlight;
-
-                case KnownPlatforms.WindowsPhone81Runtime:
-                    return currentPlatform == SupportedPlatforms.WindowsPhone81Runtime;
-
-                case KnownPlatforms.WindowsRuntime:
-                    return currentPlatform == SupportedPlatforms.WindowsRuntime80 ||
-                           currentPlatform == SupportedPlatforms.WindowsRuntime81;
-
-                case KnownPlatforms.WindowsRuntime80:
-                    return currentPlatform == SupportedPlatforms.WindowsRuntime80;
-
-                case KnownPlatforms.WindowsRuntime81:
-                    return currentPlatform == SupportedPlatforms.WindowsRuntime81;
-
                 case KnownPlatforms.WindowsUniversal:
-                    return currentPlatform == SupportedPlatforms.WindowsUniversal100;
-
-                case KnownPlatforms.WindowsUniversal100:
-                    return currentPlatform == SupportedPlatforms.WindowsUniversal100;
+                    return currentPlatform == SupportedPlatforms.WindowsUniversal;
 
                 case KnownPlatforms.Xamarin:
                     return currentPlatform == SupportedPlatforms.Android ||
@@ -137,30 +97,16 @@ namespace Catel
         {
 #if PCL
             return SupportedPlatforms.PCL;
-#elif NET35
-            throw new System.NotSupportedException("NET35 is not supported");
-#elif NET40
-            return SupportedPlatforms.NET40;
 #elif NET45
             return SupportedPlatforms.NET45;
 #elif NET46
             return SupportedPlatforms.NET46;
+#elif NET47
+            return SupportedPlatforms.NET47;
 #elif NET50
             return SupportedPlatforms.NET50;
-#elif SL5
-            return SupportedPlatforms.Silverlight5;
-#elif WP80
-            return SupportedPlatforms.WindowsPhone80;
-#elif WP81 && SILVERLIGHT
-            return SupportedPlatforms.WindowsPhone81Silverlight;
-#elif WP81 && NETFX_CORE
-            return SupportedPlatforms.WindowsPhone81Runtime;
-#elif WIN80
-            return SupportedPlatforms.WindowsRuntime80;
-#elif WIN81
-            return SupportedPlatforms.WindowsRuntime81;
-#elif UAP100
-            return SupportedPlatforms.WindowsUniversal100;
+#elif UWP
+            return SupportedPlatforms.WindowsUniversal;
 #elif ANDROID
             return SupportedPlatforms.Android;
 #elif IOS
@@ -179,11 +125,6 @@ namespace Catel
     public enum SupportedPlatforms
     {
         /// <summary>
-        /// .NET framework 4.0.
-        /// </summary>
-        NET40,
-
-        /// <summary>
         /// .NET framework 4.5.
         /// </summary>
         NET45,
@@ -194,44 +135,19 @@ namespace Catel
         NET46,
 
         /// <summary>
+        /// .NET framework 4.7.
+        /// </summary>
+        NET47,
+
+        /// <summary>
         /// .NET framework 5.0.
         /// </summary>
         NET50,
 
         /// <summary>
-        /// Silverlight 5.
-        /// </summary>
-        Silverlight5,
-
-        /// <summary>
-        /// Windows Phone 8.0.
-        /// </summary>
-        WindowsPhone80,
-
-        /// <summary>
-        /// Windows Phone 8.1 (Silverlight).
-        /// </summary>
-        WindowsPhone81Silverlight,
-
-        /// <summary>
-        /// Windows Phone 8.1 (Runtime).
-        /// </summary>
-        WindowsPhone81Runtime,
-
-        /// <summary>
-        /// Windows Runtime 8.0.
-        /// </summary>
-        WindowsRuntime80,
-
-        /// <summary>
-        /// Windows Runtime 8.1.
-        /// </summary>
-        WindowsRuntime81,
-
-        /// <summary>
         /// Windows Universal 10.0.
         /// </summary>
-        WindowsUniversal100,
+        WindowsUniversal,
 
         /// <summary>
         /// The Android platform.
@@ -270,11 +186,6 @@ namespace Catel
         NET,
 
         /// <summary>
-        /// .NET framework 4.0.
-        /// </summary>
-        NET40,
-
-        /// <summary>
         /// .NET framework 4.5.
         /// </summary>
         NET45,
@@ -285,74 +196,19 @@ namespace Catel
         NET46,
 
         /// <summary>
+        /// .NET framework 4.7.
+        /// </summary>
+        NET47,
+
+        /// <summary>
         /// .NET framework 5.0.
         /// </summary>
         NET50,
 
         /// <summary>
-        /// Any sSilverlight platform.
-        /// </summary>
-        Silverlight,
-
-        /// <summary>
-        /// Silverlight 5.
-        /// </summary>
-        Silverlight5,
-
-        /// <summary>
-        /// Any Windows Phone platform.
-        /// </summary>
-        WindowsPhone,
-
-        /// <summary>
-        /// Any Windows Phone Silverlight platform.
-        /// </summary>
-        WindowsPhoneSilverlight,
-
-        /// <summary>
-        /// Any Windows Phone Runtime platform.
-        /// </summary>
-        WindowsPhoneRuntime,
-
-        /// <summary>
-        /// Windows Phone 8.0.
-        /// </summary>
-        WindowsPhone80,
-
-        /// <summary>
-        /// Windows Phone 8.1 (Silverlight).
-        /// </summary>
-        WindowsPhone81Silverlight,
-
-        /// <summary>
-        /// Windows Phone 8.1 (Runtime).
-        /// </summary>
-        WindowsPhone81Runtime,
-
-        /// <summary>
-        /// Any Windows Runtime platform.
-        /// </summary>
-        WindowsRuntime,
-
-        /// <summary>
-        /// Windows Runtime 8.0.
-        /// </summary>
-        WindowsRuntime80,
-
-        /// <summary>
-        /// Windows Runtime 8.1.
-        /// </summary>
-        WindowsRuntime81,
-
-        /// <summary>
         /// Any Windows Universal platform.
         /// </summary>
         WindowsUniversal,
-
-        /// <summary>
-        /// Windows Universal 10.0.
-        /// </summary>
-        WindowsUniversal100,
 
         /// <summary>
         /// Any Xamarin platform.

@@ -22,7 +22,7 @@ namespace Catel.Test.Runtime.Serialization
 
     public static class SerializationTestHelper
     {
-        public static IXmlSerializer GetXmlSerializer(XmlSerializerOptimalizationMode optimalizationMode, ISerializationManager serializationManager = null)
+        public static IXmlSerializer GetXmlSerializer(ISerializationManager serializationManager = null)
         {
             if (serializationManager == null)
             {
@@ -30,7 +30,6 @@ namespace Catel.Test.Runtime.Serialization
             }
 
             var serializer = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<XmlSerializer>(serializationManager);
-            serializer.OptimalizationMode = optimalizationMode;
 
             return serializer;
         }

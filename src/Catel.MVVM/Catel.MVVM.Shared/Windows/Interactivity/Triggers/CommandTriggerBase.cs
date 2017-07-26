@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || SILVERLIGHT
+#if NET
 
 namespace Catel.Windows.Interactivity
 {
@@ -97,17 +97,6 @@ namespace Catel.Windows.Interactivity
         private void OnCommandCanExecuteChangedInternal(object sender, System.EventArgs e)
         {
             OnCommandCanExecuteChanged();
-            OnCommandCanExecuteChanged(sender, e);
-        }
-
-        /// <summary>
-        /// Called when the <see cref="ICommand.CanExecute"/> state has changed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnCommandCanExecuteChanged", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        protected virtual void OnCommandCanExecuteChanged(object sender, System.EventArgs e)
-        {
         }
 
         /// <summary>
@@ -120,11 +109,9 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the associated object is loaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectLoaded(object sender, System.EventArgs e)
+        protected override void OnAssociatedObjectLoaded()
         {
-            base.OnAssociatedObjectLoaded(sender, e);
+            base.OnAssociatedObjectLoaded();
 
             UpdateCommandSubscriptions();
         }
@@ -132,13 +119,11 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the associated object is unloaded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected override void OnAssociatedObjectUnloaded(object sender, System.EventArgs e)
+        protected override void OnAssociatedObjectUnloaded()
         {
             UnsubscribeFromCommand();
 
-            base.OnAssociatedObjectUnloaded(sender, e);
+            base.OnAssociatedObjectUnloaded();
         }
 
         /// <summary>

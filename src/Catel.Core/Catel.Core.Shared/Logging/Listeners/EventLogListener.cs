@@ -16,6 +16,7 @@ namespace Catel.Logging
     using System.Net;
     using System.Threading.Tasks;
     using Reflection;
+    using Threading;
 
     /// <summary>
     /// Log listener which writes all data to the system event log.
@@ -76,32 +77,33 @@ namespace Catel.Logging
         /// <returns>The formatted log event.</returns>
         protected override string FormatLogEvent(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
-            var logMessage = string.Format("[{0}] {1}", log.TargetType.FullName, message);
+            var logMessage = string.Format("[{0}] {1}", log.Name, message);
             return logMessage;
         }
 
         /// <summary>
-        /// Writes the batch of entries.
+        /// Writes the batch asynchronous.
         /// </summary>
         /// <param name="batchEntries">The batch entries.</param>
-        /// <returns>Task so this can be done asynchronously.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="batchEntries"/> is <c>null</c>.</exception>
-        protected override async Task WriteBatch(List<LogBatchEntry> batchEntries)
+        /// <returns>Task.</returns>
+        protected override Task WriteBatchAsync(List<LogBatchEntry> batchEntries)
         {
             try
             {
                 foreach (var batchEntry in batchEntries)
                 {
                     var type = ChooseEventLogEntryType(batchEntry.LogEvent);
-                    var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Time);
+                    var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Data, batchEntry.Time);
 
-                    EventLog.WriteEntry(Source, message, type, (int) batchEntry.LogEvent);
+                    EventLog.WriteEntry(Source, message, type, (int)batchEntry.LogEvent);
                 }
             }
             catch (Exception)
             {
                 // Swallow
             }
+
+            return TaskHelper.Completed;
         }
 
         private static EventLogEntryType ChooseEventLogEntryType(LogEvent logEvent)

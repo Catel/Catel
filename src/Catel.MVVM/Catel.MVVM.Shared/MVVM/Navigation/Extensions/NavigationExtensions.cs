@@ -120,7 +120,7 @@ namespace Catel.MVVM.Navigation
 #if NETFX_CORE
             string uriString = e.SourcePageType.FullName;
 #else
-            string uriString = UrlHelper.GetSafeUriString(e.Uri);
+            string uriString = UriExtensions.GetSafeUriString(e.Uri);
 #endif
 
             return uriString;
@@ -139,7 +139,7 @@ namespace Catel.MVVM.Navigation
 #if NETFX_CORE
             string uriString = e.SourcePageType.FullName;
 #else
-            string uriString = UrlHelper.GetSafeUriString(e.Uri);
+            string uriString = UriExtensions.GetSafeUriString(e.Uri);
 #endif
 
             return uriString;

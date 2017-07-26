@@ -11,6 +11,8 @@ namespace Catel.Test.IoC
 
     public class TypeRequestPathFacts
     {
+        private const string TestPathName = "TestPath";
+
         public class X
         {
             public X(Z z) { }
@@ -25,7 +27,7 @@ namespace Catel.Test.IoC
         {
             public Z(Y y) { }
         }
-
+        
         private static TypeRequestInfo[] CreateArrayWithOnlyReferenceTypes()
         {
             return new TypeRequestInfo[]
@@ -67,15 +69,48 @@ namespace Catel.Test.IoC
             };
         }
 
+        private static TypeRequestPath MapRequestInfoArrayIntoPath(TypeRequestInfo[] typeRequestInfos)
+        {
+            var result = TypeRequestPath.Root(TestPathName);
+            foreach (var typeRequestInfo in typeRequestInfos)
+            {
+                result = TypeRequestPath.Branch(result, typeRequestInfo);
+            }
+            return result;
+        }
+
         [TestFixture]
-        public class TheConstructor
+        public class TheRoot
         {
             [TestCase]
-            public void ThrowsArgumentNullExceptionForNullAndEmptyTypeRequestInfos()
+            public void RootOfThePathCanBeCreatedWithoutTheName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new TypeRequestPath((TypeRequestInfo)null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new TypeRequestPath((TypeRequestInfo[])null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new TypeRequestPath(new TypeRequestInfo[] { }));
+                Assert.DoesNotThrow(() => TypeRequestPath.Root());
+            }
+
+            [TestCase]
+            public void RootOfThePathCanBeCreatedWithName()
+            {
+                var path = TypeRequestPath.Root(TestPathName);
+                Assert.AreEqual(TestPathName, path.Name);
+            }
+        }
+
+        [TestFixture]
+        public class TheBranch
+        {
+            [TestCase]
+            public void ThrowsArgumentNullExceptionForNullParent()
+            {
+                var item = new TypeRequestInfo(typeof(X));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeRequestPath.Branch(null, item));
+            }
+
+            [TestCase]
+            public void ThrowsArgumentNullExceptionForNullTypeRequestInfo()
+            {
+                var parent = TypeRequestPath.Root();
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeRequestPath.Branch(parent, null));
             }
 
             [TestCase]
@@ -83,7 +118,7 @@ namespace Catel.Test.IoC
             {
                 var typeArray = CreateArrayWithOnlyValueTypes();
 
-                var path = new TypeRequestPath(typeArray);
+                var path = MapRequestInfoArrayIntoPath(typeArray);
 
                 for (int i = 0; i < typeArray.Length; i++)
                 {
@@ -99,7 +134,7 @@ namespace Catel.Test.IoC
             {
                 var typeArray = CreateArrayWithOnlyReferenceTypes();
 
-                var path = new TypeRequestPath(typeArray);
+                var path = MapRequestInfoArrayIntoPath(typeArray);
 
                 for (int i = 0; i < typeArray.Length; i++)
                 {
@@ -115,7 +150,7 @@ namespace Catel.Test.IoC
             {
                 var typeArray = CreateMixedArray();
 
-                var path = new TypeRequestPath(typeArray);
+                var path = MapRequestInfoArrayIntoPath(typeArray);
 
                 for (int i = 0; i < typeArray.Length; i++)
                 {
@@ -125,16 +160,30 @@ namespace Catel.Test.IoC
                 Assert.AreEqual(typeArray[0], path.FirstType);
                 Assert.AreEqual(typeArray[typeArray.Length - 1], path.LastType);
             }
+
+            [TestCase]
+            public void ThrowsCircularDependencyExceptionIfThereAreRepetitions()
+            {
+                var typeArray = CreateInvalidPath();
+                ExceptionTester.CallMethodAndExpectException<CircularDependencyException>(() => MapRequestInfoArrayIntoPath(typeArray));
+            }
         }
 
         [TestFixture]
         public class TheFirstTypeProperty
         {
             [TestCase]
+            public void ReturnsNullForEmpty()
+            {
+                var path = TypeRequestPath.Root();
+                Assert.IsNull(path.FirstType);
+            }
+
+            [TestCase]
             public void ReturnsRightType()
             {
                 var typeArray = CreateArrayWithOnlyValueTypes();
-                var path = new TypeRequestPath(typeArray);
+                var path = MapRequestInfoArrayIntoPath(typeArray);
 
                 Assert.AreEqual(typeArray[0], path.FirstType);
             }
@@ -144,147 +193,35 @@ namespace Catel.Test.IoC
         public class TheLastTypeProperty
         {
             [TestCase]
+            public void ReturnsNullForEmpty()
+            {
+                var path = TypeRequestPath.Root();
+                Assert.IsNull(path.LastType);
+            }
+
+            [TestCase]
             public void ReturnsRightType()
             {
                 var typeArray = CreateArrayWithOnlyValueTypes();
-                var path = new TypeRequestPath(typeArray);
+                var path = MapRequestInfoArrayIntoPath(typeArray);
 
                 Assert.AreEqual(typeArray[typeArray.Length - 1], path.LastType);
             }
         }
 
         [TestFixture]
-        public class TheIsValidProperty
+        public class ToStringMethod
         {
             [TestCase]
-            public void ReturnsTrueForValidPath()
+            public void PathOfThreeTypesReturnExpectedString()
             {
-                var typeArray = CreateMixedArray();
-                var path = new TypeRequestPath(typeArray);
-             
-                Assert.IsTrue(path.IsValid);
+                var typeArray = CreateArrayWithOnlyReferenceTypes();
+                var path = MapRequestInfoArrayIntoPath(typeArray);
+
+                const string expected = "X => Y => Z";
+                Assert.AreEqual(path.ToString(), expected);
             }
 
-            [TestCase]
-            public void ReturnsFalseForInvalidPath()
-            {
-                var typeArray = CreateInvalidPath();
-                var path = new TypeRequestPath(typeArray);
-
-                Assert.IsFalse(path.IsValid);
-            }
-        }
-
-        [TestFixture]
-        public class ThePushTypeMethod
-        {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullTypeRequestInfo()
-            {
-                var typeArray = CreateMixedArray();
-                var path = new TypeRequestPath(typeArray);
-
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => path.PushType(null, false));
-            }
-
-            [TestCase]
-            public void DoesThrowCircularDependencyExceptionForDuplicateTypeIfSpecified()
-            {
-                var typeArray = CreateMixedArray();
-                var path = new TypeRequestPath(typeArray);
-
-                ExceptionTester.CallMethodAndExpectException<CircularDependencyException>(() => path.PushType(new TypeRequestInfo(typeof(X)), true));
-            }
-
-            [TestCase]
-            public void DoesNotThrowCircularDependencyExceptionForDuplicateTypeIfNotSpecified()
-            {
-                var typeArray = CreateMixedArray();
-                var path = new TypeRequestPath(typeArray);
-
-                path.PushType(new TypeRequestInfo(typeof(X)), false);
-
-                Assert.IsFalse(path.IsValid);
-            }
-
-            [TestCase]
-            public void DoesIgnoreValueTypesIfIgnoreValueTypesIsTrue()
-            {
-                var firstType = new TypeRequestInfo(typeof(X));
-                var path = new TypeRequestPath(firstType);
-
-                path.PushType(new TypeRequestInfo(typeof(DateTime)), false);
-                Assert.AreEqual(firstType, path.LastType);
-
-                path.PushType(new TypeRequestInfo(typeof(double)), false);
-                Assert.AreEqual(firstType, path.LastType);
-
-                path.PushType(new TypeRequestInfo(typeof(int)), false);
-                Assert.AreEqual(firstType, path.LastType);
-            }
-
-            [TestCase]
-            public void DoesNotIgnoreValueTypesIfIgnoreValueTypesIsFalse()
-            {
-                var firstType = new TypeRequestInfo(typeof(X));
-                var path = new TypeRequestPath(firstType, false);
-
-                path.PushType(new TypeRequestInfo(typeof(DateTime)), false);
-                Assert.AreEqual(typeof(DateTime), path.LastType.Type);
-
-                path.PushType(new TypeRequestInfo(typeof(double)), false);
-                Assert.AreEqual(typeof(double), path.LastType.Type);
-
-                path.PushType(new TypeRequestInfo(typeof(int)), false);
-                Assert.AreEqual(typeof(int), path.LastType.Type);
-            }
-        }
-
-        [TestFixture]
-        public class ThePopTypeMethod
-        {
-            [TestCase]
-            public void ThrowsInvalidOperationExceptionWhenTypeRequestPathOnlyContainsOneType()
-            {
-                var typeArray = CreateMixedArray();
-                var path = new TypeRequestPath(typeArray);
-
-                while (path.AllTypes.Length > 1)
-                {
-                    path.PopType();
-                }
-
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(path.PopType);
-            }
-        }
-
-        [TestFixture]
-        public class TheMarkTypeAsNotCreatedMethod
-        {
-            [TestCase]
-            public void ThrowsArgumentNullExceptionForNullTypeRequestInfo()
-            {
-                var typeArray = CreateMixedArray();
-                var path = new TypeRequestPath(typeArray);
-
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => path.MarkTypeAsNotCreated(null));
-            }
-
-            [TestCase]
-            public void RemovesTypeRangeUntilSpecificType()
-            {
-                var path = new TypeRequestPath(new TypeRequestInfo(typeof(X)));
-                path.PushType(new TypeRequestInfo(typeof(object)), false);
-                path.PushType(new TypeRequestInfo(typeof(Y)), false);
-                path.PushType(new TypeRequestInfo(typeof(object)), false);
-                path.PushType(new TypeRequestInfo(typeof(Z)), false);
-
-                path.MarkTypeAsNotCreated(new TypeRequestInfo(typeof(Y)));
-
-                Assert.AreEqual(2, path.TypeCount);
-                Assert.AreEqual(new TypeRequestInfo(typeof(X)), path.AllTypes[0]);
-                Assert.AreEqual(new TypeRequestInfo(typeof(object)), path.AllTypes[1]);
-            }
         }
     }
 }

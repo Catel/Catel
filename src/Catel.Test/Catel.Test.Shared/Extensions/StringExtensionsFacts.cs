@@ -29,12 +29,15 @@ namespace Catel.Test.Extensions
         [TestFixture]
         public class TheGetSlugMethod
         {
-            [TestCase("this.hello something", "thishellosomething")]
-            [TestCase("testß", "test")]
-            [TestCase("test\\*&$", "test")]
-            public void ReturnsRightSlug(string input, string expectedOutput)
+            [TestCase("this.hEllO something", "thishEllOsomething", false)]
+            [TestCase("this.hEllO something", "thishellosomething", true)]
+            [TestCase("tesTß", "tesT", false)]
+            [TestCase("tesTß", "test", true)]
+            [TestCase("tesT\\*&$", "tesT", false)]
+            [TestCase("tesT\\*&$", "test", true)]
+            public void ReturnsRightSlug(string input, string expectedOutput, bool lowercase)
             {
-                var output = input.GetSlug();
+                var output = input.GetSlug(makeLowercase: lowercase);
 
                 Assert.AreEqual(expectedOutput, output);
             }

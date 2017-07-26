@@ -13,7 +13,7 @@ namespace Catel
     using System.Linq;
     using System.Reflection;
 
-    using Catel.Caching;
+    using Caching;
     using Logging;
     using Reflection;
 
@@ -23,6 +23,18 @@ namespace Catel
 #else
     using EventArgsBase = System.EventArgs;
 #endif
+
+    /// <summary>
+    /// Open instance delegate which allows the creation of an instance method without an actual reference
+    /// to the target.
+    /// </summary>
+    public delegate void OpenInstanceEventHandler<TTarget, TEventArgs>(TTarget @this, object sender, TEventArgs e);
+
+    /// <summary>
+    /// Open instance delegate which allows the creation of an instance method without an actual reference
+    /// to the target.
+    /// </summary>
+    public delegate void OpenInstanceActionHandler<TTarget>(TTarget @this);
 
     /// <summary>
     /// Implements a weak event listener that allows the owner to be garbage
@@ -46,16 +58,7 @@ namespace Catel
     public class WeakEventListener<TTarget, TSource, TEventArgs> : IWeakEventListener
         where TTarget : class
         where TSource : class
-#if !NETFX_CORE && !PCL
-        where TEventArgs : EventArgsBase
-#endif
     {
-        /// <summary>
-        /// Open instance delegate which allows the creation of an instance method without an actual reference
-        /// to the target.
-        /// </summary>
-        public delegate void OpenInstanceHandler(TTarget @this, object sender, TEventArgs e);
-
         #region Fields
         /// <summary>
         /// The log.
@@ -104,7 +107,7 @@ namespace Catel
         /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
         /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
         /// <param name="typeForEventSubscriptions">The type for event subscriptions.</param>
-        private WeakEventListener(TTarget target, TSource source, Type typeForEventSubscriptions)
+        private WeakEventListener(object target, TSource source, Type typeForEventSubscriptions)
         {
             Argument.IsNotNull("typeForEventSubscriptions", typeForEventSubscriptions);
 
@@ -128,13 +131,24 @@ namespace Catel
         /// <summary>
         /// Gets or sets the method to call when the event fires.
         /// </summary>
-        internal OpenInstanceHandler OnEventAction { get; set; }
+        internal Delegate OnEventHandler { get; set; }
+
+        /// <summary>
+        /// Gets or sets the method to call when the event fires.
+        /// </summary>
+        internal Delegate OnEventAction { get; set; }
 
         /// <summary>
         /// Gets or sets the method to call when the static event fires.
         /// </summary>
         /// <value>The on static event action.</value>
-        internal EventHandler<TEventArgs> OnStaticEventAction { get; set; }
+        internal EventHandler<TEventArgs> OnStaticEventHandler { get; set; }
+
+        /// <summary>
+        /// Gets or sets the method to call when the static event fires.
+        /// </summary>
+        /// <value>The on static event action.</value>
+        internal Action OnStaticEventAction { get; set; }
 
         /// <summary>
         /// Gets the target or <c>null</c> if there is no target.
@@ -226,27 +240,6 @@ namespace Catel
         /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
         /// <param name="eventName">Name of the event.</param>
         /// <param name="handler">The handler to execute when the event occurs.</param>
-        /// <returns>
-        /// The created event listener.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakGenericEvent(TTarget target, TSource source, string eventName, EventHandler<TEventArgs> handler)
-        {
-            return SubscribeToWeakGenericEvent(target, source, eventName, handler, true);
-        }
-
-        /// <summary>
-        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
-        /// unsubscription of the event.
-        /// </summary>
-        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
-        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
-        /// <param name="eventName">Name of the event.</param>
-        /// <param name="handler">The handler to execute when the event occurs.</param>
         /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
         /// <returns>
         /// The created event listener.
@@ -256,7 +249,7 @@ namespace Catel
         /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakGenericEvent(TTarget target, TSource source, string eventName, EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails)
+        public static IWeakEventListener SubscribeToWeakGenericEvent(TTarget target, TSource source, string eventName, EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
         {
             Argument.IsNotNullOrWhitespace("eventName", eventName);
             Argument.IsNotNull("handler", handler);
@@ -273,29 +266,6 @@ namespace Catel
         /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
         /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
         /// <param name="handler">The handler to execute when the event occurs.</param>
-        /// <param name="eventName">Name of the event.</param>
-        /// <returns>
-        /// The created event listener.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakPropertyChangedEvent(TTarget target, TSource source, PropertyChangedEventHandler handler, string eventName = "PropertyChanged")
-        {
-            return SubscribeToWeakPropertyChangedEvent(target, source, handler, true, eventName);
-        }
-
-        /// <summary>
-        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
-        /// unsubscription of the event.
-        /// <para />
-        /// This method subscribes to the <see cref="PropertyChangedEventHandler"/> which does not follow the <c>EventHandler{TEventArgs}</c> convention.
-        /// </summary>
-        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
-        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
-        /// <param name="handler">The handler to execute when the event occurs.</param>
         /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
         /// <param name="eventName">Name of the event.</param>
         /// <returns>
@@ -306,7 +276,7 @@ namespace Catel
         /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakPropertyChangedEvent(TTarget target, TSource source, PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails, string eventName = "PropertyChanged")
+        public static IWeakEventListener SubscribeToWeakPropertyChangedEvent(TTarget target, TSource source, PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "PropertyChanged")
         {
             Argument.IsNotNull("handler", handler);
             Argument.IsNotNullOrWhitespace("eventName", eventName);
@@ -323,29 +293,6 @@ namespace Catel
         /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
         /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
         /// <param name="handler">The handler to execute when the event occurs.</param>
-        /// <param name="eventName">Name of the event.</param>
-        /// <returns>
-        /// The created event listener.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakCollectionChangedEvent(TTarget target, TSource source, NotifyCollectionChangedEventHandler handler, string eventName = "CollectionChanged")
-        {
-            return SubscribeToWeakCollectionChangedEvent(target, source, handler, true, eventName);
-        }
-
-        /// <summary>
-        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
-        /// unsubscription of the event.
-        /// <para />
-        /// This method subscribes to the <see cref="NotifyCollectionChangedEventHandler"/> which does not follow the <c>EventHandler{TEventArgs}</c> convention.
-        /// </summary>
-        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
-        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
-        /// <param name="handler">The handler to execute when the event occurs.</param>
         /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
         /// <param name="eventName">Name of the event.</param>
         /// <returns>
@@ -356,7 +303,7 @@ namespace Catel
         /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakCollectionChangedEvent(TTarget target, TSource source, NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails, string eventName = "CollectionChanged")
+        public static IWeakEventListener SubscribeToWeakCollectionChangedEvent(TTarget target, TSource source, NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "CollectionChanged")
         {
             return SubscribeToWeakEventWithExplicitSourceType<INotifyCollectionChanged>(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
@@ -369,27 +316,6 @@ namespace Catel
         /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
         /// <param name="eventName">Name of the event.</param>
         /// <param name="handler">The handler to execute when the event occurs.</param>
-        /// <returns>
-        /// The created event listener.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakEvent(TTarget target, TSource source, string eventName, Delegate handler)
-        {
-            return SubscribeToWeakEventWithExplicitSourceType<TSource>(target, source, eventName, handler);
-        }
-
-        /// <summary>
-        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
-        /// unsubscription of the event.
-        /// </summary>
-        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
-        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
-        /// <param name="eventName">Name of the event.</param>
-        /// <param name="handler">The handler to execute when the event occurs.</param>
         /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
         /// <returns>
         /// The created event listener.
@@ -399,32 +325,9 @@ namespace Catel
         /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakEvent(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails)
+        public static IWeakEventListener SubscribeToWeakEvent(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails = true)
         {
             return SubscribeToWeakEventWithExplicitSourceType<TSource>(target, source, eventName, handler, throwWhenSubscriptionFails);
-        }
-
-        /// <summary>
-        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
-        /// unsubscription of the event.
-        /// </summary>
-        /// <typeparam name="TExplicitSourceType">The final source type, which must be specified for explicitly implemented events.</typeparam>
-        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
-        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
-        /// <param name="eventName">Name of the event.</param>
-        /// <param name="handler">The handler to execute when the event occurs.</param>
-        /// <returns>
-        /// The created event listener.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget target, TSource source, string eventName, Delegate handler)
-            where TExplicitSourceType : class
-        {
-            return SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(target, source, eventName, handler, true);
         }
 
         /// <summary>
@@ -445,7 +348,7 @@ namespace Catel
         /// <exception cref="InvalidOperationException">The <paramref name="source" /> and <paramref name="target" /> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName" /> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler" /> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails)
+        public static IWeakEventListener SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails = true)
             where TExplicitSourceType : class
         {
             Argument.IsNotNullOrWhitespace("eventName", eventName);
@@ -456,13 +359,18 @@ namespace Catel
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Both the source and target are null, which means that a static event handler subscribes to a static event. In such cases, there are no memory leaks, so there is no reason to use this class");
             }
 
+            object finalTarget = target;
+
             var methodInfo = handler.GetMethodInfoEx();
             if ((methodInfo.Name.Contains("_AnonymousDelegate>")) || (methodInfo.DeclaringType.FullName.Contains("__DisplayClass")))
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
+                if (finalTarget.GetType() != methodInfo.DeclaringType)
+                {
+                    finalTarget = handler.Target ?? finalTarget;
+                }
             }
 
-            var weakListener = new WeakEventListener<TTarget, TSource, TEventArgs>(target, source, typeof(TExplicitSourceType));
+            var weakListener = new WeakEventListener<TTarget, TSource, TEventArgs>(finalTarget, source, typeof(TExplicitSourceType));
 
             try
             {
@@ -476,15 +384,35 @@ namespace Catel
                 throw Log.ErrorAndCreateException<InvalidOperationException>(ex, "Failed to create the delegate. Probably the wrong type of EventArgs is used and does not match the EventHandler<TEventArgs>");
             }
 
-            if (weakListener.IsStaticEventHandler)
+            var isAction = methodInfo.GetParameters().Length == 0;
+
+            if (weakListener.IsStaticEventHandler || (isAction && methodInfo.IsStatic))
             {
-                var del = DelegateHelper.CreateDelegate(typeof(EventHandler<TEventArgs>), methodInfo);
-                weakListener.OnStaticEventAction = (EventHandler<TEventArgs>)del;
+                if (isAction)
+                {
+                    var del = DelegateHelper.CreateDelegate(typeof(Action), methodInfo);
+                    weakListener.OnStaticEventAction = (Action)del;
+                }
+                else
+                {
+                    var del = DelegateHelper.CreateDelegate(typeof(EventHandler<TEventArgs>), methodInfo);
+                    weakListener.OnStaticEventHandler = (EventHandler<TEventArgs>)del;
+                }
             }
             else
             {
-                var del = DelegateHelper.CreateDelegate(typeof(OpenInstanceHandler), methodInfo);
-                weakListener.OnEventAction = (OpenInstanceHandler)del;
+                if (isAction)
+                {
+                    var delegateType = typeof(OpenInstanceActionHandler<>).MakeGenericType(finalTarget.GetType());
+                    var del = DelegateHelper.CreateDelegate(delegateType, methodInfo);
+                    weakListener.OnEventAction = del;
+                }
+                else
+                {
+                    var delegateType = typeof(OpenInstanceEventHandler<,>).MakeGenericType(finalTarget.GetType(), typeof(TEventArgs));
+                    var del = DelegateHelper.CreateDelegate(delegateType, methodInfo);
+                    weakListener.OnEventHandler = del;
+                }
             }
 
             return weakListener;
@@ -509,7 +437,7 @@ namespace Catel
                 return true;
             }
 
-            var error = string.Format("No add-method available for event '{0}', cannot subscribe using weak events. Make sure the event is public", eventName);
+            var error = $"No add-method available for event '{eventName}', cannot subscribe using weak events. Make sure the event is public";
             Log.Error(error);
 
             if (throwOnError)
@@ -710,11 +638,7 @@ namespace Catel
         {
             Argument.IsNotNull("methodInfo", methodInfo);
 
-#if WIN80
-            methodInfo.Invoke(source, new object[] { _eventRegistrationToken });
-#else
             methodInfo.Invoke(source, new object[] { _internalEventDelegate });
-#endif
 
             return true;
         }
@@ -734,18 +658,30 @@ namespace Catel
                 return;
             }
 
-            var target = (TTarget)Target;
+            var target = Target;
+
+            var onEventHandler = OnEventHandler;
+            if (onEventHandler != null)
+            {
+                onEventHandler.DynamicInvoke(target, source, eventArgs);
+            }
 
             var onEventAction = OnEventAction;
             if (onEventAction != null)
             {
-                onEventAction(target, source, eventArgs);
+                onEventAction.DynamicInvoke(target);
+            }
+
+            var onStaticEventHandler = OnStaticEventHandler;
+            if (onStaticEventHandler != null)
+            {
+                onStaticEventHandler(source, eventArgs);
             }
 
             var onStaticEventAction = OnStaticEventAction;
             if (onStaticEventAction != null)
             {
-                onStaticEventAction(source, eventArgs);
+                onStaticEventAction();
             }
         }
 
@@ -799,43 +735,24 @@ namespace Catel
         /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
         /// <param name="eventName">Name of the event.</param>
         /// <param name="handler">The handler to execute when the event occurs.</param>
-        /// <returns>The created event listener.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is not of type <see cref="PropertyChangedEventHandler"/>,
-        /// <see cref="NotifyCollectionChangedEventHandler"/> or <see cref="EventHandler{TEventArgs}"/>.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakGenericEvent<TEventArgs>(TTarget target, TSource source, string eventName, EventHandler<TEventArgs> handler)
+        /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
+        /// <returns>
+        /// The created event listener.
+        /// </returns>
+        /// <exception cref="ArgumentException">The <paramref name="eventName" /> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="handler" /> is <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The <paramref name="source" /> and <paramref name="target" /> are both <c>null</c>.</exception>
+        /// <exception cref="InvalidOperationException">The <paramref name="source" /> and <paramref name="target" /> are both <c>null</c>.</exception>
+        /// <exception cref="NotSupportedException">The <paramref name="handler" /> is not of type <see cref="PropertyChangedEventHandler" />,
+        /// <see cref="NotifyCollectionChangedEventHandler" /> or <see cref="EventHandler{TEventArgs}" />.</exception>
+        /// <exception cref="NotSupportedException">The <paramref name="handler" /> is not of type <see cref="PropertyChangedEventHandler" />,
+        /// <see cref="NotifyCollectionChangedEventHandler" /> or <see cref="EventHandler{TEventArgs}" />.</exception>
+        public static IWeakEventListener SubscribeToWeakGenericEvent<TEventArgs>(TTarget target, TSource source, string eventName, EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
 #if !NETFX_CORE && !PCL
  where TEventArgs : EventArgsBase
 #endif
         {
-            return SubscribeToWeakEvent(target, source, eventName, handler);
-        }
-
-        /// <summary>
-        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
-        /// unsubscription of the event.
-        /// <para />
-        /// This method subscribes to the <see cref="PropertyChangedEventHandler"/> which does not follow the <c>EventHandler{TEventArgs}</c> convention.
-        /// </summary>
-        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
-        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
-        /// <param name="handler">The handler to execute when the event occurs.</param>
-        /// <param name="eventName">Name of the event.</param>
-        /// <returns>
-        /// The created event listener.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakPropertyChangedEvent(TTarget target, TSource source, PropertyChangedEventHandler handler, string eventName = "PropertyChanged")
-        {
-            return SubscribeToWeakPropertyChangedEvent(target, source, handler, true, eventName);
+            return SubscribeToWeakEvent(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
 
         /// <summary>
@@ -857,7 +774,7 @@ namespace Catel
         /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakPropertyChangedEvent(TTarget target, TSource source, PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails, string eventName = "PropertyChanged")
+        public static IWeakEventListener SubscribeToWeakPropertyChangedEvent(TTarget target, TSource source, PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "PropertyChanged")
         {
             return SubscribeToWeakEventWithExplicitSourceType<INotifyPropertyChanged>(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
@@ -871,29 +788,6 @@ namespace Catel
         /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
         /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
         /// <param name="handler">The handler to execute when the event occurs.</param>
-        /// <param name="eventName">Name of the event.</param>
-        /// <returns>
-        /// The created event listener.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakCollectionChangedEvent(TTarget target, TSource source, NotifyCollectionChangedEventHandler handler, string eventName = "CollectionChanged")
-        {
-            return SubscribeToWeakCollectionChangedEvent(target, source, handler, true, eventName);
-        }
-
-        /// <summary>
-        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
-        /// unsubscription of the event.
-        /// <para />
-        /// This method subscribes to the <see cref="NotifyCollectionChangedEventHandler"/> which does not follow the <c>EventHandler{TEventArgs}</c> convention.
-        /// </summary>
-        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
-        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
-        /// <param name="handler">The handler to execute when the event occurs.</param>
         /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
         /// <param name="eventName">Name of the event.</param>
         /// <returns>
@@ -904,7 +798,7 @@ namespace Catel
         /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakCollectionChangedEvent(TTarget target, TSource source, NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails, string eventName = "CollectionChanged")
+        public static IWeakEventListener SubscribeToWeakCollectionChangedEvent(TTarget target, TSource source, NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "CollectionChanged")
         {
             return SubscribeToWeakEventWithExplicitSourceType<INotifyCollectionChanged>(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
@@ -917,29 +811,6 @@ namespace Catel
         /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
         /// <param name="eventName">Name of the event.</param>
         /// <param name="handler">The handler to execute when the event occurs.</param>
-        /// <returns>
-        /// The created event listener.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is not of type <see cref="PropertyChangedEventHandler"/>, 
-        /// <see cref="NotifyCollectionChangedEventHandler"/> or <see cref="EventHandler{TEventArgs}"/>.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakEvent(TTarget target, TSource source, string eventName, Delegate handler)
-        {
-            return SubscribeToWeakEvent(target, source, eventName, handler, true);
-        }
-
-        /// <summary>
-        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
-        /// unsubscription of the event.
-        /// </summary>
-        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
-        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
-        /// <param name="eventName">Name of the event.</param>
-        /// <param name="handler">The handler to execute when the event occurs.</param>
         /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
         /// <returns>
         /// The created event listener.
@@ -951,7 +822,7 @@ namespace Catel
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is not of type <see cref="PropertyChangedEventHandler"/>, 
         /// <see cref="NotifyCollectionChangedEventHandler"/> or <see cref="EventHandler{TEventArgs}"/>.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakEvent(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails)
+        public static IWeakEventListener SubscribeToWeakEvent(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails = true)
         {
             return SubscribeToWeakEventWithExplicitSourceType<TSource>(target, source, eventName, handler, throwWhenSubscriptionFails);
         }
@@ -965,35 +836,6 @@ namespace Catel
         /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
         /// <param name="eventName">Name of the event.</param>
         /// <param name="handler">The handler to execute when the event occurs.</param>
-        /// <returns>
-        /// The created event listener.
-        /// </returns>
-        /// <remarks>
-        /// This method can only be used for non-static event sources and targets. If static events or listeners are required, use
-        /// the <see cref="WeakEventListener{TTarget,TSource,TEventArgs}"/> class.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is not of type <see cref="PropertyChangedEventHandler"/>, <see cref="NotifyCollectionChangedEventHandler"/> or <see cref="EventHandler{TEventArgs}"/>.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget target, TSource source, string eventName, Delegate handler)
-        {
-            return SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(target, source, eventName, handler, true);
-        }
-
-        /// <summary>
-        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
-        /// unsubscription of the event.
-        /// </summary>
-        /// <typeparam name="TExplicitSourceType">The final source type, which must be specified for explicitly implemented events.</typeparam>
-        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
-        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
-        /// <param name="eventName">Name of the event.</param>
-        /// <param name="handler">The handler to execute when the event occurs.</param>
         /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
         /// <returns>
         /// The created event listener.
@@ -1010,7 +852,7 @@ namespace Catel
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is not of type <see cref="PropertyChangedEventHandler"/>, <see cref="NotifyCollectionChangedEventHandler"/> or <see cref="EventHandler{TEventArgs}"/>.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails)
+        public static IWeakEventListener SubscribeToWeakEventWithExplicitSourceType<TExplicitSourceType>(TTarget target, TSource source, string eventName, Delegate handler, bool throwWhenSubscriptionFails = true)
         {
             Argument.IsNotNullOrWhitespace("eventName", eventName);
             Argument.IsNotNull("handler", handler);
@@ -1036,21 +878,42 @@ namespace Catel
                         type = null;
                     }
                 }
+                else if (handlerType == typeof(Action))
+                {
+                    // We must have the right event args, so get the right ones using reflection (cached anyway)
+                    var eventHandlerType = typeof(TSource).GetEventEx(eventName)?.EventHandlerType;
+                    if (eventHandlerType != null)
+                    {
+                        if (eventHandlerType.ContainsGenericParametersEx())
+                        {
+                            type = eventHandlerType.GetGenericArgumentsEx()[0];
+                        }
+                        else
+                        {
+                            var invokeMethod = eventHandlerType.GetMethodEx("Invoke");
+                            type = invokeMethod.GetParameters()[1].ParameterType;
+                        }
+                    }
+                    else
+                    {
+                        type = typeof(EventArgsBase);
+                    }
+                }
 
                 return type;
             });
 
             if (eventArgsType == null)
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Only handlers of type 'PropertyChangedEventHandler', 'NotifyCollectionChangedEventHandler' or 'EventHandler<TEventArgs' are supported. '{0}' does not belong to these supported types", handler.GetType().Name);
+                throw Log.ErrorAndCreateException<NotSupportedException>("Only handlers of type 'Action', 'PropertyChangedEventHandler', 'NotifyCollectionChangedEventHandler' or 'EventHandler<TEventArgs>' are supported. '{0}' does not belong to these supported types", handlerType.Name);
             }
 
-            var targetType = typeof (TTarget);
+            var targetType = typeof(TTarget);
             var sourceType = typeof(TSource);
 
             MethodInfo methodInfo = null;
 
-            var cacheKey = string.Format("{0}_{1}_{2}", targetType.FullName, sourceType.FullName, eventArgsType.FullName);
+            var cacheKey = $"{targetType.FullName}_{sourceType.FullName}_{eventArgsType?.FullName}";
 
             lock (ListenerTypeCache)
             {
@@ -1101,31 +964,6 @@ namespace Catel
         /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
         /// <param name="eventName">Name of the event.</param>
         /// <param name="handler">The handler to execute when the event occurs.</param>
-        /// <returns>The created event listener.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is not of type <see cref="PropertyChangedEventHandler"/>,
-        /// <see cref="NotifyCollectionChangedEventHandler"/> or <see cref="EventHandler{TEventArgs}"/>.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakGenericEvent<TEventArgs>(this object target, object source, string eventName, EventHandler<TEventArgs> handler)
-#if !NETFX_CORE && !PCL
- where TEventArgs : EventArgsBase
-#endif
-        {
-            return SubscribeToWeakGenericEvent(target, source, eventName, handler, true);
-        }
-
-        /// <summary>
-        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
-        /// unsubscription of the event.
-        /// </summary>
-        /// <typeparam name="TEventArgs">The type of the event args.</typeparam>
-        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
-        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
-        /// <param name="eventName">Name of the event.</param>
-        /// <param name="handler">The handler to execute when the event occurs.</param>
         /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
         /// <returns>The created event listener.</returns>
         /// <exception cref="ArgumentException">The <paramref name="eventName" /> is <c>null</c> or whitespace.</exception>
@@ -1135,7 +973,7 @@ namespace Catel
         /// <exception cref="NotSupportedException">The <paramref name="handler" /> is not of type <see cref="PropertyChangedEventHandler" />,
         /// <see cref="NotifyCollectionChangedEventHandler" /> or <see cref="EventHandler{TEventArgs}" />.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler" /> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakGenericEvent<TEventArgs>(this object target, object source, string eventName, EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails)
+        public static IWeakEventListener SubscribeToWeakGenericEvent<TEventArgs>(this object target, object source, string eventName, EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
 #if !NETFX_CORE && !PCL
  where TEventArgs : EventArgsBase
 #endif
@@ -1153,35 +991,6 @@ namespace Catel
         /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
         /// <param name="eventName">Name of the event.</param>
         /// <param name="handler">The handler to execute when the event occurs.</param>
-        /// <returns>
-        /// The created event listener.
-        /// </returns>
-        /// <remarks>
-        /// This method can only be used for non-static event sources and targets. If static events or listeners are required, use
-        /// the <see cref="WeakEventListener{TTarget,TSource,TEventArgs}"/> class.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakPropertyChangedEvent(this object target, object source, PropertyChangedEventHandler handler, string eventName = "PropertyChanged")
-        {
-            return SubscribeToWeakPropertyChangedEvent(target, source, handler, true, eventName);
-        }
-
-        /// <summary>
-        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
-        /// unsubscription of the event.
-        /// <para />
-        /// This method subscribes to the <see cref="PropertyChangedEventHandler"/> which does not follow the <c>EventHandler{TEventArgs}</c> convention.
-        /// </summary>
-        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
-        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
-        /// <param name="eventName">Name of the event.</param>
-        /// <param name="handler">The handler to execute when the event occurs.</param>
         /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
         /// <returns>
         /// The created event listener.
@@ -1197,7 +1006,7 @@ namespace Catel
         /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakPropertyChangedEvent(this object target, object source, PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails, string eventName = "PropertyChanged")
+        public static IWeakEventListener SubscribeToWeakPropertyChangedEvent(this object target, object source, PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "PropertyChanged")
         {
             return SubscribeToWeakEvent(target, source, eventName, handler, typeof(INotifyPropertyChanged), throwWhenSubscriptionFails);
         }
@@ -1211,35 +1020,6 @@ namespace Catel
         /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
         /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
         /// <param name="handler">The handler to execute when the event occurs.</param>
-        /// <param name="eventName">Name of the event.</param>
-        /// <returns>
-        /// The created event listener.
-        /// </returns>
-        /// <remarks>
-        /// This method can only be used for non-static event sources and targets. If static events or listeners are required, use
-        /// the <see cref="WeakEventListener{TTarget,TSource,TEventArgs}"/> class.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
-        /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
-        /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakCollectionChangedEvent(this object target, object source, NotifyCollectionChangedEventHandler handler, string eventName = "CollectionChanged")
-        {
-            return SubscribeToWeakCollectionChangedEvent(target, source, handler, true, eventName);
-        }
-
-        /// <summary>
-        /// Subscribes to a weak event by using one single method. This method also takes care of automatic
-        /// unsubscription of the event.
-        /// <para />
-        /// This method subscribes to the <see cref="NotifyCollectionChangedEventHandler"/> which does not follow the <c>EventHandler{TEventArgs}</c> convention.
-        /// </summary>
-        /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
-        /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
-        /// <param name="handler">The handler to execute when the event occurs.</param>
         /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
         /// <param name="eventName">Name of the event.</param>
         /// <returns>
@@ -1256,7 +1036,7 @@ namespace Catel
         /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakCollectionChangedEvent(this object target, object source, NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails, string eventName = "CollectionChanged")
+        public static IWeakEventListener SubscribeToWeakCollectionChangedEvent(this object target, object source, NotifyCollectionChangedEventHandler handler, bool throwWhenSubscriptionFails = true, string eventName = "CollectionChanged")
         {
             return SubscribeToWeakEvent(target, source, eventName, handler, typeof(INotifyCollectionChanged), throwWhenSubscriptionFails);
         }
@@ -1280,13 +1060,16 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="eventName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="handler"/> is <c>null</c>.</exception>
+        /// <param name="throwWhenSubscriptionFails">if set to <c>true</c>, throw an exception when subscription fails (does not apply to argument checks).</param>
         /// <exception cref="InvalidOperationException">The <paramref name="source"/> and <paramref name="target"/> are both <c>null</c>.</exception>
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is not of type <see cref="PropertyChangedEventHandler"/>, <see cref="NotifyCollectionChangedEventHandler"/> or <see cref="EventHandler{TEventArgs}"/>.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakEvent(this object target, object source, string eventName, Delegate handler)
+        public static IWeakEventListener SubscribeToWeakEvent(this object target, object source, string eventName, Action handler, bool throwWhenSubscriptionFails = true)
         {
-            return SubscribeToWeakEvent(target, source, eventName, handler, true);
+            Argument.IsNotNull("source", source);
+
+            return SubscribeToWeakEvent(handler.Target, source, eventName, handler, source.GetType(), throwWhenSubscriptionFails);
         }
 
         /// <summary>
@@ -1313,7 +1096,7 @@ namespace Catel
         /// <exception cref="InvalidOperationException">The <paramref name="eventName"/> does not exist or not accessible.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is not of type <see cref="PropertyChangedEventHandler"/>, <see cref="NotifyCollectionChangedEventHandler"/> or <see cref="EventHandler{TEventArgs}"/>.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler"/> is an anonymous delegate.</exception>
-        public static IWeakEventListener SubscribeToWeakEvent(this object target, object source, string eventName, Delegate handler, bool throwWhenSubscriptionFails)
+        public static IWeakEventListener SubscribeToWeakEvent(this object target, object source, string eventName, Delegate handler, bool throwWhenSubscriptionFails = true)
         {
             Argument.IsNotNull("source", source);
 

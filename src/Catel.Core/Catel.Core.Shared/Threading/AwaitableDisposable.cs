@@ -9,12 +9,7 @@ namespace Catel.Threading
 {
     using System;
     using System.Threading.Tasks;
-
-#if NET40 || SL5
-    using Microsoft.Runtime.CompilerServices;
-#else
     using System.Runtime.CompilerServices;
-#endif
 
     /// <summary>
     /// An awaitable wrapper around a task whose result is disposable. The wrapper is not disposable, so this prevents usage errors like "using (MyAsync())" when the appropriate usage should be "using (await MyAsync())".
@@ -43,7 +38,9 @@ namespace Catel.Threading
         /// <summary>
         /// Returns the underlying task.
         /// </summary>
+#pragma warning disable UseAsyncSuffix // Use Async suffix
         public Task<T> AsTask()
+#pragma warning restore UseAsyncSuffix // Use Async suffix
         {
             return _task;
         }
@@ -52,7 +49,9 @@ namespace Catel.Threading
         /// Implicit conversion to the underlying task.
         /// </summary>
         /// <param name="source">The awaitable wrapper.</param>
+#pragma warning disable UseAsyncSuffix // Use Async suffix
         public static implicit operator Task<T>(AwaitableDisposable<T> source)
+#pragma warning restore UseAsyncSuffix // Use Async suffix
         {
             return source.AsTask();
         }

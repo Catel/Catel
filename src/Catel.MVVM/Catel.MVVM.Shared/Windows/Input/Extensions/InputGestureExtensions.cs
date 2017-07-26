@@ -28,7 +28,7 @@ namespace Catel.Windows.Input
                 return true;
             }
 
-#if NET || SL5
+#if NET
             if (inputGesture.Key != Key.None)
             {
                 return false;

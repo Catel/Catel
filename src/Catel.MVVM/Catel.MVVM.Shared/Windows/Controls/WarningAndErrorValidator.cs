@@ -87,7 +87,7 @@ namespace Catel.Windows.Controls
         private readonly Dictionary<object, ValidationData> _objectValidation = new Dictionary<object, ValidationData>();
         private readonly object _objectValidationLock = new object();
 
-#if NET || SL5
+#if NET
         private InfoBarMessageControl _infoBarMessageControl;
 #endif
         #endregion
@@ -132,7 +132,7 @@ namespace Catel.Windows.Controls
         public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(object), typeof(WarningAndErrorValidator),
             new PropertyMetadata(null, (sender, e) => ((WarningAndErrorValidator)sender).UpdateSource(e.OldValue, e.NewValue)));
 
-#if NET || SL5
+#if NET
         /// <summary>
         /// Gets or sets a value indicating whether this warning and error validator should automatically register to the first <see cref="InfoBarMessageControl"/> it can find.
         /// </summary>
@@ -194,7 +194,7 @@ namespace Catel.Windows.Controls
         /// </summary>
         private void Initialize()
         {
-#if NET || SL5
+#if NET
             if (AutomaticallyRegisterToInfoBarMessageControl)
             {
                 //_infoBarMessageControl = this.FindLogicalAncestorByType<InfoBarMessageControl>();
@@ -239,7 +239,7 @@ namespace Catel.Windows.Controls
 
             _objectValidation.Clear();
 
-#if NET || SL5
+#if NET
             if (_infoBarMessageControl != null)
             {
                 _infoBarMessageControl.UnsubscribeWarningAndErrorValidator(this);
@@ -413,18 +413,18 @@ namespace Catel.Windows.Controls
                 oldValidationData = (ValidationData)currentValidationData.Clone();
             }
 
-            var model = value as IModel;
+            var validatable = value as IValidatable;
 
             CheckObjectValidationForFields(value, propertyChanged, currentValidationData.FieldWarnings, ValidationType.Warning);
 
             #region Warnings - business
             currentValidationData.BusinessWarnings.Clear();
 
-            if (model != null)
+            if (validatable != null)
             {
-                if (!model.IsHidingValidationResults)
+                if (!validatable.IsHidingValidationResults)
                 {
-                    foreach (var warning in model.ValidationContext.GetBusinessRuleWarnings())
+                    foreach (var warning in validatable.ValidationContext.GetBusinessRuleWarnings())
                     {
                         currentValidationData.BusinessWarnings.Add(new BusinessWarningOrErrorInfo(warning.Message));
                     }
@@ -445,11 +445,11 @@ namespace Catel.Windows.Controls
             #region Errors - business
             currentValidationData.BusinessErrors.Clear();
 
-            if (model != null)
+            if (validatable != null)
             {
-                if (!model.IsHidingValidationResults)
+                if (!validatable.IsHidingValidationResults)
                 {
-                    foreach (var error in model.ValidationContext.GetBusinessRuleErrors())
+                    foreach (var error in validatable.ValidationContext.GetBusinessRuleErrors())
                     {
                         currentValidationData.BusinessErrors.Add(new BusinessWarningOrErrorInfo(error.Message));
                     }
@@ -517,17 +517,17 @@ namespace Catel.Windows.Controls
         {
             var warningsOrErrors = new Dictionary<string, string>();
 
-            var model = value as IModel;
-            if (model != null)
+            var validatable = value as IValidatable;
+            if (validatable != null)
             {
                 // Respect IsHidingValidationResults
-                if (model.IsHidingValidationResults)
+                if (validatable.IsHidingValidationResults)
                 {
                     return warningsOrErrors;
                 }
 
                 // Read all data from validation context
-                var validationContext = model.ValidationContext;
+                var validationContext = validatable.ValidationContext;
                 var fieldValidationResults = new List<IFieldValidationResult>();
 
                 switch (validationType)

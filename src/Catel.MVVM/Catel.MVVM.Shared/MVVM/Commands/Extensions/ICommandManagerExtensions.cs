@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !WINDOWS_PHONE && !XAMARIN
+#if !XAMARIN
 
 namespace Catel
 {
@@ -98,7 +98,7 @@ namespace Catel
 
             var commandContainerName = string.Format("{0}CommandContainer", commandName.Replace(".", string.Empty));
 
-            var commandContainerType = (from type in TypeCache.GetTypes()
+            var commandContainerType = (from type in TypeCache.GetTypes(allowInitialization: false)
                                         where string.Equals(type.Name, commandContainerName, StringComparison.OrdinalIgnoreCase)
                                         select type).FirstOrDefault();
             if (commandContainerType == null)

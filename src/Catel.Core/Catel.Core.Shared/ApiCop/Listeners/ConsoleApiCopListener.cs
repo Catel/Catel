@@ -22,8 +22,6 @@ namespace Catel.ApiCop.Listeners
         {
 #if NET
             System.Diagnostics.Trace.WriteLine(line);
-#elif SILVERLIGHT
-            Console.WriteLine(line);
 #else
             System.Diagnostics.Debug.WriteLine(line);
 #endif

@@ -34,6 +34,8 @@ namespace Catel.Windows.Input
         public static bool AreKeyboardModifiersPressed(ModifierKeys modifier, bool checkForExactModifiers = true)
         {
             var allModifiers = Enum<ModifierKeys>.GetValues();
+            allModifiers.Remove(ModifierKeys.None);
+
             var currentlyPressedModifiers = GetCurrentlyPressedModifiers();
 
             if (checkForExactModifiers)
@@ -88,36 +90,44 @@ namespace Catel.Windows.Input
 #if NETFX_CORE
             var coreWindow = CoreWindow.GetForCurrentThread();
 
-            if ((coreWindow.GetKeyState(VirtualKey.Control) != CoreVirtualKeyStates.None) ||
-                (coreWindow.GetKeyState(VirtualKey.LeftControl) != CoreVirtualKeyStates.None) ||
-                (coreWindow.GetKeyState(VirtualKey.RightControl) != CoreVirtualKeyStates.None))
+            // Control
+            var controlState = coreWindow.GetKeyState(VirtualKey.Control);
+            var leftControlState = coreWindow.GetKeyState(VirtualKey.LeftControl);
+            var rightControlState = coreWindow.GetKeyState(VirtualKey.RightControl);
+            if (Enum<CoreVirtualKeyStates>.Flags.IsFlagSet(controlState, CoreVirtualKeyStates.Down) ||
+                Enum<CoreVirtualKeyStates>.Flags.IsFlagSet(leftControlState, CoreVirtualKeyStates.Down) ||
+                Enum<CoreVirtualKeyStates>.Flags.IsFlagSet(rightControlState, CoreVirtualKeyStates.Down))
             {
                 modifiers.Add(ModifierKeys.Control);
             }
 
-            //if ((coreWindow.GetKeyState(VirtualKey.Alt) != CoreVirtualKeyStates.None) ||
-            //    (coreWindow.GetKeyState(VirtualKey.LeftAlt) != CoreVirtualKeyStates.None) ||
-            //    (coreWindow.GetKeyState(VirtualKey.RightAlt) != CoreVirtualKeyStates.None))
-            //{
-            //    modifiers.Add(ModifierKeys.Alt);
-            //}
-
-            if ((coreWindow.GetKeyState(VirtualKey.Menu) != CoreVirtualKeyStates.None) ||
-                (coreWindow.GetKeyState(VirtualKey.LeftMenu) != CoreVirtualKeyStates.None) ||
-                (coreWindow.GetKeyState(VirtualKey.RightMenu) != CoreVirtualKeyStates.None))
+            // Menu == Alt key
+            var menuState = coreWindow.GetKeyState(VirtualKey.Menu);
+            var leftMenuState = coreWindow.GetKeyState(VirtualKey.LeftMenu);
+            var rightMenuState = coreWindow.GetKeyState(VirtualKey.RightMenu);
+            if (Enum<CoreVirtualKeyStates>.Flags.IsFlagSet(menuState, CoreVirtualKeyStates.Down) ||
+                Enum<CoreVirtualKeyStates>.Flags.IsFlagSet(leftMenuState, CoreVirtualKeyStates.Down) ||
+                Enum<CoreVirtualKeyStates>.Flags.IsFlagSet(rightMenuState, CoreVirtualKeyStates.Down))
             {
                 modifiers.Add(ModifierKeys.Menu);
             }
 
-            if ((coreWindow.GetKeyState(VirtualKey.Shift) != CoreVirtualKeyStates.None) ||
-                (coreWindow.GetKeyState(VirtualKey.LeftShift) != CoreVirtualKeyStates.None) ||
-                (coreWindow.GetKeyState(VirtualKey.RightShift) != CoreVirtualKeyStates.None))
+            // Shift
+            var shiftState =coreWindow.GetKeyState(VirtualKey.Shift);
+            var leftShiftState =coreWindow.GetKeyState(VirtualKey.LeftShift);
+            var rightShiftState =coreWindow.GetKeyState(VirtualKey.RightShift);
+            if (Enum<CoreVirtualKeyStates>.Flags.IsFlagSet(shiftState, CoreVirtualKeyStates.Down) ||
+                Enum<CoreVirtualKeyStates>.Flags.IsFlagSet(leftShiftState, CoreVirtualKeyStates.Down) ||
+                Enum<CoreVirtualKeyStates>.Flags.IsFlagSet(rightShiftState, CoreVirtualKeyStates.Down))
             {
                 modifiers.Add(ModifierKeys.Shift);
             }
 
-            if ((coreWindow.GetKeyState(VirtualKey.LeftWindows) != CoreVirtualKeyStates.None) ||
-                (coreWindow.GetKeyState(VirtualKey.RightWindows) != CoreVirtualKeyStates.None))
+            // Windows
+            var leftWindowsState = coreWindow.GetKeyState(VirtualKey.LeftWindows);
+            var rightWindowsState = coreWindow.GetKeyState(VirtualKey.LeftWindows);
+            if (Enum<CoreVirtualKeyStates>.Flags.IsFlagSet(leftWindowsState, CoreVirtualKeyStates.Down) ||
+                Enum<CoreVirtualKeyStates>.Flags.IsFlagSet(rightWindowsState, CoreVirtualKeyStates.Down))
             {
                 modifiers.Add(ModifierKeys.Windows);
             }

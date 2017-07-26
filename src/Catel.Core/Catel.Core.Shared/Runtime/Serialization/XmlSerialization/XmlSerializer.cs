@@ -15,11 +15,12 @@ namespace Catel.Runtime.Serialization.Xml
     using System.Xml;
     using System.Xml.Linq;
     using System.Xml.Serialization;
-    using Catel.Caching;
-    using Catel.Data;
-    using Catel.IoC;
-    using Catel.Logging;
-    using Catel.Reflection;
+
+    using Caching;
+    using Data;
+    using IoC;
+    using Logging;
+    using Reflection;
 
     /// <summary>
     /// The xml serializer.
@@ -73,19 +74,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             _dataContractSerializerFactory = dataContractSerializerFactory;
             _xmlNamespaceManager = xmlNamespaceManager;
-
-            OptimalizationMode = XmlSerializerOptimalizationMode.Performance;
         }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// Gets or sets the default fallback optimalization mode if it's not specified via <see cref="XmlSerializationConfiguration"/>.
-        /// <para />
-        /// The default value is <see cref="XmlSerializerOptimalizationMode.Performance"/>.
-        /// </summary>
-        /// <value>The optimalization mode.</value>
-        public XmlSerializerOptimalizationMode OptimalizationMode { get; set; }
         #endregion
 
         #region Methods
@@ -390,7 +379,7 @@ namespace Catel.Runtime.Serialization.Xml
                 var properties = modelType.GetPropertiesEx();
                 foreach (var property in properties)
                 {
-                    if (AttributeHelper.IsDecoratedWithAttribute<XmlIgnoreAttribute>(property))
+                    if (property.IsDecoratedWithAttribute<XmlIgnoreAttribute>())
                     {
                         ignoredProperties.Add(property.Name);
                     }
@@ -438,50 +427,57 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns>System.String.</returns>
         protected string GetXmlElementName(Type modelType, object model, string memberName)
         {
+            string xmlElementName = null;
+
             if (ShouldSerializeAsCollection(modelType))
             {
-                return CollectionName;
+                xmlElementName = CollectionName;
             }
 
-            XmlRootAttribute xmlRootAttribute;
-            if (AttributeHelper.TryGetAttribute(modelType, out xmlRootAttribute))
+            else if (modelType.TryGetAttribute(out XmlRootAttribute xmlRootAttribute))
             {
-                return xmlRootAttribute.ElementName;
+                xmlElementName = xmlRootAttribute.ElementName;
             }
 
-            if (!string.IsNullOrWhiteSpace(memberName))
+            else if (!string.IsNullOrWhiteSpace(memberName))
             {
                 var propertyDataManager = PropertyDataManager.Default;
                 if (propertyDataManager.IsPropertyNameMappedToXmlElement(modelType, memberName))
                 {
-                    return propertyDataManager.MapPropertyNameToXmlElementName(modelType, memberName);
+                    xmlElementName = propertyDataManager.MapPropertyNameToXmlElementName(modelType, memberName);
                 }
             }
+            else
+            {
+                xmlElementName = modelType.Name;
+            }
 
-            return modelType.Name;
+            // Fix for https://github.com/Catel/Catel/issues/1073
+            if (!string.IsNullOrWhiteSpace(xmlElementName))
+            {
+                xmlElementName = XmlConvert.EncodeName(xmlElementName);
+            }
+
+            return xmlElementName;
         }
 
         /// <summary>
         /// Gets the XML optimalization mode. First, the value will be retrieved from the <c>context.Configuration</c> value if
-        /// it's of type <c>XmlSerializationConfiguration</c>. Otherwise the <see cref="OptimalizationMode"/> will be used.
+        /// it's of type <c>XmlSerializationConfiguration</c>.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns></returns>
         protected virtual XmlSerializerOptimalizationMode GetXmlOptimalizationMode(ISerializationContext<XmlSerializationContextInfo> context)
         {
-            XmlSerializerOptimalizationMode? optimalizationMode = null;
+            var optimalizationMode = XmlSerializerOptimalizationMode.Performance;
 
             var xmlSerializationConfiguration = context.Configuration as XmlSerializationConfiguration;
             if (xmlSerializationConfiguration != null)
             {
                 optimalizationMode = xmlSerializationConfiguration.OptimalizationMode;
             }
-            else
-            {
-                optimalizationMode = OptimalizationMode;
-            }
 
-            return optimalizationMode.Value;
+            return optimalizationMode;
         }
 
         /// <summary>
@@ -552,7 +548,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns>
         /// The serialization context.
         /// </returns>
-        protected override ISerializationContext<XmlSerializationContextInfo> GetContext(object model, Type modelType, Stream stream, 
+        protected override ISerializationContext<XmlSerializationContextInfo> GetContext(object model, Type modelType, Stream stream,
             SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             XDocument document = null;
@@ -650,11 +646,11 @@ namespace Catel.Runtime.Serialization.Xml
                 return referenceInfo.Instance;
             }
 
-            var typeAttribute = element.Attribute("type"); // .GetAttribute("type", "http://catel.codeplex.com");
+            var typeAttribute = element.Attribute("type"); // .GetAttribute("type", "http://schemas.catelproject.com");
             var attributeValue = (typeAttribute != null) ? typeAttribute.Value : null;
             if (!string.IsNullOrEmpty(attributeValue))
             {
-                var typeToDeserialize = TypeCache.GetTypeWithoutAssembly(attributeValue);
+                var typeToDeserialize = TypeCache.GetTypeWithoutAssembly(attributeValue, allowInitialization: false);
                 if (typeToDeserialize != null && propertyTypeToDeserialize != typeToDeserialize)
                 {
                     Log.Debug("Property type for property '{0}' is '{1}' but found type info that it should be deserialized as '{2}'",
@@ -798,7 +794,7 @@ namespace Catel.Runtime.Serialization.Xml
                     xmlWriter.WriteStartElement(elementName);
 
 #if XAMARIN
-                    xmlWriter.WriteAttributeString("xmlns", namespacePrefix, defaultNamespace, "http://catel.codeplex.com");
+                    xmlWriter.WriteAttributeString("xmlns", namespacePrefix, defaultNamespace, "http://schemas.catelproject.com");
 #endif
 
                     xmlWriter.WriteAttributeString(namespacePrefix, "IsNull", null, "true");
@@ -967,7 +963,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns>The namespace.</returns>
         protected virtual string GetNamespaceUrl()
         {
-            return "http://catel.codeplex.com";
+            return "http://schemas.catelproject.com";
         }
         #endregion
     }

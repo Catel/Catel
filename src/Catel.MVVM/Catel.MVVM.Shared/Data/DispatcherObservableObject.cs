@@ -32,19 +32,6 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Raises the <see cref="ObservableObject.PropertyChanging"/> event.
-        /// <para/>
-        /// This is the one and only method that actually raises the <see cref="ObservableObject.PropertyChanging"/> event. All other
-        /// methods are (and should be) just overloads that eventually call this method.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangingEventArgs"/> instance containing the event data.</param>
-        protected override void RaisePropertyChanging(object sender, AdvancedPropertyChangingEventArgs e)
-        {
-            _dispatcherService.BeginInvokeIfRequired(() => base.RaisePropertyChanging(sender, e));
-        }
-
-        /// <summary>
         /// Raises the <see cref="ObservableObject.PropertyChanged"/> event.
         /// <para/>
         /// This is the one and only method that actually raises the <see cref="ObservableObject.PropertyChanged"/> event. All other

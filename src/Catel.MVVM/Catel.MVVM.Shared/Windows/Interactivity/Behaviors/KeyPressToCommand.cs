@@ -4,11 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !WIN80 && !XAMARIN
+#if !XAMARIN
 
 namespace Catel.Windows.Interactivity
 {
-    
 #if NETFX_CORE
     using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;

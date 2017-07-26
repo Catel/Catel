@@ -7,9 +7,9 @@
 namespace Catel.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Reflection;
     using System.Xml.Serialization;
-    using Catel.Caching;
     using Catel.Reflection;
 
     /// <summary>
@@ -37,7 +37,12 @@ namespace Catel.Data
 #if NET
         [field: NonSerialized]
 #endif
-        private readonly ICacheStorage<Type, CachedPropertyInfo> _cachedPropertyInfo = new CacheStorage<Type, CachedPropertyInfo>(storeNullValues: true);
+        private CachedPropertyInfo _cachedPropertyInfo;
+
+#if NET
+        [field: NonSerialized]
+#endif
+        private bool _updatedCachedPropertyInfo;
         #endregion
 
         #region Constructors
@@ -47,7 +52,6 @@ namespace Catel.Data
         /// <param name="name">Name of the property.</param>
         /// <param name="type">Type of the property.</param>
         /// <param name="defaultValue">Default value of the property.</param>
-        /// <param name="setParent">if set to <c>true</c>, the parent of the property will be set.</param>
         /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
         /// <param name="isSerializable">if set to <c>true</c>, the property is serializable.</param>
         /// <param name="includeInSerialization">if set to <c>true</c>, the property should be included in the serialization.</param>
@@ -56,9 +60,9 @@ namespace Catel.Data
         /// <param name="isCalculatedProperty">if set to <c>true</c>, the property is a calculated property.</param>
         /// <exception cref="ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
-        internal PropertyData(string name, Type type, object defaultValue, bool setParent, EventHandler<AdvancedPropertyChangedEventArgs> propertyChangedEventHandler,
+        internal PropertyData(string name, Type type, object defaultValue, EventHandler<AdvancedPropertyChangedEventArgs> propertyChangedEventHandler,
             bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool isCalculatedProperty)
-            : this(name, type, () => defaultValue, setParent, propertyChangedEventHandler, isSerializable,
+            : this(name, type, () => defaultValue, propertyChangedEventHandler, isSerializable,
                    includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty) { }
 
         /// <summary>
@@ -68,7 +72,6 @@ namespace Catel.Data
         /// <param name="type">Type of the property.</param>
         /// <param name="createDefaultValue">The delegate that creates the default value. If <c>null</c>, a delegate returning the default 
         /// value (<c>null</c> for reference types, <c>Activator.CreateInstance(type)</c> for reference types).</param>
-        /// <param name="setParent">if set to <c>true</c>, the parent of the property will be set.</param>
         /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
         /// <param name="isSerializable">if set to <c>true</c>, the property is serializable.</param>
         /// <param name="includeInSerialization">if set to <c>true</c>, the property should be included in the serialization.</param>
@@ -78,7 +81,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="createDefaultValue"/> is <c>null</c>.</exception>
-        internal PropertyData(string name, Type type, Func<object> createDefaultValue, bool setParent, EventHandler<AdvancedPropertyChangedEventArgs> propertyChangedEventHandler,
+        internal PropertyData(string name, Type type, Func<object> createDefaultValue, EventHandler<AdvancedPropertyChangedEventArgs> propertyChangedEventHandler,
             bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool isCalculatedProperty)
         {
             Argument.IsNotNullOrWhitespace("name", name);
@@ -87,7 +90,6 @@ namespace Catel.Data
 
             Name = name;
             Type = type;
-            SetParent = setParent;
             PropertyChangedEventHandler = propertyChangedEventHandler;
             IsSerializable = isSerializable;
             IncludeInSerialization = includeInSerialization;
@@ -123,13 +125,6 @@ namespace Catel.Data
         {
             get { return _createDefaultValue(); }
         }
-
-        /// <summary>
-        /// Gets a value indicating whether to set the parent after creating or deserializing the property.
-        /// </summary>
-        /// <value><c>true</c> if the parent of the should be set after creating or deserializing the property; otherwise, <c>false</c>.</value>
-        [XmlIgnore]
-        public bool SetParent { get; private set; }
 
         /// <summary>
         /// Gets a value indicating the property changed event handler.
@@ -211,16 +206,15 @@ namespace Catel.Data
         {
             Argument.IsNotNull("containingType", containingType);
 
-            return _cachedPropertyInfo.GetFromCacheOrFetch(containingType, () =>
+            if (!_updatedCachedPropertyInfo)
             {
-                var propertyInfo = containingType.GetPropertyEx(Name, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                if (propertyInfo == null)
-                {
-                    return null;
-                }
+                _updatedCachedPropertyInfo = true;
 
-                return new CachedPropertyInfo(propertyInfo);
-            });
+                var propertyInfo = containingType.GetPropertyEx(Name, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                _cachedPropertyInfo = (propertyInfo == null) ? null : new CachedPropertyInfo(propertyInfo);
+            }
+
+            return _cachedPropertyInfo;
         }
         #endregion
     }

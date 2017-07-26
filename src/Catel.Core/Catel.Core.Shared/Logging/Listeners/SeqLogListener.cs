@@ -80,7 +80,7 @@ namespace Catel.Logging
         /// <param name="batchEntries">The batch entries.</param>
         /// <returns>Task so this can be done asynchronously.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="batchEntries"/> is <c>null</c>.</exception>
-        protected override async Task WriteBatch(List<LogBatchEntry> batchEntries)
+        protected override async Task WriteBatchAsync(List<LogBatchEntry> batchEntries)
         {
             Argument.IsNotNull("batchEntries", batchEntries);
 
@@ -90,7 +90,7 @@ namespace Catel.Logging
                 textWriter.Write("{\"events\":[");
 
                 var logEntries = batchEntries.Select(
-                    batchEntry => FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, FastDateTime.Now))
+                    batchEntry => FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Data, FastDateTime.Now))
                     .Aggregate((log1, log2) => string.Format("{0},{1}", log1, log2));
 
                 textWriter.Write(logEntries);

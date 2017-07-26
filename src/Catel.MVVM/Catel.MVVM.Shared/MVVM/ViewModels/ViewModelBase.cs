@@ -20,6 +20,12 @@ namespace Catel.MVVM
     using Logging;
     using Reflection;
     using Services;
+    using System.Collections.ObjectModel;
+    using Threading;
+
+#if !PCL
+    using System.Collections.Concurrent;
+#endif
 
     #region Enums
     /// <summary>
@@ -37,46 +43,14 @@ namespace Catel.MVVM
         /// </summary>
         EndEdit
     }
-
-    /// <summary>
-    /// Available view model events that can be retrieved via the <see cref="InterestedInAttribute"/>.
-    /// </summary>
-    public enum ViewModelEvent
-    {
-        /// <summary>
-        /// Saving event, invoked when a view model is about to be saved.
-        /// </summary>
-        Saving,
-
-        /// <summary>
-        /// Saved event, invoked when a view model has been saved successfully.
-        /// </summary>
-        Saved,
-
-        /// <summary>
-        /// Canceling event, invoked when a view model is about to be canceled.
-        /// </summary>
-        Canceling,
-
-        /// <summary>
-        /// Canceled event, invoked when a view model has been canceled.
-        /// </summary>
-        Canceled,
-
-        /// <summary>
-        /// Closed event, invoked when the view model is closed.
-        /// </summary>
-        Closed
-    }
     #endregion
 
     /// <summary>
     /// View model base for MVVM implementations. This class is based on the <see cref="ModelBase" />, and supports all
     /// common interfaces used by WPF.
     /// </summary>
-    /// <remarks>This view model base does not add any services. The technique specific implementation should take care of that
-    /// (such as WPF, Silverlight, etc).</remarks>
-    public abstract partial class ViewModelBase : ModelBase, IViewModel, INotifyableViewModel, IRelationalViewModel, IUniqueIdentifyable
+    /// <remarks>This view model base does not add any services.</remarks>
+    public abstract partial class ViewModelBase : ValidatableModelBase, IRelationalViewModel, IUniqueIdentifyable
     {
         #region Fields
         /// <summary>
@@ -93,7 +67,12 @@ namespace Catel.MVVM
 #if NET
         [field: NonSerialized]
 #endif
+
+#if !PCL
+        private static readonly ConcurrentDictionary<Type, ViewModelMetadata> _metaData = new ConcurrentDictionary<Type, ViewModelMetadata>();
+#else
         private static readonly Dictionary<Type, ViewModelMetadata> _metaData = new Dictionary<Type, ViewModelMetadata>();
+#endif
 
 #if !XAMARIN
         /// <summary>
@@ -114,28 +93,12 @@ namespace Catel.MVVM
         private readonly bool _ignoreMultipleModelsWarning;
 
         /// <summary>
-        /// Value indicating whether the view model is already initialized via a call to <see cref="InitializeViewModel" />.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private bool _isViewModelInitialized;
-
-        /// <summary>
         /// Value indicating whether the view model attributes are initialized. 
         /// </summary>
 #if NET
         [field: NonSerialized]
 #endif
         private bool _areViewModelAttributesIntialized;
-
-        /// <summary>
-        /// Value indicating whether the specified models are dirty.
-        /// </summary>
-#if NET
-        [field: NonSerialized]
-#endif
-        private readonly Dictionary<string, bool> _modelsDirtyFlags = new Dictionary<string, bool>();
 
 #if NET
         [field: NonSerialized]
@@ -224,7 +187,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        protected ViewModelBase() 
+        protected ViewModelBase()
             : this(true, false, false)
         {
         }
@@ -268,57 +231,48 @@ namespace Catel.MVVM
                 return;
             }
 
-            Log.Debug("Creating view model of type '{0}' with unique identifier {1}", GetType().Name, UniqueIdentifier);
+            var type = GetType();
+
+            Log.Debug("Creating view model of type '{0}' with unique identifier {1}", type.Name, UniqueIdentifier);
 
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
+#if !XAMARIN
             if (serviceLocator == null)
             {
                 serviceLocator = ServiceLocator.Default;
             }
 
-#if !XAMARIN
             DependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
             _dispatcherService = DependencyResolver.Resolve<IDispatcherService>();
 #endif
 
-            // In silverlight, automatically invalidate commands when property changes
-#if !WINDOWS_PHONE && !NET35
             ValidateModelsOnInitialization = true;
-#endif
 
             ViewModelCommandManager = MVVM.ViewModelCommandManager.Create(this);
             ViewModelCommandManager.AddHandler(async (viewModel, propertyName, command, commandParameter) =>
             {
                 var eventArgs = new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName);
 
-                CommandExecuted.SafeInvoke(this, eventArgs);
                 await CommandExecutedAsync.SafeInvokeAsync(this, eventArgs);
             });
 
+            DeferValidationUntilFirstSaveCall = true;
             InvalidateCommandsOnPropertyChanged = true;
             SupportIEditableObject = supportIEditableObject;
 
-            // Temporarily suspend validation, will be enabled at the end of constructor again
-            SuspendValidation = true;
-
-            if (!skipViewModelAttributesInitialization)
+            // Temporarily suspend validation
+            using (SuspendValidations(false))
             {
-                InitializeViewModelAttributes();
+                if (!skipViewModelAttributesInitialization)
+                {
+                    InitializeViewModelAttributes();
+                }
+
+                ViewModelManager.RegisterViewModelInstance(this);
+
+                InitializeThrottling();
             }
-
-            ViewModelManager.RegisterViewModelInstance(this);
-
-            object[] interestedInAttributes = GetType().GetCustomAttributesEx(typeof(InterestedInAttribute), true);
-            foreach (InterestedInAttribute interestedInAttribute in interestedInAttributes)
-            {
-                ViewModelManager.AddInterestedViewModelInstance(interestedInAttribute.ViewModelType, this);
-            }
-
-            InitializeThrottling();
-
-            // Enable validation again like we promised some lines of code ago
-            SuspendValidation = false;
 
             // As a last step, enable the auditors (we don't need change notifications of previous properties, etc)
             AuditingHelper.RegisterViewModel(this);
@@ -329,19 +283,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Occurs when the view model has been initialized.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "InitializedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<EventArgs> Initialized;
-
-        /// <summary>
-        /// Occurs when the view model has been initialized.
-        /// </summary>
         public event AsyncEventHandler<EventArgs> InitializedAsync;
-
-        /// <summary>
-        /// Occurs when a command on the view model has been executed.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "CommandExecutedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<CommandExecutedEventArgs> CommandExecuted;
 
         /// <summary>
         /// Occurs when a command on the view model has been executed.
@@ -351,19 +293,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Occurs when the view model is about to be saved.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "SavingAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<SavingEventArgs> Saving;
-
-        /// <summary>
-        /// Occurs when the view model is about to be saved.
-        /// </summary>
         public event AsyncEventHandler<SavingEventArgs> SavingAsync;
-
-        /// <summary>
-        /// Occurs when the view model is saved successfully.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "SavedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<EventArgs> Saved;
 
         /// <summary>
         /// Occurs when the view model is saved successfully.
@@ -373,19 +303,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Occurs when the view model is about to be canceled.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "CancelingAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<CancelingEventArgs> Canceling;
-
-        /// <summary>
-        /// Occurs when the view model is about to be canceled.
-        /// </summary>
         public event AsyncEventHandler<CancelingEventArgs> CancelingAsync;
-
-        /// <summary>
-        /// Occurrs when the view model is canceled.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "CanceledAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<EventArgs> Canceled;
 
         /// <summary>
         /// Occurrs when the view model is canceled.
@@ -395,19 +313,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Occurs when the view model is being closed.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "ClosingAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<EventArgs> Closing;
-
-        /// <summary>
-        /// Occurs when the view model is being closed.
-        /// </summary>
         public event AsyncEventHandler<EventArgs> ClosingAsync;
-
-        /// <summary>
-        /// Occurs when the view model has just been closed.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "ClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public event EventHandler<ViewModelClosedEventArgs> Closed;
 
         /// <summary>
         /// Occurs when the view model has just been closed.
@@ -466,6 +372,24 @@ namespace Catel.MVVM
         private bool SupportIEditableObject { get; set; }
 
         /// <summary>
+        /// Gets a value indicating whether this object is currently initializing.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this object is currently initializing; otherwise, <c>false</c>.
+        /// </value>
+        [ExcludeFromValidation]
+        protected bool IsInitializing { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this object is initialized.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this object is initialized; otherwise, <c>false</c>.
+        /// </value>
+        [ExcludeFromValidation]
+        protected bool IsInitialized { get; private set; }
+
+        /// <summary>
         /// Gets a value indicating whether this instance is currently canceling.
         /// </summary>
         [ExcludeFromValidation]
@@ -485,7 +409,7 @@ namespace Catel.MVVM
 
         /// <summary>
         /// Gets a value indicating whether this instance is closed. If a view model is closed, calling
-        /// <see cref="CancelViewModel"/>, <see cref="SaveViewModel"/> or <see cref="CloseViewModel"/>
+        /// <see cref="CancelViewModelAsync"/>, <see cref="SaveViewModelAsync"/> or <see cref="CloseViewModelAsync"/>
         /// will have no effect.
         /// </summary>
         /// <value><c>true</c> if the view model is closed; otherwise, <c>false</c>.</value>
@@ -504,7 +428,7 @@ namespace Catel.MVVM
             {
                 _title = value;
 
-                RaisePropertyChanged("Title");
+                RaisePropertyChanged(nameof(Title));
             }
         }
 
@@ -515,34 +439,21 @@ namespace Catel.MVVM
         /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
         /// </value>
         [ExcludeFromValidation]
-        public bool HasErrors
-        {
-            get { return ((INotifyDataErrorInfo)this).HasErrors || _childViewModelsHaveErrors; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance has a dirty model.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has a dirty model; otherwise, <c>false</c>.
-        /// </value>
-        [ExcludeFromValidation]
-        public virtual bool HasDirtyModel
+        public override bool HasErrors
         {
             get
             {
-                var hasDirtyModels = (from dirtyModelFlag in _modelsDirtyFlags
-                                      where dirtyModelFlag.Value
-                                      select dirtyModelFlag).Any();
-                if (hasDirtyModels)
+                if (base.HasErrors)
                 {
                     return true;
                 }
 
-                lock (ChildViewModels)
+                if (_childViewModelsHaveErrors)
                 {
-                    return ChildViewModels.Any(childViewModel => childViewModel.HasDirtyModel);
+                    return true;
                 }
+
+                return false;
             }
         }
 
@@ -575,7 +486,7 @@ namespace Catel.MVVM
         {
             var viewModelType = GetType();
 
-            var metaData = InitializeViewModelMetaData(viewModelType);
+            var metaData = GetViewModelMetaData(viewModelType);
 
             lock (_modelLock)
             {
@@ -583,7 +494,6 @@ namespace Catel.MVVM
             }
 
             _viewModelToModelMap.AddRange(metaData.Mappings);
-            _validationSummaries.AddRange(metaData.Validations);
         }
 
         /// <summary>
@@ -595,20 +505,33 @@ namespace Catel.MVVM
         /// <param name="viewModelType">Type of the view model.</param>
         /// <returns>ViewModelMetadata.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
-        private static ViewModelMetadata InitializeViewModelMetaData(Type viewModelType)
+        private static ViewModelMetadata GetViewModelMetaData(Type viewModelType)
         {
-            if (_metaData.ContainsKey(viewModelType))
+#if PCL
+            lock (_metaData)
             {
-                return _metaData[viewModelType];
-            }
+                ViewModelMetadata data = null;
+                if (!_metaData.TryGetValue(viewModelType, out data))
+                {
+                    data = CreateViewModelMetaData(viewModelType);
+                    _metaData[viewModelType] = data;
+                }
 
+                return data;
+            }
+#else
+            return _metaData.GetOrAdd(viewModelType, CreateViewModelMetaData);
+#endif
+        }
+
+        private static ViewModelMetadata CreateViewModelMetaData(Type viewModelType)
+        {
             var properties = new List<PropertyInfo>();
             var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, false, true);
             properties.AddRange(viewModelType.GetPropertiesEx(bindingFlags));
 
             var modelObjectsInfo = new Dictionary<string, ModelInfo>();
             var viewModelToModelMap = new Dictionary<string, ViewModelToModelMapping>();
-            var validationSummaries = new Dictionary<string, ValidationToViewModelAttribute>();
 
             var modelNames = (from propertyInfo in properties
                               where propertyInfo.IsDecoratedWithAttribute<ModelAttribute>()
@@ -652,26 +575,12 @@ namespace Catel.MVVM
                     }
                 }
                 #endregion
-
-                #region ValidationToViewModel attributes
-                var validationToViewModelAttribute = propertyInfo.GetCustomAttributeEx(typeof(ValidationToViewModelAttribute), true) as ValidationToViewModelAttribute;
-                if (validationToViewModelAttribute != null)
-                {
-                    if (propertyInfo.PropertyType != typeof(IValidationSummary))
-                    {
-                        throw Log.ErrorAndCreateException<InvalidOperationException>("A property decorated with the ValidationToViewModel attribute must be of type IValidationSummary, but '{0}' is not", propertyInfo.Name);
-                    }
-
-                    validationSummaries.Add(propertyInfo.Name, validationToViewModelAttribute);
-
-                    Log.Debug("Registered property '{0}' as validation summary", propertyInfo.Name);
-                }
-                #endregion
             }
 
-            _metaData.Add(viewModelType, new ViewModelMetadata(viewModelType, modelObjectsInfo, viewModelToModelMap, validationSummaries));
-
-            return _metaData[viewModelType];
+            return new ViewModelMetadata(
+                viewModelType,
+                modelObjectsInfo,
+                viewModelToModelMap);
         }
 
         /// <summary>
@@ -736,52 +645,51 @@ namespace Catel.MVVM
 
             _areViewModelAttributesIntialized = true;
 
-            SuspendValidation = true;
-
-            InitializePropertiesWithAttributes();
-
-            lock (_modelLock)
+            using (SuspendValidations(false))
             {
-                foreach (var modelInfo in _modelObjectsInfo)
-                {
-                    _modelObjects.Add(modelInfo.Key, null);
-                }
-            }
+                InitializePropertiesWithAttributes();
 
-            if (SupportIEditableObject)
-            {
                 lock (_modelLock)
                 {
-                    foreach (var modelKeyValuePair in _modelObjects)
+                    foreach (var modelInfo in _modelObjectsInfo)
                     {
-                        if (_modelObjectsInfo[modelKeyValuePair.Key].SupportIEditableObject)
+                        _modelObjects.Add(modelInfo.Key, null);
+                    }
+                }
+
+                if (SupportIEditableObject)
+                {
+                    lock (_modelLock)
+                    {
+                        foreach (var modelKeyValuePair in _modelObjects)
                         {
-                            var modelKeyValuePairValueAsModelBaseBase = modelKeyValuePair.Value as IModel;
-                            if ((modelKeyValuePairValueAsModelBaseBase == null) || !modelKeyValuePairValueAsModelBaseBase.IsInEditSession)
+                            if (_modelObjectsInfo[modelKeyValuePair.Key].SupportIEditableObject)
                             {
-                                EditableObjectHelper.BeginEditObject(modelKeyValuePair.Value);
+                                var modelKeyValuePairValueAsModelBaseBase = modelKeyValuePair.Value as IModel;
+                                if ((modelKeyValuePairValueAsModelBaseBase == null) || !modelKeyValuePairValueAsModelBaseBase.IsInEditSession)
+                                {
+                                    EditableObjectHelper.BeginEditObject(modelKeyValuePair.Value);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            ValidateViewModelToModelMappings();
+                ValidateViewModelToModelMappings();
 
-            if (!_ignoreMultipleModelsWarning)
-            {
-                lock (_modelLock)
+                if (!_ignoreMultipleModelsWarning)
                 {
-                    if (_modelObjects.Count > 1)
+                    lock (_modelLock)
                     {
-                        Log.Warning("The view model {0} implements {1} models.\n\n" +
-                                    "Normally, a view model only implements 1 model so make sure you are using the Model attribute correctly. If the Model attribute is used correctly (on models only), this warning can be ignored by using a constructor overload.",
-                            GetType().Name, _modelObjects.Count);
+                        if (_modelObjects.Count > 1)
+                        {
+                            Log.Warning("The view model {0} implements {1} models.\n\n" +
+                                        "Normally, a view model only implements 1 model so make sure you are using the Model attribute correctly. If the Model attribute is used correctly (on models only), this warning can be ignored by using a constructor overload.",
+                                GetType().Name, _modelObjects.Count);
+                        }
                     }
                 }
             }
-
-            SuspendValidation = false;
         }
 
         /// <summary>
@@ -827,7 +735,7 @@ namespace Catel.MVVM
                     childViewModels.Add(childViewModel);
 
                     childViewModel.PropertyChanged += OnChildViewModelPropertyChanged;
-                    childViewModel.Closed += OnChildViewModelClosed;
+                    childViewModel.ClosedAsync += OnChildViewModelClosedAsync;
                 }
 
                 var validate = false;
@@ -841,7 +749,7 @@ namespace Catel.MVVM
                 }
                 else
                 {
-                    var validationContext = ((IModelValidation)childViewModel).ValidationContext;
+                    var validationContext = ((IValidatableModel)childViewModel).ValidationContext;
                     if (validationContext != null)
                     {
                         if (validationContext.HasErrors || validationContext.HasWarnings)
@@ -865,7 +773,7 @@ namespace Catel.MVVM
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnChildViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if ((e.PropertyName == "INotifyDataErrorInfo.HasErrors") || (e.PropertyName == "INotifyDataWarningInfo.HasWarnings"))
+            if (e.PropertyName == nameof(HasErrors) || e.PropertyName == nameof(HasWarnings))
             {
                 Validate();
             }
@@ -881,9 +789,11 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnChildViewModelClosed(object sender, EventArgs e)
+        private Task OnChildViewModelClosedAsync(object sender, EventArgs e)
         {
             ((IRelationalViewModel)this).UnregisterChildViewModel((IViewModel)sender);
+
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -905,7 +815,7 @@ namespace Catel.MVVM
                 }
 
                 childViewModel.PropertyChanged -= OnChildViewModelPropertyChanged;
-                childViewModel.Closed -= OnChildViewModelClosed;
+                childViewModel.ClosedAsync -= OnChildViewModelClosedAsync;
 
                 ChildViewModels.RemoveAt(index);
             }
@@ -986,6 +896,8 @@ namespace Catel.MVVM
                 return;
             }
 
+            base.OnPropertyChanged(e);
+
             lock (_modelLock)
             {
                 if (_modelObjects.ContainsKey(e.PropertyName))
@@ -1008,8 +920,8 @@ namespace Catel.MVVM
                     // Since the model has been changed, copy all values from the model to the view model
                     foreach (KeyValuePair<string, ViewModelToModelMapping> viewModelToModelMap in _viewModelToModelMap)
                     {
-                        ViewModelToModelMapping mapping = viewModelToModelMap.Value;
-                        IViewModelToModelConverter converter = mapping.Converter;
+                        var mapping = viewModelToModelMap.Value;
+                        var converter = mapping.Converter;
                         if (string.CompareOrdinal(mapping.ModelProperty, e.PropertyName) == 0)
                         {
                             var values = new object[mapping.ValueProperties.Length];
@@ -1036,7 +948,7 @@ namespace Catel.MVVM
 
                             values[0] = converter.Convert(values, this);
 
-                            SetValue(mapping.ViewModelProperty, values[0], true, ValidateModelsOnInitialization);
+                            SetValue(mapping.ViewModelProperty, values[0], true);
                         }
                     }
                 }
@@ -1059,7 +971,7 @@ namespace Catel.MVVM
                                 var viewModelValue = GetValue(e.PropertyName);
                                 var propertiesToSet = mapping.ValueProperties;
 
-#if !WINDOWS_PHONE && !NET35 && !XAMARIN_FORMS
+#if !XAMARIN_FORMS
                                 if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
                                 {
                                     mapping.ValueProperties.ForEach(_modelErrorInfo[mapping.ModelProperty].ClearDefaultErrors);
@@ -1075,15 +987,28 @@ namespace Catel.MVVM
                                         Log.Error("Properties - values count mismatch, properties '{0}', values '{1}'",
                                             string.Join(", ", propertiesToSet), string.Join(", ", valuesToSet));
                                     }
-                                    for (int index = 0; index < propertiesToSet.Length && index < valuesToSet.Length; index++)
+
+                                    for (var index = 0; index < propertiesToSet.Length && index < valuesToSet.Length; index++)
                                     {
-                                        if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index], false))
+                                        try
                                         {
-                                            Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
+                                            mapping.IgnoredProperties.AddRange(propertiesToSet);
+
+                                            if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index], false))
+                                            {
+                                                Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
+                                            }
+                                            else
+                                            {
+                                                Log.Warning("Failed to set property '{0}' on model type '{1}'", propertiesToSet[index], model.GetType().Name);
+                                            }
                                         }
-                                        else
+                                        finally
                                         {
-                                            Log.Warning("Failed to set property '{0}' on model type '{1}'", propertiesToSet[index], model.GetType().Name);
+                                            foreach (var propertyToSet in propertiesToSet)
+                                            {
+                                                mapping.IgnoredProperties.Remove(propertyToSet);
+                                            }
                                         }
                                     }
                                 }
@@ -1101,93 +1026,6 @@ namespace Catel.MVVM
             {
                 ViewModelCommandManager.InvalidateCommands();
             }
-        }
-
-        /// <summary>
-        /// Called when a property has changed for a view model type that the current view model is interested in. This can
-        /// be accomplished by decorating the view model with the <see cref="InterestedInAttribute"/>.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <remarks>
-        /// This method should only be called by Catel so the <see cref="ManagedViewModel"/> can invoke it. This method is only used as a pass-through
-        /// to the actual <see cref="OnViewModelPropertyChanged"/> method.
-        /// </remarks>
-        void INotifyableViewModel.ViewModelPropertyChanged(IViewModel viewModel, string propertyName)
-        {
-            Log.Debug("A view model ('{0}') the current view model ('{1}') is interested in has changed a property ('{2}')",
-                viewModel.GetType(), GetType(), propertyName);
-
-            OnViewModelPropertyChanged(viewModel, propertyName);
-        }
-
-        /// <summary>
-        /// Called when a property has changed for a view model type that the current view model is interested in. This can
-        /// be accomplished by decorating the view model with the <see cref="InterestedInAttribute"/>.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="propertyName">Name of the property.</param>
-        protected virtual void OnViewModelPropertyChanged(IViewModel viewModel, string propertyName)
-        {
-        }
-
-        /// <summary>
-        /// Called when a command for a view model type that the current view model is interested in has been executed. This can
-        /// be accomplished by decorating the view model with the <see cref="InterestedInAttribute"/>.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="command">The command that has been executed.</param>
-        /// <param name="commandParameter">The command parameter used during the execution.</param>
-        /// <remarks>
-        /// This method should only be called by Catel so the <see cref="ManagedViewModel"/> can invoke it. This method is only used as a pass-through
-        /// to the actual <see cref="OnViewModelCommandExecuted"/> method.
-        /// </remarks>
-        void INotifyableViewModel.ViewModelCommandExecuted(IViewModel viewModel, ICatelCommand command, object commandParameter)
-        {
-            Log.Debug("A view model ('{0}') the current view model ('{1}') is interested in has executed a command with tag '{2}'",
-                viewModel.GetType(), GetType(), ObjectToStringHelper.ToString(command.Tag));
-
-            OnViewModelCommandExecuted(viewModel, command, commandParameter);
-        }
-
-        /// <summary>
-        /// Called when a command for a view model type that the current view model is interested in has been executed. This can
-        /// be accomplished by decorating the view model with the <see cref="InterestedInAttribute"/>.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="command">The command that has been executed.</param>
-        /// <param name="commandParameter">The command parameter used during the execution.</param>
-        protected virtual void OnViewModelCommandExecuted(IViewModel viewModel, ICatelCommand command, object commandParameter)
-        {
-        }
-
-        /// <summary>
-        /// Views the model event.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="viewModelEvent">The view model event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// This method should only be called by Catel so the <see cref="ManagedViewModel"/> can invoke it. This method is only used as a pass-through
-        /// to the actual <see cref="OnViewModelEvent"/> method.
-        /// </remarks>
-        void INotifyableViewModel.ViewModelEvent(IViewModel viewModel, ViewModelEvent viewModelEvent, EventArgs e)
-        {
-            Log.Debug("A view model ('{0}') the current view model ('{1}') is interested in has raised an event ('{2}')",
-                viewModel.GetType(), GetType(), viewModelEvent.ToString());
-
-            OnViewModelEvent(viewModel, viewModelEvent, e);
-        }
-
-        /// <summary>
-        /// Called when an event for a view model type that the current view model is interested in has been raised. This can
-        /// be accomplished by decorating the view model with the <see cref="InterestedInAttribute"/>.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="viewModelEvent">The view model event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        protected virtual void OnViewModelEvent(IViewModel viewModel, ViewModelEvent viewModelEvent, EventArgs e)
-        {
         }
 
         /// <summary>
@@ -1212,14 +1050,22 @@ namespace Catel.MVVM
             foreach (var map in _viewModelToModelMap)
             {
                 var mapping = map.Value;
-                IViewModelToModelConverter converter = mapping.Converter;
+
+                var converter = mapping.Converter;
                 if (converter.ShouldConvert(e.PropertyName))
                 {
                     // Check if this is the right model (duplicate mappings might exist)
-                    if (_modelObjects[mapping.ModelProperty] == sender)
+                    if (ReferenceEquals(_modelObjects[mapping.ModelProperty], sender))
                     {
+                        var propertyName = e.PropertyName ?? string.Empty;
+                        if (mapping.IgnoredProperties.Contains(propertyName))
+                        {
+                            continue;
+                        }
+
                         // Only OneWay, TwoWay or Explicit (yes, only VM => M is explicit) should be mapped
-                        if ((mapping.Mode == ViewModelToModelMode.TwoWay) || (mapping.Mode == ViewModelToModelMode.OneWay) ||
+                        if ((mapping.Mode == ViewModelToModelMode.TwoWay) ||
+                            (mapping.Mode == ViewModelToModelMode.OneWay) ||
                             (mapping.Mode == ViewModelToModelMode.Explicit))
                         {
                             var values = new object[mapping.ValueProperties.Length];
@@ -1234,14 +1080,6 @@ namespace Catel.MVVM
                         }
                     }
                 }
-            }
-
-            var modelNameOnViewModel = (from modelObject in _modelObjects
-                                        where ObjectHelper.AreEqualReferences(modelObject.Value, sender)
-                                        select modelObject.Key).FirstOrDefault();
-            if (!string.IsNullOrEmpty(modelNameOnViewModel))
-            {
-                _modelsDirtyFlags[modelNameOnViewModel] = true;
             }
 
             OnModelPropertyChanged(sender, e);
@@ -1279,7 +1117,6 @@ namespace Catel.MVVM
                 ViewModelManager.RegisterModel(this, model);
             }
 
-            _modelsDirtyFlags[modelProperty] = false;
             _modelErrorInfo[modelProperty] = new ModelErrorInfo(model);
             _modelErrorInfo[modelProperty].Updated += OnModelErrorInfoUpdated;
 
@@ -1300,7 +1137,7 @@ namespace Catel.MVVM
                 }
             }
 
-#if (NET || SL5) && !NET35
+#if NET
             if (ValidateModelsOnInitialization)
             {
                 var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
@@ -1310,6 +1147,7 @@ namespace Catel.MVVM
                 _modelErrorInfo[modelProperty].InitializeDefaultErrors(validationResults);
             }
 #endif
+
             InitializeModel(modelProperty, model);
         }
 
@@ -1335,9 +1173,9 @@ namespace Catel.MVVM
                 ViewModelManager.UnregisterModel(this, model);
             }
 
-            if (_modelErrorInfo.ContainsKey(modelProperty))
+            ModelErrorInfo modelErrorInfo;
+            if (_modelErrorInfo.TryGetValue(modelProperty, out modelErrorInfo))
             {
-                var modelErrorInfo = _modelErrorInfo[modelProperty];
                 modelErrorInfo.Updated -= OnModelErrorInfoUpdated;
                 modelErrorInfo.CleanUp();
 
@@ -1417,34 +1255,9 @@ namespace Catel.MVVM
         /// <returns>
         /// <c>true</c> if successful; otherwise <c>false</c>.
         /// </returns>
-        [ObsoleteEx(Message = "Use Async overload instead, the return value of this method will be changed to bool", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual async Task<bool> Cancel()
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// Cancels the editing of the data.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if successful; otherwise <c>false</c>.
-        /// </returns>
         protected virtual Task<bool> CancelAsync()
         {
-            // Note: should be converted to a sync method in v5`
-            return Cancel();
-        }
-
-        /// <summary>
-        /// Saves the data.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if successful; otherwise <c>false</c>.
-        /// </returns>
-        [ObsoleteEx(Message = "Use Async overload instead, the return value of this method will be changed to bool", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual async Task<bool> Save()
-        {
-            return true;
+            return TaskHelper<bool>.FromResult(true);
         }
 
         /// <summary>
@@ -1455,71 +1268,36 @@ namespace Catel.MVVM
         /// </returns>
         protected virtual Task<bool> SaveAsync()
         {
-            // Note: should be converted to a sync method in v5
-            return Save();
+            return TaskHelper<bool>.FromResult(true);
         }
 
         /// <summary>
         /// Called when the view model is about to be closed.
         /// <para />
-        /// This method also raises the <see cref="Closing" /> event.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnClosingAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual void OnClosing()
-        {
-            OnClosingAsync().Wait();
-        }
-
-        /// <summary>
-        /// Called when the view model is about to be closed.
-        /// <para />
-        /// This method also raises the <see cref="Closing"/> event.
+        /// This method also raises the <see cref="ClosingAsync"/> event.
         /// </summary>
         protected virtual Task OnClosingAsync()
         {
-            Closing.SafeInvoke(this);
             return ClosingAsync.SafeInvokeAsync(this);
         }
 
         /// <summary>
-        /// Closes this instance. Always called after the <see cref="Cancel"/> of <see cref="Save"/> method.
-        /// </summary>
-        [ObsoleteEx(Message = "Use Async overload instead, the return value of this method will be changed to void", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual async Task Close()
-        {
-        }
-
-        /// <summary>
-        /// Closes this instance. Always called after the <see cref="Cancel"/> of <see cref="Save"/> method.
+        /// Closes this instance. Always called after the <see cref="CancelAsync"/> of <see cref="SaveAsync"/> method.
         /// </summary>
         protected virtual Task CloseAsync()
         {
-            // Note: should be converted to a sync method in v5
-            return Close();
+            return TaskHelper.Completed;
         }
 
         /// <summary>
         /// Called when the view model has just been closed.
         /// <para />
-        /// This method also raises the <see cref="Closed"/> event.
-        /// </summary>
-        /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "OnClosedAsync", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual void OnClosed(bool? result)
-        {
-            OnClosedAsync(result).Wait();
-        }
-
-        /// <summary>
-        /// Called when the view model has just been closed.
-        /// <para />
-        /// This method also raises the <see cref="Closed"/> event.
+        /// This method also raises the <see cref="ClosedAsync"/> event.
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
         protected virtual Task OnClosedAsync(bool? result)
         {
             var eventArgs = new ViewModelClosedEventArgs(this, result);
-            Closed.SafeInvoke(this, eventArgs);
             return ClosedAsync.SafeInvokeAsync(this, eventArgs);
         }
 
@@ -1566,34 +1344,18 @@ namespace Catel.MVVM
         /// similar.
         /// <para />
         /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public Task InitializeViewModel()
-        {
-            return InitializeViewModelAsync();
-        }
-
-        /// <summary>
-        /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
-        /// to a state where the associated UI element (user control, window, ...) is actually loaded.
-        /// <para />
-        /// This method is called as soon as the associated UI element is loaded.
-        /// </summary>
-        /// <returns>The task.</returns>
-        /// <remarks>It's not recommended to implement the initialization of properties in this method. The initialization of properties
-        /// should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
-        /// similar.
-        /// <para />
-        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.</remarks>
         public async Task InitializeViewModelAsync()
         {
-            if (!_isViewModelInitialized)
+            if (!IsInitializing && !IsInitialized)
             {
-                _isViewModelInitialized = true;
+                IsInitializing = true;
 
                 await InitializeAsync();
 
-                Initialized.SafeInvoke(this);
                 await InitializedAsync.SafeInvokeAsync(this);
+
+                IsInitializing = false;
+                IsInitialized = true;
             }
         }
 
@@ -1610,38 +1372,9 @@ namespace Catel.MVVM
         /// <para />
         /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
         /// </remarks>
-        [ObsoleteEx(Message = "Use Async overload instead, the return value of this method will be changed to void", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        protected virtual async Task Initialize()
+        protected virtual Task InitializeAsync()
         {
-        }
-
-        /// <summary>
-        /// Initializes the view model. Normally the initialization is done in the constructor, but sometimes this must be delayed
-        /// to a state where the associated UI element (user control, window, ...) is actually loaded.
-        /// <para />
-        /// This method is called as soon as the associated UI element is loaded.
-        /// </summary>
-        /// <remarks>
-        /// It's not recommended to implement the initialization of properties in this method. The initialization of properties
-        /// should be done in the constructor. This method should be used to start the retrieval of data from a web service or something
-        /// similar.
-        /// <para />
-        /// During unit tests, it is recommended to manually call this method because there is no external container calling this method.
-        /// </remarks>
-        protected virtual async Task InitializeAsync()
-        {
-            // Note: should be converted to a sync method in v5
-            await Initialize();
-        }
-
-        /// <summary>
-        /// Cancels the editing of the data.
-        /// </summary>
-        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public Task<bool> CancelViewModel()
-        {
-            return CancelViewModelAsync();
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -1658,7 +1391,6 @@ namespace Catel.MVVM
             IsCanceling = true;
 
             var eventArgs = new CancelingEventArgs();
-            Canceling.SafeInvoke(this, eventArgs);
             await CancelingAsync.SafeInvokeAsync(this, eventArgs);
 
             if (eventArgs.Cancel)
@@ -1687,32 +1419,11 @@ namespace Catel.MVVM
 
             Log.Info("Canceled view model '{0}'", GetType());
 
-            Canceled.SafeInvoke(this);
             await CanceledAsync.SafeInvokeAsync(this);
 
             IsCanceling = false;
 
             return true;
-        }
-
-        /// <summary>
-        /// Cancels the editing of the data, but also closes the view model in the same call.
-        /// </summary>
-        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async extension method", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public Task<bool> CancelAndCloseViewModel()
-        {
-            return this.CancelAndCloseViewModelAsync();
-        }
-
-        /// <summary>
-        /// Saves the data.
-        /// </summary>
-        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public Task<bool> SaveViewModel()
-        {
-            return SaveViewModelAsync();
         }
 
         /// <summary>
@@ -1734,15 +1445,20 @@ namespace Catel.MVVM
             }
 
             // Force validation before saving
-            if (!ValidateViewModel(true, false))
-            {
-                IsSaving = false;
+            Validate(true);
 
-                return false;
+            if (!IsValidationSuspended)
+            {
+                var validationContext = ((IValidatable)this).ValidationContext;
+                if (validationContext.HasErrors)
+                {
+                    IsSaving = false;
+
+                    return false;
+                }
             }
 
             var eventArgs = new SavingEventArgs();
-            Saving.SafeInvoke(this, eventArgs);
             await SavingAsync.SafeInvokeAsync(this, eventArgs);
 
             if (eventArgs.Cancel)
@@ -1767,7 +1483,6 @@ namespace Catel.MVVM
                     }
                 }
 
-                Saved.SafeInvoke(this);
                 await SavedAsync.SafeInvokeAsync(this);
             }
 
@@ -1777,27 +1492,7 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Saves the data, but also closes the view model in the same call if the save succeeds.
-        /// </summary>
-        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async extension method", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public Task<bool> SaveAndCloseViewModel()
-        {
-            return this.SaveAndCloseViewModelAsync();
-        }
-
-        /// <summary>
-        /// Closes this instance. Always called after the <see cref="Cancel"/> of <see cref="Save"/> method.
-        /// </summary>
-        /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "Async overload", TreatAsErrorFromVersion = "4.2", RemoveInVersion = "5.0")]
-        public Task CloseViewModel(bool? result)
-        {
-            return CloseViewModelAsync(result);
-        }
-
-        /// <summary>
-        /// Closes this instance. Always called after the <see cref="Cancel"/> of <see cref="Save"/> method.
+        /// Closes this instance. Always called after the <see cref="CancelAsync"/> of <see cref="SaveAsync"/> method.
         /// </summary>
         /// <param name="result">The result to pass to the view. This will, for example, be used as <c>DialogResult</c>.</param>
         public async Task CloseViewModelAsync(bool? result)
@@ -1817,8 +1512,6 @@ namespace Catel.MVVM
 
             await CloseAsync();
 
-            SuspendValidation = true;
-
             // Note: important to set *before* calling the event (the handler might need to check
             // if the vm is closed)
             IsClosing = false;
@@ -1830,6 +1523,6 @@ namespace Catel.MVVM
 
             ViewModelManager.UnregisterViewModelInstance(this);
         }
-#endregion
+        #endregion
     }
 }

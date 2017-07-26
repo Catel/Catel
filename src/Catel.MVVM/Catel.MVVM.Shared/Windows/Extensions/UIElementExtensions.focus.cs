@@ -10,50 +10,14 @@ namespace Catel.Windows
 {
     using System;
     using System.Collections.Generic;
-    using System.Runtime.InteropServices;
     using System.Windows;
     using System.Windows.Input;
-    using System.Windows.Interop;
 
     /// <summary>
     /// Extensions for <see cref="UIElement"/>.
     /// </summary>
     public static partial class UIElementExtensions
     {
-        #region Win32 imports
-        [StructLayout(LayoutKind.Sequential)]
-        private struct POINT
-        {
-            public int X;
-            public int Y;
-
-            public POINT(int x, int y)
-            {
-                this.X = x;
-                this.Y = y;
-            }
-
-            public static implicit operator System.Drawing.Point(POINT p)
-            {
-                return new System.Drawing.Point(p.X, p.Y);
-            }
-
-            public static implicit operator POINT(System.Drawing.Point p)
-            {
-                return new POINT(p.X, p.Y);
-            }
-        }
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool InvalidateRect(IntPtr hWnd, IntPtr lpRect, bool bErase);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool ScreenToClient(IntPtr hWnd, ref POINT lpPoint);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool ClientToScreen(IntPtr hWnd, ref POINT lpPoint);
-        #endregion
-
         #region Methods
         /// <summary>
         /// Gets the focused control.

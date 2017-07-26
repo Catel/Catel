@@ -34,7 +34,7 @@ namespace Catel.Caching.Policies
         /// </summary>
         protected override void OnReset()
         {
-            AbsoluteExpirationDateTime = DateTime.Now.Add(DurationTimeSpan);
+            AbsoluteExpirationDateTime = FastDateTime.Now.Add(DurationTimeSpan);
         }
 
         #endregion

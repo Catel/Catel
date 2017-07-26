@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NETFX_CORE || PCL || (NET && !NET40)
+#if NETFX_CORE || PCL || NET
 
 namespace Catel.Reflection
 {
