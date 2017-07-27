@@ -18,6 +18,24 @@ Items prepended with CTL are from JIRA (old issue tracker). Items prepended with
 **********************************************************
 
 ==================
+Version 5.1.0
+==================
+
+Added/fixed:
+============
+(*) #1017    Improve performance of ViewToViewModelMappingHelper
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 5.0.0
 ==================
 
