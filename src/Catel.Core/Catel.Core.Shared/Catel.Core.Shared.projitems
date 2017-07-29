@@ -288,6 +288,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Pooling\Poolables\BufferPoolableBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pooling\Poolables\PoolableBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pooling\PoolManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\Annotations.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\SolutionAssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />

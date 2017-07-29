@@ -9,12 +9,25 @@ namespace Catel.Data
 {
     using System;
     using System.ComponentModel;
-
+    using System.Runtime.CompilerServices;
+    using Annotations;
     using Logging;
     using Reflection;
 
     public partial class ModelBase
     {
+        /// <summary>
+        /// Sets the value of a specific property.
+        /// </summary>
+        /// <param name="name">Name of the property.</param>
+        /// <param name="value">Value of the property.</param>
+        /// <param name="notifyOnChange">If <c>true</c>, the <see cref="INotifyPropertyChanged.PropertyChanged"/> event will be invoked.</param>
+        [NotifyPropertyChangedInvocator]
+        protected void Set(object value, bool notifyOnChange = true, [CallerMemberName] string name = null)
+        {
+            SetValue(name, value, notifyOnChange);
+        }
+
         /// <summary>
         /// Sets the value of a specific property.
         /// </summary>
@@ -135,6 +148,17 @@ namespace Catel.Data
             {
                 return _propertyBag.GetPropertyValue<T>(propertyName);
             }
+        }
+
+        /// <summary>
+        /// Gets the value of a specific property.
+        /// </summary>
+        /// <param name="name">Name of the property.</param>
+        /// <returns>Object value of the property.</returns>
+        [NotifyPropertyChangedInvocator]
+        protected TValue Get<TValue>([CallerMemberName] string name = null)
+        {
+            return GetValue<TValue>(name);
         }
 
         /// <summary>

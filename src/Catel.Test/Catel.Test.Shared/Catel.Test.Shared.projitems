@@ -76,6 +76,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\ModelBaseFacts.editableobject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ModelBaseFacts.serialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ObjectWithDefaultValues.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\PersonModelUsingCallerMemberName.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\TestValidatorProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\TestValidator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatableModelBaseFacts.cs" />
@@ -286,6 +287,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)Caching\Policies\ExpirationPolicyFacts.cs.orig" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\ModelBaseFacts.callermembername.cs" />
     <None Include="$(MSBuildThisFileDirectory)Test References\Catel.Core.accessor" />
   </ItemGroup>
   <ItemGroup>
