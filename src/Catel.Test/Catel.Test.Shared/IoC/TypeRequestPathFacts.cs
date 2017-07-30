@@ -6,6 +6,7 @@
 namespace Catel.Test.IoC
 {
     using System;
+    using System.Linq;
     using Catel.IoC;
     using NUnit.Framework;
 
@@ -122,7 +123,7 @@ namespace Catel.Test.IoC
 
                 for (int i = 0; i < typeArray.Length; i++)
                 {
-                    Assert.AreEqual(typeArray[i], path.AllTypes[i]);
+                    Assert.AreEqual(typeArray[i], path.AllTypes.ElementAt(i));
                 }
                     
                 Assert.AreEqual(typeArray[0], path.FirstType);
@@ -138,7 +139,7 @@ namespace Catel.Test.IoC
 
                 for (int i = 0; i < typeArray.Length; i++)
                 {
-                    Assert.AreEqual(typeArray[i], path.AllTypes[i]);
+                    Assert.AreEqual(typeArray[i], path.AllTypes.ElementAt(i));
                 }
 
                 Assert.AreEqual(typeArray[0], path.FirstType);
@@ -154,7 +155,7 @@ namespace Catel.Test.IoC
 
                 for (int i = 0; i < typeArray.Length; i++)
                 {
-                    Assert.AreEqual(typeArray[i], path.AllTypes[i]);
+                    Assert.AreEqual(typeArray[i], path.AllTypes.ElementAt(i));
                 }
 
                 Assert.AreEqual(typeArray[0], path.FirstType);

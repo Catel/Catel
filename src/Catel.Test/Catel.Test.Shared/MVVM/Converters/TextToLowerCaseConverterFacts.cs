@@ -7,6 +7,7 @@
 
 namespace Catel.Test.MVVM.Converters
 {
+    using System.Diagnostics;
     using System.Globalization;
     using Catel.MVVM.Converters;
 
@@ -25,6 +26,24 @@ namespace Catel.Test.MVVM.Converters
                 var converter = new TextToLowerCaseConverter();
 
                 Assert.AreEqual("lowercase", converter.Convert("LoWeRcAsE", typeof (string), null, (CultureInfo) null));
+            }
+
+            [TestCase]
+            public void SecondCallRunsFasterThanFirstOne()
+            {
+                var converter = new TextToLowerCaseConverter();
+
+                Stopwatch stopwatch1 = new Stopwatch();
+                stopwatch1.Start();
+                converter.Convert("LoWeRcAsE", typeof(string), null, (CultureInfo) null);
+                stopwatch1.Stop();
+
+                Stopwatch stopwatch2 = new Stopwatch();
+                stopwatch2.Start();
+                converter.Convert("LoWeRcAsE", typeof(string), null, (CultureInfo) null);
+                stopwatch2.Stop();
+
+                Assert.Less(stopwatch2.Elapsed, stopwatch1.Elapsed);
             }
 
             [TestCase]

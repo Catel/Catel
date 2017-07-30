@@ -7,6 +7,7 @@
 
 namespace Catel.Test.Windows.Input
 {
+    using System.Diagnostics;
     using System.IO;
     using Catel.Runtime.Serialization;
     using InputGesture = Catel.Windows.Input.InputGesture;
@@ -70,6 +71,47 @@ namespace Catel.Test.Windows.Input
                 var inputGesture = new InputGesture(Key.A, ModifierKeys.Control | ModifierKeys.Shift);
 
                 Assert.AreEqual("Control + Shift + A", inputGesture.ToString());
+            }
+
+            [TestCase]
+            public void CorrectlyReturnsStringAfterUpdateKey()
+            {
+                var inputGesture = new InputGesture(Key.A, ModifierKeys.Control | ModifierKeys.Shift);
+
+                inputGesture.ToString();
+
+                inputGesture.Key = Key.B;
+
+                Assert.AreEqual("Control + Shift + B", inputGesture.ToString());
+            }
+
+            [TestCase]
+            public void CorrectlyReturnsStringAfterUpdateModifierKeys()
+            {
+                var inputGesture = new InputGesture(Key.A, ModifierKeys.Control | ModifierKeys.Shift);
+
+                inputGesture.ToString();
+
+                inputGesture.Modifiers |= ModifierKeys.Alt;
+                Assert.AreEqual("Alt + Control + Shift + A", inputGesture.ToString());
+            }
+
+            [TestCase]
+            public void SecondCallExecutesFasterThanFirstOne()
+            {
+                var inputGesture = new InputGesture(Key.A, ModifierKeys.Control | ModifierKeys.Shift);
+
+                Stopwatch stopwatch1 = new Stopwatch();
+                stopwatch1.Start();
+                inputGesture.ToString();
+                stopwatch1.Stop();
+
+                Stopwatch stopwatch2 = new Stopwatch();
+                stopwatch2.Start();
+                inputGesture.ToString();
+                stopwatch2.Stop();
+
+                Assert.Less(stopwatch2.Elapsed, stopwatch1.Elapsed);
             }
         }
     }

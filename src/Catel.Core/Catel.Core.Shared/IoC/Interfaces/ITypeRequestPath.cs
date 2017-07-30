@@ -5,6 +5,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Catel.IoC
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Interface defining the public members of <see cref="TypeRequestPath"/> to be used inside exceptions.
     /// </summary>
@@ -14,7 +16,7 @@ namespace Catel.IoC
         /// Gets all types in the right order.
         /// </summary>
         /// <value>All types.</value>
-        TypeRequestInfo[] AllTypes { get; }
+        IEnumerable<TypeRequestInfo> AllTypes { get; }
 
         /// <summary>
         /// Gets the first type in the type path.
