@@ -244,6 +244,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\BinarySerializerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\BinarySerialization\RedirectDeserializationBinderFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFact.advanced.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFacts.generic.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFacts.warmup.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFacts.dictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Serialization\GenericSerializationFacts.cs" />

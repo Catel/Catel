@@ -6,6 +6,7 @@
 namespace Catel.IoC
 {
     using System;
+    using System.Collections.Generic;
     using System.Text;
     using Logging;
 
@@ -22,7 +23,12 @@ namespace Catel.IoC
         private static readonly TypeRequestInfo[] Empty = new TypeRequestInfo[0];
 
         private readonly TypeRequestInfo[] _typePath;
-        
+
+        /// <summary>
+        /// <see cref="ToString"/> method result cache.
+        /// </summary>
+        private string _string;
+
         private TypeRequestPath(TypeRequestInfo[] typePath, string name)
         {
             _typePath = typePath;
@@ -103,7 +109,7 @@ namespace Catel.IoC
         /// Gets all types in the right order.
         /// </summary>
         /// <value>All types.</value>
-        public TypeRequestInfo[] AllTypes
+        public IEnumerable<TypeRequestInfo> AllTypes
         {
             get { return _typePath; }
         }
@@ -149,7 +155,7 @@ namespace Catel.IoC
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
-            return FormatPath(_typePath);
+            return _string ?? (_string = FormatPath(_typePath));
         }
     }
 }

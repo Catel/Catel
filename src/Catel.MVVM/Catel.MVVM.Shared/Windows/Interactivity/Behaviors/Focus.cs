@@ -52,9 +52,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if !NETFX_CORE
         private Catel.IWeakEventListener _weakEventListener;
-#endif
         #endregion
 
         /// <summary>
@@ -185,14 +183,9 @@ namespace Catel.Windows.Interactivity
                 switch (FocusMoment)
                 {
                     case FocusMoment.Event:
-
-#if NETFX_CORE
-                        throw new NotSupportedInPlatformException("Dynamic events are not supported");
-#else
                         _weakEventListener?.Detach();
                         _weakEventListener = null;
                         break;
-#endif
 
                     case FocusMoment.PropertyChanged:
                         var sourceAsPropertyChanged = e.OldValue as INotifyPropertyChanged;
@@ -213,17 +206,13 @@ namespace Catel.Windows.Interactivity
                 switch (FocusMoment)
                 {
                     case FocusMoment.Event:
-#if NETFX_CORE
-                        throw new NotSupportedInPlatformException("Dynamic events are not supported");
-#else
                         if (string.IsNullOrEmpty(EventName))
                         {
                             throw new InvalidOperationException("Property 'EventName' is required when FocusMode is 'FocusMode.Event'");
                         }
 
-                        _weakEventListener = this.SubscribeToWeakEvent(Source, EventName, (Action) OnSourceEventOccurred);
+                        _weakEventListener = this.SubscribeToWeakEvent(Source, EventName, OnSourceEventOccurred);
                         break;
-#endif
 
                     case FocusMoment.PropertyChanged:
                         if (string.IsNullOrEmpty(PropertyName))

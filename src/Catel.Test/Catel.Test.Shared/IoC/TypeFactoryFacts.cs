@@ -260,7 +260,7 @@ namespace Catel.Test.IoC
 
                 var ex = ExceptionTester.CallMethodAndExpectException<CircularDependencyException>(() => typeFactory.CreateInstance<X>());
 
-                Assert.AreEqual(3, ex.TypePath.AllTypes.Length);
+                Assert.AreEqual(3, ex.TypePath.AllTypes.Count());
                 Assert.AreEqual(typeof(X), ex.TypePath.FirstType.Type);
                 Assert.AreEqual(typeof(X), ex.DuplicateRequestInfo.Type);
             }

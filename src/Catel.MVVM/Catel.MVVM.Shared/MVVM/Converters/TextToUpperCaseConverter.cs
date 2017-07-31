@@ -9,12 +9,18 @@ namespace Catel.MVVM.Converters
 {
     using System;
     using System.Globalization;
+    using Caching;
 
     /// <summary>
     /// Converts string values to upper case.
     /// </summary>
     public class TextToUpperCaseConverter : ValueConverterBase
     {
+        /// <summary>
+        /// The cache storage.
+        /// </summary>
+        private readonly ICacheStorage<string, string> _cacheStorage = new CacheStorage<string, string>();
+
         #region Methods
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
@@ -28,11 +34,14 @@ namespace Catel.MVVM.Converters
             var stringValue = value as string;
             if (stringValue != null)
             {
+                return _cacheStorage.GetFromCacheOrFetch(stringValue, () =>
+                {
 #if NETFX_CORE || XAMARIN_FORMS
-                return stringValue.ToUpper();
+                    return stringValue.ToUpper();
 #else
-                return stringValue.ToUpper(CurrentCulture ?? CultureInfo.CurrentCulture);
+                    return stringValue.ToUpper(CurrentCulture ?? CultureInfo.CurrentCulture);
 #endif
+                });
             }
 
             return value;

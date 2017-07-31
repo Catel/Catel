@@ -171,7 +171,7 @@ namespace Catel.Services
             var window = CreateWindow(name, data, completedProc, false);
             if (window != null)
             {
-                return await ShowWindowAsync(window, false);
+                return await ShowWindowAsync(window, data, false);
             }
 
             return false;
@@ -219,7 +219,7 @@ namespace Catel.Services
             var window = CreateWindow(name, data, completedProc, true);
             if (window != null)
             {
-                return await ShowWindowAsync(window, true);
+                return await ShowWindowAsync(window, data, true);
             }
 
             return false;
