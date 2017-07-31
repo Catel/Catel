@@ -105,33 +105,54 @@ namespace Catel.Services
         /// <param name="isModal">True if this is a ShowDialog request.</param>
         protected virtual void HandleCloseSubscription(object window, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
         {
-            Catel.IWeakEventListener weakEventListener = null;
-
-            Action closed = () =>
+            var eventInfo = window.GetType().GetEvent("Closed");
+            var addMethod = eventInfo?.AddMethod;
+            if (addMethod != null)
             {
-                bool? dialogResult = null;
-                PropertyHelper.TryGetPropertyValue(window, "DialogResult", out dialogResult);
+                EventHandler eventHandler = null;
+                void Closed(object s, EventArgs e)
+                {
+                    if (!ReferenceEquals(window, s))
+                    {
+                        // Fix for https://github.com/Catel/Catel/issues/1074
+                        return;
+                    }
 
-                completedProc(this, new UICompletedEventArgs(data, isModal ? dialogResult : null));
+                    bool? dialogResult;
+                    PropertyHelper.TryGetPropertyValue(window, "DialogResult", out dialogResult);
 
-                weakEventListener?.Detach();
-            };
+                    try
+                    {
+                        completedProc(this, new UICompletedEventArgs(data, isModal ? dialogResult : null));
+                    }
+                    finally
+                    {
+                        var removeMethod = eventInfo.RemoveMethod;
+                        if (removeMethod != null)
+                        {
+                            removeMethod.Invoke(window, new object[] { eventHandler });
+                        }
+                    }
+                }
 
-            weakEventListener = this.SubscribeToWeakEvent(window, "Closed", closed);
+                eventHandler = Closed;
+                addMethod.Invoke(window, new object[] { eventHandler });
+            }
         }
 
         /// <summary>
         /// Shows the window.
         /// </summary>
         /// <param name="window">The window.</param>
+        /// <param name="data">The data.</param>
         /// <param name="showModal">If <c>true</c>, the window should be shown as modal.</param>
         /// <returns><c>true</c> if the window is closed with success; otherwise <c>false</c> or <c>null</c>.</returns>
-        protected virtual Task<bool?> ShowWindowAsync(FrameworkElement window, bool showModal)
+        protected virtual Task<bool?> ShowWindowAsync(FrameworkElement window, object data, bool showModal)
         {
             // Note: no async/await because we use a TaskCompletionSource
             var tcs = new TaskCompletionSource<bool?>();
 
-            HandleCloseSubscription(window, "Closed", (sender, args) => { tcs.SetResult(args.Result); }, showModal);
+            HandleCloseSubscription(window, data, (sender, args) => tcs.TrySetResult(args.Result), showModal);
 
             var showMethodInfo = showModal ? window.GetType().GetMethodEx("ShowDialog") : window.GetType().GetMethodEx("Show");
             if (showModal && showMethodInfo == null)
@@ -143,34 +164,24 @@ namespace Catel.Services
 
             if (showMethodInfo == null)
             {
-                var exception = new NotSupportedException($"Methods 'Show' or 'ShowDialog' not found on '{window.GetType().Name}', cannot show the window");
-
-                Log.Error(exception);
-
+                var exception = Log.ErrorAndCreateException<NotSupportedException>($"Methods 'Show' or 'ShowDialog' not found on '{window.GetType().Name}', cannot show the window");
                 tcs.SetException(exception);
             }
             else
             {
-                if (showModal)
+                window.Dispatcher.BeginInvoke(() =>
                 {
-                    window.Dispatcher.BeginInvoke(
-                        () =>
-                            {
-                                // Safety net to prevent crashes when this is the main window
-                                try
-                                {
-                                    showMethodInfo.Invoke(window, null);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Log.Warning(ex, $"An error occurred while showing window '{window.GetType().GetSafeFullName(true)}'");
-                                }
-                            });
-                }
-                else
-                {
-                    window.Dispatcher.BeginInvoke(() => showMethodInfo.Invoke(window, null));
-                }
+                    // Safety net to prevent crashes when this is the main window
+                    try
+                    {
+                        showMethodInfo.Invoke(window, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, $"An error occurred while showing window '{window.GetType().GetSafeFullName(true)}'");
+                        tcs.TrySetResult(null);
+                    }
+                });
             }
 
             return tcs.Task;

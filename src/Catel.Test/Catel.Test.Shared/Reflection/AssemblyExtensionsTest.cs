@@ -17,7 +17,7 @@ namespace Catel.Test.Reflection
     [TestFixture]
     public class AssemblyExtensionsTest
     {
-        private const string VersionPrefix = "5.0";
+        private const string VersionPrefix = "5.1";
 
         private static readonly Assembly Assembly = typeof(AssemblyExtensionsTest).GetAssemblyEx();
 
@@ -95,7 +95,7 @@ namespace Catel.Test.Reflection
         [TestCase]
         public void CopyrightAutomatic()
         {
-            string expected = "Copyright © CatenaLogic 2010 - 2016";
+            string expected = "Copyright © CatenaLogic 2010 - 2017";
 
             var result = Assembly.Copyright();
 

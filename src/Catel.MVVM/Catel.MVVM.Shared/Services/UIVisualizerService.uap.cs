@@ -123,9 +123,10 @@ namespace Catel.Services
         /// Shows the window.
         /// </summary>
         /// <param name="window">The window.</param>
+        /// <param name="data">The data.</param>
         /// <param name="showModal">If <c>true</c>, the window should be shown as modal.</param>
         /// <returns><c>true</c> if the window is closed with success; otherwise <c>false</c> or <c>null</c>.</returns>
-        protected virtual async Task<bool?> ShowWindowAsync(ContentDialog window, bool showModal)
+        protected virtual async Task<bool?> ShowWindowAsync(ContentDialog window, object data, bool showModal)
         {
             // Note: no async/await because we use a TaskCompletionSource
 

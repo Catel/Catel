@@ -615,13 +615,19 @@ namespace Catel.Test
             }
 
             [TestCase]
-            public void ThrowsNotSupportedExceptionForAnonymousHandler()
+            public void DoesNotLeakWithAnonymousHandlers()
             {
                 var source = new EventSource();
                 var listener = new EventListener();
                 int count = 0;
 
-                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(listener, source, "PublicEvent", (sender, e) => count++));
+                WeakEventListener<EventListener, EventSource, ViewModelClosedEventArgs>.SubscribeToWeakGenericEvent(listener, source, "PublicEvent", (sender, e) => count++);
+
+                Assert.AreEqual(0, count);
+
+                source.RaisePublicEvent();
+
+                Assert.AreEqual(1, count);
             }
 
             [TestCase]

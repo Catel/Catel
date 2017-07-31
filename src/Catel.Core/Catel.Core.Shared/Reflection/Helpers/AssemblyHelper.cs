@@ -166,7 +166,11 @@ namespace Catel.Reflection
                     Log.Warning("The following loading exceptions occurred:");
                     foreach (var error in typeLoadException.LoaderExceptions)
                     {
-                        Log.Warning("  " + error.Message);
+                        // Fix mono issue https://github.com/Catel/Catel/issues/1071 
+                        if (error != null)
+                        {
+                            Log.Warning("  " + error.Message);
+                        }
                     }
                 }
             }

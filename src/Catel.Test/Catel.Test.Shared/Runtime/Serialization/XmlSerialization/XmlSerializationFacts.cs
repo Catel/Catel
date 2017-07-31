@@ -59,7 +59,7 @@ namespace Catel.Test.Runtime.Serialization
 
             public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), null);
 
-            
+
             public ObservableCollection<XmlPerson> Persons
             {
                 get { return GetValue<ObservableCollection<XmlPerson>>(PersonsProperty); }
@@ -227,7 +227,7 @@ namespace Catel.Test.Runtime.Serialization
                 {
                     FirstName = "Geert",
                     LastName = family.LastName,
-                    Gender = Gender.Male 
+                    Gender = Gender.Male
                 });
 
                 var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, SerializationTestHelper.GetXmlSerializer(),

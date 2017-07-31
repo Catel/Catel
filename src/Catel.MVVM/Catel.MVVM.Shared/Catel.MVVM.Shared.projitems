@@ -368,6 +368,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\HideUntilViewModelLoaded.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Interfaces\IBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\KeyPressToCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\PointerInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\MouseInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\Navigate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Interactivity\Behaviors\NumericTextBox.cs" />
