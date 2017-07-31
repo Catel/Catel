@@ -25,6 +25,18 @@ namespace Catel
 #endif
 
     /// <summary>
+    /// Open instance delegate which allows the creation of an instance method without an actual reference
+    /// to the target.
+    /// </summary>
+    public delegate void OpenInstanceEventHandler<TTarget, TEventArgs>(TTarget @this, object sender, TEventArgs e);
+
+    /// <summary>
+    /// Open instance delegate which allows the creation of an instance method without an actual reference
+    /// to the target.
+    /// </summary>
+    public delegate void OpenInstanceActionHandler<TTarget>(TTarget @this);
+
+    /// <summary>
     /// Implements a weak event listener that allows the owner to be garbage
     /// collected if its only remaining link is an event handler.
     /// </summary>
@@ -46,22 +58,7 @@ namespace Catel
     public class WeakEventListener<TTarget, TSource, TEventArgs> : IWeakEventListener
         where TTarget : class
         where TSource : class
-#if !NETFX_CORE && !PCL
-        where TEventArgs : EventArgsBase
-#endif
     {
-        /// <summary>
-        /// Open instance delegate which allows the creation of an instance method without an actual reference
-        /// to the target.
-        /// </summary>
-        public delegate void OpenInstanceEventHandler(TTarget @this, object sender, TEventArgs e);
-
-        /// <summary>
-        /// Open instance delegate which allows the creation of an instance method without an actual reference
-        /// to the target.
-        /// </summary>
-        public delegate void OpenInstanceActionHandler(TTarget @this);
-
         #region Fields
         /// <summary>
         /// The log.
@@ -110,7 +107,7 @@ namespace Catel
         /// <param name="target">Instance subscribing to the event, should be <c>null</c> for static event handlers.</param>
         /// <param name="source">The source of the event, should be <c>null</c> for static events.</param>
         /// <param name="typeForEventSubscriptions">The type for event subscriptions.</param>
-        private WeakEventListener(TTarget target, TSource source, Type typeForEventSubscriptions)
+        private WeakEventListener(object target, TSource source, Type typeForEventSubscriptions)
         {
             Argument.IsNotNull("typeForEventSubscriptions", typeForEventSubscriptions);
 
@@ -134,12 +131,12 @@ namespace Catel
         /// <summary>
         /// Gets or sets the method to call when the event fires.
         /// </summary>
-        internal OpenInstanceEventHandler OnEventHandler { get; set; }
+        internal Delegate OnEventHandler { get; set; }
 
         /// <summary>
         /// Gets or sets the method to call when the event fires.
         /// </summary>
-        internal OpenInstanceActionHandler OnEventAction { get; set; }
+        internal Delegate OnEventAction { get; set; }
 
         /// <summary>
         /// Gets or sets the method to call when the static event fires.
@@ -362,16 +359,18 @@ namespace Catel
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Both the source and target are null, which means that a static event handler subscribes to a static event. In such cases, there are no memory leaks, so there is no reason to use this class");
             }
 
+            object finalTarget = target;
+
             var methodInfo = handler.GetMethodInfoEx();
             if ((methodInfo.Name.Contains("_AnonymousDelegate>")) || (methodInfo.DeclaringType.FullName.Contains("__DisplayClass")))
             {
-                if (target.GetType() != methodInfo.DeclaringType)
+                if (finalTarget.GetType() != methodInfo.DeclaringType)
                 {
-                    throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
+                    finalTarget = handler.Target ?? finalTarget;
                 }
             }
 
-            var weakListener = new WeakEventListener<TTarget, TSource, TEventArgs>(target, source, typeof(TExplicitSourceType));
+            var weakListener = new WeakEventListener<TTarget, TSource, TEventArgs>(finalTarget, source, typeof(TExplicitSourceType));
 
             try
             {
@@ -397,20 +396,22 @@ namespace Catel
                 else
                 {
                     var del = DelegateHelper.CreateDelegate(typeof(EventHandler<TEventArgs>), methodInfo);
-                    weakListener.OnStaticEventHandler = (EventHandler<TEventArgs>) del;
+                    weakListener.OnStaticEventHandler = (EventHandler<TEventArgs>)del;
                 }
             }
             else
             {
                 if (isAction)
                 {
-                    var del = DelegateHelper.CreateDelegate(typeof(OpenInstanceActionHandler), methodInfo);
-                    weakListener.OnEventAction = (OpenInstanceActionHandler)del;
+                    var delegateType = typeof(OpenInstanceActionHandler<>).MakeGenericType(finalTarget.GetType());
+                    var del = DelegateHelper.CreateDelegate(delegateType, methodInfo);
+                    weakListener.OnEventAction = del;
                 }
                 else
                 {
-                    var del = DelegateHelper.CreateDelegate(typeof(OpenInstanceEventHandler), methodInfo);
-                    weakListener.OnEventHandler = (OpenInstanceEventHandler) del;
+                    var delegateType = typeof(OpenInstanceEventHandler<,>).MakeGenericType(finalTarget.GetType(), typeof(TEventArgs));
+                    var del = DelegateHelper.CreateDelegate(delegateType, methodInfo);
+                    weakListener.OnEventHandler = del;
                 }
             }
 
@@ -657,18 +658,18 @@ namespace Catel
                 return;
             }
 
-            var target = (TTarget)Target;
+            var target = Target;
 
             var onEventHandler = OnEventHandler;
             if (onEventHandler != null)
             {
-                onEventHandler(target, source, eventArgs);
+                onEventHandler.DynamicInvoke(target, source, eventArgs);
             }
 
             var onEventAction = OnEventAction;
             if (onEventAction != null)
             {
-                onEventAction(target);
+                onEventAction.DynamicInvoke(target);
             }
 
             var onStaticEventHandler = OnStaticEventHandler;
@@ -879,7 +880,24 @@ namespace Catel
                 }
                 else if (handlerType == typeof(Action))
                 {
-                    type = typeof(EventArgsBase);
+                    // We must have the right event args, so get the right ones using reflection (cached anyway)
+                    var eventHandlerType = typeof(TSource).GetEventEx(eventName)?.EventHandlerType;
+                    if (eventHandlerType != null)
+                    {
+                        if (eventHandlerType.ContainsGenericParametersEx())
+                        {
+                            type = eventHandlerType.GetGenericArgumentsEx()[0];
+                        }
+                        else
+                        {
+                            var invokeMethod = eventHandlerType.GetMethodEx("Invoke");
+                            type = invokeMethod.GetParameters()[1].ParameterType;
+                        }
+                    }
+                    else
+                    {
+                        type = typeof(EventArgsBase);
+                    }
                 }
 
                 return type;

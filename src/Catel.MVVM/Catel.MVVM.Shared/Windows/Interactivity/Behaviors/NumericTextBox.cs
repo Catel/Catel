@@ -15,11 +15,13 @@ namespace Catel.Windows.Interactivity
     using global::Windows.UI.Xaml.Controls;
     using Key = global::Windows.System.VirtualKey;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+    using UIKeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
 #else
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Input;
     using UIEventArgs = System.EventArgs;
+    using UIKeyEventArgs = System.Windows.Input.KeyEventArgs;
 #endif
 
     using System;
@@ -181,7 +183,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>        
-        private void OnAssociatedObjectKeyDown(object sender, KeyEventArgs e)
+        private void OnAssociatedObjectKeyDown(object sender, UIKeyEventArgs e)
         {
             bool notAllowed = true;
             string keyValue = GetKeyValue(e);
@@ -208,7 +210,7 @@ namespace Catel.Windows.Interactivity
         /// Called when the <c>TextBox.TextChanged</c> occurs.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.Windows.Controls.TextChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The text change event args instance containing the event data.</param>
         private void OnAssociatedObjectTextChanged(object sender, TextChangedEventArgs e)
         {
             if (!UpdateBindingOnTextChanged)
@@ -371,9 +373,9 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Gets the Key to a string value.
         /// </summary>
-        /// <param name="e">The <see cref="System.Windows.Input.KeyEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The key event args instance containing the event data.</param>
         /// <returns></returns>
-        private string GetKeyValue(KeyEventArgs e)
+        private string GetKeyValue(UIKeyEventArgs e)
         {
             string keyValue = string.Empty;
 
