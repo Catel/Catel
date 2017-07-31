@@ -11,6 +11,7 @@ namespace Catel.Test.IoC
     using System.Linq;
     using System.Threading;
     using Catel.IoC;
+    using Catel.Logging;
     using Catel.Messaging;
     using Catel.Services;
     using Data;
@@ -133,6 +134,91 @@ namespace Catel.Test.IoC
             public long LongValue { get; private set; }
 
             public IDummyDependency Dependency { get; private set; }
+        }
+
+        [TestFixture]
+        public class TheCreateInstanceWithParametersMethod
+        {
+            public interface IInterface
+            {
+                bool InterfaceSignal { get; set; }
+
+            }
+
+            public class ClassA : IInterface
+            {
+                public bool InterfaceSignal { get; set; }
+                public bool SignalA { get; set; }
+            }
+
+            public class ClassB : IInterface
+            {
+                public ClassB(IInterface i)
+                {
+                    i.InterfaceSignal = true;
+                }
+
+                public ClassB(ClassB b)
+                {
+                    b.SignalB = true;
+                }
+
+                public ClassB(ClassB b1, ClassB b2)
+                {
+                    b1.SignalB = true;
+                    b2.SignalB = true;
+                }
+
+                public ClassB(ClassB b, ClassA a)
+                {
+                    b.SignalB = true;
+                    a.SignalA = true;
+                }
+
+                public ClassB(ClassB b, IInterface i)
+                {
+                    b.SignalB = true;
+                    i.InterfaceSignal = true;
+                }
+
+                public bool SignalB { get; set; }
+
+                public bool InterfaceSignal { get; set; }
+            }
+
+            [Test]
+            public void UseTheMostSpecializedConstructor()
+            {
+                ClassB b = new ClassB(new ClassA());
+
+                TypeFactory.Default.CreateInstanceWithParameters(typeof(ClassB), b);
+
+                Assert.IsTrue(b.SignalB);
+            }
+
+            [Test]
+            public void UseTheMostSpecializedConstructor2()
+            {
+                ClassB b1 = new ClassB(new ClassA());
+                ClassB b2 = new ClassB(new ClassA());
+
+                TypeFactory.Default.CreateInstanceWithParameters(typeof(ClassB), b1, b2);
+
+                Assert.IsTrue(b1.SignalB);
+                Assert.IsTrue(b2.SignalB);
+            }
+
+            [Test]
+            public void UseTheMostSpecializedConstructor3()
+            {
+                ClassA a = new ClassA();
+                ClassB b = new ClassB(a);
+
+                TypeFactory.Default.CreateInstanceWithParameters(typeof(ClassB), b, a);
+
+                Assert.IsTrue(b.SignalB);
+                Assert.IsTrue(a.SignalA);
+            }
         }
 
         [TestFixture]

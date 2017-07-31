@@ -25,6 +25,7 @@ Added/fixed:
 ============
 (*) #953     Cache ToString, ToUpper() and ToLower() calls
 (*) #1017    Improve performance of ViewToViewModelMappingHelper
+(x) #1070    TypeFactory.CreateInstanceWithParameters use the most specialized constructor
 
 Roadmap:
 ========

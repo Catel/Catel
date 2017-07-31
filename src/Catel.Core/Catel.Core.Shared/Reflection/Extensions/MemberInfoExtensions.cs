@@ -7,10 +7,12 @@
 namespace Catel.Reflection
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using System.Text;
     using Catel.Caching;
+    using IoC;
 
     /// <summary>
     /// Member info extensions.
@@ -44,6 +46,106 @@ namespace Catel.Reflection
                 return stringBuilder.ToString();
             });
         }
+
+        /// <summary>
+        /// Constructor distance tuple.
+        /// </summary>
+        private class ConstructorDistance
+        {
+            public ConstructorDistance(int distance, ConstructorInfo constructor)
+            {
+                Distance = distance;
+                Constructor = constructor;
+            }
+
+            public int Distance { get; }
+            public ConstructorInfo Constructor { get; }
+        }
+
+
+        /// <summary>
+        /// Sort constructors
+        /// </summary>
+        /// <param name="constructors"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public static IEnumerable<ConstructorInfo> SortByParametersMatchDistance(this List<ConstructorInfo> constructors, object[] parameters)
+        {
+            List<ConstructorDistance> constructorDistances = new List<ConstructorDistance>();
+            foreach (var constructor in constructors)
+            {
+                int distance;
+                if (constructor.TryGetConstructorDistanceByParametersMatch(parameters, out distance))
+                {
+                    constructorDistances.Add(new ConstructorDistance(distance, constructor));
+                }
+            }
+
+            return constructorDistances.OrderBy(constructor => constructor.Distance).Select(constructor => constructor.Constructor);
+        }
+
+        /// <summary>
+        /// Try to get the constructor distance by parameters match.
+        /// </summary>
+        /// <param name="constructor">The constructor info</param>
+        /// <param name="parameters"></param>
+        /// <param name="distance">The distance</param>
+        /// <returns></returns>
+        public static bool TryGetConstructorDistanceByParametersMatch(this ConstructorInfo constructor, object[] parameters, out int distance)
+        {
+            var constructorParameters = constructor.GetParameters();
+            distance = 0;
+
+            int i = 0;
+            var match = true;
+            while (i < parameters.Length && match)
+            {
+                int value = 0;
+                var parameter = parameters[i];
+                var constructorParameter = constructorParameters[i];
+                var constructorParameterType = constructorParameter.GetType();
+
+                if (parameter == null && !constructorParameterType.IsClassEx() && !constructorParameterType.IsNullableType())
+                {
+                    match = false;
+                }
+
+                if (parameter != null && !constructorParameter.ParameterType.IsAssignableFromEx(parameter.GetType()))
+                {
+                    match = false;
+                }
+
+                if (match && parameter != null)
+                {
+                    var parameterType = parameter.GetType();
+                    int idx;
+                    if (constructorParameter.ParameterType.IsInterfaceEx() && (idx = Array.IndexOf(parameterType.GetInterfacesSorted(), constructorParameter.ParameterType)) > -1)
+                    {
+                        value = idx + 1;
+                    }
+                    else
+                    {
+                        while (parameterType != null && parameterType != constructorParameter.ParameterType)
+                        {
+                            value++;
+                            parameterType = parameterType.GetBaseTypeEx();
+                        }
+
+                        if (parameterType == null)
+                        {
+                            match = false;
+                        }
+                    }
+
+                    distance += value * value;
+                }
+
+                i++;
+            }
+
+            return match;
+        }
+
 
         /// <summary>
         /// Gets the signature of a method.

@@ -296,7 +296,7 @@ namespace Catel.IoC
 
                 Log.Debug("Creating instance of type '{0}' using specific parameters. No constructor found in the cache, so searching for the right one", typeToConstruct.FullName);
 
-                var constructors = typeConstructorsMetadata.GetConstructors(parameters.Length, !autoCompleteDependencies);
+                var constructors = typeConstructorsMetadata.GetConstructors(parameters.Length, !autoCompleteDependencies).SortByParametersMatchDistance(parameters).ToList();
 
                 for (int i = 0; i < constructors.Count; i++)
                 {
