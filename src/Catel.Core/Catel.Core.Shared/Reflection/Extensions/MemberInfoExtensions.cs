@@ -48,40 +48,31 @@ namespace Catel.Reflection
         }
 
         /// <summary>
-        /// Constructor distance tuple.
+        /// Sort constructors by parameters match distance.
         /// </summary>
-        private class ConstructorDistance
-        {
-            public ConstructorDistance(int distance, ConstructorInfo constructor)
-            {
-                Distance = distance;
-                Constructor = constructor;
-            }
-
-            public int Distance { get; }
-            public ConstructorInfo Constructor { get; }
-        }
-
-
-        /// <summary>
-        /// Sort constructors
-        /// </summary>
-        /// <param name="constructors"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
+        /// <param name="constructors">The constructors</param>
+        /// <param name="parameters">The constructor parameters</param>
+        /// <returns>
+        /// The constructors sorted by match distance.
+        /// </returns>
         public static IEnumerable<ConstructorInfo> SortByParametersMatchDistance(this List<ConstructorInfo> constructors, object[] parameters)
         {
+          if (constructors != null && constructors.Count > 1)
+          {
             List<ConstructorDistance> constructorDistances = new List<ConstructorDistance>();
             foreach (var constructor in constructors)
             {
-                int distance;
-                if (constructor.TryGetConstructorDistanceByParametersMatch(parameters, out distance))
-                {
-                    constructorDistances.Add(new ConstructorDistance(distance, constructor));
-                }
+              int distance;
+              if (constructor.TryGetConstructorDistanceByParametersMatch(parameters, out distance))
+              {
+                constructorDistances.Add(new ConstructorDistance(distance, constructor));
+              }
             }
 
             return constructorDistances.OrderBy(constructor => constructor.Distance).Select(constructor => constructor.Constructor);
+          }
+
+          return constructors;
         }
 
         /// <summary>
@@ -90,60 +81,56 @@ namespace Catel.Reflection
         /// <param name="constructor">The constructor info</param>
         /// <param name="parameters"></param>
         /// <param name="distance">The distance</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> whether the constructor match with the parameters and distance can be computed; otherwise <c>false</c></returns>
         public static bool TryGetConstructorDistanceByParametersMatch(this ConstructorInfo constructor, object[] parameters, out int distance)
         {
-            var constructorParameters = constructor.GetParameters();
-            distance = 0;
+          Argument.IsNotNull("constructor", constructor);
 
-            int i = 0;
-            var match = true;
-            while (i < parameters.Length && match)
+          distance = 0;
+          var constructorParameters = constructor.GetParameters();
+          for (int i = 0; i < parameters.Length; i++)
+          {
+            int value = 0;
+            var parameter = parameters[i];
+            var constructorParameterType = constructorParameters[i].ParameterType;
+
+            if (parameter == null && !constructorParameterType.IsClassEx() && !constructorParameterType.IsNullableType())
             {
-                int value = 0;
-                var parameter = parameters[i];
-                var constructorParameter = constructorParameters[i];
-                var constructorParameterType = constructorParameter.GetType();
-
-                if (parameter == null && !constructorParameterType.IsClassEx() && !constructorParameterType.IsNullableType())
-                {
-                    match = false;
-                }
-
-                if (parameter != null && !constructorParameter.ParameterType.IsAssignableFromEx(parameter.GetType()))
-                {
-                    match = false;
-                }
-
-                if (match && parameter != null)
-                {
-                    var parameterType = parameter.GetType();
-                    int idx;
-                    if (constructorParameter.ParameterType.IsInterfaceEx() && (idx = Array.IndexOf(parameterType.GetInterfacesSorted(), constructorParameter.ParameterType)) > -1)
-                    {
-                        value = idx + 1;
-                    }
-                    else
-                    {
-                        while (parameterType != null && parameterType != constructorParameter.ParameterType)
-                        {
-                            value++;
-                            parameterType = parameterType.GetBaseTypeEx();
-                        }
-
-                        if (parameterType == null)
-                        {
-                            match = false;
-                        }
-                    }
-
-                    distance += value * value;
-                }
-
-                i++;
+              return false;
             }
 
-            return match;
+            if (parameter != null && !constructorParameterType.IsAssignableFromEx(parameter.GetType()))
+            {
+              return false;
+            }
+
+            if (parameter != null)
+            {
+              var parameterType = parameter.GetType();
+              int idx;
+              if (constructorParameterType.IsInterfaceEx() && (idx = Array.IndexOf(parameterType.GetInterfacesSorted(), constructorParameterType)) > -1)
+              {
+                value = idx + 1;
+              }
+              else
+              {
+                while (parameterType != null && parameterType != constructorParameterType)
+                {
+                  value++;
+                  parameterType = parameterType.GetBaseTypeEx();
+                }
+
+                if (parameterType == null)
+                {
+                  return false;
+                }
+              }
+
+              distance += value * value;
+            }
+          }
+
+          return true;
         }
 
 
@@ -213,6 +200,28 @@ namespace Catel.Reflection
             return (propertyInfo.CanRead && propertyInfo.GetGetMethod().IsStatic) || (propertyInfo.CanWrite && propertyInfo.GetSetMethod().IsStatic);
 #endif
         }
-        #endregion
-    }
+    #endregion
+
+      /// <summary>
+      /// Constructor distance tuple.
+      /// </summary>
+      private class ConstructorDistance
+      {
+        public ConstructorDistance(int distance, ConstructorInfo constructor)
+        {
+          this.Distance = distance;
+          this.Constructor = constructor;
+        }
+
+        /// <summary>
+        /// Gets the distance.
+        /// </summary>
+        public int Distance { get; }
+
+        /// <summary>
+        /// Get the constructor.
+        /// </summary>
+        public ConstructorInfo Constructor { get; }
+      }
+  }
 }
