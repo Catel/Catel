@@ -8,11 +8,13 @@
 namespace Catel.Test.Data
 {
     using System.Collections.Generic;
+    using Catel.Data;
     using NUnit.Framework;
     using TestClasses;
 
     public partial class ModelBaseFacts
     {
+
         [TestFixture]
         public class SuspendChangeNotificationFacts
         {
