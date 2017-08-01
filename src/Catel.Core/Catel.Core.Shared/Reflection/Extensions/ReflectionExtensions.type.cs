@@ -676,11 +676,11 @@ namespace Catel.Reflection
                         interfaces.Remove(@interface);
                         interfaces.Add(@interface);
 
-                        @interface = interfaceType.BaseType;
+                        @interface = interfaceType.GetBaseTypeEx();
                     }
                 }
 
-                type = type.BaseType;
+                type = type.GetBaseTypeEx();
             }
 
             return interfaces.ToArray();
