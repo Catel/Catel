@@ -209,8 +209,8 @@ namespace Catel.Reflection
       {
         public ConstructorDistance(int distance, ConstructorInfo constructor)
         {
-          this.Distance = distance;
-          this.Constructor = constructor;
+          Distance = distance;
+          Constructor = constructor;
         }
 
         /// <summary>
