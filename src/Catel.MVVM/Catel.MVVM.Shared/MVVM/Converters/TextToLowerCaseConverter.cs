@@ -33,7 +33,7 @@ namespace Catel.MVVM.Converters
             var stringValue = value as string;
             if (stringValue != null)
             {
-                _cacheStorage.GetFromCacheOrFetch(stringValue, () =>
+                value = _cacheStorage.GetFromCacheOrFetch(stringValue, () =>
                 {
 #if NETFX_CORE || XAMARIN_FORMS
                     return stringValue.ToLower();
