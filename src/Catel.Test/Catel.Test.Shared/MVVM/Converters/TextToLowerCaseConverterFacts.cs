@@ -24,8 +24,9 @@ namespace Catel.Test.MVVM.Converters
             public void ReturnsLowerCaseString()
             {
                 var converter = new TextToLowerCaseConverter();
+                var actualValue = converter.Convert("LoWeRcAsE", typeof(string), null, (CultureInfo) null);
 
-                Assert.AreEqual("lowercase", converter.Convert("LoWeRcAsE", typeof (string), null, (CultureInfo) null));
+                Assert.AreEqual("lowercase", actualValue);
             }
 
             [TestCase]
@@ -33,12 +34,12 @@ namespace Catel.Test.MVVM.Converters
             {
                 var converter = new TextToLowerCaseConverter();
 
-                Stopwatch stopwatch1 = new Stopwatch();
+                var stopwatch1 = new Stopwatch();
                 stopwatch1.Start();
                 converter.Convert("LoWeRcAsE", typeof(string), null, (CultureInfo) null);
                 stopwatch1.Stop();
 
-                Stopwatch stopwatch2 = new Stopwatch();
+                var stopwatch2 = new Stopwatch();
                 stopwatch2.Start();
                 converter.Convert("LoWeRcAsE", typeof(string), null, (CultureInfo) null);
                 stopwatch2.Stop();
