@@ -258,82 +258,80 @@ namespace Catel.IoC
         /// <param name="autoCompleteDependencies">if set to <c>true</c>, the additional dependencies will be auto completed.</param>
         /// <returns>The instantiated type using dependency injection.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToConstruct" /> is <c>null</c>.</exception>
-        private object CreateInstanceWithSpecifiedParameters(Type typeToConstruct, object tag, object[] parameters,
-            bool autoCompleteDependencies)
+        private object CreateInstanceWithSpecifiedParameters(Type typeToConstruct, object tag, object[] parameters, bool autoCompleteDependencies)
         {
-            Argument.IsNotNull("typeToConstruct", typeToConstruct);
+          Argument.IsNotNull("typeToConstruct", typeToConstruct);
 
-            if (parameters == null)
+          if (parameters == null)
+          {
+            parameters = new object[] { };
+          }
+
+          var previousRequestPath = _currentTypeRequestPath.Value;
+          try
+          {
+            var typeRequestInfo = new TypeRequestInfo(typeToConstruct);
+            _currentTypeRequestPath.Value = TypeRequestPath.Branch(previousRequestPath, typeRequestInfo);
+
+            var constructorCacheKey = new ConstructorCacheKey(typeToConstruct, autoCompleteDependencies, parameters);
+
+            var typeConstructorsMetadata = GetTypeMetaData(typeToConstruct);
+
+            var constructorCacheValue = GetConstructor(constructorCacheKey);
+
+            if (constructorCacheValue.ConstructorInfo != null)
             {
-                parameters = new object[] {};
+              var cachedConstructor = constructorCacheValue.ConstructorInfo;
+              var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, cachedConstructor, tag, parameters, false, false, typeConstructorsMetadata);
+              if (instanceCreatedWithInjection != null)
+              {
+                return instanceCreatedWithInjection;
+              }
+
+              Log.Warning("Found constructor for type '{0}' in constructor, but it failed to create an instance. Removing the constructor from the cache", typeToConstruct.FullName);
+
+              SetConstructor(constructorCacheKey, constructorCacheValue, null);
             }
 
-            var previousRequestPath = _currentTypeRequestPath.Value;
-            try
+            Log.Debug("Creating instance of type '{0}' using specific parameters. No constructor found in the cache, so searching for the right one", typeToConstruct.FullName);
+
+            var constructors = typeConstructorsMetadata.GetConstructors(parameters.Length, !autoCompleteDependencies).SortByParametersMatchDistance(parameters).ToList();
+
+            for (int i = 0; i < constructors.Count; i++)
             {
-                var typeRequestInfo = new TypeRequestInfo(typeToConstruct);
-                _currentTypeRequestPath.Value = TypeRequestPath.Branch(previousRequestPath, typeRequestInfo);
+              var constructor = constructors[i];
 
-                var constructorCacheKey = new ConstructorCacheKey(typeToConstruct, autoCompleteDependencies, parameters);
+              var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, constructor, tag, parameters, true, i < constructors.Count - 1, typeConstructorsMetadata);
+              if (instanceCreatedWithInjection != null)
+              {
+                // We found a constructor that works, cache it
+                SetConstructor(constructorCacheKey, constructorCacheValue, constructor);
 
-                var typeConstructorsMetadata = GetTypeMetaData(typeToConstruct);
+                // Only update the rule when using a constructor for the first time, not when using it from the cache
+                ApiCop.UpdateRule<TooManyDependenciesApiCopRule>("TypeFactory.LimitDependencyInjection", x => x.SetNumberOfDependenciesInjected(typeToConstruct, constructor.GetParameters().Count()));
 
-                var constructorCacheValue = GetConstructor(constructorCacheKey);
-
-                if (constructorCacheValue.ConstructorInfo != null)
-                {
-                    var cachedConstructor = constructorCacheValue.ConstructorInfo;
-                    var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, cachedConstructor, tag, parameters, false, false, typeConstructorsMetadata);
-                    if (instanceCreatedWithInjection != null)
-                    {
-                        return instanceCreatedWithInjection;
-                    }
-
-                    Log.Warning("Found constructor for type '{0}' in constructor, but it failed to create an instance. Removing the constructor from the cache", typeToConstruct.FullName);
-
-                    SetConstructor(constructorCacheKey, constructorCacheValue, null);
-                }
-
-                Log.Debug("Creating instance of type '{0}' using specific parameters. No constructor found in the cache, so searching for the right one", typeToConstruct.FullName);
-
-                var constructors = typeConstructorsMetadata.GetConstructors(parameters.Length, !autoCompleteDependencies);
-
-                for (int i = 0; i < constructors.Count; i++)
-                {
-                    var constructor = constructors[i];
-
-                    var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, constructor, tag, parameters, true, i < constructors.Count - 1, typeConstructorsMetadata);
-                    if (instanceCreatedWithInjection != null)
-                    {
-                        // We found a constructor that works, cache it
-                        SetConstructor(constructorCacheKey, constructorCacheValue, constructor);
-
-                        // Only update the rule when using a constructor for the first time, not when using it from the cache
-                        ApiCop.UpdateRule<TooManyDependenciesApiCopRule>("TypeFactory.LimitDependencyInjection",
-                            x => x.SetNumberOfDependenciesInjected(typeToConstruct, constructor.GetParameters().Count()));
-
-                        return instanceCreatedWithInjection;
-                    }
-                }
-
-                Log.Debug("No constructor could be used, cannot construct type '{0}' with the specified parameters", typeToConstruct.FullName);
-            }
-            catch (CircularDependencyException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                Log.Warning(ex, "Failed to construct type '{0}'", typeToConstruct.FullName);
-
-                throw;
-            }
-            finally
-            {
-                _currentTypeRequestPath.Value = previousRequestPath;
+                return instanceCreatedWithInjection;
+              }
             }
 
-            return null;
+            Log.Debug("No constructor could be used, cannot construct type '{0}' with the specified parameters", typeToConstruct.FullName);
+          }
+          catch (CircularDependencyException)
+          {
+            throw;
+          }
+          catch (Exception ex)
+          {
+            Log.Warning(ex, "Failed to construct type '{0}'", typeToConstruct.FullName);
+
+            throw;
+          }
+          finally
+          {
+            _currentTypeRequestPath.Value = previousRequestPath;
+          }
+
+          return null;
         }
         
         /// <summary>

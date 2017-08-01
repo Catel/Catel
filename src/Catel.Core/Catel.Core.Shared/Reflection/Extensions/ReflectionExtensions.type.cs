@@ -658,6 +658,36 @@ namespace Catel.Reflection
         }
 
         /// <summary>
+        /// Gets the interfaces sorted by order of implementation.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>Type[][].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static Type[] GetInterfacesSorted(this Type type)
+        {
+            List<Type> interfaces = new List<Type>();
+            while (type != null)
+            {
+                foreach (var interfaceType in type.GetInterfacesEx())
+                {
+                    var @interface = interfaceType;
+                    while (@interface != null)
+                    {
+                        interfaces.Remove(@interface);
+                        interfaces.Add(@interface);
+
+                        @interface = interfaceType.BaseType;
+                    }
+                }
+
+                type = type.BaseType;
+            }
+
+            return interfaces.ToArray();
+        }
+
+
+        /// <summary>
         /// The get base type ex.
         /// </summary>
         /// <param name="type">The type.</param>
