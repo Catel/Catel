@@ -8,6 +8,7 @@
 namespace Catel.IoC
 {
     using System;
+    using Collections;
     using Logging;
     using Reflection;
 
@@ -94,7 +95,7 @@ namespace Catel.IoC
 
             if (types.Length == 0)
             {
-                return new object[] { };
+                return ArrayShim.Empty<object>();
             }
 
             int typeCount = types.Length;

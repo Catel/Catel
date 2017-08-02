@@ -18,6 +18,7 @@ namespace Catel.Runtime.Serialization.Xml
     using Catel.Data;
     using Catel.Logging;
     using Catel.Reflection;
+    using Collections;
     using IoC;
 
     /// <summary>
@@ -781,7 +782,7 @@ namespace Catel.Runtime.Serialization.Xml
                     }
 
                     // Should have an empty constructor
-                    if (type.GetConstructorEx(new Type[0]) == null)
+                    if (type.GetConstructorEx(ArrayShim.Empty<Type>()) == null)
                     {
                         return false;
                     }
