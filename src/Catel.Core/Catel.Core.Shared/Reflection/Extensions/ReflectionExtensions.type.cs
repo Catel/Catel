@@ -70,12 +70,18 @@ namespace Catel.Reflection
         /// The _method cache.
         /// </summary>
         private static readonly CacheStorage<ReflectionCacheKey, MethodInfo> _methodCache = new CacheStorage<ReflectionCacheKey, MethodInfo>(storeNullValues: true);
-#endif
 
         /// <summary>
-        /// Dictionary containing all possible implicit conversions of system types.
+        /// The type distance cache.
         /// </summary>
-        private static readonly Dictionary<Type, HashSet<Type>> _convertableDictionary = new Dictionary<Type, HashSet<Type>>
+        private static CacheStorage<string, int> _typeDistanceCacheStorage = new CacheStorage<string, int>();
+
+#endif
+
+    /// <summary>
+    /// Dictionary containing all possible implicit conversions of system types.
+    /// </summary>
+    private static readonly Dictionary<Type, HashSet<Type>> _convertableDictionary = new Dictionary<Type, HashSet<Type>>
             {
                 {typeof (decimal), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char)}},
                 {typeof (double), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char), typeof (float)}},
@@ -657,35 +663,61 @@ namespace Catel.Reflection
 #endif
         }
 
-        /// <summary>
-        /// Gets the interfaces sorted by order of implementation.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns>Type[][].</returns>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
-        public static Type[] GetInterfacesSorted(this Type type)
+      /// <summary>
+      /// Gets the distance between types.
+      /// </summary>
+      /// <param name="fromType">The type</param>
+      /// <param name="toType">The base type</param>
+      /// <returns>The distance distance between types or -1 if the <paramref name="toType"/> is not assignable from the <paramref name="fromType"/></returns>
+      public static int GetTypeDistance(this Type fromType, Type toType)
+      {
+        Argument.IsNotNull("type", fromType);
+        Argument.IsNotNull("baseType", toType);
+
+#if ENABLE_CACHE
+          var cacheKey = $"fromType:{fromType.FullName};toType:{toType.FullName}";
+          return _typeDistanceCacheStorage.GetFromCacheOrFetch(cacheKey, () => GetDistanceInternal(fromType, toType));
+#else
+        return GetTypeDistanceInternal(fromType, toType);
+#endif
+      }
+
+      /// <summary>
+      /// Gets the distance between types.
+      /// </summary>
+      /// <param name="fromType">The type</param>
+      /// <param name="toType">The base type</param>
+      /// <returns>The distance distance between types or -1 if the <paramref name="toType"/> is not assignable from the <paramref name="fromType"/></returns>
+      /// <remarks>
+      /// Don't use this method directly use <see cref="GetTypeDistance"/> instead.
+      /// </remarks>
+      private static int GetTypeDistanceInternal(Type fromType, Type toType)
+      {
+        if (!toType.IsAssignableFromEx(fromType))
         {
-            List<Type> interfaces = new List<Type>();
-            while (type != null)
-            {
-                foreach (var interfaceType in type.GetInterfacesEx())
-                {
-                    var @interface = interfaceType;
-                    while (@interface != null)
-                    {
-                        interfaces.Remove(@interface);
-                        interfaces.Add(@interface);
-
-                        @interface = interfaceType.GetBaseTypeEx();
-                    }
-                }
-
-                type = type.GetBaseTypeEx();
-            }
-
-            return interfaces.ToArray();
+          return -1;
         }
 
+        int classDistance = 0;
+        int interfaceDistance = 0;
+        while (fromType != toType)
+        {
+          if (toType.IsInterfaceEx())
+          {
+            if (!fromType.ImplementsInterfaceEx(toType))
+            {
+              return interfaceDistance;
+            }
+
+            interfaceDistance = classDistance + 1;
+          }
+
+          fromType = fromType.GetBaseTypeEx();
+          classDistance++;
+        }
+
+        return classDistance;
+      }
 
         /// <summary>
         /// The get base type ex.

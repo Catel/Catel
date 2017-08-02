@@ -6,11 +6,11 @@
 
 namespace Catel.Test.IoC
 {
-  using System.Diagnostics;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading;
     using Catel.IoC;
-  using Catel.Messaging;
+    using Catel.Messaging;
     using Catel.Services;
     using Data;
     using NUnit.Framework;

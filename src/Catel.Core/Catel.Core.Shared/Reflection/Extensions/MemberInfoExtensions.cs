@@ -90,7 +90,6 @@ namespace Catel.Reflection
           var constructorParameters = constructor.GetParameters();
           for (int i = 0; i < parameters.Length; i++)
           {
-            int value = 0;
             var parameter = parameters[i];
             var constructorParameterType = constructorParameters[i].ParameterType;
 
@@ -107,26 +106,13 @@ namespace Catel.Reflection
             if (parameter != null)
             {
               var parameterType = parameter.GetType();
-              int idx;
-              if (constructorParameterType.IsInterfaceEx() && (idx = Array.IndexOf(parameterType.GetInterfacesSorted(), constructorParameterType)) > -1)
+              int typeDistance = parameterType.GetTypeDistance(constructorParameterType);
+              if (typeDistance == -1)
               {
-                value = idx + 1;
-              }
-              else
-              {
-                while (parameterType != null && parameterType != constructorParameterType)
-                {
-                  value++;
-                  parameterType = parameterType.GetBaseTypeEx();
-                }
-
-                if (parameterType == null)
-                {
-                  return false;
-                }
+                return false;
               }
 
-              distance += value * value;
+              distance += typeDistance * typeDistance;
             }
           }
 
