@@ -186,7 +186,7 @@ namespace Catel.Test.Runtime.Serialization
                 public static Type[] GetKnownTypes()
                 {
                     var assembly = AppDomain.CurrentDomain.GetLoadedAssemblies(false).FirstOrDefault(a => a.FullName.StartsWith("DynamicClasses", StringComparison.Ordinal));
-                    var types = new List<Type>(assembly == null ? new Type[0] : assembly.GetTypes().Where(t => t.Name.StartsWith("DynamicClass", StringComparison.Ordinal)).ToArray());
+                    var types = new List<Type>(assembly == null ? ArrayShim.Empty<Type>() : assembly.GetTypes().Where(t => t.Name.StartsWith("DynamicClass", StringComparison.Ordinal)).ToArray());
 
                     return types.ToArray();
                 }

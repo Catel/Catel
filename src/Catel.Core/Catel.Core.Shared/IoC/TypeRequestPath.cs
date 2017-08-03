@@ -8,6 +8,7 @@ namespace Catel.IoC
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using Collections;
     using Logging;
 
     /// <summary>
@@ -19,8 +20,6 @@ namespace Catel.IoC
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private static readonly TypeRequestInfo[] Empty = new TypeRequestInfo[0];
 
         private readonly TypeRequestInfo[] _typePath;
 
@@ -42,7 +41,7 @@ namespace Catel.IoC
         /// <returns></returns>
         public static TypeRequestPath Root(string name = null)
         {
-            return new TypeRequestPath(Empty, name);
+            return new TypeRequestPath(ArrayShim.Empty<TypeRequestInfo>(), name);
         }
 
         /// <summary>

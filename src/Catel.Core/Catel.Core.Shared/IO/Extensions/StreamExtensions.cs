@@ -9,6 +9,7 @@ namespace Catel.IO
     using System;
     using System.IO;
     using System.Text;
+    using Collections;
 
     /// <summary>
     /// Extensions for the <see cref="Stream"/> class.
@@ -28,6 +29,11 @@ namespace Catel.IO
             stream.Position = 0L;
 
             var length = (int)stream.Length;
+            if (length == 0)
+            {
+                return ArrayShim.Empty<byte>();
+            }
+
             var buffer = new byte[length];
 
             stream.Read(buffer, 0, length);

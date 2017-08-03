@@ -10,6 +10,7 @@ namespace Catel.MVVM
 {
     using System;
     using System.Windows;
+    using Collections;
     using Logging;
     using Reflection;
 
@@ -84,7 +85,7 @@ namespace Catel.MVVM
             Log.Debug("No constructor with data (of type '{0}') injection found, trying default constructor", ObjectToStringHelper.ToTypeString(dataContext));
 
             // Try default constructor
-            var defaultConstructor = viewType.GetConstructorEx(new Type[0]);
+            var defaultConstructor = viewType.GetConstructorEx(ArrayShim.Empty<Type>());
             if (defaultConstructor == null)
             {
                 Log.Error("View '{0}' does not have an injection or default constructor thus cannot be constructed", viewType.Name);
