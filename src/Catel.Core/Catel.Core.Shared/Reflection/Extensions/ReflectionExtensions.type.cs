@@ -698,25 +698,14 @@ namespace Catel.Reflection
           return -1;
         }
 
-        int classDistance = 0;
-        int interfaceDistance = 0;
-        while (fromType != toType)
+        int distance = 0;
+        while (fromType != toType && !(toType.IsInterfaceEx() && !fromType.ImplementsInterfaceEx(toType)))
         {
-          if (toType.IsInterfaceEx())
-          {
-            if (!fromType.ImplementsInterfaceEx(toType))
-            {
-              return interfaceDistance;
-            }
-
-            interfaceDistance = classDistance + 1;
-          }
-
           fromType = fromType.GetBaseTypeEx();
-          classDistance++;
+          distance++;
         }
 
-        return classDistance;
+        return distance;
       }
 
         /// <summary>

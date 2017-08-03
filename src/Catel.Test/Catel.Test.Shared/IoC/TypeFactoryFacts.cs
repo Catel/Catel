@@ -139,13 +139,13 @@ namespace Catel.Test.IoC
         {
             public interface IInterface
             {
-                bool InterfaceSignal { get; set; }
+                bool SignalI { get; set; }
 
             }
 
             public class ClassA : IInterface
             {
-                public bool InterfaceSignal { get; set; }
+                public bool SignalI { get; set; }
                 public bool SignalA { get; set; }
             }
 
@@ -153,7 +153,7 @@ namespace Catel.Test.IoC
             {
                 public ClassB(IInterface i)
                 {
-                    i.InterfaceSignal = true;
+                    i.SignalI = true;
                 }
 
                 public ClassB(ClassB b)
@@ -176,12 +176,29 @@ namespace Catel.Test.IoC
                 public ClassB(ClassB b, IInterface i)
                 {
                     b.SignalB = true;
-                    i.InterfaceSignal = true;
+                    i.SignalI = true;
+                }
+
+                public ClassB(IInterface i, ClassA a)
+                {
+                    i.SignalI = true;
+                    a.SignalA = true;
+                }
+
+                public ClassB(ClassC c, ClassA a)
+                {
+                    c.SignalC = true;
+                    a.SignalA = true;
                 }
 
                 public bool SignalB { get; set; }
 
-                public bool InterfaceSignal { get; set; }
+                public bool SignalI { get; set; }
+            }
+
+            public class ClassC : ClassA
+            {
+                public bool SignalC { get; set; }
             }
 
             [Test]
@@ -215,6 +232,18 @@ namespace Catel.Test.IoC
                 TypeFactory.Default.CreateInstanceWithParameters(typeof(ClassB), b, a);
 
                 Assert.IsTrue(b.SignalB);
+                Assert.IsTrue(a.SignalA);
+            }
+
+            [Test]
+            public void UseTheMostSpecializedConstructor4()
+            {
+                ClassA a = new ClassA();
+                ClassC c = new ClassC();
+
+                TypeFactory.Default.CreateInstanceWithParameters(typeof(ClassB), c, a);
+
+                Assert.IsTrue(c.SignalC);
                 Assert.IsTrue(a.SignalA);
             }
         }
