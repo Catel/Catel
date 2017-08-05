@@ -17,6 +17,11 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         public static void Warning(this ILog log)
         {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
             Write(log, LogEvent.Warning, string.Empty);
         }
 
@@ -28,6 +33,11 @@ namespace Catel.Logging
         /// <param name="s1">The formatting arguments.</param>
         public static void Warning(this ILog log, string messageFormat, object s1)
         {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
             Write(log, LogEvent.Warning, messageFormat, s1);
         }
 
@@ -40,6 +50,11 @@ namespace Catel.Logging
         /// <param name="s2">The formatting argument 2.</param>
         public static void Warning(this ILog log, string messageFormat, object s1, object s2)
         {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
             Write(log, LogEvent.Warning, messageFormat, s1, s2);
         }
 
@@ -53,6 +68,11 @@ namespace Catel.Logging
         /// <param name="s3">The formatting argument 3.</param>
         public static void Warning(this ILog log, string messageFormat, object s1, object s2, object s3)
         {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
             Write(log, LogEvent.Warning, messageFormat, s1, s2, s3);
         }
 
@@ -67,6 +87,11 @@ namespace Catel.Logging
         /// <param name="s4">The formatting argument 4.</param>
         public static void Warning(this ILog log, string messageFormat, object s1, object s2, object s3, object s4)
         {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
             Write(log, LogEvent.Warning, messageFormat, s1, s2, s3, s4);
         }
 
@@ -83,6 +108,11 @@ namespace Catel.Logging
         /// <param name="others">The formatting arguments.</param>
         public static void Warning(this ILog log, string messageFormat, object s1, object s2, object s3, object s4, object s5, params object[] others)
         {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
             Write(log, LogEvent.Warning, messageFormat, s1, s2, s3, s4, s5, others);
         }
 
@@ -94,6 +124,11 @@ namespace Catel.Logging
         /// <param name="args">The formatting arguments.</param>
         public static void Warning(this ILog log, string messageFormat, params object[] args)
         {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
             Write(log, LogEvent.Warning, messageFormat, args);
         }
 
@@ -105,6 +140,11 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         public static void Warning(this ILog log, Exception exception)
         {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
             Write(log, LogEvent.Warning, exception, string.Empty);
         }
 
@@ -118,6 +158,11 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         public static void Warning(this ILog log, Exception exception, string messageFormat, params object[] args)
         {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
             Write(log, LogEvent.Warning, exception, messageFormat, args);
         }
 
@@ -129,6 +174,11 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         public static void WarningWithData(this ILog log, string message, object extraData = null)
         {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
             log.WriteWithData(message, extraData, LogEvent.Warning);
         }
 
@@ -140,6 +190,11 @@ namespace Catel.Logging
         /// <param name="logData">The log data.</param>
         public static void WarningWithData(this ILog log, string message, LogData logData)
         {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
             log.WriteWithData(message, logData, LogEvent.Warning);
         }
 
@@ -153,16 +208,6 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
         public static void WarningWithData(this ILog log, Exception exception, string message, object extraData = null)
         {
-            if (!LogManager.LogInfo.IsWarningEnabled)
-            {
-                return;
-            }
-
-            if (LogManager.LogInfo.IgnoreCatelLogging && log.IsCatelLogging)
-            {
-                return;
-            }
-
             log.WarningWithData(FormatException(exception, message), extraData);
         }
     }

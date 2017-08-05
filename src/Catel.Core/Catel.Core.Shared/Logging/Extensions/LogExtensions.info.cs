@@ -17,6 +17,11 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         public static void Info(this ILog log)
         {
+            if (!LogManager.LogInfo.IsInfoEnabled)
+            {
+                return;
+            }
+
             Write(log, LogEvent.Info, string.Empty);
         }
 
@@ -28,6 +33,11 @@ namespace Catel.Logging
         /// <param name="args">The formatting arguments.</param>
         public static void Info(this ILog log, string messageFormat, params object[] args)
         {
+            if (!LogManager.LogInfo.IsInfoEnabled)
+            {
+                return;
+            }
+
             Write(log, LogEvent.Info, messageFormat, args);
         }
 
@@ -39,6 +49,11 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         public static void Info(this ILog log, Exception exception)
         {
+            if (!LogManager.LogInfo.IsInfoEnabled)
+            {
+                return;
+            }
+
             Write(log, LogEvent.Info, exception, string.Empty);
         }
 
@@ -52,6 +67,11 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         public static void Info(this ILog log, Exception exception, string messageFormat, params object[] args)
         {
+            if (!LogManager.LogInfo.IsInfoEnabled)
+            {
+                return;
+            }
+
             Write(log, LogEvent.Info, exception, messageFormat, args);
         }
 
@@ -63,6 +83,11 @@ namespace Catel.Logging
         /// <param name="extraData">The extra data.</param>
         public static void InfoWithData(this ILog log, string message, object extraData = null)
         {
+            if (!LogManager.LogInfo.IsInfoEnabled)
+            {
+                return;
+            }
+
             log.WriteWithData(message, extraData, LogEvent.Info);
         }
 
@@ -74,6 +99,11 @@ namespace Catel.Logging
         /// <param name="logData">The log data.</param>
         public static void InfoWithData(this ILog log, string message, LogData logData)
         {
+            if (!LogManager.LogInfo.IsInfoEnabled)
+            {
+                return;
+            }
+
             log.WriteWithData(message, logData, LogEvent.Info);
         }
 
@@ -87,16 +117,6 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
         public static void InfoWithData(this ILog log, Exception exception, string message, object extraData = null)
         {
-            if (!LogManager.LogInfo.IsInfoEnabled)
-            {
-                return;
-            }
-
-            if (LogManager.LogInfo.IgnoreCatelLogging && log.IsCatelLogging)
-            {
-                return;
-            }
-
             log.InfoWithData(FormatException(exception, message), extraData);
         }
     }
