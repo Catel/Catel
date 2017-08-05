@@ -8,7 +8,7 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
-
+    using System.Linq;
     using Catel.Services;
 
     using Reflection;
@@ -40,6 +40,27 @@ namespace Catel.MVVM
         }
 
         /// <summary>
+        /// Determines whether the specified view model type is compatible with the view. A view model is compatible
+        /// if it's either resolved via naming conventions or registered manually.
+        /// </summary>
+        /// <param name="viewModelType">Type of the view model.</param>
+        /// <param name="viewType">Type of the view.</param>
+        /// <returns>
+        ///   <c>true</c> if the view model is compatible with the view; otherwise, <c>false</c>.
+        /// </returns>
+        public virtual bool IsCompatible(Type viewModelType, Type viewType)
+        {
+            Argument.IsNotNull("viewModelType", viewModelType);
+            Argument.IsNotNull("viewType", viewType);
+
+            var viewModelTypeName = TypeHelper.GetTypeNameWithAssembly(viewModelType.AssemblyQualifiedName);
+            var viewTypeName = TypeHelper.GetTypeNameWithAssembly(viewType.AssemblyQualifiedName);
+
+            var values = ResolveValues(viewModelTypeName);
+            return values.Contains(viewTypeName);
+        }
+
+        /// <summary>
         /// Resolves a view type by the view model and the registered <see cref="ILocator.NamingConventions"/>.
         /// </summary>
         /// <param name="viewModelType">Type of the view model to resolve the view for.</param>
@@ -51,7 +72,7 @@ namespace Catel.MVVM
 
             var viewModelTypeName = TypeHelper.GetTypeNameWithAssembly(viewModelType.AssemblyQualifiedName);
 
-            string resolvedType = Resolve(viewModelTypeName);
+            var resolvedType = Resolve(viewModelTypeName);
             return GetTypeFromString(resolvedType);
         }
 

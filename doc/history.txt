@@ -23,11 +23,12 @@ Version 5.1.0
 
 Added/fixed:
 ============
-(*) #953   Cache ToString, ToUpper() and ToLower() calls
-(*) #1017  Improve performance of ViewToViewModelMappingHelper
-(*) #1068  Minimize allocations using ArrayShim
-(*) #1070  TypeFactory.CreateInstanceWithParameters use the most specialized constructor
-
+(+) #1077 Add IViewModelLocator.IsCompatible and IViewLocator.IsCompatible to allow multiple views and/or 
+    views models to be compatible with multiple view models and/or views
+(*) #953  Cache ToString, ToUpper() and ToLower() calls
+(*) #1017 Improve performance of ViewToViewModelMappingHelper
+(*) #1068 Minimize allocations using ArrayShim
+(*) #1070 TypeFactory.CreateInstanceWithParameters use the most specialized constructor
 
 Roadmap:
 ========

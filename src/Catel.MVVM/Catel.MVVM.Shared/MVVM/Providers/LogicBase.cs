@@ -890,7 +890,7 @@ namespace Catel.MVVM.Providers
             LastKnownDataContext = null;
 
             var dataContext = TargetView.DataContext;
-            if (dataContext == null)
+            if (ReferenceEquals(dataContext, null))
             {
                 return;
             }
@@ -901,14 +901,15 @@ namespace Catel.MVVM.Providers
             }
 
             // Here we have a data context that makes sense
-            LastKnownDataContext = (dataContext != null) ? new WeakReference(dataContext) : null;
+            LastKnownDataContext = new WeakReference(dataContext);
 
             if (ReferenceEquals(ViewModel, dataContext))
             {
                 return;
             }
 
-            if (dataContext.GetType().IsAssignableFromEx(ViewModelType))
+            // Check if the VM is compatible
+            if (_viewModelLocator.IsCompatible(TargetViewType, dataContext.GetType()))
             {
                 // Use the view model from the data context, probably set manually
                 ViewModel = (IViewModel)dataContext;

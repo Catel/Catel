@@ -8,6 +8,7 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Logging;
     using Reflection;
 
@@ -23,7 +24,7 @@ namespace Catel.MVVM
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private readonly Dictionary<string, string> _cache = new Dictionary<string, string>();
+        private readonly Dictionary<string, HashSet<string>> _cache = new Dictionary<string, HashSet<string>>();
         #endregion
 
         #region Constructors
@@ -64,11 +65,11 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Resolves the specified value to resolve. It uses both the <see cref="NamingConventions"/> and the manually registered
+        /// Resolves the specified values. It uses both the <see cref="NamingConventions"/> and the manually registered
         /// values registered via the <see cref="Register"/> method to resolve the value.
         /// </summary>
         /// <param name="valueToResolve">The value to resolve.</param>
-        /// <returns>The resolved value or <c>null</c> if the value could not be resolved.</returns>
+        /// <returns>A list of resolved values (can contain multiple items).</returns>
         /// <remarks>
         /// This method can be overriden to implement custom behavior. Don't forget to register the value using the 
         /// <see cref="Register"/> method if the result should be cached in a custom implementation.
@@ -78,17 +79,20 @@ namespace Catel.MVVM
         /// method manually.
         /// </remarks>
         /// <exception cref="ArgumentException">The <paramref name="valueToResolve"/> is <c>null</c> or whitespace.</exception>
-        protected virtual string Resolve(string valueToResolve)
+        protected virtual IEnumerable<string> ResolveValues(string valueToResolve)
         {
             Argument.IsNotNullOrWhitespace("valueToResolve", valueToResolve);
 
             lock (_cache)
             {
-                if (_cache.ContainsKey(valueToResolve))
+                if (_cache.TryGetValue(valueToResolve, out HashSet<string> existingSet))
                 {
-                    return _cache[valueToResolve];
+                    if (existingSet.Count > 0)
+                    {
+                        return existingSet;
+                    }
                 }
-                
+
                 Type resolvedType = null;
 
                 var assembly = TypeHelper.GetAssemblyName(valueToResolve);
@@ -117,9 +121,35 @@ namespace Catel.MVVM
                 var fullResolvedTypeName = (resolvedType != null) ? TypeHelper.GetTypeNameWithAssembly(resolvedType.AssemblyQualifiedName) : null;
 
                 Log.Debug("Resolved type '{0}' for type '{1}'", fullResolvedTypeName, valueToResolve);
-                _cache.Add(valueToResolve, fullResolvedTypeName);
-                return fullResolvedTypeName;
+
+                var newSet = new HashSet<string>();
+                newSet.Add(fullResolvedTypeName);
+
+                _cache.Add(valueToResolve, newSet);
+
+                return newSet;
             }
+        }
+
+        /// <summary>
+        /// Resolves the specified value. It uses both the <see cref="NamingConventions"/> and the manually registered
+        /// values registered via the <see cref="Register"/> method to resolve the value.
+        /// </summary>
+        /// <param name="valueToResolve">The value to resolve.</param>
+        /// <returns>The resolved value or <c>null</c> if the value could not be resolved.</returns>
+        /// <remarks>
+        /// This method can be overriden to implement custom behavior. Don't forget to register the value using the 
+        /// <see cref="Register"/> method if the result should be cached in a custom implementation.
+        /// <para />
+        /// By default, this value will assume the <paramref name="valueToResolve"/> is a type and will cast it as so. If the 
+        /// <paramref name="valueToResolve"/> is not a type, override this method and register the result using the <see cref="Register"/>
+        /// method manually.
+        /// </remarks>
+        /// <exception cref="ArgumentException">The <paramref name="valueToResolve"/> is <c>null</c> or whitespace.</exception>
+        protected virtual string Resolve(string valueToResolve)
+        {
+            var values = ResolveValues(valueToResolve);
+            return values.LastOrDefault();
         }
 
         /// <summary>
@@ -134,7 +164,15 @@ namespace Catel.MVVM
 
             lock (_cache)
             {
-                return _cache.ContainsKey(valueToResolve) ? _cache[valueToResolve] : null;
+                if (_cache.TryGetValue(valueToResolve, out HashSet<string> existingSet))
+                {
+                    if (existingSet.Count > 0)
+                    {
+                        return existingSet.Last();
+                    }
+                }
+
+                return null;
             }
         }
 
@@ -151,14 +189,16 @@ namespace Catel.MVVM
 
             lock (_cache)
             {
-                if (_cache.ContainsKey(valueToResolve))
+                HashSet<string> set = null;
+
+                if (!_cache.TryGetValue(valueToResolve, out set))
                 {
-                    _cache[valueToResolve] = resolvedValue;
+                    set = new HashSet<string>();
+
+                    _cache[valueToResolve] = set;
                 }
-                else
-                {
-                    _cache.Add(valueToResolve, resolvedValue);
-                }
+
+                set.Add(resolvedValue);
             }
         }
 
@@ -185,6 +225,7 @@ namespace Catel.MVVM
         /// <remarks>
         /// Internally, this method uses <see cref="TypeCache.GetType(string, bool, bool)"/>.
         /// </remarks>
+        [ObsoleteEx(ReplacementTypeOrMember = "TypeCache.GetType", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         protected static Type GetTypeFromString(string fullTypeName)
         {
             if (string.IsNullOrEmpty(fullTypeName))

@@ -26,6 +26,17 @@ namespace Catel.MVVM
         void Register(Type viewModelType, Type viewType);
 
         /// <summary>
+        /// Determines whether the specified view type is compatible with the view model. A view is compatible
+        /// if it's either resolved via naming conventions or registered manually.
+        /// </summary>
+        /// <param name="viewModelType">Type of the view model.</param>
+        /// <param name="viewType">Type of the view.</param>
+        /// <returns>
+        ///   <c>true</c> if the view is compatible with the view model; otherwise, <c>false</c>.
+        /// </returns>
+        bool IsCompatible(Type viewModelType, Type viewType);
+
+        /// <summary>
         /// Resolves a view type by the view model and the registered <see cref="ILocator.NamingConventions"/>.
         /// </summary>
         /// <param name="viewModelType">Type of the view model to resolve the view for.</param>

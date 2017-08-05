@@ -179,6 +179,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Exceptions\PropertyNotFoundInModelExceptionTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Exceptions\ViewModelNotRegisteredExceptionTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Exceptions\WrongViewModelTypeExceptionTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Fixtures\ViewModels.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Fixtures\Views.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\TestClasses.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\UrlLocatorFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\ViewLocatorFacts.cs" />

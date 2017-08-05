@@ -8,6 +8,8 @@ namespace Catel.Test.MVVM
 {
     using System;
     using Catel.MVVM;
+    using Locators.Fixtures.ViewModels;
+    using Locators.Fixtures.Views;
     using SpecialTest;
     using Test.Views;
     using Test.ViewModels;
@@ -55,6 +57,38 @@ namespace Catel.Test.MVVM
 
                 var resolvedView = viewLocator.ResolveView(typeof(FollowingNoNamingConventionView));
                 Assert.AreEqual(typeof(NoNamingConventionViewModel2), resolvedView);
+            }
+        }
+
+        [TestFixture]
+        public class TheIsCompatibleMethod
+        {
+            [TestCase]
+            public void ThrowsArgumentNullExceptionForNullTypeToResolve()
+            {
+                var viewLocator = new ViewLocator();
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewLocator.IsCompatible(null, typeof(FollowingNoNamingConventionView)));
+            }
+
+            [TestCase]
+            public void ThrowsArgumentNullExceptionForNullResolvedType()
+            {
+                var viewLocator = new ViewLocator();
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewLocator.IsCompatible(typeof(NoNamingConventionViewModel), null));
+            }
+
+            [TestCase(typeof(MyNameViewer), true)]
+            [TestCase(typeof(MyNameViewer2), true)]
+            [TestCase(typeof(NonCompatibleView), false)]
+            public void ReturnsCompatibleValues(Type viewType, bool expectedValue)
+            {
+                var viewLocator = new ViewLocator();
+
+                viewLocator.Register(typeof(MyNameViewerViewModel), typeof(MyNameViewer));
+                viewLocator.Register(typeof(MyNameViewerViewModel), typeof(MyNameViewer2));
+
+                var isCompatible = viewLocator.IsCompatible(typeof(MyNameViewerViewModel), viewType);
+                Assert.AreEqual(expectedValue, isCompatible);
             }
         }
 
