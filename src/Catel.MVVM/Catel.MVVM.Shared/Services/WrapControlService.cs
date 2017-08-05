@@ -13,7 +13,7 @@ namespace Catel.Services
     using Windows;
 
     using Catel.Windows.Controls;
-
+    using Collections;
     using Reflection;
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
@@ -75,7 +75,7 @@ namespace Catel.Services
         /// </remarks>
         public Grid Wrap(FrameworkElement frameworkElement, WrapControlServiceWrapOptions wrapOptions, ContentControl parentContentControl = null)
         {
-            return Wrap(frameworkElement, wrapOptions, new DataWindowButton[] { }, parentContentControl);
+            return Wrap(frameworkElement, wrapOptions, ArrayShim.Empty<DataWindowButton>(), parentContentControl);
         }
 
         /// <summary>

@@ -12,6 +12,7 @@ namespace Catel.Reflection
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
+    using Collections;
     using Logging;
     using Threading;
 
@@ -532,7 +533,7 @@ namespace Catel.Reflection
 
             if (typeSource == null)
             {
-                return new Type[] { };
+                return ArrayShim.Empty<Type>();
             }
 
             var retryCount = 3;
@@ -554,7 +555,7 @@ namespace Catel.Reflection
                 }
             }
 
-            return new Type[] { };
+            return ArrayShim.Empty<Type>();
 
             // IMPORTANT NOTE: READ NOTE ABOVE BEFORE EDITING THIS METHOD!!!!
         }

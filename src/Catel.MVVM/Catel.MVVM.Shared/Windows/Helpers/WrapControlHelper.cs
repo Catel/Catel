@@ -11,6 +11,7 @@ namespace Catel.Windows
 {
     using System;
     using System.Windows;
+    using Collections;
     using Controls;
     using Reflection;
 #if NETFX_CORE
@@ -143,7 +144,7 @@ namespace Catel.Windows
         /// </remarks>
         public static Grid Wrap(FrameworkElement frameworkElement, WrapOptions wrapOptions, ContentControl parentContentControl = null)
         {
-            return Wrap(frameworkElement, wrapOptions, new DataWindowButton[] { }, parentContentControl);
+            return Wrap(frameworkElement, wrapOptions, ArrayShim.Empty<DataWindowButton>(), parentContentControl);
         }
 
         /// <summary>

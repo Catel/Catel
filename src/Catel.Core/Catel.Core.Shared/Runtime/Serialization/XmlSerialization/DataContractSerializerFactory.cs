@@ -449,7 +449,7 @@ namespace Catel.Runtime.Serialization.Xml
             string typeName = type.AssemblyQualifiedName;
             if (string.IsNullOrWhiteSpace(typeName))
             {
-                return new Type[] { };
+                return ArrayShim.Empty<Type>();
             }
 
             return _knownTypesByAttributesCache.GetFromCacheOrFetch(typeName, () =>

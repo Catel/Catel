@@ -8,6 +8,7 @@
 namespace Catel
 {
     using System;
+    using Collections;
 
     /// <summary>
     /// Exception factory.
@@ -58,7 +59,7 @@ namespace Catel
             }
 
             // try 3: without anything
-            exception = CreateException(exceptionType, new object[] { });
+            exception = CreateException(exceptionType, ArrayShim.Empty<object>());
             if (exception != null)
             {
                 return exception;

@@ -11,7 +11,7 @@ namespace Catel.Reflection
     using System.Reflection;
 
     using Catel.Caching;
-
+    using Collections;
     using Logging;
 
     /// <summary>
@@ -360,7 +360,7 @@ namespace Catel.Reflection
                     "Hidden property '{0}' is not found on the base type '{1}'", property, baseType.GetType().Name);
             }
 
-            return (TValue)propertyInfo.GetValue(obj, bindingFlags, null, new object[] { }, CultureInfo.InvariantCulture);
+            return (TValue)propertyInfo.GetValue(obj, bindingFlags, null, ArrayShim.Empty<object>(), CultureInfo.InvariantCulture);
         }
 #endif
 

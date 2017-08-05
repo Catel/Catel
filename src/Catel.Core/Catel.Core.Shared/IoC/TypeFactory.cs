@@ -17,6 +17,7 @@ namespace Catel.IoC
     using Logging;
     using Reflection;
     using Threading;
+    using Catel.Collections;
 #if !XAMARIN
     using System.Dynamic;
 #endif
@@ -264,7 +265,7 @@ namespace Catel.IoC
 
           if (parameters == null)
           {
-            parameters = new object[] { };
+            parameters = ArrayShim.Empty<object>();
           }
 
           var previousRequestPath = _currentTypeRequestPath.Value;

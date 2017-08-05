@@ -318,7 +318,7 @@ namespace Catel.Collections
         {
             Argument.IsNotNull("elementType", elementType);
 
-            var internalList = new List<object>(collection != null ? collection.Cast<object>() : new object[] { });
+            var internalList = new List<object>(collection != null ? collection.Cast<object>() : ArrayShim.Empty<object>());
             var array = Array.CreateInstance(elementType, internalList.Count);
 
             var index = 0;

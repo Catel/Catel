@@ -8,6 +8,7 @@
 namespace Catel
 {
     using System;
+    using Collections;
 
     /// <summary>
     /// Exception in case the functionality is not supported in the current platform.
@@ -32,7 +33,7 @@ namespace Catel
         /// </summary>
         /// <param name="message">The message.</param>
         public NotSupportedInPlatformException(string message)
-            : this(message, new object[] { })
+            : this(message, ArrayShim.Empty<object>())
         {
         }
 
