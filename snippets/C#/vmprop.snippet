@@ -31,22 +31,16 @@
                     <ID>defaultvalue</ID>
                     <ToolTip>Default value of the property</ToolTip>
                     <Default>null</Default>
-                </Literal>				
+                </Literal>
             </Declarations>
             <Code Language="csharp">
-                <![CDATA[/// <summary>
-/// $description$.
-/// </summary>
-public $type$ $name$
+                <![CDATA[public $type$ $name$
 {
-	get { return GetValue<$type$>($name$Property); }
-	set { SetValue($name$Property, value); }
+    get { return GetValue<$type$>($name$Property); }
+    set { SetValue($name$Property, value); }
 }
 
-/// <summary>
-/// Register the $name$ property so it is known in the class.
-/// </summary>
-public static readonly PropertyData $name$Property = RegisterProperty("$name$", typeof($type$), $defaultvalue$);]]>
+public static readonly PropertyData $name$Property = RegisterProperty(nameof($name$), typeof($type$), $defaultvalue$);]]>
             </Code>
         </Snippet>
     </CodeSnippet>

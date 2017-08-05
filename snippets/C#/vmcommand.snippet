@@ -24,18 +24,12 @@
                 </Literal>
             </Declarations>
             <Code Language="csharp">
-                <![CDATA[/// <summary>
-/// Gets the $name$ command.
-/// </summary>
-public Command $name$ { get; private set; }
+                <![CDATA[public Command $name$ { get; private set; }
 
 // TODO: Move code below to constructor
 $name$ = new Command(On$name$Execute);
 // TODO: Move code above to constructor
 
-/// <summary>
-/// Method to invoke when the $name$ command is executed.
-/// </summary>
 private void On$name$Execute()
 {
     // TODO: Handle command logic here

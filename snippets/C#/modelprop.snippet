@@ -34,24 +34,13 @@
                 </Literal>
             </Declarations>
             <Code Language="csharp">
-                <![CDATA[/// <summary>
-/// $description$.
-/// </summary>
-#if NETFX_CORE
-[DataMember]
-// TODO: use the following line instead of the one above, if you want to ignore the property for (de)serialization
-//[IgnoreDataMember]
-#endif
-public $type$ $name$
+                <![CDATA[public $type$ $name$
 {
-	get { return GetValue<$type$>($name$Property); }
-	set { SetValue($name$Property, value); }
+    get { return GetValue<$type$>($name$Property); }
+    set { SetValue($name$Property, value); }
 }
 
-/// <summary>
-/// Register the $name$ property so it is known in the class.
-/// </summary>
-public static readonly PropertyData $name$Property = RegisterProperty("$name$", typeof($type$), $defaultvalue$);]]>
+public static readonly PropertyData $name$Property = RegisterProperty(nameof($name$), typeof($type$), $defaultvalue$);]]>
             </Code>
         </Snippet>
     </CodeSnippet>

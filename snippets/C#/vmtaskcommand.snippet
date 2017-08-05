@@ -2,9 +2,9 @@
 <CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
     <CodeSnippet Format="1.0.0">
         <Header>
-            <Title>Define a property as a model for a view model class</Title>
-            <Shortcut>vmpropmodel</Shortcut>
-            <Description>Code snippet for a property as a model for a view model class</Description>
+            <Title>Define a task command for a view model class</Title>
+            <Shortcut>vmtaskcommand</Shortcut>
+            <Description>Code snippet for a task command for a view model class</Description>
             <Author>CatenaLogic</Author>
             <SnippetTypes>
                 <SnippetType>Expansion</SnippetType>
@@ -13,15 +13,10 @@
         <Snippet>
             <Declarations>
                 <Literal>
-                    <ID>description</ID>
-                    <ToolTip>Description of the property</ToolTip>
-                    <Default>Gets or sets the property value</Default>
-                </Literal>
-                <Literal>
                     <ID>name</ID>
-                    <ToolTip>Name of the property</ToolTip>
+                    <ToolTip>Name of the command</ToolTip>
                     <Default>name</Default>
-                </Literal>
+                </Literal>			
                 <Literal>
                     <ID>type</ID>
                     <ToolTip>Type of the property</ToolTip>
@@ -29,14 +24,16 @@
                 </Literal>
             </Declarations>
             <Code Language="csharp">
-                <![CDATA[[Model]
-public $type$ $name$
-{
-    get { return GetValue<$type$>($name$Property); }
-    private set { SetValue($name$Property, value); }
-}
+                <![CDATA[public TaskCommand $name$ { get; private set; }
 
-public static readonly PropertyData $name$Property = RegisterProperty(nameof($name$), typeof($type$));]]>
+// TODO: Move code below to constructor
+$name$ = new TaskCommand(On$name$ExecuteAsync);
+// TODO: Move code above to constructor
+
+private async Task On$name$ExecuteAsync()
+{
+    // TODO: Handle command logic here
+}]]>
             </Code>
         </Snippet>
     </CodeSnippet>
