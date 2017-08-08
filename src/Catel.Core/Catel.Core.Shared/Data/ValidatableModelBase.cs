@@ -1082,6 +1082,70 @@ namespace Catel.Data
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the current business warnings.
+        /// </summary>
+        /// <returns>The warnings or <see cref="string.Empty"/> if no warning is available.</returns>
+        public virtual string GetBusinessRuleWarnings()
+        {
+            var warning = (from businessRuleWarning in _validationContext.GetBusinessRuleWarnings()
+                           select businessRuleWarning.Message).FirstOrDefault();
+
+            return warning ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the warnings for a specific column.
+        /// </summary>
+        /// <param name="columnName">Column name.</param>
+        /// <returns>
+        /// The warnings or <see cref="string.Empty" /> if no warning is available.
+        /// </returns>
+        public virtual string GetFieldWarnings(string columnName)
+        {
+            if (string.IsNullOrEmpty(columnName))
+            {
+                return string.Empty;
+            }
+
+            var warning = (from fieldWarning in _validationContext.GetFieldWarnings(columnName)
+                           select fieldWarning.Message).FirstOrDefault();
+
+            return warning ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the current errors errors.
+        /// </summary>
+        /// <returns>The errors or <see cref="string.Empty"/> if no error is available.</returns>
+        public virtual string GetBusinessRuleErrors()
+        {
+            var error = (from businessRuleError in _validationContext.GetBusinessRuleErrors()
+                         select businessRuleError.Message).FirstOrDefault();
+
+            return error ?? string.Empty;
+        }
+
+        /// <summary>
+        /// Gets the errors for a specific column.
+        /// </summary>
+        /// <param name="columnName">Column name.</param>
+        /// <returns>
+        /// The errors or <see cref="string.Empty" /> if no error is available.
+        /// </returns>
+        public virtual string GetFieldErrors(string columnName)
+        {
+            if (string.IsNullOrEmpty(columnName))
+            {
+                return string.Empty;
+            }
+
+            var error = (from fieldError in _validationContext.GetFieldErrors(columnName)
+                         select fieldError.Message).FirstOrDefault();
+
+            return error ?? string.Empty;
+        }
         #endregion
 
         #region IDataWarningInfo Members

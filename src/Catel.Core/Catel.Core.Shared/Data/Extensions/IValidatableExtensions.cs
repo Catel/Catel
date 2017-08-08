@@ -8,9 +8,7 @@
 namespace Catel.Data
 {
     using System;
-    using System.Linq;
     using System.Text;
-    using Text;
 
     /// <summary>
     /// Extensions for IValidatable.
@@ -79,80 +77,6 @@ namespace Catel.Data
             {
                 validatable.Validate(true);
             }
-        }
-
-        /// <summary>
-        /// Gets the current business warnings.
-        /// </summary>
-        /// <returns>The warnings or <see cref="string.Empty"/> if no warning is available.</returns>
-        public static string GetBusinessRuleWarnings(this IValidatable validatable)
-        {
-            Argument.IsNotNull("model", validatable);
-
-            var warning = (from businessRuleWarning in validatable.ValidationContext.GetBusinessRuleWarnings()
-                           select businessRuleWarning.Message).FirstOrDefault();
-
-            return warning ?? string.Empty;
-        }
-
-        /// <summary>
-        /// Gets the warnings for a specific column.
-        /// </summary>
-        /// <param name="validatable">The model.</param>
-        /// <param name="columnName">Column name.</param>
-        /// <returns>
-        /// The warnings or <see cref="string.Empty" /> if no warning is available.
-        /// </returns>
-        public static string GetFieldWarnings(this IValidatable validatable, string columnName)
-        {
-            Argument.IsNotNull("model", validatable);
-
-            if (string.IsNullOrEmpty(columnName))
-            {
-                return string.Empty;
-            }
-
-            var warning = (from fieldWarning in validatable.ValidationContext.GetFieldWarnings(columnName)
-                           select fieldWarning.Message).FirstOrDefault();
-
-            return warning ?? string.Empty;
-        }
-
-        /// <summary>
-        /// Gets the current errors errors.
-        /// </summary>
-        /// <returns>The errors or <see cref="string.Empty"/> if no error is available.</returns>
-        public static string GetBusinessRuleErrors(this IValidatable validatable)
-        {
-            Argument.IsNotNull("model", validatable);
-
-            var error = (from businessRuleError in validatable.ValidationContext.GetBusinessRuleErrors()
-                         select businessRuleError.Message).FirstOrDefault();
-
-            return error ?? string.Empty;
-        }
-
-        /// <summary>
-        /// Gets the errors for a specific column.
-        /// </summary>
-        /// <param name="validatable">The model.</param>
-        /// <param name="columnName">Column name.</param>
-        /// <returns>
-        /// The errors or <see cref="string.Empty" /> if no error is available.
-        /// </returns>
-        public static string GetFieldErrors(this IValidatable validatable, string columnName)
-        {
-            Argument.IsNotNull("model", validatable);
-
-            if (string.IsNullOrEmpty(columnName))
-            {
-                return string.Empty;
-            }
-
-            var error = (from fieldError in validatable.ValidationContext.GetFieldErrors(columnName)
-                         select fieldError.Message).FirstOrDefault();
-
-            return error ?? string.Empty;
         }
 
         /// <summary>

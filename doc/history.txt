@@ -29,6 +29,7 @@ Added/fixed:
 (*) #1017 Improve performance of ViewToViewModelMappingHelper
 (*) #1068 Minimize allocations using ArrayShim
 (*) #1070 TypeFactory.CreateInstanceWithParameters use the most specialized constructor
+(*) #1084 Moved some extension methods back from IValidatableExtensions to ValidatableModelBase
 
 Roadmap:
 ========
