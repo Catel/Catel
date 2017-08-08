@@ -1087,12 +1087,9 @@ namespace Catel.Data
         /// Gets the current business warnings.
         /// </summary>
         /// <returns>The warnings or <see cref="string.Empty"/> if no warning is available.</returns>
-        public virtual string GetBusinessRuleWarnings()
+        protected virtual string GetBusinessRuleWarnings()
         {
-            var warning = (from businessRuleWarning in _validationContext.GetBusinessRuleWarnings()
-                           select businessRuleWarning.Message).FirstOrDefault();
-
-            return warning ?? string.Empty;
+            return ((IValidatable)this).GetBusinessRuleWarnings();
         }
 
         /// <summary>
@@ -1102,29 +1099,18 @@ namespace Catel.Data
         /// <returns>
         /// The warnings or <see cref="string.Empty" /> if no warning is available.
         /// </returns>
-        public virtual string GetFieldWarnings(string columnName)
+        protected virtual string GetFieldWarnings(string columnName)
         {
-            if (string.IsNullOrEmpty(columnName))
-            {
-                return string.Empty;
-            }
-
-            var warning = (from fieldWarning in _validationContext.GetFieldWarnings(columnName)
-                           select fieldWarning.Message).FirstOrDefault();
-
-            return warning ?? string.Empty;
+            return ((IValidatable)this).GetFieldWarnings(columnName);
         }
 
         /// <summary>
         /// Gets the current errors errors.
         /// </summary>
         /// <returns>The errors or <see cref="string.Empty"/> if no error is available.</returns>
-        public virtual string GetBusinessRuleErrors()
+        protected virtual string GetBusinessRuleErrors()
         {
-            var error = (from businessRuleError in _validationContext.GetBusinessRuleErrors()
-                         select businessRuleError.Message).FirstOrDefault();
-
-            return error ?? string.Empty;
+            return ((IValidatable)this).GetBusinessRuleErrors();
         }
 
         /// <summary>
@@ -1134,17 +1120,9 @@ namespace Catel.Data
         /// <returns>
         /// The errors or <see cref="string.Empty" /> if no error is available.
         /// </returns>
-        public virtual string GetFieldErrors(string columnName)
+        protected virtual string GetFieldErrors(string columnName)
         {
-            if (string.IsNullOrEmpty(columnName))
-            {
-                return string.Empty;
-            }
-
-            var error = (from fieldError in _validationContext.GetFieldErrors(columnName)
-                         select fieldError.Message).FirstOrDefault();
-
-            return error ?? string.Empty;
+            return ((IValidatable)this).GetFieldErrors(columnName);
         }
         #endregion
 
