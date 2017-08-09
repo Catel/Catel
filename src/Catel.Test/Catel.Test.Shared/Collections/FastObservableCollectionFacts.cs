@@ -463,6 +463,24 @@ namespace Catel.Test.Collections
 
                 Assert.AreEqual(0, counter);
             }
+
+            [TestCase]
+            public void SuspendsValidationWhileClearing()
+            {
+                var counter = 0;
+
+                var fastCollection = new FastObservableCollection<int> { 1, 2, 3 };
+                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                fastCollection.CollectionChanged += (sender, e) => counter++;
+
+                using (fastCollection.SuspendChangeNotifications())
+                {
+                    fastCollection.Clear();
+                }
+
+                Assert.AreEqual(1, counter);
+                Assert.AreEqual(0, fastCollection.Count);
+            }
         }
 
         [TestFixture]
@@ -862,6 +880,22 @@ namespace Catel.Test.Collections
 
                 Assert.Contains(5, eventArgsList.First(args => args.Action == NotifyCollectionChangedAction.Add).NewItems);
                 Assert.Contains(4, eventArgsList.First(args => args.Action == NotifyCollectionChangedAction.Remove).OldItems);
+            }
+
+            [TestCase]
+            public void EventArgsContainOldItemsAfterClearing()
+            {
+                var eventArgsList = new List<NotifyCollectionChangedEventArgs>();
+                var fastCollection = new FastObservableCollection<int> { 1, 2, 3 };
+                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                fastCollection.CollectionChanged += (sender, args) => { eventArgsList.Add(args); };
+
+                using (fastCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
+                {
+                    fastCollection.Clear();
+                }
+
+                Assert.AreEqual(3, eventArgsList.First(args => args.Action == NotifyCollectionChangedAction.Remove).OldItems.Count);
             }
         }
     }

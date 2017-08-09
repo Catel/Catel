@@ -537,7 +537,7 @@ namespace Catel.Collections
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None or SuspensionMode.Mixed, current mode is '{_suspensionContext.Mode}'");
             }
 
-            if (_suspensionContext != null && (_suspensionContext.Mode == SuspensionMode.None || _suspensionContext.Mode == SuspensionMode.Mixed))
+            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Mixed)
             {
                 while (Count > 0)
                 {
