@@ -133,24 +133,21 @@ namespace Catel.Collections
         /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
         public bool TryRemoveItemFromOldItems(int index, T item)
         {
-            if (Mode == SuspensionMode.Mixed)
+            var oldIdx = OldItems.LastIndexOf(item);
+            if (oldIdx > -1 && OldItemIndices[oldIdx] == index)
             {
-                var oldIdx = OldItems.LastIndexOf(item);
-                if (oldIdx > -1 && OldItemIndices[oldIdx] == index)
+                OldItems.RemoveAt(oldIdx);
+                OldItemIndices.RemoveAt(oldIdx);
+
+                for (var i = 0; i < OldItemIndices.Count; i++)
                 {
-                    OldItems.RemoveAt(oldIdx);
-                    OldItemIndices.RemoveAt(oldIdx);
-
-                    for (var i = 0; i < OldItemIndices.Count; i++)
+                    if (OldItemIndices[i] >= index)
                     {
-                        if (OldItemIndices[i] >= index)
-                        {
-                            OldItemIndices[i]++;
-                        }
+                        OldItemIndices[i]++;
                     }
-
-                    return true;
                 }
+
+                return true;
             }
 
             return false;
@@ -164,23 +161,20 @@ namespace Catel.Collections
         /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
         public bool? TryRemoveItemFromNewItems(int index, T item)
         {
-            if (Mode == SuspensionMode.Mixed)
+            var newIdx = NewItems.LastIndexOf(item);
+            if (newIdx > -1 && NewItemIndices[newIdx] == index)
             {
-                var newIdx = NewItems.LastIndexOf(item);
-                if (newIdx > -1 && NewItemIndices[newIdx] == index)
+                NewItems.RemoveAt(newIdx);
+                NewItemIndices.RemoveAt(newIdx);
+                for (var i = 0; i < NewItemIndices.Count; i++)
                 {
-                    NewItems.RemoveAt(newIdx);
-                    NewItemIndices.RemoveAt(newIdx);
-                    for (var i = 0; i < NewItemIndices.Count; i++)
+                    if (NewItemIndices[i] >= index)
                     {
-                        if (NewItemIndices[i] >= index)
-                        {
-                            NewItemIndices[i]--;
-                        }
+                        NewItemIndices[i]--;
                     }
-
-                    return true;
                 }
+
+                return true;
             }
 
             return false;

@@ -563,18 +563,25 @@ namespace Catel.Collections
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
             }
 
-            bool? removed = null;
-            if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None)
+            var rememberItem = false;
+            if (this._suspensionContext != null)
             {
-                removed = _suspensionContext.TryRemoveItemFromOldItems(index, item);
+                if (this._suspensionContext.Mode == SuspensionMode.Adding)
+                {
+                    rememberItem = true;
+                }
+                else if (this._suspensionContext.Mode == SuspensionMode.Mixed)
+                {
+                    // Do not remember item if it could be removed
+                    rememberItem = this._suspensionContext.TryRemoveItemFromOldItems(index, item) == false;
+                }
             }
 
             // Call base
             base.InsertItem(index, item);
 
-            if (removed != null && !removed.Value)
+            if (rememberItem)
             {
-                // Remember
                 _suspensionContext.NewItems.Add(item);
                 _suspensionContext.NewItemIndices.Add(index);
             }
@@ -609,20 +616,27 @@ namespace Catel.Collections
             }
 
             // Get item
-            T item = this[index];
+            var item = this[index];
 
-            bool? removed = null;
-            if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None)
+            var rememberItem = false;
+            if (this._suspensionContext != null)
             {
-                removed = _suspensionContext.TryRemoveItemFromNewItems(index, item);
+                if (this._suspensionContext.Mode == SuspensionMode.Removing)
+                {
+                    rememberItem = true;
+                }
+                else if (this._suspensionContext.Mode == SuspensionMode.Mixed)
+                {
+                    // Do not remember item if it could be removed
+                    rememberItem = this._suspensionContext.TryRemoveItemFromNewItems(index, item) == false;
+                }
             }
 
             // Call base
             base.RemoveItem(index);
 
-            if (removed != null && !removed.Value)
+            if (rememberItem)
             {
-                // Remember
                 _suspensionContext.OldItems.Add(item);
                 _suspensionContext.OldItemIndices.Add(index);
             }
@@ -635,7 +649,7 @@ namespace Catel.Collections
         protected override void SetItem(int index, T item)
         {
             // Check
-            if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Mixed)
+            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Mixed))
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None or SuspensionMode.Mixed, current mode is '{_suspensionContext.Mode}'");
             }
