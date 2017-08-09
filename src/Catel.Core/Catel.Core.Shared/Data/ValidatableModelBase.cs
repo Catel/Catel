@@ -1082,6 +1082,48 @@ namespace Catel.Data
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the current business warnings.
+        /// </summary>
+        /// <returns>The warnings or <see cref="string.Empty"/> if no warning is available.</returns>
+        protected virtual string GetBusinessRuleWarnings()
+        {
+            return ((IValidatable)this).GetBusinessRuleWarnings();
+        }
+
+        /// <summary>
+        /// Gets the warnings for a specific column.
+        /// </summary>
+        /// <param name="columnName">Column name.</param>
+        /// <returns>
+        /// The warnings or <see cref="string.Empty" /> if no warning is available.
+        /// </returns>
+        protected virtual string GetFieldWarnings(string columnName)
+        {
+            return ((IValidatable)this).GetFieldWarnings(columnName);
+        }
+
+        /// <summary>
+        /// Gets the current errors errors.
+        /// </summary>
+        /// <returns>The errors or <see cref="string.Empty"/> if no error is available.</returns>
+        protected virtual string GetBusinessRuleErrors()
+        {
+            return ((IValidatable)this).GetBusinessRuleErrors();
+        }
+
+        /// <summary>
+        /// Gets the errors for a specific column.
+        /// </summary>
+        /// <param name="columnName">Column name.</param>
+        /// <returns>
+        /// The errors or <see cref="string.Empty" /> if no error is available.
+        /// </returns>
+        protected virtual string GetFieldErrors(string columnName)
+        {
+            return ((IValidatable)this).GetFieldErrors(columnName);
+        }
         #endregion
 
         #region IDataWarningInfo Members
