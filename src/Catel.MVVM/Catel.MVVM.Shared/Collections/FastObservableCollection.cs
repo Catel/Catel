@@ -646,22 +646,6 @@ namespace Catel.Collections
         }
         #endregion Overrides of ObservableCollection
 
-        private NotifyRangedCollectionChangedEventArgs CreateEventArgs(NotifyCollectionChangedAction action, T changedItem = default(T), int changedIndex = -1)
-        {
-            NotifyRangedCollectionChangedEventArgs eventArgs;
-
-            if (changedItem == null)
-            {
-                eventArgs = new NotifyRangedCollectionChangedEventArgs(action);
-            }
-            else
-            {
-                eventArgs = new NotifyRangedCollectionChangedEventArgs(action, new List<T>() { changedItem }, new List<int>() { changedIndex });
-            }
-
-            return eventArgs;
-        }
-
         private NotifyRangedCollectionChangedEventArgs CreateEventArgs(NotifyCollectionChangedAction action, IList changedItems = null, IList<int> changedIndices = null)
         {
             NotifyRangedCollectionChangedEventArgs eventArgs;
@@ -673,22 +657,6 @@ namespace Catel.Collections
             else
             {
                 eventArgs = new NotifyRangedCollectionChangedEventArgs(action, changedItems, changedIndices);
-            }
-
-            return eventArgs;
-        }
-
-        private NotifyRangedCollectionChangedEventArgs CreateEventArgs(NotifyCollectionChangedAction action, IList newItems = null, IList removedItems = null, IList<int> changedIndices = null)
-        {
-            NotifyRangedCollectionChangedEventArgs eventArgs;
-
-            if (newItems == null && removedItems == null && changedIndices == null)
-            {
-                eventArgs = new NotifyRangedCollectionChangedEventArgs(action);
-            }
-            else
-            {
-                eventArgs = new NotifyRangedCollectionChangedEventArgs(action, newItems, removedItems, changedIndices);
             }
 
             return eventArgs;

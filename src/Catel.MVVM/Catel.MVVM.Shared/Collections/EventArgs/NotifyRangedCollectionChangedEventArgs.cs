@@ -41,19 +41,6 @@ namespace Catel.Collections
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NotifyRangedCollectionChangedEventArgs" /> class.
-        /// </summary>
-        /// <param name="action">The action.</param>
-        /// <param name="newItems">The new items.</param>
-        /// <param name="oldItems">The old items.</param>
-        /// <param name="indices">The indices.</param>
-        public NotifyRangedCollectionChangedEventArgs(NotifyCollectionChangedAction action, IList newItems, IList oldItems, IList<int> indices)
-            : base(action, newItems, oldItems)
-        {
-            Indices = indices;
-        }
-
-        /// <summary>
         /// Gets the indices.
         /// </summary>
         public IList<int> Indices { get; private set; }
