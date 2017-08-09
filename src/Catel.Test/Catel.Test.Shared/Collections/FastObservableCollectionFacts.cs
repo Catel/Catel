@@ -445,6 +445,22 @@ namespace Catel.Test.Collections
                     fastCollection.Remove(1);
                 }
 
+                Assert.AreEqual(1, counter);
+            }
+
+            [TestCase]
+            public void SuspendsValidationWhileDoingNothing()
+            {
+                var counter = 0;
+
+                var fastCollection = new FastObservableCollection<int>();
+                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                fastCollection.CollectionChanged += (sender, e) => counter++;
+
+                using (fastCollection.SuspendChangeNotifications())
+                {
+                }
+
                 Assert.AreEqual(0, counter);
             }
         }

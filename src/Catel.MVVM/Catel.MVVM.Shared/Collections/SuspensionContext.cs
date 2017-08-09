@@ -128,18 +128,12 @@ namespace Catel.Collections
         /// <summary>
         /// Tries to remove the item from old items
         /// </summary>
-        /// <param name="index">
-        /// The item index.
-        /// </param>
-        /// <param name="item">
-        /// The item.
-        /// </param>
-        /// <returns>
-        /// <c>true</c> if removed, otherwise <c>false</c>.
-        /// </returns>
+        /// <param name="index">The item index.</param>
+        /// <param name="item">The item.</param>
+        /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
         public bool TryRemoveItemFromOldItems(int index, T item)
         {
-            if (Mode == SuspensionMode.None || Mode == SuspensionMode.Mixed)
+            if (Mode == SuspensionMode.Mixed)
             {
                 var oldIdx = OldItems.LastIndexOf(item);
                 if (oldIdx > -1 && OldItemIndices[oldIdx] == index)
@@ -165,18 +159,12 @@ namespace Catel.Collections
         /// <summary>
         /// Tries to remove the item from new items
         /// </summary>
-        /// <param name="index">
-        /// The item index.
-        /// </param>
-        /// <param name="item">
-        /// The item.
-        /// </param>
-        /// <returns>
-        /// <c>true</c> if removed, otherwise <c>false</c>.
-        /// </returns>
+        /// <param name="index">The item index.</param>
+        /// <param name="item">The item.</param>
+        /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
         public bool? TryRemoveItemFromNewItems(int index, T item)
         {
-            if (Mode == SuspensionMode.None || Mode == SuspensionMode.Mixed)
+            if (Mode == SuspensionMode.Mixed)
             {
                 var newIdx = NewItems.LastIndexOf(item);
                 if (newIdx > -1 && NewItemIndices[newIdx] == index)

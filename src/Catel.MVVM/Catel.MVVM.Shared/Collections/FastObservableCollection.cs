@@ -438,10 +438,7 @@ namespace Catel.Collections
                     // See https://github.com/Catel/Catel/issues/1066 for details
                     if (_suspensionContext.Mode == SuspensionMode.None)
                     {
-                        if (_suspensionContext.NewItems.Count > 0 || _suspensionContext.OldItems.Count > 0)
-                        {
-                            eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, null, null));
-                        }
+                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, null, null));
                     }
                     else
                     {
@@ -540,7 +537,7 @@ namespace Catel.Collections
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None or SuspensionMode.Mixed, current mode is '{_suspensionContext.Mode}'");
             }
 
-            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Mixed)
+            if (_suspensionContext != null && (_suspensionContext.Mode == SuspensionMode.None || _suspensionContext.Mode == SuspensionMode.Mixed))
             {
                 while (Count > 0)
                 {
@@ -566,7 +563,11 @@ namespace Catel.Collections
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
             }
 
-            bool? removed = _suspensionContext?.TryRemoveItemFromOldItems(index, item);
+            bool? removed = null;
+            if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None)
+            {
+                removed = _suspensionContext.TryRemoveItemFromOldItems(index, item);
+            }
 
             // Call base
             base.InsertItem(index, item);
@@ -610,7 +611,11 @@ namespace Catel.Collections
             // Get item
             T item = this[index];
 
-            bool? removed = _suspensionContext?.TryRemoveItemFromNewItems(index, item);
+            bool? removed = null;
+            if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None)
+            {
+                removed = _suspensionContext.TryRemoveItemFromNewItems(index, item);
+            }
 
             // Call base
             base.RemoveItem(index);
