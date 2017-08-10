@@ -77,7 +77,7 @@ namespace Catel.Test.Collections
         [TestFixture]
         public class TheIsDirtyProperty
         {
-            [TestCase]
+            [Test]
             public void ReturnsFalseWhenNoPendingNotificationsAreListed()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -87,7 +87,7 @@ namespace Catel.Test.Collections
                 Assert.IsFalse(fastCollection.IsDirty);
             }
 
-            [TestCase]
+            [Test]
             public void ReturnsTrueWhenPendingNotificationsAreListed()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -106,7 +106,7 @@ namespace Catel.Test.Collections
         [TestFixture]
         public class TheNotificationsSuspendedProperty
         {
-            [TestCase]
+            [Test]
             public void ReturnsFalseAfterDisposing()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -121,7 +121,7 @@ namespace Catel.Test.Collections
                 Assert.IsFalse(fastCollection.NotificationsSuspended);
             }
 
-            [TestCase]
+            [Test]
             public void ReturnsFalseAfterChangedDisposing()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -139,7 +139,7 @@ namespace Catel.Test.Collections
         [TestFixture]
         public class TheAddRangeMethod
         {
-            [TestCase]
+            [Test]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -148,7 +148,7 @@ namespace Catel.Test.Collections
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.AddItems(null, SuspensionMode.Adding));
             }
 
-            [TestCase]
+            [Test]
             public void ThrowsInvalidOperationExceptionForInvalidSuspensionMode()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -156,7 +156,7 @@ namespace Catel.Test.Collections
                 ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Removing));
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleEventWhileAddingRange()
             {
                 var counter = 0;
@@ -182,7 +182,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(4, counter);
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleAddEventWhileAddingRangeInSuspensionModeAdding()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
@@ -203,7 +203,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(1, count);
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleAddEventWhileAddingRangeInSuspensionModeNone()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
@@ -223,7 +223,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(1, count);
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleAddEventWhileAddingRangeInSuspensionModeMixed()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
@@ -243,7 +243,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(1, count);
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleAddEventWhileAddingRangeWithoutSuspensionMode()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
@@ -261,7 +261,7 @@ namespace Catel.Test.Collections
         [TestFixture]
         public class TheInsertRangeMethod
         {
-            [TestCase]
+            [Test]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -270,7 +270,7 @@ namespace Catel.Test.Collections
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.InsertItems(null, 0, SuspensionMode.Adding));
             }
 
-            [TestCase]
+            [Test]
             public void ThrowsInvalidOperationExceptionForInvalidSuspensionMode()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -278,7 +278,7 @@ namespace Catel.Test.Collections
                 ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0, SuspensionMode.Removing));
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleEventWhileInsertingRange()
             {
                 var counter = 0;
@@ -304,7 +304,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(4, counter);
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleAddEventWhileInsertingRangeInSuspensionModeAdding()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
@@ -324,7 +324,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(1, count);
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleAddEventWhileInsertingRangeInSuspensionModeNone()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
@@ -338,7 +338,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleAddEventWhileInsertingRangeInSuspensionModeMixed()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
@@ -352,7 +352,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleAddEventWhileInsertingRangeWithoutSuspensionMode()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
@@ -370,7 +370,7 @@ namespace Catel.Test.Collections
         [TestFixture]
         public class TheRemoveRangeMethod
         {
-            [TestCase]
+            [Test]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -379,7 +379,7 @@ namespace Catel.Test.Collections
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.RemoveItems(null, SuspensionMode.Removing));
             }
 
-            [TestCase]
+            [Test]
             public void ThrowsInvalidOperationExceptionForInvalidSuspensionMode()
             {
                 var fastCollection = new FastObservableCollection<int>(new[] { 1, 2, 3, 4, 5 });
@@ -387,7 +387,7 @@ namespace Catel.Test.Collections
                 ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Adding));
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleEventWhileRemovingRange()
             {
                 var counter = 0;
@@ -413,7 +413,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(4, counter);
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleRemoveEventWhileRemovingRangeInSuspensionModeRemoving()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
@@ -427,7 +427,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgs.Action);
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleRemoveEventWhileRemovingRangeInSuspensionModeNone()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
@@ -441,7 +441,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleRemoveEventWhileRemovingRangeInSuspensionModeMixed()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
@@ -455,7 +455,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgs.Action);
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleRemoveEventWhileRemovingRangeWithoutSuspensionMode()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
@@ -473,7 +473,7 @@ namespace Catel.Test.Collections
         [TestFixture]
         public class TheSuspendNotificationsMethod
         {
-            [TestCase]
+            [Test]
             public void SuspendsValidationWhileAddingAndRemovingItems()
             {
                 var counter = 0;
@@ -500,7 +500,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(1, counter);
             }
 
-            [TestCase]
+            [Test]
             public void SuspendsValidationWhileMovingItems()
             {
                 var counter = 0;
@@ -518,7 +518,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(2, fastCollection[3]);
             }
 
-            [TestCase]
+            [Test]
             public void SuspendsValidationWhileMovingItemsWithRemoveAndAdd()
             {
                 var counter = 0;
@@ -536,7 +536,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(1, counter);
             }
 
-            [TestCase]
+            [Test]
             public void SuspendsValidationWhileDoingNothing()
             {
                 var counter = 0;
@@ -552,7 +552,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(0, counter);
             }
 
-            [TestCase]
+            [Test]
             public void SuspendsValidationWhileClearing()
             {
                 var counter = 0;
@@ -574,7 +574,7 @@ namespace Catel.Test.Collections
         [TestFixture]
         public class SupportsLinq
         {
-            [TestCase]
+            [Test]
             public void ReturnsSingleElementUsingLinq()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -590,7 +590,7 @@ namespace Catel.Test.Collections
         [TestFixture]
         public class TheResetMethod
         {
-            [TestCase]
+            [Test]
             public void ResetWithoutSuspendChangeNotifications()
             {
                 var collectionChanged = false;
@@ -603,7 +603,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(true, collectionChanged);
             }
 
-            [TestCase]
+            [Test]
             public void CallingResetWhileAddingItemsInAddingMode()
             {
                 var counter = 0;
@@ -638,7 +638,7 @@ namespace Catel.Test.Collections
         [TestFixture]
         public class TheSuspensionModeMethod
         {
-            [TestCase]
+            [Test]
             public void AddingItemsInAddingMode()
             {
                 var counter = 0;
@@ -666,7 +666,7 @@ namespace Catel.Test.Collections
                 CollectionAssert.AreEqual(eventArgs.NewItems, new[] { 1, 2, 3, 4, 5 });
             }
 
-            [TestCase]
+            [Test]
             public void CascadedAddingItemsInAddingMode()
             {
                 var counter = 0;
@@ -703,7 +703,7 @@ namespace Catel.Test.Collections
                 // ReSharper restore PossibleNullReferenceException
             }
 
-            [TestCase]
+            [Test]
             public void CascadedAddingItemsInAddingModeWithInterceptingDisposing()
             {
                 var counter = 0;
@@ -741,7 +741,7 @@ namespace Catel.Test.Collections
                 // ReSharper restore PossibleNullReferenceException
             }
 
-            [TestCase]
+            [Test]
             public void MultipleActionsWithoutSuspendingNotifications()
             {
                 var counter = 0;
@@ -767,7 +767,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(9, counter);
             }
 
-            [TestCase]
+            [Test]
             public void RemovingItemsInRemovingMode()
             {
                 var counter = 0;
@@ -804,7 +804,7 @@ namespace Catel.Test.Collections
                 return v;
             }
 
-            [TestCase]
+            [Test]
             public void CleanedUpSuspensionContextAfterAdding()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -817,7 +817,7 @@ namespace Catel.Test.Collections
                 Assert.IsNull(context);
             }
 
-            [TestCase]
+            [Test]
             public void CleanedUpSuspensionContextAfterDoingNothing()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -829,7 +829,7 @@ namespace Catel.Test.Collections
                 Assert.IsNull(context);
             }
 
-            [TestCase]
+            [Test]
             public void ThrowsInvalidOperationExceptionForAddingInRemovingMode()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -839,7 +839,7 @@ namespace Catel.Test.Collections
                 }
             }
 
-            [TestCase]
+            [Test]
             public void ThrowsInvalidOperationExceptionForClearingInAddingMode()
             {
                 var fastCollection = new FastObservableCollection<int>();
@@ -849,7 +849,7 @@ namespace Catel.Test.Collections
                 }
             }
 
-            [TestCase]
+            [Test]
             public void ThrowsInvalidOperationExceptionForMovingInAddingMode()
             {
                 var fastCollection = new FastObservableCollection<int> { 0 };
@@ -859,7 +859,7 @@ namespace Catel.Test.Collections
                 }
             }
 
-            [TestCase]
+            [Test]
             public void ThrowsInvalidOperationExceptionForRemovingInAddingMode()
             {
                 var fastCollection = new FastObservableCollection<int> { 0 };
@@ -869,7 +869,7 @@ namespace Catel.Test.Collections
                 }
             }
 
-            [TestCase]
+            [Test]
             public void ThrowsInvalidOperationExceptionForSettingInAddingMode()
             {
                 var fastCollection = new FastObservableCollection<int> { 0 };
@@ -879,7 +879,7 @@ namespace Catel.Test.Collections
                 }
             }
 
-            [TestCase]
+            [Test]
             [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1501:StatementMustNotBeOnSingleLine", Justification = "Reviewed. Suppression is OK here.")]
             public void ThrowsInvalidOperationExceptionForChangingMode()
             {
@@ -970,7 +970,7 @@ namespace Catel.Test.Collections
                 Assert.Contains(4, eventArgsList.First(args => args.Action == NotifyCollectionChangedAction.Remove).OldItems);
             }
 
-            [TestCase]
+            [Test]
             public void EventArgsContainOldItemsAfterClearing()
             {
                 var eventArgsList = new List<NotifyCollectionChangedEventArgs>();
@@ -986,7 +986,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(3, eventArgsList.First(args => args.Action == NotifyCollectionChangedAction.Remove).OldItems.Count);
             }
 
-            [TestCase]
+            [Test]
             public void TargetCollectionAimsSourceCollectionChangesUsingItems()
             {
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
@@ -1011,7 +1011,7 @@ namespace Catel.Test.Collections
                 CollectionAssert.AreEqual(sourceCollection, targetCollection);
             }
 
-            [TestCase]
+            [Test]
             public void TargetCollectionAimsSourceCollectionChangesUsingIndices()
             {
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
@@ -1036,7 +1036,7 @@ namespace Catel.Test.Collections
                 CollectionAssert.AreEqual(sourceCollection, targetCollection);
             }
 
-            [TestCase]
+            [Test]
             public void TargetCollectionAimsSourceCollectionChangesWithMovingItemsUsingIndices()
             {
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
@@ -1057,7 +1057,7 @@ namespace Catel.Test.Collections
                 CollectionAssert.AreEqual(sourceCollection, targetCollection);
             }
 
-            [TestCase]
+            [Test]
             public void TargetCollectionAimsSourceCollectionChangesWithSimulatedMovingItemsUsingIndices()
             {
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
@@ -1079,7 +1079,7 @@ namespace Catel.Test.Collections
                 CollectionAssert.AreEqual(sourceCollection, targetCollection);
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleEventForMovingItems()
             {
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
@@ -1097,7 +1097,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgsList[0].Action);
             }
 
-            [TestCase]
+            [Test]
             public void RaisesSingleEventForSimulatedMovingItems()
             {
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();

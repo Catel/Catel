@@ -432,41 +432,27 @@ namespace Catel.Collections
 
                 if (_suspensionContext != null)
                 {
-                    // Special case: if suspension mode == None, we raise a .Reset (default behavior). We would love to pass in the 
-                    // right items (e.g. Reset or MassiveUpdate), but the UI components don't support this, hence the .Reset.
-                    //
-                    // See https://github.com/Catel/Catel/issues/1066 for details
-                    if (_suspensionContext.Mode == SuspensionMode.None)
+                    if (_suspensionContext.NewItems.Count != 0)
                     {
-                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, null, null));
+                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Add, _suspensionContext.NewItems, _suspensionContext.NewItemIndices));
                     }
-                    else
-                    {
-                        if (_suspensionContext.NewItems.Count != 0)
-                        {
-                            eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Add, _suspensionContext.NewItems, _suspensionContext.NewItemIndices));
-                        }
 
-                        if (_suspensionContext.OldItems.Count != 0)
-                        {
-                            eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Remove, _suspensionContext.OldItems, _suspensionContext.OldItemIndices));
-                        }
+                    if (_suspensionContext.OldItems.Count != 0)
+                    {
+                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Remove, _suspensionContext.OldItems, _suspensionContext.OldItemIndices));
                     }
                 }
-                else
+
+                if (eventArgsList.Count == 0)
                 {
-                    eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, null, null));
+                    eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset));
                 }
 
-                if (eventArgsList.Count > 0)
+                OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+                OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+                foreach (var eventArgs in eventArgsList)
                 {
-                    OnPropertyChanged(new PropertyChangedEventArgs("Count"));
-                    OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-
-                    foreach (var eventArgs in eventArgsList)
-                    {
-                        OnCollectionChanged(eventArgs);
-                    }
+                    OnCollectionChanged(eventArgs);
                 }
             };
 
