@@ -20,7 +20,7 @@ namespace Catel.Data
     /// <summary>
     /// Class that is aware of changes of child objects by using the <see cref="ChangeNotificationWrapper"/>.
     /// </summary>
-    public abstract class ChildAwareModelBase : ModelBase
+    public abstract class ChildAwareModelBase : ValidatableModelBase
     {
         /// <summary>
         /// The change notification wrappers for all property values.
