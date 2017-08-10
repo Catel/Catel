@@ -449,6 +449,42 @@ namespace Catel.Test.Collections
             }
 
             [TestCase]
+            public void SuspendsValidationWhileMovingItems()
+            {
+                var counter = 0;
+
+                var fastCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                fastCollection.CollectionChanged += (sender, e) => counter++;
+
+                using (fastCollection.SuspendChangeNotifications())
+                {
+                    fastCollection.Move(1, 3);
+                }
+
+                Assert.AreEqual(1, counter);
+                Assert.AreEqual(2, fastCollection[3]);
+            }
+
+            [TestCase]
+            public void SuspendsValidationWhileMovingItemsWithRemoveAndAdd()
+            {
+                var counter = 0;
+
+                var fastCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                fastCollection.CollectionChanged += (sender, e) => counter++;
+
+                using (fastCollection.SuspendChangeNotifications())
+                {
+                    fastCollection.Remove(2);
+                    fastCollection.Insert(3, 2);
+                }
+
+                Assert.AreEqual(1, counter);
+            }
+
+            [TestCase]
             public void SuspendsValidationWhileDoingNothing()
             {
                 var counter = 0;
