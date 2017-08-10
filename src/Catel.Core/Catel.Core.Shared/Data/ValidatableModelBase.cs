@@ -276,7 +276,7 @@ namespace Catel.Data
         /// <value>
         /// <c>true</c> if validation is suspended; otherwise, <c>false</c>.
         /// </value>
-        protected bool IsValidationSuspended
+        protected virtual bool IsValidationSuspended
         {
             get
             {
