@@ -14,6 +14,7 @@ namespace Catel.Test.Collections
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Reflection;
+    using System.Text;
 
     using Catel.Collections;
     using Catel.Reflection;
@@ -22,9 +23,9 @@ namespace Catel.Test.Collections
 
     public class FastObservableCollectionFacts
     {
-        public static class FastObservableCollectionFactsHelper
+        internal static class FastObservableCollectionFactsHelper
         {
-            public static void Synchronize<T>(IList<T> targetCollection, IEnumerable<NotifyRangedCollectionChangedEventArgs> eventArgs, bool useIndices)
+            public static void Synchronize<T>(IList<T> targetCollection, IList<T> sourceCollection, IEnumerable<NotifyRangedCollectionChangedEventArgs> eventArgs, bool useIndices)
             {
                 if (useIndices)
                 {
@@ -50,6 +51,7 @@ namespace Catel.Test.Collections
                         else if (eventArg.Action == NotifyCollectionChangedAction.Reset)
                         {
                             targetCollection.Clear();
+                            targetCollection.AddRange(sourceCollection);
                         }
                     }
                 }
@@ -68,6 +70,7 @@ namespace Catel.Test.Collections
                         else if (eventArg.Action == NotifyCollectionChangedAction.Reset)
                         {
                             targetCollection.Clear();
+                            targetCollection.AddRange(sourceCollection);
                         }
                     }
                 }
@@ -1006,7 +1009,7 @@ namespace Catel.Test.Collections
 
                 // Test using items
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
-                FastObservableCollectionFactsHelper.Synchronize(targetCollection, eventArgsList, false);
+                FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList, false);
 
                 CollectionAssert.AreEqual(sourceCollection, targetCollection);
             }
@@ -1031,7 +1034,7 @@ namespace Catel.Test.Collections
 
                 // Test using indices
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
-                FastObservableCollectionFactsHelper.Synchronize(targetCollection, eventArgsList, true);
+                FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList, true);
 
                 CollectionAssert.AreEqual(sourceCollection, targetCollection);
             }
@@ -1052,7 +1055,7 @@ namespace Catel.Test.Collections
 
                 // Test using indices
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
-                FastObservableCollectionFactsHelper.Synchronize(targetCollection, eventArgsList, true);
+                FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList, true);
 
                 CollectionAssert.AreEqual(sourceCollection, targetCollection);
             }
@@ -1074,7 +1077,7 @@ namespace Catel.Test.Collections
 
                 // Test using indices
                 var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
-                FastObservableCollectionFactsHelper.Synchronize(targetCollection, eventArgsList, true);
+                FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList, true);
 
                 CollectionAssert.AreEqual(sourceCollection, targetCollection);
             }
