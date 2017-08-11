@@ -22,6 +22,40 @@ namespace Catel.Test.Collections
 
     public class FastObservableCollectionFacts
     {
+
+        internal static class FastObservableCollectionFactsHelper
+        {
+            public static void Synchronize<T>(IList<T> targetCollection, IList<T> sourceCollection, IEnumerable<NotifyRangedCollectionChangedEventArgs> eventArgs)
+            {
+                foreach (var eventArg in eventArgs)
+                {
+                    if (eventArg.Action == NotifyCollectionChangedAction.Add)
+                    {
+                        var i = 0;
+                        foreach (var index in eventArg.Indices)
+                        {
+                            var item = (T)eventArg.NewItems[i];
+                            targetCollection.Insert(index, item);
+                            i++;
+                        }
+                    }
+                    else if (eventArg.Action == NotifyCollectionChangedAction.Remove)
+                    {
+                        foreach (var index in eventArg.Indices)
+                        {
+                            targetCollection.RemoveAt(index);
+                        }
+                    }
+                    else if (eventArg.Action == NotifyCollectionChangedAction.Reset)
+                    {
+                        targetCollection.Clear();
+                        targetCollection.AddRange(sourceCollection);
+                    }
+                }
+            }
+        }
+
+
         [TestFixture]
         public class TheIsDirtyProperty
         {
@@ -799,7 +833,7 @@ namespace Catel.Test.Collections
 
                 Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
                 Assert.AreEqual(1, count);
-                Assert.AreEqual(new[] { 1, 4 }, eventArgs.NewItems.OfType<int>().ToArray());
+                Assert.AreEqual(new[] { 4, 1 }, eventArgs.NewItems.OfType<int>().ToArray());
             }
 
             [Test]
@@ -846,6 +880,31 @@ namespace Catel.Test.Collections
 
                 Assert.Contains(5, eventArgsList.First(args => args.Action == NotifyCollectionChangedAction.Add).NewItems);
                 Assert.Contains(4, eventArgsList.First(args => args.Action == NotifyCollectionChangedAction.Remove).OldItems);
+            }
+
+            [Test]
+            public void TargetCollectionAimsSourceCollectionChangesUsingIndices()
+            {
+                var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
+                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                sourceCollection.AutomaticallyDispatchChangeNotifications = false;
+                sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
+
+                using (sourceCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
+                {
+                    sourceCollection.Add(6);
+                    sourceCollection.Remove(3);
+                    sourceCollection.Add(7);
+                    sourceCollection.Remove(4);
+                    sourceCollection.Remove(5);
+                    sourceCollection.Add(3);
+                }
+
+                // Test using indices
+                var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
+                FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
+
+                CollectionAssert.AreEqual(sourceCollection, targetCollection);
             }
         }
     }

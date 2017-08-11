@@ -242,7 +242,11 @@ namespace Catel.Collections
             {
                 foreach (var item in collection)
                 {
-                    Add(item);
+                    var removed = _suspensionContext?.TryRemoveItemFromOldItems(item);
+                    if (removed != null && !removed.Value)
+                    {
+                        Add(item);
+                    }
                 }
             }
         }
@@ -264,7 +268,11 @@ namespace Catel.Collections
             {
                 foreach (var item in collection)
                 {
-                    list.Add(item);
+                    var removed = _suspensionContext?.TryRemoveItemFromOldItems((T)item);
+                    if (removed != null && !removed.Value)
+                    {
+                        list.Add(item);
+                    }
                 }
             }
         }
@@ -284,7 +292,11 @@ namespace Catel.Collections
             {
                 foreach (var item in collection)
                 {
-                    Remove(item);
+                    var removed = _suspensionContext?.TryRemoveItemFromNewItems(item);
+                    if (removed != null && !removed.Value)
+                    {
+                        Remove(item);
+                    }
                 }
             }
         }
@@ -306,7 +318,11 @@ namespace Catel.Collections
             {
                 foreach (var item in collection)
                 {
-                    list.Remove(item);
+                    var removed = _suspensionContext?.TryRemoveItemFromNewItems((T)item);
+                    if (removed != null && !removed.Value)
+                    {
+                        list.Remove(item);
+                    }
                 }
             }
         }
@@ -386,6 +402,10 @@ namespace Catel.Collections
                 },
                 x =>
                 {
+                    if (x.Instance._suspensionContext.Count == 1 && x.Instance._suspensionContext.Mode == SuspensionMode.Mixed)
+                    {
+                        x.Instance.SynchronizeWithSuspensionContext();
+                    }
                     x.Instance._suspensionContext.Count--;
                     if (x.Instance._suspensionContext.Count == 0)
                     {
@@ -396,6 +416,46 @@ namespace Catel.Collections
                         x.Instance._suspensionContext = null;
                     }
                 }, _suspensionContext);
+        }
+
+        /// <summary>
+        /// Synchronize the list with the suspenstion context.
+        /// </summary>
+        private void SynchronizeWithSuspensionContext()
+        {
+            if (_suspensionContext.NewItems.Count > 0)
+            {
+                _suspensionContext.NewItemIndices.Reverse();
+                _suspensionContext.NewItems.Reverse();
+
+                for (int i = 0; i < _suspensionContext.NewItems.Count; i++)
+                {
+                    base.InsertItem(_suspensionContext.NewItemIndices[i], _suspensionContext.NewItems[i]);
+                }
+            }
+
+            if (_suspensionContext.OldItems.Count > 0)
+            {
+                SortedList<int, T> sortedList = new SortedList<int, T>();
+                for (int i = 0; i < _suspensionContext.OldItems.Count; i++)
+                {
+                    var value = _suspensionContext.OldItems[i];
+                    var idx = _suspensionContext.OldItemIndices[i];
+                    sortedList.Add(idx, value);
+                }
+
+                _suspensionContext.OldItems.Clear();
+                _suspensionContext.OldItemIndices.Clear();
+                for (int i = sortedList.Count - 1; i >= 0; i--)
+                {
+                    var idx = sortedList.Keys[i];
+
+                    _suspensionContext.OldItemIndices.Add(idx);
+                    _suspensionContext.OldItems.Add(sortedList[idx]);
+
+                    base.RemoveItem(idx);
+                }
+            }
         }
 
         /// <summary>
@@ -614,12 +674,11 @@ namespace Catel.Collections
             bool? removed;
             try
             {
-                removed = suspensionContext?.TryRemoveItemFromOldItems(index, item);
+                removed = suspensionContext?.TryRemoveItemFromOldItems(item);
 
-                base.InsertItem(index, item);
-
-                if (suspensionContext == null)
+                if (suspensionContext == null || suspensionContext.Mode != SuspensionMode.Mixed)
                 {
+                    base.InsertItem(index, item);
                     OnListChanged(new NotifyListChangedEventArgs(ListChangedType.ItemAdded, index, item));
                 }
             }
@@ -658,11 +717,11 @@ namespace Catel.Collections
             bool? removed;
             try
             {
-                removed = _suspensionContext?.TryRemoveItemFromNewItems(index, item);
-                base.RemoveItem(index);
+                removed = _suspensionContext?.TryRemoveItemFromNewItems(item);
 
-                if (!NotificationsSuspended)
+                if (_suspensionContext == null || _suspensionContext.Mode != SuspensionMode.Mixed)
                 {
+                    base.RemoveItem(index);
                     OnListChanged(new NotifyListChangedEventArgs(ListChangedType.ItemDeleted, index, item));
                 }
             }

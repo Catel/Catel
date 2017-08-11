@@ -31,6 +31,7 @@ Added/fixed:
 (*) #1070 TypeFactory.CreateInstanceWithParameters use the most specialized constructor
 (*) #1083 Derived ChildAwareModelBase from ValidatableModelBase instead of ModelBase
 (*) #1084 Add virtual validation methods to ValidatableModelBase
+(x) #1088 Fix issues with FastObservableCollection especially with SuspensionMode.Mixed
 
 Roadmap:
 ========
