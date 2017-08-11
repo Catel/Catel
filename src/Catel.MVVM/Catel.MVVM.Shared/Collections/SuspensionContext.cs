@@ -136,7 +136,7 @@ namespace Catel.Collections
         /// </returns>
         public bool TryRemoveItemFromOldItems(T item)
         {
-            if (Mode == SuspensionMode.Mixed)
+            if (Mode == SuspensionMode.None || Mode == SuspensionMode.Mixed)
             {
                 var oldIdx = OldItems.LastIndexOf(item);
                 if (oldIdx > -1)
@@ -162,7 +162,7 @@ namespace Catel.Collections
         /// </returns>
         public bool? TryRemoveItemFromNewItems(T item)
         {
-            if (Mode == SuspensionMode.Mixed)
+            if (Mode == SuspensionMode.None || Mode == SuspensionMode.Mixed)
             {
                 var newIdx = NewItems.LastIndexOf(item);
                 if (newIdx > -1)
