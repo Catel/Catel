@@ -29,7 +29,9 @@ Added/fixed:
 (*) #1017 Improve performance of ViewToViewModelMappingHelper
 (*) #1068 Minimize allocations using ArrayShim
 (*) #1070 TypeFactory.CreateInstanceWithParameters use the most specialized constructor
+(*) #1083 Derived ChildAwareModelBase from ValidatableModelBase instead of ModelBase
 (*) #1084 Add virtual validation methods to ValidatableModelBase
+(*) #1085 Changed ValidatableModelBase.IsValidationSuspended to be virtual
 
 Roadmap:
 ========
