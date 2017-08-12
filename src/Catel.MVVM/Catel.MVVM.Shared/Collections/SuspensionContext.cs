@@ -7,6 +7,7 @@
 namespace Catel.Collections
 {
     using System.Collections.Generic;
+    using System.Collections.Specialized;
 
     /// <summary>
     /// Context class the hold all relevant data while notifications are suspended.
@@ -22,6 +23,12 @@ namespace Catel.Collections
         private readonly List<int> _oldItemIndices = new List<int>();
 
         private readonly List<T> _oldItems = new List<T>();
+
+        private readonly List<int> _mixedItemIndices = new List<int>();
+
+        private readonly List<T> _mixedItems = new List<T>();
+
+        private readonly List<NotifyCollectionChangedAction> _mixedActions = new List<NotifyCollectionChangedAction>();
 
         private int _suspensionCount;
 
@@ -78,7 +85,7 @@ namespace Catel.Collections
         }
 
         /// <summary>
-        /// Gets the indices od the added items while change notifications were suspended.
+        /// Gets the indices of the added items while change notifications were suspended in Adding mode.
         /// </summary>
         public List<int> NewItemIndices
         {
@@ -89,7 +96,7 @@ namespace Catel.Collections
         }
 
         /// <summary>
-        /// Gets the added items while change notifications were suspended.
+        /// Gets the added items while change notifications were suspended in Adding mode.
         /// </summary>
         public List<T> NewItems
         {
@@ -100,7 +107,7 @@ namespace Catel.Collections
         }
 
         /// <summary>
-        /// Gets the indices od the removed items while change notifications were suspended.
+        /// Gets the indices of the removed items while change notifications were suspended in Removing mode.
         /// </summary>
         public List<int> OldItemIndices
         {
@@ -111,7 +118,7 @@ namespace Catel.Collections
         }
 
         /// <summary>
-        /// Gets the removed items while change notifications were suspended.
+        /// Gets the removed items while change notifications were suspended in Removing mode.
         /// </summary>
         public List<T> OldItems
         {
@@ -120,64 +127,42 @@ namespace Catel.Collections
                 return _oldItems;
             }
         }
+
+        /// <summary>
+        /// Gets the indices of the added and removed items while change notifications were suspended in Mixed mode.
+        /// </summary>
+        public List<int> MixedItemIndices
+        {
+            get
+            {
+                return _mixedItemIndices;
+            }
+        }
+
+        /// <summary>
+        /// Gets the added and removed items while change notifications were suspended in Mixed mode.
+        /// </summary>
+        public List<T> MixedItems
+        {
+            get
+            {
+                return _mixedItems;
+            }
+        }
+
+        /// <summary>
+        /// Gets the actions while change notifications were suspended in Mixed mode.
+        /// </summary>
+        public List<NotifyCollectionChangedAction> MixedActions
+        {
+            get
+            {
+                return _mixedActions;
+            }
+        }
         #endregion
 
         #region Methods
         #endregion
-
-        /// <summary>
-        /// Tries to remove the item from old items
-        /// </summary>
-        /// <param name="index">The item index.</param>
-        /// <param name="item">The item.</param>
-        /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
-        public bool TryRemoveItemFromOldItems(int index, T item)
-        {
-            var oldIdx = OldItems.LastIndexOf(item);
-            if (oldIdx > -1 && OldItemIndices[oldIdx] == index)
-            {
-                OldItems.RemoveAt(oldIdx);
-                OldItemIndices.RemoveAt(oldIdx);
-
-                for (var i = 0; i < OldItemIndices.Count; i++)
-                {
-                    if (OldItemIndices[i] >= index)
-                    {
-                        OldItemIndices[i]++;
-                    }
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Tries to remove the item from new items
-        /// </summary>
-        /// <param name="index">The item index.</param>
-        /// <param name="item">The item.</param>
-        /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
-        public bool? TryRemoveItemFromNewItems(int index, T item)
-        {
-            var newIdx = NewItems.LastIndexOf(item);
-            if (newIdx > -1 && NewItemIndices[newIdx] == index)
-            {
-                NewItems.RemoveAt(newIdx);
-                NewItemIndices.RemoveAt(newIdx);
-                for (var i = 0; i < NewItemIndices.Count; i++)
-                {
-                    if (NewItemIndices[i] >= index)
-                    {
-                        NewItemIndices[i]--;
-                    }
-                }
-
-                return true;
-            }
-
-            return false;
-        }
     }
 }

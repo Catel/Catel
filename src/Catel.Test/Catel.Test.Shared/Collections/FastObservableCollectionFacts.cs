@@ -14,7 +14,6 @@ namespace Catel.Test.Collections
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Reflection;
-    using System.Text;
 
     using Catel.Collections;
     using Catel.Reflection;
@@ -25,52 +24,48 @@ namespace Catel.Test.Collections
     {
         internal static class FastObservableCollectionFactsHelper
         {
-            public static void Synchronize<T>(IList<T> targetCollection, IList<T> sourceCollection, IEnumerable<NotifyRangedCollectionChangedEventArgs> eventArgs, bool useIndices)
+            public static void Synchronize<T>(IList<T> targetCollection, IList<T> sourceCollection, NotifyRangedCollectionChangedEventArgs eventArg)
             {
-                if (useIndices)
+                if (eventArg.Action == NotifyCollectionChangedAction.Add)
                 {
-                    foreach (var eventArg in eventArgs)
+                    var i = 0;
+                    foreach (var index in eventArg.Indices)
                     {
-                        if (eventArg.Action == NotifyCollectionChangedAction.Add)
+                        var item = (T)eventArg.NewItems[i];
+                        targetCollection.Insert(index, item);
+                        i++;
+                    }
+                }
+                else if (eventArg.Action == NotifyCollectionChangedAction.Remove)
+                {
+                    foreach (var index in eventArg.Indices)
+                    {
+                        targetCollection.RemoveAt(index);
+                    }
+                }
+                else if (eventArg.Action == NotifyCollectionChangedAction.Reset)
+                {
+                    if (eventArg.SuspensionMode == SuspensionMode.None)
+                    {
+                        targetCollection.Clear();
+                        targetCollection.AddRange(sourceCollection);
+                    }
+                    else if (eventArg.SuspensionMode == SuspensionMode.Mixed)
+                    {
+                        var i = 0;
+                        foreach (var index in eventArg.Indices)
                         {
-                            var i = 0;
-                            foreach (var index in eventArg.Indices)
+                            var action = eventArg.MixedActions[i];
+                            if (action == NotifyCollectionChangedAction.Add)
                             {
-                                var item = (T)eventArg.NewItems[i];
+                                var item = (T)eventArg.MixedItems[i];
                                 targetCollection.Insert(index, item);
-                                i++;
                             }
-                        }
-                        else if (eventArg.Action == NotifyCollectionChangedAction.Remove)
-                        {
-                            foreach (var index in eventArg.Indices)
+                            else if (action == NotifyCollectionChangedAction.Remove)
                             {
                                 targetCollection.RemoveAt(index);
                             }
-                        }
-                        else if (eventArg.Action == NotifyCollectionChangedAction.Reset)
-                        {
-                            targetCollection.Clear();
-                            targetCollection.AddRange(sourceCollection);
-                        }
-                    }
-                }
-                else
-                {
-                    foreach (var eventArg in eventArgs)
-                    {
-                        if (eventArg.Action == NotifyCollectionChangedAction.Add)
-                        {
-                            targetCollection.AddRange(eventArg.NewItems.Cast<T>());
-                        }
-                        else if (eventArg.Action == NotifyCollectionChangedAction.Remove)
-                        {
-                            eventArg.OldItems.Cast<T>().ForEach(item => targetCollection.Remove(item));
-                        }
-                        else if (eventArg.Action == NotifyCollectionChangedAction.Reset)
-                        {
-                            targetCollection.Clear();
-                            targetCollection.AddRange(sourceCollection);
+                            i++;
                         }
                     }
                 }
@@ -166,7 +161,7 @@ namespace Catel.Test.Collections
 
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) => counter++;
+                fastCollection.CollectionChanged += (sender, e) => { counter++; };
 
                 fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 });
 
@@ -189,74 +184,64 @@ namespace Catel.Test.Collections
             public void RaisesSingleAddEventWhileAddingRangeInSuspensionModeAdding()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
-
-                int count = 0;
+                var count = 0;
 
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) =>
-                    {
-                        eventArgs = e;
-                        count++;
-                    };
+                fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
                 fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Adding);
 
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
                 Assert.AreEqual(1, count);
+                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
             }
 
             [Test]
             public void RaisesSingleAddEventWhileAddingRangeInSuspensionModeNone()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
-                int count = 0;
+                var count = 0;
 
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) =>
-                    {
-                        eventArgs = e;
-                        count++;
-                    };
+                fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
+
 
                 fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.None);
 
-                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
                 Assert.AreEqual(1, count);
+                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
             }
 
             [Test]
             public void RaisesSingleAddEventWhileAddingRangeInSuspensionModeMixed()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
-                int count = 0;
+                var count = 0;
 
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) =>
-                {
-                    eventArgs = e;
-                    count++;
-                };
+                fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
                 fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Mixed);
 
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
                 Assert.AreEqual(1, count);
+                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
             }
 
             [Test]
             public void RaisesSingleAddEventWhileAddingRangeWithoutSuspensionMode()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
+                var count = 0;
 
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) => eventArgs = e;
+                fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
                 fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 });
 
+                Assert.AreEqual(1, count);
                 Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
             }
         }
@@ -311,33 +296,31 @@ namespace Catel.Test.Collections
             public void RaisesSingleAddEventWhileInsertingRangeInSuspensionModeAdding()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
+                var count = 0;
 
-                int count = 0;
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) =>
-                    {
-                        eventArgs = e;
-                        count++;
-                    };
+                fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
                 fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0, SuspensionMode.Adding);
 
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
                 Assert.AreEqual(1, count);
+                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
             }
 
             [Test]
             public void RaisesSingleAddEventWhileInsertingRangeInSuspensionModeNone()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
+                var count = 0;
 
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) => eventArgs = e;
+                fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
                 fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0, SuspensionMode.None);
 
+                Assert.AreEqual(1, count);
                 Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
             }
 
@@ -345,27 +328,31 @@ namespace Catel.Test.Collections
             public void RaisesSingleAddEventWhileInsertingRangeInSuspensionModeMixed()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
+                var count = 0;
 
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) => eventArgs = e;
+                fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
                 fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0, SuspensionMode.Mixed);
 
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
+                Assert.AreEqual(1, count);
+                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
             }
 
             [Test]
             public void RaisesSingleAddEventWhileInsertingRangeWithoutSuspensionMode()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
+                var count = 0;
 
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) => eventArgs = e;
+                fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
                 fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0);
 
+                Assert.AreEqual(1, count);
                 Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
             }
         }
@@ -420,13 +407,15 @@ namespace Catel.Test.Collections
             public void RaisesSingleRemoveEventWhileRemovingRangeInSuspensionModeRemoving()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
+                var count = 0;
 
                 var fastCollection = new FastObservableCollection<int>(new[] { 1, 2, 3, 4, 5 });
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) => eventArgs = e;
+                fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
                 fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Removing);
 
+                Assert.AreEqual(1, count);
                 Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgs.Action);
             }
 
@@ -434,13 +423,15 @@ namespace Catel.Test.Collections
             public void RaisesSingleRemoveEventWhileRemovingRangeInSuspensionModeNone()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
+                var count = 0;
 
                 var fastCollection = new FastObservableCollection<int>(new[] { 1, 2, 3, 4, 5 });
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) => eventArgs = e;
+                fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
                 fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.None);
 
+                Assert.AreEqual(1, count);
                 Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
             }
 
@@ -448,27 +439,31 @@ namespace Catel.Test.Collections
             public void RaisesSingleRemoveEventWhileRemovingRangeInSuspensionModeMixed()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
+                var count = 0;
 
                 var fastCollection = new FastObservableCollection<int>(new[] { 1, 2, 3, 4, 5 });
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) => eventArgs = e;
+                fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
                 fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Mixed);
 
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgs.Action);
+                Assert.AreEqual(1, count);
+                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
             }
 
             [Test]
             public void RaisesSingleRemoveEventWhileRemovingRangeWithoutSuspensionMode()
             {
                 var eventArgs = default(NotifyCollectionChangedEventArgs);
+                var count = 0;
 
                 var fastCollection = new FastObservableCollection<int>(new[] { 1, 2, 3, 4, 5 });
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) => eventArgs = e;
+                fastCollection.CollectionChanged += (sender, e) => { eventArgs = e; count++; };
 
                 fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 });
 
+                Assert.AreEqual(1, count);
                 Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action);
             }
         }
@@ -476,33 +471,6 @@ namespace Catel.Test.Collections
         [TestFixture]
         public class TheSuspendNotificationsMethod
         {
-            [Test]
-            public void SuspendsValidationWhileAddingAndRemovingItems()
-            {
-                var counter = 0;
-
-                var fastCollection = new FastObservableCollection<int>();
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) => counter++;
-
-                using (fastCollection.SuspendChangeNotifications())
-                {
-                    fastCollection.Add(1);
-                    fastCollection.Add(2);
-                    fastCollection.Add(3);
-                    fastCollection.Add(4);
-                    fastCollection.Add(5);
-
-                    fastCollection.Remove(5);
-                    fastCollection.Remove(4);
-                    fastCollection.Remove(3);
-                    fastCollection.Remove(2);
-                    fastCollection.Remove(1);
-                }
-
-                Assert.AreEqual(1, counter);
-            }
-
             [Test]
             public void SuspendsValidationWhileMovingItems()
             {
@@ -649,11 +617,7 @@ namespace Catel.Test.Collections
 
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) =>
-                    {
-                        counter++;
-                        eventArgs = e;
-                    };
+                fastCollection.CollectionChanged += (sender, e) => { counter++; eventArgs = e; };
 
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
@@ -677,11 +641,7 @@ namespace Catel.Test.Collections
 
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) =>
-                    {
-                        counter++;
-                        eventArgs = e;
-                    };
+                fastCollection.CollectionChanged += (sender, e) => { counter++; eventArgs = e; };
 
                 var firstToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
                 var secondToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
@@ -714,11 +674,7 @@ namespace Catel.Test.Collections
 
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, e) =>
-                    {
-                        counter++;
-                        eventArgs = e;
-                    };
+                fastCollection.CollectionChanged += (sender, e) => { counter++; eventArgs = e; };
 
                 var firstToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
                 var secondToken = fastCollection.SuspendChangeNotifications(SuspensionMode.Adding);
@@ -904,93 +860,42 @@ namespace Catel.Test.Collections
         public class TheMixedMode
         {
             [Test]
-            public void RaisesSingleAddEventIfTheRemovedItemsAreASubSetOfTheAddedItems()
+            public void ModeIsMixed()
             {
-                var count = 0;
-                NotifyCollectionChangedEventArgs eventArgs = null;
-                var fastCollection = new FastObservableCollection<int>();
-
-                fastCollection.CollectionChanged += (sender, args) =>
-                    {
-                        count++;
-                        eventArgs = args;
-                    };
-
-                using (fastCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
-                {
-                    fastCollection.AddItems(new[] { 1, 2, 3, 4 });
-                    fastCollection.RemoveItems(new[] { 2, 3 });
-                }
-
-                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgs.Action);
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(new[] { 1, 4 }, eventArgs.NewItems.OfType<int>().ToArray());
-            }
-
-            [Test]
-            public void RaisesSingleRemoveEventIfTheAddedItemsAreASubSetOfTheRemovedItems()
-            {
-                var count = 0;
-                NotifyCollectionChangedEventArgs eventArgs = null;
-                var fastCollection = new FastObservableCollection<int>();
-                fastCollection.AddItems(new[] { 1, 2, 3, 4 });
-
-                fastCollection.CollectionChanged += (sender, args) =>
-                    {
-                        count++;
-                        eventArgs = args;
-                    };
-
-                using (fastCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
-                {
-                    fastCollection.RemoveItems(new[] { 4, 2, 3 });
-                    fastCollection.AddItems(new[] { 2 });
-                }
-
-                Assert.AreEqual(NotifyCollectionChangedAction.Remove, eventArgs.Action);
-                Assert.AreEqual(1, count);
-                Assert.AreEqual(new[] { 4, 3 }, eventArgs.OldItems.OfType<int>().ToArray());
-            }
-
-            [Test]
-            public void RaisesTwoEvents()
-            {
-                var eventArgsList = new List<NotifyCollectionChangedEventArgs>();
-                var fastCollection = new FastObservableCollection<int>();
-                fastCollection.AddItems(new[] { 1, 2, 3, 4 });
-
-                fastCollection.CollectionChanged += (sender, args) => { eventArgsList.Add(args); };
-
-                using (fastCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
-                {
-                    fastCollection.RemoveItems(new[] { 4 });
-                    fastCollection.AddItems(new[] { 5 });
-                }
-
-                Assert.AreEqual(2, eventArgsList.Count);
-
-                Assert.Contains(5, eventArgsList.First(args => args.Action == NotifyCollectionChangedAction.Add).NewItems);
-                Assert.Contains(4, eventArgsList.First(args => args.Action == NotifyCollectionChangedAction.Remove).OldItems);
-            }
-
-            [Test]
-            public void EventArgsContainOldItemsAfterClearing()
-            {
-                var eventArgsList = new List<NotifyCollectionChangedEventArgs>();
+                var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
                 var fastCollection = new FastObservableCollection<int> { 1, 2, 3 };
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                fastCollection.CollectionChanged += (sender, args) => { eventArgsList.Add(args); };
+                fastCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
+
+                using (fastCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
+                {
+                    fastCollection.Add(4);
+                    fastCollection.Remove(3);
+                }
+
+                Assert.AreEqual(1, eventArgsList.Count);
+                Assert.AreEqual(SuspensionMode.Mixed, eventArgsList[0].SuspensionMode);
+            }
+
+            [Test]
+            public void EventArgsContainMixedItemsAfterClearing()
+            {
+                var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
+                var fastCollection = new FastObservableCollection<int> { 1, 2, 3 };
+                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                fastCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
 
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
                 {
                     fastCollection.Clear();
                 }
 
-                Assert.AreEqual(3, eventArgsList.First(args => args.Action == NotifyCollectionChangedAction.Remove).OldItems.Count);
+                Assert.AreEqual(1, eventArgsList.Count);
+                Assert.AreEqual(3, eventArgsList.First(args => args.SuspensionMode == SuspensionMode.Mixed).MixedItems.Count);
             }
 
             [Test]
-            public void TargetCollectionAimsSourceCollectionChangesUsingItems()
+            public void TargetCollectionAimsSourceCollectionChanges()
             {
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
                 var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
@@ -1007,15 +912,15 @@ namespace Catel.Test.Collections
                     sourceCollection.Add(3);
                 }
 
-                // Test using items
-                var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
-                FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList, false);
+                Assert.AreEqual(1, eventArgsList.Count);
 
+                var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
+                FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList[0]);
                 CollectionAssert.AreEqual(sourceCollection, targetCollection);
             }
 
             [Test]
-            public void TargetCollectionAimsSourceCollectionChangesUsingIndices()
+            public void TargetCollectionAimsSourceCollectionChangesWithMovingItems()
             {
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
                 var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
@@ -1024,44 +929,18 @@ namespace Catel.Test.Collections
 
                 using (sourceCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
                 {
-                    sourceCollection.Add(6);
-                    sourceCollection.Remove(3);
-                    sourceCollection.Add(7);
-                    sourceCollection.Remove(4);
-                    sourceCollection.Remove(5);
-                    sourceCollection.Add(3);
-                }
-
-                // Test using indices
-                var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
-                FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList, true);
-
-                CollectionAssert.AreEqual(sourceCollection, targetCollection);
-            }
-
-            [Test]
-            public void TargetCollectionAimsSourceCollectionChangesWithMovingItemsUsingIndices()
-            {
-                var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
-                sourceCollection.AutomaticallyDispatchChangeNotifications = false;
-                sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
-
-                using (sourceCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
-                {
-                    // Move 1 forward
                     sourceCollection.Move(0, 3);
                 }
 
-                // Test using indices
-                var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
-                FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList, true);
+                Assert.AreEqual(1, eventArgsList.Count);
 
+                var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
+                FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList[0]);
                 CollectionAssert.AreEqual(sourceCollection, targetCollection);
             }
 
             [Test]
-            public void TargetCollectionAimsSourceCollectionChangesWithSimulatedMovingItemsUsingIndices()
+            public void TargetCollectionAimsSourceCollectionChangesWithSimulatedMovingItems()
             {
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
                 var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
@@ -1070,15 +949,14 @@ namespace Catel.Test.Collections
 
                 using (sourceCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
                 {
-                    // Move 1 forward
                     sourceCollection.Remove(1);
                     sourceCollection.Insert(3, 1);
                 }
 
-                // Test using indices
-                var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
-                FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList, true);
+                Assert.AreEqual(1, eventArgsList.Count);
 
+                var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
+                FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList[0]);
                 CollectionAssert.AreEqual(sourceCollection, targetCollection);
             }
 
@@ -1092,7 +970,6 @@ namespace Catel.Test.Collections
 
                 using (sourceCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
                 {
-                    // Move 1 forward
                     sourceCollection.Move(0, 3);
                 }
 
@@ -1110,9 +987,63 @@ namespace Catel.Test.Collections
 
                 using (sourceCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
                 {
-                    // Move 1 forward
                     sourceCollection.Remove(1);
                     sourceCollection.Insert(3, 1);
+                }
+
+                Assert.AreEqual(1, eventArgsList.Count);
+                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgsList[0].Action);
+            }
+
+            [Test]
+            public void RaisesSingleEventForAddingItems()
+            {
+                var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
+                var sourceCollection = new FastObservableCollection<int> { };
+                sourceCollection.AutomaticallyDispatchChangeNotifications = false;
+                sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
+
+                using (sourceCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
+                {
+                    sourceCollection.Add(1);
+                    sourceCollection.Add(2);
+                }
+
+                Assert.AreEqual(1, eventArgsList.Count);
+                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgsList[0].Action);
+            }
+
+            [Test]
+            public void RaisesSingleEventForInsertingItems()
+            {
+                var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
+                var sourceCollection = new FastObservableCollection<int> { };
+                sourceCollection.AutomaticallyDispatchChangeNotifications = false;
+                sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
+
+                using (sourceCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
+                {
+                    sourceCollection.Insert(0, 1);
+                    sourceCollection.Insert(1, 2);
+                }
+
+                Assert.AreEqual(1, eventArgsList.Count);
+                Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgsList[0].Action);
+            }
+
+            [Test]
+            public void RaisesSingleEventForAddingAndMovingItems()
+            {
+                var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
+                var sourceCollection = new FastObservableCollection<int> { };
+                sourceCollection.AutomaticallyDispatchChangeNotifications = false;
+                sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
+
+                using (sourceCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
+                {
+                    sourceCollection.Add(2);
+                    sourceCollection.Add(1);
+                    sourceCollection.Move(1, 0);
                 }
 
                 Assert.AreEqual(1, eventArgsList.Count);

@@ -12,9 +12,11 @@ namespace Catel.Collections
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
-    using Catel.Logging;
+
+    using Catel.Data;
 
     using IoC;
+    using Logging;
     using Services;
 
     /// <summary>
@@ -394,7 +396,7 @@ namespace Catel.Collections
                 // Create new context
                 _suspensionContext = new SuspensionContext<T>(mode);
             }
-            else if (_suspensionContext != null && (_suspensionContext.Mode != mode && _suspensionContext.Mode != SuspensionMode.Mixed))
+            else if (_suspensionContext != null && _suspensionContext.Mode != mode)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot change mode during another active suspension.");
             }
@@ -428,30 +430,39 @@ namespace Catel.Collections
         {
             Action action = () =>
             {
-                var eventArgsList = new List<NotifyCollectionChangedEventArgs>();
-
-                if (_suspensionContext != null)
+                // Create event args
+                NotifyCollectionChangedEventArgs eventArgs = null;
+                if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Adding)
                 {
                     if (_suspensionContext.NewItems.Count != 0)
                     {
-                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Add, _suspensionContext.NewItems, _suspensionContext.NewItemIndices));
+                        eventArgs = new NotifyRangedCollectionChangedEventArgs(SuspensionMode.Adding, _suspensionContext.NewItems, _suspensionContext.NewItemIndices);
                     }
-
+                }
+                else if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
+                {
                     if (_suspensionContext.OldItems.Count != 0)
                     {
-                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Remove, _suspensionContext.OldItems, _suspensionContext.OldItemIndices));
+                        eventArgs = new NotifyRangedCollectionChangedEventArgs(SuspensionMode.Removing, _suspensionContext.OldItems, _suspensionContext.OldItemIndices);
                     }
                 }
-
-                if (eventArgsList.Count == 0)
+                else if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Mixed)
                 {
-                    eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset));
+                    if (_suspensionContext.MixedItems.Count != 0)
+                    {
+                        eventArgs = new NotifyRangedCollectionChangedEventArgs(SuspensionMode.Mixed, _suspensionContext.MixedItems, _suspensionContext.MixedItemIndices, _suspensionContext.MixedActions);
+                    }
+                }
+                else
+                {
+                    eventArgs = new NotifyRangedCollectionChangedEventArgs(SuspensionMode.None);
                 }
 
-                OnPropertyChanged(new PropertyChangedEventArgs("Count"));
-                OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-                foreach (var eventArgs in eventArgsList)
+                // Fire events
+                if (eventArgs != null)
                 {
+                    OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+                    OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
                     OnCollectionChanged(eventArgs);
                 }
             };
@@ -549,27 +560,22 @@ namespace Catel.Collections
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
             }
 
-            var rememberItem = false;
-            if (this._suspensionContext != null)
-            {
-                if (this._suspensionContext.Mode == SuspensionMode.Adding)
-                {
-                    rememberItem = true;
-                }
-                else if (this._suspensionContext.Mode == SuspensionMode.Mixed)
-                {
-                    // Do not remember item if it could be removed
-                    rememberItem = this._suspensionContext.TryRemoveItemFromOldItems(index, item) == false;
-                }
-            }
-
             // Call base
             base.InsertItem(index, item);
 
-            if (rememberItem)
+            if (_suspensionContext != null)
             {
-                _suspensionContext.NewItems.Add(item);
-                _suspensionContext.NewItemIndices.Add(index);
+                if (_suspensionContext.Mode == SuspensionMode.Adding)
+                {
+                    _suspensionContext.NewItems.Add(item);
+                    _suspensionContext.NewItemIndices.Add(index);
+                }
+                else if (_suspensionContext.Mode == SuspensionMode.Mixed)
+                {
+                    _suspensionContext.MixedItems.Add(item);
+                    _suspensionContext.MixedItemIndices.Add(index);
+                    _suspensionContext.MixedActions.Add(NotifyCollectionChangedAction.Add);
+                }
             }
         }
 
@@ -585,8 +591,18 @@ namespace Catel.Collections
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None or SuspensionMode.Mixed, current mode is '{_suspensionContext.Mode}'");
             }
 
-            // Call base
-            base.MoveItem(oldIndex, newIndex);
+            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Mixed)
+            {
+                // Split up
+                var item = this[oldIndex];
+                RemoveItem(oldIndex);
+                InsertItem(newIndex, item);
+            }
+            else
+            {
+                // Call base
+                base.MoveItem(oldIndex, newIndex);
+            }
         }
 
         /// <summary>
@@ -604,27 +620,22 @@ namespace Catel.Collections
             // Get item
             var item = this[index];
 
-            var rememberItem = false;
-            if (this._suspensionContext != null)
-            {
-                if (this._suspensionContext.Mode == SuspensionMode.Removing)
-                {
-                    rememberItem = true;
-                }
-                else if (this._suspensionContext.Mode == SuspensionMode.Mixed)
-                {
-                    // Do not remember item if it could be removed
-                    rememberItem = this._suspensionContext.TryRemoveItemFromNewItems(index, item) == false;
-                }
-            }
-
             // Call base
             base.RemoveItem(index);
 
-            if (rememberItem)
+            if (_suspensionContext != null)
             {
-                _suspensionContext.OldItems.Add(item);
-                _suspensionContext.OldItemIndices.Add(index);
+                if (_suspensionContext.Mode == SuspensionMode.Removing)
+                {
+                    _suspensionContext.OldItems.Add(item);
+                    _suspensionContext.OldItemIndices.Add(index);
+                }
+                else if (_suspensionContext.Mode == SuspensionMode.Mixed)
+                {
+                    _suspensionContext.MixedItems.Add(item);
+                    _suspensionContext.MixedItemIndices.Add(index);
+                    _suspensionContext.MixedActions.Add(NotifyCollectionChangedAction.Remove);
+                }
             }
         }
 
@@ -644,22 +655,6 @@ namespace Catel.Collections
             base.SetItem(index, item);
         }
         #endregion Overrides of ObservableCollection
-
-        private NotifyRangedCollectionChangedEventArgs CreateEventArgs(NotifyCollectionChangedAction action, IList changedItems = null, IList<int> changedIndices = null)
-        {
-            NotifyRangedCollectionChangedEventArgs eventArgs;
-
-            if (changedItems == null && changedIndices == null)
-            {
-                eventArgs = new NotifyRangedCollectionChangedEventArgs(action);
-            }
-            else
-            {
-                eventArgs = new NotifyRangedCollectionChangedEventArgs(action, changedItems, changedIndices);
-            }
-
-            return eventArgs;
-        }
         #endregion
     }
 }
