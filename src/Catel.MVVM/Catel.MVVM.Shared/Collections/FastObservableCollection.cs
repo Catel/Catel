@@ -436,26 +436,26 @@ namespace Catel.Collections
                 {
                     if (_suspensionContext.NewItems.Count != 0)
                     {
-                        eventArgs = new NotifyRangedCollectionChangedEventArgs(SuspensionMode.Adding, _suspensionContext.NewItems, _suspensionContext.NewItemIndices);
+                        eventArgs = new NotifyRangedCollectionChangedEventArgs(_suspensionContext.NewItems, _suspensionContext.NewItemIndices, SuspensionMode.Adding);
                     }
                 }
                 else if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
                 {
                     if (_suspensionContext.OldItems.Count != 0)
                     {
-                        eventArgs = new NotifyRangedCollectionChangedEventArgs(SuspensionMode.Removing, _suspensionContext.OldItems, _suspensionContext.OldItemIndices);
+                        eventArgs = new NotifyRangedCollectionChangedEventArgs(_suspensionContext.OldItems, _suspensionContext.OldItemIndices, SuspensionMode.Removing);
                     }
                 }
                 else if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Mixed)
                 {
                     if (_suspensionContext.MixedItems.Count != 0)
                     {
-                        eventArgs = new NotifyRangedCollectionChangedEventArgs(SuspensionMode.Mixed, _suspensionContext.MixedItems, _suspensionContext.MixedItemIndices, _suspensionContext.MixedActions);
+                        eventArgs = new NotifyRangedCollectionChangedEventArgs(_suspensionContext.MixedItems, _suspensionContext.MixedItemIndices, _suspensionContext.MixedActions);
                     }
                 }
                 else
                 {
-                    eventArgs = new NotifyRangedCollectionChangedEventArgs(SuspensionMode.None);
+                    eventArgs = new NotifyRangedCollectionChangedEventArgs();
                 }
 
                 // Fire events
@@ -651,8 +651,17 @@ namespace Catel.Collections
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None or SuspensionMode.Mixed, current mode is '{_suspensionContext.Mode}'");
             }
 
-            // Call base
-            base.SetItem(index, item);
+            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Mixed)
+            {
+                // Split up
+                RemoveItem(index);
+                InsertItem(index, item);
+            }
+            else
+            {
+                // Call base
+                base.SetItem(index, item);
+            }
         }
         #endregion Overrides of ObservableCollection
         #endregion

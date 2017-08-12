@@ -961,6 +961,26 @@ namespace Catel.Test.Collections
             }
 
             [Test]
+            public void TargetCollectionAimsSourceCollectionChangesWithReplacingItem()
+            {
+                var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
+                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                sourceCollection.AutomaticallyDispatchChangeNotifications = false;
+                sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
+
+                using (sourceCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
+                {
+                    sourceCollection[0] = 6;
+                }
+
+                Assert.AreEqual(1, eventArgsList.Count);
+
+                var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
+                FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList[0]);
+                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+            }
+
+            [Test]
             public void RaisesSingleEventForMovingItems()
             {
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
