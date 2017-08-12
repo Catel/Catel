@@ -32,6 +32,7 @@ Added/fixed:
 (*) #1083 Derived ChildAwareModelBase from ValidatableModelBase instead of ModelBase
 (*) #1084 Add virtual validation methods to ValidatableModelBase
 (*) #1085 Changed ValidatableModelBase.IsValidationSuspended to be virtual
+(x) #1088 Fixed issues with FastObservableCollection especially with SuspensionMode.Mixed
 
 Roadmap:
 ========
