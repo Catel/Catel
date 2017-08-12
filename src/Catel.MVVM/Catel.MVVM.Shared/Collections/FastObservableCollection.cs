@@ -94,16 +94,8 @@ namespace Catel.Collections
         /// <summary>
         /// Gets a value indicating whether change notifications are suspended.
         /// </summary>
-        /// <value>
-        /// <c>True</c> if notifications are suspended, otherwise, <c>false</c>.
-        /// </value>
-        public bool NotificationsSuspended
-        {
-            get
-            {
-                return _suspensionContext != null;
-            }
-        }
+        /// <value><c>True</c> if notifications are suspended, otherwise, <c>false</c>.</value>
+        public bool NotificationsSuspended => _suspensionContext != null;
 
         /// <summary>
         /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
@@ -186,8 +178,8 @@ namespace Catel.Collections
         }
 
         /// <summary>
-        /// Raises <see cref="E:System.Collections.Specialized.INotifyCollectionChanged.CollectionChanged" /> with 
-        /// <see cref="F:System.Collections.Specialized.NotifyCollectionChangedAction.Reset" /> changed action.
+        /// Raises <see cref="INotifyCollectionChanged.CollectionChanged"/> with
+        /// <see cref="NotifyCollectionChangedAction.Reset"/> changed action.
         /// </summary>
         public void Reset()
         {
@@ -434,23 +426,23 @@ namespace Catel.Collections
                 NotifyCollectionChangedEventArgs eventArgs = null;
                 if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Adding)
                 {
-                    if (_suspensionContext.NewItems.Count != 0)
+                    if (_suspensionContext.ChangedItems.Count != 0)
                     {
-                        eventArgs = new NotifyRangedCollectionChangedEventArgs(_suspensionContext.NewItems, _suspensionContext.NewItemIndices, SuspensionMode.Adding);
+                        eventArgs = new NotifyRangedCollectionChangedEventArgs(_suspensionContext.ChangedItems, _suspensionContext.ChangedItemIndices, SuspensionMode.Adding);
                     }
                 }
                 else if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
                 {
-                    if (_suspensionContext.OldItems.Count != 0)
+                    if (_suspensionContext.ChangedItems.Count != 0)
                     {
-                        eventArgs = new NotifyRangedCollectionChangedEventArgs(_suspensionContext.OldItems, _suspensionContext.OldItemIndices, SuspensionMode.Removing);
+                        eventArgs = new NotifyRangedCollectionChangedEventArgs(_suspensionContext.ChangedItems, _suspensionContext.ChangedItemIndices, SuspensionMode.Removing);
                     }
                 }
                 else if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Mixed)
                 {
-                    if (_suspensionContext.MixedItems.Count != 0)
+                    if (_suspensionContext.ChangedItems.Count != 0)
                     {
-                        eventArgs = new NotifyRangedCollectionChangedEventArgs(_suspensionContext.MixedItems, _suspensionContext.MixedItemIndices, _suspensionContext.MixedActions);
+                        eventArgs = new NotifyRangedCollectionChangedEventArgs(_suspensionContext.ChangedItems, _suspensionContext.ChangedItemIndices, _suspensionContext.MixedActions);
                     }
                 }
                 else
@@ -565,15 +557,14 @@ namespace Catel.Collections
 
             if (_suspensionContext != null)
             {
-                if (_suspensionContext.Mode == SuspensionMode.Adding)
+                if (_suspensionContext.Mode == SuspensionMode.Adding || _suspensionContext.Mode == SuspensionMode.Mixed)
                 {
-                    _suspensionContext.NewItems.Add(item);
-                    _suspensionContext.NewItemIndices.Add(index);
+                    _suspensionContext.ChangedItems.Add(item);
+                    _suspensionContext.ChangedItemIndices.Add(index);
                 }
-                else if (_suspensionContext.Mode == SuspensionMode.Mixed)
+
+                if (_suspensionContext.Mode == SuspensionMode.Mixed)
                 {
-                    _suspensionContext.MixedItems.Add(item);
-                    _suspensionContext.MixedItemIndices.Add(index);
                     _suspensionContext.MixedActions.Add(NotifyCollectionChangedAction.Add);
                 }
             }
@@ -625,15 +616,14 @@ namespace Catel.Collections
 
             if (_suspensionContext != null)
             {
-                if (_suspensionContext.Mode == SuspensionMode.Removing)
+                if (_suspensionContext.Mode == SuspensionMode.Removing || _suspensionContext.Mode == SuspensionMode.Mixed)
                 {
-                    _suspensionContext.OldItems.Add(item);
-                    _suspensionContext.OldItemIndices.Add(index);
+                    _suspensionContext.ChangedItems.Add(item);
+                    _suspensionContext.ChangedItemIndices.Add(index);
                 }
-                else if (_suspensionContext.Mode == SuspensionMode.Mixed)
+
+                if (_suspensionContext.Mode == SuspensionMode.Mixed)
                 {
-                    _suspensionContext.MixedItems.Add(item);
-                    _suspensionContext.MixedItemIndices.Add(index);
                     _suspensionContext.MixedActions.Add(NotifyCollectionChangedAction.Remove);
                 }
             }

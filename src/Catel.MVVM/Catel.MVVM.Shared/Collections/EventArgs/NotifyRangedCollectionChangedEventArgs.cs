@@ -35,10 +35,12 @@ namespace Catel.Collections
         public NotifyRangedCollectionChangedEventArgs(IList changedItems, IList<int> indices, SuspensionMode mode)
             : base(ModeToAction(mode), changedItems, (indices != null && indices.Count != 0) ? indices[0] : -1)
         {
+            Argument.IsNotNull(nameof(changedItems), changedItems);
             Argument.IsNotNull(nameof(indices), indices);
             // ReSharper disable once PossibleNullReferenceException
             Argument.IsNotOutOfRange(nameof(indices), indices.Count, changedItems.Count, changedItems.Count);
 
+            ChangedItems = changedItems;
             Indices = indices;
             SuspensionMode = mode;
         }
@@ -46,18 +48,18 @@ namespace Catel.Collections
         /// <summary>
         /// Initializes a new instance of the <see cref="NotifyRangedCollectionChangedEventArgs"/> class.
         /// </summary>
-        /// <param name="mixedChangedItems">The mixed changed items.</param>
+        /// <param name="changedItems">The changed items.</param>
         /// <param name="indices">The indices.</param>
         /// <param name="mixedActions">The mixed actions.</param>
-        public NotifyRangedCollectionChangedEventArgs(IList mixedChangedItems, IList<int> indices, IList<NotifyCollectionChangedAction> mixedActions)
+        public NotifyRangedCollectionChangedEventArgs(IList changedItems, IList<int> indices, IList<NotifyCollectionChangedAction> mixedActions)
             : base(NotifyCollectionChangedAction.Reset)
         {
-            Argument.IsNotNull(nameof(mixedChangedItems), mixedChangedItems);
+            Argument.IsNotNull(nameof(changedItems), changedItems);
             Argument.IsNotNull(nameof(indices), indices);
             Argument.IsNotNull(nameof(mixedActions), mixedActions);
 
             SuspensionMode = SuspensionMode.Mixed;
-            MixedItems = mixedChangedItems;
+            ChangedItems = changedItems;
             Indices = indices;
             MixedActions = mixedActions;
         }
@@ -70,9 +72,9 @@ namespace Catel.Collections
         public IList<int> Indices { get; }
 
         /// <summary>
-        /// Gets the mixed items.
+        /// Gets the changed items.
         /// </summary>
-        public IList MixedItems { get; }
+        public IList ChangedItems { get; }
 
         /// <summary>
         /// Gets the mixed actions.

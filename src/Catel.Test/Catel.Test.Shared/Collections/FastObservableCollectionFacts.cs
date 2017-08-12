@@ -58,7 +58,7 @@ namespace Catel.Test.Collections
                             var action = eventArg.MixedActions[i];
                             if (action == NotifyCollectionChangedAction.Add)
                             {
-                                var item = (T)eventArg.MixedItems[i];
+                                var item = (T)eventArg.ChangedItems[i];
                                 targetCollection.Insert(index, item);
                             }
                             else if (action == NotifyCollectionChangedAction.Remove)
@@ -891,7 +891,7 @@ namespace Catel.Test.Collections
                 }
 
                 Assert.AreEqual(1, eventArgsList.Count);
-                Assert.AreEqual(3, eventArgsList.First(args => args.SuspensionMode == SuspensionMode.Mixed).MixedItems.Count);
+                Assert.AreEqual(3, eventArgsList.First(args => args.SuspensionMode == SuspensionMode.Mixed).ChangedItems.Count);
             }
 
             [Test]

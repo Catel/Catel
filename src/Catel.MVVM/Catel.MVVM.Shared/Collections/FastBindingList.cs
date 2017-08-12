@@ -39,7 +39,7 @@ namespace Catel.Collections
         /// The current suspension context.
         /// </summary>
         [field: NonSerialized]
-        private SuspensionContext<T> _suspensionContext;
+        private ExtendedSuspensionContext<T> _suspensionContext;
         #endregion
 
         #region Constructors
@@ -366,7 +366,7 @@ namespace Catel.Collections
             if (_suspensionContext == null)
             {
                 // Create new context
-                _suspensionContext = new SuspensionContext<T>(mode);
+                _suspensionContext = new ExtendedSuspensionContext<T>(mode);
             }
             else if (_suspensionContext != null && _suspensionContext.Mode != mode)
             {
