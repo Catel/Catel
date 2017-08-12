@@ -12,9 +12,9 @@ namespace Catel.Collections
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using Catel.Logging;
 
     using IoC;
+    using Logging;
     using Services;
 
     /// <summary>
