@@ -93,11 +93,11 @@ namespace Catel
                     {
                         result = (TResult)_action.DynamicInvoke(Target);
                     }
-                    catch (TargetInvocationException e)
+                    catch (TargetInvocationException ex)
                     {
-                        if (e.InnerException != null)
+                        if (ex.InnerException != null)
                         {
-                            throw e.InnerException;
+                            throw ex.InnerException;
                         }
                     }
 
@@ -192,11 +192,11 @@ namespace Catel
                     {
                         result = (TResult)_action.DynamicInvoke(Target, parameter);
                     }
-                    catch (TargetInvocationException e)
+                    catch (TargetInvocationException ex)
                     {
-                        if (e.InnerException != null)
+                        if (ex.InnerException != null)
                         {
-                            throw e.InnerException;
+                            throw ex.InnerException;
                         }
                     }
 
