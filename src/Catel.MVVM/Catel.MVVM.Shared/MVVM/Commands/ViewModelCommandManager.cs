@@ -190,7 +190,7 @@ namespace Catel.MVVM
                                 var commandAsICatelCommand = command as ICatelCommand;
                                 if (commandAsICatelCommand != null)
                                 {
-                                    commandAsICatelCommand.ExecutedAsync += OnViewModelCommandExecutedAsync;
+                                    commandAsICatelCommand.Executed += OnViewModelCommandExecuted;
                                 }
 
                                 _commands.Add(command, propertyInfo.Name);
@@ -258,7 +258,7 @@ namespace Catel.MVVM
                     var commandAsICatelCommand = command as ICatelCommand;
                     if (commandAsICatelCommand != null)
                     {
-                        commandAsICatelCommand.ExecutedAsync -= OnViewModelCommandExecutedAsync;
+                        commandAsICatelCommand.Executed -= OnViewModelCommandExecuted;
                     }
                 }
 
@@ -268,7 +268,9 @@ namespace Catel.MVVM
             Log.Debug("Unregistered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, _viewModel.UniqueIdentifier);
         }
 
-        private async Task OnViewModelCommandExecutedAsync(object sender, CommandExecutedEventArgs e)
+#pragma warning disable AvoidAsyncVoid // Avoid async void
+        private async void OnViewModelCommandExecuted(object sender, CommandExecutedEventArgs e)
+#pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             CommandHandler[] syncHandlers;
             AsyncCommandHandler[] asyncHandlers;

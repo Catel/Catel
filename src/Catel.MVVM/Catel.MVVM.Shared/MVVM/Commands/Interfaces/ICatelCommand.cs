@@ -31,6 +31,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Occurs when the command has just been executed successfully.
         /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = "No replacement", TreatAsErrorFromVersion = "5.1", RemoveInVersion = "6.0")]
         event AsyncEventHandler<CommandExecutedEventArgs> ExecutedAsync;
 
         /// <summary>

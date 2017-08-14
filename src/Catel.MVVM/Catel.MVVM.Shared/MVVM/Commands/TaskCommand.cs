@@ -142,26 +142,7 @@ namespace Catel.MVVM
         }
         #endregion
 
-        #region Events
-
-        /// <summary>
-        /// Occurs when the command is about to execute.
-        /// </summary>
-        public event EventHandler<CommandCanceledEventArgs> Executing;
-
-        /// <summary>
-        /// Occurs when the command is canceled.
-        /// </summary>
-        public event EventHandler<CommandEventArgs> Canceled;
-
-        /// <summary>
-        /// Raised for each reported progress value.
-        /// </summary>
-        public event EventHandler<CommandProgressChangedEventArgs<TProgress>> ProgressChanged;
-        #endregion
-
         #region Properties
-
         /// <summary>
         /// Gets or sets a value indicating whether to swallow exceptions that happen in the task command. This property can be used
         /// to use the behavior of Catel 4.x to swallow exceptions.
@@ -209,6 +190,23 @@ namespace Catel.MVVM
         }
         #endregion
 
+        #region Events
+        /// <summary>
+        /// Occurs when the command is about to execute.
+        /// </summary>
+        public event EventHandler<CommandCanceledEventArgs> Executing;
+
+        /// <summary>
+        /// Occurs when the command is canceled.
+        /// </summary>
+        public event EventHandler<CommandEventArgs> Canceled;
+
+        /// <summary>
+        /// Raised for each reported progress value.
+        /// </summary>
+        public event EventHandler<CommandProgressChangedEventArgs<TProgress>> ProgressChanged;
+        #endregion
+
         #region Methods
         /// <summary>
         /// Determines whether this instance can execute the specified parameter.
@@ -227,7 +225,9 @@ namespace Catel.MVVM
         /// be set to null.</param>
         /// <param name="ignoreCanExecuteCheck">if set to <c>true</c>, the check on <see cref="Command{TExecuteParameter, TCanExecuteParameter}.CanExecute()" /> will be used before
         /// actually executing the action.</param>
-        protected override async Task ExecuteAsync(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
+#pragma warning disable AvoidAsyncVoid
+        protected override async void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
+#pragma warning restore AvoidAsyncVoid
         {
             var executeAsync = _executeAsync;
 
@@ -296,7 +296,7 @@ namespace Catel.MVVM
             }
             else
             {
-                await RaiseExecutedAsync(parameter);
+                RaiseExecuted(parameter);
             }
 
             RaiseCanExecuteChanged();
