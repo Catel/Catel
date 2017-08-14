@@ -9,7 +9,7 @@ NuGet stable version|![Version](https://img.shields.io/nuget/v/catel.core.svg)
 NuGet unstable version|![Pre-release version](https://img.shields.io/nuget/vpre/catel.core.svg)
 MyGet unstable version|![Pre-release version](https://img.shields.io/myget/catel/vpre/catel.core.svg)
 
-Catel is an application development platform with the focus on MVVM (WPF, Universal Windows Platform, Xamarin.Android, Xamarin.iOS and Xamarin.Forms) and MVC (ASP.NET MVC). 
+Catel is an application development platform with the focus on MVVM (WPF, Universal Windows Platform, Xamarin.Android, Xamarin.iOS and Xamarin.Forms). 
 The goal of Catel is to provide a complete set of modular functionality for Line of Business applications written in any .NET 
 technology, from client to server.
 

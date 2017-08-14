@@ -307,9 +307,13 @@ namespace Catel.MVVM
         /// </summary>
         public void Cancel()
         {
-            if (CancelCommand.CanExecute())
+            var cancelCommand = CancelCommand;
+            if (cancelCommand != null)
             {
-                CancelCommand.Execute();
+                if (cancelCommand.CanExecute())
+                {
+                    cancelCommand.Execute();
+                }
             }
         }
 
