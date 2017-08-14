@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Collections\EventArgs\NotifyRangedListChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\FastBindingList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\FastObservableCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\ExtendedSuspensionContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\SuspensionContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\DispatcherObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Designer\Attributes\DesignTimeCodeAttribute.cs" />
