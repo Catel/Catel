@@ -6,7 +6,9 @@
 
 namespace Catel.Collections
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Context class the hold all relevant data while notifications are suspended.
@@ -123,58 +125,123 @@ namespace Catel.Collections
         #endregion
 
         #region Methods
+
         #endregion
 
         /// <summary>
         /// Tries to remove the item from old items
         /// </summary>
-        /// <param name="item">
-        /// The item.
-        /// </param>
-        /// <returns>
-        /// <c>true</c> if removed, otherwise <c>false</c>.
-        /// </returns>
-        public bool TryRemoveItemFromOldItems(T item)
+        /// <param name="item">The item.</param>
+        /// <param name="index"></param>
+        /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
+        public bool TryRemoveItemFromOldItems(T item, int index = -1)
         {
-            if (Mode == SuspensionMode.None || Mode == SuspensionMode.Mixed)
-            {
-                var oldIdx = OldItems.LastIndexOf(item);
-                if (oldIdx > -1)
-                {
-                    OldItems.RemoveAt(oldIdx);
-                    OldItemIndices.RemoveAt(oldIdx);
+            return TryRemoveItems(item, index, _oldItems, _oldItemIndices);
+        }
 
-                    return true;
+        /// <summary>
+        /// Tries to remove the item from new items
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <param name="index">The item index</param>
+        /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
+        public bool TryRemoveItemFromNewItems(T item, int index = -1)
+        {
+            return TryRemoveItems(item, index, _newItems, _newItemIndices);
+        }
+
+        /// <summary>
+        /// Synchronize
+        /// </summary>
+        /// <param name="insertSyncAction">The insert synchronization action</param>
+        /// <param name="removeSyncAction">The remove synchronization action</param>
+        public void Synchronize(Action<int, T> insertSyncAction, Action<int> removeSyncAction)
+        {
+            SynchronizeInserts(insertSyncAction);
+            SynchronizeRemoves(removeSyncAction);
+        }
+
+        /// <summary>
+        /// Tries to remove the item from the given <paramref name="items"/>
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <param name="index">The index</param>
+        /// <param name="items">The items</param>
+        /// <param name="itemIndexes">The item indexes</param>
+        /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
+        private static bool TryRemoveItems(T item, int index, List<T> items, List<int> itemIndexes)
+        {
+            if (itemIndexes.Count == 0)
+            {
+                return false;
+            }
+
+            if (index != -1)
+            {
+                // TODO: Improve the performace of this operations.
+
+                var itemIdx = itemIndexes.LastIndexOf(index);
+                if (itemIdx == -1 || !Equals(item, items[itemIdx]))
+                {
+                    return false;
                 }
+
+                items.RemoveAt(itemIdx);
+                itemIndexes.RemoveAt(itemIdx);
+
+                return true;
+            }
+
+            var newIdx = items.LastIndexOf(item);
+            if (newIdx > -1)
+            {
+                items.RemoveAt(newIdx);
+                itemIndexes.RemoveAt(newIdx);
+
+                return true;
             }
 
             return false;
         }
 
         /// <summary>
-        /// Tries to remove the item from new items
+        /// Synchronize from old items
         /// </summary>
-        /// <param name="item">
-        /// The item.
-        /// </param>
-        /// <returns>
-        /// <c>true</c> if removed, otherwise <c>false</c>.
-        /// </returns>
-        public bool? TryRemoveItemFromNewItems(T item)
+        /// <param name="insertSyncAction">The remove sync action</param>
+        private void SynchronizeInserts(Action<int, T> insertSyncAction)
         {
-            if (Mode == SuspensionMode.None || Mode == SuspensionMode.Mixed)
+            if (insertSyncAction != null && NewItems.Count > 0)
             {
-                var newIdx = NewItems.LastIndexOf(item);
-                if (newIdx > -1)
+                for (int i = 0; i < NewItems.Count; i++)
                 {
-                    NewItems.RemoveAt(newIdx);
-                    NewItemIndices.RemoveAt(newIdx);
-                    
-                    return true;
+                    insertSyncAction(NewItemIndices[i], NewItems[i]);
                 }
             }
+        }
 
-            return false;
+        /// <summary>
+        /// Synchronize from old items
+        /// </summary>
+        /// <param name="removeSyncAction">The remove sync action</param>
+        private void SynchronizeRemoves(Action<int> removeSyncAction)
+        {
+            if (removeSyncAction != null && OldItems.Count > 0)
+            {
+                SortedDictionary<int, T> sortedDictionary = new SortedDictionary<int, T>(Comparer<int>.Create((x, y) => y.CompareTo(x)));
+                for (int i = 0; i < OldItems.Count; i++)
+                {
+                    sortedDictionary.Add(OldItemIndices[i], OldItems[i]);
+                }
+
+                int idx = 0;
+                foreach (KeyValuePair<int, T> pair in sortedDictionary)
+                {
+                    OldItemIndices[idx] = pair.Key;
+                    OldItems[idx++] = pair.Value;
+
+                    removeSyncAction(pair.Key);
+                }
+            }
         }
     }
 }

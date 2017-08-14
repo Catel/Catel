@@ -668,7 +668,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(1, counter);
                 Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
                 Assert.AreEqual(NotifyRangedListChangedAction.Remove, eventArgs.Action);
-                CollectionAssert.AreEqual(eventArgs.OldItems, new[] { 1, 2, 3, 4, 5 });
+                CollectionAssert.AreEqual(eventArgs.OldItems, new[] { 5, 4, 3, 2, 1 });
             }
 
             private SuspensionContext<T> GetSuspensionContext<T>(FastBindingList<T> collection)

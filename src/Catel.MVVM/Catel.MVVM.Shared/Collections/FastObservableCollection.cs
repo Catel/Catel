@@ -12,6 +12,7 @@ namespace Catel.Collections
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
+    using System.Linq;
     using Catel.Logging;
 
     using IoC;
@@ -139,12 +140,16 @@ namespace Catel.Collections
 
             using (SuspendChangeNotifications(mode))
             {
-                foreach (var item in collection)
+                foreach (var item in collection.Reverse())
                 {
-                    Insert(index++, item);
+                    if (IsInsertRequired(item))
+                    {
+                        Insert(index, item);
+                    }
                 }
             }
         }
+
 
         /// <summary>
         /// Inserts the elements of the specified collection at the specified index.
@@ -176,9 +181,12 @@ namespace Catel.Collections
 
             using (SuspendChangeNotifications(mode))
             {
-                foreach (var item in collection)
+                foreach (var item in collection.OfType<T>().Reverse())
                 {
-                    list.Insert(index++, item);
+                    if (IsInsertRequired(item))
+                    {
+                        list.Insert(index, item);
+                    }
                 }
             }
         }
@@ -224,12 +232,12 @@ namespace Catel.Collections
 
             using (SuspendChangeNotifications(mode))
             {
-                foreach (var item in collection)
+                var lastIdx = Math.Max(0, Count - 1);
+                foreach (var item in collection.Reverse())
                 {
-                    var removed = _suspensionContext?.TryRemoveItemFromOldItems(item);
-                    if (removed == null || !removed.Value)
+                    if (IsInsertRequired(item))
                     {
-                        Add(item);
+                        Insert(lastIdx, item);
                     }
                 }
             }
@@ -261,15 +269,14 @@ namespace Catel.Collections
             Argument.IsNotNull("collection", collection);
 
             var list = (IList)this;
-
             using (SuspendChangeNotifications(mode))
             {
-                foreach (var item in collection)
+                var lastIdx = Math.Max(0, Count - 1);
+                foreach (var item in collection.OfType<T>().Reverse())
                 {
-                    var removed = _suspensionContext?.TryRemoveItemFromOldItems((T)item);
-                    if (removed == null || !removed.Value)
+                    if (IsInsertRequired(item))
                     {
-                        list.Add(item);
+                        list.Insert(lastIdx, item);
                     }
                 }
             }
@@ -304,8 +311,7 @@ namespace Catel.Collections
             {
                 foreach (var item in collection)
                 {
-                    var removed = _suspensionContext?.TryRemoveItemFromNewItems(item);
-                    if (removed == null || !removed.Value)
+                    if (IsRemoveRequired(item))
                     {
                         Remove(item);
                     }
@@ -342,10 +348,9 @@ namespace Catel.Collections
 
             using (SuspendChangeNotifications(mode))
             {
-                foreach (var item in collection)
+                foreach (var item in collection.OfType<T>())
                 {
-                    var removed = _suspensionContext?.TryRemoveItemFromNewItems((T)item);
-                    if (removed == null || !removed.Value)
+                   if (IsRemoveRequired(item))
                     {
                         list.Remove(item);
                     }
@@ -423,7 +428,8 @@ namespace Catel.Collections
                 },
                 x =>
                 {
-                    if (x.Instance._suspensionContext.Count == 1 && x.Instance._suspensionContext.Mode == SuspensionMode.Mixed)
+                    
+                    if (x.Instance._suspensionContext.Count == 1 && x.Instance._suspensionContext.Mode != SuspensionMode.None)
                     {
                         x.Instance.SynchronizeFromSuspensionContext();
                     }
@@ -443,43 +449,11 @@ namespace Catel.Collections
         }
 
         /// <summary>
-        /// Synchroniz the list with the suspenstion context.
+        /// Synchronize the list with the suspenstion context.
         /// </summary>
         private void SynchronizeFromSuspensionContext()
         {
-            if (_suspensionContext.NewItems.Count > 0)
-            {
-                _suspensionContext.NewItemIndices.Reverse();
-                _suspensionContext.NewItems.Reverse();
-
-                for (int i = 0; i < _suspensionContext.NewItems.Count; i ++)
-                {
-                    base.InsertItem(_suspensionContext.NewItemIndices[i], _suspensionContext.NewItems[i]);
-                }
-            }
-
-            if (_suspensionContext.OldItems.Count > 0)
-            {
-                SortedList<int, T> sortedList = new SortedList<int, T>();
-                for (int i = 0; i < _suspensionContext.OldItems.Count; i++)
-                {
-                    var value = _suspensionContext.OldItems[i];
-                    var idx = _suspensionContext.OldItemIndices[i];
-                    sortedList.Add(idx, value);
-                }
-
-                _suspensionContext.OldItems.Clear();
-                _suspensionContext.OldItemIndices.Clear();
-                for (int i = sortedList.Count - 1; i >= 0; i--)
-                {
-                    var idx = sortedList.Keys[i];
-
-                    _suspensionContext.OldItemIndices.Add(idx);
-                    _suspensionContext.OldItems.Add(sortedList[idx]);
-
-                    base.RemoveItem(idx);
-                }
-            }
+            _suspensionContext.Synchronize((idx, value) => base.InsertItem(idx, value), idx => base.RemoveItem(idx));
         }
 
         /// <summary>
@@ -491,47 +465,30 @@ namespace Catel.Collections
             {
                 var eventArgsList = new List<NotifyCollectionChangedEventArgs>();
 
-                var suspensionContext = _suspensionContext;
-                if (suspensionContext != null)
+                if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None)
                 {
-                    // Special case: if suspension mode == None, we raise a .Reset (default behavior). We would love to pass in the 
-                    // right items (e.g. Reset or MassiveUpdate), but the UI components don't support this, hence the .Reset.
-                    //
-                    // See https://github.com/Catel/Catel/issues/1066 for details
-                    if (suspensionContext.Mode == SuspensionMode.None)
+                    if (_suspensionContext.NewItems.Count != 0)
                     {
-                        if (suspensionContext.NewItems.Count > 0 || suspensionContext.OldItems.Count > 0)
-                        {
-                            eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, null, null));
-                        }
+                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Add, _suspensionContext.NewItems, _suspensionContext.NewItemIndices));
                     }
-                    else
-                    {
-                        if (suspensionContext.NewItems.Count != 0)
-                        {
-                            eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Add, suspensionContext.NewItems, suspensionContext.NewItemIndices));
-                        }
 
-                        if (suspensionContext.OldItems.Count != 0)
-                        {
-                            eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Remove, suspensionContext.OldItems, suspensionContext.OldItemIndices));
-                        }
+                    if (_suspensionContext.OldItems.Count != 0)
+                    {
+                        eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Remove, _suspensionContext.OldItems, _suspensionContext.OldItemIndices));
                     }
                 }
-                else
+
+                // TODO: When reset must be called?
+                if (eventArgsList.Count == 0)
                 {
-                    eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset, null, null));
+                    eventArgsList.Add(CreateEventArgs(NotifyCollectionChangedAction.Reset));
                 }
 
-                if (eventArgsList.Count > 0)
+                OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+                OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+                foreach (var eventArgs in eventArgsList)
                 {
-                    OnPropertyChanged(new PropertyChangedEventArgs("Count"));
-                    OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-
-                    foreach (var eventArgs in eventArgsList)
-                    {
-                        OnCollectionChanged(eventArgs);
-                    }
+                    OnCollectionChanged(eventArgs);
                 }
             };
 
@@ -551,8 +508,7 @@ namespace Catel.Collections
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs" /> instance containing the event data.</param>
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            var suspensionContext = _suspensionContext;
-            if (suspensionContext == null || suspensionContext.Count == 0)
+            if (_suspensionContext == null || _suspensionContext.Count == 0)
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {
@@ -566,7 +522,7 @@ namespace Catel.Collections
                 return;
             }
 
-            if (suspensionContext.Count != 0)
+            if (_suspensionContext.Count != 0)
             {
                 IsDirty = true;
             }
@@ -578,8 +534,7 @@ namespace Catel.Collections
         /// <param name="e">The <see cref="PropertyChangedEventArgs" /> instance containing the event data.</param>
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            var suspensionContext = _suspensionContext;
-            if (suspensionContext == null || suspensionContext.Count == 0)
+            if (_suspensionContext == null || _suspensionContext.Count == 0)
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {
@@ -599,17 +554,16 @@ namespace Catel.Collections
         protected override void ClearItems()
         {
             // Check
-            var suspensionContext = _suspensionContext;
-            if (suspensionContext != null && suspensionContext.Mode != SuspensionMode.None && suspensionContext.Mode != SuspensionMode.Mixed)
+            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Mixed))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, current mode is '{suspensionContext.Mode}'");
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None or SuspensionMode.Mixed, current mode is '{_suspensionContext.Mode}'");
             }
 
-            if (_suspensionContext != null && (_suspensionContext.Mode == SuspensionMode.None || _suspensionContext.Mode == SuspensionMode.Mixed))
+            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Mixed)
             {
-                while (Count > 0)
+                for (int i = 0; i < Count; i++)
                 {
-                    RemoveItem(0);
+                    RemoveItem(i);
                 }
             }
             else
@@ -626,25 +580,23 @@ namespace Catel.Collections
         protected override void InsertItem(int index, T item)
         {
             // Check
-            var suspensionContext = _suspensionContext;
-            if (suspensionContext != null && suspensionContext.Mode == SuspensionMode.Removing)
+            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
             }
 
-            bool? removed = suspensionContext?.TryRemoveItemFromOldItems(item);
+            var insertRequired = IsInsertRequired(item, index);
 
-            if (suspensionContext == null || suspensionContext.Mode != SuspensionMode.Mixed)
+            if (_suspensionContext == null || _suspensionContext.Mode != SuspensionMode.Mixed && _suspensionContext.Mode != SuspensionMode.Adding)
             {
                 // Call base
                 base.InsertItem(index, item);
             }
 
-            if (removed != null && !removed.Value)
+            if (insertRequired)
             {
-                // Remember
-                suspensionContext.NewItems.Add(item);
-                suspensionContext.NewItemIndices.Add(index);
+                _suspensionContext.NewItems.Add(item);
+                _suspensionContext.NewItemIndices.Add(index);
             }
         }
 
@@ -657,11 +609,18 @@ namespace Catel.Collections
             // Check
             if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Mixed))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, current mode is '{_suspensionContext.Mode}'");
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None or SuspensionMode.Mixed, current mode is '{_suspensionContext.Mode}'");
             }
 
-            // Call base
-            base.MoveItem(oldIndex, newIndex);
+            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Mixed)
+            {
+                RemoveItem(oldIndex);
+                InsertItem(newIndex, this[oldIndex]);
+            }
+            else
+            {
+                base.MoveItem(oldIndex, newIndex);
+            }
         }
 
         /// <summary>
@@ -671,28 +630,26 @@ namespace Catel.Collections
         protected override void RemoveItem(int index)
         {
             // Check
-            var suspensionContext = _suspensionContext;
-            if (suspensionContext != null && suspensionContext.Mode == SuspensionMode.Adding)
+            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Adding)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
             }
 
             // Get item
-            T item = this[index];
+            var item = this[index];
 
-            bool? removed = suspensionContext?.TryRemoveItemFromNewItems(item);
+            var removeRequired = IsRemoveRequired(item, index);
 
-            // Call base
-            if (suspensionContext == null || suspensionContext.Mode != SuspensionMode.Mixed)
+            if (_suspensionContext == null || _suspensionContext.Mode != SuspensionMode.Mixed && _suspensionContext.Mode != SuspensionMode.Mixed && _suspensionContext.Mode != SuspensionMode.Removing)
             {
+                // Call base
                 base.RemoveItem(index);
             }
 
-            if (removed != null && !removed.Value)
+            if (removeRequired)
             {
-                // Remember
-                suspensionContext.OldItems.Add(item);
-                suspensionContext.OldItemIndices.Add(index);
+                _suspensionContext.OldItems.Add(item);
+                _suspensionContext.OldItemIndices.Add(index);
             }
         }
 
@@ -703,31 +660,15 @@ namespace Catel.Collections
         protected override void SetItem(int index, T item)
         {
             // Check
-            if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Mixed)
+            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Mixed))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, current mode is '{_suspensionContext.Mode}'");
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None or SuspensionMode.Mixed, current mode is '{_suspensionContext.Mode}'");
             }
 
             // Call base
             base.SetItem(index, item);
         }
         #endregion Overrides of ObservableCollection
-
-        private NotifyRangedCollectionChangedEventArgs CreateEventArgs(NotifyCollectionChangedAction action, T changedItem = default(T), int changedIndex = -1)
-        {
-            NotifyRangedCollectionChangedEventArgs eventArgs;
-
-            if (changedItem == null)
-            {
-                eventArgs = new NotifyRangedCollectionChangedEventArgs(action);
-            }
-            else
-            {
-                eventArgs = new NotifyRangedCollectionChangedEventArgs(action, new List<T>() { changedItem }, new List<int>() { changedIndex });
-            }
-
-            return eventArgs;
-        }
 
         private NotifyRangedCollectionChangedEventArgs CreateEventArgs(NotifyCollectionChangedAction action, IList changedItems = null, IList<int> changedIndices = null)
         {
@@ -745,20 +686,36 @@ namespace Catel.Collections
             return eventArgs;
         }
 
-        private NotifyRangedCollectionChangedEventArgs CreateEventArgs(NotifyCollectionChangedAction action, IList newItems = null, IList removedItems = null, IList<int> changedIndices = null)
+        /// <summary>
+        /// Checks if insert is required.
+        /// </summary>
+        /// <param name="item">The item</param>
+        /// <param name="index">The item index</param>
+        /// <returns><c>true</c> if its required; otherwise <c>false</c></returns>
+        private bool IsInsertRequired(T item, int index = -1)
         {
-            NotifyRangedCollectionChangedEventArgs eventArgs;
-
-            if (newItems == null && removedItems == null && changedIndices == null)
+            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Mixed)
             {
-                eventArgs = new NotifyRangedCollectionChangedEventArgs(action);
-            }
-            else
-            {
-                eventArgs = new NotifyRangedCollectionChangedEventArgs(action, newItems, removedItems, changedIndices);
+                return !_suspensionContext.TryRemoveItemFromOldItems(item, index);
             }
 
-            return eventArgs;
+            return _suspensionContext != null;
+        }
+
+        /// <summary>
+        /// Checks if insert is required.
+        /// </summary>
+        /// <param name="item">The item</param>
+        /// <param name="index">The item index</param>
+        /// <returns><c>true</c> if its required; otherwise <c>false</c></returns>
+        private bool IsRemoveRequired(T item, int index = -1)
+        {
+            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Mixed)
+            {
+                return !_suspensionContext.TryRemoveItemFromNewItems(item, index);
+            }
+
+            return _suspensionContext != null;
         }
         #endregion
     }
