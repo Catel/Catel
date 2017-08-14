@@ -22,6 +22,41 @@ namespace Catel.Test.Collections
 
     public class FastBindingListFacts
     {
+        internal static class FastBindingListFactsHelper
+        {
+            public static void Synchronize<T>(IList<T> targetCollection, IList<T> sourceCollection, List<NotifyListChangedEventArgs> eventArgs)
+            {
+                foreach (var eventArg in eventArgs)
+                {
+                    if (eventArg.ListChangedType == ListChangedType.ItemAdded)
+                    {
+                        var rangedListChangedEventArgs = (NotifyRangedListChangedEventArgs)eventArg;
+                        var i = 0;
+                        foreach (var index in rangedListChangedEventArgs.Indices)
+                        {
+                            var item = (T)rangedListChangedEventArgs.NewItems[i];
+                            targetCollection.Insert(index, item);
+                            i++;
+                        }
+                    }
+                    else if (eventArg.ListChangedType == ListChangedType.ItemChanged)
+                    {
+                        var rangedListChangedEventArgs = (NotifyRangedListChangedEventArgs)eventArg;
+
+                        foreach (var index in rangedListChangedEventArgs.Indices)
+                        {
+                            targetCollection.RemoveAt(index);
+                        }
+                    }
+                    else if (eventArg.ListChangedType == ListChangedType.Reset)
+                    {
+                        targetCollection.Clear();
+                        targetCollection.AddRange(sourceCollection);
+                    }
+                }
+            }
+        }
+
         [TestFixture]
         public class TheIsDirtyProperty
         {
@@ -633,7 +668,7 @@ namespace Catel.Test.Collections
                 Assert.AreEqual(1, counter);
                 Assert.AreEqual(ListChangedType.Reset, eventArgs.ListChangedType);
                 Assert.AreEqual(NotifyRangedListChangedAction.Remove, eventArgs.Action);
-                CollectionAssert.AreEqual(eventArgs.OldItems, new[] { 1, 2, 3, 4, 5 });
+                CollectionAssert.AreEqual(eventArgs.OldItems, new[] { 5, 4, 3, 2, 1 });
             }
 
             private SuspensionContext<T> GetSuspensionContext<T>(FastBindingList<T> collection)
@@ -736,7 +771,7 @@ namespace Catel.Test.Collections
                     count++;
                     eventArgs = args as NotifyRangedListChangedEventArgs;
                 };
-                using (fastCollection.SuspendChangeNotifications())
+                using (fastCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
                 {
                     fastCollection.AddItems(new[] { 1, 2, 3, 4 });
                     fastCollection.RemoveItems(new[] { 2, 3 });
@@ -744,7 +779,7 @@ namespace Catel.Test.Collections
 
                 Assert.AreEqual(NotifyRangedListChangedAction.Add, eventArgs.Action);
                 Assert.AreEqual(1, count);
-                Assert.AreEqual(new[] { 1, 4 }, eventArgs.NewItems.OfType<int>().ToArray());
+                Assert.AreEqual(new[] { 4, 1 }, eventArgs.NewItems.OfType<int>().ToArray());
             }
 
             [Test]
@@ -761,7 +796,7 @@ namespace Catel.Test.Collections
                     eventArgs = args as NotifyRangedListChangedEventArgs;
                 };
 
-                using (fastCollection.SuspendChangeNotifications())
+                using (fastCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
                 {
                     fastCollection.RemoveItems(new[] { 4, 2, 3 });
                     fastCollection.AddItems(new[] { 2 });
@@ -781,7 +816,7 @@ namespace Catel.Test.Collections
 
                 fastCollection.ListChanged += (sender, args) => { eventArgsList.Add(args as NotifyRangedListChangedEventArgs); };
 
-                using (fastCollection.SuspendChangeNotifications())
+                using (fastCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
                 {
                     fastCollection.RemoveItems(new[] { 4 });
                     fastCollection.AddItems(new[] { 5 });
@@ -792,6 +827,32 @@ namespace Catel.Test.Collections
                 Assert.Contains(5, eventArgsList.First(args =>  args.Action == NotifyRangedListChangedAction.Add).NewItems);
                 Assert.Contains(4, eventArgsList.First(args => args.Action == NotifyRangedListChangedAction.Remove).OldItems);
             }
+
+            [Test]
+            public void TargetCollectionAimsSourceCollectionChangesUsingIndices()
+            {
+                var eventArgsList = new List<NotifyListChangedEventArgs>();
+                var sourceCollection = new FastBindingList<int> { 1, 2, 3, 4, 5 };
+                sourceCollection.AutomaticallyDispatchChangeNotifications = false;
+                sourceCollection.ListChanged += (sender, args) => { eventArgsList.Add((NotifyListChangedEventArgs)args); };
+
+                using (sourceCollection.SuspendChangeNotifications(SuspensionMode.Mixed))
+                {
+                    sourceCollection.Add(6);
+                    sourceCollection.Remove(3);
+                    sourceCollection.Add(7);
+                    sourceCollection.Remove(4);
+                    sourceCollection.Remove(5);
+                    sourceCollection.Add(3);
+                }
+
+                // Test using indices
+                var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
+                FastBindingListFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
+
+                CollectionAssert.AreEqual(sourceCollection, targetCollection);
+            }
+
         }
     }
 }
