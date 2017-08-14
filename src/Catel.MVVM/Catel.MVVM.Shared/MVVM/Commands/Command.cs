@@ -115,7 +115,10 @@ namespace Catel.MVVM
         /// <summary>
         /// Occurs when the command has just been executed successfully.
         /// </summary>
+#pragma warning disable CS0067
+        [ObsoleteEx(ReplacementTypeOrMember = "No replacement", TreatAsErrorFromVersion = "5.1", RemoveInVersion = "6.0")]
         public event AsyncEventHandler<CommandExecutedEventArgs> ExecutedAsync;
+#pragma warning restore CS0067
         #endregion
 
         #region Properties
@@ -243,9 +246,7 @@ namespace Catel.MVVM
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
         public void Execute(TExecuteParameter parameter)
         {
-#pragma warning disable 4014
-            ExecuteAsync(parameter, false);
-#pragma warning restore 4014
+            Execute(parameter, false);
         }
 
         /// <summary>
@@ -253,7 +254,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
         /// <param name="ignoreCanExecuteCheck">if set to <c>true</c>, the check on <see cref="CanExecute()"/> will be used before actually executing the action.</param>
-        protected virtual async Task ExecuteAsync(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
+        protected virtual void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
         {
             // Double check whether execution is allowed, some controls directly call Execute
             if (!ignoreCanExecuteCheck && !CanExecute(parameter))
@@ -264,15 +265,28 @@ namespace Catel.MVVM
             if (_executeWithParameter != null)
             {
                 _executeWithParameter(parameter);
-                await RaiseExecutedAsync(parameter);
+                RaiseExecuted(parameter);
             }
             else if (_executeWithoutParameter != null)
             {
                 _executeWithoutParameter();
-                await RaiseExecutedAsync(parameter);
+                RaiseExecuted(parameter);
             }
 
             RaiseCanExecuteChanged();
+        }
+
+        /// <summary>
+        /// Defines the method to be called when the command is invoked.
+        /// </summary>
+        /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
+        /// <param name="ignoreCanExecuteCheck">if set to <c>true</c>, the check on <see cref="CanExecute()"/> will be used before actually executing the action.</param>
+        [ObsoleteEx(ReplacementTypeOrMember = "Execute(TExecuteParameter, bool)", TreatAsErrorFromVersion = "5.1", RemoveInVersion = "6.0")]
+        protected virtual Task ExecuteAsync(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
+        {
+            Execute(parameter, ignoreCanExecuteCheck);
+
+            return TaskHelper.Completed;
         }
 
         /// <summary>
@@ -280,7 +294,7 @@ namespace Catel.MVVM
         /// </summary>
         public virtual void RaiseCanExecuteChanged()
         {
-            AutoDispatchIfRequiredAsync(async () =>
+            AutoDispatchIfRequired(() =>
             {
                 try
                 {
@@ -298,19 +312,31 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="parameter">The parameter.</param>
         /// <returns>Task.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "RaiseExecuted(object)", TreatAsErrorFromVersion = "5.1", RemoveInVersion = "6.0")]
         protected Task RaiseExecutedAsync(object parameter)
         {
-            var action = new Func<Task>(async () =>
+            RaiseExecuted(parameter);
+
+            return TaskHelper.Completed;
+        }
+
+        /// <summary>
+        /// Raises the <see cref="Executed" /> event.
+        /// </summary>
+        /// <param name="parameter">The parameter.</param>
+        /// <returns>Task.</returns>
+        protected virtual void RaiseExecuted(object parameter)
+        {
+            var action = new Action(() =>
             {
                 var eventArgs = new CommandExecutedEventArgs(this, parameter);
                 Executed.SafeInvoke(this, eventArgs);
-                await ExecutedAsync.SafeInvokeAsync(this, eventArgs);
             });
 
-            return AutoDispatchIfRequiredAsync(action);
+            AutoDispatchIfRequired(action);
         }
 
-        private Task AutoDispatchIfRequiredAsync(Func<Task> action)
+        private void AutoDispatchIfRequired(Action action)
         {
             if (AutomaticallyDispatchEvents)
             {
@@ -318,10 +344,8 @@ namespace Catel.MVVM
             }
             else
             {
-                return action();
+                action();
             }
-
-            return TaskHelper.Completed;
         }
         #endregion
     }
