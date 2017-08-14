@@ -7,6 +7,7 @@
 namespace Catel
 {
     using System;
+    using System.Reflection;
 
     using Catel.Logging;
     using Catel.Reflection;
@@ -88,7 +89,18 @@ namespace Catel
             {
                 if (IsTargetAlive)
                 {
-                    result = (TResult)_action.DynamicInvoke(Target);
+                    try
+                    {
+                        result = (TResult)_action.DynamicInvoke(Target);
+                    }
+                    catch (TargetInvocationException ex)
+                    {
+                        if (ex.InnerException != null)
+                        {
+                            throw ex.InnerException;
+                        }
+                    }
+
                     return true;
                 }
 
@@ -176,7 +188,18 @@ namespace Catel
             {
                 if (IsTargetAlive)
                 {
-                    result = (TResult)_action.DynamicInvoke(Target, parameter);
+                    try
+                    {
+                        result = (TResult)_action.DynamicInvoke(Target, parameter);
+                    }
+                    catch (TargetInvocationException ex)
+                    {
+                        if (ex.InnerException != null)
+                        {
+                            throw ex.InnerException;
+                        }
+                    }
+
                     return true;
                 }
 

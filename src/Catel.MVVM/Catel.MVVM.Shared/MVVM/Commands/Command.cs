@@ -244,7 +244,7 @@ namespace Catel.MVVM
         public void Execute(TExecuteParameter parameter)
         {
 #pragma warning disable 4014
-            ExecuteAsync(parameter, false);
+            ExecuteAsync(parameter, false).Wait();
 #pragma warning restore 4014
         }
 
