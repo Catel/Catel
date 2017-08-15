@@ -420,40 +420,8 @@ namespace Catel.Collections
         {
             Action action = () =>
             {
-                // Create event args
-                var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
-                if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Adding)
-                {
-                    if (_suspensionContext.ChangedItems.Count != 0)
-                    {
-                        eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs(_suspensionContext.ChangedItems, _suspensionContext.ChangedItemIndices, SuspensionMode.Adding));
-                    }
-                }
-                else if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
-                {
-                    if (_suspensionContext.ChangedItems.Count != 0)
-                    {
-                        eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs(_suspensionContext.ChangedItems, _suspensionContext.ChangedItemIndices, SuspensionMode.Removing));
-                    }
-                }
-                else if (_suspensionContext != null && _suspensionContext.IsMixedMode())
-                {
-                    if (_suspensionContext.ChangedItems.Count != 0)
-                    {
-                        if (_suspensionContext.Mode == SuspensionMode.Mixed)
-                        {
-                            eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs(_suspensionContext.ChangedItems, _suspensionContext.ChangedItemIndices, _suspensionContext.MixedActions));
-                        }
-                        else if (_suspensionContext.Mode == SuspensionMode.MixedBash)
-                        {
-                            eventArgsList.AddRange(_suspensionContext.CreateMixedBashEventArgsList());
-                        }
-                    }
-                }
-                else
-                {
-                    eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs());
-                }
+                // Create event args list
+                var eventArgsList = this._suspensionContext.CreateEventArgsList();
 
                 // Fire events
                 if (eventArgsList.Count != 0)

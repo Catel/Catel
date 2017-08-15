@@ -16,12 +16,78 @@ namespace Catel.Collections
     {
         #region Methods
         /// <summary>
+        /// The create event args list.
+        /// </summary>
+        /// <param name="suspensionContext">The suspension context.</param>
+        /// <typeparam name="T">The type of collection item.</typeparam>
+        /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
+        public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateEventArgsList<T>(this SuspensionContext<T> suspensionContext)
+        {
+            // No suspension context is the same as None mode
+            var mode = suspensionContext?.Mode ?? SuspensionMode.None;
+
+            // Fast return for no items in not None modes
+            // ReSharper disable once PossibleNullReferenceException
+            if (mode != SuspensionMode.None && suspensionContext.ChangedItems.Count == 0)
+            {
+                return new NotifyRangedCollectionChangedEventArgs[] { };
+            }
+
+            // Determine creation depending on mode
+            ICollection<NotifyRangedCollectionChangedEventArgs> eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
+            switch (mode)
+            {
+                case SuspensionMode.None:
+                    {
+                        eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs());
+                        break;
+                    }
+
+                case SuspensionMode.Adding:
+                case SuspensionMode.Removing:
+                    {
+                        // ReSharper disable once PossibleNullReferenceException
+                        eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs(suspensionContext.ChangedItems, suspensionContext.ChangedItemIndices, mode));
+                        break;
+                    }
+
+                case SuspensionMode.Mixed:
+                    {
+                        // ReSharper disable once PossibleNullReferenceException
+                        eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs(suspensionContext.ChangedItems, suspensionContext.ChangedItemIndices, suspensionContext.MixedActions));
+                        break;
+                    }
+
+                case SuspensionMode.MixedBash:
+                    {
+                        eventArgsList = suspensionContext.CreateMixedBashEventArgsList();
+                        break;
+                    }
+            }
+
+            return eventArgsList;
+        }
+
+        /// <summary>
+        /// The is mixed mode.
+        /// </summary>
+        /// <param name="suspensionContext">The suspension context.</param>
+        /// <typeparam name="T">The type of collection item.</typeparam>
+        /// <returns><c>True</c> if <see cref="SuspensionMode"/> is one of the mixed modes; otherwise, <c>false</c>.</returns>
+        public static bool IsMixedMode<T>(this SuspensionContext<T> suspensionContext)
+        {
+            Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
+
+            return suspensionContext.Mode.IsMixedMode();
+        }
+
+        /// <summary>
         /// The create mixed bash event args list.
         /// </summary>
         /// <param name="suspensionContext">The suspension context.</param>
         /// <typeparam name="T">The type of collection item.</typeparam>
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
-        public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateMixedBashEventArgsList<T>(this SuspensionContext<T> suspensionContext)
+        private static ICollection<NotifyRangedCollectionChangedEventArgs> CreateMixedBashEventArgsList<T>(this SuspensionContext<T> suspensionContext)
         {
             Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.MixedBash);
@@ -62,19 +128,6 @@ namespace Catel.Collections
             }
 
             return eventArgsList;
-        }
-
-        /// <summary>
-        /// The is mixed mode.
-        /// </summary>
-        /// <param name="suspensionContext">The suspension context.</param>
-        /// <typeparam name="T">The type of collection item.</typeparam>
-        /// <returns><c>True</c> if <see cref="SuspensionMode"/> is one of the mixed modes; otherwise, <c>false</c>.</returns>
-        public static bool IsMixedMode<T>(this SuspensionContext<T> suspensionContext)
-        {
-            Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
-
-            return suspensionContext.Mode.IsMixedMode();
         }
         #endregion Methods
     }
