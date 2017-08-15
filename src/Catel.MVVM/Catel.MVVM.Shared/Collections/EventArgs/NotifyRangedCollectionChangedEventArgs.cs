@@ -10,6 +10,9 @@ namespace Catel.Collections
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Linq;
+
+    using Catel.Collections.Extensions;
 
     /// <summary>
     /// The ranged notify collection changed event args.
@@ -151,5 +154,5 @@ namespace Catel.Collections
             }
         }
         #endregion
-    }
+  }
 }

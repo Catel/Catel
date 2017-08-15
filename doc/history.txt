@@ -26,6 +26,7 @@ Added/fixed:
 (+) #1077 Add IViewModelLocator.IsCompatible and IViewLocator.IsCompatible to allow multiple views and/or 
     views models to be compatible with multiple view models and/or views
 (+) #1095 Add mode MixedBash to FastObservableCollection
+(+) #1096 Add mode MixedConsolidate to FastObservableCollection
 (*) #953  Cache ToString, ToUpper() and ToLower() calls
 (*) #1017 Improve performance of ViewToViewModelMappingHelper
 (*) #1068 Minimize allocations using ArrayShim

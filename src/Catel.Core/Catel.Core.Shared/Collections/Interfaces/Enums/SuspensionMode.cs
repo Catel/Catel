@@ -40,6 +40,12 @@ namespace Catel.Collections
         /// that this raises multiple <see cref="NotifyCollectionChangedAction.Add"/> events and <see cref="NotifyCollectionChangedAction.Remove"/>
         /// events instead of single <see cref="NotifyCollectionChangedAction.Reset"/> event.
         /// </summary>
-        MixedBash
+        MixedBash,
+
+        /// <summary>
+        /// MixedConsolidate mode (combination of Adding and Removing). This behaves the same as <see cref="MixedBash"/>, except
+        /// that this consolidates those add and remove events which annulled each other.
+        /// </summary>
+        MixedConsolidate
     }
 }
