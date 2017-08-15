@@ -6,7 +6,7 @@
 
 using Catel.IoC;
 
-#if NET
+#if NET || NETSTANDARD
 
 namespace Catel.Data
 {

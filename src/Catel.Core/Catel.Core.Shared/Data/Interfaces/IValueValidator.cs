@@ -3,14 +3,13 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Catel.Data
 {
     /// <summary>
     /// The value validator interface
     /// </summary>
-    /// <typeparam name="TValue">
-    /// The type of the value
-    /// </typeparam>
+    /// <typeparam name="TValue">The type of the value</typeparam>
     public interface IValueValidator<in TValue>
     {
         #region Methods
@@ -18,11 +17,9 @@ namespace Catel.Data
         /// <summary>
         /// Determines whether the specified value is valid.
         /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
+        /// <param name="value">The value.</param>
         /// <returns>
-        /// <c>true</c> if is valid, otherwise <c>false</c>.
+        ///   <c>true</c> if is valid, otherwise <c>false</c>.
         /// </returns>
         bool IsValid(TValue @value);
         #endregion

@@ -11,14 +11,14 @@ namespace Catel.Data
     using System.Linq.Expressions;
     using System.Xml.Schema;
 
-#if !NET
+#if !NET && !NETSTANDARD
     using System.Runtime.Serialization;
 #endif
 
     /// <summary>
     /// Very basic class implementing the <see cref="INotifyPropertyChanged"/> interfaces.
     /// </summary>
-#if NET
+#if NET || NETSTANDARD
     [Serializable]
 #else
     [DataContract]
@@ -29,7 +29,7 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when a property of this object has changed.
         /// </summary>
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         public event PropertyChangedEventHandler PropertyChanged;

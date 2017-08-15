@@ -7,7 +7,7 @@
 
 namespace Catel.Data
 {
-#if NET
+#if NET || NETSTANDARD
     using System.IO;
     using Runtime.Serialization;
 #endif
@@ -17,7 +17,7 @@ namespace Catel.Data
     /// </summary>
     public static class ISavableModelExtensions
     {
-#if NET
+#if NET || NETSTANDARD
         /// <summary>
         /// Saves the object to a file using a specific formatting.
         /// </summary>

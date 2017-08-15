@@ -8,14 +8,14 @@ namespace Catel.IO
 {
     using System;
 
-#if NET
+#if NET || NETSTANDARD
     using System.IO;
     using System.Reflection;
 
     using Reflection;
 #endif
 
-#if NET
+#if NET || NETSTANDARD
     /// <summary>
     /// Gets the application data target.
     /// </summary>
@@ -43,7 +43,7 @@ namespace Catel.IO
     /// </summary>
     public static class Path
     {
-#if NET
+#if NET || NETSTANDARD
         /// <summary>
         /// Gets the application data directory for the company and product as defined the the assembly information of the entry assembly. 
         /// If the entry assembly is <c>null</c>, this method will fall back to the calling assembly to retrieve the information.
@@ -333,7 +333,7 @@ namespace Catel.IO
             return fullPath;
         }
 
-#if NET
+#if NET || NETSTANDARD
         /// <summary>
         /// Returns the full path for a relative path.
         /// </summary>

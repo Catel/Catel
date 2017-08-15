@@ -11,7 +11,7 @@ namespace Catel.Data
     /// Defines all serialization members for the models.
     /// </summary>
     public interface IModelSerialization : Runtime.Serialization.ISerializable, System.Xml.Serialization.IXmlSerializable
-#if NET
+#if NET || NETSTANDARD
                                         , System.Runtime.Serialization.ISerializable
 #endif
     {

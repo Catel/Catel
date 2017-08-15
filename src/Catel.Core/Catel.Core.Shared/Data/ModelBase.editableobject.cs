@@ -16,7 +16,7 @@ namespace Catel.Data
     using Logging;
     using Runtime.Serialization;
 
-#if !NET
+#if !NET && !NETSTANDARD
     using System.Runtime.Serialization;
 #endif
 
@@ -26,7 +26,7 @@ namespace Catel.Data
         /// <summary>
         /// Class containing backup information.
         /// </summary>
-#if !NET
+#if !NET && !NETSTANDARD
         [DataContract]
 #endif
         private class BackupData
@@ -139,12 +139,12 @@ namespace Catel.Data
         /// <summary>
         /// The backup of the current object if any backup is initiated.
         /// </summary>
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private BackupData _backup;
 
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private event EventHandler<BeginEditEventArgs> _beginEditingEvent;
@@ -159,17 +159,17 @@ namespace Catel.Data
         /// be no need for the <see cref="EditEventArgs.EditableObject"/> as
         /// the sender of the event should be the same information.
         /// </remarks>
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private event EventHandler<EventArgs> _cancelEditingCompletedEvent;
 
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private event EventHandler<CancelEditEventArgs> _cancelEditingEvent;
 
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private event EventHandler<EndEditEventArgs> _endEditingEvent;
