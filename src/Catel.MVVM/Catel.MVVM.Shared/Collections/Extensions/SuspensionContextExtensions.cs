@@ -27,9 +27,9 @@ namespace Catel.Collections.Extensions
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.MixedBash);
 
             var i = 0;
-            NotifyCollectionChangedAction? previousAction = null;
             var changedItems = new List<T>();
             var changedItemIndices = new List<int>();
+            var previousAction = (NotifyCollectionChangedAction?)null;
             var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
             foreach (var action in suspensionContext.MixedActions)
             {

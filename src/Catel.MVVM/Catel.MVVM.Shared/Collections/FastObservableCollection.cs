@@ -453,8 +453,7 @@ namespace Catel.Collections
                 }
                 else
                 {
-                    var eventArgs = new NotifyRangedCollectionChangedEventArgs();
-                    eventArgsList.Add(eventArgs);
+                    eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs());
                 }
 
                 // Fire events
