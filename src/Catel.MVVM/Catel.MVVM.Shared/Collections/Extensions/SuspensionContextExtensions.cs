@@ -5,7 +5,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Catel.Collections
-{ 
+{
+    using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
 
@@ -62,6 +63,12 @@ namespace Catel.Collections
                     {
                         eventArgsList = suspensionContext.CreateMixedBashEventArgsList();
                         break;
+                    }
+
+                default:
+                    {
+                        // ReSharper disable once LocalizableElement
+                        throw new ArgumentOutOfRangeException(nameof(mode), $"The suspension mode '{mode}' is unhandled.");
                     }
             }
 
