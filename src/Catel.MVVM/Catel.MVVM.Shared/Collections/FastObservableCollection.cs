@@ -13,7 +13,6 @@ namespace Catel.Collections
     using System.Collections.Specialized;
     using System.ComponentModel;
 
-    using Catel.Collections.Extensions;
     using Catel.IoC;
     using Catel.Logging;
     using Catel.Services;

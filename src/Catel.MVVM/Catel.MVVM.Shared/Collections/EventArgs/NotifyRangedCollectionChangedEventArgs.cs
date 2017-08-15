@@ -10,11 +10,8 @@ namespace Catel.Collections
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.Specialized;
-    using System.Linq;
 
-    using Catel.Collections.Extensions;
-
-    /// <summary>
+  /// <summary>
     /// The ranged notify collection changed event args.
     /// </summary>
     public class NotifyRangedCollectionChangedEventArgs : NotifyCollectionChangedEventArgs
