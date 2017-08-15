@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FastObservableCollectionFacts.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -24,6 +24,11 @@ namespace Catel.Test.Collections
     {
         internal static class FastObservableCollectionFactsHelper
         {
+            public static void Synchronize<T>(IList<T> targetCollection, IList<T> sourceCollection, IList<NotifyRangedCollectionChangedEventArgs> eventArgsList)
+            {
+                eventArgsList.ForEach(eventArgs => Synchronize(targetCollection, sourceCollection, eventArgs));
+            }
+
             public static void Synchronize<T>(IList<T> targetCollection, IList<T> sourceCollection, NotifyRangedCollectionChangedEventArgs eventArg)
             {
                 if (eventArg.Action == NotifyCollectionChangedAction.Add)
@@ -1068,6 +1073,55 @@ namespace Catel.Test.Collections
 
                 Assert.AreEqual(1, eventArgsList.Count);
                 Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgsList[0].Action);
+            }
+        }
+
+        [TestFixture]
+        public class TheMixedBashMode
+        {
+            [Test]
+            public void RaisesSingleEventWithSingleItemWithMixedBashModeAndAddAction()
+            {
+                var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
+                var fastCollection = new FastObservableCollection<int> { 1, 2, 3 };
+                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                fastCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
+
+                using (fastCollection.SuspendChangeNotifications(SuspensionMode.MixedBash))
+                {
+                    fastCollection.Add(4);
+                }
+
+                Assert.AreEqual(1, eventArgsList.Count);
+                Assert.AreEqual(1, eventArgsList[0].ChangedItems.Count);
+                Assert.AreEqual(1, eventArgsList[0].NewItems.Count);
+                Assert.AreEqual(SuspensionMode.MixedBash, eventArgsList[0].SuspensionMode);
+                Assert.AreEqual(NotifyCollectionChangedAction.Add, eventArgsList[0].Action);
+            }
+
+            [Test]
+            public void TargetCollectionAimsSourceCollectionChangesWithAddingAndRemovingItems()
+            {
+                var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
+                var sourceCollection = new FastObservableCollection<int> { 1, 2, 3, 4, 5 };
+                sourceCollection.AutomaticallyDispatchChangeNotifications = false;
+                sourceCollection.CollectionChanged += (sender, args) => { eventArgsList.Add((NotifyRangedCollectionChangedEventArgs)args); };
+
+                using (sourceCollection.SuspendChangeNotifications(SuspensionMode.MixedBash))
+                {
+                    sourceCollection.Add(1);
+                    sourceCollection.Add(2);
+                    sourceCollection.Add(3);
+                    sourceCollection.Remove(3);
+                    sourceCollection.Remove(2);
+                    sourceCollection.Add(2);
+                }
+
+                Assert.AreEqual(3, eventArgsList.Count);
+
+                var targetCollection = new List<int> { 1, 2, 3, 4, 5 };
+                FastObservableCollectionFactsHelper.Synchronize(targetCollection, sourceCollection, eventArgsList);
+                CollectionAssert.AreEqual(sourceCollection, targetCollection);
             }
         }
     }

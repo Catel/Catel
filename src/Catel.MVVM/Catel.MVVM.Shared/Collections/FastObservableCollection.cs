@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="FastObservableCollection.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -13,7 +13,7 @@ namespace Catel.Collections
     using System.Collections.Specialized;
     using System.ComponentModel;
 
-    using Catel.Data;
+    using Catel.Collections.Extensions;
 
     using IoC;
     using Logging;
@@ -423,39 +423,50 @@ namespace Catel.Collections
             Action action = () =>
             {
                 // Create event args
-                NotifyCollectionChangedEventArgs eventArgs = null;
+                var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
                 if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Adding)
                 {
                     if (_suspensionContext.ChangedItems.Count != 0)
                     {
-                        eventArgs = new NotifyRangedCollectionChangedEventArgs(_suspensionContext.ChangedItems, _suspensionContext.ChangedItemIndices, SuspensionMode.Adding);
+                        eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs(_suspensionContext.ChangedItems, _suspensionContext.ChangedItemIndices, SuspensionMode.Adding));
                     }
                 }
                 else if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
                 {
                     if (_suspensionContext.ChangedItems.Count != 0)
                     {
-                        eventArgs = new NotifyRangedCollectionChangedEventArgs(_suspensionContext.ChangedItems, _suspensionContext.ChangedItemIndices, SuspensionMode.Removing);
+                        eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs(_suspensionContext.ChangedItems, _suspensionContext.ChangedItemIndices, SuspensionMode.Removing));
                     }
                 }
-                else if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Mixed)
+                else if (_suspensionContext != null && _suspensionContext.IsMixedMode())
                 {
                     if (_suspensionContext.ChangedItems.Count != 0)
                     {
-                        eventArgs = new NotifyRangedCollectionChangedEventArgs(_suspensionContext.ChangedItems, _suspensionContext.ChangedItemIndices, _suspensionContext.MixedActions);
+                        if (_suspensionContext.Mode == SuspensionMode.Mixed)
+                        {
+                            eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs(_suspensionContext.ChangedItems, _suspensionContext.ChangedItemIndices, _suspensionContext.MixedActions));
+                        }
+                        else if (_suspensionContext.Mode == SuspensionMode.MixedBash)
+                        {
+                            eventArgsList.AddRange(_suspensionContext.CreateMixedBashEventArgsList());
+                        }
                     }
                 }
                 else
                 {
-                    eventArgs = new NotifyRangedCollectionChangedEventArgs();
+                    var eventArgs = new NotifyRangedCollectionChangedEventArgs();
+                    eventArgsList.Add(eventArgs);
                 }
 
                 // Fire events
-                if (eventArgs != null)
+                if (eventArgsList.Count != 0)
                 {
                     OnPropertyChanged(new PropertyChangedEventArgs("Count"));
                     OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-                    OnCollectionChanged(eventArgs);
+                    foreach (var eventArgs in eventArgsList)
+                    {
+                        OnCollectionChanged(eventArgs);
+                    }
                 }
             };
 
@@ -521,12 +532,12 @@ namespace Catel.Collections
         protected override void ClearItems()
         {
             // Check
-            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Mixed))
+            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && !_suspensionContext.IsMixedMode()))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None or SuspensionMode.Mixed, current mode is '{_suspensionContext.Mode}'");
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None or mixed modes, current mode is '{_suspensionContext.Mode}'");
             }
 
-            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Mixed)
+            if (_suspensionContext != null && _suspensionContext.IsMixedMode())
             {
                 while (Count > 0)
                 {
@@ -557,13 +568,13 @@ namespace Catel.Collections
 
             if (_suspensionContext != null)
             {
-                if (_suspensionContext.Mode == SuspensionMode.Adding || _suspensionContext.Mode == SuspensionMode.Mixed)
+                if (_suspensionContext.Mode == SuspensionMode.Adding || _suspensionContext.IsMixedMode())
                 {
                     _suspensionContext.ChangedItems.Add(item);
                     _suspensionContext.ChangedItemIndices.Add(index);
                 }
 
-                if (_suspensionContext.Mode == SuspensionMode.Mixed)
+                if (_suspensionContext.IsMixedMode())
                 {
                     _suspensionContext.MixedActions.Add(NotifyCollectionChangedAction.Add);
                 }
@@ -577,12 +588,12 @@ namespace Catel.Collections
         protected override void MoveItem(int oldIndex, int newIndex)
         {
             // Check
-            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Mixed))
+            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && !_suspensionContext.IsMixedMode()))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None or SuspensionMode.Mixed, current mode is '{_suspensionContext.Mode}'");
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None or mixed modes, current mode is '{_suspensionContext.Mode}'");
             }
 
-            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Mixed)
+            if (_suspensionContext != null && _suspensionContext.IsMixedMode())
             {
                 // Split up
                 var item = this[oldIndex];
@@ -616,13 +627,13 @@ namespace Catel.Collections
 
             if (_suspensionContext != null)
             {
-                if (_suspensionContext.Mode == SuspensionMode.Removing || _suspensionContext.Mode == SuspensionMode.Mixed)
+                if (_suspensionContext.Mode == SuspensionMode.Removing || _suspensionContext.IsMixedMode())
                 {
                     _suspensionContext.ChangedItems.Add(item);
                     _suspensionContext.ChangedItemIndices.Add(index);
                 }
 
-                if (_suspensionContext.Mode == SuspensionMode.Mixed)
+                if (_suspensionContext.IsMixedMode())
                 {
                     _suspensionContext.MixedActions.Add(NotifyCollectionChangedAction.Remove);
                 }
@@ -636,12 +647,12 @@ namespace Catel.Collections
         protected override void SetItem(int index, T item)
         {
             // Check
-            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Mixed))
+            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && !_suspensionContext.IsMixedMode()))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None or SuspensionMode.Mixed, current mode is '{_suspensionContext.Mode}'");
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None or a mixed mode, current mode is '{_suspensionContext.Mode}'");
             }
 
-            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Mixed)
+            if (_suspensionContext != null && _suspensionContext.IsMixedMode())
             {
                 // Split up
                 RemoveItem(index);
