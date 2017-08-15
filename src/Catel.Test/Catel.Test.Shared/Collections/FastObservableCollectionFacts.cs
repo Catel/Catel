@@ -1472,7 +1472,7 @@ namespace Catel.Test.Collections
             }
 
             [Test]
-            public void RaisesTwoEventsForAddingAndMovingItems()
+            public void RaisesSingleEventsForAddingAndMovingItems()
             {
                 var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
                 var sourceCollection = new FastObservableCollection<int>();
