@@ -11,7 +11,7 @@ namespace Catel.Collections
     using System.Collections.Generic;
     using System.Collections.Specialized;
 
-    /// <summary>
+  /// <summary>
     /// The ranged notify collection changed event args.
     /// </summary>
     public class NotifyRangedCollectionChangedEventArgs : NotifyCollectionChangedEventArgs
@@ -151,5 +151,5 @@ namespace Catel.Collections
             }
         }
         #endregion
-    }
+  }
 }
