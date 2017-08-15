@@ -16,6 +16,9 @@ namespace Catel.Collections
     internal class SuspensionContext<T>
     {
         #region Fields
+        /// <summary>
+        /// The suspension count.
+        /// </summary>
         private int _suspensionCount;
         #endregion Fields
 

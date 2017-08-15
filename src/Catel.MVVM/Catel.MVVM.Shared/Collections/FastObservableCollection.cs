@@ -14,10 +14,9 @@ namespace Catel.Collections
     using System.ComponentModel;
 
     using Catel.Collections.Extensions;
-
-    using IoC;
-    using Logging;
-    using Services;
+    using Catel.IoC;
+    using Catel.Logging;
+    using Catel.Services;
 
     /// <summary>
     /// Fast implementation of <see cref="ObservableCollection{T}"/> where the change notifications

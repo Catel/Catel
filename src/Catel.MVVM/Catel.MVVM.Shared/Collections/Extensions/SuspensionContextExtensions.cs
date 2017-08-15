@@ -14,33 +14,7 @@ namespace Catel.Collections.Extensions
     /// </summary>
     internal static class SuspensionContextExtensions
     {
-        #region Fields
-
-        /// <summary>
-        /// The mixed modes.
-        /// </summary>
-        private static readonly List<SuspensionMode> MixedModes;
-
-        #endregion Fields
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes static members of the <see cref="SuspensionContextExtensions"/> class.
-        /// </summary>
-        static SuspensionContextExtensions()
-        {
-            MixedModes = new List<SuspensionMode>
-                              {
-                                  SuspensionMode.Mixed,
-                                  SuspensionMode.MixedBash
-                              };
-        }
-
-        #endregion Constructors
-
         #region Methods
-
         /// <summary>
         /// The create mixed bash event args list.
         /// </summary>
@@ -102,17 +76,6 @@ namespace Catel.Collections.Extensions
 
             return suspensionContext.Mode.IsMixedMode();
         }
-
-        /// <summary>
-        /// The is mixed mode.
-        /// </summary>
-        /// <param name="suspensionMode">The suspension Mode.</param>
-        /// <returns><c>True</c> if <see cref="SuspensionMode"/> is one of the mixed modes; otherwise, <c>false</c>.</returns>
-        public static bool IsMixedMode(this SuspensionMode suspensionMode)
-        {
-            return MixedModes.Contains(suspensionMode);
-        }
-
         #endregion Methods
     }
 }
