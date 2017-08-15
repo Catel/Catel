@@ -4,8 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Collections.Extensions
-{
+namespace Catel.Collections
+{ 
     using System.Collections.Generic;
     using System.Collections.Specialized;
 

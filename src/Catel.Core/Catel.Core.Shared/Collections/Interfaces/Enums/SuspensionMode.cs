@@ -37,7 +37,7 @@ namespace Catel.Collections
 
         /// <summary>
         /// MixedBash mode (combination of Adding and Removing). This behaves the same as <see cref="Mixed"/>, except
-        /// that this raises multiply <see cref="NotifyCollectionChangedAction.Add"/> events and <see cref="NotifyCollectionChangedAction.Remove"/>
+        /// that this raises multiple <see cref="NotifyCollectionChangedAction.Add"/> events and <see cref="NotifyCollectionChangedAction.Remove"/>
         /// events instead of single <see cref="NotifyCollectionChangedAction.Reset"/> event.
         /// </summary>
         MixedBash

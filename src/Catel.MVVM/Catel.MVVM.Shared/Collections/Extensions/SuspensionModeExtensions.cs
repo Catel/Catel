@@ -4,9 +4,11 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Collections.Extensions
+namespace Catel.Collections
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// The suspension mode extensions.
@@ -17,22 +19,8 @@ namespace Catel.Collections.Extensions
         /// <summary>
         /// The mixed modes.
         /// </summary>
-        private static readonly List<SuspensionMode> MixedModes;
+        private static readonly List<SuspensionMode> MixedModes = Enum<SuspensionMode>.GetValues().Where(mode => mode.ToString().ContainsIgnoreCase("Mixed")).ToList();
         #endregion Fields
-
-        #region Constructors
-        /// <summary>
-        /// Initializes static members of the <see cref="SuspensionModeExtensions"/> class.
-        /// </summary>
-        static SuspensionModeExtensions()
-        {
-            MixedModes = new List<SuspensionMode>
-                              {
-                                  SuspensionMode.Mixed,
-                                  SuspensionMode.MixedBash
-                              };
-        }
-        #endregion Constructors
 
         #region Methods
         /// <summary>
