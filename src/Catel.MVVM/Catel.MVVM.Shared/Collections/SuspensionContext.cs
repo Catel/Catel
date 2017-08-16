@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SuspensionContext.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -13,9 +13,12 @@ namespace Catel.Collections
     /// Context class the hold all relevant data while notifications are suspended.
     /// </summary>
     /// <typeparam name="T">Type of the elements contained by the suspending collection.</typeparam>
-    public class SuspensionContext<T>
+    internal class SuspensionContext<T>
     {
         #region Fields
+        /// <summary>
+        /// The suspension count.
+        /// </summary>
         private int _suspensionCount;
         #endregion Fields
 
