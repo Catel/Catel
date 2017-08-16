@@ -56,7 +56,7 @@ namespace Catel.Collections
             Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Adding);
 
-            return new List<NotifyRangedCollectionChangedEventArgs> {new NotifyRangedCollectionChangedEventArgs(suspensionContext.ChangedItems, suspensionContext.ChangedItemIndices, suspensionContext.Mode)};
+            return new List<NotifyRangedCollectionChangedEventArgs> { new NotifyRangedCollectionChangedEventArgs(suspensionContext.ChangedItems, suspensionContext.ChangedItemIndices, suspensionContext.Mode) };
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Catel.Collections
             Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Removing);
 
-            return new List<NotifyRangedCollectionChangedEventArgs> {new NotifyRangedCollectionChangedEventArgs(suspensionContext.ChangedItems, suspensionContext.ChangedItemIndices, suspensionContext.Mode)};
+            return new List<NotifyRangedCollectionChangedEventArgs> { new NotifyRangedCollectionChangedEventArgs(suspensionContext.ChangedItems, suspensionContext.ChangedItemIndices, suspensionContext.Mode) };
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace Catel.Collections
         {
             Argument.IsValid(nameof(suspensionContext), suspensionContext, context => context == null || context.Mode == SuspensionMode.None);
 
-            return new List<NotifyRangedCollectionChangedEventArgs> {new NotifyRangedCollectionChangedEventArgs()};
+            return new List<NotifyRangedCollectionChangedEventArgs> { new NotifyRangedCollectionChangedEventArgs() };
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Catel.Collections
             Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Mixed);
 
-            return new List<NotifyRangedCollectionChangedEventArgs> {new NotifyRangedCollectionChangedEventArgs(suspensionContext.ChangedItems, suspensionContext.ChangedItemIndices, suspensionContext.MixedActions)};
+            return new List<NotifyRangedCollectionChangedEventArgs> { new NotifyRangedCollectionChangedEventArgs(suspensionContext.ChangedItems, suspensionContext.ChangedItemIndices, suspensionContext.MixedActions) };
         }
 
         /// <summary>
@@ -127,35 +127,28 @@ namespace Catel.Collections
 
             var events = suspensionContext.CreateBashEvents(suspensionContext.Mode);
 
-            bool consolidated;
+            bool restartRequired;
             do
             {
-                consolidated = false;
+                restartRequired = false;
+
                 for (int i = events.Count - 1; i >= 1; i--)
                 {
                     var currentEvent = events[i];
                     if (currentEvent.Indices.Count > 0)
                     {
                         var previousEvent = events[i - 1];
-                        if (currentEvent.Action != previousEvent.Action)
-                        {
-                            consolidated = previousEvent.ConsolidateItems(currentEvent);
-                        }
-                        else
-                        {
-                            previousEvent.AppendItems(currentEvent);
-                            events.RemoveAt(i);
-                            consolidated = true;
-                        }
+                        restartRequired = currentEvent.Action == previousEvent.Action ? previousEvent.ConsolidateItemsByAppend(currentEvent) : previousEvent.ConsolidateItems(currentEvent);
                     }
-                    else
+
+                    if (currentEvent.Indices.Count == 0)
                     {
                         events.RemoveAt(i);
-                        consolidated = true;
+                        restartRequired = i < events.Count;
                     }
                 }
             }
-            while (consolidated);
+            while (restartRequired);
 
             return events;
         }
@@ -185,7 +178,7 @@ namespace Catel.Collections
             var i = 0;
             var changedItems = new List<T>();
             var changedItemIndices = new List<int>();
-            var previousAction = (NotifyCollectionChangedAction?) null;
+            var previousAction = (NotifyCollectionChangedAction?)null;
             var eventArgsList = new List<NotifyRangedCollectionChangedEventArgs>();
             foreach (var action in suspensionContext.MixedActions)
             {

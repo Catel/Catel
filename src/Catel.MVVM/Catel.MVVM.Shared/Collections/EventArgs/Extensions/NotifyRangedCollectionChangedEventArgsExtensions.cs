@@ -15,17 +15,27 @@ namespace Catel.Collections
     internal static class NotifyRangedCollectionChangedEventArgsExtensions
     {
         /// <summary>
-        /// Appends changed items and indexes from <paramref name="other" /> into <paramref name="instance" /> .
+        /// Consolidate changed items and indexes from <paramref name="other" /> into <paramref name="instance" /> by append.
         /// </summary>
         /// <param name="instance">The instance</param>
         /// <param name="other">The other instance.</param>
-        public static void AppendItems(this NotifyRangedCollectionChangedEventArgs instance, NotifyRangedCollectionChangedEventArgs other)
+        public static bool ConsolidateItemsByAppend(this NotifyRangedCollectionChangedEventArgs instance, NotifyRangedCollectionChangedEventArgs other)
         {
+            if (other.Indices.Count == 0)
+            {
+                return false;
+            }
+
             instance.Indices.AddRange(other.Indices);
             foreach (var item in other.ChangedItems)
             {
                 instance.ChangedItems.Add(item);
             }
+
+            other.Indices.Clear();
+            other.ChangedItems.Clear();
+
+            return true;
         }
 
         /// <summary>
@@ -36,7 +46,11 @@ namespace Catel.Collections
         /// <returns><c>True</c> if consolidation was executed; otherwise <c>False</c></returns>
         public static bool ConsolidateItems(this NotifyRangedCollectionChangedEventArgs instance, NotifyRangedCollectionChangedEventArgs other)
         {
-            var consolidated = false;
+            if (instance.Indices.Count == 0 || other.Indices.Count == 0)
+            {
+                return false;
+            }
+
             if (instance.Indices.Count > other.Indices.Count)
             {
                 var backup = instance;
@@ -44,6 +58,7 @@ namespace Catel.Collections
                 other = backup;
             }
 
+            var consolidated = false;
             for (var i = instance.Indices.Count - 1; i >= 0; i--)
             {
                 var idx = other.Indices.IndexOf(instance.Indices[i]);
