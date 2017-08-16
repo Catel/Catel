@@ -15,7 +15,6 @@ namespace Catel.Services
     /// </summary>
     public class LanguageResourceKey : IEquatable<LanguageResourceKey>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="LanguageResourceKey"/> class.
         /// </summary>
@@ -26,9 +25,7 @@ namespace Catel.Services
             ResourceName = resourceName;
             CultureInfo = cultureInfo;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the name of the resource.
         /// </summary>
@@ -40,7 +37,6 @@ namespace Catel.Services
         /// </summary>
         /// <value>The culture information.</value>
         public CultureInfo CultureInfo { get; private set; }
-        #endregion
 
         /// <summary>
         /// Determines whether the specified <see cref="System.Object" /> is equal to this instance.

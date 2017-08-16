@@ -12,7 +12,6 @@ namespace Catel.Runtime
     /// </summary>
     public class ReferenceInfo
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ReferenceInfo" /> class.
         /// </summary>
@@ -25,9 +24,7 @@ namespace Catel.Runtime
             Id = id;
             IsFirstUsage = isFirstUsage;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the instance.
         /// </summary>
@@ -45,6 +42,5 @@ namespace Catel.Runtime
         /// </summary>
         /// <value><c>true</c> if this instance is the first usage of this instance; otherwise, <c>false</c>.</value>
         public bool IsFirstUsage { get; internal set; }
-        #endregion
     }
 }

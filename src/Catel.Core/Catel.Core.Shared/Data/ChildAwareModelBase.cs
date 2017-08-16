@@ -64,7 +64,6 @@ namespace Catel.Data
         }
 #endif
 
-        #region Properties
         /// <summary>
         /// Gets or sets a value indicating whether event subscriptions of child values should be disabled.
         /// <para />
@@ -86,8 +85,6 @@ namespace Catel.Data
         [Browsable(false)]
 #endif
         protected bool HandlePropertyAndCollectionChanges { get; set; }
-
-        #endregion
 
         /// <summary>
         /// Initializes this instance.

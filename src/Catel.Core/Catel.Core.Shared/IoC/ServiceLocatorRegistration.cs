@@ -16,7 +16,6 @@ namespace Catel.IoC
     [DebuggerDisplay("{DeclaringType} => {ImplementingType} ({RegistrationType})")]
     public class ServiceLocatorRegistration
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceLocatorRegistration" /> class.
         /// </summary>
@@ -39,9 +38,7 @@ namespace Catel.IoC
             Tag = tag;
             RegistrationType = registrationType;
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the create service function.
         /// </summary>
@@ -83,6 +80,5 @@ namespace Catel.IoC
         /// </summary>
         /// <value>The tag.</value>
         public object Tag { get; private set; }
-        #endregion
     }
 }

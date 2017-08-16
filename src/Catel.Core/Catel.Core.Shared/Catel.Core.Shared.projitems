@@ -421,7 +421,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\TaskShim.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\ThreadHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Interfaces\IAsyncWaitQueue.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Threading\Internal\Deque.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Internal\Dequeue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\SynchronizationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Timer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\Interfaces\IExecute.cs" />

@@ -169,7 +169,7 @@ namespace Catel.Collections
         /// <param name="index">The item index.</param>
         /// <param name="item">The item.</param>
         /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
-        /// <remarks>This code is only need by <see cref="FastBindingList{T}"/>.</remarks>
+        /// <remarks>This code is only need by <c>FastBindingList{T}</c>.</remarks>
         public bool TryRemoveItemFromOldItems(int index, T item)
         {
             if (Mode == SuspensionMode.None || Mode == SuspensionMode.Mixed)
@@ -201,7 +201,7 @@ namespace Catel.Collections
         /// <param name="index">The item index.</param>
         /// <param name="item">The item.</param>
         /// <returns><c>true</c> if removed, otherwise <c>false</c>.</returns>
-        /// <remarks>This code is only need by <see cref="FastBindingList{T}"/>.</remarks>
+        /// <remarks>This code is only need by <c>FastBindingList{T}</c>.</remarks>
         public bool? TryRemoveItemFromNewItems(int index, T item)
         {
             if (Mode == SuspensionMode.None || Mode == SuspensionMode.Mixed)

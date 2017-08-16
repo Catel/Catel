@@ -12,7 +12,6 @@ namespace Catel.Runtime.Serialization
     /// </summary>
     public static class SerializationContextHelper
     {
-        #region Methods
         /// <summary>
         /// Gets the name of the serialization reference manager scope.
         /// </summary>
@@ -22,6 +21,5 @@ namespace Catel.Runtime.Serialization
             var scopeName = string.Format("Thread_{0}", ThreadHelper.GetCurrentThreadId());
             return scopeName;
         }
-        #endregion
     }
 }

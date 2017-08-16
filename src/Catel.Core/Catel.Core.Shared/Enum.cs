@@ -224,7 +224,7 @@ namespace Catel
             #endregion
 
             #region Static Methods
-#if NET
+#if NET || NETSTANDARD
             /// <summary>
             /// Creates a list based on an enum.
             /// </summary>

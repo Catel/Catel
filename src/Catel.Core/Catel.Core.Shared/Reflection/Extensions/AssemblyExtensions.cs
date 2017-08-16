@@ -15,7 +15,7 @@ namespace Catel.Reflection
     /// </summary>
     public static class AssemblyExtensions
     {
-#if NET || NETSTANDARD
+#if NET
         /// <summary>
         /// Gets the build date time of the assembly.
         /// </summary>

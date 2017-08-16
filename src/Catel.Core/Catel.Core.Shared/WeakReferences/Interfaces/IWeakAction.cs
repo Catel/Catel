@@ -4,9 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 namespace Catel
 {
+    using System;
+
     /// <summary>
     /// A weak action which allows the invocation of a command in a weak manner. This way, actions will not cause
     /// memory leaks.
