@@ -36,7 +36,6 @@ Added/fixed:
 (*) #1085 Changed ValidatableModelBase.IsValidationSuspended to be virtual
 (x) #1088 Fix issues with FastObservableCollection especially with SuspensionMode.Mixed
 (x) #1093 Fix Command.Execute bad async implementation (resulting in exceptions not being thrown)
-(x) #1105 Change unit test that fails for SuspensionMode.Mixed in favor to use SuspensionMode.MixedConsolidate
 
 Roadmap:
 ========
