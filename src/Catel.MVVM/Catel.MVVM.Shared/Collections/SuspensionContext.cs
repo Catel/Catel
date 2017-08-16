@@ -39,7 +39,7 @@ namespace Catel.Collections
         /// <summary>
         /// Gets events generators registry.
         /// </summary>
-        public static Lazy<Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>>> EventsGeneratorsRegistry { get; } = new Lazy<Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>>>(InitFunction);
+        public static Lazy<Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>>> EventsGeneratorsRegistry { get; } = new Lazy<Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>>>(InitializeRegistry);
 
         /// <summary>
         /// Gets the indices of the changed items while change notifications.
@@ -80,10 +80,10 @@ namespace Catel.Collections
 
         #region Methods
         /// <summary>
-        /// Initialize the EventsGeneratorsRegistry
+        /// Initialize the Events generators registry
         /// </summary>
         /// <returns></returns>
-        private static Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>> InitFunction()
+        private static Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>> InitializeRegistry()
         {
             return new Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>>
                        {
