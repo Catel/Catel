@@ -35,18 +35,8 @@ namespace Catel.Collections
                 return ArrayShim.Empty<NotifyRangedCollectionChangedEventArgs>();
             }
 
-            if (SuspensionContext<T>.EventsGeneratorsRegistry.Count == 0)
-            {
-                SuspensionContext<T>.EventsGeneratorsRegistry.Add(SuspensionMode.None, context => context.CreateNoneEvents());
-                SuspensionContext<T>.EventsGeneratorsRegistry.Add(SuspensionMode.Adding, context => context.CreateAddingEvents());
-                SuspensionContext<T>.EventsGeneratorsRegistry.Add(SuspensionMode.Removing, context => context.CreateRemovingEvents());
-                SuspensionContext<T>.EventsGeneratorsRegistry.Add(SuspensionMode.Mixed, context => context.CreateMixedEvents());
-                SuspensionContext<T>.EventsGeneratorsRegistry.Add(SuspensionMode.MixedBash, context => context.CreateMixedBashEvents());
-                SuspensionContext<T>.EventsGeneratorsRegistry.Add(SuspensionMode.MixedConsolidate, context => context.CreateMixedConsolidateEvents());
-            }
-
             Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>> createEvents;
-            if (!SuspensionContext<T>.EventsGeneratorsRegistry.TryGetValue(mode, out createEvents))
+            if (!SuspensionContext<T>.EventsGeneratorsRegistry.Value.TryGetValue(mode, out createEvents))
             {
                 // ReSharper disable once LocalizableElement
                 throw new ArgumentOutOfRangeException(nameof(mode), $"The suspension mode '{mode}' is unhandled.");
@@ -61,7 +51,7 @@ namespace Catel.Collections
         /// <param name="suspensionContext">The suspension context.</param>
         /// <typeparam name="T">The type of collection item.</typeparam>
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
-        private static ICollection<NotifyRangedCollectionChangedEventArgs> CreateAddingEvents<T>(this SuspensionContext<T> suspensionContext)
+        public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateAddingEvents<T>(this SuspensionContext<T> suspensionContext)
         {
             Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Adding);
@@ -75,7 +65,7 @@ namespace Catel.Collections
         /// <param name="suspensionContext">The suspension context.</param>
         /// <typeparam name="T">The type of collection item.</typeparam>
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
-        private static ICollection<NotifyRangedCollectionChangedEventArgs> CreateRemovingEvents<T>(this SuspensionContext<T> suspensionContext)
+        public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateRemovingEvents<T>(this SuspensionContext<T> suspensionContext)
         {
             Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Removing);
@@ -89,7 +79,7 @@ namespace Catel.Collections
         /// <param name="suspensionContext">The suspension context.</param>
         /// <typeparam name="T">The type of collection item.</typeparam>
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
-        private static ICollection<NotifyRangedCollectionChangedEventArgs> CreateNoneEvents<T>(this SuspensionContext<T> suspensionContext)
+        public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateNoneEvents<T>(this SuspensionContext<T> suspensionContext)
         {
             Argument.IsValid(nameof(suspensionContext), suspensionContext, context => context == null || context.Mode == SuspensionMode.None);
 
@@ -102,7 +92,7 @@ namespace Catel.Collections
         /// <param name="suspensionContext">The suspension context.</param>
         /// <typeparam name="T">The type of collection item.</typeparam>
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
-        private static ICollection<NotifyRangedCollectionChangedEventArgs> CreateMixedEvents<T>(this SuspensionContext<T> suspensionContext)
+        public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateMixedEvents<T>(this SuspensionContext<T> suspensionContext)
         {
             Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Mixed);
@@ -116,7 +106,7 @@ namespace Catel.Collections
         /// <param name="suspensionContext">The suspension context.</param>
         /// <typeparam name="T">The type of collection item.</typeparam>
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
-        private static ICollection<NotifyRangedCollectionChangedEventArgs> CreateMixedBashEvents<T>(this SuspensionContext<T> suspensionContext)
+        public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateMixedBashEvents<T>(this SuspensionContext<T> suspensionContext)
         {
             Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.MixedBash);
@@ -130,7 +120,7 @@ namespace Catel.Collections
         /// <param name="suspensionContext">The suspension context.</param>
         /// <typeparam name="T">The type of collection item.</typeparam>
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
-        private static ICollection<NotifyRangedCollectionChangedEventArgs> CreateMixedConsolidateEvents<T>(this SuspensionContext<T> suspensionContext)
+        public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateMixedConsolidateEvents<T>(this SuspensionContext<T> suspensionContext)
         {
             Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.MixedConsolidate);
@@ -164,7 +154,8 @@ namespace Catel.Collections
                         consolidated = true;
                     }
                 }
-            } while (consolidated);
+            }
+            while (consolidated);
 
             return events;
         }

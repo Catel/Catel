@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.Collections
 {
     using System;
@@ -16,22 +17,11 @@ namespace Catel.Collections
     /// <typeparam name="T">Type of the elements contained by the suspending collection.</typeparam>
     internal class SuspensionContext<T>
     {
-        /// <summary>
-        /// The events generator registry.
-        /// </summary>
-        private static Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>> _eventGeneratorsRegistry;
-
-        /// <summary>
-        /// Gets events generators registry.
-        /// </summary>
-        public static Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>> EventsGeneratorsRegistry => _eventGeneratorsRegistry ?? (_eventGeneratorsRegistry = new Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>>());
-
         #region Fields
         /// <summary>
         /// The suspension count.
         /// </summary>
         private int _suspensionCount;
-
         #endregion Fields
 
         #region Constructors
@@ -46,6 +36,11 @@ namespace Catel.Collections
         #endregion Constructors
 
         #region Properties
+        /// <summary>
+        /// Gets events generators registry.
+        /// </summary>
+        public static Lazy<Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>>> EventsGeneratorsRegistry { get; } = new Lazy<Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>>>(InitFunction);
+
         /// <summary>
         /// Gets the indices of the changed items while change notifications.
         /// </summary>
@@ -82,5 +77,24 @@ namespace Catel.Collections
         /// </summary>
         public SuspensionMode Mode { get; }
         #endregion Properties
+
+        #region Methods
+        /// <summary>
+        /// Initialize the EventsGeneratorsRegistry
+        /// </summary>
+        /// <returns></returns>
+        private static Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>> InitFunction()
+        {
+            return new Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>>
+                       {
+                           { SuspensionMode.None, context => context.CreateNoneEvents() },
+                           { SuspensionMode.Adding, context => context.CreateAddingEvents() },
+                           { SuspensionMode.Removing, context => context.CreateRemovingEvents() },
+                           { SuspensionMode.Mixed, context => context.CreateMixedEvents() },
+                           { SuspensionMode.MixedBash, context => context.CreateMixedBashEvents() },
+                           { SuspensionMode.MixedConsolidate, context => context.CreateMixedConsolidateEvents() }
+                       };
+        }
+        #endregion Methods
     }
 }
