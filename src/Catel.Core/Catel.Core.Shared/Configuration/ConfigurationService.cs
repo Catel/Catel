@@ -40,7 +40,7 @@ namespace Catel.Configuration
         private readonly IObjectConverterService _objectConverterService;
         private readonly ISerializer _serializer;
 
-#if NET
+#if NET || NETSTANDARD
         private readonly DynamicConfiguration _localConfiguration;
         private readonly DynamicConfiguration _roamingConfiguration;
 
@@ -83,7 +83,7 @@ namespace Catel.Configuration
             _objectConverterService = objectConverterService;
             _serializer = serializer;
 
-#if NET
+#if NET || NETSTANDARD
             _localConfigFilePath = Path.Combine(Path.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserLocal), "configuration.xml");
 
             try

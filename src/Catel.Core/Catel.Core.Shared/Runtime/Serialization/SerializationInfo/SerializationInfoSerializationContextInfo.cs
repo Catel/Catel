@@ -25,7 +25,7 @@ namespace Catel.Runtime.Serialization
             PropertyValues = new List<PropertyValue>();
         }
 
-#if NET
+#if NET || NETSTANDARD
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializationInfoSerializationContextInfo" /> class.
         /// </summary>
@@ -58,7 +58,7 @@ namespace Catel.Runtime.Serialization
         /// <value>The property values.</value>
         public List<PropertyValue> PropertyValues { get; internal set; }
 
-#if NET
+#if NET || NETSTANDARD
         /// <summary>
         /// Gets the serialization info.
         /// </summary>

@@ -365,7 +365,7 @@ namespace Catel.Runtime.Serialization.Xml
                 return true;
             }
 
-#if NET
+#if NET || NETSTANDARD
             // Implements ISerializable
             if (type.ImplementsInterfaceEx<ISerializable>())
             {

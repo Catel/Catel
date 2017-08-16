@@ -20,7 +20,6 @@ namespace Catel
     /// </summary>
     public static class ExceptionExtensions
     {
-        #region Public Methods and Operators
         /// <summary>
         /// Determines whether the specified exception is critical (meaning the application should shut down).
         /// </summary>
@@ -33,7 +32,7 @@ namespace Catel
                 if (ex is OutOfMemoryException || 
                     ex is BadImageFormatException
 
-#if NET || XAMARIN
+#if NET || NETSTANDARD || XAMARIN
                     || ex is AppDomainUnloadedException || 
                     ex is CannotUnloadAppDomainException || 
                     ex is InvalidProgramException || 
@@ -206,7 +205,6 @@ namespace Catel
 
             return new XDocument(root);
         }
-        #endregion
         #endregion
     }
 }

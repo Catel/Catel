@@ -5,9 +5,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 #if NET
+
 namespace Catel.Logging
 {
-
     using System;
     using System.Collections.Generic;
     using System.IO;

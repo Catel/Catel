@@ -8,7 +8,7 @@ namespace Catel
 {
     using System;
 
-#if NET
+#if NET || NETSTANDARD
     using System.Diagnostics;
 #else
     using System.ComponentModel;
@@ -96,7 +96,7 @@ namespace Catel
         /// <returns><c>true</c> if the process is hosted by visual studio; otherwise, <c>false</c>.</returns>
         public static bool IsProcessCurrentlyHostedByVisualStudio(bool checkParentProcesses = false)
         {
-#if NET
+#if NET || NETSTANDARD
             return IsHostedByProcess("devenv", checkParentProcesses);
 #elif XAMARIN || PCL
             return false;
@@ -117,7 +117,7 @@ namespace Catel
         /// <returns><c>true</c> if the process is hosted by sharp develop; otherwise, <c>false</c>.</returns>
         public static bool IsProcessCurrentlyHostedBySharpDevelop(bool checkParentProcesses = false)
         {
-#if NET
+#if NET || NETSTANDARD
             return IsHostedByProcess("sharpdevelop", checkParentProcesses);
 #elif XAMARIN || PCL
             return false;
@@ -138,7 +138,7 @@ namespace Catel
         /// <returns><c>true</c> if the process is hosted by expression blend; otherwise, <c>false</c>.</returns>
         public static bool IsProcessCurrentlyHostedByExpressionBlend(bool checkParentProcesses = false)
         {
-#if NET
+#if NET || NETSTANDARD
             return IsHostedByProcess("blend", checkParentProcesses);
 #elif XAMARIN || PCL
             return false;
@@ -177,7 +177,7 @@ namespace Catel
             return false;
         }
 
-#if NET
+#if NET || NETSTANDARD
         private static bool IsHostedByProcess(string processName, bool supportParentProcesses = false)
         {
             var currentProcess = Process.GetCurrentProcess();
@@ -191,6 +191,7 @@ namespace Catel
             {
                 if (currentProcessName.ContainsIgnoreCase("vshost"))
                 {
+#if NET
                     currentProcess = currentProcess.GetParent();
                     if (currentProcess == null)
                     {
@@ -198,6 +199,9 @@ namespace Catel
                     }
 
                     currentProcessName = currentProcess.ProcessName;
+#else
+                    return false;
+#endif
                 }
             }
 

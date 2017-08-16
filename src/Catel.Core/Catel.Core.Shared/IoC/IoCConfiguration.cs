@@ -103,8 +103,8 @@ namespace Catel.IoC
         {
             Log.Info("Updating default components");
 
-			// Don't initialize the first service locator (we are still loading assemblies at that time)
-			bool initializeServiceLocator = (_defaultServiceLocator != null);
+            // Don't initialize the first service locator (we are still loading assemblies at that time)
+            bool initializeServiceLocator = (_defaultServiceLocator != null);
             var serviceLocator = IoCFactory.CreateServiceLocator(initializeServiceLocator);
 
             lock (_lockObject)

@@ -18,6 +18,7 @@ namespace Catel.IoC
     using Reflection;
     using Threading;
     using Catel.Collections;
+
 #if !XAMARIN
     using System.Dynamic;
 #endif
@@ -539,7 +540,7 @@ namespace Catel.IoC
 
                 return instance;
             }
-#if NET
+#if NET || NETSTANDARD
             catch (MissingMethodException)
             {
                 // Ignore, we accept this

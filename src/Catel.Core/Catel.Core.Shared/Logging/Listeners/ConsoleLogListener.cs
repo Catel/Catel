@@ -7,7 +7,7 @@ namespace Catel.Logging
 {
     using System;
 
-#if NET
+#if NET || NETSTANDARD
     using System.Collections.Generic;
 #endif
 
@@ -16,7 +16,7 @@ namespace Catel.Logging
     /// </summary>
     public class ConsoleLogListener : LogListenerBase
     {
-#if NET
+#if NET || NETSTANDARD
         private class ConsoleColorSet
         {
             public ConsoleColorSet(ConsoleColor background, ConsoleColor foreground)
@@ -53,7 +53,7 @@ namespace Catel.Logging
         {
             string consoleMessage = FormatLogEvent(log, message, logEvent, extraData, logData, time);
 
-#if NET
+#if NET || NETSTANDARD
             var oldConsoleBackgroundColor = Console.BackgroundColor;
             var oldConsoleForegroundColor = Console.ForegroundColor;
 
@@ -66,13 +66,13 @@ namespace Catel.Logging
             Console.WriteLine(consoleMessage);
 #endif
 
-#if NET
+#if NET || NETSTANDARD
             Console.BackgroundColor = oldConsoleBackgroundColor;
             Console.ForegroundColor = oldConsoleForegroundColor;
 #endif
         }
 
-#if NET
+#if NET || NETSTANDARD
         private static void UpdateConsoleColors(LogEvent logEvent)
         {
             var colorSet = ColorSets[logEvent];

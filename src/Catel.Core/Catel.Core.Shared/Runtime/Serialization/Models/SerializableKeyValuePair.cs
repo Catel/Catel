@@ -12,7 +12,7 @@ namespace Catel.Runtime.Serialization
     /// <summary>
     /// Serializable key value pair.
     /// </summary>
-#if NET
+#if NET || NETSTANDARD
     [Serializable]
 #endif
     public class SerializableKeyValuePair

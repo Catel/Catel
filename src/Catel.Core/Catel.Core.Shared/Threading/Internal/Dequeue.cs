@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Deque.cs" company="Catel development team">
+// <copyright file="Dequeue.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -13,15 +13,15 @@ namespace Catel.Threading
     using System.Linq;
 
     /// <summary>
-    /// A double-ended queue (deque), which provides O(1) indexed access, O(1) removals from the front and back, amortized O(1) insertions to the front and back, and O(N) insertions and removals anywhere else (with the operations getting slower as the index approaches the middle).
+    /// A double-ended queue (Dequeue), which provides O(1) indexed access, O(1) removals from the front and back, amortized O(1) insertions to the front and back, and O(N) insertions and removals anywhere else (with the operations getting slower as the index approaches the middle).
     /// </summary>
-    /// <typeparam name="T">The type of elements contained in the deque.</typeparam>
+    /// <typeparam name="T">The type of elements contained in the Dequeue.</typeparam>
     /// <remarks>
     /// This code originally comes from AsyncEx: https://github.com/StephenCleary/AsyncEx
     /// </remarks>
     [DebuggerDisplay("Count = {Count}, Capacity = {Capacity}")]
-    [DebuggerTypeProxy(typeof (Deque<>.DebugView))]
-    internal sealed class Deque<T> : IList<T>, System.Collections.IList
+    [DebuggerTypeProxy(typeof (Dequeue<>.DebugView))]
+    internal sealed class Dequeue<T> : IList<T>, System.Collections.IList
     {
         /// <summary>
         /// The default capacity.
@@ -39,10 +39,10 @@ namespace Catel.Threading
         private int offset;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Deque&lt;T&gt;"/> class with the specified capacity.
+        /// Initializes a new instance of the <see cref="Dequeue&lt;T&gt;"/> class with the specified capacity.
         /// </summary>
         /// <param name="capacity">The initial capacity. Must be greater than <c>0</c>.</param>
-        public Deque(int capacity)
+        public Dequeue(int capacity)
         {
             if (capacity < 1)
             {
@@ -53,10 +53,10 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Deque&lt;T&gt;"/> class with the elements from the specified collection.
+        /// Initializes a new instance of the <see cref="Dequeue&lt;T&gt;"/> class with the elements from the specified collection.
         /// </summary>
         /// <param name="collection">The collection.</param>
-        public Deque(IEnumerable<T> collection)
+        public Dequeue(IEnumerable<T> collection)
         {
             int count = collection.Count();
             if (count > 0)
@@ -71,9 +71,9 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Deque&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="Dequeue&lt;T&gt;"/> class.
         /// </summary>
-        public Deque()
+        public Dequeue()
             : this(DefaultCapacity)
         {
         }
@@ -107,7 +107,7 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Gets or sets the capacity for this deque. This value must always be greater than zero, and this property cannot be set to a value less than <see cref="Count"/>.
+        /// Gets or sets the capacity for this Dequeue. This value must always be greater than zero, and this property cannot be set to a value less than <see cref="Count"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException"><c>Capacity</c> cannot be set to a value less than <see cref="Count"/>.</exception>
         public int Capacity
@@ -153,13 +153,13 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Gets the number of elements contained in this deque.
+        /// Gets the number of elements contained in this Dequeue.
         /// </summary>
-        /// <returns>The number of elements contained in this deque.</returns>
+        /// <returns>The number of elements contained in this Dequeue.</returns>
         public int Count { get; private set; }
 
         /// <summary>
-        /// Removes all items from this deque.
+        /// Removes all items from this Dequeue.
         /// </summary>
         public void Clear()
         {
@@ -170,9 +170,9 @@ namespace Catel.Threading
         /// <summary>
         /// Applies the offset to <paramref name="index"/>, resulting in a buffer index.
         /// </summary>
-        /// <param name="index">The deque index.</param>
+        /// <param name="index">The Dequeue index.</param>
         /// <returns>The buffer index.</returns>
-        private int DequeIndexToBufferIndex(int index)
+        private int DequeueIndexToBufferIndex(int index)
         {
             return (index + offset)%Capacity;
         }
@@ -184,7 +184,7 @@ namespace Catel.Threading
         /// <returns>The element at the specified index.</returns>
         private T DoGetItem(int index)
         {
-            return buffer[DequeIndexToBufferIndex(index)];
+            return buffer[DequeueIndexToBufferIndex(index)];
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Catel.Threading
         /// <param name="item">The element to store in the list.</param>
         private void DoSetItem(int index, T item)
         {
-            buffer[DequeIndexToBufferIndex(index)] = item;
+            buffer[DequeueIndexToBufferIndex(index)] = item;
         }
 
         /// <summary>
@@ -274,7 +274,7 @@ namespace Catel.Threading
         /// <param name="value">The element to insert.</param>
         private void DoAddToBack(T value)
         {
-            buffer[DequeIndexToBufferIndex(Count)] = value;
+            buffer[DequeueIndexToBufferIndex(Count)] = value;
             ++Count;
         }
 
@@ -294,7 +294,7 @@ namespace Catel.Threading
         /// <returns>The former last element.</returns>
         private T DoRemoveFromBack()
         {
-            T ret = buffer[DequeIndexToBufferIndex(Count - 1)];
+            T ret = buffer[DequeueIndexToBufferIndex(Count - 1)];
             --Count;
             return ret;
         }
@@ -329,7 +329,7 @@ namespace Catel.Threading
                 int writeIndex = Capacity - collectionCount;
                 for (int j = 0; j != copyCount; ++j)
                 {
-                    buffer[DequeIndexToBufferIndex(writeIndex + j)] = buffer[DequeIndexToBufferIndex(j)];
+                    buffer[DequeueIndexToBufferIndex(writeIndex + j)] = buffer[DequeueIndexToBufferIndex(j)];
                 }
 
                 // Rotate to the new view
@@ -344,7 +344,7 @@ namespace Catel.Threading
                 int writeIndex = index + collectionCount;
                 for (int j = copyCount - 1; j != -1; --j)
                 {
-                    buffer[DequeIndexToBufferIndex(writeIndex + j)] = buffer[DequeIndexToBufferIndex(index + j)];
+                    buffer[DequeueIndexToBufferIndex(writeIndex + j)] = buffer[DequeueIndexToBufferIndex(index + j)];
                 }
             }
 
@@ -352,7 +352,7 @@ namespace Catel.Threading
             int i = index;
             foreach (T item in collection)
             {
-                buffer[DequeIndexToBufferIndex(i)] = item;
+                buffer[DequeueIndexToBufferIndex(i)] = item;
                 ++i;
             }
 
@@ -390,7 +390,7 @@ namespace Catel.Threading
                 int writeIndex = collectionCount;
                 for (int j = copyCount - 1; j != -1; --j)
                 {
-                    buffer[DequeIndexToBufferIndex(writeIndex + j)] = buffer[DequeIndexToBufferIndex(j)];
+                    buffer[DequeueIndexToBufferIndex(writeIndex + j)] = buffer[DequeueIndexToBufferIndex(j)];
                 }
 
                 // Rotate to new view
@@ -405,7 +405,7 @@ namespace Catel.Threading
                 int readIndex = index + collectionCount;
                 for (int j = 0; j != copyCount; ++j)
                 {
-                    buffer[DequeIndexToBufferIndex(index + j)] = buffer[DequeIndexToBufferIndex(readIndex + j)];
+                    buffer[DequeueIndexToBufferIndex(index + j)] = buffer[DequeueIndexToBufferIndex(readIndex + j)];
                 }
             }
 
@@ -425,7 +425,7 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Inserts a single element at the back of this deque.
+        /// Inserts a single element at the back of this Dequeue.
         /// </summary>
         /// <param name="value">The element to insert.</param>
         public void AddToBack(T value)
@@ -435,7 +435,7 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Inserts a single element at the front of this deque.
+        /// Inserts a single element at the front of this Dequeue.
         /// </summary>
         /// <param name="value">The element to insert.</param>
         public void AddToFront(T value)
@@ -445,7 +445,7 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Inserts a collection of elements into this deque.
+        /// Inserts a collection of elements into this Dequeue.
         /// </summary>
         /// <param name="index">The index at which the collection is inserted.</param>
         /// <param name="collection">The collection of elements to insert.</param>
@@ -470,9 +470,9 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Removes a range of elements from this deque.
+        /// Removes a range of elements from this Dequeue.
         /// </summary>
-        /// <param name="offset">The index into the deque at which the range begins.</param>
+        /// <param name="offset">The index into the Dequeue at which the range begins.</param>
         /// <param name="count">The number of elements to remove.</param>
         /// <exception cref="ArgumentOutOfRangeException">Either <paramref name="offset"/> or <paramref name="count"/> is less than 0.</exception>
         /// <exception cref="ArgumentException">The range [<paramref name="offset"/>, <paramref name="offset"/> + <paramref name="count"/>) is not within the range [0, <see cref="Count"/>).</exception>
@@ -489,30 +489,30 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Removes and returns the last element of this deque.
+        /// Removes and returns the last element of this Dequeue.
         /// </summary>
         /// <returns>The former last element.</returns>
-        /// <exception cref="InvalidOperationException">The deque is empty.</exception>
+        /// <exception cref="InvalidOperationException">The Dequeue is empty.</exception>
         public T RemoveFromBack()
         {
             if (this.IsEmpty)
             {
-                throw new InvalidOperationException("The deque is empty.");
+                throw new InvalidOperationException("The Dequeue is empty.");
             }
 
             return this.DoRemoveFromBack();
         }
 
         /// <summary>
-        /// Removes and returns the first element of this deque.
+        /// Removes and returns the first element of this Dequeue.
         /// </summary>
         /// <returns>The former first element.</returns>
-        /// <exception cref="InvalidOperationException">The deque is empty.</exception>
+        /// <exception cref="InvalidOperationException">The Dequeue is empty.</exception>
         public T RemoveFromFront()
         {
             if (this.IsEmpty)
             {
-                throw new InvalidOperationException("The deque is empty.");
+                throw new InvalidOperationException("The Dequeue is empty.");
             }
 
             return this.DoRemoveFromFront();
@@ -521,11 +521,11 @@ namespace Catel.Threading
         [DebuggerNonUserCode]
         private sealed class DebugView
         {
-            private readonly Deque<T> deque;
+            private readonly Dequeue<T> Dequeue;
 
-            public DebugView(Deque<T> deque)
+            public DebugView(Dequeue<T> Dequeue)
             {
-                this.deque = deque;
+                this.Dequeue = Dequeue;
             }
 
             [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
@@ -533,8 +533,8 @@ namespace Catel.Threading
             {
                 get
                 {
-                    var array = new T[deque.Count];
-                    ((ICollection<T>) deque).CopyTo(array, 0);
+                    var array = new T[Dequeue.Count];
+                    ((ICollection<T>) Dequeue).CopyTo(array, 0);
                     return array;
                 }
             }

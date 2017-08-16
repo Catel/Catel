@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Catel.Scoping;
-
 namespace Catel.Runtime.Serialization
 {
     using System;
@@ -15,6 +13,7 @@ namespace Catel.Runtime.Serialization
     using Catel.ApiCop.Rules;
     using Catel.Logging;
     using Catel.Reflection;
+    using Catel.Scoping;
 
     /// <summary>
     /// Base class for all serializers.

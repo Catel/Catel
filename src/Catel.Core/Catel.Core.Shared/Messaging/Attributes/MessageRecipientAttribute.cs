@@ -14,20 +14,16 @@ namespace Catel.Messaging
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public sealed class MessageRecipientAttribute : Attribute
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageRecipientAttribute"/> class.
         /// </summary>
         public MessageRecipientAttribute()
         {
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the tag.
         /// </summary>
         public object Tag { get; set; }
-        #endregion
     }
 }

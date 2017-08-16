@@ -19,7 +19,7 @@ namespace Catel.Data
     public interface ISavableModel : IModel
     {
         #region Methods
-#if NET || XAMARIN
+#if NET || NETSTANDARD || XAMARIN
         // No overloads required
 #elif NETFX_CORE
         /// <summary>

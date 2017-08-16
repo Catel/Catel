@@ -4,11 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-
-
 namespace Catel.Logging
 {
+    using System;
+
     /// <summary>
     /// Logging class used internally for Catel. 
     /// </summary>
@@ -26,16 +25,10 @@ namespace Catel.Logging
             AlwaysLog = alwaysLog;
         }
 
-        #region Implementation of ICatelLog
-
         /// <summary>
         /// Gets a value indicating whether this log should always write logging statements regardless of log filter settings.
         /// </summary>
         public bool AlwaysLog { get; }
-
-        #endregion
-
-        #region Overrides of Log
 
         /// <summary>
         /// Gets a value indicating whether this logger is a Catel logger.
@@ -49,7 +42,5 @@ namespace Catel.Logging
         {
             get { return true; }
         }
-
-        #endregion
     }
 }
