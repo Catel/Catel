@@ -4,8 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.Collections
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
 
@@ -34,6 +36,11 @@ namespace Catel.Collections
         #endregion Constructors
 
         #region Properties
+        /// <summary>
+        /// Gets events generators registry.
+        /// </summary>
+        public static Lazy<Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>>> EventsGeneratorsRegistry { get; } = new Lazy<Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>>>(InitializeRegistry);
+
         /// <summary>
         /// Gets the indices of the changed items while change notifications.
         /// </summary>
@@ -70,5 +77,24 @@ namespace Catel.Collections
         /// </summary>
         public SuspensionMode Mode { get; }
         #endregion Properties
+
+        #region Methods
+        /// <summary>
+        /// Initialize the Events generators registry
+        /// </summary>
+        /// <returns></returns>
+        private static Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>> InitializeRegistry()
+        {
+            return new Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>>
+                       {
+                           { SuspensionMode.None, context => context.CreateNoneEvents() },
+                           { SuspensionMode.Adding, context => context.CreateAddingEvents() },
+                           { SuspensionMode.Removing, context => context.CreateRemovingEvents() },
+                           { SuspensionMode.Mixed, context => context.CreateMixedEvents() },
+                           { SuspensionMode.MixedBash, context => context.CreateMixedBashEvents() },
+                           { SuspensionMode.MixedConsolidate, context => context.CreateMixedConsolidateEvents() }
+                       };
+        }
+        #endregion Methods
     }
 }
