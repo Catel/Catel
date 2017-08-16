@@ -6,7 +6,6 @@
 
 #if NET
 
-
 namespace Catel.Logging
 {
     using System.Collections.Generic;

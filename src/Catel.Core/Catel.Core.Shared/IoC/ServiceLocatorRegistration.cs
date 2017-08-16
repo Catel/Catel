@@ -78,13 +78,6 @@ namespace Catel.IoC
         /// <value>The type of the registration.</value>
         public RegistrationType RegistrationType { get; private set; }
 
-        //public RegisteredTypeInfo RelatedTypeInfo { get; private set; }
-
-        //public bool IsRelatedTypeInfo
-        //{
-        //    get { return RelatedTypeInfo != null; }
-        //}
-
         /// <summary>
         /// Gets the tag.
         /// </summary>

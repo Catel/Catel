@@ -437,6 +437,5 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)ComponentModel\DataAnnotations\" />
     <Folder Include="$(MSBuildThisFileDirectory)Data\Validation\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Linq\" />
   </ItemGroup>
 </Project>

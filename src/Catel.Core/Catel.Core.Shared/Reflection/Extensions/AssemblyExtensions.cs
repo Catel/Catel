@@ -15,7 +15,7 @@ namespace Catel.Reflection
     /// </summary>
     public static class AssemblyExtensions
     {
-#if NET
+#if NET || NETSTANDARD
         /// <summary>
         /// Gets the build date time of the assembly.
         /// </summary>
@@ -42,7 +42,7 @@ namespace Catel.Reflection
                 return title;
             }
 
-#if NET
+#if NET || NETSTANDARD
             return System.IO.Path.GetFileNameWithoutExtension(assembly.CodeBase);
 #else
             throw new NotSupportedInPlatformException();
@@ -145,7 +145,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("assembly", assembly);
 
-#if NET
+#if NET || NETSTANDARD
             string location = assembly.Location;
             return location.Substring(0, location.LastIndexOf('\\'));
 #else

@@ -14,7 +14,6 @@ namespace Catel.Logging
     /// </summary>
     public class LogData : Dictionary<string, object>
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="LogData"/> class.
         /// </summary>
@@ -30,6 +29,5 @@ namespace Catel.Logging
             : base(values)
         {
         }
-        #endregion
     }
 }
