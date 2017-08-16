@@ -421,7 +421,7 @@ namespace Catel.Collections
             Action action = () =>
             {
                 // Create event args list
-                var eventArgsList = this._suspensionContext.CreateEventArgsList();
+                var eventArgsList = _suspensionContext.CreateEvents();
 
                 // Fire events
                 if (eventArgsList.Count != 0)

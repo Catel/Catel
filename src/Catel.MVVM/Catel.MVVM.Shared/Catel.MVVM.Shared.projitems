@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CatelEnvironment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Enums\NotifyRangedListChangedAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\EventArgs\Extensions\NotifyRangedCollectionChangedEventArgsExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\EventArgs\NotifyListChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\EventArgs\NotifyRangedCollectionChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\EventArgs\NotifyRangedListChangedEventArgs.cs" />

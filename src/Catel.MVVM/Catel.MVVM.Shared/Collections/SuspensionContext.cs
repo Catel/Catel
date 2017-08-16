@@ -6,6 +6,7 @@
 
 namespace Catel.Collections
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
 
@@ -15,11 +16,22 @@ namespace Catel.Collections
     /// <typeparam name="T">Type of the elements contained by the suspending collection.</typeparam>
     internal class SuspensionContext<T>
     {
+        /// <summary>
+        /// The events generator registry.
+        /// </summary>
+        private static Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>> _eventGeneratorsRegistry;
+
+        /// <summary>
+        /// Gets events generators registry.
+        /// </summary>
+        public static Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>> EventsGeneratorsRegistry => _eventGeneratorsRegistry ?? (_eventGeneratorsRegistry = new Dictionary<SuspensionMode, Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>>>());
+
         #region Fields
         /// <summary>
         /// The suspension count.
         /// </summary>
         private int _suspensionCount;
+
         #endregion Fields
 
         #region Constructors

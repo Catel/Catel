@@ -23,6 +23,38 @@ namespace Catel.Collections
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        /// <summary>Searches for the specified object and returns the zero-based index of the first occurrence within the range of elements in the <see cref="T:System.Collections.Generic.List`1" /> that extends from the specified index to the last element.</summary>
+        /// <param name="list">The list</param>
+        /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.List`1" />. The value can be <see langword="null" /> for reference types.</param>
+        /// <param name="index">The zero-based starting index of the search. 0 (zero) is valid in an empty list.</param>
+        /// <returns>The zero-based index of the first occurrence of <paramref name="item" /> within the range of elements in the <see cref="T:System.Collections.Generic.List`1" /> that extends from <paramref name="index" /> to the last element, if found; otherwise, –1.</returns>
+        /// <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index" /> is outside the range of valid indexes for the <see cref="T:System.Collections.Generic.List`1" />.</exception>
+        /// <typeparam name="T">The item type</typeparam>
+        /// <returns>The index of the item in the is if it's present; otherwise <value>-1</value></returns>
+        public static int IndexOf<T>(this IList<T> list, T item, int index)
+        {
+            Argument.IsNotNull("list", list);
+
+            var asList = list as List<T>;
+            if (asList != null)
+            {
+                return asList.IndexOf(item, index);
+            }
+
+            while (index < list.Count && !object.Equals(list[index], item))
+            {
+                index++;
+            }
+
+            if (index < list.Count)
+            {
+                return index;
+            }
+
+            return -1;
+        }
+
+
         /// <summary>
         /// Determines whether the item can be moved up in the list.
         /// </summary>
