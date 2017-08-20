@@ -81,7 +81,9 @@ namespace Catel
 			// for a specific string, use a cast like the DateTime about
 
             // Check if there is a culture specific version
-            var toStringMethod = instanceType.GetMethodEx("ToString", new[] {typeof (IFormatProvider)});
+
+            
+            var toStringMethod = instanceType.GetMethodEx("ToString", TypeArray.From<IFormatProvider>());
             if (toStringMethod != null)
             {
                 return (string)toStringMethod.Invoke(instance, new object[] { cultureInfo });
