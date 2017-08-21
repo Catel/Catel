@@ -23,3 +23,4 @@ Post release steps:
 1)  Update the following version numbers:
      * History.txt
      * SolutionAssemblyInfo.cs
+     * AssemblyExtensionTests.cs
