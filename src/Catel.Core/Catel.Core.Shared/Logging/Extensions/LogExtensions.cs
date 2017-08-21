@@ -192,7 +192,7 @@ namespace Catel.Logging
 
             if (others != null && others.Length > 0)
             {
-                object[] args = {s1, s2, s3, s4, s5};
+                object[] args = { s1, s2, s3, s4, s5 };
                 Array.Resize(ref args, 5 + others.Length);
                 Array.Copy(others, 0, args, 5, others.Length);
 

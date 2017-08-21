@@ -320,6 +320,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\StaticHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Helpers\TypeHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\Interfaces\IEntryAssemblyResolver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflection\TypeArray.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\TypeCache.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\TypeInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\ReferenceEqualityComparer.cs" />

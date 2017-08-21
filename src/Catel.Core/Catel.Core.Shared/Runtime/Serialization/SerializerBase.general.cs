@@ -765,9 +765,10 @@ namespace Catel.Runtime.Serialization
         /// <returns></returns>
         protected virtual MethodInfo GetObjectToStringMethod(Type memberType)
         {
+            
             var toStringMethod = _toStringMethodCache.GetFromCacheOrFetch(memberType, () =>
             {
-                var method = memberType.GetMethodEx("ToString", new[] { typeof(IFormatProvider) }, BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                var method = memberType.GetMethodEx("ToString", TypeArray.From<IFormatProvider>(), BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
                 return method;
             });
 
@@ -783,7 +784,7 @@ namespace Catel.Runtime.Serialization
         {
             var parseMethod = _parseMethodCache.GetFromCacheOrFetch(memberType, () =>
             {
-                var method = memberType.GetMethodEx("Parse", new[] { typeof(string), typeof(IFormatProvider) }, BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
+                var method = memberType.GetMethodEx("Parse", TypeArray.From<string, IFormatProvider>(), BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
                 return method;
             });
 
