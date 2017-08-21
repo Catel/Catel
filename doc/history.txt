@@ -21,6 +21,20 @@ Items prepended with CTL are from JIRA (old issue tracker). Items prepended with
 Version 5.1.0
 ==================
 
+For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date:
+=============
+2017/08/21
+
+Platform support changes:
+=========================
+-
+
+Classes / members marked as obsolete:
+=====================================
+-
+
 Added/fixed:
 ============
 (+) #1077 Add IViewModelLocator.IsCompatible and IViewLocator.IsCompatible to allow multiple views and/or 
@@ -36,38 +50,6 @@ Added/fixed:
 (*) #1085 Changed ValidatableModelBase.IsValidationSuspended to be virtual
 (x) #1088 Fix issues with FastObservableCollection especially with SuspensionMode.Mixed
 (x) #1093 Fix Command.Execute bad async implementation (resulting in exceptions not being thrown)
-
-Roadmap:
-========
-See http://www.catelproject.com/support/issue-tracker
-
-Known issues:
-=============
-See http://www.catelproject.com/support/issue-tracker
-
-**********************************************************
-
-==================
-Version 5.0.0
-==================
-
-For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/update-guides/
-
-Release date:
-=============
-2017/xx/xx
-
-Platform support changes:
-=========================
--
-
-Classes / members marked as obsolete:
-=====================================
--
-
-Added/fixed:
-============
-...
 
 Roadmap:
 ========
