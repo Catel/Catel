@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Catel.Core</AssemblyName>
+    <RootNamespace>Catel</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <DefineConstants>TRACE;NETSTANDARD;NS20;RELEASE;NETSTANDARD2_0</DefineConstants>
+    <NoWarn>1591;1998;1701;1702;1705</NoWarn>
+    <OutputPath>..\..\..\output\debug\NS20\Catel.Core\</OutputPath>
+    <DocumentationFile>..\..\..\output\debug\NS20\Catel.Core\Catel.Core.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <DefineConstants>TRACE;DEBUG;NETSTANDARD;NS20;NETSTANDARD2_0</DefineConstants>
+    <NoWarn>1591;1998;1701;1702;1705</NoWarn>
+    <OutputPath>..\..\..\output\debug\NS20\Catel.Core\</OutputPath>
+    <DocumentationFile>..\..\..\output\debug\NS20\Catel.Core\Catel.Core.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <Import Project="..\Catel.Core.Shared\Catel.Core.Shared.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <PackageReference Include="AsyncUsageAnalyzers" Version="1.0.0-alpha003" />
+    <PackageReference Include="MethodTimer.Fody" Version="1.19.1" />
+    <PackageReference Include="Catel.Fody" Version="2.17.0" NoWarn="NU1701" />
+    <PackageReference Include="Fody" Version="2.1.2" />
+    <PackageReference Include="ModuleInit.Fody" Version="1.6.0" />
+    <PackageReference Include="Obsolete.Fody" Version="4.2.4" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
+    <PackageReference Include="WpfAnalyzers" Version="0.2.7.10" />
+  </ItemGroup>
+
+</Project>

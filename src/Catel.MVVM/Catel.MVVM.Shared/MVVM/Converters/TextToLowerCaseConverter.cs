@@ -9,12 +9,18 @@ namespace Catel.MVVM.Converters
 {
     using System;
     using System.Globalization;
+    using Caching;
 
     /// <summary>
     /// Converts string values to lower case.
     /// </summary>
     public class TextToLowerCaseConverter : ValueConverterBase
     {
+        /// <summary>
+        /// The cache storage.
+        /// </summary>
+        private readonly ICacheStorage<string, string> _cacheStorage = new CacheStorage<string, string>();
+
         /// <summary>
         /// Modifies the source data before passing it to the target for display in the UI.
         /// </summary>
@@ -27,11 +33,14 @@ namespace Catel.MVVM.Converters
             var stringValue = value as string;
             if (stringValue != null)
             {
+                value = _cacheStorage.GetFromCacheOrFetch(stringValue, () =>
+                {
 #if NETFX_CORE || XAMARIN_FORMS
-                return stringValue.ToLower();
+                    return stringValue.ToLower();
 #else
-                return stringValue.ToLower(CurrentCulture ?? CultureInfo.CurrentCulture);
+                    return stringValue.ToLower(CurrentCulture ?? CultureInfo.CurrentCulture);
 #endif
+                });
             }
 
             return value;

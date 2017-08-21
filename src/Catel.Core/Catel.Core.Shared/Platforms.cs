@@ -69,6 +69,12 @@ namespace Catel
                 case KnownPlatforms.NET50:
                     return currentPlatform == SupportedPlatforms.NET50;
 
+                case KnownPlatforms.NetStandard:
+                    return currentPlatform == SupportedPlatforms.NetStandard20;
+
+                case KnownPlatforms.NetStandard20:
+                    return currentPlatform == SupportedPlatforms.NetStandard20;
+
                 case KnownPlatforms.WindowsUniversal:
                     return currentPlatform == SupportedPlatforms.WindowsUniversal;
 
@@ -105,6 +111,8 @@ namespace Catel
             return SupportedPlatforms.NET47;
 #elif NET50
             return SupportedPlatforms.NET50;
+#elif NS20
+            return SupportedPlatforms.NetStandard20;
 #elif UWP
             return SupportedPlatforms.WindowsUniversal;
 #elif ANDROID
@@ -143,6 +151,11 @@ namespace Catel
         /// .NET framework 5.0.
         /// </summary>
         NET50,
+
+        /// <summary>
+        /// .NET Standard 2.0.
+        /// </summary>
+        NetStandard20,
 
         /// <summary>
         /// Windows Universal 10.0.
@@ -204,6 +217,16 @@ namespace Catel
         /// .NET framework 5.0.
         /// </summary>
         NET50,
+
+        /// <summary>
+        /// Any .NET Standard platform.
+        /// </summary>
+        NetStandard,
+
+        /// <summary>
+        /// .NET Standard 2.0.
+        /// </summary>
+        NetStandard20,
 
         /// <summary>
         /// Any Windows Universal platform.

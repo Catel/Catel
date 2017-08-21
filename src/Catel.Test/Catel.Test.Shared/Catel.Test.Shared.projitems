@@ -145,6 +145,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Auditing\AuditorTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Auditing\TestAuditor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Auditing\TestViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandManagerExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandManagerFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CompositeCommandFacts.cs" />
@@ -179,6 +180,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Exceptions\PropertyNotFoundInModelExceptionTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Exceptions\ViewModelNotRegisteredExceptionTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Exceptions\WrongViewModelTypeExceptionTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Fixtures\ViewModels.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\Fixtures\Views.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\TestClasses.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\UrlLocatorFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Locators\ViewLocatorFacts.cs" />

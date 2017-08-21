@@ -10,7 +10,7 @@ namespace Catel.Threading
     using System.Threading;
 
     /// <summary>
-    /// Provides a syncronization context to acquire or release exclusive lock of an object and execute thread safe code.
+    /// Provides a synchronization context to acquire or release exclusive lock of an object and execute thread safe code.
     /// </summary>
     /// <remarks>
     /// Be aware when you use this class. If it is improperly used could provoke dead locks.

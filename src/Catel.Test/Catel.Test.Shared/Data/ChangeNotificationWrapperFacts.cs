@@ -218,7 +218,7 @@ namespace Catel.Test.Data
             }
 
             [TestCase]
-            public void HandlesCollectionChangesCorrectlyInSuspensionModeMixed()
+            public void HandlesCollectionChangesCorrectlyInSuspensionModeMixedConsolidate()
             {
                 var collection = new FastObservableCollection<TestModel>();
                 var wrapper = new ChangeNotificationWrapper(collection);
@@ -248,7 +248,7 @@ namespace Catel.Test.Data
                     }
                 };
 
-                using (collection.SuspendChangeNotifications(SuspensionMode.Mixed))
+                using (collection.SuspendChangeNotifications(SuspensionMode.MixedConsolidate))
                 {
                     ((ICollection<TestModel>)collection).ReplaceRange(new [] { new TestModel() });
                 }

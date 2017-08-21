@@ -6,7 +6,6 @@
 
 #if NET
 
-
 namespace Catel.IoC
 {
     using System.Configuration;

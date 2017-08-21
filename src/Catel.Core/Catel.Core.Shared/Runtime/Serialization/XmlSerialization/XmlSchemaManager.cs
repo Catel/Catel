@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETSTANDARD
 
 namespace Catel.Runtime.Serialization.Xml
 {

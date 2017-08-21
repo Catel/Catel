@@ -99,10 +99,8 @@ namespace Catel.MVVM.Navigation
 #if NETFX_CORE
             return string.Equals(uriString, viewType.FullName, StringComparison.OrdinalIgnoreCase);
 #else
-            var lowerUri = uriString.ToLowerInvariant();
-            var lowerViewTypeName = viewType.Name.ToLowerInvariant();
 
-            return lowerUri.Contains(lowerViewTypeName + ".xaml");
+            return uriString.ContainsIgnoreCase(viewType.Name + ".xaml");
 #endif
         }
 

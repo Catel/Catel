@@ -2,9 +2,9 @@
 <CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
     <CodeSnippet Format="1.0.0">
         <Header>
-            <Title>Define a command for a view model class</Title>
-            <Shortcut>vmcommand</Shortcut>
-            <Description>Code snippet for a command for a view model class</Description>
+            <Title>Define a task command with a can execute method for a view model class</Title>
+            <Shortcut>vmtaskcommandwithcanexecute</Shortcut>
+            <Description>Code snippet for a task command with a can execute method for a view model class</Description>
             <Author>CatenaLogic</Author>
             <SnippetTypes>
                 <SnippetType>Expansion</SnippetType>
@@ -16,31 +16,29 @@
                     <ID>name</ID>
                     <ToolTip>Name of the command</ToolTip>
                     <Default>name</Default>
-                </Literal>			
+                </Literal>					
                 <Literal>
                     <ID>type</ID>
                     <ToolTip>Type of the property</ToolTip>
                     <Default>type</Default>
                 </Literal>
             </Declarations>
-            <Code Language="VB">
-                <![CDATA[''' <summary>
-''' Gets the $name$ command.
-''' </summary>
-Public ReadOnly Property $name$() As Command
-	Get
-		Return _$name$
-	End Get
-End Property
+            <Code Language="csharp">
+                <![CDATA[public TaskCommand $name$ { get; private set; }
 
-Private ReadOnly _$name$ As Command = New Command(AddressOf On$name$Execute)
+// TODO: Move code below to constructor
+$name$ = new TaskCommand(On$name$ExecuteAsync, On$name$CanExecute);
+// TODO: Move code above to constructor
 
-''' <summary>
-''' Method to invoke when the $name$ command is executed.
-''' </summary>
-Private Sub On$name$Execute()
-	' TODO: Handle command logic here
-End Sub]]>
+private bool On$name$CanExecute()
+{
+    return true;
+}
+
+private async Task On$name$ExecuteAsync()
+{
+    // TODO: Handle command logic here
+}]]>
             </Code>
         </Snippet>
     </CodeSnippet>

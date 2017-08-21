@@ -18,7 +18,7 @@ namespace Catel.Data
     using Logging;
     using Reflection;
 
-#if NET
+#if NET || NETSTANDARD
     using System.Runtime.Serialization;
 #endif
 
@@ -56,12 +56,12 @@ namespace Catel.Data
         /// The property names that failed to validate and should be skipped next time for NET 4.0 
         /// attribute validation.
         /// </summary>
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         protected static readonly Dictionary<Type, HashSet<string>> PropertiesNotCausingValidation = new Dictionary<Type, HashSet<string>>();
 
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private bool _isValidated;
@@ -69,7 +69,7 @@ namespace Catel.Data
         /// <summary>
         /// Field that determines whether a validator has been retrieved yet.
         /// </summary>
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private bool _hasRetrievedValidatorOnce;
@@ -77,7 +77,7 @@ namespace Catel.Data
         /// <summary>
         /// The backing field for the <see cref="IValidatable.Validator"/> property.
         /// </summary>
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private IValidator _validator;
@@ -85,24 +85,24 @@ namespace Catel.Data
         /// <summary>
         /// The validation context, which can contain in-between validation info.
         /// </summary>
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private readonly ValidationContext _validationContext = new ValidationContext();
 
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private SuspensionContext _validationSuspensionContext;
 
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private readonly HashSet<string> _propertiesCurrentlyBeingValidated = new HashSet<string>();
 
 #if !NETFX_CORE && !PCL
 
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private bool _firstAnnotationValidation = true;
@@ -110,33 +110,33 @@ namespace Catel.Data
         /// <summary>
         /// A dictionary containing the annotation (attribute) validation results of properties of this class.
         /// </summary>
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private readonly Dictionary<string, string> _dataAnnotationValidationResults = new Dictionary<string, string>();
 
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private readonly Dictionary<string, System.ComponentModel.DataAnnotations.ValidationContext> _dataAnnotationsValidationContext = new Dictionary<string, System.ComponentModel.DataAnnotations.ValidationContext>();
 #endif
 
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private event EventHandler<DataErrorsChangedEventArgs> _errorsChanged;
 
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private event EventHandler<DataErrorsChangedEventArgs> _warningsChanged;
 
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private event EventHandler<ValidationEventArgs> _validating;
 
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         private event EventHandler<ValidationEventArgs> _validated;
@@ -159,7 +159,7 @@ namespace Catel.Data
             InitializeModelValidation();
         }
 
-#if NET
+#if NET || NETSTANDARD
         /// <summary>
         /// Initializes a new instance of the <see cref="ValidatableModelBase"/> class.
         /// </summary>
@@ -180,7 +180,7 @@ namespace Catel.Data
         /// <value>
         /// <c>true</c> if the object is validating; otherwise, <c>false</c>.
         /// </value>
-#if NET
+#if NET || NETSTANDARD
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -238,7 +238,7 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether this object should automatically validate itself when a property value
         /// has changed.
         /// </summary>
-#if NET
+#if NET || NETSTANDARD
         [Browsable(false)]
 #endif
         protected bool AutomaticallyValidateOnPropertyChanged { get; set; }
@@ -276,7 +276,7 @@ namespace Catel.Data
         /// <value>
         /// <c>true</c> if validation is suspended; otherwise, <c>false</c>.
         /// </value>
-        protected bool IsValidationSuspended
+        protected virtual bool IsValidationSuspended
         {
             get
             {
@@ -307,7 +307,7 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when the object is about the validate the fields.
         /// </summary>
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         protected event EventHandler ValidatingFields;
@@ -315,7 +315,7 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when the object has validated the fields.
         /// </summary>
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         protected event EventHandler ValidatedFields;
@@ -323,7 +323,7 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when the object is about the validate the business rules.
         /// </summary>
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         protected event EventHandler ValidatingBusinessRules;
@@ -331,7 +331,7 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when the object has validated the business rules.
         /// </summary>
-#if NET
+#if NET || NETSTANDARD
         [field: NonSerialized]
 #endif
         protected event EventHandler ValidatedBusinessRules;
@@ -1081,6 +1081,48 @@ namespace Catel.Data
                     _propertiesCurrentlyBeingValidated.Remove(propertyName);
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the current business warnings.
+        /// </summary>
+        /// <returns>The warnings or <see cref="string.Empty"/> if no warning is available.</returns>
+        protected virtual string GetBusinessRuleWarnings()
+        {
+            return ((IValidatable)this).GetBusinessRuleWarnings();
+        }
+
+        /// <summary>
+        /// Gets the warnings for a specific column.
+        /// </summary>
+        /// <param name="columnName">Column name.</param>
+        /// <returns>
+        /// The warnings or <see cref="string.Empty" /> if no warning is available.
+        /// </returns>
+        protected virtual string GetFieldWarnings(string columnName)
+        {
+            return ((IValidatable)this).GetFieldWarnings(columnName);
+        }
+
+        /// <summary>
+        /// Gets the current errors errors.
+        /// </summary>
+        /// <returns>The errors or <see cref="string.Empty"/> if no error is available.</returns>
+        protected virtual string GetBusinessRuleErrors()
+        {
+            return ((IValidatable)this).GetBusinessRuleErrors();
+        }
+
+        /// <summary>
+        /// Gets the errors for a specific column.
+        /// </summary>
+        /// <param name="columnName">Column name.</param>
+        /// <returns>
+        /// The errors or <see cref="string.Empty" /> if no error is available.
+        /// </returns>
+        protected virtual string GetFieldErrors(string columnName)
+        {
+            return ((IValidatable)this).GetFieldErrors(columnName);
         }
         #endregion
 

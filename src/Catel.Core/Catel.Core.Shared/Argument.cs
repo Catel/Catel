@@ -3,6 +3,7 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Catel
 {
     using System;
@@ -23,16 +24,13 @@ namespace Catel
     public static partial class Argument
     {
         #region Fields
-
         /// <summary>
         /// The <see cref="ILog">log</see> object.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCatelLogger(typeof(Argument), true);
-
         #endregion
 
         #region Methods
-
         /// <summary>
         /// Determines whether the specified argument is not <c>null</c>.
         /// </summary>

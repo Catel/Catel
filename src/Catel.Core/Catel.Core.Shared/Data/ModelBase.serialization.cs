@@ -10,12 +10,8 @@ namespace Catel.Data
 
     using ISerializable = Catel.Runtime.Serialization.ISerializable;
 
-#if !NET
+#if !NET && !NETSTANDARD
     using System.Reflection;
-#endif
-
-#if NET
-    using System.Security;
 #endif
 
 #if NET

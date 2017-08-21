@@ -18,6 +18,7 @@ namespace Catel.Runtime.Serialization.Xml
     using Catel.Data;
     using Catel.Logging;
     using Catel.Reflection;
+    using Collections;
     using IoC;
 
     /// <summary>
@@ -364,7 +365,7 @@ namespace Catel.Runtime.Serialization.Xml
                 return true;
             }
 
-#if NET
+#if NET || NETSTANDARD
             // Implements ISerializable
             if (type.ImplementsInterfaceEx<ISerializable>())
             {
@@ -448,7 +449,7 @@ namespace Catel.Runtime.Serialization.Xml
             string typeName = type.AssemblyQualifiedName;
             if (string.IsNullOrWhiteSpace(typeName))
             {
-                return new Type[] { };
+                return ArrayShim.Empty<Type>();
             }
 
             return _knownTypesByAttributesCache.GetFromCacheOrFetch(typeName, () =>
@@ -781,7 +782,7 @@ namespace Catel.Runtime.Serialization.Xml
                     }
 
                     // Should have an empty constructor
-                    if (type.GetConstructorEx(new Type[0]) == null)
+                    if (type.GetConstructorEx(ArrayShim.Empty<Type>()) == null)
                     {
                         return false;
                     }

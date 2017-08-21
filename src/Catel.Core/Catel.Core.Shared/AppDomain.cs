@@ -8,6 +8,7 @@
 
 namespace System
 {
+    using Catel.Collections;
     using Catel.Logging;
 
     using Collections.Generic;
@@ -15,6 +16,7 @@ namespace System
     using System.Linq;
     using Catel.Reflection;
     using MethodTimer;
+
 #if NETFX_CORE
     using global::Windows.ApplicationModel;
     using global::Windows.Storage.Search;
@@ -102,9 +104,9 @@ namespace System
                         }
                     }
 #else
-                    var currentdomain = typeof(string).GetTypeInfo().Assembly.GetType("System.AppDomain").GetRuntimeProperty("CurrentDomain").GetMethod.Invoke(null, new object[] { });
-                    var method = currentdomain.GetType().GetRuntimeMethod("GetAssemblies", new Type[] { });
-                    var assemblies = method.Invoke(currentdomain, new object[] { }) as Assembly[];
+                    var currentdomain = typeof(string).GetTypeInfo().Assembly.GetType("System.AppDomain").GetRuntimeProperty("CurrentDomain").GetMethod.Invoke(null, ArrayShim.Empty<object>());
+                    var method = currentdomain.GetType().GetRuntimeMethod("GetAssemblies", ArrayShim.Empty<Type>());
+                    var assemblies = method.Invoke(currentdomain, ArrayShim.Empty<object>()) as Assembly[];
                     loadedAssemblies.AddRange(assemblies);
 #endif
 

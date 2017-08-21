@@ -40,6 +40,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\DurationExpirationPolicy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\ExpirationPolicy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Caching\Policies\SlidingExpirationPolicy.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\ArrayShim.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Extensions\CollectionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Extensions\DictionaryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Helpers\CollectionHelper.cs" />
@@ -420,7 +421,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\TaskShim.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Helpers\ThreadHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Interfaces\IAsyncWaitQueue.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Threading\Internal\Deque.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Threading\Internal\Dequeue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\SynchronizationContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\Timer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WeakReferences\Interfaces\IExecute.cs" />
@@ -436,6 +437,5 @@
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)ComponentModel\DataAnnotations\" />
     <Folder Include="$(MSBuildThisFileDirectory)Data\Validation\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Linq\" />
   </ItemGroup>
 </Project>

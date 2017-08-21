@@ -14,6 +14,11 @@ namespace Catel.ExceptionHandling
     /// </summary>
     public class BufferPolicy : PolicyBase, IBufferPolicy
     {
+        /// <summary>
+        /// <see cref="ToString"/> method result cache.
+        /// </summary>
+        private string _string;
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="BufferPolicy"/> class.
@@ -37,7 +42,7 @@ namespace Catel.ExceptionHandling
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("{0} times per {1}", NumberOfTimes, Interval);
+            return _string ?? (_string = string.Format("{0} times per {1}", NumberOfTimes, Interval));
         }
         #endregion
     }

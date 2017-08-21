@@ -25,6 +25,12 @@ namespace Catel.Windows.Input
     /// </summary>
     public class InputGesture : ModelBase
     {
+
+        /// <summary>
+        /// <see cref="ToString"/> method result cache.
+        /// </summary>
+        private string _string; 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InputGesture"/> class.
         /// </summary>
@@ -64,7 +70,7 @@ namespace Catel.Windows.Input
         /// <summary>
         /// Register the Key property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData KeyProperty = RegisterProperty("Key", typeof(Key));
+        public static readonly PropertyData KeyProperty = RegisterProperty<InputGesture, Key>(o => o.Key, propertyChangedEventHandler: (o, e) => o.OnInputGesturePropertyChanged());
 
         /// <summary>
         /// Gets the modifiers.
@@ -78,7 +84,15 @@ namespace Catel.Windows.Input
         /// <summary>
         /// Register the Modifiers property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ModifiersProperty = RegisterProperty("Modifiers", typeof(ModifierKeys));
+        public static readonly PropertyData ModifiersProperty = RegisterProperty<InputGesture, ModifierKeys>(o => o.Modifiers, propertyChangedEventHandler: (o, e) => o.OnInputGesturePropertyChanged());
+
+        /// <summary>
+        /// Called whether <see cref="Modifiers"/> or <see cref="Key"/> properties changed.
+        /// </summary>
+        private void OnInputGesturePropertyChanged()
+        {
+            _string = null;
+        }
 
         /// <summary>
         /// Determines whether the specified <see cref="System.Object" /> is equal to this instance.
@@ -163,20 +177,25 @@ namespace Catel.Windows.Input
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
-            var format = string.Empty;
-
-            if (Modifiers != ModifierKeys.None)
+            if (_string == null)
             {
-                foreach (var modifier in Enum<ModifierKeys>.GetValues())
+                var format = string.Empty;
+
+                if (Modifiers != ModifierKeys.None)
                 {
-                    if (Enum<ModifierKeys>.Flags.IsFlagSet(Modifiers, modifier) && modifier != ModifierKeys.None)
+                    foreach (var modifier in Enum<ModifierKeys>.GetValues())
                     {
-                        format += string.Format("{0} + ", modifier);
+                        if (Enum<ModifierKeys>.Flags.IsFlagSet(Modifiers, modifier) && modifier != ModifierKeys.None)
+                        {
+                            format += string.Format("{0} + ", modifier);
+                        }
                     }
                 }
+
+                _string = format + Key;
             }
 
-            return format + Key;
+            return _string;
         }
     }
 }

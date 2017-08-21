@@ -6,7 +6,6 @@
 
 namespace Catel.Test.IoC
 {
-    using System;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading;
@@ -136,6 +135,120 @@ namespace Catel.Test.IoC
         }
 
         [TestFixture]
+        public class TheCreateInstanceWithParametersMethod
+        {
+            public interface IInterface
+            {
+                bool SignalI { get; set; }
+
+            }
+
+            public class ClassA : IInterface
+            {
+                public bool SignalI { get; set; }
+                public bool SignalA { get; set; }
+            }
+
+            public class ClassB : IInterface
+            {
+                public ClassB(IInterface i)
+                {
+                    i.SignalI = true;
+                }
+
+                public ClassB(ClassB b)
+                {
+                    b.SignalB = true;
+                }
+
+                public ClassB(ClassB b1, ClassB b2)
+                {
+                    b1.SignalB = true;
+                    b2.SignalB = true;
+                }
+
+                public ClassB(ClassB b, ClassA a)
+                {
+                    b.SignalB = true;
+                    a.SignalA = true;
+                }
+
+                public ClassB(ClassB b, IInterface i)
+                {
+                    b.SignalB = true;
+                    i.SignalI = true;
+                }
+
+                public ClassB(IInterface i, ClassA a)
+                {
+                    i.SignalI = true;
+                    a.SignalA = true;
+                }
+
+                public ClassB(ClassC c, ClassA a)
+                {
+                    c.SignalC = true;
+                    a.SignalA = true;
+                }
+
+                public bool SignalB { get; set; }
+
+                public bool SignalI { get; set; }
+            }
+
+            public class ClassC : ClassA
+            {
+                public bool SignalC { get; set; }
+            }
+
+            [Test]
+            public void UseTheMostSpecializedConstructor()
+            {
+                ClassB b = new ClassB(new ClassA());
+
+                TypeFactory.Default.CreateInstanceWithParameters(typeof(ClassB), b);
+
+                Assert.IsTrue(b.SignalB);
+            }
+
+            [Test]
+            public void UseTheMostSpecializedConstructor2()
+            {
+                ClassB b1 = new ClassB(new ClassA());
+                ClassB b2 = new ClassB(new ClassA());
+
+                TypeFactory.Default.CreateInstanceWithParameters(typeof(ClassB), b1, b2);
+
+                Assert.IsTrue(b1.SignalB);
+                Assert.IsTrue(b2.SignalB);
+            }
+
+            [Test]
+            public void UseTheMostSpecializedConstructor3()
+            {
+                ClassA a = new ClassA();
+                ClassB b = new ClassB(a);
+
+                TypeFactory.Default.CreateInstanceWithParameters(typeof(ClassB), b, a);
+
+                Assert.IsTrue(b.SignalB);
+                Assert.IsTrue(a.SignalA);
+            }
+
+            [Test]
+            public void UseTheMostSpecializedConstructor4()
+            {
+                ClassA a = new ClassA();
+                ClassC c = new ClassC();
+
+                TypeFactory.Default.CreateInstanceWithParameters(typeof(ClassB), c, a);
+
+                Assert.IsTrue(c.SignalC);
+                Assert.IsTrue(a.SignalA);
+            }
+        }
+
+        [TestFixture]
         public class TheCreateInstanceMethod
         {
             [TestCase]
@@ -260,7 +373,7 @@ namespace Catel.Test.IoC
 
                 var ex = ExceptionTester.CallMethodAndExpectException<CircularDependencyException>(() => typeFactory.CreateInstance<X>());
 
-                Assert.AreEqual(3, ex.TypePath.AllTypes.Length);
+                Assert.AreEqual(3, ex.TypePath.AllTypes.Count());
                 Assert.AreEqual(typeof(X), ex.TypePath.FirstType.Type);
                 Assert.AreEqual(typeof(X), ex.DuplicateRequestInfo.Type);
             }

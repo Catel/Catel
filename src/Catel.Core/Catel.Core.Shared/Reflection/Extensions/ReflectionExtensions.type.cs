@@ -70,12 +70,18 @@ namespace Catel.Reflection
         /// The _method cache.
         /// </summary>
         private static readonly CacheStorage<ReflectionCacheKey, MethodInfo> _methodCache = new CacheStorage<ReflectionCacheKey, MethodInfo>(storeNullValues: true);
-#endif
 
         /// <summary>
-        /// Dictionary containing all possible implicit conversions of system types.
+        /// The type distance cache.
         /// </summary>
-        private static readonly Dictionary<Type, HashSet<Type>> _convertableDictionary = new Dictionary<Type, HashSet<Type>>
+        private static CacheStorage<string, int> _typeDistanceCacheStorage = new CacheStorage<string, int>();
+
+#endif
+
+    /// <summary>
+    /// Dictionary containing all possible implicit conversions of system types.
+    /// </summary>
+    private static readonly Dictionary<Type, HashSet<Type>> _convertableDictionary = new Dictionary<Type, HashSet<Type>>
             {
                 {typeof (decimal), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char)}},
                 {typeof (double), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char), typeof (float)}},
@@ -656,6 +662,51 @@ namespace Catel.Reflection
             return type.GetInterfaces();
 #endif
         }
+
+      /// <summary>
+      /// Gets the distance between types.
+      /// </summary>
+      /// <param name="fromType">The type</param>
+      /// <param name="toType">The base type</param>
+      /// <returns>The distance distance between types or -1 if the <paramref name="toType"/> is not assignable from the <paramref name="fromType"/></returns>
+      public static int GetTypeDistance(this Type fromType, Type toType)
+      {
+        Argument.IsNotNull("type", fromType);
+        Argument.IsNotNull("baseType", toType);
+
+#if ENABLE_CACHE
+          var cacheKey = $"fromType:{fromType.FullName};toType:{toType.FullName}";
+          return _typeDistanceCacheStorage.GetFromCacheOrFetch(cacheKey, () => GetDistanceInternal(fromType, toType));
+#else
+        return GetTypeDistanceInternal(fromType, toType);
+#endif
+      }
+
+      /// <summary>
+      /// Gets the distance between types.
+      /// </summary>
+      /// <param name="fromType">The type</param>
+      /// <param name="toType">The base type</param>
+      /// <returns>The distance distance between types or -1 if the <paramref name="toType"/> is not assignable from the <paramref name="fromType"/></returns>
+      /// <remarks>
+      /// Don't use this method directly use <see cref="GetTypeDistance"/> instead.
+      /// </remarks>
+      private static int GetTypeDistanceInternal(Type fromType, Type toType)
+      {
+        if (!toType.IsAssignableFromEx(fromType))
+        {
+          return -1;
+        }
+
+        int distance = 0;
+        while (fromType != toType && !(toType.IsInterfaceEx() && !fromType.ImplementsInterfaceEx(toType)))
+        {
+          fromType = fromType.GetBaseTypeEx();
+          distance++;
+        }
+
+        return distance;
+      }
 
         /// <summary>
         /// The get base type ex.

@@ -12,6 +12,7 @@ namespace Catel.Reflection
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
+    using Collections;
     using Logging;
     using Threading;
 
@@ -28,7 +29,7 @@ namespace Catel.Reflection
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if NET
+#if NET || NETSTANDARD
         private static readonly Queue<Assembly> _threadSafeAssemblyQueue = new Queue<Assembly>();
 
         /// <summary>
@@ -100,7 +101,7 @@ namespace Catel.Reflection
             ShouldIgnoreAssemblyEvaluators = new List<Func<Assembly, bool>>();
             ShouldIgnoreTypeEvaluators = new List<Func<Assembly, Type, bool>>();
 
-#if NET
+#if NET || NETSTANDARD
             AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
 
             // Initialize the types of early loaded assemblies
@@ -115,7 +116,7 @@ namespace Catel.Reflection
 #endif
         }
 
-#if NET
+#if NET || NETSTANDARD
         /// <summary>
         /// Called when an assembly is loaded in the current <see cref="AppDomain"/>.
         /// </summary>
@@ -532,7 +533,7 @@ namespace Catel.Reflection
 
             if (typeSource == null)
             {
-                return new Type[] { };
+                return ArrayShim.Empty<Type>();
             }
 
             var retryCount = 3;
@@ -554,7 +555,7 @@ namespace Catel.Reflection
                 }
             }
 
-            return new Type[] { };
+            return ArrayShim.Empty<Type>();
 
             // IMPORTANT NOTE: READ NOTE ABOVE BEFORE EDITING THIS METHOD!!!!
         }
@@ -693,7 +694,7 @@ namespace Catel.Reflection
                     }
                 }
 
-#if NET
+#if NET || NETSTANDARD
                 var lateLoadedAssemblies = new List<Assembly>();
 
                 lock (_threadSafeAssemblyQueue)
@@ -843,7 +844,7 @@ namespace Catel.Reflection
                 return true;
             }
 
-#if NET
+#if NET || NETSTANDARD
             if (assembly.ReflectionOnly)
             {
                 return true;

@@ -133,9 +133,10 @@ namespace Catel.MVVM.Views
         {
             Argument.IsNotNull("viewModelContainer", viewModelContainer);
 
-            if (_viewModelContainers.ContainsKey(viewModelContainer))
+            ViewToViewModelMappingHelper viewToViewModelMappingHelper;
+            if (_viewModelContainers.TryGetValue(viewModelContainer, out viewToViewModelMappingHelper))
             {
-                _viewModelContainers[viewModelContainer].UninitializeViewToViewModelMappings();
+                viewToViewModelMappingHelper.UninitializeViewToViewModelMappings();
                 _viewModelContainers.Remove(viewModelContainer);
             }
         }
@@ -239,9 +240,10 @@ namespace Catel.MVVM.Views
         private void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var viewModelContainerType = ViewModelContainerType;
-            if (_viewToViewModelMappingContainers[viewModelContainerType].ContainsViewModelToViewMapping(e.PropertyName))
+            var viewToViewModelMappingContainer = _viewToViewModelMappingContainers[viewModelContainerType];
+            if (viewToViewModelMappingContainer.ContainsViewModelToViewMapping(e.PropertyName))
             {
-                ViewToViewModelMapping mapping = _viewToViewModelMappingContainers[viewModelContainerType].GetViewModelToViewMapping(e.PropertyName);
+                ViewToViewModelMapping mapping = viewToViewModelMappingContainer.GetViewModelToViewMapping(e.PropertyName);
                 if (_ignoredViewModelChanges.Contains(mapping.ViewPropertyName))
                 {
                     Log.Debug("Ignored property changed event for ViewModel.'{0}'", mapping.ViewPropertyName);
@@ -267,9 +269,10 @@ namespace Catel.MVVM.Views
         private void OnViewModelContainerPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var viewModelContainerType = ViewModelContainerType;
-            if (_viewToViewModelMappingContainers[viewModelContainerType].ContainsViewToViewModelMapping(e.PropertyName))
+            var viewToViewModelMappingContainer = _viewToViewModelMappingContainers[viewModelContainerType];
+            if (viewToViewModelMappingContainer.ContainsViewToViewModelMapping(e.PropertyName))
             {
-                ViewToViewModelMapping mapping = _viewToViewModelMappingContainers[viewModelContainerType].GetViewToViewModelMapping(e.PropertyName);
+                ViewToViewModelMapping mapping = viewToViewModelMappingContainer.GetViewToViewModelMapping(e.PropertyName);
                 if (_ignoredViewChanges.Contains(mapping.ViewPropertyName))
                 {
                     Log.Debug("Ignored property changed event for view.'{0}'", mapping.ViewPropertyName);

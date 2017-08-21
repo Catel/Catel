@@ -6,7 +6,7 @@
 
 using Catel.IoC;
 
-#if NET
+#if NET || NETSTANDARD
 
 namespace Catel.Data
 {
@@ -82,6 +82,7 @@ namespace Catel.Data
         [SecurityCritical]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
+#if NET
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
             using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetBinarySerializer(), null)))
             {
@@ -94,6 +95,9 @@ namespace Catel.Data
                 var serializationContext = serializationContextInfoFactory.GetSerializationContextInfo(serializer, this, info, configuration);
                 serializer.Serialize(this, serializationContext, configuration);
             }
+#else
+            throw new NotSupportedInPlatformException("It's adviced to no longer use binary serialization on this platform");
+#endif
         }
 
         /// <summary>
@@ -103,6 +107,7 @@ namespace Catel.Data
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
+#if NET
             if (_serializationInfo == null)
             {
                 // Probably a custom serializer which will populate us in a different way
@@ -121,6 +126,9 @@ namespace Catel.Data
                 var serializationContext = serializationContextInfoFactory.GetSerializationContextInfo(serializer, this, _serializationInfo, configuration);
                 serializer.Deserialize(this, serializationContext, configuration);
             }
+#else
+            throw new NotSupportedInPlatformException("It's adviced to no longer use binary serialization on this platform");
+#endif
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Catel.Reflection
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using Collections;
     using IoC;
     using Logging;
 
@@ -178,7 +179,7 @@ namespace Catel.Reflection
             {
                 Log.Error(ex, "Failed to get types from assembly '{0}'", assembly.FullName);
 
-                foundAssemblyTypes = new Type[] { };
+                foundAssemblyTypes = ArrayShim.Empty<Type>();
             }
 
             return foundAssemblyTypes;

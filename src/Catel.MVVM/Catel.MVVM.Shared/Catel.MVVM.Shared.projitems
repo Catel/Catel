@@ -11,11 +11,15 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CatelEnvironment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\Enums\NotifyRangedListChangedAction.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\EventArgs\Extensions\NotifyRangedCollectionChangedEventArgsExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\EventArgs\NotifyListChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\EventArgs\NotifyRangedCollectionChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\EventArgs\NotifyRangedListChangedEventArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\Extensions\SuspensionModeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\Extensions\SuspensionContextExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\FastBindingList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\FastObservableCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Collections\ExtendedSuspensionContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Collections\SuspensionContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\DispatcherObservableObject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Designer\Attributes\DesignTimeCodeAttribute.cs" />

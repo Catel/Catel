@@ -274,7 +274,7 @@ namespace Catel.Data
             // CTL-212: Generic types are not supported for FieldInfo.GetValue
             if (type.ContainsGenericParametersEx())
             {
-                return new PropertyData[] { };
+                return ArrayShim.Empty<PropertyData>();
             }
 
             PreventWrongDeclaredFields(type);

@@ -7,6 +7,7 @@
 namespace Catel.MVVM.Converters
 {
     using System;
+    using Collections;
     using Logging;
     using Reflection;
 
@@ -44,13 +45,13 @@ namespace Catel.MVVM.Converters
             }
 
             var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
-            var methodInfo = value.GetType().GetMethodEx(methodName, new Type[0], bindingFlags);
+            var methodInfo = value.GetType().GetMethodEx(methodName, ArrayShim.Empty<Type>(), bindingFlags);
             if (methodInfo == null)
             {
                 return value;
             }
 
-            return methodInfo.Invoke(value, new object[0]);
+            return methodInfo.Invoke(value, ArrayShim.Empty<object>());
         }
 
         /// <summary>

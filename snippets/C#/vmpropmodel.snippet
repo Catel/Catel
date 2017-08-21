@@ -29,20 +29,14 @@
                 </Literal>
             </Declarations>
             <Code Language="csharp">
-                <![CDATA[/// <summary>
-/// $description$.
-/// </summary>
-[Model]
+                <![CDATA[[Model]
 public $type$ $name$
 {
-	get { return GetValue<$type$>($name$Property); }
-	private set { SetValue($name$Property, value); }
+    get { return GetValue<$type$>($name$Property); }
+    private set { SetValue($name$Property, value); }
 }
 
-/// <summary>
-/// Register the $name$ property so it is known in the class.
-/// </summary>
-public static readonly PropertyData $name$Property = RegisterProperty("$name$", typeof($type$));]]>
+public static readonly PropertyData $name$Property = RegisterProperty(nameof($name$), typeof($type$));]]>
             </Code>
         </Snippet>
     </CodeSnippet>

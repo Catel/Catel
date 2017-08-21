@@ -10,22 +10,22 @@ namespace Catel.Reflection
     using System.Globalization;
     using System.Reflection;
 
-#if NET
+#if NET || NETSTANDARD
     using System.Runtime.InteropServices;
 #endif
 
-#if !NET && !NETFX_CORE && !PCL
+#if !NET && !NETSTANDARD && !NETFX_CORE && !PCL
 
     /// <summary>
     /// The type info.
     /// </summary>
     public class TypeInfo
     {
-        #region Fields
+    #region Fields
         private readonly Type _type;
-        #endregion
+    #endregion
 
-        #region Constructors
+    #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeInfo"/> class. 
         /// </summary>
@@ -41,9 +41,9 @@ namespace Catel.Reflection
 
             _type = type;
         }
-        #endregion
+    #endregion
 
-        #region Properties
+    #region Properties
         /// <summary>
         /// Gets the name of the current member.
         /// </summary>
@@ -133,7 +133,7 @@ namespace Catel.Reflection
             get { return _type.ReflectedType; }
         }
 
-#if NET
+#if NET || NETSTANDARD
 
         /// <summary>
         /// Gets a <see cref="T:System.Runtime.InteropServices.StructLayoutAttribute"/> that describes the layout of the current type.
@@ -249,7 +249,7 @@ namespace Catel.Reflection
             get { return _type.BaseType; }
         }
 
-#if NET
+#if NET || NETSTANDARD
 
         /// <summary>
         /// Gets the initializer for the <see cref="T:System.Type"/>.
@@ -423,7 +423,7 @@ namespace Catel.Reflection
         }
 #endif
 
-#if NET 
+#if NET || NETSTANDARD
 
         /// <summary>
         /// Gets a value indicating whether the class layout attribute SequentialLayout is selected for the <see cref="T:System.Type"/>.
@@ -559,7 +559,7 @@ namespace Catel.Reflection
         {
             get
             {
-#if !NET
+#if !NET && !NETSTANDARD
                 return true;
 #else
                 return _type.IsSerializable;
@@ -739,7 +739,7 @@ namespace Catel.Reflection
             get { return _type.HasElementType; }
         }
 
-#if NET 
+#if NET || NETSTANDARD
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="T:System.Type"/> can be hosted in a context.
@@ -807,9 +807,9 @@ namespace Catel.Reflection
             get { return this.GetInterfaces(); }
         }
 
-        #endregion
+    #endregion
 
-        #region Methods
+    #region Methods
         /// <summary>
         /// Gets the type.
         /// </summary>
@@ -1127,7 +1127,7 @@ namespace Catel.Reflection
         }
 #endif
 
-#if NET 
+#if NET || NETSTANDARD
 
         /// <summary>
         /// Invokes the specified member, using the specified binding constraints and matching the specified argument list and culture.
@@ -1312,7 +1312,7 @@ namespace Catel.Reflection
             return _type.GetArrayRank();
         }
 
-#if NET 
+#if NET || NETSTANDARD
         /// <summary>
         /// Searches for a constructor whose parameters match the specified argument types and modifiers, using the specified binding constraints and the specified calling convention.
         /// </summary>
@@ -1892,7 +1892,7 @@ namespace Catel.Reflection
             return _type.GetInterfaces();
         }
 
-#if NET        
+#if NET || NETSTANDARD
         /// <summary>
         /// Returns an array of <see cref="T:System.Type"/> objects representing a filtered list of interfaces implemented or inherited by the current <see cref="T:System.Type"/>.
         /// </summary>
@@ -2154,7 +2154,7 @@ namespace Catel.Reflection
             return _type.GetProperty(name, returnType, types);
         }
 
-#if NET
+#if NET || NETSTANDARD
 
         /// <summary>
         /// Searches for the specified public property whose parameters match the specified argument types.
@@ -2698,7 +2698,7 @@ namespace Catel.Reflection
             return _type.GetInterfaceMap(interfaceType);
         }
 #endif
-        #endregion
+    #endregion
     }
 #endif
 }

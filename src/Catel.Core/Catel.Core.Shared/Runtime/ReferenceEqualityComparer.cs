@@ -16,7 +16,6 @@ namespace Catel.Runtime
     public class ReferenceEqualityComparer<TObject> : IEqualityComparer<TObject>
         where TObject : class
     {
-        #region IEqualityComparer<TObject> Members
         /// <summary>
         /// Determines whether the specified objects are equal.
         /// </summary>
@@ -44,6 +43,5 @@ namespace Catel.Runtime
             // Note: we need to use the same hashcode, then the dictionary will use the Equals method instead
             return 0;
         }
-        #endregion
     }
 }

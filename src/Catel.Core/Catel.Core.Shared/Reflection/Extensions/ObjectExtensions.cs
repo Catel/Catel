@@ -9,6 +9,7 @@ namespace Catel.Reflection
 {
     using System;
     using System.Linq;
+    using Collections;
 
     /// <summary>
     /// Object extensions for reflection.
@@ -24,7 +25,7 @@ namespace Catel.Reflection
         {
             if (objects == null)
             {
-                return new Attribute[] { };
+                return ArrayShim.Empty<Attribute>();
             }
 
             return objects.Cast<Attribute>().ToArray();

@@ -8,22 +8,15 @@ namespace Catel.Test.MVVM
 {
     using System;
     using Catel.MVVM;
+    using Locators.Fixtures.ViewModels;
+    using Locators.Fixtures.Views;
     using SpecialTest;
     using Test.ViewModels;
     using Test.Views;
     using ViewModels;
 
     using NUnit.Framework;
-
-    namespace Views
-    {
-        public class MyNameViewer { }
-    }
-
-    namespace ViewModels
-    {
-        public class MyNameViewerViewModel { }
-    }
+    using Views;
 
     public class ViewModelLocatorFacts
     {
@@ -66,6 +59,38 @@ namespace Catel.Test.MVVM
 
                 var resolvedViewModel = viewModelLocator.ResolveViewModel(typeof(FollowingNoNamingConventionView));
                 Assert.AreEqual(typeof(NoNamingConventionViewModel2), resolvedViewModel);
+            }
+        }
+
+        [TestFixture]
+        public class TheIsCompatibleMethod
+        {
+            [TestCase]
+            public void ThrowsArgumentNullExceptionForNullTypeToResolve()
+            {
+                var viewModelLocator = new ViewModelLocator();
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModelLocator.IsCompatible(null, typeof(MyNameViewerViewModel)));
+            }
+
+            [TestCase]
+            public void ThrowsArgumentNullExceptionForNullResolvedType()
+            {
+                var viewModelLocator = new ViewModelLocator();
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModelLocator.IsCompatible(typeof(MyNameViewer), null));
+            }
+
+            [TestCase(typeof(MyNameViewerViewModel), true)]
+            [TestCase(typeof(MyNameViewerViewModel2), true)]
+            [TestCase(typeof(NonCompatibleViewModel), false)]
+            public void ReturnsCompatibleValues(Type viewModelType, bool expectedValue)
+            {
+                var viewModelLocator = new ViewModelLocator();
+
+                viewModelLocator.Register(typeof(FollowingNoNamingConventionView), typeof(MyNameViewerViewModel));
+                viewModelLocator.Register(typeof(FollowingNoNamingConventionView), typeof(MyNameViewerViewModel2));
+
+                var isCompatible = viewModelLocator.IsCompatible(typeof(FollowingNoNamingConventionView), viewModelType);
+                Assert.AreEqual(expectedValue, isCompatible);
             }
         }
 
@@ -128,7 +153,7 @@ namespace Catel.Test.MVVM
             public void ResolvesMyNameViewerViewModelFromMyNameViewer()
             {
                 var viewModelLocator = new ViewModelLocator();
-                var resolvedType = viewModelLocator.ResolveViewModel(typeof(Catel.Test.MVVM.Views.MyNameViewer));
+                var resolvedType = viewModelLocator.ResolveViewModel(typeof(MyNameViewer));
 
                 Assert.IsNotNull(resolvedType);
                 Assert.AreEqual(typeof(MyNameViewerViewModel), resolvedType);

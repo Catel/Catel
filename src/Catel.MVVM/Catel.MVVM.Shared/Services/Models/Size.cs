@@ -16,6 +16,7 @@ namespace Catel.Services
     {
         private double _width;
         private double _height;
+        private string _string;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Size"/> class.
@@ -26,6 +27,7 @@ namespace Catel.Services
         {
             _width = width;
             _height = height;
+            _string = null;
         }
 
         /// <summary>
@@ -35,7 +37,14 @@ namespace Catel.Services
         public double Width
         {
             get { return _width; }
-            set { _width = value; }
+            set
+            {
+                if (_width != value)
+                {
+                    _width = value;
+                    _string = null;
+                }
+            }
         }
 
         /// <summary>
@@ -45,7 +54,14 @@ namespace Catel.Services
         public double Height
         {
             get { return _height; }
-            set { _height = value; }
+            set
+            {
+                if (_height != value)
+                {
+                    _height = value;
+                    _string = null;
+                }
+            }
         }
 
         /// <summary>
@@ -127,7 +143,7 @@ namespace Catel.Services
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
-            return string.Format("{0}x{1}", Width, Height);
+            return _string ?? (_string =  string.Format("{0}x{1}", Width, Height));
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Catel
     using System;
     using System.Globalization;
     using System.Text;
+    using Collections;
     using Logging;
     using Reflection;
 
@@ -79,7 +80,7 @@ namespace Catel
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                return new byte[] { };
+                return ArrayShim.Empty<byte>();
             }
 
             var encoding = new UTF8Encoding();

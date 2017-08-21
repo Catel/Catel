@@ -18,6 +18,50 @@ Items prepended with CTL are from JIRA (old issue tracker). Items prepended with
 **********************************************************
 
 ==================
+Version 5.1.0
+==================
+
+For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date:
+=============
+2017/08/21
+
+Platform support changes:
+=========================
+-
+
+Classes / members marked as obsolete:
+=====================================
+-
+
+Added/fixed:
+============
+(+) #1077 Add IViewModelLocator.IsCompatible and IViewLocator.IsCompatible to allow multiple views and/or 
+    views models to be compatible with multiple view models and/or views
+(+) #1095 Add mode MixedBash to FastObservableCollection
+(+) #1096 Add mode MixedConsolidate to FastObservableCollection
+(*) #953  Cache ToString, ToUpper() and ToLower() calls
+(*) #1017 Improve performance of ViewToViewModelMappingHelper
+(*) #1068 Minimize allocations using ArrayShim
+(*) #1070 TypeFactory.CreateInstanceWithParameters use the most specialized constructor
+(*) #1083 Derived ChildAwareModelBase from ValidatableModelBase instead of ModelBase
+(*) #1084 Add virtual validation methods to ValidatableModelBase
+(*) #1085 Changed ValidatableModelBase.IsValidationSuspended to be virtual
+(x) #1088 Fix issues with FastObservableCollection especially with SuspensionMode.Mixed
+(x) #1093 Fix Command.Execute bad async implementation (resulting in exceptions not being thrown)
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 5.0.0
 ==================
 

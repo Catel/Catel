@@ -23,7 +23,7 @@ namespace Catel.Threading
     [DebuggerTypeProxy(typeof (DefaultAsyncWaitQueue<>.DebugView))]
     public sealed class DefaultAsyncWaitQueue<T> : IAsyncWaitQueue<T>
     {
-        private readonly Deque<TaskCompletionSource<T>> _queue = new Deque<TaskCompletionSource<T>>();
+        private readonly Dequeue<TaskCompletionSource<T>> _queue = new Dequeue<TaskCompletionSource<T>>();
 
         private int Count
         {

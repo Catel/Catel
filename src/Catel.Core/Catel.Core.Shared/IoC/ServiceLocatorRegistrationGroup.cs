@@ -15,7 +15,6 @@ namespace Catel.IoC
     /// </summary>
     public class ServiceLocatorRegistrationGroup
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ServiceLocatorRegistrationGroup"/> class.
         /// </summary>
@@ -27,15 +26,11 @@ namespace Catel.IoC
 
             EntryRegistration = entryRegistration;
         }
-        #endregion
-
+        
         /// <summary>
         /// Gets the entry registration.
         /// </summary>
         /// <value>The entry registration.</value>
         public ServiceLocatorRegistration EntryRegistration { get; private set; }
-
-        
-        
     }
 }

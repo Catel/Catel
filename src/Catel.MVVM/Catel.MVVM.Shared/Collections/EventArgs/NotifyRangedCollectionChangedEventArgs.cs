@@ -1,61 +1,155 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NotifyRangedCollectionChangedEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Catel.Collections
 {
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Collections.Specialized;
 
-    /// <summary>
+  /// <summary>
     /// The ranged notify collection changed event args.
     /// </summary>
     public class NotifyRangedCollectionChangedEventArgs : NotifyCollectionChangedEventArgs
     {
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="NotifyRangedCollectionChangedEventArgs"/> class.
         /// </summary>
-        /// <param name="action">The action.</param>
-        public NotifyRangedCollectionChangedEventArgs(NotifyCollectionChangedAction action)
-            : base(action)
+        /// <remarks>This is only for use of <see cref="Catel.Collections.SuspensionMode.None"/>.</remarks>
+        public NotifyRangedCollectionChangedEventArgs()
+            : base(NotifyCollectionChangedAction.Reset)
         {
+            SuspensionMode = SuspensionMode.None;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NotifyRangedCollectionChangedEventArgs"/> class.
         /// </summary>
-        /// <param name="action">The action.</param>
         /// <param name="changedItems">The changed items.</param>
         /// <param name="indices">The indices.</param>
-        public NotifyRangedCollectionChangedEventArgs(NotifyCollectionChangedAction action, IList changedItems, IList<int> indices)
-            : base(action, changedItems, (indices != null && indices.Count != 0) ? indices[0] : -1)
+        /// <param name="mode">The suspension mode.</param>
+        /// <remarks>This only for use of <see cref="Catel.Collections.SuspensionMode.Adding"/> and <see cref="Catel.Collections.SuspensionMode.Removing"/>.</remarks>
+        public NotifyRangedCollectionChangedEventArgs(IList changedItems, IList<int> indices, SuspensionMode mode)
+            : base(ModeToAction(mode), changedItems, (indices != null && indices.Count != 0) ? indices[0] : -1)
         {
-            Argument.IsNotNull("indices", indices);
+            Argument.IsNotNull(nameof(changedItems), changedItems);
+            Argument.IsNotNull(nameof(indices), indices);
             // ReSharper disable once PossibleNullReferenceException
-            Argument.IsNotOutOfRange("indices", indices.Count, changedItems.Count, changedItems.Count);
+            Argument.IsNotOutOfRange(nameof(indices), indices.Count, changedItems.Count, changedItems.Count);
 
+            ChangedItems = changedItems;
             Indices = indices;
+            SuspensionMode = mode;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NotifyRangedCollectionChangedEventArgs" /> class.
+        /// Initializes a new instance of the <see cref="NotifyRangedCollectionChangedEventArgs"/> class.
         /// </summary>
-        /// <param name="action">The action.</param>
-        /// <param name="newItems">The new items.</param>
-        /// <param name="oldItems">The old items.</param>
+        /// <param name="changedItems">The changed items.</param>
         /// <param name="indices">The indices.</param>
-        public NotifyRangedCollectionChangedEventArgs(NotifyCollectionChangedAction action, IList newItems, IList oldItems, IList<int> indices)
-            : base(action, newItems, oldItems)
+        /// <param name="mode">The suspension mode.</param>
+        /// <param name="action">The action.</param>
+        /// <remarks>This is only for use of <see cref="Catel.Collections.SuspensionMode.MixedBash"/>.</remarks>
+        public NotifyRangedCollectionChangedEventArgs(IList changedItems, IList<int> indices, SuspensionMode mode, NotifyCollectionChangedAction action)
+            : base(EnsureModeAndAction(mode, action), changedItems, (indices != null && indices.Count != 0) ? indices[0] : -1)
         {
+            Argument.IsNotNull(nameof(changedItems), changedItems);
+            Argument.IsNotNull(nameof(indices), indices);
+            // ReSharper disable once PossibleNullReferenceException
+            Argument.IsNotOutOfRange(nameof(indices), indices.Count, changedItems.Count, changedItems.Count);
+
+            ChangedItems = changedItems;
             Indices = indices;
+            SuspensionMode = mode;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NotifyRangedCollectionChangedEventArgs"/> class.
+        /// </summary>
+        /// <param name="changedItems">The changed items.</param>
+        /// <param name="indices">The indices.</param>
+        /// <param name="mixedActions">The mixed actions.</param>
+        /// <remarks>This is only for use of <see cref="Catel.Collections.SuspensionMode.Mixed"/>.</remarks>
+        public NotifyRangedCollectionChangedEventArgs(IList changedItems, IList<int> indices, IList<NotifyCollectionChangedAction> mixedActions)
+            : base(NotifyCollectionChangedAction.Reset)
+        {
+            Argument.IsNotNull(nameof(changedItems), changedItems);
+            Argument.IsNotNull(nameof(indices), indices);
+            Argument.IsNotNull(nameof(mixedActions), mixedActions);
+
+            SuspensionMode = SuspensionMode.Mixed;
+            ChangedItems = changedItems;
+            Indices = indices;
+            MixedActions = mixedActions;
+        }
+        #endregion
+
+        #region Properties
         /// <summary>
         /// Gets the indices.
         /// </summary>
-        public IList<int> Indices { get; private set; }
-    }
+        public IList<int> Indices { get; }
+
+        /// <summary>
+        /// Gets the changed items.
+        /// </summary>
+        public IList ChangedItems { get; }
+
+        /// <summary>
+        /// Gets the mixed actions.
+        /// </summary>
+        public IList<NotifyCollectionChangedAction> MixedActions { get; }
+
+        /// <summary>
+        /// Gets the suspension mode.
+        /// </summary>
+        public SuspensionMode SuspensionMode { get; }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// The ensure mode and action.
+        /// </summary>
+        /// <param name="mode">The suspension mode.</param>
+        /// <param name="action">The action.</param>
+        /// <returns>The <see cref="NotifyCollectionChangedAction"/>.</returns>
+        private static NotifyCollectionChangedAction EnsureModeAndAction(SuspensionMode mode, NotifyCollectionChangedAction action)
+        {
+            // Check for mixed modes except for Mixed, others fail
+            if (mode == SuspensionMode.Mixed || !mode.IsMixedMode())
+            {
+                throw new ArgumentException($"Wrong mode '{mode}' for constructor.");
+            }
+
+            // Check for action Add or Remove, others fail
+            switch (action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                case NotifyCollectionChangedAction.Remove: return action;
+                default: throw new ArgumentException($"Wrong action '{action}' for constructor.");
+            }
+        }
+
+        /// <summary>
+        /// Transforms the <see cref="SuspensionMode"/> into its equivalent <see cref="NotifyCollectionChangedAction"/>.
+        /// </summary>
+        /// <param name="mode">The suspension mode.</param>
+        /// <returns>The equivalent <see cref="NotifyCollectionChangedAction"/>.</returns>
+        private static NotifyCollectionChangedAction ModeToAction(SuspensionMode mode)
+        {
+            // Only transform modes Adding and Removing, others fail
+            switch (mode)
+            {
+                case SuspensionMode.Adding: return NotifyCollectionChangedAction.Add;
+                case SuspensionMode.Removing: return NotifyCollectionChangedAction.Remove;
+                default: throw new ArgumentException($"Wrong mode '{mode}' for constructor.");
+            }
+        }
+        #endregion
+  }
 }
