@@ -39,7 +39,6 @@ namespace Catel
         /// <exception cref="System.ArgumentNullException"></exception>
         /// <exception cref="ArgumentNullException">If <paramref name="paramValue" /> is <c>null</c>.</exception>
         [DebuggerNonUserCode, DebuggerStepThrough]
-        [MethodTimer.Time]
         public static void IsNotNull(string paramName, object paramValue)
         {
             if (paramValue == null)
