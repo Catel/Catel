@@ -238,6 +238,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionExtensionsFacts.methodinfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionExtensionsFacts.propertyinfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\ReflectionExtensionsFacts.type.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reflection\TypeArrayFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\TypeCacheFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\TypeExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\TypeHelperFacts.cs" />

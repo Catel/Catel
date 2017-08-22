@@ -54,7 +54,7 @@ namespace Catel
             }
 
             var targetType = target?.GetType() ?? typeof(object);
-            var delegateType = typeof(OpenInstanceAction<>).MakeGenericType(typeof(TResult), targetType);
+            var delegateType = typeof(OpenInstanceAction<>).MakeGenericTypeEx(typeof(TResult), targetType);
 
             _action = DelegateHelper.CreateDelegate(delegateType, methodInfo);
         }
@@ -155,7 +155,7 @@ namespace Catel
             }
 
             var targetType = target?.GetType() ?? typeof(object);
-            var delegateType = typeof(OpenInstanceGenericAction<>).MakeGenericType(typeof(TParameter), typeof(TResult), targetType);
+            var delegateType = typeof(OpenInstanceGenericAction<>).MakeGenericTypeEx(typeof(TParameter), typeof(TResult), targetType);
 
             _action = DelegateHelper.CreateDelegate(delegateType, methodInfo);
         }

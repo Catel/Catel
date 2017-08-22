@@ -63,7 +63,7 @@ namespace Catel.Messaging
                             break;
 
                         case 1:
-                            actionType = typeof(Action<>).MakeGenericType(parameterInfos[0].ParameterType);
+                            actionType = typeof(Action<>).MakeGenericTypeEx(parameterInfos[0].ParameterType);
                             actionParameterType = parameterInfos[0].ParameterType;
                             break;
 

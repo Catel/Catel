@@ -403,13 +403,13 @@ namespace Catel
             {
                 if (isAction)
                 {
-                    var delegateType = typeof(OpenInstanceActionHandler<>).MakeGenericType(finalTarget.GetType());
+                    var delegateType = typeof(OpenInstanceActionHandler<>).MakeGenericTypeEx(finalTarget.GetType());
                     var del = DelegateHelper.CreateDelegate(delegateType, methodInfo);
                     weakListener.OnEventAction = del;
                 }
                 else
                 {
-                    var delegateType = typeof(OpenInstanceEventHandler<,>).MakeGenericType(finalTarget.GetType(), typeof(TEventArgs));
+                    var delegateType = typeof(OpenInstanceEventHandler<,>).MakeGenericTypeEx(finalTarget.GetType(), typeof(TEventArgs));
                     var del = DelegateHelper.CreateDelegate(delegateType, methodInfo);
                     weakListener.OnEventHandler = del;
                 }
@@ -911,7 +911,7 @@ namespace Catel
             var targetType = typeof(TTarget);
             var sourceType = typeof(TSource);
 
-            MethodInfo methodInfo = null;
+            MethodInfo methodInfo;
 
             var cacheKey = $"{targetType.FullName}_{sourceType.FullName}_{eventArgsType?.FullName}";
 
@@ -919,10 +919,10 @@ namespace Catel
             {
                 if (!ListenerTypeCache.ContainsKey(cacheKey))
                 {
-                    var listenerType = typeof(WeakEventListener<TTarget, TSource, EventArgsBase>).GetGenericTypeDefinition().MakeGenericType(new[] { targetType, sourceType, eventArgsType });
+                    var listenerType = typeof(WeakEventListener<TTarget, TSource, EventArgsBase>).GetGenericTypeDefinition().MakeGenericTypeEx(targetType, sourceType, eventArgsType);
                     var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
 
-                    ListenerTypeCache[cacheKey] = listenerType.GetMethodEx("SubscribeToWeakEventWithExplicitSourceType", new[] { targetType, sourceType, typeof(string), typeof(Delegate), typeof(bool) }, bindingFlags);
+                    ListenerTypeCache[cacheKey] = listenerType.GetMethodEx("SubscribeToWeakEventWithExplicitSourceType", TypeArray.From(targetType, sourceType, typeof(string), typeof(Delegate), typeof(bool)), bindingFlags);
                 }
 
                 methodInfo = ListenerTypeCache[cacheKey];
@@ -1146,10 +1146,10 @@ namespace Catel
             {
                 if (!ListenerTypeCache.ContainsKey(cacheKey))
                 {
-                    var listenerType = typeof(WeakEventListener<object, object>).GetGenericTypeDefinition().MakeGenericType(new[] { targetType, sourceType });
+                    var listenerType = typeof(WeakEventListener<object, object>).GetGenericTypeDefinition().MakeGenericTypeEx(targetType, sourceType);
                     var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
 
-                    ListenerTypeCache[cacheKey] = listenerType.GetMethodEx("SubscribeToWeakEventWithExplicitSourceType", new[] { targetType, sourceType, typeof(string), typeof(Delegate), typeof(bool) }, bindingFlags);
+                    ListenerTypeCache[cacheKey] = listenerType.GetMethodEx("SubscribeToWeakEventWithExplicitSourceType", TypeArray.From(targetType, sourceType, typeof(string), typeof(Delegate), typeof(bool)), bindingFlags);
                 }
 
                 methodInfo = ListenerTypeCache[cacheKey];
