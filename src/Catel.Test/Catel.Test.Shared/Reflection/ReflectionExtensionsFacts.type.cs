@@ -11,6 +11,9 @@ namespace Catel.Test.Reflection
     using System.Runtime.InteropServices;
     using Catel.IoC;
     using Catel.Reflection;
+
+    using JetBrains.dotMemoryUnit;
+
     using NUnit.Framework;
 
     public partial class ReflectionExtensionsFacts
@@ -165,6 +168,38 @@ namespace Catel.Test.Reflection
                 var propertyInfo = typeof(Person).GetPropertyEx("FirstName", allowExplicitInterfaceProperties: true);
 
                 Assert.IsNotNull(propertyInfo);
+            }
+        }
+
+        [TestFixture]
+        public class TheMakeGenericExFacts
+        {
+            class ClassA<T>
+            {
+            }
+
+            [Test]
+            [DotMemoryUnit(CollectAllocations = true)]
+            [Ignore("Requires dotMemory")]
+            public void Allocates_Less_Type_Arrays_Than_MakeGenericType()
+            {
+                int count = int.MaxValue;
+
+                var memoryCheckPoint1 = dotMemory.Check();
+                var makeGenericTypeEx1 = typeof(ClassA<>).MakeGenericTypeEx(typeof(int));
+                var makeGenericTypeEx2 = typeof(ClassA<>).MakeGenericTypeEx(typeof(int));
+                var makeGenericTypeEx3 = typeof(ClassA<>).MakeGenericTypeEx(typeof(int));
+                var makeGenericTypeEx4 = typeof(ClassA<>).MakeGenericTypeEx(typeof(int));
+                var makeGenericTypeEx5 = typeof(ClassA<>).MakeGenericTypeEx(typeof(int));
+                dotMemory.Check(memory => count = memory.GetDifference(memoryCheckPoint1).GetNewObjects(where => where.Type.Is<Type[]>()).ObjectsCount);
+
+                var memoryCheckPoint2 = dotMemory.Check();
+                var makeGenericType1 = typeof(ClassA<>).MakeGenericType(typeof(int));
+                var makeGenericType2 = typeof(ClassA<>).MakeGenericType(typeof(int));
+                var makeGenericType3 = typeof(ClassA<>).MakeGenericType(typeof(int));
+                var makeGenericType4 = typeof(ClassA<>).MakeGenericType(typeof(int));
+                var makeGenericType5 = typeof(ClassA<>).MakeGenericType(typeof(int));
+                dotMemory.Check(memory => Assert.Less(count, memory.GetDifference(memoryCheckPoint2).GetNewObjects(where => where.Type.Is<Type[]>()).ObjectsCount));
             }
         }
     }
