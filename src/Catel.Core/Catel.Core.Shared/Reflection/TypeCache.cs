@@ -650,7 +650,7 @@ namespace Catel.Reflection
                     _typesWithoutAssemblyLowerCase?.Clear();
                 }
 
-                var assembliesToInitialize = checkSingleAssemblyOnly ? new List<Assembly>(new[] { assembly }) : AssemblyHelper.GetLoadedAssemblies();
+                var assembliesToInitialize = checkSingleAssemblyOnly ? new List<Assembly> { assembly } : AssemblyHelper.GetLoadedAssemblies();
                 InitializeAssemblies(assembliesToInitialize, forceFullInitialization, allowMultithreadedInitialization);
             }
         }

@@ -189,5 +189,95 @@ namespace Catel.Reflection
             var elementType = genericEnumerableInterface.GetGenericArgumentsEx()[0];
             return elementType;
         }
+
+        /// <summary>
+        /// Substitutes the elements of an array of types for the type parameters of the current generic type definition and returns a <see cref="T:System.Type" /> object representing the resulting constructed type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="parameterType1">The parameter type 1</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameterType1"/> is <c>null</c>.</exception>
+        public static Type MakeGenericTypeEx(this Type type, Type parameterType1)
+        {
+            Argument.IsNotNull("type", type);
+
+            return type.MakeGenericType(TypeArray.From(parameterType1));
+        }
+
+        /// <summary>
+        /// Substitutes the elements of an array of types for the type parameters of the current generic type definition and returns a <see cref="T:System.Type" /> object representing the resulting constructed type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="parameterType1">The parameter type 1</param>
+        /// <param name="parameterType2">The parameter type 2</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameterType1"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameterType2"/> is <c>null</c>.</exception>
+        public static Type MakeGenericTypeEx(this Type type, Type parameterType1, Type parameterType2)
+        {
+            Argument.IsNotNull("type", type);
+
+            return type.MakeGenericType(TypeArray.From(parameterType1, parameterType2));
+        }
+
+        /// <summary>
+        /// Substitutes the elements of an array of types for the type parameters of the current generic type definition and returns a <see cref="T:System.Type" /> object representing the resulting constructed type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="parameterType1">The parameter type 1</param>
+        /// <param name="parameterType2">The parameter type 2</param>
+        /// <param name="parameterType3">The parameter type 3</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameterType1"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameterType2"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameterType3"/> is <c>null</c>.</exception>
+        public static Type MakeGenericTypeEx(this Type type, Type parameterType1, Type parameterType2, Type parameterType3)
+        {
+            Argument.IsNotNull("type", type);
+
+            return type.MakeGenericType(TypeArray.From(parameterType1, parameterType2, parameterType3));
+        }
+
+        /// <summary>
+        /// Substitutes the elements of an array of types for the type parameters of the current generic type definition and returns a <see cref="T:System.Type" /> object representing the resulting constructed type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="parameterType1">The parameter type 1</param>
+        /// <param name="parameterType2">The parameter type 2</param>
+        /// <param name="parameterType3">The parameter type 3</param>
+        /// <param name="parameterType4">The parameter type 4</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameterType1"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameterType2"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameterType3"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameterType4"/> is <c>null</c>.</exception>
+        public static Type MakeGenericTypeEx(this Type type, Type parameterType1, Type parameterType2, Type parameterType3, Type parameterType4)
+        {
+            Argument.IsNotNull("type", type);
+
+            return type.MakeGenericType(TypeArray.From(parameterType1, parameterType2, parameterType3, parameterType4));
+        }
+
+        /// <summary>
+        /// Substitutes the elements of an array of types for the type parameters of the current generic type definition and returns a <see cref="T:System.Type" /> object representing the resulting constructed type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="parameterType1">The parameter type 1</param>
+        /// <param name="parameterType2">The parameter type 2</param>
+        /// <param name="parameterType3">The parameter type 3</param>
+        /// <param name="parameterType4">The parameter type 4</param>
+        /// <param name="parameterType5">The parameter type 5</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameterType1"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameterType2"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameterType3"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameterType4"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="parameterType5"/> is <c>null</c>.</exception>
+        public static Type MakeGenericTypeEx(this Type type, Type parameterType1, Type parameterType2, Type parameterType3, Type parameterType4, Type parameterType5)
+        {
+            Argument.IsNotNull("type", type);
+
+            return type.MakeGenericType(TypeArray.From(parameterType1, parameterType2, parameterType3, parameterType4, parameterType5));
+        }
     }
 }

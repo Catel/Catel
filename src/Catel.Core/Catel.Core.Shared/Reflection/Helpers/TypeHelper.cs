@@ -278,7 +278,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNullOrWhitespace("type", type);
 
-            const string innerTypesEnd = ",";
+            const string InnerTypesEnd = ",";
 
             string newType = type;
             string[] innerTypes = GetInnerTypes(newType);
@@ -315,7 +315,7 @@ namespace Catel.Reflection
 
             if (innerTypes.Length > 0)
             {
-                int innerTypesIndex = stripAssemblies ? newType.Length : newType.IndexOf(innerTypesEnd);
+                int innerTypesIndex = stripAssemblies ? newType.Length : newType.IndexOf(InnerTypesEnd, StringComparison.InvariantCultureIgnoreCase);
                 if (innerTypesIndex >= 0)
                 {
                     newType = newType.Insert(innerTypesIndex, string.Format(CultureInfo.InvariantCulture, "[{0}]", FormatInnerTypes(innerTypes, stripAssemblies)));

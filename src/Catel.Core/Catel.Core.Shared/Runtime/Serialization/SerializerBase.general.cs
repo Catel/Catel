@@ -929,7 +929,7 @@ namespace Catel.Runtime.Serialization
             if (elementType != null)
             {
                 var collectionType = typeof(List<>);
-                var genericCollectionType = collectionType.MakeGenericType(elementType);
+                var genericCollectionType = collectionType.MakeGenericTypeEx(elementType);
 
                 type = genericCollectionType;
             }

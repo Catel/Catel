@@ -73,7 +73,7 @@ namespace Catel.Runtime.Serialization
                     var valueValue = splittedValues[4];
 
                     // TODO: consider caching
-                    var keyValuePairGenericType = keyValuePairType.MakeGenericType(keyType, valueType);
+                    var keyValuePairGenericType = keyValuePairType.MakeGenericTypeEx(keyType, valueType);
 
                     var key = StringToObjectHelper.ToRightType(keyType, keyValue);
                     var value = StringToObjectHelper.ToRightType(valueType, valueValue);

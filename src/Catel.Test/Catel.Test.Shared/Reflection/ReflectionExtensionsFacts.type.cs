@@ -11,6 +11,9 @@ namespace Catel.Test.Reflection
     using System.Runtime.InteropServices;
     using Catel.IoC;
     using Catel.Reflection;
+
+    using JetBrains.dotMemoryUnit;
+
     using NUnit.Framework;
 
     public partial class ReflectionExtensionsFacts

@@ -81,7 +81,7 @@ namespace Catel.MVVM.Converters
                 stringParameter = stringParameter.Substring(1);
             }
 
-            var genericEnumType = typeof(Enum<>).MakeGenericType(enumType);
+            var genericEnumType = typeof(Enum<>).MakeGenericTypeEx(enumType);
             var bindingFlags = BindingFlags.Public | BindingFlags.Static;
             
             var parseMethod = genericEnumType.GetMethodEx("Parse", TypeArray.From<string, bool>(), bindingFlags);

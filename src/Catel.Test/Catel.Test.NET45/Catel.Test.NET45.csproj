@@ -46,6 +46,9 @@
     <Reference Include="Castle.Core, Version=4.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\Castle.Core.4.1.0\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="dotMemory.Unit, Version=103.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\JetBrains.dotMemoryUnit.2.3.20160517.113140\Lib\dotMemory.Unit.dll</HintPath>
+    </Reference>
     <Reference Include="MethodTimer, Version=1.19.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\MethodTimer.Fody.1.19.1\lib\netstandard1.0\MethodTimer.dll</HintPath>
     </Reference>
