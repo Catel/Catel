@@ -49,10 +49,12 @@
     <ProjectReference Include="..\B\B.csproj">
       <Project>{1946E4C8-F21B-4301-A65B-7F98BB3C9294}</Project>
       <Name>B</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\C\C.csproj">
       <Project>{97D8DC25-7E8C-4FA4-969C-AB527A179404}</Project>
       <Name>C</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

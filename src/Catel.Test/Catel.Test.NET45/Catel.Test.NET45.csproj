@@ -108,6 +108,11 @@
       <Project>{7c69650f-08c8-494c-857f-43b29a4bb20c}</Project>
       <Name>Catel.Serialization.Json.NET45</Name>
     </ProjectReference>
+    <ProjectReference Include="..\A\A.csproj">
+      <Project>{ecf60334-c99b-457d-9ad1-f52cb5253234}</Project>
+      <Name>A</Name>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
