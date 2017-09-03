@@ -203,14 +203,11 @@ namespace Catel.MVVM
 
             lock (_viewModelModelsLock)
             {
-                if (!_viewModelModels.ContainsKey(viewModel.UniqueIdentifier))
+                if (_viewModelModels.TryGetValue(viewModel.UniqueIdentifier, out var models))
                 {
-                    _viewModelModels[viewModel.UniqueIdentifier] = new List<object>();
+                    modelCount = models.Count;
+                    _viewModelModels.Remove(viewModel.UniqueIdentifier);
                 }
-
-                var models = _viewModelModels[viewModel.UniqueIdentifier];
-                modelCount = models.Count;
-                models.Clear();
             }
 
             Log.Debug("Unregistered all '{0}' models of view model '{1}' (id = '{2}')", modelCount, viewModelTypeName, viewModel.UniqueIdentifier);
