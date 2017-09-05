@@ -39,4 +39,8 @@
     <PackageReference Include="WpfAnalyzers" Version="0.2.7.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="NETStandard.Library" Version="2.0.0" />
+  </ItemGroup>
+
 </Project>
