@@ -173,18 +173,24 @@ namespace Catel.MVVM
 
             Log.Debug("Unregistering model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
 
+            var modelWasRemoved = false;
+
             lock (_viewModelModelsLock)
             {
-                if (!_viewModelModels.ContainsKey(viewModel.UniqueIdentifier))
+                if (_viewModelModels.TryGetValue(viewModel.UniqueIdentifier, out var models))
                 {
-                    _viewModelModels[viewModel.UniqueIdentifier] = new List<object>();
+                    models.Remove(model);
+                    modelWasRemoved = true;
                 }
-
-                var models = _viewModelModels[viewModel.UniqueIdentifier];
-                models.Remove(model);
             }
 
-            Log.Debug("Unregistered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+            if (modelWasRemoved)
+            {
+                Log.Debug("Unregistered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+                return;
+            }
+
+            Log.Debug("Model '{0}' was not registered with view model '{1}' (id = '{2}') or has already been unregistered.", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
         }
 
         /// <summary>
