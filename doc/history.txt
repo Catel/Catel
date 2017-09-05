@@ -37,7 +37,7 @@ none
 
 Added/fixed:
 ============
-(*) #1115 Changed ViewModelManager.UnregisterAllModels() so that it removes an unnecessary list of models.
+(*) #1115 Changed ViewModelManager.UnregisterAllModels() so that it removes an unnecessary list of models
 
 Roadmap:
 ========
