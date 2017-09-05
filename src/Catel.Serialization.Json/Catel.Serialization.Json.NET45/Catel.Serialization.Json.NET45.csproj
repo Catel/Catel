@@ -38,9 +38,6 @@
     <DocumentationFile>..\..\..\output\release\NET45\Catel.Serialization.Json\Catel.Serialization.Json.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Catel.Fody.Attributes, Version=2.17.0.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
-      <HintPath>..\..\..\lib\Catel.Fody.2.17.0\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
-    </Reference>
     <Reference Include="MethodTimer, Version=1.19.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\MethodTimer.Fody.1.19.1\lib\netstandard1.0\MethodTimer.dll</HintPath>
     </Reference>

@@ -31,7 +31,7 @@
   <ItemGroup>
     <PackageReference Include="AsyncUsageAnalyzers" Version="1.0.0-alpha003" />
     <PackageReference Include="MethodTimer.Fody" Version="1.19.1" />
-    <PackageReference Include="Catel.Fody" Version="2.17.0" NoWarn="NU1701" />
+    <PackageReference Include="Catel.Fody" Version="2.17.2" NoWarn="NU1701" />
     <PackageReference Include="Fody" Version="2.1.2" />
     <PackageReference Include="ModuleInit.Fody" Version="1.6.0" />
     <PackageReference Include="Obsolete.Fody" Version="4.2.4" />

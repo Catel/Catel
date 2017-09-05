@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Catel.Fody.Attributes, Version=2.16.2.0, Culture=neutral, PublicKeyToken=1c8163524cbe02e6, processorArchitecture=MSIL">
-      <HintPath>..\..\..\lib\Catel.Fody.2.16.2\lib\portable-net4+sl4+wp7+win8+wpa81+MonoAndroid14+MonoTouch40\Catel.Fody.Attributes.dll</HintPath>
+      <HintPath>..\..\..\lib\Catel.Fody.2.17.2\lib\netstandard1.4\Catel.Fody.Attributes.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MethodTimer, Version=1.19.1.0, Culture=neutral, processorArchitecture=MSIL">
