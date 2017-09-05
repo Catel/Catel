@@ -187,10 +187,11 @@ namespace Catel.MVVM
             if (modelWasRemoved)
             {
                 Log.Debug("Unregistered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
-                return;
             }
-
-            Log.Debug("Model '{0}' was not registered with view model '{1}' (id = '{2}') or has already been unregistered.", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+            else
+            {
+                Log.Debug("Model '{0}' was not registered with view model '{1}' (id = '{2}') or has already been unregistered.", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+            }
         }
 
         /// <summary>
