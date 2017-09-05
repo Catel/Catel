@@ -144,12 +144,12 @@ namespace Catel.MVVM
 
             lock (_viewModelModelsLock)
             {
-                if (!_viewModelModels.ContainsKey(viewModel.UniqueIdentifier))
+                if (!_viewModelModels.TryGetValue(viewModel.UniqueIdentifier, out var models))
                 {
-                    _viewModelModels[viewModel.UniqueIdentifier] = new List<object>();
+                    models = new List<object>();
+                    _viewModelModels[viewModel.UniqueIdentifier] = models;
                 }
 
-                var models = _viewModelModels[viewModel.UniqueIdentifier];
                 models.Add(model);
             }
 
