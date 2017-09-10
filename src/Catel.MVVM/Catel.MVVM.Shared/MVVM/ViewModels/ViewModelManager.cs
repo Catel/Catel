@@ -144,12 +144,12 @@ namespace Catel.MVVM
 
             lock (_viewModelModelsLock)
             {
-                if (!_viewModelModels.ContainsKey(viewModel.UniqueIdentifier))
+                if (!_viewModelModels.TryGetValue(viewModel.UniqueIdentifier, out var models))
                 {
-                    _viewModelModels[viewModel.UniqueIdentifier] = new List<object>();
+                    models = new List<object>();
+                    _viewModelModels[viewModel.UniqueIdentifier] = models;
                 }
 
-                var models = _viewModelModels[viewModel.UniqueIdentifier];
                 models.Add(model);
             }
 
@@ -173,18 +173,25 @@ namespace Catel.MVVM
 
             Log.Debug("Unregistering model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
 
+            var modelWasRemoved = false;
+
             lock (_viewModelModelsLock)
             {
-                if (!_viewModelModels.ContainsKey(viewModel.UniqueIdentifier))
+                if (_viewModelModels.TryGetValue(viewModel.UniqueIdentifier, out var models))
                 {
-                    _viewModelModels[viewModel.UniqueIdentifier] = new List<object>();
+                    models.Remove(model);
+                    modelWasRemoved = true;
                 }
-
-                var models = _viewModelModels[viewModel.UniqueIdentifier];
-                models.Remove(model);
             }
 
-            Log.Debug("Unregistered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+            if (modelWasRemoved)
+            {
+                Log.Debug("Unregistered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+            }
+            else
+            {
+                Log.Debug("Model '{0}' was not registered with view model '{1}' (id = '{2}') or has already been unregistered.", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+            }
         }
 
         /// <summary>
@@ -203,14 +210,11 @@ namespace Catel.MVVM
 
             lock (_viewModelModelsLock)
             {
-                if (!_viewModelModels.ContainsKey(viewModel.UniqueIdentifier))
+                if (_viewModelModels.TryGetValue(viewModel.UniqueIdentifier, out var models))
                 {
-                    _viewModelModels[viewModel.UniqueIdentifier] = new List<object>();
+                    modelCount = models.Count;
+                    _viewModelModels.Remove(viewModel.UniqueIdentifier);
                 }
-
-                var models = _viewModelModels[viewModel.UniqueIdentifier];
-                modelCount = models.Count;
-                models.Clear();
             }
 
             Log.Debug("Unregistered all '{0}' models of view model '{1}' (id = '{2}')", modelCount, viewModelTypeName, viewModel.UniqueIdentifier);

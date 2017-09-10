@@ -1,10 +1,10 @@
 ﻿{
   "dependencies": {
     "AsyncUsageAnalyzers": "1.0.0-alpha003",
-    "Catel.Fody": "2.17.0",
+    "Catel.Fody": "2.17.2",
     "Fody": "2.1.2",
     "MethodTimer.Fody": "1.19.1",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.3",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
     "ModuleInit.Fody": "1.6.0",
     "Newtonsoft.Json": "10.0.3",
     "Newtonsoft.Json.Bson": "1.0.1",
