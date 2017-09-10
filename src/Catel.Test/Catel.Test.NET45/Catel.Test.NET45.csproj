@@ -113,6 +113,14 @@
       <Name>A</Name>
       <Private>True</Private>
     </ProjectReference>
+    <ProjectReference Include="..\B\B.csproj">
+      <Project>{1946e4c8-f21b-4301-a65b-7f98bb3c9294}</Project>
+      <Name>B</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\C\C.csproj">
+      <Project>{97d8dc25-7e8c-4fa4-969c-ab527a179404}</Project>
+      <Name>C</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
