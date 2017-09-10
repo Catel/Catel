@@ -7,6 +7,7 @@ namespace Catel.Test.Reflection
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Catel.Reflection;
     using NUnit.Framework;
 
@@ -90,5 +91,40 @@ namespace Catel.Test.Reflection
                 Assert.AreEqual(typeof(MySpecialClass), interfaces[0]);
             }
         }
+
+        [Test]
+        public void Does_Not_Enter_In_A_Deadlock()
+        {
+            TypeCache.InitializeTypes();
+
+            Task<Type>[] tasks = { LoadABAsync(), LoadACAsync()};
+
+            // ReSharper disable once CoVariantArrayConversion
+            Assert.IsTrue(Task.WaitAll(tasks, 5000));
+
+            Assert.IsNotNull(tasks[0].Result);
+            Assert.IsNotNull(tasks[1].Result);
+
+            var typeB = TypeCache.GetType("A.AB, A");
+            var typeC = TypeCache.GetType("A.AC, A");
+
+            Assert.IsNotNull(typeB);
+            Assert.IsNotNull(typeC);
+        }
+
+        static Task<Type> LoadACAsync()
+        {
+            return Task.Run(() => Type.GetType("A.AC, A, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"));
+        }
+
+        static Task<Type> LoadABAsync()
+        {
+            return Task.Run(() => Type.GetType("A.AB, A, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"));
+        }
     }
 }
+
+
+
+
+

@@ -175,7 +175,18 @@ namespace Catel.Reflection
                     }
                 }
 
+                var types = GetTypesOfAssembly(assembly);
+
                 Monitor.Exit(_lockObject);
+
+                // Important to do outside of the lock
+                var handler = AssemblyLoaded;
+                if (handler != null)
+                {
+                    var eventArgs = new AssemblyLoadedEventArgs(assembly, types);
+
+                    handler(null, eventArgs);
+                }
             }
             else
             {
@@ -183,16 +194,9 @@ namespace Catel.Reflection
                 {
                     _threadSafeAssemblyQueue.Enqueue(assembly);
                 }
-            }
 
-            // Important to do outside of the lock
-            var handler = AssemblyLoaded;
-            if (handler != null)
-            {
-                var types = GetTypesOfAssembly(assembly);
-                var eventArgs = new AssemblyLoadedEventArgs(assembly, types);
-
-                handler(null, eventArgs);
+                // Note: AssemblyLoaded will be invoked later when the assembly
+                // is actually loaded, fixed for https://github.com/Catel/Catel/issues/1120
             }
         }
 #endif
@@ -659,6 +663,8 @@ namespace Catel.Reflection
         {
             // Important note: only allow explicit multithreaded initialization
 
+            var listForLoadedEvent = new List<Tuple<Assembly, Type[]>>();
+
             lock (_lockObject)
             {
                 var assembliesToRetrieve = new List<Assembly>();
@@ -707,11 +713,26 @@ namespace Catel.Reflection
                     }
                 }
 
-                if (lateLoadedAssemblies.Count > 0)
+                foreach (var lateLoadedAssembly in lateLoadedAssemblies)
                 {
-                    InitializeAssemblies(lateLoadedAssemblies, false, false);
+                    var tuple = Tuple.Create(lateLoadedAssembly, GetTypesOfAssembly(lateLoadedAssembly));
+                    listForLoadedEvent.Add(tuple);
                 }
 #endif
+            }
+
+            // Calling out of lock statement, but still may happens that would be called inside of it 
+            var handler = AssemblyLoaded;
+            if (handler != null)
+            {
+                foreach (var tuple in listForLoadedEvent)
+                {
+                    var assembly = tuple.Item1;
+                    var types = tuple.Item2;
+                    var eventArgs = new AssemblyLoadedEventArgs(assembly, types);
+
+                    handler(null, eventArgs);
+                }
             }
         }
 
@@ -734,8 +755,8 @@ namespace Catel.Reflection
                 var taskLists = new List<List<Assembly>>();
 
                 var assemblyCount = assemblies.Count;
-                var assembliesPerBatch = (int) Math.Ceiling(assemblyCount / (double) PreferredNumberOfThreads);
-                var batchCount = (int) Math.Ceiling(assemblyCount / (double) assembliesPerBatch);
+                var assembliesPerBatch = (int)Math.Ceiling(assemblyCount / (double)PreferredNumberOfThreads);
+                var batchCount = (int)Math.Ceiling(assemblyCount / (double)assembliesPerBatch);
 
                 for (var i = 0; i < batchCount; i++)
                 {
