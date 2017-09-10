@@ -96,6 +96,7 @@ namespace Catel.Test.Reflection
         public void Does_Not_Enter_In_A_Deadlock()
         {
             TypeCache.InitializeTypes();
+
             Task<Type>[] tasks = { LoadABAsync(), LoadACAsync()};
 
             // ReSharper disable once CoVariantArrayConversion
@@ -103,6 +104,12 @@ namespace Catel.Test.Reflection
 
             Assert.IsNotNull(tasks[0].Result);
             Assert.IsNotNull(tasks[1].Result);
+
+            var typeB = TypeCache.GetType("A.AB, A");
+            var typeC = TypeCache.GetType("A.AC, A");
+
+            Assert.IsNotNull(typeB);
+            Assert.IsNotNull(typeC);
         }
 
         static Task<Type> LoadACAsync()

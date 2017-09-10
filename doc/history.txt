@@ -38,6 +38,7 @@ none
 Added/fixed:
 ============
 (*) #1115 Changed ViewModelManager.UnregisterAllModels() so that it removes an unnecessary list of models
+(x) #1120 TypeCache deadlock when loading assemblies in a specific order & dependency set
 
 Roadmap:
 ========
