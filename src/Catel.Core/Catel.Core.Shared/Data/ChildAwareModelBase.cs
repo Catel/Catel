@@ -167,12 +167,18 @@ namespace Catel.Data
         protected virtual void OnPropertyObjectPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // It is possible that the sender used string.Empty or null for the property name, then exit
-            if (string.IsNullOrEmpty(e.PropertyName))
+            var propertyName = e.PropertyName;
+            if (string.IsNullOrEmpty(propertyName))
             {
                 return;
             }
 
             RaisePropertyChanged(sender, e, true, false);
+
+            if (IsValidationProperty(propertyName))
+            {
+                Validate(true);
+            }
         }
 
         /// <summary>
