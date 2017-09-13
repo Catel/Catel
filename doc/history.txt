@@ -38,7 +38,9 @@ none
 Added/fixed:
 ============
 (*) #1114 ChildAwareModelBase should revalidated when child validation changes
-(*) #1115 Change ViewModelManager.UnregisterAllModels() so that it removes an unnecessary list of models
+(*) #1115 Change ViewModelManager.UnregisterAllModels() so that it removes an unnecessary list 
+    of models
+(x) #1108 IDataErrorInfo model validation on view models are not mapped at the right time
 (x) #1120 TypeCache deadlock when loading assemblies in a specific order & dependency set
 
 Roadmap:
