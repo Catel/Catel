@@ -27,18 +27,22 @@
 		</group>
 		
 		<group targetFramework="net45">
+		  <dependency id="Catel.Core" version="[VERSION]" />
           <dependency id="Expression.Blend.Sdk.WPF" version="[replaced]" />
         </group>
 
 		<group targetFramework="net46">
+		  <dependency id="Catel.Core" version="[VERSION]" />
           <dependency id="Expression.Blend.Sdk.WPF" version="[replaced]" />
         </group>
 		
 		<group targetFramework="net47">
+		  <dependency id="Catel.Core" version="[VERSION]" />
           <dependency id="Expression.Blend.Sdk.WPF" version="[replaced]" />
         </group>
 		
         <group targetFramework="uap10.0">
+		  <dependency id="Catel.Core" version="[VERSION]" />
           <dependency id="Microsoft.Xaml.Behaviors.Uwp.Managed" version="2.0.0" />
         </group>
         

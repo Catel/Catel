@@ -23,7 +23,7 @@ namespace Catel.Logging
         /// <param name="time">The time.</param>
         protected override void Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
-            string consoleMessage = FormatLogEvent(log, message, logEvent, extraData, logData, time);
+            var consoleMessage = FormatLogEvent(log, message, logEvent, extraData, logData, time);
 
             System.Diagnostics.Debug.WriteLine(consoleMessage);
         }
