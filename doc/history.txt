@@ -40,6 +40,9 @@ Added/fixed:
 (*) #1114 ChildAwareModelBase should revalidated when child validation changes
 (*) #1115 Change ViewModelManager.UnregisterAllModels() so that it removes an unnecessary list 
     of models
+(*) #1075 ServiceLocator.ResolveTypes and ServiceLocator.ResolveAllTypes are confusing, therefore
+    ResolveAllTypes (and all corresponding overloads) are renamed to ResolveMultipleTypes since
+    it can resolve multiple types at once instead of all types of the same registration type
 (x) #1028 Some global styles don't work in DataWindow, work in Window
 (x) #1108 IDataErrorInfo model validation on view models are not mapped at the right time
 (x) #1120 TypeCache deadlock when loading assemblies in a specific order & dependency set

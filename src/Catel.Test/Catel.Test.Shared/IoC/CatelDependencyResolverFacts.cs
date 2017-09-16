@@ -57,7 +57,7 @@ namespace Catel.Test.IoC
         }
 
         [TestFixture]
-        public class TheCanResolveAllMethod
+        public class TheCanResolveMultipleMethod
         {
             [TestCase]
             public void ThrowsArgumentExceptionForNullTypes()
@@ -65,7 +65,7 @@ namespace Catel.Test.IoC
                 var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => dependencyResolver.CanResolveAll(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => dependencyResolver.CanResolveMultiple(null));
             }
 
             [TestCase]
@@ -74,7 +74,7 @@ namespace Catel.Test.IoC
                 var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                Assert.IsTrue(dependencyResolver.CanResolveAll(new Type[] { }));
+                Assert.IsTrue(dependencyResolver.CanResolveMultiple(new Type[] { }));
             }
 
             [TestCase]
@@ -86,7 +86,7 @@ namespace Catel.Test.IoC
 
                 var typesToResolve = new[] { typeof(ITestInterface), typeof(INavigationService), typeof(ITypeFactory) };
 
-                Assert.IsFalse(dependencyResolver.CanResolveAll(typesToResolve));
+                Assert.IsFalse(dependencyResolver.CanResolveMultiple(typesToResolve));
             }
 
             [TestCase]
@@ -98,7 +98,7 @@ namespace Catel.Test.IoC
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
                 var typesToResolve = new[] { typeof(IMessageService), typeof(INavigationService), typeof(ITypeFactory) };
-                Assert.IsTrue(dependencyResolver.CanResolveAll(typesToResolve));
+                Assert.IsTrue(dependencyResolver.CanResolveMultiple(typesToResolve));
             }
         }
 
@@ -135,7 +135,7 @@ namespace Catel.Test.IoC
         }
 
         [TestFixture]
-        public class TheResolveAllMethod
+        public class TheResolveMultipleMethod
         {
             [TestCase]
             public void ThrowsArgumentExceptionForNullTypes()
@@ -143,7 +143,7 @@ namespace Catel.Test.IoC
                 var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => dependencyResolver.ResolveAll(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => dependencyResolver.ResolveMultiple(null));
             }
 
             [TestCase]
@@ -152,7 +152,7 @@ namespace Catel.Test.IoC
                 var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                var resolvedObjects = dependencyResolver.ResolveAll(new Type[] {});
+                var resolvedObjects = dependencyResolver.ResolveMultiple(new Type[] {});
                 Assert.AreEqual(0, resolvedObjects.Length);
             }
 
@@ -164,7 +164,7 @@ namespace Catel.Test.IoC
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
                 var typesToResolve = new[] { typeof(IMessageService), typeof(ITestInterface), typeof(ITypeFactory) };
-                var resolvedTypes = dependencyResolver.ResolveAll(typesToResolve);
+                var resolvedTypes = dependencyResolver.ResolveMultiple(typesToResolve);
 
                 Assert.IsNotNull(resolvedTypes[0] as IMessageService);
                 Assert.IsNull(resolvedTypes[1]);
@@ -180,7 +180,7 @@ namespace Catel.Test.IoC
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
                 var typesToResolve = new[] { typeof(IMessageService), typeof(INavigationService), typeof(ITypeFactory) };
-                var resolvedTypes = dependencyResolver.ResolveAll(typesToResolve);
+                var resolvedTypes = dependencyResolver.ResolveMultiple(typesToResolve);
 
                 Assert.IsNotNull(resolvedTypes[0] as IMessageService);
                 Assert.IsNotNull(resolvedTypes[1] as INavigationService);
