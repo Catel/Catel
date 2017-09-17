@@ -37,6 +37,7 @@ none
 
 Added/fixed:
 ============
+(*) #147  Update project & item templates to Catel 5.x
 (*) #1114 ChildAwareModelBase should revalidated when child validation changes
 (*) #1115 Change ViewModelManager.UnregisterAllModels() so that it removes an unnecessary list 
     of models
