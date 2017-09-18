@@ -8,6 +8,8 @@
 namespace Catel.Test.Data.TestClasses
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+
     using Catel.Data;
 
     public class ValidatableParent : ChildAwareModelBase
@@ -20,6 +22,14 @@ namespace Catel.Test.Data.TestClasses
 
         public static readonly PropertyData ChildProperty = RegisterProperty<ValidatableParent, ValidatableChild>(model => model.Child);
 
+        public ObservableCollection<ValidatableChild> Collection
+        {
+            get => GetValue<ObservableCollection<ValidatableChild>>(CollectionProperty);
+            set => SetValue(CollectionProperty, value);
+        }
+
+        public static readonly PropertyData CollectionProperty = RegisterProperty<ValidatableParent, ObservableCollection<ValidatableChild>>(model => model.Collection);
+
         protected override void ValidateBusinessRules(List<IBusinessRuleValidationResult> validationResults)
         {
             if (this.Child != null)
@@ -30,13 +40,14 @@ namespace Catel.Test.Data.TestClasses
                     validationResults.Add(BusinessRuleValidationResult.CreateError(errors));
                 }
             }
-        }
 
-        protected override void ValidateFields(List<IFieldValidationResult> validationResults)
-        {
-            if (this.Child == null)
+            if (this.Collection != null && this.Collection.Count != 0)
             {
-                validationResults.Add(FieldValidationResult.CreateError(nameof(Child), "F: There is no child"));
+                var errors = this.Collection[0].GetErrorMessage();
+                if (errors.Length != 0)
+                {
+                    validationResults.Add(BusinessRuleValidationResult.CreateError(errors));
+                }
             }
         }
     }

@@ -46,8 +46,55 @@ namespace Catel.Test.Data
             Assert.IsTrue(model.HasCollectionChanged);
         }
 
-        [TestCase]
-        public void ValidatesChildAndParent()
+        [Test]
+        public void ValidatesParentOnCollectionChanged()
+        {
+            var c = new ValidatableChild();
+            var p = new ValidatableParent();
+
+            p.Collection = new ObservableCollection<ValidatableChild>();
+
+            Assert.IsFalse(p.HasErrors);
+            Assert.IsFalse(c.HasErrors);
+
+            c.Name = string.Empty;
+            p.Collection.Add(c);
+
+            Assert.IsTrue(p.HasErrors);
+            Assert.IsTrue(c.HasErrors);
+
+            c.Name = "Funny";
+            p.Collection.Clear();
+
+            Assert.IsFalse(p.HasErrors);
+            Assert.IsFalse(c.HasErrors);
+        }
+
+        [Test]
+        public void ValidatesParentOnCollectionItemPropertyChanged()
+        {
+            var c = new ValidatableChild();
+            var p = new ValidatableParent();
+
+            p.Collection = new ObservableCollection<ValidatableChild>();
+            p.Collection.Add(c);
+
+            Assert.IsFalse(p.HasErrors);
+            Assert.IsFalse(c.HasErrors);
+
+            c.Name = string.Empty;
+
+            Assert.IsTrue(p.HasErrors);
+            Assert.IsTrue(c.HasErrors);
+
+            c.Name = "Bunny";
+
+            Assert.IsFalse(p.HasErrors);
+            Assert.IsFalse(c.HasErrors);
+        }
+
+        [Test]
+        public void ValidatesParentOnPropertyChanged()
         {
             var c = new ValidatableChild();
             var p = new ValidatableParent();
