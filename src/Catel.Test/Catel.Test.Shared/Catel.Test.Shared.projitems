@@ -108,6 +108,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\UriExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Factories\ExceptionFactoryFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FastDateTimeFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalInitialization.approvaltests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GlobalInitialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ConsoleHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ExpressionHelperFacts.cs" />
@@ -144,7 +145,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\MessageBaseFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\MessageMediatorFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\MessageMediatorHelperFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Auditing\AuditingManagerTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Auditing\AuditorTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Auditing\TestAuditor.cs" />
@@ -233,6 +233,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\MethodTimeLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\GlobalSuppressions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PublicApiFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\AppDomainExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\AssemblyExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\PropertyHelperFacts.cs" />
