@@ -18,10 +18,10 @@ using System.Runtime.CompilerServices;
 ////[assembly: AssemblyTitle("DEFINED IN ACTUAL ASSEMBLYINFO")]
 ////[assembly: AssemblyProduct("DEFINED IN ACTUAL ASSEMBLYINFO")]
 ////[assembly: AssemblyDescription("DEFINED IN ACTUAL ASSEMBLYINFO")]
-#if !XAMARIN_FORMS
+
 [assembly: AssemblyCompany("CatenaLogic")]
 [assembly: AssemblyCopyright("Copyright © CatenaLogic 2010 - 2017")]
-#endif
+
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en-US")]
@@ -35,7 +35,7 @@ using System.Runtime.CompilerServices;
 //
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-#if !XAMARIN_FORMS
+
 [assembly: AssemblyVersion("5.2")]
 [assembly: AssemblyInformationalVersion("5.2, manually built in Visual Studio")]
 
@@ -84,7 +84,7 @@ using System.Runtime.CompilerServices;
 #endif
 
 #endif
-#endif
+
 
 //// CLS compliant
 //#if !NETFX_CORE && !XAMARIN && !TEST

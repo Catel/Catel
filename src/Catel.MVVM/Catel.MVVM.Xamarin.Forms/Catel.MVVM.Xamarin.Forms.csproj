@@ -7,15 +7,17 @@
     <PackageId>Catel.MVVM</PackageId>
     <Description>Catel MVVM library</Description>
     -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG;NETSTANDARD2_0;XAMARIN_FORMS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETSTANDARD2_0;XAMARIN_FORMS;NETSTANDARD2_0;NS20</DefineConstants>
     <OutputPath>..\..\..\output\debug\Xamarin.Forms\Catel.MVVM\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>TRACE;RELEASE;NETSTANDARD2_0;XAMARIN_FORMS</DefineConstants>
+    <DefineConstants>TRACE;RELEASE;NETSTANDARD2_0;XAMARIN_FORMS;RELEASE;NETSTANDARD2_0;NS20</DefineConstants>
     <OutputPath>..\..\..\output\release\Xamarin.Forms\Catel.MVVM\</OutputPath>
   </PropertyGroup>
 
