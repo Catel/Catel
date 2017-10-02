@@ -15,12 +15,12 @@ namespace Catel.MVVM
     using System.Windows.Input;
     using Catel.Logging;
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
     using InputGesture = Catel.Windows.Input.InputGesture;
 
 #if NETFX_CORE
     using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
-#else
+#else 
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 #endif
 
@@ -37,7 +37,7 @@ namespace Catel.MVVM
         private readonly object _lockObject = new object();
         private readonly Dictionary<string, ICompositeCommand> _commands = new Dictionary<string, ICompositeCommand>();
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
 
 #if NET
         private bool _subscribedToApplicationActivedEvent;
@@ -58,13 +58,13 @@ namespace Catel.MVVM
         /// </summary>
         public CommandManager()
         {
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
             SubscribeToKeyboardEvents();
 #endif
         }
 
         #region Properties
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets or sets a value indicating whether the keyboard events are suspended.
         /// </summary>
@@ -101,7 +101,7 @@ namespace Catel.MVVM
         public event EventHandler<CommandCreatedEventArgs> CommandCreated;
         #endregion
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Creates the command inside the command manager.
         /// <para />
@@ -483,7 +483,7 @@ namespace Catel.MVVM
             }
         }
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the original input gesture with which the command was initially created.
         /// </summary>

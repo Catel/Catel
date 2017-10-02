@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
 
 namespace Catel
 {
@@ -16,6 +16,10 @@ namespace Catel
     using global::Windows.UI.Xaml;
 #else
     using System.Windows;
+#endif
+
+#if XAMARIN_FORMS
+    using Xamarin.Forms;
 #endif
 
     /// <summary>

@@ -10,15 +10,17 @@ using System.Windows;
 
 #if NETFX_CORE
 using global::Windows.UI.Xaml.Markup;
-#elif !PCL && !XAMARIN
+#elif !PCL && !XAMARIN && !XAMARIN_FORMS
 using System.Windows.Markup;
 #endif
 
 // All other assembly info is defined in SharedAssembly.cs
 
+#if !XAMARIN_FORMS
 [assembly: AssemblyTitle("Catel.MVVM")]
 [assembly: AssemblyProduct("Catel.MVVM")]
 [assembly: AssemblyDescription("Catel MVVM library")]
+#endif
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -41,7 +43,7 @@ using System.Windows.Markup;
 #endif
 
 // XmlnsDefinition is not supported in UWP
-#if !NETFX_CORE && !PCL && !XAMARIN
+#if !NETFX_CORE && !PCL && !XAMARIN && !XAMARIN_FORMS
 
 [assembly: XmlnsPrefix("http://schemas.catelproject.com", "catel")]
 [assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM")]

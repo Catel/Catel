@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
 
 namespace Catel.Windows.Markup
 {

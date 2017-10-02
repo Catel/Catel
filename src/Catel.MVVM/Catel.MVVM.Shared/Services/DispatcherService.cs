@@ -34,7 +34,7 @@ namespace Catel.Services
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Initializes a new instance of the <see cref="DispatcherService"/> class.
         /// </summary>
@@ -55,7 +55,7 @@ namespace Catel.Services
 
 #if ANDROID
         private readonly Handler _handler = new Handler(Looper.MainLooper);
-#elif !XAMARIN
+#elif !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the current dispatcher.
         /// <para />

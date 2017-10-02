@@ -11,7 +11,7 @@ namespace Catel.MVVM.Views
     using System.ComponentModel;
     using System.Linq;
     
-#if XAMARIN
+#if XAMARIN || XAMARIN_FORMS
     // nothing
     using Catel.Collections;
 #elif NETFX_CORE
@@ -33,7 +33,7 @@ namespace Catel.MVVM.Views
         {
             Argument.IsNotNull("view", view);
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
             var viewProperties = ((FrameworkElement)view).GetDependencyProperties();
             return viewProperties.Select(x => x.PropertyName).ToArray();
 #else
@@ -53,7 +53,7 @@ namespace Catel.MVVM.Views
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
             Argument.IsNotNull("handler", handler);
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
             ((FrameworkElement)view).SubscribeToDependencyProperty(propertyName, (sender, e) =>
             {
                 if (!((FrameworkElement)sender).IsRealDependencyProperty(e.PropertyName))

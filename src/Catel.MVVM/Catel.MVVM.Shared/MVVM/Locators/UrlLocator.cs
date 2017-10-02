@@ -85,7 +85,7 @@ namespace Catel.MVVM
                     return viewUri;
                 }
 
-#if XAMARIN
+#if XAMARIN || XAMARIN_FORMS
 
                 throw new MustBeImplementedException();
 #else

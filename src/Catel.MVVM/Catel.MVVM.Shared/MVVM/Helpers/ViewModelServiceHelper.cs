@@ -10,7 +10,7 @@ namespace Catel.MVVM
     using Catel.MVVM.Views;
     using Catel.Services;
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
     using Catel.Windows;
 #endif
 
@@ -62,7 +62,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationRootService, NavigationRootService>();
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IOpenFileService, OpenFileService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISaveFileService, SaveFileService>();
@@ -78,7 +78,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<ICameraService, CameraService>();
 #endif
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
                 // TODO: Add support in xamarin
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
 #endif

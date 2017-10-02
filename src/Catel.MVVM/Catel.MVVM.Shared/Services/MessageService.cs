@@ -47,7 +47,7 @@ namespace Catel.Services
         /// </summary>
         partial void Initialize();
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
 
         /// <summary>
         /// Translates the message box result.

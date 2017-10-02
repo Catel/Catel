@@ -74,7 +74,7 @@ namespace Catel.MVVM
         private static readonly Dictionary<Type, ViewModelMetadata> _metaData = new Dictionary<Type, ViewModelMetadata>();
 #endif
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// The dispatcher service used to dispatch all calls.
         /// </summary>
@@ -237,7 +237,7 @@ namespace Catel.MVVM
 
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
             if (serviceLocator == null)
             {
                 serviceLocator = ServiceLocator.Default;

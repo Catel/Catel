@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Weavers>
-  <!--<Catel WeaveProperties="false" />
+<Weavers VerifyAssembly="true">
+  <!--
   <Obsolete />
   <ModuleInit />
-  <MethodTimer />-->
+  <Catel WeaveProperties="false" />
+  <MethodTimer />
+  -->
 </Weavers>

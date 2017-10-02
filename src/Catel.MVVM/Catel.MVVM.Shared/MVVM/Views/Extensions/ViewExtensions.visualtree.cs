@@ -7,7 +7,7 @@
 
 namespace Catel.MVVM.Views
 {
-#if XAMARIN
+#if XAMARIN || XAMARIN_FORMS
     // nothing
 #elif NETFX_CORE
     using global::Windows.UI.Xaml.Controls;
@@ -26,7 +26,7 @@ namespace Catel.MVVM.Views
         {
             Argument.IsNotNull("view", view);
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
             // According to the documentation, no visual tree is garantueed in the Loaded event of the user control.
             // However, as a solution the documentation says you need to manually call ApplyTemplate, so let's do that.
             // For more info, see http://msdn.microsoft.com/en-us/library/ms596558(vs.95)
