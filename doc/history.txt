@@ -18,6 +18,38 @@ Items prepended with CTL are from JIRA (old issue tracker). Items prepended with
 **********************************************************
 
 ==================
+Version 5.3.0
+==================
+
+For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date:
+=============
+2017/xx/xx
+
+Platform support changes:
+=========================
+none
+
+Classes / members marked as obsolete:
+=====================================
+none
+
+Added/fixed:
+============
+xxx
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 5.2.0
 ==================
 

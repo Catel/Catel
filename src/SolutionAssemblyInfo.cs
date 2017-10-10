@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SolutionAssemblyInfo.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -35,8 +35,8 @@ using System.Runtime.CompilerServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("5.2")]
-[assembly: AssemblyInformationalVersion("5.2, manually built in Visual Studio")]
+[assembly: AssemblyVersion("5.3")]
+[assembly: AssemblyInformationalVersion("5.3, manually built in Visual Studio")]
 
 #if DEBUG
 
@@ -50,6 +50,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("NET50, Debug")]
 #elif UWP
 [assembly: AssemblyConfiguration("Universal Windows Platform 10.0, Debug")]
+#elif NS20
+[assembly: AssemblyConfiguration(".NET Standard 2.0, Debug")]
 #elif PCL
 [assembly: AssemblyConfiguration("PCL, Debug")]
 #elif XAMARIN && ANDROID
@@ -72,6 +74,8 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("NET50, Release")]
 #elif UWP
 [assembly: AssemblyConfiguration("Universal Windows Platform 10.0, Release")]
+#elif NS20
+[assembly: AssemblyConfiguration(".NET Standard 2.0, Release")]
 #elif PCL
 [assembly: AssemblyConfiguration("PCL, Release")]
 #elif XAMARIN && ANDROID
