@@ -5,7 +5,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using System.Diagnostics;
 using System.Linq;
+using Catel.Data;
+using Catel.IoC;
+using Catel.Logging;
 using Catel.Reflection;
 using NUnit.Framework;
 
@@ -19,6 +23,17 @@ public class GlobalInitialization
     [OneTimeSetUp]
     public static void SetUp()
     {
+        if (Debugger.IsAttached)
+        {
+            LogManager.AddDebugListener();
+        }
+
+        // For testing purposes, enable features we disabled for CTL-234
+        var modelEqualityComparer = ServiceLocator.Default.ResolveType<IModelEqualityComparer>();
+        modelEqualityComparer.CompareProperties = true;
+        modelEqualityComparer.CompareValues = true;
+        modelEqualityComparer.CompareCollections = true;
+
         //System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
 
         // Required since we do multithreaded initialization

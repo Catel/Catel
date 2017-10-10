@@ -167,12 +167,18 @@ namespace Catel.Data
         protected virtual void OnPropertyObjectPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // It is possible that the sender used string.Empty or null for the property name, then exit
-            if (string.IsNullOrEmpty(e.PropertyName))
+            var propertyName = e.PropertyName;
+            if (string.IsNullOrEmpty(propertyName))
             {
                 return;
             }
 
             RaisePropertyChanged(sender, e, true, false);
+
+            if (IsValidationProperty(propertyName))
+            {
+                Validate(true);
+            }
         }
 
         /// <summary>
@@ -183,6 +189,8 @@ namespace Catel.Data
         protected virtual void OnPropertyObjectCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             SetDirty(string.Empty);
+
+            Validate(true);
         }
 
         /// <summary>
@@ -193,12 +201,18 @@ namespace Catel.Data
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (string.Equals(e.PropertyName, "IsDirty", StringComparison.Ordinal))
+            var propertyName = e.PropertyName;
+            if (string.Equals(propertyName, "IsDirty", StringComparison.Ordinal))
             {
                 return;
             }
 
             SetDirty(string.Empty);
+
+            if (IsValidationProperty(propertyName))
+            {
+                Validate(true);
+            }
         }
     }
 }

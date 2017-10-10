@@ -56,7 +56,7 @@ namespace Catel.IoC
             public Type Type { get; private set; }
 
             public object Tag { get; private set; }
-            
+
             #endregion
 
             #region Methods
@@ -164,12 +164,9 @@ namespace Catel.IoC
         /// <value>The default instance.</value>
         public static IServiceLocator Default
         {
-            get
-            {
-                return IoCConfiguration.DefaultServiceLocator;
-            }
+            get { return IoCConfiguration.DefaultServiceLocator; }
         }
-        
+
         #endregion
 
         #region IServiceLocator Members
@@ -487,7 +484,26 @@ namespace Catel.IoC
         /// <param name="types">The types that should be registered.</param>
         /// <returns><c>true</c> if all the specified types are registered with this instance of the <see cref="IServiceLocator" />; otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="types"/> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "AreMultipleTypesRegistered", TreatAsErrorFromVersion = "5.2", RemoveInVersion = "6.0")]
         public bool AreAllTypesRegistered(params Type[] types)
+        {
+            return AreMultipleTypesRegistered(types);
+        }
+
+        /// <summary>
+        /// Determines whether all the specified types are registered with the service locator.
+        /// </summary>
+        /// <remarks>
+        /// Note that this method is written for optimalization by the <see cref="TypeFactory"/>. This means that the 
+        /// <see cref="TypeFactory"/> does not need to call the <see cref="ServiceLocator"/> several times to construct
+        /// a single type using dependency injection.
+        /// <para />
+        /// Only use this method if you know what you are doing, otherwise use the <see cref="IsTypeRegistered"/> instead.
+        /// </remarks>
+        /// <param name="types">The types that should be registered.</param>
+        /// <returns><c>true</c> if all the specified types are registered with this instance of the <see cref="IServiceLocator" />; otherwise <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="types"/> is <c>null</c>.</exception>
+        public bool AreMultipleTypesRegistered(params Type[] types)
         {
             Argument.IsNotNull("types", types);
 
@@ -516,12 +532,31 @@ namespace Catel.IoC
         /// <see cref="TypeFactory"/> does not need to call the <see cref="ServiceLocator"/> several times to construct
         /// a single type using dependency injection.
         /// <para />
+        /// Only use this method if you know what you are doing, otherwise use the <see cref="ServiceLocator.IsTypeRegistered"/> instead.
+        /// </remarks>
+        /// <param name="types">The collection of types that should be resolved.</param>
+        /// <returns>The resolved types in the same order as the types.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="types"/> is <c>null</c> or an empty array.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "ResolveMultipleTypes", TreatAsErrorFromVersion = "5.2", RemoveInVersion = "6.0")]
+        public object[] ResolveAllTypes(params Type[] types)
+        {
+            return ResolveMultipleTypes(types);
+        }
+
+        /// <summary>
+        /// Resolves all the specified types.
+        /// </summary>
+        /// <remarks>
+        /// Note that this method is written for optimalization by the <see cref="TypeFactory"/>. This means that the 
+        /// <see cref="TypeFactory"/> does not need to call the <see cref="ServiceLocator"/> several times to construct
+        /// a single type using dependency injection.
+        /// <para />
         /// Only use this method if you know what you are doing, otherwise use the <see cref="ResolveType"/> instead.
         /// </remarks>
         /// <param name="types">The collection of types that should be resolved.</param>
         /// <returns>The resolved types in the same order as the types.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="types"/> is <c>null</c>.</exception>
-        public object[] ResolveAllTypes(params Type[] types)
+        public object[] ResolveMultipleTypes(params Type[] types)
         {
             Argument.IsNotNull("types", types);
 
@@ -795,7 +830,7 @@ namespace Catel.IoC
 
             return instance;
         }
-        
+
         /// <summary>
         /// Throws the <see cref="TypeNotRegisteredException" /> but will also reset the current type request path.
         /// </summary>

@@ -1211,7 +1211,7 @@ namespace Catel.Test.IoC
         }
 
         [TestFixture]
-        public class TheAreAllTypesRegisteredMethod
+        public class TheAreMultipleTypesRegisteredMethod
         {
             #region Methods
             [TestCase]
@@ -1219,7 +1219,7 @@ namespace Catel.Test.IoC
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => serviceLocator.AreAllTypesRegistered(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => serviceLocator.AreMultipleTypesRegistered(null));
             }
 
             [TestCase]
@@ -1230,7 +1230,7 @@ namespace Catel.Test.IoC
                 serviceLocator.RegisterType<object>();
                 serviceLocator.RegisterType<ITestInterface1, TestClass1>();
 
-                Assert.IsFalse(serviceLocator.AreAllTypesRegistered(typeof(object), typeof(ITestInterface1), typeof(ITestInterface2)));
+                Assert.IsFalse(serviceLocator.AreMultipleTypesRegistered(typeof(object), typeof(ITestInterface1), typeof(ITestInterface2)));
             }
 
             [TestCase]
@@ -1242,13 +1242,13 @@ namespace Catel.Test.IoC
                 serviceLocator.RegisterType<ITestInterface1, TestClass1>();
                 serviceLocator.RegisterType<ITestInterface2, TestClass2>();
 
-                Assert.IsTrue(serviceLocator.AreAllTypesRegistered(typeof(object), typeof(ITestInterface1), typeof(ITestInterface2)));
+                Assert.IsTrue(serviceLocator.AreMultipleTypesRegistered(typeof(object), typeof(ITestInterface1), typeof(ITestInterface2)));
             }
             #endregion
         }
 
         [TestFixture]
-        public class TheResolveAllTypesMethod
+        public class TheResolveMultipleMethod
         {
             #region Methods
             [TestCase]
@@ -1256,7 +1256,7 @@ namespace Catel.Test.IoC
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => serviceLocator.ResolveAllTypes(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => serviceLocator.ResolveMultipleTypes(null));
             }
 
             [TestCase]
@@ -1267,7 +1267,7 @@ namespace Catel.Test.IoC
                 serviceLocator.RegisterType<object>();
                 serviceLocator.RegisterType<ITestInterface1, TestClass1>();
 
-                ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => serviceLocator.ResolveAllTypes(typeof(object), typeof(ITestInterface1), typeof(ITestInterface2)));
+                ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => serviceLocator.ResolveMultipleTypes(typeof(object), typeof(ITestInterface1), typeof(ITestInterface2)));
             }
 
             [TestCase]
@@ -1279,7 +1279,7 @@ namespace Catel.Test.IoC
                 serviceLocator.RegisterType<ITestInterface1, TestClass1>();
                 serviceLocator.RegisterType<ITestInterface2, TestClass2>();
 
-                var resolvedTypes = serviceLocator.ResolveAllTypes(typeof(object), typeof(ITestInterface1), typeof(ITestInterface2)).ToArray();
+                var resolvedTypes = serviceLocator.ResolveMultipleTypes(typeof(object), typeof(ITestInterface1), typeof(ITestInterface2)).ToArray();
 
                 Assert.AreEqual(3, resolvedTypes.Length);
                 Assert.AreEqual(typeof(object), resolvedTypes[0].GetType());

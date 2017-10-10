@@ -31,22 +31,22 @@ namespace Catel.Data
         /// <summary>
         /// The name of the <see cref="IDataWarningInfo.Warning"/> property.
         /// </summary>
-        private const string WarningMessageProperty = "IDataWarningInfo.Warning";
+        internal const string WarningMessageProperty = "IDataWarningInfo.Warning";
 
         /// <summary>
         /// The name of the <see cref="INotifyDataWarningInfo.HasWarnings"/> property.
         /// </summary>
-        private const string HasWarningsMessageProperty = "HasWarnings";
+        internal const string HasWarningsMessageProperty = "HasWarnings";
 
         /// <summary>
         /// The name of the <see cref="IDataErrorInfo.Error"/> property.
         /// </summary>
-        private const string ErrorMessageProperty = "IDataErrorInfo.Error";
+        internal const string ErrorMessageProperty = "IDataErrorInfo.Error";
 
         /// <summary>
         /// The name of the <see cref="INotifyDataErrorInfo.HasErrors"/> property.
         /// </summary>
-        private const string HasErrorsMessageProperty = "HasErrors";
+        internal const string HasErrorsMessageProperty = "HasErrors";
         #endregion
 
         #region Fields
@@ -536,15 +536,32 @@ namespace Catel.Data
                 return false;
             }
 
-            if ((string.CompareOrdinal(propertyName, WarningMessageProperty) == 0) ||
-                (string.CompareOrdinal(propertyName, HasWarningsMessageProperty) == 0) ||
-                (string.CompareOrdinal(propertyName, ErrorMessageProperty) == 0) ||
-                (string.CompareOrdinal(propertyName, HasErrorsMessageProperty) == 0))
+            if (IsValidationProperty(propertyName))
             {
                 return false;
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Determines whether the specified property is a validation property.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified property is a validation property; otherwise, <c>false</c>.
+        /// </returns>
+        protected virtual bool IsValidationProperty(string propertyName)
+        {
+            if ((string.CompareOrdinal(propertyName, WarningMessageProperty) == 0) ||
+                (string.CompareOrdinal(propertyName, HasWarningsMessageProperty) == 0) ||
+                (string.CompareOrdinal(propertyName, ErrorMessageProperty) == 0) ||
+                (string.CompareOrdinal(propertyName, HasErrorsMessageProperty) == 0))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

@@ -57,6 +57,12 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
         #endregion
 
         #region Properties
+        public bool DeferValidationUntilFirstSaveCallWrapper
+        {
+            get { return DeferValidationUntilFirstSaveCall; }
+            set { DeferValidationUntilFirstSaveCall = value; }
+        }
+
         /// <summary>
         /// Gets or sets the model.
         /// </summary>
@@ -106,6 +112,15 @@ namespace Catel.Test.MVVM.ViewModels.TestClasses
             get { return GetValue<string>(FirstNameAsExplicitProperty); }
             set { SetValue(FirstNameAsExplicitProperty, value); }
         }
+
+        [ViewModelToModel("Person", "LastName")]
+        public string LastName
+        {
+            get { return GetValue<string>(LastNameProperty); }
+            set { SetValue(LastNameProperty, value); }
+        }
+
+        public static readonly PropertyData LastNameProperty = RegisterProperty(nameof(LastName), typeof(string), null);
         #endregion
     }
 }

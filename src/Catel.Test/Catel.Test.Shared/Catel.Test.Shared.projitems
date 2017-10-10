@@ -33,6 +33,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\CatelTypeInfoFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ChangeNotificationWrapperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ComparableModelBaseFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ModelWithObservableCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ModelWithCollectionViewSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ClassWithoutPropertiesA.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ClassWithoutPropertiesB.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ClassWithValidator.cs" />
@@ -78,6 +80,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ObjectWithDefaultValues.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\TestValidatorProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\TestValidator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ValidatableChild.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ValidatableParent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ValidatableModelBaseFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ModelBaseTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Helpers\ModelBaseTestHelper.cs" />
@@ -104,6 +108,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\UriExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Factories\ExceptionFactoryFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FastDateTimeFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlobalInitialization.approvaltests.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GlobalInitialization.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ConsoleHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\ExpressionHelperFacts.cs" />
@@ -140,7 +145,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\MessageBaseFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\MessageMediatorFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messaging\MessageMediatorHelperFacts.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ModuleInitializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Auditing\AuditingManagerTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Auditing\AuditorTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Auditing\TestAuditor.cs" />
@@ -229,6 +233,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\..\GlobalSuppressions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\MethodTimeLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\GlobalSuppressions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PublicApiFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\AppDomainExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\AssemblyExtensionsTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reflection\PropertyHelperFacts.cs" />

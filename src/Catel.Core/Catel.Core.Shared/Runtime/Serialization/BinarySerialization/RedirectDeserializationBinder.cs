@@ -106,16 +106,12 @@ namespace Catel.Runtime.Serialization.Binary
 
         private bool IsTypeBinarySerializable(Type type)
         {
-            return TypeBinarySerializableCache.GetFromCacheOrFetch(type, () =>
+            if (type == null)
             {
-                if (type == null)
-                {
-                    return false;
-                }
+                return false;
+            }
 
-                var ctor = type.GetConstructor(new[] {typeof (SerializationInfo), typeof (StreamingContext)});
-                return ctor != null;
-            });
+            return TypeBinarySerializableCache.GetFromCacheOrFetch(type, () => type.GetConstructor(TypeArray.From<SerializationInfo, StreamingContext>()) != null);
         }
 
         /// <summary>

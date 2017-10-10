@@ -14,6 +14,18 @@ namespace Catel.Test.MVVM.ViewModels
     public partial class ViewModelBaseFacts
     {
         [Test]
+        public void UpdatesMappedValidationAfterChangingMappedViewModelProperty()
+        {
+            var vm = new TestViewModelWithMappings(new Person());
+            vm.DeferValidationUntilFirstSaveCallWrapper = false;
+
+            vm.FirstNameAsTwoWay = "John";
+            vm.LastName = "Doe";
+
+            Assert.IsFalse(vm.HasErrors);
+        }
+
+        [Test]
         public void HasErrors_Returns_False_If_Model_Contains_Errors_But_Model_Validation_Is_Supended()
         {
             var vm = new TestViewModelWithSuspendedModelValidation(new Person());

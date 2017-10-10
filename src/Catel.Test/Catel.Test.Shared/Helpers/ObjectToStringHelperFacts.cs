@@ -10,6 +10,7 @@ namespace Catel.Test
 
     using NUnit.Framework;
 
+    [TestFixture]
     public class ObjectToStringHelperFacts
     {
         [TestFixture]

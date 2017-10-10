@@ -957,6 +957,8 @@ namespace Catel.MVVM
             // If we are validating, don't map view model values back to the model
             if (!IsValidating)
             {
+                var validate = false;
+
                 if (_viewModelToModelMap.ContainsKey(e.PropertyName))
                 {
                     lock (_modelLock)
@@ -997,6 +999,9 @@ namespace Catel.MVVM
                                             if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index], false))
                                             {
                                                 Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
+
+                                                // Force validation, see https://github.com/Catel/Catel/issues/1108
+                                                validate = true;
                                             }
                                             else
                                             {
@@ -1019,6 +1024,12 @@ namespace Catel.MVVM
                             Log.Warning("Value for model property '{0}' is null, cannot map properties from view model to model", mapping.ModelProperty);
                         }
                     }
+                }
+
+                if (validate)
+                {
+                    // Model was updated successfully, make sure to revalidate, fixes https://github.com/Catel/Catel/issues/1108
+                    Validate(true);
                 }
             }
 

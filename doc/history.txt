@@ -18,6 +18,47 @@ Items prepended with CTL are from JIRA (old issue tracker). Items prepended with
 **********************************************************
 
 ==================
+Version 5.2.0
+==================
+
+For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date:
+=============
+2017/10/10
+
+Platform support changes:
+=========================
+none
+
+Classes / members marked as obsolete:
+=====================================
+none
+
+Added/fixed:
+============
+(*) #147  Update project & item templates to Catel 5.x
+(*) #1114 ChildAwareModelBase should revalidated when child validation changes
+(*) #1115 Change ViewModelManager.UnregisterAllModels() so that it removes an unnecessary list 
+    of models
+(*) #1075 ServiceLocator.ResolveTypes and ServiceLocator.ResolveAllTypes are confusing, therefore
+    ResolveAllTypes (and all corresponding overloads) are renamed to ResolveMultipleTypes since
+    it can resolve multiple types at once instead of all types of the same registration type
+(x) #1028 Some global styles don't work in DataWindow, work in Window
+(x) #1108 IDataErrorInfo model validation on view models are not mapped at the right time
+(x) #1120 TypeCache deadlock when loading assemblies in a specific order & dependency set
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 5.1.0
 ==================
 
@@ -29,11 +70,11 @@ Release date:
 
 Platform support changes:
 =========================
--
+none
 
 Classes / members marked as obsolete:
 =====================================
--
+none
 
 Added/fixed:
 ============
