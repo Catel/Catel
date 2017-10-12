@@ -24,14 +24,14 @@ namespace Catel
         {
             Argument.IsNotNull(() => @this);
 
+            Page currentPage = Application.Current.MainPage;
             var modalStack = Application.Current.MainPage.Navigation.ModalStack;
-            var currentPage = modalStack[modalStack.Count - 1];
-            if (currentPage is NavigationPage)
+            if (modalStack.Count > 0)
             {
-                currentPage = (currentPage as NavigationPage).CurrentPage ?? currentPage;
+                currentPage = modalStack[modalStack.Count - 1];
             }
 
-            return currentPage;
+            return  (currentPage as NavigationPage)?.CurrentPage ?? currentPage;
         }
     }
 }

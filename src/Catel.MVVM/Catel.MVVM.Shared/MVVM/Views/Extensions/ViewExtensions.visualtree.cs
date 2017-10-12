@@ -46,7 +46,8 @@ namespace Catel.MVVM.Views
         public static IViewModelContainer FindParentViewModelContainer(this IView view)
         {
 #if XAMARIN_FORMS
-            throw new MustBeImplementedException();
+            // TODO: Search the parent if is possible.
+            return null;
 #else
             return FindParentByPredicate(view, o => o is IViewModelContainer) as IViewModelContainer;
 #endif
