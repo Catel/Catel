@@ -14,6 +14,7 @@ namespace Catel.Services
     using System.Linq;
     using Catel.IoC;
     using Catel.MVVM;
+    using global::Xamarin.Forms;
     using Page = global::Xamarin.Forms.Page;
 
     /// <summary>
@@ -62,7 +63,7 @@ namespace Catel.Services
 
         public override int GetBackStackCount()
         {
-            return Navigation.NavigationStack.Count;
+            return Application.Current.GetActivePage().Navigation.NavigationStack.Count;
         }
 
 
@@ -73,7 +74,8 @@ namespace Catel.Services
         {
             if (CanGoBack)
             {
-                Navigation.RemovePage(Navigation.NavigationStack.Last());
+                var navigation = Application.Current.GetActivePage().Navigation;
+                navigation.RemovePage(navigation.NavigationStack.Last());
             }
         }
 
@@ -96,7 +98,7 @@ namespace Catel.Services
 
         async partial void NavigateBack()
         {
-            await Navigation.PopAsync();
+            await Application.Current.GetActivePage().Navigation.PopAsync();
         }
 
         partial void NavigateForward()
@@ -117,7 +119,7 @@ namespace Catel.Services
             var viewModel = viewModelFactory.CreateViewModel(viewModelType, parameters.Count > 0 ? parameters.Values.ToArray() : null);
             view.BindingContext = viewModel;
 
-            await Navigation.PushAsync(view);
+            await Application.Current.GetActivePage().Navigation.PushAsync(view);
         }
 
         partial void NavigateToUri(Uri uri)

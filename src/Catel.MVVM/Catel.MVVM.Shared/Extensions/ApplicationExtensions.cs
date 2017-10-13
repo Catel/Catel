@@ -20,18 +20,34 @@ namespace Catel
         /// The current or top most page of the application.
         /// </returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="this"/> is <c>null</c>.</exception>
-        public static Page CurrentPage(this Application @this)
+        public static Page GetActivePage(this Application @this)
         {
             Argument.IsNotNull(() => @this);
 
-            Page currentPage = Application.Current.MainPage;
-            var stack = Application.Current.MainPage.Navigation.NavigationStack;
+            Page activePage = Application.Current.MainPage.GetActivePage();
+             
+            var stack = activePage.Navigation.NavigationStack;
             if (stack.Count > 0)
             {
-                currentPage = stack[stack.Count - 1];
+                activePage = stack[stack.Count - 1];
             }
 
-            return currentPage;
+            return activePage;
+        }
+
+        public static Page GetActivePage(this Page page)
+        {
+            if (page is NavigationPage)
+            {
+                return ((NavigationPage)page).CurrentPage.GetActivePage();
+            }
+
+            if (page is TabbedPage)
+            {
+                return ((TabbedPage)page).CurrentPage.GetActivePage();
+            }
+
+            return page;
         }
     }
 }

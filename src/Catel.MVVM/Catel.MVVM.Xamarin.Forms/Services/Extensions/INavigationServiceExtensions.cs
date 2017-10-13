@@ -6,6 +6,7 @@
 
 namespace Catel.Services
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
@@ -24,7 +25,7 @@ namespace Catel.Services
             if (parameters != null)
             {
                 int i = 0;
-                @this.Navigate<TViewModelType>(parameters.ToDictionary(o => "p" + i++));
+                @this.Navigate<TViewModelType>(parameters.ToDictionary(o => i++.ToString()));
             }
             else
             {

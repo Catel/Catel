@@ -57,7 +57,7 @@ namespace Catel.Services
 
             var messageResult = MessageResult.None;
 
-            var currentPage = Application.Current.CurrentPage();
+            var currentPage = Application.Current.GetActivePage();
             if (currentPage != null)
             {
                 var configuration = _configurationResultMap[button];

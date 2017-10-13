@@ -10,13 +10,10 @@ namespace Catel.Windows.Controls
     using System;
     using System.ComponentModel;
     using System.Threading.Tasks;
-    using Catel.IoC;
     using Catel.MVVM;
     using Catel.MVVM.Providers;
     using Catel.MVVM.Views;
-    using Catel.Services;
     using Catel.Threading;
-    using global::Xamarin.Forms;
 
     /// <summary>
     ///     The content page.
@@ -63,21 +60,9 @@ namespace Catel.Windows.Controls
 
             _userControlLogic.ViewModelChanged += (sender, args) =>
             {
-                var serviceLocator = this.GetServiceLocator();
-
-                if (BindingContext != null)
-                {
-                    serviceLocator.RemoveType<INavigationService>(BindingContext);
-                }
-
                 if (BindingContext != _userControlLogic.ViewModel)
                 {
                     BindingContext = _userControlLogic.ViewModel;
-                }
-
-                if (BindingContext != null)
-                {
-                    serviceLocator.RegisterInstance<INavigationService>(new NavigationService(Navigation), BindingContext);
                 }
             };
 

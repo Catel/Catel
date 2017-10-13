@@ -10,16 +10,13 @@ namespace Catel.Services
     using System.Collections.Generic;
     using Catel.MVVM;
     using Logging;
-#if XAMARIN_FORMS
-    using global::Xamarin.Forms;
-#endif
 
     /// <summary>
     /// Service to navigate inside applications.
     /// </summary>
     public partial class NavigationService : NavigationServiceBase, INavigationService
     {
-        #region Fields
+    #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -30,33 +27,12 @@ namespace Catel.Services
         /// </summary>
         private static readonly Dictionary<string, string> _registeredUris = new Dictionary<string, string>();
 
-#if XAMARIN_FORMS
-        /// <summary>
-        /// The navigation root service.
-        /// </summary>
-        protected readonly INavigation Navigation;
-#else
         /// <summary>
         /// The navigation root service.
         /// </summary>
         protected readonly INavigationRootService NavigationRootService;
-#endif
-        #endregion
+#endregion
 
-#if XAMARIN_FORMS
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NavigationService" /> class.
-        /// </summary>
-        /// <param name="navigation">The navigation service.</param>
-        public NavigationService(INavigation navigation)
-        {
-            Argument.IsNotNull(() => navigation);
-
-            Navigation = navigation;
-
-            Initialize();
-        }
-#else
 #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationService" /> class.
@@ -71,7 +47,7 @@ namespace Catel.Services
             Initialize();
         }
 #endregion
-#endif
+
 #region Events
         /// <summary>
         /// Occurs when the application is about to be closed.
