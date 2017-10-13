@@ -8,10 +8,11 @@ namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Catel.MVVM;
-    using IoC;
     using Logging;
+#if XAMARIN_FORMS
+    using global::Xamarin.Forms;
+#endif
 
     /// <summary>
     /// Service to navigate inside applications.
@@ -24,15 +25,39 @@ namespace Catel.Services
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        /// <summary>
+        /// The registered uris.
+        /// </summary>
         private static readonly Dictionary<string, string> _registeredUris = new Dictionary<string, string>();
 
+#if XAMARIN_FORMS
+        /// <summary>
+        /// The navigation root service.
+        /// </summary>
+        protected readonly INavigation Navigation;
+#else
         /// <summary>
         /// The navigation root service.
         /// </summary>
         protected readonly INavigationRootService NavigationRootService;
+#endif
         #endregion
 
-        #region Constructors
+#if XAMARIN_FORMS
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NavigationService" /> class.
+        /// </summary>
+        /// <param name="navigation">The navigation service.</param>
+        public NavigationService(INavigation navigation)
+        {
+            Argument.IsNotNull(() => navigation);
+
+            Navigation = navigation;
+
+            Initialize();
+        }
+#else
+#region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationService" /> class.
         /// </summary>
@@ -45,9 +70,9 @@ namespace Catel.Services
 
             Initialize();
         }
-        #endregion
-
-        #region Events
+#endregion
+#endif
+#region Events
         /// <summary>
         /// Occurs when the application is about to be closed.
         /// </summary>
@@ -57,9 +82,9 @@ namespace Catel.Services
         /// Occurs when nothing has canceled the application closing and the application is really about to be closed.
         /// </summary>
         public event EventHandler<EventArgs> ApplicationClosed;
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
         partial void Initialize();
         partial void CloseMainWindow();
         partial void NavigateBack();
@@ -252,6 +277,6 @@ namespace Catel.Services
                 return result;
             }
         }
-        #endregion
+#endregion
     }
 }

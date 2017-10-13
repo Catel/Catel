@@ -139,7 +139,7 @@ namespace Catel.Services
         {
             Argument.IsNotNull("action", action);
 #if XAMARIN_FORMS
-            SynchronizationContext.Current.Post(state => action(), null);           
+            SynchronizationContext.Current.Post(state => action(), null);
 #elif ANDROID
             _handler.Post(action);
 #elif IOS

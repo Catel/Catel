@@ -12,6 +12,9 @@ namespace Catel.Services
     /// </summary>
     public partial class NavigationRootService : INavigationRootService
     {
-
+        public object GetNavigationRoot()
+        {
+            return null;
+        }
     }
 }

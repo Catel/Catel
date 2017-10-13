@@ -25,13 +25,13 @@ namespace Catel
             Argument.IsNotNull(() => @this);
 
             Page currentPage = Application.Current.MainPage;
-            var modalStack = Application.Current.MainPage.Navigation.ModalStack;
-            if (modalStack.Count > 0)
+            var stack = Application.Current.MainPage.Navigation.NavigationStack;
+            if (stack.Count > 0)
             {
-                currentPage = modalStack[modalStack.Count - 1];
+                currentPage = stack[stack.Count - 1];
             }
 
-            return  (currentPage as NavigationPage)?.CurrentPage ?? currentPage;
+            return currentPage;
         }
     }
 }

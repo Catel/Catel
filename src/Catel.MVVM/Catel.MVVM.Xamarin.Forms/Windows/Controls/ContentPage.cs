@@ -10,10 +10,13 @@ namespace Catel.Windows.Controls
     using System;
     using System.ComponentModel;
     using System.Threading.Tasks;
+    using Catel.IoC;
     using Catel.MVVM;
     using Catel.MVVM.Providers;
     using Catel.MVVM.Views;
+    using Catel.Services;
     using Catel.Threading;
+    using global::Xamarin.Forms;
 
     /// <summary>
     ///     The content page.
@@ -31,7 +34,7 @@ namespace Catel.Windows.Controls
         /// </summary>
         public ContentPage() : this(null)
         {
-            this.BindingContextChanged += OnBindingContextChanged;
+            BindingContextChanged += OnBindingContextChanged;
         }
 
         private object _oldbindingContext;
@@ -42,7 +45,6 @@ namespace Catel.Windows.Controls
             _oldbindingContext = BindingContext;
             RaiseViewModelChanged();
         }
-
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ContentPage" /> class.
@@ -55,29 +57,39 @@ namespace Catel.Windows.Controls
             _userControlLogic.TargetViewPropertyChanged += (sender, e) =>
             {
                 OnPropertyChanged(e.PropertyName);
-                // PropertyChanged.SafeInvoke(this, e);
             };
 
             _userControlLogic.ViewModelClosedAsync += OnViewModelClosedAsync;
 
             _userControlLogic.ViewModelChanged += (sender, args) =>
             {
+                var serviceLocator = this.GetServiceLocator();
+
+                if (BindingContext != null)
+                {
+                    serviceLocator.RemoveType<INavigationService>(BindingContext);
+                }
+
                 if (BindingContext != _userControlLogic.ViewModel)
                 {
                     BindingContext = _userControlLogic.ViewModel;
+                }
+
+                if (BindingContext != null)
+                {
+                    serviceLocator.RegisterInstance<INavigationService>(new NavigationService(Navigation), BindingContext);
                 }
             };
 
             _userControlLogic.ViewModelPropertyChanged += (sender, e) =>
             {
                 OnViewModelPropertyChanged(e);
-                //ViewModelPropertyChanged.SafeInvoke(this, e);
+                ViewModelPropertyChanged.SafeInvoke(this, e);
             };
 
             Loaded += (sender, e) =>
             {
                 // _viewLoaded.SafeInvoke(this);
-
                 // OnLoaded(e);
             };
 
@@ -87,58 +99,8 @@ namespace Catel.Windows.Controls
                 // OnUnloaded(e);
             };
 
-
-            // var dependencyResolver = this.GetDependencyResolver();
-            // _viewManager = dependencyResolver.Resolve<IViewManager>();
-
             DataContextChanged += OnDataContextChanged;
         }
-
-        /// <summary>
-        ///     Gets or sets object that contains the properties that will be targeted by the bound properties that belong to this
-        ///     <see cref="T:Xamarin.Forms.BindableObject" />.
-        /// </summary>
-        /// <value>
-        ///     An <see cref="T:System.Object" /> that contains the properties that will be targeted by the bound properties that
-        ///     belong to this <see cref="T:Xamarin.Forms.BindableObject" />. This is a bindable property.
-        /// </value>
-        /// <remarks>
-        ///     <block subset="none" type="note">
-        ///         Typically, the runtime performance is better if
-        ///         <see cref="P:Xamarin.Forms.BindableObject.BindingContext" /> is set after all calls to
-        ///         <see cref="M:Xamarin.Forms.BindableObject.SetBinding" /> have been made.
-        ///     </block>
-        ///     <para>
-        ///         The following example shows how to apply a BindingContext and a Binding to a Label (inherits from
-        ///         BindableObject):
-        ///     </para>
-        ///     <example>
-        ///         <code lang="C#">
-        /// <![CDATA[
-        /// var label = new Label ();
-        /// label.SetBinding (Label.TextProperty, "Name");
-        /// label.BindingContext = new {Name = "John Doe", Company = "Xamarin"};
-        /// Debug.WriteLine (label.Text); //prints "John Doe"
-        ///         ]]>
-        /// </code>
-        ///     </example>
-        /// </remarks>
-        /*
-        public new object BindingContext
-        {
-            get => base.BindingContext;
-
-            set
-            {
-                if (!Equals(base.BindingContext, value))
-                {
-                    var oldContext = base.BindingContext;
-                    base.BindingContext = value;
-                    DataContextChanged.SafeInvoke(this, () => new DataContextChangedEventArgs(oldContext, BindingContext));
-                }
-            }
-        }
-        */
 
         /// <summary>
         ///     Gets the view model.
@@ -149,6 +111,11 @@ namespace Catel.Windows.Controls
         ///     Occurs when the view model has changed.
         /// </summary>
         public event EventHandler<EventArgs> ViewModelChanged;
+
+        /// <summary>
+        /// Occurs when a property on the <see cref="ViewModel"/> has changed.
+        /// </summary>
+        public event EventHandler<PropertyChangedEventArgs> ViewModelPropertyChanged;
 
         /// <summary>
         ///     Gets or sets the data context.
@@ -186,10 +153,17 @@ namespace Catel.Windows.Controls
         public event EventHandler<DataContextChangedEventArgs> DataContextChanged;
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="propertyChangedEventArgs"></param>
         private void OnViewModelPropertyChanged(PropertyChangedEventArgs propertyChangedEventArgs)
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void RaiseViewModelChanged()
         {
             OnViewModelChanged();
@@ -252,11 +226,12 @@ namespace Catel.Windows.Controls
         /// </remarks>
         protected sealed override bool OnBackButtonPressed()
         {
-            BackButtonPressed.SafeInvoke(this);
+            /*BackButtonPressed.SafeInvoke(this);
 
             var popupLayout = Content as PopupLayout;
             //// TODO: Lookup for top most popup layout.
-            return popupLayout != null && popupLayout.IsPopupActive || base.OnBackButtonPressed();
+            return popupLayout != null && popupLayout.IsPopupActive || base.OnBackButtonPressed();*/
+            return base.OnBackButtonPressed();
         }
 
         /// <summary>

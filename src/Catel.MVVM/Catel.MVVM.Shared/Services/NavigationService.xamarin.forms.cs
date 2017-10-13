@@ -4,7 +4,6 @@
 // </copyright>>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Catel.MVVM.Views;
 
 #if XAMARIN_FORMS
 
@@ -12,10 +11,9 @@ namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Catel.IoC;
     using Catel.MVVM;
-
-    using Application = global::Xamarin.Forms.Application;
     using Page = global::Xamarin.Forms.Page;
 
     /// <summary>
@@ -30,7 +28,7 @@ namespace Catel.Services
         /// <value>The can go back.</value>
         public override bool CanGoBack
         {
-            get { return GetBackStackCount() > 0; }
+            get { return this.GetBackStackCount() > 0; }
         }
 
         /// <summary>
@@ -44,6 +42,7 @@ namespace Catel.Services
                 throw new MustBeImplementedException();
             }
         }
+
         #endregion
 
         #region Methods
@@ -61,21 +60,11 @@ namespace Catel.Services
             return navigationTarget;
         }
 
-        /// <summary>
-        /// Gets the back stack count.
-        /// </summary>
-        /// <returns>System.Int32.</returns>
         public override int GetBackStackCount()
         {
-            var backStackCount = 0;
-            var currentPage = Application.Current.CurrentPage();
-            if (currentPage != null)
-            {
-                backStackCount = currentPage.Navigation.ModalStack.Count - 1;
-            }
-
-            return backStackCount;
+            return Navigation.NavigationStack.Count;
         }
+
 
         /// <summary>
         /// Removes the back entry.
@@ -84,9 +73,7 @@ namespace Catel.Services
         {
             if (CanGoBack)
             {
-                var currentPage = Application.Current.CurrentPage();
-                var page = currentPage.Navigation.ModalStack[currentPage.Navigation.ModalStack.Count - 1];
-                currentPage.Navigation.RemovePage(page);
+                Navigation.RemovePage(Navigation.NavigationStack.Last());
             }
         }
 
@@ -109,11 +96,7 @@ namespace Catel.Services
 
         async partial void NavigateBack()
         {
-            var currentPage = Application.Current.CurrentPage();
-            if (currentPage != null)
-            {
-                await currentPage.Navigation.PopModalAsync();
-            }
+            await Navigation.PopAsync();
         }
 
         partial void NavigateForward()
@@ -131,21 +114,10 @@ namespace Catel.Services
             var typeFactory = dependencyResolver.Resolve<ITypeFactory>();
             var view = (Page)typeFactory.CreateInstance(viewType);
             var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
-            var viewModel = viewModelFactory.CreateViewModel(viewModelType, null);
-            if (view is IView)
-            {
-                (view as IView).DataContext = viewModel;
-            }
-            else
-            {
-                view.BindingContext = viewModel;
-            }
+            var viewModel = viewModelFactory.CreateViewModel(viewModelType, parameters.Count > 0 ? parameters.Values.ToArray() : null);
+            view.BindingContext = viewModel;
 
-            var currentPage = Application.Current.CurrentPage();
-            if (currentPage != null)
-            {
-                await currentPage.Navigation.PushModalAsync(view);
-            }
+            await Navigation.PushAsync(view);
         }
 
         partial void NavigateToUri(Uri uri)
