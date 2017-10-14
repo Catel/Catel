@@ -27,17 +27,22 @@ namespace Catel.Services
         /// </summary>
         private static readonly Dictionary<string, string> _registeredUris = new Dictionary<string, string>();
 
+#if !XAMARIN_FORMS
         /// <summary>
         /// The navigation root service.
         /// </summary>
         protected readonly INavigationRootService NavigationRootService;
-#endregion
+#endif
+        #endregion
 
-#region Constructors
+#if !XAMARIN_FORMS
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationService" /> class.
         /// </summary>
         /// <param name="navigationRootService">The navigation root service.</param>
+
         public NavigationService(INavigationRootService navigationRootService)
         {
             Argument.IsNotNull(() => navigationRootService);
@@ -46,9 +51,11 @@ namespace Catel.Services
 
             Initialize();
         }
-#endregion
 
-#region Events
+        #endregion
+#endif
+
+        #region Events
         /// <summary>
         /// Occurs when the application is about to be closed.
         /// </summary>

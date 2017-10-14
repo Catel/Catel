@@ -12,91 +12,8 @@ namespace Catel.Xamarin.Forms
     using System.Reflection;
     using System.Threading.Tasks;
     using global::Xamarin.Forms;
-    using Reflection;
+    using global::Xamarin.Forms.Internals;
 
-    /// <summary>
-    ///     The arguments proxy interface.
-    /// </summary>
-    public interface IArgumentsProxy
-    {
-        /// <summary>
-        ///     The object.
-        /// </summary>
-        object Object { get; }
-
-        /// <summary>
-        ///     The internal type.
-        /// </summary>
-        Type InternalType { get; }
-
-        /// <summary>
-        ///     The result.
-        /// </summary>
-        TaskCompletionSource<bool> Result { get; }
-    }
-
-    public static class ArgumentsProxyFactory
-    {
-        /// <summary>
-        ///     Creates a proxy for <see cref="Xamarin.Forms.AlertArgument" />.
-        /// </summary>
-        /// <param name="caption">The caption</param>
-        /// <param name="message">The message</param>
-        /// <param name="positiveButton">The positive button text</param>
-        /// <param name="negativeButton">The negative button text</param>
-        /// <returns>The proxy instance</returns>
-        public static IArgumentsProxy CreateAlertArgument(string caption, string message, string positiveButton,
-            string negativeButton)
-        {
-            return new AlertArgumentsProxy(caption, message, positiveButton, negativeButton);
-        }
-
-        /// <summary>
-        ///     The alert arguments proxy.
-        /// </summary>
-        private sealed class AlertArgumentsProxy : IArgumentsProxy
-        {
-            /// <summary>
-            /// The property info
-            /// </summary>
-            private readonly PropertyInfo _propertyInfo;
-
-            /// <summary>
-            ///     Initializes a new instance of the <see cref="AlertArgumentsProxy" /> class.
-            /// </summary>
-            /// <param name="caption">The caption</param>
-            /// <param name="message">The message</param>
-            /// <param name="positiveButton">The positive button text</param>
-            /// <param name="negativeButton">The negative button text</param>
-            public AlertArgumentsProxy(string caption, string message, string positiveButton, string negativeButton)
-            {
-                var assembly = typeof (Application).GetAssemblyEx();
-                InternalType = assembly.GetType("Xamarin.Forms.AlertArguments");
-
-                _propertyInfo = InternalType.GetPropertyEx("Result");
-                var constructor = InternalType.GetConstructorsEx()[0];
-                Object = constructor.Invoke(new object[] {caption, message, positiveButton, negativeButton});
-            }
-
-            /// <summary>
-            ///     The task completion source.
-            /// </summary>
-            public TaskCompletionSource<bool> Result
-            {
-                get { return (TaskCompletionSource<bool>) _propertyInfo.GetValue(Object); }
-            }
-
-            /// <summary>
-            ///     The object.
-            /// </summary>
-            public object Object { get; }
-
-            /// <summary>
-            ///     The internal type.
-            /// </summary>
-            public Type InternalType { get; }
-        }
-    }
 
     /// <summary>
     ///     The Messaging Center Helper
@@ -109,25 +26,25 @@ namespace Catel.Xamarin.Forms
         /// <param name="sender">The sender.</param>
         /// <param name="typeOfSender">The type of sender.</param>
         /// <param name="message">The message.</param>
-        /// <param name="argumentsProxy">The arguments proxy.</param>
+        /// <param name="alertArguments">The arguments proxy.</param>
         /// <returns>System.Threading.Tasks.TaskCompletionSource&lt;System.Boolean&gt;.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="typeOfSender"/> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="sender"/> is <c>null</c>.</exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="argumentsProxy"/> is <c>null</c>.</exception>
-        private static TaskCompletionSource<bool> Send(object sender, Type typeOfSender, string message, IArgumentsProxy argumentsProxy)
+        /// <exception cref="System.ArgumentNullException">The <paramref name="alertArguments"/> is <c>null</c>.</exception>
+        private static TaskCompletionSource<bool> Send(object sender, Type typeOfSender, string message, AlertArguments alertArguments)
         {
             Argument.IsNotNull(() => sender);
             Argument.IsNotNull(() => typeOfSender);
             Argument.IsOfType(() => sender, typeOfSender);
-            Argument.IsNotNull(() => argumentsProxy);
+            Argument.IsNotNull(() => alertArguments);
 
             var type = typeof(global::Xamarin.Forms.MessagingCenter);
             //// TODO: Use reflection API instead but reflection API requires some fixes.
             var methodInfo = type.GetRuntimeMethods().FirstOrDefault(info => info.Name == "Send" && info.GetGenericArguments().Length == 2 && info.GetParameters().Length == 3);
-            var makeGenericMethod = methodInfo.MakeGenericMethod(typeof(Page), argumentsProxy.InternalType);
-            makeGenericMethod.Invoke(type, new[] { sender, message, argumentsProxy.Object });
+            var makeGenericMethod = methodInfo.MakeGenericMethod(typeof(Page), typeof(AlertArguments));
+            makeGenericMethod.Invoke(type, new[] { sender, message, alertArguments });
 
-            return argumentsProxy.Result;
+            return alertArguments.Result;
         }
 
         /// <summary>
@@ -136,9 +53,9 @@ namespace Catel.Xamarin.Forms
         /// <param name="sender">The sender.</param>
         /// <param name="arguments">The arguments.</param>
         /// <returns>System.Threading.Tasks.TaskCompletionSource&lt;System.Boolean&gt;.</returns>
-        private static TaskCompletionSource<bool> SendAlert(Page sender, IArgumentsProxy arguments)
+        private static void SendAlertMessage(Page sender, AlertArguments arguments)
         {
-            return Send(sender, typeof(Page), Messages.SendAlert, arguments);
+            Send(sender, typeof(Page), Messages.SendAlert, arguments);
         }
 
         /// <summary>
@@ -150,11 +67,11 @@ namespace Catel.Xamarin.Forms
         /// <param name="positiveButton">The positive button.</param>
         /// <param name="negativeButton">The negative button.</param>
         /// <returns>System.Threading.Tasks.TaskCompletionSource&lt;System.Boolean&gt;.</returns>
-        public static TaskCompletionSource<bool> SendAlert(Page sender, string caption, string message, string positiveButton, string negativeButton)
+        public static async Task<bool> SendAlertAsync(Page sender, string caption, string message, string positiveButton, string negativeButton)
         {
-            var argument = ArgumentsProxyFactory.CreateAlertArgument(caption, message, positiveButton, negativeButton);
-            SendAlert(sender, argument);
-            return argument.Result;
+            var argument = new AlertArguments(caption, message, positiveButton, negativeButton);
+            SendAlertMessage(sender, argument);
+            return await argument.Result.Task;
         }
 
         /// <summary>

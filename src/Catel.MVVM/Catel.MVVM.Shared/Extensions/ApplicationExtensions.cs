@@ -24,8 +24,18 @@ namespace Catel
         {
             Argument.IsNotNull(() => @this);
 
-            Page activePage = Application.Current.MainPage.GetActivePage();
-             
+            Page activePage = Application.Current.MainPage;
+            while(!(activePage is ContentPage))
+            {
+                if (activePage is NavigationPage)
+                {
+                    activePage = ((NavigationPage)activePage).CurrentPage;
+                } else  if (activePage is TabbedPage)
+                {
+                    activePage = ((TabbedPage)activePage).CurrentPage;
+                }
+            }
+
             var stack = activePage.Navigation.NavigationStack;
             if (stack.Count > 0)
             {
@@ -33,21 +43,6 @@ namespace Catel
             }
 
             return activePage;
-        }
-
-        public static Page GetActivePage(this Page page)
-        {
-            if (page is NavigationPage)
-            {
-                return ((NavigationPage)page).CurrentPage.GetActivePage();
-            }
-
-            if (page is TabbedPage)
-            {
-                return ((TabbedPage)page).CurrentPage.GetActivePage();
-            }
-
-            return page;
         }
     }
 }

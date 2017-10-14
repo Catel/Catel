@@ -1362,7 +1362,6 @@ namespace Catel.MVVM
                 IsInitializing = true;
 
                 await InitializeAsync();
-
                 await InitializedAsync.SafeInvokeAsync(this);
 
                 IsInitializing = false;
@@ -1534,6 +1533,6 @@ namespace Catel.MVVM
 
             ViewModelManager.UnregisterViewModelInstance(this);
         }
-        #endregion
+#endregion
     }
 }

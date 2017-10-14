@@ -22,6 +22,47 @@ namespace Catel.Services
     /// </summary>
     public partial class NavigationService
     {
+        /// <summary>
+        /// The type factory
+        /// </summary>
+        private readonly ITypeFactory _typeFactory;
+
+        /// <summary>
+        /// The view locator.
+        /// </summary>
+        private readonly IViewLocator _viewLocator;
+
+
+        /// <summary>
+        /// The view model factory.
+        /// </summary>
+        private readonly IViewModelFactory _viewModelFactory;
+
+        /// <summary>
+        /// The view model locator.
+        /// </summary>
+        private readonly IViewModelLocator _viewModelLocator;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NavigationService" /> class.
+        /// </summary>
+        /// <param name="typeFactory">The type factory</param>
+        /// <param name="viewLocator">The view locator</param>
+        /// <param name="viewModelFactory">The viewmodel factory</param>
+        public NavigationService(ITypeFactory typeFactory, IViewLocator viewLocator, IViewModelLocator viewModelLocator, IViewModelFactory viewModelFactory)
+        {
+            Argument.IsNotNull(() => typeFactory);
+            Argument.IsNotNull(() => viewLocator);
+            Argument.IsNotNull(() => viewModelLocator);
+
+            _typeFactory = typeFactory;
+            _viewLocator = viewLocator;
+            _viewModelFactory = viewModelFactory;
+            _viewModelLocator = viewModelLocator;
+
+            Initialize();
+        }
+
         #region Properties
         /// <summary>
         /// Gets the can go back.
@@ -29,7 +70,7 @@ namespace Catel.Services
         /// <value>The can go back.</value>
         public override bool CanGoBack
         {
-            get { return this.GetBackStackCount() > 0; }
+            get { return GetBackStackCount() > 0; }
         }
 
         /// <summary>
@@ -39,7 +80,7 @@ namespace Catel.Services
         public override bool CanGoForward
         {
             get
-            {
+        {
                 throw new MustBeImplementedException();
             }
         }
@@ -54,13 +95,12 @@ namespace Catel.Services
         /// <returns>The target to navigate to.</returns>
         protected override string ResolveNavigationTarget(Type viewModelType)
         {
-            var dependencyResolver = this.GetDependencyResolver();
-            var viewLocator = dependencyResolver.Resolve<IViewLocator>();
-
-            var navigationTarget = viewLocator.ResolveView(viewModelType).AssemblyQualifiedName;
-            return navigationTarget;
+            return _viewLocator.ResolveView(viewModelType).AssemblyQualifiedName;
         }
 
+        /// <summary>
+        /// Returns the number of total back entries (which is the navigation history).
+        /// </summary>
         public override int GetBackStackCount()
         {
             return Application.Current.GetActivePage().Navigation.NavigationStack.Count;
@@ -87,20 +127,32 @@ namespace Catel.Services
             throw new MustBeImplementedException();
         }
 
+        /// <summary>
+        /// Initialize
+        /// </summary>
         partial void Initialize()
         {
         }
 
+        /// <summary>
+        /// Closes the main window
+        /// </summary>
         partial void CloseMainWindow()
         {
             throw new MustBeImplementedException();
         }
 
+        /// <summary>
+        /// Navigates Back
+        /// </summary>
         async partial void NavigateBack()
         {
             await Application.Current.GetActivePage().Navigation.PopAsync();
         }
 
+        /// <summary>
+        /// Navigates forward
+        /// </summary>
         partial void NavigateForward()
         {
             throw new MustBeImplementedException();
@@ -108,20 +160,19 @@ namespace Catel.Services
 
         async partial void NavigateWithParameters(string uri, Dictionary<string, object> parameters)
         {
-            var dependencyResolver = this.GetDependencyResolver();
-
             var viewType = Type.GetType(uri);
-            var viewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
-            var viewModelType = viewModelLocator.ResolveViewModel(viewType);
-            var typeFactory = dependencyResolver.Resolve<ITypeFactory>();
-            var view = (Page)typeFactory.CreateInstance(viewType);
-            var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
-            var viewModel = viewModelFactory.CreateViewModel(viewModelType, parameters.Count > 0 ? parameters.Values.ToArray() : null);
+            var viewModelType = _viewModelLocator.ResolveViewModel(viewType);
+            var view = (Page)_typeFactory.CreateInstance(viewType);
+            var viewModel = _viewModelFactory.CreateViewModel(viewModelType, parameters.Count > 0 ? parameters.Values.ToArray() : null);
             view.BindingContext = viewModel;
 
             await Application.Current.GetActivePage().Navigation.PushAsync(view);
         }
 
+        /// <summary>
+        /// Navigates to an Uri.
+        /// </summary>
+        /// <param name="uri">The uri.</param>
         partial void NavigateToUri(Uri uri)
         {
             throw new MustBeImplementedException();
