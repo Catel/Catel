@@ -33,7 +33,8 @@ none
 
 Classes / members marked as obsolete:
 =====================================
-none
+* #1124 Mark NullableValueConverter as obsolete since converter doesn't have a target type, 
+  so this converter won't work as expected NullableValueConverter
 
 Added/fixed:
 ============
