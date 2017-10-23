@@ -3,18 +3,24 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Catel.MVVM</AssemblyName>
+    <RootNamespace>Catel.MVVM</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <RootNamespace>Catel.MVVM</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
     <DefineConstants>TRACE;DEBUG;NETSTANDARD2_0;XAMARIN_FORMS;NETSTANDARD2_0;NS20</DefineConstants>
+    <NoWarn>1591;1998;1701;1702;1705</NoWarn>
     <OutputPath>..\..\..\output\debug\Xamarin.Forms\Catel.MVVM\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
     <DefineConstants>TRACE;RELEASE;NETSTANDARD2_0;XAMARIN_FORMS;RELEASE;NETSTANDARD2_0;NS20</DefineConstants>
+    <NoWarn>1591;1998;1701;1702;1705</NoWarn>
     <OutputPath>..\..\..\output\release\Xamarin.Forms\Catel.MVVM\</OutputPath>
   </PropertyGroup>
 
@@ -56,18 +62,7 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Catel.Fody" Version="2.19.0" />
-    <PackageReference Include="MethodTimer.Fody" Version="1.19.1" />
-    <PackageReference Include="ModuleInit.Fody" Version="1.6.0" />
-    <PackageReference Include="Obsolete.Fody" Version="4.2.4" />
-    <PackageReference Include="Xamarin.Forms" Version="2.4.0.282" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="NETStandard.Library" Version="2.0.0" />
-  </ItemGroup>
-    
+   
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.NS20\Catel.Core.NS20.csproj" />
   </ItemGroup>
@@ -77,5 +72,18 @@
   </ItemGroup>
 
   <Import Project="..\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <PackageReference Include="Catel.Fody" Version="2.19.0" />
+    <PackageReference Include="Fody" Version="2.2.0" />
+    <PackageReference Include="MethodTimer.Fody" Version="1.19.1" />
+    <PackageReference Include="ModuleInit.Fody" Version="1.6.0" />
+    <PackageReference Include="Obsolete.Fody" Version="4.2.4" />
+    <PackageReference Include="Xamarin.Forms" Version="2.4.0.282" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="NETStandard.Library" Version="2.0.0" />
+  </ItemGroup>
 
 </Project>
