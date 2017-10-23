@@ -21,20 +21,23 @@ namespace Catel.Windows.Controls
     public class ContentPage : global::Xamarin.Forms.ContentPage, IView
     {
         /// <summary>
-        ///     The view mananger.
+        ///     The user control logic.
         /// </summary>
-        // private readonly IViewManager _viewManager;
         private readonly UserControlLogic _userControlLogic;
+
+        /// <summary>
+        ///     The old binding context reference.
+        /// </summary>
+        private object _oldbindingContext;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ContentPage" /> class.
         /// </summary>
-        public ContentPage() : this(null)
+        public ContentPage() 
+            : this(null)
         {
             BindingContextChanged += OnBindingContextChanged;
         }
-
-        private object _oldbindingContext;
 
         private void OnBindingContextChanged(object o, EventArgs eventArgs)
         {
@@ -60,7 +63,7 @@ namespace Catel.Windows.Controls
 
             _userControlLogic.ViewModelChanged += (sender, args) =>
             {
-                if (BindingContext != _userControlLogic.ViewModel)
+                if (!ObjectHelper.AreEqual(BindingContext, _userControlLogic.ViewModel))
                 {
                     BindingContext = _userControlLogic.ViewModel;
                 }
@@ -139,15 +142,15 @@ namespace Catel.Windows.Controls
 
 
         /// <summary>
-        /// 
+        ///     Called when the view model property has been closed.
         /// </summary>
-        /// <param name="propertyChangedEventArgs"></param>
-        private void OnViewModelPropertyChanged(PropertyChangedEventArgs propertyChangedEventArgs)
+        /// <param name="e">The <see cref="PropertyChangedEventArgs" /> instance containing the event data.</param>
+        private void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
         {
         }
 
         /// <summary>
-        /// 
+        /// Raises view model changed
         /// </summary>
         private void RaiseViewModelChanged()
         {
@@ -211,11 +214,13 @@ namespace Catel.Windows.Controls
         /// </remarks>
         protected sealed override bool OnBackButtonPressed()
         {
-            /*BackButtonPressed.SafeInvoke(this);
-
+            /*
+            BackButtonPressed.SafeInvoke(this);
             var popupLayout = Content as PopupLayout;
             //// TODO: Lookup for top most popup layout.
-            return popupLayout != null && popupLayout.IsPopupActive || base.OnBackButtonPressed();*/
+            return popupLayout != null && popupLayout.IsPopupActive || base.OnBackButtonPressed();
+            */
+
             return base.OnBackButtonPressed();
         }
 

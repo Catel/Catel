@@ -123,14 +123,13 @@ namespace Catel.MVVM
             if (dataContext != null)
             {
                 var parameters = dataContext as object[];
-                if(parameters != null)
+                if (parameters == null)
                 {
-                    viewModel = _typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag(viewModelType, tag, parameters) as IViewModel;
+                    parameters = new object[] { dataContext };
                 }
-                else
-                {
-                    viewModel = _typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag(viewModelType, tag, dataContext) as IViewModel;
-                }
+
+                viewModel = _typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag(viewModelType, tag,
+                    parameters) as IViewModel;
 
                 if (viewModel != null)
                 {

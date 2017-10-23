@@ -23,6 +23,11 @@ namespace Catel.IoC
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// A single null element array of objects.
+        /// </summary>
+        private static object[] SingleNullElementArrayOfObjects = new object[1]{ null };
         #endregion
 
         #region Fields
@@ -86,7 +91,7 @@ namespace Catel.IoC
                         var interfaceType = serviceType.GetInterfaces().FirstOrDefault() ?? serviceType;
                         _serviceLocator.RegisterType(interfaceType, serviceLocatorRegistration =>
                         {
-                            return dependencyServiceGetMethodInfo.MakeGenericMethod(interfaceType).Invoke(dependencyServiceType, new object[1]{ null });
+                            return dependencyServiceGetMethodInfo.MakeGenericMethod(interfaceType).Invoke(dependencyServiceType, SingleNullElementArrayOfObjects);
                         });
                     }
                 }

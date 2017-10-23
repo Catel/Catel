@@ -103,7 +103,25 @@ namespace Catel.Services
         /// </summary>
         public override int GetBackStackCount()
         {
-            return Application.Current.GetActivePage().Navigation.NavigationStack.Count;
+            var currentApplication = Application.Current;
+            var activePage = currentApplication.GetActivePage();
+            if(activePage == null)
+            {
+                return 0;
+            }
+
+            var navigation = activePage.Navigation;
+            if (navigation == null)
+            {
+                return 0;
+            }
+
+            var navigationStack = navigation.NavigationStack;
+            if (navigationStack == null)
+            {
+                return 0;
+            }
+            return navigationStack.Count;
         }
 
 
@@ -114,8 +132,26 @@ namespace Catel.Services
         {
             if (CanGoBack)
             {
-                var navigation = Application.Current.GetActivePage().Navigation;
-                navigation.RemovePage(navigation.NavigationStack.Last());
+                var currentApplication = Application.Current;
+                var activePage = currentApplication.GetActivePage();
+                if(activePage == null)
+                {
+                    return;
+                }
+
+                var navigation = activePage.Navigation;
+                if(navigation == null)
+                {
+                    return;
+                }
+
+                var navigationStack  = navigation.NavigationStack;
+                if(navigationStack == null || navigationStack.Count == 0)
+                {
+                    return;
+                }
+
+                navigation.RemovePage(navigationStack.Last());
             }
         }
 
@@ -125,13 +161,6 @@ namespace Catel.Services
         public override void RemoveAllBackEntries()
         {
             throw new MustBeImplementedException();
-        }
-
-        /// <summary>
-        /// Initialize
-        /// </summary>
-        partial void Initialize()
-        {
         }
 
         /// <summary>
@@ -147,7 +176,20 @@ namespace Catel.Services
         /// </summary>
         async partial void NavigateBack()
         {
-            await Application.Current.GetActivePage().Navigation.PopAsync();
+            var currentApplication = Application.Current;
+            var activePage = currentApplication.GetActivePage();
+            if (activePage == null)
+            {
+                return;
+            }
+
+            var navigation = activePage.Navigation;
+            if (navigation == null)
+            {
+                return;
+            }
+
+            await navigation.PopAsync();
         }
 
         /// <summary>
@@ -166,7 +208,20 @@ namespace Catel.Services
             var viewModel = _viewModelFactory.CreateViewModel(viewModelType, parameters.Count > 0 ? parameters.Values.ToArray() : null);
             view.BindingContext = viewModel;
 
-            await Application.Current.GetActivePage().Navigation.PushAsync(view);
+            var currentApplication = Application.Current;
+            var activePage = currentApplication.GetActivePage();
+            if (activePage == null)
+            {
+                return;
+            }
+
+            var navigation = activePage.Navigation;
+            if (navigation == null)
+            {
+                return;
+            }
+
+            await navigation.PushAsync(view);
         }
 
         /// <summary>

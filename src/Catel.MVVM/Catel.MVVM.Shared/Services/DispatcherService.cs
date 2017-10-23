@@ -118,7 +118,15 @@ namespace Catel.Services
         {
             Argument.IsNotNull("action", action);
 #if XAMARIN_FORMS
-            SynchronizationContext.Current.Post(state => action(), null);
+            var synchronizationContext = SynchronizationContext.Current;
+            if (synchronizationContext != null)
+            {
+                synchronizationContext.Post(state => action(), null);
+            }
+            else
+            {
+                action();
+            }
 #elif ANDROID
             _handler.Post(action);
 #elif IOS
@@ -139,9 +147,10 @@ namespace Catel.Services
         {
             Argument.IsNotNull("action", action);
 #if XAMARIN_FORMS
-            if(SynchronizationContext.Current != null)
+            var synchronizationContext = SynchronizationContext.Current;
+            if (synchronizationContext != null)
             {
-                SynchronizationContext.Current.Post(state => action(), null);
+                synchronizationContext.Post(state => action(), null);
             }
             else
             {

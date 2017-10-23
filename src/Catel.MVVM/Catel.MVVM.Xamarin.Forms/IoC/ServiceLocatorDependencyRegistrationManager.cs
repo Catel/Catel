@@ -59,7 +59,6 @@ namespace Catel.IoC
         /// </summary>
         public void Initialize()
         {
-            //// TODO: Use type cache insted?
             AppDomain.CurrentDomain.AssemblyLoad += CurrentDomainOnAssemblyLoad;
             foreach (var assembly in AppDomain.CurrentDomain.GetLoadedAssemblies())
             {

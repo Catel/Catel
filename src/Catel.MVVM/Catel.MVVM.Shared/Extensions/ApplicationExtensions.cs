@@ -25,14 +25,16 @@ namespace Catel
             Argument.IsNotNull(() => @this);
 
             Page activePage = Application.Current.MainPage;
-            while(!(activePage is ContentPage))
+            while (!(activePage is ContentPage))
             {
-                if (activePage is NavigationPage)
+                switch (activePage)
                 {
-                    activePage = ((NavigationPage)activePage).CurrentPage;
-                } else  if (activePage is TabbedPage)
-                {
-                    activePage = ((TabbedPage)activePage).CurrentPage;
+                    case NavigationPage navigationPage:
+                        activePage = navigationPage.CurrentPage;
+                        break;
+                    case TabbedPage tabbedPage:
+                        activePage = tabbedPage.CurrentPage;
+                        break;
                 }
             }
 
