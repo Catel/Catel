@@ -2171,7 +2171,7 @@ namespace Catel.Services
     }
     public class MessageService : Catel.Services.ViewModelServiceBase, Catel.Services.IMessageService
     {
-        public MessageService(Catel.Services.IDispatcherService dispatcherService) { }
+        public MessageService(Catel.Services.IDispatcherService dispatcherService, Catel.Services.ILanguageService languageService) { }
         public virtual System.Threading.Tasks.Task<Catel.Services.MessageResult> ShowAsync(string message, string caption = "", Catel.Services.MessageButton button = 1, Catel.Services.MessageImage icon = 0) { }
         public virtual System.Threading.Tasks.Task<Catel.Services.MessageResult> ShowErrorAsync(System.Exception exception) { }
         public virtual System.Threading.Tasks.Task<Catel.Services.MessageResult> ShowErrorAsync(string message, string caption = "") { }
