@@ -40,6 +40,9 @@
     <NoWarn>1998</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Catel.Fody.Attributes, Version=2.19.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Catel.Fody.2.19.0\lib\netstandard1.0\Catel.Fody.Attributes.dll</HintPath>
+    </Reference>
     <Reference Include="MethodTimer, Version=1.19.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\lib\MethodTimer.Fody.1.19.1\lib\netstandard1.0\MethodTimer.dll</HintPath>
     </Reference>
@@ -47,8 +50,8 @@
       <HintPath>..\..\..\lib\Expression.Blend.Sdk.WPF.1.0.1\lib\net45\Microsoft.Expression.Interactions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Obsolete, Version=4.2.4.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
-      <HintPath>..\..\..\lib\Obsolete.Fody.4.2.4\Lib\dotnet\Obsolete.dll</HintPath>
+    <Reference Include="Obsolete, Version=4.3.2.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Obsolete.Fody.4.3.2\Lib\dotnet\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -182,12 +185,12 @@
   </ItemGroup>
   <Import Project="..\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\..\lib\Fody.2.1.2\build\netstandard1.0\Fody.targets" Condition="Exists('..\..\..\lib\Fody.2.1.2\build\netstandard1.0\Fody.targets')" />
+  <Import Project="..\..\..\lib\Fody.2.2.0\build\net452\Fody.targets" Condition="Exists('..\..\..\lib\Fody.2.2.0\build\net452\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\lib\Fody.2.1.2\build\netstandard1.0\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.2.1.2\build\netstandard1.0\Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\Fody.2.2.0\build\net452\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.2.2.0\build\net452\Fody.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
