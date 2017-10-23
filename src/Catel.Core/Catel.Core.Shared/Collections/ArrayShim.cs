@@ -37,5 +37,6 @@ namespace Catel.Collections
             return Array.Empty<T>();
 #endif
         }
+        
     }
 }

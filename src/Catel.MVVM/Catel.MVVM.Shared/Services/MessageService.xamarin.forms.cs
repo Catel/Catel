@@ -14,7 +14,6 @@ namespace Catel.Services
     using System.Threading.Tasks;
 
     using global::Xamarin.Forms;
-    using IoC;
 
     public partial class MessageService
     {
@@ -28,15 +27,9 @@ namespace Catel.Services
         /// </summary>
         partial void Initialize()
         {
-            var dependencyResolver = this.GetDependencyResolver();
-
-            var languageService = dependencyResolver.Resolve<ILanguageService>();
-
-            _configurationResultMap.Add(MessageButton.OK, new Configuration(languageService.GetString("OK"), MessageResult.OK, null, MessageResult.None));
-            _configurationResultMap.Add(MessageButton.OKCancel, new Configuration(languageService.GetString("OK"), MessageResult.OK,
-                languageService.GetString("Cancel"), MessageResult.Cancel));
-            _configurationResultMap.Add(MessageButton.YesNo, new Configuration(languageService.GetString("Yes"), MessageResult.Yes,
-                languageService.GetString("No"), MessageResult.No));
+            _configurationResultMap.Add(MessageButton.OK, new Configuration(_languageService.GetString("OK"), MessageResult.OK, null, MessageResult.None));
+            _configurationResultMap.Add(MessageButton.OKCancel, new Configuration(_languageService.GetString("OK"), MessageResult.OK, _languageService.GetString("Cancel"), MessageResult.Cancel));
+            _configurationResultMap.Add(MessageButton.YesNo, new Configuration(_languageService.GetString("Yes"), MessageResult.Yes, _languageService.GetString("No"), MessageResult.No));
         }
 
         /// <summary>
@@ -56,14 +49,11 @@ namespace Catel.Services
             }
 
             var messageResult = MessageResult.None;
-
-            var currentPage = Application.Current.CurrentPage();
+            var currentPage = Application.Current.GetActivePage();
             if (currentPage != null)
             {
                 var configuration = _configurationResultMap[button];
-                var result = Xamarin.Forms.MessagingCenter.SendAlert(currentPage, caption, message, configuration.PositiveButton, configuration.NegativeButton);
-                await result.Task;
-                messageResult = result.Task.Result ? configuration.PositiveResult: configuration.NegativeResult;
+                messageResult = await Xamarin.Forms.MessagingCenter.SendAlertAsync(currentPage, caption, message, configuration.PositiveButton, configuration.NegativeButton) ? configuration.PositiveResult: configuration.NegativeResult;
             }
 
             return messageResult;

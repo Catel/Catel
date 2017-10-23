@@ -21,6 +21,7 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyCompany("CatenaLogic")]
 [assembly: AssemblyCopyright("Copyright © CatenaLogic 2010 - 2017")]
+
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en-US")]
@@ -87,6 +88,7 @@ using System.Runtime.CompilerServices;
 #endif
 
 #endif
+
 
 //// CLS compliant
 //#if !NETFX_CORE && !XAMARIN && !TEST

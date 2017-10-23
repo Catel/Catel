@@ -8,7 +8,7 @@ namespace Catel.MVVM.Views
 {
     using MVVM;
 
-#if XAMARIN
+#if XAMARIN || XAMARIN_FORMS
     using ViewType = System.Object;
 #elif NETFX_CORE
     using ViewType = global::Windows.UI.Xaml.DependencyObject;

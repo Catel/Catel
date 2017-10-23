@@ -23,7 +23,7 @@ namespace Catel.Services
         /// </returns>
         public static Task PushModalAsync(ContentPage contentPage)
         {
-            return Application.Current.CurrentPage().Navigation.PushModalAsync(contentPage);
+            return Application.Current.GetActivePage().Navigation.PushModalAsync(contentPage);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Catel.Services
         /// </returns>
         public static Task PopModalAsync()
         {
-            return Application.Current.CurrentPage().Navigation.PopModalAsync();
+            return Application.Current.GetActivePage().Navigation.PopModalAsync();
         }
     }
 }

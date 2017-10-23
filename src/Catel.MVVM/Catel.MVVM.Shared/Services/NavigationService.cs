@@ -8,9 +8,7 @@ namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Catel.MVVM;
-    using IoC;
     using Logging;
 
     /// <summary>
@@ -18,25 +16,33 @@ namespace Catel.Services
     /// </summary>
     public partial class NavigationService : NavigationServiceBase, INavigationService
     {
-        #region Fields
+    #region Fields
         /// <summary>
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        /// <summary>
+        /// The registered uris.
+        /// </summary>
         private static readonly Dictionary<string, string> _registeredUris = new Dictionary<string, string>();
 
+#if !XAMARIN_FORMS
         /// <summary>
         /// The navigation root service.
         /// </summary>
         protected readonly INavigationRootService NavigationRootService;
+#endif
         #endregion
 
+#if !XAMARIN_FORMS
         #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NavigationService" /> class.
         /// </summary>
         /// <param name="navigationRootService">The navigation root service.</param>
+
         public NavigationService(INavigationRootService navigationRootService)
         {
             Argument.IsNotNull(() => navigationRootService);
@@ -45,7 +51,9 @@ namespace Catel.Services
 
             Initialize();
         }
+
         #endregion
+#endif
 
         #region Events
         /// <summary>
@@ -57,9 +65,9 @@ namespace Catel.Services
         /// Occurs when nothing has canceled the application closing and the application is really about to be closed.
         /// </summary>
         public event EventHandler<EventArgs> ApplicationClosed;
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
         partial void Initialize();
         partial void CloseMainWindow();
         partial void NavigateBack();
@@ -252,6 +260,6 @@ namespace Catel.Services
                 return result;
             }
         }
-        #endregion
+#endregion
     }
 }

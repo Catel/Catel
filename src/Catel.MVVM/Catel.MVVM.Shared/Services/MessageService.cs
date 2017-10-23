@@ -27,16 +27,22 @@ namespace Catel.Services
     {
         private readonly IDispatcherService _dispatcherService;
 
+        private readonly ILanguageService _languageService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageService"/> class.
         /// </summary>
         /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="languageService">The language service.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
-        public MessageService(IDispatcherService dispatcherService)
+        public MessageService(IDispatcherService dispatcherService, ILanguageService languageService)
         {
             Argument.IsNotNull("dispatcherService", dispatcherService);
+            Argument.IsNotNull("dispatcherService", languageService);
 
             _dispatcherService = dispatcherService;
+            _languageService = languageService;
+
             Initialize();
         }
 
@@ -47,7 +53,7 @@ namespace Catel.Services
         /// </summary>
         partial void Initialize();
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
 
         /// <summary>
         /// Translates the message box result.

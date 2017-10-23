@@ -8,6 +8,8 @@ namespace Catel.IoC
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
     using Logging;
     using Reflection;
 
@@ -21,6 +23,11 @@ namespace Catel.IoC
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// A single null element array of objects.
+        /// </summary>
+        private static object[] SingleNullElementArrayOfObjects = new object[1]{ null };
         #endregion
 
         #region Fields
@@ -69,6 +76,27 @@ namespace Catel.IoC
 
             TypeCache.AssemblyLoaded += (sender, args) =>
             {
+
+#if NETSTANDARD
+                var dependencyServiceType = Type.GetType("Xamarin.Forms.DependencyService, Xamarin.Forms.Core");
+                if (dependencyServiceType != null)
+                {
+                    var dependencyServiceGetMethodInfo = dependencyServiceType.GetMethodEx("Get", BindingFlags.Static | BindingFlags.Public);
+                    var dependencyAttributeType = Type.GetType("Xamarin.Forms.DependencyAttribute, Xamarin.Forms.Core");
+                    var propertyInfo = dependencyAttributeType.GetPropertyEx("Implementor", BindingFlags.Instance | BindingFlags.NonPublic);
+
+                    foreach (var dependencyAttribute in args.Assembly.GetCustomAttributes(dependencyAttributeType))
+                    {
+                        var serviceType = (Type)propertyInfo.GetValue(dependencyAttribute);
+                        var interfaceType = serviceType.GetInterfaces().FirstOrDefault() ?? serviceType;
+                        _serviceLocator.RegisterType(interfaceType, serviceLocatorRegistration =>
+                        {
+                            return dependencyServiceGetMethodInfo.MakeGenericMethod(interfaceType).Invoke(dependencyServiceType, SingleNullElementArrayOfObjects);
+                        });
+                    }
+                }
+#endif
+
                 foreach (var type in args.LoadedTypes)
                 {
                     _pendingTypes.Enqueue(type);
