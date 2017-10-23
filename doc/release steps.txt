@@ -11,9 +11,10 @@ Final release steps:
 2)   Build and deploy via build server
 3)   Create release on github (https://github.com/Catel/Catel/releases)
 4)   Create release page under "Download" section on catelproject.com
-5.1) Ensure that the update guides are written at http://docs.catelproject.com/vnext/setup-deployment/update-guides/
-5.2) Copy the docs and keep vnext (http://docs.catelproject.com)
-5.3) Make sure to update the welcome page as well to include the new version
+5.1) Ensure that the latest reference docs are generated using SharpDox.Plugins.Hugo
+5.2) Ensure that the update guides are written at http://docs.catelproject.com/vnext/setup-deployment/update-guides/
+5.3) Copy the docs and keep vnext (http://docs.catelproject.com)
+5.4) Make sure to update the welcome page as well to include the new version
 6)   Share via Twitter
 7)   Share via LinkedIn
 
@@ -24,3 +25,4 @@ Post release steps:
      * History.txt
      * SolutionAssemblyInfo.cs
      * AssemblyExtensionTests.cs
+2)  Update Catel.Benchmarks

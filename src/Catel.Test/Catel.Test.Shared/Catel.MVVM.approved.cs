@@ -1165,6 +1165,8 @@ namespace Catel.MVVM.Converters
         protected override object Convert(object value, System.Type targetType, object parameter) { }
         protected override object ConvertBack(object value, System.Type targetType, object parameter) { }
     }
+    [System.ObsoleteAttribute("Converter doesn\'t have a target type, so this converter won\'t work as expected. W" +
+        "ill be removed in version 6.0.0.", true)]
     [System.Windows.Data.ValueConversionAttribute(typeof(object), typeof(object))]
     public class NullableValueConverter : Catel.MVVM.Converters.ValueConverterBase
     {

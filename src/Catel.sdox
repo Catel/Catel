@@ -3,8 +3,9 @@
   <section guid="feacbce2-8290-4d90-bb05-373b9d7dbbfc">
     <item key="ConfigFileName" value="Catel" />
     <item key="ProjectName" value="Catel" />
-    <item key="ProjectUrl" value="" />
+    <item key="ProjectUrl" value="http://www.catelproject.com" />
     <item key="Author" value="CatenaLogic" />
+    <item key="VersionNumber" value="5.2" />
     <InputFile>
       <Relative>catel.docs.sln</Relative>
       <Full>C:\Source\Catel\src\Catel.Docs.sln</Full>

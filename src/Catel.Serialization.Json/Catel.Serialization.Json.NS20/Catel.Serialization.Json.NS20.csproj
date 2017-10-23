@@ -28,8 +28,8 @@
 
   <ItemGroup>
     <PackageReference Include="AsyncUsageAnalyzers" Version="1.0.0-alpha003" />
-    <PackageReference Include="Catel.Fody" Version="2.18.0" />
-    <PackageReference Include="Fody" Version="2.1.2" />
+    <PackageReference Include="Catel.Fody" Version="2.19.0" />
+    <PackageReference Include="Fody" Version="2.2.0" />
     <PackageReference Include="MethodTimer.Fody" Version="1.19.1" />
     <PackageReference Include="ModuleInit.Fody" Version="1.6.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
