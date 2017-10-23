@@ -33,6 +33,7 @@ namespace Catel.Services
         /// Initializes a new instance of the <see cref="MessageService"/> class.
         /// </summary>
         /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <param name="languageService">The language service.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
         public MessageService(IDispatcherService dispatcherService, ILanguageService languageService)
         {

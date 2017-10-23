@@ -31,6 +31,18 @@
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Exceptions.resx" Link="Properties\Exceptions.resx">
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.de.resx" Link="Properties\Resources.de.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.es.resx" Link="Properties\Resources.es.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.fr.resx" Link="Properties\Resources.fr.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.it.resx" Link="Properties\Resources.it.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.nl.resx" Link="Properties\Resources.nl.resx">
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>

@@ -8,6 +8,7 @@ namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
+    using Catel.MVVM;
 
     /// <summary>
     /// Service to navigate inside applications.
