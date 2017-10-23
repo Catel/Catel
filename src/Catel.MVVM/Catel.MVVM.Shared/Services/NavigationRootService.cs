@@ -4,7 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 namespace Catel.Services
 {
     /// <summary>
@@ -12,9 +11,12 @@ namespace Catel.Services
     /// </summary>
     public partial class NavigationRootService : INavigationRootService
     {
+#if XAMARIN_FORMS
         public object GetNavigationRoot()
         {
-            return null;
+            throw new System.NotImplementedException();
         }
+#endif
     }
 }
+
