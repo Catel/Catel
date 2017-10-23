@@ -34,31 +34,31 @@
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.de.resx" Link="Properties\Resources.de.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.es.resx" Link="Properties\Resources.es.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.fr.resx" Link="Properties\Resources.fr.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.it.resx" Link="Properties\Resources.it.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.nl.resx" Link="Properties\Resources.nl.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.resx" Link="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.ru.resx" Link="Properties\Resources.ru.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.tr.resx" Link="Properties\Resources.tr.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="..\Catel.MVVM.Shared\Properties\Resources.zh-Hans.resx" Link="Properties\Resources.zh-Hans.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
   </ItemGroup>
 
@@ -74,7 +74,7 @@
   <Import Project="..\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems" Label="Shared" />
 
   <ItemGroup>
-    <PackageReference Include="Catel.Fody" Version="2.19.0" />
+    <PackageReference Include="Catel.Fody" Version="2.19.0" NoWarn="NU1701" />
     <PackageReference Include="Fody" Version="2.2.0" />
     <PackageReference Include="MethodTimer.Fody" Version="1.19.1" />
     <PackageReference Include="ModuleInit.Fody" Version="1.6.0" />
