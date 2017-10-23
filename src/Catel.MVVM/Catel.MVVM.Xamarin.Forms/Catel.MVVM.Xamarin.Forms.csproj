@@ -3,10 +3,6 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Catel.MVVM</AssemblyName>
-    <!--
-    <PackageId>Catel.MVVM</PackageId>
-    <Description>Catel MVVM library</Description>
-    -->
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <RootNamespace>Catel.MVVM</RootNamespace>
@@ -68,6 +64,10 @@
     <PackageReference Include="Xamarin.Forms" Version="2.4.0.282" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="NETStandard.Library" Version="2.0.0" />
+  </ItemGroup>
+    
   <ItemGroup>
     <ProjectReference Include="..\..\Catel.Core\Catel.Core.NS20\Catel.Core.NS20.csproj" />
   </ItemGroup>
