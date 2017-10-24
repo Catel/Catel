@@ -60,7 +60,7 @@
       <HintPath>..\..\..\lib\Newtonsoft.Json.Bson.1.0.1\lib\netstandard1.3\Newtonsoft.Json.Bson.dll</HintPath>
     </Reference>
     <Reference Include="Obsolete, Version=4.3.2.0, Culture=neutral, PublicKeyToken=1ca091877d12ca03, processorArchitecture=MSIL">
-      <HintPath>..\..\..\lib\Obsolete.Fody.4.3.2\Lib\netstandard1.4\Obsolete.dll</HintPath>
+      <HintPath>..\..\..\lib\Obsolete.Fody.4.3.2\lib\netstandard1.4\Obsolete.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -75,8 +75,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="FodyWeavers.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -88,22 +86,17 @@
   <ItemGroup>
     <Compile Include="ModuleInitializer.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\..\..\lib\AsyncUsageAnalyzers.1.0.0-alpha003\analyzers\dotnet\AsyncUsageAnalyzers.dll" />
-    <Analyzer Include="..\..\..\lib\WpfAnalyzers.0.2.7.10\analyzers\dotnet\cs\WpfAnalyzers.Analyzers.dll" />
-    <Analyzer Include="..\..\..\lib\WpfAnalyzers.0.2.7.10\analyzers\dotnet\cs\WpfAnalyzers.CodeFixes.dll" />
-  </ItemGroup>
   <Import Project="..\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems" Label="Shared" Condition="Exists('..\Catel.Serialization.Json.Shared\Catel.Serialization.Json.Shared.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <Import Project="..\..\..\lib\Fody.2.2.0\build\netstandard1.2\Fody.targets" Condition="Exists('..\..\..\lib\Fody.2.2.0\build\netstandard1.2\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\lib\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets'))" />
     <Error Condition="!Exists('..\..\..\lib\Fody.2.2.0\build\netstandard1.2\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\Fody.2.2.0\build\netstandard1.2\Fody.targets'))" />
+    <Error Condition="!Exists('..\..\..\lib\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\lib\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets'))" />
   </Target>
   <Import Project="..\..\..\lib\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\..\..\lib\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
-  <Import Project="..\..\..\lib\Fody.2.2.0\build\netstandard1.2\Fody.targets" Condition="Exists('..\..\..\lib\Fody.2.2.0\build\netstandard1.2\Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

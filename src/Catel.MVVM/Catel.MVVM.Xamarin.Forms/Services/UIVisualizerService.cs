@@ -225,6 +225,7 @@ namespace Catel.Services
 
             _callbacks[contentPage] = new Tuple<IViewModel, EventHandler<UICompletedEventArgs>>(viewModel, completedProc);
             contentPage.BackButtonPressed += OnBackButtonPressed;
+
             await NavigationHelper.PushModalAsync(contentPage);
         }
 

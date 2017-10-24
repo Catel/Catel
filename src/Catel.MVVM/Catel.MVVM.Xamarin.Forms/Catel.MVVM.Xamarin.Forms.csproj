@@ -78,12 +78,8 @@
     <PackageReference Include="Fody" Version="2.2.0" />
     <PackageReference Include="MethodTimer.Fody" Version="1.19.1" />
     <PackageReference Include="ModuleInit.Fody" Version="1.6.0" />
-    <PackageReference Include="Obsolete.Fody" Version="4.2.4" />
-    <PackageReference Include="Xamarin.Forms" Version="2.4.0.282" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="NETStandard.Library" Version="2.0.0" />
+    <PackageReference Include="Obsolete.Fody" Version="4.3.2" />
+    <PackageReference Include="Xamarin.Forms" Version="2.4.0.18342" />
   </ItemGroup>
 
 </Project>

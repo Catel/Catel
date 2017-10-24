@@ -184,13 +184,13 @@ namespace Catel.Windows.Controls
         /// </summary>
         public event EventHandler<EventArgs> BackButtonPressed;
 
-
         /// <summary>
         ///     Occurs immediately prior to the <see cref="T:Xamarin.Forms.Page" /> becoming visible.
         /// </summary>
         protected override void OnAppearing()
         {
             Loaded.SafeInvoke(this, EventArgs.Empty);
+
             base.OnAppearing();
         }
 
@@ -200,6 +200,7 @@ namespace Catel.Windows.Controls
         protected sealed override void OnDisappearing()
         {
             base.OnDisappearing();
+
             Unloaded.SafeInvoke(this, EventArgs.Empty);
         }
 
@@ -220,6 +221,8 @@ namespace Catel.Windows.Controls
             //// TODO: Lookup for top most popup layout.
             return popupLayout != null && popupLayout.IsPopupActive || base.OnBackButtonPressed();
             */
+
+            BackButtonPressed.SafeInvoke(this);
 
             return base.OnBackButtonPressed();
         }
