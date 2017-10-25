@@ -36,8 +36,13 @@ namespace Catel.Services
             //_languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Resources"));
             //_languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Exceptions"));
 
+#if XAMARIN_FORMS
             _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.MVVM.Properties", "Resources"));
             _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.MVVM.Properties", "Exceptions"));
+#else
+            _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Resources"));
+            _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Exceptions"));
+#endif
 
             // Note: we don't have resources in Catel.Extensions.Controls at the moment
             //_languageSources.Add(new LanguageResourceSource("Catel.Extensions.Controls", "Catel.Properties", "Resources"));
@@ -48,7 +53,7 @@ namespace Catel.Services
             CacheResults = true;
         }
 
-        #region Properties
+#region Properties
         /// <summary>
         /// Gets or sets the fallback culture.
         /// </summary>
@@ -84,14 +89,14 @@ namespace Catel.Services
         /// </summary>
         /// <value><c>true</c> if the results should be cached; otherwise, <c>false</c>.</value>
         public bool CacheResults { get; set; }
-        #endregion
+#endregion
 
-        #region Events
+#region Events
         /// <summary>
         /// Occurs when the <see cref="FallbackCulture"/> or <see cref="PreferredCulture"/> are updated.
         /// </summary>
         public event EventHandler<EventArgs> LanguageUpdated;
-        #endregion
+#endregion
 
         /// <summary>
         /// Preloads the language sources to provide optimal performance.
