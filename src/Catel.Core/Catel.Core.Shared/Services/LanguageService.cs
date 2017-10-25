@@ -36,13 +36,16 @@ namespace Catel.Services
             //_languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Resources"));
             //_languageSources.Add(new LanguageResourceSource("Catel.Core", "Catel.Properties", "Exceptions"));
 
-#if XAMARIN_FORMS
-            _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.MVVM.Properties", "Resources"));
-            _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.MVVM.Properties", "Exceptions"));
-#else
-            _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Resources"));
-            _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Exceptions"));
-#endif
+            if(Platforms.CurrentPlatform == SupportedPlatforms.XamarinForms)
+            {
+                _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.MVVM.Properties", "Resources"));
+                _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.MVVM.Properties", "Exceptions"));
+            }
+            else
+            {
+                _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Resources"));
+                _languageSources.Add(new LanguageResourceSource("Catel.MVVM", "Catel.Properties", "Exceptions"));
+            }
 
             // Note: we don't have resources in Catel.Extensions.Controls at the moment
             //_languageSources.Add(new LanguageResourceSource("Catel.Extensions.Controls", "Catel.Properties", "Resources"));

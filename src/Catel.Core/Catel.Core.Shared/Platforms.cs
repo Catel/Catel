@@ -8,6 +8,7 @@
 namespace Catel
 {
     using System;
+    using Catel.Reflection;
 
     /// <summary>
     /// Information about the platforms.
@@ -101,6 +102,11 @@ namespace Catel
 
         private static SupportedPlatforms DeterminePlatform()
         {
+            if (TypeCache.GetType("Xamarin.Forms.Device") != null)
+            {
+                return SupportedPlatforms.XamarinForms;
+            }
+
 #if PCL
             return SupportedPlatforms.PCL;
 #elif NET45
