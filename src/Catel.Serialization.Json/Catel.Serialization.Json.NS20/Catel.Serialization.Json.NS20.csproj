@@ -13,8 +13,8 @@
     <WarningsAsErrors />
     <DefineConstants>TRACE;NETSTANDARD;NS20;RELEASE;NETSTANDARD2_0</DefineConstants>
     <NoWarn>1591;1998;1701;1702;1705</NoWarn>
-    <OutputPath>..\..\..\output\debug\NS20\Catel.Serialization.Json\</OutputPath>
-    <DocumentationFile>..\..\..\output\debug\NS20\Catel.Serialization.Json\Catel.Serialization.Json.xml</DocumentationFile>
+    <OutputPath>..\..\..\output\release\NS20\Catel.Serialization.Json\</OutputPath>
+    <DocumentationFile>..\..\..\output\release\NS20\Catel.Serialization.Json\Catel.Serialization.Json.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
