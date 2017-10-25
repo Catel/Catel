@@ -551,6 +551,7 @@ namespace Catel.Test.IoC
                 serviceLocator.RegisterType<IMessageService, MessageService>();
                 serviceLocator.RegisterType<INavigationService, NavigationService>();
                 serviceLocator.RegisterType<INavigationRootService, NavigationRootService>();
+                serviceLocator.RegisterType<ILanguageService, LanguageService>();
                 serviceLocator.RegisterInstance<IDummyDependency>(noTagDependency);
                 serviceLocator.RegisterInstance<IDummyDependency>(tagDependency, "tag");
 
