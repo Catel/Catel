@@ -12,7 +12,7 @@
 	<summary>
 	</summary>
 	
-	<tags>mvvm data object wpf windows winrt windows phone wp8 wp sl silverlight view model viewmodel</tags>
+	<tags>mvvm data object wpf windows uwp xamarin ios android view model viewmodel</tags>
 	
 	<language>en-US</language>
 	<projectUrl>http://www.catelproject.com</projectUrl>	
