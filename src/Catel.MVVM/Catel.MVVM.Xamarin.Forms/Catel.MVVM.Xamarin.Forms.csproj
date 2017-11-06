@@ -13,7 +13,7 @@
     <WarningsAsErrors />
     <DefineConstants>TRACE;DEBUG;NETSTANDARD2_0;XAMARIN_FORMS;NETSTANDARD2_0;NS20</DefineConstants>
     <NoWarn>1591;1998;1701;1702;1705</NoWarn>
-    <OutputPath>..\..\..\output\debug\Xamarin.Forms\Catel.MVVM\</OutputPath>
+    <OutputPath>..\..\..\output\debug\Xamarin.Forms\Catel.MVVM.Xamarin.Forms\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -21,7 +21,7 @@
     <WarningsAsErrors />
     <DefineConstants>TRACE;RELEASE;NETSTANDARD2_0;XAMARIN_FORMS;RELEASE;NETSTANDARD2_0;NS20</DefineConstants>
     <NoWarn>1591;1998;1701;1702;1705</NoWarn>
-    <OutputPath>..\..\..\output\release\Xamarin.Forms\Catel.MVVM\</OutputPath>
+    <OutputPath>..\..\..\output\release\Xamarin.Forms\Catel.MVVM.Xamarin.Forms\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
