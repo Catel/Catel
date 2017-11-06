@@ -20,12 +20,14 @@ namespace Catel.Collections
         None,
 
         /// <summary>
-        /// The adding.
+        /// Adding mode. When the suspension stops, this will result in a single <see cref="NotifyCollectionChangedAction.Add"/>
+        /// event.
         /// </summary>
         Adding,
 
         /// <summary>
-        /// The removing.
+        /// Removing mode. When the suspension stops, this will result in a single <see cref="NotifyCollectionChangedAction.Remove"/>
+        /// event.
         /// </summary>
         Removing,
 
@@ -46,6 +48,11 @@ namespace Catel.Collections
         /// MixedConsolidate mode (combination of Adding and Removing). This behaves the same as <see cref="MixedBash"/>, except
         /// that this consolidates those add and remove events which annulled each other.
         /// </summary>
-        MixedConsolidate
+        MixedConsolidate,
+
+        /// <summary>
+        /// Silent mode. When the suspension stops, this will result in no event.
+        /// </summary>
+        Silent
     }
 }

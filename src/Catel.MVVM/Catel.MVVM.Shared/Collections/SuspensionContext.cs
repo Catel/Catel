@@ -92,7 +92,8 @@ namespace Catel.Collections
                            { SuspensionMode.Removing, context => context.CreateRemovingEvents() },
                            { SuspensionMode.Mixed, context => context.CreateMixedEvents() },
                            { SuspensionMode.MixedBash, context => context.CreateMixedBashEvents() },
-                           { SuspensionMode.MixedConsolidate, context => context.CreateMixedConsolidateEvents() }
+                           { SuspensionMode.MixedConsolidate, context => context.CreateMixedConsolidateEvents() },
+                           { SuspensionMode.Silent, context => context.CreateSilentEvents() }
                        };
         }
         #endregion Methods
