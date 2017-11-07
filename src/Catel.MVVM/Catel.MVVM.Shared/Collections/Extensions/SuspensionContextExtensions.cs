@@ -164,7 +164,7 @@ namespace Catel.Collections
             Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
             Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Silent);
 
-            return new NotifyRangedCollectionChangedEventArgs[0];
+            return ArrayShim.Empty<NotifyRangedCollectionChangedEventArgs>();
         }
 
         /// <summary>
