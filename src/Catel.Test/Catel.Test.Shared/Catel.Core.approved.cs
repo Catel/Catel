@@ -941,6 +941,7 @@ namespace Catel.Collections
         Mixed = 3,
         MixedBash = 4,
         MixedConsolidate = 5,
+        Silent = 6,
     }
 }
 namespace Catel.ComponentModel
