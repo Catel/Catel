@@ -7,6 +7,7 @@
 namespace Catel.Logging
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using Reflection;
@@ -16,6 +17,11 @@ namespace Catel.Logging
     /// </summary>
     public static partial class LogExtensions
     {
+        /// <summary>
+        /// Exception data key used to indicates whether the exception was already processed by Catel log system.
+        /// </summary>
+        private const string AlreadyProcessedByCatelLogSystemExceptionDataKey = "AlreadyProcessedByCatelLogSystem";
+
         /// <summary>
         /// Logs the product info with version information.
         /// </summary>
@@ -283,6 +289,19 @@ namespace Catel.Logging
             if (LogManager.LogInfo.IgnoreCatelLogging && log.IsCatelLogging)
             {
                 return;
+            }
+
+            if (exception != null && LogManager.LogInfo.IgnoreDuplicateExceptionLogging)
+            {
+                lock (exception)
+                {
+                    if (exception.Data.Contains(AlreadyProcessedByCatelLogSystemExceptionDataKey))
+                    {
+                        return;
+                    }
+
+                    exception.Data.Add(AlreadyProcessedByCatelLogSystemExceptionDataKey, true);
+                }
             }
 
             log.WriteWithData(FormatException(exception, message), extraData, logEvent);
