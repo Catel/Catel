@@ -55,7 +55,7 @@ namespace Catel.Logging
             public static bool IgnoreCatelLogging { get; private set; }
 
             /// <summary>
-            /// Gets a value indicating whether duplicate exception loggin is ignored.
+            /// Gets a value indicating whether duplicate exception logging is ignored.
             /// </summary>
             /// <value>
             /// <c>true</c> if duplicate exception logging is ignored; otherwise, <c>false</c>.
@@ -192,7 +192,7 @@ namespace Catel.Logging
 
                     if (LogManager.IgnoreDuplicateExceptionLogging.HasValue)
                     {
-                        IsStatusEnabled = LogManager.IgnoreDuplicateExceptionLogging.Value;
+                        IgnoreDuplicateExceptionLogging = LogManager.IgnoreDuplicateExceptionLogging.Value;
                     }
                 }
             }
