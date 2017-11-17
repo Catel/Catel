@@ -55,6 +55,14 @@ namespace Catel.Logging
             public static bool IgnoreCatelLogging { get; private set; }
 
             /// <summary>
+            /// Gets a value indicating whether duplicate exception logging is ignored.
+            /// </summary>
+            /// <value>
+            /// <c>true</c> if duplicate exception logging is ignored; otherwise, <c>false</c>.
+            /// </value>
+            public static bool IgnoreDuplicateExceptionLogging { get; private set; }
+
+            /// <summary>
             /// Gets a value indicating whether debug logging is enabled. This means that there is at least one listener 
             /// that is interested in debug logging.
             /// </summary>
@@ -98,6 +106,8 @@ namespace Catel.Logging
             /// <c>true</c> if status logging is enabled; otherwise, <c>false</c>.
             /// </value>
             public static bool IsStatusEnabled { get; private set; }
+
+
             #endregion
 
             #region Methods
@@ -109,6 +119,7 @@ namespace Catel.Logging
                 lock (_logListeners)
                 {
                     IgnoreCatelLogging = true;
+                    IgnoreDuplicateExceptionLogging = true;
                     IsDebugEnabled = false;
                     IsInfoEnabled = false;
                     IsWarningEnabled = false;
@@ -178,6 +189,11 @@ namespace Catel.Logging
                     {
                         IsStatusEnabled = LogManager.IsStatusEnabled.Value;
                     }
+
+                    if (LogManager.IgnoreDuplicateExceptionLogging.HasValue)
+                    {
+                        IgnoreDuplicateExceptionLogging = LogManager.IgnoreDuplicateExceptionLogging.Value;
+                    }
                 }
             }
 
@@ -229,11 +245,13 @@ namespace Catel.Logging
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private static bool? _ignoreCatelLogging;
+        private static bool? _ignoreDuplicateExceptionLogging;
         private static bool? _isDebugEnabled;
         private static bool? _isInfoEnabled;
         private static bool? _isWarningEnabled;
         private static bool? _isErrorEnabled;
         private static bool? _isStatusEnabled;
+
         #endregion
 
         #region Constructors
@@ -348,6 +366,21 @@ namespace Catel.Logging
             set
             {
                 _isStatusEnabled = value;
+                LogInfo.UpdateLogInfo();
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether duplicate exception loggin is ignored.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if duplicate exception logging is ignored; otherwise, <c>false</c>.
+        /// </value>
+        public static bool? IgnoreDuplicateExceptionLogging {
+            get { return _ignoreDuplicateExceptionLogging; }
+            set
+            {
+                _ignoreDuplicateExceptionLogging = value;
                 LogInfo.UpdateLogInfo();
             }
         }
