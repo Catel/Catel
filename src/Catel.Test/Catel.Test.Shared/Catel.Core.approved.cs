@@ -2742,6 +2742,7 @@ namespace Catel.Logging
     public class static LogManager
     {
         public static System.Nullable<bool> IgnoreCatelLogging { get; set; }
+        public static System.Nullable<bool> IgnoreDuplicateExceptionLogging { get; set; }
         public static System.Nullable<bool> IsDebugEnabled { get; set; }
         public static System.Nullable<bool> IsErrorEnabled { get; set; }
         public static System.Nullable<bool> IsInfoEnabled { get; set; }
@@ -2765,6 +2766,7 @@ namespace Catel.Logging
         public class static LogInfo
         {
             public static bool IgnoreCatelLogging { get; }
+            public static bool IgnoreDuplicateExceptionLogging { get; }
             public static bool IsDebugEnabled { get; }
             public static bool IsEnabled { get; }
             public static bool IsErrorEnabled { get; }
