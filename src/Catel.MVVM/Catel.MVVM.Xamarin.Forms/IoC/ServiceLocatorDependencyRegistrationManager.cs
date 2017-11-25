@@ -59,11 +59,21 @@ namespace Catel.IoC
         /// </summary>
         public void Initialize()
         {
-            AppDomain.CurrentDomain.AssemblyLoad += CurrentDomainOnAssemblyLoad;
+            TypeCache.AssemblyLoaded += TypeCacheOnAssemblyLoaded;
             foreach (var assembly in AppDomain.CurrentDomain.GetLoadedAssemblies())
             {
                 LoadServiceFromAssembly(assembly);
             }
+        }
+
+        /// <summary>
+        /// Called when an assembly is loaded in the <see cref="TypeCache"/>.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="AssemblyLoadedEventArgs" /> instance containing the event data.</param>
+        private void TypeCacheOnAssemblyLoaded(object sender, AssemblyLoadedEventArgs args)
+        {
+            LoadServiceFromAssembly(args.Assembly);
         }
 
         /// <summary>
@@ -85,16 +95,6 @@ namespace Catel.IoC
 
                 _serviceLocator.RegisterType(interfaceType, serviceLocatorRegistration => DependencyServiceGetMethodInfo.MakeGenericMethod(interfaceType).Invoke(typeof(DependencyService), ArrayOfObjectWithSingleNullElement));
             }
-        }
-
-        /// <summary>
-        /// Called when an assembly is loaded in the current <see cref="AppDomain"/>.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="args">The <see cref="AssemblyLoadEventArgs" /> instance containing the event data.</param>
-        private void CurrentDomainOnAssemblyLoad(object sender, AssemblyLoadEventArgs args)
-        {
-            LoadServiceFromAssembly(args.LoadedAssembly);
         }
     }
 }
