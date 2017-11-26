@@ -197,5 +197,23 @@ namespace Catel.Services
                 Hide();
             }
         }
+
+        /// <summary>
+        /// Updates the status text.
+        /// </summary>
+        /// <param name="status">The status. When the string is <c>null</c> or empty, the default please wait text will be used.</param>
+        void IProgress<string>.Report(string status)
+        {
+            UpdateStatus(status);
+        }
+
+        /// <summary>
+        /// Updates the status and shows a progress bar with the specified status text. The percentage will be automatically calculated.
+        /// </summary>
+        /// <param name="status">The status.</param>
+        void IProgress<IProgressStatus>.Report(IProgressStatus status)
+        {
+            UpdateStatus(status.CurrentItem, status.TotalItems, status.StatusFormat);
+        }
     }
 }

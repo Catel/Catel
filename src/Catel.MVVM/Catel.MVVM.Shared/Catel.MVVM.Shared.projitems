@@ -267,6 +267,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IViewExportService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IViewModelService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IViewModelWrapperService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Models\Interfaces\IProgressStatus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Models\ProgressStatus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LocationService.android.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LocationService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LocationService.ios.cs" />

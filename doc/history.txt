@@ -38,7 +38,7 @@ Classes / members marked as obsolete:
 
 Added/fixed:
 ============
-xxx
+(+) #690 CTL-693 IProgress used for IPleaseWaitService
 
 Roadmap:
 ========

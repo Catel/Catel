@@ -16,7 +16,7 @@ namespace Catel.Services
     /// <summary>
     /// Interface for the Please Wait service.
     /// </summary>
-    public interface IPleaseWaitService
+    public interface IPleaseWaitService : IProgress<string>, IProgress<IProgressStatus>
     {
         #region Methods
         /// <summary>
