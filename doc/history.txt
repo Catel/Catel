@@ -39,6 +39,7 @@ Classes / members marked as obsolete:
 Added/fixed:
 ============
 (+) #333 CTL-271 Support generic lists in ServiceLocator 
+(*) #1127 Use TypeCache instead AppDomain.CurrentDomain in ServiceLocatorDependencyRegistrationManager implementation
 
 Roadmap:
 ========
