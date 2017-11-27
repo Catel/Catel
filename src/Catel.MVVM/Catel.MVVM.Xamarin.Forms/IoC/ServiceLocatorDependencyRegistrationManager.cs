@@ -59,7 +59,7 @@ namespace Catel.IoC
         /// </summary>
         public void Initialize()
         {
-            TypeCache.AssemblyLoaded += TypeCacheOnAssemblyLoaded;
+            TypeCache.AssemblyLoaded += OnTypeCacheAssemblyLoaded;
             foreach (var assembly in AppDomain.CurrentDomain.GetLoadedAssemblies())
             {
                 LoadServiceFromAssembly(assembly);
@@ -71,7 +71,7 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="args">The <see cref="AssemblyLoadedEventArgs" /> instance containing the event data.</param>
-        private void TypeCacheOnAssemblyLoaded(object sender, AssemblyLoadedEventArgs args)
+        private void OnTypeCacheAssemblyLoaded(object sender, AssemblyLoadedEventArgs args)
         {
             LoadServiceFromAssembly(args.Assembly);
         }
