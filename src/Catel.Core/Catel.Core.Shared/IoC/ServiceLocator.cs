@@ -228,13 +228,13 @@ namespace Catel.IoC
         }
 
         /// <summary>
-        /// Determines whether the specified service type is registered tag regardless.
+        /// Determines whether the specified service type is registered with or without tag.
         /// </summary>
         /// <param name="serviceType">The type of the service.</param>
         /// <returns><c>true</c> if the specified service type is registered; otherwise, <c>false</c>.</returns>
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
-        public bool IsTypeRegisteredTagRegardless(Type serviceType)
+        public bool IsTypeRegisteredWithOrWithoutTag(Type serviceType)
         {
             Argument.IsNotNull("serviceType", serviceType);
 
@@ -666,27 +666,29 @@ namespace Catel.IoC
         /// <returns><c>true</c> if the specified service type is registered; otherwise, <c>false</c>.</returns>
         private bool IsTypeRegisteredAsOpenGeneric(Type serviceType, object tag = null)
         {
-            if (serviceType.IsGenericTypeEx())
+            if (!serviceType.IsGenericTypeEx())
             {
-                var genericArguments = serviceType.GetGenericArgumentsEx().ToList();
-                var hasRealGenericArguments = (from genericArgument in genericArguments
-                    where !string.IsNullOrEmpty(genericArgument.FullName)
-                    select genericArgument).Any();
-                if (hasRealGenericArguments)
+                return false;
+            }
+
+            var genericArguments = serviceType.GetGenericArgumentsEx().ToList();
+            var hasRealGenericArguments = (from genericArgument in genericArguments
+                                           where !string.IsNullOrEmpty(genericArgument.FullName)
+                                           select genericArgument).Any();
+            if (hasRealGenericArguments)
+            {
+                var genericType = serviceType.GetGenericTypeDefinitionEx();
+                var isOpenGenericTypeRegistered = IsTypeRegistered(genericType, tag);
+                if (isOpenGenericTypeRegistered)
                 {
-                    var genericType = serviceType.GetGenericTypeDefinitionEx();
-                    var isOpenGenericTypeRegistered = IsTypeRegistered(genericType, tag);
-                    if (isOpenGenericTypeRegistered)
-                    {
-                        Log.Debug("An open generic type '{0}' is registered, registering new closed generic type '{1}' based on the open registration", genericType.GetSafeFullName(false), serviceType.GetSafeFullName(false));
+                    Log.Debug("An open generic type '{0}' is registered, registering new closed generic type '{1}' based on the open registration", genericType.GetSafeFullName(false), serviceType.GetSafeFullName(false));
 
-                        var registrationInfo = GetRegistrationInfo(genericType, tag);
-                        var finalType = registrationInfo.ImplementingType.MakeGenericType(genericArguments.ToArray());
+                    var registrationInfo = this.GetRegistrationInfo(genericType, tag);
+                    var finalType = registrationInfo.ImplementingType.MakeGenericType(genericArguments.ToArray());
 
-                        RegisterType(serviceType, finalType, tag, registrationInfo.RegistrationType);
+                    RegisterType(serviceType, finalType, tag, registrationInfo.RegistrationType);
 
-                        return true;
-                    }
+                    return true;
                 }
             }
 

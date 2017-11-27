@@ -19,7 +19,7 @@ namespace Catel.IoC
     using Reflection;
     using Threading;
     using Catel.Collections;
-    using Catel.Linq.Extensions;
+    using Catel.Linq;
 #if !XAMARIN
     using System.Dynamic;
 #endif
@@ -417,17 +417,18 @@ namespace Catel.IoC
                         var parameterToResolve = ctorParameters[j];
                         var parameterTypeToResolve = parameterToResolve.ParameterType;
 
-                        if (!typeof(string).IsAssignableFrom(parameterTypeToResolve) && typeof(IEnumerable).IsAssignableFrom(parameterTypeToResolve))
+                        if (!typeof(string).IsAssignableFromEx(parameterTypeToResolve) && 
+                            typeof(IEnumerable).IsAssignableFromEx(parameterTypeToResolve))
                         {
                             var collectionElementType = parameterTypeToResolve.GetCollectionElementType();
-                            if (collectionElementType != null && _serviceLocator.IsTypeRegisteredTagRegardless(collectionElementType))
-                            // if (collectionElementType != null && _serviceLocator.IsTypeRegistered(collectionElementType))
+                            if (collectionElementType != null && _serviceLocator.IsTypeRegisteredWithOrWithoutTag(collectionElementType))
                             {
                                 continue;
                             }
                         }
 
-                        if (!_serviceLocator.IsTypeRegistered(parameterTypeToResolve, tag) && !_serviceLocator.IsTypeRegistered(parameterTypeToResolve))
+                        if (!_serviceLocator.IsTypeRegistered(parameterTypeToResolve, tag) && 
+                            !_serviceLocator.IsTypeRegistered(parameterTypeToResolve))
                         {
                             if (logDebug)
                             {
@@ -530,7 +531,7 @@ namespace Catel.IoC
                     if (!typeof(string).IsAssignableFrom(parameterTypeToResolve) && typeof(IEnumerable).IsAssignableFrom(parameterTypeToResolve))
                     {
                         var collectionElementType = parameterTypeToResolve.GetCollectionElementType();
-                        if (collectionElementType != null && _serviceLocator.IsTypeRegisteredTagRegardless(collectionElementType))
+                        if (collectionElementType != null && _serviceLocator.IsTypeRegisteredWithOrWithoutTag(collectionElementType))
                         {
                             IEnumerable ctorParameterValueLocal = _serviceLocator.ResolveTypes(collectionElementType).Cast(collectionElementType);
                             
