@@ -235,6 +235,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)IoC\TypeRequestPath.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IO\Extensions\StreamExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IO\Path.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Linq\Extensions\EnumerableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\BatchLogListenerBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\CatelLog.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\Configuration\LoggingConfigurationSection.cs" />

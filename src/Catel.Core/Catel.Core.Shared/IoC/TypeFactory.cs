@@ -7,6 +7,7 @@
 namespace Catel.IoC
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
@@ -18,7 +19,7 @@ namespace Catel.IoC
     using Reflection;
     using Threading;
     using Catel.Collections;
-
+    using Catel.Linq;
 #if !XAMARIN
     using System.Dynamic;
 #endif
@@ -416,6 +417,16 @@ namespace Catel.IoC
                         var parameterToResolve = ctorParameters[j];
                         var parameterTypeToResolve = parameterToResolve.ParameterType;
 
+                        if (!typeof(string).IsAssignableFromEx(parameterTypeToResolve) && 
+                            typeof(IEnumerable).IsAssignableFromEx(parameterTypeToResolve))
+                        {
+                            var collectionElementType = parameterTypeToResolve.GetCollectionElementType();
+                            if (collectionElementType != null && _serviceLocator.IsTypeRegisteredWithOrWithoutTag(collectionElementType))
+                            {
+                                continue;
+                            }
+                        }
+
                         if (!_serviceLocator.IsTypeRegistered(parameterTypeToResolve, tag) && 
                             !_serviceLocator.IsTypeRegistered(parameterTypeToResolve))
                         {
@@ -514,18 +525,47 @@ namespace Catel.IoC
                 var ctorParameters = constructor.GetParameters();
                 for (int i = parameters.Length; i < ctorParameters.Length; i++)
                 {
-                    object ctorParameterValue;
+                    object ctorParameterValue = null;
 
-                    if (tag != null && _serviceLocator.IsTypeRegistered(ctorParameters[i].ParameterType, tag))
+                    var parameterTypeToResolve = ctorParameters[i].ParameterType;
+                    if (!typeof(string).IsAssignableFrom(parameterTypeToResolve) && typeof(IEnumerable).IsAssignableFrom(parameterTypeToResolve))
                     {
-                        // Use preferred tag
-                        ctorParameterValue = _serviceLocator.ResolveType(ctorParameters[i].ParameterType, tag);
+                        var collectionElementType = parameterTypeToResolve.GetCollectionElementType();
+                        if (collectionElementType != null && _serviceLocator.IsTypeRegisteredWithOrWithoutTag(collectionElementType))
+                        {
+                            IEnumerable ctorParameterValueLocal = _serviceLocator.ResolveTypes(collectionElementType).Cast(collectionElementType);
+                            
+                            if (parameterTypeToResolve.IsArray)
+                            {
+                                ctorParameterValueLocal = ctorParameterValueLocal.ToSystemArray(collectionElementType);
+                            }
+                            else if (typeof(IReadOnlyList<>).MakeGenericType(collectionElementType).IsAssignableFromEx(parameterTypeToResolve) || typeof(IReadOnlyCollection<>).MakeGenericType(collectionElementType).IsAssignableFromEx(parameterTypeToResolve))
+                            {
+                                ctorParameterValueLocal = ctorParameterValueLocal.AsReadOnly(collectionElementType);
+                            }
+                            else if (typeof(IList<>).MakeGenericType(collectionElementType).IsAssignableFromEx(parameterTypeToResolve) || typeof(ICollection<>).MakeGenericType(collectionElementType).IsAssignableFromEx(parameterTypeToResolve))
+                            {
+                                ctorParameterValueLocal = ctorParameterValueLocal.ToList(collectionElementType);
+                            }
+
+                            ctorParameterValue = ctorParameterValueLocal;
+                        }
                     }
-                    else
+
+                    if (ctorParameterValue == null)
                     {
-                        // No tag or fallback to default without tag
-                        ctorParameterValue = _serviceLocator.ResolveType(ctorParameters[i].ParameterType);
+                        if (tag != null && _serviceLocator.IsTypeRegistered(parameterTypeToResolve, tag))
+                        {
+                            // Use preferred tag
+                            ctorParameterValue = _serviceLocator.ResolveType(parameterTypeToResolve, tag);
+                        }
+                        else
+                        {
+                            // No tag or fallback to default without tag
+                            ctorParameterValue = _serviceLocator.ResolveType(parameterTypeToResolve);
+                        }
                     }
+
 
                     finalParameters.Add(ctorParameterValue);
                 }
