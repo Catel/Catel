@@ -173,21 +173,27 @@ namespace Catel.Reflection
 
             if (type.IsArrayEx())
             {
-                var arrayElementType = type.GetElementTypeEx();
-                return arrayElementType;
+                return type.GetElementTypeEx();
             }
 
-            var interfaces = type.GetInterfacesEx();
-            var genericEnumerableInterface = (from iface in interfaces
-                                              where iface.Name.StartsWith("IEnumerable") && iface.IsGenericTypeEx()
-                                              select iface).FirstOrDefault();
-            if (genericEnumerableInterface == null)
+            Type genericEnumerableInterface;
+            if (typeof(IEnumerable).IsAssignableFromEx(type) && type.IsGenericType)
             {
-                return null;
+                genericEnumerableInterface = type;
+            }
+            else
+            {
+                var interfaces = type.GetInterfacesEx();
+                genericEnumerableInterface = (from iface in interfaces
+                    where iface.Name.StartsWith("IEnumerable") && iface.IsGenericTypeEx()
+                    select iface).FirstOrDefault();
+                if (genericEnumerableInterface == null)
+                {
+                    return null;
+                }
             }
 
-            var elementType = genericEnumerableInterface.GetGenericArgumentsEx()[0];
-            return elementType;
+            return genericEnumerableInterface.GetGenericArgumentsEx()[0];
         }
     }
 }

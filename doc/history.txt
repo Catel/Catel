@@ -38,7 +38,7 @@ Classes / members marked as obsolete:
 
 Added/fixed:
 ============
-xxx
+(+) #333 CTL-271 Support generic lists in ServiceLocator 
 
 Roadmap:
 ========

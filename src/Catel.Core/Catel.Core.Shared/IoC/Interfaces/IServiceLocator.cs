@@ -116,6 +116,15 @@ namespace Catel.IoC
         bool IsTypeRegisteredAsSingleton(Type serviceType, object tag = null);
 
         /// <summary>
+        /// Determines whether the specified service type is registered tag regardless.
+        /// </summary>
+        /// <param name="serviceType">The type of the service.</param>
+        /// <returns><c>true</c> if the specified service type is registered; otherwise, <c>false</c>.</returns>
+        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
+        bool IsTypeRegisteredTagRegardless(Type serviceType);
+
+        /// <summary>
         /// Registers a specific instance of a service. 
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
