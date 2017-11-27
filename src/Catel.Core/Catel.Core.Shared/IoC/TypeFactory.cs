@@ -528,7 +528,7 @@ namespace Catel.IoC
                     object ctorParameterValue = null;
 
                     var parameterTypeToResolve = ctorParameters[i].ParameterType;
-                    if (!typeof(string).IsAssignableFrom(parameterTypeToResolve) && typeof(IEnumerable).IsAssignableFrom(parameterTypeToResolve))
+                    if (!typeof(string).IsAssignableFromEx(parameterTypeToResolve) && typeof(IEnumerable).IsAssignableFromEx(parameterTypeToResolve))
                     {
                         var collectionElementType = parameterTypeToResolve.GetCollectionElementType();
                         if (collectionElementType != null && _serviceLocator.IsTypeRegisteredWithOrWithoutTag(collectionElementType))

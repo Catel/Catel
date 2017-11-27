@@ -2136,6 +2136,7 @@ namespace Catel.IoC
         Catel.IoC.RegistrationInfo GetRegistrationInfo(System.Type serviceType, object tag = null);
         bool IsTypeRegistered(System.Type serviceType, object tag = null);
         bool IsTypeRegisteredAsSingleton(System.Type serviceType, object tag = null);
+        bool IsTypeRegisteredWithOrWithoutTag(System.Type serviceType);
         void RegisterInstance(System.Type serviceType, object instance, object tag = null);
         void RegisterType(System.Type serviceType, System.Type serviceImplementationType, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = True);
         void RegisterType(System.Type serviceType, System.Func<Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = True);
@@ -2273,6 +2274,7 @@ namespace Catel.IoC
         public Catel.IoC.RegistrationInfo GetRegistrationInfo(System.Type serviceType, object tag = null) { }
         public bool IsTypeRegistered(System.Type serviceType, object tag = null) { }
         public bool IsTypeRegisteredAsSingleton(System.Type serviceType, object tag = null) { }
+        public bool IsTypeRegisteredWithOrWithoutTag(System.Type serviceType) { }
         public void RegisterInstance(System.Type serviceType, object instance, object tag = null) { }
         public void RegisterType(System.Type serviceType, System.Type serviceImplementationType, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = True) { }
         public void RegisterType(System.Type serviceType, System.Func<Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = True) { }
@@ -2443,6 +2445,17 @@ namespace Catel.IoC
         public static Catel.IoC.TypeRequestPath Branch(Catel.IoC.TypeRequestPath parent, Catel.IoC.TypeRequestInfo typeRequestInfo) { }
         public static Catel.IoC.TypeRequestPath Root(string name = null) { }
         public override string ToString() { }
+    }
+}
+namespace Catel.Linq
+{
+    
+    public class static EnumerableExtensions
+    {
+        public static System.Collections.IEnumerable AsReadOnly(this System.Collections.IEnumerable instance, System.Type type) { }
+        public static System.Collections.IEnumerable Cast(this System.Collections.IEnumerable instance, System.Type type) { }
+        public static System.Collections.IEnumerable ToList(this System.Collections.IEnumerable instance, System.Type type) { }
+        public static System.Collections.IEnumerable ToSystemArray(this System.Collections.IEnumerable instance, System.Type type) { }
     }
 }
 namespace Catel.Logging
