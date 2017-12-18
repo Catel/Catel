@@ -41,6 +41,7 @@ Added/fixed:
 (+) #333  CTL-271 Support generic lists in ServiceLocator 
 (*) #1127 Use TypeCache instead AppDomain.CurrentDomain in ServiceLocatorDependencyRegistrationManager implementation
 (*) #1143 UserControlLogic should dispose view models if they implement IDispose
+(*) #1144 Improve [Save|Cancel]AndCloseViewModelAsync behavior when calling on an already closing view model
 
 Roadmap:
 ========
