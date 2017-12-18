@@ -1068,7 +1068,19 @@ namespace Catel.MVVM.Providers
                         IsClosingViewModel = true;
                     }
 
-                    await vm.CloseViewModelAsync(result);
+                    var isClosing = false;
+
+                    var viewModelBase = vm as ViewModelBase;
+                    if (viewModelBase != null)
+                    {
+                        isClosing = viewModelBase.IsClosing;
+                    }
+
+                    if (!isClosing && !vm.IsClosed)
+                    {
+                        await vm.CloseViewModelAsync(result);
+                    }
+
                     ViewModel = null;
                 }
                 finally
