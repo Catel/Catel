@@ -761,6 +761,12 @@ namespace Catel.MVVM.Providers
                 }
 
                 await CloseViewModelAsync(result);
+
+                var disposable = vm as IDisposable;
+                if (disposable != null)
+                {
+                    disposable.Dispose();
+                }
             }
         }
 
