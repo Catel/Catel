@@ -4068,6 +4068,7 @@ namespace Catel.Threading
     }
     public class static TaskExtensions
     {
+        public static System.Threading.Tasks.Task AwaitWithTimeoutAsync(this System.Threading.Tasks.Task task, int timeout) { }
         public static void WaitAndUnwrapException(this System.Threading.Tasks.Task task) { }
         public static void WaitAndUnwrapException(this System.Threading.Tasks.Task task, System.Threading.CancellationToken cancellationToken) { }
         public static TResult WaitAndUnwrapException<TResult>(this System.Threading.Tasks.Task<TResult> task) { }

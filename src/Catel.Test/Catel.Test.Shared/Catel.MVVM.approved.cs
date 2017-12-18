@@ -586,6 +586,9 @@ namespace Catel.MVVM
     }
     public class static IViewModelExtensions
     {
+        public static System.Threading.Tasks.Task<bool> AwaitCancelingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
+        public static System.Threading.Tasks.Task AwaitClosingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
+        public static System.Threading.Tasks.Task<bool> AwaitSavingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
         public static System.Threading.Tasks.Task<bool> CancelAndCloseViewModelAsync(this Catel.MVVM.IViewModel viewModel) { }
         public static System.Threading.Tasks.Task<bool> SaveAndCloseViewModelAsync(this Catel.MVVM.IViewModel viewModel) { }
     }
@@ -821,16 +824,16 @@ namespace Catel.MVVM
         [Catel.Data.ExcludeFromValidationAttribute()]
         protected bool InvalidateCommandsOnPropertyChanged { get; set; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected bool IsCanceling { get; }
+        protected internal bool IsCanceling { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
         public bool IsClosed { get; }
-        protected bool IsClosing { get; }
+        protected internal bool IsClosing { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected bool IsInitialized { get; }
+        protected internal bool IsInitialized { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected bool IsInitializing { get; }
+        protected internal bool IsInitializing { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected bool IsSaving { get; }
+        protected internal bool IsSaving { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
         protected Catel.MVVM.Navigation.NavigationContext NavigationContext { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
