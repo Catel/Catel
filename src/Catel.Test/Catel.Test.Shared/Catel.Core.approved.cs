@@ -3160,6 +3160,7 @@ namespace Catel.Reflection
     }
     public class static TypeCache
     {
+        public static System.Collections.Generic.List<string> InitializedAssemblies { get; }
         public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, bool>> ShouldIgnoreAssemblyEvaluators { get; }
         public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, System.Type, bool>> ShouldIgnoreTypeEvaluators { get; }
         public event System.EventHandler<Catel.Reflection.AssemblyLoadedEventArgs> AssemblyLoaded;
