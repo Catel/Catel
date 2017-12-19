@@ -211,7 +211,7 @@ namespace Catel.Services
             var view = (Page)_typeFactory.CreateInstance(viewType);
             var viewModel = _viewModelFactory.CreateViewModel(viewModelType, parameters.Count > 0 ? parameters.Values.ToArray() : null);
             view.BindingContext = viewModel;
-
+            
             var currentApplication = Application.Current;
             var activePage = currentApplication.GetActivePage();
             if (activePage == null)
