@@ -712,7 +712,7 @@ namespace Catel.MVVM.Providers
 
             IsTargetViewLoaded = true;
 
-            var dataContext = view.DataContext;
+            var dataContext = view?.DataContext;
             LastKnownDataContext = (dataContext != null) ? new WeakReference(dataContext) : null;
 
             await OnTargetViewLoadedAsync(sender, e);
