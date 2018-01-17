@@ -186,17 +186,17 @@ namespace Catel.Logging
                                          : IO.Path.GetApplicationDataDirectory();
             }
 
-            if (filePath.Contains(FilePathKeyword.AssemblyName))
+            if (_assembly != null && filePath.Contains(FilePathKeyword.AssemblyName))
             {
                 filePath = filePath.Replace(FilePathKeyword.AssemblyName, _assembly.GetName().Name);
             }
 
-            if (filePath.Contains(FilePathKeyword.AssemblyProduct))
+            if (_assembly != null && filePath.Contains(FilePathKeyword.AssemblyProduct))
             {
                 filePath = filePath.Replace(FilePathKeyword.AssemblyProduct, _assembly.Product());
             }
 
-            if (filePath.Contains(FilePathKeyword.AssemblyCompany))
+            if (_assembly != null && filePath.Contains(FilePathKeyword.AssemblyCompany))
             {
                 filePath = filePath.Replace(FilePathKeyword.AssemblyCompany, _assembly.Company());
             }
