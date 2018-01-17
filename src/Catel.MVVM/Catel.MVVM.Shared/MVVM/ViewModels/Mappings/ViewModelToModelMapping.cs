@@ -60,7 +60,7 @@ namespace Catel.MVVM
 
             if (propertiesLength > 1)
             {
-                additionalPropertiesToWatch.CopyTo(ValueProperties, 1);
+                additionalPropertiesToWatch?.CopyTo(ValueProperties, 1);
             }
 
             var argsLength = 1 + (additionalConstructorArgs == null ? 0 : additionalConstructorArgs.Length);
@@ -69,7 +69,7 @@ namespace Catel.MVVM
 
             if (argsLength > 1)
             {
-                additionalConstructorArgs.CopyTo(args, 1);
+                additionalConstructorArgs?.CopyTo(args, 1);
             }
 
             var typeFactory = this.GetTypeFactory();
