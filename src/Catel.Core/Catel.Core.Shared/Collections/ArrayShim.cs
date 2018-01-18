@@ -18,7 +18,7 @@ namespace Catel.Collections
     public static class ArrayShim
     {
 #if ARRAY_EMPTY_MISSING
-        private static class EmptyArray<T>
+        internal static class EmptyArray<T>
         {
             internal static readonly T[] Value = new T[0];
         }
