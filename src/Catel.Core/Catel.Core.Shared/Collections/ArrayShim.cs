@@ -20,7 +20,7 @@ namespace Catel.Collections
 #if ARRAY_EMPTY_MISSING
         internal static class EmptyArray<T>
         {
-            public static readonly T[] Value = new T[0];
+            internal static readonly T[] Value = new T[0];
         }
 #endif
 
