@@ -19,7 +19,7 @@ namespace Catel.Logging
     /// <summary>
     ///  Log listener which writes all data to a Seq server.
     /// </summary>
-    public class SeqLogListener : BatchLogListenerBase
+    public class SeqLogListener : BatchLogListenerBase, IDisposable
     {
 #region Constants
         private const string ApiKeyHeaderName = "X-Seq-ApiKey";
@@ -28,7 +28,11 @@ namespace Catel.Logging
 
 #region Fields
         private readonly IJsonLogFormatter _jsonLogFormatter;
-#endregion
+
+        private WebClient _webClient;
+
+        private readonly object _syncObj = new object();
+        #endregion
 
 #region Constructors
         /// <summary>
@@ -92,28 +96,10 @@ namespace Catel.Logging
 
                 var message = textWriter.ToString();
 
-                var baseUri = ServerUrl;
-                if (!string.IsNullOrWhiteSpace(baseUri))
-                {
-                    using (var webClient = new WebClient { Encoding = Encoding.UTF8 })
-                    {
-                        if (!baseUri.EndsWith("/"))
-                        {
-                            baseUri += "/";
-                        }
+                InitializeWebClient();
 
-                        var webApiUrl = string.Format("{0}{1}", baseUri, BulkUploadResource);
+                _webClient.UploadString(WebApiUrl, message);
 
-                        webClient.Headers[HttpRequestHeader.ContentType] = "application/json";
-
-                        if (!string.IsNullOrWhiteSpace(ApiKey))
-                        {
-                            webClient.Headers.Add(ApiKeyHeaderName, ApiKey);
-                        }
-
-                        webClient.UploadString(webApiUrl, message);
-                    }
-                }
             }
             catch (Exception)
             {
@@ -121,7 +107,51 @@ namespace Catel.Logging
             }
         }
 
-#endregion
+        private string WebApiUrl
+        {
+            get
+            {
+                var baseUri = ServerUrl;
+                if (string.IsNullOrWhiteSpace(baseUri))
+                {
+                    return string.Empty;
+                }
+
+                if (!baseUri.EndsWith("/"))
+                {
+                    baseUri += "/";
+                }
+
+                return string.Format("{0}{1}", baseUri, BulkUploadResource);
+            }
+        }
+
+        private void InitializeWebClient()
+        {
+            lock (_syncObj)
+            {
+                if (_webClient == null)
+                {
+                    _webClient = new WebClient { Encoding = Encoding.UTF8 };
+
+                    _webClient.Headers[HttpRequestHeader.ContentType] = "application/json";
+
+                    if (!string.IsNullOrWhiteSpace(ApiKey))
+                    {
+                        _webClient.Headers.Add(ApiKeyHeaderName, ApiKey);
+                    }
+                }
+            }
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            _webClient?.Dispose();
+        }
+
+        #endregion
+
     }
 
 }
