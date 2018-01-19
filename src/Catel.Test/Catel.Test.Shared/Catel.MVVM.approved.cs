@@ -3228,7 +3228,7 @@ namespace Catel.Windows.Markup
     {
         public CommandManagerBinding() { }
         public CommandManagerBinding(string commandName) { }
-        [System.Windows.Markup.ConstructorArgumentAttribute("type")]
+        [System.Windows.Markup.ConstructorArgumentAttribute("commandName")]
         public string CommandName { get; set; }
         protected override void OnTargetObjectLoaded() { }
         protected override void OnTargetObjectUnloaded() { }

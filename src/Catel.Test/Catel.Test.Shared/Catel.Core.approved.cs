@@ -2812,11 +2812,12 @@ namespace Catel.Logging
         public System.Collections.Generic.IEnumerable<Catel.Logging.LogEntry> GetWarningLogEntries() { }
         protected override void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
     }
-    public class SeqLogListener : Catel.Logging.BatchLogListenerBase
+    public class SeqLogListener : Catel.Logging.BatchLogListenerBase, System.IDisposable
     {
         public SeqLogListener() { }
         public string ApiKey { get; set; }
         public string ServerUrl { get; set; }
+        public void Dispose() { }
         protected override string FormatLogEvent(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
         protected override System.Threading.Tasks.Task WriteBatchAsync(System.Collections.Generic.List<Catel.Logging.LogBatchEntry> batchEntries) { }
     }
