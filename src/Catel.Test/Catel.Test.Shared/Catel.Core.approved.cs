@@ -2812,11 +2812,12 @@ namespace Catel.Logging
         public System.Collections.Generic.IEnumerable<Catel.Logging.LogEntry> GetWarningLogEntries() { }
         protected override void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
     }
-    public class SeqLogListener : Catel.Logging.BatchLogListenerBase
+    public class SeqLogListener : Catel.Logging.BatchLogListenerBase, System.IDisposable
     {
         public SeqLogListener() { }
         public string ApiKey { get; set; }
         public string ServerUrl { get; set; }
+        public void Dispose() { }
         protected override string FormatLogEvent(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
         protected override System.Threading.Tasks.Task WriteBatchAsync(System.Collections.Generic.List<Catel.Logging.LogBatchEntry> batchEntries) { }
     }
@@ -3160,6 +3161,7 @@ namespace Catel.Reflection
     }
     public class static TypeCache
     {
+        public static System.Collections.Generic.List<string> InitializedAssemblies { get; }
         public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, bool>> ShouldIgnoreAssemblyEvaluators { get; }
         public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, System.Type, bool>> ShouldIgnoreTypeEvaluators { get; }
         public event System.EventHandler<Catel.Reflection.AssemblyLoadedEventArgs> AssemblyLoaded;
@@ -4068,6 +4070,7 @@ namespace Catel.Threading
     }
     public class static TaskExtensions
     {
+        public static System.Threading.Tasks.Task AwaitWithTimeoutAsync(this System.Threading.Tasks.Task task, int timeout) { }
         public static void WaitAndUnwrapException(this System.Threading.Tasks.Task task) { }
         public static void WaitAndUnwrapException(this System.Threading.Tasks.Task task, System.Threading.CancellationToken cancellationToken) { }
         public static TResult WaitAndUnwrapException<TResult>(this System.Threading.Tasks.Task<TResult> task) { }

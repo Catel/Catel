@@ -116,6 +116,25 @@ namespace Catel.Reflection
 #endif
         }
 
+        #region Properties
+        /// <summary>
+        /// Gets the names of the assemblies initialized by the TypeCache.
+        /// </summary>
+        /// <value>
+        /// The initialized assemblies.
+        /// </value>
+        public static List<string> InitializedAssemblies
+        {
+            get
+            {
+                lock (_loadedAssemblies)
+                {
+                    return _loadedAssemblies.ToList();
+                }
+            }
+        }
+        #endregion
+
 #if NET || NETSTANDARD
         /// <summary>
         /// Called when an assembly is loaded in the current <see cref="AppDomain"/>.

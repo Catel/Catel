@@ -90,7 +90,7 @@ namespace Catel
                     return currentPlatform == SupportedPlatforms.iOS;
 
                 case KnownPlatforms.XamarinForms:
-                    return currentPlatform == SupportedPlatforms.PCL;
+                    return currentPlatform == SupportedPlatforms.NetStandard20;
 
                 case KnownPlatforms.PCL:
                     return currentPlatform == SupportedPlatforms.PCL;
@@ -102,7 +102,9 @@ namespace Catel
 
         private static SupportedPlatforms DeterminePlatform()
         {
-            if (TypeCache.GetType("Xamarin.Forms.Device") != null)
+            // Note: don't use cache service, it forces the initialization of the AppDomain which
+            // might be too early
+            if (Type.GetType("Xamarin.Forms.Device") != null)
             {
                 return SupportedPlatforms.XamarinForms;
             }

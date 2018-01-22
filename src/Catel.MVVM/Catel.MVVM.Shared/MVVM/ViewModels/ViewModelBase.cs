@@ -383,7 +383,7 @@ namespace Catel.MVVM
         /// <c>true</c> if this object is currently initializing; otherwise, <c>false</c>.
         /// </value>
         [ExcludeFromValidation]
-        protected bool IsInitializing { get; private set; }
+        protected internal bool IsInitializing { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this object is initialized.
@@ -392,25 +392,25 @@ namespace Catel.MVVM
         /// <c>true</c> if this object is initialized; otherwise, <c>false</c>.
         /// </value>
         [ExcludeFromValidation]
-        protected bool IsInitialized { get; private set; }
+        protected internal bool IsInitialized { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is currently canceling.
         /// </summary>
         [ExcludeFromValidation]
-        protected bool IsCanceling { get; private set; }
+        protected internal bool IsCanceling { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is currently saving.
         /// </summary>
         [ExcludeFromValidation]
-        protected bool IsSaving { get; private set; }
+        protected internal bool IsSaving { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is closing.
         /// </summary>
         /// <value><c>true</c> if this instance is closing; otherwise, <c>false</c>.</value>
-        protected bool IsClosing { get; private set; }
+        protected internal bool IsClosing { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is closed. If a view model is closed, calling
@@ -1447,7 +1447,7 @@ namespace Catel.MVVM
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public async Task<bool> SaveViewModelAsync()
         {
-            if (IsClosing || IsClosed)
+            if (IsSaving || IsCanceling || IsClosing || IsClosed)
             {
                 return false;
             }

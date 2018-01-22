@@ -48,7 +48,7 @@ namespace Catel.Windows.Markup
         /// </summary>
         /// <value>The name of the command.</value>
 #if NET
-        [ConstructorArgument("type")]
+        [ConstructorArgument("commandName")]
 #endif
         public string CommandName { get; set; }
 

@@ -174,7 +174,9 @@ namespace Catel.Services
         /// <summary>
         /// Navigates Back
         /// </summary>
+#pragma warning disable AvoidAsyncVoid
         async partial void NavigateBack()
+#pragma warning restore AvoidAsyncVoid
         {
             var currentApplication = Application.Current;
             var activePage = currentApplication.GetActivePage();
@@ -200,14 +202,16 @@ namespace Catel.Services
             throw new MustBeImplementedException();
         }
 
+#pragma warning disable AvoidAsyncVoid
         async partial void NavigateWithParameters(string uri, Dictionary<string, object> parameters)
+#pragma warning restore AvoidAsyncVoid
         {
             var viewType = Type.GetType(uri);
             var viewModelType = _viewModelLocator.ResolveViewModel(viewType);
             var view = (Page)_typeFactory.CreateInstance(viewType);
             var viewModel = _viewModelFactory.CreateViewModel(viewModelType, parameters.Count > 0 ? parameters.Values.ToArray() : null);
             view.BindingContext = viewModel;
-
+            
             var currentApplication = Application.Current;
             var activePage = currentApplication.GetActivePage();
             if (activePage == null)

@@ -19,9 +19,9 @@ namespace Catel.Reflection
         /// </summary>
         /// <typeparam name="T1">The type 1</typeparam>
         /// <typeparam name="T2">The type 2</typeparam>
-		/// <typeparam name="T3">The type 3</typeparam>
-		/// <typeparam name="T4">The type 4</typeparam>
-		/// <typeparam name="T5">The type 5</typeparam>		
+        /// <typeparam name="T3">The type 3</typeparam>
+        /// <typeparam name="T4">The type 4</typeparam>
+        /// <typeparam name="T5">The type 5</typeparam>		
         /// <returns>Array of types</returns>
         public static Type[] From<T1, T2, T3, T4, T5>()
         {
@@ -33,8 +33,8 @@ namespace Catel.Reflection
         /// </summary>
         /// <typeparam name="T1">The type 1</typeparam>
         /// <typeparam name="T2">The type 2</typeparam>
-		/// <typeparam name="T3">The type 3</typeparam>
-		/// <typeparam name="T4">The type 4</typeparam>	
+        /// <typeparam name="T3">The type 3</typeparam>
+        /// <typeparam name="T4">The type 4</typeparam>	
         /// <returns>Array of types</returns>
         public static Type[] From<T1, T2, T3, T4>()
         {
@@ -46,7 +46,7 @@ namespace Catel.Reflection
         /// </summary>
         /// <typeparam name="T1">The type 1</typeparam>
         /// <typeparam name="T2">The type 2</typeparam>
-		/// <typeparam name="T3">The type 3</typeparam>
+        /// <typeparam name="T3">The type 3</typeparam>
         /// <returns>Array of types</returns>
         public static Type[] From<T1, T2, T3>()
         {
@@ -76,27 +76,27 @@ namespace Catel.Reflection
 
         private static class ArrayCache<T1, T2, T3, T4, T5>
         {
-            public static readonly Type[] Value = { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5) };
+            internal static readonly Type[] Value = { typeof(T1), typeof(T2), typeof(T3), typeof(T4), typeof(T5) };
         }
 
         private static class ArrayCache<T1, T2, T3, T4>
         {
-            public static readonly Type[] Value = { typeof(T1), typeof(T2), typeof(T3), typeof(T4) };
+            internal static readonly Type[] Value = { typeof(T1), typeof(T2), typeof(T3), typeof(T4) };
         }
 
         private static class ArrayCache<T1, T2, T3>
         {
-            public static readonly Type[] Value = { typeof(T1), typeof(T2), typeof(T3) };
+            internal static readonly Type[] Value = { typeof(T1), typeof(T2), typeof(T3) };
         }
 
         private static class ArrayCache<T1, T2>
         {
-            public static readonly Type[] Value = { typeof(T1), typeof(T2) };
+            internal static readonly Type[] Value = { typeof(T1), typeof(T2) };
         }
 
         private static class ArrayCache<T1>
         {
-            public static readonly Type[] Value = { typeof(T1) };
+            internal static readonly Type[] Value = { typeof(T1) };
         }
     }
 }
