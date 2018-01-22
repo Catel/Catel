@@ -281,8 +281,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IStartupInfoProviderExtensionsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Fixtures\LanguageServiceFixture.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Fixtures\StartupInfoProviderFixture.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\GuidObjectIdGeneratorFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\LanguageServiceFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\NamingConventionTest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\NumericBasedObjectIdGeneratorsFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\ViewModelServiceBaseTest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Text\StringBuilderExtensionFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Threading\SynchronizationContextFacts.cs" />

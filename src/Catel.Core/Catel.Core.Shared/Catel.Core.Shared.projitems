@@ -394,8 +394,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Scoping\EventArgs\ScopeClosedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Scoping\ScopeManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Extensions\IObjectConverterServiceExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\GuidObjectIdGenerator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\NumericBasedObjectIdGenerators.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IObjectIdGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IRollingInMemoryLogService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\IObjectConverterService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\NumericBasedObjectIdGenerator.generic.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\ObjectIdGenerator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\RollingInMemoryLogService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILanguageService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\Interfaces\ILanguageSource.cs" />

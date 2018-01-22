@@ -169,6 +169,8 @@ namespace Catel.MVVM
         [field: NonSerialized]
 #endif
         private string _title;
+
+        private readonly IObjectIdGenerator<int> _objectIdGenerator;
         #endregion
 
         #region Constructors
@@ -223,17 +225,12 @@ namespace Catel.MVVM
         protected ViewModelBase(IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false,
             bool skipViewModelAttributesInitialization = false)
         {
-            UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<ViewModelBase>();
             ViewModelConstructionTime = FastDateTime.Now;
 
             if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }
-
-            var type = GetType();
-
-            Log.Debug("Creating view model of type '{0}' with unique identifier {1}", type.Name, UniqueIdentifier);
 
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
@@ -246,6 +243,14 @@ namespace Catel.MVVM
             DependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
             _dispatcherService = DependencyResolver.Resolve<IDispatcherService>();
 #endif
+            var type = GetType();
+
+            serviceLocator.RegisterTypeIfNotYetRegisteredWithTag(typeof(IObjectIdGenerator<int>), typeof(IntegerObjectIdGenerator<>).MakeGenericType(type), type);
+
+            _objectIdGenerator = serviceLocator.ResolveType<IObjectIdGenerator<int>>(type);
+            UniqueIdentifier = _objectIdGenerator.GetUniqueIdentifier();
+
+            Log.Debug("Creating view model of type '{0}' with unique identifier {1}", type.Name, UniqueIdentifier);
 
             ValidateModelsOnInitialization = true;
 
@@ -1529,9 +1534,13 @@ namespace Catel.MVVM
 
             await OnClosedAsync(result);
 
-            Log.Info("Closed view model '{0}'", GetType());
+            var type = GetType();
+
+            Log.Info("Closed view model '{0}'", type);
 
             ViewModelManager.UnregisterViewModelInstance(this);
+
+            _objectIdGenerator.ReleaseIdentifier(UniqueIdentifier);
         }
 #endregion
     }
