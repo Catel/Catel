@@ -36,7 +36,6 @@ namespace Catel.Services
     /// <typeparam name="TObjectType">The object type</typeparam>
     /// <typeparam name="TUniqueIdentifier">The unique identifier type</typeparam>
     public interface IObjectIdGenerator<TObjectType, TUniqueIdentifier> : IObjectIdGenerator<TUniqueIdentifier>
-        where TObjectType : class 
     {
     }
 }

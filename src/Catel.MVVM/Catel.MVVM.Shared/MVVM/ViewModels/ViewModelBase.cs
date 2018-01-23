@@ -190,7 +190,7 @@ namespace Catel.MVVM
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
         protected ViewModelBase()
-            : this(true, false, false, false)
+            : this(true, false, false)
         {
         }
 
@@ -203,13 +203,29 @@ namespace Catel.MVVM
         /// <param name="skipViewModelAttributesInitialization">
         /// if set to <c>true</c>, the initialization will be skipped and must be done manually via <see cref="InitializeViewModelAttributes"/>.
         /// </param>
+        /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
+        /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
+        protected ViewModelBase(bool supportIEditableObject, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
+            : this(false, supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
+        /// </summary>
         /// <param name="reuseIdentifier">
         /// if set to <c>true</c>, the identifier will be reused from the relased identifier pool.
         /// </param>
+        /// <param name="supportIEditableObject">if set to <c>true</c>, the view model will natively support models that
+        /// implement the <see cref="IEditableObject"/> interface.</param>
+        /// <param name="ignoreMultipleModelsWarning">if set to <c>true</c>, the warning when using multiple models is ignored.</param>
+        /// <param name="skipViewModelAttributesInitialization">
+        /// if set to <c>true</c>, the initialization will be skipped and must be done manually via <see cref="InitializeViewModelAttributes"/>.
+        /// </param>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        protected ViewModelBase(bool supportIEditableObject, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false, bool reuseIdentifier = false)
-            : this(null, supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization, reuseIdentifier)
+        protected ViewModelBase(bool reuseIdentifier, bool supportIEditableObject, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
+            : this(null, reuseIdentifier, supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization)
         {
         }
 
@@ -223,13 +239,29 @@ namespace Catel.MVVM
         /// implement the <see cref="IEditableObject"/> interface.</param>
         /// <param name="ignoreMultipleModelsWarning">if set to <c>true</c>, the warning when using multiple models is ignored.</param>
         /// <param name="skipViewModelAttributesInitialization">if set to <c>true</c>, the initialization will be skipped and must be done manually via <see cref="InitializeViewModelAttributes"/>.</param>
+        /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
+        /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
+        protected ViewModelBase(IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
+            : this(serviceLocator, false, supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
+        /// <para/>
+        /// This constructor allows the injection of a custom <see cref="IServiceLocator"/>.
+        /// </summary>
+        /// <param name="serviceLocator">The service locator to inject. If <c>null</c>, the <see cref="Catel.IoC.ServiceLocator.Default"/> will be used.</param>
         /// <param name="reuseIdentifier">
         /// if set to <c>true</c>, the identifier will be reused from the relased identifier pool.
         /// </param>
+        /// <param name="supportIEditableObject">if set to <c>true</c>, the view model will natively support models that
+        /// implement the <see cref="IEditableObject"/> interface.</param>
+        /// <param name="ignoreMultipleModelsWarning">if set to <c>true</c>, the warning when using multiple models is ignored.</param>
+        /// <param name="skipViewModelAttributesInitialization">if set to <c>true</c>, the initialization will be skipped and must be done manually via <see cref="InitializeViewModelAttributes"/>.</param>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        protected ViewModelBase(IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false,
-            bool skipViewModelAttributesInitialization = false, bool reuseIdentifier = false)
+        protected ViewModelBase(IServiceLocator serviceLocator, bool reuseIdentifier, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
         {
             ViewModelConstructionTime = FastDateTime.Now;
 
@@ -251,7 +283,7 @@ namespace Catel.MVVM
 #endif
             var type = GetType();
 
-            serviceLocator.RegisterTypeIfNotYetRegisteredWithTag(typeof(IObjectIdGenerator<int>), typeof(IntegerObjectIdGenerator<>).MakeGenericType(type), type);
+            serviceLocator.RegisterType(typeof(IObjectIdGenerator<int>), x => typeof(IntegerObjectIdGenerator<>).MakeGenericTypeEx(type), type, RegistrationType.Singleton, false);
 
             _objectIdGenerator = serviceLocator.ResolveType<IObjectIdGenerator<int>>(type);
             UniqueIdentifier = _objectIdGenerator.GetUniqueIdentifier(reuseIdentifier);
@@ -262,11 +294,11 @@ namespace Catel.MVVM
 
             ViewModelCommandManager = MVVM.ViewModelCommandManager.Create(this);
             ViewModelCommandManager.AddHandler(async (viewModel, propertyName, command, commandParameter) =>
-            {
-                var eventArgs = new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName);
+                {
+                    var eventArgs = new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName);
 
-                await CommandExecutedAsync.SafeInvokeAsync(this, eventArgs);
-            });
+                    await CommandExecutedAsync.SafeInvokeAsync(this, eventArgs);
+                });
 
             DeferValidationUntilFirstSaveCall = true;
             InvalidateCommandsOnPropertyChanged = true;
@@ -288,6 +320,7 @@ namespace Catel.MVVM
             // As a last step, enable the auditors (we don't need change notifications of previous properties, etc)
             AuditingHelper.RegisterViewModel(this);
         }
+
         #endregion
 
         #region Events

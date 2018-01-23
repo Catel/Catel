@@ -14,7 +14,6 @@ namespace Catel.Services
     /// <typeparam name="TObjectType">The object type</typeparam>
     /// <typeparam name="TUniqueIdentifier">The unique identifier type</typeparam>
     public abstract class ObjectIdGenerator<TObjectType, TUniqueIdentifier> : IObjectIdGenerator<TObjectType, TUniqueIdentifier>
-        where TObjectType : class
     {
         private static readonly Queue<TUniqueIdentifier> _releasedUniqueIdentifiers = new Queue<TUniqueIdentifier>();
 
