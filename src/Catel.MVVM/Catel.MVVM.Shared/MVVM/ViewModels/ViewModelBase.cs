@@ -93,6 +93,14 @@ namespace Catel.MVVM
         private readonly bool _ignoreMultipleModelsWarning;
 
         /// <summary>
+        /// Value indicating whether the identifier will be reused from the relased identifier pool.
+        /// </summary>
+#if NET
+        [field: NonSerialized]
+#endif
+        private readonly bool _reuseIdentifier;
+
+        /// <summary>
         /// Value indicating whether the view model attributes are initialized. 
         /// </summary>
 #if NET
@@ -269,6 +277,8 @@ namespace Catel.MVVM
             {
                 return;
             }
+
+            _reuseIdentifier = reuseIdentifier;
 
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
@@ -1579,7 +1589,10 @@ namespace Catel.MVVM
 
             ViewModelManager.UnregisterViewModelInstance(this);
 
-            _objectIdGenerator.ReleaseIdentifier(UniqueIdentifier);
+            if (_reuseIdentifier)
+            {
+                _objectIdGenerator.ReleaseIdentifier(UniqueIdentifier);
+            }
         }
 #endregion
     }
