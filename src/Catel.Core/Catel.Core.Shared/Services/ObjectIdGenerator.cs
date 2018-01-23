@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+
 namespace Catel.Services
 {
     using System.Collections.Generic;
@@ -15,31 +16,35 @@ namespace Catel.Services
     /// <typeparam name="TUniqueIdentifier">The unique identifier type</typeparam>
     public abstract class ObjectIdGenerator<TObjectType, TUniqueIdentifier> : IObjectIdGenerator<TObjectType, TUniqueIdentifier>
     {
-        private static readonly Queue<TUniqueIdentifier> _releasedUniqueIdentifiers = new Queue<TUniqueIdentifier>();
+        private static Queue<TUniqueIdentifier> _releasedUniqueIdentifiers;
 
         private static readonly object _syncObj = new object();
 
         /// <inheritdoc />
         public TUniqueIdentifier GetUniqueIdentifier()
         {
-            lock (_syncObj)
-            {
-                return GenerateUniqueIdentifier();
-            }
+            return GenerateUniqueIdentifier();
         }
 
         /// <inheritdoc />
         public TUniqueIdentifier GetUniqueIdentifier(bool reuse)
         {
-            lock (_syncObj)
+            if (reuse)
             {
-                if (reuse && _releasedUniqueIdentifiers.Count > 0)
+                lock (_syncObj)
                 {
-                    return _releasedUniqueIdentifiers.Dequeue();
+                    if (_releasedUniqueIdentifiers == null)
+                    {
+                        _releasedUniqueIdentifiers = new Queue<TUniqueIdentifier>();
+                    }
+                    else if (_releasedUniqueIdentifiers.Count > 0)
+                    {
+                        return _releasedUniqueIdentifiers.Dequeue();
+                    }
                 }
-
-                return GenerateUniqueIdentifier();
             }
+
+            return GenerateUniqueIdentifier();
         }
 
         /// <inheritdoc />
@@ -47,6 +52,11 @@ namespace Catel.Services
         {
             lock (_syncObj)
             {
+                if (_releasedUniqueIdentifiers == null)
+                {
+                    _releasedUniqueIdentifiers = new Queue<TUniqueIdentifier>();
+                }
+
                 _releasedUniqueIdentifiers.Enqueue(identifier);
             }
         }
