@@ -169,6 +169,8 @@ namespace Catel.MVVM
         [field: NonSerialized]
 #endif
         private string _title;
+
+        private IObjectIdGenerator<int> _objectIdGenerator;
         #endregion
 
         #region Constructors
@@ -208,6 +210,7 @@ namespace Catel.MVVM
         {
         }
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
         /// <para/>
@@ -220,20 +223,14 @@ namespace Catel.MVVM
         /// <param name="skipViewModelAttributesInitialization">if set to <c>true</c>, the initialization will be skipped and must be done manually via <see cref="InitializeViewModelAttributes"/>.</param>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        protected ViewModelBase(IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false,
-            bool skipViewModelAttributesInitialization = false)
+        protected ViewModelBase(IServiceLocator serviceLocator,  bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
         {
-            UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<ViewModelBase>();
             ViewModelConstructionTime = FastDateTime.Now;
 
             if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }
-
-            var type = GetType();
-
-            Log.Debug("Creating view model of type '{0}' with unique identifier {1}", type.Name, UniqueIdentifier);
 
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
@@ -246,16 +243,23 @@ namespace Catel.MVVM
             DependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
             _dispatcherService = DependencyResolver.Resolve<IDispatcherService>();
 #endif
+            var type = GetType();
+
+            serviceLocator.RegisterType(typeof(IObjectIdGenerator<int>), x => GetObjectIdGeneratorType(), type, RegistrationType.Singleton, false);
+            _objectIdGenerator = serviceLocator.ResolveType<IObjectIdGenerator<int>>(type);
+            UniqueIdentifier = this.GetObjectId(_objectIdGenerator);
+
+            Log.Debug("Creating view model of type '{0}' with unique identifier {1}", type.Name, UniqueIdentifier);
 
             ValidateModelsOnInitialization = true;
 
             ViewModelCommandManager = MVVM.ViewModelCommandManager.Create(this);
             ViewModelCommandManager.AddHandler(async (viewModel, propertyName, command, commandParameter) =>
-            {
-                var eventArgs = new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName);
+                {
+                    var eventArgs = new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName);
 
-                await CommandExecutedAsync.SafeInvokeAsync(this, eventArgs);
-            });
+                    await CommandExecutedAsync.SafeInvokeAsync(this, eventArgs);
+                });
 
             DeferValidationUntilFirstSaveCall = true;
             InvalidateCommandsOnPropertyChanged = true;
@@ -1529,10 +1533,33 @@ namespace Catel.MVVM
 
             await OnClosedAsync(result);
 
-            Log.Info("Closed view model '{0}'", GetType());
+            var type = GetType();
+
+            Log.Info("Closed view model '{0}'", type);
 
             ViewModelManager.UnregisterViewModelInstance(this);
+
+            _objectIdGenerator.ReleaseIdentifier(UniqueIdentifier);
         }
-#endregion
+
+        /// <summary>
+        /// Gets the object id generator type.
+        /// </summary>
+        /// <returns>The object id generator</returns>
+        protected virtual Type GetObjectIdGeneratorType()
+        {
+            return typeof(IntegerObjectIdGenerator<ViewModelBase>);
+        }
+
+        /// <summary>
+        /// Gets the object id. 
+        /// </summary>
+        /// <param name="objectIdGenerator">The object id generator</param>
+        /// <returns>The object id</returns>
+        protected virtual int GetObjectId(IObjectIdGenerator<int> objectIdGenerator)
+        {
+            return objectIdGenerator.GetUniqueIdentifier();
+        }
+        #endregion
     }
 }

@@ -826,6 +826,7 @@ namespace Catel.IoC
 
                 registeredTypeInfo = new ServiceLocatorRegistration(serviceType, serviceImplementationType, tag, registrationType,
                     x => (createServiceFunc != null) ? createServiceFunc(x) : CreateServiceInstance(x));
+
                 _registeredTypes[serviceInfo] = registeredTypeInfo;
             }
 
@@ -861,6 +862,12 @@ namespace Catel.IoC
                     var tag = serviceInfo.Tag;
 
                     var instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
+
+                    if (instance != null && instance is Type)
+                    {
+                        instance = _typeFactory.CreateInstance((Type)instance);
+                    }
+
                     if (instance == null)
                     {
                         ThrowTypeNotRegisteredException(serviceType);
