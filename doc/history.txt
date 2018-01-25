@@ -42,7 +42,8 @@ Added/fixed:
 (*) #1127 Use TypeCache instead AppDomain.CurrentDomain in ServiceLocatorDependencyRegistrationManager implementation
 (*) #1143 UserControlLogic should dispose view models if they implement IDispose
 (*) #1144 Improve [Save|Cancel]AndCloseViewModelAsync behavior when calling on an already closing view model
-(*) #1146 Reuse identifiers in UniqueIdentifierHelper #1146
+(*) #1146 Reuse identifiers in UniqueIdentifierHelper
+(*) #1150 DataWindow uses Dispatcher to subscribe to Closing event in order to allow derived types to subscribe first
 (x) #1142 LogicBase calls CloseViewModel twice on view model that is already closing
 
 Roadmap:
