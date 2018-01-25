@@ -38,7 +38,7 @@ namespace Catel.Services
     }
 
     /// <summary>
-    /// ULong object id generator
+    /// ULong object id generator.
     /// </summary>
     /// <typeparam name="TObjectType">
     /// The object type.
