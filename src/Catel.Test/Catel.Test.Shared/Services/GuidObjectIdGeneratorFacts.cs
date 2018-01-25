@@ -9,7 +9,6 @@ namespace Catel.Test.Services
     using System;
 
     using Catel.Services;
-    using Catel.Test.ViewModels;
 
     using NUnit.Framework;
 
@@ -18,11 +17,26 @@ namespace Catel.Test.Services
         [TestFixture]
         public class The_GetUniqueIdentifier_Method
         {
+            public class PersonViewModel2
+            {
+            }
+
+            public class PersonViewModel4
+            {
+            }
+
+            public class PersonViewModel1
+            {
+            }
+
+            public class PersonViewModel3
+            {
+            }
             [Test]
             public void Returns_New_UniqueIdentifier_Even_If_Are_Generated_By_Different_Instances()
             {
-                IObjectIdGenerator<Guid> generator1 = new GuidObjectIdGenerator<PersonViewModel>();
-                IObjectIdGenerator<Guid> generator2 = new GuidObjectIdGenerator<PersonViewModel>();
+                IObjectIdGenerator<Guid> generator1 = new GuidObjectIdGenerator<PersonViewModel1>();
+                IObjectIdGenerator<Guid> generator2 = new GuidObjectIdGenerator<PersonViewModel1>();
 
                 Assert.AreNotEqual(generator1.GetUniqueIdentifier(), generator2.GetUniqueIdentifier());
             }
@@ -30,7 +44,7 @@ namespace Catel.Test.Services
             [Test]
             public void Returns_A_Released_Identifier_If_Requested()
             {
-                IObjectIdGenerator<Guid> generator = new GuidObjectIdGenerator<PersonViewModel>();
+                IObjectIdGenerator<Guid> generator = new GuidObjectIdGenerator<PersonViewModel2>();
                 var uniqueIdentifier = generator.GetUniqueIdentifier();
 
                 generator.ReleaseIdentifier(uniqueIdentifier);
@@ -41,8 +55,8 @@ namespace Catel.Test.Services
             [Test]
             public void Returns_Unique_Identifier_For_DiferentTypes()
             {
-                IObjectIdGenerator<Guid> generator1 = new GuidObjectIdGenerator<PersonViewModel>();
-                IObjectIdGenerator<Guid> generator2 = new GuidObjectIdGenerator<SameNamespacePersonViewModel>();
+                IObjectIdGenerator<Guid> generator1 = new GuidObjectIdGenerator<PersonViewModel3>();
+                IObjectIdGenerator<Guid> generator2 = new GuidObjectIdGenerator<PersonViewModel4>();
 
                 Assert.AreNotEqual(generator1.GetUniqueIdentifier(), generator2.GetUniqueIdentifier());
             }
