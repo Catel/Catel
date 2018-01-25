@@ -1589,10 +1589,7 @@ namespace Catel.MVVM
 
             ViewModelManager.UnregisterViewModelInstance(this);
 
-            if (_reuseIdentifier)
-            {
-                _objectIdGenerator.ReleaseIdentifier(UniqueIdentifier);
-            }
+            _objectIdGenerator.ReleaseIdentifier(UniqueIdentifier);
         }
 #endregion
     }
