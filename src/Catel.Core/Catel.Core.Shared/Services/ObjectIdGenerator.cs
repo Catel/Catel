@@ -21,13 +21,7 @@ namespace Catel.Services
         private static readonly object _syncObj = new object();
 
         /// <inheritdoc />
-        public TUniqueIdentifier GetUniqueIdentifier()
-        {
-            return GenerateUniqueIdentifier();
-        }
-
-        /// <inheritdoc />
-        public TUniqueIdentifier GetUniqueIdentifier(bool reuse)
+        public TUniqueIdentifier GetUniqueIdentifier(bool reuse = false)
         {
             if (reuse)
             {
