@@ -33,11 +33,7 @@ namespace Catel.Services
             {
                 lock (_syncObj)
                 {
-                    if (_releasedUniqueIdentifiers == null)
-                    {
-                        _releasedUniqueIdentifiers = new Queue<TUniqueIdentifier>();
-                    }
-                    else if (_releasedUniqueIdentifiers.Count > 0)
+                    if (_releasedUniqueIdentifiers != null && _releasedUniqueIdentifiers.Count > 0)
                     {
                         return _releasedUniqueIdentifiers.Dequeue();
                     }
