@@ -16,7 +16,7 @@ namespace Catel.Services
         /// Gets the unique identifier for the specified type.
         /// </summary>
         /// <returns>A new unique identifier but if <paramref name="reuse"/> is <c>true</c> will return a released identifier.</returns>
-        TUniqueIdentifier GetUniqueIdentifier(bool reuse);
+        TUniqueIdentifier GetUniqueIdentifier(bool reuse = false);
 
         /// <summary>
         /// Release the unique identifier for the specified type.
