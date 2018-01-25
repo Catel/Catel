@@ -37,6 +37,15 @@ namespace Catel.Test.Services
 
                 Assert.AreEqual(uniqueIdentifier, generator.GetUniqueIdentifier(true));
             }
+
+            [Test]
+            public void Returns_Unique_Identifier_For_DiferentTypes()
+            {
+                IObjectIdGenerator<Guid> generator1 = new GuidObjectIdGenerator<PersonViewModel>();
+                IObjectIdGenerator<Guid> generator2 = new GuidObjectIdGenerator<SameNamespacePersonViewModel>();
+
+                Assert.AreNotEqual(generator1.GetUniqueIdentifier(), generator2.GetUniqueIdentifier());
+            }
         }
     }
 }
