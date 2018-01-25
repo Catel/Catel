@@ -170,7 +170,7 @@ namespace Catel.MVVM
 #endif
         private string _title;
 
-        private readonly IObjectIdGenerator<int> _objectIdGenerator;
+        private IObjectIdGenerator<int> _objectIdGenerator;
         #endregion
 
         #region Constructors
@@ -247,7 +247,7 @@ namespace Catel.MVVM
 
             serviceLocator.RegisterType(typeof(IObjectIdGenerator<int>), x => GetObjectIdGeneratorType(), type, RegistrationType.Singleton, false);
             _objectIdGenerator = serviceLocator.ResolveType<IObjectIdGenerator<int>>(type);
-            UniqueIdentifier = GetObjectId(_objectIdGenerator);
+            UniqueIdentifier = this.GetObjectId(_objectIdGenerator);
 
             Log.Debug("Creating view model of type '{0}' with unique identifier {1}", type.Name, UniqueIdentifier);
 
@@ -281,8 +281,6 @@ namespace Catel.MVVM
             // As a last step, enable the auditors (we don't need change notifications of previous properties, etc)
             AuditingHelper.RegisterViewModel(this);
         }
-
-
         #endregion
 
         #region Events
@@ -1550,7 +1548,7 @@ namespace Catel.MVVM
         /// <returns>The object id generator</returns>
         protected virtual Type GetObjectIdGeneratorType()
         {
-            return typeof(IntegerObjectIdGenerator<>).MakeGenericTypeEx(GetType());
+            return typeof(IntegerObjectIdGenerator<ViewModelBase>);
         }
 
         /// <summary>
