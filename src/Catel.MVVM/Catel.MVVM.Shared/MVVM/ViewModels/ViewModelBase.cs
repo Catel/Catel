@@ -247,7 +247,7 @@ namespace Catel.MVVM
 
             serviceLocator.RegisterType(typeof(IObjectIdGenerator<int>), x => GetObjectIdGeneratorType(), type, RegistrationType.Singleton, false);
             _objectIdGenerator = serviceLocator.ResolveType<IObjectIdGenerator<int>>(type);
-            UniqueIdentifier = this.GetObjectId(_objectIdGenerator);
+            UniqueIdentifier = GetObjectId(_objectIdGenerator);
 
             Log.Debug("Creating view model of type '{0}' with unique identifier {1}", type.Name, UniqueIdentifier);
 
