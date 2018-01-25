@@ -865,6 +865,8 @@ namespace Catel.MVVM
         public System.Threading.Tasks.Task CloseViewModelAsync(System.Nullable<bool> result) { }
         protected object[] GetAllModels() { }
         protected System.Collections.Generic.IEnumerable<Catel.MVVM.IViewModel> GetChildViewModels() { }
+        protected virtual int GetObjectId(Catel.Services.IObjectIdGenerator<int> objectIdGenerator) { }
+        protected virtual System.Type GetObjectIdGeneratorType() { }
         protected virtual System.Threading.Tasks.Task InitializeAsync() { }
         protected virtual void InitializeModel(string modelProperty, object model) { }
         public System.Threading.Tasks.Task InitializeViewModelAsync() { }
