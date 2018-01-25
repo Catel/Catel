@@ -35,6 +35,15 @@ namespace Catel.Test.Services
 
                 Assert.AreEqual(uniqueIdentifier, generator.GetUniqueIdentifier(true));
             }
+
+            [Test]
+            public void Returns_Unique_Identifier_For_DiferentTypes()
+            {
+                IObjectIdGenerator<int> generator1 = new IntegerObjectIdGenerator<PersonViewModel>();
+                IObjectIdGenerator<int> generator2 = new IntegerObjectIdGenerator<SameNamespacePersonViewModel>();
+
+                Assert.AreEqual(generator1.GetUniqueIdentifier(), generator2.GetUniqueIdentifier());
+            }
         }
     }
 
@@ -62,6 +71,16 @@ namespace Catel.Test.Services
 
                 Assert.AreEqual(uniqueIdentifier, generator.GetUniqueIdentifier(true));
             }
+
+            [Test]
+            public void Returns_Unique_Identifier_For_DiferentTypes()
+            {
+                IObjectIdGenerator<int> generator1 = new IntegerObjectIdGenerator<PersonViewModel>();
+                IObjectIdGenerator<int> generator2 = new IntegerObjectIdGenerator<SameNamespacePersonViewModel>();
+
+                Assert.AreEqual(generator1.GetUniqueIdentifier(), generator2.GetUniqueIdentifier());
+            }
+
         }
     }
 
@@ -89,6 +108,16 @@ namespace Catel.Test.Services
 
                 Assert.AreEqual(uniqueIdentifier, generator.GetUniqueIdentifier(true));
             }
+
+            [Test]
+            public void Returns_Unique_Identifier_For_DiferentTypes()
+            {
+                IObjectIdGenerator<int> generator1 = new IntegerObjectIdGenerator<PersonViewModel>();
+                IObjectIdGenerator<int> generator2 = new IntegerObjectIdGenerator<SameNamespacePersonViewModel>();
+
+                Assert.AreEqual(generator1.GetUniqueIdentifier(), generator2.GetUniqueIdentifier());
+            }
+
         }
     }
 }
