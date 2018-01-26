@@ -40,7 +40,7 @@ namespace Catel.Test.Services
             }
 
             [Test]
-            public void Returns_Unique_Identifier_For_DiferentTypes()
+            public void Returns_Unique_Identifier_For_DifferentTypes()
             {
                 IObjectIdGenerator<int> generator1 = new IntegerObjectIdGenerator<PersonViewModel3>();
                 IObjectIdGenerator<int> generator2 = new IntegerObjectIdGenerator<PersonViewModel4>();
@@ -153,7 +153,7 @@ namespace Catel.Test.Services
             }
 
             [Test]
-            public void Returns_Unique_Identifier_For_DiferentTypes()
+            public void Returns_Unique_Identifier_For_DifferentTypes()
             {
                 IObjectIdGenerator<long> generator1 = new LongObjectIdGenerator<PersonViewModel3>();
                 IObjectIdGenerator<long> generator2 = new LongObjectIdGenerator<PersonViewModel4>();
@@ -251,7 +251,7 @@ namespace Catel.Test.Services
             }
 
             [Test]
-            public void Returns_Unique_Identifier_For_DiferentTypes()
+            public void Returns_Unique_Identifier_For_DifferentTypes()
             {
                 IObjectIdGenerator<ulong> generator1 = new ULongObjectIdGenerator<PersonViewModel3>();
                 IObjectIdGenerator<ulong> generator2 = new ULongObjectIdGenerator<PersonViewModel4>();
