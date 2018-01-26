@@ -6,6 +6,8 @@
 
 namespace Catel.Services
 {
+    using System;
+
     /// <summary>
     /// The object id generator service.
     /// </summary>
@@ -15,6 +17,7 @@ namespace Catel.Services
         /// <summary>
         /// Gets the unique identifier for the specified type.
         /// </summary>
+        /// <param name="reuse">Indicates whether the id will be returned from released id pool</param>
         /// <returns>A new unique identifier but if <paramref name="reuse"/> is <c>true</c> will return a released identifier.</returns>
         TUniqueIdentifier GetUniqueIdentifier(bool reuse = false);
 
@@ -29,7 +32,20 @@ namespace Catel.Services
     /// </summary>
     /// <typeparam name="TObjectType">The object type</typeparam>
     /// <typeparam name="TUniqueIdentifier">The unique identifier type</typeparam>
-    public interface IObjectIdGenerator<TObjectType, TUniqueIdentifier> : IObjectIdGenerator<TUniqueIdentifier>
+    public interface IObjectIdGenerator<in TObjectType, TUniqueIdentifier> : IObjectIdGenerator<TUniqueIdentifier>
+        where TObjectType : class
     {
+        /// <summary>
+        /// Gets the unique identifier for the specified instance.
+        /// </summary>
+        /// <param name="instance">The instance</param>
+        /// <param name="reuse">Indicates whether the id will be returned from released id pool</param>
+        /// <returns></returns>
+        TUniqueIdentifier GetUniqueIdentifierForInstance(TObjectType instance, bool reuse = false);
+
+        /// <summary>
+        /// Gets and sets the instance check interval.
+        /// </summary>
+        TimeSpan? InstanceCheckInterval { get; set; }
     }
 }

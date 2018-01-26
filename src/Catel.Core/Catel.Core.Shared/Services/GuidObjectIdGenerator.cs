@@ -15,6 +15,7 @@ namespace Catel.Services
     /// The entity type.
     /// </typeparam>
     public class GuidObjectIdGenerator<TObjectType> : ObjectIdGenerator<TObjectType, Guid>
+        where TObjectType : class
     {
         /// <inheritdoc />
         protected override Guid GenerateUniqueIdentifier()
