@@ -71,12 +71,11 @@ namespace Catel.Test.Services
             [Test]
             public void Returns_A_Released_Identifier_If_The_Instance_Is_Released_And_Reuse_Is_True()
             {
-                var generator = new IntegerObjectIdGenerator<PersonViewModel1> { InstanceCheckInterval = TimeSpan.FromSeconds(5) };
+                var generator = new IntegerObjectIdGenerator<PersonViewModel1>();
                 var uniqueIdentifierForInstance = generator.GetUniqueIdentifierForInstance(new PersonViewModel1());
 
                 GC.Collect();
-
-                Thread.Sleep(TimeSpan.FromSeconds(20));
+                GC.WaitForPendingFinalizers();
 
                 Assert.AreEqual(uniqueIdentifierForInstance, generator.GetUniqueIdentifierForInstance(new PersonViewModel1(), true));
             }
@@ -84,12 +83,11 @@ namespace Catel.Test.Services
             [Test]
             public void Returns_A_Unique_Identifier_Even_When_An_Instance_Is_Released_But_Reuse_Is_False()
             {
-                var generator = new IntegerObjectIdGenerator<PersonViewModel2> { InstanceCheckInterval = TimeSpan.FromSeconds(5) };
+                var generator = new IntegerObjectIdGenerator<PersonViewModel2>();
                 var uniqueIdentifierForInstance = generator.GetUniqueIdentifierForInstance(new PersonViewModel2());
 
                 GC.Collect();
-
-                Thread.Sleep(TimeSpan.FromSeconds(20));
+                GC.WaitForPendingFinalizers();
 
                 Assert.AreNotEqual(uniqueIdentifierForInstance, generator.GetUniqueIdentifierForInstance(new PersonViewModel2()));
             }
@@ -97,7 +95,7 @@ namespace Catel.Test.Services
             [Test]
             public void Returns_A_Unique_Identifier_For_Diferent_Instances()
             {
-                var generator = new IntegerObjectIdGenerator<PersonViewModel3> { InstanceCheckInterval = TimeSpan.FromSeconds(5) };
+                var generator = new IntegerObjectIdGenerator<PersonViewModel3>();
                 Assert.AreNotEqual(generator.GetUniqueIdentifierForInstance(new PersonViewModel3()), generator.GetUniqueIdentifierForInstance(new PersonViewModel3()));
             }
 
@@ -170,12 +168,11 @@ namespace Catel.Test.Services
             [Test]
             public void Returns_A_Released_Identifier_If_The_Instance_Is_Released_And_Reuse_Is_True()
             {
-                var generator = new LongObjectIdGenerator<PersonViewModel1> { InstanceCheckInterval = TimeSpan.FromSeconds(5) };
+                var generator = new LongObjectIdGenerator<PersonViewModel1>();
                 var uniqueIdentifierForInstance = generator.GetUniqueIdentifierForInstance(new PersonViewModel1());
 
                 GC.Collect();
-
-                Thread.Sleep(TimeSpan.FromSeconds(20));
+                GC.WaitForPendingFinalizers();
 
                 Assert.AreEqual(uniqueIdentifierForInstance, generator.GetUniqueIdentifierForInstance(new PersonViewModel1(), true));
             }
@@ -183,12 +180,11 @@ namespace Catel.Test.Services
             [Test]
             public void Returns_A_Unique_Identifier_Even_When_An_Instance_Is_Released_But_Reuse_Is_False()
             {
-                var generator = new LongObjectIdGenerator<PersonViewModel2> { InstanceCheckInterval = TimeSpan.FromSeconds(5) };
+                var generator = new LongObjectIdGenerator<PersonViewModel2>();
                 var uniqueIdentifierForInstance = generator.GetUniqueIdentifierForInstance(new PersonViewModel2());
 
                 GC.Collect();
-
-                Thread.Sleep(TimeSpan.FromSeconds(20));
+                GC.WaitForPendingFinalizers();
 
                 Assert.AreNotEqual(uniqueIdentifierForInstance, generator.GetUniqueIdentifierForInstance(new PersonViewModel2()));
             }
@@ -196,7 +192,7 @@ namespace Catel.Test.Services
             [Test]
             public void Returns_A_Unique_Identifier_For_Diferent_Instances()
             {
-                var generator = new LongObjectIdGenerator<PersonViewModel3> { InstanceCheckInterval = TimeSpan.FromSeconds(5) };
+                var generator = new LongObjectIdGenerator<PersonViewModel3>();
                 Assert.AreNotEqual(generator.GetUniqueIdentifierForInstance(new PersonViewModel3()), generator.GetUniqueIdentifierForInstance(new PersonViewModel3()));
             }
 
@@ -270,12 +266,10 @@ namespace Catel.Test.Services
             [Test]
             public void Returns_A_Released_Identifier_If_The_Instance_Is_Released_And_Reuse_Is_True()
             {
-                var generator = new ULongObjectIdGenerator<PersonViewModel1> { InstanceCheckInterval = TimeSpan.FromSeconds(5) };
+                var generator = new ULongObjectIdGenerator<PersonViewModel1>();
                 var uniqueIdentifierForInstance = generator.GetUniqueIdentifierForInstance(new PersonViewModel1());
 
                 GC.Collect();
-
-                Thread.Sleep(TimeSpan.FromSeconds(20));
 
                 Assert.AreEqual(uniqueIdentifierForInstance, generator.GetUniqueIdentifierForInstance(new PersonViewModel1(), true));
             }
@@ -283,12 +277,10 @@ namespace Catel.Test.Services
             [Test]
             public void Returns_A_Unique_Identifier_Even_When_An_Instance_Is_Released_But_Reuse_Is_False()
             {
-                var generator = new ULongObjectIdGenerator<PersonViewModel2> { InstanceCheckInterval = TimeSpan.FromSeconds(5) };
+                var generator = new ULongObjectIdGenerator<PersonViewModel2>();
                 var uniqueIdentifierForInstance = generator.GetUniqueIdentifierForInstance(new PersonViewModel2());
 
                 GC.Collect();
-
-                Thread.Sleep(TimeSpan.FromSeconds(20));
 
                 Assert.AreNotEqual(uniqueIdentifierForInstance, generator.GetUniqueIdentifierForInstance(new PersonViewModel2()));
             }
@@ -296,7 +288,7 @@ namespace Catel.Test.Services
             [Test]
             public void Returns_A_Unique_Identifier_For_Diferent_Instances()
             {
-                var generator = new ULongObjectIdGenerator<PersonViewModel3> { InstanceCheckInterval = TimeSpan.FromSeconds(5) };
+                var generator = new ULongObjectIdGenerator<PersonViewModel3>();
                 Assert.AreNotEqual(generator.GetUniqueIdentifierForInstance(new PersonViewModel3()), generator.GetUniqueIdentifierForInstance(new PersonViewModel3()));
             }
 

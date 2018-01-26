@@ -71,12 +71,11 @@ namespace Catel.Test.Services
             [Test]
             public void Returns_A_Released_Identifier_If_The_Instance_Is_Released_And_Reuse_Is_True()
             {
-                GuidObjectIdGenerator<PersonViewModel1> generator = new GuidObjectIdGenerator<PersonViewModel1> { InstanceCheckInterval = TimeSpan.FromSeconds(5) };
+                GuidObjectIdGenerator<PersonViewModel1> generator = new GuidObjectIdGenerator<PersonViewModel1>();
                 var uniqueIdentifierForInstance = generator.GetUniqueIdentifierForInstance(new PersonViewModel1());
 
                 GC.Collect();
-
-                Thread.Sleep(TimeSpan.FromSeconds(20));
+                GC.WaitForPendingFinalizers();
 
                 Assert.AreEqual(uniqueIdentifierForInstance, generator.GetUniqueIdentifierForInstance(new PersonViewModel1(), true));
             }
@@ -84,12 +83,11 @@ namespace Catel.Test.Services
             [Test]
             public void Returns_A_Unique_Identifier_Even_When_An_Instance_Is_Released_But_Reuse_Is_False()
             {
-                GuidObjectIdGenerator<PersonViewModel2> generator = new GuidObjectIdGenerator<PersonViewModel2> { InstanceCheckInterval = TimeSpan.FromSeconds(5) };
+                GuidObjectIdGenerator<PersonViewModel2> generator = new GuidObjectIdGenerator<PersonViewModel2>();
                 var uniqueIdentifierForInstance = generator.GetUniqueIdentifierForInstance(new PersonViewModel2());
 
                 GC.Collect();
-
-                Thread.Sleep(TimeSpan.FromSeconds(20));
+                GC.WaitForPendingFinalizers();
 
                 Assert.AreNotEqual(uniqueIdentifierForInstance, generator.GetUniqueIdentifierForInstance(new PersonViewModel2()));
             }
@@ -97,7 +95,7 @@ namespace Catel.Test.Services
             [Test]
             public void Returns_A_Unique_Identifier_For_Diferent_Instances()
             {
-                GuidObjectIdGenerator<PersonViewModel3> generator = new GuidObjectIdGenerator<PersonViewModel3> { InstanceCheckInterval = TimeSpan.FromSeconds(5) };
+                GuidObjectIdGenerator<PersonViewModel3> generator = new GuidObjectIdGenerator<PersonViewModel3>();
                 Assert.AreNotEqual(generator.GetUniqueIdentifierForInstance(new PersonViewModel3()), generator.GetUniqueIdentifierForInstance(new PersonViewModel3())); 
             }
 

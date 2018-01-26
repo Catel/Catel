@@ -38,14 +38,9 @@ namespace Catel.Services
         /// <summary>
         /// Gets the unique identifier for the specified instance.
         /// </summary>
-        /// <param name="instance">The instance</param>
-        /// <param name="reuse">Indicates whether the id will be returned from released id pool</param>
+        /// <param name="instance">The instance.</param>
+        /// <param name="reuse">Indicates whether the id will be returned from released id pool.</param>
         /// <returns></returns>
         TUniqueIdentifier GetUniqueIdentifierForInstance(TObjectType instance, bool reuse = false);
-
-        /// <summary>
-        /// Gets and sets the instance check interval.
-        /// </summary>
-        TimeSpan? InstanceCheckInterval { get; set; }
     }
 }

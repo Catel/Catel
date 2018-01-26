@@ -7,11 +7,8 @@
 
 namespace Catel.Services
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-
-    using Catel.Threading;
+    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// The ObjectIdGenerator class.
@@ -25,13 +22,8 @@ namespace Catel.Services
 
         private static readonly object _syncObj = new object();
 
-        private static SortedDictionary<TUniqueIdentifier, WeakReference<TObjectType>> _allocatedUniqueIdentifierPerInstances = new SortedDictionary<TUniqueIdentifier, WeakReference<TObjectType>>();
-
-        private static readonly TimeSpan DefaultInterval = TimeSpan.FromMinutes(1);
-
-        private static TimeSpan? _interval;
-
-        private static Timer _timer;
+        // private static ConditionalWeakTable<TObjectType, object> _allocatedUniqueIdentifierPerInstances = new ConditionalWeakTable<TObjectType, object>();
+        private static ConditionalWeakTable<TObjectType, InstanceWrapper> _allocatedUniqueIdentifierPerInstances = new ConditionalWeakTable<TObjectType, InstanceWrapper>();
 
         /// <inheritdoc />
         public TUniqueIdentifier GetUniqueIdentifier(bool reuse = false)
@@ -69,71 +61,25 @@ namespace Catel.Services
         {
             Argument.IsNotNull("instance", instance);
 
-            var uniqueIdentifier = GetUniqueIdentifier(reuse);
-
             lock (_syncObj)
             {
+                if (_allocatedUniqueIdentifierPerInstances != null && _allocatedUniqueIdentifierPerInstances.TryGetValue(instance, out var wrapper))
+                {
+                    return wrapper.UniqueIdentifier;
+                }
+
                 if (_allocatedUniqueIdentifierPerInstances == null)
                 {
-                    _allocatedUniqueIdentifierPerInstances = new SortedDictionary<TUniqueIdentifier, WeakReference<TObjectType>>();
+                    _allocatedUniqueIdentifierPerInstances = new ConditionalWeakTable<TObjectType, InstanceWrapper>();
                 }
 
-                _allocatedUniqueIdentifierPerInstances.Add(uniqueIdentifier, new WeakReference<TObjectType>(instance));
+                wrapper = new InstanceWrapper(this, GetUniqueIdentifier(reuse));
 
-                var interval = _interval ?? DefaultInterval;
-                if (_timer == null)
-                {
-                    _timer = new Timer(OnTimerElapsed, null, interval, interval);
-                }
-                else
-                {
-                    _timer.Change(interval, interval);
-                }
+                _allocatedUniqueIdentifierPerInstances.Add(instance, wrapper);
+
+                return wrapper.UniqueIdentifier;
             }
 
-            return uniqueIdentifier;
-        }
-
-        /// <inheritdoc />
-        public TimeSpan? InstanceCheckInterval
-        {
-            get
-            {
-                lock (_syncObj)
-                {
-                    return _interval;
-                }
-            }
-            set
-            {
-                lock (_syncObj)
-                {
-                    _interval = value;
-                }
-            }
-        }
-
-        private void OnTimerElapsed(object state)
-        {
-            lock (_syncObj)
-            {
-                var uniqueIdentifiers = _allocatedUniqueIdentifierPerInstances.Where(pair => !pair.Value.TryGetTarget(out var _)).Select(pair => pair.Key).ToList();
-                if (uniqueIdentifiers.Any() && _releasedUniqueIdentifiers == null)
-                {
-                    _releasedUniqueIdentifiers = new Queue<TUniqueIdentifier>();
-                }
-
-                foreach (var uniqueIdentifier in uniqueIdentifiers)
-                {
-                    _allocatedUniqueIdentifierPerInstances.Remove(uniqueIdentifier);
-                    _releasedUniqueIdentifiers.Enqueue(uniqueIdentifier);
-                }
-
-                if (_timer != null && _allocatedUniqueIdentifierPerInstances.Count == 0)
-                {
-                    _timer.Change(Timeout.Infinite, Timeout.Infinite);
-                }
-            }
         }
 
         /// <summary>
@@ -143,5 +89,25 @@ namespace Catel.Services
         /// The unique identifier.
         /// </returns>
         protected abstract TUniqueIdentifier GenerateUniqueIdentifier();
+
+        private class InstanceWrapper
+        {
+            public InstanceWrapper(IObjectIdGenerator<TObjectType, TUniqueIdentifier> objectIdGenerator, TUniqueIdentifier uniqueIdentifier)
+            {
+                Argument.IsNotNull("objectIdGenerator", objectIdGenerator);
+
+                ObjectIdGenerator = objectIdGenerator;
+                UniqueIdentifier = uniqueIdentifier;
+            }
+
+            public IObjectIdGenerator<TObjectType, TUniqueIdentifier> ObjectIdGenerator { get; }
+
+            public TUniqueIdentifier UniqueIdentifier { get; }
+
+            ~InstanceWrapper()
+            {
+                ObjectIdGenerator?.ReleaseIdentifier(UniqueIdentifier);
+            }
+        }
     }
 }
