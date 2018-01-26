@@ -40,7 +40,7 @@ namespace Catel.Test.Services
             }
 
             [Test]
-            public void Returns_Unique_Identifier_For_DiferentTypes()
+            public void Returns_Unique_Identifier_For_DifferentTypes()
             {
                 IObjectIdGenerator<Guid> generator1 = new GuidObjectIdGenerator<PersonViewModel3>();
                 IObjectIdGenerator<Guid> generator2 = new GuidObjectIdGenerator<PersonViewModel4>();
