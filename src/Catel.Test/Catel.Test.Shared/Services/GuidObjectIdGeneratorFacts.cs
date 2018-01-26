@@ -8,7 +8,6 @@
 namespace Catel.Test.Services
 {
     using System;
-    using System.Threading;
 
     using Catel.Services;
 
