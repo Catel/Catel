@@ -6,6 +6,9 @@
 
 #if NET || NETSTANDARD
 
+// Define debug so this code doesn't get stripped out
+#define DEBUG
+
 namespace Catel.Logging
 {
     using System;

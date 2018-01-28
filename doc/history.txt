@@ -44,6 +44,7 @@ Added/fixed:
 (*) #1144 Improve [Save|Cancel]AndCloseViewModelAsync behavior when calling on an already closing view model
 (*) #1146 Reuse identifiers in UniqueIdentifierHelper
 (*) #1150 DataWindow uses Dispatcher to subscribe to Closing event in order to allow derived types to subscribe first
+(*) #1154 Fix DebugLogListener so it also works in release mode
 (x) #1142 LogicBase calls CloseViewModel twice on view model that is already closing
 
 Roadmap:
