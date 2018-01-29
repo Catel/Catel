@@ -87,8 +87,6 @@ namespace Catel.Services
         {
             public InstanceWrapper(IObjectIdGenerator<TObjectType, TUniqueIdentifier> objectIdGenerator, TUniqueIdentifier uniqueIdentifier)
             {
-                Argument.IsNotNull("objectIdGenerator", objectIdGenerator);
-
                 ObjectIdGenerator = objectIdGenerator;
                 UniqueIdentifier = uniqueIdentifier;
             }
