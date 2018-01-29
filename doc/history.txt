@@ -49,6 +49,7 @@ Added/fixed:
 (*) Update .NET Standard to 2.0.1
 (*) Update Xamarin.Forms to 2.5.0.122203
 (x) #1142 LogicBase calls CloseViewModel twice on view model that is already closing
+(x) #1155 DelayBindingUpdate behavior might crash when dependency property is not found
 
 Roadmap:
 ========

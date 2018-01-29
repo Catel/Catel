@@ -37,7 +37,7 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     public class DelayBindingUpdate : BehaviorBase<FrameworkElement>
     {
-        #region Fields
+#region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -50,9 +50,9 @@ namespace Catel.Windows.Interactivity
         private Binding _originalBinding;
 
         private DependencyProperty _dependencyPropertyCache;
-        #endregion
+#endregion
 
-        #region Constructors
+#region Constructors
         static DelayBindingUpdate()
         {
             BindingProperties = new List<PropertyInfo>(from property in typeof(Binding).GetPropertiesEx()
@@ -69,9 +69,9 @@ namespace Catel.Windows.Interactivity
 
             _timer = new DispatcherTimer();
         }
-        #endregion
+#endregion
 
-        #region Properties
+#region Properties
         /// <summary>
         /// Gets or sets the update delay. 
         /// <para />
@@ -140,9 +140,9 @@ namespace Catel.Windows.Interactivity
                 return null;
             }
         }
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
         /// <summary>
         /// Validates the required properties.
         /// </summary>
@@ -159,11 +159,19 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override void OnAssociatedObjectLoaded()
         {
+            var dependencyPropertyName = UsedDependencyPropertyName;
+
             var dependencyProperty = GetDependencyProperty();
+            if (dependencyProperty == null)
+            {
+                Log.Error("No dependency property found on '{0}'", dependencyPropertyName);
+                return;
+            }
+
             var bindingExpression = AssociatedObject.GetBindingExpression(dependencyProperty);
             if (bindingExpression == null)
             {
-                Log.Error("No binding expression found on '{0}'", UsedDependencyPropertyName);
+                Log.Error("No binding expression found on '{0}'", dependencyPropertyName);
                 return;
             }
 
@@ -176,9 +184,9 @@ namespace Catel.Windows.Interactivity
             AssociatedObject.ClearValue(dependencyProperty);
             AssociatedObject.SetBinding(dependencyProperty, newBinding);
 
-            Log.Debug("Changed UpdateSourceTrigger from to 'Explicit' for dependency property '{0}'", UsedDependencyPropertyName);
+            Log.Debug("Changed UpdateSourceTrigger from to 'Explicit' for dependency property '{0}'", dependencyPropertyName);
 
-            AssociatedObject.SubscribeToDependencyProperty(PropertyName, OnDependencyPropertyChanged);
+            AssociatedObject.SubscribeToDependencyProperty(dependencyProperty.Name, OnDependencyPropertyChanged);
 
             Log.Debug("Subscribed to property changes of the original object");
 
@@ -191,15 +199,17 @@ namespace Catel.Windows.Interactivity
         protected override void OnAssociatedObjectUnloaded()
         {
             var dependencyProperty = GetDependencyProperty();
+            if (dependencyProperty != null)
+            {
+                AssociatedObject.ClearValue(dependencyProperty);
+                AssociatedObject.SetBinding(dependencyProperty, _originalBinding);
 
-            AssociatedObject.ClearValue(dependencyProperty);
-            AssociatedObject.SetBinding(dependencyProperty, _originalBinding);
+                Log.Debug("Restored binding for dependency property '{0}'", UsedDependencyPropertyName);
 
-            Log.Debug("Restored binding for dependency property '{0}'", UsedDependencyPropertyName);
+                AssociatedObject.UnsubscribeFromDependencyProperty(PropertyName, OnDependencyPropertyChanged);
 
-            AssociatedObject.UnsubscribeFromDependencyProperty(PropertyName, OnDependencyPropertyChanged);
-
-            Log.Debug("Unsubscribed from property changes of the original object");
+                Log.Debug("Unsubscribed from property changes of the original object");
+            }
 
             _timer.Stop();
             _timer.Tick -= OnTimerTick;
@@ -252,7 +262,15 @@ namespace Catel.Windows.Interactivity
                 return;
             }
 
+            var dependencyPropertyName = UsedDependencyPropertyName;
+
             var dependencyProperty = GetDependencyProperty();
+            if (dependencyProperty == null)
+            {
+                Log.Error("No dependency property found on '{0}'", dependencyPropertyName);
+                return;
+            }
+
             var bindingExpression = AssociatedObject.GetBindingExpression(dependencyProperty);
             if (bindingExpression == null)
             {
@@ -282,7 +300,7 @@ namespace Catel.Windows.Interactivity
                 property = GetDependencyProperty(DependencyPropertyName);
                 if (property != null)
                 {
-                    property = _dependencyPropertyCache;
+                    _dependencyPropertyCache = property;
                     return property;
                 }
             }
@@ -359,7 +377,7 @@ namespace Catel.Windows.Interactivity
 
             return newBinding;
         }
-        #endregion
+#endregion
     }
 }
 
