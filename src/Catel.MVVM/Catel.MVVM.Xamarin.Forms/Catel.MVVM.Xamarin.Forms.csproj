@@ -85,11 +85,15 @@
 
   <ItemGroup>
     <PackageReference Include="Catel.Fody" Version="2.19.0" NoWarn="NU1701" />
-    <PackageReference Include="Fody" Version="2.2.1" />
-    <PackageReference Include="MethodTimer.Fody" Version="2.0.1" />
-    <PackageReference Include="ModuleInit.Fody" Version="1.7.0" />
-    <PackageReference Include="Obsolete.Fody" Version="4.3.2" />
-    <PackageReference Include="Xamarin.Forms" Version="2.5.0.91635" />
+    <PackageReference Include="Fody" Version="2.3.23" />
+    <PackageReference Include="MethodTimer.Fody" Version="2.0.2" />
+    <PackageReference Include="ModuleInit.Fody" Version="1.7.1" />
+    <PackageReference Include="Obsolete.Fody" Version="4.3.7" />
+    <PackageReference Include="Xamarin.Forms" Version="2.5.0.122203" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="NETStandard.Library" Version="2.0.1" />
   </ItemGroup>
 
 </Project>
