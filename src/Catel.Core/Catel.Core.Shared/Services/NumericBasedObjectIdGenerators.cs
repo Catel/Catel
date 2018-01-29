@@ -14,6 +14,7 @@ namespace Catel.Services
     /// The object type.
     /// </typeparam>
     public sealed class IntegerObjectIdGenerator<TObjectType> : NumericBasedObjectIdGenerator<TObjectType, int>
+        where TObjectType : class
     {
         /// <inheritdoc />
         protected override int GenerateUniqueIdentifier()
@@ -29,6 +30,7 @@ namespace Catel.Services
     /// The object type.
     /// </typeparam>
     public sealed class LongObjectIdGenerator<TObjectType> : NumericBasedObjectIdGenerator<TObjectType, long>
+        where TObjectType : class
     {
         /// <inheritdoc />
         protected override long GenerateUniqueIdentifier()
@@ -44,6 +46,7 @@ namespace Catel.Services
     /// The object type.
     /// </typeparam>
     public sealed class ULongObjectIdGenerator<TObjectType> : NumericBasedObjectIdGenerator<TObjectType, ulong>
+        where TObjectType : class
     {
         /// <inheritdoc />
         protected override ulong GenerateUniqueIdentifier()

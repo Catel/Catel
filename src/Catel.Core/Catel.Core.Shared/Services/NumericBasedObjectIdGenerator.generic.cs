@@ -14,6 +14,7 @@ namespace Catel.Services
     /// <typeparam name="TObjectType">The object type.</typeparam>
     /// <typeparam name="TUniqueIdentifier">The unique identifier type.</typeparam>
     public abstract class NumericBasedObjectIdGenerator<TObjectType, TUniqueIdentifier> : ObjectIdGenerator<TObjectType, TUniqueIdentifier>
+        where TObjectType : class
     {
         static NumericBasedObjectIdGenerator()
         {
