@@ -3873,7 +3873,7 @@ namespace Catel.Services
 {
     
     public class GuidObjectIdGenerator<TObjectType> : Catel.Services.ObjectIdGenerator<TObjectType, System.Guid>
-    
+        where TObjectType :  class
     {
         public GuidObjectIdGenerator() { }
         protected override System.Guid GenerateUniqueIdentifier() { }
@@ -3896,7 +3896,7 @@ namespace Catel.Services
         string GetSource();
     }
     public sealed class IntegerObjectIdGenerator<TObjectType> : Catel.Services.NumericBasedObjectIdGenerator<TObjectType, int>
-    
+        where TObjectType :  class
     {
         public IntegerObjectIdGenerator() { }
         protected override int GenerateUniqueIdentifier() { }
@@ -3921,7 +3921,12 @@ namespace Catel.Services
         TUniqueIdentifier GetUniqueIdentifier(bool reuse = False);
         void ReleaseIdentifier(TUniqueIdentifier identifier);
     }
-    public interface IObjectIdGenerator<TObjectType, TUniqueIdentifier> : Catel.Services.IObjectIdGenerator<TUniqueIdentifier> { }
+    public interface IObjectIdGenerator<in TObjectType, TUniqueIdentifier> : Catel.Services.IObjectIdGenerator<TUniqueIdentifier>
+        where in TObjectType :  class
+    
+    {
+        TUniqueIdentifier GetUniqueIdentifierForInstance(TObjectType instance, bool reuse = False);
+    }
     public interface IRollingInMemoryLogService
     {
         Catel.Logging.RollingInMemoryLogListener LogListener { get; }
@@ -3977,13 +3982,13 @@ namespace Catel.Services
         protected abstract void PreloadLanguageSource(Catel.Services.ILanguageSource languageSource);
     }
     public sealed class LongObjectIdGenerator<TObjectType> : Catel.Services.NumericBasedObjectIdGenerator<TObjectType, long>
-    
+        where TObjectType :  class
     {
         public LongObjectIdGenerator() { }
         protected override long GenerateUniqueIdentifier() { }
     }
     public abstract class NumericBasedObjectIdGenerator<TObjectType, TUniqueIdentifier> : Catel.Services.ObjectIdGenerator<TObjectType, TUniqueIdentifier>
-    
+        where TObjectType :  class
     
     {
         protected NumericBasedObjectIdGenerator() { }
@@ -4000,12 +4005,13 @@ namespace Catel.Services
         public object ConvertFromStringToObject(string value, System.Type targetType, System.Globalization.CultureInfo culture) { }
     }
     public abstract class ObjectIdGenerator<TObjectType, TUniqueIdentifier> : Catel.Services.IObjectIdGenerator<TUniqueIdentifier>, Catel.Services.IObjectIdGenerator<TObjectType, TUniqueIdentifier>
-    
+        where TObjectType :  class
     
     {
         protected ObjectIdGenerator() { }
         protected abstract TUniqueIdentifier GenerateUniqueIdentifier();
         public TUniqueIdentifier GetUniqueIdentifier(bool reuse = False) { }
+        public TUniqueIdentifier GetUniqueIdentifierForInstance(TObjectType instance, bool reuse = False) { }
         public void ReleaseIdentifier(TUniqueIdentifier identifier) { }
     }
     public class RollingInMemoryLogService : Catel.Services.ServiceBase, Catel.Services.IRollingInMemoryLogService
@@ -4027,7 +4033,7 @@ namespace Catel.Services
         public virtual string Name { get; }
     }
     public sealed class ULongObjectIdGenerator<TObjectType> : Catel.Services.NumericBasedObjectIdGenerator<TObjectType, ulong>
-    
+        where TObjectType :  class
     {
         public ULongObjectIdGenerator() { }
         protected override ulong GenerateUniqueIdentifier() { }
