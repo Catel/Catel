@@ -92,7 +92,7 @@ namespace Catel.Test.Services
             }
 
             [Test]
-            public void Returns_A_Unique_Identifier_For_Diferent_Instances()
+            public void Returns_A_Unique_Identifier_For_Different_Instances()
             {
                 var generator = new IntegerObjectIdGenerator<PersonViewModel3>();
                 Assert.AreNotEqual(generator.GetUniqueIdentifierForInstance(new PersonViewModel3()), generator.GetUniqueIdentifierForInstance(new PersonViewModel3()));
@@ -189,7 +189,7 @@ namespace Catel.Test.Services
             }
 
             [Test]
-            public void Returns_A_Unique_Identifier_For_Diferent_Instances()
+            public void Returns_A_Unique_Identifier_For_Different_Instances()
             {
                 var generator = new LongObjectIdGenerator<PersonViewModel3>();
                 Assert.AreNotEqual(generator.GetUniqueIdentifierForInstance(new PersonViewModel3()), generator.GetUniqueIdentifierForInstance(new PersonViewModel3()));
@@ -285,7 +285,7 @@ namespace Catel.Test.Services
             }
 
             [Test]
-            public void Returns_A_Unique_Identifier_For_Diferent_Instances()
+            public void Returns_A_Unique_Identifier_For_Different_Instances()
             {
                 var generator = new ULongObjectIdGenerator<PersonViewModel3>();
                 Assert.AreNotEqual(generator.GetUniqueIdentifierForInstance(new PersonViewModel3()), generator.GetUniqueIdentifierForInstance(new PersonViewModel3()));

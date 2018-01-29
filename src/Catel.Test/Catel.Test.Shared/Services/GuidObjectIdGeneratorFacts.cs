@@ -92,7 +92,7 @@ namespace Catel.Test.Services
             }
 
             [Test]
-            public void Returns_A_Unique_Identifier_For_Diferent_Instances()
+            public void Returns_A_Unique_Identifier_For_Different_Instances()
             {
                 GuidObjectIdGenerator<PersonViewModel3> generator = new GuidObjectIdGenerator<PersonViewModel3>();
                 Assert.AreNotEqual(generator.GetUniqueIdentifierForInstance(new PersonViewModel3()), generator.GetUniqueIdentifierForInstance(new PersonViewModel3())); 
