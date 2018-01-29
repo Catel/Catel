@@ -22,7 +22,7 @@ namespace Catel.Services
 
         private static readonly object _syncObj = new object();
 
-        private static ConditionalWeakTable<TObjectType, InstanceWrapper> _allocatedUniqueIdentifierPerInstances;
+        private static readonly ConditionalWeakTable<TObjectType, InstanceWrapper> _allocatedUniqueIdentifierPerInstances = new ConditionalWeakTable<TObjectType, InstanceWrapper>();
 
         /// <inheritdoc />
         public TUniqueIdentifier GetUniqueIdentifier(bool reuse = false)
@@ -62,11 +62,7 @@ namespace Catel.Services
 
             lock (_syncObj)
             {
-                if (_allocatedUniqueIdentifierPerInstances == null)
-                {
-                    _allocatedUniqueIdentifierPerInstances = new ConditionalWeakTable<TObjectType, InstanceWrapper>();
-                }
-                else if (_allocatedUniqueIdentifierPerInstances.TryGetValue(instance, out var wrapper))
+                if (_allocatedUniqueIdentifierPerInstances.TryGetValue(instance, out var wrapper))
                 {
                     return wrapper.UniqueIdentifier;
                 }
