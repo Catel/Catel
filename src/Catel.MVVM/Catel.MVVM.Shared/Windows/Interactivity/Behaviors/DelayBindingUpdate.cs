@@ -130,7 +130,7 @@ namespace Catel.Windows.Interactivity
                     }
                 }
 
-                string propertyName = string.Format("{0}Property", PropertyName);
+                var propertyName = string.Format("{0}Property", PropertyName);
                 property = GetDependencyProperty(propertyName);
                 if (property != null)
                 {
@@ -181,12 +181,14 @@ namespace Catel.Windows.Interactivity
             var newBinding = CreateBindingCopy(binding);
             newBinding.UpdateSourceTrigger = UpdateSourceTrigger.Explicit;
 
-            AssociatedObject.ClearValue(dependencyProperty);
-            AssociatedObject.SetBinding(dependencyProperty, newBinding);
+            var associatedObject = AssociatedObject;
+            associatedObject.ClearValue(dependencyProperty);
+            associatedObject.SetBinding(dependencyProperty, newBinding);
 
             Log.Debug("Changed UpdateSourceTrigger from to 'Explicit' for dependency property '{0}'", dependencyPropertyName);
 
-            AssociatedObject.SubscribeToDependencyProperty(dependencyProperty.Name, OnDependencyPropertyChanged);
+            var finalDependencyPropertyName = associatedObject.GetDependencyPropertyName(dependencyProperty);
+            AssociatedObject.SubscribeToDependencyProperty(finalDependencyPropertyName, OnDependencyPropertyChanged);
 
             Log.Debug("Subscribed to property changes of the original object");
 
@@ -201,12 +203,14 @@ namespace Catel.Windows.Interactivity
             var dependencyProperty = GetDependencyProperty();
             if (dependencyProperty != null)
             {
-                AssociatedObject.ClearValue(dependencyProperty);
-                AssociatedObject.SetBinding(dependencyProperty, _originalBinding);
+                var associatedObject = AssociatedObject;
+                associatedObject.ClearValue(dependencyProperty);
+                associatedObject.SetBinding(dependencyProperty, _originalBinding);
 
                 Log.Debug("Restored binding for dependency property '{0}'", UsedDependencyPropertyName);
 
-                AssociatedObject.UnsubscribeFromDependencyProperty(PropertyName, OnDependencyPropertyChanged);
+                var finalDependencyPropertyName = associatedObject.GetDependencyPropertyName(dependencyProperty);
+                AssociatedObject.UnsubscribeFromDependencyProperty(finalDependencyPropertyName, OnDependencyPropertyChanged);
 
                 Log.Debug("Unsubscribed from property changes of the original object");
             }
