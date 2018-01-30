@@ -8,6 +8,7 @@ namespace Catel.Services
 {
     using System;
     using System.Threading.Tasks;
+    using IoC;
 
 #if ANDROID
     using Android.App;
@@ -26,8 +27,19 @@ namespace Catel.Services
     public partial class MessageService : ViewModelServiceBase, IMessageService
     {
         private readonly IDispatcherService _dispatcherService;
-
         private readonly ILanguageService _languageService;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageService"/> class.
+        /// </summary>
+        /// <param name="dispatcherService">The dispatcher service.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
+        [ObsoleteEx(Message = "Backwards compatible constructor, use MessageService(IDispatcherService, ILanguageService) instead", TreatAsErrorFromVersion = "5.3", RemoveInVersion = "6.0")]
+        public MessageService(IDispatcherService dispatcherService)
+            : this(dispatcherService, dispatcherService?.GetDependencyResolver().Resolve<ILanguageService>())
+        {
+            // Note: backwards compatibility ctor
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MessageService"/> class.
@@ -35,10 +47,11 @@ namespace Catel.Services
         /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="languageService">The language service.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="languageService"/> is <c>null</c>.</exception>
         public MessageService(IDispatcherService dispatcherService, ILanguageService languageService)
         {
             Argument.IsNotNull("dispatcherService", dispatcherService);
-            Argument.IsNotNull("dispatcherService", languageService);
+            Argument.IsNotNull("languageService", languageService);
 
             _dispatcherService = dispatcherService;
             _languageService = languageService;
@@ -171,6 +184,6 @@ namespace Catel.Services
         {
             return ShowMessageBoxAsync(message, caption, button, icon);
         }
-#endregion
+        #endregion
     }
 }

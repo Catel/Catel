@@ -40,7 +40,7 @@ Added/fixed:
 ============
 (+) #333  CTL-271 Support generic lists in ServiceLocator 
 (+) #1141 Add support for object instances in ObjectIdGenerator
-(*) #1127 Use TypeCache instead AppDomain.CurrentDomain in ServiceLocatorDependencyRegistrationManager implementation
+(*) #1127 Use TypeCache instead of AppDomain.CurrentDomain in ServiceLocatorDependencyRegistrationManager implementation
 (*) #1143 UserControlLogic should dispose view models if they implement IDispose
 (*) #1144 Improve [Save|Cancel]AndCloseViewModelAsync behavior when calling on an already closing view model
 (*) #1146 Reuse identifiers in ObjectIdGenerator
