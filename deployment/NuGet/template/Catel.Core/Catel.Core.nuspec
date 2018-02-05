@@ -32,17 +32,7 @@
     </dependencies>
     
     <frameworkAssemblies>
-		<group targetFramework="net45">
-          <frameworkAssembly assemblyName="System.Configuration"  />
-        </group>
-
-		<group targetFramework="net46">
-		  <frameworkAssembly assemblyName="System.Configuration"  />
-        </group>
-		
-		<group targetFramework="net47">
-		  <!-- Uses .NET Standard 2.0 instead -->
-        </group>
+		<frameworkAssembly assemblyName="System.Configuration" targetFramework="net45,net46" />
     </frameworkAssemblies>
   </metadata>
 </package>
