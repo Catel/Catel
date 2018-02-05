@@ -31,7 +31,6 @@
         </group>
         
         <group targetFramework="uap10.0">
-		  <dependency id="Catel.Core" version="[VERSION]" />
           <dependency id="Microsoft.NETCore.UniversalWindowsPlatform" version="6.0.6" />
         </group>
     </dependencies>
