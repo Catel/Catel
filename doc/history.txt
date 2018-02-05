@@ -47,6 +47,7 @@ Added/fixed:
 (*) #1146 Reuse identifiers in ObjectIdGenerator
 (*) #1150 DataWindow uses Dispatcher to subscribe to Closing event in order to allow derived types to subscribe first
 (*) #1154 Fix DebugLogListener so it also works in release mode
+(*) #1159 Allow EqualsIgnoreCase / ContainsIgnoreCase / etc to accept null values (then the result should be false)
 (*) Update .NET Standard to 2.0.1
 (*) Update Xamarin.Forms to 2.5.0.122203
 (x) #1142 LogicBase calls CloseViewModel twice on view model that is already closing
