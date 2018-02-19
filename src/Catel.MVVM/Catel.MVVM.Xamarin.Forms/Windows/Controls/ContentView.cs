@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#pragma warning disable CS0067
 
 namespace Catel.Windows.Controls
 {
@@ -31,6 +32,8 @@ namespace Catel.Windows.Controls
             var dependencyResolver = this.GetDependencyResolver();
             _viewManager = dependencyResolver.Resolve<IViewManager>();
 
+            // TODO: Subscribe to Loaded / Unloaded from XF
+            // TODO: Shouldn't this be BindingContextChanged?
             DataContextChanged += OnDataContextChanged;
         }
 
@@ -127,6 +130,8 @@ namespace Catel.Windows.Controls
         ///     Occurs when the data context has changed.
         /// </summary>
         public event EventHandler<DataContextChangedEventArgs> DataContextChanged;
+
+        
 
         /// <summary>
         /// Removes the parent-child relationship

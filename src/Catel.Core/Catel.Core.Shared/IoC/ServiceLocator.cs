@@ -228,6 +228,45 @@ namespace Catel.IoC
         }
 
         /// <summary>
+        /// Determines whether the specified service type is registered with or without tag.
+        /// </summary>
+        /// <param name="serviceType">The type of the service.</param>
+        /// <returns><c>true</c> if the specified service type is registered; otherwise, <c>false</c>.</returns>
+        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
+        public bool IsTypeRegisteredWithOrWithoutTag(Type serviceType)
+        {
+            Argument.IsNotNull("serviceType", serviceType);
+
+            lock (_lockObject)
+            {
+                if (_registeredInstances.Keys.Any(info => info.Type == serviceType))
+                {
+                    return true;
+                }
+
+                if (_registeredTypes.Keys.Any(info => info.Type == serviceType))
+                {
+                    return true;
+                }
+
+                // CTL-161, support generic types
+                if (IsTypeRegisteredAsOpenGeneric(serviceType))
+                {
+                    return true;
+                }
+
+                // Last resort
+                if (IsTypeRegisteredByMissingTypeHandler(serviceType))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Determines whether the specified service type is registered.
         /// </summary>
         /// <param name="serviceType">The type of the service.</param>
@@ -254,55 +293,18 @@ namespace Catel.IoC
                 }
 
                 // CTL-161, support generic types
-                if (serviceType.IsGenericTypeEx())
+                if (serviceType.IsGenericTypeEx() && IsTypeRegisteredAsOpenGeneric(serviceType, tag))
                 {
-                    var genericArguments = serviceType.GetGenericArgumentsEx().ToList();
-                    var hasRealGenericArguments = (from genericArgument in genericArguments
-                                                   where !string.IsNullOrEmpty(genericArgument.FullName)
-                                                   select genericArgument).Any();
-                    if (hasRealGenericArguments)
-                    {
-                        var genericType = serviceType.GetGenericTypeDefinitionEx();
-                        var isOpenGenericTypeRegistered = IsTypeRegistered(genericType, tag);
-                        if (isOpenGenericTypeRegistered)
-                        {
-                            Log.Debug("An open generic type '{0}' is registered, registering new closed generic type '{1}' based on the open registration", genericType.GetSafeFullName(false), serviceType.GetSafeFullName(false));
-
-                            var registrationInfo = GetRegistrationInfo(genericType, tag);
-                            var finalType = registrationInfo.ImplementingType.MakeGenericType(genericArguments.ToArray());
-
-                            RegisterType(serviceType, finalType, tag, registrationInfo.RegistrationType);
-
-                            return true;
-                        }
-                    }
+                    return true;
                 }
 
                 // CTL-271 Support generic lists (array specific type)
                 // TODO: Can register, 
 
                 // Last resort
-                var missingTypeHandler = MissingType;
-                if (missingTypeHandler != null)
+                if (IsTypeRegisteredByMissingTypeHandler(serviceType))
                 {
-                    var eventArgs = new MissingTypeEventArgs(serviceType);
-                    missingTypeHandler(this, eventArgs);
-
-                    if (eventArgs.ImplementingInstance != null)
-                    {
-                        Log.Debug("Late registering type '{0}' to instance of type '{1}' via MissingTypeEventArgs.ImplementingInstance", serviceType.FullName, eventArgs.ImplementingInstance.GetType().FullName);
-
-                        RegisterInstance(serviceType, eventArgs.ImplementingInstance, eventArgs.Tag, this);
-                        return true;
-                    }
-
-                    if (eventArgs.ImplementingType != null)
-                    {
-                        Log.Debug("Late registering type '{0}' to type '{1}' via MissingTypeEventArgs.ImplementingType", serviceType.FullName, eventArgs.ImplementingType.FullName);
-
-                        RegisterType(serviceType, eventArgs.ImplementingType, eventArgs.Tag, eventArgs.RegistrationType, true, this, null);
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -657,6 +659,76 @@ namespace Catel.IoC
 
         #region Methods
         /// <summary>
+        /// Determines whether the specified service type is registered as open generic.
+        /// </summary>
+        /// <param name="serviceType">The type of the service.</param>
+        /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
+        /// <returns><c>true</c> if the specified service type is registered; otherwise, <c>false</c>.</returns>
+        private bool IsTypeRegisteredAsOpenGeneric(Type serviceType, object tag = null)
+        {
+            if (!serviceType.IsGenericTypeEx())
+            {
+                return false;
+            }
+
+            var genericArguments = serviceType.GetGenericArgumentsEx().ToList();
+            var hasRealGenericArguments = (from genericArgument in genericArguments
+                                           where !string.IsNullOrEmpty(genericArgument.FullName)
+                                           select genericArgument).Any();
+            if (hasRealGenericArguments)
+            {
+                var genericType = serviceType.GetGenericTypeDefinitionEx();
+                var isOpenGenericTypeRegistered = IsTypeRegistered(genericType, tag);
+                if (isOpenGenericTypeRegistered)
+                {
+                    Log.Debug("An open generic type '{0}' is registered, registering new closed generic type '{1}' based on the open registration", genericType.GetSafeFullName(false), serviceType.GetSafeFullName(false));
+
+                    var registrationInfo = this.GetRegistrationInfo(genericType, tag);
+                    var finalType = registrationInfo.ImplementingType.MakeGenericType(genericArguments.ToArray());
+
+                    RegisterType(serviceType, finalType, tag, registrationInfo.RegistrationType);
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether the specified service type is registered by missing type handler.
+        /// </summary>
+        /// <param name="serviceType">The type of the service.</param>
+        /// <returns><c>true</c> if the specified service type is registered; otherwise, <c>false</c>.</returns>
+        private bool IsTypeRegisteredByMissingTypeHandler(Type serviceType)
+        {
+            var missingTypeHandler = MissingType;
+            if (missingTypeHandler != null)
+            {
+                var eventArgs = new MissingTypeEventArgs(serviceType);
+                missingTypeHandler(this, eventArgs);
+
+                if (eventArgs.ImplementingInstance != null)
+                {
+                    Log.Debug("Late registering type '{0}' to instance of type '{1}' via MissingTypeEventArgs.ImplementingInstance", serviceType.FullName, eventArgs.ImplementingInstance.GetType().FullName);
+
+                    RegisterInstance(serviceType, eventArgs.ImplementingInstance, eventArgs.Tag, this);
+                    return true;
+                }
+
+                if (eventArgs.ImplementingType != null)
+                {
+                    Log.Debug("Late registering type '{0}' to type '{1}' via MissingTypeEventArgs.ImplementingType", serviceType.FullName, eventArgs.ImplementingType.FullName);
+
+                    RegisterType(serviceType, eventArgs.ImplementingType, eventArgs.Tag, eventArgs.RegistrationType, true, this, null);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Registers a specific instance of an service.
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
@@ -754,6 +826,7 @@ namespace Catel.IoC
 
                 registeredTypeInfo = new ServiceLocatorRegistration(serviceType, serviceImplementationType, tag, registrationType,
                     x => (createServiceFunc != null) ? createServiceFunc(x) : CreateServiceInstance(x));
+
                 _registeredTypes[serviceInfo] = registeredTypeInfo;
             }
 
@@ -789,6 +862,12 @@ namespace Catel.IoC
                     var tag = serviceInfo.Tag;
 
                     var instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
+
+                    if (instance != null && instance is Type)
+                    {
+                        instance = _typeFactory.CreateInstance((Type)instance);
+                    }
+
                     if (instance == null)
                     {
                         ThrowTypeNotRegisteredException(serviceType);

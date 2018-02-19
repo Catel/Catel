@@ -34,7 +34,7 @@ namespace Catel.Services
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Initializes a new instance of the <see cref="DispatcherService"/> class.
         /// </summary>
@@ -55,7 +55,7 @@ namespace Catel.Services
 
 #if ANDROID
         private readonly Handler _handler = new Handler(Looper.MainLooper);
-#elif !XAMARIN
+#elif !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the current dispatcher.
         /// <para />
@@ -118,7 +118,15 @@ namespace Catel.Services
         {
             Argument.IsNotNull("action", action);
 #if XAMARIN_FORMS
-            SynchronizationContext.Current.Post(state => action(), null);
+            var synchronizationContext = SynchronizationContext.Current;
+            if (synchronizationContext != null)
+            {
+                synchronizationContext.Post(state => action(), null);
+            }
+            else
+            {
+                action();
+            }
 #elif ANDROID
             _handler.Post(action);
 #elif IOS
@@ -139,7 +147,15 @@ namespace Catel.Services
         {
             Argument.IsNotNull("action", action);
 #if XAMARIN_FORMS
-            SynchronizationContext.Current.Post(state => action(), null);           
+            var synchronizationContext = SynchronizationContext.Current;
+            if (synchronizationContext != null)
+            {
+                synchronizationContext.Post(state => action(), null);
+            }
+            else
+            {
+                action();
+            }
 #elif ANDROID
             _handler.Post(action);
 #elif IOS

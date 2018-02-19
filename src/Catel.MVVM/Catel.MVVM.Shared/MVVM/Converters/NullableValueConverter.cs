@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NullableValueConverter.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
+//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -15,6 +15,7 @@ namespace Catel.MVVM.Converters
 #if NET
     [System.Windows.Data.ValueConversion(typeof(object), typeof(object))]
 #endif
+    [ObsoleteEx(TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0", Message = "Converter doesn't have a target type, so this converter won't work as expected")]
     public class NullableValueConverter : ValueConverterBase
     {
         /// <summary>
@@ -44,10 +45,10 @@ namespace Catel.MVVM.Converters
         protected override object ConvertBack(object value, Type targetType, object parameter)
         {
             object result = null;
-            string str = value as string;
+            var str = value as string;
             if (value != null && (str == null || !string.IsNullOrEmpty(str.Trim())))
             {
-                Type underlyingType = Nullable.GetUnderlyingType(targetType) ?? targetType;
+                var underlyingType = Nullable.GetUnderlyingType(targetType) ?? targetType;
 
                 try
                 {

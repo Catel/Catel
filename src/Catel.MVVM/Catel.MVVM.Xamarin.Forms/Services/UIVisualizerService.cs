@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
-
 namespace Catel.Services
 {
     using System;
@@ -227,6 +225,7 @@ namespace Catel.Services
 
             _callbacks[contentPage] = new Tuple<IViewModel, EventHandler<UICompletedEventArgs>>(viewModel, completedProc);
             contentPage.BackButtonPressed += OnBackButtonPressed;
+
             await NavigationHelper.PushModalAsync(contentPage);
         }
 
@@ -240,13 +239,11 @@ namespace Catel.Services
         private async Task<bool> TryDisplayAsPopupAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc, StackLayout contentLayout)
         {
             bool result = false;
-            var currentPage = Application.Current.CurrentPage() as ContentPage;
-            if (currentPage != null)
+            if (Application.Current.GetActivePage() is ContentPage currentPage)
             {
                 _callbacks[currentPage] = new Tuple<IViewModel, EventHandler<UICompletedEventArgs>>(viewModel, completedProc);
                 // TODO: Look for the top must popup layout inactive
-                var popupLayout = currentPage.Content as PopupLayout;
-                if (popupLayout != null && !popupLayout.IsPopupActive)
+                if (currentPage.Content is PopupLayout popupLayout && !popupLayout.IsPopupActive)
                 {
                     currentPage.BackButtonPressed += OnBackButtonPressed;
                     contentLayout.HeightRequest = contentLayout.Children[0].HeightRequest + contentLayout.Children[1].HeightRequest;
@@ -279,11 +276,9 @@ namespace Catel.Services
         /// <returns></returns>
         private static async Task CloseModalAsync()
         {
-            var currentPage = Application.Current.CurrentPage() as ContentPage;
-            if (currentPage != null)
+            if (Application.Current.GetActivePage() is ContentPage currentPage)
             {
-                var popupLayout = currentPage.Content as PopupLayout;
-                if (popupLayout != null && popupLayout.IsPopupActive)
+                if (currentPage.Content is PopupLayout popupLayout && popupLayout.IsPopupActive)
                 {
                     await popupLayout.DismissPopupAsync();
                 }

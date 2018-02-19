@@ -54,6 +54,11 @@ namespace Catel
         /// <returns><c>true</c> if the strings are equal, <c>false</c> otherwise.</returns>
         public static bool EqualsIgnoreCase(this string str, string valueToCheck)
         {
+            if (str == null)
+            {
+                return false;
+            }
+
             return string.Equals(str, valueToCheck, StringComparison.OrdinalIgnoreCase);
         }
 
@@ -77,6 +82,16 @@ namespace Catel
         /// <returns><c>true</c> if the string starts with the value to check, <c>false</c> otherwise.</returns>
         public static bool StartsWithIgnoreCase(this string str, string valueToCheck)
         {
+            if (str == null)
+            {
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(valueToCheck))
+            {
+                return false;
+            }
+
             var startsWith = str.StartsWith(valueToCheck, StringComparison.OrdinalIgnoreCase);
             return startsWith;
         }
@@ -89,6 +104,16 @@ namespace Catel
         /// <returns><c>true</c> if the string ends with the value to check, <c>false</c> otherwise.</returns>
         public static bool EndsWithIgnoreCase(this string str, string valueToCheck)
         {
+            if (str == null)
+            {
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(valueToCheck))
+            {
+                return false;
+            }
+
             var endsWith = str.EndsWith(valueToCheck, StringComparison.OrdinalIgnoreCase);
             return endsWith;
         }
@@ -101,6 +126,16 @@ namespace Catel
         /// <returns>The index or <c>-1</c> if not found.</returns>
         public static int IndexOfIgnoreCase(this string str, string valueToCheck)
         {
+            if (str == null)
+            {
+                return -1;
+            }
+
+            if (string.IsNullOrEmpty(valueToCheck))
+            {
+                return -1;
+            }
+
             var index = str.IndexOf(valueToCheck, StringComparison.OrdinalIgnoreCase);
             return index;
         }
@@ -130,7 +165,7 @@ namespace Catel
         /// <returns><c>true</c> if the string equals any of the values, <c>false</c> otherwise.</returns>
         public static bool EqualsAny(this string str, params string[] values)
         {
-            if (string.IsNullOrWhiteSpace(str))
+            if (str == null)
             {
                 return false;
             }
@@ -154,7 +189,7 @@ namespace Catel
         /// <returns><c>true</c> if the string equals any of the values, <c>false</c> otherwise.</returns>
         public static bool EqualsAnyIgnoreCase(this string str, params string[] values)
         {
-            if (string.IsNullOrWhiteSpace(str))
+            if (str == null)
             {
                 return false;
             }
@@ -178,7 +213,7 @@ namespace Catel
         /// <returns><c>true</c> if the string starts with any of the values, <c>false</c> otherwise.</returns>
         public static bool StartsWithAny(this string str, params string[] values)
         {
-            if (string.IsNullOrWhiteSpace(str))
+            if (string.IsNullOrEmpty(str))
             {
                 return false;
             }
@@ -202,7 +237,7 @@ namespace Catel
         /// <returns><c>true</c> if the string starts with any of the values, <c>false</c> otherwise.</returns>
         public static bool StartsWithAnyIgnoreCase(this string str, params string[] values)
         {
-            if (string.IsNullOrWhiteSpace(str))
+            if (string.IsNullOrEmpty(str))
             {
                 return false;
             }
@@ -226,7 +261,7 @@ namespace Catel
         /// <returns><c>true</c> if the string ends with any of the values, <c>false</c> otherwise.</returns>
         public static bool EndsWithAny(this string str, params string[] values)
         {
-            if (string.IsNullOrWhiteSpace(str))
+            if (string.IsNullOrEmpty(str))
             {
                 return false;
             }
@@ -250,7 +285,7 @@ namespace Catel
         /// <returns><c>true</c> if the string ends with any of the values, <c>false</c> otherwise.</returns>
         public static bool EndsWithAnyIgnoreCase(this string str, params string[] values)
         {
-            if (string.IsNullOrWhiteSpace(str))
+            if (string.IsNullOrEmpty(str))
             {
                 return false;
             }

@@ -22,6 +22,10 @@ namespace Catel
     using System.Diagnostics;
 #endif
 
+#if XAMARIN_FORMS
+    using Xamarin.Forms;
+#endif
+
     /// <summary>
     /// Class containing environment information.
     /// </summary>
@@ -101,7 +105,7 @@ namespace Catel
             ViewModelServiceHelper.RegisterDefaultViewModelServices(ServiceLocator.Default);
         }
 
-#if !PCL && !XAMARIN
+#if !PCL && !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the main window of the application.
         /// </summary>
@@ -161,7 +165,7 @@ namespace Catel
             }
 #elif NETFX_CORE
             isInDesignMode = global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
-#elif XAMARIN
+#elif XAMARIN || XAMARIN_FORMS
             isInDesignMode = false;
 #else
             isInDesignMode = DesignerProperties.IsInDesignTool;

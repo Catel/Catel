@@ -13,8 +13,8 @@
     <WarningsAsErrors />
     <DefineConstants>TRACE;NETSTANDARD;NS20;RELEASE;NETSTANDARD2_0</DefineConstants>
     <NoWarn>1591;1998;1701;1702;1705</NoWarn>
-    <OutputPath>..\..\..\output\debug\NS20\Catel.Core\</OutputPath>
-    <DocumentationFile>..\..\..\output\debug\NS20\Catel.Core\Catel.Core.xml</DocumentationFile>
+    <OutputPath>..\..\..\output\release\NS20\Catel.Core\</OutputPath>
+    <DocumentationFile>..\..\..\output\release\NS20\Catel.Core\Catel.Core.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -30,17 +30,17 @@
 
   <ItemGroup>
     <PackageReference Include="AsyncUsageAnalyzers" Version="1.0.0-alpha003" />
-    <PackageReference Include="MethodTimer.Fody" Version="1.19.1" />
-    <PackageReference Include="Catel.Fody" Version="2.17.2" NoWarn="NU1701" />
-    <PackageReference Include="Fody" Version="2.1.2" />
-    <PackageReference Include="ModuleInit.Fody" Version="1.6.0" />
-    <PackageReference Include="Obsolete.Fody" Version="4.2.4" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
-    <PackageReference Include="WpfAnalyzers" Version="0.2.7.10" />
+    <PackageReference Include="MethodTimer.Fody" Version="2.0.2" />
+    <PackageReference Include="Catel.Fody" Version="2.19.0" NoWarn="NU1701" />
+    <PackageReference Include="Fody" Version="2.3.23" />
+    <PackageReference Include="ModuleInit.Fody" Version="1.7.1" />
+    <PackageReference Include="Obsolete.Fody" Version="4.3.7" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
+    <PackageReference Include="WpfAnalyzers" Version="2.1.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="NETStandard.Library" Version="2.0.0" />
+    <PackageReference Update="NETStandard.Library" Version="2.0.1" />
   </ItemGroup>
 
 </Project>

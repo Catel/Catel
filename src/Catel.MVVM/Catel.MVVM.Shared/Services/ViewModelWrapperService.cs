@@ -44,7 +44,7 @@ namespace Catel.Services
             Argument.IsNotNull("view", view);
             Argument.IsNotNull("viewModelSource", viewModelSource);
 
-#if XAMARIN
+#if XAMARIN || XAMARIN_FORMS
             var viewModelWrapper = new ViewModelWrapper(view);
             return viewModelWrapper;
 #else

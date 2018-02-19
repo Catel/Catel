@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !XAMARIN || ANDROID
+#if !XAMARIN && !XAMARIN_FORMS || ANDROID
 
 namespace Catel.MVVM.Converters
 {

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
 
 namespace Catel.Windows.Data
 {
@@ -200,7 +200,7 @@ namespace Catel.Windows.Data
                         }
                     }
 
-                    string name = member.Name;
+                    var name = member.Name;
 
                     int propertyPostfixIndex = name.LastIndexOf("Property", StringComparison.Ordinal);
                     if (propertyPostfixIndex != -1)

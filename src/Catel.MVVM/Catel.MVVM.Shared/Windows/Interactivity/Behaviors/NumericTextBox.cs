@@ -62,7 +62,7 @@ namespace Catel.Windows.Interactivity
 #else
             Key.LeftCtrl,
             Key.RightCtrl,
-#endif                                        
+#endif
             Key.Down,
             Key.End,
             Key.Enter,
@@ -120,9 +120,10 @@ namespace Catel.Windows.Interactivity
             get { return (bool)GetValue(IsNegativeAllowedProperty); }
             set
             {
+#pragma warning disable WPF0036
+#if NET
                 if (value)
                 {
-#if NET
                     AllowedKeys.Add(Key.OemMinus);
                 }
                 else
@@ -131,8 +132,9 @@ namespace Catel.Windows.Interactivity
                     {
                         AllowedKeys.Remove(Key.OemMinus);
                     }
-#endif
                 }
+#endif
+#pragma warning restore WPF0036
 
                 SetValue(IsNegativeAllowedProperty, value);
             }

@@ -24,7 +24,7 @@ namespace Catel.MVVM.Converters
         /// The generic <c>UnSet</c> value, compatible with all platforms.
         /// </summary>
         public static readonly object UnsetValue = 
-#if XAMARIN
+#if XAMARIN || XAMARIN_FORMS
             new UnsetBindingValue();
 #else
             DependencyProperty.UnsetValue;
@@ -48,7 +48,7 @@ namespace Catel.MVVM.Converters
         }
     }
 
-#if XAMARIN
+#if XAMARIN || XAMARIN_FORMS
     /// <summary>
     /// Unset binding value class.
     /// </summary>

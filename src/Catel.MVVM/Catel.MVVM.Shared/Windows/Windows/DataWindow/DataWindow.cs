@@ -267,8 +267,13 @@ namespace Catel.Windows
             CanCloseUsingEscape = true;
 
             Loaded += (sender, e) => Initialize();
-            Closing += OnDataWindowClosing;
             DataContextChanged += (sender, e) => _viewDataContextChanged.SafeInvoke(this, () => new DataContextChangedEventArgs(e.OldValue, e.NewValue));
+
+            // #1150 Subscribe in dispatcher to allow derived types to be the first handler
+            Dispatcher.BeginInvoke(() =>
+            {
+                Closing += OnDataWindowClosing;
+            });
 
             if (setOwnerAndFocus)
             {
@@ -870,6 +875,11 @@ namespace Catel.Windows
         private async void OnDataWindowClosing(object sender, CancelEventArgs args)
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
+            if (args.Cancel)
+            {
+                return;
+            }
+
             if (!_forceClose && !ClosedByButton)
             {
                 var vm = ViewModel;

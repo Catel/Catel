@@ -586,6 +586,9 @@ namespace Catel.MVVM
     }
     public class static IViewModelExtensions
     {
+        public static System.Threading.Tasks.Task<bool> AwaitCancelingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
+        public static System.Threading.Tasks.Task AwaitClosingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
+        public static System.Threading.Tasks.Task<bool> AwaitSavingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
         public static System.Threading.Tasks.Task<bool> CancelAndCloseViewModelAsync(this Catel.MVVM.IViewModel viewModel) { }
         public static System.Threading.Tasks.Task<bool> SaveAndCloseViewModelAsync(this Catel.MVVM.IViewModel viewModel) { }
     }
@@ -821,16 +824,16 @@ namespace Catel.MVVM
         [Catel.Data.ExcludeFromValidationAttribute()]
         protected bool InvalidateCommandsOnPropertyChanged { get; set; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected bool IsCanceling { get; }
+        protected internal bool IsCanceling { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
         public bool IsClosed { get; }
-        protected bool IsClosing { get; }
+        protected internal bool IsClosing { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected bool IsInitialized { get; }
+        protected internal bool IsInitialized { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected bool IsInitializing { get; }
+        protected internal bool IsInitializing { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected bool IsSaving { get; }
+        protected internal bool IsSaving { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
         protected Catel.MVVM.Navigation.NavigationContext NavigationContext { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
@@ -862,6 +865,8 @@ namespace Catel.MVVM
         public System.Threading.Tasks.Task CloseViewModelAsync(System.Nullable<bool> result) { }
         protected object[] GetAllModels() { }
         protected System.Collections.Generic.IEnumerable<Catel.MVVM.IViewModel> GetChildViewModels() { }
+        protected virtual int GetObjectId(Catel.Services.IObjectIdGenerator<int> objectIdGenerator) { }
+        protected virtual System.Type GetObjectIdGeneratorType() { }
         protected virtual System.Threading.Tasks.Task InitializeAsync() { }
         protected virtual void InitializeModel(string modelProperty, object model) { }
         public System.Threading.Tasks.Task InitializeViewModelAsync() { }
@@ -1165,6 +1170,8 @@ namespace Catel.MVVM.Converters
         protected override object Convert(object value, System.Type targetType, object parameter) { }
         protected override object ConvertBack(object value, System.Type targetType, object parameter) { }
     }
+    [System.ObsoleteAttribute("Converter doesn\'t have a target type, so this converter won\'t work as expected. W" +
+        "ill be removed in version 6.0.0.", true)]
     [System.Windows.Data.ValueConversionAttribute(typeof(object), typeof(object))]
     public class NullableValueConverter : Catel.MVVM.Converters.ValueConverterBase
     {
@@ -2169,7 +2176,10 @@ namespace Catel.Services
     }
     public class MessageService : Catel.Services.ViewModelServiceBase, Catel.Services.IMessageService
     {
+        [System.ObsoleteAttribute("Backwards compatible constructor, use MessageService(IDispatcherService, ILanguag" +
+            "eService) instead. Will be removed in version 6.0.0.", true)]
         public MessageService(Catel.Services.IDispatcherService dispatcherService) { }
+        public MessageService(Catel.Services.IDispatcherService dispatcherService, Catel.Services.ILanguageService languageService) { }
         public virtual System.Threading.Tasks.Task<Catel.Services.MessageResult> ShowAsync(string message, string caption = "", Catel.Services.MessageButton button = 1, Catel.Services.MessageImage icon = 0) { }
         public virtual System.Threading.Tasks.Task<Catel.Services.MessageResult> ShowErrorAsync(System.Exception exception) { }
         public virtual System.Threading.Tasks.Task<Catel.Services.MessageResult> ShowErrorAsync(string message, string caption = "") { }
@@ -3223,7 +3233,7 @@ namespace Catel.Windows.Markup
     {
         public CommandManagerBinding() { }
         public CommandManagerBinding(string commandName) { }
-        [System.Windows.Markup.ConstructorArgumentAttribute("type")]
+        [System.Windows.Markup.ConstructorArgumentAttribute("commandName")]
         public string CommandName { get; set; }
         protected override void OnTargetObjectLoaded() { }
         protected override void OnTargetObjectUnloaded() { }

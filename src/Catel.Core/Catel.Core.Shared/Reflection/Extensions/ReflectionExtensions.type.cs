@@ -6,7 +6,7 @@
 
 #pragma warning disable 1591
 
-//#define ENABLE_CACHE
+// #define ENABLE_CACHE
 
 namespace Catel.Reflection
 {
@@ -14,6 +14,9 @@ namespace Catel.Reflection
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+#if ENABLE_CACHE
+    using Catel.Caching;
+#endif
 
     /// <summary>
     /// Reflection extension class.
@@ -76,12 +79,17 @@ namespace Catel.Reflection
         /// </summary>
         private static CacheStorage<string, int> _typeDistanceCacheStorage = new CacheStorage<string, int>();
 
+        /// <summary>
+        /// The _makeGenericTypeCacheStorage cache.
+        /// </summary>
+        private static readonly CacheStorage<string, Type> _makeGenericTypeCacheStorage = new CacheStorage<string, Type>();
 #endif
 
-    /// <summary>
-    /// Dictionary containing all possible implicit conversions of system types.
-    /// </summary>
-    private static readonly Dictionary<Type, HashSet<Type>> _convertableDictionary = new Dictionary<Type, HashSet<Type>>
+
+        /// <summary>
+        /// Dictionary containing all possible implicit conversions of system types.
+        /// </summary>
+        private static readonly Dictionary<Type, HashSet<Type>> _convertableDictionary = new Dictionary<Type, HashSet<Type>>
             {
                 {typeof (decimal), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char)}},
                 {typeof (double), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char), typeof (float)}},
@@ -198,6 +206,27 @@ namespace Catel.Reflection
 
             var attributes = GetCustomAttributesEx(type, attributeType, inherit);
             return (attributes.Length > 0) ? attributes[0] : null;
+        }
+
+        /// <summary>
+        /// The get custom attribute ex.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="typeArguments">The type arguments.</param>
+        /// <returns>The generic type.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="typeArguments" /> is <c>null</c> or empty array.</exception>
+        public static Type MakeGenericTypeEx(this Type type, params Type[] typeArguments)
+        {
+            Argument.IsNotNull("type", type);
+            Argument.IsNotNullOrEmptyArray("typeArguments", typeArguments);
+
+#if ENABLE_CACHE
+            var key = typeArguments.Aggregate(type.AssemblyQualifiedName + ";", (current, typeArgument) => current + typeArgument.AssemblyQualifiedName + ";");
+            return _makeGenericTypeCacheStorage.GetFromCacheOrFetch(key, () => type.MakeGenericType(typeArguments));
+#else
+            return type.MakeGenericType(typeArguments);
+#endif
         }
 
         /// <summary>

@@ -18,6 +18,52 @@ Items prepended with CTL are from JIRA (old issue tracker). Items prepended with
 **********************************************************
 
 ==================
+Version 5.3.0
+==================
+
+For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date:
+=============
+2018/02/19
+
+Platform support changes:
+=========================
+none
+
+Classes / members marked as obsolete:
+=====================================
+* #1124 Mark NullableValueConverter as obsolete since converter doesn't have a target type, 
+  so this converter won't work as expected NullableValueConverter
+
+Added/fixed:
+============
+(+) #333  CTL-271 Support generic lists in ServiceLocator 
+(+) #1141 Add support for object instances in ObjectIdGenerator
+(+) #1158 Implement keyboard event subscriptions for UWP implementation of CommandManager
+(*) #1127 Use TypeCache instead of AppDomain.CurrentDomain in ServiceLocatorDependencyRegistrationManager implementation
+(*) #1143 UserControlLogic should dispose view models if they implement IDispose
+(*) #1144 Improve [Save|Cancel]AndCloseViewModelAsync behavior when calling on an already closing view model
+(*) #1146 Reuse identifiers in ObjectIdGenerator
+(*) #1150 DataWindow uses Dispatcher to subscribe to Closing event in order to allow derived types to subscribe first
+(*) #1154 Fix DebugLogListener so it also works in release mode
+(*) #1159 Allow EqualsIgnoreCase / ContainsIgnoreCase / etc to accept null values (then the result should be false)
+(*) Update .NET Standard to 2.0.1
+(*) Update Xamarin.Forms to 2.5.0.122203
+(x) #1142 LogicBase calls CloseViewModel twice on view model that is already closing
+(x) #1155 DelayBindingUpdate behavior might crash when dependency property is not found
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 5.2.0
 ==================
 
@@ -37,6 +83,7 @@ none
 
 Added/fixed:
 ============
+(+) #1133 Add Silent mode to FastObservableCollection<T>
 (*) #147  Update project & item templates to Catel 5.x
 (*) #1114 ChildAwareModelBase should revalidated when child validation changes
 (*) #1115 Change ViewModelManager.UnregisterAllModels() so that it removes an unnecessary list 

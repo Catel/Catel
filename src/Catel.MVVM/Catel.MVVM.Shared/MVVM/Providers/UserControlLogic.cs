@@ -18,7 +18,7 @@ namespace Catel.MVVM.Providers
     using MVVM;
     using Reflection;
 
-#if XAMARIN
+#if XAMARIN || XAMARIN_FORMS
     // TODO
 #elif NETFX_CORE
     using global::Windows.UI;
@@ -761,6 +761,12 @@ namespace Catel.MVVM.Providers
                 }
 
                 await CloseViewModelAsync(result);
+
+                var disposable = vm as IDisposable;
+                if (disposable != null)
+                {
+                    disposable.Dispose();
+                }
             }
         }
 

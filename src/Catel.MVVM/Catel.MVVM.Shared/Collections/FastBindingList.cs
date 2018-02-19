@@ -631,8 +631,8 @@ namespace Catel.Collections
             if (removed != null && !removed.Value)
             {
                 // Remember
-                suspensionContext.NewItems.Add(item);
-                suspensionContext.NewItemIndices.Add(index);
+                suspensionContext?.NewItems.Add(item);
+                suspensionContext?.NewItemIndices.Add(index);
             }
         }
 
@@ -674,8 +674,8 @@ namespace Catel.Collections
             if (removed != null && !removed.Value)
             {
                 // Remember
-                _suspensionContext.OldItems.Add(item);
-                _suspensionContext.OldItemIndices.Add(index);
+                _suspensionContext?.OldItems.Add(item);
+                _suspensionContext?.OldItemIndices.Add(index);
             }
         }
 

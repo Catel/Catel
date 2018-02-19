@@ -4,14 +4,14 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
 
 namespace Catel.MVVM
 {
     using Catel.IoC;
     using Logging;
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
     using InputGesture = Catel.Windows.Input.InputGesture;
 #if NETFX_CORE
     using global::Windows.UI.Xaml;

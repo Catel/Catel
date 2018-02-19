@@ -4,7 +4,6 @@
 // </copyright>>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Catel.MVVM.Views;
 
 #if XAMARIN_FORMS
 
@@ -12,10 +11,10 @@ namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Catel.IoC;
     using Catel.MVVM;
-
-    using Application = global::Xamarin.Forms.Application;
+    using global::Xamarin.Forms;
     using Page = global::Xamarin.Forms.Page;
 
     /// <summary>
@@ -23,6 +22,47 @@ namespace Catel.Services
     /// </summary>
     public partial class NavigationService
     {
+        /// <summary>
+        /// The type factory
+        /// </summary>
+        private readonly ITypeFactory _typeFactory;
+
+        /// <summary>
+        /// The view locator.
+        /// </summary>
+        private readonly IViewLocator _viewLocator;
+
+
+        /// <summary>
+        /// The view model factory.
+        /// </summary>
+        private readonly IViewModelFactory _viewModelFactory;
+
+        /// <summary>
+        /// The view model locator.
+        /// </summary>
+        private readonly IViewModelLocator _viewModelLocator;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NavigationService" /> class.
+        /// </summary>
+        /// <param name="typeFactory">The type factory</param>
+        /// <param name="viewLocator">The view locator</param>
+        /// <param name="viewModelFactory">The viewmodel factory</param>
+        public NavigationService(ITypeFactory typeFactory, IViewLocator viewLocator, IViewModelLocator viewModelLocator, IViewModelFactory viewModelFactory)
+        {
+            Argument.IsNotNull(() => typeFactory);
+            Argument.IsNotNull(() => viewLocator);
+            Argument.IsNotNull(() => viewModelLocator);
+
+            _typeFactory = typeFactory;
+            _viewLocator = viewLocator;
+            _viewModelFactory = viewModelFactory;
+            _viewModelLocator = viewModelLocator;
+
+            Initialize();
+        }
+
         #region Properties
         /// <summary>
         /// Gets the can go back.
@@ -40,10 +80,11 @@ namespace Catel.Services
         public override bool CanGoForward
         {
             get
-            {
+        {
                 throw new MustBeImplementedException();
             }
         }
+
         #endregion
 
         #region Methods
@@ -54,28 +95,35 @@ namespace Catel.Services
         /// <returns>The target to navigate to.</returns>
         protected override string ResolveNavigationTarget(Type viewModelType)
         {
-            var dependencyResolver = this.GetDependencyResolver();
-            var viewLocator = dependencyResolver.Resolve<IViewLocator>();
-
-            var navigationTarget = viewLocator.ResolveView(viewModelType).AssemblyQualifiedName;
-            return navigationTarget;
+            return _viewLocator.ResolveView(viewModelType).AssemblyQualifiedName;
         }
 
         /// <summary>
-        /// Gets the back stack count.
+        /// Returns the number of total back entries (which is the navigation history).
         /// </summary>
-        /// <returns>System.Int32.</returns>
         public override int GetBackStackCount()
         {
-            var backStackCount = 0;
-            var currentPage = Application.Current.CurrentPage();
-            if (currentPage != null)
+            var currentApplication = Application.Current;
+            var activePage = currentApplication.GetActivePage();
+            if(activePage == null)
             {
-                backStackCount = currentPage.Navigation.ModalStack.Count - 1;
+                return 0;
             }
 
-            return backStackCount;
+            var navigation = activePage.Navigation;
+            if (navigation == null)
+            {
+                return 0;
+            }
+
+            var navigationStack = navigation.NavigationStack;
+            if (navigationStack == null)
+            {
+                return 0;
+            }
+            return navigationStack.Count;
         }
+
 
         /// <summary>
         /// Removes the back entry.
@@ -84,9 +132,26 @@ namespace Catel.Services
         {
             if (CanGoBack)
             {
-                var currentPage = Application.Current.CurrentPage();
-                var page = currentPage.Navigation.ModalStack[currentPage.Navigation.ModalStack.Count - 1];
-                currentPage.Navigation.RemovePage(page);
+                var currentApplication = Application.Current;
+                var activePage = currentApplication.GetActivePage();
+                if(activePage == null)
+                {
+                    return;
+                }
+
+                var navigation = activePage.Navigation;
+                if(navigation == null)
+                {
+                    return;
+                }
+
+                var navigationStack  = navigation.NavigationStack;
+                if(navigationStack == null || navigationStack.Count == 0)
+                {
+                    return;
+                }
+
+                navigation.RemovePage(navigationStack.Last());
             }
         }
 
@@ -98,56 +163,75 @@ namespace Catel.Services
             throw new MustBeImplementedException();
         }
 
-        partial void Initialize()
-        {
-        }
-
+        /// <summary>
+        /// Closes the main window
+        /// </summary>
         partial void CloseMainWindow()
         {
             throw new MustBeImplementedException();
         }
 
+        /// <summary>
+        /// Navigates Back
+        /// </summary>
+#pragma warning disable AvoidAsyncVoid
         async partial void NavigateBack()
+#pragma warning restore AvoidAsyncVoid
         {
-            var currentPage = Application.Current.CurrentPage();
-            if (currentPage != null)
+            var currentApplication = Application.Current;
+            var activePage = currentApplication.GetActivePage();
+            if (activePage == null)
             {
-                await currentPage.Navigation.PopModalAsync();
+                return;
             }
+
+            var navigation = activePage.Navigation;
+            if (navigation == null)
+            {
+                return;
+            }
+
+            await navigation.PopAsync();
         }
 
+        /// <summary>
+        /// Navigates forward
+        /// </summary>
         partial void NavigateForward()
         {
             throw new MustBeImplementedException();
         }
 
+#pragma warning disable AvoidAsyncVoid
         async partial void NavigateWithParameters(string uri, Dictionary<string, object> parameters)
+#pragma warning restore AvoidAsyncVoid
         {
-            var dependencyResolver = this.GetDependencyResolver();
-
             var viewType = Type.GetType(uri);
-            var viewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
-            var viewModelType = viewModelLocator.ResolveViewModel(viewType);
-            var typeFactory = dependencyResolver.Resolve<ITypeFactory>();
-            var view = (Page)typeFactory.CreateInstance(viewType);
-            var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
-            var viewModel = viewModelFactory.CreateViewModel(viewModelType, null);
-            if (view is IView)
+            var viewModelType = _viewModelLocator.ResolveViewModel(viewType);
+            var view = (Page)_typeFactory.CreateInstance(viewType);
+            var viewModel = _viewModelFactory.CreateViewModel(viewModelType, parameters.Count > 0 ? parameters.Values.ToArray() : null);
+            view.BindingContext = viewModel;
+            
+            var currentApplication = Application.Current;
+            var activePage = currentApplication.GetActivePage();
+            if (activePage == null)
             {
-                (view as IView).DataContext = viewModel;
-            }
-            else
-            {
-                view.BindingContext = viewModel;
+                return;
             }
 
-            var currentPage = Application.Current.CurrentPage();
-            if (currentPage != null)
+            var navigation = activePage.Navigation;
+            if (navigation == null)
             {
-                await currentPage.Navigation.PushModalAsync(view);
+                return;
             }
+
+            await navigation.PushAsync(view);
         }
 
+        /// <summary>
+        /// Navigates to an Uri.
+        /// </summary>
+        /// <param name="uri">The uri.</param>
         partial void NavigateToUri(Uri uri)
         {
             throw new MustBeImplementedException();

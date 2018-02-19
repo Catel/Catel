@@ -22,7 +22,7 @@ namespace Catel.MVVM.Views
         {
             Argument.IsNotNull("view", view);
 
-#if XAMARIN
+#if XAMARIN || XAMARIN_FORMS
             var userControl = view as IUserControl;
             if (userControl == null)
             {

@@ -29,20 +29,31 @@ namespace Catel.Collections
             var mode = suspensionContext?.Mode ?? SuspensionMode.None;
 
             // Fast return for no items in not None modes
-            // ReSharper disable once PossibleNullReferenceException
-            if (mode != SuspensionMode.None && suspensionContext.ChangedItems.Count == 0)
+            if (mode != SuspensionMode.None && suspensionContext?.ChangedItems.Count == 0)
             {
                 return ArrayShim.Empty<NotifyRangedCollectionChangedEventArgs>();
             }
 
-            Func<SuspensionContext<T>, ICollection<NotifyRangedCollectionChangedEventArgs>> createEvents;
-            if (!SuspensionContext<T>.EventsGeneratorsRegistry.Value.TryGetValue(mode, out createEvents))
+            if (!SuspensionContext<T>.EventsGeneratorsRegistry.Value.TryGetValue(mode, out var createEvents))
             {
                 // ReSharper disable once LocalizableElement
                 throw new ArgumentOutOfRangeException(nameof(mode), $"The suspension mode '{mode}' is unhandled.");
             }
 
             return createEvents(suspensionContext);
+        }
+
+        /// <summary>
+        /// Creates the none event args list.
+        /// </summary>
+        /// <param name="suspensionContext">The suspension context.</param>
+        /// <typeparam name="T">The type of collection item.</typeparam>
+        /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
+        public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateNoneEvents<T>(this SuspensionContext<T> suspensionContext)
+        {
+            Argument.IsValid(nameof(suspensionContext), suspensionContext, context => context == null || context.Mode == SuspensionMode.None);
+
+            return new List<NotifyRangedCollectionChangedEventArgs> { new NotifyRangedCollectionChangedEventArgs() };
         }
 
         /// <summary>
@@ -74,20 +85,7 @@ namespace Catel.Collections
         }
 
         /// <summary>
-        /// Creates the adding event args list.
-        /// </summary>
-        /// <param name="suspensionContext">The suspension context.</param>
-        /// <typeparam name="T">The type of collection item.</typeparam>
-        /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
-        public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateNoneEvents<T>(this SuspensionContext<T> suspensionContext)
-        {
-            Argument.IsValid(nameof(suspensionContext), suspensionContext, context => context == null || context.Mode == SuspensionMode.None);
-
-            return new List<NotifyRangedCollectionChangedEventArgs> { new NotifyRangedCollectionChangedEventArgs() };
-        }
-
-        /// <summary>
-        /// The create mixed bash event args list.
+        /// The create mixed event args list.
         /// </summary>
         /// <param name="suspensionContext">The suspension context.</param>
         /// <typeparam name="T">The type of collection item.</typeparam>
@@ -154,6 +152,20 @@ namespace Catel.Collections
         }
 
         /// <summary>
+        /// Creates the silent event args list.
+        /// </summary>
+        /// <param name="suspensionContext">The suspension context.</param>
+        /// <typeparam name="T">The type of collection item.</typeparam>
+        /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
+        public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateSilentEvents<T>(this SuspensionContext<T> suspensionContext)
+        {
+            Argument.IsNotNull(nameof(suspensionContext), suspensionContext);
+            Argument.IsValid(nameof(suspensionContext.Mode), suspensionContext.Mode, mode => mode == SuspensionMode.Silent);
+
+            return ArrayShim.Empty<NotifyRangedCollectionChangedEventArgs>();
+        }
+
+        /// <summary>
         /// The is mixed mode.
         /// </summary>
         /// <param name="suspensionContext">The suspension context.</param>
@@ -207,7 +219,10 @@ namespace Catel.Collections
             if (changedItems.Count != 0)
             {
                 // ReSharper disable once PossibleInvalidOperationException
-                eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs(changedItems, changedItemIndices, suspensionMode, previousAction.Value));
+                if (previousAction != null)
+                {
+                    eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs(changedItems, changedItemIndices, suspensionMode, previousAction.Value));
+                }
             }
 
             return eventArgsList;

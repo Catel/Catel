@@ -130,3 +130,4 @@ Desktop.ini
 TestResults
 src/UpgradeLog.htm
 src/_NCrunch_*/
+/src/.sonarqube

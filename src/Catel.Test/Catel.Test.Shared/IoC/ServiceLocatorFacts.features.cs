@@ -18,124 +18,66 @@ namespace Catel.Test.IoC
     /// </summary>
     public partial class ServiceLocatorFacts
     {
-        #region Test classes
-        public interface IService
-        {
-        }
-
-        public class IndependentService : IService
-        {
-        }
-
-        public interface IServiceWithListDependency<out TServiceList>
-            where TServiceList : IEnumerable<IService>
-        {
-            TServiceList Services { get; }
-        }
-
-        public class ServiceWithListConstructorDependency<TServiceList> : IServiceWithListDependency<TServiceList>
-            where TServiceList : IEnumerable<IService>
-        {
-            private readonly TServiceList _services;
-
-            public ServiceWithListConstructorDependency(TServiceList services)
-            {
-                _services = services;
-            }
-
-            public TServiceList Services
-            {
-                get { return _services; }
-            }
-        }
-
-        public interface IInjectable<T>
-        {
-            T Injected { get; }
-        }
-
-        public class Injectable<T> : IInjectable<T>
-        {
-            public Injectable(T injected)
-            {
-                Injected = injected;
-            }
-            public T Injected { get; private set; }
-        }
-
-        public class Item
-        {
-        }
-
-        public class Consumer
-        {
-            public Consumer(IInjectable<Item> item)
-            {
-                Item = item;
-            }
-
-            public IInjectable<Item> Item { get; private set; }
-        }
-        #endregion
-
         [TestFixture]
         public class ListTests
         {
-            //[TestCase]
-            //public void Array()
-            //{
-            //    var serviceLocator = IoCFactory.CreateServiceLocator();
+             [TestCase]
+             public void Array()
+             {
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
-            //    PrepareContainer(serviceLocator);
+                PrepareContainer(serviceLocator);
 
-            //    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IService[]>>(serviceLocator);
-            //}
+                AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IService[]>>(serviceLocator);
+            }
 
-            //[TestCase]
-            //public void List()
-            //{
-            //    var serviceLocator = IoCFactory.CreateServiceLocator();
+            [TestCase]
+            public void List()
+            {
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
-            //    PrepareContainer(serviceLocator);
+                PrepareContainer(serviceLocator);
 
-            //    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IList<IService>>>(serviceLocator);
-            //}
+                AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IList<IService>>>(serviceLocator);
+            }
 
-            //[TestCase]
-            //public void Collection()
-            //{
-            //    var serviceLocator = IoCFactory.CreateServiceLocator();
+            [TestCase]
+            public void Collection()
+            {
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
-            //    PrepareContainer(serviceLocator);
+                PrepareContainer(serviceLocator);
 
-            //    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<ICollection<IService>>>(serviceLocator);
-            //}
+                AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<ICollection<IService>>>(serviceLocator);
+            }
 
-            //[TestCase]
-            //public void Enumerable()
-            //{
-            //    var serviceLocator = IoCFactory.CreateServiceLocator();
+            [TestCase]
+            public void Enumerable()
+            {
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
-            //    PrepareContainer(serviceLocator);
+                PrepareContainer(serviceLocator);
 
-            //    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IEnumerable<IService>>>(serviceLocator);
-            //}
+                AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IEnumerable<IService>>>(serviceLocator);
+            }
 
-            //[TestCase]
-            //public void IReadOnlyCollection()
-            //{
-            //    var serviceLocator = IoCFactory.CreateServiceLocator();
-            //
-            //    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IReadOnlyCollection<IService>>>(serviceLocator);
-            //}
+            [TestCase]
+            public void IReadOnlyCollection()
+            {
+                var serviceLocator = IoCFactory.CreateServiceLocator();
 
-            //[TestCase]
-            //public void IReadOnlyList()
-            //{
-            //    var serviceLocator = IoCFactory.CreateServiceLocator();
-            //
-            //    AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IReadOnlyList<IService>>>(serviceLocator);
-            //}
+                PrepareContainer(serviceLocator);
+
+                AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IReadOnlyCollection<IService>>>(serviceLocator);
+            }
+
+            [TestCase]
+            public void IReadOnlyList()
+            {
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+            
+                AssertResolvesListDependencyFor<ServiceWithListConstructorDependency<IReadOnlyList<IService>>>(serviceLocator);
+            }
 
             private void PrepareContainer(IServiceLocator serviceLocator)
             {
@@ -146,14 +88,18 @@ namespace Catel.Test.IoC
                 where TTestComponent : IServiceWithListDependency<IEnumerable<IService>>
             {
                 serviceLocator.RegisterType<IService, IndependentService>();
+                serviceLocator.RegisterTypeWithTag<IService, IndependentService2>("A");
+
                 serviceLocator.RegisterType<TTestComponent>();
 
                 var resolved = serviceLocator.ResolveType<TTestComponent>();
 
                 Assert.IsNotNull(resolved);
                 Assert.IsNotNull(resolved.Services);
-                Assert.AreEqual(1, resolved.Services.Count());
-                Assert.IsTrue(typeof(IndependentService).IsAssignableFromEx(resolved.Services.First().GetType()));
+                Assert.AreEqual(2, resolved.Services.Count());
+
+                Assert.IsTrue(resolved.Services.Any(service => service is IndependentService));
+                Assert.IsTrue(resolved.Services.Any(service => service is IndependentService2));
             }
         }
 
@@ -175,5 +121,64 @@ namespace Catel.Test.IoC
                 Assert.IsNotNull(model.Item);
             }
         }
+
+        #region Test classes
+        public interface IService
+        {
+        }
+
+        public class IndependentService : IService
+        {
+        }
+        public class IndependentService2 : IService
+        {
+        }
+
+        public interface IServiceWithListDependency<out TServiceList>
+            where TServiceList : IEnumerable<IService>
+        {
+            TServiceList Services { get; }
+        }
+
+        public class ServiceWithListConstructorDependency<TServiceList> : IServiceWithListDependency<TServiceList>
+            where TServiceList : IEnumerable<IService>
+        {
+            public ServiceWithListConstructorDependency(TServiceList services)
+            {
+                Services = services;
+            }
+
+            public TServiceList Services { get; }
+        }
+
+        public interface IInjectable<T>
+        {
+            T Injected { get; }
+        }
+
+        public class Injectable<T> : IInjectable<T>
+        {
+            public Injectable(T injected)
+            {
+                Injected = injected;
+            }
+
+            public T Injected { get; }
+        }
+
+        public class Item
+        {
+        }
+
+        public class Consumer
+        {
+            public Consumer(IInjectable<Item> item)
+            {
+                Item = item;
+            }
+
+            public IInjectable<Item> Item { get; }
+        }
+        #endregion
     }
 }

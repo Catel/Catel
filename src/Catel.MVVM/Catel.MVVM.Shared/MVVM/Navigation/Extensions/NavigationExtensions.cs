@@ -8,7 +8,7 @@ namespace Catel.MVVM.Navigation
 {
     using System;
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
 #if NETFX_CORE
     using global::Windows.UI.Xaml.Navigation;
 #else
@@ -47,7 +47,7 @@ namespace Catel.MVVM.Navigation
             return uriString.Contains("app://external");
         }
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Determines whether the navigation is for the specified view.
         /// </summary>
@@ -104,7 +104,7 @@ namespace Catel.MVVM.Navigation
 #endif
         }
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the URI from the navigating context.
         /// </summary>

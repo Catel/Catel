@@ -74,7 +74,7 @@ namespace Catel.MVVM
         private static readonly Dictionary<Type, ViewModelMetadata> _metaData = new Dictionary<Type, ViewModelMetadata>();
 #endif
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// The dispatcher service used to dispatch all calls.
         /// </summary>
@@ -169,6 +169,8 @@ namespace Catel.MVVM
         [field: NonSerialized]
 #endif
         private string _title;
+
+        private IObjectIdGenerator<int> _objectIdGenerator;
         #endregion
 
         #region Constructors
@@ -208,6 +210,7 @@ namespace Catel.MVVM
         {
         }
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
         /// <para/>
@@ -220,10 +223,8 @@ namespace Catel.MVVM
         /// <param name="skipViewModelAttributesInitialization">if set to <c>true</c>, the initialization will be skipped and must be done manually via <see cref="InitializeViewModelAttributes"/>.</param>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        protected ViewModelBase(IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false,
-            bool skipViewModelAttributesInitialization = false)
+        protected ViewModelBase(IServiceLocator serviceLocator,  bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
         {
-            UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<ViewModelBase>();
             ViewModelConstructionTime = FastDateTime.Now;
 
             if (CatelEnvironment.IsInDesignMode)
@@ -231,31 +232,34 @@ namespace Catel.MVVM
                 return;
             }
 
-            var type = GetType();
-
-            Log.Debug("Creating view model of type '{0}' with unique identifier {1}", type.Name, UniqueIdentifier);
-
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
-#if !XAMARIN
             if (serviceLocator == null)
             {
                 serviceLocator = ServiceLocator.Default;
             }
 
+#if !XAMARIN && !XAMARIN_FORMS
             DependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
             _dispatcherService = DependencyResolver.Resolve<IDispatcherService>();
 #endif
+            var type = GetType();
+
+            serviceLocator.RegisterType(typeof(IObjectIdGenerator<int>), x => GetObjectIdGeneratorType(), type, RegistrationType.Singleton, false);
+            _objectIdGenerator = serviceLocator.ResolveType<IObjectIdGenerator<int>>(type);
+            UniqueIdentifier = GetObjectId(_objectIdGenerator);
+
+            Log.Debug("Creating view model of type '{0}' with unique identifier {1}", type.Name, UniqueIdentifier);
 
             ValidateModelsOnInitialization = true;
 
             ViewModelCommandManager = MVVM.ViewModelCommandManager.Create(this);
             ViewModelCommandManager.AddHandler(async (viewModel, propertyName, command, commandParameter) =>
-            {
-                var eventArgs = new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName);
+                {
+                    var eventArgs = new CommandExecutedEventArgs((ICatelCommand)command, commandParameter, propertyName);
 
-                await CommandExecutedAsync.SafeInvokeAsync(this, eventArgs);
-            });
+                    await CommandExecutedAsync.SafeInvokeAsync(this, eventArgs);
+                });
 
             DeferValidationUntilFirstSaveCall = true;
             InvalidateCommandsOnPropertyChanged = true;
@@ -378,7 +382,7 @@ namespace Catel.MVVM
         /// <c>true</c> if this object is currently initializing; otherwise, <c>false</c>.
         /// </value>
         [ExcludeFromValidation]
-        protected bool IsInitializing { get; private set; }
+        protected internal bool IsInitializing { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this object is initialized.
@@ -387,25 +391,25 @@ namespace Catel.MVVM
         /// <c>true</c> if this object is initialized; otherwise, <c>false</c>.
         /// </value>
         [ExcludeFromValidation]
-        protected bool IsInitialized { get; private set; }
+        protected internal bool IsInitialized { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is currently canceling.
         /// </summary>
         [ExcludeFromValidation]
-        protected bool IsCanceling { get; private set; }
+        protected internal bool IsCanceling { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is currently saving.
         /// </summary>
         [ExcludeFromValidation]
-        protected bool IsSaving { get; private set; }
+        protected internal bool IsSaving { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is closing.
         /// </summary>
         /// <value><c>true</c> if this instance is closing; otherwise, <c>false</c>.</value>
-        protected bool IsClosing { get; private set; }
+        protected internal bool IsClosing { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is closed. If a view model is closed, calling
@@ -1362,7 +1366,6 @@ namespace Catel.MVVM
                 IsInitializing = true;
 
                 await InitializeAsync();
-
                 await InitializedAsync.SafeInvokeAsync(this);
 
                 IsInitializing = false;
@@ -1443,7 +1446,7 @@ namespace Catel.MVVM
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
         public async Task<bool> SaveViewModelAsync()
         {
-            if (IsClosing || IsClosed)
+            if (IsSaving || IsCanceling || IsClosing || IsClosed)
             {
                 return false;
             }
@@ -1530,9 +1533,32 @@ namespace Catel.MVVM
 
             await OnClosedAsync(result);
 
-            Log.Info("Closed view model '{0}'", GetType());
+            var type = GetType();
+
+            Log.Info("Closed view model '{0}'", type);
 
             ViewModelManager.UnregisterViewModelInstance(this);
+
+            _objectIdGenerator.ReleaseIdentifier(UniqueIdentifier);
+        }
+
+        /// <summary>
+        /// Gets the object id generator type.
+        /// </summary>
+        /// <returns>The object id generator</returns>
+        protected virtual Type GetObjectIdGeneratorType()
+        {
+            return typeof(IntegerObjectIdGenerator<ViewModelBase>);
+        }
+
+        /// <summary>
+        /// Gets the object id. 
+        /// </summary>
+        /// <param name="objectIdGenerator">The object id generator</param>
+        /// <returns>The object id</returns>
+        protected virtual int GetObjectId(IObjectIdGenerator<int> objectIdGenerator)
+        {
+            return objectIdGenerator.GetUniqueIdentifier();
         }
         #endregion
     }

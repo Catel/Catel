@@ -4,9 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Catel.IoC;
 namespace Catel.MVVM
 {
+    using Catel.IoC;
+
     /// <summary>
     /// Class that gets called as soon as the module is loaded.
     /// </summary>
@@ -21,8 +22,14 @@ namespace Catel.MVVM
         public static void Initialize()
         {
             var serviceLocator = ServiceLocator.Default;
+
             var module = new MVVMModule();
             module.Initialize(serviceLocator);
+
+#if XAMARIN_FORMS
+            var manager = new ServiceLocatorDependencyRegistrationManager(serviceLocator);
+            manager.Initialize();
+#endif
         }
     }
 }

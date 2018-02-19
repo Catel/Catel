@@ -941,6 +941,7 @@ namespace Catel.Collections
         Mixed = 3,
         MixedBash = 4,
         MixedConsolidate = 5,
+        Silent = 6,
     }
 }
 namespace Catel.ComponentModel
@@ -2135,6 +2136,7 @@ namespace Catel.IoC
         Catel.IoC.RegistrationInfo GetRegistrationInfo(System.Type serviceType, object tag = null);
         bool IsTypeRegistered(System.Type serviceType, object tag = null);
         bool IsTypeRegisteredAsSingleton(System.Type serviceType, object tag = null);
+        bool IsTypeRegisteredWithOrWithoutTag(System.Type serviceType);
         void RegisterInstance(System.Type serviceType, object instance, object tag = null);
         void RegisterType(System.Type serviceType, System.Type serviceImplementationType, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = True);
         void RegisterType(System.Type serviceType, System.Func<Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = True);
@@ -2272,6 +2274,7 @@ namespace Catel.IoC
         public Catel.IoC.RegistrationInfo GetRegistrationInfo(System.Type serviceType, object tag = null) { }
         public bool IsTypeRegistered(System.Type serviceType, object tag = null) { }
         public bool IsTypeRegisteredAsSingleton(System.Type serviceType, object tag = null) { }
+        public bool IsTypeRegisteredWithOrWithoutTag(System.Type serviceType) { }
         public void RegisterInstance(System.Type serviceType, object instance, object tag = null) { }
         public void RegisterType(System.Type serviceType, System.Type serviceImplementationType, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = True) { }
         public void RegisterType(System.Type serviceType, System.Func<Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = True) { }
@@ -2442,6 +2445,17 @@ namespace Catel.IoC
         public static Catel.IoC.TypeRequestPath Branch(Catel.IoC.TypeRequestPath parent, Catel.IoC.TypeRequestInfo typeRequestInfo) { }
         public static Catel.IoC.TypeRequestPath Root(string name = null) { }
         public override string ToString() { }
+    }
+}
+namespace Catel.Linq
+{
+    
+    public class static EnumerableExtensions
+    {
+        public static System.Collections.IEnumerable AsReadOnly(this System.Collections.IEnumerable instance, System.Type type) { }
+        public static System.Collections.IEnumerable Cast(this System.Collections.IEnumerable instance, System.Type type) { }
+        public static System.Collections.IEnumerable ToList(this System.Collections.IEnumerable instance, System.Type type) { }
+        public static System.Collections.IEnumerable ToSystemArray(this System.Collections.IEnumerable instance, System.Type type) { }
     }
 }
 namespace Catel.Logging
@@ -2741,6 +2755,7 @@ namespace Catel.Logging
     public class static LogManager
     {
         public static System.Nullable<bool> IgnoreCatelLogging { get; set; }
+        public static System.Nullable<bool> IgnoreDuplicateExceptionLogging { get; set; }
         public static System.Nullable<bool> IsDebugEnabled { get; set; }
         public static System.Nullable<bool> IsErrorEnabled { get; set; }
         public static System.Nullable<bool> IsInfoEnabled { get; set; }
@@ -2764,6 +2779,7 @@ namespace Catel.Logging
         public class static LogInfo
         {
             public static bool IgnoreCatelLogging { get; }
+            public static bool IgnoreDuplicateExceptionLogging { get; }
             public static bool IsDebugEnabled { get; }
             public static bool IsEnabled { get; }
             public static bool IsErrorEnabled { get; }
@@ -2796,11 +2812,12 @@ namespace Catel.Logging
         public System.Collections.Generic.IEnumerable<Catel.Logging.LogEntry> GetWarningLogEntries() { }
         protected override void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
     }
-    public class SeqLogListener : Catel.Logging.BatchLogListenerBase
+    public class SeqLogListener : Catel.Logging.BatchLogListenerBase, System.IDisposable
     {
         public SeqLogListener() { }
         public string ApiKey { get; set; }
         public string ServerUrl { get; set; }
+        public void Dispose() { }
         protected override string FormatLogEvent(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
         protected override System.Threading.Tasks.Task WriteBatchAsync(System.Collections.Generic.List<Catel.Logging.LogBatchEntry> batchEntries) { }
     }
@@ -3123,6 +3140,7 @@ namespace Catel.Reflection
         public static bool IsPublicEx(this System.Type type) { }
         public static bool IsSerializableEx(this System.Type type) { }
         public static bool IsValueTypeEx(this System.Type type) { }
+        public static System.Type MakeGenericTypeEx(this System.Type type, params System.Type[] typeArguments) { }
         public static bool TryGetAttribute<TAttribute>(this System.Reflection.MemberInfo memberInfo, out TAttribute attribute)
             where TAttribute : System.Attribute { }
         public static bool TryGetAttribute(this System.Reflection.MemberInfo memberInfo, System.Type attributeType, out System.Attribute attribute) { }
@@ -3144,6 +3162,7 @@ namespace Catel.Reflection
     }
     public class static TypeCache
     {
+        public static System.Collections.Generic.List<string> InitializedAssemblies { get; }
         public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, bool>> ShouldIgnoreAssemblyEvaluators { get; }
         public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, System.Type, bool>> ShouldIgnoreTypeEvaluators { get; }
         public event System.EventHandler<Catel.Reflection.AssemblyLoadedEventArgs> AssemblyLoaded;
@@ -3853,6 +3872,12 @@ namespace Catel.Scoping
 namespace Catel.Services
 {
     
+    public class GuidObjectIdGenerator<TObjectType> : Catel.Services.ObjectIdGenerator<TObjectType, System.Guid>
+        where TObjectType :  class
+    {
+        public GuidObjectIdGenerator() { }
+        protected override System.Guid GenerateUniqueIdentifier() { }
+    }
     public interface ILanguageService
     {
         bool CacheResults { get; set; }
@@ -3870,6 +3895,12 @@ namespace Catel.Services
     {
         string GetSource();
     }
+    public sealed class IntegerObjectIdGenerator<TObjectType> : Catel.Services.NumericBasedObjectIdGenerator<TObjectType, int>
+        where TObjectType :  class
+    {
+        public IntegerObjectIdGenerator() { }
+        protected override int GenerateUniqueIdentifier() { }
+    }
     public interface IObjectConverterService
     {
         System.Globalization.CultureInfo DefaultCulture { get; set; }
@@ -3883,6 +3914,18 @@ namespace Catel.Services
     {
         public static T ConvertFromObjectToObject<T>(this Catel.Services.IObjectConverterService service, object value) { }
         public static T ConvertFromStringToObject<T>(this Catel.Services.IObjectConverterService service, string value) { }
+    }
+    public interface IObjectIdGenerator<TUniqueIdentifier>
+    
+    {
+        TUniqueIdentifier GetUniqueIdentifier(bool reuse = False);
+        void ReleaseIdentifier(TUniqueIdentifier identifier);
+    }
+    public interface IObjectIdGenerator<in TObjectType, TUniqueIdentifier> : Catel.Services.IObjectIdGenerator<TUniqueIdentifier>
+        where in TObjectType :  class
+    
+    {
+        TUniqueIdentifier GetUniqueIdentifierForInstance(TObjectType instance, bool reuse = False);
     }
     public interface IRollingInMemoryLogService
     {
@@ -3938,6 +3981,19 @@ namespace Catel.Services
         public abstract string GetString(Catel.Services.ILanguageSource languageSource, string resourceName, System.Globalization.CultureInfo cultureInfo);
         protected abstract void PreloadLanguageSource(Catel.Services.ILanguageSource languageSource);
     }
+    public sealed class LongObjectIdGenerator<TObjectType> : Catel.Services.NumericBasedObjectIdGenerator<TObjectType, long>
+        where TObjectType :  class
+    {
+        public LongObjectIdGenerator() { }
+        protected override long GenerateUniqueIdentifier() { }
+    }
+    public abstract class NumericBasedObjectIdGenerator<TObjectType, TUniqueIdentifier> : Catel.Services.ObjectIdGenerator<TObjectType, TUniqueIdentifier>
+        where TObjectType :  class
+    
+    {
+        protected NumericBasedObjectIdGenerator() { }
+        protected static TUniqueIdentifier Value { get; set; }
+    }
     public class ObjectConverterService : Catel.Services.IObjectConverterService
     {
         public ObjectConverterService() { }
@@ -3947,6 +4003,16 @@ namespace Catel.Services
         public string ConvertFromObjectToString(object value, System.Globalization.CultureInfo culture) { }
         public virtual object ConvertFromStringToObject(string value, System.Type targetType) { }
         public object ConvertFromStringToObject(string value, System.Type targetType, System.Globalization.CultureInfo culture) { }
+    }
+    public abstract class ObjectIdGenerator<TObjectType, TUniqueIdentifier> : Catel.Services.IObjectIdGenerator<TUniqueIdentifier>, Catel.Services.IObjectIdGenerator<TObjectType, TUniqueIdentifier>
+        where TObjectType :  class
+    
+    {
+        protected ObjectIdGenerator() { }
+        protected abstract TUniqueIdentifier GenerateUniqueIdentifier();
+        public TUniqueIdentifier GetUniqueIdentifier(bool reuse = False) { }
+        public TUniqueIdentifier GetUniqueIdentifierForInstance(TObjectType instance, bool reuse = False) { }
+        public void ReleaseIdentifier(TUniqueIdentifier identifier) { }
     }
     public class RollingInMemoryLogService : Catel.Services.ServiceBase, Catel.Services.IRollingInMemoryLogService
     {
@@ -3965,6 +4031,12 @@ namespace Catel.Services
     {
         protected ServiceBase() { }
         public virtual string Name { get; }
+    }
+    public sealed class ULongObjectIdGenerator<TObjectType> : Catel.Services.NumericBasedObjectIdGenerator<TObjectType, ulong>
+        where TObjectType :  class
+    {
+        public ULongObjectIdGenerator() { }
+        protected override ulong GenerateUniqueIdentifier() { }
     }
 }
 namespace Catel.Test
@@ -4052,6 +4124,7 @@ namespace Catel.Threading
     }
     public class static TaskExtensions
     {
+        public static System.Threading.Tasks.Task AwaitWithTimeoutAsync(this System.Threading.Tasks.Task task, int timeout) { }
         public static void WaitAndUnwrapException(this System.Threading.Tasks.Task task) { }
         public static void WaitAndUnwrapException(this System.Threading.Tasks.Task task, System.Threading.CancellationToken cancellationToken) { }
         public static TResult WaitAndUnwrapException<TResult>(this System.Threading.Tasks.Task<TResult> task) { }

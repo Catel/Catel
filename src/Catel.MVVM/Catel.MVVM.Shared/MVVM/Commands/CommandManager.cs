@@ -15,12 +15,13 @@ namespace Catel.MVVM
     using System.Windows.Input;
     using Catel.Logging;
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
     using InputGesture = Catel.Windows.Input.InputGesture;
 
 #if NETFX_CORE
     using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
-#else
+    using global::Windows.UI.Xaml;
+#else 
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 #endif
 
@@ -30,23 +31,14 @@ namespace Catel.MVVM
     /// Manager that takes care of application-wide commands and can dynamically forward
     /// them to the right view models.
     /// </summary>
-    public class CommandManager : ICommandManager
+    public partial class CommandManager : ICommandManager
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly object _lockObject = new object();
         private readonly Dictionary<string, ICompositeCommand> _commands = new Dictionary<string, ICompositeCommand>();
 
-#if !XAMARIN
-
-#if NET
-        private bool _subscribedToApplicationActivedEvent;
-#endif
-
-#if NET
-        private readonly ConditionalWeakTable<FrameworkElement, CommandManagerWrapper> _subscribedViews = new ConditionalWeakTable<FrameworkElement, CommandManagerWrapper>();
-#endif
-
+#if !XAMARIN && !XAMARIN_FORMS
         private readonly Dictionary<string, InputGesture> _originalCommandGestures = new Dictionary<string, InputGesture>();
         private readonly Dictionary<string, InputGesture> _commandGestures = new Dictionary<string, InputGesture>();
 
@@ -58,13 +50,13 @@ namespace Catel.MVVM
         /// </summary>
         public CommandManager()
         {
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
             SubscribeToKeyboardEvents();
 #endif
         }
 
         #region Properties
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets or sets a value indicating whether the keyboard events are suspended.
         /// </summary>
@@ -101,7 +93,7 @@ namespace Catel.MVVM
         public event EventHandler<CommandCreatedEventArgs> CommandCreated;
         #endregion
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Creates the command inside the command manager.
         /// <para />
@@ -483,7 +475,7 @@ namespace Catel.MVVM
             }
         }
 
-#if !XAMARIN
+#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the original input gesture with which the command was initially created.
         /// </summary>
@@ -573,75 +565,10 @@ namespace Catel.MVVM
         /// </summary>
         public void SubscribeToKeyboardEvents()
         {
-#if NET
-            var application = Application.Current;
-            if (application == null)
-            {
-                Log.Warning("Application.Current is null, cannot subscribe to keyboard events");
-                return;
-            }
-#endif
-
-#if NET
-            FrameworkElement mainView = application.MainWindow;
-            if (mainView == null)
-            {
-                if (!_subscribedToApplicationActivedEvent)
-                {
-                    application.Activated += (sender, e) => SubscribeToKeyboardEvents();
-                    _subscribedToApplicationActivedEvent = true;
-                    Log.Info("Application.MainWindow is null, cannot subscribe to keyboard events, subscribed to Application.Activated event");
-                }
-
-                return;
-            }
-#elif NETFX_CORE
-            // TODO: Grab events
-#endif
-
-#if NET
-            SubscribeToKeyboardEvents(mainView);
-#endif
-        }
-#endif
-
-#if NET
-        /// <summary>
-        /// Subscribes to keyboard events.
-        /// </summary>
-        /// <param name="view">The view.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="view"/> is <c>null</c>.</exception>
-        public void SubscribeToKeyboardEvents(FrameworkElement view)
-        {
-            Argument.IsNotNull("view", view);
-
-            CommandManagerWrapper commandManagerWrapper = null;
-            if (!_subscribedViews.TryGetValue(view, out commandManagerWrapper))
-            {
-                _subscribedViews.Add(view, new CommandManagerWrapper(view, this));
-
-#if NET
-                var app = Application.Current;
-                if (app != null)
-                {
-                    var mainWindow = app.MainWindow;
-                    if (ReferenceEquals(mainWindow, view))
-                    {
-                        EventManager.RegisterClassHandler(typeof(Window), Window.LoadedEvent, new RoutedEventHandler(OnWindowLoaded));
-                    }
-                }
-#endif
-            }
+            SubscribeToKeyboardEventsInternal();
         }
 
-        private void OnWindowLoaded(object sender, RoutedEventArgs e)
-        {
-            var view = sender as FrameworkElement;
-            if (view != null)
-            {
-                SubscribeToKeyboardEvents(view);
-            }
-        }
+        partial void SubscribeToKeyboardEventsInternal();
 #endif
     }
 }

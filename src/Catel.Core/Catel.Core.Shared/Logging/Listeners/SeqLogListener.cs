@@ -19,22 +19,22 @@ namespace Catel.Logging
     /// <summary>
     ///  Log listener which writes all data to a Seq server.
     /// </summary>
-    public class SeqLogListener : BatchLogListenerBase
+    public class SeqLogListener : BatchLogListenerBase, IDisposable
     {
-        #region Constants
+#region Constants
         private const string ApiKeyHeaderName = "X-Seq-ApiKey";
         private const string BulkUploadResource = "api/events/raw";
-        #endregion
+#endregion
 
-        #region Fields
+#region Fields
         private readonly IJsonLogFormatter _jsonLogFormatter;
-        private readonly object _lock = new object();
 
         private WebClient _webClient;
-        private string _webApiUrl;
+
+        private readonly object _syncObj = new object();
         #endregion
 
-        #region Constructors
+#region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="SeqLogListener"/> class.
         /// </summary>
@@ -42,9 +42,9 @@ namespace Catel.Logging
         {
             _jsonLogFormatter = new JsonLogFormatter();
         }
-        #endregion
+#endregion
 
-        #region Properties
+#region Properties
         /// <summary>
         /// Gets or sets the seq server url.
         /// </summary>
@@ -54,9 +54,9 @@ namespace Catel.Logging
         /// Gets or sets the seq server api key.
         /// </summary>
         public string ApiKey { get; set; }
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
         /// <summary>
         /// Formats the log event to a message which can be written to a log persistence storage.
         /// </summary>
@@ -89,38 +89,17 @@ namespace Catel.Logging
                 var textWriter = new StringWriter();
                 textWriter.Write("{\"events\":[");
 
-                var logEntries = batchEntries.Select(
-                    batchEntry => FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Data, FastDateTime.Now))
-                    .Aggregate((log1, log2) => string.Format("{0},{1}", log1, log2));
+                var logEntries = batchEntries.Select(batchEntry => FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Data, FastDateTime.Now)).Aggregate((log1, log2) => string.Format("{0},{1}", log1, log2));
 
                 textWriter.Write(logEntries);
                 textWriter.Write("]}");
 
                 var message = textWriter.ToString();
 
-                lock (_lock)
-                {
-                    if (_webClient == null)
-                    {
-                        var baseUri = ServerUrl;
-                        if (!baseUri.EndsWith("/"))
-                        {
-                            baseUri += "/";
-                        }
+                InitializeWebClient();
 
-                        _webApiUrl = string.Format("{0}{1}", baseUri, BulkUploadResource);
+                _webClient.UploadString(WebApiUrl, message);
 
-                        _webClient = new WebClient {Encoding = Encoding.UTF8};
-                        _webClient.Headers[HttpRequestHeader.ContentType] = "application/json";
-
-                        if (!string.IsNullOrWhiteSpace(ApiKey))
-                        {
-                            _webClient.Headers.Add(ApiKeyHeaderName, ApiKey);
-                        }
-                    }
-                }
-
-                _webClient.UploadString(_webApiUrl, message);
             }
             catch (Exception)
             {
@@ -128,7 +107,51 @@ namespace Catel.Logging
             }
         }
 
+        private string WebApiUrl
+        {
+            get
+            {
+                var baseUri = ServerUrl;
+                if (string.IsNullOrWhiteSpace(baseUri))
+                {
+                    return string.Empty;
+                }
+
+                if (!baseUri.EndsWith("/"))
+                {
+                    baseUri += "/";
+                }
+
+                return string.Format("{0}{1}", baseUri, BulkUploadResource);
+            }
+        }
+
+        private void InitializeWebClient()
+        {
+            lock (_syncObj)
+            {
+                if (_webClient == null)
+                {
+                    _webClient = new WebClient { Encoding = Encoding.UTF8 };
+
+                    _webClient.Headers[HttpRequestHeader.ContentType] = "application/json";
+
+                    if (!string.IsNullOrWhiteSpace(ApiKey))
+                    {
+                        _webClient.Headers.Add(ApiKeyHeaderName, ApiKey);
+                    }
+                }
+            }
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            _webClient?.Dispose();
+        }
+
         #endregion
+
     }
 
 }
