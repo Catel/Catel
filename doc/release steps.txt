@@ -25,4 +25,5 @@ Post release steps:
      * History.txt
      * SolutionAssemblyInfo.cs
      * AssemblyExtensionTests.cs
+     * Catel.sdox
 2)  Update Catel.Benchmarks

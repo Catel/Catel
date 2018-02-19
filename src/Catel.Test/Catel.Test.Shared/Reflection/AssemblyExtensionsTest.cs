@@ -17,7 +17,7 @@ namespace Catel.Test.Reflection
     [TestFixture]
     public class AssemblyExtensionsTest
     {
-        private const string VersionPrefix = "5.3";
+        private const string VersionPrefix = "5.4";
 
         private static readonly Assembly Assembly = typeof(AssemblyExtensionsTest).GetAssemblyEx();
 
