@@ -17,6 +17,8 @@ namespace Catel.Test.Reflection
     [TestFixture]
     public class AssemblyExtensionsTest
     {
+        // Note: don't use DateTime.Now.Year because we want a specific build to always compile, even in the next year
+        private const string CurrentYear = "2018";
         private const string VersionPrefix = "5.4";
 
         private static readonly Assembly Assembly = typeof(AssemblyExtensionsTest).GetAssemblyEx();
@@ -95,7 +97,7 @@ namespace Catel.Test.Reflection
         [TestCase]
         public void CopyrightAutomatic()
         {
-            string expected = "Copyright © CatenaLogic 2010 - 2017";
+            string expected = "Copyright © CatenaLogic 2010 - " + CurrentYear;
 
             var result = Assembly.Copyright();
 
