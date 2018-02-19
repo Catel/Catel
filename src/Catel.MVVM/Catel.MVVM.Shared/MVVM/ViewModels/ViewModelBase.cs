@@ -234,12 +234,12 @@ namespace Catel.MVVM
 
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
-#if !XAMARIN && !XAMARIN_FORMS
             if (serviceLocator == null)
             {
                 serviceLocator = ServiceLocator.Default;
             }
 
+#if !XAMARIN && !XAMARIN_FORMS
             DependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
             _dispatcherService = DependencyResolver.Resolve<IDispatcherService>();
 #endif

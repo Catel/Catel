@@ -23,7 +23,7 @@ namespace Catel
     /// <summary>
     /// Extension methods for the <see cref="ICommandManager"/>.
     /// </summary>
-    public static class ICommandManagerExtensions
+    public static partial class ICommandManagerExtensions
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 

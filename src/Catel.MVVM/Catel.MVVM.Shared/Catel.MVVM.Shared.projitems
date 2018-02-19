@@ -46,7 +46,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Bindings\Extensions\BindingPartyExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Command.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandContainerBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandManager.uwp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandManager.wpf.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CommandManagerWrapper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\CompositeCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandCanceledEventArgs.cs" />
@@ -55,6 +57,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandExecutedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\EventArgs\CommandProgressChangedEventArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Extensions\ICommandManagerExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Extensions\ICommandManagerExtensions.uwp.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Helpers\CommandHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Interfaces\IAuthenticationProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MVVM\Commands\Interfaces\ICatelCommand.cs" />

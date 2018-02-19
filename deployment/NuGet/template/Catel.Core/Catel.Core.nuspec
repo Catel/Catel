@@ -20,7 +20,23 @@
 	<!--<iconUrl>file://content/icon.png</iconUrl>-->
 	<iconUrl>http://www.catenalogic.com/catel.png</iconUrl>
     
-    <dependencies>    
-    </dependencies>      
+    <dependencies>
+		<!-- Always include regardless of target framework -->
+		<group>
+		  <!-- <dependency id="Catel.Core" version="[VERSION]" /> -->
+		</group>
+
+		<group targetFramework="net47">
+		  <!-- <dependency id="System.Configuration.ConfigurationManager" version="4.4.1" /> -->
+        </group>
+        
+        <group targetFramework="uap10.0">
+          <dependency id="Microsoft.NETCore.UniversalWindowsPlatform" version="6.0.6" />
+        </group>
+    </dependencies>
+    
+    <frameworkAssemblies>
+		<frameworkAssembly assemblyName="System.Configuration" targetFramework="net45,net46" />
+    </frameworkAssemblies>
   </metadata>
 </package>

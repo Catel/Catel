@@ -9,8 +9,15 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
-    using System.Windows;
     using System.Windows.Input;
+
+#if NET
+    using System.Windows;
+#endif
+
+#if NETFX_CORE
+    using global::Windows.UI.Xaml;
+#endif
 
 #if !XAMARIN && !XAMARIN_FORMS
     using InputGesture = Catel.Windows.Input.InputGesture;
@@ -145,7 +152,7 @@ namespace Catel.MVVM
         /// </summary>
         void SubscribeToKeyboardEvents();
 
-#if NET
+#if NET || NETFX_CORE
         /// <summary>
         /// Subscribes to keyboard events.
         /// </summary>

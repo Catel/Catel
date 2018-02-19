@@ -25,7 +25,7 @@ For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/
 
 Release date:
 =============
-2017/xx/xx
+2018/02/19
 
 Platform support changes:
 =========================
@@ -40,12 +40,14 @@ Added/fixed:
 ============
 (+) #333  CTL-271 Support generic lists in ServiceLocator 
 (+) #1141 Add support for object instances in ObjectIdGenerator
-(*) #1127 Use TypeCache instead AppDomain.CurrentDomain in ServiceLocatorDependencyRegistrationManager implementation
+(+) #1158 Implement keyboard event subscriptions for UWP implementation of CommandManager
+(*) #1127 Use TypeCache instead of AppDomain.CurrentDomain in ServiceLocatorDependencyRegistrationManager implementation
 (*) #1143 UserControlLogic should dispose view models if they implement IDispose
 (*) #1144 Improve [Save|Cancel]AndCloseViewModelAsync behavior when calling on an already closing view model
 (*) #1146 Reuse identifiers in ObjectIdGenerator
 (*) #1150 DataWindow uses Dispatcher to subscribe to Closing event in order to allow derived types to subscribe first
 (*) #1154 Fix DebugLogListener so it also works in release mode
+(*) #1159 Allow EqualsIgnoreCase / ContainsIgnoreCase / etc to accept null values (then the result should be false)
 (*) Update .NET Standard to 2.0.1
 (*) Update Xamarin.Forms to 2.5.0.122203
 (x) #1142 LogicBase calls CloseViewModel twice on view model that is already closing
