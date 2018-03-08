@@ -38,7 +38,7 @@ Classes / members marked as obsolete:
 
 Added/fixed:
 ============
-xxxx
+(*) #1166 Nesting with ChildAwareModelBase now supports more than one layer
 
 Roadmap:
 ========
