@@ -96,7 +96,7 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Sets the value fast without checking for any constraints or additional logic such as change notifications. This 
+        /// Sets the value fast without checking for any constraints or additional logic such as change notifications. This
         /// means that if this method is used incorrectly, it can throw random exceptions.
         /// <para />
         /// This is a wrapper around the _propertyValues field. Don't use the field directly, always use
@@ -201,15 +201,9 @@ namespace Catel.Data
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var propertyName = e.PropertyName;
-            if (string.Equals(propertyName, "IsDirty", StringComparison.Ordinal))
-            {
-                return;
-            }
-
             SetDirty(string.Empty);
 
-            if (IsValidationProperty(propertyName))
+            if (IsValidationProperty(e.PropertyName))
             {
                 Validate(true);
             }

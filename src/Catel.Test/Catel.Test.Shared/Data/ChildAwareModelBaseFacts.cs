@@ -115,6 +115,8 @@ namespace Catel.Test.Data
             Assert.IsFalse(c.HasErrors);
         }
 
+
+
         //[TestCase]
         //public void IsDirtyWithChildrenWhenSavingChild()
         //{
@@ -152,5 +154,30 @@ namespace Catel.Test.Data
         //    Assert.IsFalse(computerSettings.IniFileCollection[0].IniEntryCollection[0].IsDirty);
         //    Assert.IsFalse(computerSettings.IsDirty);
         //}
+
+
+        [Test]
+        public void ChildChangesPropagateToGrandParent()
+        {
+            TestClasses.Child c = new TestClasses.Child();
+            TestClasses.Parent p = new TestClasses.Parent();
+            GrandParent g = new GrandParent();
+            g.Parents.Add(p);
+            p.Children.Add(c);
+
+            c.ResetDirtyFlag();
+            p.ResetDirtyFlag();
+            g.ResetDirtyFlag();
+
+            Assert.IsFalse(c.IsDirty);
+            Assert.IsFalse(p.IsDirty);
+            Assert.IsFalse(g.IsDirty);
+
+            c.Name = "Pietje";
+
+            Assert.IsTrue(c.IsDirty);
+            Assert.IsTrue(p.IsDirty);
+            Assert.IsTrue(g.IsDirty);
+        }
     }
 }
