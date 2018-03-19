@@ -49,8 +49,16 @@ namespace Catel.MVVM.Converters
         /// <returns>The value to be passed to the target dependency property.</returns>
         protected override object Convert(object value, Type targetType, object parameter)
         {
-            string formatString = string.Format("{{0:{0}}}", (parameter as string) ?? _defaultFormatString);
-            return string.Format(CurrentCulture, formatString, value);
+            var formattingToUse = (parameter as string) ?? _defaultFormatString ?? string.Empty;
+            var formatString = string.Format("{{0:{0}}}", formattingToUse);
+
+            if (formatString.Contains(" "))
+            {
+                formatString = formattingToUse;
+            }
+
+            var finalValue = string.Format(CurrentCulture, formatString, value);
+            return finalValue;
         }
         #endregion
     }

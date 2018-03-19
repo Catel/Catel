@@ -39,6 +39,7 @@ Classes / members marked as obsolete:
 Added/fixed:
 ============
 (*) #1166 Nesting with ChildAwareModelBase now supports more than one layer
+(*) #1169 Improve FormattingConverter to allow more usages
 
 Roadmap:
 ========
