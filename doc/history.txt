@@ -38,6 +38,7 @@ Classes / members marked as obsolete:
 
 Added/fixed:
 ============
+(+) #1168 Add ParallelHelper.ExecuteInParallelAsync 
 (*) #1166 Nesting with ChildAwareModelBase now supports more than one layer
 
 Roadmap:

@@ -10,6 +10,8 @@ namespace Catel
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
+
     using Catel.Logging;
     using Catel.Threading;
 
@@ -74,7 +76,7 @@ namespace Catel
                 {
                     var innerI = i;
                     var batch = batches[i];
-                    
+
                     actions.Add(() => ExecuteBatch(taskName, innerI.ToString(), batch, actionToInvoke));
                 }
 
@@ -111,6 +113,26 @@ namespace Catel
             }
 
             Log.Debug("{0} Finished batch for '{1}' items", finalName, items.Count);
+        }
+
+        /// <summary>
+        /// Runs async tasks in parallel in pre-defined batches.
+        /// </summary>
+        /// <param name="tasks">The task list.</param>
+        /// <param name="taskName">The task name.</param>
+        /// <param name="batchSize">The batch size.</param>
+        public static async Task ExecuteInParallelAsync(List<Func<Task>> tasks, int batchSize = 1000, string taskName = null)
+        {
+            Argument.IsNotNull(nameof(tasks), tasks);
+
+            taskName = ObjectToStringHelper.ToString(taskName);
+
+            Log.Debug("[{0}] Executing '{1}' async tasks in parallel in batches of size '{2}'", taskName, tasks.Count, batchSize);
+
+            for (int i = 0; i < tasks.Count; i = i + batchSize)
+            {
+                await TaskHelper.RunAndWaitAsync(tasks.Skip(i).Take(Math.Min(batchSize, tasks.Count - i)).ToArray());
+            }
         }
     }
 }
