@@ -34,6 +34,10 @@ namespace Catel.Configuration
     /// </summary>
     public partial class ConfigurationService : IConfigurationService
     {
+        private static readonly string DefaultLocalConfigFilePath = Path.Combine(Path.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserLocal), "configuration.xml");
+
+        private static readonly string DefaultRoamingConfigFilePath = Path.Combine(Path.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "configuration.xml");
+
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly ISerializationManager _serializationManager;
@@ -41,11 +45,11 @@ namespace Catel.Configuration
         private readonly ISerializer _serializer;
 
 #if NET || NETSTANDARD
-        private readonly DynamicConfiguration _localConfiguration;
-        private readonly DynamicConfiguration _roamingConfiguration;
+        private DynamicConfiguration _localConfiguration;
+        private DynamicConfiguration _roamingConfiguration;
 
-        private readonly string _localConfigFilePath;
-        private readonly string _roamingConfigFilePath;
+        private string _localConfigFilePath;
+        private string _roamingConfigFilePath;
 #elif ANDROID
         private readonly global::Android.Content.ISharedPreferences _preferences =
             global::Android.Preferences.PreferenceManager.GetDefaultSharedPreferences(global::Android.App.Application.Context);
@@ -84,60 +88,19 @@ namespace Catel.Configuration
             _serializer = serializer;
 
 #if NET || NETSTANDARD
-            _localConfigFilePath = Path.Combine(Path.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserLocal), "configuration.xml");
-
-            try
-            {
-                if (File.Exists(_localConfigFilePath))
-                {
-                    using (var fileStream = new FileStream(_localConfigFilePath, FileMode.Open))
-                    {
-                        _localConfiguration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _serializer);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to load local configuration, using default settings");
-            }
-
-            if (_localConfiguration == null)
-            {
-                _localConfiguration = new DynamicConfiguration();
-            }
-
-            _roamingConfigFilePath = Path.Combine(Path.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "configuration.xml");
-
-            try
-            {
-                if (File.Exists(_roamingConfigFilePath))
-                {
-                    using (var fileStream = new FileStream(_roamingConfigFilePath, FileMode.Open))
-                    {
-                        _roamingConfiguration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _serializer);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Failed to load roaming configuration, using default settings");
-            }
-
-            if (_roamingConfiguration == null)
-            {
-                _roamingConfiguration = new DynamicConfiguration();
-            }
+            SetLocalConfigFilePath(DefaultLocalConfigFilePath);
+            SetRoamingConfigFilePath(DefaultRoamingConfigFilePath);
 #endif
         }
 
-        #region Events
+#region Events
         /// <summary>
         /// Occurs when the configuration has changed.
         /// </summary>
         public event EventHandler<ConfigurationChangedEventArgs> ConfigurationChanged;
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
         /// <summary>
         /// Suspends the notifications of this service until the returned object is disposed.
         /// </summary>
@@ -262,6 +225,82 @@ namespace Catel.Configuration
             }
         }
 
+#if NET || NETSTANDARD
+        /// <summary>
+        /// Sets the roaming config file path.
+        /// </summary>
+        /// <param name="filePath">The file path. </param>
+        public void SetRoamingConfigFilePath(string filePath)
+        {
+            Argument.IsNotNullOrEmpty(nameof(filePath), filePath);
+
+            _roamingConfigFilePath = filePath;
+
+            try
+            {
+                if (File.Exists(_roamingConfigFilePath))
+                {
+                    using (var fileStream = new FileStream(_roamingConfigFilePath, FileMode.Open))
+                    {
+                        _roamingConfiguration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _serializer);
+                    }
+                }
+                else
+                {
+                    _roamingConfiguration?.SaveAsXml(_roamingConfigFilePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to load roaming configuration, using default settings");
+
+                _roamingConfigFilePath = DefaultRoamingConfigFilePath;
+            }
+
+            if (_roamingConfiguration == null)
+            {
+                _roamingConfiguration = new DynamicConfiguration();
+            }
+        }
+
+        /// <summary>
+        /// Sets the roaming config file path.
+        /// </summary>
+        /// <param name="filePath">The file path. </param>
+        public void SetLocalConfigFilePath(string filePath)
+        {
+            Argument.IsNotNullOrEmpty(nameof(filePath), filePath);
+
+            _localConfigFilePath = filePath;
+
+            try
+            {
+                if (File.Exists(_localConfigFilePath))
+                {
+                    using (var fileStream = new FileStream(_localConfigFilePath, FileMode.Open))
+                    {
+                        _localConfiguration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _serializer);
+                    }
+                }
+                else
+                {
+                    _localConfiguration?.SaveAsXml(_localConfigFilePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to load local configuration, using default settings");
+
+                _localConfigFilePath = DefaultLocalConfigFilePath;
+            }
+
+            if (_localConfiguration == null)
+            {
+                _localConfiguration = new DynamicConfiguration();
+            }
+        }
+#endif
+
         /// <summary>
         /// Determines whether the specified key value exists in the configuration.
         /// </summary>
@@ -373,6 +412,6 @@ namespace Catel.Configuration
 
             ConfigurationChanged.SafeInvoke(this, () => new ConfigurationChangedEventArgs(container, key, value));
         }
-        #endregion
+#endregion
     }
 }
