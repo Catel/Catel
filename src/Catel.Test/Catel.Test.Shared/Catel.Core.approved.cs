@@ -554,6 +554,7 @@ namespace Catel
     public class static ParallelHelper
     {
         public static void ExecuteInParallel<T>(System.Collections.Generic.List<T> items, System.Action<T> actionToInvoke, int itemsPerBatch = 1000, string taskName = null) { }
+        public static System.Threading.Tasks.Task ExecuteInParallelAsync(System.Collections.Generic.List<System.Func<System.Threading.Tasks.Task>> tasks, int batchSize = 1000, string taskName = null) { }
     }
     public class static Platforms
     {
@@ -989,6 +990,8 @@ namespace Catel.Configuration
         protected virtual string GetValueFromStore(Catel.Configuration.ConfigurationContainer container, string key) { }
         public void InitializeValue(Catel.Configuration.ConfigurationContainer container, string key, object defaultValue) { }
         public bool IsValueAvailable(Catel.Configuration.ConfigurationContainer container, string key) { }
+        public void SetLocalConfigFilePath(string filePath) { }
+        public void SetRoamingConfigFilePath(string filePath) { }
         public void SetValue(Catel.Configuration.ConfigurationContainer container, string key, object value) { }
         protected virtual void SetValueToStore(Catel.Configuration.ConfigurationContainer container, string key, string value) { }
         public System.IDisposable SuspendNotifications() { }
@@ -1020,6 +1023,8 @@ namespace Catel.Configuration
         T GetValue<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = null);
         void InitializeValue(Catel.Configuration.ConfigurationContainer container, string key, object defaultValue);
         bool IsValueAvailable(Catel.Configuration.ConfigurationContainer container, string key);
+        void SetLocalConfigFilePath(string filePath);
+        void SetRoamingConfigFilePath(string filePath);
         void SetValue(Catel.Configuration.ConfigurationContainer container, string key, object value);
         System.IDisposable SuspendNotifications();
     }
