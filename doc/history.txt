@@ -39,6 +39,7 @@ Classes / members marked as obsolete:
 Added/fixed:
 ============
 (+) #1027 Allow configuration service to choose path format
+(+) #1168 Add ParallelHelper.ExecuteInParallelAsync 
 (*) #1166 Nesting with ChildAwareModelBase now supports more than one layer
 (*) #1169 Improve FormattingConverter to allow more usages
 
