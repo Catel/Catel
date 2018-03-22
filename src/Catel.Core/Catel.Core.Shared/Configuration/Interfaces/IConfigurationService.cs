@@ -63,5 +63,17 @@ namespace Catel.Configuration
         /// <param name="defaultValue">The default value.</param>
         /// <exception cref="ArgumentException">The <paramref name="key" /> is <c>null</c> or whitespace.</exception>
         void InitializeValue(ConfigurationContainer container, string key, object defaultValue);
+
+        /// <summary>
+        /// Sets the roaming config file path.
+        /// </summary>
+        /// <param name="filePath">The file path. </param>
+        void SetRoamingConfigFilePath(string filePath);
+
+        /// <summary>
+        /// Sets the local config file path.
+        /// </summary>
+        /// <param name="filePath">The file path. </param>
+        void SetLocalConfigFilePath(string filePath);
     }
 }
