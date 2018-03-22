@@ -16,6 +16,7 @@ namespace Catel.Configuration
     using Data;
     using Catel.Logging;
     using Runtime.Serialization.Xml;
+
 #if PCL
     // Not supported
 #elif NETFX_CORE
@@ -34,10 +35,6 @@ namespace Catel.Configuration
     /// </summary>
     public partial class ConfigurationService : IConfigurationService
     {
-        private static readonly string DefaultLocalConfigFilePath = Path.Combine(Path.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserLocal), "configuration.xml");
-
-        private static readonly string DefaultRoamingConfigFilePath = Path.Combine(Path.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "configuration.xml");
-
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly ISerializationManager _serializationManager;
@@ -50,6 +47,9 @@ namespace Catel.Configuration
 
         private string _localConfigFilePath;
         private string _roamingConfigFilePath;
+
+        private static readonly string DefaultLocalConfigFilePath = Path.Combine(Path.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserLocal), "configuration.xml");
+        private static readonly string DefaultRoamingConfigFilePath = Path.Combine(Path.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "configuration.xml");
 #elif ANDROID
         private readonly global::Android.Content.ISharedPreferences _preferences =
             global::Android.Preferences.PreferenceManager.GetDefaultSharedPreferences(global::Android.App.Application.Context);
@@ -76,7 +76,7 @@ namespace Catel.Configuration
         /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="objectConverterService">The object converter service.</param>
         /// <param name="serializer">The serializer.</param>
-        public ConfigurationService(ISerializationManager serializationManager, 
+        public ConfigurationService(ISerializationManager serializationManager,
             IObjectConverterService objectConverterService, ISerializer serializer)
         {
             Argument.IsNotNull("serializationManager", serializationManager);
@@ -93,14 +93,14 @@ namespace Catel.Configuration
 #endif
         }
 
-#region Events
+        #region Events
         /// <summary>
         /// Occurs when the configuration has changed.
         /// </summary>
         public event EventHandler<ConfigurationChangedEventArgs> ConfigurationChanged;
-#endregion
+        #endregion
 
-#region Methods
+        #region Methods
         /// <summary>
         /// Suspends the notifications of this service until the returned object is disposed.
         /// </summary>
@@ -412,6 +412,6 @@ namespace Catel.Configuration
 
             ConfigurationChanged.SafeInvoke(this, () => new ConfigurationChangedEventArgs(container, key, value));
         }
-#endregion
+        #endregion
     }
 }
