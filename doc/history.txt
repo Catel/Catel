@@ -42,6 +42,7 @@ Added/fixed:
 (+) #1168 Add ParallelHelper.ExecuteInParallelAsync 
 (*) #1166 Nesting with ChildAwareModelBase now supports more than one layer
 (*) #1169 Improve FormattingConverter to allow more usages
+(*) #1170 Implement Path.GetApplicationDataDirectory to allow its usage on all platforms
 
 Roadmap:
 ========

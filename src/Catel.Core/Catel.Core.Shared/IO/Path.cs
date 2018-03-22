@@ -7,15 +7,14 @@
 namespace Catel.IO
 {
     using System;
-
-#if NET || NETSTANDARD
     using System.IO;
     using System.Reflection;
-
     using Reflection;
+
+#if NETFX_CORE
+    using Windows.Storage;
 #endif
 
-#if NET || NETSTANDARD
     /// <summary>
     /// Gets the application data target.
     /// </summary>
@@ -36,14 +35,13 @@ namespace Catel.IO
         /// </summary>
         Machine
     }
-#endif
 
     /// <summary>
     /// Static class that implements some path methods
     /// </summary>
     public static class Path
     {
-#if NET || NETSTANDARD
+#if !PCL
         /// <summary>
         /// Gets the application data directory for the company and product as defined the the assembly information of the entry assembly. 
         /// If the entry assembly is <c>null</c>, this method will fall back to the calling assembly to retrieve the information.
@@ -132,7 +130,14 @@ namespace Catel.IO
         /// <returns>Directory for the application data.</returns>
         public static string GetApplicationDataDirectory(ApplicationDataTarget applicationDataTarget)
         {
-            var assembly = AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
+            var assembly = AssemblyHelper.GetEntryAssembly();
+
+#if !NETFX_CORE
+            if (assembly == null)
+            {
+                assembly = Assembly.GetCallingAssembly();
+            }
+#endif
 
             return GetApplicationDataDirectory(applicationDataTarget, assembly.Company(), assembly.Product());
         }
@@ -164,6 +169,25 @@ namespace Catel.IO
         {
             var rootDirectory = string.Empty;
 
+#if NETFX_CORE
+            switch (applicationDataTarget)
+            {
+                case ApplicationDataTarget.UserLocal:
+                    rootDirectory = ApplicationData.Current.LocalFolder.Path;
+                    break;
+
+                case ApplicationDataTarget.UserRoaming:
+                    rootDirectory = ApplicationData.Current.RoamingFolder.Path;
+                    break;
+
+                case ApplicationDataTarget.Machine:
+                    rootDirectory = ApplicationData.Current.SharedLocalFolder.Path;
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException("applicationDataTarget");
+            }
+#else
             switch (applicationDataTarget)
             {
                 case ApplicationDataTarget.UserLocal:
@@ -181,6 +205,7 @@ namespace Catel.IO
                 default:
                     throw new ArgumentOutOfRangeException("applicationDataTarget");
             }
+#endif
 
             string path = Combine(rootDirectory, companyName, productName);
 
@@ -193,13 +218,13 @@ namespace Catel.IO
         }
 #endif
 
-        /// <summary>
-        /// Gets the name of the directory.
-        /// </summary>
-        /// <param name="path">The path to get the directory name from.</param>
-        /// <returns>The directory name.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="path"/> is <c>null</c> or whitespace.</exception>
-        public static string GetDirectoryName(string path)
+            /// <summary>
+            /// Gets the name of the directory.
+            /// </summary>
+            /// <param name="path">The path to get the directory name from.</param>
+            /// <returns>The directory name.</returns>
+            /// <exception cref="ArgumentException">The <paramref name="path"/> is <c>null</c> or whitespace.</exception>
+            public static string GetDirectoryName(string path)
         {
             Argument.IsNotNullOrWhitespace("path", path);
 
