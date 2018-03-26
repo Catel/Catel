@@ -25,6 +25,7 @@ namespace Catel.MVVM.Converters
         {
             var parameterAsString = ObjectToStringHelper.ToString(parameter);
 
+            var isSupported = false;
             var supportedPlatforms = parameterAsString.Split(new[] { '|' });
 
             foreach (var supportedPlatform in supportedPlatforms)
@@ -34,12 +35,18 @@ namespace Catel.MVVM.Converters
                 {
                     if (Platforms.IsPlatformSupported(platform))
                     {
-                        return true;
+                        isSupported = true;
+                        break;
                     }
                 }
             }
 
-            return false;
+            if (SupportInversionUsingCommandParameter && ConverterHelper.ShouldInvert(parameter))
+            {
+                isSupported = !isSupported;
+            }
+
+            return isSupported;
         }
     }
 }

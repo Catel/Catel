@@ -56,15 +56,13 @@ namespace Catel.MVVM.Converters
         /// </returns>
         protected override bool IsVisible(object value, Type targetType, object parameter)
         {
-            bool invert = ConverterHelper.ShouldInvert(parameter);
-            string stringValue = value as string;
+            var stringValue = value as string;
 
-            if (invert)
-            {
-                return string.IsNullOrEmpty(stringValue);
-            }
+            var isVisible = !string.IsNullOrEmpty(stringValue);
 
-            return !string.IsNullOrEmpty(stringValue);
+            // Note: base class will invert if needed
+
+            return isVisible;
         }
     }
 

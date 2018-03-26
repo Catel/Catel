@@ -31,7 +31,7 @@ namespace Catel.MVVM.Converters
         /// Initializes a new instance of the <see cref="EnumToCollapsingVisibilityConverter"/> class.
         /// </summary>
         public EnumToCollapsingVisibilityConverter()
-            : base(Visibility.Collapsed)
+            : this(Visibility.Collapsed)
         {
         }
 
@@ -43,6 +43,7 @@ namespace Catel.MVVM.Converters
         internal EnumToCollapsingVisibilityConverter(Visibility notVisibleVisibility)
             : base(notVisibleVisibility)
         {
+            SupportInversionUsingCommandParameter = false;
         }
         #endregion
 

@@ -51,10 +51,26 @@ namespace Catel.MVVM.Converters
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ValueConverterBase{TConvert, TConvertBack}"/> class.
+        /// </summary>
+        public ValueConverterBase()
+        {
+            SupportInversionUsingCommandParameter = true;
+        }
+
+        /// <summary>
         /// Gets the current culture.
         /// </summary>
         /// <value>The current culture.</value>
         protected CultureInfo CurrentCulture { get; private set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this converter should support inversion of the behavior using the command parameter.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if inversion is supported; otherwise, <c>false</c>.
+        /// </value>
+        public bool SupportInversionUsingCommandParameter { get; set; }
 
         /// <summary>
         /// Gets or sets the linked value converter. This way it is possible to chain up several converters.

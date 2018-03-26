@@ -6,6 +6,7 @@
 
 namespace Catel.MVVM.Converters
 {
+    using System;
     using Reflection;
 
 #if XAMARIN
@@ -38,10 +39,14 @@ namespace Catel.MVVM.Converters
         /// <returns><c>true</c> if the converter should be inverted; otherwise <c>false</c>.</returns>
         public static bool ShouldInvert(object parameter)
         {
-            bool invert = false;
+            var invert = false;
+
             if (parameter != null)
             {
-                invert = TypeHelper.Cast<bool>(parameter);
+                if (TypeHelper.TryCast<bool, object>(parameter, out var shouldInvert))
+                {
+                    invert = shouldInvert;
+                }
             }
 
             return invert;

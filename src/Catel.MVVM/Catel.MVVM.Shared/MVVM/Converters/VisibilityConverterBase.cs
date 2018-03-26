@@ -39,7 +39,7 @@ namespace Catel.MVVM.Converters
         }
         #endregion
 
-        #region Properties
+        #region
         /// <summary>
         /// Gets the <see cref="Visibility"/> state when not visibible should be returned.
         /// </summary>
@@ -66,7 +66,14 @@ namespace Catel.MVVM.Converters
         /// <returns>The value to be passed to the target dependency property.</returns>
         protected override object Convert(object value, Type targetType, object parameter)
         {
-            return IsVisible(value, targetType, parameter) ? Visibility.Visible : NotVisibleVisibility;
+            var isVisible = IsVisible(value, targetType, parameter);
+
+            if (SupportInversionUsingCommandParameter && ConverterHelper.ShouldInvert(parameter))
+            {
+                isVisible = !isVisible;
+            }
+
+            return isVisible ? Visibility.Visible : NotVisibleVisibility;
         }
         #endregion
     }

@@ -43,6 +43,8 @@ Added/fixed:
 (*) #1166 Nesting with ChildAwareModelBase now supports more than one layer
 (*) #1169 Improve FormattingConverter to allow more usages
 (*) #1170 Implement Path.GetApplicationDataDirectory to allow its usage on all platforms
+(*) #1174 Use ConverterHelper.ShouldInvert on all converters so converter parameters can be used 
+    to invert the behavior of a converter
 
 Roadmap:
 ========

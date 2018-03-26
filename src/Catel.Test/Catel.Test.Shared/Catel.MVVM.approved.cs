@@ -1243,13 +1243,14 @@ namespace Catel.MVVM.Converters
     
     
     {
-        protected ValueConverterBase() { }
+        public ValueConverterBase() { }
         [System.ComponentModel.TypeConverterAttribute(typeof(Catel.MVVM.Converters.StringToTypeConverter))]
         public System.Type BackOverrideType { get; set; }
         protected System.Globalization.CultureInfo CurrentCulture { get; }
         public Catel.MVVM.Converters.IValueConverter Link { get; set; }
         [System.ComponentModel.TypeConverterAttribute(typeof(Catel.MVVM.Converters.StringToTypeConverter))]
         public System.Type OverrideType { get; set; }
+        public bool SupportInversionUsingCommandParameter { get; set; }
         public virtual object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) { }
         protected abstract object Convert(TConvert value, System.Type targetType, object parameter);
         public virtual object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) { }
