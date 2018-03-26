@@ -45,6 +45,7 @@ Added/fixed:
 (*) #1170 Implement Path.GetApplicationDataDirectory to allow its usage on all platforms
 (*) #1174 Use ConverterHelper.ShouldInvert on all converters so converter parameters can be used 
     to invert the behavior of a converter
+(x) #1175 TypeHelper.TryCast should not throw exceptions
 
 Roadmap:
 ========
