@@ -65,6 +65,31 @@ namespace Catel.Services
         /// Occurs when nothing has canceled the application closing and the application is really about to be closed.
         /// </summary>
         public event EventHandler<EventArgs> ApplicationClosed;
+
+        /// <summary>
+        /// Occurs when value of <see cref="CanGoBack"/> property has changed;
+        /// </summary>
+        public event EventHandler CanGoBackChanged;
+
+        /// <summary>
+        /// Occurs when value of <see cref="CanGoForward"/> property has changed;
+        /// </summary>
+        public event EventHandler CanGoForwardChanged;
+
+        /// <summary>
+        /// Occurs when a new navigation is requested.
+        /// </summary>
+        public event EventHandler Navigating;
+
+        /// <summary>
+        /// Occurs when an error is raised while navigating to the requested content.
+        /// </summary>
+        public event EventHandler NavigationFailed;
+
+        /// <summary>
+        /// Occurs the navigation has been successfully completed.
+        /// </summary>
+        public event EventHandler Navigated;
 #endregion
 
 #region Methods
@@ -183,6 +208,46 @@ namespace Catel.Services
 
                 Navigate(_registeredUris[viewModelTypeName], parameters);
             }
+        }
+
+        /// <summary>
+        /// Raises the <see cref="CanGoBackChanged"/> event.
+        /// </summary>
+        protected virtual void OnCanGoBackChanged()
+        {
+            CanGoBackChanged?.SafeInvoke(EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="CanGoForwardChanged"/> event.
+        /// </summary>
+        protected virtual void OnCanGoForwardChanged()
+        {
+            CanGoForwardChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="Navigating"/> event.
+        /// </summary>
+        protected virtual void OnNavigating()
+        {
+            Navigating.SafeInvoke(EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="NavigationFailed"/> event.
+        /// </summary>
+        protected virtual void OnNavigationFailed()
+        {
+            NavigationFailed.SafeInvoke(EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Raises the <see cref="Navigated"/> event.
+        /// </summary>
+        protected virtual void OnNavigated()
+        {
+            Navigated.SafeInvoke(EventArgs.Empty);
         }
 
         /// <summary>

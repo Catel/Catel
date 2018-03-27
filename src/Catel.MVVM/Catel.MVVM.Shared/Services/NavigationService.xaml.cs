@@ -10,6 +10,7 @@ namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
     using System.Windows;
     using Catel.IoC;
@@ -36,7 +37,11 @@ namespace Catel.Services
 #if NET
         private bool _appClosingByMainWindow;
         private bool _appClosedFromService;
+#else
+        private long _canGoBackPropertyChangedCallbackToken;
+        private long _canGoForwardPropertyChangedCallbackToken;
 #endif
+        private RootFrameType _frame;
         #endregion
 
         #region Properties
@@ -73,7 +78,68 @@ namespace Catel.Services
             {
                 // Note: don't cache, it might change dynamically
                 var rootFrame = NavigationRootService.GetNavigationRoot() as RootFrameType;
+
+                if (!Equals(_frame, rootFrame))
+                {
+                    if (_frame != null)
+                    {
+#if NET
+                        var canGoBackPropertyDescriptor = DependencyPropertyDescriptor.FromProperty(RootFrameType.CanGoBackProperty, typeof(RootFrameType));
+                        canGoBackPropertyDescriptor.RemoveValueChanged(_frame, CanGoBackChangedHandler);
+                        var canGoForwardPropertyDescriptor = DependencyPropertyDescriptor.FromProperty(RootFrameType.CanGoBackProperty, typeof(RootFrameType));
+                        canGoForwardPropertyDescriptor.RemoveValueChanged(_frame, CanGoForwardChangedHandler);
+#else
+                        _frame.UnregisterPropertyChangedCallback(RootFrameType.CanGoBackProperty, _canGoBackPropertyChangedCallbackToken);
+                        _frame.UnregisterPropertyChangedCallback(RootFrameType.CanGoForwardProperty, _canGoForwardPropertyChangedCallbackToken);
+#endif
+                        _frame.Navigating -= NavigatingEventHandler;
+                        _frame.NavigationFailed -= NavigationFailedEventHandler;
+                        _frame.Navigated -= NavigatedEventHandler;
+                    }
+
+                    _frame = rootFrame;
+
+                    if (_frame != null)
+                    {
+#if NET
+                        var propertyDescriptor = DependencyPropertyDescriptor.FromProperty(RootFrameType.CanGoBackProperty, typeof(RootFrameType));
+                        propertyDescriptor.AddValueChanged(_frame, CanGoBackChangedHandler);
+                        var canGoForwardPropertyDescriptor = DependencyPropertyDescriptor.FromProperty(RootFrameType.CanGoBackProperty, typeof(RootFrameType));
+                        canGoForwardPropertyDescriptor.AddValueChanged(_frame, CanGoForwardChangedHandler);
+#else
+                        _canGoBackPropertyChangedCallbackToken = _frame.RegisterPropertyChangedCallback(RootFrameType.CanGoBackProperty, (_, __) => OnCanGoBackChanged());
+                        _canGoForwardPropertyChangedCallbackToken = _frame.RegisterPropertyChangedCallback(RootFrameType.CanGoForwardProperty, (_, __) => OnCanGoForwardChanged());
+#endif
+                        _frame.Navigating += NavigatingEventHandler;
+                        _frame.NavigationFailed += NavigationFailedEventHandler;
+                        _frame.Navigated += NavigatedEventHandler;
+                    }
+                }
+
                 return rootFrame;
+
+#if NET
+                void CanGoBackChangedHandler(object sender, EventArgs e)
+                {
+                    OnCanGoBackChanged();
+                }
+                void CanGoForwardChangedHandler(object sender, EventArgs e)
+                {
+                    OnCanGoForwardChanged();
+                }
+#endif
+                void NavigatingEventHandler(object sender, NavigatingCancelEventArgs navigatingCancelEventArgs)
+                {
+                    OnNavigating();
+                }
+                void NavigationFailedEventHandler(object sender, NavigationFailedEventArgs navigationFailedEventArgs)
+                {
+                    OnNavigationFailed();
+                }
+                void NavigatedEventHandler(object sender, NavigationEventArgs navigationEventArgs)
+                {
+                    OnNavigated();
+                }
             }
         }
 
@@ -244,6 +310,7 @@ namespace Catel.Services
             }
 #endif
         }
+
         #endregion
     }
 }

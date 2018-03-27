@@ -43,6 +43,32 @@ namespace Catel.Services
         /// Occurs when nothing has canceled the application closing and the application is really about to be closed. 
         /// </summary>
         event EventHandler<EventArgs> ApplicationClosed;
+
+        /// <summary>
+        /// Occurs when value of <see cref="CanGoBack"/> property has changed;
+        /// </summary>
+        event EventHandler CanGoBackChanged;
+
+        /// <summary>
+        /// Occurs when value of <see cref="CanGoForward"/> property has changed;
+        /// </summary>
+        event EventHandler CanGoForwardChanged;
+
+        /// <summary>
+        /// Occurs when a new navigation is requested.
+        /// </summary>
+        event EventHandler Navigating;
+
+        /// <summary>
+        /// Occurs when an error is raised while navigating to the requested content.
+        /// </summary>
+        event EventHandler NavigationFailed;
+
+        /// <summary>
+        /// Occurs when the navigation to the requested content has been successfully completed.
+        /// </summary>
+        event EventHandler Navigated;
+
         #endregion
 
         #region Methods
