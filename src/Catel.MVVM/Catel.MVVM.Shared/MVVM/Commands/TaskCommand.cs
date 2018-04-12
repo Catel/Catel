@@ -298,8 +298,6 @@ namespace Catel.MVVM
                 {
                     tcs.TrySetResult(null);
                 }
-
-                _task = null;
             }
 
             if (executionTask?.IsCanceled ?? false)
