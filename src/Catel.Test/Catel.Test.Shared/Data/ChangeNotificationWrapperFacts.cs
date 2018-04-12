@@ -329,7 +329,7 @@ namespace Catel.Test.Data
 
                 newModel.FirstName = "Geert";
 
-                Assert.IsTrue(collectionItemPropertyChanged);
+                Assert.IsTrue(collectionItemPropertyChanged, "Collection item property should have changed");
             }
 
             [TestCase]
