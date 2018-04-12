@@ -28,13 +28,13 @@
 
   <ItemGroup>
     <PackageReference Include="AsyncUsageAnalyzers" Version="1.0.0-alpha003" />
-    <PackageReference Include="Catel.Fody" Version="2.19.0" />
-    <PackageReference Include="Fody" Version="2.3.23" />
-    <PackageReference Include="MethodTimer.Fody" Version="2.0.2" />
-    <PackageReference Include="ModuleInit.Fody" Version="1.7.1" />
+    <PackageReference Include="Catel.Fody" Version="3.3.0" />
+    <PackageReference Include="Fody" Version="3.0.3" />
+    <PackageReference Include="MethodTimer.Fody" Version="2.1.0" />
+    <PackageReference Include="ModuleInit.Fody" Version="1.8.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Obsolete.Fody" Version="4.3.7" />
-    <PackageReference Include="WpfAnalyzers" Version="2.1.2" />
+    <PackageReference Include="Obsolete.Fody" Version="4.4.0" />
+    <PackageReference Include="WpfAnalyzers" Version="2.1.2.1" />
   </ItemGroup>
 
   <ItemGroup>

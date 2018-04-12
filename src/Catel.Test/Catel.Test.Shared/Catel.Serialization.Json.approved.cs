@@ -4,10 +4,8 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Catel.Test")]
 [assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
 [assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName=".NET Framework 4.5")]
-
 namespace Catel.Core
 {
-    
     public class static ModuleInitializer
     {
         public static void Initialize() { }
@@ -15,7 +13,6 @@ namespace Catel.Core
 }
 namespace Catel
 {
-    
     public class static JsonExtensions
     {
         public static Newtonsoft.Json.JsonReader CreateReader(this Newtonsoft.Json.Linq.JToken token, Catel.Runtime.Serialization.ISerializationConfiguration configuration) { }
@@ -29,7 +26,6 @@ namespace Catel
 }
 namespace Catel.Runtime.Serialization.Json
 {
-    
     public class CatelJsonContractResolver : Newtonsoft.Json.Serialization.DefaultContractResolver
     {
         public CatelJsonContractResolver() { }
