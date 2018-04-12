@@ -89,8 +89,6 @@ namespace Catel.Test.MVVM.Commands
             {
                 taskCommand.Execute();
 
-                Assert.IsTrue(taskCommand.IsExecuting);
-
                 await taskCommand.Task;
 
                 Assert.Fail("Expected exception");
@@ -99,7 +97,7 @@ namespace Catel.Test.MVVM.Commands
             {
             }
 
-            Assert.IsFalse(taskCommand.IsExecuting);
+            Assert.IsFalse(taskCommand.IsExecuting, "Command should not be executing");
         }
 
         [TestCase]
@@ -117,9 +115,7 @@ namespace Catel.Test.MVVM.Commands
             {
                 taskCommand.Execute();
 
-                Assert.IsTrue(taskCommand.IsExecuting);
-
-                await Task.Delay(1000);
+                await Task.Delay(1500);
 
                 Assert.Fail("Expected exception");
             }
@@ -127,7 +123,7 @@ namespace Catel.Test.MVVM.Commands
             {
             }
 
-            Assert.IsFalse(taskCommand.IsExecuting);
+            Assert.IsFalse(taskCommand.IsExecuting, "Command should not be executing");
         }
 
         private static async Task TestExecuteAsync(CancellationToken cancellationToken)

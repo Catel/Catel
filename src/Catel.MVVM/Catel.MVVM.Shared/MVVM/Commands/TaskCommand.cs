@@ -254,18 +254,20 @@ namespace Catel.MVVM
 
             RaiseCanExecuteChanged();
 
-            var executionTask = executeAsync(parameter, _cancellationTokenSource.Token, _progress);
-
             // Use TaskCompletionSource to create a separate task that will not contain the
             // exception that might be thrown. This allows us to let the users await the task
             // but still respect the SwallowExceptions property
             var tcs = new TaskCompletionSource<object>();
             _task = tcs.Task;
 
+            Task executionTask = null;
+            var handledException = false;
+
             try
             {
                 Log.Debug("Executing task command");
 
+                executionTask = executeAsync(parameter, _cancellationTokenSource.Token, _progress);
                 await executionTask.ConfigureAwait(false);
             }
             catch (OperationCanceledException)
@@ -276,21 +278,31 @@ namespace Catel.MVVM
             {
                 Log.Error(ex, "Task ended with exception");
 
+                // Important: end the task, the exception thrown below will be earlier than the finally block
+                _cancellationTokenSource?.Dispose();
+                _cancellationTokenSource = null;
+
                 if (!SwallowExceptions)
                 {
+                    handledException = true;
+                    tcs.TrySetException(ex);
                     throw;
                 }
             }
             finally
             {
-                _cancellationTokenSource.Dispose();
+                _cancellationTokenSource?.Dispose();
                 _cancellationTokenSource = null;
 
-                tcs.TrySetResult(null);
+                if (!handledException)
+                {
+                    tcs.TrySetResult(null);
+                }
+
                 _task = null;
             }
 
-            if (executionTask.IsCanceled)
+            if (executionTask?.IsCanceled ?? false)
             {
                 Canceled.SafeInvoke(this, () => new CommandEventArgs(parameter));
             }
