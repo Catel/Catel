@@ -121,7 +121,7 @@ namespace Catel.Test.Data
 
                 wrapper.UnsubscribeFromAllEvents();
 
-                bool eventRaised = false;
+                var eventRaised = false;
                 wrapper.PropertyChanged += (sender, e) => eventRaised = true;
 
                 testModel.FirstName = "Geert";
@@ -137,7 +137,7 @@ namespace Catel.Test.Data
 
                 wrapper.UnsubscribeFromAllEvents();
 
-                bool eventRaised = false;
+                var eventRaised = false;
                 wrapper.CollectionChanged += (sender, e) => eventRaised = true;
 
                 collection.Add(new TestModel());
@@ -155,7 +155,7 @@ namespace Catel.Test.Data
 
                 wrapper.UnsubscribeFromAllEvents();
 
-                bool eventRaised = false;
+                var eventRaised = false;
                 wrapper.CollectionItemPropertyChanged += (sender, e) => eventRaised = true;
 
                 testModel.FirstName = "Geert";
@@ -173,7 +173,7 @@ namespace Catel.Test.Data
                 var model = new TestModel();
                 var wrapper = new ChangeNotificationWrapper(model);
 
-                bool propertyChanged = false;
+                var propertyChanged = false;
 
                 wrapper.PropertyChanged += (sender, e) => propertyChanged = true;
 
@@ -192,8 +192,8 @@ namespace Catel.Test.Data
                 var collection = new ObservableCollection<TestModel>();
                 var wrapper = new ChangeNotificationWrapper(collection);
 
-                bool itemsAdded = false;
-                bool itemsRemoved = false;
+                var itemsAdded = false;
+                var itemsRemoved = false;
 
                 wrapper.CollectionChanged += (sender, e) =>
                 {
@@ -250,7 +250,7 @@ namespace Catel.Test.Data
 
                 using (collection.SuspendChangeNotifications(SuspensionMode.MixedConsolidate))
                 {
-                    ((ICollection<TestModel>)collection).ReplaceRange(new [] { new TestModel() });
+                    collection.ReplaceRange(new [] { new TestModel() });
                 }
 
                 Assert.IsTrue(itemsAdded, "Items should be added");
@@ -267,7 +267,7 @@ namespace Catel.Test.Data
 
                 var wrapper = new ChangeNotificationWrapper(collection);
 
-                bool collectionItemPropertyChanged = false;
+                var collectionItemPropertyChanged = false;
 
                 wrapper.CollectionItemPropertyChanged += (sender, e) => collectionItemPropertyChanged = true;
 
@@ -282,7 +282,7 @@ namespace Catel.Test.Data
                 var collection = new ObservableCollection<TestModel>();
                 TestModel model = null;
 
-                for (int i = 0; i < 10; i++)
+                for (var i = 0; i < 10; i++)
                 {
                     var randomModel = new TestModel();
                     collection.Add(randomModel);
@@ -292,7 +292,7 @@ namespace Catel.Test.Data
 
                 var wrapper = new ChangeNotificationWrapper(collection);
 
-                bool collectionItemPropertyChanged = false;
+                var collectionItemPropertyChanged = false;
 
                 wrapper.CollectionItemPropertyChanged += (sender, e) => collectionItemPropertyChanged = true;
 
@@ -308,7 +308,7 @@ namespace Catel.Test.Data
             {
                 var collection = new FastObservableCollection<TestModel>();
 
-                for (int i = 0; i < 10; i++)
+                for (var i = 0; i < 10; i++)
                 {
                     var randomModel = new TestModel();
                     collection.Add(randomModel);
@@ -338,7 +338,7 @@ namespace Catel.Test.Data
                 var collection = new FastObservableCollection<TestModel>();
                 TestModel model = null;
 
-                for (int i = 0; i < 10; i++)
+                for (var i = 0; i < 10; i++)
                 {
                     var randomModel = new TestModel();
                     collection.Add(randomModel);
@@ -375,6 +375,7 @@ namespace Catel.Test.Data
 
                 model = null;
                 GC.Collect();
+                GC.WaitForPendingFinalizers();
 
                 Assert.IsFalse(wrapper.IsObjectAlive);
             }
@@ -390,6 +391,7 @@ namespace Catel.Test.Data
 
                 collectionModel = null;
                 GC.Collect();
+                GC.WaitForPendingFinalizers();
 
                 Assert.IsFalse(wrapper.IsObjectAlive);
             }
