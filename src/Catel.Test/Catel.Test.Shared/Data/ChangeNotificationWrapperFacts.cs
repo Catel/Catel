@@ -253,9 +253,9 @@ namespace Catel.Test.Data
                     ((ICollection<TestModel>)collection).ReplaceRange(new [] { new TestModel() });
                 }
 
-                Assert.IsTrue(itemsAdded);
-                Assert.IsTrue(itemsRemoved);
-                Assert.IsFalse(itemsReset);
+                Assert.IsTrue(itemsAdded, "Items should be added");
+                Assert.IsTrue(itemsRemoved, "Items should be removed");
+                Assert.IsFalse(itemsReset, "Items should not be reset");
             }
 
             [TestCase]
