@@ -35,7 +35,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>..\..\..\output\release\NET45\Test\</OutputPath>
     <DefineConstants>TRACE;NET; NET45; TEST</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
