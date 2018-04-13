@@ -897,6 +897,18 @@ namespace Catel.Reflection
                 return true;
             }
 
+            //// Ignore windows assemblies
+            //if (assemblyFullName.Contains("ContentType=WindowsRuntime"))
+            //{
+            //    return true;
+            //}
+
+            //// Ignore System.Runtime (.net standard)
+            //if (assemblyFullName.StartsWith("System.Runtime,"))
+            //{
+            //    return true;
+            //}
+
             foreach (var evaluator in ShouldIgnoreAssemblyEvaluators)
             {
                 if (evaluator.Invoke(assembly))
