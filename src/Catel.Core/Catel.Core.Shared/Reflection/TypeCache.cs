@@ -852,8 +852,7 @@ namespace Catel.Reflection
             var newAssemblyName = TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName);
             var newFullType = TypeHelper.FormatType(newAssemblyName, type.FullName);
 
-            Dictionary<string, Type> typesByAssembly;
-            if (!_typesByAssembly.TryGetValue(newAssemblyName, out typesByAssembly))
+            if (!_typesByAssembly.TryGetValue(newAssemblyName, out var typesByAssembly))
             {
                 typesByAssembly = new Dictionary<string, Type>();
                 _typesByAssembly[newAssemblyName] = typesByAssembly;
