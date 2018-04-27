@@ -6,6 +6,7 @@
 
 
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Catel.Data;
 using Catel.IoC;
@@ -34,7 +35,9 @@ public class GlobalInitialization
         modelEqualityComparer.CompareValues = true;
         modelEqualityComparer.CompareCollections = true;
 
-        //System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+        var culture = new CultureInfo("en-US");
+        System.Threading.Thread.CurrentThread.CurrentCulture = culture;
+        System.Threading.Thread.CurrentThread.CurrentUICulture = culture;
 
         // Required since we do multithreaded initialization
         TypeCache.InitializeTypes(allowMultithreadedInitialization: false);
