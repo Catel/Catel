@@ -25,7 +25,7 @@ For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/
 
 Release date:
 =============
-2018/xx/xx
+2018/04/28
 
 Platform support changes:
 =========================
@@ -45,7 +45,7 @@ Added/fixed:
 (*) #1169 Improve FormattingConverter to allow more usages
 (*) #1170 Implement Path.GetApplicationDataDirectory to allow its usage on all platforms
 (*) #1174 Use ConverterHelper.ShouldInvert on all converters so converter parameters can be used 
-    to invert the behavior of a converter
+    to invert the behavior of a converter, check your usages of BooleanTo*VisibilityConverter!
 (*) #1177 Improve performance of assembly loading for UWP
 (x) #1175 TypeHelper.TryCast should not throw exceptions
 

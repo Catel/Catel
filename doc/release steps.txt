@@ -3,7 +3,7 @@ What steps to perform when releasing:
 Prerelease steps:
 =================
 1) Write blog post about what's new in the latest version
-
+2) Update release date in history.txt
 
 Final release steps:
 ====================
