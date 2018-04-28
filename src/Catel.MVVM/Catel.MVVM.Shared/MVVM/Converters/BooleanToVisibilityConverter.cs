@@ -57,22 +57,13 @@ namespace Catel.MVVM.Converters
         /// </returns>
         protected override bool IsVisible(object value, Type targetType, object parameter)
         {
-            bool? param = null;
-            bool tmp;
-
-            if (parameter != null && bool.TryParse(parameter.ToString(), out tmp))
-            {
-                param = tmp;
-            }
-
             if (value is bool)
             {
-                if (!param.HasValue)
-                {
-                    return (bool) value;
-                }
+                var isVisible = (bool) value;
 
-                return ((bool) value == param.Value);
+                // Note: base class will invert if needed
+
+                return isVisible;
             }
 
             return false;
@@ -89,21 +80,14 @@ namespace Catel.MVVM.Converters
         /// </returns>
         protected override object ConvertBack(object value, Type targetType, object parameter)
         {
-            bool? param = null;
-            bool tmp;
-
-            if (parameter != null && bool.TryParse(parameter.ToString(), out tmp))
-            {
-                param = tmp;
-            }
-
             if (value is Visibility)
             {
-                bool isVisible = (Visibility) value == Visibility.Visible;
+                var isVisible = (Visibility) value == Visibility.Visible;
 
-                if (param.HasValue)
+                // Note: base class will doesn't implement ConvertBack so we need to invert ourselves
+                if (SupportInversionUsingCommandParameter && ConverterHelper.ShouldInvert(parameter))
                 {
-                    return isVisible == param;
+                    isVisible = !isVisible;
                 }
 
                 return isVisible;

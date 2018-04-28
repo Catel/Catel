@@ -437,40 +437,46 @@ namespace Catel.Reflection
         /// <returns>When a cast is succeded true else false.</returns>
         public static bool TryCast<TOutput, TInput>(TInput value, out TOutput output)
         {
-            bool success = true;
-            Type outputType = typeof(TOutput);
-            Type innerType = Nullable.GetUnderlyingType(outputType);
+            var success = true;
 
-            // Database support...
-            if (value == null)
+            try
             {
-                output = default(TOutput);
+                var outputType = typeof(TOutput);
+                var innerType = Nullable.GetUnderlyingType(outputType);
 
-                if (outputType.IsValueTypeEx() && innerType == null)
+                // Database support...
+                if (value == null)
                 {
-                    success = false;
+                    output = default(TOutput);
+
+                    if (outputType.IsValueTypeEx() && innerType == null)
+                    {
+                        success = false;
+                    }
+                    else
+                    {
+                        // Non-valuetype can contain nill.
+                        // (Nullable<T> also)
+                    }
                 }
                 else
                 {
-                    // Non-valuetype can contain nill.
-                    // (Nullable<T> also)
-                    success = true;
+                    var inputType = value.GetType();
+                    if (inputType.IsAssignableFromEx(outputType))
+                    {
+                        // Direct assignable
+                        output = (TOutput)(object)value;
+                    }
+                    else
+                    {
+                        output = (TOutput)Convert.ChangeType(value, innerType ?? outputType, CultureInfo.InvariantCulture);
+                    }
                 }
             }
-            else
+            catch (Exception)
             {
-                Type inputType = value.GetType();
-                if (inputType.IsAssignableFromEx(outputType))
-                {
-                    // Direct assignable
-                    success = true;
-                    output = (TOutput)(object)value;
-                }
-                else
-                {
-                    output = (TOutput)Convert.ChangeType(value, innerType ?? outputType, CultureInfo.InvariantCulture);
-                    success = true;
-                }
+                output = default(TOutput);
+                success = false;
             }
 
             return success;
@@ -501,9 +507,9 @@ namespace Catel.Reflection
             if (!TryCast(value, out output))
             {
                 var tI = value.GetType().GetSafeFullName(false);
-                string tO = typeof(TOutput).FullName;
-                string vl = string.Concat(value);
-                string msg = "Failed to cast from '{0}' to '{1}'";
+                var tO = typeof(TOutput).FullName;
+                var vl = string.Concat(value);
+                var msg = $"Failed to cast from '{0}' to '{1}'";
 
                 if (!tI.Equals(vl))
                 {

@@ -124,12 +124,14 @@ namespace Catel.MVVM.Providers
 
             Argument.IsNotNull("targetView", targetView);
 
+            var targetViewType = targetView.GetType();
+
             if (viewModelType == null)
             {
-                viewModelType = (viewModel != null) ? viewModel.GetType() : _viewModelLocator.ResolveViewModel(targetView.GetType());
+                viewModelType = (viewModel != null) ? viewModel.GetType() : _viewModelLocator.ResolveViewModel(targetViewType);
                 if (viewModelType == null)
                 {
-                    throw Log.ErrorAndCreateException<NotSupportedException>("The view model of the view '{0}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually", TargetViewType?.Name);
+                    throw Log.ErrorAndCreateException<NotSupportedException>($"The view model of the view '{targetViewType.Name}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually");
                 }
             }
 

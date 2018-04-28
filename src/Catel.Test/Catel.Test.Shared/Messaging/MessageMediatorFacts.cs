@@ -315,6 +315,7 @@ namespace Catel.Test.Messaging
 
                 recipient = null;
                 GC.Collect();
+                GC.WaitForPendingFinalizers();
 
                 Assert.IsFalse(sender.SendMessage(mediator, "test"));
                 Assert.AreEqual(0, mediator.GetRegisteredHandlers<string>().Count, "SendMessage should auto cleanup");

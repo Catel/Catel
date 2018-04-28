@@ -402,6 +402,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Markup\ServiceDependencyExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Markup\UpdatableMarkupExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\DispatcherOperation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Extensions\DispatcherExtensions.begininvokeasync.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Extensions\DispatcherExtensions.tasks.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Extensions\DispatcherExtensions.begininvoke.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Windows\Threading\Extensions\DispatcherExtensions.invoke.cs" />

@@ -78,16 +78,7 @@ namespace Catel.MVVM.Converters
                 isVisible = ((short)value) > 0;
             }
 
-            var invertParameter = parameter as string;
-            if (!string.IsNullOrWhiteSpace(invertParameter))
-            {
-                var invert = false;
-                bool.TryParse(invertParameter, out invert);
-                if (invert)
-                {
-                    isVisible = !isVisible;
-                }
-            }
+            // Note: base class will invert if needed
 
             return isVisible;
         }

@@ -33,6 +33,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\CatelTypeInfoFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ChangeNotificationWrapperFacts.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ComparableModelBaseFacts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\Family.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ModelWithObservableCollection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ModelWithCollectionViewSource.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\TestClasses\ClassWithoutPropertiesA.cs" />

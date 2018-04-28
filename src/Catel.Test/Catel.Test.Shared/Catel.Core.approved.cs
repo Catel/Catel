@@ -4,10 +4,8 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Catel.Test")]
 [assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
 [assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName=".NET Framework 4.5")]
-
 namespace Catel.ApiCop
 {
-    
     public class ApiCop : Catel.ApiCop.IApiCop
     {
         public ApiCop(System.Type targetType) { }
@@ -120,7 +118,6 @@ namespace Catel.ApiCop
 }
 namespace Catel.ApiCop.Listeners
 {
-    
     public class ConsoleApiCopListener : Catel.ApiCop.TextApiCopListenerBase
     {
         public ConsoleApiCopListener() { }
@@ -136,7 +133,6 @@ namespace Catel.ApiCop.Listeners
 }
 namespace Catel.ApiCop.Rules
 {
-    
     public class InitializationApiCopRule : Catel.ApiCop.ApiCopRule
     {
         public InitializationApiCopRule(string name, string description, Catel.ApiCop.ApiCopRuleLevel level, Catel.ApiCop.Rules.InitializationMode recommendedInitializationMode, string url = null) { }
@@ -167,7 +163,6 @@ namespace Catel.ApiCop.Rules
 }
 namespace Catel
 {
-    
     public class static Argument
     {
         public static void ImplementsInterface(string paramName, object instance, System.Type interfaceType) { }
@@ -294,7 +289,6 @@ namespace Catel
         public DisposableToken(object instance, System.Action<Catel.IDisposableToken<object>> initialize, System.Action<Catel.IDisposableToken<object>> dispose, object tag = null) { }
     }
     public class DisposableToken<T> : Catel.IDisposableToken<T>, System.IDisposable
-    
     {
         public DisposableToken(T instance, System.Action<Catel.IDisposableToken<T>> initialize, System.Action<Catel.IDisposableToken<T>> dispose, object tag = null) { }
         public T Instance { get; }
@@ -423,7 +417,6 @@ namespace Catel
         bool MatchesObject(object target);
     }
     public interface IDisposableToken<T> : System.IDisposable
-    
     {
         T Instance { get; }
         object Tag { get; }
@@ -433,7 +426,6 @@ namespace Catel
         bool Execute();
     }
     public interface IExecute<TResult>
-    
     {
         bool Execute(out TResult result);
     }
@@ -442,7 +434,6 @@ namespace Catel
         bool ExecuteWithObject(object parameter);
     }
     public interface IExecuteWithObject<TResult>
-    
     {
         bool ExecuteWithObject(object parameter, out TResult result);
     }
@@ -463,7 +454,6 @@ namespace Catel
         string MethodName { get; }
     }
     public interface IWeakAction<TParameter> : Catel.IExecuteWithObject, Catel.IWeakReference
-    
     {
         System.Delegate Action { get; }
         string MethodName { get; }
@@ -485,14 +475,11 @@ namespace Catel
         void Detach();
     }
     public interface IWeakFunc<TResult> : Catel.IExecute<TResult>, Catel.IWeakReference
-    
     {
         System.Delegate Action { get; }
         string MethodName { get; }
     }
     public interface IWeakFunc<TParameter, TResult> : Catel.IExecuteWithObject<TResult>, Catel.IWeakReference
-    
-    
     {
         System.Delegate Action { get; }
         string MethodName { get; }
@@ -554,6 +541,7 @@ namespace Catel
     public class static ParallelHelper
     {
         public static void ExecuteInParallel<T>(System.Collections.Generic.List<T> items, System.Action<T> actionToInvoke, int itemsPerBatch = 1000, string taskName = null) { }
+        public static System.Threading.Tasks.Task ExecuteInParallelAsync(System.Collections.Generic.List<System.Func<System.Threading.Tasks.Task>> tasks, int batchSize = 1000, string taskName = null) { }
     }
     public class static Platforms
     {
@@ -679,7 +667,6 @@ namespace Catel
         public delegate void OpenInstanceAction<TTarget>(TTarget @this);
     }
     public class WeakAction<TParameter> : Catel.WeakActionBase, Catel.IExecuteWithObject, Catel.IWeakAction<TParameter>, Catel.IWeakReference
-    
     {
         public WeakAction(object target, System.Action<TParameter> action) { }
         public System.Delegate Action { get; }
@@ -716,7 +703,6 @@ namespace Catel
     public class WeakEventListener<TTarget, TSource, TEventArgs> : Catel.IWeakEventListener
         where TTarget :  class
         where TSource :  class
-    
     {
         public System.Type EventArgsType { get; }
         public bool IsSourceAlive { get; }
@@ -739,7 +725,6 @@ namespace Catel
         public static Catel.IWeakEventListener SubscribeToWeakPropertyChangedEvent(TTarget target, TSource source, System.ComponentModel.PropertyChangedEventHandler handler, bool throwWhenSubscriptionFails = True, string eventName = "PropertyChanged") { }
     }
     public class WeakFunc<TResult> : Catel.WeakActionBase, Catel.IExecute<TResult>, Catel.IWeakFunc<TResult>, Catel.IWeakReference
-    
     {
         public WeakFunc(object target, System.Func<TResult> func) { }
         public System.Delegate Action { get; }
@@ -748,8 +733,6 @@ namespace Catel
         public delegate TResult OpenInstanceAction<TResult, TTarget>(TTarget @this);
     }
     public class WeakFunc<TParameter, TResult> : Catel.WeakActionBase, Catel.IExecuteWithObject<TResult>, Catel.IWeakFunc<TParameter, TResult>, Catel.IWeakReference
-    
-    
     {
         public WeakFunc(object target, System.Func<TParameter, TResult> func) { }
         public System.Delegate Action { get; }
@@ -760,10 +743,7 @@ namespace Catel
 }
 namespace Catel.Caching
 {
-    
     public class CacheStorage<TKey, TValue> : Catel.Caching.ICacheStorage<TKey, TValue>
-    
-    
     {
         public CacheStorage(System.Func<Catel.Caching.Policies.ExpirationPolicy> defaultExpirationPolicyInitCode = null, bool storeNullValues = False, System.Collections.Generic.IEqualityComparer<TKey> equalityComparer = null) { }
         public bool DisposeValuesOnRemoval { get; set; }
@@ -784,8 +764,6 @@ namespace Catel.Caching
         public void Remove(TKey key, System.Action action = null) { }
     }
     public class ExpiredEventArgs<TKey, TValue> : System.EventArgs
-    
-    
     {
         public ExpiredEventArgs(TKey key, TValue value, bool dispose) { }
         public bool Dispose { get; set; }
@@ -793,8 +771,6 @@ namespace Catel.Caching
         public TValue Value { get; }
     }
     public class ExpiringEventArgs<TKey, TValue> : System.EventArgs
-    
-    
     {
         public ExpiringEventArgs(TKey key, TValue value, Catel.Caching.Policies.ExpirationPolicy expirationPolicy) { }
         public bool Cancel { get; set; }
@@ -803,8 +779,6 @@ namespace Catel.Caching
         public TValue Value { get; }
     }
     public interface ICacheStorage<TKey, TValue>
-    
-    
     {
         bool DisposeValuesOnRemoval { get; set; }
         System.TimeSpan ExpirationTimerInterval { get; set; }
@@ -826,7 +800,6 @@ namespace Catel.Caching
 }
 namespace Catel.Caching.Policies
 {
-    
     public class AbsoluteExpirationPolicy : Catel.Caching.Policies.ExpirationPolicy
     {
         protected AbsoluteExpirationPolicy(System.DateTime absoluteExpirationDateTime, bool canReset) { }
@@ -872,7 +845,6 @@ namespace Catel.Caching.Policies
 }
 namespace Catel.Collections
 {
-    
     public class static ArrayShim
     {
         public static T[] Empty<T>() { }
@@ -913,8 +885,6 @@ namespace Catel.Collections
         System.IDisposable SuspendChangeNotifications(Catel.Collections.SuspensionMode mode);
     }
     public class ListDictionary<TKey, TValue> : System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IDictionary<TKey, TValue>, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.IEnumerable
-    
-    
     {
         public ListDictionary() { }
         public int Count { get; }
@@ -946,7 +916,6 @@ namespace Catel.Collections
 }
 namespace Catel.ComponentModel
 {
-    
     [System.AttributeUsageAttribute(System.AttributeTargets.Class | System.AttributeTargets.Enum | System.AttributeTargets.Method | System.AttributeTargets.Property | System.AttributeTargets.Field | System.AttributeTargets.Event | System.AttributeTargets.All)]
     public class DisplayNameAttribute : System.ComponentModel.DisplayNameAttribute
     {
@@ -958,7 +927,6 @@ namespace Catel.ComponentModel
 }
 namespace Catel.Configuration
 {
-    
     public class ConfigurationChangedEventArgs : System.EventArgs
     {
         public ConfigurationChangedEventArgs(Catel.Configuration.ConfigurationContainer container, string key, object newValue) { }
@@ -989,6 +957,8 @@ namespace Catel.Configuration
         protected virtual string GetValueFromStore(Catel.Configuration.ConfigurationContainer container, string key) { }
         public void InitializeValue(Catel.Configuration.ConfigurationContainer container, string key, object defaultValue) { }
         public bool IsValueAvailable(Catel.Configuration.ConfigurationContainer container, string key) { }
+        public void SetLocalConfigFilePath(string filePath) { }
+        public void SetRoamingConfigFilePath(string filePath) { }
         public void SetValue(Catel.Configuration.ConfigurationContainer container, string key, object value) { }
         protected virtual void SetValueToStore(Catel.Configuration.ConfigurationContainer container, string key, string value) { }
         public System.IDisposable SuspendNotifications() { }
@@ -1020,6 +990,8 @@ namespace Catel.Configuration
         T GetValue<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = null);
         void InitializeValue(Catel.Configuration.ConfigurationContainer container, string key, object defaultValue);
         bool IsValueAvailable(Catel.Configuration.ConfigurationContainer container, string key);
+        void SetLocalConfigFilePath(string filePath);
+        void SetRoamingConfigFilePath(string filePath);
         void SetValue(Catel.Configuration.ConfigurationContainer container, string key, object value);
         System.IDisposable SuspendNotifications();
     }
@@ -1037,7 +1009,6 @@ namespace Catel.Configuration
 }
 namespace Catel.Core
 {
-    
     public class static ModuleInitializer
     {
         public static void Initialize() { }
@@ -1045,7 +1016,6 @@ namespace Catel.Core
 }
 namespace Catel.Data
 {
-    
     public class AdvancedPropertyChangedEventArgs : System.ComponentModel.PropertyChangedEventArgs
     {
         public AdvancedPropertyChangedEventArgs(object sender, Catel.Data.AdvancedPropertyChangedEventArgs e) { }
@@ -1387,7 +1357,6 @@ namespace Catel.Data
         Catel.Data.IValidator GetValidator(System.Type targetType);
     }
     public interface IValueValidator<in TValue>
-    
     {
         bool IsValid(TValue value);
     }
@@ -1810,7 +1779,6 @@ namespace Catel.Data
         protected abstract Catel.Data.IValidator GetValidator(System.Type targetType);
     }
     public class XmlNameMapper<T>
-    
     {
         public bool IsPropertyNameMappedToXmlName(System.Type type, string propertyName) { }
         public bool IsXmlNameMappedToProperty(System.Type type, string xmlName) { }
@@ -1820,7 +1788,6 @@ namespace Catel.Data
 }
 namespace Catel.ExceptionHandling
 {
-    
     public class BufferedEventArgs : System.EventArgs
     {
         public BufferedEventArgs(System.Exception bufferedException, System.DateTime dateTime) { }
@@ -1968,7 +1935,6 @@ namespace Catel.ExceptionHandling
 }
 namespace Catel.IO
 {
-    
     public enum ApplicationDataTarget
     {
         UserLocal = 0,
@@ -2005,7 +1971,6 @@ namespace Catel.IO
 }
 namespace Catel.IoC
 {
-    
     public class CatelDependencyResolver : Catel.IoC.IDependencyResolver
     {
         public CatelDependencyResolver(Catel.IoC.IServiceLocator serviceLocator) { }
@@ -2318,19 +2283,15 @@ namespace Catel.IoC
         public static void RegisterInstance<TService>(this Catel.IoC.IServiceLocator serviceLocator, TService instance, object tag = null) { }
         public static void RegisterType<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
         public static void RegisterType<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = True)
-        
             where TServiceImplementation : TService { }
         public static void RegisterType<TService>(this Catel.IoC.IServiceLocator serviceLocator, System.Func<Catel.IoC.ServiceLocatorRegistration, TService> createServiceFunc, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = True) { }
         public static TServiceImplementation RegisterTypeAndInstantiate<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator) { }
         public static TService RegisterTypeAndInstantiate<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator)
-        
             where TServiceImplementation : TService { }
         public static void RegisterTypeIfNotYetRegistered<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0)
-        
             where TServiceImplementation : TService { }
         public static void RegisterTypeIfNotYetRegistered(this Catel.IoC.IServiceLocator serviceLocator, System.Type serviceType, System.Type serviceImplementationType, Catel.IoC.RegistrationType registrationType = 0) { }
         public static void RegisterTypeIfNotYetRegisteredWithTag<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null, Catel.IoC.RegistrationType registrationType = 0)
-        
             where TServiceImplementation : TService { }
         public static void RegisterTypeIfNotYetRegisteredWithTag(this Catel.IoC.IServiceLocator serviceLocator, System.Type serviceType, System.Type serviceImplementationType, object tag = null, Catel.IoC.RegistrationType registrationType = 0) { }
         public static Catel.IoC.IRegistrationConventionHandler RegisterTypesUsingAllConventions(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
@@ -2340,7 +2301,6 @@ namespace Catel.IoC
         public static Catel.IoC.IRegistrationConventionHandler RegisterTypesUsingDefaultNamingConvention(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
         public static void RegisterTypeWithTag<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null, Catel.IoC.RegistrationType registrationType = 0) { }
         public static void RegisterTypeWithTag<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = True)
-        
             where TServiceImplementation : TService { }
         public static void RegisterTypeWithTag<TService>(this Catel.IoC.IServiceLocator serviceLocator, System.Func<Catel.IoC.ServiceLocatorRegistration, TService> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = True) { }
         public static void RemoveType<TService>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null) { }
@@ -2449,7 +2409,6 @@ namespace Catel.IoC
 }
 namespace Catel.Linq
 {
-    
     public class static EnumerableExtensions
     {
         public static System.Collections.IEnumerable AsReadOnly(this System.Collections.IEnumerable instance, System.Type type) { }
@@ -2460,7 +2419,6 @@ namespace Catel.Linq
 }
 namespace Catel.Logging
 {
-    
     public abstract class BatchLogListenerBase : Catel.Logging.LogListenerBase, Catel.Logging.IBatchLogListener
     {
         public BatchLogListenerBase(int maxBatchCount = 100) { }
@@ -2833,7 +2791,6 @@ namespace Catel.Logging
 }
 namespace Catel.Messaging
 {
-    
     public class CombinedMessage : Catel.Messaging.MessageBase<Catel.Messaging.CombinedMessage, bool>
     {
         public CombinedMessage() { }
@@ -2853,7 +2810,6 @@ namespace Catel.Messaging
     }
     public abstract class MessageBase<TMessage, TData>
         where TMessage : Catel.Messaging.MessageBase<, >, new ()
-    
     {
         protected MessageBase() { }
         protected MessageBase(TData data) { }
@@ -2897,7 +2853,6 @@ namespace Catel.Messaging
 }
 namespace Catel.Pooling
 {
-    
     public class Buffer4096Poolable : Catel.Pooling.BufferPoolableBase
     {
         public Buffer4096Poolable() { }
@@ -2948,7 +2903,6 @@ namespace Catel.Pooling
 }
 namespace Catel.Reflection
 {
-    
     public class static AppDomainExtensions
     {
         public static T CreateInstanceAndUnwrap<T>(this System.AppDomain appDomain)
@@ -3108,7 +3062,6 @@ namespace Catel.Reflection
         public static System.Reflection.MethodInfo GetMethodEx(this System.Type type, string name, System.Type[] types, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.MethodInfo[] GetMethodsEx(this System.Type type, bool flattenHierarchy = True, bool allowStaticMembers = False) { }
         public static System.Reflection.MethodInfo[] GetMethodsEx(this System.Type type, System.Reflection.BindingFlags bindingFlags) { }
-        [System.Runtime.CompilerServices.IteratorStateMachineAttribute(typeof(Catel.Reflection.ReflectionExtensions.<GetParentTypes>d__26))]
         public static System.Collections.Generic.IEnumerable<System.Type> GetParentTypes(this System.Type type) { }
         public static System.Reflection.PropertyInfo[] GetPropertiesEx(this System.Type type, bool flattenHierarchy = True, bool allowStaticMembers = False) { }
         public static System.Reflection.PropertyInfo[] GetPropertiesEx(this System.Type type, System.Reflection.BindingFlags bindingFlags) { }
@@ -3225,7 +3178,6 @@ namespace Catel.Reflection
 }
 namespace Catel.Runtime
 {
-    
     public class ReferenceEqualityComparer<TObject> : System.Collections.Generic.IEqualityComparer<TObject>
         where TObject :  class
     {
@@ -3257,7 +3209,6 @@ namespace Catel.Runtime
 }
 namespace Catel.Runtime.Serialization.Binary
 {
-    
     public class BinarySerializationContextInfo : Catel.Runtime.Serialization.SerializationInfoSerializationContextInfo
     {
         public BinarySerializationContextInfo(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> memberValues = null, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter binaryFormatter = null) { }
@@ -3304,7 +3255,6 @@ namespace Catel.Runtime.Serialization.Binary
 }
 namespace Catel.Runtime.Serialization
 {
-    
     public class CacheInvalidatedEventArgs : System.EventArgs
     {
         public CacheInvalidatedEventArgs(System.Type type) { }
@@ -3394,11 +3344,9 @@ namespace Catel.Runtime.Serialization
     public class static ISerializationManagerExtensions
     {
         public static void AddSerializerModifier<TType, TSerializerModifier>(this Catel.Runtime.Serialization.ISerializationManager serializationManager)
-        
             where TSerializerModifier : Catel.Runtime.Serialization.ISerializerModifier { }
         public static Catel.Runtime.Serialization.ISerializerModifier[] GetSerializerModifiers<TType>(this Catel.Runtime.Serialization.ISerializationManager serializationManager) { }
         public static void RemoveSerializerModifier<TType, TSerializerModifier>(this Catel.Runtime.Serialization.ISerializationManager serializationManager)
-        
             where TSerializerModifier : Catel.Runtime.Serialization.ISerializerModifier { }
     }
     public interface ISerializer
@@ -3710,7 +3658,6 @@ namespace Catel.Runtime.Serialization
         public virtual System.Nullable<bool> ShouldSerializeMemberUsingParse(Catel.Runtime.Serialization.MemberValue memberValue) { }
     }
     public abstract class SerializerModifierBase<TModel> : Catel.Runtime.Serialization.SerializerModifierBase
-    
     {
         protected SerializerModifierBase() { }
         public virtual void OnDeserialized(Catel.Runtime.Serialization.ISerializationContext context, TModel model) { }
@@ -3726,7 +3673,6 @@ namespace Catel.Runtime.Serialization
 }
 namespace Catel.Runtime.Serialization.Xml
 {
-    
     public class DataContractSerializerFactory : Catel.Runtime.Serialization.Xml.IDataContractSerializerFactory
     {
         public DataContractSerializerFactory() { }
@@ -3850,7 +3796,6 @@ namespace Catel.Runtime.Serialization.Xml
 }
 namespace Catel.Scoping
 {
-    
     public class ScopeClosedEventArgs : System.EventArgs
     {
         public ScopeClosedEventArgs(object scopeObject, string scopeName) { }
@@ -3871,7 +3816,6 @@ namespace Catel.Scoping
 }
 namespace Catel.Services
 {
-    
     public class GuidObjectIdGenerator<TObjectType> : Catel.Services.ObjectIdGenerator<TObjectType, System.Guid>
         where TObjectType :  class
     {
@@ -3916,14 +3860,12 @@ namespace Catel.Services
         public static T ConvertFromStringToObject<T>(this Catel.Services.IObjectConverterService service, string value) { }
     }
     public interface IObjectIdGenerator<TUniqueIdentifier>
-    
     {
         TUniqueIdentifier GetUniqueIdentifier(bool reuse = False);
         void ReleaseIdentifier(TUniqueIdentifier identifier);
     }
     public interface IObjectIdGenerator<in TObjectType, TUniqueIdentifier> : Catel.Services.IObjectIdGenerator<TUniqueIdentifier>
         where in TObjectType :  class
-    
     {
         TUniqueIdentifier GetUniqueIdentifierForInstance(TObjectType instance, bool reuse = False);
     }
@@ -3989,7 +3931,6 @@ namespace Catel.Services
     }
     public abstract class NumericBasedObjectIdGenerator<TObjectType, TUniqueIdentifier> : Catel.Services.ObjectIdGenerator<TObjectType, TUniqueIdentifier>
         where TObjectType :  class
-    
     {
         protected NumericBasedObjectIdGenerator() { }
         protected static TUniqueIdentifier Value { get; set; }
@@ -4006,7 +3947,6 @@ namespace Catel.Services
     }
     public abstract class ObjectIdGenerator<TObjectType, TUniqueIdentifier> : Catel.Services.IObjectIdGenerator<TUniqueIdentifier>, Catel.Services.IObjectIdGenerator<TObjectType, TUniqueIdentifier>
         where TObjectType :  class
-    
     {
         protected ObjectIdGenerator() { }
         protected abstract TUniqueIdentifier GenerateUniqueIdentifier();
@@ -4041,7 +3981,6 @@ namespace Catel.Services
 }
 namespace Catel.Test
 {
-    
     public class static ExceptionTester
     {
         public static TException CallMethodAndExpectException<TException>(System.Action action, System.Func<TException, bool> exceptionValidator = null)
@@ -4050,7 +3989,6 @@ namespace Catel.Test
 }
 namespace Catel.Text
 {
-    
     public class static StringBuilderExtensions
     {
         public static void AppendLine(this System.Text.StringBuilder sb, string format, params object[] args) { }
@@ -4058,7 +3996,6 @@ namespace Catel.Text
 }
 namespace Catel.Threading
 {
-    
     [System.Diagnostics.DebuggerDisplayAttribute("Id = {Id}, Taken = {_taken}")]
     [System.Diagnostics.DebuggerTypeProxyAttribute(typeof(Catel.Threading.AsyncLock.DebugView))]
     public sealed class AsyncLock
@@ -4087,12 +4024,10 @@ namespace Catel.Threading
     [System.Diagnostics.DebuggerDisplayAttribute("Count = {Count}")]
     [System.Diagnostics.DebuggerTypeProxyAttribute(typeof(Catel.Threading.DefaultAsyncWaitQueue<>.DebugView))]
     public sealed class DefaultAsyncWaitQueue<T> : Catel.Threading.IAsyncWaitQueue<T>
-    
     {
         public DefaultAsyncWaitQueue() { }
     }
     public interface IAsyncWaitQueue<T>
-    
     {
         bool IsEmpty { get; }
         System.IDisposable CancelAll();
@@ -4144,7 +4079,6 @@ namespace Catel.Threading
         public static System.Threading.Tasks.Task RunAndWaitAsync(params System.Func<>[] actions) { }
     }
     public class static TaskHelper<T>
-    
     {
         public static System.Threading.Tasks.Task<T> Canceled { get; }
         public static System.Threading.Tasks.Task<T> DefaultValue { get; }
@@ -4197,7 +4131,6 @@ namespace Catel.Threading
 }
 namespace System.ComponentModel
 {
-    
     public class BeginEditEventArgs : System.ComponentModel.EditEventArgs { }
     public class CancelEditCompletedEventArgs : System.EventArgs { }
     public class CancelEditEventArgs : System.ComponentModel.EditEventArgs { }

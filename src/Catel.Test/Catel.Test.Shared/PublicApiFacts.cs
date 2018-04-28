@@ -8,6 +8,7 @@
 namespace Catel.Test
 {
     using System;
+    using System.Runtime.CompilerServices;
     using ApiApprover;
     using Catel.MVVM;
     using Catel.Runtime.Serialization.Json;
@@ -16,7 +17,7 @@ namespace Catel.Test
     [TestFixture]
     public class PublicApiFacts
     {
-        [Test]
+        [Test, MethodImpl(MethodImplOptions.NoInlining)]
         public void Catel_Core_HasNoBreakingChanges()
         {
             var assembly = typeof(Argument).Assembly;
@@ -24,7 +25,7 @@ namespace Catel.Test
             PublicApiApprover.ApprovePublicApi(assembly);
         }
 
-        [Test]
+        [Test, MethodImpl(MethodImplOptions.NoInlining)]
         public void Catel_MVVM_HasNoBreakingChanges()
         {
             var assembly = typeof(ViewModelBase).Assembly;
@@ -32,7 +33,7 @@ namespace Catel.Test
             PublicApiApprover.ApprovePublicApi(assembly);
         }
 
-        [Test]
+        [Test, MethodImpl(MethodImplOptions.NoInlining)]
         public void Catel_Serialization_Json_HasNoBreakingChanges()
         {
             var assembly = typeof(JsonSerializer).Assembly;

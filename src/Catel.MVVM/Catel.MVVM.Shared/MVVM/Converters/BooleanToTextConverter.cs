@@ -57,7 +57,7 @@ namespace Catel.MVVM.Converters
                 return ConverterHelper.UnsetValue;
             }
 
-            bool typedValue = (bool)value;
+            var typedValue = (bool)value;
             var mode = (parameter is BooleanToTextConverterMode) ? (BooleanToTextConverterMode)parameter : ParseMode(parameter as string);
 
             // Now convert the value

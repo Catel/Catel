@@ -26,27 +26,37 @@ namespace Catel.MVVM.Converters
         /// <returns>The value to be passed to the target dependency property.</returns>
         protected override object Convert(object value, Type targetType, object parameter)
         {
-            if (value == null)
-            {
-                return false;
-            }
+            var containsItems = false;
 
-            var collection = value as ICollection;
-            if (collection != null)
+            if (value != null)
             {
-                return (collection.Count > 0);
-            }
-
-            var enumerable = value as IEnumerable;
-            if (enumerable != null)
-            {
-                foreach (object obj in enumerable)
+                var collection = value as ICollection;
+                if (collection != null && collection.Count > 0)
                 {
-                    return true;
+                    containsItems = true;
+                }
+
+                var enumerable = value as IEnumerable;
+                if (!containsItems && enumerable != null)
+                {
+                    // TODO: Would MoveNext + reset be better?
+                    //var item = enumerable.GetEnumerator();
+                    //item.
+
+                    foreach (object obj in enumerable)
+                    {
+                        containsItems = true;
+                        break;
+                    }
                 }
             }
 
-            return false;
+            if (SupportInversionUsingCommandParameter && ConverterHelper.ShouldInvert(parameter))
+            {
+                containsItems = !containsItems;
+            }
+
+            return containsItems;
         }
     }
 }

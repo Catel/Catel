@@ -18,6 +18,48 @@ Items prepended with CTL are from JIRA (old issue tracker). Items prepended with
 **********************************************************
 
 ==================
+Version 5.4.0
+==================
+
+For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date:
+=============
+2018/04/28
+
+Platform support changes:
+=========================
+none
+
+Classes / members marked as obsolete:
+=====================================
+* #1124 Mark NullableValueConverter as obsolete since converter doesn't have a target type, 
+  so this converter won't work as expected NullableValueConverter
+
+Added/fixed:
+============
+(+) #1027 Allow configuration service to choose path format
+(+) #1157 Add DispatcherExtensions.BeginInvokeAsync for UWP (and other platforms)
+(+) #1168 Add ParallelHelper.ExecuteInParallelAsync 
+(*) #1166 Nesting with ChildAwareModelBase now supports more than one layer
+(*) #1169 Improve FormattingConverter to allow more usages
+(*) #1170 Implement Path.GetApplicationDataDirectory to allow its usage on all platforms
+(*) #1174 Use ConverterHelper.ShouldInvert on all converters so converter parameters can be used 
+    to invert the behavior of a converter, check your usages of BooleanTo*VisibilityConverter!
+(*) #1177 Improve performance of assembly loading for UWP
+(x) #1175 TypeHelper.TryCast should not throw exceptions
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 5.3.0
 ==================
 
