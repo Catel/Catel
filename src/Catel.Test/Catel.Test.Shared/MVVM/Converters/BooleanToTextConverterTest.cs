@@ -6,6 +6,7 @@
 
 namespace Catel.Test.MVVM.Converters
 {
+    using System.Collections.Generic;
     using System.Globalization;
     using Catel.MVVM.Converters;
     using NUnit.Framework;
@@ -13,92 +14,37 @@ namespace Catel.Test.MVVM.Converters
     [TestFixture]
     public class BooleanToTextConverterTest
     {
+        #region Properties
+        private static IEnumerable<TestCaseData> TestCases
+        {
+            get
+            {
+                yield return new TestCaseData(null, null).Returns(ConverterHelper.UnsetValue).SetName("Convert_Null");
+                yield return new TestCaseData("string", null).Returns(ConverterHelper.UnsetValue).SetName("Convert_NonBoolean");
+                yield return new TestCaseData(true, null).Returns("Yes").SetName("Convert_True");
+                yield return new TestCaseData(true, "YesNo").Returns("Yes").SetName("Convert_True_YesNoAsText");
+                yield return new TestCaseData(true, BooleanToTextConverterMode.YesNo).Returns("Yes").SetName("Convert_True_YesNoAsValue");
+                yield return new TestCaseData(true, "X").Returns("x").SetName("Convert_True_XAsText");
+                yield return new TestCaseData(true, BooleanToTextConverterMode.X).Returns("x").SetName("Convert_True_XAsValue");
+                yield return new TestCaseData(false, null).Returns("No").SetName("Convert_False");
+                yield return new TestCaseData(false, "YesNo").Returns("No").SetName("Convert_False_YesNoAsText");
+                yield return new TestCaseData(false, BooleanToTextConverterMode.YesNo).Returns("No").SetName("Convert_False_YesNoAsValue");
+                yield return new TestCaseData(false, "X").Returns(string.Empty).SetName("Convert_False_XAsText");
+                yield return new TestCaseData(false, BooleanToTextConverterMode.X).Returns(string.Empty).SetName("Convert_False_XAsValue");
+            }
+        }
+        #endregion
+
         #region Methods
-        [TestCase]
-        public void Convert_Null()
+        [Test]
+        [TestCaseSource(nameof(TestCases))]
+        public object Convert(object value, object parameter)
         {
             var converter = new BooleanToTextConverter();
-            Assert.AreEqual(ConverterHelper.UnsetValue, converter.Convert(null, typeof (string), null, (CultureInfo)null));
+            return converter.Convert(value, typeof(string), parameter, null);
         }
 
-        [TestCase]
-        public void Convert_NonBoolean()
-        {
-            var converter = new BooleanToTextConverter();
-            Assert.AreEqual(ConverterHelper.UnsetValue, converter.Convert("string", typeof (string), null, (CultureInfo)null));
-        }
-
-        [TestCase]
-        public void Convert_True()
-        {
-            var converter = new BooleanToTextConverter();
-            Assert.AreEqual("Yes", converter.Convert(true, typeof (string), null, (CultureInfo)null));
-        }
-
-        [TestCase]
-        public void Convert_False()
-        {
-            var converter = new BooleanToTextConverter();
-            Assert.AreEqual("No", converter.Convert(false, typeof (string), null, (CultureInfo)null));
-        }
-
-        [TestCase]
-        public void Convert_True_YesNoAsText()
-        {
-            var converter = new BooleanToTextConverter();
-            Assert.AreEqual("Yes", converter.Convert(true, typeof (string), "YesNo", (CultureInfo)null));
-        }
-
-        [TestCase]
-        public void Convert_True_YesNoAsValue()
-        {
-            var converter = new BooleanToTextConverter();
-            Assert.AreEqual("Yes", converter.Convert(true, typeof (string), BooleanToTextConverterMode.YesNo, (CultureInfo)null));
-        }
-
-        [TestCase]
-        public void Convert_True_XAsText()
-        {
-            var converter = new BooleanToTextConverter();
-            Assert.AreEqual("x", converter.Convert(true, typeof (string), "X", (CultureInfo)null));
-        }
-
-        [TestCase]
-        public void Convert_True_XAsValue()
-        {
-            var converter = new BooleanToTextConverter();
-            Assert.AreEqual("x", converter.Convert(true, typeof (string), BooleanToTextConverterMode.X, (CultureInfo)null));
-        }
-
-        [TestCase]
-        public void Convert_False_YesNoAsText()
-        {
-            var converter = new BooleanToTextConverter();
-            Assert.AreEqual("No", converter.Convert(false, typeof (string), "YesNo", (CultureInfo)null));
-        }
-
-        [TestCase]
-        public void Convert_False_YesNoAsValue()
-        {
-            var converter = new BooleanToTextConverter();
-            Assert.AreEqual("No", converter.Convert(false, typeof (string), BooleanToTextConverterMode.YesNo, (CultureInfo)null));
-        }
-
-        [TestCase]
-        public void Convert_False_XAsText()
-        {
-            var converter = new BooleanToTextConverter();
-            Assert.AreEqual(string.Empty, converter.Convert(false, typeof (string), "X", (CultureInfo)null));
-        }
-
-        [TestCase]
-        public void Convert_False_XAsValue()
-        {
-            var converter = new BooleanToTextConverter();
-            Assert.AreEqual(string.Empty, converter.Convert(false, typeof (string), BooleanToTextConverterMode.X, (CultureInfo)null));
-        }
-
-        [TestCase]
+        [Test]
         public void ConvertBack()
         {
             var converter = new BooleanToTextConverter();
@@ -106,31 +52,31 @@ namespace Catel.Test.MVVM.Converters
         }
         #endregion
 
-        //[TestCase]
+        //[Test]
         //public void ConvertBack_Null()
         //{
         //    Assert.Fail("Need to write unit test");
         //}
 
-        //[TestCase]
+        //[Test]
         //public void ConvertBack_YesNo_Yes()
         //{
         //    Assert.Fail("Need to write unit test");
         //}
 
-        //[TestCase]
+        //[Test]
         //public void ConvertBack_YesNo_No()
         //{
         //    Assert.Fail("Need to write unit test");
         //}
 
-        //[TestCase]
+        //[Test]
         //public void ConvertBack_X_X()
         //{
         //    Assert.Fail("Need to write unit test");
         //}
 
-        //[TestCase]
+        //[Test]
         //public void ConvertBack_X_EmptyString()
         //{
         //    Assert.Fail("Need to write unit test");
