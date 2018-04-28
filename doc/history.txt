@@ -18,6 +18,39 @@ Items prepended with CTL are from JIRA (old issue tracker). Items prepended with
 **********************************************************
 
 ==================
+Version 5.5.0
+==================
+
+For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date:
+=============
+2018/xx/xx
+
+Platform support changes:
+=========================
+none
+
+Classes / members marked as obsolete:
+=====================================
+* #1124 Mark NullableValueConverter as obsolete since converter doesn't have a target type, 
+  so this converter won't work as expected NullableValueConverter
+
+Added/fixed:
+============
+
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 5.4.0
 ==================
 

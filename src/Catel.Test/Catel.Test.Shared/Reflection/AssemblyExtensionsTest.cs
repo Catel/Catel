@@ -19,7 +19,7 @@ namespace Catel.Test.Reflection
     {
         // Note: don't use DateTime.Now.Year because we want a specific build to always compile, even in the next year
         private const string CurrentYear = "2018";
-        private const string VersionPrefix = "5.4";
+        private const string VersionPrefix = "5.5";
 
         private static readonly Assembly Assembly = typeof(AssemblyExtensionsTest).GetAssemblyEx();
 
