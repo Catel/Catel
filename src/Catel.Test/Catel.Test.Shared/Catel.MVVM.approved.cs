@@ -15,10 +15,8 @@
 [assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.Windows.Markup")]
 [assembly: System.Windows.Markup.XmlnsPrefixAttribute("http://schemas.catelproject.com", "catel")]
 [assembly: System.Windows.ThemeInfoAttribute(System.Windows.ResourceDictionaryLocation.SourceAssembly, System.Windows.ResourceDictionaryLocation.SourceAssembly)]
-
 namespace Catel
 {
-    
     public class static CatelEnvironment
     {
         public const string DefaultMultiLingualDependencyPropertyValue = "SET IN CONSTRUCTOR TO SUPPORT RUNTIME LANGUAGE SWITCHING";
@@ -71,9 +69,7 @@ namespace Catel
 }
 namespace Catel.Collections
 {
-    
     public class ExtendedSuspensionContext<T>
-    
     {
         public ExtendedSuspensionContext(Catel.Collections.SuspensionMode mode) { }
         public int Count { get; set; }
@@ -89,7 +85,6 @@ namespace Catel.Collections
         public bool TryRemoveItemFromOldItems(int index, T item) { }
     }
     public class FastBindingList<T> : System.ComponentModel.BindingList<T>, Catel.Collections.ISuspendChangeNotificationsCollection, System.Collections.ICollection, System.Collections.IEnumerable
-    
     {
         public FastBindingList() { }
         public FastBindingList(System.Collections.Generic.IEnumerable<T> collection) { }
@@ -122,7 +117,6 @@ namespace Catel.Collections
         public System.IDisposable SuspendChangeNotifications(Catel.Collections.SuspensionMode mode) { }
     }
     public class FastObservableCollection<T> : System.Collections.ObjectModel.ObservableCollection<T>, Catel.Collections.ISuspendChangeNotificationsCollection, System.Collections.ICollection, System.Collections.IEnumerable
-    
     {
         public FastObservableCollection() { }
         public FastObservableCollection(System.Collections.Generic.IEnumerable<T> collection) { }
@@ -198,7 +192,6 @@ namespace Catel.Collections
 }
 namespace Catel.Data
 {
-    
     public class DispatcherObservableObject : Catel.Data.ObservableObject
     {
         public DispatcherObservableObject() { }
@@ -207,7 +200,6 @@ namespace Catel.Data
 }
 namespace Catel.MVVM.Auditing
 {
-    
     public class static AuditingHelper
     {
         public static void RegisterViewModel(Catel.MVVM.IViewModel viewModel) { }
@@ -255,7 +247,6 @@ namespace Catel.MVVM.Auditing
 }
 namespace Catel.MVVM
 {
-    
     public class CancelingEventArgs : Catel.MVVM.CancellableEventArgs
     {
         public CancelingEventArgs() { }
@@ -270,14 +261,11 @@ namespace Catel.MVVM
         public Command(System.Action execute, System.Func<bool> canExecute = null, object tag = null) { }
     }
     public class Command<TExecuteParameter> : Catel.MVVM.Command<TExecuteParameter, TExecuteParameter>
-    
     {
         public Command(System.Action execute, System.Func<bool> canExecute = null, object tag = null) { }
         public Command(System.Action<TExecuteParameter> execute, System.Func<TExecuteParameter, bool> canExecute = null, object tag = null) { }
     }
     public class Command<TExecuteParameter, TCanExecuteParameter> : Catel.MVVM.CommandBase, Catel.MVVM.ICatelCommand, Catel.MVVM.ICatelCommand<TExecuteParameter, TCanExecuteParameter>, System.Windows.Input.ICommand
-    
-    
     {
         public Command(System.Action execute, System.Func<bool> canExecute = null, object tag = null) { }
         public Command(System.Action<TExecuteParameter> execute, System.Func<TCanExecuteParameter, bool> canExecute = null, object tag = null) { }
@@ -320,19 +308,14 @@ namespace Catel.MVVM
         protected CommandContainerBase(string commandName, Catel.MVVM.ICommandManager commandManager) { }
     }
     public abstract class CommandContainerBase<TParameter> : Catel.MVVM.CommandContainerBase<TParameter, TParameter, Catel.MVVM.ITaskProgressReport>
-    
     {
         protected CommandContainerBase(string commandName, Catel.MVVM.ICommandManager commandManager) { }
     }
     public abstract class CommandContainerBase<TExecuteParameter, TCanExecuteParameter> : Catel.MVVM.CommandContainerBase<TExecuteParameter, TCanExecuteParameter, Catel.MVVM.ITaskProgressReport>
-    
-    
     {
         protected CommandContainerBase(string commandName, Catel.MVVM.ICommandManager commandManager) { }
     }
     public abstract class CommandContainerBase<TExecuteParameter, TCanExecuteParameter, TPogress>
-    
-    
         where TPogress : Catel.MVVM.ITaskProgressReport
     {
         protected CommandContainerBase(string commandName, Catel.MVVM.ICommandManager commandManager) { }
@@ -397,7 +380,6 @@ namespace Catel.MVVM
         protected System.Windows.FrameworkElement View { get; }
     }
     public class CommandProgressChangedEventArgs<TProgress> : System.EventArgs
-    
     {
         public CommandProgressChangedEventArgs(TProgress progress) { }
         public TProgress Progress { get; set; }
@@ -455,8 +437,6 @@ namespace Catel.MVVM
         void RaiseCanExecuteChanged();
     }
     public interface ICatelCommand<TExecuteParameter, TCanExecuteParameter> : Catel.MVVM.ICatelCommand, System.Windows.Input.ICommand
-    
-    
     {
         bool CanExecute(TCanExecuteParameter parameter);
         void Execute(TExecuteParameter parameter);
@@ -702,7 +682,6 @@ namespace Catel.MVVM
     }
     public class ProgressiveTaskCommand<TProgress, TExecuteParameter> : Catel.MVVM.TaskCommand<TExecuteParameter, TExecuteParameter, TProgress>
         where TProgress : Catel.MVVM.ITaskProgressReport
-    
     {
         public ProgressiveTaskCommand(System.Func<System.Threading.CancellationToken, System.IProgress<TProgress>, System.Threading.Tasks.Task> execute, System.Func<bool> canExecute = null, System.Action<TProgress> reportProgress = null, object tag = null) { }
     }
@@ -748,21 +727,16 @@ namespace Catel.MVVM
         public TaskCommand(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> execute, System.Func<bool> canExecute = null, object tag = null) { }
     }
     public class TaskCommand<TExecuteParameter> : Catel.MVVM.TaskCommand<TExecuteParameter, TExecuteParameter>
-    
     {
         public TaskCommand(System.Func<TExecuteParameter, System.Threading.Tasks.Task> execute, System.Func<TExecuteParameter, bool> canExecute = null, object tag = null) { }
         public TaskCommand(System.Func<TExecuteParameter, System.Threading.CancellationToken, System.Threading.Tasks.Task> execute, System.Func<TExecuteParameter, bool> canExecute = null, object tag = null) { }
     }
     public class TaskCommand<TExecuteParameter, TCanExecuteParameter> : Catel.MVVM.TaskCommand<TExecuteParameter, TCanExecuteParameter, Catel.MVVM.ITaskProgressReport>
-    
-    
     {
         public TaskCommand(System.Func<TExecuteParameter, System.Threading.Tasks.Task> execute, System.Func<TCanExecuteParameter, bool> canExecute = null, object tag = null) { }
         public TaskCommand(System.Func<TExecuteParameter, System.Threading.CancellationToken, System.Threading.Tasks.Task> execute, System.Func<TCanExecuteParameter, bool> canExecute = null, object tag = null) { }
     }
     public class TaskCommand<TExecuteParameter, TCanExecuteParameter, TProgress> : Catel.MVVM.Command<TExecuteParameter, TCanExecuteParameter>, Catel.MVVM.ICatelCommand, Catel.MVVM.ICatelTaskCommand<TProgress>, System.Windows.Input.ICommand
-    
-    
         where TProgress : Catel.MVVM.ITaskProgressReport
     {
         public TaskCommand(System.Func<System.Threading.Tasks.Task> execute, System.Func<bool> canExecute = null, object tag = null) { }
@@ -1007,7 +981,6 @@ namespace Catel.MVVM
 }
 namespace Catel.MVVM.Converters
 {
-    
     [System.Windows.Data.ValueConversionAttribute(typeof(object), typeof(object))]
     public class AreEqualMultiValueConverter : System.Windows.Markup.MarkupExtension, System.Windows.Data.IMultiValueConverter
     {
@@ -1235,13 +1208,10 @@ namespace Catel.MVVM.Converters
         protected ValueConverterBase() { }
     }
     public abstract class ValueConverterBase<TConvert> : Catel.MVVM.Converters.ValueConverterBase<TConvert, object>
-    
     {
         protected ValueConverterBase() { }
     }
     public abstract class ValueConverterBase<TConvert, TConvertBack> : System.Windows.Markup.MarkupExtension, Catel.MVVM.Converters.IValueConverter, System.Windows.Data.IValueConverter
-    
-    
     {
         public ValueConverterBase() { }
         [System.ComponentModel.TypeConverterAttribute(typeof(Catel.MVVM.Converters.StringToTypeConverter))]
@@ -1283,7 +1253,6 @@ namespace Catel.MVVM.Converters
 }
 namespace Catel.MVVM.Navigation
 {
-    
     public class NavigatedEventArgs : Catel.MVVM.Navigation.NavigationEventArgsBase
     {
         public NavigatedEventArgs(string uri, Catel.MVVM.Navigation.NavigationMode navigationMode) { }
@@ -1354,7 +1323,6 @@ namespace Catel.MVVM.Navigation
 }
 namespace Catel.MVVM.Providers
 {
-    
     public class DetermineViewModelInstanceEventArgs : System.EventArgs
     {
         public DetermineViewModelInstanceEventArgs(object dataContext) { }
@@ -1503,7 +1471,6 @@ namespace Catel.MVVM.Providers
 }
 namespace Catel.MVVM.Tasks
 {
-    
     public class ActionTask : Catel.MVVM.Tasks.TaskBase
     {
         public ActionTask(string name, System.Action<Catel.MVVM.Tasks.ITaskProgressTracker> action) { }
@@ -1545,7 +1512,6 @@ namespace Catel.MVVM.Tasks
 }
 namespace Catel.MVVM.Views
 {
-    
     public class DataContextChangedEventArgs : System.EventArgs
     {
         public DataContextChangedEventArgs(object oldContext, object newContext) { }
@@ -1726,7 +1692,6 @@ namespace Catel.MVVM.Views
 }
 namespace Catel.Services
 {
-    
     public class AccelerometerService : Catel.Services.SensorServiceBase<Catel.Services.IAccelerometerValue, Catel.Services.AccelerometerValueChangedEventArgs>, Catel.Services.IAccelerometerService, Catel.Services.ISensorService<Catel.Services.IAccelerometerValue, Catel.Services.AccelerometerValueChangedEventArgs>
     {
         public AccelerometerService(Catel.Services.IDispatcherService dispatcherService) { }
@@ -2034,7 +1999,6 @@ namespace Catel.Services
         System.Threading.Tasks.Task<bool> DetermineDirectoryAsync();
     }
     public interface ISensorService<TValueInterface, TEventArgs>
-    
         where TEventArgs : System.EventArgs
     {
         TValueInterface CurrentValue { get; }
@@ -2301,7 +2265,6 @@ namespace Catel.Services
         public virtual System.Threading.Tasks.Task<bool> DetermineDirectoryAsync() { }
     }
     public abstract class SensorServiceBase<TValueInterface, TEventArgs> : Catel.Services.ViewModelServiceBase, Catel.Services.ISensorService<TValueInterface, TEventArgs>
-    
         where TEventArgs : System.EventArgs
     {
         protected SensorServiceBase(Catel.Services.IDispatcherService dispatcherService) { }
@@ -2434,7 +2397,6 @@ namespace Catel.Services
 }
 namespace Catel.Windows
 {
-    
     public class static ApplicationExtensions
     {
         public static System.Windows.Window GetActiveWindow(this System.Windows.Application application) { }
@@ -2543,7 +2505,6 @@ namespace Catel.Windows
         public static T FindVisualDescendantByType<T>(this System.Windows.DependencyObject startElement)
             where T : System.Windows.DependencyObject { }
         public static object FindVisualRoot(this System.Windows.DependencyObject startElement) { }
-        [System.Runtime.CompilerServices.IteratorStateMachineAttribute(typeof(Catel.Windows.DependencyObjectExtensions.<GetChildren>d__13))]
         public static System.Collections.Generic.IEnumerable<System.Windows.DependencyObject> GetChildren(this System.Windows.DependencyObject parent) { }
         public static System.Windows.DependencyObject GetLogicalParent(this System.Windows.DependencyObject element) { }
         public static System.Windows.DependencyObject GetVisualParent(this System.Windows.DependencyObject element) { }
@@ -2642,7 +2603,6 @@ namespace Catel.Windows
 }
 namespace Catel.Windows.Controls
 {
-    
     [System.Windows.TemplatePartAttribute(Name="PART_MessageBar", Type=typeof(System.Windows.FrameworkElement))]
     public class InfoBarMessageControl : System.Windows.Controls.ContentControl
     {
@@ -2760,7 +2720,6 @@ namespace Catel.Windows.Controls
 }
 namespace Catel.Windows.Data
 {
-    
     public class static BindingHelper
     {
         public static void ClearBinding(System.Windows.DependencyObject dependencyObject, System.Windows.DependencyProperty dependencyProperty) { }
@@ -2809,7 +2768,6 @@ namespace Catel.Windows.Data
 }
 namespace Catel.Windows.Input
 {
-    
     public class InputGesture : Catel.Data.ModelBase
     {
         public static readonly Catel.Data.PropertyData KeyProperty;
@@ -2837,7 +2795,6 @@ namespace Catel.Windows.Input
 }
 namespace Catel.Windows.Interactivity
 {
-    
     public class Authentication : Catel.Windows.Interactivity.BehaviorBase<System.Windows.FrameworkElement>
     {
         public static readonly System.Windows.DependencyProperty ActionProperty;
@@ -3229,7 +3186,6 @@ namespace Catel.Windows.Interactivity
 }
 namespace Catel.Windows.Markup
 {
-    
     public class CommandManagerBinding : Catel.Windows.Markup.UpdatableMarkupExtension
     {
         public CommandManagerBinding() { }
@@ -3276,7 +3232,6 @@ namespace Catel.Windows.Markup
 }
 namespace Catel.Windows.Threading
 {
-    
     public class static DispatcherExtensions
     {
         public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action) { }

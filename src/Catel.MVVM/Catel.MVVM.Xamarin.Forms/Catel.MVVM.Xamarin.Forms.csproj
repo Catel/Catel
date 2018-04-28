@@ -84,12 +84,12 @@
   <Import Project="..\Catel.MVVM.Shared\Catel.MVVM.Shared.projitems" Label="Shared" />
 
   <ItemGroup>
-    <PackageReference Include="Catel.Fody" Version="2.19.0" NoWarn="NU1701" />
-    <PackageReference Include="Fody" Version="2.3.23" />
-    <PackageReference Include="MethodTimer.Fody" Version="2.0.2" />
-    <PackageReference Include="ModuleInit.Fody" Version="1.7.1" />
-    <PackageReference Include="Obsolete.Fody" Version="4.3.7" />
-    <PackageReference Include="Xamarin.Forms" Version="2.5.0.122203" />
+    <PackageReference Include="Catel.Fody" Version="3.3.0" NoWarn="NU1701" />
+    <PackageReference Include="Fody" Version="3.0.3" />
+    <PackageReference Include="MethodTimer.Fody" Version="2.1.0" />
+    <PackageReference Include="ModuleInit.Fody" Version="1.8.0" />
+    <PackageReference Include="Obsolete.Fody" Version="4.4.0" />
+    <PackageReference Include="Xamarin.Forms" Version="2.5.1.444934" />
   </ItemGroup>
 
   <ItemGroup>

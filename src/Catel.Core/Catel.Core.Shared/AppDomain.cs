@@ -21,6 +21,7 @@ namespace System
     using global::Windows.ApplicationModel;
     using global::Windows.Storage.Search;
     using Catel;
+    using Collections.Immutable;
 #endif
 
     /// <summary>
@@ -77,30 +78,55 @@ namespace System
                     var folder = Package.Current.InstalledLocation;
 
                     // Note: normally it's bad practice to use task.Wait(), but GetAssemblies must be blocking to cache it all
+                    
+                    // Note: winmd cannot be read, see https://stackoverflow.com/questions/9136683/cannot-get-types-from-winmd-file,
+                    // so we create a hashset of all winmd files and ignore them
+                    var winmdQueryOptions = new QueryOptions(CommonFileQuery.OrderByName, new[] { ".winmd" });
+                    winmdQueryOptions.FolderDepth = FolderDepth.Shallow;
 
-                    var queryOptions = new QueryOptions(CommonFileQuery.OrderByName, new[] { ".dll", ".exe", ".winmd" });
-                    queryOptions.FolderDepth = FolderDepth.Shallow;
+                    var winmdQueryResult = folder.CreateFileQueryWithOptions(winmdQueryOptions);
+                    var winmdTask = winmdQueryResult.GetFilesAsync().AsTask();
+                    winmdTask.Wait();
+                    var winmdFiles = new HashSet<string>(winmdTask.Result.Select(x => x.Name.Substring(0, x.Name.Length - x.FileType.Length)), StringComparer.OrdinalIgnoreCase);
 
-                    var queryResult = folder.CreateFileQueryWithOptions(queryOptions);
+                    // Get assemblies
+                    var assemblyQueryOptions = new QueryOptions(CommonFileQuery.OrderByName, new[] { ".dll", ".exe" /*, ".winmd" */ });
+                    assemblyQueryOptions.FolderDepth = FolderDepth.Shallow;
 
-                    var task = queryResult.GetFilesAsync().AsTask();
-                    task.Wait();
-
-                    var files = task.Result.ToList();
+                    var assemblyQueryResult = folder.CreateFileQueryWithOptions(assemblyQueryOptions);
+                    var assembliesTask = assemblyQueryResult.GetFilesAsync().AsTask();
+                    assembliesTask.Wait();
+                    var assemblyFiles = assembliesTask.Result.ToImmutableHashSet();
 
                     var arrayToIgnore = KnownPrefixesToIgnore.ToArray();
 
-                    foreach (var file in files)
+                    foreach (var file in assemblyFiles)
                     {
-                        if (file.Name.StartsWithAnyIgnoreCase(arrayToIgnore))
+                        try
                         {
-                            continue;
-                        }
+                            if (file.Name.StartsWithAnyIgnoreCase(arrayToIgnore))
+                            {
+                                continue;
+                            }
 
-                        var assembly = LoadAssemblyFromFile(file);
-                        if (assembly != null)
+                            Log.Debug($"Loading assembly from file '{file.Name}'");
+
+                            var assemblyName = file.Name.Substring(0, file.Name.Length - file.FileType.Length);
+                            if (winmdFiles.Contains(assemblyName))
+                            {
+                                Log.Debug($"Ignoring assembly load of '{file.Name}' because it's (most likely) not a managed assembly (because .winmd exists)");
+                                continue;
+                            }
+
+                            var assembly = LoadAssemblyFromFile(file);
+                            if (assembly != null)
+                            {
+                                loadedAssemblies.Add(assembly);
+                            }
+                        }
+                        catch (Exception ex)
                         {
-                            loadedAssemblies.Add(assembly);
+                            Log.Warning(ex, $"Failed to load assembly '{file}'");
                         }
                     }
 #else

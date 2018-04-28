@@ -1,15 +1,15 @@
 ﻿{
   "dependencies": {
     "AsyncUsageAnalyzers": "1.0.0-alpha003",
-    "Catel.Fody": "2.19.0",
-    "Fody": "2.3.23",
-    "MethodTimer.Fody": "2.0.2",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.6",
-    "ModuleInit.Fody": "1.7.1",
+    "Catel.Fody": "3.3.0",
+    "Fody": "3.0.3",
+    "MethodTimer.Fody": "2.1.0",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.8",
+    "ModuleInit.Fody": "1.8.0",
     "Newtonsoft.Json": "10.0.3",
     "Newtonsoft.Json.Bson": "1.0.1",
-    "Obsolete.Fody": "4.3.7",
-    "WpfAnalyzers": "2.1.2"
+    "Obsolete.Fody": "4.4.0",
+    "WpfAnalyzers": "2.1.2.1"
   },
   "frameworks": {
     "uap10.0.10240": {}

@@ -269,6 +269,7 @@ namespace Catel.Test.Services
                 var uniqueIdentifierForInstance = generator.GetUniqueIdentifierForInstance(new PersonViewModel1());
 
                 GC.Collect();
+                GC.WaitForPendingFinalizers();
 
                 Assert.AreEqual(uniqueIdentifierForInstance, generator.GetUniqueIdentifierForInstance(new PersonViewModel1(), true));
             }

@@ -1,10 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MethodTimeLogger.cs" company="CatenaLogic">
-//   Copyright (c) 2008 - 2016 CatenaLogic. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
 using System.Reflection;
 using Catel.Logging;
 using System;
