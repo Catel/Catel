@@ -308,25 +308,32 @@ namespace Catel.Data
         /// </summary>
         void IEditableObject.EndEdit()
         {
-            if (_backup == null)
+            try
             {
-                Log.Debug("IEditableObject is not in edit state");
-                return;
+                if (_backup == null)
+                {
+                    Log.Debug("IEditableObject is not in edit state");
+                    return;
+                }
+
+                var eventArgs = new EndEditEventArgs(this);
+                _endEditingEvent.SafeInvoke(this, eventArgs);
+                OnEndEdit(eventArgs);
+
+                if (eventArgs.Cancel)
+                {
+                    Log.Info("IEditableObject.EndEdit is canceled by the event args");
+                    return;
+                }
+
+                Log.Debug("IEditableObject.EndEdit");
+
+                _backup = null;
             }
-
-            var eventArgs = new EndEditEventArgs(this);
-            _endEditingEvent.SafeInvoke(this, eventArgs);
-            OnEndEdit(eventArgs);
-
-            if (eventArgs.Cancel)
+            finally
             {
-                Log.Info("IEditableObject.EndEdit is canceled by the event args");
-                return;
+                IsDirty = false;
             }
-
-            Log.Debug("IEditableObject.EndEdit");
-
-            _backup = null;
         }
     }
 }

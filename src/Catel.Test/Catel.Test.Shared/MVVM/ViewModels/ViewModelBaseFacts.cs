@@ -11,9 +11,11 @@ namespace Catel.Test.MVVM.ViewModels
     using System.Threading;
     using System.Threading.Tasks;
     using Auditing;
+    using Catel.Data;
     using Catel.MVVM;
     using Catel.MVVM.Auditing;
     using NUnit.Framework;
+    using TestClasses;
     using TestViewModel = TestClasses.TestViewModel;
 
     [TestFixture]
@@ -233,6 +235,39 @@ namespace Catel.Test.MVVM.ViewModels
             var firstId = flatenSortedIdentifiers[0];
 
             Assert.That(flatenSortedIdentifiers, Is.EquivalentTo(Enumerable.Range(firstId, personsPerThread * threadAmount)));
+        }
+
+        [Test]
+        public async Task SaveViewModelAsync_Sets_Model_State_To_No_Dirty()
+        {
+            var viewModel = new TestViewModelWithMappings(new Person {FirstName = "Name", MiddleName = "MiddleName", LastName = "LastName"});
+
+            await viewModel.SaveViewModelAsync();
+
+            Assert.IsFalse(((IModel)viewModel.Person).IsDirty);
+        }
+
+        [Test]
+        public async Task Update_ViewModelToModel_Property_Sets_Model_Into_Dirty_State()
+        {
+            var viewModel = new TestViewModelWithMappings(new Person { FirstName = "Name", MiddleName = "MiddleName", LastName = "LastName" });
+            await viewModel.SaveViewModelAsync();
+
+            viewModel.FirstNameAsTwoWay = "First Name";
+            Assert.IsTrue(((IModel)viewModel.Person).IsDirty);
+        }
+
+        [Test]
+        public async Task CancelViewModelAsync_Restores_Model_To_Last_Saved_No_Dirty_State()
+        {
+            var viewModel = new TestViewModelWithMappings(new Person { FirstName = "Name", MiddleName = "MiddleName", LastName = "LastName" });
+            await viewModel.SaveViewModelAsync();
+
+            viewModel.FirstNameAsTwoWay = "First Name";
+            Assert.IsTrue(((IModel)viewModel.Person).IsDirty);
+
+            await viewModel.CancelViewModelAsync();
+            Assert.IsFalse(((IModel) viewModel.Person).IsDirty);
         }
     }
 }
