@@ -38,7 +38,7 @@ Classes / members marked as obsolete:
 
 Added/fixed:
 ============
-
+(*) #1181 Support passing in IEqualityComparer for ListDictionary
 
 Roadmap:
 ========

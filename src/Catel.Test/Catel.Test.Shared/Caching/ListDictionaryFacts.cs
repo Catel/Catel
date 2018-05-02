@@ -7,14 +7,43 @@
 
 namespace Catel.Test.Caching
 {
-    using System.Collections.Generic;
+    using System;
     using System.Linq;
-    using Catel.Caching;
     using Catel.Collections;
     using NUnit.Framework;
 
     public class ListDictionaryFacts
     {
+        [TestFixture]
+        public class CustomComparer
+        {
+            [TestCase("key", "key", true)]
+            [TestCase("key", "KEY", true)]
+            [TestCase("key", "key ", false)]
+            [TestCase("key", "KEY ", false)]
+            public void CheckComparisonsOrdinalIgnoreCase(string key, string retrievalKey, bool expected)
+            {
+                var list = new ListDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+                list.Add(key, "value");
+
+                Assert.AreEqual(expected, list.ContainsKey(retrievalKey));
+            }
+
+            [TestCase("key", "key", true)]
+            [TestCase("key", "KEY", false)]
+            [TestCase("key", "key ", false)]
+            [TestCase("key", "KEY ", false)]
+            public void CheckComparisonsCurrentCulture(string key, string retrievalKey, bool expected)
+            {
+                var list = new ListDictionary<string, string>(StringComparer.CurrentCulture);
+
+                list.Add(key, "value");
+
+                Assert.AreEqual(expected, list.ContainsKey(retrievalKey));
+            }
+        }
+
         [TestFixture]
         public class KeepsOrder
         {
@@ -24,13 +53,13 @@ namespace Catel.Test.Caching
             {
                 var listDictionary = new ListDictionary<string, int>();
 
-                for (int i = 0; i < itemsCount; i++)
+                for (var i = 0; i < itemsCount; i++)
                 {
                     listDictionary[i.ToString()] = i;
                 }
 
                 var keyValuePairs = listDictionary.ToList();
-                for (int i = 0; i < itemsCount; i++)
+                for (var i = 0; i < itemsCount; i++)
                 {
                     Assert.AreEqual(i.ToString(), keyValuePairs[i].Key);
                 }

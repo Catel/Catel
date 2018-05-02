@@ -20,6 +20,7 @@ namespace Catel.Collections
     {
         #region Fields
         private readonly IList<KeyValuePair<TKey, TValue>> _list;
+        private readonly IEqualityComparer<TKey> _comparer;
         #endregion
 
         #region Constructors
@@ -29,6 +30,16 @@ namespace Catel.Collections
         public ListDictionary()
         {
             _list = new List<KeyValuePair<TKey, TValue>>();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListDictionary{TKey, TValue}"/> class.
+        /// </summary>
+        /// <param name="comparer">The equality comparer for the key comparison.</param>
+        public ListDictionary(IEqualityComparer<TKey> comparer)
+            : this()
+        {
+            _comparer = comparer;
         }
         #endregion
 
@@ -66,7 +77,6 @@ namespace Catel.Collections
             get
             {
                 var index = GetIndex(key);
-
                 if (index < 0)
                 {
                     throw new KeyNotFoundException();
@@ -106,7 +116,7 @@ namespace Catel.Collections
         /// <value>
         /// An <see cref="System.Collections.Generic.ICollection{T}"/> containing the values in the <see cref="ListDictionary{TKey, TValue}"/>.
         /// </value>
-       public ICollection<TValue> Values
+        public ICollection<TValue> Values
         {
             get { return _list.Select(item => item.Value).ToList(); }
         }
@@ -232,7 +242,6 @@ namespace Catel.Collections
         private int RemoveAndGetIndex(TKey key)
         {
             var index = GetIndex(key);
-
             if (index >= 0)
             {
                 _list.RemoveAt(index);
@@ -246,7 +255,12 @@ namespace Catel.Collections
             while (index >= 0 && index < _list.Count)
             {
                 var keyValuePair = _list[index];
-                if (Equals(keyValuePair.Key, key))
+
+                if (_comparer != null && _comparer.Equals(keyValuePair.Key, key))
+                {
+                    return index;
+                }
+                else if (Equals(keyValuePair.Key, key))
                 {
                     return index;
                 }
