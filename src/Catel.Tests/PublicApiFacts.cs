@@ -9,7 +9,7 @@ namespace Catel.Tests
 {
     using System;
     using System.Runtime.CompilerServices;
-    using ApiApprover;
+    using global::ApiApprover;
     using Catel.MVVM;
     using Catel.Runtime.Serialization.Json;
     using NUnit.Framework;
