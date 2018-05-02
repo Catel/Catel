@@ -121,13 +121,13 @@ namespace Catel.Test.Windows
             [TestCase]
             public void ReturnsFalseForNonExistingResourceAsUriString()
             {
-                Assert.IsFalse(ResourceHelper.XamlPageExists(ResourceHelper.GetResourceUri("MyApp.xaml", "Catel.Test")));
+                Assert.IsFalse(ResourceHelper.XamlPageExists(ResourceHelper.GetResourceUri("TestControl.xaml", "Catel.Tests")));
             }
 
             [TestCase]
             public void ReturnsTrueForExistingResourceAsUriString()
             {
-                Assert.IsTrue(ResourceHelper.XamlPageExists(ResourceHelper.GetResourceUri("App.xaml", "Catel.Test")));
+                Assert.IsTrue(ResourceHelper.XamlPageExists(ResourceHelper.GetResourceUri("TestControl.xaml", "Catel.Tests")));
             }
 
             [TestCase]
@@ -135,7 +135,7 @@ namespace Catel.Test.Windows
             {
                 ResourceHelper.EnsurePackUriIsAllowed();
 
-                Assert.IsFalse(ResourceHelper.XamlPageExists(new Uri(ResourceHelper.GetResourceUri("MyApp.xaml", "Catel.Test"), UriKind.RelativeOrAbsolute)));
+                Assert.IsFalse(ResourceHelper.XamlPageExists(new Uri(ResourceHelper.GetResourceUri("NonExistingTestControl.xaml", "Catel.Tests"), UriKind.RelativeOrAbsolute)));
             }
 
             [TestCase]
@@ -143,7 +143,7 @@ namespace Catel.Test.Windows
             {
                 ResourceHelper.EnsurePackUriIsAllowed();
 
-                Assert.IsTrue(ResourceHelper.XamlPageExists(new Uri(ResourceHelper.GetResourceUri("App.xaml", "Catel.Test"), UriKind.RelativeOrAbsolute)));
+                Assert.IsTrue(ResourceHelper.XamlPageExists(new Uri(ResourceHelper.GetResourceUri("TestControl.xaml", "Catel.Tests"), UriKind.RelativeOrAbsolute)));
             }
         }
     }

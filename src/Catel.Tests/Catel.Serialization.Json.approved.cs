@@ -1,9 +1,5 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Catel.Core")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Catel.MVVM")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Catel.Test")]
-[assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName=".NET Framework 4.5")]
+[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
 namespace Catel.Core
 {
     public class static ModuleInitializer

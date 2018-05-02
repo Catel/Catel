@@ -1,9 +1,8 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Catel.Core")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Catel.MVVM")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Catel.Test")]
-[assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName=".NET Framework 4.5")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Catel.Serialization.Json")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Catel.Tests")]
+[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
 namespace Catel.ApiCop
 {
     public class ApiCop : Catel.ApiCop.IApiCop
@@ -504,7 +503,6 @@ namespace Catel
         XamarinAndroid = 10,
         XamariniOS = 11,
         XamarinForms = 12,
-        PCL = 13,
     }
     public class static LanguageHelper
     {
@@ -635,7 +633,6 @@ namespace Catel
         Android = 6,
         iOS = 7,
         XamarinForms = 8,
-        PCL = 9,
     }
     public class static TagHelper
     {
@@ -887,6 +884,7 @@ namespace Catel.Collections
     public class ListDictionary<TKey, TValue> : System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IDictionary<TKey, TValue>, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.IEnumerable
     {
         public ListDictionary() { }
+        public ListDictionary(System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
         public int Count { get; }
         public bool IsReadOnly { get; }
         public TValue this[TKey key] { get; set; }
