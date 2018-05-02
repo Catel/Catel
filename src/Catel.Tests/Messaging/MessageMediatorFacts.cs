@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Messaging
+namespace Catel.Tests.Messaging
 {
     using System;
     using Catel.Messaging;

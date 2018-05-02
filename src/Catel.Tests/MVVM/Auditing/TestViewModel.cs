@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.MVVM.Auditing
+namespace Catel.Tests.MVVM.Auditing
 {
     using Catel.Data;
     using Catel.MVVM;

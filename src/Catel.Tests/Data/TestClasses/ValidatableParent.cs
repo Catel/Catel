@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Data.TestClasses
+namespace Catel.Tests.Data.TestClasses
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;

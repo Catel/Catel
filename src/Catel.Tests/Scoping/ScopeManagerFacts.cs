@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Scoping
+namespace Catel.Tests.Scoping
 {
     using System;
     using Catel.Scoping;

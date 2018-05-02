@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Text
+namespace Catel.Tests.Text
 {
     using Catel.Text;
     using System.Text;

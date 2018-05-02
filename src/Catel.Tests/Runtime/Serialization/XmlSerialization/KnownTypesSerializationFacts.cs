@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Runtime.Serialization.XmlSerialization
+namespace Catel.Tests.Runtime.Serialization.XmlSerialization
 {
     using System;
     using System.Collections;
@@ -18,7 +18,7 @@ namespace Catel.Test.Runtime.Serialization.XmlSerialization
     using Catel.Data;
     using Catel.Runtime.Serialization;
     using Catel.Runtime.Serialization.Xml;
-    using Catel.Test.Data;
+    using Catel.Tests.Data;
     using NUnit.Framework;
 
     public interface IParams

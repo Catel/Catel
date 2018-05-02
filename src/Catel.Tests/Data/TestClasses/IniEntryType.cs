@@ -1,4 +1,4 @@
-namespace Catel.Test.Data
+namespace Catel.Tests.Data
 {
     /// <summary>
     /// Just a dummy enum to test enum (de)serialization.

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Reflection
+namespace Catel.Tests.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -13,6 +13,7 @@ namespace Catel.Test.Reflection
     using Catel.Reflection;
 
     using NUnit.Framework;
+    using Test;
 
     public class TypeHelperFacts
     {
@@ -135,9 +136,9 @@ namespace Catel.Test.Reflection
             [TestCase]
             public void ReturnsFormattedType()
             {
-                string expectedValue = "Catel.Test.Helpers.TypeHelperFacts, Catel.Test";
+                string expectedValue = "Catel.Tests.Helpers.TypeHelperFacts, Catel.Tests";
 
-                string actualValue = TypeHelper.FormatType("Catel.Test", "Catel.Test.Helpers.TypeHelperFacts");
+                string actualValue = TypeHelper.FormatType("Catel.Tests", "Catel.Tests.Helpers.TypeHelperFacts");
 
                 Assert.AreEqual(expectedValue, actualValue);
             }
@@ -155,8 +156,8 @@ namespace Catel.Test.Reflection
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetAssemblyName(assemblyName));
             }
 
-            [TestCase("Catel.Test.TypeHelper", null)]
-            [TestCase("Catel.Test.TypeHelper, Catel.Core", "Catel.Core")]
+            [TestCase("Catel.Tests.TypeHelper", null)]
+            [TestCase("Catel.Tests.TypeHelper, Catel.Core", "Catel.Core")]
             [TestCase("System.Collections.Generic.List`1[[Catel.Data.PropertyValue, Catel.Core]]", null)]
             [TestCase("System.Collections.Generic.List`1[[Catel.Data.PropertyValue, Catel.Core]], mscorlib", "mscorlib")]
             [TestCase("System.Collections.Generic.List`1[[Catel.Data.PropertyValue, Catel.Core]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
@@ -260,8 +261,8 @@ namespace Catel.Test.Reflection
                 ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeHelper.GetTypeName(typeName));
             }
 
-            [TestCase("Catel.Test.TypeHelper", "Catel.Test.TypeHelper")]
-            [TestCase("Catel.Test.TypeHelper, Catel.Core", "Catel.Test.TypeHelper")]
+            [TestCase("Catel.Tests.TypeHelper", "Catel.Tests.TypeHelper")]
+            [TestCase("Catel.Tests.TypeHelper, Catel.Core", "Catel.Tests.TypeHelper")]
             [TestCase("System.Collections.Generic.List`1[[Catel.Data.PropertyValue, Catel.Core]], mscorlib", "System.Collections.Generic.List`1[[Catel.Data.PropertyValue]]")]
             [TestCase("System.Collections.Generic.List`1[[Catel.Data.PropertyValue, Catel.Core]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", "System.Collections.Generic.List`1[[Catel.Data.PropertyValue]]")]
             public void ReturnsTypeName(string input, string expectedOutput)
@@ -287,13 +288,13 @@ namespace Catel.Test.Reflection
             [TestCase]
             public void ReturnsFullTypeNameForTypeWithAssemblyWithoutOverhead()
             {
-                Assert.AreEqual("Catel.Test.TypeHelper, Catel.Core", TypeHelper.GetTypeNameWithAssembly("Catel.Test.TypeHelper, Catel.Core"));
+                Assert.AreEqual("Catel.Tests.TypeHelper, Catel.Core", TypeHelper.GetTypeNameWithAssembly("Catel.Tests.TypeHelper, Catel.Core"));
             }
 
             [TestCase]
             public void ReturnsFullTypeNameForTypeWithAssembly()
             {
-                Assert.AreEqual("Catel.Test.TypeHelper, Catel.Core", TypeHelper.GetTypeNameWithAssembly("Catel.Test.TypeHelper, Catel.Core, Version=1.0.0.0, PublicKeyToken=1234578, Culture=neutral"));
+                Assert.AreEqual("Catel.Tests.TypeHelper, Catel.Core", TypeHelper.GetTypeNameWithAssembly("Catel.Tests.TypeHelper, Catel.Core, Version=1.0.0.0, PublicKeyToken=1234578, Culture=neutral"));
             }
             #endregion
         }
@@ -314,13 +315,13 @@ namespace Catel.Test.Reflection
             [TestCase]
             public void ReturnsTypeNameForTypeWithoutAssembly()
             {
-                Assert.AreEqual("TypeHelper", TypeHelper.GetTypeNameWithoutNamespace("Catel.Test.TypeHelper"));
+                Assert.AreEqual("TypeHelper", TypeHelper.GetTypeNameWithoutNamespace("Catel.Tests.TypeHelper"));
             }
 
             [TestCase]
             public void ReturnsTypeNameForTypeWithAssembly()
             {
-                Assert.AreEqual("TypeHelper", TypeHelper.GetTypeNameWithoutNamespace("Catel.Test.TypeHelper, Catel.Core"));
+                Assert.AreEqual("TypeHelper", TypeHelper.GetTypeNameWithoutNamespace("Catel.Tests.TypeHelper, Catel.Core"));
             }
             #endregion
         }
@@ -341,13 +342,13 @@ namespace Catel.Test.Reflection
             [TestCase]
             public void ReturnsTypeNamespaceForTypeWithoutAssembly()
             {
-                Assert.AreEqual("Catel.Test", TypeHelper.GetTypeNamespace("Catel.Test.TypeHelper"));
+                Assert.AreEqual("Catel.Tests", TypeHelper.GetTypeNamespace("Catel.Tests.TypeHelper"));
             }
 
             [TestCase]
             public void ReturnsTypeNamespaceForTypeWithAssembly()
             {
-                Assert.AreEqual("Catel.Test", TypeHelper.GetTypeNamespace("Catel.Test.TypeHelper, Catel.Core"));
+                Assert.AreEqual("Catel.Tests", TypeHelper.GetTypeNamespace("Catel.Tests.TypeHelper, Catel.Core"));
             }
             #endregion
         }

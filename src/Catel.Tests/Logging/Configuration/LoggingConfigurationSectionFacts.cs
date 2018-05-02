@@ -6,7 +6,7 @@
 
 #if NET
 
-namespace Catel.Test.Logging.Configuration
+namespace Catel.Tests.Logging.Configuration
 {
     using System.Configuration;
     using System.IO;

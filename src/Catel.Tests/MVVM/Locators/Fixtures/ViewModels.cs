@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.MVVM.Locators.Fixtures.ViewModels
+namespace Catel.Tests.MVVM.Locators.Fixtures.ViewModels
 {
     public class MyNameViewerViewModel { }
 

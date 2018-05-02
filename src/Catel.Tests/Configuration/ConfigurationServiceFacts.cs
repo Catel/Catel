@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Configuration
+namespace Catel.Tests.Configuration
 {
     using System;
     using Catel.Configuration;

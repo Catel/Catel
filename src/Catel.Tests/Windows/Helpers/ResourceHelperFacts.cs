@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Windows
+namespace Catel.Tests.Windows
 {
     using System;
     using Catel.Windows;

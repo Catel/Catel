@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.IoC.EventArgs
+namespace Catel.Tests.IoC.EventArgs
 {
     using System;
     using Catel.IoC;

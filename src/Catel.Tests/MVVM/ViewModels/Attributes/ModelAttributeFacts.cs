@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.MVVM.ViewModels.Attributes
+namespace Catel.Tests.MVVM.ViewModels.Attributes
 {
     using Catel.MVVM;
 

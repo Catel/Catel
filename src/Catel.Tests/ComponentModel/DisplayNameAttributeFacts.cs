@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.ComponentModel
+namespace Catel.Tests.ComponentModel
 {
     using NUnit.Framework;
     using Services.Fixtures;

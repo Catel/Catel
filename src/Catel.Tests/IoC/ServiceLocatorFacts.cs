@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.IoC
+namespace Catel.Tests.IoC
 {
     using System;
     using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Catel.Test.IoC
     using Catel.IoC;
     using Catel.MVVM;
     using Catel.Services;
-    using Catel.Test.Data;
+    using Catel.Tests.Data;
     using NUnit.Framework;
 
     public partial class ServiceLocatorFacts
@@ -1065,7 +1065,7 @@ namespace Catel.Test.IoC
                 var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterTypesUsingDefaultNamingConvention()
-                              .ExcludeAllTypesOfNamespace("Catel.Test.IoC");
+                              .ExcludeAllTypesOfNamespace("Catel.Tests.IoC");
 
                 Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService>());
                 Assert.IsFalse(serviceLocator.IsTypeRegistered<IFooService2>());
@@ -1152,7 +1152,7 @@ namespace Catel.Test.IoC
                 var serviceLocator = IoCFactory.CreateServiceLocator();
 
                 serviceLocator.RegisterTypesUsingDefaultNamingConvention()
-                              .IncludeAllTypesOfNamespace("Catel.Test.IoC");
+                              .IncludeAllTypesOfNamespace("Catel.Tests.IoC");
 
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService>());
                 Assert.IsTrue(serviceLocator.IsTypeRegistered<IFooService2>());

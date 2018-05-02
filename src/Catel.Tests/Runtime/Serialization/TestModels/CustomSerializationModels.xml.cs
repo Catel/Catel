@@ -6,7 +6,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Runtime.Serialization.TestModels
+namespace Catel.Tests.Runtime.Serialization.TestModels
 {
     using Catel.Data;
     using System.Xml.Linq;

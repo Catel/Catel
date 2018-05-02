@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Messaging
+namespace Catel.Tests.Messaging
 {
     using Catel.Messaging;
     using NUnit.Framework;

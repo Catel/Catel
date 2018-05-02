@@ -1,4 +1,4 @@
-﻿namespace Catel.Test.MVVM.ViewModels
+﻿namespace Catel.Tests.MVVM.ViewModels
 {
     using System;
     using Catel.MVVM;

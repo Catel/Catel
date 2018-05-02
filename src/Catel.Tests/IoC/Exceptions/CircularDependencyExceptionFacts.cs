@@ -3,7 +3,7 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Test.IoC.Exceptions
+namespace Catel.Tests.IoC.Exceptions
 {
     using System;
     using Catel.IoC;

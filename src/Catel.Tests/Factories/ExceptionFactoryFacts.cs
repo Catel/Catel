@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Factories
+namespace Catel.Tests.Factories
 {
     using System;
     using NUnit.Framework;

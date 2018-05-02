@@ -6,7 +6,7 @@
 
 #if NET
 
-namespace Catel.Test.MVVM.Converters
+namespace Catel.Tests.MVVM.Converters
 {
     using Catel.MVVM.Converters;
 

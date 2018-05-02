@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.MVVM.ViewModels.TestClasses
+namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
     public class ViewModelFactoryTestViewModelWithOnlyDefaultConstructor : ViewModelFactoryTestViewModel
     {

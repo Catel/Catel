@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Services.Exceptions
+namespace Catel.Tests.Services.Exceptions
 {
     using Catel.Services;
 

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Reflection
+namespace Catel.Tests.Reflection
 {
     using System.Reflection;
     using Catel.Reflection;
@@ -27,7 +27,7 @@ namespace Catel.Test.Reflection
         [TestCase]
         public void TitleAutomatic()
         {
-            string expected = "Catel.Test";
+            var expected = "Catel.Tests";
 
             var result = Assembly.Title();
 
@@ -87,7 +87,7 @@ namespace Catel.Test.Reflection
         [TestCase]
         public void ProductAutomatic()
         {
-            string expected = "Catel.Test";
+            string expected = "Catel.Tests";
 
             var result = Assembly.Product();
 

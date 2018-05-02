@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.MVVM.ViewModels
+namespace Catel.Tests.MVVM.ViewModels
 {
     using System.Linq;
     using System.Threading;

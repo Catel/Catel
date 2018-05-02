@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Data
+namespace Catel.Tests.Data
 {
     using System;
     using System.Linq;

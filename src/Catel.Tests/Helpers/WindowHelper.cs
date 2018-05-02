@@ -6,7 +6,7 @@
 
 #if NET
 
-namespace Catel.Test
+namespace Catel.Tests
 {
     using System.Windows;
     using System.Windows.Controls;

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test
+namespace Catel.Tests
 {
     using System;
 
@@ -15,7 +15,7 @@ namespace Catel.Test
 
     using Catel.Data;
     using Catel.MVVM;
-    using Catel.Test.ViewModels;
+    using Catel.Tests.ViewModels;
 
     using NUnit.Framework;
 

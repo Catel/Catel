@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Runtime.Serialization
+namespace Catel.Tests.Runtime.Serialization
 {
     using System;
     using System.IO;

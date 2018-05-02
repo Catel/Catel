@@ -4,12 +4,13 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test
+namespace Catel.Tests
 {
     using System;
     using Data;
 
     using NUnit.Framework;
+    using Test;
 
     public class ExpressionHelperFacts
     {

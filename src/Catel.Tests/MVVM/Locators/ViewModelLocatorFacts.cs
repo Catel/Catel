@@ -4,18 +4,19 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.MVVM
+namespace Catel.Tests.MVVM
 {
     using System;
     using Catel.MVVM;
     using Locators.Fixtures.ViewModels;
     using Locators.Fixtures.Views;
     using SpecialTest;
-    using Test.ViewModels;
-    using Test.Views;
+    using Tests.ViewModels;
+    using Tests.Views;
     using ViewModels;
 
     using NUnit.Framework;
+    using Test;
     using Views;
 
     public class ViewModelLocatorFacts

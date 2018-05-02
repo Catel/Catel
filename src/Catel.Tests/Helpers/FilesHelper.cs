@@ -6,7 +6,7 @@
 
 #if NET
 
-namespace Catel.Test
+namespace Catel.Tests
 {
     using System;
     using System.Collections.Generic;

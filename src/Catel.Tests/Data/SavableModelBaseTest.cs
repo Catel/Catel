@@ -4,11 +4,11 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Data
+namespace Catel.Tests.Data
 {
     using System.IO;
     using Catel.Runtime.Serialization;
-    using Catel.Test.Runtime.Serialization;
+    using Catel.Tests.Runtime.Serialization;
 
     using NUnit.Framework;
 

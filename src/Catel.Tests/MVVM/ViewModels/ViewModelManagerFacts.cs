@@ -4,15 +4,16 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.MVVM.ViewModels
+namespace Catel.Tests.MVVM.ViewModels
 {
     using System;
     using System.Linq;
     using Catel.MVVM;
-    using Test.ViewModels;
+    using Tests.ViewModels;
     using TestClasses;
 
     using NUnit.Framework;
+    using Test;
 
     [TestFixture]
     public class ViewModelManagerFacts

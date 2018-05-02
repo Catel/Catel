@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.IO
+namespace Catel.Tests.IO
 {
     using System;
     using System.IO;

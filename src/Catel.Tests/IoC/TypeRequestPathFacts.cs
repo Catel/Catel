@@ -3,7 +3,7 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Test.IoC
+namespace Catel.Tests.IoC
 {
     using System;
     using System.Linq;

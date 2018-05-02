@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Catel.Test.Data.TestClasses
+namespace Catel.Tests.Data.TestClasses
 {
     using System.Collections.ObjectModel;
     using Catel.Data;

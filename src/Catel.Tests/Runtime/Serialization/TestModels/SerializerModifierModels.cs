@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Runtime.Serialization.TestModels
+namespace Catel.Tests.Runtime.Serialization.TestModels
 {
     using System;
     using System.Collections.Generic;

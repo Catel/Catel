@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.IoC
+namespace Catel.Tests.IoC
 {
     using System.Diagnostics;
     using System.Linq;

@@ -6,14 +6,14 @@
 
 #if NET
 
-namespace Catel.Test.Runtime.Serialization
+namespace Catel.Tests.Runtime.Serialization
 {
     using System;
     using System.Linq;
     using Catel.Data;
     using Catel.Reflection;
     using Catel.Runtime.Serialization;
-    using Catel.Test.Data;
+    using Catel.Tests.Data;
 
     using NUnit.Framework;
 

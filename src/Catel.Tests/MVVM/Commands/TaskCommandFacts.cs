@@ -6,7 +6,7 @@
 
 #if NET
 
-namespace Catel.Test.MVVM.Commands
+namespace Catel.Tests.MVVM.Commands
 {
     using System;
     using System.Threading;

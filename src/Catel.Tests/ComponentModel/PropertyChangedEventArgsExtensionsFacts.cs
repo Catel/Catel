@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.ComponentModel
+namespace Catel.Tests.ComponentModel
 {
     using System;
     using System.ComponentModel;

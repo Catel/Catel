@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Pooling
+namespace Catel.Tests.Pooling
 {
     using Catel.Pooling;
     using NUnit.Framework;

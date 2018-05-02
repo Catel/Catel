@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Data.TestClasses
+namespace Catel.Tests.Data.TestClasses
 {
     using System.ComponentModel.DataAnnotations;
     using Catel.Data;

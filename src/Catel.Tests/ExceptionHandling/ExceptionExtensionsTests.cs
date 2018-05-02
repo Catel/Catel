@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.ExceptionHandling
+namespace Catel.Tests.ExceptionHandling
 {
     using System;
     using System.Linq;

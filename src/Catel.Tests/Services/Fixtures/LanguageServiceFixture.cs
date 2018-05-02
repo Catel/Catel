@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Services.Fixtures
+namespace Catel.Tests.Services.Fixtures
 {
     using System.Collections.Generic;
     using System.Globalization;

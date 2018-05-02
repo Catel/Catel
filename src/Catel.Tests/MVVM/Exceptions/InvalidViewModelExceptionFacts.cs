@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.MVVM.Exceptions
+namespace Catel.Tests.MVVM.Exceptions
 {
     using NUnit.Framework;
 

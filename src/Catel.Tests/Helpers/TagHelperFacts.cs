@@ -4,9 +4,10 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test
+namespace Catel.Tests
 {
     using Data;
+    using Test;
 
     using NUnit.Framework;
 

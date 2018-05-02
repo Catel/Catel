@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.MVVM.ViewModels.TestClasses
+namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
     using System.Collections.Generic;
     using Catel.Data;

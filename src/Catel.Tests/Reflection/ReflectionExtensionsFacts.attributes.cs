@@ -7,7 +7,7 @@
 // Required since we are testing obsolete attribute retrievals
 #pragma warning disable 612
 
-namespace Catel.Test.Reflection
+namespace Catel.Tests.Reflection
 {
     using System;
     using System.Reflection;

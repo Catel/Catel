@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Runtime
+namespace Catel.Tests.Runtime
 {
     using Catel.Runtime;
 

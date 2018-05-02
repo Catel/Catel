@@ -6,7 +6,7 @@
 
 #if NET
 
-namespace Catel.Test.Configuration
+namespace Catel.Tests.Configuration
 {
     using System.IO;
     using System.Runtime.Serialization;

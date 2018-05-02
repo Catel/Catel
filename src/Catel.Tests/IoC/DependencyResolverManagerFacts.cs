@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.IoC
+namespace Catel.Tests.IoC
 {
     using System;
     using Catel.IoC;

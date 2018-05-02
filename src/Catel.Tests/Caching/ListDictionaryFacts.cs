@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Caching
+namespace Catel.Tests.Caching
 {
     using System;
     using System.Linq;

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Data
+namespace Catel.Tests.Data
 {
     using System.Collections.Generic;
     using System.IO;

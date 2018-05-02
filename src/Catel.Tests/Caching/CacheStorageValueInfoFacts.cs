@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Caching
+namespace Catel.Tests.Caching
 {
     using System;
     using Catel.Caching;

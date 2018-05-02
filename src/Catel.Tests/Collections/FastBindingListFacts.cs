@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Collections
+namespace Catel.Tests.Collections
 {
     using System;
     using System.Collections;

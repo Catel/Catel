@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.MVVM.Converters
+namespace Catel.Tests.MVVM.Converters
 {
     using System.Globalization;
     using Catel.MVVM.Converters;

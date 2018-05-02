@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.MVVM.ViewModels
+namespace Catel.Tests.MVVM.ViewModels
 {
     using Catel.MVVM;
     using NUnit.Framework;

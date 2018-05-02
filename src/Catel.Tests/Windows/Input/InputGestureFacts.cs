@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Windows.Input
+namespace Catel.Tests.Windows.Input
 {
     using System.Diagnostics;
     using System.IO;

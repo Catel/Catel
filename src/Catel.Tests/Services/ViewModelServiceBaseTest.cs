@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Services
+namespace Catel.Tests.Services
 {
     using Catel.Services;
 

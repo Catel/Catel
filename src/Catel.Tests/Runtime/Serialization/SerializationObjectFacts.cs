@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Runtime.Serialization
+namespace Catel.Tests.Runtime.Serialization
 {
     using System;
     using Catel.Runtime.Serialization;

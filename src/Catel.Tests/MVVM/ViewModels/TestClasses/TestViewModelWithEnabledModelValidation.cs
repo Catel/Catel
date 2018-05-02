@@ -3,7 +3,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.MVVM.ViewModels.TestClasses
+namespace Catel.Tests.MVVM.ViewModels.TestClasses
 {
     using Catel.Data;
     using Catel.MVVM;

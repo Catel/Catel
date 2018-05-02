@@ -3,7 +3,7 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Test.MVVM.ViewModels
+namespace Catel.Tests.MVVM.ViewModels
 {
     using System;
     using System.ComponentModel.DataAnnotations;

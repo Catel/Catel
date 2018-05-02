@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.SpecialTest
+namespace Catel.Tests.SpecialTest
 {
     public class NoNamingConventionViewModel
     {
@@ -19,7 +19,7 @@ namespace Catel.Test.SpecialTest
     }
 }
 
-namespace Catel.Test.ViewModels
+namespace Catel.Tests.ViewModels
 {
     using Catel.Data;
     using Catel.MVVM;
@@ -42,7 +42,7 @@ namespace Catel.Test.ViewModels
     }
 }
 
-namespace Catel.Test
+namespace Catel.Tests
 {
     using Catel.Data;
     using Catel.MVVM;
@@ -69,28 +69,28 @@ namespace Catel.Test
     }
 }
 
-namespace Catel.Test.Views
+namespace Catel.Tests.Views
 {
     public class PersonView
     {
     }
 }
 
-namespace Catel.Test.Controls
+namespace Catel.Tests.Controls
 {
     public class PersonControl
     {
     }
 }
 
-namespace Catel.Test.Windows
+namespace Catel.Tests.Windows
 {
     public class PersonWindow
     {
     }
 }
 
-namespace Catel.Test.Pages
+namespace Catel.Tests.Pages
 {
     public class PersonPage
     {

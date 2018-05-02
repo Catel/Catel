@@ -3,7 +3,7 @@
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace Catel.Test.Reflection
+namespace Catel.Tests.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -59,8 +59,8 @@ namespace Catel.Test.Reflection
                 Assert.AreEqual(typeof(List<int>), type2);
             }
 
-            [TestCase("Catel.Test.Reflection.TypeCacheFacts[]", typeof(TypeCacheFacts[]))]
-            [TestCase("System.Collections.Generic.List`1[[Catel.Test.Reflection.TypeCacheFacts]]", typeof(List<TypeCacheFacts>))]
+            [TestCase("Catel.Tests.Reflection.TypeCacheFacts[]", typeof(TypeCacheFacts[]))]
+            [TestCase("System.Collections.Generic.List`1[[Catel.Tests.Reflection.TypeCacheFacts]]", typeof(List<TypeCacheFacts>))]
             public void ReturnsRightType(string typeName, Type expectedType)
             {
                 var type = TypeCache.GetType(typeName);

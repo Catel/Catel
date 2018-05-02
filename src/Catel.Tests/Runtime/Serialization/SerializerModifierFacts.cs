@@ -5,15 +5,15 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Runtime.Serialization
+namespace Catel.Tests.Runtime.Serialization
 {
     using System;
     using System.Collections.ObjectModel;
     using System.Linq;
     using Catel.Data;
     using Catel.Runtime.Serialization;
-    using Catel.Test.Data;
-    using Catel.Test.Runtime.Serialization.TestModels;
+    using Catel.Tests.Data;
+    using Catel.Tests.Runtime.Serialization.TestModels;
     using NUnit.Framework;
 
     public class SerializerModifierFacts

@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Reflection
+namespace Catel.Tests.Reflection
 {
     using System;
     using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace Catel.Test.Reflection
     using Catel.Collections;
     using Catel.Data;
     using Catel.Reflection;
-    using Catel.Test.Runtime.Serialization;
+    using Catel.Tests.Runtime.Serialization;
 
     using NUnit.Framework;
 

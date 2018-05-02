@@ -1,4 +1,4 @@
-﻿namespace Catel.Test.IoC
+﻿namespace Catel.Tests.IoC
 {
     using System.ComponentModel;
 

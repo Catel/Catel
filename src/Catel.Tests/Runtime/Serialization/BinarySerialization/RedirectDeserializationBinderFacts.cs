@@ -6,7 +6,7 @@
 
 #if NET
 
-namespace Catel.Test.Runtime.Serialization
+namespace Catel.Tests.Runtime.Serialization
 {
     using Catel.Reflection;
     using Catel.Runtime.Serialization.Binary;

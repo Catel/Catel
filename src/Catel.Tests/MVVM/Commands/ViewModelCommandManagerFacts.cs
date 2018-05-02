@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.MVVM
+namespace Catel.Tests.MVVM
 {
     using System;
     using Catel.MVVM;

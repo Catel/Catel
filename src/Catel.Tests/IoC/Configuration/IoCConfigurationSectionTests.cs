@@ -6,7 +6,7 @@
 
 #if NET
 
-namespace Catel.Test.IoC.Configuration
+namespace Catel.Tests.IoC.Configuration
 {
     using System.Configuration;
     using Catel.Configuration;

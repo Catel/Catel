@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Services
+namespace Catel.Tests.Services
 {
     using System;
     using Catel.Services;

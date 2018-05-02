@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.IoC
+namespace Catel.Tests.IoC
 {
     public class ServiceLocatorRegistrationGroupFacts
     {

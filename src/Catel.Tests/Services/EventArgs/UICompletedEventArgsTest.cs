@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Services.EventArgs
+namespace Catel.Tests.Services.EventArgs
 {
     using Catel.Services;
 

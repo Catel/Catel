@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Reflection
+namespace Catel.Tests.Reflection
 {
     using NUnit.Framework;
 

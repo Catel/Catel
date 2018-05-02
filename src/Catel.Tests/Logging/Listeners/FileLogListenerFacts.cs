@@ -6,7 +6,7 @@
 
 #if NET
 
-namespace Catel.Test.Logging.Listeners
+namespace Catel.Tests.Logging.Listeners
 {
     using System;
     using Catel.Logging;
@@ -17,7 +17,7 @@ namespace Catel.Test.Logging.Listeners
         [TestFixture]
         public class TheFilePathProperty
         {
-            [TestCase(@"myapp.log", @"{AppData}\CatenaLogic\Catel.Test\myapp.log")]
+            [TestCase(@"myapp.log", @"{AppData}\CatenaLogic\Catel.Tests\myapp.log")]
             [TestCase(@"..\myapp.log", @"{AppData}\CatenaLogic\myapp.log")]
             [TestCase(@"c:\source\myapp.log", @"c:\source\myapp.log")]
             public void ReturnsRightFullPath(string path, string expectedPath)

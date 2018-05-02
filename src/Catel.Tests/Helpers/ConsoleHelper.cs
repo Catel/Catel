@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test
+namespace Catel.Tests
 {
     public static class ConsoleHelper
     {

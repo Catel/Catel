@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.Logging
+namespace Catel.Tests.Logging
 {
     using Catel.Logging;
     using NUnit.Framework;

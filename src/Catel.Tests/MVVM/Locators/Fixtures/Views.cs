@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.MVVM.Locators.Fixtures.Views
+namespace Catel.Tests.MVVM.Locators.Fixtures.Views
 {
     public class MyNameViewer
     {

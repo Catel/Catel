@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Catel.Test.IoC.Exceptions
+namespace Catel.Tests.IoC.Exceptions
 {
     using Catel.IoC;
     using NUnit.Framework;

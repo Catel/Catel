@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Test.Contexts
+namespace Catel.Tests.Contexts
 {
     using NUnit.Framework;
 
