@@ -29,8 +29,6 @@ namespace Catel.Data
         /// <param name="serializer">The serializer to use.</param>
         /// <param name="configuration">The configuration.</param>
         void Save(IRandomAccessStream fileStream, ISerializer serializer, ISerializationConfiguration configuration = null);
-#elif PCL
-        // Not supported in Portable Class Library
 #else
         /// <summary>
         /// Saves the object to an isolated storage file stream using the default formatting.

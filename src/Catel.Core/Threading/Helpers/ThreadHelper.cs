@@ -19,7 +19,7 @@ namespace Catel
         /// <returns>System.String.</returns>
         public static int GetCurrentThreadId()
         {
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             return System.Environment.CurrentManagedThreadId;
 #else
             return Thread.CurrentThread.ManagedThreadId;
@@ -34,7 +34,7 @@ namespace Catel
         /// <param name="millisecondsTimeout">The milliseconds timeout.</param>
         public static void Sleep(int millisecondsTimeout)
         {
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             new ManualResetEvent(false).WaitOne(millisecondsTimeout);
 #else
             Thread.Sleep(millisecondsTimeout);
@@ -54,8 +54,6 @@ namespace Catel
             {
                 spinWait.SpinOnce();
             }
-#elif PCL
-            Sleep(1); // alternative for PCL
 #else
             Thread.SpinWait(20);
 #endif

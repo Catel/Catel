@@ -11,7 +11,7 @@ namespace Catel.Reflection
     using System;
     using System.Reflection;
 
-#if NETFX_CORE || NET || NETSTANDARD || PCL
+#if NETFX_CORE || NET || NETSTANDARD
     using System.Linq;
 #endif
 
@@ -26,7 +26,7 @@ namespace Catel.Reflection
 
             Type[] results = null;
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             results = assembly.ExportedTypes.ToArray();
 #else
             results = assembly.GetExportedTypes();
@@ -41,7 +41,7 @@ namespace Catel.Reflection
 
             Type[] results = null;
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             results = (from type in assembly.DefinedTypes
                        select type.AsType()).ToArray();
 #else
@@ -62,7 +62,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("assembly", assembly);
             Argument.IsNotNull("attributeType", attributeType);
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             return assembly.GetCustomAttributes(attributeType).ToArray();
 #else
             return assembly.GetCustomAttributes(attributeType, true).ToAttributeArray();

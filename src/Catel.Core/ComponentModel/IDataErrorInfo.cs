@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
 
 namespace System.ComponentModel
 {

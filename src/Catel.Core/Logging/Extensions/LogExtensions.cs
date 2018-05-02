@@ -78,7 +78,7 @@ namespace Catel.Logging
             Write(log, LogEvent.Info, "DEVICE INFO");
             Write(log, LogEvent.Info, string.Empty);
 
-#if !PCL && !NETFX_CORE
+#if !NETFX_CORE
             Write(log, LogEvent.Info, "Platform:              {0}", Environment.OSVersion.Platform);
             Write(log, LogEvent.Info, "OS Version:            {0}", Environment.OSVersion.Version);
 #endif

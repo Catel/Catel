@@ -16,8 +16,6 @@ namespace Catel.Data
     using System.Runtime.Serialization;
 #elif NETFX_CORE
     using Windows.Storage.Streams;
-#elif PCL
-    // Not supported in Portable Class Library
 #else
     using System.IO.IsolatedStorage;
 #endif
@@ -84,8 +82,6 @@ namespace Catel.Data
         {
             Save((Stream)fileStream, null);
         }
-#elif PCL
-        // Not supported in Portable Class Library
 #else
         /// <summary>
         /// Saves the object to an isolated storage file stream using the default formatting.
@@ -133,8 +129,6 @@ namespace Catel.Data
         {
             return Load((Stream)fileStream, serializer, configuration);
         }
-#elif PCL
-        // Not supported in Portable Class Library
 #endif
 
         /// <summary>

@@ -17,9 +17,7 @@ namespace Catel.Configuration
     using Catel.Logging;
     using Runtime.Serialization.Xml;
 
-#if PCL
-    // Not supported
-#elif NETFX_CORE
+#if NETFX_CORE
     using Windows.Storage;
 #else
     using System.Configuration;
@@ -309,7 +307,7 @@ namespace Catel.Configuration
         /// <returns><c>true</c> if the value exists, <c>false</c> otherwise.</returns>
         protected virtual bool ValueExists(ConfigurationContainer container, string key)
         {
-#if PCL || (XAMARIN && !ANDROID)
+#if (XAMARIN && !ANDROID)
             throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
 #elif ANDROID
             return _preferences.Contains(key);
@@ -330,7 +328,7 @@ namespace Catel.Configuration
         /// <returns>The value.</returns>
         protected virtual string GetValueFromStore(ConfigurationContainer container, string key)
         {
-#if PCL || (XAMARIN && !ANDROID)
+#if (XAMARIN && !ANDROID)
             throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
 #elif ANDROID
             return _preferences.GetString(key, null);
@@ -351,7 +349,7 @@ namespace Catel.Configuration
         /// <param name="value">The value.</param>
         protected virtual void SetValueToStore(ConfigurationContainer container, string key, string value)
         {
-#if PCL || (XAMARIN && !ANDROID)
+#if (XAMARIN && !ANDROID)
             throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
 #elif ANDROID
             _preferences.Edit()

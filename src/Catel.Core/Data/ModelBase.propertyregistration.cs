@@ -37,7 +37,7 @@ namespace Catel.Data
 
             var memberExpression = (MemberExpression)propertyExpression.Body;
 
-#if !PCL && !NETFX_CORE
+#if !NETFX_CORE
             if (memberExpression.Member.MemberType != MemberTypes.Property)
             {
                 throw Log.ErrorAndCreateException<ArgumentException>("The member type of the body of the property expression should be a property");
@@ -77,7 +77,7 @@ namespace Catel.Data
 
             var memberExpression = (MemberExpression)propertyExpression.Body;
 
-#if !PCL && !NETFX_CORE
+#if !NETFX_CORE
             if (memberExpression.Member.MemberType != MemberTypes.Property)
             {
                 throw Log.ErrorAndCreateException<ArgumentException>("The member type of the body of the property expression should be a property");

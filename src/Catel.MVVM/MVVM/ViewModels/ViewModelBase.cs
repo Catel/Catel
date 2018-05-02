@@ -22,10 +22,7 @@ namespace Catel.MVVM
     using Services;
     using System.Collections.ObjectModel;
     using Threading;
-
-#if !PCL
     using System.Collections.Concurrent;
-#endif
 
     #region Enums
     /// <summary>
@@ -68,11 +65,8 @@ namespace Catel.MVVM
         [field: NonSerialized]
 #endif
 
-#if !PCL
         private static readonly ConcurrentDictionary<Type, ViewModelMetadata> _metaData = new ConcurrentDictionary<Type, ViewModelMetadata>();
-#else
-        private static readonly Dictionary<Type, ViewModelMetadata> _metaData = new Dictionary<Type, ViewModelMetadata>();
-#endif
+
 
 #if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
@@ -511,21 +505,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelType" /> is <c>null</c>.</exception>
         private static ViewModelMetadata GetViewModelMetaData(Type viewModelType)
         {
-#if PCL
-            lock (_metaData)
-            {
-                ViewModelMetadata data = null;
-                if (!_metaData.TryGetValue(viewModelType, out data))
-                {
-                    data = CreateViewModelMetaData(viewModelType);
-                    _metaData[viewModelType] = data;
-                }
-
-                return data;
-            }
-#else
             return _metaData.GetOrAdd(viewModelType, CreateViewModelMetaData);
-#endif
         }
 
         private static ViewModelMetadata CreateViewModelMetaData(Type viewModelType)

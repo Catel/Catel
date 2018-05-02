@@ -189,20 +189,7 @@ namespace Catel.Threading
         {
             Argument.IsNotNull("actions", actions);
 
-#if PCL
-            var list = actions.ToList();
-            var tasks = new List<Task>();
-            for (int i = 0; i < list.Count; i++)
-            {
-                var task = new Task(list[i]);
-                tasks.Add(task);
-                task.Start();
-            }
-
-            Task.WaitAll(tasks.ToArray());
-#else
             Parallel.Invoke(actions);
-#endif
         }
 
         /// <summary>

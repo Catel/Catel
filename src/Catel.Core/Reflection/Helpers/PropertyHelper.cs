@@ -49,7 +49,7 @@ namespace Catel.Reflection
                 return false;
             }
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             var getMethod = propertyInfo.GetMethod;
 #else
             var getMethod = propertyInfo.GetGetMethod();
@@ -223,7 +223,7 @@ namespace Catel.Reflection
                 return false;
             }
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             value = (TValue)propertyInfo.GetValue(obj, null);
             return true;
 #else
@@ -305,7 +305,7 @@ namespace Catel.Reflection
                 return false;
             }
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             propertyInfo.SetValue(obj, value, null);
 #else
 
@@ -331,7 +331,7 @@ namespace Catel.Reflection
             return true;
         }
 
-#if !NETFX_CORE && !PCL
+#if !NETFX_CORE
         /// <summary>
         /// Gets hidden property value.
         /// </summary>

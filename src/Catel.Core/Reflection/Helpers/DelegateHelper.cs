@@ -85,7 +85,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("delegateType", delegateType);
             Argument.IsNotNull("methodInfo", methodInfo);
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             return methodInfo.CreateDelegate(delegateType, target);
 #else
             return Delegate.CreateDelegate(delegateType, target, methodInfo);

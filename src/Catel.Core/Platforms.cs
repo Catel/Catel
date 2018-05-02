@@ -92,9 +92,6 @@ namespace Catel
                 case KnownPlatforms.XamarinForms:
                     return currentPlatform == SupportedPlatforms.NetStandard20;
 
-                case KnownPlatforms.PCL:
-                    return currentPlatform == SupportedPlatforms.PCL;
-
                 default:
                     throw new ArgumentOutOfRangeException("platformToCheck");
             }
@@ -109,9 +106,7 @@ namespace Catel
                 return SupportedPlatforms.XamarinForms;
             }
 
-#if PCL
-            return SupportedPlatforms.PCL;
-#elif NET45
+#if NET45
             return SupportedPlatforms.NET45;
 #elif NET46
             return SupportedPlatforms.NET46;
@@ -181,14 +176,9 @@ namespace Catel
         iOS,
 
         /// <summary>
-        /// Portable Class Library platform.
+        /// Xamarin.Forms platform.
         /// </summary>
         XamarinForms,
-
-        /// <summary>
-        /// Portable Class Library platform.
-        /// </summary>
-        PCL
     }
 
     /// <summary>
@@ -260,10 +250,5 @@ namespace Catel
         /// The xamarin forms platform.
         /// </summary>
         XamarinForms,
-
-        /// <summary>
-        /// Portable Class Library platform.
-        /// </summary>
-        PCL
     }
 }

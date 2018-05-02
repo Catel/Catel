@@ -18,8 +18,6 @@ namespace Catel.Data
     using System.Runtime.Serialization.Formatters.Binary;
 #elif NETFX_CORE
     using Windows.Storage.Streams;
-#elif PCL
-    // Not supported in Portable Class Library
 #else
     using System.IO.IsolatedStorage;
 #endif

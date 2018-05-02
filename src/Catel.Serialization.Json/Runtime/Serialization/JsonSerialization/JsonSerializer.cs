@@ -4,9 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !PCL
 #define SUPPORT_BSON
-#endif
 
 namespace Catel.Runtime.Serialization.Json
 {

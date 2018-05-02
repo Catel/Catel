@@ -476,7 +476,7 @@ namespace Catel
                 }
             }
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             var addMethod = eventInfo.AddMethod;
 #else
             var addMethod = eventInfo.GetAddMethod();
@@ -506,7 +506,7 @@ namespace Catel
 
             _internalEventDelegate = DelegateHelper.CreateDelegate(handlerType, this, "OnEvent");
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             if (methodInfo.ReturnType == typeof(void))
             {
                 methodInfo.Invoke(source, new object[] { _internalEventDelegate });
@@ -587,7 +587,7 @@ namespace Catel
                 }
             }
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             var removeMethod = eventInfo.RemoveMethod;
 #else
             var removeMethod = eventInfo.GetRemoveMethod();
@@ -749,7 +749,7 @@ namespace Catel
         /// <exception cref="NotSupportedException">The <paramref name="handler" /> is not of type <see cref="PropertyChangedEventHandler" />,
         /// <see cref="NotifyCollectionChangedEventHandler" /> or <see cref="EventHandler{TEventArgs}" />.</exception>
         public static IWeakEventListener SubscribeToWeakGenericEvent<TEventArgs>(TTarget target, TSource source, string eventName, EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
-#if !NETFX_CORE && !PCL
+#if !NETFX_CORE
  where TEventArgs : EventArgsBase
 #endif
         {
@@ -975,7 +975,7 @@ namespace Catel
         /// <see cref="NotifyCollectionChangedEventHandler" /> or <see cref="EventHandler{TEventArgs}" />.</exception>
         /// <exception cref="NotSupportedException">The <paramref name="handler" /> is an anonymous delegate.</exception>
         public static IWeakEventListener SubscribeToWeakGenericEvent<TEventArgs>(this object target, object source, string eventName, EventHandler<TEventArgs> handler, bool throwWhenSubscriptionFails = true)
-#if !NETFX_CORE && !PCL
+#if !NETFX_CORE
  where TEventArgs : EventArgsBase
 #endif
         {

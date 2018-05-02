@@ -367,7 +367,7 @@ namespace Catel.Reflection
                 // Fallback to GetType
                 try
                 {
-#if NETFX_CORE || PCL
+#if NETFX_CORE
                     var type = Type.GetType(typeNameWithAssembly, false);
 #else
                     var type = Type.GetType(typeNameWithAssembly, false, ignoreCase);
@@ -378,7 +378,7 @@ namespace Catel.Reflection
                         return type;
                     }
                 }
-#if !NETFX_CORE && !PCL
+#if !NETFX_CORE
                 catch (System.IO.FileLoadException fle)
                 {
                     Log.Debug(fle, "Failed to load type '{0}' using Type.GetType(), failed to load file", typeNameWithAssembly);
@@ -830,11 +830,7 @@ namespace Catel.Reflection
                 var types = (from assembly in assemblies
                              select new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assembly.GetAllTypesSafely())));
 
-#if PCL
-                var results = types;
-#else
                 var results = types.AsParallel();
-#endif
 
                 return results.ToDictionary(p => p.Key, p => p.Value);
             }

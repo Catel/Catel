@@ -98,7 +98,7 @@ namespace Catel
         {
 #if NET || NETSTANDARD
             return IsHostedByProcess("devenv", checkParentProcesses);
-#elif XAMARIN || PCL
+#elif XAMARIN
             return false;
 #elif NETFX_CORE
             return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
@@ -119,7 +119,7 @@ namespace Catel
         {
 #if NET || NETSTANDARD
             return IsHostedByProcess("sharpdevelop", checkParentProcesses);
-#elif XAMARIN || PCL
+#elif XAMARIN
             return false;
 #elif NETFX_CORE
             return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
@@ -140,7 +140,7 @@ namespace Catel
         {
 #if NET || NETSTANDARD
             return IsHostedByProcess("blend", checkParentProcesses);
-#elif XAMARIN || PCL
+#elif XAMARIN
             return false;
 #elif NETFX_CORE
             return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;

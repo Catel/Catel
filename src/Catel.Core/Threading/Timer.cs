@@ -4,9 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !PCL
 #define USE_INTERNAL_TIMER
-#endif
 
 namespace Catel.Threading
 {

@@ -60,7 +60,7 @@ namespace Catel.Logging
             UpdateConsoleColors(logEvent);
 #endif
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             System.Diagnostics.Debug.WriteLine(consoleMessage);
 #else
             Console.WriteLine(consoleMessage);

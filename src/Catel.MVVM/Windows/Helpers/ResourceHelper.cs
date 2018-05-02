@@ -28,7 +28,7 @@ namespace Catel.Windows
         /// </summary>
         public static void EnsurePackUriIsAllowed()
         {
-#if !NETFX_CORE && !PCL
+#if !NETFX_CORE
             if (!UriParser.IsKnownScheme("pack"))
             {
                 Log.Debug("Pack uri is not yet allowed, adding it as known scheme");
@@ -112,7 +112,7 @@ namespace Catel.Windows
         {
             Argument.IsNotNull("uri", uri);
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             return false;
 #else
             try

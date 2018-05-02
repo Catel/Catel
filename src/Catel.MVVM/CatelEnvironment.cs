@@ -105,7 +105,7 @@ namespace Catel
             ViewModelServiceHelper.RegisterDefaultViewModelServices(ServiceLocator.Default);
         }
 
-#if !PCL && !XAMARIN && !XAMARIN_FORMS
+#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the main window of the application.
         /// </summary>

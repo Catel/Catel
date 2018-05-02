@@ -58,7 +58,7 @@ namespace Catel
                 return "null";
             }
 
-#if !NETFX_CORE && !PCL
+#if !NETFX_CORE
             if (instance == DBNull.Value)
             {
                 return "dbnull";

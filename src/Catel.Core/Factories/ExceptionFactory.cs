@@ -92,7 +92,7 @@ namespace Catel
             {
                 return (Exception)Activator.CreateInstance(exceptionType, args);
             }
-#if !NETFX_CORE && !PCL
+#if !NETFX_CORE
             catch (MissingMethodException)
 #else
             catch (Exception)

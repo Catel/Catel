@@ -24,7 +24,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("del", del);
 
-#if NETFX_CORE || NET45 || PCL
+#if NETFX_CORE || NET45
             return del.GetMethodInfo();
 #else
             return del.Method;

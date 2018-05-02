@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NETFX_CORE || PCL || NET || NETSTANDARD
+#if NETFX_CORE || NET || NETSTANDARD
 
 namespace Catel.Reflection
 {

@@ -41,7 +41,6 @@ namespace Catel.IO
     /// </summary>
     public static class Path
     {
-#if !PCL
         /// <summary>
         /// Gets the application data directory for the company and product as defined the the assembly information of the entry assembly. 
         /// If the entry assembly is <c>null</c>, this method will fall back to the calling assembly to retrieve the information.
@@ -216,15 +215,14 @@ namespace Catel.IO
 
             return path;
         }
-#endif
 
-            /// <summary>
-            /// Gets the name of the directory.
-            /// </summary>
-            /// <param name="path">The path to get the directory name from.</param>
-            /// <returns>The directory name.</returns>
-            /// <exception cref="ArgumentException">The <paramref name="path"/> is <c>null</c> or whitespace.</exception>
-            public static string GetDirectoryName(string path)
+        /// <summary>
+        /// Gets the name of the directory.
+        /// </summary>
+        /// <param name="path">The path to get the directory name from.</param>
+        /// <returns>The directory name.</returns>
+        /// <exception cref="ArgumentException">The <paramref name="path"/> is <c>null</c> or whitespace.</exception>
+        public static string GetDirectoryName(string path)
         {
             Argument.IsNotNullOrWhitespace("path", path);
 
@@ -301,7 +299,7 @@ namespace Catel.IO
         {
             Argument.IsNotNullOrWhitespace("fullPath", fullPath);
 
-#if !NETFX_CORE && !PCL
+#if !NETFX_CORE
             if (string.IsNullOrEmpty(basePath))
             {
                 basePath = Environment.CurrentDirectory;
@@ -417,7 +415,6 @@ namespace Catel.IO
             return path + slash;
         }
 
-#if !PCL
         /// <summary>
         /// Returns a combination of multiple paths.
         /// </summary>
@@ -425,7 +422,7 @@ namespace Catel.IO
         /// <returns>Combination of all the paths passed.</returns>
         public static string Combine(params string[] paths)
         {
-            string result = string.Empty;
+            var result = string.Empty;
 
             // Make sure we have any values
             if (paths.Length == 0)
@@ -485,7 +482,6 @@ namespace Catel.IO
 
             return ReplacePathSlashesByUrlSlashes(result);
         }
-#endif
 
         /// <summary>
         /// Replaces path slashes (\) by url slashes (/).

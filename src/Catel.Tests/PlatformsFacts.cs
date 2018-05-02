@@ -27,7 +27,6 @@ namespace Catel.Test
             [TestCase(KnownPlatforms.Xamarin, SupportedPlatforms.iOS)]
             [TestCase(KnownPlatforms.XamarinAndroid, SupportedPlatforms.Android)]
             [TestCase(KnownPlatforms.XamariniOS, SupportedPlatforms.iOS)]
-            [TestCase(KnownPlatforms.PCL, SupportedPlatforms.PCL)]
             public void ReturnsTrueForSupportedPlatform(KnownPlatforms platformToCheck, SupportedPlatforms currentPlatform)
             {
                 Assert.IsTrue(Platforms.IsPlatformSupported(platformToCheck, currentPlatform));

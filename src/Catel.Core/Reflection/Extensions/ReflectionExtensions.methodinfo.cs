@@ -11,7 +11,7 @@ namespace Catel.Reflection
     using System;
     using System.Reflection;
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
     using System.Linq;
 #endif
 
@@ -30,7 +30,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("methodInfo", methodInfo);
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             return methodInfo.GetCustomAttributes(inherit).ToArray();
 #else
             return methodInfo.GetCustomAttributes(inherit).ToAttributeArray();
@@ -42,7 +42,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("methodInfo", methodInfo);
             Argument.IsNotNull("attributeType", attributeType);
 
-#if NETFX_CORE || PCL
+#if NETFX_CORE
             return methodInfo.GetCustomAttributes(attributeType, inherit).ToArray();
 #else
             return methodInfo.GetCustomAttributes(attributeType, inherit).ToAttributeArray();
