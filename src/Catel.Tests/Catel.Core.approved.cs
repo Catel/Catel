@@ -2557,6 +2557,7 @@ namespace Catel.Logging
         public Catel.Logging.LogEvent LogEvent { get; }
         public string Message { get; }
         public System.DateTime Time { get; }
+        public override string ToString() { }
     }
     [System.FlagsAttribute()]
     public enum LogEvent
@@ -3977,7 +3978,7 @@ namespace Catel.Services
         protected override ulong GenerateUniqueIdentifier() { }
     }
 }
-namespace Catel.Test
+namespace Catel.Tests
 {
     public class static ExceptionTester
     {

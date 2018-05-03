@@ -77,7 +77,7 @@ namespace Catel.Tests.Reflection
         [TestCase]
         public void DescriptionAutomatic()
         {
-            string expected = "Catel test library";
+            string expected = "Catel tests library";
 
             var result = Assembly.Description();
 
