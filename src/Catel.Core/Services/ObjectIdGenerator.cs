@@ -24,6 +24,8 @@ namespace Catel.Services
 
         private static readonly ConditionalWeakTable<TObjectType, InstanceWrapper> _allocatedUniqueIdentifierPerInstances = new ConditionalWeakTable<TObjectType, InstanceWrapper>();
 
+        protected readonly object _lock = new object();
+
         /// <inheritdoc />
         public TUniqueIdentifier GetUniqueIdentifier(bool reuse = false)
         {

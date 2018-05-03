@@ -39,6 +39,7 @@ Classes / members marked as obsolete:
 Added/fixed:
 ============
 (*) #1181 Support passing in IEqualityComparer for ListDictionary
+(x) #1184 ObjectIdGenerator should lock generation process
 
 Roadmap:
 ========

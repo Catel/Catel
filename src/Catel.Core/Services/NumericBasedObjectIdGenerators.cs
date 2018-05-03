@@ -19,7 +19,10 @@ namespace Catel.Services
         /// <inheritdoc />
         protected override int GenerateUniqueIdentifier()
         {
-            return Value++;
+            lock (_lock)
+            {
+                return Value++;
+            }
         }
     }
 
@@ -35,7 +38,10 @@ namespace Catel.Services
         /// <inheritdoc />
         protected override long GenerateUniqueIdentifier()
         {
-            return Value++;
+            lock (_lock)
+            {
+                return Value++;
+            }
         }
     }
 
@@ -51,7 +57,10 @@ namespace Catel.Services
         /// <inheritdoc />
         protected override ulong GenerateUniqueIdentifier()
         {
-            return Value++;
+            lock (_lock)
+            {
+                return Value++;
+            }
         }
     }
 }

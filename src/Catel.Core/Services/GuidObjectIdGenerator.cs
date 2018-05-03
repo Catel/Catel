@@ -20,6 +20,7 @@ namespace Catel.Services
         /// <inheritdoc />
         protected override Guid GenerateUniqueIdentifier()
         {
+            // Note: no need to lock, guids are unique
             return Guid.NewGuid();
         }
     }

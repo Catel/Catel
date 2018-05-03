@@ -107,25 +107,29 @@ namespace Catel.Tests.MVVM.ViewModels
 
             var allViewModels = new TestViewModel[threadAmount][];
 
-            for (int i = 0; i < threadAmount; i++)
+            for (var i = 0; i < threadAmount; i++)
             {
-                threads[i] = new Thread((index) =>
+                threads[i] = new Thread(index =>
                 {
                     var localViewModels = new TestViewModel[personsPerThread];
-                    for (int j = 0; j < personsPerThread; j++)
+                    for (var j = 0; j < personsPerThread; j++)
                     {
                         localViewModels[j] = new TestViewModel();
                     }
-                    allViewModels[(int) index] = localViewModels;
+
+                    lock (allViewModels)
+                    {
+                        allViewModels[(int) index] = localViewModels;
+                    }
                 });
             }
 
-            for (int i = 0; i < threadAmount; i++)
+            for (var i = 0; i < threadAmount; i++)
             {
                 threads[i].Start(i);
             }
 
-            for (int i = 0; i < threadAmount; i++)
+            for (var i = 0; i < threadAmount; i++)
             {
                 threads[i].Join();
             }
