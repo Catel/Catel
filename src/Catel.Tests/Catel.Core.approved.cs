@@ -3947,6 +3947,7 @@ namespace Catel.Services
     public abstract class ObjectIdGenerator<TObjectType, TUniqueIdentifier> : Catel.Services.IObjectIdGenerator<TUniqueIdentifier>, Catel.Services.IObjectIdGenerator<TObjectType, TUniqueIdentifier>
         where TObjectType :  class
     {
+        protected readonly object _lock;
         protected ObjectIdGenerator() { }
         protected abstract TUniqueIdentifier GenerateUniqueIdentifier();
         public TUniqueIdentifier GetUniqueIdentifier(bool reuse = False) { }
