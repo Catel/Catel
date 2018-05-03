@@ -42,7 +42,6 @@
 
   <ItemGroup>
     <Compile Remove="*.approved.cs;*.received.cs" />
-    <Compile Remove="A\**;B\**;C\**" />
   </ItemGroup>
 
   <ItemGroup>
