@@ -210,11 +210,11 @@ namespace Catel.Tests.Data
 
                 var model = new TestModel();
                 collection.Add(model);
-                Assert.IsTrue(itemsAdded);
-                Assert.IsFalse(itemsRemoved);
+                Assert.IsTrue(itemsAdded, "Item should have been added");
+                Assert.IsFalse(itemsRemoved, "Item should not (yet) have been removed");
 
                 collection.Remove(model);
-                Assert.IsTrue(itemsRemoved);
+                Assert.IsTrue(itemsRemoved, "Item should have been removed");
             }
 
             [TestCase]

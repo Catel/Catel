@@ -121,7 +121,7 @@ namespace Catel.Tests.Windows
             [TestCase]
             public void ReturnsFalseForNonExistingResourceAsUriString()
             {
-                Assert.IsFalse(ResourceHelper.XamlPageExists(ResourceHelper.GetResourceUri("TestControl.xaml", "Catel.Tests")));
+                Assert.IsFalse(ResourceHelper.XamlPageExists(ResourceHelper.GetResourceUri("NonExistingTestControl.xaml", "Catel.Tests")));
             }
 
             [TestCase]
