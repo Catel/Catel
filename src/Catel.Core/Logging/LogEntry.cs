@@ -101,6 +101,15 @@ namespace Catel.Logging
                 return _logData;
             }
         }
+
+        /// <summary>
+        /// Returns the string value of this object.
+        /// </summary>
+        /// <returns>String value.</returns>
+        public override string ToString()
+        {
+            return $"[{Time}] [{LogEvent}] {Message}";
+        }
         #endregion
     }
 }
