@@ -8,7 +8,6 @@ namespace Catel.Tests
 {
     using System;
     using NUnit.Framework;
-    using Test;
 
     [TestFixture]
     public class WeakActionTest

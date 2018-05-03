@@ -13,7 +13,6 @@ namespace Catel.Tests.MVVM.ViewModels
     using TestClasses;
 
     using NUnit.Framework;
-    using Test;
 
     [TestFixture]
     public class ViewModelManagerFacts

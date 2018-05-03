@@ -16,7 +16,6 @@ namespace Catel.Tests.MVVM
     using ViewModels;
 
     using NUnit.Framework;
-    using Test;
     using Views;
 
     public class ViewModelLocatorFacts

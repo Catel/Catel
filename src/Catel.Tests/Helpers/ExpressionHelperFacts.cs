@@ -10,7 +10,6 @@ namespace Catel.Tests
     using Data;
 
     using NUnit.Framework;
-    using Test;
 
     public class ExpressionHelperFacts
     {

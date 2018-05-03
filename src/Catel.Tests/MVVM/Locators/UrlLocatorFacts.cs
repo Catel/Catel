@@ -13,7 +13,6 @@ namespace Catel.Tests.MVVM
     using Tests.ViewModels;
 
     using NUnit.Framework;
-    using Test;
 
     public class UrlLocatorFacts
     {

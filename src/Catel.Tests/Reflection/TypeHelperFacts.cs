@@ -13,7 +13,6 @@ namespace Catel.Tests.Reflection
     using Catel.Reflection;
 
     using NUnit.Framework;
-    using Test;
 
     public class TypeHelperFacts
     {

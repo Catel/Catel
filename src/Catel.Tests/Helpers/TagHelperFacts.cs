@@ -7,7 +7,6 @@
 namespace Catel.Tests
 {
     using Data;
-    using Test;
 
     using NUnit.Framework;
 
