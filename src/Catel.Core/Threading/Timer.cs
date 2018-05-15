@@ -43,10 +43,10 @@ namespace Catel.Threading
         private readonly TimerCallback _timerCallback;
         private readonly object _timerState;
 
+        private readonly object _lock = new object();
         private System.Threading.CancellationTokenSource _cancellationTokenSource;
 
 #if USE_INTERNAL_TIMER
-        private readonly object _lock = new object();
         private System.Threading.Timer _timer;
 #endif
         #endregion
@@ -118,6 +118,11 @@ namespace Catel.Threading
 
         #region Events
         /// <summary>
+        /// Occurs when the interval changes.
+        /// </summary>
+        public event EventHandler<EventArgs> Changed;
+ 
+        /// <summary>
         /// Occurs when the interval elapses.
         /// </summary>
         public event EventHandler<EventArgs> Elapsed;
@@ -144,7 +149,7 @@ namespace Catel.Threading
         {
             SetUpTimer(dueTime, interval);
 
-            var cancellationToken = _cancellationTokenSource.Token;
+            var cancellationToken = GetCancellationToken();
 
             if (dueTime < TimeSpan.Zero)
             {
@@ -173,6 +178,13 @@ namespace Catel.Threading
                 delayTask.ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
 #endif
             }
+
+            // Note: don't use SafeInvoke, this event could be raised a *lot*
+            var changed = Changed;
+            if (changed != null)
+            {
+                changed(this, EventArgs.Empty);
+            }
         }
 
         /// <summary>
@@ -184,8 +196,7 @@ namespace Catel.Threading
         {
             Stop();
 
-            _cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = _cancellationTokenSource.Token;
+            var cancellationToken = GetCancellationToken();
 
 #if USE_INTERNAL_TIMER
             lock (_lock)
@@ -239,10 +250,13 @@ namespace Catel.Threading
         /// </summary>
         private void Stop()
         {
-            if (_cancellationTokenSource != null)
+            lock (_lock)
             {
-                _cancellationTokenSource.Cancel();
-                _cancellationTokenSource = null;
+                if (_cancellationTokenSource != null)
+                {
+                    _cancellationTokenSource.Cancel();
+                    _cancellationTokenSource = null;
+                }
             }
 
 #if USE_INTERNAL_TIMER
@@ -255,6 +269,19 @@ namespace Catel.Threading
                 }
             }
 #endif
+        }
+
+        private CancellationToken GetCancellationToken()
+        {
+            lock (_lock)
+            {
+                if (_cancellationTokenSource == null)
+                {
+                    _cancellationTokenSource = new CancellationTokenSource();
+                }
+
+                return _cancellationTokenSource.Token;
+            }
         }
 
         /// <summary>

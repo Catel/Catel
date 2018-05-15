@@ -4122,6 +4122,7 @@ namespace Catel.Threading
         public Timer(Catel.Threading.TimerCallback callback, object state, int dueTime, int interval) { }
         public Timer(Catel.Threading.TimerCallback callback, object state, System.TimeSpan dueTime, System.TimeSpan interval) { }
         public int Interval { get; set; }
+        public event System.EventHandler<System.EventArgs> Changed;
         public event System.EventHandler<System.EventArgs> Elapsed;
         public void Change(int dueTime, int interval) { }
         public void Change(System.TimeSpan dueTime, System.TimeSpan interval) { }
