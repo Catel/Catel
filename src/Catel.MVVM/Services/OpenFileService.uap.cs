@@ -8,6 +8,7 @@
 
 namespace Catel.Services
 {
+    using Logging;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -38,13 +39,36 @@ namespace Catel.Services
             {
                 foreach (var filter in filters)
                 {
-                    var finalFilter = filter;
-                    if (finalFilter.StartsWith("*"))
+                    var fileFilter = filter;
+
+                    // Support full .NET filters (like "Text files|*.txt") as well
+                    if (fileFilter.Contains("|"))
                     {
-                        finalFilter = finalFilter.Replace("*", string.Empty);
+                        var splittedFilters = fileFilter.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                        if (splittedFilters.Length == 2)
+                        {
+                            fileFilter = splittedFilters[1];
+                        }
+                        else
+                        {
+                            Log.Warning($"Failed to parse filter '{fileFilter}'");
+
+                            fileFilter = null;
+                        }
                     }
 
-                    fileDialog.FileTypeFilter.Add(finalFilter);
+                    if (!string.IsNullOrWhiteSpace(fileFilter))
+                    {
+                        if (fileFilter.StartsWith("*"))
+                        {
+                            fileFilter = fileFilter.Replace("*", string.Empty);
+                        }
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(fileFilter))
+                    {
+                        fileDialog.FileTypeFilter.Add(fileFilter);
+                    }
                 }
             }
 

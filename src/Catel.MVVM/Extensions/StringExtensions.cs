@@ -12,7 +12,7 @@ namespace Catel
     /// <summary>
     /// String extensions.
     /// </summary>
-    public static class StringExtensions
+    public static partial class StringExtensions
     {
         /// <summary>
         /// Gets the a unique name for a control. This is sometimes required in some frameworks.

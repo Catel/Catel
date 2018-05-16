@@ -8,6 +8,7 @@
 
 namespace Catel.Services
 {
+    using Logging;
     using System.IO;
 
 #if NET
@@ -25,6 +26,8 @@ namespace Catel.Services
     /// </summary>
     public partial class OpenFileService : FileServiceBase, IOpenFileService
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         #region IFileSupport Members
         /// <summary>
         /// Gets the file names in case <see cref="IsMultiSelect"/> is <c>true</c>.

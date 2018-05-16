@@ -9,7 +9,9 @@
 namespace Catel.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Catel.Logging;
     using global::Windows.Storage;
     using global::Windows.Storage.Pickers;
 
@@ -30,7 +32,49 @@ namespace Catel.Services
         {
             var fileDialog = new FileSavePicker();
 
-            fileDialog.DefaultFileExtension = Filter;
+            var filters = Filter?.Split(';');
+            if (filters != null)
+            {
+                foreach (var filter in filters)
+                {
+                    var filterName = string.Empty;
+                    var fileFilters = new List<string>();
+                    var fileFilter = filter;
+
+                    // Support full .NET filters (like "Text files|*.txt") as well
+                    if (fileFilter.Contains("|"))
+                    {
+                        var splittedFilters = fileFilter.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                        if (splittedFilters.Length == 2)
+                        {
+                            filterName = splittedFilters[0];
+                            fileFilter = splittedFilters[1];
+                        }
+                        else
+                        {
+                            Log.Warning($"Failed to parse filter '{fileFilter}'");
+
+                            fileFilter = null;
+                        }
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(fileFilter))
+                    {
+                        fileFilters.AddRange(fileFilter.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries));
+                    }
+
+                    for (int i = 0; i < fileFilters.Count; i++)
+                    {
+                        fileFilters[i] = fileFilters[i].Trim().Replace("*", string.Empty);
+                    }
+
+                    if (fileFilters.Count > 0)
+                    {
+                        fileDialog.FileTypeChoices.Add(filterName, fileFilters);
+                    }
+                }
+            }
+
             fileDialog.SuggestedFileName = FileName;
 
             var file = await fileDialog.PickSaveFileAsync();
