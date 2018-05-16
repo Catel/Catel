@@ -15,7 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{E0737FB3-1C6
 		..\doc\readme.txt = ..\doc\readme.txt
 		..\doc\release steps.txt = ..\doc\release steps.txt
 		..\doc\running custom tool.txt = ..\doc\running custom tool.txt
-		..\doc\translating resources.txt = ..\doc\translating resources.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{EF395E12-0C90-4CE1-921A-A276AF0DC28A}"

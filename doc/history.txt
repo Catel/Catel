@@ -38,6 +38,7 @@ Classes / members marked as obsolete:
 
 Added/fixed:
 ============
+(+) #1183 Add MultiLingual App Toolkit (MAT) to support all target frameworks
 (*) #1123 SaveFileService & OpenFileService should support Windows file filters in UWP
 (*) #1181 Support passing in IEqualityComparer for ListDictionary
 (x) #1180 Potential NullReferenceException in Timer
