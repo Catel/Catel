@@ -14,6 +14,8 @@
 
   <ItemGroup>
     <_ResxFiles Remove="Properties\*.resx" />
+    <None Remove="MultilingualResources\*.xlf" />
+    <XliffResource Include="MultilingualResources\*.xlf" />
   </ItemGroup>
   
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\Microsoft.Multilingual.ResxResources.targets" Label="MultilingualAppToolkit" Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\Multilingual App Toolkit\v$(MultilingualAppToolkitVersion)\Microsoft.Multilingual.ResxResources.targets')" />
