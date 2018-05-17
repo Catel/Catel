@@ -9,6 +9,9 @@ var versionNuGet = GetContinuaCIVariable("GitVersion_NuGetVersion", "5.5.0-alpha
 var solutionName = GetContinuaCIVariable("SolutionName", string.Format("{0}.sln", projectName));
 var configurationName = GetContinuaCIVariable("ConfigurationName", "Release");
 var outputRootDirectory = GetContinuaCIVariable("OutputRootDirectory", string.Format("./output/{0}", configurationName));
+var codeSignWildCard = GetContinuaCIVariable("CodeSignWildcard", projectName);
+var codeSignCertificateSubjectName = GetContinuaCIVariable("CodeSignCertificateSubjectName", company);
+var codeSignTimeStampUri = GetContinuaCIVariable("CodeSignTimeStampUri", "http://timestamp.comodoca.com/authenticode");
 
 var nuGetPackageSources = GetContinuaCIVariable("NuGetPackageSources", string.Empty);
 var repositoryUrl = GetContinuaCIVariable("RepositoryUrl", defaultRepositoryUrl);
