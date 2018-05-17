@@ -3,10 +3,11 @@
 var buildServerVariables = ContinuaCI.Environment.Variable;
 
 var target = GetContinuaCIVariable("Target", "Default");
-var versionMajorMinorPatch = GetContinuaCIVariable("GitVersion_MajorMinorPatch", "5.5.0");
-var versionFullSemVer = GetContinuaCIVariable("GitVersion_FullSemVer", "5.5.0-alpha.1");
-var versionNuGet = GetContinuaCIVariable("GitVersion_NuGetVersion", "5.5.0-alpha0001");
+var versionMajorMinorPatch = GetContinuaCIVariable("GitVersion_MajorMinorPatch", "3.0.0");
+var versionFullSemVer = GetContinuaCIVariable("GitVersion_FullSemVer", "3.0.0-alpha.1");
+var versionNuGet = GetContinuaCIVariable("GitVersion_NuGetVersion", "3.0.0-alpha0001");
 var solutionName = GetContinuaCIVariable("SolutionName", string.Format("{0}.sln", projectName));
+var isCiBuild = bool.Parse(GetContinuaCIVariable("IsCiBuild", "False"));
 var configurationName = GetContinuaCIVariable("ConfigurationName", "Release");
 var outputRootDirectory = GetContinuaCIVariable("OutputRootDirectory", string.Format("./output/{0}", configurationName));
 var codeSignWildCard = GetContinuaCIVariable("CodeSignWildcard", projectName);

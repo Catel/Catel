@@ -127,6 +127,12 @@ Task("CodeSign")
     .ContinueOnError()
     .Does(() =>
 {
+    if (isCiBuild)
+    {
+        Information("Skipping code signing because this is a CI build");
+        return;
+    }
+
     var exeSignFilesSearchPattern = outputRootDirectory + string.Format("/**/*{0}*.exe", codeSignWildCard);
     var dllSignFilesSearchPattern = outputRootDirectory + string.Format("/**/*{0}*.dll", codeSignWildCard);
 
@@ -140,7 +146,7 @@ Task("CodeSign")
 
     filesToSign.AddRange(GetFiles(dllSignFilesSearchPattern));
 
-    Information("Found '{0}' files to code sign", filesToSign.Count);
+    Information("Found '{0}' files to code sign, this can take a few minutes", filesToSign.Count);
 
     Sign(filesToSign, new SignToolSignSettings 
     {
