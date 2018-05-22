@@ -14,7 +14,7 @@ Note that defines must be set for Debug and Release configurations
 Output directories
 ==================
 
-..\..\output\[DEBUG|RELEASE]\[FRAMEWORK]\[PROJECT]
+..\..\output\[DEBUG|RELEASE]\[PROJECT]\[FRAMEWORK]
 
 Note that the xml documentation must also be generated
 

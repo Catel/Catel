@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net46</TargetFrameworks>
+    <AssemblyName>Catel.Tests</AssemblyName>
+    <RootNamespace>Catel.Tests</RootNamespace>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <PackageId>Catel.Tests</PackageId>
+    <PackageVersion>1.0.0-alpha0001</PackageVersion>
+    <Description></Description>
+    <PackageTags></PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ApiApprover" Version="7.0.0" PrivateAssets="all" />
+    <PackageReference Include="ApprovalTests" Version="3.0.13" PrivateAssets="all" />
+    <PackageReference Include="ApprovalUtilities" Version="3.0.13" PrivateAssets="all" />
+    <PackageReference Include="Fody" Version="3.0.3" PrivateAssets="all" />
+    <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="2.1.0" PrivateAssets="all" />
+    <PackageReference Include="MethodTimer.Fody" Version="2.1.0" PrivateAssets="all" />
+    <PackageReference Include="ModuleInit.Fody" Version="1.8.0" PrivateAssets="all" />
+    <PackageReference Include="Mono.Cecil" Version="0.10.0" PrivateAssets="all" />
+    <PackageReference Include="Moq" Version="4.8.2" />
+    <PackageReference Include="NUnit" Version="3.10.1" PrivateAssets="all" />
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.4.0" PrivateAssets="all" />
+    <PackageReference Include="Obsolete.Fody" Version="4.4.0" PrivateAssets="all" />
+    <PackageReference Include="PublicApiGenerator" Version="7.0.0" PrivateAssets="all" />    
+    <PackageReference Include="WpfAnalyzers" Version="2.1.2.1" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="NETStandard.Library" Version="2.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Catel.Core\Catel.Core.csproj" />
+    <ProjectReference Include="..\Catel.MVVM\Catel.MVVM.csproj" />
+    <ProjectReference Include="..\Catel.Serialization.Json\Catel.Serialization.Json.csproj" />
+    <ProjectReference Include="..\Catel.Tests.TestReferenceA\Catel.Tests.TestReferenceA.csproj" />
+    <ProjectReference Include="..\Catel.Tests.TestReferenceB\Catel.Tests.TestReferenceB.csproj" />
+    <ProjectReference Include="..\Catel.Tests.TestReferenceC\Catel.Tests.TestReferenceC.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="*.approved.cs;*.received.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
+</Project>

@@ -18,6 +18,43 @@ Items prepended with CTL are from JIRA (old issue tracker). Items prepended with
 **********************************************************
 
 ==================
+Version 5.5.0
+==================
+
+For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date:
+=============
+2018/05/22
+
+Platform support changes:
+=========================
+* #1103 / #1165 Convert to multi-targeted projects, PCL is no longer supported (.NET Standard is the replacement)
+
+Classes / members marked as obsolete:
+=====================================
+* #1124 Mark NullableValueConverter as obsolete since converter doesn't have a target type, 
+  so this converter won't work as expected NullableValueConverter
+
+Added/fixed:
+============
+(+) #1183 Add MultiLingual App Toolkit (MAT) to support all target frameworks
+(*) #1123 SaveFileService & OpenFileService should support Windows file filters in UWP
+(*) #1181 Support passing in IEqualityComparer for ListDictionary
+(x) #1180 Potential NullReferenceException in Timer
+(x) #1184 ObjectIdGenerator should lock generation process
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 5.4.0
 ==================
 

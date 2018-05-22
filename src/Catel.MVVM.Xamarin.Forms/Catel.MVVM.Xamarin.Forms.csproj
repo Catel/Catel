@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <AssemblyName>Catel.MVVM</AssemblyName>
+    <RootNamespace>Catel</RootNamespace>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <PackageId>Catel.MVVM.Xamarin.Forms</PackageId>
+    <PackageVersion>5.0.0-alpha0001</PackageVersion>
+    <Description>Catel.MVVM.Xamarin.Forms library.</Description>
+    <PackageTags>catel;mvvm;view;viewmodel;model;interaction;interactivity;behaviors;xamarin;forms</PackageTags>
+    <DefineConstants>$(DefineConstants);XAMARIN;XAMARIN_FORMS;XF</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Catel.Fody" Version="3.3.0" PrivateAssets="all" />
+    <PackageReference Include="Fody" Version="3.0.3" PrivateAssets="all" />
+    <PackageReference Include="MethodTimer.Fody" Version="2.1.0" PrivateAssets="all" />
+    <PackageReference Include="ModuleInit.Fody" Version="1.8.0" PrivateAssets="all" />
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.4.0" PrivateAssets="all" />
+    <PackageReference Include="Obsolete.Fody" Version="4.4.0" PrivateAssets="all" />
+    <PackageReference Include="Xamarin.Forms" Version="2.5.1.444934" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Catel.Core\Catel.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Catel.MVVM\**\*.cs" />
+    <Compile Remove="..\Catel.MVVM\Platforms\**\*.cs" />
+    <Compile Remove="..\Catel.MVVM\bin\**\*.cs" />
+    <Compile Remove="..\Catel.MVVM\obj\**\*.cs" />
+    <Compile Remove="..\Catel.MVVM\Properties\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="NETStandard.Library" Version="2.0.1" />
+  </ItemGroup>
+
+  <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props')" />
+</Project>
