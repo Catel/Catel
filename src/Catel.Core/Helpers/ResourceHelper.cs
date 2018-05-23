@@ -60,7 +60,7 @@ namespace Catel
         /// <param name="assembly">The assembly to read the resource from.</param>
         /// <param name="resourceName">The name of the resource.</param>
         /// <returns>The embedded resource as a string.</returns>
-        public static string ExtractEmbeddedResource(Assembly assembly, string resourceName)
+        public static string ExtractEmbeddedResource(this Assembly assembly, string resourceName)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -85,7 +85,8 @@ namespace Catel
         /// </summary>
         /// <param name="assembly">The assembly to read the resource from.</param>
         /// <param name="resourceName">The name of the resource.</param>
-        public static void ExtractEmbeddedResource(Assembly assembly, string resourceName, Stream targetStream)
+        /// <param name="targetStream">The target stream to write the resource to.</param>
+        public static void ExtractEmbeddedResource(this Assembly assembly, string resourceName, Stream targetStream)
         {
             Log.Debug("Extracting embedded resource '{0}' from assembly '{1}'", resourceName, assembly.FullName);
 
