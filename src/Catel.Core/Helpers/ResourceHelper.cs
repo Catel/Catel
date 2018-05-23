@@ -58,13 +58,13 @@ namespace Catel
         /// Extracts the embedded resource and reads it as a string.
         /// </summary>
         /// <param name="assembly">The assembly to read the resource from.</param>
-        /// <param name="resourceName">The name of the resource.</param>
+        /// <param name="relativeResourceName">The relative name of the resource, the assembly name will automatically be added.</param>
         /// <returns>The embedded resource as a string.</returns>
-        public static string ExtractEmbeddedResource(this Assembly assembly, string resourceName)
+        public static string ExtractEmbeddedResource(this Assembly assembly, string relativeResourceName)
         {
             using (var memoryStream = new MemoryStream())
             {
-                ExtractEmbeddedResource(assembly, resourceName, memoryStream);
+                ExtractEmbeddedResource(assembly, relativeResourceName, memoryStream);
 
                 if (memoryStream.Length == 0)
                 {
@@ -84,19 +84,21 @@ namespace Catel
         /// Extracts the embedded resource and writes it to the target stream.
         /// </summary>
         /// <param name="assembly">The assembly to read the resource from.</param>
-        /// <param name="resourceName">The name of the resource.</param>
+        /// <param name="relativeResourceName">The relative name of the resource, the assembly name will automatically be added.</param>
         /// <param name="targetStream">The target stream to write the resource to.</param>
-        public static void ExtractEmbeddedResource(this Assembly assembly, string resourceName, Stream targetStream)
+        public static void ExtractEmbeddedResource(this Assembly assembly, string relativeResourceName, Stream targetStream)
         {
-            Log.Debug("Extracting embedded resource '{0}' from assembly '{1}'", resourceName, assembly.FullName);
+            Log.Debug("Extracting embedded resource '{0}' from assembly '{1}'", relativeResourceName, assembly.FullName);
 
-            using (var resource = assembly.GetManifestResourceStream(resourceName))
+            var finalResourceName = $"{assembly.GetName().Name}.{relativeResourceName}";
+
+            using (var resource = assembly.GetManifestResourceStream(finalResourceName))
             {
                 if (resource == null)
                 {
                     var warning = new StringBuilder();
-                    warning.AppendLine($"Failed to extract embedded resource '{resource}', possible names:");
-                    
+                    warning.AppendLine($"Failed to extract embedded resource '{finalResourceName}', possible names:");
+
                     foreach (var name in assembly.GetManifestResourceNames())
                     {
                         warning.AppendLine($"  * {name}");
