@@ -38,7 +38,7 @@ Classes / members marked as obsolete:
 
 Added/fixed:
 ============
-
+(+) #1188 Add ResourceHelper.ExtractEmbeddedResource
 
 Roadmap:
 ========
