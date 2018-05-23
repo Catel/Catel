@@ -88,9 +88,27 @@ namespace Catel
         /// <param name="targetStream">The target stream to write the resource to.</param>
         public static void ExtractEmbeddedResource(this Assembly assembly, string relativeResourceName, Stream targetStream)
         {
+            ExtractEmbeddedResource(assembly, assembly?.GetName().Name, relativeResourceName, targetStream);
+        }
+
+        /// <summary>
+        /// Extracts the embedded resource and writes it to the target stream.
+        /// </summary>
+        /// <param name="assembly">The assembly to read the resource from.</param>
+        /// <param name="assemblyName">The assembly name to prefix the resource with.</param>
+        /// <param name="relativeResourceName">The relative name of the resource, the assembly name will automatically be added.</param>
+        /// <param name="targetStream">The target stream to write the resource to.</param>
+        public static void ExtractEmbeddedResource(this Assembly assembly, string assemblyName, string relativeResourceName, Stream targetStream)
+        {
+            Argument.IsNotNull(() => assembly);
+
             Log.Debug("Extracting embedded resource '{0}' from assembly '{1}'", relativeResourceName, assembly.FullName);
 
-            var finalResourceName = $"{assembly.GetName().Name}.{relativeResourceName}";
+            var finalResourceName = relativeResourceName;
+            if (!string.IsNullOrWhiteSpace(assemblyName))
+            {
+                finalResourceName = $"{assemblyName}.{finalResourceName}";
+            }
 
             using (var resource = assembly.GetManifestResourceStream(finalResourceName))
             {

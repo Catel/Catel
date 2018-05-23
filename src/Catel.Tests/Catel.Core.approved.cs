@@ -563,6 +563,9 @@ namespace Catel
     }
     public class static ResourceHelper
     {
+        public static string ExtractEmbeddedResource(this System.Reflection.Assembly assembly, string relativeResourceName) { }
+        public static void ExtractEmbeddedResource(this System.Reflection.Assembly assembly, string relativeResourceName, System.IO.Stream targetStream) { }
+        public static void ExtractEmbeddedResource(this System.Reflection.Assembly assembly, string assemblyName, string relativeResourceName, System.IO.Stream targetStream) { }
         public static string GetString(System.Type callingType, string resourceFile, string resourceName) { }
         public static string GetString(string resourceName) { }
     }
