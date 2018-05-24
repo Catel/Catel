@@ -8,6 +8,7 @@ Downloads|![NuGet downloads](https://img.shields.io/nuget/dt/catel.core.svg)
 NuGet stable version|![Version](https://img.shields.io/nuget/v/catel.core.svg)
 NuGet unstable version|![Pre-release version](https://img.shields.io/nuget/vpre/catel.core.svg)
 MyGet unstable version|![Pre-release version](https://img.shields.io/myget/catel/vpre/catel.core.svg)
+Open Collective|[![Backers on Open Collective](https://opencollective.com/Catel/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/Catel/sponsors/badge.svg)](#sponsors) 
 
 Catel is an application development platform with the focus on MVVM (WPF, UWP, Xamarin.Android, Xamarin.iOS and Xamarin.Forms). 
 The goal of Catel is to provide a complete set of modular functionality for Line of Business applications written in any .NET 
@@ -141,3 +142,32 @@ available based on Catel. All these open source are developed by a company calle
 maintained and being used in several commercial WPF applications.
 
 For more information, see https://github.com/wildgums
+## Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="graphs/contributors"><img src="https://opencollective.com/Catel/contributors.svg?width=890&button=false" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/Catel#backer)]
+
+<a href="https://opencollective.com/Catel#backers" target="_blank"><img src="https://opencollective.com/Catel/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/Catel#sponsor)]
+
+<a href="https://opencollective.com/Catel/sponsor/0/website" target="_blank"><img src="https://opencollective.com/Catel/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/Catel/sponsor/1/website" target="_blank"><img src="https://opencollective.com/Catel/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/Catel/sponsor/2/website" target="_blank"><img src="https://opencollective.com/Catel/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/Catel/sponsor/3/website" target="_blank"><img src="https://opencollective.com/Catel/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/Catel/sponsor/4/website" target="_blank"><img src="https://opencollective.com/Catel/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/Catel/sponsor/5/website" target="_blank"><img src="https://opencollective.com/Catel/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/Catel/sponsor/6/website" target="_blank"><img src="https://opencollective.com/Catel/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/Catel/sponsor/7/website" target="_blank"><img src="https://opencollective.com/Catel/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/Catel/sponsor/8/website" target="_blank"><img src="https://opencollective.com/Catel/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/Catel/sponsor/9/website" target="_blank"><img src="https://opencollective.com/Catel/sponsor/9/avatar.svg"></a>
+
+
