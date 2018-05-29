@@ -81,7 +81,7 @@ namespace Catel.Services
             {
                 FileName = fileName,
                 Arguments = arguments
-            });
+            }, processCompletedCallback);
         }
     }
 }
