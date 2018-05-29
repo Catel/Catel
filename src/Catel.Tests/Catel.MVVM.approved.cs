@@ -2240,6 +2240,7 @@ namespace Catel.Services
         public ProcessContext() { }
         public string Arguments { get; set; }
         public string FileName { get; set; }
+        public string Verb { get; set; }
         public string WorkingDirectory { get; set; }
     }
     public class ProcessService : Catel.Services.IProcessService

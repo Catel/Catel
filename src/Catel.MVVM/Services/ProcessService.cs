@@ -48,7 +48,10 @@ namespace Catel.Services
                 launcher.Completed += (sender, e) => processCompletedCallback(0);
             }
 #else
-            var processStartInfo = new ProcessStartInfo(fileName, arguments);
+            var processStartInfo = new ProcessStartInfo(fileName, arguments)
+            {
+                Verb = processContext.Verb
+            };
             
             if (!string.IsNullOrWhiteSpace(processContext.WorkingDirectory))
             {
