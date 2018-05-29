@@ -39,6 +39,7 @@ Classes / members marked as obsolete:
 Added/fixed:
 ============
 (+) #1188 Add ResourceHelper.ExtractEmbeddedResource
+(+) #1190 Add ServiceLocator.TypeUnregistered event with type / instance info
 (*) #1187 Allow process service to specify the working directory
 
 Roadmap:

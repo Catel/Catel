@@ -590,15 +590,26 @@ namespace Catel.IoC
 
             lock (_lockObject)
             {
+                var wasRemoved = false;
+
                 var serviceInfo = new ServiceInfo(serviceType, tag);
-                if (_registeredInstances.ContainsKey(serviceInfo))
+
+                if (_registeredInstances.TryGetValue(serviceInfo, out var existingInstance))
                 {
                     _registeredInstances.Remove(serviceInfo);
+                    wasRemoved = true;
                 }
 
-                if (_registeredTypes.ContainsKey(serviceInfo))
+                if (_registeredTypes.TryGetValue(serviceInfo, out var existingRegistration))
                 {
                     _registeredTypes.Remove(serviceInfo);
+                    wasRemoved = true;
+                }
+
+                if (wasRemoved)
+                {
+                    TypeUnregistered.SafeInvoke(this, () => new TypeUnregisteredEventArgs(serviceType, existingRegistration.ImplementingType,
+                        tag, existingRegistration.RegistrationType, existingInstance?.ImplementingInstance));
                 }
             }
         }
@@ -614,23 +625,12 @@ namespace Catel.IoC
 
             lock (_lockObject)
             {
-                // Instances
-                for (int i = _registeredInstances.Count - 1; i >= 0; i--)
-                {
-                    var serviceInfo = _registeredInstances.Keys.ElementAt(i);
-                    if (serviceInfo.Type == serviceType)
-                    {
-                        _registeredInstances.Remove(serviceInfo);
-                    }
-                }
-
-                // Registration
                 for (int i = _registeredTypes.Count - 1; i >= 0; i--)
                 {
                     var serviceInfo = _registeredTypes.Keys.ElementAt(i);
                     if (serviceInfo.Type == serviceType)
                     {
-                        _registeredTypes.Remove(serviceInfo);
+                        RemoveType(serviceType, serviceInfo.Tag);
                     }
                 }
             }
@@ -650,6 +650,11 @@ namespace Catel.IoC
         /// Occurs when a type is registered in the service locator.
         /// </summary>
         public event EventHandler<TypeRegisteredEventArgs> TypeRegistered;
+
+        /// <summary>
+        /// Occurs when a type is unregistered in the service locator.
+        /// </summary>
+        public event EventHandler<TypeUnregisteredEventArgs> TypeUnregistered;
 
         /// <summary>
         /// Occurs when a type is instantiated in the service locator.

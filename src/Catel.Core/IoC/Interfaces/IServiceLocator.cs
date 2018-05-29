@@ -82,6 +82,11 @@ namespace Catel.IoC
         event EventHandler<TypeRegisteredEventArgs> TypeRegistered;
 
         /// <summary>
+        /// Occurs when a type is unregistered in the service locator.
+        /// </summary>
+        event EventHandler<TypeUnregisteredEventArgs> TypeUnregistered;
+
+        /// <summary>
         /// Occurs when a type is instantiated in the service locator.
         /// </summary>
         event EventHandler<TypeInstantiatedEventArgs> TypeInstantiated;

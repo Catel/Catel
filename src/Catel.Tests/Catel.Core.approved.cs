@@ -2096,6 +2096,7 @@ namespace Catel.IoC
         public event System.EventHandler<Catel.IoC.MissingTypeEventArgs> MissingType;
         public event System.EventHandler<Catel.IoC.TypeInstantiatedEventArgs> TypeInstantiated;
         public event System.EventHandler<Catel.IoC.TypeRegisteredEventArgs> TypeRegistered;
+        public event System.EventHandler<Catel.IoC.TypeUnregisteredEventArgs> TypeUnregistered;
         [System.ObsoleteAttribute("Use `AreMultipleTypesRegistered` instead. Will be removed in version 6.0.0.", true)]
         bool AreAllTypesRegistered(params System.Type[] types);
         bool AreMultipleTypesRegistered(params System.Type[] types);
@@ -2233,6 +2234,7 @@ namespace Catel.IoC
         public event System.EventHandler<Catel.IoC.MissingTypeEventArgs> MissingType;
         public event System.EventHandler<Catel.IoC.TypeInstantiatedEventArgs> TypeInstantiated;
         public event System.EventHandler<Catel.IoC.TypeRegisteredEventArgs> TypeRegistered;
+        public event System.EventHandler<Catel.IoC.TypeUnregisteredEventArgs> TypeUnregistered;
         [System.ObsoleteAttribute("Use `AreMultipleTypesRegistered` instead. Will be removed in version 6.0.0.", true)]
         public bool AreAllTypesRegistered(params System.Type[] types) { }
         public bool AreMultipleTypesRegistered(params System.Type[] types) { }
@@ -2406,6 +2408,16 @@ namespace Catel.IoC
         public static Catel.IoC.TypeRequestPath Branch(Catel.IoC.TypeRequestPath parent, Catel.IoC.TypeRequestInfo typeRequestInfo) { }
         public static Catel.IoC.TypeRequestPath Root(string name = null) { }
         public override string ToString() { }
+    }
+    public class TypeUnregisteredEventArgs : System.EventArgs
+    {
+        public TypeUnregisteredEventArgs(System.Type serviceType, System.Type serviceImplementationType, object tag, Catel.IoC.RegistrationType registrationType) { }
+        public TypeUnregisteredEventArgs(System.Type serviceType, System.Type serviceImplementationType, object tag, Catel.IoC.RegistrationType registrationType, object instance) { }
+        public object Instance { get; }
+        public Catel.IoC.RegistrationType RegistrationType { get; }
+        public System.Type ServiceImplementationType { get; }
+        public System.Type ServiceType { get; }
+        public object Tag { get; }
     }
 }
 namespace Catel.Linq
