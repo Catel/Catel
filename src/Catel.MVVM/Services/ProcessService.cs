@@ -24,15 +24,18 @@ namespace Catel.Services
         /// <summary>
         /// Starts a process resource by specifying the name of an application and a set of command-line arguments.
         /// </summary>
-        /// <param name="fileName">The name of an application file to run in the process.</param>
-        /// <param name="arguments">Command-line arguments to pass when starting the process.</param>
+        /// <param name="processContext">The process context of an application file to run in the process.</param>
         /// <param name="processCompletedCallback">The process completed callback, invoked only when the process is started successfully and completed.</param>
-        /// <exception cref="ArgumentException">The <paramref name="fileName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="processContext"/> is <c>null</c>.</exception>
         /// <exception cref="Win32Exception">An error occurred when opening the associated file.</exception>
-        public virtual void StartProcess(string fileName, string arguments = "", ProcessCompletedDelegate processCompletedCallback = null)
+        public virtual void StartProcess(ProcessContext processContext, ProcessCompletedDelegate processCompletedCallback = null)
         {
-            Argument.IsNotNullOrWhitespace("fileName", fileName);
+            Argument.IsNotNull(nameof(processContext), processContext);
+            Argument.IsNotNullOrWhitespace(nameof(processContext.FileName), processContext.FileName);
 
+            var fileName = processContext.FileName;
+
+            var arguments = processContext.Arguments;
             if (arguments == null)
             {
                 arguments = string.Empty;
@@ -45,13 +48,37 @@ namespace Catel.Services
                 launcher.Completed += (sender, e) => processCompletedCallback(0);
             }
 #else
-            var process = Process.Start(fileName, arguments);
+            var processStartInfo = new ProcessStartInfo(fileName, arguments);
+            
+            if (!string.IsNullOrWhiteSpace(processContext.WorkingDirectory))
+            {
+                processStartInfo.WorkingDirectory = processContext.WorkingDirectory;
+            }
+
+            var process = Process.Start(processStartInfo);
             if (processCompletedCallback != null)
             {
                 process.EnableRaisingEvents = true;
                 process.Exited += (sender, e) => processCompletedCallback(process.ExitCode);
             }
 #endif
+        }
+
+        /// <summary>
+        /// Starts a process resource by specifying the name of an application and a set of command-line arguments.
+        /// </summary>
+        /// <param name="fileName">The name of an application file to run in the process.</param>
+        /// <param name="arguments">Command-line arguments to pass when starting the process.</param>
+        /// <param name="processCompletedCallback">The process completed callback, invoked only when the process is started successfully and completed.</param>
+        /// <exception cref="ArgumentException">The <paramref name="fileName"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="Win32Exception">An error occurred when opening the associated file.</exception>
+        public virtual void StartProcess(string fileName, string arguments = "", ProcessCompletedDelegate processCompletedCallback = null)
+        {
+            StartProcess(new ProcessContext
+            {
+                FileName = fileName,
+                Arguments = arguments
+            });
         }
     }
 }

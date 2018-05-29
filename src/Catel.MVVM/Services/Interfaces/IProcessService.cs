@@ -21,6 +21,14 @@ namespace Catel.Services
         /// <summary>
         /// Starts a process resource by specifying the name of an application and a set of command-line arguments.
         /// </summary>
+        /// <param name="processContext">The process context of an application file to run in the process.</param>
+        /// <param name="processCompletedCallback">The process completed callback, invoked only when the process is started successfully and completed.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="processContext"/> is <c>null</c>.</exception>
+        void StartProcess(ProcessContext processContext, ProcessCompletedDelegate processCompletedCallback = null);
+
+        /// <summary>
+        /// Starts a process resource by specifying the name of an application and a set of command-line arguments.
+        /// </summary>
         /// <param name="fileName">The name of an application file to run in the process.</param>
         /// <param name="arguments">Command-line arguments to pass when starting the process.</param>
         /// <param name="processCompletedCallback">The process completed callback, invoked only when the process is started successfully and completed.</param>
