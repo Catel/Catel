@@ -1974,6 +1974,7 @@ namespace Catel.Services
     }
     public interface IProcessService
     {
+        System.Threading.Tasks.Task<Catel.Services.ProcessResult> RunAsync(Catel.Services.ProcessContext processContext);
         void StartProcess(Catel.Services.ProcessContext processContext, Catel.Services.ProcessCompletedDelegate processCompletedCallback = null);
         void StartProcess(string fileName, string arguments = "", Catel.Services.ProcessCompletedDelegate processCompletedCallback = null);
     }
@@ -2243,9 +2244,16 @@ namespace Catel.Services
         public string Verb { get; set; }
         public string WorkingDirectory { get; set; }
     }
+    public class ProcessResult
+    {
+        public ProcessResult(Catel.Services.ProcessContext context) { }
+        public Catel.Services.ProcessContext Context { get; }
+        public int ExitCode { get; set; }
+    }
     public class ProcessService : Catel.Services.IProcessService
     {
         public ProcessService() { }
+        public virtual System.Threading.Tasks.Task<Catel.Services.ProcessResult> RunAsync(Catel.Services.ProcessContext processContext) { }
         public virtual void StartProcess(Catel.Services.ProcessContext processContext, Catel.Services.ProcessCompletedDelegate processCompletedCallback = null) { }
         public virtual void StartProcess(string fileName, string arguments = "", Catel.Services.ProcessCompletedDelegate processCompletedCallback = null) { }
     }
