@@ -4,9 +4,31 @@
 Information("Running target '{0}'", target);
 Information("Using output directory '{0}'", outputRootDirectory);
 
+var nuGetExe = System.IO.Path.GetFullPath(outputRootDirectory + "/../../tools/nuget.exe");
+
+//-------------------------------------------------------------
+
+Task("UpdateNuGet")
+    .ContinueOnError()
+    .Does(() => 
+{
+    Information("Making sure NuGet is using the latest version");
+
+    var exitCode = StartProcess(nuGetExe, new ProcessSettings
+    {
+        Arguments = "update -self"
+    });
+
+    var newNuGetVersionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(nuGetExe);
+    var newNuGetVersion = newNuGetVersionInfo.FileVersion;
+
+    Information("Updating NuGet.exe exited with '{0}', version is '{1}'", exitCode, newNuGetVersion);
+});
+
 //-------------------------------------------------------------
 
 Task("RestorePackages")
+    .IsDependentOn("UpdateNuGet")
 	.Does(() =>
 {
 	var solutions = GetFiles("./**/*.sln");
@@ -133,6 +155,12 @@ Task("CodeSign")
         return;
     }
 
+    if (string.IsNullOrWhiteSpace(codeSignCertificateSubjectName))
+    {
+        Information("Skipping code signing because the certificate subject name was not specified");
+        return;
+    }
+
     var exeSignFilesSearchPattern = outputRootDirectory + string.Format("/**/*{0}*.exe", codeSignWildCard);
     var dllSignFilesSearchPattern = outputRootDirectory + string.Format("/**/*{0}*.dll", codeSignWildCard);
 
@@ -210,6 +238,26 @@ Task("Package")
             MSBuild(projectFileName, msBuildSettings);
         }
 	}
+
+    var codeSign = (!isCiBuild && !string.IsNullOrWhiteSpace(codeSignCertificateSubjectName));
+    if (codeSign)
+    {
+        // For details, see https://docs.microsoft.com/en-us/nuget/create-packages/sign-a-package
+        // nuget sign MyPackage.nupkg -CertificateSubjectName <MyCertSubjectName> -Timestamper <TimestampServiceURL>
+        var filesToSign = GetFiles(string.Format("{0}/*.nupkg", outputRootDirectory));
+
+        foreach (var fileToSign in filesToSign)
+        {
+            Information("Signing NuGet package '{0}'", fileToSign);
+
+            var exitCode = StartProcess(nuGetExe, new ProcessSettings
+            {
+                Arguments = string.Format("sign \"{0}\" -CertificateSubjectName \"{1}\" -Timestamper \"{2}\"", fileToSign, codeSignCertificateSubjectName, codeSignTimeStampUri)
+            });
+
+            Information("Signing NuGet package exited with '{0}'", exitCode);
+        }
+    }
 });
 
 //-------------------------------------------------------------
