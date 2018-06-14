@@ -19,6 +19,11 @@ var repositoryUrl = GetContinuaCIVariable("RepositoryUrl", defaultRepositoryUrl)
 var repositoryBranchName = GetContinuaCIVariable("RepositoryBranchName", string.Empty);
 var repositoryCommitId = GetContinuaCIVariable("RepositoryCommitId", string.Empty);
 
+var sonarUrl = GetContinuaCIVariable("SonarUrl", string.Empty);
+var sonarUsername = GetContinuaCIVariable("SonarUsername", string.Empty);
+var sonarPassword = GetContinuaCIVariable("SonarPassword", string.Empty);
+var sonarProject = GetContinuaCIVariable("SonarProject", projectName);
+
 var solutionAssemblyInfoFileName = "./src/SolutionAssemblyInfo.cs";
 var solutionFileName = string.Format("./src/{0}", solutionName);
 var platforms = new Dictionary<string, PlatformTarget>();
