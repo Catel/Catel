@@ -1388,7 +1388,7 @@ namespace Catel.Tests.IoC
         [TestFixture]
         public class TheResolveMissingType
         {
-            interface IDummy
+            private interface IDummy
             {
                  
             }

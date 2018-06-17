@@ -42,6 +42,7 @@ Added/fixed:
 (+) #1190 Add ServiceLocator.TypeUnregistered event with type / instance info
 (+) #1193 Add Task<ProcessResult> IProcessService.RunAsync(ProcessorContext)
 (*) #1187 Allow process service to specify the working directory
+(x) #1195 BatchLogListenerBase WriteBatchAsync async handling not working
 (x) #1196 Command containers are not registered with correct container type
 
 Roadmap:

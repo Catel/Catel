@@ -688,7 +688,7 @@ namespace Catel.IoC
                 {
                     Log.Debug("An open generic type '{0}' is registered, registering new closed generic type '{1}' based on the open registration", genericType.GetSafeFullName(false), serviceType.GetSafeFullName(false));
 
-                    var registrationInfo = this.GetRegistrationInfo(genericType, tag);
+                    var registrationInfo = GetRegistrationInfo(genericType, tag);
                     var finalType = registrationInfo.ImplementingType.MakeGenericType(genericArguments.ToArray());
 
                     RegisterType(serviceType, finalType, tag, registrationInfo.RegistrationType);
