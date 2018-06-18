@@ -122,14 +122,6 @@ namespace Catel.Runtime.Serialization
         public TContext Context { get; private set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the root event should be ignored for events.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if the root event should be ignored for events; otherwise, <c>false</c>.
-        /// </value>
-        public bool IgnoreRootObjectForEvents { get; internal set; }
-
-        /// <summary>
         /// Gets the reference manager.
         /// </summary>
         /// <value>The reference manager.</value>

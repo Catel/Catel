@@ -2435,6 +2435,8 @@ namespace Catel.Logging
     public abstract class BatchLogListenerBase : Catel.Logging.LogListenerBase, Catel.Logging.IBatchLogListener
     {
         public BatchLogListenerBase(int maxBatchCount = 100) { }
+        public BatchLogListenerBase(System.TimeSpan interval, int maxBatchCount = 100) { }
+        protected System.TimeSpan Interval { get; set; }
         public int MaximumBatchCount { get; }
         public System.Threading.Tasks.Task FlushAsync() { }
         protected override void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
