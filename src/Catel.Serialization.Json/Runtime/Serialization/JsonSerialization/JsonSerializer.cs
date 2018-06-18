@@ -472,7 +472,7 @@ namespace Catel.Runtime.Serialization.Json
             {
                 if (serializationContext.JsonProperties == null)
                 {
-                    var jsonObject = JObject.Load(context.Context.JsonReader);
+                    var jsonObject = JObject.Load(jsonReader);
                     serializationContext.JsonProperties = jsonObject.Properties().ToDictionary(x => x.Name, x => x);
                 }
             }
@@ -480,7 +480,7 @@ namespace Catel.Runtime.Serialization.Json
             {
                 if (serializationContext.JsonArray == null)
                 {
-                    var jsonArray = JArray.Load(context.Context.JsonReader);
+                    var jsonArray = JArray.Load(jsonReader);
                     serializationContext.JsonArray = jsonArray;
                 }
             }
@@ -488,7 +488,7 @@ namespace Catel.Runtime.Serialization.Json
             {
                 if (serializationContext.JsonProperties == null)
                 {
-                    var jsonObject = JObject.Load(context.Context.JsonReader);
+                    var jsonObject = JObject.Load(jsonReader);
                     serializationContext.JsonProperties = jsonObject.Properties().ToDictionary(x => x.Name, x => x);
                 }
 
