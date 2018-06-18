@@ -463,6 +463,7 @@ namespace Catel.Runtime.Serialization.Json
         protected override void BeforeDeserialization(ISerializationContext<JsonSerializationContextInfo> context)
         {
             var serializationContext = context.Context;
+            var jsonReader = serializationContext.JsonReader;
 
             if (context.ModelType.ImplementsInterfaceEx<ICustomJsonSerializable>())
             {
