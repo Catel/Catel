@@ -647,7 +647,7 @@ namespace Catel.Data
             {
                 PropertiesNotCausingValidation[type].Add(propertyName);
 
-                Log.Warning(ex, "Failed to validate property '{0}' via Validator (property does not exists?)", propertyName);
+                Log.Warning(ex, "Failed to validate property '{0}' via Validator (property does not exist or requires 1 or more parameters?)", propertyName);
             }
 #endif
 

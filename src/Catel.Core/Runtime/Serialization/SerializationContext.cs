@@ -166,79 +166,61 @@ namespace Catel.Runtime.Serialization
                 {
                     x.Instance.TypeStack.Push(x.Instance.ModelType);
 
-                    var registrationInfo = ReferenceManager.GetInfo(x.Instance.Model);
-                    var ignoreEvents = false;
-                    
-                    switch (x.Instance.ContextMode)
+                    var serializable = x.Instance.Model as ISerializable;
+                    if (serializable != null)
                     {
-                        case SerializationContextMode.Serialization:
-                            ignoreEvents = registrationInfo.HasCalledSerializing;
-                            break;
+                        var registrationInfo = ReferenceManager.GetInfo(serializable);
 
-                        case SerializationContextMode.Deserialization:
-                            ignoreEvents = registrationInfo.HasCalledDeserializing;
-                            break;
-                    }
-
-                    if (!ignoreEvents)
-                    {
-                        var serializable = x.Instance.Model as ISerializable;
-                        if (serializable != null)
+                        switch (x.Instance.ContextMode)
                         {
-                            switch ((SerializationContextMode)x.Tag)
-                            {
-                                case SerializationContextMode.Serialization:
+                            case SerializationContextMode.Serialization:
+                                if (!registrationInfo.HasCalledSerializing)
+                                {
                                     serializable.StartSerialization();
                                     registrationInfo.HasCalledSerializing = true;
-                                    break;
+                                }
+                                break;
 
-                                case SerializationContextMode.Deserialization:
+                            case SerializationContextMode.Deserialization:
+                                if (!registrationInfo.HasCalledDeserializing)
+                                {
                                     serializable.StartDeserialization();
                                     registrationInfo.HasCalledDeserializing = true;
-                                    break;
+                                }
+                                break;
 
-                                default:
-                                    throw new ArgumentOutOfRangeException();
-                            }
+                            default:
+                                throw new ArgumentOutOfRangeException();
                         }
                     }
                 },
                 x =>
                 {
-                    var registrationInfo = ReferenceManager.GetInfo(x.Instance.Model);
-                    var ignoreEvents = false;
-
-                    switch (x.Instance.ContextMode)
+                    var serializable = x.Instance.Model as ISerializable;
+                    if (serializable != null)
                     {
-                        case SerializationContextMode.Serialization:
-                            ignoreEvents = registrationInfo.HasCalledSerialized;
-                            break;
+                        var registrationInfo = ReferenceManager.GetInfo(serializable);
 
-                        case SerializationContextMode.Deserialization:
-                            ignoreEvents = registrationInfo.HasCalledDeserialized;
-                            break;
-                    }
-
-                    if (!ignoreEvents)
-                    {
-                        var serializable = x.Instance.Model as ISerializable;
-                        if (serializable != null)
+                        switch (x.Instance.ContextMode)
                         {
-                            switch ((SerializationContextMode)x.Tag)
-                            {
-                                case SerializationContextMode.Serialization:
+                            case SerializationContextMode.Serialization:
+                                if (!registrationInfo.HasCalledSerialized)
+                                {
                                     serializable.FinishSerialization();
                                     registrationInfo.HasCalledSerialized = true;
-                                    break;
+                                }
+                                break;
 
-                                case SerializationContextMode.Deserialization:
+                            case SerializationContextMode.Deserialization:
+                                if (!registrationInfo.HasCalledDeserialized)
+                                {
                                     serializable.FinishDeserialization();
                                     registrationInfo.HasCalledDeserialized = true;
-                                    break;
+                                }
+                                break;
 
-                                default:
-                                    throw new ArgumentOutOfRangeException();
-                            }
+                            default:
+                                throw new ArgumentOutOfRangeException();
                         }
                     }
 
