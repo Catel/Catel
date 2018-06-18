@@ -1,9 +1,10 @@
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Linq.Expressions;
     using System.Runtime.Serialization;
     using Catel.Data;
+    using Catel.Runtime.Serialization;
 
     /// <summary>
     /// IniEntry Data object class which fully supports serialization, property changed notifications,
@@ -14,6 +15,53 @@ namespace Catel.Tests.Data
 #endif
     public class IniEntry : ComparableModelBase
     {
+        #region Serialization test code
+        [ExcludeFromSerialization]
+        public int _onSerializingCalls;
+        [ExcludeFromSerialization]
+        public int _onSerializedCalls;
+        [ExcludeFromSerialization]
+        public int _onDeserializingCalls;
+        [ExcludeFromSerialization]
+        public int _onDeserializedCalls;
+
+        public void ClearSerializationCounters()
+        {
+            _onSerializingCalls = 0;
+            _onSerializedCalls = 0;
+            _onDeserializingCalls = 0;
+            _onDeserializedCalls = 0;
+        }
+
+        protected override void OnSerializing()
+        {
+            _onSerializingCalls++;
+
+            base.OnSerializing();
+        }
+
+        protected override void OnSerialized()
+        {
+            _onSerializedCalls++;
+
+            base.OnSerialized();
+        }
+
+        protected override void OnDeserializing()
+        {
+            _onDeserializingCalls++;
+
+            base.OnDeserializing();
+        }
+
+        protected override void OnDeserialized()
+        {
+            _onDeserializedCalls++;
+
+            base.OnDeserialized();
+        }
+        #endregion
+
         #region Fields
         #endregion
 

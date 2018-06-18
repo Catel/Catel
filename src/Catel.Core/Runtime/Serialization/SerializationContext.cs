@@ -35,7 +35,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        public SerializationContext(object model, Type modelType, TContext context, 
+        public SerializationContext(object model, Type modelType, TContext context,
             SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
         {
             Argument.IsNotNull("modelType", modelType);
@@ -122,6 +122,14 @@ namespace Catel.Runtime.Serialization
         public TContext Context { get; private set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the root event should be ignored for events.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if the root event should be ignored for events; otherwise, <c>false</c>.
+        /// </value>
+        public bool IgnoreRootObjectForEvents { get; internal set; }
+
+        /// <summary>
         /// Gets the reference manager.
         /// </summary>
         /// <value>The reference manager.</value>
@@ -166,41 +174,79 @@ namespace Catel.Runtime.Serialization
                 {
                     x.Instance.TypeStack.Push(x.Instance.ModelType);
 
-                    var serializable = x.Instance.Model as ISerializable;
-                    if (serializable != null)
+                    var registrationInfo = ReferenceManager.GetInfo(x.Instance.Model);
+                    var ignoreEvents = false;
+                    
+                    switch (x.Instance.ContextMode)
                     {
-                        switch ((SerializationContextMode)x.Tag)
+                        case SerializationContextMode.Serialization:
+                            ignoreEvents = registrationInfo.HasCalledSerializing;
+                            break;
+
+                        case SerializationContextMode.Deserialization:
+                            ignoreEvents = registrationInfo.HasCalledDeserializing;
+                            break;
+                    }
+
+                    if (!ignoreEvents)
+                    {
+                        var serializable = x.Instance.Model as ISerializable;
+                        if (serializable != null)
                         {
-                            case SerializationContextMode.Serialization:
-                                serializable.StartSerialization();
-                                break;
+                            switch ((SerializationContextMode)x.Tag)
+                            {
+                                case SerializationContextMode.Serialization:
+                                    serializable.StartSerialization();
+                                    registrationInfo.HasCalledSerializing = true;
+                                    break;
 
-                            case SerializationContextMode.Deserialization:
-                                serializable.StartDeserialization();
-                                break;
+                                case SerializationContextMode.Deserialization:
+                                    serializable.StartDeserialization();
+                                    registrationInfo.HasCalledDeserializing = true;
+                                    break;
 
-                            default:
-                                throw new ArgumentOutOfRangeException();
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
                         }
                     }
                 },
                 x =>
                 {
-                    var serializable = x.Instance.Model as ISerializable;
-                    if (serializable != null)
+                    var registrationInfo = ReferenceManager.GetInfo(x.Instance.Model);
+                    var ignoreEvents = false;
+
+                    switch (x.Instance.ContextMode)
                     {
-                        switch ((SerializationContextMode)x.Tag)
+                        case SerializationContextMode.Serialization:
+                            ignoreEvents = registrationInfo.HasCalledSerialized;
+                            break;
+
+                        case SerializationContextMode.Deserialization:
+                            ignoreEvents = registrationInfo.HasCalledDeserialized;
+                            break;
+                    }
+
+                    if (!ignoreEvents)
+                    {
+                        var serializable = x.Instance.Model as ISerializable;
+                        if (serializable != null)
                         {
-                            case SerializationContextMode.Serialization:
-                                serializable.FinishSerialization();
-                                break;
+                            switch ((SerializationContextMode)x.Tag)
+                            {
+                                case SerializationContextMode.Serialization:
+                                    serializable.FinishSerialization();
+                                    registrationInfo.HasCalledSerialized = true;
+                                    break;
 
-                            case SerializationContextMode.Deserialization:
-                                serializable.FinishDeserialization();
-                                break;
+                                case SerializationContextMode.Deserialization:
+                                    serializable.FinishDeserialization();
+                                    registrationInfo.HasCalledDeserialized = true;
+                                    break;
 
-                            default:
-                                throw new ArgumentOutOfRangeException();
+                                default:
+                                    throw new ArgumentOutOfRangeException();
+                            }
                         }
                     }
 

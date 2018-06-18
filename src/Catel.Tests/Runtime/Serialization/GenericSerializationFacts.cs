@@ -20,8 +20,66 @@ namespace Catel.Tests.Runtime.Serialization
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static void TestSerializationOnAllSerializers(Action<ISerializer, ISerializationConfiguration, string> action, 
+        private static void TestSerializationOnXmlSerializer(Action<ISerializer, ISerializationConfiguration, string> action,
             bool testWithoutGraphIdsAsWell = true, ISerializationManager serializationManager = null)
+        {
+            var serializers = new List<ISerializer>();
+
+            serializers.Add(SerializationTestHelper.GetXmlSerializer(serializationManager));
+
+            TestSerializationOnSerializers(serializers, action, serializationManager);
+        }
+
+        private static void TestSerializationOnBinarySerializer(Action<ISerializer, ISerializationConfiguration, string> action,
+            bool testWithoutGraphIdsAsWell = true, ISerializationManager serializationManager = null)
+        {
+            var serializers = new List<ISerializer>();
+
+            serializers.Add(SerializationTestHelper.GetBinarySerializer(serializationManager));
+
+            TestSerializationOnSerializers(serializers, action, serializationManager);
+        }
+
+        private static void TestSerializationOnJsonSerializer(Action<ISerializer, ISerializationConfiguration, string> action,
+            bool testWithoutGraphIdsAsWell = true, ISerializationManager serializationManager = null)
+        {
+            var serializers = new List<ISerializer>();
+
+            serializers.Add(SerializationTestHelper.GetJsonSerializer(serializationManager));
+
+            if (testWithoutGraphIdsAsWell)
+            {
+                var basicJsonSerializer = SerializationTestHelper.GetJsonSerializer(serializationManager);
+                basicJsonSerializer.PreserveReferences = false;
+                basicJsonSerializer.WriteTypeInfo = false;
+                serializers.Add(basicJsonSerializer);
+            }
+
+            TestSerializationOnSerializers(serializers, action, serializationManager);
+        }
+
+        private static void TestSerializationOnAllSerializers(Action<ISerializer, ISerializationConfiguration, string> action,
+            bool testWithoutGraphIdsAsWell = true, ISerializationManager serializationManager = null)
+        {
+            var serializers = new List<ISerializer>();
+
+            serializers.Add(SerializationTestHelper.GetXmlSerializer(serializationManager));
+            serializers.Add(SerializationTestHelper.GetBinarySerializer(serializationManager));
+            serializers.Add(SerializationTestHelper.GetJsonSerializer(serializationManager));
+
+            if (testWithoutGraphIdsAsWell)
+            {
+                var basicJsonSerializer = SerializationTestHelper.GetJsonSerializer(serializationManager);
+                basicJsonSerializer.PreserveReferences = false;
+                basicJsonSerializer.WriteTypeInfo = false;
+                serializers.Add(basicJsonSerializer);
+            }
+
+            TestSerializationOnSerializers(serializers, action, serializationManager);
+        }
+
+        private static void TestSerializationOnSerializers(List<ISerializer> serializers, Action<ISerializer, ISerializationConfiguration, string> action, 
+            ISerializationManager serializationManager = null)
         {
             if (serializationManager == null)
             {
@@ -62,20 +120,6 @@ namespace Catel.Tests.Runtime.Serialization
                     UseBson = true
                 },
             });
-
-            var serializers = new List<ISerializer>();
-
-            serializers.Add(SerializationTestHelper.GetXmlSerializer(serializationManager));
-            serializers.Add(SerializationTestHelper.GetBinarySerializer(serializationManager));
-            serializers.Add(SerializationTestHelper.GetJsonSerializer(serializationManager));
-
-            if (testWithoutGraphIdsAsWell)
-            {
-                var basicJsonSerializer = SerializationTestHelper.GetJsonSerializer(serializationManager);
-                basicJsonSerializer.PreserveReferences = false;
-                basicJsonSerializer.WriteTypeInfo = false;
-                serializers.Add(basicJsonSerializer);
-            }
 
             foreach (var serializer in serializers)
             {

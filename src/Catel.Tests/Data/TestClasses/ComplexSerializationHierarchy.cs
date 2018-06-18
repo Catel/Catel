@@ -22,6 +22,26 @@ namespace Catel.Tests.Data
 
     public static class ComplexSerializationHierarchy
     {
+        public static object CreateObjectGraphWithDepth(int depth)
+        {
+            object originalObject = null;
+
+            if (depth == 1)
+            {
+                originalObject = ModelBaseTestHelper.CreateIniEntryObject();
+            }
+            else if (depth == 2)
+            {
+                originalObject = ModelBaseTestHelper.CreateIniFileObject();
+            }
+            else if (depth == 3)
+            {
+                originalObject = ModelBaseTestHelper.CreateComputerSettingsObject();
+            }
+
+            return originalObject;
+        }
+
         public static ScheduleAssistantSettings CreateComplexHierarchy()
         {
             var settings = new ScheduleAssistantSettings();
