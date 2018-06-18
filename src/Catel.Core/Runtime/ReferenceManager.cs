@@ -165,15 +165,18 @@ namespace Catel.Runtime
         {
             lock (_lock)
             {
-                if (_referenceInfoByInstance.ContainsKey(referenceInfo) || _usedIds.Contains(referenceInfo.Id))
+                var id = referenceInfo.Id;
+                var instance = referenceInfo.Instance;
+
+                if (_referenceInfoByInstance.ContainsKey(instance) || _usedIds.Contains(id))
                 {
                     return false;
                 }
 
-                _referenceInfoByInstance.Add(referenceInfo.Instance, referenceInfo);
-                _referenceInfoById.Add(referenceInfo.Id, referenceInfo);
+                _referenceInfoByInstance.Add(instance, referenceInfo);
+                _referenceInfoById.Add(id, referenceInfo);
 
-                _usedIds.Add(referenceInfo.Id);
+                _usedIds.Add(id);
 
                 return true;
             }
