@@ -45,7 +45,7 @@
             }
 
             [TestCase(1000, 0)]
-            [TestCase(3000, 1)]
+            [TestCase(2100, 1)]
             [TestCase(4100, 2)]
             public async Task TestMultipleBatchesAsync(int millisecondsToWait, int expectedFlushCount)
             {
