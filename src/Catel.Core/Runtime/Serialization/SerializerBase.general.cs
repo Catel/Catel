@@ -157,12 +157,8 @@ namespace Catel.Runtime.Serialization
 
             if (ShouldSerializeAsDictionary(modelType))
             {
-                // CTL-688: only support json for now. In the future, these checks (depth AND type) should be removed
-                if (SupportsDictionarySerialization(context))
-                {
-                    listToSerialize.Add(new MemberValue(SerializationMemberGroup.Dictionary, modelType, modelType, CollectionName, CollectionName, model));
-                    return listToSerialize;
-                }
+                listToSerialize.Add(new MemberValue(SerializationMemberGroup.Dictionary, modelType, modelType, CollectionName, CollectionName, model));
+                return listToSerialize;
             }
 
             if (ShouldSerializeAsCollection(modelType))
@@ -697,7 +693,7 @@ namespace Catel.Runtime.Serialization
 
                 var toStringMethod = GetObjectToStringMethod(memberType);
                 if (toStringMethod == null)
-                {    
+                {
                     return false;
                 }
 
@@ -765,7 +761,7 @@ namespace Catel.Runtime.Serialization
         /// <returns></returns>
         protected virtual MethodInfo GetObjectToStringMethod(Type memberType)
         {
-            
+
             var toStringMethod = _toStringMethodCache.GetFromCacheOrFetch(memberType, () =>
             {
                 var method = memberType.GetMethodEx("ToString", TypeArray.From<IFormatProvider>(), BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
@@ -984,24 +980,6 @@ namespace Catel.Runtime.Serialization
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// Supportses the dictionary serialization.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        protected virtual bool SupportsDictionarySerialization(ISerializationContext<TSerializationContext> context)
-        {
-            // NOTE: This method must be deleted in the future
-
-            // CTL-688: only support json for now. In the future, these checks (depth AND type) should be removed
-            if (context.Depth == 0 || GetType().Name != "XmlSerializer")
-            {
-                return true;
-            }
-
-            return false;
         }
         #endregion
     }

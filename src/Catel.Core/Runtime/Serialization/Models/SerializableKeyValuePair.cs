@@ -8,12 +8,14 @@
 namespace Catel.Runtime.Serialization
 {
     using System;
+    using System.Runtime.Serialization;
+    using System.Xml.Serialization;
 
     /// <summary>
     /// Serializable key value pair.
     /// </summary>
 #if NET || NETSTANDARD
-    [Serializable]
+    [DataContract, Serializable]
 #endif
     public class SerializableKeyValuePair
     {
@@ -21,6 +23,7 @@ namespace Catel.Runtime.Serialization
         /// Gets or sets the key.
         /// </summary>
         /// <value>The key.</value>
+        [DataMember]
         public object Key { get; set; }
 
         /// <summary>
@@ -28,12 +31,14 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The type of the key.</value>
         [ExcludeFromSerialization]
+        [XmlIgnore]
         public Type KeyType { get; set; }
 
         /// <summary>
         /// Gets or sets the value.
         /// </summary>
         /// <value>The value.</value>
+        [DataMember]
         public object Value { get; set; }
 
         /// <summary>
@@ -41,6 +46,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The type of the value.</value>
         [ExcludeFromSerialization]
+        [XmlIgnore]
         public Type ValueType { get; set; }
     }
 }

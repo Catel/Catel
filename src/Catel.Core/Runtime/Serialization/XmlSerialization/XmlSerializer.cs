@@ -685,6 +685,7 @@ namespace Catel.Runtime.Serialization.Xml
                 }
             }
 
+            // Special case if a Catel ModelBase should be serialized as collection
             if (!isDeserialized && ShouldSerializeModelAsCollection(propertyTypeToDeserialize))
             {
                 var collection = value as IList;
@@ -723,6 +724,12 @@ namespace Catel.Runtime.Serialization.Xml
                 value = collection;
 
                 isDeserialized = true;
+            }
+
+            if (!isDeserialized && ShouldSerializeAsDictionary(propertyTypeToDeserialize))
+            {
+                // Force deserialization as List<>
+                propertyTypeToDeserialize = typeof(List<SerializableKeyValuePair>);
             }
 
             if (!isDeserialized)

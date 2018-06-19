@@ -3446,14 +3446,19 @@ namespace Catel.Runtime.Serialization
         public virtual Catel.Runtime.Serialization.MemberValue GetMemberValue(object model, string memberName, Catel.Runtime.Serialization.SerializationModelInfo modelInfo) { }
         public virtual void SetMemberValue(object model, Catel.Runtime.Serialization.MemberValue member, Catel.Runtime.Serialization.SerializationModelInfo modelInfo) { }
     }
+    [System.Runtime.Serialization.DataContractAttribute()]
     public class SerializableKeyValuePair
     {
         public SerializableKeyValuePair() { }
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public object Key { get; set; }
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
         public System.Type KeyType { get; set; }
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public object Value { get; set; }
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
         public System.Type ValueType { get; set; }
     }
     public class SerializationConfiguration : Catel.Runtime.Serialization.ISerializationConfiguration
@@ -3648,7 +3653,6 @@ namespace Catel.Runtime.Serialization
         protected virtual bool ShouldSerializeEnumAsString(Catel.Runtime.Serialization.MemberValue memberValue, bool checkActualMemberType) { }
         protected virtual bool ShouldSerializeModelAsCollection(System.Type memberType) { }
         protected virtual bool ShouldSerializeUsingParseAndToString(Catel.Runtime.Serialization.MemberValue memberValue, bool checkActualMemberType) { }
-        protected virtual bool SupportsDictionarySerialization(Catel.Runtime.Serialization.ISerializationContext<TSerializationContext> context) { }
         public void Warmup(System.Collections.Generic.IEnumerable<System.Type> types, int typesPerThread = 1000) { }
         protected abstract void Warmup(System.Type type);
     }

@@ -124,6 +124,10 @@ namespace Catel.Tests.Data
         }
     }
 
+#if NET
+    // Required for binary serialization
+    [Serializable]
+#endif
     [DataContract]
     public class Family
     {
@@ -139,6 +143,10 @@ namespace Catel.Tests.Data
         public List<Person> Persons { get; private set; }
     }
 
+#if NET
+    // Required for binary serialization
+    [Serializable]
+#endif
     [DataContract]
     public class Person
     {
