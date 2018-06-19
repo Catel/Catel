@@ -22,10 +22,8 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
         private bool _getViaInterface;
         private bool _setViaInterface;
 
-        [IncludeInSerialization]
         public string _firstName;
 
-        [IncludeInSerialization]
         public string _lastName;
 
         bool IFieldSerializable.GetFieldValue(string fieldName, ref object value)

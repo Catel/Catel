@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<IniEntry graphid="1" xmlns:ctl="http://schemas.catelproject.com">
+  <Group>MyGroup</Group>
+  <Key>MyKey</Key>
+  <Value>MyValue</Value>
+  <IniEntryType>Private</IniEntryType>
+</IniEntry>

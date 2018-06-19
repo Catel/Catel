@@ -1,0 +1,1 @@
+﻿{"$graphid":1,"$typename":"Catel.Tests.Data.Family","LastName":"Family last name","$Persons_$graphid":2,"Persons":[{"$graphid":3,"$typename":"Catel.Tests.Data.Person","Gender":1,"FirstName":"Mrs.","LastName":"Doe"},{"$graphid":4,"$typename":"Catel.Tests.Data.Person","Gender":0,"FirstName":"Mr.","LastName":"Bla"}]}

@@ -1,0 +1,1 @@
+﻿{"$graphid":1,"$typename":"Catel.Tests.Data.ObjectWithPrivateMembers","PublicMember":"My public member","PrivateMember":"My private member"}

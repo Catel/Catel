@@ -30,7 +30,6 @@ namespace Catel.Tests.Runtime.Serialization
             }
 
             var serializer = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<XmlSerializer>(serializationManager);
-
             return serializer;
         }
 
