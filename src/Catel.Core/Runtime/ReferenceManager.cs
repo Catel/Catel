@@ -110,19 +110,16 @@ namespace Catel.Runtime
 
             lock (_lock)
             {
-                ReferenceInfo referenceInfo = null;
-
-                if (!_referenceInfoByInstance.ContainsKey(instance))
+                if (_referenceInfoByInstance.TryGetValue(instance, out var referenceInfo))
+                {
+                    referenceInfo.IsFirstUsage = false;
+                }
+                else
                 {
                     var id = GetNextId();
                     referenceInfo = new ReferenceInfo(instance, id, true);
 
                     AddReferenceInfo(referenceInfo);
-                }
-                else
-                {
-                    referenceInfo = _referenceInfoByInstance[instance];
-                    referenceInfo.IsFirstUsage = false;
                 }
 
                 return referenceInfo;

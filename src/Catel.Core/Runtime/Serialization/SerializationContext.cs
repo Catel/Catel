@@ -92,7 +92,17 @@ namespace Catel.Runtime.Serialization
             {
                 if (!_depth.HasValue)
                 {
-                    _depth = ReferenceManager.Count;
+                    // Note: changed to STackCount, that's more reliable than ReferenceManager since instances
+                    // can be re-used and this won't increase the depth
+                    //_depth = ReferenceManager.Count;
+                    var depth = TypeStack.Count;
+                    if (depth > 0)
+                    {
+                        // The type itself is pushed to the typestack, so the depth is - 1
+                        depth--;
+                    }
+
+                    _depth = depth;
                 }
 
                 return _depth.Value;
@@ -171,6 +181,8 @@ namespace Catel.Runtime.Serialization
                     {
                         var registrationInfo = ReferenceManager.GetInfo(serializable);
 
+                        //// Note: we need to use the x.Tag instead of x.Instance.ContextMode here because we might be serializing a different thing
+                        //switch ((SerializationContextMode)x.Tag)
                         switch (x.Instance.ContextMode)
                         {
                             case SerializationContextMode.Serialization:
@@ -201,6 +213,8 @@ namespace Catel.Runtime.Serialization
                     {
                         var registrationInfo = ReferenceManager.GetInfo(serializable);
 
+                        //// Note: we need to use the x.Tag instead of x.Instance.ContextMode here because we might be serializing a different thing
+                        //switch ((SerializationContextMode)x.Tag)
                         switch (x.Instance.ContextMode)
                         {
                             case SerializationContextMode.Serialization:

@@ -46,6 +46,7 @@ Added/fixed:
 (x) #1195 BatchLogListenerBase WriteBatchAsync async handling not working
 (x) #1196 Command containers are not registered with correct container type
 (x) #1197 ReferenceManager uses wrong key to check for existence of objects
+(x) #1198 Json serializer doesn't support ModelBase as a collection serialization
 
 Roadmap:
 ========

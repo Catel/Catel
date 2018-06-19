@@ -736,6 +736,7 @@ namespace Catel.Tests.Runtime.Serialization
                 bc.Add(b3);
 
                 TestSerializationOnAllSerializers((serializer, config, description) =>
+                //TestSerializationOnJsonSerializer((serializer, config, description) =>
                 {
                     var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(bc, serializer, config);
 

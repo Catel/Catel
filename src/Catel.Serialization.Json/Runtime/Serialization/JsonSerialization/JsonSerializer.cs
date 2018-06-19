@@ -336,7 +336,7 @@ namespace Catel.Runtime.Serialization.Json
                             jsonWriter.WritePropertyName(idPropertyName);
                             jsonSerializer.Serialize(jsonWriter, referenceInfo.Id);
 
-                            if (!referenceInfo.IsFirstUsage)
+                            if (!referenceInfo.IsFirstUsage && !ReferenceEquals(value, context.Model))
                             {
                                 return;
                             }
