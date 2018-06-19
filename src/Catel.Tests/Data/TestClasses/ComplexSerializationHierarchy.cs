@@ -124,9 +124,7 @@ namespace Catel.Tests.Data
         }
     }
 
-#if NET
-    [Serializable]
-#endif
+    [DataContract]
     public class Family
     {
         public Family()
@@ -134,20 +132,23 @@ namespace Catel.Tests.Data
             Persons = new List<Person>();
         }
 
+        [DataMember]
         public string LastName { get; set; }
 
+        [DataMember]
         public List<Person> Persons { get; private set; }
     }
 
-#if NET
-    [Serializable]
-#endif
+    [DataContract]
     public class Person
     {
+        [DataMember]
         public Gender Gender { get; set; }
 
+        [DataMember]
         public string FirstName { get; set; }
 
+        [DataMember]
         public string LastName { get; set; }
     }
 
