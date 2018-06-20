@@ -140,7 +140,7 @@ Task("SonarBegin")
         Url = sonarUrl,
         Login = sonarUsername,
         Password = sonarPassword,
-        Verbose = true,
+        Verbose = false,
         Key = sonarProject
     });
 });
