@@ -188,9 +188,9 @@ namespace Catel.Runtime.Serialization.Json
 
                 if (PreserveReferences)
                 {
-                    if (jsonProperties.ContainsKey(GraphRefId))
+                    if (jsonProperties.TryGetValue(GraphRefId, out var graphIdProperty))
                     {
-                        var graphId = (int)jsonProperties[GraphRefId].Value;
+                        var graphId = (int)graphIdProperty.Value;
 
                         var scopeName = SerializationContextHelper.GetSerializationScopeName();
                         using (var scopeManager = ScopeManager<SerializationContextScope<JsonSerializationContextInfo>>.GetScopeManager(scopeName))
@@ -206,9 +206,9 @@ namespace Catel.Runtime.Serialization.Json
                     }
                 }
 
-                if (jsonProperties.ContainsKey(TypeName))
+                if (jsonProperties.TryGetValue(TypeName, out var typeNameProperty))
                 {
-                    var modelTypeOverrideValue = (string)jsonProperties[TypeName].Value;
+                    var modelTypeOverrideValue = (string)typeNameProperty.Value;
                     var modelTypeOverride = TypeCache.GetTypeWithoutAssembly(modelTypeOverrideValue, allowInitialization: false);
                     if (modelTypeOverride == null)
                     {
@@ -496,9 +496,8 @@ namespace Catel.Runtime.Serialization.Json
                 if (PreserveReferences)
                 {
                     var properties = serializationContext.JsonProperties;
-                    if (properties.ContainsKey(GraphId))
+                    if (properties.TryGetValue(GraphId, out var graphIdProperty))
                     {
-                        var graphIdProperty = properties[GraphId];
                         if (graphIdProperty != null)
                         {
                             var graphId = (int)graphIdProperty.Value;
@@ -536,9 +535,9 @@ namespace Catel.Runtime.Serialization.Json
                 if (PreserveReferences)
                 {
                     var graphRefIdPropertyName = string.Format("${0}_{1}", memberValue.NameForSerialization, GraphRefId);
-                    if (jsonProperties.ContainsKey(graphRefIdPropertyName))
+                    if (jsonProperties.TryGetValue(graphRefIdPropertyName, out var graphIdProperty))
                     {
-                        var graphId = (int)jsonProperties[graphRefIdPropertyName].Value;
+                        var graphId = (int)graphIdProperty.Value;
                         var referenceManager = context.ReferenceManager;
                         var referenceInfo = referenceManager.GetInfoById(graphId);
                         if (referenceInfo == null)
@@ -641,10 +640,9 @@ namespace Catel.Runtime.Serialization.Json
                     return SerializationObject.SucceededToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name, dictionary);
                 }
 
-                if (jsonProperties.ContainsKey(memberValue.NameForSerialization))
+                if (jsonProperties.TryGetValue(memberValue.NameForSerialization, out var jsonMemberProperty))
                 {
-                    var jsonProperty = jsonProperties[memberValue.NameForSerialization];
-                    var jsonValue = jsonProperty.Value;
+                    var jsonValue = jsonMemberProperty.Value;
                     if (jsonValue != null)
                     {
                         object finalMemberValue = null;
@@ -700,7 +698,7 @@ namespace Catel.Runtime.Serialization.Json
                                     }
                                     else if (ShouldSerializeAsCollection(memberValue))
                                     {
-                                        finalMemberValue = Deserialize(valueType, jsonProperty.Value.CreateReader(context.Configuration), context.Configuration);
+                                        finalMemberValue = Deserialize(valueType, jsonMemberProperty.Value.CreateReader(context.Configuration), context.Configuration);
                                     }
                                     else
                                     {
@@ -741,9 +739,9 @@ namespace Catel.Runtime.Serialization.Json
                             if (PreserveReferences && finalMemberValue.GetType().IsClassType())
                             {
                                 var graphIdPropertyName = $"${memberValue.NameForSerialization}_{GraphId}";
-                                if (jsonProperties.ContainsKey(graphIdPropertyName))
+                                if (jsonProperties.TryGetValue(graphIdPropertyName, out var graphIdProperty))
                                 {
-                                    var graphId = (int)jsonProperties[graphIdPropertyName].Value;
+                                    var graphId = (int)graphIdProperty.Value;
 
                                     var referenceManager = context.ReferenceManager;
                                     referenceManager.RegisterManually(graphId, finalMemberValue);

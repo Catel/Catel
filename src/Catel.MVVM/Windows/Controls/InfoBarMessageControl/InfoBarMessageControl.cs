@@ -53,14 +53,14 @@ namespace Catel.Windows.Controls
     [TemplatePart(Name = ElementMessageBar, Type = typeof(FrameworkElement))]
     public class InfoBarMessageControl : ContentControl
     {
-        #region Constants
+#region Constants
         /// <summary>
         /// The bar that will show the initial message bar.
         /// </summary>
         private const string ElementMessageBar = "PART_MessageBar";
-        #endregion
+#endregion
 
-        #region Fields
+#region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -77,9 +77,9 @@ namespace Catel.Windows.Controls
 
         private readonly Dictionary<int, WarningAndErrorValidator> _warningAndErrorValidators = new Dictionary<int, WarningAndErrorValidator>(); 
         private bool _subscribedToEvents;
-        #endregion
+#endregion
 
-        #region Constructors
+#region Constructors
         /// <summary>
         /// Initializes static members of the <see cref="InfoBarMessageControl"/> class.
         /// </summary>
@@ -117,9 +117,9 @@ namespace Catel.Windows.Controls
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
-        #endregion
+#endregion
 
-        #region Properties
+#region Properties
         /// <summary>
         /// Gets or sets the default property value for the <see cref="Text"/> property.
         /// </summary>
@@ -217,9 +217,9 @@ namespace Catel.Windows.Controls
         {
             get { return _errorMessages; }
         }
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
         /// <summary>
         /// Called when the control is loaded.
         /// </summary>
@@ -512,21 +512,22 @@ namespace Catel.Windows.Controls
                 {
                     case ValidationEventAction.Added:
                     case ValidationEventAction.Refresh:
-                        if (!messages.ContainsKey(bindingObject))
+                        if (!messages.TryGetValue(bindingObject, out var addBindingObjectMessages))
                         {
-                            messages.Add(bindingObject, new List<string>());
+                            addBindingObjectMessages = new List<string>();
+                            messages.Add(bindingObject, addBindingObjectMessages);
                         }
 
-                        if (!messages[bindingObject].Contains(message))
+                        if (!addBindingObjectMessages.Contains(message))
                         {
-                            messages[bindingObject].Add(message);
+                            addBindingObjectMessages.Add(message);
                         }
                         break;
 
                     case ValidationEventAction.Removed:
-                        if (messages.ContainsKey(bindingObject))
+                        if (messages.TryGetValue(bindingObject, out var removeBindingObjectMessages))
                         {
-                            messages[bindingObject].Remove(message);
+                            removeBindingObjectMessages.Remove(message);
                         }
                         break;
 
@@ -598,7 +599,7 @@ namespace Catel.Windows.Controls
                 }
             }
         }
-        #endregion
+#endregion
     }
 }
 

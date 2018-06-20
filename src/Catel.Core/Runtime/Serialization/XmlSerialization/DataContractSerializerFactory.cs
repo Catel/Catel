@@ -730,9 +730,9 @@ namespace Catel.Runtime.Serialization.Xml
             /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
             public bool IsSpecialCollectionType(Type type)
             {
-                if (_isSpecialCollectionCache.ContainsKey(type))
+                if (_isSpecialCollectionCache.TryGetValue(type, out var isSpecialCollectionCached))
                 {
-                    return _isSpecialCollectionCache[type];
+                    return isSpecialCollectionCached;
                 }
 
                 // Check all sub types as well (a type might be deriving from IEnumerable)

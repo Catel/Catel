@@ -496,21 +496,21 @@ namespace Catel.Runtime.Serialization
         protected Type GetMemberType(Type modelType, string memberName)
         {
             var catelProperties = SerializationManager.GetCatelProperties(modelType);
-            if (catelProperties.ContainsKey(memberName))
+            if (catelProperties.TryGetValue(memberName, out var catelProperty))
             {
-                return catelProperties[memberName].MemberType;
+                return catelProperty.MemberType;
             }
 
             var regularProperties = SerializationManager.GetRegularProperties(modelType);
-            if (regularProperties.ContainsKey(memberName))
+            if (regularProperties.TryGetValue(memberName, out var regularProperty))
             {
-                return regularProperties[memberName].MemberType;
+                return regularProperty.MemberType;
             }
 
             var fields = SerializationManager.GetFields(modelType);
-            if (fields.ContainsKey(memberName))
+            if (fields.TryGetValue(memberName, out var field))
             {
-                return fields[memberName].MemberType;
+                return field.MemberType; ;
             }
 
             return null;

@@ -135,10 +135,8 @@ namespace Catel.MVVM
             lock (_lock)
             {
                 var vmId = viewModel.UniqueIdentifier;
-                if (_viewModelInstances.ContainsKey(vmId))
+                if (_viewModelInstances.Remove(vmId))
                 {
-                    _viewModelInstances.Remove(vmId);
-
                     Log.Debug("Removed view model instance, currently containing '{0}' instances of type '{1}'", _viewModelInstances.Count, ViewModelType);
                 }
             }

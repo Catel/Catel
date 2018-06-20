@@ -198,10 +198,7 @@ namespace Catel.Data
 
             lock (_lockObject)
             {
-                if (_catelProperties.ContainsKey(name))
-                {
-                    _catelProperties.Remove(name);
-                }
+                _catelProperties.Remove(name);
             }
         }
 

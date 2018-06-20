@@ -62,9 +62,9 @@ namespace Catel.Windows.Data
 
             var key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(type, propertyName);
 
-            if (!_realDependencyPropertiesCache.ContainsKey(key))
+            if (!_realDependencyPropertiesCache.TryGetValue(key, out var isRealDependencyProperty))
             {
-                var isRealDependencyProperty = true;
+                isRealDependencyProperty = true;
 
                 if (propertyName.EndsWith("_handler"))
                 {
@@ -78,7 +78,7 @@ namespace Catel.Windows.Data
                 _realDependencyPropertiesCache.Add(key, isRealDependencyProperty);
             }
 
-            return _realDependencyPropertiesCache[key];
+            return isRealDependencyProperty;
         }
 
         /// <summary>
@@ -286,19 +286,19 @@ namespace Catel.Windows.Data
             var viewType = frameworkElement.GetType();
             var key = DependencyPropertyHelper.GetDependencyPropertyCacheKey(viewType, propertyName);
 
-            if (!_dependencyProperties.ContainsKey(key))
+            if (!_dependencyProperties.TryGetValue(key, out var dependencyProperty))
             {
                 // If called with object, this is the request for the dummy value containing the mapped dependency property
                 // on which we subscribe for changess. Otherwise this is the dependency property containing the actual
                 // handlers to call when the property changes.
                 var dependencyPropertyMetaData = typeof(T) == typeof(object) ? new PropertyMetadata(default(T), OnDependencyPropertyChanged) : null;
-                var dependencyProperty = DependencyProperty.RegisterAttached(key, typeof(T), viewType, dependencyPropertyMetaData);
+                dependencyProperty = DependencyProperty.RegisterAttached(key, typeof(T), viewType, dependencyPropertyMetaData);
 
                 _dependencyProperties[key] = dependencyProperty;
                 _wrapperDependencyProperties[dependencyProperty] = propertyName;
             }
 
-            return _dependencyProperties[key];
+            return dependencyProperty;
         }
 
         /// <summary>

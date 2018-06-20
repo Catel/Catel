@@ -74,12 +74,12 @@ namespace Catel.Data
 
             lock (_propertyDataLock)
             {
-                if (!_propertyData.ContainsKey(type))
+                if (!_propertyData.TryGetValue(type, out var typeInfo))
                 {
-                    RegisterProperties(type);
+                    typeInfo = RegisterProperties(type);
                 }
 
-                return _propertyData[type];
+                return typeInfo;
             }
         }
 
@@ -99,14 +99,13 @@ namespace Catel.Data
 
             lock (_propertyDataLock)
             {
-                if (_propertyData.ContainsKey(type))
+                if (!_propertyData.TryGetValue(type, out var typeInfo))
                 {
-                    return _propertyData[type];
+                    typeInfo = new CatelTypeInfo(type);
+                    _propertyData[type] = typeInfo;
                 }
 
-                var catelTypeInfo = new CatelTypeInfo(type);
-                _propertyData[type] = catelTypeInfo;
-                return catelTypeInfo;
+                return typeInfo;
             }
         }
 
@@ -128,12 +127,13 @@ namespace Catel.Data
 
             lock (_propertyDataLock)
             {
-                if (!_propertyData.ContainsKey(type))
+                if (!_propertyData.TryGetValue(type, out var typeInfo))
                 {
-                    _propertyData[type] = new CatelTypeInfo(type);
+                    typeInfo = new CatelTypeInfo(type);
+                    _propertyData[type] = typeInfo;
                 }
 
-                _propertyData[type].RegisterProperty(name, propertyData);
+                typeInfo.RegisterProperty(name, propertyData);
             }
         }
 
@@ -150,12 +150,13 @@ namespace Catel.Data
 
             lock (_propertyDataLock)
             {
-                if (!_propertyData.ContainsKey(type))
+                if (!_propertyData.TryGetValue(type, out var typeInfo))
                 {
-                    _propertyData[type] = new CatelTypeInfo(type);
+                    typeInfo = new CatelTypeInfo(type);
+                    _propertyData[type] = typeInfo;
                 }
 
-                _propertyData[type].UnregisterProperty(name);
+                typeInfo.UnregisterProperty(name);
             }
         }
 
@@ -176,8 +177,7 @@ namespace Catel.Data
 
             lock (_propertyDataLock)
             {
-                CatelTypeInfo propertyDataOfType;
-                if (!_propertyData.TryGetValue(type, out propertyDataOfType))
+                if (!_propertyData.TryGetValue(type, out var propertyDataOfType))
                 {
                     return false;
                 }
@@ -202,8 +202,7 @@ namespace Catel.Data
 
             lock (_propertyDataLock)
             {
-                CatelTypeInfo propertyDataOfType;
-                if (!_propertyData.TryGetValue(type, out propertyDataOfType))
+                if (!_propertyData.TryGetValue(type, out var propertyDataOfType))
                 {
                     throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, type),
                         "Property '{0}' on type '{1}' is not registered", name, type.FullName);

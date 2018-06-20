@@ -428,9 +428,10 @@ namespace Catel.IoC
                 }
 
                 var serviceInfo = new ServiceInfo(serviceType, tag);
-                if (_registeredInstances.ContainsKey(serviceInfo))
+
+                if (_registeredInstances.TryGetValue(serviceInfo, out var registeredInstanceInfo))
                 {
-                    return _registeredInstances[serviceInfo].ImplementingInstance;
+                    return registeredInstanceInfo.ImplementingInstance;
                 }
 
                 // If a type is registered, the original container is always known
@@ -755,14 +756,14 @@ namespace Catel.IoC
             {
                 var serviceInfo = new ServiceInfo(serviceType, tag);
 
-                if (_registeredTypes.ContainsKey(serviceInfo))
+                if (!_registeredTypes.TryGetValue(serviceInfo, out var existingRegisteredTypeInfo))
                 {
-                    // Re-use previous subscription
-                    registeredTypeInfo = _registeredTypes[serviceInfo];
+                    _registeredTypes[serviceInfo] = registeredTypeInfo;
                 }
                 else
                 {
-                    _registeredTypes[serviceInfo] = registeredTypeInfo;
+                    // Re-use previous subscription
+                    registeredTypeInfo = existingRegisteredTypeInfo;
                 }
 
                 _registeredInstances[serviceInfo] = new RegisteredInstanceInfo(registeredTypeInfo, instance);
@@ -822,10 +823,7 @@ namespace Catel.IoC
                 }
 
                 var serviceInfo = new ServiceInfo(serviceType, tag);
-                if (_registeredInstances.ContainsKey(serviceInfo))
-                {
-                    _registeredInstances.Remove(serviceInfo);
-                }
+                _registeredInstances.Remove(serviceInfo);
 
                 Log.Debug("Registering type '{0}' to type '{1}'", serviceType.FullName, serviceImplementationType.FullName);
 

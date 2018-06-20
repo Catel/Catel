@@ -228,9 +228,9 @@ namespace Catel.MVVM
 
             lock (_lockObject)
             {
-                if (_commands.ContainsKey(commandName))
+                if (_commands.TryGetValue(commandName, out var command))
                 {
-                    return _commands[commandName];
+                    return command;
                 }
 
                 return null;
@@ -267,12 +267,12 @@ namespace Catel.MVVM
             {
                 Log.Debug("Executing command '{0}'", commandName);
 
-                if (!_commands.ContainsKey(commandName))
+                if (!_commands.TryGetValue(commandName, out var command))
                 {
                     throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
-                _commands[commandName].Execute(null);
+                command.Execute(null);
             }
         }
 
@@ -299,12 +299,12 @@ namespace Catel.MVVM
             {
                 Log.Debug("Registering command to '{0}'", commandName);
 
-                if (!_commands.ContainsKey(commandName))
+                if (!_commands.TryGetValue(commandName, out var compositeCommand))
                 {
                     throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
-                _commands[commandName].RegisterCommand(command, viewModel);
+                compositeCommand.RegisterCommand(command, viewModel);
 
                 InvalidateCommands();
             }
@@ -332,12 +332,12 @@ namespace Catel.MVVM
             {
                 Log.Debug("Registering action to '{0}'", commandName);
 
-                if (!_commands.ContainsKey(commandName))
+                if (!_commands.TryGetValue(commandName, out var compositeCommand))
                 {
                     throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
-                _commands[commandName].RegisterAction(action);
+                compositeCommand.RegisterAction(action);
 
                 InvalidateCommands();
             }
@@ -365,12 +365,12 @@ namespace Catel.MVVM
             {
                 Log.Debug("Registering action to '{0}'", commandName);
 
-                if (!_commands.ContainsKey(commandName))
+                if (!_commands.TryGetValue(commandName, out var compositeCommand))
                 {
                     throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
-                _commands[commandName].RegisterAction(action);
+                compositeCommand.RegisterAction(action);
 
                 InvalidateCommands();
             }
@@ -398,12 +398,12 @@ namespace Catel.MVVM
             {
                 Log.Debug("Unregistering command from '{0}'", commandName);
 
-                if (!_commands.ContainsKey(commandName))
+                if (!_commands.TryGetValue(commandName, out var compositeCommand))
                 {
                     throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
-                _commands[commandName].UnregisterCommand(command);
+                compositeCommand.UnregisterCommand(compositeCommand);
 
                 InvalidateCommands();
             }
@@ -431,12 +431,12 @@ namespace Catel.MVVM
             {
                 Log.Debug("Unregistering action from '{0}'", commandName);
 
-                if (!_commands.ContainsKey(commandName))
+                if (!_commands.TryGetValue(commandName, out var compositeCommand))
                 {
                     throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
-                _commands[commandName].UnregisterAction(action);
+                compositeCommand.UnregisterAction(action);
 
                 InvalidateCommands();
             }
@@ -464,12 +464,12 @@ namespace Catel.MVVM
             {
                 Log.Debug("Unregistering action from '{0}'", commandName);
 
-                if (!_commands.ContainsKey(commandName))
+                if (!_commands.TryGetValue(commandName, out var compositeCommand))
                 {
                     throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
-                _commands[commandName].UnregisterAction(action);
+                compositeCommand.UnregisterAction(action);
 
                 InvalidateCommands();
             }

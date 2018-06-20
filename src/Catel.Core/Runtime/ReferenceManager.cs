@@ -135,9 +135,9 @@ namespace Catel.Runtime
         {
             lock (_lock)
             {
-                if (_referenceInfoById.ContainsKey(id))
+                if (_referenceInfoById.TryGetValue(id, out var referenceInfo))
                 {
-                    return _referenceInfoById[id];
+                    return referenceInfo;
                 }
 
                 return null;

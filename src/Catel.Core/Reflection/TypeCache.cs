@@ -478,9 +478,9 @@ namespace Catel.Reflection
 
             lock (_lockObject)
             {
-                if (!_typesByInterface.ContainsKey(interfaceType))
+                if (!_typesByInterface.TryGetValue(interfaceType, out var typesByInterface))
                 {
-                    _typesByInterface[interfaceType] = GetTypes(x =>
+                    typesByInterface = GetTypes(x =>
                     {
                         if (x == interfaceType)
                         {
@@ -489,9 +489,11 @@ namespace Catel.Reflection
 
                         return x.ImplementsInterfaceEx(interfaceType);
                     }).ToArray();
+
+                    _typesByInterface[interfaceType] = typesByInterface;
                 }
 
-                return _typesByInterface[interfaceType];
+                return typesByInterface;
             }
         }
 

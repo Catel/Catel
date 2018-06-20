@@ -44,10 +44,8 @@ namespace Catel.Runtime.Serialization
                     return propertyValue;
                 }
 
-                if (modelInfo.PropertiesByName.ContainsKey(memberName))
+                if (modelInfo.PropertiesByName.TryGetValue(memberName, out var propertyMemberMetadata))
                 {
-                    var memberMetadata = modelInfo.PropertiesByName[memberName];
-
                     object value = null;
                     var get = false;
 
@@ -59,18 +57,16 @@ namespace Catel.Runtime.Serialization
 
                     if (!get)
                     {
-                        value = ((PropertyInfo)memberMetadata.Tag).GetValue(model, null);
+                        value = ((PropertyInfo)propertyMemberMetadata.Tag).GetValue(model, null);
                     }
 
-                    var propertyValue = new MemberValue(SerializationMemberGroup.RegularProperty, modelType, memberMetadata.MemberType, 
-                        memberMetadata.MemberName, memberMetadata.MemberNameForSerialization, value);
+                    var propertyValue = new MemberValue(SerializationMemberGroup.RegularProperty, modelType, propertyMemberMetadata.MemberType, 
+                        propertyMemberMetadata.MemberName, propertyMemberMetadata.MemberNameForSerialization, value);
                     return propertyValue;
                 }
 
-                if (modelInfo.FieldsByName.ContainsKey(memberName))
+                if (modelInfo.FieldsByName.TryGetValue(memberName, out var fieldMemberMetadata))
                 {
-                    var memberMetadata = modelInfo.FieldsByName[memberName];
-
                     object value = null;
                     var get = false;
 
@@ -82,11 +78,11 @@ namespace Catel.Runtime.Serialization
 
                     if (!get)
                     {
-                        value = ((FieldInfo)memberMetadata.Tag).GetValue(model);
+                        value = ((FieldInfo)propertyMemberMetadata.Tag).GetValue(model);
                     }
 
-                    var fieldValue = new MemberValue(SerializationMemberGroup.Field, modelType, memberMetadata.MemberType, 
-                        memberMetadata.MemberName, memberMetadata.MemberNameForSerialization, value);
+                    var fieldValue = new MemberValue(SerializationMemberGroup.Field, modelType, propertyMemberMetadata.MemberType, 
+                        propertyMemberMetadata.MemberName, propertyMemberMetadata.MemberNameForSerialization, value);
                     return fieldValue;
                 }
             }
