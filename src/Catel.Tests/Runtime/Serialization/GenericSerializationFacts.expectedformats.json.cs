@@ -16,6 +16,7 @@
         public partial class ExpectedFormats
         {
             [Test]
+            [MethodImpl(MethodImplOptions.NoInlining)]
             public void Json_GraphDepth_1()
             {
                 var originalObject = ComplexSerializationHierarchy.CreateObjectGraphWithDepth(1);
@@ -24,6 +25,7 @@
             }
 
             [Test]
+            [MethodImpl(MethodImplOptions.NoInlining)]
             public void Json_GraphDepth_2()
             {
                 var originalObject = ComplexSerializationHierarchy.CreateObjectGraphWithDepth(2);
@@ -32,6 +34,7 @@
             }
 
             [Test]
+            [MethodImpl(MethodImplOptions.NoInlining)]
             public void Json_GraphDepth_3()
             {
                 var originalObject = ComplexSerializationHierarchy.CreateObjectGraphWithDepth(3);
@@ -40,6 +43,7 @@
             }
 
             [Test]
+            [MethodImpl(MethodImplOptions.NoInlining)]
             public void Json_Collection()
             {
                 var originalObject = new List<Country>();
@@ -50,6 +54,7 @@
             }
 
             [Test]
+            [MethodImpl(MethodImplOptions.NoInlining)]
             public void Json_Array()
             {
                 var originalObject = new[]
@@ -62,6 +67,7 @@
             }
 
             [Test]
+            [MethodImpl(MethodImplOptions.NoInlining)]
             public void Json_Dictionary()
             {
                 var originalObject = new Dictionary<string, int>();
@@ -73,6 +79,7 @@
             }
 
             [Test]
+            [MethodImpl(MethodImplOptions.NoInlining)]
             public void Json_ComplexHierarchyWithInheritance()
             {
                 var originalObject = ModelBaseTestHelper.CreateHierarchicalGraphWithInheritance();
@@ -81,6 +88,7 @@
             }
 
             [Test]
+            [MethodImpl(MethodImplOptions.NoInlining)]
             public void Json_ComplexHierarchyNonCatel()
             {
                 var originalObject = ComplexSerializationHierarchy.CreateComplexNonCatelHierarchy();
@@ -89,6 +97,7 @@
             }
 
             [Test]
+            [MethodImpl(MethodImplOptions.NoInlining)]
             public void Json_SerializationWithPrivateMembers()
             {
                 var originalObject = new ObjectWithPrivateMembers("My private member");
@@ -98,6 +107,7 @@
             }
 
             [Test]
+            [MethodImpl(MethodImplOptions.NoInlining)]
             public void Json_ModelsWithParsableObjectsAndSerializerModifierNotUsingParse()
             {
                 var originalObject = new TestModelWithParsableMembersWithoutAttributes();
