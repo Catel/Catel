@@ -3481,7 +3481,7 @@ namespace Catel.Runtime.Serialization
         public SerializationConfiguration() { }
         public System.Globalization.CultureInfo Culture { get; set; }
     }
-    public class SerializationContext<TSerializationContextInfo> : Catel.Runtime.Serialization.ISerializationContext, Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo>, System.IDisposable
+    public class SerializationContext<TSerializationContextInfo> : Catel.Disposable, Catel.Runtime.Serialization.ISerializationContext, Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo>, System.IDisposable
         where TSerializationContextInfo :  class, Catel.Runtime.Serialization.ISerializationContextInfo
     {
         public SerializationContext(object model, System.Type modelType, TSerializationContextInfo context, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
@@ -3497,7 +3497,7 @@ namespace Catel.Runtime.Serialization
         public Catel.Runtime.ReferenceManager ReferenceManager { get; }
         public System.Runtime.Serialization.SerializationInfo SerializationInfo { get; set; }
         public System.Collections.Generic.Stack<System.Type> TypeStack { get; }
-        public void Dispose() { }
+        protected override void DisposeManaged() { }
     }
     public class static SerializationContextHelper
     {

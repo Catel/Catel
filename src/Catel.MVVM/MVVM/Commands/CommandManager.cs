@@ -403,7 +403,7 @@ namespace Catel.MVVM
                     throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not yet created using the CreateCommand method", commandName);
                 }
 
-                compositeCommand.UnregisterCommand(compositeCommand);
+                compositeCommand.UnregisterCommand(command);
 
                 InvalidateCommands();
             }

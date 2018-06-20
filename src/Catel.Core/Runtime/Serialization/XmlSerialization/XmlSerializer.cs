@@ -259,8 +259,9 @@ namespace Catel.Runtime.Serialization.Xml
                     if (collection != null)
                     {
                         // Note: since we are not getting into a WriteXml call, get known types for the current context here
-                        var knownTypes = _dataContractSerializerFactory.GetKnownTypes(modelType, collection.GetType());
-                        context.Context.KnownTypes.AddRange(knownTypes);
+                        var knownTypesHashSet = context.Context.KnownTypes;
+                        var knownTypes = _dataContractSerializerFactory.GetKnownTypes(modelType, collection.GetType(), knownTypesHashSet.ToList());
+                        knownTypesHashSet.AddRange(knownTypes);
 
                         Serialize(collection, context.Context, context.Configuration);
                     }

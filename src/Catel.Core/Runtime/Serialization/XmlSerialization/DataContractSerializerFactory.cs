@@ -77,8 +77,9 @@ namespace Catel.Runtime.Serialization.Xml
             Argument.IsNotNull("serializingType", serializingType);
             Argument.IsNotNull("typeToSerialize", typeToSerialize);
 
+            var serializingTypeName = serializingType.GetSafeFullName(false);
             var typeToSerializeName = typeToSerialize.GetSafeFullName(false);
-            var key = string.Format("{0}|{1}", typeToSerializeName, additionalKnownTypes?.Count ?? 0);
+            var key = string.Format("{0}|{1}|{2}", serializingTypeName, typeToSerializeName, additionalKnownTypes?.Count ?? 0);
 
             return _knownTypesCache.GetFromCacheOrFetch(key, () =>
             {
@@ -127,8 +128,9 @@ namespace Catel.Runtime.Serialization.Xml
             Argument.IsNotNull("typeToSerialize", typeToSerialize);
             Argument.IsNotNullOrWhitespace("xmlName", xmlName);
 
+            var serializingTypeName = serializingType.GetSafeFullName(false);
             var typeToSerializeName = typeToSerialize.GetSafeFullName(false);
-            var key = string.Format("{0}|{1}|{2}", typeToSerializeName, xmlName, additionalKnownTypes?.Count ?? 0);
+            var key = string.Format("{0}|{1}|{2}|{3}", serializingTypeName, typeToSerializeName, additionalKnownTypes?.Count ?? 0, xmlName);
 
             return _dataContractSerializersCache.GetFromCacheOrFetch(key, () =>
             {

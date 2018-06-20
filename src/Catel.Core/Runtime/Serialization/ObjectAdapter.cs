@@ -78,11 +78,11 @@ namespace Catel.Runtime.Serialization
 
                     if (!get)
                     {
-                        value = ((FieldInfo)propertyMemberMetadata.Tag).GetValue(model);
+                        value = ((FieldInfo)fieldMemberMetadata.Tag).GetValue(model);
                     }
 
-                    var fieldValue = new MemberValue(SerializationMemberGroup.Field, modelType, propertyMemberMetadata.MemberType, 
-                        propertyMemberMetadata.MemberName, propertyMemberMetadata.MemberNameForSerialization, value);
+                    var fieldValue = new MemberValue(SerializationMemberGroup.Field, modelType, fieldMemberMetadata.MemberType,
+                        fieldMemberMetadata.MemberName, fieldMemberMetadata.MemberNameForSerialization, value);
                     return fieldValue;
                 }
             }
