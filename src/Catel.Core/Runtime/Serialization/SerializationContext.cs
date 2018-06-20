@@ -16,10 +16,9 @@ namespace Catel.Runtime.Serialization
     /// The serialization context used to serialize and deserialize models.
     /// </summary>
     /// <typeparam name="TSerializationContextInfo">The type of the context.</typeparam>
-    public class SerializationContext<TSerializationContextInfo> : ISerializationContext<TSerializationContextInfo>
+    public class SerializationContext<TSerializationContextInfo> : Disposable, ISerializationContext<TSerializationContextInfo>
         where TSerializationContextInfo : class, ISerializationContextInfo
     {
-        private IDisposable _serializableToken;
         private ScopeManager<SerializationContextScope<TSerializationContextInfo>> _scopeManager;
         private int? _depth;
 
@@ -70,8 +69,7 @@ namespace Catel.Runtime.Serialization
                 serializationContextInfoParentSetter.SetSerializationContext(this);
             }
 
-            // Note: the token must be created as a last step, it will add the new values to the stacks
-            _serializableToken = CreateSerializableToken();
+            Initialize();
         }
 
         /// <summary>
@@ -175,96 +173,91 @@ namespace Catel.Runtime.Serialization
 #endif
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// Disposes the managed resources.
         /// </summary>
-        public void Dispose()
+        protected override void DisposeManaged()
         {
+            base.DisposeManaged();
+
             if (_scopeManager != null)
             {
                 _scopeManager.Dispose();
                 _scopeManager = null;
             }
 
-            if (_serializableToken != null)
+            Uninitialize();
+        }
+
+        private void Initialize()
+        {
+            Contexts.Push(this);
+            TypeStack.Push(ModelType);
+
+            var serializable = Model as ISerializable;
+            if (serializable != null)
             {
-                _serializableToken.Dispose();
-                _serializableToken = null;
+                var registrationInfo = ReferenceManager.GetInfo(serializable);
+
+                //// Note: we need to use the x.Tag instead of x.Instance.ContextMode here because we might be serializing a different thing
+                //switch ((SerializationContextMode)x.Tag)
+                switch (ContextMode)
+                {
+                    case SerializationContextMode.Serialization:
+                        if (!registrationInfo.HasCalledSerializing)
+                        {
+                            serializable.StartSerialization();
+                            registrationInfo.HasCalledSerializing = true;
+                        }
+                        break;
+
+                    case SerializationContextMode.Deserialization:
+                        if (!registrationInfo.HasCalledDeserializing)
+                        {
+                            serializable.StartDeserialization();
+                            registrationInfo.HasCalledDeserializing = true;
+                        }
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
 
-        private IDisposable CreateSerializableToken()
+        private void Uninitialize()
         {
-            return new DisposableToken<SerializationContext<TSerializationContextInfo>>(this,
-                x =>
+            var serializable = Model as ISerializable;
+            if (serializable != null)
+            {
+                var registrationInfo = ReferenceManager.GetInfo(serializable);
+
+                //// Note: we need to use the x.Tag instead of x.Instance.ContextMode here because we might be serializing a different thing
+                //switch ((SerializationContextMode)x.Tag)
+                switch (ContextMode)
                 {
-                    x.Instance.Contexts.Push(x.Instance);
-                    x.Instance.TypeStack.Push(x.Instance.ModelType);
-
-                    var serializable = x.Instance.Model as ISerializable;
-                    if (serializable != null)
-                    {
-                        var registrationInfo = ReferenceManager.GetInfo(serializable);
-
-                        //// Note: we need to use the x.Tag instead of x.Instance.ContextMode here because we might be serializing a different thing
-                        //switch ((SerializationContextMode)x.Tag)
-                        switch (x.Instance.ContextMode)
+                    case SerializationContextMode.Serialization:
+                        if (!registrationInfo.HasCalledSerialized)
                         {
-                            case SerializationContextMode.Serialization:
-                                if (!registrationInfo.HasCalledSerializing)
-                                {
-                                    serializable.StartSerialization();
-                                    registrationInfo.HasCalledSerializing = true;
-                                }
-                                break;
-
-                            case SerializationContextMode.Deserialization:
-                                if (!registrationInfo.HasCalledDeserializing)
-                                {
-                                    serializable.StartDeserialization();
-                                    registrationInfo.HasCalledDeserializing = true;
-                                }
-                                break;
-
-                            default:
-                                throw new ArgumentOutOfRangeException();
+                            serializable.FinishSerialization();
+                            registrationInfo.HasCalledSerialized = true;
                         }
-                    }
-                },
-                x =>
-                {
-                    var serializable = x.Instance.Model as ISerializable;
-                    if (serializable != null)
-                    {
-                        var registrationInfo = ReferenceManager.GetInfo(serializable);
+                        break;
 
-                        //// Note: we need to use the x.Tag instead of x.Instance.ContextMode here because we might be serializing a different thing
-                        //switch ((SerializationContextMode)x.Tag)
-                        switch (x.Instance.ContextMode)
+                    case SerializationContextMode.Deserialization:
+                        if (!registrationInfo.HasCalledDeserialized)
                         {
-                            case SerializationContextMode.Serialization:
-                                if (!registrationInfo.HasCalledSerialized)
-                                {
-                                    serializable.FinishSerialization();
-                                    registrationInfo.HasCalledSerialized = true;
-                                }
-                                break;
-
-                            case SerializationContextMode.Deserialization:
-                                if (!registrationInfo.HasCalledDeserialized)
-                                {
-                                    serializable.FinishDeserialization();
-                                    registrationInfo.HasCalledDeserialized = true;
-                                }
-                                break;
-
-                            default:
-                                throw new ArgumentOutOfRangeException();
+                            serializable.FinishDeserialization();
+                            registrationInfo.HasCalledDeserialized = true;
                         }
-                    }
+                        break;
 
-                    x.Instance.TypeStack.Pop();
-                    x.Instance.Contexts.Pop();
-                }, ContextMode);
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            TypeStack.Pop();
+            Contexts.Pop();
         }
     }
 }

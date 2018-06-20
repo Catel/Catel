@@ -43,6 +43,7 @@ Added/fixed:
 (+) #1193 Add Task<ProcessResult> IProcessService.RunAsync(ProcessorContext)
 (+) #1199 Support serialization of root dictionaries in xml and binary serializers (Json already supported)
 (*) #1187 Allow process service to specify the working directory
+(*) #1200 Remove SerializationContext.CreateSerializableToken and replace by method calls
 (*) #1202 Optimize dictionary lookups to improve performance
 (x) #1194 OnDeserializing and OnDeserialized are called twice on ModelBase (de)serialization
 (x) #1195 BatchLogListenerBase WriteBatchAsync async handling not working
