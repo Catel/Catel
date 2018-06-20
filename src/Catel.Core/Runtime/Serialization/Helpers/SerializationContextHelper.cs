@@ -16,7 +16,17 @@ namespace Catel.Runtime.Serialization
         /// Gets the name of the serialization reference manager scope.
         /// </summary>
         /// <returns>The name of the scope.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "GetSerializationScopeName", TreatAsErrorFromVersion = "5.6", RemoveInVersion = "6.0")]
         public static string GetSerializationReferenceManagerScopeName()
+        {
+            return GetSerializationScopeName();
+        }
+
+        /// <summary>
+        /// Gets the name of the current serialization scope.
+        /// </summary>
+        /// <returns>The name of the scope.</returns>
+        public static string GetSerializationScopeName()
         {
             var scopeName = string.Format("Thread_{0}", ThreadHelper.GetCurrentThreadId());
             return scopeName;

@@ -19,7 +19,7 @@ namespace Catel.Runtime.Serialization.Json
     /// <summary>
     /// Class containing all information about the Json serialization context.
     /// </summary>
-    public class JsonSerializationContextInfo : ISerializationContextInfo
+    public class JsonSerializationContextInfo : SerializationContextInfoBase<JsonSerializationContextInfo>
     {
         #region Constructors
         /// <summary>

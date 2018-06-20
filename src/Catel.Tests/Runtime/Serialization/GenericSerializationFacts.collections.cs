@@ -168,7 +168,7 @@ namespace Catel.Tests.Runtime.Serialization
             }
 
             [DataContract]
-            [KnownType("GetKnownTypes")]
+            [KnownType(nameof(DataSourceResult.GetKnownTypes))]
             public class DataSourceResult
             {
                 #region Public Properties

@@ -27,19 +27,10 @@ namespace Catel.Runtime.Serialization.Xml
     public class DataContractSerializerFactory : IDataContractSerializerFactory
     {
         #region Fields
-        /// <summary>
-        /// The <see cref="ILog">log</see> object.
-        /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        /// Cache for the <see cref="DataContractSerializer"/> per name.
-        /// </summary>
+        private readonly CacheStorage<string, List<Type>> _knownTypesCache = new CacheStorage<string, List<Type>>(storeNullValues: true);
         private readonly CacheStorage<string, DataContractSerializer> _dataContractSerializersCache = new CacheStorage<string, DataContractSerializer>(storeNullValues: true);
-
-        /// <summary>
-        /// Cache for known attributes per type.
-        /// </summary>
         private readonly CacheStorage<string, Type[]> _knownTypesByAttributesCache = new CacheStorage<string, Type[]>();
         #endregion
 
@@ -72,28 +63,24 @@ namespace Catel.Runtime.Serialization.Xml
 
         #region IDataContractSerializerFactory Members
         /// <summary>
-        /// Gets the Data Contract serializer for a specific type. This method caches serializers so the
-        /// performance can be improved when a serializer is used more than once.
+        /// Gets the known types for a specific type. This method caches the lists so the
+        /// performance can be improved when a type is used more than once.
         /// </summary>
         /// <param name="serializingType">The type that is currently (de)serializing.</param>
         /// <param name="typeToSerialize">The type to (de)serialize.</param>
-        /// <param name="xmlName">Name of the property as known in XML.</param>
-        /// <param name="rootNamespace">The root namespace.</param>
         /// <param name="additionalKnownTypes">A list of additional types to add to the known types.</param>
         /// <returns><see cref="DataContractSerializer" /> for the given type.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="serializingType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">The <paramref name="xmlName" /> is <c>null</c> or whitespace.</exception>
-        public virtual DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string rootNamespace = null, List<Type> additionalKnownTypes = null)
+        public virtual List<Type> GetKnownTypes(Type serializingType, Type typeToSerialize, List<Type> additionalKnownTypes = null)
         {
             Argument.IsNotNull("serializingType", serializingType);
             Argument.IsNotNull("typeToSerialize", typeToSerialize);
-            Argument.IsNotNullOrWhitespace("xmlName", xmlName);
 
             var typeToSerializeName = typeToSerialize.GetSafeFullName(false);
-            var key = string.Format("{0}|{1}", typeToSerializeName, xmlName);
+            var key = string.Format("{0}|{1}", typeToSerializeName, additionalKnownTypes?.Count ?? 0);
 
-            return _dataContractSerializersCache.GetFromCacheOrFetch(key, () =>
+            return _knownTypesCache.GetFromCacheOrFetch(key, () =>
             {
 #if ENABLE_DETAILED_LOGGING
                 Log.Debug("Getting known types for xml serialization of '{0}'", typeToSerializeName);
@@ -117,7 +104,36 @@ namespace Catel.Runtime.Serialization.Xml
                     }
                 }
 
-                var xmlSerializer = new DataContractSerializer(typeToSerialize, xmlName, rootNamespace ?? string.Empty, serializerTypeInfo.KnownTypes);
+                return serializerTypeInfo.KnownTypes.ToList();
+            });
+        }
+
+        /// <summary>
+        /// Gets the Data Contract serializer for a specific type. This method caches serializers so the
+        /// performance can be improved when a serializer is used more than once.
+        /// </summary>
+        /// <param name="serializingType">The type that is currently (de)serializing.</param>
+        /// <param name="typeToSerialize">The type to (de)serialize.</param>
+        /// <param name="xmlName">Name of the property as known in XML.</param>
+        /// <param name="rootNamespace">The root namespace.</param>
+        /// <param name="additionalKnownTypes">A list of additional types to add to the known types.</param>
+        /// <returns><see cref="DataContractSerializer" /> for the given type.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="serializingType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="typeToSerialize" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="xmlName" /> is <c>null</c> or whitespace.</exception>
+        public virtual DataContractSerializer GetDataContractSerializer(Type serializingType, Type typeToSerialize, string xmlName, string rootNamespace = null, List<Type> additionalKnownTypes = null)
+        {
+            Argument.IsNotNull("serializingType", serializingType);
+            Argument.IsNotNull("typeToSerialize", typeToSerialize);
+            Argument.IsNotNullOrWhitespace("xmlName", xmlName);
+
+            var typeToSerializeName = typeToSerialize.GetSafeFullName(false);
+            var key = string.Format("{0}|{1}|{2}", typeToSerializeName, xmlName, additionalKnownTypes?.Count ?? 0);
+
+            return _dataContractSerializersCache.GetFromCacheOrFetch(key, () =>
+            {
+                var knownTypes = GetKnownTypes(serializingType, typeToSerialize, additionalKnownTypes);
+                var xmlSerializer = new DataContractSerializer(typeToSerialize, xmlName, rootNamespace ?? string.Empty, knownTypes);
                 return xmlSerializer;
             });
         }
@@ -570,10 +586,7 @@ namespace Catel.Runtime.Serialization.Xml
 
                 if (additionalKnownTypes != null)
                 {
-                    foreach (var additionalKnownType in additionalKnownTypes)
-                    {
-                        _knownTypes.Add(additionalKnownType);
-                    }
+                    _knownTypes.AddRange(additionalKnownTypes);
                 }
             }
             #endregion

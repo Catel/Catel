@@ -55,7 +55,7 @@ namespace Catel.Runtime.Serialization.Json
         public Newtonsoft.Json.Formatting Formatting { get; set; }
         public bool UseBson { get; set; }
     }
-    public class JsonSerializationContextInfo : Catel.Runtime.Serialization.ISerializationContextInfo
+    public class JsonSerializationContextInfo : Catel.Runtime.Serialization.SerializationContextInfoBase<Catel.Runtime.Serialization.Json.JsonSerializationContextInfo>
     {
         public JsonSerializationContextInfo(Newtonsoft.Json.JsonSerializer jsonSerializer, Newtonsoft.Json.JsonReader jsonReader, Newtonsoft.Json.JsonWriter jsonWriter) { }
         public Newtonsoft.Json.Linq.JArray JsonArray { get; set; }
@@ -84,8 +84,10 @@ namespace Catel.Runtime.Serialization.Json
         protected override object Deserialize(object model, Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Json.JsonSerializationContextInfo> context) { }
         public object Deserialize(System.Type modelType, Newtonsoft.Json.JsonReader jsonReader, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
         protected override Catel.Runtime.Serialization.SerializationObject DeserializeMember(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Json.JsonSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
+        [System.ObsoleteAttribute("Use `GetSerializationContextInfo` instead. Will be removed in version 6.0.0.", true)]
         protected override Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Json.JsonSerializationContextInfo> GetContext(object model, System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration configuration) { }
-        protected virtual Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Json.JsonSerializationContextInfo> GetContext(object model, System.Type modelType, Newtonsoft.Json.JsonReader jsonReader, Newtonsoft.Json.JsonWriter jsonWriter, Catel.Runtime.Serialization.SerializationContextMode contextMode, System.Collections.Generic.Dictionary<string, Newtonsoft.Json.Linq.JProperty> jsonProperties, Newtonsoft.Json.Linq.JArray jsonArray, Catel.Runtime.Serialization.ISerializationConfiguration configuration) { }
+        protected override Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Json.JsonSerializationContextInfo> GetSerializationContextInfo(object model, System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration configuration) { }
+        protected virtual Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Json.JsonSerializationContextInfo> GetSerializationContextInfo(object model, System.Type modelType, Newtonsoft.Json.JsonReader jsonReader, Newtonsoft.Json.JsonWriter jsonWriter, Catel.Runtime.Serialization.SerializationContextMode contextMode, System.Collections.Generic.Dictionary<string, Newtonsoft.Json.Linq.JProperty> jsonProperties, Newtonsoft.Json.Linq.JArray jsonArray, Catel.Runtime.Serialization.ISerializationConfiguration configuration) { }
         protected override void Serialize(object model, Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Json.JsonSerializationContextInfo> context) { }
         public void Serialize(object model, Newtonsoft.Json.JsonWriter jsonWriter, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
         protected override void SerializeMember(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Json.JsonSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }

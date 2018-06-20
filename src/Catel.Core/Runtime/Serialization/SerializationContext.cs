@@ -15,13 +15,12 @@ namespace Catel.Runtime.Serialization
     /// <summary>
     /// The serialization context used to serialize and deserialize models.
     /// </summary>
-    /// <typeparam name="TContext">The type of the context.</typeparam>
-    public class SerializationContext<TContext> : ISerializationContext<TContext>
-        where TContext : class
+    /// <typeparam name="TSerializationContextInfo">The type of the context.</typeparam>
+    public class SerializationContext<TSerializationContextInfo> : ISerializationContext<TSerializationContextInfo>
+        where TSerializationContextInfo : class, ISerializationContextInfo
     {
         private IDisposable _serializableToken;
-        private ScopeManager<Stack<Type>> _typeStackScopeManager;
-        private ScopeManager<ReferenceManager> _referenceManagerScopeManager;
+        private ScopeManager<SerializationContextScope<TSerializationContextInfo>> _scopeManager;
         private int? _depth;
 
         /// <summary>
@@ -33,9 +32,9 @@ namespace Catel.Runtime.Serialization
         /// <param name="contextMode">The context mode.</param>
         /// <param name="configuration">The configuration.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        public SerializationContext(object model, Type modelType, TContext context,
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        public SerializationContext(object model, Type modelType, TSerializationContextInfo context,
             SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
         {
             Argument.IsNotNull("modelType", modelType);
@@ -50,14 +49,28 @@ namespace Catel.Runtime.Serialization
             TypeStack = new Stack<Type>();
             Configuration = configuration;
 
-            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+            var scopeName = SerializationContextHelper.GetSerializationScopeName();
+            _scopeManager = ScopeManager<SerializationContextScope<TSerializationContextInfo>>.GetScopeManager(scopeName, () => new SerializationContextScope<TSerializationContextInfo>());
 
-            _typeStackScopeManager = ScopeManager<Stack<Type>>.GetScopeManager(scopeName, () => new Stack<Type>());
-            TypeStack = _typeStackScopeManager.ScopeObject;
+            var contextScope = _scopeManager.ScopeObject;
 
-            _referenceManagerScopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName);
-            ReferenceManager = _referenceManagerScopeManager.ScopeObject;
+            TypeStack = contextScope.TypeStack;
+            ReferenceManager = contextScope.ReferenceManager;
+            Contexts = contextScope.Contexts;
 
+            var contexts = contextScope.Contexts;
+            if (contexts.Count > 0)
+            {
+                Parent = contexts.Peek();
+            }
+
+            var serializationContextInfoParentSetter = context as ISerializationContextContainer;
+            if (serializationContextInfoParentSetter != null)
+            {
+                serializationContextInfoParentSetter.SetSerializationContext(this);
+            }
+
+            // Note: the token must be created as a last step, it will add the new values to the stacks
             _serializableToken = CreateSerializableToken();
         }
 
@@ -110,6 +123,14 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
+        /// Gets the context stack.
+        /// </summary>
+        /// <value>
+        /// The contexts.
+        /// </value>
+        public Stack<ISerializationContext<TSerializationContextInfo>> Contexts { get; private set; }
+
+        /// <summary>
         /// Gets the type stack inside the current scope.
         /// </summary>
         public Stack<Type> TypeStack { get; private set; }
@@ -129,7 +150,15 @@ namespace Catel.Runtime.Serialization
         /// Gets the context.
         /// </summary>
         /// <value>The context.</value>
-        public TContext Context { get; private set; }
+        public TSerializationContextInfo Context { get; private set; }
+
+        /// <summary>
+        /// Gets the parent context.
+        /// </summary>
+        /// <value>
+        /// The parent context.
+        /// </value>
+        public ISerializationContext<TSerializationContextInfo> Parent { get; private set; }
 
         /// <summary>
         /// Gets the reference manager.
@@ -150,16 +179,10 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         public void Dispose()
         {
-            if (_typeStackScopeManager != null)
+            if (_scopeManager != null)
             {
-                _typeStackScopeManager.Dispose();
-                _typeStackScopeManager = null;
-            }
-
-            if (_referenceManagerScopeManager != null)
-            {
-                _referenceManagerScopeManager.Dispose();
-                _referenceManagerScopeManager = null;
+                _scopeManager.Dispose();
+                _scopeManager = null;
             }
 
             if (_serializableToken != null)
@@ -171,9 +194,10 @@ namespace Catel.Runtime.Serialization
 
         private IDisposable CreateSerializableToken()
         {
-            return new DisposableToken<SerializationContext<TContext>>(this,
+            return new DisposableToken<SerializationContext<TSerializationContextInfo>>(this,
                 x =>
                 {
+                    x.Instance.Contexts.Push(x.Instance);
                     x.Instance.TypeStack.Push(x.Instance.ModelType);
 
                     var serializable = x.Instance.Model as ISerializable;
@@ -239,6 +263,7 @@ namespace Catel.Runtime.Serialization
                     }
 
                     x.Instance.TypeStack.Pop();
+                    x.Instance.Contexts.Pop();
                 }, ContextMode);
         }
     }

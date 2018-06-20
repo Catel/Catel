@@ -14,6 +14,7 @@ namespace Catel.Runtime.Serialization
     /// <summary>
     /// Class containing all information about the serialization info (.NET only) serialization context.
     /// </summary>
+    [ObsoleteEx(Message = "No longer needed, confusing name", TreatAsErrorFromVersion = "5.6", RemoveInVersion = "6.0")]
     public class SerializationInfoSerializationContextInfo : ISerializationContextInfo
     {
         /// <summary>
@@ -40,7 +41,7 @@ namespace Catel.Runtime.Serialization
             SerializationInfo = serializationInfo;
 
             if (memberValues != null)
-            { 
+            {
                 MemberValues = memberValues;
             }
         }
@@ -57,6 +58,15 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <value>The property values.</value>
         public List<PropertyValue> PropertyValues { get; internal set; }
+
+        /// <summary>
+        /// Gets the parent context info.
+        /// </summary>
+        /// <value>
+        /// The parent context info.
+        /// </value>
+        /// <exception cref="NotImplementedException"></exception>
+        public ISerializationContextInfo Parent => throw new NotImplementedException();
 
 #if NET || NETSTANDARD
         /// <summary>

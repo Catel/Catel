@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Catel.IoC;
-
 #if NET || NETSTANDARD
 
 namespace Catel.Data
@@ -13,7 +11,8 @@ namespace Catel.Data
     using System;
     using System.Runtime.Serialization;
     using System.Security;
-    using Catel.Runtime;
+    using Catel.IoC;
+    using Catel.Runtime.Serialization.Binary;
     using Catel.Scoping;
     using Runtime.Serialization;
 
@@ -46,10 +45,10 @@ namespace Catel.Data
 
                 // Too bad we cannot put this in the BinarySerializer, but BinarySerialization works bottom => top. We
                 // do need the GraphId though, thus we are setting it here
-                var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-                using (var scopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName))
+                var scopeName = SerializationContextHelper.GetSerializationScopeName();
+                using (var scopeManager = ScopeManager<SerializationContextScope<BinarySerializationContextInfo>>.GetScopeManager(scopeName))
                 {
-                    var referenceManager = scopeManager.ScopeObject;
+                    var referenceManager = scopeManager.ScopeObject.ReferenceManager;
 
                     int? graphId = null;
 

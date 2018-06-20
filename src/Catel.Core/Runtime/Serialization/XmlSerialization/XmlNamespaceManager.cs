@@ -41,16 +41,16 @@ namespace Catel.Runtime.Serialization.Xml
             Argument.IsNotNull("type", type);
 
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var serializationManagerScopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName))
+            using (var scopeManager = ScopeManager<SerializationContextScope<XmlSerializationContextInfo>>.GetScopeManager(scopeName))
             {
-                EnsureSubscribedToScope(serializationManagerScopeManager, scopeName);
+                EnsureSubscribedToScope(scopeManager, scopeName);
 
                 var scopeInfo = _scopeInfo[scopeName];
                 return scopeInfo.GetNamespace(type, preferredPrefix);
             }
         }
 
-        private void EnsureSubscribedToScope(ScopeManager<ReferenceManager> scopeManager, string scopeName)
+        private void EnsureSubscribedToScope(ScopeManager<SerializationContextScope<XmlSerializationContextInfo>> scopeManager, string scopeName)
         {
             if (!_scopeInfo.ContainsKey(scopeName))
             {
@@ -63,7 +63,7 @@ namespace Catel.Runtime.Serialization.Xml
         {
             _scopeInfo.Remove(e.ScopeName);
 
-            var scopeManager = (ScopeManager<ReferenceManager>)sender;
+            var scopeManager = (ScopeManager<SerializationContextScope<XmlSerializationContextInfo>>)sender;
             scopeManager.ScopeClosed -= OnScopeClosed;
         }
 

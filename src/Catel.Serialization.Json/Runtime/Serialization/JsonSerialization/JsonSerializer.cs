@@ -136,7 +136,7 @@ namespace Catel.Runtime.Serialization.Json
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
 
-                using (var context = GetContext(model, model.GetType(), null, jsonWriter, SerializationContextMode.Serialization, null, null, configuration))
+                using (var context = GetSerializationContextInfo(model, model.GetType(), null, jsonWriter, SerializationContextMode.Serialization, null, null, configuration))
                 {
                     base.Serialize(model, context.Context, configuration);
                 }
@@ -192,10 +192,10 @@ namespace Catel.Runtime.Serialization.Json
                     {
                         var graphId = (int)jsonProperties[GraphRefId].Value;
 
-                        var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-                        using (var scopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName))
+                        var scopeName = SerializationContextHelper.GetSerializationScopeName();
+                        using (var scopeManager = ScopeManager<SerializationContextScope<JsonSerializationContextInfo>>.GetScopeManager(scopeName))
                         {
-                            var referenceManager = scopeManager.ScopeObject;
+                            var referenceManager = scopeManager.ScopeObject.ReferenceManager;
 
                             var referenceInfo = referenceManager.GetInfoById(graphId);
                             if (referenceInfo != null)
@@ -227,7 +227,7 @@ namespace Catel.Runtime.Serialization.Json
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
 
-                using (var context = GetContext(model, modelType, jsonReader, null, SerializationContextMode.Deserialization,
+                using (var context = GetSerializationContextInfo(model, modelType, jsonReader, null, SerializationContextMode.Deserialization,
                     jsonProperties, jsonArray, configuration))
                 {
                     model = base.Deserialize(model, context.Context, configuration);
@@ -795,7 +795,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <summary>
         /// Gets the context.
         /// </summary>
-        /// <param name="model">The model.</param>
+        /// <param name="model">The model, can be <c>null</c> for value types.</param>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
@@ -803,8 +803,30 @@ namespace Catel.Runtime.Serialization.Json
         /// <returns>
         /// ISerializationContext{SerializationInfo}.
         /// </returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">contextMode</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "GetSerializationContextInfo", TreatAsErrorFromVersion = "5.6", RemoveInVersion = "6.0")]
+#pragma warning disable 672
         protected override ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, Stream stream,
+#pragma warning restore 672
+            SerializationContextMode contextMode, ISerializationConfiguration configuration)
+        {
+            return GetSerializationContextInfo(model, modelType, stream, contextMode, configuration);
+        }
+
+        /// <summary>
+        /// Gets the serializer specific serialization context info.
+        /// </summary>
+        /// <param name="model">The model, can be <c>null</c> for value types.</param>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <param name="contextMode">The context mode.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The serialization context.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
+        protected override ISerializationContext<JsonSerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, Stream stream,
             SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             JsonReader jsonReader = null;
@@ -888,7 +910,7 @@ namespace Catel.Runtime.Serialization.Json
                 jsonWriter.Formatting = formatting;
             }
 
-            return GetContext(model, modelType, jsonReader, jsonWriter, contextMode, null, null, configuration);
+            return GetSerializationContextInfo(model, modelType, jsonReader, jsonWriter, contextMode, null, null, configuration);
         }
 
         /// <summary>
@@ -905,7 +927,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <returns>
         /// ISerializationContext&lt;JsonSerializationContextInfo&gt;.
         /// </returns>
-        protected virtual ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, JsonReader jsonReader, JsonWriter jsonWriter,
+        protected virtual ISerializationContext<JsonSerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, JsonReader jsonReader, JsonWriter jsonWriter,
             SerializationContextMode contextMode, Dictionary<string, JProperty> jsonProperties, JArray jsonArray, ISerializationConfiguration configuration)
         {
             var jsonSerializer = new Newtonsoft.Json.JsonSerializer();

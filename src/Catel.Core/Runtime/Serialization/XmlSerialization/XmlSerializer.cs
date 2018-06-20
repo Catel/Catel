@@ -16,6 +16,7 @@ namespace Catel.Runtime.Serialization.Xml
     using System.Xml.Linq;
     using System.Xml.Serialization;
 
+    using Collections;
     using Caching;
     using Data;
     using IoC;
@@ -257,6 +258,10 @@ namespace Catel.Runtime.Serialization.Xml
                     var collection = ConvertDictionaryToCollection(memberValue.Value);
                     if (collection != null)
                     {
+                        // Note: since we are not getting into a WriteXml call, get known types for the current context here
+                        var knownTypes = _dataContractSerializerFactory.GetKnownTypes(modelType, collection.GetType());
+                        context.Context.KnownTypes.AddRange(knownTypes);
+
                         Serialize(collection, context.Context, context.Configuration);
                     }
                     return;
@@ -540,7 +545,25 @@ namespace Catel.Runtime.Serialization.Xml
         /// <summary>
         /// Gets the context.
         /// </summary>
-        /// <param name="model">The model.</param>
+        /// <param name="model">The model, can be <c>null</c> for value types.</param>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <param name="contextMode">The context mode.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// ISerializationContext{SerializationInfo}.
+        /// </returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "GetSerializationContextInfo", TreatAsErrorFromVersion = "5.6", RemoveInVersion = "6.0")]
+        protected override ISerializationContext<XmlSerializationContextInfo> GetContext(object model, Type modelType, Stream stream,
+            SerializationContextMode contextMode, ISerializationConfiguration configuration)
+        {
+            return GetSerializationContextInfo(model, modelType, stream, contextMode, configuration);
+        }
+
+        /// <summary>
+        /// Gets the serializer specific serialization context info.
+        /// </summary>
+        /// <param name="model">The model, can be <c>null</c> for value types.</param>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
@@ -548,7 +571,10 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns>
         /// The serialization context.
         /// </returns>
-        protected override ISerializationContext<XmlSerializationContextInfo> GetContext(object model, Type modelType, Stream stream,
+        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
+        protected override ISerializationContext<XmlSerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, Stream stream,
             SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             XDocument document = null;
@@ -810,7 +836,11 @@ namespace Catel.Runtime.Serialization.Xml
                 else
                 {
                     var memberTypeToSerialize = memberValue.GetBestMemberType();
-                    var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, null, null);
+                    var additionalKnownTypes = context.Context.KnownTypes;
+                    var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, null, additionalKnownTypes.ToList());
+
+                    // We might have added more known types in the serializer
+                    additionalKnownTypes.AddRange(serializer.KnownTypes);
 
                     ReferenceInfo referenceInfo = null;
                     var serializeElement = true;

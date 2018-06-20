@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETSTANDARD
 
 
 namespace Catel.Runtime.Serialization.Binary
@@ -13,11 +13,12 @@ namespace Catel.Runtime.Serialization.Binary
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
+    using Catel.Data;
 
     /// <summary>
     /// Class containing all information about the binary serialization context.
     /// </summary>
-    public class BinarySerializationContextInfo : SerializationInfoSerializationContextInfo
+    public class BinarySerializationContextInfo : SerializationContextInfoBase<BinarySerializationContextInfo>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BinarySerializationContextInfo" /> class.
@@ -27,9 +28,19 @@ namespace Catel.Runtime.Serialization.Binary
         /// <param name="binaryFormatter">The binary formatter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationInfo" /> is <c>null</c>.</exception>
         public BinarySerializationContextInfo(SerializationInfo serializationInfo, List<MemberValue> memberValues = null, BinaryFormatter binaryFormatter = null)
-            : base(serializationInfo, memberValues)
         {
+            Argument.IsNotNull("serializationInfo", serializationInfo);
+
+            MemberValues = new List<MemberValue>();
+            PropertyValues = new List<PropertyValue>();
+
             BinaryFormatter = binaryFormatter;
+            SerializationInfo = serializationInfo;
+
+            if (memberValues != null)
+            {
+                MemberValues = memberValues;
+            }
         }
 
         /// <summary>
@@ -37,6 +48,24 @@ namespace Catel.Runtime.Serialization.Binary
         /// </summary>
         /// <value>The binary formatter.</value>
         public BinaryFormatter BinaryFormatter { get; private set; }
+
+        /// <summary>
+        /// Gets the member values.
+        /// </summary>
+        /// <value>The member values.</value>
+        public List<MemberValue> MemberValues { get; internal set; }
+
+        /// <summary>
+        /// Gets the property values.
+        /// </summary>
+        /// <value>The property values.</value>
+        public List<PropertyValue> PropertyValues { get; internal set; }
+
+        /// <summary>
+        /// Gets the serialization info.
+        /// </summary>
+        /// <value>The serialization info.</value>
+        public SerializationInfo SerializationInfo { get; private set; }
     }
 }
 

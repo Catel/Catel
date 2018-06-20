@@ -25,9 +25,9 @@ namespace Catel.Runtime.Serialization
     /// <summary>
     /// Base class for serializers that can serialize any object.
     /// </summary>
-    /// <typeparam name="TSerializationContext">The type of the serialization context.</typeparam>
-    public abstract partial class SerializerBase<TSerializationContext> : ISerializer
-        where TSerializationContext : class
+    /// <typeparam name="TSerializationContextInfo">The type of the serialization context.</typeparam>
+    public abstract partial class SerializerBase<TSerializationContextInfo> : ISerializer
+        where TSerializationContextInfo : class, ISerializationContextInfo
     {
         #region Constants
         /// <summary>
@@ -81,7 +81,7 @@ namespace Catel.Runtime.Serialization
 
         #region Constructors
         /// <summary>
-        /// Initializes static members of the <see cref="SerializerBase{TSerializationContext}"/> class.
+        /// Initializes static members of the <see cref="SerializerBase{TSerializationContextInfo}"/> class.
         /// </summary>
         static SerializerBase()
         {
@@ -90,7 +90,7 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SerializerBase{TSerializationContext}" /> class.
+        /// Initializes a new instance of the <see cref="SerializerBase{TSerializationContextInfo}" /> class.
         /// </summary>
         /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="typeFactory">The type factory.</param>
@@ -130,7 +130,7 @@ namespace Catel.Runtime.Serialization
         protected IObjectAdapter ObjectAdapter { get; private set; }
         #endregion
 
-        #region ISerializer<TSerializationContext> Members
+        #region ISerializer<TSerializationContextInfo> Members
         /// <summary>
         /// Gets the serializable members for the specified model.
         /// </summary>
@@ -139,7 +139,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="membersToIgnore">The members to ignore.</param>
         /// <returns>The list of members to serialize.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        public virtual List<MemberValue> GetSerializableMembers(ISerializationContext<TSerializationContext> context, object model, params string[] membersToIgnore)
+        public virtual List<MemberValue> GetSerializableMembers(ISerializationContext<TSerializationContextInfo> context, object model, params string[] membersToIgnore)
         {
             Argument.IsNotNull("model", model);
 
@@ -335,7 +335,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="context" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, TSerializationContext context,
+        protected ISerializationContext<TSerializationContextInfo> GetContext(Type modelType, TSerializationContextInfo context,
             SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
         {
             Argument.IsNotNull("type", modelType);
@@ -358,14 +358,14 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="stream" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        protected ISerializationContext<TSerializationContext> GetContext(Type modelType, Stream stream,
+        protected ISerializationContext<TSerializationContextInfo> GetContext(Type modelType, Stream stream,
             SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
         {
             Argument.IsNotNull("type", modelType);
             Argument.IsNotNull("stream", stream);
 
             var model = CreateModelInstance(modelType);
-            return GetContext(model, modelType, stream, contextMode, configuration);
+            return GetSerializationContextInfo(model, modelType, stream, contextMode, configuration);
         }
 
         /// <summary>
@@ -382,13 +382,14 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        protected virtual ISerializationContext<TSerializationContext> GetContext(object model, Type modelType,
-            TSerializationContext context, SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
+        protected virtual ISerializationContext<TSerializationContextInfo> GetContext(object model, Type modelType,
+            TSerializationContextInfo context, SerializationContextMode contextMode, ISerializationConfiguration configuration = null)
         {
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", context);
 
-            return new SerializationContext<TSerializationContext>(model, modelType, context, contextMode, configuration);
+            var finalContext = new SerializationContext<TSerializationContextInfo>(model, modelType, context, contextMode, configuration);
+            return finalContext;
         }
 
         /// <summary>
@@ -405,7 +406,25 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        protected abstract ISerializationContext<TSerializationContext> GetContext(object model, Type modelType, Stream stream,
+        [ObsoleteEx(ReplacementTypeOrMember = "GetSerializationContextInfo", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
+        protected abstract ISerializationContext<TSerializationContextInfo> GetContext(object model, Type modelType, Stream stream,
+            SerializationContextMode contextMode, ISerializationConfiguration configuration);
+
+        /// <summary>
+        /// Gets the serializer specific serialization context info.
+        /// </summary>
+        /// <param name="model">The model, can be <c>null</c> for value types.</param>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <param name="contextMode">The context mode.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The serialization context.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
+        protected abstract ISerializationContext<TSerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, Stream stream,
             SerializationContextMode contextMode, ISerializationConfiguration configuration);
 
         /// <summary>
@@ -414,7 +433,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="stream">The stream.</param>
-        protected abstract void AppendContextToStream(ISerializationContext<TSerializationContext> context, Stream stream);
+        protected abstract void AppendContextToStream(ISerializationContext<TSerializationContextInfo> context, Stream stream);
 
         /// <summary>
         /// Populates the model with the specified members.
@@ -939,7 +958,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
         /// <returns><c>true</c> if the specified member value is a root dictionary; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsRootDictionary(ISerializationContext<TSerializationContext> context, MemberValue memberValue)
+        protected virtual bool IsRootDictionary(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
         {
             return IsRootObject(context, memberValue, x => ShouldSerializeAsDictionary(x));
         }
@@ -950,7 +969,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
         /// <returns><c>true</c> if the specified member value is a root collection; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsRootCollection(ISerializationContext<TSerializationContext> context, MemberValue memberValue)
+        protected virtual bool IsRootCollection(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
         {
             return IsRootObject(context, memberValue, x => ShouldSerializeAsCollection(x));
         }
@@ -962,7 +981,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="memberValue">The member value.</param>
         /// <param name="predicate">The predicate.</param>
         /// <returns><c>true</c> if the specified member value is a root object; otherwise, <c>false</c>.</returns>
-        protected virtual bool IsRootObject(ISerializationContext<TSerializationContext> context, MemberValue memberValue, Func<MemberValue, bool> predicate)
+        protected virtual bool IsRootObject(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue, Func<MemberValue, bool> predicate)
         {
             if (context.Depth > 0)
             {

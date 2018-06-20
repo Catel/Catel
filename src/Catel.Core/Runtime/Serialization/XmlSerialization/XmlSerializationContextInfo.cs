@@ -7,16 +7,19 @@
 namespace Catel.Runtime.Serialization.Xml
 {
     using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Runtime.Serialization;
     using System.Xml;
     using System.Xml.Linq;
+    using Catel.Collections;
     using Catel.Data;
     using Catel.IoC;
 
     /// <summary>
     /// Class containing all information about the binary serialization context.
     /// </summary>
-    public class XmlSerializationContextInfo : ISerializationContextInfo
+    public class XmlSerializationContextInfo : SerializationContextInfoBase<XmlSerializationContextInfo>
     {
         private readonly object _lockObject = new object();
         //private DataContractSerializer _dataContractSerializer;
@@ -98,6 +101,14 @@ namespace Catel.Runtime.Serialization.Xml
         #endregion
 
         /// <summary>
+        /// Gets the list of known types from the current stack.
+        /// </summary>
+        /// <value>
+        /// The known types.
+        /// </value>
+        public HashSet<Type> KnownTypes { get; private set; }
+
+        /// <summary>
         /// Gets the element.
         /// </summary>
         /// <value>The element.</value>
@@ -110,13 +121,34 @@ namespace Catel.Runtime.Serialization.Xml
         public object Model { get; private set; }
 
         #region Methods
+        protected override void OnContextUpdated(ISerializationContext<XmlSerializationContextInfo> context)
+        {
+            base.OnContextUpdated(context);
+
+            var parentContext = context?.Parent;
+
+            Debug.Assert(!ReferenceEquals(context, parentContext));
+
+            var parentKnownTypes = parentContext?.Context?.KnownTypes;
+            if (parentKnownTypes != null)
+            {
+                // Note: sometimes Catel re-uses the types, but in that case the types won't be added
+                // as duplicates anyway
+                KnownTypes.AddRange(parentKnownTypes);
+            }
+        }
+
         private void Initialize(string xmlContent, object model)
         {
+            KnownTypes = new HashSet<Type>();
+
             Initialize(XElement.Parse(xmlContent), model);
         }
 
         private void Initialize(XElement element, object model)
         {
+            KnownTypes = new HashSet<Type>();
+
             Element = element;
             Model = model;
         }

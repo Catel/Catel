@@ -18,7 +18,7 @@ namespace Catel.Runtime.Serialization
     /// <summary>
     /// Base class for all serializers.
     /// </summary>
-    public partial class SerializerBase<TSerializationContext>
+    public partial class SerializerBase<TSerializationContextInfo>
     {
         #region Events
         /// <summary>
@@ -42,7 +42,7 @@ namespace Catel.Runtime.Serialization
         public event EventHandler<SerializationEventArgs> Deserialized;
         #endregion
 
-        #region ISerializer<TSerializationContext> Members
+        #region ISerializer<TSerializationContextInfo> Members
         /// <summary>
         /// Serializes the specified model.
         /// </summary>
@@ -75,7 +75,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="configuration">The configuration.</param>
         public void Serialize(object model, ISerializationContextInfo context, ISerializationConfiguration configuration = null)
         {
-            Serialize(model, (TSerializationContext)context, configuration);
+            Serialize(model, (TSerializationContextInfo)context, configuration);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="model">The model.</param>
         /// <param name="context">The context.</param>
         /// <param name="configuration">The configuration.</param>
-        public virtual void Serialize(object model, TSerializationContext context, ISerializationConfiguration configuration = null)
+        public virtual void Serialize(object model, TSerializationContextInfo context, ISerializationConfiguration configuration = null)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", context);
@@ -105,7 +105,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="context">The context.</param>
-        protected virtual void Serialize(object model, ISerializationContext<TSerializationContext> context)
+        protected virtual void Serialize(object model, ISerializationContext<TSerializationContextInfo> context)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", context);
@@ -176,7 +176,7 @@ namespace Catel.Runtime.Serialization
         /// Called before the serializer starts serializing an object.
         /// </summary>
         /// <param name="context">The context.</param>
-        protected virtual void BeforeSerialization(ISerializationContext<TSerializationContext> context)
+        protected virtual void BeforeSerialization(ISerializationContext<TSerializationContextInfo> context)
         {
         }
 
@@ -185,7 +185,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
-        protected virtual void BeforeSerializeMember(ISerializationContext<TSerializationContext> context, MemberValue memberValue)
+        protected virtual void BeforeSerializeMember(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
         {
         }
 
@@ -195,14 +195,14 @@ namespace Catel.Runtime.Serialization
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
         /// <returns>The deserialized member value.</returns>
-        protected abstract void SerializeMember(ISerializationContext<TSerializationContext> context, MemberValue memberValue);
+        protected abstract void SerializeMember(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue);
 
         /// <summary>
         /// Called after the serializer has serialized a specific member.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
-        protected virtual void AfterSerializeMember(ISerializationContext<TSerializationContext> context, MemberValue memberValue)
+        protected virtual void AfterSerializeMember(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
         {
         }
 
@@ -210,7 +210,7 @@ namespace Catel.Runtime.Serialization
         /// Called after the serializer has serialized an object.
         /// </summary>
         /// <param name="context">The context.</param>
-        protected virtual void AfterSerialization(ISerializationContext<TSerializationContext> context)
+        protected virtual void AfterSerialization(ISerializationContext<TSerializationContextInfo> context)
         {
         }
 
@@ -219,7 +219,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="membersToSerialize">The members to serialize.</param>
-        protected virtual void SerializeMembers(ISerializationContext<TSerializationContext> context, List<MemberValue> membersToSerialize)
+        protected virtual void SerializeMembers(ISerializationContext<TSerializationContextInfo> context, List<MemberValue> membersToSerialize)
         {
             ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
                 x => x.SetInitializationMode(InitializationMode.Lazy, GetType().GetSafeFullName(false)));
@@ -283,7 +283,7 @@ namespace Catel.Runtime.Serialization
         /// Deserializes the object using the <c>Parse(string, IFormatProvider)</c> method.
         /// </summary>
         /// <returns>The deserialized object.</returns>
-        protected virtual string SerializeUsingObjectToString(ISerializationContext<TSerializationContext> context, MemberValue memberValue)
+        protected virtual string SerializeUsingObjectToString(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
         {
             var toStringMethod = GetObjectToStringMethod(memberValue.GetBestMemberType());
             if (toStringMethod == null)
