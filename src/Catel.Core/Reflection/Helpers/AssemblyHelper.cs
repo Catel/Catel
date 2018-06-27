@@ -302,7 +302,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        struct AssemblyMetaData
+        private struct AssemblyMetaData
         {
             public string NameWithVersion { get; set; }
             public string NameWithoutVersion { get; set; }
@@ -361,7 +361,7 @@ namespace Catel.Reflection
 
 #pragma warning disable 169
 #pragma warning disable 649
-        struct _IMAGE_FILE_HEADER
+        private struct _IMAGE_FILE_HEADER
         {
             public ushort Machine;
             public ushort NumberOfSections;
