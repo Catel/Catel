@@ -77,7 +77,8 @@ Task("Build")
 
             // Project info
             Key = SonarProject,
-            Branch = RepositoryBranchName,
+            // Branch only works with the branch plugin
+            //Branch = RepositoryBranchName,
             Version = VersionFullSemVer,
             
             // Minimize extreme logging
