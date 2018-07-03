@@ -11,6 +11,7 @@ namespace Catel.MVVM
     using System;
     using System.Runtime.CompilerServices;
     using System.Windows;
+    using System.Windows.Threading;
     using Logging;
 
     public partial class CommandManager
@@ -56,11 +57,13 @@ namespace Catel.MVVM
             CommandManagerWrapper commandManagerWrapper = null;
             if (!_subscribedViews.TryGetValue(view, out commandManagerWrapper))
             {
-                _subscribedViews.Add(view, new CommandManagerWrapper(view, this));
-
+                // Note: also check for dispatcher, see https://github.com/Catel/Catel/issues/1205
                 var app = Application.Current;
-                if (app != null)
+                var dispatcher = Dispatcher.CurrentDispatcher;
+                if (app != null && ReferenceEquals(app.Dispatcher, dispatcher))
                 {
+                    _subscribedViews.Add(view, new CommandManagerWrapper(view, this));
+
                     var mainWindow = app.MainWindow;
                     if (ReferenceEquals(mainWindow, view))
                     {

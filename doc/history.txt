@@ -51,6 +51,7 @@ Added/fixed:
 (x) #1197 ReferenceManager uses wrong key to check for existence of objects
 (x) #1198 Json serializer doesn't support ModelBase as a collection serialization
 (x) #1201 Xml serialization sometimes causes first chance exception "name cannot begin with the '<' character"
+(x) #1205 CommandManager should only subscribe to key events on the current thread
 
 Roadmap:
 ========
