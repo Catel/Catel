@@ -101,6 +101,8 @@ Task("Build")
 //-------------------------------------------------------------
 
 Task("Package")
+    // Make sure we have the temporary "project.assets.json" in case we need to package with Visual Studio
+    .IsDependentOn("RestorePackages")
     // Make sure to update if we are running on a new agent so we can sign nuget packages
     .IsDependentOn("UpdateNuGet")
     .IsDependentOn("CodeSign")
