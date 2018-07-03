@@ -1,15 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net45;net46;net47;uap10.0;monoandroid70</TargetFrameworks>
     <AssemblyName>Catel.MVVM</AssemblyName>
     <RootNamespace>Catel.MVVM</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageId>Catel.MVVM</PackageId>
-    <PackageVersion>5.0.0-alpha0001</PackageVersion>
+    <PackageVersion>3.0.0-alpha0001</PackageVersion>
     <Description>Catel.MVVM library.</Description>
     <PackageTags>catel;mvvm;view;viewmodel;model;interaction;interactivity;behaviors;xamarin</PackageTags>
   </PropertyGroup>
-
+  <PropertyGroup>
+    <!-- SonarQube requires a project guid -->
+    <ProjectGuid>258D208F-4B2E-47C3-ACD2-26D56EADA472</ProjectGuid>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Catel.Fody" Version="3.3.0" PrivateAssets="all" />
     <PackageReference Include="Fody" Version="3.0.3" PrivateAssets="all" />
@@ -20,47 +23,36 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
     <PackageReference Include="WpfAnalyzers" Version="2.1.2.1" PrivateAssets="all" />
   </ItemGroup>
-
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
     <PackageReference Include="Expression.Blend.Sdk.WPF" Version="1.0.1" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
-
   <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
     <PackageReference Include="Expression.Blend.Sdk.WPF" Version="1.0.1" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
-
   <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
     <PackageReference Include="Expression.Blend.Sdk.WPF" Version="1.0.1" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
-
   <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.0" />
   </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-  </ItemGroup>
-
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'"></ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'xamarin.ios10'">
     <Reference Include="System.ComponentModel" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
-
   <ItemGroup Condition="'$(TargetFramework)' == 'monoandroid70'">
     <Reference Include="System.ComponentModel" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Update="NETStandard.Library" Version="2.0.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Catel.Core\Catel.Core.csproj" />
   </ItemGroup>
-  
   <ItemGroup>
     <Compile Update="Properties\Exceptions.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -73,7 +65,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Properties\Exceptions.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -84,7 +75,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
   <Import Project="$(MSBuildSDKExtrasTargets)" Condition="Exists('$(MSBuildSDKExtrasTargets)')" />
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props')" />

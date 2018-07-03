@@ -8,6 +8,7 @@
     <PackageVersion>1.0.0-alpha0001</PackageVersion>
     <Description></Description>
     <PackageTags></PackageTags>
+    <SonarQubeExclude>true</SonarQubeExclude>
   </PropertyGroup>
 
   <ItemGroup>
