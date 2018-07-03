@@ -70,11 +70,19 @@ Task("Build")
     {
         SonarBegin(new SonarBeginSettings 
         {
+            // SonarQube info
             Url = SonarUrl,
             Login = SonarUsername,
             Password = SonarPassword,
+
+            // Project info
+            Key = SonarProject,
+            Branch = RepositoryBranchName,
+            Version = VersionFullSemVer,
+            
+            // Minimize extreme logging
             Verbose = false,
-            Key = SonarProject
+            Silent = true,
         });
     }
     else
