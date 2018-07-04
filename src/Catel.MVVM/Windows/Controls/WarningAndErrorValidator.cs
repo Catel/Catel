@@ -403,12 +403,11 @@ namespace Catel.Windows.Controls
 
             lock (_objectValidationLock)
             {
-                if (!_objectValidation.ContainsKey(value))
+                if (!_objectValidation.TryGetValue(value, out currentValidationData))
                 {
-                    _objectValidation[value] = new ValidationData(parentEnumerable);
+                    currentValidationData = new ValidationData(parentEnumerable);
+                    _objectValidation[value] = currentValidationData;
                 }
-
-                currentValidationData = _objectValidation[value];
 
                 oldValidationData = (ValidationData)currentValidationData.Clone();
             }

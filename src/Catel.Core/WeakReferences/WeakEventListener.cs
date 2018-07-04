@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WeakEventListener.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -918,15 +918,14 @@ namespace Catel
 
             lock (ListenerTypeCache)
             {
-                if (!ListenerTypeCache.ContainsKey(cacheKey))
+                if (!ListenerTypeCache.TryGetValue(cacheKey, out methodInfo))
                 {
                     var listenerType = typeof(WeakEventListener<TTarget, TSource, EventArgsBase>).GetGenericTypeDefinition().MakeGenericType(new[] { targetType, sourceType, eventArgsType });
                     var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
 
-                    ListenerTypeCache[cacheKey] = listenerType.GetMethodEx("SubscribeToWeakEventWithExplicitSourceType", new[] { targetType, sourceType, typeof(string), typeof(Delegate), typeof(bool) }, bindingFlags);
+                    methodInfo = listenerType.GetMethodEx("SubscribeToWeakEventWithExplicitSourceType", new[] { targetType, sourceType, typeof(string), typeof(Delegate), typeof(bool) }, bindingFlags);
+                    ListenerTypeCache[cacheKey] = methodInfo;
                 }
-
-                methodInfo = ListenerTypeCache[cacheKey];
             }
 
             if (methodInfo == null)
@@ -1145,15 +1144,14 @@ namespace Catel
 
             lock (ListenerTypeCache)
             {
-                if (!ListenerTypeCache.ContainsKey(cacheKey))
+                if (!ListenerTypeCache.TryGetValue(cacheKey, out methodInfo))
                 {
                     var listenerType = typeof(WeakEventListener<object, object>).GetGenericTypeDefinition().MakeGenericType(new[] { targetType, sourceType });
                     var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
 
-                    ListenerTypeCache[cacheKey] = listenerType.GetMethodEx("SubscribeToWeakEventWithExplicitSourceType", new[] { targetType, sourceType, typeof(string), typeof(Delegate), typeof(bool) }, bindingFlags);
+                    methodInfo = listenerType.GetMethodEx("SubscribeToWeakEventWithExplicitSourceType", new[] { targetType, sourceType, typeof(string), typeof(Delegate), typeof(bool) }, bindingFlags);
+                    ListenerTypeCache[cacheKey] = methodInfo;
                 }
-
-                methodInfo = ListenerTypeCache[cacheKey];
             }
 
             if (methodInfo == null)

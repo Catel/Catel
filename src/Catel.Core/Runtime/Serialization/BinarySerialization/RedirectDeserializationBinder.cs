@@ -229,9 +229,9 @@ namespace Catel.Runtime.Serialization.Binary
                 }
             }
 
-            if (_redirectAttributes.ContainsKey(newType))
+            if (_redirectAttributes.TryGetValue(newType, out var redirectAttribute))
             {
-                newType = _redirectAttributes[newType].TypeToLoad;
+                newType = redirectAttribute.TypeToLoad;
             }
 
             if (innerTypes.Length > 0)

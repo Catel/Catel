@@ -175,13 +175,13 @@ namespace Catel.Services
 
             lock (_registeredUris)
             {
-                if (!_registeredUris.ContainsKey(viewModelTypeName))
+                if (!_registeredUris.TryGetValue(viewModelTypeName, out var uri))
                 {
-                    var navigationTarget = ResolveNavigationTarget(viewModelType);
-                    _registeredUris.Add(viewModelTypeName, navigationTarget);
+                    uri = ResolveNavigationTarget(viewModelType);
+                    _registeredUris.Add(viewModelTypeName, uri);
                 }
 
-                Navigate(_registeredUris[viewModelTypeName], parameters);
+                Navigate(uri, parameters);
             }
         }
 

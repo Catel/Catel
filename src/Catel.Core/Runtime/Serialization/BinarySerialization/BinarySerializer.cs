@@ -207,10 +207,31 @@ namespace Catel.Runtime.Serialization.Binary
         /// <returns>
         /// ISerializationContext{SerializationInfo}.
         /// </returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "GetSerializationContextInfo", TreatAsErrorFromVersion = "5.6", RemoveInVersion = "6.0")]
         protected override ISerializationContext<BinarySerializationContextInfo> GetContext(object model, Type modelType, Stream stream,
             SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
-            return GetContext(model, modelType, stream, contextMode, null, configuration);
+            return GetSerializationContextInfo(model, modelType, stream, contextMode, configuration);
+        }
+
+        /// <summary>
+        /// Gets the serializer specific serialization context info.
+        /// </summary>
+        /// <param name="model">The model, can be <c>null</c> for value types.</param>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <param name="contextMode">The context mode.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The serialization context.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
+        protected override ISerializationContext<BinarySerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, Stream stream,
+            SerializationContextMode contextMode, ISerializationConfiguration configuration)
+        {
+            return GetSerializationContextInfo(model, modelType, stream, contextMode, null, configuration);
         }
 
         /// <summary>
@@ -225,7 +246,7 @@ namespace Catel.Runtime.Serialization.Binary
         /// <returns>
         /// The serialization context.
         /// </returns>
-        private ISerializationContext<BinarySerializationContextInfo> GetContext(object model, Type modelType, Stream stream, 
+        private ISerializationContext<BinarySerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, Stream stream, 
             SerializationContextMode contextMode, List<MemberValue> memberValues, ISerializationConfiguration configuration)
         {
             var serializationInfo = new SerializationInfo(model.GetType(), new FormatterConverter());

@@ -624,12 +624,17 @@ namespace Catel.Data
                         value = PropertyHelper.GetPropertyValue(this, propertyName);
                     }
 
-                    if (!_dataAnnotationsValidationContext.ContainsKey(propertyName))
+                    if (!_dataAnnotationsValidationContext.TryGetValue(propertyName, out var validationContext))
                     {
-                        _dataAnnotationsValidationContext[propertyName] = new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null) { MemberName = propertyName };
+                        validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(this, null, null)
+                        {
+                            MemberName = propertyName
+                        };
+
+                        _dataAnnotationsValidationContext[propertyName] = validationContext;
                     }
 
-                    System.ComponentModel.DataAnnotations.Validator.ValidateProperty(value, _dataAnnotationsValidationContext[propertyName]);
+                    System.ComponentModel.DataAnnotations.Validator.ValidateProperty(value, validationContext);
 
                     // If succeeded, clear any previous error
                     if (_dataAnnotationValidationResults.ContainsKey(propertyName))
@@ -647,7 +652,7 @@ namespace Catel.Data
             {
                 PropertiesNotCausingValidation[type].Add(propertyName);
 
-                Log.Warning(ex, "Failed to validate property '{0}' via Validator (property does not exists?)", propertyName);
+                Log.Warning(ex, "Failed to validate property '{0}' via Validator (property does not exist or requires 1 or more parameters?)", propertyName);
             }
 #endif
 
@@ -1158,7 +1163,7 @@ namespace Catel.Data
 
                 EnsureValidationIsUpToDate(AutomaticallyValidateOnPropertyChanged);
 
-                return this.GetBusinessRuleWarnings() ?? string.Empty;
+                return GetBusinessRuleWarnings() ?? string.Empty;
             }
         }
 
@@ -1183,7 +1188,7 @@ namespace Catel.Data
 
                 EnsureValidationIsUpToDate(AutomaticallyValidateOnPropertyChanged);
 
-                return this.GetFieldWarnings(columnName) ?? string.Empty;
+                return GetFieldWarnings(columnName) ?? string.Empty;
             }
         }
         #endregion
@@ -1203,7 +1208,7 @@ namespace Catel.Data
 
                 EnsureValidationIsUpToDate(AutomaticallyValidateOnPropertyChanged);
 
-                return this.GetBusinessRuleErrors() ?? string.Empty;
+                return GetBusinessRuleErrors() ?? string.Empty;
             }
         }
 
@@ -1228,7 +1233,7 @@ namespace Catel.Data
 
                 EnsureValidationIsUpToDate(AutomaticallyValidateOnPropertyChanged);
 
-                return this.GetFieldErrors(columnName) ?? string.Empty;
+                return GetFieldErrors(columnName) ?? string.Empty;
             }
         }
         #endregion

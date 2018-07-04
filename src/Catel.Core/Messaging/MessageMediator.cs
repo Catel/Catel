@@ -139,9 +139,10 @@ namespace Catel.Messaging
                     return false;
                 }
 
-                if (!_registeredHandlers.ContainsKey(messageType))
+                if (!_registeredHandlers.TryGetValue(messageType, out var list))
                 {
-                    _registeredHandlers.Add(messageType, new List<WeakActionInfo>());
+                    list = new List<WeakActionInfo>();
+                    _registeredHandlers.Add(messageType, list);
                 }
 
                 var handlerInfo = new WeakActionInfo
@@ -150,7 +151,6 @@ namespace Catel.Messaging
                     Tag = tag
                 };
 
-                var list = _registeredHandlers[messageType];
                 list.Add(handlerInfo);
 
                 Log.Debug("Registered handler for message type '{0}' with tag '{1}'", messageType.Name, ObjectToStringHelper.ToString(tag));

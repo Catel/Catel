@@ -168,7 +168,7 @@ namespace Catel.Tests.Runtime.Serialization
             }
 
             [DataContract]
-            [KnownType("GetKnownTypes")]
+            [KnownType(nameof(DataSourceResult.GetKnownTypes))]
             public class DataSourceResult
             {
                 #region Public Properties
@@ -736,6 +736,7 @@ namespace Catel.Tests.Runtime.Serialization
                 bc.Add(b3);
 
                 TestSerializationOnAllSerializers((serializer, config, description) =>
+                //TestSerializationOnJsonSerializer((serializer, config, description) =>
                 {
                     var deserializedObject = SerializationTestHelper.SerializeAndDeserialize(bc, serializer, config);
 

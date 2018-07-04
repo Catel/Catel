@@ -23,7 +23,7 @@ namespace Catel.Runtime.Serialization
     /// <summary>
     /// Base class for all serializers.
     /// </summary>
-    public partial class SerializerBase<TSerializationContext>
+    public partial class SerializerBase<TSerializationContextInfo>
     {
         #region Events
         /// <summary>
@@ -51,7 +51,7 @@ namespace Catel.Runtime.Serialization
         /// Called before the serializer starts deserializing an object.
         /// </summary>
         /// <param name="context">The context.</param>
-        protected virtual void BeforeDeserialization(ISerializationContext<TSerializationContext> context)
+        protected virtual void BeforeDeserialization(ISerializationContext<TSerializationContextInfo> context)
         {
         }
 
@@ -60,7 +60,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
-        protected virtual void BeforeDeserializeMember(ISerializationContext<TSerializationContext> context, MemberValue memberValue)
+        protected virtual void BeforeDeserializeMember(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
         {
         }
 
@@ -70,14 +70,14 @@ namespace Catel.Runtime.Serialization
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
         /// <returns>The <see cref="SerializationObject" /> representing the deserialized value or result.</returns>
-        protected abstract SerializationObject DeserializeMember(ISerializationContext<TSerializationContext> context, MemberValue memberValue);
+        protected abstract SerializationObject DeserializeMember(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue);
 
         /// <summary>
         /// Called after the serializer has deserialized a specific member.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="memberValue">The member value.</param>
-        protected virtual void AfterDeserializeMember(ISerializationContext<TSerializationContext> context, MemberValue memberValue)
+        protected virtual void AfterDeserializeMember(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
         {
         }
 
@@ -85,7 +85,7 @@ namespace Catel.Runtime.Serialization
         /// Called after the serializer has deserialized an object.
         /// </summary>
         /// <param name="context">The context.</param>
-        protected virtual void AfterDeserialization(ISerializationContext<TSerializationContext> context)
+        protected virtual void AfterDeserialization(ISerializationContext<TSerializationContextInfo> context)
         {
         }
 
@@ -126,7 +126,7 @@ namespace Catel.Runtime.Serialization
         /// </returns>
         public object Deserialize(object model, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
         {
-            return Deserialize(model, (TSerializationContext)serializationContext, configuration);
+            return Deserialize(model, (TSerializationContextInfo)serializationContext, configuration);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="serializationContext">The serialization context.</param>
         /// <param name="configuration">The configuration.</param>
         /// <returns></returns>
-        public virtual object Deserialize(object model, TSerializationContext serializationContext, ISerializationConfiguration configuration = null)
+        public virtual object Deserialize(object model, TSerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", serializationContext);
@@ -157,7 +157,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="model">The model.</param>
         /// <param name="context">The serialization context.</param>
-        protected virtual object Deserialize(object model, ISerializationContext<TSerializationContext> context)
+        protected virtual object Deserialize(object model, ISerializationContext<TSerializationContextInfo> context)
         {
             Argument.IsNotNull("model", model);
             Argument.IsNotNull("context", context);
@@ -230,7 +230,7 @@ namespace Catel.Runtime.Serialization
         /// </returns>
         public object Deserialize(Type modelType, ISerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
         {
-            return Deserialize(modelType, (TSerializationContext)serializationContext, configuration);
+            return Deserialize(modelType, (TSerializationContextInfo)serializationContext, configuration);
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>
         /// The deserialized <see cref="object" />.
         /// </returns>
-        public virtual object Deserialize(Type modelType, TSerializationContext serializationContext, ISerializationConfiguration configuration = null)
+        public virtual object Deserialize(Type modelType, TSerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
         {
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", serializationContext);
@@ -290,7 +290,7 @@ namespace Catel.Runtime.Serialization
         /// </returns>
         public List<MemberValue> DeserializeMembers(Type modelType, ISerializationContextInfo serializationContextInfo, ISerializationConfiguration configuration = null)
         {
-            return DeserializeMembers(modelType, (TSerializationContext)serializationContextInfo, configuration);
+            return DeserializeMembers(modelType, (TSerializationContextInfo)serializationContextInfo, configuration);
         }
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>
         /// The deserialized list of member values.
         /// </returns>
-        public virtual List<MemberValue> DeserializeMembers(Type modelType, TSerializationContext serializationContext, ISerializationConfiguration configuration = null)
+        public virtual List<MemberValue> DeserializeMembers(Type modelType, TSerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
         {
             Argument.IsNotNull("modelType", modelType);
             Argument.IsNotNull("context", serializationContext);
@@ -323,7 +323,7 @@ namespace Catel.Runtime.Serialization
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns>The deserialized list of member values.</returns>
-        protected virtual List<MemberValue> DeserializeMembers(ISerializationContext<TSerializationContext> context)
+        protected virtual List<MemberValue> DeserializeMembers(ISerializationContext<TSerializationContextInfo> context)
         {
             ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
                 x => x.SetInitializationMode(InitializationMode.Lazy, GetType().GetSafeFullName(false)));
@@ -497,7 +497,7 @@ namespace Catel.Runtime.Serialization
         /// Deserializes the object using the <c>Parse(string, IFormatProvider)</c> method.
         /// </summary>
         /// <returns>The deserialized object.</returns>
-        protected virtual object DeserializeUsingObjectParse(ISerializationContext<TSerializationContext> context, MemberValue memberValue)
+        protected virtual object DeserializeUsingObjectParse(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
         {
             // Note: don't use GetBestMemberType, it could return string type
             var parseMethod = GetObjectParseMethod(memberValue.MemberType);

@@ -30,7 +30,6 @@ namespace Catel.Tests.Runtime.Serialization
             }
 
             var serializer = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<XmlSerializer>(serializationManager);
-
             return serializer;
         }
 
@@ -87,7 +86,8 @@ namespace Catel.Tests.Runtime.Serialization
                     }
                 }
 
-                return (TModel)serializer.Deserialize(typeof(TModel), memoryStream, configuration);
+                // Note: we use model.GetType to always ensure the correct type (even if 'object' type is specified)
+                return (TModel)serializer.Deserialize(model.GetType(), memoryStream, configuration);
             }
         }
 

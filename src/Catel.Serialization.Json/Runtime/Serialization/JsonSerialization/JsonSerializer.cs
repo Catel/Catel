@@ -136,7 +136,7 @@ namespace Catel.Runtime.Serialization.Json
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
 
-                using (var context = GetContext(model, model.GetType(), null, jsonWriter, SerializationContextMode.Serialization, null, null, configuration))
+                using (var context = GetSerializationContextInfo(model, model.GetType(), null, jsonWriter, SerializationContextMode.Serialization, null, null, configuration))
                 {
                     base.Serialize(model, context.Context, configuration);
                 }
@@ -188,14 +188,14 @@ namespace Catel.Runtime.Serialization.Json
 
                 if (PreserveReferences)
                 {
-                    if (jsonProperties.ContainsKey(GraphRefId))
+                    if (jsonProperties.TryGetValue(GraphRefId, out var graphIdProperty))
                     {
-                        var graphId = (int)jsonProperties[GraphRefId].Value;
+                        var graphId = (int)graphIdProperty.Value;
 
-                        var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-                        using (var scopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName))
+                        var scopeName = SerializationContextHelper.GetSerializationScopeName();
+                        using (var scopeManager = ScopeManager<SerializationContextScope<JsonSerializationContextInfo>>.GetScopeManager(scopeName))
                         {
-                            var referenceManager = scopeManager.ScopeObject;
+                            var referenceManager = scopeManager.ScopeObject.ReferenceManager;
 
                             var referenceInfo = referenceManager.GetInfoById(graphId);
                             if (referenceInfo != null)
@@ -206,9 +206,9 @@ namespace Catel.Runtime.Serialization.Json
                     }
                 }
 
-                if (jsonProperties.ContainsKey(TypeName))
+                if (jsonProperties.TryGetValue(TypeName, out var typeNameProperty))
                 {
-                    var modelTypeOverrideValue = (string)jsonProperties[TypeName].Value;
+                    var modelTypeOverrideValue = (string)typeNameProperty.Value;
                     var modelTypeOverride = TypeCache.GetTypeWithoutAssembly(modelTypeOverrideValue, allowInitialization: false);
                     if (modelTypeOverride == null)
                     {
@@ -227,7 +227,7 @@ namespace Catel.Runtime.Serialization.Json
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
 
-                using (var context = GetContext(model, modelType, jsonReader, null, SerializationContextMode.Deserialization,
+                using (var context = GetSerializationContextInfo(model, modelType, jsonReader, null, SerializationContextMode.Deserialization,
                     jsonProperties, jsonArray, configuration))
                 {
                     model = base.Deserialize(model, context.Context, configuration);
@@ -336,7 +336,7 @@ namespace Catel.Runtime.Serialization.Json
                             jsonWriter.WritePropertyName(idPropertyName);
                             jsonSerializer.Serialize(jsonWriter, referenceInfo.Id);
 
-                            if (!referenceInfo.IsFirstUsage)
+                            if (!referenceInfo.IsFirstUsage && !ReferenceEquals(value, context.Model))
                             {
                                 return;
                             }
@@ -463,6 +463,7 @@ namespace Catel.Runtime.Serialization.Json
         protected override void BeforeDeserialization(ISerializationContext<JsonSerializationContextInfo> context)
         {
             var serializationContext = context.Context;
+            var jsonReader = serializationContext.JsonReader;
 
             if (context.ModelType.ImplementsInterfaceEx<ICustomJsonSerializable>())
             {
@@ -472,7 +473,7 @@ namespace Catel.Runtime.Serialization.Json
             {
                 if (serializationContext.JsonProperties == null)
                 {
-                    var jsonObject = JObject.Load(context.Context.JsonReader);
+                    var jsonObject = JObject.Load(jsonReader);
                     serializationContext.JsonProperties = jsonObject.Properties().ToDictionary(x => x.Name, x => x);
                 }
             }
@@ -480,7 +481,7 @@ namespace Catel.Runtime.Serialization.Json
             {
                 if (serializationContext.JsonArray == null)
                 {
-                    var jsonArray = JArray.Load(context.Context.JsonReader);
+                    var jsonArray = JArray.Load(jsonReader);
                     serializationContext.JsonArray = jsonArray;
                 }
             }
@@ -488,16 +489,15 @@ namespace Catel.Runtime.Serialization.Json
             {
                 if (serializationContext.JsonProperties == null)
                 {
-                    var jsonObject = JObject.Load(context.Context.JsonReader);
+                    var jsonObject = JObject.Load(jsonReader);
                     serializationContext.JsonProperties = jsonObject.Properties().ToDictionary(x => x.Name, x => x);
                 }
 
                 if (PreserveReferences)
                 {
                     var properties = serializationContext.JsonProperties;
-                    if (properties.ContainsKey(GraphId))
+                    if (properties.TryGetValue(GraphId, out var graphIdProperty))
                     {
-                        var graphIdProperty = properties[GraphId];
                         if (graphIdProperty != null)
                         {
                             var graphId = (int)graphIdProperty.Value;
@@ -535,9 +535,9 @@ namespace Catel.Runtime.Serialization.Json
                 if (PreserveReferences)
                 {
                     var graphRefIdPropertyName = string.Format("${0}_{1}", memberValue.NameForSerialization, GraphRefId);
-                    if (jsonProperties.ContainsKey(graphRefIdPropertyName))
+                    if (jsonProperties.TryGetValue(graphRefIdPropertyName, out var graphIdProperty))
                     {
-                        var graphId = (int)jsonProperties[graphRefIdPropertyName].Value;
+                        var graphId = (int)graphIdProperty.Value;
                         var referenceManager = context.ReferenceManager;
                         var referenceInfo = referenceManager.GetInfoById(graphId);
                         if (referenceInfo == null)
@@ -640,10 +640,9 @@ namespace Catel.Runtime.Serialization.Json
                     return SerializationObject.SucceededToDeserialize(context.ModelType, memberValue.MemberGroup, memberValue.Name, dictionary);
                 }
 
-                if (jsonProperties.ContainsKey(memberValue.NameForSerialization))
+                if (jsonProperties.TryGetValue(memberValue.NameForSerialization, out var jsonMemberProperty))
                 {
-                    var jsonProperty = jsonProperties[memberValue.NameForSerialization];
-                    var jsonValue = jsonProperty.Value;
+                    var jsonValue = jsonMemberProperty.Value;
                     if (jsonValue != null)
                     {
                         object finalMemberValue = null;
@@ -699,7 +698,7 @@ namespace Catel.Runtime.Serialization.Json
                                     }
                                     else if (ShouldSerializeAsCollection(memberValue))
                                     {
-                                        finalMemberValue = Deserialize(valueType, jsonProperty.Value.CreateReader(context.Configuration), context.Configuration);
+                                        finalMemberValue = Deserialize(valueType, jsonMemberProperty.Value.CreateReader(context.Configuration), context.Configuration);
                                     }
                                     else
                                     {
@@ -740,9 +739,9 @@ namespace Catel.Runtime.Serialization.Json
                             if (PreserveReferences && finalMemberValue.GetType().IsClassType())
                             {
                                 var graphIdPropertyName = $"${memberValue.NameForSerialization}_{GraphId}";
-                                if (jsonProperties.ContainsKey(graphIdPropertyName))
+                                if (jsonProperties.TryGetValue(graphIdPropertyName, out var graphIdProperty))
                                 {
-                                    var graphId = (int)jsonProperties[graphIdPropertyName].Value;
+                                    var graphId = (int)graphIdProperty.Value;
 
                                     var referenceManager = context.ReferenceManager;
                                     referenceManager.RegisterManually(graphId, finalMemberValue);
@@ -794,7 +793,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <summary>
         /// Gets the context.
         /// </summary>
-        /// <param name="model">The model.</param>
+        /// <param name="model">The model, can be <c>null</c> for value types.</param>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="stream">The stream.</param>
         /// <param name="contextMode">The context mode.</param>
@@ -802,8 +801,30 @@ namespace Catel.Runtime.Serialization.Json
         /// <returns>
         /// ISerializationContext{SerializationInfo}.
         /// </returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">contextMode</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "GetSerializationContextInfo", TreatAsErrorFromVersion = "5.6", RemoveInVersion = "6.0")]
+#pragma warning disable 672
         protected override ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, Stream stream,
+#pragma warning restore 672
+            SerializationContextMode contextMode, ISerializationConfiguration configuration)
+        {
+            return GetSerializationContextInfo(model, modelType, stream, contextMode, configuration);
+        }
+
+        /// <summary>
+        /// Gets the serializer specific serialization context info.
+        /// </summary>
+        /// <param name="model">The model, can be <c>null</c> for value types.</param>
+        /// <param name="modelType">Type of the model.</param>
+        /// <param name="stream">The stream.</param>
+        /// <param name="contextMode">The context mode.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The serialization context.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
+        protected override ISerializationContext<JsonSerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, Stream stream,
             SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             JsonReader jsonReader = null;
@@ -887,7 +908,7 @@ namespace Catel.Runtime.Serialization.Json
                 jsonWriter.Formatting = formatting;
             }
 
-            return GetContext(model, modelType, jsonReader, jsonWriter, contextMode, null, null, configuration);
+            return GetSerializationContextInfo(model, modelType, jsonReader, jsonWriter, contextMode, null, null, configuration);
         }
 
         /// <summary>
@@ -904,7 +925,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <returns>
         /// ISerializationContext&lt;JsonSerializationContextInfo&gt;.
         /// </returns>
-        protected virtual ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, JsonReader jsonReader, JsonWriter jsonWriter,
+        protected virtual ISerializationContext<JsonSerializationContextInfo> GetSerializationContextInfo(object model, Type modelType, JsonReader jsonReader, JsonWriter jsonWriter,
             SerializationContextMode contextMode, Dictionary<string, JProperty> jsonProperties, JArray jsonArray, ISerializationConfiguration configuration)
         {
             var jsonSerializer = new Newtonsoft.Json.JsonSerializer();

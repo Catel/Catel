@@ -42,5 +42,37 @@ namespace Catel.Runtime
         /// </summary>
         /// <value><c>true</c> if this instance is the first usage of this instance; otherwise, <c>false</c>.</value>
         public bool IsFirstUsage { get; internal set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance has called the serializing method on the model.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance has called serializing; otherwise, <c>false</c>.
+        /// </value>
+        internal bool HasCalledSerializing { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance has called the serialized method on the model.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance has called serializing; otherwise, <c>false</c>.
+        /// </value>
+        internal bool HasCalledSerialized { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance has called the deserializing method on the model.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance has called serializing; otherwise, <c>false</c>.
+        /// </value>
+        internal bool HasCalledDeserializing { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance has called the deserialized method on the model.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance has called serializing; otherwise, <c>false</c>.
+        /// </value>
+        internal bool HasCalledDeserialized { get; set; }
     }
 }

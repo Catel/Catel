@@ -18,6 +18,52 @@ Items prepended with CTL are from JIRA (old issue tracker). Items prepended with
 **********************************************************
 
 ==================
+Version 5.6.0
+==================
+
+For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date:
+=============
+2018/07/04
+
+Platform support changes:
+=========================
+* #1103 / #1165 Convert to multi-targeted projects, PCL is no longer supported (.NET Standard is the replacement)
+
+Classes / members marked as obsolete:
+=====================================
+* #1124 Mark NullableValueConverter as obsolete since converter doesn't have a target type, 
+  so this converter won't work as expected NullableValueConverter
+
+Added/fixed:
+============
+(+) #1188 Add ResourceHelper.ExtractEmbeddedResource
+(+) #1190 Add ServiceLocator.TypeUnregistered event with type / instance info
+(+) #1193 Add Task<ProcessResult> IProcessService.RunAsync(ProcessorContext)
+(+) #1199 Support serialization of root dictionaries in xml and binary serializers (Json already supported)
+(*) #1187 Allow process service to specify the working directory
+(*) #1200 Remove SerializationContext.CreateSerializableToken and replace by method calls
+(*) #1202 Optimize dictionary lookups to improve performance
+(x) #1194 OnDeserializing and OnDeserialized are called twice on ModelBase (de)serialization
+(x) #1195 BatchLogListenerBase WriteBatchAsync async handling not working
+(x) #1196 Command containers are not registered with correct container type
+(x) #1197 ReferenceManager uses wrong key to check for existence of objects
+(x) #1198 Json serializer doesn't support ModelBase as a collection serialization
+(x) #1201 Xml serialization sometimes causes first chance exception "name cannot begin with the '<' character"
+(x) #1205 CommandManager should only subscribe to key events on the current thread
+
+Roadmap:
+========
+See http://www.catelproject.com/support/issue-tracker
+
+Known issues:
+=============
+See http://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 5.5.0
 ==================
 

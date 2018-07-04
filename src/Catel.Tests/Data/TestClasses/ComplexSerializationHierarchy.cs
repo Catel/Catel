@@ -22,6 +22,26 @@ namespace Catel.Tests.Data
 
     public static class ComplexSerializationHierarchy
     {
+        public static object CreateObjectGraphWithDepth(int depth)
+        {
+            object originalObject = null;
+
+            if (depth == 1)
+            {
+                originalObject = ModelBaseTestHelper.CreateIniEntryObject();
+            }
+            else if (depth == 2)
+            {
+                originalObject = ModelBaseTestHelper.CreateIniFileObject();
+            }
+            else if (depth == 3)
+            {
+                originalObject = ModelBaseTestHelper.CreateComputerSettingsObject();
+            }
+
+            return originalObject;
+        }
+
         public static ScheduleAssistantSettings CreateComplexHierarchy()
         {
             var settings = new ScheduleAssistantSettings();
@@ -105,8 +125,10 @@ namespace Catel.Tests.Data
     }
 
 #if NET
+    // Required for binary serialization
     [Serializable]
 #endif
+    [DataContract]
     public class Family
     {
         public Family()
@@ -114,20 +136,27 @@ namespace Catel.Tests.Data
             Persons = new List<Person>();
         }
 
+        [DataMember]
         public string LastName { get; set; }
 
+        [DataMember]
         public List<Person> Persons { get; private set; }
     }
 
 #if NET
+    // Required for binary serialization
     [Serializable]
 #endif
+    [DataContract]
     public class Person
     {
+        [DataMember]
         public Gender Gender { get; set; }
 
+        [DataMember]
         public string FirstName { get; set; }
 
+        [DataMember]
         public string LastName { get; set; }
     }
 

@@ -85,14 +85,14 @@ namespace Catel.ApiCop
 
             lock (_cops)
             {
-                if (!_cops.ContainsKey(type))
+                if (!_cops.TryGetValue(type, out var cop))
                 {
-                    var cop = new ApiCop(type);
+                    cop = new ApiCop(type);
 
                     _cops.Add(type, cop);
                 }
 
-                return _cops[type];
+                return cop;
             }
         }
 

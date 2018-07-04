@@ -46,14 +46,15 @@ namespace Catel
 
             lock (_lockObject)
             {
-                if (!_uniqueIdentifiers.ContainsKey(type))
+                if (!_uniqueIdentifiers.TryGetValue(type, out var id))
                 {
-                    _uniqueIdentifiers.Add(type, 0);
+                    id = 0;
                 }
 
-                _uniqueIdentifiers[type]++;
+                id++;
+                _uniqueIdentifiers[type] = id;
 
-                return _uniqueIdentifiers[type];
+                return id;
             }
         }
     }

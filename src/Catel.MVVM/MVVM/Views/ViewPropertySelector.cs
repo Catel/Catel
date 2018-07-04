@@ -51,16 +51,13 @@ namespace Catel.MVVM.Views
             {
                 Log.Debug("Added property '{0}.{1}' to subscribe to", targetViewType.Name, propertyName);
 
-                if (!_viewProperties.ContainsKey(targetViewType))
+                if (!_viewProperties.TryGetValue(targetViewType, out var properties))
                 {
-                    _viewProperties[targetViewType] = new HashSet<string>();
+                    properties = new HashSet<string>();
+                    _viewProperties[targetViewType] = properties;
                 }
 
-                var properties = _viewProperties[targetViewType];
-                if (!properties.Contains(propertyName))
-                {
-                    properties.Add(propertyName);
-                }
+                properties.Add(propertyName);
             }
         }
 
@@ -88,10 +85,8 @@ namespace Catel.MVVM.Views
 
             properties.AddRange(_allViewsProperties);
 
-            if (_viewProperties.ContainsKey(targetViewType))
+            if (_viewProperties.TryGetValue(targetViewType, out var viewProperties))
             {
-                var viewProperties = _viewProperties[targetViewType];
-
                 foreach (var property in viewProperties)
                 {
                     if (!properties.Contains(property))

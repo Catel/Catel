@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ObjectWithPrivateMembers graphid="1" xmlns:ctl="http://schemas.catelproject.com">
+  <PublicMember>My public member</PublicMember>
+  <PrivateMember>My private member</PrivateMember>
+</ObjectWithPrivateMembers>

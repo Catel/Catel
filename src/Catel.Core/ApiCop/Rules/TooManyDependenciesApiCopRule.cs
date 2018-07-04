@@ -61,17 +61,18 @@ namespace Catel.ApiCop.Rules
 
                 AddTag(typeName);
 
-                bool update = false;
-                if (!_dependenciesPerType.ContainsKey(typeName))
+                var update = false;
+
+                if (_dependenciesPerType.TryGetValue(typeName, out var existingNumberOfDependencies))
                 {
-                    update = true;
-                }
-                else
-                {
-                    if (_dependenciesPerType[typeName] < numberOfDependencies)
+                    if (existingNumberOfDependencies < numberOfDependencies)
                     {
                         update = true;
                     }
+                }
+                else
+                {
+                    update = true;
                 }
 
                 if (update)
@@ -89,10 +90,9 @@ namespace Catel.ApiCop.Rules
         /// <returns><c>true</c> if the specified ApiCop is valid; otherwise, <c>false</c>.</returns>
         public override bool IsValid(IApiCop apiCop, string tag)
         {
-            int maxDependencies = 0;
-            if (_dependenciesPerType.ContainsKey(tag))
+            if (!_dependenciesPerType.TryGetValue(tag, out var maxDependencies))
             {
-                maxDependencies = _dependenciesPerType[tag];
+                maxDependencies = 0;
             }
 
             return maxDependencies <= MaxDependencies;
@@ -105,10 +105,9 @@ namespace Catel.ApiCop.Rules
         /// <returns>The result as text.</returns>
         public override string GetResultAsText(string tag)
         {
-            int maxDependencies = 0;
-            if (_dependenciesPerType.ContainsKey(tag))
+            if (!_dependenciesPerType.TryGetValue(tag, out var maxDependencies))
             {
-                maxDependencies = _dependenciesPerType[tag];
+                maxDependencies = 0;
             }
 
             return string.Format("[{0}] Type has '{1}' dependencies injected, consider splitting the class into multiple classes",

@@ -43,7 +43,7 @@ namespace Catel.Tests.Data
             }
         }
 
-        [TestFixture]
+        [TestFixture, RequiresThread(System.Threading.ApartmentState.STA)]
         public class TheSupportsNotifyPropertyChangedProperty
         {
             [TestCase]
@@ -65,7 +65,7 @@ namespace Catel.Tests.Data
             }
         }
 
-        [TestFixture]
+        [TestFixture, RequiresThread(System.Threading.ApartmentState.STA)]
         public class TheSupportsNotifyCollectionChangedProperty
         {
             [TestCase]
@@ -87,7 +87,7 @@ namespace Catel.Tests.Data
             }
         }
 
-        [TestFixture]
+        [TestFixture, RequiresThread(System.Threading.ApartmentState.STA)]
         public class TheIsUsefulForObjectMethod
         {
             [TestCase]
@@ -109,7 +109,7 @@ namespace Catel.Tests.Data
             }
         }
 
-        [TestFixture]
+        [TestFixture, RequiresThread(System.Threading.ApartmentState.STA)]
         public class TheUnsubscribeFromAllEventsMethod
         {
             [TestCase]
@@ -164,7 +164,7 @@ namespace Catel.Tests.Data
             }
         }
 
-        [TestFixture]
+        [TestFixture, RequiresThread(System.Threading.ApartmentState.STA)]
         public class ThePropertyChangesLogic 
         {
             [TestCase]
@@ -183,7 +183,7 @@ namespace Catel.Tests.Data
             }
         }
 
-        [TestFixture]
+        [TestFixture, RequiresThread(System.Threading.ApartmentState.STA), Explicit]
         public class TheCollectionChangesLogic
         {
             [TestCase]
@@ -213,7 +213,7 @@ namespace Catel.Tests.Data
                 Assert.IsTrue(itemsAdded, "Item should have been added");
                 Assert.IsFalse(itemsRemoved, "Item should not (yet) have been removed");
 
-                collection.Remove(model);
+                Assert.IsTrue(collection.Remove(model), "Item should have been removed from collection");
                 Assert.IsTrue(itemsRemoved, "Item should have been removed");
             }
 

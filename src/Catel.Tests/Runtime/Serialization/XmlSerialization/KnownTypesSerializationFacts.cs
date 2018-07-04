@@ -98,11 +98,11 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
         #endregion
     }
 
-    [KnownType("KnownTypes")]
+    [KnownType(nameof(DictionaryTestClass.GetKnownTypes))]
     public class DictionaryTestClass : ComparableModelBase
     {
         // This method returns the array of known types.
-        static Type[] KnownTypes()
+        static Type[] GetKnownTypes()
         {
             return new[] { typeof(ModelBaseFacts.Person) };
         }

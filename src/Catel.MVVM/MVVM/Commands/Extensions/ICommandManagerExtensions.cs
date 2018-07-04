@@ -116,7 +116,7 @@ namespace Catel
                 var commandContainer = typeFactory.CreateInstance(commandContainerType);
                 if (commandContainer != null)
                 {
-                    serviceLocator.RegisterInstance(commandContainer);
+                    serviceLocator.RegisterInstance(commandContainerType, commandContainer);
                 }
                 else
                 {

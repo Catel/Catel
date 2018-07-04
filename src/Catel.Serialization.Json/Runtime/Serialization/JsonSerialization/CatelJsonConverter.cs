@@ -44,10 +44,10 @@ namespace Catel.Runtime.Serialization.Json
 
             if (_jsonSerializer.PreserveReferences)
             {
-                var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-                using (var scopeManager = ScopeManager<ReferenceManager>.GetScopeManager(scopeName))
+                var scopeName = SerializationContextHelper.GetSerializationScopeName();
+                using (var scopeManager = ScopeManager<SerializationContextScope<JsonSerializationContextInfo>>.GetScopeManager(scopeName))
                 {
-                    var referenceManager = scopeManager.ScopeObject;
+                    var referenceManager = scopeManager.ScopeObject.ReferenceManager;
 
                     var referenceInfo = referenceManager.GetInfo(value);
                     if (referenceInfo != null && !referenceInfo.IsFirstUsage)

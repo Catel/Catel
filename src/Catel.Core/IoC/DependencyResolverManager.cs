@@ -143,9 +143,9 @@ namespace Catel.IoC
 
             lock (_lockObject)
             {
-                if (_dependencyResolversByType.ContainsKey(type))
+                if (_dependencyResolversByType.TryGetValue(type, out var resolver))
                 {
-                    return _dependencyResolversByType[type];
+                    return resolver;
                 }
             }
 

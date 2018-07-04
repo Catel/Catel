@@ -82,12 +82,20 @@ namespace Catel.Runtime.Serialization
     /// </summary>
     /// <typeparam name="TSerializationContext">The type of the serialization context.</typeparam>
     public interface ISerializationContext<TSerializationContext> : ISerializationContext
-        where TSerializationContext : class
+        where TSerializationContext : class, ISerializationContextInfo
     {
         /// <summary>
         /// Gets the context.
         /// </summary>
         /// <value>The context.</value>
         TSerializationContext Context { get; }
+
+        /// <summary>
+        /// Gets the parent context.
+        /// </summary>
+        /// <value>
+        /// The parent context.
+        /// </value>
+        ISerializationContext<TSerializationContext> Parent { get; }
     }
 }

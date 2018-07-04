@@ -607,6 +607,33 @@ namespace Catel.Tests.IoC
                 Assert.IsTrue(serviceLocator.IsTypeRegistered(typeof(ITestInterface), "2"));
                 Assert.IsTrue(object.ReferenceEquals(ref1, ref2));
             }
+
+            [TestCase]
+            public void RaisesTypeUnregisteredEvent()
+            {
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+                serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1));
+                serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "1");
+                serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "2");
+
+                var ref1 = serviceLocator.ResolveType(typeof(ITestInterface), "2");
+
+                var raisedEvent = false;
+
+                serviceLocator.TypeUnregistered += (sender, e) =>
+                {
+                    Assert.AreEqual(typeof(ITestInterface), e.ServiceType);
+                    Assert.AreEqual(typeof(TestClass1), e.ServiceImplementationType);
+                    Assert.AreEqual(RegistrationType.Singleton, e.RegistrationType);
+                    Assert.IsNull(e.Instance);
+
+                    raisedEvent = true;
+                };
+
+                serviceLocator.RemoveType(typeof(ITestInterface), "1");
+
+                Assert.IsTrue(raisedEvent);
+            }
             #endregion
         }
 
@@ -645,6 +672,37 @@ namespace Catel.Tests.IoC
 
                 ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "1"));
                 ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => serviceLocator.ResolveType(typeof(ITestInterface), "2"));
+            }
+
+            [TestCase]
+            public void RaisesTypeUnregisteredEvent()
+            {
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+                serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1));
+                serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "1");
+                serviceLocator.RegisterType(typeof(ITestInterface), typeof(TestClass1), "2");
+
+                var ref1 = serviceLocator.ResolveType(typeof(ITestInterface), "2");
+
+                var nonInstanceCounter = 0;
+                var instanceCounter = 0;
+
+                serviceLocator.TypeUnregistered += (sender, e) =>
+                {
+                    if (e.Instance != null)
+                    {
+                        instanceCounter++;
+                    }
+                    else
+                    {
+                        nonInstanceCounter++;
+                    }
+                };
+
+                serviceLocator.RemoveAllTypes(typeof(ITestInterface));
+
+                Assert.AreEqual(2, nonInstanceCounter);
+                Assert.AreEqual(1, instanceCounter);
             }
             #endregion
         }
@@ -1330,7 +1388,7 @@ namespace Catel.Tests.IoC
         [TestFixture]
         public class TheResolveMissingType
         {
-            interface IDummy
+            private interface IDummy
             {
                  
             }

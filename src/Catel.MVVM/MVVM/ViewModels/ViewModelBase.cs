@@ -561,10 +561,7 @@ namespace Catel.MVVM
                 #endregion
             }
 
-            return new ViewModelMetadata(
-                viewModelType,
-                modelObjectsInfo,
-                viewModelToModelMap);
+            return new ViewModelMetadata(viewModelType, modelObjectsInfo, viewModelToModelMap);
         }
 
         /// <summary>
@@ -943,11 +940,10 @@ namespace Catel.MVVM
             {
                 var validate = false;
 
-                if (_viewModelToModelMap.ContainsKey(e.PropertyName))
+                if (_viewModelToModelMap.TryGetValue(e.PropertyName, out var mapping))
                 {
                     lock (_modelLock)
                     {
-                        var mapping = _viewModelToModelMap[e.PropertyName];
                         var model = _modelObjects[mapping.ModelProperty];
                         if (model != null)
                         {

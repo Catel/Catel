@@ -133,12 +133,13 @@ namespace Catel.MVVM
                     return null;
                 }
 
-                if (!_instances.ContainsKey(viewModel.UniqueIdentifier))
+                if (!_instances.TryGetValue(viewModel.UniqueIdentifier, out var commandManager))
                 {
-                    _instances[viewModel.UniqueIdentifier] = new ViewModelCommandManager(viewModel);
+                    commandManager = new ViewModelCommandManager(viewModel);
+                    _instances[viewModel.UniqueIdentifier] = commandManager;
                 }
 
-                return _instances[viewModel.UniqueIdentifier];
+                return commandManager;
             }
         }
 

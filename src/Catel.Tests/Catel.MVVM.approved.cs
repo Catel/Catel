@@ -1974,6 +1974,8 @@ namespace Catel.Services
     }
     public interface IProcessService
     {
+        System.Threading.Tasks.Task<Catel.Services.ProcessResult> RunAsync(Catel.Services.ProcessContext processContext);
+        void StartProcess(Catel.Services.ProcessContext processContext, Catel.Services.ProcessCompletedDelegate processCompletedCallback = null);
         void StartProcess(string fileName, string arguments = "", Catel.Services.ProcessCompletedDelegate processCompletedCallback = null);
     }
     public interface ISaveFileService : Catel.Services.IFileSupport
@@ -2234,9 +2236,25 @@ namespace Catel.Services
     }
     public delegate void PleaseWaitWorkDelegate();
     public delegate void ProcessCompletedDelegate(int exitCode);
+    public class ProcessContext
+    {
+        public ProcessContext() { }
+        public string Arguments { get; set; }
+        public string FileName { get; set; }
+        public string Verb { get; set; }
+        public string WorkingDirectory { get; set; }
+    }
+    public class ProcessResult
+    {
+        public ProcessResult(Catel.Services.ProcessContext context) { }
+        public Catel.Services.ProcessContext Context { get; }
+        public int ExitCode { get; set; }
+    }
     public class ProcessService : Catel.Services.IProcessService
     {
         public ProcessService() { }
+        public virtual System.Threading.Tasks.Task<Catel.Services.ProcessResult> RunAsync(Catel.Services.ProcessContext processContext) { }
+        public virtual void StartProcess(Catel.Services.ProcessContext processContext, Catel.Services.ProcessCompletedDelegate processCompletedCallback = null) { }
         public virtual void StartProcess(string fileName, string arguments = "", Catel.Services.ProcessCompletedDelegate processCompletedCallback = null) { }
     }
     public class SaveFileService : Catel.Services.FileServiceBase, Catel.Services.IFileSupport, Catel.Services.ISaveFileService

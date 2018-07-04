@@ -201,14 +201,15 @@ namespace Catel.ExceptionHandling
 
             lock (_exceptionHandlers)
             {
-                if (!_exceptionHandlers.ContainsKey(exceptionType))
+                if (!_exceptionHandlers.TryGetValue(exceptionType, out var finalHandler))
                 {
-                    _exceptionHandlers.Add(exceptionType, handler);
+                    finalHandler = handler;
+                    _exceptionHandlers[exceptionType] = handler;
 
                     Log.Debug("Added the handler for the exception type '{0}'", exceptionType.Name);
                 }
 
-                return _exceptionHandlers[exceptionType];
+                return finalHandler;
             }
         }
 
@@ -224,10 +225,8 @@ namespace Catel.ExceptionHandling
 
             lock (_exceptionHandlers)
             {
-                if (_exceptionHandlers.ContainsKey(exceptionType))
+                if (_exceptionHandlers.Remove(exceptionType))
                 {
-                    _exceptionHandlers.Remove(exceptionType);
-
                     Log.Debug("Removed exception handler for type '{0}'", exceptionType.Name);
 
                     return true;
@@ -263,37 +262,37 @@ namespace Catel.ExceptionHandling
                     {
                         if (exceptionHandler.Value.BufferPolicy != null)
                         {
-                            if (!_exceptionCounter.ContainsKey(exceptionHandler.Key))
+                            if (!_exceptionCounter.TryGetValue(exceptionHandler.Key, out var queue))
                             {
-                                _exceptionCounter.Add(exceptionHandler.Key, new Queue<DateTime>());
+                                queue = new Queue<DateTime>();
+                                _exceptionCounter[exceptionHandler.Key] = queue;
                             }
 
                             var now = FastDateTime.Now;
 
-                            _exceptionCounter[exceptionHandler.Key].Enqueue(now);
+                            queue.Enqueue(now);
 
-                            if (_exceptionCounter[exceptionHandler.Key].Count <= exceptionHandler.Value.BufferPolicy.NumberOfTimes)
+                            if (queue.Count <= exceptionHandler.Value.BufferPolicy.NumberOfTimes)
                             {
                                 OnExceptionBuffered(exception, now);
-                                Log.Debug("[{0}] '{1}' buffered for the '{2}' times", now, exceptionType.Name, _exceptionCounter[exceptionHandler.Key].Count);
+                                Log.Debug("[{0}] '{1}' buffered for the '{2}' times", now, exceptionType.Name, queue.Count);
                                 continue;
                             }
 
-                            var dateTime = _exceptionCounter[exceptionHandler.Key].Dequeue();
-
+                            var dateTime = queue.Dequeue();
                             var duration = (now - dateTime);
 
                             if (duration >= exceptionHandler.Value.BufferPolicy.Interval && exceptionHandler.Value.BufferPolicy.Interval != TimeSpan.Zero)
                             {
                                 OnExceptionBuffered(exception, now);
-                                Log.Debug("[{0}] '{1}' buffered for the '{2}' times", now, exceptionType.Name, _exceptionCounter[exceptionHandler.Key].Count);
+                                Log.Debug("[{0}] '{1}' buffered for the '{2}' times", now, exceptionType.Name, queue.Count);
                                 continue;
                             }
-                            _exceptionCounter[exceptionHandler.Key].Clear();
+
+                            queue.Clear();
                         }
 
                         handler = exceptionHandler.Value;
-
                         break;
                     }
                 }

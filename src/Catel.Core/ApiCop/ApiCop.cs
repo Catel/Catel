@@ -91,13 +91,11 @@ namespace Catel.ApiCop
 
             lock (_lock)
             {
-                if (!_rules.ContainsKey(name))
+                if (_rules.TryGetValue(name, out var rule))
                 {
-                    return;
+                    var typedRule = (TRule)rule;
+                    action(typedRule);
                 }
-
-                var rule = (TRule) _rules[name];
-                action(rule);
             }
         }
 
@@ -115,6 +113,7 @@ namespace Catel.ApiCop
                 {
                     var rule = ruleKeyValuePair.Value;
                     var tags = rule.GetTags();
+
                     foreach (var tag in tags)
                     {
                         if (!rule.IsValid(this, tag))
