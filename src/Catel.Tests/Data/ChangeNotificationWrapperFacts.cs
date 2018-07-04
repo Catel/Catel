@@ -183,7 +183,7 @@ namespace Catel.Tests.Data
             }
         }
 
-        [TestFixture, RequiresThread(System.Threading.ApartmentState.STA)]
+        [TestFixture, RequiresThread(System.Threading.ApartmentState.STA), Explicit]
         public class TheCollectionChangesLogic
         {
             [TestCase]

@@ -302,7 +302,7 @@ namespace Catel.Reflection
             return false;
         }
 
-        struct AssemblyMetaData
+        private struct AssemblyMetaData
         {
             public string NameWithVersion { get; set; }
             public string NameWithoutVersion { get; set; }
@@ -314,6 +314,9 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns>DateTime.</returns>
+        /// <remarks>
+        /// For more details, see https://docs.microsoft.com/en-us/windows/desktop/Debug/pe-format#dll-characteristics.
+        /// </remarks>
         public static DateTime GetLinkerTimestamp(string fileName)
         {
             Argument.IsNotNullOrWhitespace(() => fileName);
@@ -334,7 +337,21 @@ namespace Catel.Reflection
             try
             {
                 var coffHeader = (_IMAGE_FILE_HEADER)Marshal.PtrToStructure(pinnedBuffer.AddrOfPinnedObject(), typeof(_IMAGE_FILE_HEADER));
-                return TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1) + new TimeSpan(coffHeader.TimeDateStamp * TimeSpan.TicksPerSecond));
+
+                var utcStart = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                var offset = TimeSpan.FromSeconds(coffHeader.TimeDateStamp);
+                var utcTime = utcStart.Add(offset);
+
+                var localTime = TimeZone.CurrentTimeZone.ToLocalTime(utcTime);
+                if (localTime > DateTime.Now.AddDays(1))
+                {
+                    // Something is off here, are we running a .NET core "deterministic" app?
+                    Log.Warning($"Determined '{localTime}' as linker timestamp which is in the future. This app is probably compiled by Roslyn (.NET Core) in deterministic mode. If the linker timestamp is required, set <Deterministic>False</Deterministic> in the project file. For now falling back to DateTime.Now");
+
+                    localTime = DateTime.Now;
+                }
+
+                return localTime;
             }
             finally
             {
@@ -344,7 +361,7 @@ namespace Catel.Reflection
 
 #pragma warning disable 169
 #pragma warning disable 649
-        struct _IMAGE_FILE_HEADER
+        private struct _IMAGE_FILE_HEADER
         {
             public ushort Machine;
             public ushort NumberOfSections;

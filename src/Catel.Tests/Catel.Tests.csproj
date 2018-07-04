@@ -8,23 +8,30 @@
     <PackageVersion>1.0.0-alpha0001</PackageVersion>
     <Description></Description>
     <PackageTags></PackageTags>
+    <SonarQubeExclude>true</SonarQubeExclude>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ApiApprover" Version="7.0.0" PrivateAssets="all" />
+    <PackageReference Include="ApiApprover" Version="7.0.1" PrivateAssets="all" />
     <PackageReference Include="ApprovalTests" Version="3.0.13" PrivateAssets="all" />
     <PackageReference Include="ApprovalUtilities" Version="3.0.13" PrivateAssets="all" />
-    <PackageReference Include="Fody" Version="3.0.3" PrivateAssets="all" />
+    <PackageReference Include="Fody" Version="3.1.3" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="2.1.0" PrivateAssets="all" />
-    <PackageReference Include="MethodTimer.Fody" Version="2.1.0" PrivateAssets="all" />
-    <PackageReference Include="ModuleInit.Fody" Version="1.8.0" PrivateAssets="all" />
+    <PackageReference Include="MethodTimer.Fody" Version="2.1.1" PrivateAssets="all" />
+    <PackageReference Include="ModuleInit.Fody" Version="1.8.1" PrivateAssets="all" />
     <PackageReference Include="Mono.Cecil" Version="0.10.0" PrivateAssets="all" />
-    <PackageReference Include="Moq" Version="4.8.2" />
+    <PackageReference Include="Moq" Version="4.8.3" />
     <PackageReference Include="NUnit" Version="3.10.1" PrivateAssets="all" />
-    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.4.0" PrivateAssets="all" />
-    <PackageReference Include="Obsolete.Fody" Version="4.4.0" PrivateAssets="all" />
-    <PackageReference Include="PublicApiGenerator" Version="7.0.0" PrivateAssets="all" />    
-    <PackageReference Include="WpfAnalyzers" Version="2.1.2.1" PrivateAssets="all" />
+    <PackageReference Include="MSBuild.Sdk.Extras" Version="1.5.4" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Obsolete.Fody" Version="4.4.1" PrivateAssets="all" />
+    <PackageReference Include="PublicApiGenerator" Version="7.0.1" PrivateAssets="all" />    
+    <PackageReference Include="WpfAnalyzers" Version="2.1.3.2" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
