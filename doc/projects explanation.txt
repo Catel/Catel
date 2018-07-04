@@ -1,4 +1,0 @@
-Catel projects explanation
-==========================
-
-For more information, see http://www.catelproject.com
