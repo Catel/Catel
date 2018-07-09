@@ -23,6 +23,7 @@ namespace Catel.Services
     using Catel.Services;
 
     using System.Windows.Media;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// The ViewExportService interface.
@@ -65,10 +66,13 @@ namespace Catel.Services
         /// <param name="exportMode">The export mode.</param>
         /// <param name="dpiX">The dpi X.</param>
         /// <param name="dpiY">The dpi Y.</param>
+        /// <returns></returns>
         /// <exception cref="System.InvalidOperationException"></exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
-        /// <remarks>If <paramref name="exportMode" /> is <see cref="ExportMode.Print" /> then the <paramref name="dpiX" /> and <paramref name="dpiY" /> argument will be ignored.</remarks>
-        public virtual void Export(IViewModel viewModel, ExportMode exportMode = ExportMode.Print, double dpiX = 96, double dpiY = 96)
+        /// <remarks>
+        /// If <paramref name="exportMode" /> is <see cref="ExportMode.Print" /> then the <paramref name="dpiX" /> and <paramref name="dpiY" /> argument will be ignored.
+        /// </remarks>
+        public virtual async Task ExportAsync(IViewModel viewModel, ExportMode exportMode = ExportMode.Print, double dpiX = 96, double dpiY = 96)
         {
             Argument.IsNotNull("viewModel", viewModel);
 
@@ -88,13 +92,29 @@ namespace Catel.Services
             {
                 if (exportMode == ExportMode.File)
                 {
-                    SaveToFile(bitmap);
+                    await SaveToFileAsync(bitmap);
                 }
                 else
                 {
                     Clipboard.SetImage(bitmap);
                 }
             }
+        }
+
+        /// <summary>
+        /// Exports the <paramref name="viewModel" />'s view to the print or clipboard or file.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="exportMode">The export mode.</param>
+        /// <param name="dpiX">The dpi X.</param>
+        /// <param name="dpiY">The dpi Y.</param>
+        /// <exception cref="System.InvalidOperationException"></exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
+        /// <remarks>If <paramref name="exportMode" /> is <see cref="ExportMode.Print" /> then the <paramref name="dpiX" /> and <paramref name="dpiY" /> argument will be ignored.</remarks>
+        [ObsoleteEx(ReplacementTypeOrMember = nameof(ExportAsync), TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        public virtual async void Export(IViewModel viewModel, ExportMode exportMode = ExportMode.Print, double dpiX = 96, double dpiY = 96)
+        {
+            await ExportAsync(viewModel, exportMode, dpiX, dpiY);
         }
         #endregion
 
@@ -119,14 +139,12 @@ namespace Catel.Services
         /// The save to file.
         /// </summary>
         /// <param name="bitmap">The bitmap.</param>
-#pragma warning disable AvoidAsyncVoid // Avoid async void
-        private async void SaveToFile(BitmapSource bitmap)
-#pragma warning restore AvoidAsyncVoid // Avoid async void
+        private async Task SaveToFileAsync(BitmapSource bitmap)
         {
             _saveFileService.Filter = "PNG (*.png) |*.png";
             if (await _saveFileService.DetermineFileAsync())
             {
-                string fileName = _saveFileService.FileName;
+                var fileName = _saveFileService.FileName;
                 using (var stream = new FileStream(fileName, FileMode.Create))
                 {
                     var encoder = new PngBitmapEncoder { Interlace = PngInterlaceOption.On };

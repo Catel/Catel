@@ -103,7 +103,7 @@ namespace Catel.Data
                 if (!_catelProperties.TryGetValue(name, out catelProperty))
                 {
                     throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, Type),
-                    "Property '{0}' on type '{1}' is not registered", name, Type.FullName);
+                        "Property '{0}' on type '{1}' is not registered", name, Type.FullName);
                 }
 
                 return catelProperty;
@@ -226,8 +226,9 @@ namespace Catel.Data
             var nonStaticProperties = (from property in type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true))
                                        where property.PropertyType == typeof(PropertyData)
                                        select property).ToList();
-            foreach (var nonStaticProperty in nonStaticProperties)
+            if (nonStaticProperties.Count > 0)
             {
+                var nonStaticProperty = nonStaticProperties[0];
                 throw Log.ErrorAndCreateException<InvalidOperationException>("The property '{0}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticProperty.Name);
             }
 
@@ -235,8 +236,9 @@ namespace Catel.Data
             var nonPublicProperties = (from property in type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true))
                                        where property.PropertyType == typeof(PropertyData) && !property.CanRead
                                        select property).ToList();
-            foreach (var nonPublicProperty in nonPublicProperties)
+            if (nonPublicProperties.Count > 0)
             {
+                var nonPublicProperty = nonPublicProperties[0];
                 throw Log.ErrorAndCreateException<InvalidOperationException>("The property '{0}' of type 'PropertyData' declared as non-public, but they can only be used as public", nonPublicProperty.Name);
             }
 
@@ -302,8 +304,9 @@ namespace Catel.Data
             var nonStaticFields = (from field in type.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true))
                                    where field.FieldType == typeof(PropertyData)
                                    select field).ToList();
-            foreach (var nonStaticField in nonStaticFields)
+            if (nonStaticFields.Count > 0)
             {
+                var nonStaticField = nonStaticFields[0];
                 throw Log.ErrorAndCreateException<InvalidOperationException>("The field '{0}' of type 'PropertyData' declared as instance, but they can only be used as static", nonStaticField.Name);
             }
 
@@ -311,8 +314,9 @@ namespace Catel.Data
             var nonPublicFields = (from field in type.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true))
                                    where field.FieldType == typeof(PropertyData) && !field.IsPublic
                                    select field).ToList();
-            foreach (var nonPublicField in nonPublicFields)
+            if (nonPublicFields.Count > 0)
             {
+                var nonPublicField = nonPublicFields[0];
                 throw Log.ErrorAndCreateException<InvalidOperationException>("The field '{0}' of type 'PropertyData' declared as non-public, but they can only be used as public", nonPublicField.Name);
             }
         }

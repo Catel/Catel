@@ -18,7 +18,10 @@ namespace Catel.ApiCop.Listeners
     {
         private Stream _fileStream;
         private StreamWriter _textWriter;
+
+#if NET
         private readonly string _fileName;
+#endif
 
         #region Constructors
         /// <summary>
@@ -29,7 +32,9 @@ namespace Catel.ApiCop.Listeners
         {
             Argument.IsNotNull("fileName", fileName);
 
+#if NET
             _fileName = fileName;
+#endif
         }
         #endregion
 

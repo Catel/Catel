@@ -55,6 +55,7 @@ namespace Catel.Logging
 			}
 			catch (Exception)
 			{
+                // Ignore
 			}
             
             Write(log, LogEvent.Info, string.Empty);

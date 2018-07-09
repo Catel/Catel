@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CacheStorage.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -22,14 +22,7 @@ namespace Catel.Caching
     public class CacheStorage<TKey, TValue> : ICacheStorage<TKey, TValue>
     {
         #region Fields
-        //private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private readonly Func<ExpirationPolicy> _defaultExpirationPolicyInitCode;
-
-        /// <summary>
-        /// Determines whether values should be disposed on removal.
-        /// </summary>
-        private bool _disposeValuesOnRemoval;
 
         /// <summary>
         /// Determines whether the cache storage can store null values.
@@ -107,11 +100,7 @@ namespace Catel.Caching
         /// Gets or sets whether values should be disposed on removal.
         /// </summary>
         /// <value><c>true</c> if values should be disposed on removal; otherwise, <c>false</c>.</value>
-        public bool DisposeValuesOnRemoval
-        {
-            get { return _disposeValuesOnRemoval; }
-            set { _disposeValuesOnRemoval = value; }
-        }
+        public bool DisposeValuesOnRemoval { get; set; }
 
         /// <summary>
         /// Gets the value associated with the specified key.

@@ -49,42 +49,42 @@ namespace Catel.Windows
         /// </summary>
         private const int WS_SYSMENU = 0x80000;
 
-        const int WS_EX_DLGMODALFRAME = 0x0001;
+        private const int WS_EX_DLGMODALFRAME = 0x0001;
 
-        const int SWP_NOSIZE = 0x0001;
+        private const int SWP_NOSIZE = 0x0001;
 
-        const int SWP_NOMOVE = 0x0002;
+        private const int SWP_NOMOVE = 0x0002;
 
-        const int SWP_NOZORDER = 0x0004;
+        private const int SWP_NOZORDER = 0x0004;
 
-        const int SWP_FRAMECHANGED = 0x0020;
+        private const int SWP_FRAMECHANGED = 0x0020;
 
-        const uint WM_SETICON = 0x0080;
+        private const uint WM_SETICON = 0x0080;
 
         [DllImport("user32.dll", SetLastError = true)]
-        static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        internal static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
         [DllImport("user32.dll")]
-        static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+        internal static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
         [DllImport("user32.dll")]
-        static extern bool SetWindowPos(IntPtr hwnd, IntPtr hwndInsertAfter, int x, int y, int width, int height, uint flags);
+        internal static extern bool SetWindowPos(IntPtr hwnd, IntPtr hwndInsertAfter, int x, int y, int width, int height, uint flags);
 
         [DllImport("user32.dll")]
-        static extern IntPtr SendMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam);
+        internal static extern IntPtr SendMessage(IntPtr hwnd, uint msg, IntPtr wParam, IntPtr lParam);
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+        internal static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
         [DllImport("user32.dll", SetLastError = true)]
-        static extern bool BringWindowToTop(IntPtr hWnd);
+        internal static extern bool BringWindowToTop(IntPtr hWnd);
 
         /// <summary>
         /// RECT struct for platform invokation.
         /// </summary>
         [StructLayout(LayoutKind.Sequential)]
-        public struct RECT
+        internal struct RECT
         {
             /// <summary>
             /// Left.

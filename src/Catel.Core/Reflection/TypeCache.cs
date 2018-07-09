@@ -577,6 +577,7 @@ namespace Catel.Reflection
                 }
                 catch (Exception)
                 {
+                    // Ignore
                 }
             }
 

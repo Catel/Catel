@@ -376,6 +376,7 @@ namespace Catel.Windows.Interactivity
                 }
                 catch (Exception)
                 {
+                    // Ignore
                 }
             }
 

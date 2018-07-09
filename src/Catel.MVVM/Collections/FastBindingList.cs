@@ -498,19 +498,19 @@ namespace Catel.Collections
 
             list.Sort((lhs, rhs) =>
             {
-                object lhsValue = lhs == null ? null : _sortProperty.GetValue(lhs);
-                object rhsValue = rhs == null ? null : _sortProperty.GetValue(rhs);
+                var lhsValue = lhs == null ? null : _sortProperty.GetValue(lhs);
+                var rhsValue = rhs == null ? null : _sortProperty.GetValue(rhs);
 
                 int result;
                 if (lhsValue == null && rhsValue == null) // both values are null, both equal
                 {
                     result = 0;
                 }
-                else if (lhsValue == null && rhsValue != null) // lhs value is null, rhs not, rhs value is greater
+                else if (lhsValue == null) // lhs value is null, rhs not, rhs value is greater
                 {
                     result = -1;
                 }
-                else if (lhsValue != null && rhsValue == null) // rhs value is null, lhs not, lhs value is greater
+                else if (rhsValue == null) // rhs value is null, lhs not, lhs value is greater
                 {
                     result = 1;
                 }
