@@ -187,22 +187,19 @@ namespace Catel
             }
 
             var currentProcessName = currentProcess.ProcessName;
-            if (supportParentProcesses)
+            if (supportParentProcesses && currentProcessName.ContainsIgnoreCase("vshost"))
             {
-                if (currentProcessName.ContainsIgnoreCase("vshost"))
-                {
 #if NET
-                    currentProcess = currentProcess.GetParent();
-                    if (currentProcess == null)
-                    {
-                        return false;
-                    }
-
-                    currentProcessName = currentProcess.ProcessName;
-#else
+                currentProcess = currentProcess.GetParent();
+                if (currentProcess == null)
+                {
                     return false;
-#endif
                 }
+
+                currentProcessName = currentProcess.ProcessName;
+#else
+                return false;
+#endif
             }
 
             var isHosted = currentProcessName.StartsWithIgnoreCase(processName);

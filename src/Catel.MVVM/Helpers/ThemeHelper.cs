@@ -29,7 +29,7 @@ namespace Catel
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private static readonly ICacheStorage<Uri, bool> ThemeLoadedCache = new CacheStorage<Uri, bool>(); 
+        private static readonly ICacheStorage<Uri, bool> ThemeLoadedCache = new CacheStorage<Uri, bool>();
 
         /// <summary>
         /// Ensures that the Catel.MVVM theme is loaded.
@@ -45,7 +45,7 @@ namespace Catel
         /// <param name="resourceUri">The resource URI.</param>
         public static void EnsureThemeIsLoaded(Uri resourceUri)
         {
-            EnsureThemeIsLoaded(resourceUri, () => 
+            EnsureThemeIsLoaded(resourceUri, () =>
             {
                 var application = Application.Current;
                 if (application == null)
@@ -102,12 +102,9 @@ namespace Catel
         private static bool ContainsDictionary(ResourceDictionary resourceDictionary, Uri resourceUri)
         {
             var source = resourceDictionary.Source;
-            if (source != null)
+            if (source != null && source.ToString().EqualsIgnoreCase(resourceUri.ToString()))
             {
-                if (source.ToString().EqualsIgnoreCase(resourceUri.ToString()))
-                {
-                    return true;
-                }
+                return true;
             }
 
             foreach (var mergedDictionary in resourceDictionary.MergedDictionaries)

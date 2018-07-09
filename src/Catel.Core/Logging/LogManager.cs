@@ -11,6 +11,7 @@ namespace Catel.Logging
     using System.Linq;
     using System.Reflection;
     using System.Runtime.CompilerServices;
+    using System.Threading.Tasks;
     using Reflection;
 
 #if NET
@@ -657,7 +658,7 @@ namespace Catel.Logging
         /// <summary>
         /// Flushes all listeners that implement the <see cref="IBatchLogListener" /> by calling <see cref="IBatchLogListener.FlushAsync" />.
         /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(FlushAllAsync), Message = "Since listeners only have FlushAsync, a non-async flush doesn't make sense", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0"]
+        [ObsoleteEx(ReplacementTypeOrMember = nameof(FlushAllAsync), Message = "Since listeners only have FlushAsync, a non-async flush doesn't make sense", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
 #pragma warning disable AvoidAsyncVoid // Avoid async void
         public static async void FlushAll()
 #pragma warning restore AvoidAsyncVoid // Avoid async void

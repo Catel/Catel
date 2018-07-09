@@ -37,11 +37,6 @@ namespace Catel
         /// </summary>
         public const string DefaultMultiLingualDependencyPropertyValue = "SET IN CONSTRUCTOR TO SUPPORT RUNTIME LANGUAGE SWITCHING";
 
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private static bool _bypassDevEnvCheck;
         private static bool? _isInDesignMode;
 
@@ -156,12 +151,9 @@ namespace Catel
                 isInDesignMode = DesignerProperties.GetIsInDesignMode(new DependencyObject());
             }
 
-            if (!BypassDevEnvCheck)
+            if (!BypassDevEnvCheck && !isInDesignMode.Value && EnvironmentHelper.IsProcessHostedByTool)
             {
-                if (!isInDesignMode.Value && EnvironmentHelper.IsProcessHostedByTool)
-                {
-                    isInDesignMode = true;
-                }
+                isInDesignMode = true;
             }
 #elif NETFX_CORE
             isInDesignMode = global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;

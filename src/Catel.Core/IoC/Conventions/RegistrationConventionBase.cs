@@ -21,7 +21,7 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="serviceLocator">The service locator.</param>
         /// <param name="registrationType">Type of the registration.</param>
-        public RegistrationConventionBase(IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton)
+        protected RegistrationConventionBase(IServiceLocator serviceLocator, RegistrationType registrationType = RegistrationType.Singleton)
         {
             Container = serviceLocator;
             RegistrationType = registrationType;

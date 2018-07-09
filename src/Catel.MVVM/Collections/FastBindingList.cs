@@ -368,7 +368,7 @@ namespace Catel.Collections
                 // Create new context
                 _suspensionContext = new ExtendedSuspensionContext<T>(mode);
             }
-            else if (_suspensionContext != null && _suspensionContext.Mode != mode)
+            else if (_suspensionContext.Mode != mode)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot change mode during another active suspension.");
             }
@@ -514,9 +514,9 @@ namespace Catel.Collections
                 {
                     result = 1;
                 }
-                else if (lhsValue is IComparable) // lhs is IComparable, compare to rhs
+                else if (lhsValue as IComparable comparable) // lhs is IComparable, compare to rhs
                 {
-                    result = ((IComparable)lhsValue).CompareTo(rhsValue);
+                    result = comparable.CompareTo(rhsValue);
                 }
                 else if (lhsValue.Equals(rhsValue)) // check if both values are equal
                 {

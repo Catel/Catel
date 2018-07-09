@@ -15,7 +15,6 @@ namespace Catel
     /// </summary>
     public static class FastDateTime
     {
-        private static DateTime UtcStartTime;
         private static DateTime StartTime;
         private static readonly Stopwatch Stopwatch;
 
@@ -26,7 +25,6 @@ namespace Catel
 
             Stopwatch = stopwatch;
             StartTime = now;
-            UtcStartTime = now.ToUniversalTime();
         }
 
         /// <summary>
@@ -56,9 +54,6 @@ namespace Catel
             {
                 // Returning DateTime.Utc is faster, see Catel.Benchmarks
                 return DateTime.UtcNow;
-
-                //var final = GetCurrent(ref UtcStartTime);
-                //return final;
             }
         }
 

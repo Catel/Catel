@@ -495,15 +495,13 @@ namespace Catel.Data
 
                         if (parentCollection != null)
                         {
-                            List<WeakReference> collectionItems;
-                            if (_collectionItems.TryGetValue(parentCollection, out collectionItems))
+                            if (_collectionItems.TryGetValue(parentCollection, out var collectionItems))
                             {
-                                // TODO: Consider less costly way to determine this
                                 for (var i = 0; i < collectionItems.Count; i++)
                                 {
                                     if (ReferenceEquals(collectionItems[i].Target, value))
                                     {
-                                        collectionItems.RemoveAt(i--);
+                                        collectionItems.RemoveAt(i);
                                         break;
                                     }
                                 }

@@ -85,32 +85,15 @@ namespace Catel
         {
             lock (_syncRoot)
             {
-                if (!IsDisposed)
+                if (!IsDisposed && !_disposing)
                 {
-                    if (!_disposing)
+                    _disposing = true;
+
+                    if (isDisposing)
                     {
-                        _disposing = true;
-
-                        if (isDisposing)
-                        {
-                            try
-                            {
-                                DisposeManaged();
-                            }
-                            catch (Exception ex)
-                            {
-                                if (ex.IsCritical())
-                                {
-                                    throw;
-                                }
-
-                                Log.Error( ex, "Error while disposing managed resources of '{0}'.", GetType().GetSafeFullName(false));
-                            }
-                        }
-
                         try
                         {
-                            DisposeUnmanaged();
+                            DisposeManaged();
                         }
                         catch (Exception ex)
                         {
@@ -119,12 +102,26 @@ namespace Catel
                                 throw;
                             }
 
-                            Log.Error(ex, "Error while disposing unmanaged resources of '{0}'.", GetType().GetSafeFullName(false));
+                            Log.Error(ex, "Error while disposing managed resources of '{0}'.", GetType().GetSafeFullName(false));
+                        }
+                    }
+
+                    try
+                    {
+                        DisposeUnmanaged();
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex.IsCritical())
+                        {
+                            throw;
                         }
 
-                        IsDisposed = true;
-                        _disposing = false;
+                        Log.Error(ex, "Error while disposing unmanaged resources of '{0}'.", GetType().GetSafeFullName(false));
                     }
+
+                    IsDisposed = true;
+                    _disposing = false;
                 }
             }
         }

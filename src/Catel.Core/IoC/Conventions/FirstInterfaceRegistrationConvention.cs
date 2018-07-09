@@ -19,13 +19,6 @@ namespace Catel.IoC
     /// </summary>
     public class FirstInterfaceRegistrationConvention : RegistrationConventionBase
     {
-        #region Fields
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        #endregion
-
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="FirstInterfaceRegistrationConvention"/> class.

@@ -8,7 +8,6 @@ namespace Catel
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
@@ -209,22 +208,24 @@ namespace Catel
         #endregion
 
         #region Nested type: DataBinding
+
+#if NET || NETSTANDARD
         /// <summary>
         /// DataBinding class.
         /// </summary>
         public static class DataBinding
         {
-            #region Delegates
+        #region Delegates
             /// <summary>
             /// Delegate used for formatting an enum name.
             /// </summary>
             /// <param name="value">The value to format.</param>
             /// <returns>String containing the enum name.</returns>
             public delegate string FormatEnumName(TEnum value);
-            #endregion
+        #endregion
 
-            #region Static Methods
-#if NET || NETSTANDARD
+        #region Static Methods
+
             /// <summary>
             /// Creates a list based on an enum.
             /// </summary>
@@ -237,30 +238,29 @@ namespace Catel
                 return (from TEnum value in values
                         select formatName != null ? new InternalBindableEnum(value, formatName(value)) : new InternalBindableEnum(value)).Cast<IBindableEnum<TEnum>>().ToList();
             }
-#endif
-            #endregion
+        #endregion
 
-            #region Nested type: InternalBindableEnum
+        #region Nested type: InternalBindableEnum
             /// <summary>
             /// Internal bindable enum.
             /// </summary>
             private class InternalBindableEnum : IBindableEnum<TEnum>
             {
-                #region Readonly & Static Fields
+        #region Readonly & Static Fields
                 /// <summary>
                 /// Name of the internal bindable enum.
                 /// </summary>
                 private readonly string _name;
-                #endregion
+        #endregion
 
-                #region Fields
+        #region Fields
                 /// <summary>
                 /// Value of the internal bindable enum.
                 /// </summary>
-                private TEnum _value;
-                #endregion
+                private readonly TEnum _value;
+        #endregion
 
-                #region Constructors
+        #region Constructors
                 /// <summary>
                 /// Initializes a new instance of the <see cref="Enum{TEnum}.DataBinding.InternalBindableEnum"/> class.
                 /// </summary>
@@ -281,9 +281,9 @@ namespace Catel
                     _value = value;
                     _name = name;
                 }
-                #endregion
+        #endregion
 
-                #region Instance Properties
+        #region Instance Properties
                 /// <summary>
                 /// Gets the name.
                 /// </summary>
@@ -301,9 +301,9 @@ namespace Catel
                 {
                     get { return _value; }
                 }
-                #endregion
+        #endregion
 
-                #region Instance Public Methods
+        #region Instance Public Methods
                 /// <summary>
                 /// Compares the current object with another object of the same type.
                 /// </summary>
@@ -333,10 +333,11 @@ namespace Catel
                 {
                     return _value.Equals(other.Value);
                 }
-                #endregion
+        #endregion
             }
-            #endregion
+        #endregion
         }
+#endif
         #endregion
 
         #region Nested type: Flags
@@ -415,7 +416,7 @@ namespace Catel
             public static TEnum ClearFlag(int flags, int flagToClear)
             {
                 // ReSharper disable RedundantCast
-                return ClearFlag((long)flags, (long)flagToClear);
+                return ClearFlag(flags, (long)flagToClear);
                 // ReSharper restore RedundantCast
             }
 
@@ -542,7 +543,7 @@ namespace Catel
             public static TEnum SetFlag(int flags, int flagToSet)
             {
                 // ReSharper disable RedundantCast
-                return SetFlag((long)flags, (long)flagToSet);
+                return SetFlag(flags, (long)flagToSet);
                 // ReSharper restore RedundantCast
             }
 
@@ -604,7 +605,7 @@ namespace Catel
             public static TEnum SwapFlag(int flags, int flagToSwap)
             {
                 // ReSharper disable RedundantCast
-                return SwapFlag((long)flags, (long)flagToSwap);
+                return SwapFlag(flags, (long)flagToSwap);
                 // ReSharper restore RedundantCast
             }
 
