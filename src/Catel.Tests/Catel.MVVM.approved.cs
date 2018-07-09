@@ -2062,7 +2062,9 @@ namespace Catel.Services
     }
     public interface IViewExportService
     {
+        [System.ObsoleteAttribute("Use `ExportAsync` instead. Will be removed in version 6.0.0.", true)]
         void Export(Catel.MVVM.IViewModel viewModel, Catel.Services.ExportMode exportMode = 0, double dpiX = 96, double dpiY = 96);
+        System.Threading.Tasks.Task ExportAsync(Catel.MVVM.IViewModel viewModel, Catel.Services.ExportMode exportMode = 0, double dpiX = 96, double dpiY = 96);
     }
     public interface IViewModelService : Catel.Services.IService { }
     public interface IViewModelWrapperService
@@ -2348,7 +2350,9 @@ namespace Catel.Services
     public class ViewExportService : Catel.Services.ServiceBase, Catel.Services.IViewExportService
     {
         public ViewExportService(Catel.MVVM.Views.IViewManager viewManager, Catel.Services.ISaveFileService saveFileService) { }
+        [System.ObsoleteAttribute("Use `ExportAsync` instead. Will be removed in version 6.0.0.", true)]
         public virtual void Export(Catel.MVVM.IViewModel viewModel, Catel.Services.ExportMode exportMode = 0, double dpiX = 96, double dpiY = 96) { }
+        public virtual System.Threading.Tasks.Task ExportAsync(Catel.MVVM.IViewModel viewModel, Catel.Services.ExportMode exportMode = 0, double dpiX = 96, double dpiY = 96) { }
     }
     public abstract class ViewModelServiceBase : Catel.Services.ServiceBase, Catel.Services.IService, Catel.Services.IViewModelService
     {
@@ -2576,13 +2580,6 @@ namespace Catel.Windows
         public static void SetOwnerWindowAndFocus(this System.Windows.Window window, bool forceNewOwner = False, bool focusFirstControl = True) { }
         public static void SetOwnerWindowAndFocus(this System.Windows.Window window, System.Windows.Window owner, bool forceNewOwner = False) { }
         public static void SetOwnerWindowAndFocus(this System.Windows.Window window, System.IntPtr owner, bool forceNewOwner = False) { }
-        public struct RECT
-        {
-            public int Bottom;
-            public int Left;
-            public int Right;
-            public int Top;
-        }
     }
     [System.ObsoleteAttribute("Use `Catel.Service.WrapControlService` instead. Will be removed in version 6.0.0." +
         "", true)]

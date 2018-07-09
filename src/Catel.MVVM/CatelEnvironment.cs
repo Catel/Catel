@@ -121,9 +121,9 @@ namespace Catel
                 {
                     return application.MainWindow;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Log.Warning(ex, "Failed to retrieve the application MainWindow, returning null");
+                    //Log.Warning(ex, "Failed to retrieve the application MainWindow, returning null");
                     return null;
                 }
 #endif

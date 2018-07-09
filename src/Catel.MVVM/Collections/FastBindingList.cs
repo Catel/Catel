@@ -406,7 +406,7 @@ namespace Catel.Collections
             Action action = () =>
             {
                 // Create event args
-                List<ListChangedEventArgs> eventArgsList = new List<ListChangedEventArgs>();
+                var eventArgsList = new List<ListChangedEventArgs>();
 
                 var suspensionContext = _suspensionContext;
                 if (suspensionContext != null)
@@ -490,7 +490,7 @@ namespace Catel.Collections
             _sortProperty = prop;
             _sortDirection = direction;
 
-            List<T> list = Items as List<T>;
+            var list = Items as List<T>;
             if (list == null)
             {
                 return;
@@ -498,23 +498,23 @@ namespace Catel.Collections
 
             list.Sort((lhs, rhs) =>
             {
+                var result = 0;
+
                 var lhsValue = lhs == null ? null : _sortProperty.GetValue(lhs);
                 var rhsValue = rhs == null ? null : _sortProperty.GetValue(rhs);
-
-                int result;
                 if (lhsValue == null && rhsValue == null) // both values are null, both equal
                 {
                     result = 0;
                 }
                 else if (lhsValue == null) // lhs value is null, rhs not, rhs value is greater
                 {
-                    result = -1;
+                    result = - 1;
                 }
                 else if (rhsValue == null) // rhs value is null, lhs not, lhs value is greater
                 {
                     result = 1;
                 }
-                else if (lhsValue as IComparable comparable) // lhs is IComparable, compare to rhs
+                else if (lhsValue is IComparable comparable) // lhs is IComparable, compare to rhs
                 {
                     result = comparable.CompareTo(rhsValue);
                 }
@@ -528,10 +528,13 @@ namespace Catel.Collections
                 }
 
                 if (_sortDirection == ListSortDirection.Descending)
+                {
                     result = -result;
+                }
 
                 return result;
             });
+
             _sorted = true;
 
             OnListChanged(new NotifyListChangedEventArgs(ListChangedType.Reset));
@@ -574,15 +577,15 @@ namespace Catel.Collections
                 return -1;
             }
 
-            List<T> list = Items as List<T>;
+            var list = Items as List<T>;
             if (list == null)
             {
                 return -1;
             }
 
-            for (int i = 0; i < list.Count; i++)
+            for (var i = 0; i < list.Count; i++)
             {
-                T item = list[i];
+                var item = list[i];
 
                 if (object.Equals(prop.GetValue(item), key))
                 {
@@ -649,7 +652,7 @@ namespace Catel.Collections
             }
 
             // Get item
-            T item = this[index];
+            var item = this[index];
 
             // Call base
             var oldValue = RaiseListChangedEvents;
@@ -702,7 +705,7 @@ namespace Catel.Collections
             }
 
             // Get old item
-            T oldItem = this[index];
+            var oldItem = this[index];
 
             // Call base
             var oldValue = RaiseListChangedEvents;
