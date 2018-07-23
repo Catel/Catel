@@ -17,6 +17,11 @@
     <Deterministic>False</Deterministic>
   </PropertyGroup>
 
+  <!-- (temporary?) workaround for https://github.com/dotnet/sdk/issues/1458 -->
+  <ItemGroup>
+    <PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.8.3" PrivateAssets="All" />
+  </ItemGroup>
+  
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugType>full</DebugType>
   </PropertyGroup>

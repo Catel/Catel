@@ -3,6 +3,66 @@
 #addin "nuget:?package=MagicChunks&version=2.0.0.119"
 #addin "nuget:?package=Cake.FileHelpers&version=3.0.0"
 
+#tool "nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2018.1.3"
+
+//-------------------------------------------------------------
+
+private void LogSeparator(string messageFormat, params object[] args)
+{
+    Information("");
+    Information("----------------------------------------");
+    Information(messageFormat, args);
+    Information("----------------------------------------");
+    Information("");
+}
+
+//-------------------------------------------------------------
+
+private void LogSeparator()
+{
+    Information("");
+    Information("----------------------------------------");
+    Information("");
+}
+
+//-------------------------------------------------------------
+
+private void CleanUpCode(bool failOnChanges)
+{
+    Information("Cleaning up code using CodeCleanup (R# command line tools)");
+
+    Information("Code cleanup is (temporarily) disabled. The following will need to be supported for being able to use CodeCleanup:");
+    Information("- respect xml indentation for xml comments (seems to enforce to 4 spaces)");
+    Information("- respect xml indentation for xml files");
+    Information("- don't change the order of regions / members or maybe them configurable via .editorConfig");
+    Information("- ignore wildcard files as configured at the bottom of .editorConfig");
+
+    // var processFileName = "./tools/JetBrains.ReSharper.CommandLineTools.2018.1.3/tools/cleanupcode.exe";
+    // var processArguments = string.Format("{0} -o=\".\\output\\codecleanup.xml\"", SolutionFileName);
+
+    // using (var process = StartAndReturnProcess(processFileName, new ProcessSettings 
+    //     { 
+    //         Arguments = processArguments 
+    //     }))
+    // {
+    //     process.WaitForExit();
+
+    //     var exitCode = process.GetExitCode();
+
+    //     Information("CodeCleanup exited with exit code: '{0}'", exitCode);
+        
+    //     if (exitCode != 0)
+    //     {
+    //         throw new Exception("Unexpected exit code '{0}' from CodeCleanup");
+    //     }
+    // }
+
+    // if (failOnChanges)
+    // {
+    //     // TODO: Do a diff. If there are changes, throw an exception
+    // }
+}
+
 //-------------------------------------------------------------
 
 private void UpdateSolutionAssemblyInfo()
@@ -21,6 +81,22 @@ private void UpdateSolutionAssemblyInfo()
     };
 
     CreateAssemblyInfo(SolutionAssemblyInfoFileName, assemblyInfo);
+}
+
+//-------------------------------------------------------------
+
+private string GetProjectDirectory(string projectName)
+{
+    var projectDirectory = string.Format("./src/{0}/", projectName);
+    return projectDirectory;
+}
+
+//-------------------------------------------------------------
+
+private string GetProjectFileName(string projectName)
+{
+    var fileName = string.Format("{0}{1}.csproj", GetProjectDirectory(projectName), projectName);
+    return fileName;
 }
 
 //-------------------------------------------------------------
@@ -119,6 +195,15 @@ Task("Clean")
             Recursive = true
         });
     }
+});
+
+//-------------------------------------------------------------
+
+Task("CleanupCode")
+    .ContinueOnError()
+    .Does(() => 
+{
+    CleanUpCode(true);
 });
 
 //-------------------------------------------------------------

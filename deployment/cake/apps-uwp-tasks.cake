@@ -123,8 +123,9 @@ private void BuildUwpApps()
 
         Information("Building project for platform {0}, artifacts directory is '{1}'", platform.Key, artifactsDirectory);
 
+        var projectFileName = GetProjectFileName(uwpApp);
+
         // Note: if csproj doesn't work, use SolutionFileName instead
-        var projectFileName = string.Format("./src/{0}/{0}.csproj", uwpApp);
         //var projectFileName = SolutionFileName;
         MSBuild(projectFileName, msBuildSettings);
 
