@@ -38,7 +38,7 @@ Classes / members marked as obsolete
 
 Added/fixed
 ===========
-
+(x) #1207 Potential exception at startup in .net core
 
 Roadmap
 =======
