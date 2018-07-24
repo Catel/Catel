@@ -39,6 +39,7 @@ Classes / members marked as obsolete
 Added/fixed
 ===========
 (x) #1207 Potential exception at startup in .net core
+(x) #1208 Ignore dynamic assemblies when determining the entry assembly
 
 Roadmap
 =======
