@@ -100,7 +100,12 @@ namespace Catel.Reflection
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to get assembly, returning Catel.Core as fallback");
+                Log.Error(ex, "Failed to get assembly");
+            }
+
+            if (assembly == null)
+            {
+                Log.Warning("Entry assembly could not be determined, returning Catel.Core as fallback");
 
                 assembly = typeof(AssemblyHelper).GetAssemblyEx();
             }
