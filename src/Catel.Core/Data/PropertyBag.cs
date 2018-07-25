@@ -135,8 +135,7 @@ namespace Catel.Data
 
             lock (_lockObject)
             {
-                object propertyValue;
-                if (_properties.TryGetValue(propertyName, out propertyValue))
+                if (_properties.TryGetValue(propertyName, out var propertyValue))
                 {
                     return (TValue) propertyValue;
                 }
@@ -159,8 +158,7 @@ namespace Catel.Data
 
             lock (_lockObject)
             {
-                object propertyValue;
-                if (!_properties.TryGetValue(propertyName, out propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, value))
+                if (!_properties.TryGetValue(propertyName, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, value))
                 {
                     _properties[propertyName] = value;
                     raisePropertyChanged = true;
@@ -187,8 +185,7 @@ namespace Catel.Data
 
             lock (_lockObject)
             {
-                object propertyValue;
-                if (_properties.TryGetValue(propertyName, out propertyValue) == false)
+                if (!_properties.TryGetValue(propertyName, out var propertyValue))
                 {
                     return;
                 }

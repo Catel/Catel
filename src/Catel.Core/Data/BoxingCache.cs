@@ -69,9 +69,7 @@ namespace Catel.Data
         {
             lock (_boxedValues)
             {
-                object boxedValue;
-
-                if (!_boxedValues.TryGetValue(value, out boxedValue))
+                if (!_boxedValues.TryGetValue(value, out var boxedValue))
                 {
                     boxedValue = AddUnboxedValue(value);
                 }
@@ -89,9 +87,7 @@ namespace Catel.Data
         {
             lock (_unboxedValues)
             {
-                T unboxedValue;
-
-                if (!_unboxedValues.TryGetValue(boxedValue, out unboxedValue))
+                if (!_unboxedValues.TryGetValue(boxedValue, out var unboxedValue))
                 {
                     unboxedValue = AddBoxedValue(boxedValue);
                 }

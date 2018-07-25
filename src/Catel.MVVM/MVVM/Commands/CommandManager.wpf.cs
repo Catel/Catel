@@ -54,8 +54,7 @@ namespace Catel.MVVM
         {
             Argument.IsNotNull("view", view);
 
-            CommandManagerWrapper commandManagerWrapper = null;
-            if (!_subscribedViews.TryGetValue(view, out commandManagerWrapper))
+            if (!_subscribedViews.TryGetValue(view, out var commandManagerWrapper))
             {
                 // Note: also check for dispatcher, see https://github.com/Catel/Catel/issues/1205
                 var app = Application.Current;

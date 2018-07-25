@@ -168,14 +168,14 @@ namespace Catel.MVVM
         {
             lock (_fieldErrors)
             {
-                List<string> fieldErrors;
-                if (_fieldErrors.TryGetValue(propertyName, out fieldErrors))
+                if (_fieldErrors.TryGetValue(propertyName, out var fieldErrors))
                 {
                     fieldErrors.Clear();
                 }
                 else
                 {
-                    _fieldErrors.Add(propertyName, new List<string>());
+                    fieldErrors = new List<string>();
+                    _fieldErrors[propertyName] = fieldErrors;
                 }
 
                 foreach (object error in errors)
@@ -183,7 +183,7 @@ namespace Catel.MVVM
                     var errorAsString = GetValidationString(error);
                     if (!string.IsNullOrEmpty(errorAsString))
                     {
-                        _fieldErrors[propertyName].Add(errorAsString);
+                        fieldErrors.Add(errorAsString);
                     }
                 }
             }
@@ -241,14 +241,14 @@ namespace Catel.MVVM
         {
             lock (_fieldWarnings)
             {
-                List<string> fieldWarnings;
-                if (_fieldWarnings.TryGetValue(propertyName, out fieldWarnings))
+                if (_fieldWarnings.TryGetValue(propertyName, out var fieldWarnings))
                 {
                     fieldWarnings.Clear();
                 }
                 else
                 {
-                    _fieldWarnings.Add(propertyName, new List<string>());
+                    fieldWarnings = new List<string>();
+                    _fieldWarnings[propertyName] = fieldWarnings;
                 }
 
                 foreach (object warning in warnings)
@@ -256,7 +256,7 @@ namespace Catel.MVVM
                     var warningAsString = GetValidationString(warning);
                     if (!string.IsNullOrEmpty(warningAsString))
                     {
-                        _fieldWarnings[propertyName].Add(warningAsString);
+                        fieldWarnings.Add(warningAsString);
                     }
                 }
             }
@@ -285,8 +285,7 @@ namespace Catel.MVVM
             {
                 lock (_fieldErrors)
                 {
-                    List<string> fieldErrors;
-                    if (_fieldErrors.TryGetValue(propertyName, out fieldErrors))
+                    if (_fieldErrors.TryGetValue(propertyName, out var fieldErrors))
                     {
                         errors.AddRange(fieldErrors);
                     }
@@ -319,8 +318,7 @@ namespace Catel.MVVM
             {
                 lock (_fieldWarnings)
                 {
-                    List<string> fieldWarnings;
-                    if (_fieldWarnings.TryGetValue(propertyName, out fieldWarnings))
+                    if (_fieldWarnings.TryGetValue(propertyName, out var fieldWarnings))
                     {
                         errors.AddRange(fieldWarnings);
                     }
@@ -433,8 +431,7 @@ namespace Catel.MVVM
                     {
                         lock (_fieldErrors)
                         {
-                            List<string> fieldErrors;
-                            if (_fieldErrors.TryGetValue(propertyName, out fieldErrors))
+                            if (_fieldErrors.TryGetValue(propertyName, out var fieldErrors))
                             {
                                 fieldErrors.Clear();
                             }

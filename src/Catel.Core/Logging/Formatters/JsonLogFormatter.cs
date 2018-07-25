@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="JsonLogFormatter.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -148,8 +148,7 @@ namespace Catel.Logging
                 return;
             }
 
-            Action<object, bool, TextWriter> writer;
-            if (LiteralWriters.TryGetValue(value.GetType(), out writer))
+            if (LiteralWriters.TryGetValue(value.GetType(), out var writer))
             {
                 writer(value, forceQuotation, textWriter);
                 return;

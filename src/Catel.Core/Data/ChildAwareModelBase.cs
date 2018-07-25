@@ -126,14 +126,12 @@ namespace Catel.Data
 
             lock (_lock)
             {
-                ChangeNotificationWrapper oldWrapper;
-
                 if (_propertyValueChangeNotificationWrappers == null)
                 {
                     _propertyValueChangeNotificationWrappers = new Dictionary<string, ChangeNotificationWrapper>();
                 }
 
-                if (_propertyValueChangeNotificationWrappers.TryGetValue(propertyName, out oldWrapper))
+                if (_propertyValueChangeNotificationWrappers.TryGetValue(propertyName, out var oldWrapper))
                 {
                     oldWrapper.PropertyChanged -= OnPropertyObjectPropertyChanged;
                     oldWrapper.CollectionChanged -= OnPropertyObjectCollectionChanged;

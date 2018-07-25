@@ -69,8 +69,7 @@ namespace Catel.Services
                 return null;
             }
 
-            object tempObj = null;
-            if (_weakIsWrappingTable.TryGetValue(view, out tempObj))
+            if (_weakIsWrappingTable.TryGetValue(view, out var tempObj))
             {
                 return null;
             }

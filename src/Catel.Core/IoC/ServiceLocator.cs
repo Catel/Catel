@@ -329,14 +329,12 @@ namespace Catel.IoC
 
                 var serviceInfo = new ServiceInfo(serviceType, tag);
 
-                RegisteredInstanceInfo instanceInfo;
-                if (_registeredInstances.TryGetValue(serviceInfo, out instanceInfo))
+                if (_registeredInstances.TryGetValue(serviceInfo, out var instanceInfo))
                 {
                     return instanceInfo.RegistrationType == RegistrationType.Singleton;
                 }
 
-                ServiceLocatorRegistration registration;
-                if (_registeredTypes.TryGetValue(serviceInfo, out registration))
+                if (_registeredTypes.TryGetValue(serviceInfo, out var registration))
                 {
                     return registration.RegistrationType == RegistrationType.Singleton;
                 }

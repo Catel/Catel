@@ -193,8 +193,7 @@ namespace Catel.MVVM
 
                     // INotifyDataErrorInfo & INotifyDataWarningInfo
 
-                    ModelErrorInfo modelErrorInfo;
-                    if (_modelErrorInfo.TryGetValue(mapping.ModelProperty, out modelErrorInfo))
+                    if (_modelErrorInfo.TryGetValue(mapping.ModelProperty, out var modelErrorInfo))
                     {
                         if (!hasSetFieldError)
                         {
@@ -256,8 +255,7 @@ namespace Catel.MVVM
                     }
 
                     // INotifyDataErrorInfo & INotifyDataWarningInfo
-                    ModelErrorInfo modelErrorInfo;
-                    if (_modelErrorInfo.TryGetValue(modelObject.Key, out modelErrorInfo))
+                    if (_modelErrorInfo.TryGetValue(modelObject.Key, out var modelErrorInfo))
                     {
                         foreach (var error in modelErrorInfo.GetErrors(string.Empty))
                         {

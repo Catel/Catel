@@ -99,8 +99,7 @@ namespace Catel.Data
 
             lock (_lockObject)
             {
-                PropertyData catelProperty;
-                if (!_catelProperties.TryGetValue(name, out catelProperty))
+                if (!_catelProperties.TryGetValue(name, out var catelProperty))
                 {
                     throw Log.ErrorAndCreateException(msg => new PropertyNotRegisteredException(name, Type),
                         "Property '{0}' on type '{1}' is not registered", name, Type.FullName);

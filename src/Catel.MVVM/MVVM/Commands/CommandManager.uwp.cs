@@ -32,8 +32,7 @@ namespace Catel.MVVM
         {
             Argument.IsNotNull("view", view);
 
-            CommandManagerWrapper commandManagerWrapper = null;
-            if (!_subscribedViews.TryGetValue(view, out commandManagerWrapper))
+            if (!_subscribedViews.TryGetValue(view, out var commandManagerWrapper))
             {
                 _subscribedViews.Add(view, new CommandManagerWrapper(view, this));
             }

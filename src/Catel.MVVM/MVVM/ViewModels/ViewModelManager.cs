@@ -455,8 +455,7 @@ namespace Catel.MVVM
         {
             return _managedViewModelsLock.PerformUpgradableRead(() =>
             {
-                ManagedViewModel result;
-                if (_managedViewModels.TryGetValue(viewModelType, out result))
+                if (_managedViewModels.TryGetValue(viewModelType, out var result))
                 {
                     return result;
                 }

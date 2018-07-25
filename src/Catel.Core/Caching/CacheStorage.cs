@@ -181,9 +181,7 @@ namespace Catel.Caching
 
             return ExecuteInLock(key, () =>
             {
-                CacheStorageValueInfo<TValue> valueInfo;
-
-                _dictionary.TryGetValue(key, out valueInfo);
+                _dictionary.TryGetValue(key, out var valueInfo);
 
                 return (valueInfo != null) ? valueInfo.Value : default(TValue);
             });
@@ -223,8 +221,7 @@ namespace Catel.Caching
 
             return ExecuteInLock(key, () =>
             {
-                CacheStorageValueInfo<TValue> cacheStorageValueInfo;
-                if (!@override && _dictionary.TryGetValue(key, out cacheStorageValueInfo))
+                if (!@override && _dictionary.TryGetValue(key, out var cacheStorageValueInfo))
                 {
                     return cacheStorageValueInfo.Value;
                 }
@@ -292,8 +289,7 @@ namespace Catel.Caching
 
             return ExecuteInLockAsync(key, async () =>
             {
-                CacheStorageValueInfo<TValue> cacheStorageValueInfo;
-                if (!@override && _dictionary.TryGetValue(key, out cacheStorageValueInfo))
+                if (!@override && _dictionary.TryGetValue(key, out var cacheStorageValueInfo))
                 {
                     return cacheStorageValueInfo.Value;
                 }
@@ -539,9 +535,7 @@ namespace Catel.Caching
             // of garbage collection
             lock (_syncObj)
             {
-                AsyncLock asyncLock;
-
-                if (!_locksByKey.TryGetValue(key, out asyncLock))
+                if (!_locksByKey.TryGetValue(key, out var asyncLock))
                 {
                     _locksByKey[key] = asyncLock = new AsyncLock();
                 }

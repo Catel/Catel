@@ -531,8 +531,7 @@ namespace Catel.Logging
 
             lock (_loggers)
             {
-                ILog log;
-                if (!_loggers.TryGetValue(name, out log))
+                if (!_loggers.TryGetValue(name, out var log))
                 {
                     log = new Log(name);
                     log.LogMessage += OnLogMessage;
@@ -559,8 +558,7 @@ namespace Catel.Logging
 
             lock (_loggers)
             {
-                ILog log;
-                if (!_loggers.TryGetValue(name, out log))
+                if (!_loggers.TryGetValue(name, out var log))
                 {
                     log = new Log(name, type);
                     log.LogMessage += OnLogMessage;
@@ -588,8 +586,7 @@ namespace Catel.Logging
 
             lock (_loggers)
             {
-                ILog log;
-                if (!_loggers.TryGetValue(name, out log))
+                if (!_loggers.TryGetValue(name, out var log))
                 {
                     log = new CatelLog(name, alwaysLog);
                     log.LogMessage += OnLogMessage;
@@ -620,8 +617,7 @@ namespace Catel.Logging
 
             lock (_loggers)
             {
-                ILog log;
-                if (!_loggers.TryGetValue(name, out log))
+                if (!_loggers.TryGetValue(name, out var log))
                 {
                     return false;
                 }
