@@ -89,7 +89,7 @@ namespace Catel.Reflection
                     var assemblyPath = Path.Combine(setupInfo.ApplicationBase, setupInfo.ApplicationName);
 
                     assembly = (from x in appDomain.GetLoadedAssemblies(true)
-                                where !x.IsDynamic && string.Equals(x.Location, assemblyPath)
+                                where !x.IsDynamicAssembly() && string.Equals(x.Location, assemblyPath)
                                 select x).FirstOrDefault();
                 }
 #elif NETFX_CORE
