@@ -120,8 +120,7 @@ namespace Catel.Reflection
 
             lock (_lockObject)
             {
-                string assemblyNameWithVersion = null;
-                if (_assemblyMappings.TryGetValue(assemblyNameWithoutVersion, out assemblyNameWithVersion))
+                if (_assemblyMappings.TryGetValue(assemblyNameWithoutVersion, out var assemblyNameWithVersion))
                 {
                     return assemblyNameWithVersion;
                 }
@@ -165,6 +164,7 @@ namespace Catel.Reflection
                 if (logLoaderExceptions)
                 {
                     Log.Warning("The following loading exceptions occurred:");
+
                     foreach (var error in typeLoadException.LoaderExceptions)
                     {
                         // Fix mono issue https://github.com/Catel/Catel/issues/1071 
@@ -244,6 +244,12 @@ namespace Catel.Reflection
         /// <returns><c>true</c> if the specified assembly is a dynamic assembly; otherwise, <c>false</c>.</returns>
         public static bool IsDynamicAssembly(this Assembly assembly)
         {
+            // Simplest & fastest way out
+            if (assembly.IsDynamic)
+            {
+                return true;
+            }
+
             var isDynamicAssembly =
 #if NET
                 (assembly is System.Reflection.Emit.AssemblyBuilder) &&
