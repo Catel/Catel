@@ -2008,10 +2008,14 @@ namespace Catel.Services
         void Start();
         void Stop();
     }
+    [System.ObsoleteAttribute("Use Orc.CommandLine instead since that has better support for parsing command lin" +
+        "es. Will be removed in version 6.0.0.", true)]
     public interface IStartUpInfoProvider
     {
         string[] Arguments { get; }
     }
+    [System.ObsoleteAttribute("Use Orc.CommandLine instead since that has better support for parsing command lin" +
+        "es. Will be removed in version 6.0.0.", true)]
     public class static IStartUpInfoProviderExtensions
     {
         public static string GetCommandLine(this Catel.Services.IStartUpInfoProvider startUpInfoProvider) { }
@@ -2305,6 +2309,8 @@ namespace Catel.Services
         public override int GetHashCode() { }
         public override string ToString() { }
     }
+    [System.ObsoleteAttribute("Use Orc.CommandLine instead since that has better support for parsing command lin" +
+        "es. Will be removed in version 6.0.0.", true)]
     public class StartUpInfoProvider : Catel.Services.IStartUpInfoProvider
     {
         public StartUpInfoProvider() { }

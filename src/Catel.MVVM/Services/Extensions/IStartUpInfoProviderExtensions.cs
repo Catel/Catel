@@ -16,6 +16,7 @@ namespace Catel.Services
     /// <summary>
     /// Extension methods for the startup info provider.
     /// </summary>
+    [ObsoleteEx(Message = "Use Orc.CommandLine instead since that has better support for parsing command lines", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
     public static class IStartUpInfoProviderExtensions
     {
         private static readonly char[] ReplaceableCharacters = new[] {' ', '-', ':'};
