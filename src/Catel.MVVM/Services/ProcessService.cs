@@ -83,7 +83,7 @@ namespace Catel.Services
 
             return new ProcessResult(processContext)
             {
-                ExitCode = tcs.Task.Result
+                ExitCode = tcs.Task?.Result ?? 0
             };
         }
 
