@@ -10,10 +10,21 @@
 #tool "nuget:?package=MSBuild.SonarQube.Runner.Tool&version=4.3.0"
 #tool "nuget:?package=GitVersion.CommandLine&version=4.0.0-beta0012"
 
+//-------------------------------------------------------------
+
 var Target = GetBuildServerVariable("Target", "Default");
 
 Information("Running target '{0}'", Target);
 Information("Using output directory '{0}'", OutputRootDirectory);
+
+//-------------------------------------------------------------
+
+Information("Validating input");
+
+ValidateGenericInput();
+ValidateUwpAppsInput();
+ValidateWpfAppsInput();
+ValidateComponentsInput();
 
 //-------------------------------------------------------------
 
@@ -151,7 +162,6 @@ Task("Build")
         {
             case "error":
                 throw new Exception(string.Format("The SonarQube gateway for '{0}' returned ERROR, please check the error(s) at {1}/dashboard?id={0}", SonarProject, SonarUrl));
-                break;
 
             case "warn":
                 Warning("The SonarQube gateway for '{0}' returned WARNING, please check the warning(s) at {1}/dashboard?id={0}", SonarProject, SonarUrl);
@@ -167,7 +177,6 @@ Task("Build")
 
             default:
                 throw new Exception(string.Format("Unexpected SonarQube gateway status '{0}' for project '{1}'", status, SonarProject));
-                break;
         }
     }
 

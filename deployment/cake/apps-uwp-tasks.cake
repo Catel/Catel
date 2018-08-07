@@ -7,6 +7,13 @@
 
 //-------------------------------------------------------------
 
+private void ValidateUwpAppsInput()
+{
+    // No validation required (yet)
+}
+
+//-------------------------------------------------------------
+
 private bool HasUwpApps()
 {
     return UwpApps != null && UwpApps.Length > 0;

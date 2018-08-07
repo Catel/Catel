@@ -1,8 +1,8 @@
 #l "buildserver.cake"
 
 // Generic
-var DeploymentsShare = GetBuildServerVariable("DeploymentsShare", string.Empty);
-var Channel = GetBuildServerVariable("Channel", string.Empty);
+var DeploymentsShare = GetBuildServerVariable("DeploymentsShare");
+var Channel = GetBuildServerVariable("Channel");
 var UpdateDeploymentsShare = bool.Parse(GetBuildServerVariable("UpdateDeploymentsShare", "true"));
 
 // Inno Setup

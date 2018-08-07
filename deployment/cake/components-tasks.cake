@@ -4,6 +4,13 @@
 
 //-------------------------------------------------------------
 
+private void ValidateComponentsInput()
+{
+    // No validation required (yet)
+}
+
+//-------------------------------------------------------------
+
 private bool HasComponents()
 {
     return Components != null && Components.Length > 0;

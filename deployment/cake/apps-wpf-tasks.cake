@@ -7,6 +7,13 @@
 
 //-------------------------------------------------------------
 
+private void ValidateWpfAppsInput()
+{
+    // No validation required (yet)
+}
+
+//-------------------------------------------------------------
+
 private bool HasWpfApps()
 {
     return WpfApps != null && WpfApps.Length > 0;

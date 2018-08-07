@@ -7,6 +7,25 @@
 
 //-------------------------------------------------------------
 
+private void ValidateRequiredInput(string parameterName)
+{
+    if (!Parameters.ContainsKey(parameterName))
+    {
+        Error("Parameter '{0}' is required but not defined", parameterName);
+    }
+}
+
+//-------------------------------------------------------------
+
+private void ValidateGenericInput()
+{
+    ValidateRequiredInput("SolutionName");
+    ValidateRequiredInput("Company");
+    ValidateRequiredInput("RepositoryUrl");
+}
+
+//-------------------------------------------------------------
+
 private void LogSeparator(string messageFormat, params object[] args)
 {
     Information("");
@@ -233,15 +252,22 @@ Task("CodeSign")
 
     foreach (var projectToCodeSign in projectsToCodeSign)
     {
+        var codeSignWildCard = CodeSignWildCard;
+        if (string.IsNullOrWhiteSpace(codeSignWildCard))
+        {
+            // Empty, we need to override with project name for valid default value
+            codeSignWildCard = projectToCodeSign;
+        }
+    
         var projectFilesToSign = new List<FilePath>();
 
         var outputDirectory = string.Format("{0}/{1}", OutputRootDirectory, projectToCodeSign);
 
-        var exeSignFilesSearchPattern = string.Format("{0}/**/*{1}*.exe", outputDirectory, CodeSignWildCard);
+        var exeSignFilesSearchPattern = string.Format("{0}/**/*{1}*.exe", outputDirectory, codeSignWildCard);
         Information(exeSignFilesSearchPattern);
         projectFilesToSign.AddRange(GetFiles(exeSignFilesSearchPattern));
 
-        var dllSignFilesSearchPattern = string.Format("{0}/**/*{1}*.dll", outputDirectory, CodeSignWildCard);
+        var dllSignFilesSearchPattern = string.Format("{0}/**/*{1}*.dll", outputDirectory, codeSignWildCard);
         Information(dllSignFilesSearchPattern);
         projectFilesToSign.AddRange(GetFiles(dllSignFilesSearchPattern));
 

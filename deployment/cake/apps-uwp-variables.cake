@@ -1,8 +1,8 @@
 #l "./buildserver.cake"
 
-var WindowsStoreAppId = GetBuildServerVariable("WindowsStoreAppId", string.Empty);
-var WindowsStoreClientId = GetBuildServerVariable("WindowsStoreClientId", string.Empty);
-var WindowsStoreClientSecret = GetBuildServerVariable("WindowsStoreClientSecret", string.Empty);
-var WindowsStoreTenantId = GetBuildServerVariable("WindowsStoreTenantId", string.Empty);
+var WindowsStoreAppId = GetBuildServerVariable("WindowsStoreAppId");
+var WindowsStoreClientId = GetBuildServerVariable("WindowsStoreClientId");
+var WindowsStoreClientSecret = GetBuildServerVariable("WindowsStoreClientSecret");
+var WindowsStoreTenantId = GetBuildServerVariable("WindowsStoreTenantId");
 
 var UwpApps = UwpAppsToBuild ?? new string[] { };
