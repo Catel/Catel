@@ -40,6 +40,7 @@ Classes / members marked as obsolete
 
 Added/fixed
 ===========
+(+) #1210 Add support for DispatcherPriority to Dispatcher extensions
 (x) #1207 Potential exception at startup in .net core
 (x) #1208 Ignore dynamic assemblies when determining the entry assembly
 
