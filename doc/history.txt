@@ -40,6 +40,7 @@ Classes / members marked as obsolete
 
 Added/fixed
 ===========
+(+) #1204 Support PasswordBox for the 'SelectOnFocus' behavior
 (+) #1210 Add support for DispatcherPriority to Dispatcher extensions
 (+) #1212 Support UpdateBindingOnPasswordChanged for UWP 
 (x) #1207 Potential exception at startup in .net core
