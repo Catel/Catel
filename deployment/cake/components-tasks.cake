@@ -4,6 +4,22 @@
 
 //-------------------------------------------------------------
 
+private string GetComponentNuGetRepositoryUrl(string projectName)
+{
+    // Allow per project overrides via "NuGetRepositoryUrlFor[ProjectName]"
+    return GetProjectSpecificConfigurationValue(projectName, "NuGetRepositoryUrlFor", NuGetRepositoryUrl);
+}
+
+//-------------------------------------------------------------
+
+private string GetComponentNuGetRepositoryApiKey(string projectName)
+{
+    // Allow per project overrides via "NuGetRepositoryApiKeyFor[ProjectName]"
+    return GetProjectSpecificConfigurationValue(projectName, "NuGetRepositoryApiKeyFor", NuGetRepositoryApiKey);
+}
+
+//-------------------------------------------------------------
+
 private void ValidateComponentsInput()
 {
     // No validation required (yet)
@@ -180,6 +196,43 @@ private void PackageComponents()
 
 //-------------------------------------------------------------
 
+private void DeployComponents()
+{
+    if (!HasComponents())
+    {
+        return;
+    }
+
+    foreach (var component in Components)
+    {
+        if (!ShouldDeployProject(component))
+        {
+            Information("Component '{0}' should not be deployed", component);
+            continue;
+        }
+
+        LogSeparator("Deploying component '{0}'", component);
+
+        var packageToPush = string.Format("{0}/{1}.{2}.nupkg", OutputRootDirectory, component, VersionNuGet);
+        var nuGetRepositoryUrl = GetComponentNuGetRepositoryUrl(component);
+        var nuGetRepositoryApiKey = GetComponentNuGetRepositoryApiKey(component);
+
+        if (string.IsNullOrWhiteSpace(nuGetRepositoryUrl))
+        {
+            Error("NuGet repository is empty, as a protection mechanism this must *always* be specified to make sure packages aren't accidentally deployed to the default public NuGet feed");
+            return;
+        }
+
+        NuGetPush(packageToPush, new NuGetPushSettings
+        {
+            Source = nuGetRepositoryUrl,
+            ApiKey = nuGetRepositoryApiKey
+        });
+    }
+}
+
+//-------------------------------------------------------------
+
 Task("UpdateInfoForComponents")
     .IsDependentOn("Clean")
     .Does(() =>
@@ -204,4 +257,13 @@ Task("PackageComponents")
     .Does(() =>
 {
     PackageComponents();
+});
+
+//-------------------------------------------------------------
+
+Task("DeployComponents")
+    .IsDependentOn("PackageComponents")
+    .Does(() =>
+{
+    DeployComponents();
 });

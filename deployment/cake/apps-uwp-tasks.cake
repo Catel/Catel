@@ -1,9 +1,9 @@
 #l "apps-uwp-variables.cake"
 
-#addin nuget:?package=MagicChunks&version=2.0.0.119
-#addin nuget:?package=Newtonsoft.Json&version=11.0.2
-#addin nuget:?package=WindowsAzure.Storage&version=9.1.1
-#addin nuget:?package=Cake.WindowsAppStore&version=1.4.0
+#addin "nuget:?package=MagicChunks&version=2.0.0.119"
+#addin "nuget:?package=Newtonsoft.Json&version=11.0.2"
+#addin "nuget:?package=WindowsAzure.Storage&version=9.1.1"
+#addin "nuget:?package=Cake.WindowsAppStore&version=1.4.0"
 
 //-------------------------------------------------------------
 
@@ -161,6 +161,30 @@ private void PackageUwpApps()
 
 //-------------------------------------------------------------
 
+private void DeployUwpApps()
+{
+    if (!HasUwpApps())
+    {
+        return;
+    }
+    
+    foreach (var uwpApp in UwpApps)
+    {
+        if (!ShouldDeployProject(uwpApp))
+        {
+            Information("UWP app '{0}' should not be deployed", uwpApp);
+            continue;
+        }
+
+        LogSeparator("Deploying UWP app '{0}'", uwpApp);
+
+        // TODO: How to Deploy?
+        Warning("Deploying of UWP apps is not yet implemented, please deploy '{0}' manually", uwpApp);
+    }
+}
+
+//-------------------------------------------------------------
+
 Task("UpdateInfoForUwpApps")
     .IsDependentOn("Clean")
     .Does(() =>
@@ -185,4 +209,13 @@ Task("PackageUwpApps")
     .Does(() =>
 {
     PackageUwpApps();
+});
+
+//-------------------------------------------------------------
+
+Task("DeployUwpApps")
+    .IsDependentOn("PackageUwpApps")
+    .Does(() =>
+{
+    DeployUwpApps();
 });
