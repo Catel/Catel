@@ -1,9 +1,9 @@
 #l "apps-wpf-variables.cake"
 
-#tool "Squirrel.Windows" 
+#addin "nuget:?package=Cake.Squirrel&version=0.13.0"
+#addin "nuget:?package=MagicChunks&version=2.0.0.119"
 
-#addin nuget:?package=Cake.Squirrel&version=0.13.0
-#addin nuget:?package=MagicChunks&version=2.0.0.119
+#tool "nuget:?package=Squirrel.Windows&version=1.8.0"
 
 //-------------------------------------------------------------
 
@@ -307,6 +307,30 @@ private void PackageWpfApps()
 
 //-------------------------------------------------------------
 
+private void DeployWpfApps()
+{
+    if (!HasWpfApps())
+    {
+        return;
+    }
+    
+    foreach (var wpfApp in WpfApps)
+    {
+        if (!ShouldDeployProject(wpfApp))
+        {
+            Information("WPF app '{0}' should not be deployed", wpfApp);
+            continue;
+        }
+
+        LogSeparator("Deploying WPF app '{0}'", wpfApp);
+
+        // TODO: How to Deploy?
+        Warning("Deploying of WPF apps is not yet implemented, please deploy '{0}' manually", wpfApp);
+    }
+}
+
+//-------------------------------------------------------------
+
 Task("UpdateInfoForWpfApps")
     .IsDependentOn("Clean")
     .Does(() =>
@@ -331,4 +355,13 @@ Task("PackageWpfApps")
     .Does(() =>
 {
     PackageWpfApps();
+});
+
+//-------------------------------------------------------------
+
+Task("DeployWpfApps")
+    .IsDependentOn("PackageWpfApps")
+    .Does(() =>
+{
+    DeployWpfApps();
 });

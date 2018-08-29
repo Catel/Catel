@@ -3123,7 +3123,7 @@ namespace Catel.Windows.Interactivity
         Top = 0,
         Bottom = 1,
     }
-    public class SelectTextOnFocus : Catel.Windows.Interactivity.BehaviorBase<System.Windows.Controls.TextBox>
+    public class SelectTextOnFocus : Catel.Windows.Interactivity.BehaviorBase<System.Windows.Controls.Control>
     {
         public SelectTextOnFocus() { }
         protected override void OnAssociatedObjectLoaded() { }

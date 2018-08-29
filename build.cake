@@ -6,7 +6,7 @@
 var Parameters = new Dictionary<string, object>();
 Parameters["SolutionName"] = "Catel";
 Parameters["Company"] = "CatenaLogic";
-Parameters["RepositoryUrl"] = string.Format("https://github.com/{0}/{1}", GetBuildServerVariable("Company"), GetBuildServerVariable("SolutionName"));
+Parameters["RepositoryUrl"] = string.Format("https://github.com/{0}/{1}", GetBuildServerVariable("SolutionName"), GetBuildServerVariable("SolutionName"));
 Parameters["StartYear"] = "2010";
 
 // Note: the rest of the variables should be coming from the build server,
@@ -29,6 +29,15 @@ var ComponentsToBuild = new string[]
     "Catel.MVVM",
     "Catel.MVVM.Xamarin.Forms",
     "Catel.Serialization.Json",
+};
+
+//=======================================================
+// DEFINE WEB APPS TO BUILD / PACKAGE
+//=======================================================
+
+var WebAppsToBuild = new string[]
+{
+
 };
 
 //=======================================================

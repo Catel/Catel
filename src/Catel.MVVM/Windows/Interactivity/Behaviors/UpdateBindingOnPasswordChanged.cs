@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if !XAMARIN && !XAMARIN_FORMS
 
 namespace Catel.Windows.Interactivity
 {
@@ -51,7 +51,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Called when the password has been changed.
         /// </summary>
-        /// <param name="e">The <see cref="System.Windows.DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnPasswordChanged(DependencyPropertyChangedEventArgs e)
         {
             if (AssociatedObject != null)
@@ -83,7 +83,7 @@ namespace Catel.Windows.Interactivity
         /// Passwords the box password changed.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.Windows.RoutedEventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="UIEventArgs"/> instance containing the event data.</param>
         private void OnPasswordChanged(object sender, RoutedEventArgs e)
         {
             if (!IsEnabled)

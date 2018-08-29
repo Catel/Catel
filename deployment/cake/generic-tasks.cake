@@ -120,6 +120,38 @@ private string GetProjectFileName(string projectName)
 
 //-------------------------------------------------------------
 
+private string GetProjectSlug(string projectName)
+{
+    var slug = projectName.Replace(".", "").Replace(" ", "");
+    return slug;
+}
+
+//-------------------------------------------------------------
+
+private string GetProjectSpecificConfigurationValue(string projectName, string configurationPrefix, string fallbackValue)
+{
+    // Allow per project overrides via "[configurationPrefix][projectName]"
+    var slug = GetProjectSlug(projectName);
+    var keyToCheck = string.Format("{0}{1}", configurationPrefix, slug);
+
+    var value = GetBuildServerVariable(keyToCheck, fallbackValue);
+    return value;
+}
+
+//-------------------------------------------------------------
+
+private bool ShouldDeployProject(string projectName)
+{
+    // Allow the build server to configure this via "Deploy[ProjectName]"
+    var slug = GetProjectSlug(projectName);
+    var keyToCheck = string.Format("Deploy{0}", slug);
+
+    var shouldDeploy = bool.Parse(GetBuildServerVariable(keyToCheck, "True"));
+    return shouldDeploy;
+}
+
+//-------------------------------------------------------------
+
 Task("UpdateNuGet")
     .ContinueOnError()
     .Does(() => 
