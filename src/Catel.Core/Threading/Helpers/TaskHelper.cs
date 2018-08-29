@@ -56,18 +56,16 @@ namespace Catel.Threading
         /// <returns>Task&lt;T&gt;.</returns>
         public static Task<T> FromResult(T value)
         {
-            Task<T> task;
-
             lock (_fromResultCache)
             {
-                if (!_fromResultCache.TryGetValue(value, out task))
+                if (!_fromResultCache.TryGetValue(value, out var task))
                 {
                     task = TaskShim.FromResult(value);
                     _fromResultCache[value] = task;
                 }
-            }
 
-            return task;
+                return task;
+            }
         }
     }
 

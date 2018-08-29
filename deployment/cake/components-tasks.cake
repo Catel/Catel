@@ -4,6 +4,29 @@
 
 //-------------------------------------------------------------
 
+private string GetComponentNuGetRepositoryUrl(string projectName)
+{
+    // Allow per project overrides via "NuGetRepositoryUrlFor[ProjectName]"
+    return GetProjectSpecificConfigurationValue(projectName, "NuGetRepositoryUrlFor", NuGetRepositoryUrl);
+}
+
+//-------------------------------------------------------------
+
+private string GetComponentNuGetRepositoryApiKey(string projectName)
+{
+    // Allow per project overrides via "NuGetRepositoryApiKeyFor[ProjectName]"
+    return GetProjectSpecificConfigurationValue(projectName, "NuGetRepositoryApiKeyFor", NuGetRepositoryApiKey);
+}
+
+//-------------------------------------------------------------
+
+private void ValidateComponentsInput()
+{
+    // No validation required (yet)
+}
+
+//-------------------------------------------------------------
+
 private bool HasComponents()
 {
     return Components != null && Components.Length > 0;
@@ -22,7 +45,7 @@ private void UpdateInfoForComponents()
     {
         Information("Updating version for component '{0}'", component);
 
-        var projectFileName = string.Format("./src/{0}/{0}.csproj", component);
+        var projectFileName = GetProjectFileName(component);
 
         TransformConfig(projectFileName, new TransformationCollection 
         {
@@ -42,9 +65,9 @@ private void BuildComponents()
     
     foreach (var component in Components)
     {
-        Information("Building component '{0}'", component);
+        LogSeparator("Building component '{0}'", component);
 
-        var projectFileName = string.Format("./src/{0}/{0}.csproj", component);
+        var projectFileName = GetProjectFileName(component);
         
         var msBuildSettings = new MSBuildSettings {
             Verbosity = Verbosity.Quiet, // Verbosity.Diagnostic
@@ -79,7 +102,7 @@ private void PackageComponents()
 
     foreach (var component in Components)
     {
-        Information("Packaging component '{0}'", component);
+        LogSeparator("Packaging component '{0}'", component);
 
         var projectFileName = string.Format("./src/{0}/{0}.csproj", component);
 
@@ -146,6 +169,8 @@ private void PackageComponents()
 
             MSBuild(projectFileName, msBuildSettings);
         }
+        
+        LogSeparator();
     }
 
     var codeSign = (!IsCiBuild && !string.IsNullOrWhiteSpace(CodeSignCertificateSubjectName));
@@ -166,6 +191,43 @@ private void PackageComponents()
 
             Information("Signing NuGet package exited with '{0}'", exitCode);
         }
+    }
+}
+
+//-------------------------------------------------------------
+
+private void DeployComponents()
+{
+    if (!HasComponents())
+    {
+        return;
+    }
+
+    foreach (var component in Components)
+    {
+        if (!ShouldDeployProject(component))
+        {
+            Information("Component '{0}' should not be deployed", component);
+            continue;
+        }
+
+        LogSeparator("Deploying component '{0}'", component);
+
+        var packageToPush = string.Format("{0}/{1}.{2}.nupkg", OutputRootDirectory, component, VersionNuGet);
+        var nuGetRepositoryUrl = GetComponentNuGetRepositoryUrl(component);
+        var nuGetRepositoryApiKey = GetComponentNuGetRepositoryApiKey(component);
+
+        if (string.IsNullOrWhiteSpace(nuGetRepositoryUrl))
+        {
+            Error("NuGet repository is empty, as a protection mechanism this must *always* be specified to make sure packages aren't accidentally deployed to the default public NuGet feed");
+            return;
+        }
+
+        NuGetPush(packageToPush, new NuGetPushSettings
+        {
+            Source = nuGetRepositoryUrl,
+            ApiKey = nuGetRepositoryApiKey
+        });
     }
 }
 
@@ -195,4 +257,13 @@ Task("PackageComponents")
     .Does(() =>
 {
     PackageComponents();
+});
+
+//-------------------------------------------------------------
+
+Task("DeployComponents")
+    .IsDependentOn("PackageComponents")
+    .Does(() =>
+{
+    DeployComponents();
 });

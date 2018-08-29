@@ -180,16 +180,16 @@ namespace Catel
 #if NET || NETSTANDARD
         private static bool IsHostedByProcess(string processName, bool supportParentProcesses = false)
         {
-            var currentProcess = Process.GetCurrentProcess();
-            if (currentProcess == null)
+            try
             {
-                return false;
-            }
+                var currentProcess = Process.GetCurrentProcess();
+                if (currentProcess == null)
+                {
+                    return false;
+                }
 
-            var currentProcessName = currentProcess.ProcessName;
-            if (supportParentProcesses)
-            {
-                if (currentProcessName.ContainsIgnoreCase("vshost"))
+                var currentProcessName = currentProcess.ProcessName;
+                if (supportParentProcesses && currentProcessName.ContainsIgnoreCase("vshost"))
                 {
 #if NET
                     currentProcess = currentProcess.GetParent();
@@ -203,10 +203,15 @@ namespace Catel
                     return false;
 #endif
                 }
-            }
 
-            var isHosted = currentProcessName.StartsWithIgnoreCase(processName);
-            return isHosted;
+                var isHosted = currentProcessName.StartsWithIgnoreCase(processName);
+                return isHosted;
+            }
+            catch (Exception)
+            {
+                // Ignore
+                return false;
+            }
         }
 #endif
     }

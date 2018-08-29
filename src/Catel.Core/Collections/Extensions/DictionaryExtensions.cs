@@ -31,12 +31,9 @@ namespace Catel.Collections
 
             foreach (var keyValuePair in source)
             {
-                if (!overwriteExisting)
+                if (!overwriteExisting && target.ContainsKey(keyValuePair.Key))
                 {
-                    if (target.ContainsKey(keyValuePair.Key))
-                    {
-                        continue;
-                    }
+                    continue;
                 }
 
                 target[keyValuePair.Key] = keyValuePair.Value;

@@ -79,15 +79,15 @@ namespace Catel.ApiCop.Rules
             switch (RecommendedInitializationMode)
             {
                 case InitializationMode.Lazy:
-                    recommendation = string.Format("It is recommended to not eager initialize this feature");
+                    recommendation = "It is recommended to not eager initialize this feature";
                     break;
 
                 case InitializationMode.Eager:
-                    recommendation = string.Format("It is recommended to not to lazy initialize this feature, initialize at startup instead");
+                    recommendation = "It is recommended to not to lazy initialize this feature, initialize at startup instead";
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(RecommendedInitializationMode));
             }
 
             return string.Format("[{0}] {1}", tag, recommendation);

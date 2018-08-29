@@ -133,8 +133,7 @@ namespace Catel.MVVM.Views
         {
             Argument.IsNotNull("viewModelContainer", viewModelContainer);
 
-            ViewToViewModelMappingHelper viewToViewModelMappingHelper;
-            if (_viewModelContainers.TryGetValue(viewModelContainer, out viewToViewModelMappingHelper))
+            if (_viewModelContainers.TryGetValue(viewModelContainer, out var viewToViewModelMappingHelper))
             {
                 viewToViewModelMappingHelper.UninitializeViewToViewModelMappings();
                 _viewModelContainers.Remove(viewModelContainer);

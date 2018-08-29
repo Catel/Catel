@@ -78,7 +78,7 @@ namespace System
                     var folder = Package.Current.InstalledLocation;
 
                     // Note: normally it's bad practice to use task.Wait(), but GetAssemblies must be blocking to cache it all
-                    
+
                     // Note: winmd cannot be read, see https://stackoverflow.com/questions/9136683/cannot-get-types-from-winmd-file,
                     // so we create a hashset of all winmd files and ignore them
                     var winmdQueryOptions = new QueryOptions(CommonFileQuery.OrderByName, new[] { ".winmd" });
@@ -155,31 +155,7 @@ namespace System
                     Name = assemblyName
                 };
 
-                Assembly assembly = null;
-
-                //// Step 1: try to fast load if already in memory via Fody type
-                //var expectedTypeName = $"ProcessedByFody, {assemblyName}";
-                //var expectedType = Type.GetType(expectedTypeName);
-                //if (expectedType != null)
-                //{
-                //    assembly = expectedType.GetAssemblyEx();
-                //}
-                //else
-                //{
-                //    // Step 2: try different type
-                //    expectedTypeName = $"<Module>, {assemblyName}";
-                //    expectedType = Type.GetType(expectedTypeName);
-                //    if (expectedType != null)
-                //    {
-                //        assembly = expectedType.GetAssemblyEx();
-                //    }
-                //}
-
-                // Step 3: load the assembly from file (slowest)
-                if (assembly == null)
-                {
-                    assembly = Assembly.Load(name);
-                }
+                var assembly = Assembly.Load(name);
 
                 return assembly;
             }

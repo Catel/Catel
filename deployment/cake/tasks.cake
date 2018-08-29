@@ -1,16 +1,32 @@
 #l "generic-tasks.cake"
 #l "apps-uwp-tasks.cake"
+#l "apps-web-tasks.cake"
 #l "apps-wpf-tasks.cake"
 #l "components-tasks.cake"
 
+#addin "nuget:?package=System.Net.Http&version=4.3.3"
+#addin "nuget:?package=Newtonsoft.Json&version=11.0.2"
 #addin "nuget:?package=Cake.Sonar&version=1.1.0"
 
 #tool "nuget:?package=MSBuild.SonarQube.Runner.Tool&version=4.3.0"
+#tool "nuget:?package=GitVersion.CommandLine&version=4.0.0-beta0012"
+
+//-------------------------------------------------------------
 
 var Target = GetBuildServerVariable("Target", "Default");
 
 Information("Running target '{0}'", Target);
 Information("Using output directory '{0}'", OutputRootDirectory);
+
+//-------------------------------------------------------------
+
+Information("Validating input");
+
+ValidateGenericInput();
+ValidateUwpAppsInput();
+ValidateWebAppsInput();
+ValidateWpfAppsInput();
+ValidateComponentsInput();
 
 //-------------------------------------------------------------
 
@@ -20,7 +36,7 @@ private void BuildTestProjects()
     {
         Information("Building test project '{0}'", testProject);
 
-        var projectFileName = string.Format("./src/{0}/{0}.csproj", testProject);
+        var projectFileName = GetProjectFileName(testProject);
         
         var msBuildSettings = new MSBuildSettings
         {
@@ -55,6 +71,7 @@ Task("UpdateInfo")
     
     UpdateInfoForComponents();
     UpdateInfoForUwpApps();
+    UpdateInfoForWebApps();
     UpdateInfoForWpfApps();
 });
 
@@ -63,7 +80,8 @@ Task("UpdateInfo")
 Task("Build")
     .IsDependentOn("Clean")
     .IsDependentOn("UpdateInfo")
-    .Does(() =>
+    .IsDependentOn("CleanupCode")
+    .Does(async () =>
 {
     var enableSonar = !string.IsNullOrWhiteSpace(SonarUrl);
     if (enableSonar)
@@ -93,6 +111,7 @@ Task("Build")
 
     BuildComponents();
     BuildUwpApps();
+    BuildWebApps();
     BuildWpfApps();
 
     if (!string.IsNullOrWhiteSpace(SonarUrl))
@@ -102,6 +121,67 @@ Task("Build")
             Login = SonarUsername,
             Password = SonarPassword,
         });
+        
+        Information("Checking whether the project passed the SonarQube gateway...");
+            
+        var status = "none";
+
+        // We need to use /api/qualitygates/project_status
+        var client = new System.Net.Http.HttpClient();
+        using (client)
+        {
+            var queryUri = string.Format("{0}/api/qualitygates/project_status?projectKey={1}", SonarUrl, SonarProject);
+
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11 | System.Net.SecurityProtocolType.Tls;
+
+            var byteArray = Encoding.ASCII.GetBytes(string.Format("{0}:{1}", SonarUsername, SonarPassword));
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+            Debug("Invoking GET request: '{0}'", queryUri);
+
+            var response = await client.GetAsync(new Uri(queryUri));
+
+            Debug("Parsing request contents");
+
+            var content = response.Content;
+            var jsonContent = await content.ReadAsStringAsync();
+
+            Debug(jsonContent);
+
+            dynamic result = Newtonsoft.Json.Linq.JObject.Parse(jsonContent);
+            status = result.projectStatus.status;
+        }
+
+        Information("SonarQube gateway status returned from request: '{0}'", status);
+
+        if (string.IsNullOrWhiteSpace(status))
+        {
+            status = "none";
+        }
+
+        status = status.ToLower();
+
+        switch (status)
+        {
+            case "error":
+                throw new Exception(string.Format("The SonarQube gateway for '{0}' returned ERROR, please check the error(s) at {1}/dashboard?id={0}", SonarProject, SonarUrl));
+
+            case "warn":
+                Warning("The SonarQube gateway for '{0}' returned WARNING, please check the warning(s) at {1}/dashboard?id={0}", SonarProject, SonarUrl);
+                break;
+
+            case "none":
+                Warning("The SonarQube gateway for '{0}' returned NONE, please check why no gateway status is available at {1}/dashboard?id={0}", SonarProject, SonarUrl);
+                break;
+
+            case "ok":
+                Information("The SonarQube gateway for '{0}' returned OK, well done! If you want to show off the results, check out {1}/dashboard?id={0}", SonarProject, SonarUrl);
+                break;
+
+            default:
+                throw new Exception(string.Format("Unexpected SonarQube gateway status '{0}' for project '{1}'", status, SonarProject));
+        }
     }
 
     BuildTestProjects();
@@ -110,6 +190,7 @@ Task("Build")
 //-------------------------------------------------------------
 
 Task("Package")
+    // Note: no dependency on 'build' since we might have already built the solution
     // Make sure we have the temporary "project.assets.json" in case we need to package with Visual Studio
     .IsDependentOn("RestorePackages")
     // Make sure to update if we are running on a new agent so we can sign nuget packages
@@ -119,7 +200,62 @@ Task("Package")
 {
     PackageComponents();
     PackageUwpApps();
+    PackageWebApps();
     PackageWpfApps();
+});
+
+//-------------------------------------------------------------
+
+Task("PackageLocal")
+    .IsDependentOn("Package")
+    .Does(() =>
+{
+    // For now only package components, we might need to move this to components-tasks.cake in the future
+    if (!HasComponents())
+    {
+        return;
+    }
+
+    Information("Copying build artifacts to '{0}'", NuGetLocalPackagesDirectory);
+    
+    CreateDirectory(NuGetLocalPackagesDirectory);
+
+    foreach (var component in Components)
+    {
+        Information("Copying build artifact for '{0}'", component);
+    
+        var cacheDirectory = Environment.ExpandEnvironmentVariables(string.Format("%userprofile%/.nuget/packages/{0}/{1}", component, VersionNuGet));
+
+        Information("Checking for existing local NuGet cached version at '{0}'", cacheDirectory);
+
+        if (DirectoryExists(cacheDirectory))
+        {
+            Information("Deleting already existing NuGet cached version from '{0}'", cacheDirectory);
+            
+            DeleteDirectory(cacheDirectory, new DeleteDirectorySettings()
+            {
+                Force = true,
+                Recursive = true
+            });
+        }
+        
+        var sourceFile = string.Format("{0}/{1}.{2}.nupkg", OutputRootDirectory, component, VersionNuGet);
+        CopyFiles(new [] { sourceFile }, NuGetLocalPackagesDirectory);
+    }
+});
+
+//-------------------------------------------------------------
+
+Task("Deploy")
+    // Note: no dependency on 'package' since we might have already packaged the solution
+    // Make sure we have the temporary "project.assets.json" in case we need to package with Visual Studio
+    .IsDependentOn("RestorePackages")
+    .Does(() =>
+{
+    DeployComponents();
+    DeployUwpApps();
+    DeployWebApps();
+    DeployWpfApps();
 });
 
 //-------------------------------------------------------------
@@ -134,8 +270,21 @@ Task("BuildAndPackage")
 
 //-------------------------------------------------------------
 
+Task("BuildAndPackageLocal")
+    .IsDependentOn("Build")
+    .IsDependentOn("PackageLocal");
+
+//-------------------------------------------------------------
+
+Task("BuildAndDeploy")
+    .IsDependentOn("Build")
+    .IsDependentOn("Package")
+    .IsDependentOn("Deploy");
+
+//-------------------------------------------------------------
+
 Task("Default")
-	.IsDependentOn("Build");
+    .IsDependentOn("BuildAndPackage");
 
 //-------------------------------------------------------------
 

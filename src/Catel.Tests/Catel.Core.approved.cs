@@ -287,12 +287,12 @@ namespace Catel
     {
         public DisposableToken(object instance, System.Action<Catel.IDisposableToken<object>> initialize, System.Action<Catel.IDisposableToken<object>> dispose, object tag = null) { }
     }
-    public class DisposableToken<T> : Catel.IDisposableToken<T>, System.IDisposable
+    public class DisposableToken<T> : Catel.Disposable, Catel.IDisposableToken<T>, System.IDisposable
     {
         public DisposableToken(T instance, System.Action<Catel.IDisposableToken<T>> initialize, System.Action<Catel.IDisposableToken<T>> dispose, object tag = null) { }
         public T Instance { get; }
         public object Tag { get; }
-        public void Dispose() { }
+        protected override void DisposeManaged() { }
     }
     public class static Enum<TEnum>
         where TEnum :  struct, System.IComparable, System.IFormattable
@@ -2176,7 +2176,7 @@ namespace Catel.IoC
     }
     public abstract class RegistrationConventionBase : Catel.IoC.IRegistrationConvention
     {
-        public RegistrationConventionBase(Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
+        protected RegistrationConventionBase(Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
         public Catel.IoC.IServiceLocator Container { get; set; }
         public Catel.IoC.RegistrationType RegistrationType { get; set; }
         public abstract void Process(System.Collections.Generic.IEnumerable<System.Type> typesToRegister);
@@ -2743,7 +2743,10 @@ namespace Catel.Logging
         public static Catel.Logging.ILogListener AddDebugListener(bool ignoreCatelLogging = False) { }
         public static void AddListener(Catel.Logging.ILogListener listener) { }
         public static void ClearListeners() { }
+        [System.ObsoleteAttribute("Since listeners only have FlushAsync, a non-async flush doesn\'t make sense. Use `" +
+            "FlushAllAsync` instead. Will be removed in version 6.0.0.", true)]
         public static void FlushAll() { }
+        public static System.Threading.Tasks.Task FlushAllAsync() { }
         public static Catel.Logging.ILog GetCurrentClassLogger() { }
         public static System.Collections.Generic.IEnumerable<Catel.Logging.ILogListener> GetListeners() { }
         public static Catel.Logging.ILog GetLogger<T>() { }
@@ -3800,7 +3803,6 @@ namespace Catel.Runtime.Serialization.Xml
     }
     public class static XmlSchemaHelper
     {
-        public static Catel.Logging.ILog Log;
         public const string Xmlns = "http://www.w3.org/2001/XMLSchema";
         public static System.Xml.XmlQualifiedName GetXmlSchema(System.Type type, System.Xml.Schema.XmlSchemaSet schemaSet, bool generateFlatSchema) { }
     }

@@ -500,8 +500,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("serializerModifierType", serializerModifierType);
 
-            List<Type> serializerModifierTypes = null;
-            if (!_serializationModifierDefinitionsPerTypeCache.TryGetValue(type, out serializerModifierTypes))
+            if (!_serializationModifierDefinitionsPerTypeCache.TryGetValue(type, out var serializerModifierTypes))
             {
                 serializerModifierTypes = new List<Type>();
                 _serializationModifierDefinitionsPerTypeCache[type] = serializerModifierTypes;
@@ -531,8 +530,7 @@ namespace Catel.Runtime.Serialization
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("serializerModifierType", serializerModifierType);
 
-            List<Type> serializerModifierTypes = null;
-            if (!_serializationModifierDefinitionsPerTypeCache.TryGetValue(type, out serializerModifierTypes))
+            if (!_serializationModifierDefinitionsPerTypeCache.TryGetValue(type, out var serializerModifierTypes))
             {
                 serializerModifierTypes = new List<Type>();
                 _serializationModifierDefinitionsPerTypeCache[type] = serializerModifierTypes;
@@ -590,8 +588,7 @@ namespace Catel.Runtime.Serialization
         {
             var modifiers = new List<Type>();
 
-            List<Type> customModifierTypes = null;
-            if (_serializationModifierDefinitionsPerTypeCache.TryGetValue(type, out customModifierTypes))
+            if (_serializationModifierDefinitionsPerTypeCache.TryGetValue(type, out var customModifierTypes))
             {
                 modifiers.AddRange(customModifierTypes);
             }

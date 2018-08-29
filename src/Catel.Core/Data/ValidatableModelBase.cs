@@ -494,7 +494,7 @@ namespace Catel.Data
             var propertyName = e.PropertyName;
             if (!string.IsNullOrWhiteSpace(propertyName))
             {
-                if (PropertiesNotCausingValidation.TryGetValue(GetType(), out HashSet<string> ignoredProperties))
+                if (PropertiesNotCausingValidation.TryGetValue(GetType(), out var ignoredProperties))
                 {
                     if (ignoredProperties.Contains(propertyName))
                     {

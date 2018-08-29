@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CacheStorage.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -10,7 +10,6 @@ namespace Catel.Caching
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
-    using Logging;
     using Policies;
     using Threading;
 
@@ -22,14 +21,7 @@ namespace Catel.Caching
     public class CacheStorage<TKey, TValue> : ICacheStorage<TKey, TValue>
     {
         #region Fields
-        //private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private readonly Func<ExpirationPolicy> _defaultExpirationPolicyInitCode;
-
-        /// <summary>
-        /// Determines whether values should be disposed on removal.
-        /// </summary>
-        private bool _disposeValuesOnRemoval;
 
         /// <summary>
         /// Determines whether the cache storage can store null values.
@@ -93,7 +85,6 @@ namespace Catel.Caching
             IEqualityComparer<TKey> equalityComparer = null)
         {
             _dictionary = new Dictionary<TKey, CacheStorageValueInfo<TValue>>(equalityComparer);
-            _disposeValuesOnRemoval = false;
             _storeNullValues = storeNullValues;
             _defaultExpirationPolicyInitCode = defaultExpirationPolicyInitCode;
 
@@ -107,11 +98,7 @@ namespace Catel.Caching
         /// Gets or sets whether values should be disposed on removal.
         /// </summary>
         /// <value><c>true</c> if values should be disposed on removal; otherwise, <c>false</c>.</value>
-        public bool DisposeValuesOnRemoval
-        {
-            get { return _disposeValuesOnRemoval; }
-            set { _disposeValuesOnRemoval = value; }
-        }
+        public bool DisposeValuesOnRemoval { get; set; }
 
         /// <summary>
         /// Gets the value associated with the specified key.
@@ -194,9 +181,7 @@ namespace Catel.Caching
 
             return ExecuteInLock(key, () =>
             {
-                CacheStorageValueInfo<TValue> valueInfo;
-
-                _dictionary.TryGetValue(key, out valueInfo);
+                _dictionary.TryGetValue(key, out var valueInfo);
 
                 return (valueInfo != null) ? valueInfo.Value : default(TValue);
             });
@@ -236,8 +221,7 @@ namespace Catel.Caching
 
             return ExecuteInLock(key, () =>
             {
-                CacheStorageValueInfo<TValue> cacheStorageValueInfo;
-                if (!@override && _dictionary.TryGetValue(key, out cacheStorageValueInfo))
+                if (!@override && _dictionary.TryGetValue(key, out var cacheStorageValueInfo))
                 {
                     return cacheStorageValueInfo.Value;
                 }
@@ -261,12 +245,9 @@ namespace Catel.Caching
                         _checkForExpiredItems = true;
                     }
 
-                    if (expirationPolicy != null)
+                    if (expirationPolicy != null && _expirationTimer == null)
                     {
-                        if (_expirationTimer == null)
-                        {
-                            UpdateTimer();
-                        }
+                        UpdateTimer();
                     }
                 }
 
@@ -308,8 +289,7 @@ namespace Catel.Caching
 
             return ExecuteInLockAsync(key, async () =>
             {
-                CacheStorageValueInfo<TValue> cacheStorageValueInfo;
-                if (!@override && _dictionary.TryGetValue(key, out cacheStorageValueInfo))
+                if (!@override && _dictionary.TryGetValue(key, out var cacheStorageValueInfo))
                 {
                     return cacheStorageValueInfo.Value;
                 }
@@ -334,12 +314,9 @@ namespace Catel.Caching
                         _checkForExpiredItems = true;
                     }
 
-                    if (expirationPolicy != null)
+                    if (expirationPolicy != null && _expirationTimer == null)
                     {
-                        if (_expirationTimer == null)
-                        {
-                            UpdateTimer();
-                        }
+                        UpdateTimer();
                     }
                 }
 
@@ -443,7 +420,7 @@ namespace Catel.Caching
         [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1409:RemoveUnnecessaryCode", Justification = "Reviewed. Suppression is OK here.")]
         private void RemoveExpiredItems()
         {
-            bool containsItemsThatCanExpire = false;
+            var containsItemsThatCanExpire = false;
 
             var keysToRemove = new List<TKey>();
 
@@ -472,12 +449,9 @@ namespace Catel.Caching
                 {
                     var removed = RemoveItem(keyToRemove, true);
 
-                    if (!removed)
+                    if (!removed && !containsItemsThatCanExpire && _dictionary[keyToRemove].CanExpire)
                     {
-                        if (!containsItemsThatCanExpire && _dictionary[keyToRemove].CanExpire)
-                        {
-                            containsItemsThatCanExpire = true;
-                        }
+                        containsItemsThatCanExpire = true;
                     }
                 });
             }
@@ -561,9 +535,7 @@ namespace Catel.Caching
             // of garbage collection
             lock (_syncObj)
             {
-                AsyncLock asyncLock;
-
-                if (!_locksByKey.TryGetValue(key, out asyncLock))
+                if (!_locksByKey.TryGetValue(key, out var asyncLock))
                 {
                     _locksByKey[key] = asyncLock = new AsyncLock();
                 }
@@ -578,8 +550,6 @@ namespace Catel.Caching
         /// <param name="state">The timer state.</param>
         private void OnTimerElapsed(object state)
         {
-            //Log.Debug("Expiration timer elapsed");
-
             if (!_checkForExpiredItems)
             {
                 return;
@@ -598,8 +568,7 @@ namespace Catel.Caching
         private bool RemoveItem(TKey key, bool raiseEvents, Action action = null)
         {
             // Try to get item, if there is no item by that key then return true to indicate that item was removed.
-            var item = default(CacheStorageValueInfo<TValue>);
-            if (!_dictionary.TryGetValue(key, out item))
+            if (!_dictionary.TryGetValue(key, out var item))
             {
                 return true;
             }
@@ -631,7 +600,7 @@ namespace Catel.Caching
 
             _dictionary.Remove(key);
 
-            bool dispose = _disposeValuesOnRemoval;
+            var dispose = DisposeValuesOnRemoval;
             if (raiseEvents)
             {
                 var expiredEventArgs = new ExpiredEventArgs<TKey, TValue>(key, item.Value, dispose);

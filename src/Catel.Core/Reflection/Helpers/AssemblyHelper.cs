@@ -89,7 +89,7 @@ namespace Catel.Reflection
                     var assemblyPath = Path.Combine(setupInfo.ApplicationBase, setupInfo.ApplicationName);
 
                     assembly = (from x in appDomain.GetLoadedAssemblies(true)
-                                where string.Equals(x.Location, assemblyPath)
+                                where !x.IsDynamicAssembly() && string.Equals(x.Location, assemblyPath)
                                 select x).FirstOrDefault();
                 }
 #elif NETFX_CORE
@@ -100,7 +100,12 @@ namespace Catel.Reflection
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Failed to get assembly, returning Catel.Core as fallback");
+                Log.Error(ex, "Failed to get assembly");
+            }
+
+            if (assembly == null)
+            {
+                Log.Warning("Entry assembly could not be determined, returning Catel.Core as fallback");
 
                 assembly = typeof(AssemblyHelper).GetAssemblyEx();
             }
@@ -120,8 +125,7 @@ namespace Catel.Reflection
 
             lock (_lockObject)
             {
-                string assemblyNameWithVersion = null;
-                if (_assemblyMappings.TryGetValue(assemblyNameWithoutVersion, out assemblyNameWithVersion))
+                if (_assemblyMappings.TryGetValue(assemblyNameWithoutVersion, out var assemblyNameWithVersion))
                 {
                     return assemblyNameWithVersion;
                 }
@@ -165,6 +169,7 @@ namespace Catel.Reflection
                 if (logLoaderExceptions)
                 {
                     Log.Warning("The following loading exceptions occurred:");
+
                     foreach (var error in typeLoadException.LoaderExceptions)
                     {
                         // Fix mono issue https://github.com/Catel/Catel/issues/1071 
@@ -244,6 +249,12 @@ namespace Catel.Reflection
         /// <returns><c>true</c> if the specified assembly is a dynamic assembly; otherwise, <c>false</c>.</returns>
         public static bool IsDynamicAssembly(this Assembly assembly)
         {
+            // Simplest & fastest way out
+            if (assembly.IsDynamic)
+            {
+                return true;
+            }
+
             var isDynamicAssembly =
 #if NET
                 (assembly is System.Reflection.Emit.AssemblyBuilder) &&

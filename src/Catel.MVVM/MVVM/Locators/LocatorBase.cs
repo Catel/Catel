@@ -85,7 +85,7 @@ namespace Catel.MVVM
 
             lock (_cache)
             {
-                if (_cache.TryGetValue(valueToResolve, out HashSet<string> existingSet))
+                if (_cache.TryGetValue(valueToResolve, out var existingSet))
                 {
                     if (existingSet.Count > 0)
                     {
@@ -164,7 +164,7 @@ namespace Catel.MVVM
 
             lock (_cache)
             {
-                if (_cache.TryGetValue(valueToResolve, out HashSet<string> existingSet))
+                if (_cache.TryGetValue(valueToResolve, out var existingSet))
                 {
                     if (existingSet.Count > 0)
                     {

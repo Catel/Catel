@@ -102,8 +102,7 @@ namespace Catel.IoC
 
             lock (_lockObject)
             {
-                IDependencyResolver dependencyResolver = null;
-                if (!_dependencyResolversByInstance.TryGetValue(instance, out dependencyResolver))
+                if (!_dependencyResolversByInstance.TryGetValue(instance, out var dependencyResolver))
                 {
                     dependencyResolver = GetDependencyResolverForType(instance.GetType());
                 }

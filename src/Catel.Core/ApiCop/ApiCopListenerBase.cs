@@ -66,7 +66,7 @@ namespace Catel.ApiCop
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(Grouping));
             }
 
             WriteSummary(sortedResults);
@@ -112,7 +112,7 @@ namespace Catel.ApiCop
                     return result.Tag;
 
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(Grouping));
             }
         }
 

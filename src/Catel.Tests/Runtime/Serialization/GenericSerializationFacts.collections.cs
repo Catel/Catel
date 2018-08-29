@@ -916,9 +916,8 @@ namespace Catel.Tests.Runtime.Serialization
                             var parameterName = jsonReader.Value as string;
 
                             jsonReader.Read();
-                            int parameterIndex;
 
-                            if ((parameterName != null) && parameterNames.TryGetValue(parameterName, out parameterIndex))
+                            if ((parameterName != null) && parameterNames.TryGetValue(parameterName, out var parameterIndex))
                             {
                                 parameters[parameterIndex] = serializer.Deserialize(parameterTypes[parameterIndex], jsonReader, null);
                             }

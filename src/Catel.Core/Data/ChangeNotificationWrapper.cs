@@ -255,8 +255,7 @@ namespace Catel.Data
 
             lock (_lockObject)
             {
-                List<WeakReference> collectionItems;
-                if (_collectionItems.TryGetValue(collection, out collectionItems))
+                if (_collectionItems.TryGetValue(collection, out var collectionItems))
                 {
                     var oldItems = collectionItems.ToArray();
                     foreach (var item in oldItems)
@@ -411,8 +410,7 @@ namespace Catel.Data
                         throw new ArgumentOutOfRangeException("eventChangeType");
                 }
 
-                IWeakEventListener oldSubscription;
-                if (eventsTable != null && eventsTable.TryGetValue(value, out oldSubscription))
+                if (eventsTable != null && eventsTable.TryGetValue(value, out var oldSubscription))
                 {
                     oldSubscription.Detach();
 
@@ -495,15 +493,13 @@ namespace Catel.Data
 
                         if (parentCollection != null)
                         {
-                            List<WeakReference> collectionItems;
-                            if (_collectionItems.TryGetValue(parentCollection, out collectionItems))
+                            if (_collectionItems.TryGetValue(parentCollection, out var collectionItems))
                             {
-                                // TODO: Consider less costly way to determine this
                                 for (var i = 0; i < collectionItems.Count; i++)
                                 {
                                     if (ReferenceEquals(collectionItems[i].Target, value))
                                     {
-                                        collectionItems.RemoveAt(i--);
+                                        collectionItems.RemoveAt(i);
                                         break;
                                     }
                                 }
@@ -520,8 +516,7 @@ namespace Catel.Data
                         throw new ArgumentOutOfRangeException("eventChangeType");
                 }
 
-                IWeakEventListener oldSubscription;
-                if (eventsTable != null && eventsTable.TryGetValue(value, out oldSubscription))
+                if (eventsTable != null && eventsTable.TryGetValue(value, out var oldSubscription))
                 {
                     if (oldSubscription != null)
                     {
@@ -535,8 +530,7 @@ namespace Catel.Data
 
                 if (value is ICollection)
                 {
-                    List<WeakReference> collectionItems;
-                    if (_collectionItems.TryGetValue(value, out collectionItems))
+                    if (_collectionItems.TryGetValue(value, out var collectionItems))
                     {
                         foreach (var item in collectionItems)
                         {

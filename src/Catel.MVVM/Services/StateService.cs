@@ -48,9 +48,7 @@ namespace Catel.Services
 
             lock (_states)
             {
-                IState state = null;
-
-                if (_states.TryGetValue(key, out state))
+                if (_states.TryGetValue(key, out var state))
                 {
                     Log.Debug($"Loaded state '{key}'");
 

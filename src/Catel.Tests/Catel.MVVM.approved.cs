@@ -2008,10 +2008,14 @@ namespace Catel.Services
         void Start();
         void Stop();
     }
+    [System.ObsoleteAttribute("Use Orc.CommandLine instead since that has better support for parsing command lin" +
+        "es. Will be removed in version 6.0.0.", true)]
     public interface IStartUpInfoProvider
     {
         string[] Arguments { get; }
     }
+    [System.ObsoleteAttribute("Use Orc.CommandLine instead since that has better support for parsing command lin" +
+        "es. Will be removed in version 6.0.0.", true)]
     public class static IStartUpInfoProviderExtensions
     {
         public static string GetCommandLine(this Catel.Services.IStartUpInfoProvider startUpInfoProvider) { }
@@ -2062,7 +2066,9 @@ namespace Catel.Services
     }
     public interface IViewExportService
     {
+        [System.ObsoleteAttribute("Use `ExportAsync` instead. Will be removed in version 6.0.0.", true)]
         void Export(Catel.MVVM.IViewModel viewModel, Catel.Services.ExportMode exportMode = 0, double dpiX = 96, double dpiY = 96);
+        System.Threading.Tasks.Task ExportAsync(Catel.MVVM.IViewModel viewModel, Catel.Services.ExportMode exportMode = 0, double dpiX = 96, double dpiY = 96);
     }
     public interface IViewModelService : Catel.Services.IService { }
     public interface IViewModelWrapperService
@@ -2303,6 +2309,8 @@ namespace Catel.Services
         public override int GetHashCode() { }
         public override string ToString() { }
     }
+    [System.ObsoleteAttribute("Use Orc.CommandLine instead since that has better support for parsing command lin" +
+        "es. Will be removed in version 6.0.0.", true)]
     public class StartUpInfoProvider : Catel.Services.IStartUpInfoProvider
     {
         public StartUpInfoProvider() { }
@@ -2348,7 +2356,9 @@ namespace Catel.Services
     public class ViewExportService : Catel.Services.ServiceBase, Catel.Services.IViewExportService
     {
         public ViewExportService(Catel.MVVM.Views.IViewManager viewManager, Catel.Services.ISaveFileService saveFileService) { }
+        [System.ObsoleteAttribute("Use `ExportAsync` instead. Will be removed in version 6.0.0.", true)]
         public virtual void Export(Catel.MVVM.IViewModel viewModel, Catel.Services.ExportMode exportMode = 0, double dpiX = 96, double dpiY = 96) { }
+        public virtual System.Threading.Tasks.Task ExportAsync(Catel.MVVM.IViewModel viewModel, Catel.Services.ExportMode exportMode = 0, double dpiX = 96, double dpiY = 96) { }
     }
     public abstract class ViewModelServiceBase : Catel.Services.ServiceBase, Catel.Services.IService, Catel.Services.IViewModelService
     {
@@ -2576,13 +2586,6 @@ namespace Catel.Windows
         public static void SetOwnerWindowAndFocus(this System.Windows.Window window, bool forceNewOwner = False, bool focusFirstControl = True) { }
         public static void SetOwnerWindowAndFocus(this System.Windows.Window window, System.Windows.Window owner, bool forceNewOwner = False) { }
         public static void SetOwnerWindowAndFocus(this System.Windows.Window window, System.IntPtr owner, bool forceNewOwner = False) { }
-        public struct RECT
-        {
-            public int Bottom;
-            public int Left;
-            public int Right;
-            public int Top;
-        }
     }
     [System.ObsoleteAttribute("Use `Catel.Service.WrapControlService` instead. Will be removed in version 6.0.0." +
         "", true)]
@@ -3120,7 +3123,7 @@ namespace Catel.Windows.Interactivity
         Top = 0,
         Bottom = 1,
     }
-    public class SelectTextOnFocus : Catel.Windows.Interactivity.BehaviorBase<System.Windows.Controls.TextBox>
+    public class SelectTextOnFocus : Catel.Windows.Interactivity.BehaviorBase<System.Windows.Controls.Control>
     {
         public SelectTextOnFocus() { }
         protected override void OnAssociatedObjectLoaded() { }
@@ -3250,19 +3253,31 @@ namespace Catel.Windows.Threading
     public class static DispatcherExtensions
     {
         public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action) { }
+        public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority) { }
         public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
+        public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
         public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, bool onlyBeginInvokeWhenNoAccess) { }
+        public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority, bool onlyBeginInvokeWhenNoAccess) { }
         public static System.Threading.Tasks.Task BeginInvokeAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Func<System.Threading.Tasks.Task> func) { }
         public static System.Windows.Threading.DispatcherOperation BeginInvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Action action) { }
+        public static System.Windows.Threading.DispatcherOperation BeginInvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority) { }
         public static System.Windows.Threading.DispatcherOperation BeginInvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
+        public static System.Windows.Threading.DispatcherOperation BeginInvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
         public static int GetThreadId(this System.Windows.Threading.Dispatcher dispatcher) { }
         public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action) { }
+        public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority) { }
         public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
+        public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
         public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, bool onlyBeginInvokeWhenNoAccess) { }
+        public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority, bool onlyInvokeWhenNoAccess) { }
         public static System.Threading.Tasks.Task InvokeAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
+        public static System.Threading.Tasks.Task InvokeAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
         public static System.Threading.Tasks.Task<T> InvokeAsync<T>(this System.Windows.Threading.Dispatcher dispatcher, System.Func<T> func) { }
+        public static System.Threading.Tasks.Task<T> InvokeAsync<T>(this System.Windows.Threading.Dispatcher dispatcher, System.Func<T> func, System.Windows.Threading.DispatcherPriority priority) { }
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Action action) { }
+        public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority) { }
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
+        public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
     }
     public class static DispatcherHelper
     {

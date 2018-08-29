@@ -347,8 +347,7 @@ namespace Catel.IoC
         {
             return _typeConstructorsMetadataLock.PerformUpgradableRead(() =>
             {
-                TypeMetaData result;
-                if (_typeConstructorsMetadata.TryGetValue(type, out result))
+                if (_typeConstructorsMetadata.TryGetValue(type, out var result))
                 {
                     return result;
                 }
@@ -623,11 +622,11 @@ namespace Catel.IoC
         {
             return _constructorCacheLock.PerformRead(() =>
             {
-                ConstructorCacheValue result;
-                if (_constructorCache.TryGetValue(cacheKey, out result))
+                if (_constructorCache.TryGetValue(cacheKey, out var result))
                 {
                     return result;
                 }
+
                 return ConstructorCacheValue.First();
             });
         }
@@ -637,8 +636,7 @@ namespace Catel.IoC
             // Currently I choose last-win strategy but maybe other should be used
             _constructorCacheLock.PerformWrite(() =>
             {
-                ConstructorCacheValue storedValue;
-                if (!_constructorCache.TryGetValue(cacheKey, out storedValue))
+                if (!_constructorCache.TryGetValue(cacheKey, out var storedValue))
                 {
                     storedValue = ConstructorCacheValue.First();
                 }

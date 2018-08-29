@@ -3,6 +3,85 @@
 #addin "nuget:?package=MagicChunks&version=2.0.0.119"
 #addin "nuget:?package=Cake.FileHelpers&version=3.0.0"
 
+#tool "nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2018.1.3"
+
+//-------------------------------------------------------------
+
+private void ValidateRequiredInput(string parameterName)
+{
+    if (!Parameters.ContainsKey(parameterName))
+    {
+        Error("Parameter '{0}' is required but not defined", parameterName);
+    }
+}
+
+//-------------------------------------------------------------
+
+private void ValidateGenericInput()
+{
+    ValidateRequiredInput("SolutionName");
+    ValidateRequiredInput("Company");
+    ValidateRequiredInput("RepositoryUrl");
+}
+
+//-------------------------------------------------------------
+
+private void LogSeparator(string messageFormat, params object[] args)
+{
+    Information("");
+    Information("----------------------------------------");
+    Information(messageFormat, args);
+    Information("----------------------------------------");
+    Information("");
+}
+
+//-------------------------------------------------------------
+
+private void LogSeparator()
+{
+    Information("");
+    Information("----------------------------------------");
+    Information("");
+}
+
+//-------------------------------------------------------------
+
+private void CleanUpCode(bool failOnChanges)
+{
+    Information("Cleaning up code using CodeCleanup (R# command line tools)");
+
+    Information("Code cleanup is (temporarily) disabled. The following will need to be supported for being able to use CodeCleanup:");
+    Information("- respect xml indentation for xml comments (seems to enforce to 4 spaces)");
+    Information("- respect xml indentation for xml files");
+    Information("- don't change the order of regions / members or maybe them configurable via .editorConfig");
+    Information("- ignore wildcard files as configured at the bottom of .editorConfig");
+
+    // var processFileName = "./tools/JetBrains.ReSharper.CommandLineTools.2018.1.3/tools/cleanupcode.exe";
+    // var processArguments = string.Format("{0} -o=\".\\output\\codecleanup.xml\"", SolutionFileName);
+
+    // using (var process = StartAndReturnProcess(processFileName, new ProcessSettings 
+    //     { 
+    //         Arguments = processArguments 
+    //     }))
+    // {
+    //     process.WaitForExit();
+
+    //     var exitCode = process.GetExitCode();
+
+    //     Information("CodeCleanup exited with exit code: '{0}'", exitCode);
+        
+    //     if (exitCode != 0)
+    //     {
+    //         throw new Exception("Unexpected exit code '{0}' from CodeCleanup");
+    //     }
+    // }
+
+    // if (failOnChanges)
+    // {
+    //     // TODO: Do a diff. If there are changes, throw an exception
+    // }
+}
+
 //-------------------------------------------------------------
 
 private void UpdateSolutionAssemblyInfo()
@@ -21,6 +100,54 @@ private void UpdateSolutionAssemblyInfo()
     };
 
     CreateAssemblyInfo(SolutionAssemblyInfoFileName, assemblyInfo);
+}
+
+//-------------------------------------------------------------
+
+private string GetProjectDirectory(string projectName)
+{
+    var projectDirectory = string.Format("./src/{0}/", projectName);
+    return projectDirectory;
+}
+
+//-------------------------------------------------------------
+
+private string GetProjectFileName(string projectName)
+{
+    var fileName = string.Format("{0}{1}.csproj", GetProjectDirectory(projectName), projectName);
+    return fileName;
+}
+
+//-------------------------------------------------------------
+
+private string GetProjectSlug(string projectName)
+{
+    var slug = projectName.Replace(".", "").Replace(" ", "");
+    return slug;
+}
+
+//-------------------------------------------------------------
+
+private string GetProjectSpecificConfigurationValue(string projectName, string configurationPrefix, string fallbackValue)
+{
+    // Allow per project overrides via "[configurationPrefix][projectName]"
+    var slug = GetProjectSlug(projectName);
+    var keyToCheck = string.Format("{0}{1}", configurationPrefix, slug);
+
+    var value = GetBuildServerVariable(keyToCheck, fallbackValue);
+    return value;
+}
+
+//-------------------------------------------------------------
+
+private bool ShouldDeployProject(string projectName)
+{
+    // Allow the build server to configure this via "Deploy[ProjectName]"
+    var slug = GetProjectSlug(projectName);
+    var keyToCheck = string.Format("Deploy{0}", slug);
+
+    var shouldDeploy = bool.Parse(GetBuildServerVariable(keyToCheck, "True"));
+    return shouldDeploy;
 }
 
 //-------------------------------------------------------------
@@ -123,6 +250,15 @@ Task("Clean")
 
 //-------------------------------------------------------------
 
+Task("CleanupCode")
+    .ContinueOnError()
+    .Does(() => 
+{
+    CleanUpCode(true);
+});
+
+//-------------------------------------------------------------
+
 Task("CodeSign")
     .ContinueOnError()
     .Does(() =>
@@ -148,15 +284,22 @@ Task("CodeSign")
 
     foreach (var projectToCodeSign in projectsToCodeSign)
     {
+        var codeSignWildCard = CodeSignWildCard;
+        if (string.IsNullOrWhiteSpace(codeSignWildCard))
+        {
+            // Empty, we need to override with project name for valid default value
+            codeSignWildCard = projectToCodeSign;
+        }
+    
         var projectFilesToSign = new List<FilePath>();
 
         var outputDirectory = string.Format("{0}/{1}", OutputRootDirectory, projectToCodeSign);
 
-        var exeSignFilesSearchPattern = string.Format("{0}/**/*{1}*.exe", outputDirectory, CodeSignWildCard);
+        var exeSignFilesSearchPattern = string.Format("{0}/**/*{1}*.exe", outputDirectory, codeSignWildCard);
         Information(exeSignFilesSearchPattern);
         projectFilesToSign.AddRange(GetFiles(exeSignFilesSearchPattern));
 
-        var dllSignFilesSearchPattern = string.Format("{0}/**/*{1}*.dll", outputDirectory, CodeSignWildCard);
+        var dllSignFilesSearchPattern = string.Format("{0}/**/*{1}*.dll", outputDirectory, codeSignWildCard);
         Information(dllSignFilesSearchPattern);
         projectFilesToSign.AddRange(GetFiles(dllSignFilesSearchPattern));
 

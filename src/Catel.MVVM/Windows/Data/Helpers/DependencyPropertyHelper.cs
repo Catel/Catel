@@ -100,7 +100,7 @@ namespace Catel.Windows.Data
 
             var propertyKey = GetDependencyPropertyCacheKey(viewType, propertyName);
 
-            if (_cacheByPropertyName.TryGetValue(propertyKey, out DependencyProperty dependencyProperty))
+            if (_cacheByPropertyName.TryGetValue(propertyKey, out var dependencyProperty))
             {
                 return dependencyProperty;
             }
@@ -121,7 +121,7 @@ namespace Catel.Windows.Data
 
             EnsureItemInCache(frameworkElement.GetType());
 
-            if (_cacheByDependencyProperty.TryGetValue(dependencyProperty, out string name))
+            if (_cacheByDependencyProperty.TryGetValue(dependencyProperty, out var name))
             {
                 return name;
             }

@@ -21,9 +21,9 @@ namespace Catel.Windows.Interactivity
 #endif
 
     /// <summary>
-    /// Selects all the text when the <see cref="TextBox"/> is focused.
+    /// Selects all the text when the <see cref="TextBox"/> or <see cref="PasswordBox"/> is focused.
     /// </summary>
-    public class SelectTextOnFocus : BehaviorBase<TextBox>
+    public class SelectTextOnFocus : BehaviorBase<Control>
     {
         /// <summary>
         /// Called when the <see cref="Behavior{T}.AssociatedObject"/> is loaded.
@@ -110,7 +110,17 @@ namespace Catel.Windows.Interactivity
                 return;
             }
 
-            AssociatedObject.SelectAll();
+            var textBox = AssociatedObject as TextBox;
+            if (textBox != null)
+            {
+                textBox.SelectAll();
+            }
+
+            var passwordBox = AssociatedObject as PasswordBox;
+            if (passwordBox != null)
+            {
+                passwordBox.SelectAll();
+            }
         } 
     }
 }

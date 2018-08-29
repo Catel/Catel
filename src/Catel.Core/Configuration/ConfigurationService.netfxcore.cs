@@ -23,11 +23,9 @@ namespace Catel.Configuration
         /// <returns>The settings container.</returns>
         protected ApplicationDataContainer GetSettingsContainer(ConfigurationContainer container)
         {
-            ApplicationDataContainer settings = null;
-
             lock (_containerCache)
             {
-                if (!_containerCache.TryGetValue(container, out settings))
+                if (!_containerCache.TryGetValue(container, out var settings))
                 {
                     switch (container)
                     {
@@ -45,9 +43,9 @@ namespace Catel.Configuration
 
                     _containerCache[container] = settings;
                 }
-            }
 
-            return settings;
+                return settings;
+            }
         }
     }
 }

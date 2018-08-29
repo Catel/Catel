@@ -324,16 +324,14 @@ namespace Catel.Reflection
                 if (typeNameWithAssembly == null)
                 {
                     // If we have a mapping, use that instead
-                    string typeNameMapping;
-                    if (typesWithoutAssembly.TryGetValue(typeName, out typeNameMapping))
+                    if (typesWithoutAssembly.TryGetValue(typeName, out var typeNameMapping))
                     {
                         typeName = typeNameMapping;
                     }
 
                     // Note that lazy-loaded types (a few lines below) are added to the types *with* assemblies so we have
                     // a direct access cache
-                    Type cachedType;
-                    if (typesWithAssembly.TryGetValue(typeName, out cachedType))
+                    if (typesWithAssembly.TryGetValue(typeName, out var cachedType))
                     {
                         return cachedType;
                     }
@@ -348,8 +346,7 @@ namespace Catel.Reflection
                     return fallbackType;
                 }
 
-                Type typeWithAssembly;
-                if (typesWithAssembly.TryGetValue(typeNameWithAssembly, out typeWithAssembly))
+                if (typesWithAssembly.TryGetValue(typeNameWithAssembly, out var typeWithAssembly))
                 {
                     return typeWithAssembly;
                 }
@@ -358,8 +355,7 @@ namespace Catel.Reflection
                 var assemblyNameWithoutOverhead = TypeHelper.GetAssemblyNameWithoutOverhead(assemblyName);
                 var typeNameWithoutAssemblyOverhead = TypeHelper.FormatType(assemblyNameWithoutOverhead, typeName);
 
-                Type typeWithoutAssembly;
-                if (typesWithAssembly.TryGetValue(typeNameWithoutAssemblyOverhead, out typeWithoutAssembly))
+                if (typesWithAssembly.TryGetValue(typeNameWithoutAssemblyOverhead, out var typeWithoutAssembly))
                 {
                     return typeWithoutAssembly;
                 }
@@ -392,15 +388,14 @@ namespace Catel.Reflection
                 // Fallback for this assembly only
                 InitializeTypes(assemblyName, false);
 
-                Type finalType;
-                if (typesWithAssembly.TryGetValue(typeNameWithAssembly, out finalType))
+                if (typesWithAssembly.TryGetValue(typeNameWithAssembly, out var exisingTypeWithAssembly))
                 {
-                    return finalType;
+                    return exisingTypeWithAssembly;
                 }
 
-                if (typesWithAssembly.TryGetValue(typeNameWithoutAssemblyOverhead, out finalType))
+                if (typesWithAssembly.TryGetValue(typeNameWithoutAssemblyOverhead, out var existingTypeWithoutAssembly))
                 {
-                    return finalType;
+                    return existingTypeWithoutAssembly;
                 }
             }
 
@@ -577,6 +572,7 @@ namespace Catel.Reflection
                 }
                 catch (Exception)
                 {
+                    // Ignore
                 }
             }
 

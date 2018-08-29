@@ -409,13 +409,10 @@ namespace Catel.Data
                 if ((senderAsModelBase != null) && (string.Equals(e.PropertyName, IsDirtyProperty.Name, StringComparison.Ordinal)))
                 {
                     // Maybe this is a child object informing us that it's not dirty any longer
-                    if (senderAsModelBase.GetValue<bool>(e.PropertyName) == false)
+                    if (!senderAsModelBase.GetValue<bool>(e.PropertyName) && !ReferenceEquals(this, sender))
                     {
-                        if (!ReferenceEquals(this, sender))
-                        {
-                            // Ignore
-                            return;
-                        }
+                        // Ignore
+                        return;
                     }
 
                     // A child became dirty, we are dirty as well

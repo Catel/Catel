@@ -131,22 +131,15 @@ namespace Catel.MVVM
 
             foreach (var commandName in commandNames)
             {
-                bool keyHandled = false;
-
                 var inputGesture = _commandManager.GetInputGesture(commandName);
                 if (inputGesture != null)
                 {
                     if (inputGesture.Matches(e))
                     {
-                        keyHandled = true;
+                        e.Handled = true;
                         _commandManager.ExecuteCommand(commandName);
                         break;
                     }
-                }
-
-                if (keyHandled)
-                {
-                    e.Handled = true;
                 }
             }
         }

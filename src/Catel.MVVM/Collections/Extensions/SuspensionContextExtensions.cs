@@ -130,7 +130,7 @@ namespace Catel.Collections
             {
                 restartRequired = false;
 
-                for (int i = events.Count - 1; i >= 1; i--)
+                for (var i = events.Count - 1; i >= 1; i--)
                 {
                     var currentEvent = events[i];
                     if (currentEvent.Indices.Count > 0)
@@ -216,13 +216,9 @@ namespace Catel.Collections
             }
 
             // Create event args for last item(s)
-            if (changedItems.Count != 0)
+            if (changedItems.Count != 0 && previousAction != null)
             {
-                // ReSharper disable once PossibleInvalidOperationException
-                if (previousAction != null)
-                {
-                    eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs(changedItems, changedItemIndices, suspensionMode, previousAction.Value));
-                }
+                eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs(changedItems, changedItemIndices, suspensionMode, previousAction.Value));
             }
 
             return eventArgsList;

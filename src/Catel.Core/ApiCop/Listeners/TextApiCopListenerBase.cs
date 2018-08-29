@@ -20,7 +20,6 @@ namespace Catel.ApiCop
         private const string DocumentationUrl = "http://docs.catelproject.com/vnext/ApiCop.htm";
 
         private DateTime _startTime;
-        private DateTime _endTime;
 
         /// <summary>
         /// Called when the listener is about to write the results.
@@ -56,7 +55,7 @@ namespace Catel.ApiCop
         /// <param name="results">The results.</param>
         protected override void WriteSummary(IEnumerable<IApiCopResult> results)
         {
-            if (results.Count() == 0)
+            if (results.Any())
             {
                 WriteLine("No results found which is a good sign, congratulations!");
             }
@@ -117,9 +116,9 @@ namespace Catel.ApiCop
         /// </summary>
         protected override void EndWriting()
         {
-            _endTime = DateTime.Now;
+            var endTime = DateTime.Now;
 
-            var duration = _endTime - _startTime;
+            var duration = endTime - _startTime;
 
             WriteLine("****************************************************************");
             WriteLine("End of ApiCop (r) results, generation took '{0}'", duration.ToString(@"hh\:mm\:ss\.fff"));

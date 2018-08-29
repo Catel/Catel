@@ -98,7 +98,7 @@ namespace Catel
             catch (Exception)
 #endif
             {
-
+                // Ignore
             }
 
             return null;

@@ -345,7 +345,7 @@ namespace Catel.IO
                     else
                     {
                         // *** We're dealing with a file or a start path
-                        return fullPath.Replace(partialPath + (fullPath == partialPath ? string.Empty : "\\"), backDirs);
+                        return fullPath.Replace(partialPath + "\\", backDirs);
                     }
                 }
 

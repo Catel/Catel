@@ -30,7 +30,7 @@ namespace Catel
     /// <summary>
     /// A reusable disposable token that accepts initialization and uninitialization code.
     /// </summary>
-    public class DisposableToken<T> : IDisposableToken<T>
+    public class DisposableToken<T> : Disposable, IDisposableToken<T>
     {
         #region Fields
         private T _instance;
@@ -72,10 +72,7 @@ namespace Catel
         public object Tag { get { return _tag; } }
 
         #region IDisposable Members
-        /// <summary>
-        /// Disposes this instance.
-        /// </summary>
-        public void Dispose()
+        protected override void DisposeManaged()
         {
             if (_dispose != null)
             {

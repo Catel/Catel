@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="LogManager.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -11,6 +11,7 @@ namespace Catel.Logging
     using System.Linq;
     using System.Reflection;
     using System.Runtime.CompilerServices;
+    using System.Threading.Tasks;
     using Reflection;
 
 #if NET
@@ -530,8 +531,7 @@ namespace Catel.Logging
 
             lock (_loggers)
             {
-                ILog log;
-                if (!_loggers.TryGetValue(name, out log))
+                if (!_loggers.TryGetValue(name, out var log))
                 {
                     log = new Log(name);
                     log.LogMessage += OnLogMessage;
@@ -558,8 +558,7 @@ namespace Catel.Logging
 
             lock (_loggers)
             {
-                ILog log;
-                if (!_loggers.TryGetValue(name, out log))
+                if (!_loggers.TryGetValue(name, out var log))
                 {
                     log = new Log(name, type);
                     log.LogMessage += OnLogMessage;
@@ -587,8 +586,7 @@ namespace Catel.Logging
 
             lock (_loggers)
             {
-                ILog log;
-                if (!_loggers.TryGetValue(name, out log))
+                if (!_loggers.TryGetValue(name, out var log))
                 {
                     log = new CatelLog(name, alwaysLog);
                     log.LogMessage += OnLogMessage;
@@ -619,8 +617,7 @@ namespace Catel.Logging
 
             lock (_loggers)
             {
-                ILog log;
-                if (!_loggers.TryGetValue(name, out log))
+                if (!_loggers.TryGetValue(name, out var log))
                 {
                     return false;
                 }
@@ -634,9 +631,7 @@ namespace Catel.Logging
         /// <summary>
         /// Flushes all listeners that implement the <see cref="IBatchLogListener" /> by calling <see cref="IBatchLogListener.FlushAsync" />.
         /// </summary>
-#pragma warning disable AvoidAsyncVoid // Avoid async void
-        public static async void FlushAll()
-#pragma warning restore AvoidAsyncVoid // Avoid async void
+        public static async Task FlushAllAsync()
         {
             var logListenersToFlush = new List<IBatchLogListener>();
 
@@ -654,6 +649,17 @@ namespace Catel.Logging
             {
                 await logListenerToFlush.FlushAsync();
             }
+        }
+
+        /// <summary>
+        /// Flushes all listeners that implement the <see cref="IBatchLogListener" /> by calling <see cref="IBatchLogListener.FlushAsync" />.
+        /// </summary>
+        [ObsoleteEx(ReplacementTypeOrMember = nameof(FlushAllAsync), Message = "Since listeners only have FlushAsync, a non-async flush doesn't make sense", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+#pragma warning disable AvoidAsyncVoid // Avoid async void
+        public static async void FlushAll()
+#pragma warning restore AvoidAsyncVoid // Avoid async void
+        {
+            await FlushAllAsync();
         }
 
         /// <summary>

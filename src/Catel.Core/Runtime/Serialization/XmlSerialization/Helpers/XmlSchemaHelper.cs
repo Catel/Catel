@@ -31,7 +31,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <summary>
         /// The log.
         /// </summary>
-        public static ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Default xml schema.

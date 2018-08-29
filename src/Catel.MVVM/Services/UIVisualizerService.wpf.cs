@@ -11,14 +11,11 @@ namespace Catel.Services
     using System;
     using System.Threading.Tasks;
     using System.Windows;
-
-    using MVVM;
-
-    using Logging;
-
-    using Reflection;
+    using System.Windows.Threading;
     using Catel.Windows.Threading;
-
+    using Logging;
+    using MVVM;
+    using Reflection;
     using Windows;
 
     /// <summary>
@@ -118,8 +115,7 @@ namespace Catel.Services
                         return;
                     }
 
-                    bool? dialogResult;
-                    PropertyHelper.TryGetPropertyValue(window, "DialogResult", out dialogResult);
+                    PropertyHelper.TryGetPropertyValue(window, "DialogResult", out bool? dialogResult);
 
                     try
                     {
@@ -169,6 +165,7 @@ namespace Catel.Services
             }
             else
             {
+                // ORCOMP-337: Always invoke with priority Input.
                 window.Dispatcher.BeginInvoke(() =>
                 {
                     // Safety net to prevent crashes when this is the main window
@@ -181,7 +178,7 @@ namespace Catel.Services
                         Log.Error(ex, $"An error occurred while showing window '{window.GetType().GetSafeFullName(true)}'");
                         tcs.TrySetResult(null);
                     }
-                });
+                }, DispatcherPriority.Input, false);
             }
 
             return tcs.Task;

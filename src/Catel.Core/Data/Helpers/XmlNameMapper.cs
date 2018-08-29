@@ -217,7 +217,7 @@ namespace Catel.Data
 
             if (attribute != null)
             {
-                string mappedName = attribute.AttributeName;
+                var mappedName = attribute.AttributeName;
                 if (string.IsNullOrWhiteSpace(mappedName))
                 {
                     mappedName = propertyName;
@@ -251,13 +251,10 @@ namespace Catel.Data
                 return attribute != null;
             }
 
-            string mappedName = propertyName;
-            if (attribute != null)
+            var mappedName = propertyName;
+            if (attribute != null && !string.IsNullOrWhiteSpace(attribute.ElementName))
             {
-                if (!string.IsNullOrWhiteSpace(attribute.ElementName))
-                {
-                    mappedName = attribute.ElementName;
-                }
+                mappedName = attribute.ElementName;
             }
 
             if (!string.IsNullOrEmpty(mappedName))

@@ -29,12 +29,7 @@ namespace Catel.Collections
                 return true;
             }
 
-            if (listA == listB)
-            {
-                return true;
-            }
-
-            if ((listA == null) || (listB == null))
+            if (ReferenceEquals(listA, null) || ReferenceEquals(listB, null))
             {
                 return false;
             }

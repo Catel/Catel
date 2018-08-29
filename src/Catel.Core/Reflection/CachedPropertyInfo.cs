@@ -59,8 +59,7 @@ namespace Catel.Reflection
 
             lock (_decoratedWithAttributeCache)
             {
-                bool isDecorated;
-                if (!_decoratedWithAttributeCache.TryGetValue(attributeType, out isDecorated))
+                if (!_decoratedWithAttributeCache.TryGetValue(attributeType, out var isDecorated))
                 {
                     isDecorated = PropertyInfo.IsDecoratedWithAttribute(attributeType);
                     _decoratedWithAttributeCache[attributeType] = isDecorated;

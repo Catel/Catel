@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ReflectionExtensions.type.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -789,8 +789,7 @@ namespace Catel.Reflection
 
             var instanceType = objectToCheck.GetType();
 
-            HashSet<Type> convertableHashSet;
-            if (_convertableDictionary.TryGetValue(type, out convertableHashSet))
+            if (_convertableDictionary.TryGetValue(type, out var convertableHashSet))
             {
                 if (convertableHashSet.Contains(instanceType))
                 {
