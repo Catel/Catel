@@ -37,6 +37,8 @@ Classes / members marked as obsolete
   so this converter won't work as expected NullableValueConverter
 * #1209 Mark IStartupInfoProvider as obsolete in favor of Orc.CommandLine since that implementation
   takes better care of supporting different quote styles (e.g. allows ')
+* #1216 Mark binary serializers as obsolete due to potential security issues in the binary serialization engine
+  of .NET itself (see https://github.com/Catel/Catel/issues/1216)
 
 Added/fixed
 ===========

@@ -104,10 +104,12 @@ namespace Catel.Tests.Runtime.Serialization
                 //},
             });
 
+#pragma warning disable CS0618
             serializerConfigurations[typeof(BinarySerializer)] = new List<ISerializationConfiguration>(new[]
             {
                 new SerializationConfiguration()
             });
+#pragma warning restore CS0618
 
             serializerConfigurations[typeof(JsonSerializer)] = new List<ISerializationConfiguration>(new[]
             {

@@ -15,6 +15,7 @@ namespace Catel.Runtime.Serialization.Binary
     /// <summary>
     /// Binary serialization context factory.
     /// </summary>
+    [ObsoleteEx(Message = "Binary serialization should no longer be used for security reasons, see https://github.com/Catel/Catel/issues/1216", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
     public class BinarySerializationContextInfoFactory : ISerializationContextInfoFactory
     {
         /// <summary>
