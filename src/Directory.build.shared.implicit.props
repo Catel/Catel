@@ -17,18 +17,24 @@
     <Deterministic>False</Deterministic>
   </PropertyGroup>
 
+  <!-- Note: Portable PDB's are disabled for now since ApiApprover breaks because of this -->
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
+  
+  <!-- Enforce portable pdb format -->
+  <!--<PropertyGroup>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>-->
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
   <!-- (temporary?) workaround for https://github.com/dotnet/sdk/issues/1458 -->
   <ItemGroup>
     <PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.8.3" PrivateAssets="All" />
   </ItemGroup>
-  
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <DebugType>pdbonly</DebugType>
-  </PropertyGroup>
 
   <PropertyGroup>
     <!-- https://github.com/dotnet/sdk/issues/810 - the temporary project has the wrong file extension -->

@@ -85,8 +85,12 @@ private void BuildComponents()
         msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
         msBuildSettings.WithProperty("PackageOutputPath", OutputRootDirectory);
 
-        // TODO: Enable GitLink / SourceLink, see RepositoryUrl, RepositoryBranchName, RepositoryCommitId variables
-
+        // SourceLink specific stuff
+        msBuildSettings.WithProperty("PublishRepositoryUrl", "true");
+        
+        // For SourceLink to work, the .csproj should contain something like this:
+        // <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02 " PrivateAssets="all" />
+        
         MSBuild(projectFileName, msBuildSettings);
     }
 }
