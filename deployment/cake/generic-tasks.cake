@@ -146,7 +146,11 @@ private bool ShouldDeployProject(string projectName)
     var slug = GetProjectSlug(projectName);
     var keyToCheck = string.Format("Deploy{0}", slug);
 
-    var shouldDeploy = bool.Parse(GetBuildServerVariable(keyToCheck, "True"));
+    var value = GetBuildServerVariable(keyToCheck, "True");
+    
+    Information("Value for '{0}': {1}", keyToCheck, value);
+    
+    var shouldDeploy = bool.Parse(value);
     return shouldDeploy;
 }
 
