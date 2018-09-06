@@ -20,6 +20,10 @@ which ensures a safe bet by professional companies and developers.
 
 For documentation, please visit the [documentation portal](https://docs.catelproject.com)
 
+## Features and components
+
+Below are a few features that are available in Catel.
+
 ### Catel.Core
 
 Catel.Core is the library you want to include in all your projects, whether you are writing a UI project or not. It contains lots of useful helper methods. The
@@ -39,7 +43,7 @@ And more....
 
 ### Catel.MVVM
 
-Catel.MVVM is the library you want to include when you are writing a UI project (e.g. WPF, UWP, Xamarin) and you want to use the MVVM pattern. Catel is the *only* MVVM library that has context-aware view and view-model creation, which can be used to solve the [nested user controls problem](http://docs.catelproject.com/vnext/introduction/mvvm/introduction-to-nested-user-controls-problem/). 
+Catel.MVVM is the library you want to include when you are writing a UI project (e.g. WPF, UWP, Xamarin) and you want to use the MVVM pattern. Catel is the *only* MVVM library that has context-aware view and view-model creation, which can be used to solve the [nested user controls problem](https://docs.catelproject.com/vnext/introduction/mvvm/introduction-to-nested-user-controls-problem/). 
 
 The most important
 features are listed below:
@@ -134,7 +138,7 @@ with Catel:
 
 If you are planning on using WPF, there is a huge set (60+) of free open-source components 
 available based on Catel. All these open source are developed by a company called WildGums 
-(see http://www.wildgums.com) and provided to the community for free. The components are well 
+(see https://www.wildgums.com) and provided to the community for free. The components are well 
 maintained and being used in several commercial WPF applications.
 
 For more information, see https://github.com/wildgums
@@ -164,7 +168,3 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 <a href="https://opencollective.com/Catel/sponsor/7/website" target="_blank"><img src="https://opencollective.com/Catel/sponsor/7/avatar.svg"></a>
 <a href="https://opencollective.com/Catel/sponsor/8/website" target="_blank"><img src="https://opencollective.com/Catel/sponsor/8/avatar.svg"></a>
 <a href="https://opencollective.com/Catel/sponsor/9/website" target="_blank"><img src="https://opencollective.com/Catel/sponsor/9/avatar.svg"></a>
-
-## Major features
-
-Below are a few major features that are available in Catel.
