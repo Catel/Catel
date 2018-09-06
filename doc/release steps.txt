@@ -17,6 +17,7 @@ Final release steps:
 5.4) Make sure to update the welcome page as well to include the new version
 6)   Share via Twitter
 7)   Share via LinkedIn
+8)   Share on Open Collective
 
 Post release steps:
 ===================
