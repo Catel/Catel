@@ -61,4 +61,20 @@ var SonarProject = GetBuildServerVariable("SonarProject", SolutionName);
 // Update some variables (like expanding paths, etc)
 
 OutputRootDirectory = System.IO.Path.GetFullPath(OutputRootDirectory);
-var TestProjects = TestProjectsToBuild ?? new string[] { };
+
+//-------------------------------------------------------------
+
+List<string> _testProjects;
+
+public List<string> TestProjects
+{
+    get 
+    {
+        if (_testProjects is null)
+        {
+            _testProjects = new List<string>();
+        }
+
+        return _testProjects;
+    }
+}

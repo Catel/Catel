@@ -12,5 +12,19 @@ var UpdateDeploymentsShare = bool.Parse(GetBuildServerVariable("UpdateDeployment
 // Azure sync
 var AzureDeploymentsStorageConnectionString = GetBuildServerVariable("AzureDeploymentsStorageConnectionString");
 
+//-------------------------------------------------------------
 
-var WpfApps = WpfAppsToBuild ?? new string[] { };
+List<string> _wpfApps;
+
+public List<string> WpfApps
+{
+    get 
+    {
+        if (_wpfApps is null)
+        {
+            _wpfApps = new List<string>();
+        }
+
+        return _wpfApps;
+    }
+}

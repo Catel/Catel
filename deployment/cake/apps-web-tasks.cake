@@ -41,7 +41,7 @@ private void ValidateWebAppsInput()
 
 private bool HasWebApps()
 {
-    return WebApps != null && WebApps.Length > 0;
+    return WebApps != null && WebApps.Count > 0;
 }
 
 //-------------------------------------------------------------

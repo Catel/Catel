@@ -16,7 +16,7 @@ private void ValidateUwpAppsInput()
 
 private bool HasUwpApps()
 {
-    return UwpApps != null && UwpApps.Length > 0;
+    return UwpApps != null && UwpApps.Count > 0;
 }
 
 //-------------------------------------------------------------

@@ -29,7 +29,7 @@ private void ValidateComponentsInput()
 
 private bool HasComponents()
 {
-    return Components != null && Components.Length > 0;
+    return Components != null && Components.Count > 0;
 }
 
 //-------------------------------------------------------------

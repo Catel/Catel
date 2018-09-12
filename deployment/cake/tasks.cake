@@ -3,6 +3,7 @@
 #l "apps-web-tasks.cake"
 #l "apps-wpf-tasks.cake"
 #l "components-tasks.cake"
+#l "docker-tasks.cake"
 
 #addin "nuget:?package=System.Net.Http&version=4.3.3"
 #addin "nuget:?package=Newtonsoft.Json&version=11.0.2"
@@ -27,6 +28,7 @@ ValidateUwpAppsInput();
 ValidateWebAppsInput();
 ValidateWpfAppsInput();
 ValidateComponentsInput();
+ValidateDockerImagesInput();
 
 //-------------------------------------------------------------
 
@@ -34,7 +36,7 @@ private void BuildTestProjects()
 {
     foreach (var testProject in TestProjects)
     {
-        Information("Building test project '{0}'", testProject);
+        LogSeparator("Building test project '{0}'", testProject);
 
         var projectFileName = GetProjectFileName(testProject);
         
@@ -73,6 +75,7 @@ Task("UpdateInfo")
     UpdateInfoForUwpApps();
     UpdateInfoForWebApps();
     UpdateInfoForWpfApps();
+    UpdateInfoForDockerImages();
 });
 
 //-------------------------------------------------------------
@@ -113,6 +116,7 @@ Task("Build")
     BuildUwpApps();
     BuildWebApps();
     BuildWpfApps();
+    BuildDockerImages();
 
     if (!string.IsNullOrWhiteSpace(SonarUrl))
     {
@@ -202,6 +206,7 @@ Task("Package")
     PackageUwpApps();
     PackageWebApps();
     PackageWpfApps();
+    PackageDockerImages();
 });
 
 //-------------------------------------------------------------
@@ -256,6 +261,7 @@ Task("Deploy")
     DeployUwpApps();
     DeployWebApps();
     DeployWpfApps();
+    DeployDockerImages();
 });
 
 //-------------------------------------------------------------

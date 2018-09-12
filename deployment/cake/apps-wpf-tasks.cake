@@ -18,7 +18,7 @@ private void ValidateWpfAppsInput()
 
 private bool HasWpfApps()
 {
-    return WpfApps != null && WpfApps.Length > 0;
+    return WpfApps != null && WpfApps.Count > 0;
 }
 
 //-------------------------------------------------------------
