@@ -77,7 +77,7 @@ namespace Catel.Services
             if (isModal)
             {
                 var activeWindow = GetActiveWindow();
-                if (ReferenceEquals(window, activeWindow))
+                if (!ReferenceEquals(window, activeWindow))
                 {
                     PropertyHelper.TrySetPropertyValue(window, "Owner", activeWindow);
                 }

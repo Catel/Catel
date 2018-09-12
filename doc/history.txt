@@ -42,7 +42,7 @@ Classes / members marked as obsolete
 
 Added/fixed
 ===========
-xxx
+(x) #1218 UIVisualizerService is not setting parent window correctly
 
 Roadmap
 =======
