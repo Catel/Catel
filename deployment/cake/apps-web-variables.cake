@@ -1,9 +1,5 @@
 #l "./buildserver.cake"
 
-var OctopusRepositoryUrl = GetBuildServerVariable("OctopusRepositoryUrl");
-var OctopusRepositoryApiKey = GetBuildServerVariable("OctopusRepositoryApiKey");
-var OctopusDeploymentTarget = GetBuildServerVariable("OctopusDeploymentTarget", "Staging");
-
 //-------------------------------------------------------------
 
 List<string> _webApps;

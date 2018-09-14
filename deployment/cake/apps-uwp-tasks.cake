@@ -140,7 +140,7 @@ private void BuildUwpApps()
         appxUploadFileName = GetAppxUploadFileName(artifactsDirectory, uwpApp, VersionMajorMinorPatch);
         if (appxUploadFileName == null)
         {
-            Error("Couldn't determine the appxupload file using base directory '{0}'", artifactsDirectory);
+            throw new Exception(string.Format("Couldn't determine the appxupload file using base directory '{0}'", artifactsDirectory));
         }
 
         Information("Created appxupload file '{0}'", appxUploadFileName, artifactsDirectory);

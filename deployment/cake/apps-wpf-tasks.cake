@@ -327,8 +327,7 @@ private void DeployWpfApps()
     var azureStorageSyncExe = azureStorageSyncExes.LastOrDefault();
     if (azureStorageSyncExe == null)
     {
-        Error("Can't find the AzureStorageSync tool that should have been installed via this script");
-        return;
+        throw new Exception("Can't find the AzureStorageSync tool that should have been installed via this script");
     }
 
     foreach (var wpfApp in WpfApps)
@@ -351,7 +350,7 @@ private void DeployWpfApps()
 
         if (exitCode != 0)
         {
-            Error("Received unexpected exit code '{0}' for WPF app '{1}'", exitCode, wpfApp);
+            throw new Exception(string.Format("Received unexpected exit code '{0}' for WPF app '{1}'", exitCode, wpfApp));
         }
     }
 }

@@ -1,6 +1,8 @@
 #l "docker-variables.cake"
+#l "lib-octopusdeploy.cake"
 
 #addin "nuget:?package=Cake.FileHelpers&version=3.0.0"
+#addin "nuget:?package=Cake.Docker&version=0.9.6 "
 
 //-------------------------------------------------------------
 
@@ -12,10 +14,28 @@ private string GetDockerRegistryUrl(string projectName)
 
 //-------------------------------------------------------------
 
-private string GetDockerRegistryApiKey(string projectName)
+private string GetDockerRegistryUserName(string projectName)
 {
-    // Allow per project overrides via "DockerRegistryApiKeyFor[ProjectName]"
-    return GetProjectSpecificConfigurationValue(projectName, "DockerRegistryApiKeyFor", DockerRegistryApiKey);
+    // Allow per project overrides via "DockerRegistryUserNameFor[ProjectName]"
+    return GetProjectSpecificConfigurationValue(projectName, "DockerRegistryUserNameFor", DockerRegistryUserName);
+}
+
+//-------------------------------------------------------------
+
+private string GetDockerRegistryPassword(string projectName)
+{
+    // Allow per project overrides via "DockerRegistryPasswordFor[ProjectName]"
+    return GetProjectSpecificConfigurationValue(projectName, "DockerRegistryPasswordFor", DockerRegistryPassword);
+}
+
+//-------------------------------------------------------------
+
+private string GetDockerImageTag(string projectName, string version)
+{
+    var dockerRegistryUrl = GetDockerRegistryUrl(projectName);
+
+    var tag = string.Format("{0}/{1}:v{2}", dockerRegistryUrl, projectName.Replace(".", "-"), version);
+    return tag.ToLower();
 }
 
 //-------------------------------------------------------------
@@ -41,17 +61,18 @@ private void UpdateInfoForDockerImages()
         return;
     }
 
-    foreach (var dockerImage in DockerImages)
-    {
-        Information("Updating version for docker image '{0}'", dockerImage);
+    // Doesn't seem neccessary yet
+    // foreach (var dockerImage in DockerImages)
+    // {
+    //     Information("Updating version for docker image '{0}'", dockerImage);
 
-        var projectFileName = GetProjectFileName(dockerImage);
+    //     var projectFileName = GetProjectFileName(dockerImage);
 
-        TransformConfig(projectFileName, new TransformationCollection 
-        {
-            { "Project/PropertyGroup/PackageVersion", VersionNuGet }
-        });
-    }
+    //     TransformConfig(projectFileName, new TransformationCollection 
+    //     {
+    //         { "Project/PropertyGroup/PackageVersion", VersionNuGet }
+    //     });
+    // }
 }
 
 //-------------------------------------------------------------
@@ -85,12 +106,6 @@ private void BuildDockerImages()
         msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
         msBuildSettings.WithProperty("PackageOutputPath", OutputRootDirectory);
 
-        // SourceLink specific stuff
-        msBuildSettings.WithProperty("PublishRepositoryUrl", "true");
-        
-        // For SourceLink to work, the .csproj should contain something like this:
-        // <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02 " PrivateAssets="all" />
-        
         MSBuild(projectFileName, msBuildSettings);
     }
 }
@@ -109,10 +124,50 @@ private void PackageDockerImages()
         LogSeparator("Packaging docker image '{0}'", dockerImage);
 
         var projectFileName = string.Format("./src/{0}/{0}.csproj", dockerImage);
+        var dockerImageSpecificationFileName = string.Format("./deployment/docker/{0}/{0}", dockerImage);
 
-        // TODO: How to pack
+        var outputDirectory = string.Format("{0}/{1}/", OutputRootDirectory, dockerImage);
+        Information("Output directory: '{0}'", outputDirectory);
 
+        Information("1) Using 'dotnet publish' to package '{0}'", dockerImage);
+
+        var msBuildSettings = new DotNetCoreMSBuildSettings();
+
+        // Note: we need to set OverridableOutputPath because we need to be able to respect
+        // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
+        // are properties passed in using the command line)
+        msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
+        msBuildSettings.WithProperty("PackageOutputPath", outputDirectory);
+        msBuildSettings.WithProperty("ConfigurationName", ConfigurationName);
+        msBuildSettings.WithProperty("PackageVersion", VersionNuGet);
+
+        var publishSettings = new DotNetCorePublishSettings
+        {
+            MSBuildSettings = msBuildSettings,
+            OutputDirectory = outputDirectory,
+            Configuration = ConfigurationName
+        };
+
+        DotNetCorePublish(projectFileName, publishSettings);
         
+        Information("2) Using 'docker build' to package '{0}'", dockerImage);
+
+        // docker build ..\..\output\Release\platform -f .\Dockerfile
+
+        // From the docs (https://docs.microsoft.com/en-us/azure/app-service/containers/tutorial-custom-docker-image#use-a-docker-image-from-any-private-registry-optional), 
+        // we need something like this:
+        // docker tag <azure-container-registry-name>.azurecr.io/mydockerimage
+        var dockerRegistryUrl = GetDockerRegistryUrl(dockerImage);
+
+        // Note: to prevent all output & source files to be copied to the docker context, we will set the
+        // output directory as context (to keep the footprint as small as possible)
+
+        DockerBuild(new DockerImageBuildSettings
+        {
+            File = dockerImageSpecificationFileName,
+            Tag = new string[] { GetDockerImageTag(dockerImage, VersionNuGet) }
+        }, outputDirectory);
+
         LogSeparator();
     }
 }
@@ -136,17 +191,69 @@ private void DeployDockerImages()
 
         LogSeparator("Deploying docker image '{0}'", dockerImage);
 
-        var imageToPush = string.Format("{0}/{1}.{2}.nupkg", OutputRootDirectory, dockerImage, VersionNuGet);
         var dockerRegistryUrl = GetDockerRegistryUrl(dockerImage);
-        var dockerRegistryApiKey = GetDockerRegistryApiKey(dockerImage);
+        var dockerRegistryUserName = GetDockerRegistryUserName(dockerImage);
+        var dockerRegistryPassword = GetDockerRegistryPassword(dockerImage);
+        var dockerImageTag = GetDockerImageTag(dockerImage, VersionNuGet);
+        var octopusRepositoryUrl = GetOctopusRepositoryUrl(dockerImage);
+        var octopusRepositoryApiKey = GetOctopusRepositoryApiKey(dockerImage);
+        var octopusDeploymentTarget = GetOctopusDeploymentTarget(dockerImage);
 
         if (string.IsNullOrWhiteSpace(dockerRegistryUrl))
         {
-            Error("Docker registry url is empty, as a protection mechanism this must *always* be specified to make sure packages aren't accidentally deployed to some default public registry");
-            return;
+            throw new Exception("Docker registry url is empty, as a protection mechanism this must *always* be specified to make sure packages aren't accidentally deployed to some default public registry");
         }
 
-        // TODO: Push to registry
+        // Note: we are logging in each time because the registry might be different per container
+        Information("1) Logging in to docker @ '{0}'", dockerRegistryUrl);
+
+        DockerLogin(new DockerRegistryLoginSettings
+        {
+            Username = dockerRegistryUserName,
+            Password = dockerRegistryPassword
+        }, dockerRegistryUrl);
+
+        try
+        {
+            Information("2) Pushing docker images with tag '{0}' to '{1}'", dockerImageTag, dockerRegistryUrl);
+
+            DockerPush(new DockerImagePushSettings
+            {
+            }, dockerImageTag);
+
+            Information("3) Creating release '{0}' in Octopus Deploy", VersionNuGet);
+
+            OctoCreateRelease(dockerImage, new CreateReleaseSettings 
+            {
+                Server = octopusRepositoryUrl,
+                ApiKey = octopusRepositoryApiKey,
+                ReleaseNumber = VersionNuGet,
+                DefaultPackageVersion = VersionNuGet,
+                IgnoreExisting = true
+            });
+
+            Information("4) Deploying release '{0}'", VersionNuGet);
+
+            OctoDeployRelease(octopusRepositoryUrl, octopusRepositoryApiKey, dockerImage, octopusDeploymentTarget, 
+                VersionNuGet, new OctopusDeployReleaseDeploymentSettings
+            {
+                ShowProgress = true,
+                WaitForDeployment = true,
+                DeploymentTimeout = TimeSpan.FromMinutes(5),
+                CancelOnTimeout = true,
+                GuidedFailure = true,
+                Force = true,
+                NoRawLog = true,
+            });
+        }
+        finally
+        {
+            Information("5) Logging out of docker @ '{0}'", dockerRegistryUrl);
+
+            DockerLogout(new DockerRegistryLogoutSettings
+            {
+            }, dockerRegistryUrl);
+        }
     }
 }
 

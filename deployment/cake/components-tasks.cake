@@ -223,8 +223,7 @@ private void DeployComponents()
 
         if (string.IsNullOrWhiteSpace(nuGetRepositoryUrl))
         {
-            Error("NuGet repository is empty, as a protection mechanism this must *always* be specified to make sure packages aren't accidentally deployed to the default public NuGet feed");
-            return;
+            throw new Exception("NuGet repository is empty, as a protection mechanism this must *always* be specified to make sure packages aren't accidentally deployed to the default public NuGet feed");
         }
 
         NuGetPush(packageToPush, new NuGetPushSettings
