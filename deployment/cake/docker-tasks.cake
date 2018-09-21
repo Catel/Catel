@@ -205,7 +205,7 @@ private void DeployDockerImages()
         }
 
         // Note: we are logging in each time because the registry might be different per container
-        Information("1) Logging in to docker @ '{0}'", dockerRegistryUrl);
+        Information("Logging in to docker @ '{0}'", dockerRegistryUrl);
 
         DockerLogin(new DockerRegistryLoginSettings
         {
@@ -215,13 +215,19 @@ private void DeployDockerImages()
 
         try
         {
-            Information("2) Pushing docker images with tag '{0}' to '{1}'", dockerImageTag, dockerRegistryUrl);
+            Information("Pushing docker images with tag '{0}' to '{1}'", dockerImageTag, dockerRegistryUrl);
 
             DockerPush(new DockerImagePushSettings
             {
             }, dockerImageTag);
 
-            Information("3) Creating release '{0}' in Octopus Deploy", VersionNuGet);
+            if (string.IsNullOrWhiteSpace(octopusRepositoryUrl))
+            {
+                Warning("Octopus Deploy url is not specified, skipping deployment to Octopus Deploy");
+                continue;
+            }
+
+            Information("Creating release '{0}' in Octopus Deploy", VersionNuGet);
 
             OctoCreateRelease(dockerImage, new CreateReleaseSettings 
             {
@@ -232,7 +238,7 @@ private void DeployDockerImages()
                 IgnoreExisting = true
             });
 
-            Information("4) Deploying release '{0}'", VersionNuGet);
+            Information("Deploying release '{0}' via Octopus Deploy", VersionNuGet);
 
             OctoDeployRelease(octopusRepositoryUrl, octopusRepositoryApiKey, dockerImage, octopusDeploymentTarget, 
                 VersionNuGet, new OctopusDeployReleaseDeploymentSettings
@@ -248,7 +254,7 @@ private void DeployDockerImages()
         }
         finally
         {
-            Information("5) Logging out of docker @ '{0}'", dockerRegistryUrl);
+            Information("Logging out of docker @ '{0}'", dockerRegistryUrl);
 
             DockerLogout(new DockerRegistryLogoutSettings
             {

@@ -112,7 +112,7 @@ Task("RestorePackages")
     var solutions = GetFiles("./**/*.sln");
     
     var allFiles = new List<FilePath>();
-    allFiles.AddRange(projects);
+    //allFiles.AddRange(projects);
     allFiles.AddRange(solutions);
 
     foreach(var file in allFiles)
@@ -253,6 +253,12 @@ Task("CodeSign")
         Information("Found '{0}' files to code sign for '{1}'", projectFilesToSign.Count, projectToCodeSign);
 
         filesToSign.AddRange(projectFilesToSign);
+    }
+
+    if (filesToSign.Count == 0)
+    {
+        Information("Found no files to sign, skipping code signing process...");
+        return;
     }
 
     Information("Found '{0}' files to code sign, this can take a few minutes...", filesToSign.Count);
