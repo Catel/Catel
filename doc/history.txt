@@ -43,6 +43,7 @@ Classes / members marked as obsolete
 Added/fixed
 ===========
 (x) #1218 UIVisualizerService is not setting parent window correctly
+(x) #1220 DispatcherExtensions.BeginInvoke should never return null as task
 
 Roadmap
 =======

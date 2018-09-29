@@ -183,7 +183,7 @@ namespace Catel.Windows.Threading
             }
 
             action.Invoke();
-            return null;
+            return GetDefaultDispatcherOperation(dispatcher);
         }
 
 #if NET
@@ -209,9 +209,34 @@ namespace Catel.Windows.Threading
             }
 
             action.Invoke();
-            return null;
+            return GetDefaultDispatcherOperation(dispatcher);
         }
 #endif
+
+        private static readonly Action EmptyAction = new Action(() => { });
+
+        private static DispatcherOperation GetDefaultDispatcherOperation(Dispatcher dispatcher)
+        {
+            // Fix for https://github.com/Catel/Catel/issues/1220
+
+#if NETFX_CORE
+            return DispatcherOperation.Default;
+#else
+            //[SecurityCritical]
+            //internal DispatcherOperation(Dispatcher dispatcher, DispatcherPriority priority, Action action)
+            //: this(dispatcher, (Delegate)action, priority, (object)null, 0, (DispatcherOperationTaskSource)new DispatcherOperationTaskSource<object>(), true)
+            //{
+            //}
+
+            //var dispatcherOperation = (DispatcherOperation)Activator.CreateInstance(typeof(DispatcherOperation),
+            //    dispatcher, DispatcherPriority.Normal, EmptyAction);
+
+            //return dispatcherOperation;
+
+            // Unfortunately we will need to await a dispatcher operation anyway
+            return dispatcher.BeginInvoke(EmptyAction);
+#endif
+        }
     }
 }
 
