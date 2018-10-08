@@ -33,6 +33,12 @@ namespace Catel.MVVM.Auditing
         void OnViewModelCreated(IViewModel viewModel);
 
         /// <summary>
+        /// Called when a specific view model type is initialized.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        void OnViewModelInitialized(IViewModel viewModel);
+
+        /// <summary>
         /// Called when the property of a view model has just changed.
         /// </summary>
         /// <param name="viewModel">The view model.</param>

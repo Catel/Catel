@@ -224,6 +224,7 @@ namespace Catel.MVVM.Auditing
         public virtual void OnViewModelClosing(Catel.MVVM.IViewModel viewModel) { }
         public virtual void OnViewModelCreated(Catel.MVVM.IViewModel viewModel) { }
         public virtual void OnViewModelCreating(System.Type viewModelType) { }
+        public virtual void OnViewModelInitialized(Catel.MVVM.IViewModel viewModel) { }
         public virtual void OnViewModelSaved(Catel.MVVM.IViewModel viewModel) { }
         public virtual void OnViewModelSaving(Catel.MVVM.IViewModel viewModel) { }
     }
@@ -238,6 +239,7 @@ namespace Catel.MVVM.Auditing
         void OnViewModelClosing(Catel.MVVM.IViewModel viewModel);
         void OnViewModelCreated(Catel.MVVM.IViewModel viewModel);
         void OnViewModelCreating(System.Type viewModelType);
+        void OnViewModelInitialized(Catel.MVVM.IViewModel viewModel);
         void OnViewModelSaved(Catel.MVVM.IViewModel viewModel);
         void OnViewModelSaving(Catel.MVVM.IViewModel viewModel);
     }
