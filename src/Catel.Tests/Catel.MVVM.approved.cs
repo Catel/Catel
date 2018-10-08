@@ -243,6 +243,11 @@ namespace Catel.MVVM.Auditing
         void OnViewModelSaved(Catel.MVVM.IViewModel viewModel);
         void OnViewModelSaving(Catel.MVVM.IViewModel viewModel);
     }
+    public class InvalidateCommandManagerOnViewModelInitializationAuditor : Catel.MVVM.Auditing.AuditorBase
+    {
+        public InvalidateCommandManagerOnViewModelInitializationAuditor(Catel.MVVM.ICommandManager commandManager) { }
+        public override void OnViewModelInitialized(Catel.MVVM.IViewModel viewModel) { }
+    }
 }
 namespace Catel.MVVM
 {

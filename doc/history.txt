@@ -43,6 +43,7 @@ Classes / members marked as obsolete
 Added/fixed
 ===========
 (+) #1222 Add OnViewModelInitialized to view model auditors
+(+) #1223 Automatically invalidate application-wide commands on view model initialization
 (x) #1218 UIVisualizerService is not setting parent window correctly
 (x) #1220 DispatcherExtensions.BeginInvoke should never return null as task
 
