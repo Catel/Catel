@@ -1322,6 +1322,7 @@ namespace Catel.Data
     public class static IValidationContextExtensions
     {
         public static string GetValidationsAsStringList(this Catel.Data.IValidationContext validationContext, Catel.Data.ValidationResultType validationResult) { }
+        public static bool HasWarningsOrErrors(this Catel.Data.IValidationContext validationContext) { }
     }
     public interface IValidationResult
     {
