@@ -36,6 +36,8 @@
     <Resource Include="Resources\Fonts\**\*.ttf" />
     <Resource Include="Resources\Images\**\*.png" />
     <Resource Include="Resources\Images\**\*.gif" />
+    <Resource Include="Resources\Images\**\*.jpg" />
+    <Resource Include="Resources\Images\**\*.jpeg" />
     <EmbeddedResource Include="Resources\ThirdPartyNotices\**\*" />
   </ItemGroup>
 

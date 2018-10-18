@@ -1,5 +1,8 @@
 #l "buildserver.cake"
 
+// Target
+var Target = GetBuildServerVariable("Target", "Default");
+
 // Copyright info
 var Company = GetBuildServerVariable("Company");
 var StartYear = GetBuildServerVariable("StartYear");
@@ -37,7 +40,16 @@ var IsCiBuild = bool.Parse(GetBuildServerVariable("IsCiBuild", "False"));
 var IsAlphaBuild = bool.Parse(GetBuildServerVariable("IsAlphaBuild", "False"));
 var IsBetaBuild = bool.Parse(GetBuildServerVariable("IsBetaBuild", "False"));
 var IsOfficialBuild = bool.Parse(GetBuildServerVariable("IsOfficialBuild", "False"));
+var IsLocalBuild = Target.ToLower().Contains("local");
 var ConfigurationName = GetBuildServerVariable("ConfigurationName", "Release");
+
+// If local, we want full pdb, so do a debug instead
+if (IsLocalBuild)
+{
+    Warning("Enforcing configuration 'Debug' because this is seems to be a local build, do not publish this package!");
+    ConfigurationName = "Debug";
+}
+
 var OutputRootDirectory = GetBuildServerVariable("OutputRootDirectory", string.Format("./output/{0}", ConfigurationName));
 
 // Code signing

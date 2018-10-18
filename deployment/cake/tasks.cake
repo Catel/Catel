@@ -16,8 +16,6 @@
 
 //-------------------------------------------------------------
 
-var Target = GetBuildServerVariable("Target", "Default");
-
 Information("Running target '{0}'", Target);
 Information("Using output directory '{0}'", OutputRootDirectory);
 
