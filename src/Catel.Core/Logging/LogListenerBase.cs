@@ -162,19 +162,9 @@ namespace Catel.Logging
         /// <param name="time">The time.</param>
         void ILogListener.Write(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
-            // If the log is a catel log and the AlwaysLog flag is set, skip additional checks and log the message.
-            var catelLog = log as ICatelLog;
-            if (catelLog == null || !catelLog.AlwaysLog)
+            if (ShouldIgnoreLogging(log, message, logEvent, extraData, logData, time))
             {
-                if (IgnoreCatelLogging && log.IsCatelLogging)
-                {
-                    return;
-                }
-
-                if (ShouldIgnoreLogMessage(log, message, logEvent, extraData, logData, time))
-                {
-                    return;
-                }
+                return;
             }
 
             Write(log, message, logEvent, extraData, logData, time);
@@ -192,19 +182,9 @@ namespace Catel.Logging
         /// <param name="time">The time.</param>
         void ILogListener.Debug(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
-            // If the log is a catel log and the AlwaysLog flag is set, skip additional checks and log the message.
-            var catelLog = log as ICatelLog;
-            if (catelLog == null || !catelLog.AlwaysLog)
+            if (ShouldIgnoreLogging(log, message, LogEvent.Debug, extraData, logData, time))
             {
-                if (IgnoreCatelLogging && log.IsCatelLogging)
-                {
-                    return;
-                }
-
-                if (ShouldIgnoreLogMessage(log, message, LogEvent.Debug, extraData, logData, time))
-                {
-                    return;
-                }
+                return;
             }
 
             Debug(log, message, extraData, logData, time);
@@ -220,19 +200,9 @@ namespace Catel.Logging
         /// <param name="time">The time.</param>
         void ILogListener.Info(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
-            // If the log is a catel log and the AlwaysLog flag is set, skip additional checks and log the message.
-            var catelLog = log as ICatelLog;
-            if (catelLog == null || !catelLog.AlwaysLog)
+            if (ShouldIgnoreLogging(log, message, LogEvent.Info, extraData, logData, time))
             {
-                if (IgnoreCatelLogging && log.IsCatelLogging)
-                {
-                    return;
-                }
-
-                if (ShouldIgnoreLogMessage(log, message, LogEvent.Info, extraData, logData, time))
-                {
-                    return;
-                }
+                return;
             }
 
             Info(log, message, extraData, logData, time);
@@ -248,19 +218,9 @@ namespace Catel.Logging
         /// <param name="time">The time.</param>
         void ILogListener.Warning(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
-            // If the log is a catel log and the AlwaysLog flag is set, skip additional checks and log the message.
-            var catelLog = log as ICatelLog;
-            if (catelLog == null || !catelLog.AlwaysLog)
+            if (ShouldIgnoreLogging(log, message, LogEvent.Warning, extraData, logData, time))
             {
-                if (IgnoreCatelLogging && log.IsCatelLogging)
-                {
-                    return;
-                }
-
-                if (ShouldIgnoreLogMessage(log, message, LogEvent.Warning, extraData, logData, time))
-                {
-                    return;
-                }
+                return;
             }
 
             Warning(log, message, extraData, logData, time);
@@ -276,19 +236,9 @@ namespace Catel.Logging
         /// <param name="time">The ti me.</param>
         void ILogListener.Error(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
-            // If the log is a catel log and the AlwaysLog flag is set, skip additional checks and log the message.
-            var catelLog = log as ICatelLog;
-            if (catelLog == null || !catelLog.AlwaysLog)
+            if (ShouldIgnoreLogging(log, message, LogEvent.Error, extraData, logData, time))
             {
-                if (IgnoreCatelLogging && log.IsCatelLogging)
-                {
-                    return;
-                }
-
-                if (ShouldIgnoreLogMessage(log, message, LogEvent.Error, extraData, logData, time))
-                {
-                    return;
-                }
+                return;
             }
 
             Error(log, message, extraData, logData, time);
@@ -304,26 +254,31 @@ namespace Catel.Logging
         /// <param name="time">The ti me.</param>
         void ILogListener.Status(ILog log, string message, object extraData, LogData logData, DateTime time)
         {
-            // If the log is a catel log and the AlwaysLog flag is set, skip additional checks and log the message.
-            var catelLog = log as ICatelLog;
-            if (catelLog == null || !catelLog.AlwaysLog)
-            {
-                if (IgnoreCatelLogging && log.IsCatelLogging)
+            if (ShouldIgnoreLogging(log, message, LogEvent.Status, extraData, logData, time))
             {
                 return;
             }
-
-            if (ShouldIgnoreLogMessage(log, message, LogEvent.Status, extraData, logData, time))
-            {
-                return;
-            }
-}
 
             Status(log, message, extraData, logData, time);
         }
         #endregion
 
         #region Methods
+        private bool ShouldIgnoreLogging(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
+        {
+            if (IgnoreCatelLogging && log.IsCatelLoggingAndCanBeIgnored())
+            {
+                return true;
+            }
+
+            if (ShouldIgnoreLogMessage(log, message, logEvent, extraData, logData, time))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Returns whether the log message should be ignored
         /// </summary>

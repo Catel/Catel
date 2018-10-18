@@ -2556,6 +2556,7 @@ namespace Catel.Logging
         public System.Type TargetType { get; }
         public event System.EventHandler<Catel.Logging.LogMessageEventArgs> LogMessage;
         public void Indent() { }
+        protected virtual bool ShouldIgnoreIfCatelLoggingIsDisabled() { }
         public void Unindent() { }
         public void WriteWithData(string message, object extraData, Catel.Logging.LogEvent logEvent) { }
         public void WriteWithData(string message, Catel.Logging.LogData logData, Catel.Logging.LogEvent logEvent) { }
@@ -2637,6 +2638,7 @@ namespace Catel.Logging
         public static void InfoWithData(this Catel.Logging.ILog log, string message, object extraData = null) { }
         public static void InfoWithData(this Catel.Logging.ILog log, string message, Catel.Logging.LogData logData) { }
         public static void InfoWithData(this Catel.Logging.ILog log, System.Exception exception, string message, object extraData = null) { }
+        public static bool IsCatelLoggingAndCanBeIgnored(this Catel.Logging.ILog log) { }
         public static void LogDebugHeading(this Catel.Logging.ILog log, string headingContent, string messageFormat, params object[] args) { }
         public static void LogDebugHeading1(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
         public static void LogDebugHeading2(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }

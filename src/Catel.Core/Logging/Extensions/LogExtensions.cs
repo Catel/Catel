@@ -7,9 +7,6 @@
 namespace Catel.Logging
 {
     using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
     using Reflection;
 
     /// <summary>
@@ -48,16 +45,16 @@ namespace Catel.Logging
             var assembly = AssemblyHelper.GetEntryAssembly();
             Write(log, LogEvent.Info, "Assembly:              {0}", assembly.Title());
             Write(log, LogEvent.Info, "Version:               {0}", assembly.Version());
-			
-			try
-			{
-				Write(log, LogEvent.Info, "Informational version: {0}", assembly.InformationalVersion());
-			}
-			catch (Exception)
-			{
+
+            try
+            {
+                Write(log, LogEvent.Info, "Informational version: {0}", assembly.InformationalVersion());
+            }
+            catch (Exception)
+            {
                 // Ignore
-			}
-            
+            }
+
             Write(log, LogEvent.Info, string.Empty);
             Write(log, LogEvent.Info, "Company:               {0}", assembly.Company());
             Write(log, LogEvent.Info, "Copyright:             {0}", assembly.Copyright());
@@ -103,6 +100,26 @@ namespace Catel.Logging
             Write(log, LogEvent.Info, string.Empty);
         }
 
+        /// <summary>
+        /// Determines whether the log is Catel logging and can be ignored if Catel logging is disabled.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <returns><c>true</c> if the logging is Catel logging *and* can be ignored.</returns>
+        public static bool IsCatelLoggingAndCanBeIgnored(this ILog log)
+        {
+            if (!log.IsCatelLogging)
+            {
+                return false;
+            }
+
+            var catelLog = log as CatelLog;
+            if (catelLog != null && catelLog.AlwaysLog)
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         /// <summary>
         /// Writes the specified message as the specified log event.
@@ -209,7 +226,7 @@ namespace Catel.Logging
             {
                 log?.WriteWithData(string.Format(messageFormat, s1, s2, s3, s4, s5), null, logEvent);
             }
-        }       
+        }
 
         /// <summary>
         /// Writes the specified message as the specified log event.
@@ -287,7 +304,7 @@ namespace Catel.Logging
                 return;
             }
 
-            if (LogManager.LogInfo.IgnoreCatelLogging && log.IsCatelLogging)
+            if (LogManager.LogInfo.IgnoreCatelLogging && log.IsCatelLoggingAndCanBeIgnored())
             {
                 return;
             }
@@ -386,7 +403,7 @@ namespace Catel.Logging
                 var exception = ExceptionFactory.CreateException<TException>(msg, innerException);
                 if (exception == null)
                 {
-                    var error = $"Exception type '{typeof (TException).Name}' does not have a constructor accepting a string";
+                    var error = $"Exception type '{typeof(TException).Name}' does not have a constructor accepting a string";
 
                     if (log != null)
                     {
@@ -445,7 +462,7 @@ namespace Catel.Logging
             var exception = createExceptionCallback(message);
             if (exception == null)
             {
-                var error = $"Exception type '{typeof (TException).Name}' does not have a constructor accepting a string";
+                var error = $"Exception type '{typeof(TException).Name}' does not have a constructor accepting a string";
 
                 if (log != null)
                 {

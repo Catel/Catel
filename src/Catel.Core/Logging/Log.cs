@@ -17,6 +17,7 @@ namespace Catel.Logging
         #region Fields
         private int _indentSize = 2;
         private int _indentLevel = 0;
+        private readonly Lazy<bool> _shouldIgnoreIfCatelLoggingIsDisabled;
         #endregion
 
         #region Constructors
@@ -54,6 +55,7 @@ namespace Catel.Logging
             TargetType = targetType;
 
             IsCatelLogging = targetType?.IsCatelType() ?? false;
+            _shouldIgnoreIfCatelLoggingIsDisabled = new Lazy<bool>(ShouldIgnoreIfCatelLoggingIsDisabled);
         }
         #endregion
 
@@ -151,7 +153,7 @@ namespace Catel.Logging
                 return;
             }
 
-            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
+            if (LogManager.LogInfo.IgnoreCatelLogging && _shouldIgnoreIfCatelLoggingIsDisabled.Value)
             {
                 return;
             }
@@ -172,12 +174,21 @@ namespace Catel.Logging
                 return;
             }
 
-            if (LogManager.LogInfo.IgnoreCatelLogging && IsCatelLogging)
+            if (LogManager.LogInfo.IgnoreCatelLogging && _shouldIgnoreIfCatelLoggingIsDisabled.Value)
             {
                 return;
             }
 
             WriteMessage(message, null, logData, logEvent);
+        }
+
+        /// <summary>
+        /// Retuns a value whether this should be ignored if it as Catel logging.
+        /// </summary>
+        /// <returns><c>true</c> if this log should be ignored if Catel logging is </returns>
+        protected virtual bool ShouldIgnoreIfCatelLoggingIsDisabled()
+        {
+            return this.IsCatelLoggingAndCanBeIgnored();
         }
 
         /// <summary>
