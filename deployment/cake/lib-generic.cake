@@ -97,6 +97,40 @@ private bool IsDotNetCoreProject(string projectName)
 
 //-------------------------------------------------------------
 
+private bool ShouldProcessProject(string projectName)
+{
+    // Includes > Excludes
+    var includes = Includes;
+    if (includes.Count > 0)
+    {
+        var process = includes.Any(x => string.Equals(x, projectName, StringComparison.OrdinalIgnoreCase));
+
+        if (!process)
+        {
+            Warning("Project '{0}' should not be processed, removing from projects to process", projectName);
+        }
+
+        return process;
+    }
+
+    var excludes = Excludes;
+    if (excludes.Count > 0)
+    {
+        var process = !excludes.Any(x => string.Equals(x, projectName, StringComparison.OrdinalIgnoreCase));
+
+        if (!process)
+        {
+            Warning("Project '{0}' should not be processed, removing from projects to process", projectName);
+        }
+
+        return process;
+    }
+
+    return true;
+}
+
+//-------------------------------------------------------------
+
 private bool ShouldDeployProject(string projectName)
 {
     // Allow the build server to configure this via "Deploy[ProjectName]"

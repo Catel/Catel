@@ -21,6 +21,26 @@ private bool HasUwpApps()
 
 //-------------------------------------------------------------
 
+private async Task PrepareForUwpAppsAsync()
+{
+    if (!HasUwpApps())
+    {
+        return;
+    }
+
+    // Check whether projects should be processed, `.ToList()` 
+    // is required to prevent issues with foreach
+    foreach (var uwpApp in UwpApps.ToList())
+    {
+        if (!ShouldProcessProject(uwpApp))
+        {
+            UwpApps.Remove(uwpApp);
+        }
+    }
+}
+
+//-------------------------------------------------------------
+
 public void UpdateAppxManifestVersion(string path, string version)
 {
     Information("Updating AppxManifest version @ '{0}' to '{1}'", path, version);

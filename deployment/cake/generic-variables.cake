@@ -68,11 +68,74 @@ var SonarUsername = GetBuildServerVariable("SonarUsername");
 var SonarPassword = GetBuildServerVariable("SonarPassword");
 var SonarProject = GetBuildServerVariable("SonarProject", SolutionName);
 
+// Testing
+var TestProcessBit = GetBuildServerVariable("TestProcessBit", "X86");
+
+// Includes / Excludes
+var Include = GetBuildServerVariable("Include", string.Empty);
+var Exclude = GetBuildServerVariable("Exclude", string.Empty);
+
 //-------------------------------------------------------------
 
 // Update some variables (like expanding paths, etc)
 
 OutputRootDirectory = System.IO.Path.GetFullPath(OutputRootDirectory);
+
+//-------------------------------------------------------------
+
+List<string> _includes;
+
+public List<string> Includes
+{
+    get 
+    {
+        if (_includes is null)
+        {
+            var value = Include;
+            var list = _includes = new List<string>();
+            
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                var splitted = value.Split(new [] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var split in splitted)
+                {
+                    list.Add(split.Trim());
+                }
+            }
+        }
+
+        return _includes;
+    }
+}
+
+//-------------------------------------------------------------
+
+List<string> _excludes;
+
+public List<string> Excludes
+{
+    get 
+    {
+        if (_excludes is null)
+        {
+            var value = Exclude;
+            var list = _excludes = new List<string>();
+            
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                var splitted = value.Split(new [] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var split in splitted)
+                {
+                    list.Add(split.Trim());
+                }
+            }
+        }
+
+        return _excludes;
+    }
+}
 
 //-------------------------------------------------------------
 

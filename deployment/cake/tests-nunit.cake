@@ -20,7 +20,8 @@ private void RunTestsUsingNUnit(string projectName, string testTargetFramework, 
         },
         NoHeader = true,
         NoColor = true,
-        NoResults = false
+        NoResults = false,
+        X86 = string.Equals(TestProcessBit, "X86", StringComparison.OrdinalIgnoreCase)
         //Work = testResultsDirectory
     });
 

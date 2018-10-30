@@ -66,7 +66,20 @@ private void BuildTestProjects()
 
 //-------------------------------------------------------------
 
+Task("Prepare")
+    .Does(async () =>
+{
+    await PrepareForComponentsAsync();
+    await PrepareForUwpAppsAsync();
+    await PrepareForWebAppsAsync();
+    await PrepareForWpfAppsAsync();
+    await PrepareForDockerImagesAsync();
+});
+
+//-------------------------------------------------------------
+
 Task("UpdateInfo")
+    .IsDependentOn("Prepare")
     .Does(() =>
 {
     UpdateSolutionAssemblyInfo();
@@ -243,21 +256,6 @@ Task("PackageLocal")
     {
         Information("Copying build artifact for '{0}'", component);
     
-        var cacheDirectory = Environment.ExpandEnvironmentVariables(string.Format("%userprofile%/.nuget/packages/{0}/{1}", component, VersionNuGet));
-
-        Information("Checking for existing local NuGet cached version at '{0}'", cacheDirectory);
-
-        if (DirectoryExists(cacheDirectory))
-        {
-            Information("Deleting already existing NuGet cached version from '{0}'", cacheDirectory);
-            
-            DeleteDirectory(cacheDirectory, new DeleteDirectorySettings()
-            {
-                Force = true,
-                Recursive = true
-            });
-        }
-        
         var sourceFile = string.Format("{0}/{1}.{2}.nupkg", OutputRootDirectory, component, VersionNuGet);
         CopyFiles(new [] { sourceFile }, NuGetLocalPackagesDirectory);
     }
