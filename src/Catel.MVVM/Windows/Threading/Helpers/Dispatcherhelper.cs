@@ -59,7 +59,7 @@ namespace Catel.Windows.Threading
 #endif
 
 #if NET
-        private static readonly DispatcherOperationCallback exitFrameCallback = ExitFrame;
+        private static readonly DispatcherOperationCallback ExitFrameCallback = ExitFrame;
 
         /// <summary>
         /// Processes all UI messages currently in the message queue.
@@ -73,7 +73,7 @@ namespace Catel.Windows.Threading
             // this callback will end the nested message loop.
             // note that the priority of this callback should be lower than that of UI event messages.
             DispatcherOperation exitOperation = Dispatcher.CurrentDispatcher.BeginInvoke(
-                DispatcherPriority.Background, exitFrameCallback, nestedFrame);
+                DispatcherPriority.Background, ExitFrameCallback, nestedFrame);
 
             // pump the nested message loop, the nested message loop will immediately
             // process the messages left inside the message queue.

@@ -42,6 +42,7 @@ Classes / members marked as obsolete
 
 Added/fixed
 ===========
+(+) #1215 Add InvokeAsync() for UWP (NETFX_CORE)
 (+) #1222 Add OnViewModelInitialized to view model auditors
 (+) #1223 Automatically invalidate application-wide commands on view model initialization
 (+) #1224 Add HasWarningsOrErrors as extension method for IValidationContext

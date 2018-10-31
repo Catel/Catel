@@ -14,6 +14,7 @@ namespace Catel.Windows.Threading
 
 #if NETFX_CORE
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
+    using System.Windows.Threading;
 #else
     using System.Windows.Threading;
 #endif
@@ -25,7 +26,7 @@ namespace Catel.Windows.Threading
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if NET
+#if NET || UWP
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
@@ -48,24 +49,10 @@ namespace Catel.Windows.Threading
         /// <returns>The task representing the action.</returns>
         public static Task InvokeAsync(this Dispatcher dispatcher, Delegate method, DispatcherPriority priority, params object[] args)
         {
-            var tcs = new TaskCompletionSource<bool>();
-
-            var dispatcherOperation = dispatcher.BeginInvoke(new Action(() =>
+            return RunAsync(dispatcher, () =>
             {
-                try
-                {
-                    method.DynamicInvoke(args);
-                }
-                catch (Exception ex)
-                {
-                    tcs.SetException(ex);
-                }
-            }), priority, null);
-
-            dispatcherOperation.Completed += (sender, e) => SetResult(tcs, true);
-            dispatcherOperation.Aborted += (sender, e) => SetCanceled(tcs);
-
-            return tcs.Task;
+                method.DynamicInvoke(args);
+            }, priority);
         }
 
         /// <summary>
@@ -90,14 +77,60 @@ namespace Catel.Windows.Threading
         /// <returns>The task representing the action.</returns>
         public static Task<T> InvokeAsync<T>(this Dispatcher dispatcher, Func<T> func, DispatcherPriority priority)
         {
-            var tcs = new TaskCompletionSource<T>();
-            var result = default(T);
+            return RunWithResultAsync(dispatcher, () =>
+            {
+                return func();
+            }, priority);
+        }
+
+        private static Task RunAsync(this Dispatcher dispatcher, Action action, DispatcherPriority priority)
+        {
+#if UWP
+            var task = dispatcher.RunAsync(priority.ToCoreDispatcherPriority(), () =>
+            {
+                action();
+            });
+
+            return task.AsTask();
+#else
+            var tcs = new TaskCompletionSource<bool>();
 
             var dispatcherOperation = dispatcher.BeginInvoke(new Action(() =>
             {
                 try
                 {
-                    result = func();
+                    action();
+                }
+                catch (Exception ex)
+                {
+                    tcs.SetException(ex);
+                }
+            }), priority, null);
+
+            dispatcherOperation.Completed += (sender, e) => SetResult(tcs, true);
+            dispatcherOperation.Aborted += (sender, e) => SetCanceled(tcs);
+
+            return tcs.Task;
+#endif
+        }
+
+        private static async Task<T> RunWithResultAsync<T>(this Dispatcher dispatcher, Func<T> function, DispatcherPriority priority)
+        {
+            var result = default(T);
+
+#if UWP
+            await dispatcher.RunAsync(priority.ToCoreDispatcherPriority(), () =>
+            {
+                result = function();
+            });
+#else
+            var tcs = new TaskCompletionSource<T>();
+
+            var dispatcherOperation = dispatcher.BeginInvoke(new Action(() =>
+            {
+                try
+                {
+                    result = function();
                 }
                 catch (Exception ex)
                 {
@@ -108,7 +141,10 @@ namespace Catel.Windows.Threading
             dispatcherOperation.Completed += (sender, e) => SetResult(tcs, result);
             dispatcherOperation.Aborted += (sender, e) => SetCanceled(tcs);
 
-            return tcs.Task;
+            await tcs.Task;
+#endif
+
+            return result;
         }
 
         private static bool SetResult<T>(TaskCompletionSource<T> tcs, T result)
