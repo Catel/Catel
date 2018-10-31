@@ -80,7 +80,7 @@ namespace Catel.Data
         /// <param name="configuration">The configuration.</param>
         public void Save(IRandomAccessStream fileStream, ISerializer serializer, ISerializationConfiguration configuration = null)
         {
-            Save((Stream)fileStream, null);
+            Save(fileStream.AsStream(), null);
         }
 #else
         /// <summary>
