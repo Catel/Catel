@@ -46,6 +46,7 @@ Added/fixed
 (+) #1222 Add OnViewModelInitialized to view model auditors
 (+) #1223 Automatically invalidate application-wide commands on view model initialization
 (+) #1224 Add HasWarningsOrErrors as extension method for IValidationContext
+(*) #1231 Improve UpdatableMarkupExtension so it can provide dynamic values in styles
 (x) #1218 UIVisualizerService is not setting parent window correctly
 (x) #1220 DispatcherExtensions.BeginInvoke should never return null as task
 (x) #1225 CatelLog.AlwaysLog is not being respected in LogExtensions

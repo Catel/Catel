@@ -42,7 +42,7 @@ namespace Catel.Windows.Markup
 
             Source = this;
             Mode = BindingMode.OneWay;
-            Path = new PropertyPath("InternalBindingValue");
+            Path = new PropertyPath(nameof(InternalBindingValue));
 
 #if NETFX_CORE
             Dispatcher.BeginInvoke(UpdateBinding);
@@ -64,7 +64,7 @@ namespace Catel.Windows.Markup
             set
             {
                 _internalBindingValue = value;
-                RaisePropertyChanged("InternalBindingValue");
+                RaisePropertyChanged(nameof(InternalBindingValue));
             }
         }
 
@@ -102,7 +102,7 @@ namespace Catel.Windows.Markup
         /// Called when a property has been changed.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
-        private void RaisePropertyChanged(string propertyName)
+        protected void RaisePropertyChanged(string propertyName)
         {
             var handler = PropertyChanged;
             if (handler != null)
