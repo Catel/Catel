@@ -127,7 +127,7 @@ namespace Catel.Data
         /// </remarks>
         public static T Load(IRandomAccessStream fileStream, ISerializer serializer, ISerializationConfiguration configuration = null)
         {
-            return Load((Stream)fileStream, serializer, configuration);
+            return Load(fileStream.AsStream(), serializer, configuration);
         }
 #endif
 
