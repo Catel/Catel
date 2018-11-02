@@ -162,7 +162,9 @@ namespace Catel.Windows.Markup
                     {
                         if (!AllowUpdatableStyleSetters)
                         {
-                            throw Log.ErrorAndCreateException<NotSupportedException>($"Note that the target object is a setter in a style, and will never be updatable without enabling 'AllowUpdatableStyleSetters'. Either enable this property or use a different base class.");
+                            //throw Log.ErrorAndCreateException<NotSupportedException>($"Note that the target object is a setter in a style, and will never be updatable without enabling 'AllowUpdatableStyleSetters'. Either enable this property or use a different base class.");
+                            Log.Warning($"Note that the target object is a setter in a style, and will never be updatable without enabling 'AllowUpdatableStyleSetters'. Either enable this property or use a different base class.");
+                            return;
                         }
 
                         // Very special case, see https://github.com/Catel/Catel/issues/1231. Since this
