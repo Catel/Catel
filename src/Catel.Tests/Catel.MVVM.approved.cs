@@ -245,7 +245,7 @@ namespace Catel.MVVM.Auditing
     }
     public class InvalidateCommandManagerOnViewModelInitializationAuditor : Catel.MVVM.Auditing.AuditorBase
     {
-        public InvalidateCommandManagerOnViewModelInitializationAuditor(Catel.MVVM.ICommandManager commandManager) { }
+        public InvalidateCommandManagerOnViewModelInitializationAuditor(Catel.MVVM.ICommandManager commandManager, Catel.Services.IDispatcherService dispatcherService) { }
         public override void OnViewModelInitialized(Catel.MVVM.IViewModel viewModel) { }
     }
 }
