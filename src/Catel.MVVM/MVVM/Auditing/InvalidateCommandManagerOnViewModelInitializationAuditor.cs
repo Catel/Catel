@@ -3,52 +3,45 @@
 namespace Catel.MVVM.Auditing
 {
     using System;
+    using System.Threading;
     using Catel.MVVM.Auditing;
-
-#if UWP
-    using global::Windows.UI.Xaml;
-    using DispatcherTimerEventArgs = System.Object;
-#else
-    using System.Windows.Threading;
-    using DispatcherTimerEventArgs = System.EventArgs;
-#endif
+    using Catel.Services;
 
     public class InvalidateCommandManagerOnViewModelInitializationAuditor : AuditorBase
     {
-        private readonly ICommandManager _commandManager;
-        private readonly DispatcherTimer _dispatcherTimer = new DispatcherTimer();
+        private static readonly TimeSpan TimerDuration = TimeSpan.FromMilliseconds(50);
 
-        public InvalidateCommandManagerOnViewModelInitializationAuditor(ICommandManager commandManager)
+        private readonly ICommandManager _commandManager;
+        private readonly IDispatcherService _dispatcherService;
+
+        private readonly Timer _timer;
+
+        public InvalidateCommandManagerOnViewModelInitializationAuditor(ICommandManager commandManager,
+            IDispatcherService dispatcherService)
         {
             Argument.IsNotNull(() => commandManager);
+            Argument.IsNotNull(() => dispatcherService);
 
             _commandManager = commandManager;
+            _dispatcherService = dispatcherService;
 
-            _dispatcherTimer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromMilliseconds(25)
-            };
-
-            _dispatcherTimer.Tick += OnDispatcherTimerTick;
+            _timer = new Timer(OnTimerTick, null, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
         }
 
         public override void OnViewModelInitialized(IViewModel viewModel)
         {
             base.OnViewModelInitialized(viewModel);
 
-            if (_dispatcherTimer.IsEnabled)
-            {
-                _dispatcherTimer.Stop();
-            }
-
-            _dispatcherTimer.Start();
+            // Reset timer
+            _timer.Change(TimerDuration, Timeout.InfiniteTimeSpan);
         }
 
-        private void OnDispatcherTimerTick(object sender, DispatcherTimerEventArgs e)
+        private void OnTimerTick(object e)
         {
-            _dispatcherTimer.Stop();
-
-            _commandManager.InvalidateCommands();
+            _dispatcherService.BeginInvokeIfRequired(() =>
+            {
+                _commandManager.InvalidateCommands();
+            });
         }
     }
 }
