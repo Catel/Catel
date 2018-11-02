@@ -160,25 +160,24 @@ namespace Catel.Windows.Markup
                     }
                     else if (targetObject is Setter setter)
                     {
-                        if (!AllowUpdatableStyleSetters)
+                        if (AllowUpdatableStyleSetters)
                         {
-                            //throw Log.ErrorAndCreateException<NotSupportedException>($"Note that the target object is a setter in a style, and will never be updatable without enabling 'AllowUpdatableStyleSetters'. Either enable this property or use a different base class.");
-                            Log.Warning($"Note that the target object is a setter in a style, and will never be updatable without enabling 'AllowUpdatableStyleSetters'. Either enable this property or use a different base class.");
-                            return;
+                            // Very special case, see https://github.com/Catel/Catel/issues/1231. Since this
+                            // object will be used inside a style, we will raise "OnTargetObjectLoaded" to allow
+                            // the markup extensions to register to events. This mode will never call
+                            // "OnTargetObjectUnloaded"
+
+                            OnTargetObjectLoaded();
+
+                            return new Binding
+                            {
+                                Source = this,
+                                Path = new PropertyPath(nameof(Value))
+                            };
                         }
 
-                        // Very special case, see https://github.com/Catel/Catel/issues/1231. Since this
-                        // object will be used inside a style, we will raise "OnTargetObjectLoaded" to allow
-                        // the markup extensions to register to events. This mode will never call
-                        // "OnTargetObjectUnloaded"
-
-                        OnTargetObjectLoaded();
-
-                        return new Binding
-                        {
-                            Source = this,
-                            Path = new PropertyPath(nameof(Value))
-                        };
+                        //throw Log.ErrorAndCreateException<NotSupportedException>($"Note that the target object is a setter in a style, and will never be updatable without enabling 'AllowUpdatableStyleSetters'. Either enable this property or use a different base class.");
+                        Log.Warning($"Note that the target object is a setter in a style, and will never be updatable without enabling 'AllowUpdatableStyleSetters'. Either enable this property or use a different base class.");
                     }
 #endif
                 }
