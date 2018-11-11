@@ -48,6 +48,7 @@ Added/fixed
 (x) #1218 UIVisualizerService is not setting parent window correctly
 (x) #1220 DispatcherExtensions.BeginInvoke should never return null as task
 (x) #1225 CatelLog.AlwaysLog is not being respected in LogExtensions
+(x) #1232 NavigationService.Navigate leads to endless loop when MainPage is MasterDetailPage
 
 Roadmap
 =======
