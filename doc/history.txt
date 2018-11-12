@@ -25,7 +25,7 @@ For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/
 
 Release date
 ============
-2018/xx/xx
+2018/11/12
 
 Platform support changes
 ========================
@@ -42,12 +42,15 @@ Classes / members marked as obsolete
 
 Added/fixed
 ===========
+(+) #1215 Add InvokeAsync() for UWP (NETFX_CORE)
 (+) #1222 Add OnViewModelInitialized to view model auditors
 (+) #1223 Automatically invalidate application-wide commands on view model initialization
 (+) #1224 Add HasWarningsOrErrors as extension method for IValidationContext
+(*) #1231 Improve UpdatableMarkupExtension so it can provide dynamic values in styles
 (x) #1218 UIVisualizerService is not setting parent window correctly
 (x) #1220 DispatcherExtensions.BeginInvoke should never return null as task
 (x) #1225 CatelLog.AlwaysLog is not being respected in LogExtensions
+(x) #1227 SavableModelBase.Save throws InvalidCastException for UWP platform
 
 Roadmap
 =======

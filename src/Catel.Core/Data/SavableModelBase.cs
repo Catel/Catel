@@ -80,7 +80,7 @@ namespace Catel.Data
         /// <param name="configuration">The configuration.</param>
         public void Save(IRandomAccessStream fileStream, ISerializer serializer, ISerializationConfiguration configuration = null)
         {
-            Save((Stream)fileStream, null);
+            Save(fileStream.AsStreamForWrite(), serializer, configuration);
         }
 #else
         /// <summary>
@@ -91,7 +91,7 @@ namespace Catel.Data
         /// <param name="configuration">The configuration.</param>
         public void Save(IsolatedStorageFileStream fileStream, ISerializer serializer, ISerializationConfiguration configuration = null)
         {
-            Save((Stream)fileStream, null);
+            Save((Stream)fileStream, serializer, configuration);
         }
 #endif
 
@@ -127,7 +127,7 @@ namespace Catel.Data
         /// </remarks>
         public static T Load(IRandomAccessStream fileStream, ISerializer serializer, ISerializationConfiguration configuration = null)
         {
-            return Load((Stream)fileStream, serializer, configuration);
+            return Load(fileStream.AsStreamForRead(), serializer, configuration);
         }
 #endif
 
