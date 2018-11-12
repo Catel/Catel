@@ -11,7 +11,7 @@ namespace Catel
     using MVVM.Views;
     using Services;
     using IoC;
-
+    using Catel.MVVM.Auditing;
 
     /// <summary>
     /// MVVM module which allows the registration of default services in the service locator.
@@ -39,6 +39,12 @@ namespace Catel
 #endif
 
             ViewModelServiceHelper.RegisterDefaultViewModelServices(serviceLocator);
+
+#if !XAMARIN
+            var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
+            var auditor = typeFactory.CreateInstance<InvalidateCommandManagerOnViewModelInitializationAuditor>();
+            AuditingManager.RegisterAuditor(auditor);
+#endif
 
             DesignTimeHelper.InitializeDesignTime();
         }

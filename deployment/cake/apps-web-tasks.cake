@@ -1,34 +1,9 @@
 #l "apps-web-variables.cake"
+#l "lib-octopusdeploy.cake"
 
 #addin "nuget:?package=MagicChunks&version=2.0.0.119"
 #addin "nuget:?package=Newtonsoft.Json&version=11.0.2"
 #addin "nuget:?package=WindowsAzure.Storage&version=9.1.1"
-
-#tool "nuget:?package=OctopusTools&version=4.39.1"
-
-//-------------------------------------------------------------
-
-private string GetOctopusRepositoryUrl(string projectName)
-{
-    // Allow per project overrides via "OctopusRepositoryUrlFor[ProjectName]"
-    return GetProjectSpecificConfigurationValue(projectName, "OctopusRepositoryUrlFor", OctopusRepositoryUrl);
-}
-
-//-------------------------------------------------------------
-
-private string GetOctopusRepositoryApiKey(string projectName)
-{
-    // Allow per project overrides via "OctopusRepositoryApiKeyFor[ProjectName]"
-    return GetProjectSpecificConfigurationValue(projectName, "OctopusRepositoryApiKeyFor", OctopusRepositoryApiKey);
-}
-
-//-------------------------------------------------------------
-
-private string GetOctopusDeploymentTarget(string projectName)
-{
-    // Allow per project overrides via "OctopusDeploymentTargetFor[ProjectName]"
-    return GetProjectSpecificConfigurationValue(projectName, "OctopusDeploymentTargetFor", OctopusDeploymentTarget);
-}
 
 //-------------------------------------------------------------
 
@@ -41,7 +16,27 @@ private void ValidateWebAppsInput()
 
 private bool HasWebApps()
 {
-    return WebApps != null && WebApps.Length > 0;
+    return WebApps != null && WebApps.Count > 0;
+}
+
+//-------------------------------------------------------------
+
+private async Task PrepareForWebAppsAsync()
+{
+    if (!HasWebApps())
+    {
+        return;
+    }
+
+    // Check whether projects should be processed, `.ToList()` 
+    // is required to prevent issues with foreach
+    foreach (var webApp in WebApps.ToList())
+    {
+        if (!ShouldProcessProject(webApp))
+        {
+            WebApps.Remove(webApp);
+        }
+    }
 }
 
 //-------------------------------------------------------------
@@ -188,7 +183,7 @@ private void DeployWebApps()
             ReplaceExisting = true,
         });
 
-        Information("2) Creating release '{0}'", VersionNuGet);
+        Information("2) Creating release '{0}' in Octopus Deploy", VersionNuGet);
 
         OctoCreateRelease(webApp, new CreateReleaseSettings 
         {

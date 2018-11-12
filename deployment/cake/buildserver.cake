@@ -100,7 +100,7 @@ private string GetBuildServerVariableForCache(string variableName, string defaul
             return ((Func<string>)parameter).Invoke();
         }
         
-        Error("Parameter is defined as '{0}', but that type is not supported yet...", parameter.GetType().Name);
+        throw new Exception(string.Format("Parameter is defined as '{0}', but that type is not supported yet...", parameter.GetType().Name));
     }
     
     Information("Variable '{0}' is not specified, returning default value", variableName);

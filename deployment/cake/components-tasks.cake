@@ -29,7 +29,59 @@ private void ValidateComponentsInput()
 
 private bool HasComponents()
 {
-    return Components != null && Components.Length > 0;
+    return Components != null && Components.Count > 0;
+}
+
+//-------------------------------------------------------------
+
+private async Task PrepareForComponentsAsync()
+{
+    if (!HasComponents())
+    {
+        return;
+    }
+
+    // Check whether projects should be processed, `.ToList()` 
+    // is required to prevent issues with foreach
+    foreach (var component in Components.ToList())
+    {
+        if (!ShouldProcessProject(component))
+        {
+            Components.Remove(component);
+        }
+    }
+
+    if (IsLocalBuild && Target.ToLower().Contains("packagelocal"))
+    {
+        foreach (var component in Components)
+        {
+            var cacheDirectory = Environment.ExpandEnvironmentVariables(string.Format("%userprofile%/.nuget/packages/{0}/{1}", component, VersionNuGet));
+
+            Information("Checking for existing local NuGet cached version at '{0}'", cacheDirectory);
+
+            var retryCount = 3;
+
+            while (retryCount > 0)
+            {
+                if (!DirectoryExists(cacheDirectory))
+                {
+                    break;
+                }
+
+                Information("Deleting already existing NuGet cached version from '{0}'", cacheDirectory);
+                
+                DeleteDirectory(cacheDirectory, new DeleteDirectorySettings()
+                {
+                    Force = true,
+                    Recursive = true
+                });
+
+                await System.Threading.Tasks.Task.Delay(1000);
+
+                retryCount--;
+            }            
+        }
+    }
 }
 
 //-------------------------------------------------------------
@@ -85,8 +137,12 @@ private void BuildComponents()
         msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
         msBuildSettings.WithProperty("PackageOutputPath", OutputRootDirectory);
 
-        // TODO: Enable GitLink / SourceLink, see RepositoryUrl, RepositoryBranchName, RepositoryCommitId variables
-
+        // SourceLink specific stuff
+        msBuildSettings.WithProperty("PublishRepositoryUrl", "true");
+        
+        // For SourceLink to work, the .csproj should contain something like this:
+        // <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02 " PrivateAssets="all" />
+        
         MSBuild(projectFileName, msBuildSettings);
     }
 }
@@ -219,8 +275,7 @@ private void DeployComponents()
 
         if (string.IsNullOrWhiteSpace(nuGetRepositoryUrl))
         {
-            Error("NuGet repository is empty, as a protection mechanism this must *always* be specified to make sure packages aren't accidentally deployed to the default public NuGet feed");
-            return;
+            throw new Exception("NuGet repository is empty, as a protection mechanism this must *always* be specified to make sure packages aren't accidentally deployed to the default public NuGet feed");
         }
 
         NuGetPush(packageToPush, new NuGetPushSettings

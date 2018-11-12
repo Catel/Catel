@@ -5,7 +5,7 @@
     <item key="ProjectName" value="Catel" />
     <item key="ProjectUrl" value="http://www.catelproject.com" />
     <item key="Author" value="CatenaLogic" />
-    <item key="VersionNumber" value="5.7" />
+    <item key="VersionNumber" value="5.8" />
     <InputFile>
       <Relative>catel.docs.sln</Relative>
       <Full>C:\Source\Catel\src\Catel.Docs.sln</Full>

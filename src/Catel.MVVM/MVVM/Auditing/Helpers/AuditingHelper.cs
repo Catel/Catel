@@ -72,6 +72,7 @@ namespace Catel.MVVM.Auditing
 
             viewModel.PropertyChanged += OnViewModelPropertyChanged;
             viewModel.CommandExecutedAsync += OnViewModelCommandExecutedAsync;
+            viewModel.InitializedAsync += OnViewModelInitializedAsync;
             viewModel.SavingAsync += OnViewModelSavingAsync;
             viewModel.SavedAsync += OnViewModelSavedAsync;
             viewModel.CancelingAsync += OnViewModelCancelingAsync;
@@ -91,6 +92,7 @@ namespace Catel.MVVM.Auditing
 
             viewModel.PropertyChanged -= OnViewModelPropertyChanged;
             viewModel.CommandExecutedAsync -= OnViewModelCommandExecutedAsync;
+            viewModel.InitializedAsync -= OnViewModelInitializedAsync;
             viewModel.SavingAsync -= OnViewModelSavingAsync;
             viewModel.SavedAsync -= OnViewModelSavedAsync;
             viewModel.CancelingAsync -= OnViewModelCancelingAsync;
@@ -125,6 +127,18 @@ namespace Catel.MVVM.Auditing
             }
 
             AuditingManager.OnCommandExecuted((IViewModel)sender, e.CommandPropertyName, e.Command, e.CommandParameter);
+
+            return TaskHelper.Completed;
+        }
+
+        private static Task OnViewModelInitializedAsync(object sender, EventArgs e)
+        {
+            if (!AuditingManager.IsAuditingEnabled)
+            {
+                return TaskHelper.Completed;
+            }
+
+            AuditingManager.OnViewModelInitialized((IViewModel)sender);
 
             return TaskHelper.Completed;
         }

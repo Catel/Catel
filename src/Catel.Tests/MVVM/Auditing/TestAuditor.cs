@@ -40,6 +40,21 @@ namespace Catel.Tests.MVVM.Auditing
             OnViewModelCreatedType = viewModel.GetType();
         }
 
+
+        public bool OnViewModelInitializedCalled { get; set; }
+        public Type OnViewModelInitializedType { get; set; }
+
+        public override void OnViewModelInitialized(IViewModel viewModel)
+        {
+            if (OnViewModelInitializedCalled)
+            {
+                return;
+            }
+
+            OnViewModelInitializedCalled = true;
+            OnViewModelInitializedType = viewModel.GetType();
+        }
+
         public bool OnPropertyChangedCalled { get; set; }
         public IViewModel OnPropertyChangedViewModel { get; set; }
         public string OnPropertyChangedPropertyName { get; set; }

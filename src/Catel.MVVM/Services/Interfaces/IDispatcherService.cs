@@ -8,6 +8,7 @@ namespace Catel.Services
 {
     using System;
     using System.Threading.Tasks;
+
 #if !XAMARIN && !XAMARIN_FORMS
 #if NETFX_CORE
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
@@ -21,7 +22,7 @@ namespace Catel.Services
     /// </summary>
     public interface IDispatcherService
     {
-#if NET
+#if NET || UWP
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>

@@ -5,4 +5,19 @@ var WindowsStoreClientId = GetBuildServerVariable("WindowsStoreClientId");
 var WindowsStoreClientSecret = GetBuildServerVariable("WindowsStoreClientSecret");
 var WindowsStoreTenantId = GetBuildServerVariable("WindowsStoreTenantId");
 
-var UwpApps = UwpAppsToBuild ?? new string[] { };
+//-------------------------------------------------------------
+
+List<string> _uwpApps;
+
+public List<string> UwpApps
+{
+    get 
+    {
+        if (_uwpApps is null)
+        {
+            _uwpApps = new List<string>();
+        }
+
+        return _uwpApps;
+    }
+}

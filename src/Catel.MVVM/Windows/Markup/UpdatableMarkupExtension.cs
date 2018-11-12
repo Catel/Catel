@@ -8,14 +8,13 @@
 
 namespace Catel.Windows.Markup
 {
+    using Catel.Logging;
     using System;
+    using System.ComponentModel;
     using System.Reflection;
 
 #if !NETFX_CORE
-    using System.Threading;
     using System.Windows;
-    using System.Windows.Threading;
-    using Catel.Windows.Threading;
     using System.Windows.Data;
     using System.Windows.Markup;
 #else
@@ -29,10 +28,12 @@ namespace Catel.Windows.Markup
     /// <remarks>
     /// This class is found at http://www.thomaslevesque.com/2009/07/28/wpf-a-markup-extension-that-can-update-its-target/.
     /// </remarks>
-    public abstract class UpdatableMarkupExtension : MarkupExtension
+    public abstract class UpdatableMarkupExtension : MarkupExtension, INotifyPropertyChanged
     {
         #region Fields
-        private object _targetObject;
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private WeakReference<object> _targetObject;
         private object _targetProperty;
         private bool _isFrameworkElementLoaded;
         private IServiceProvider _serviceProvider;
@@ -45,12 +46,37 @@ namespace Catel.Windows.Markup
 
         #region Properties
         /// <summary>
+        /// If set the <c>true</c>, this markup extension can replace the value by a dynamic binding
+        /// in case this markup extension is used inside a setter inside a style.
+        /// <para />
+        /// The default value is <c>false</c>.
+        /// </summary>
+        protected bool AllowUpdatableStyleSetters { get; set; }
+
+        /// <summary>
         /// Gets the target object.
         /// </summary>
         /// <value>The target object.</value>
         protected object TargetObject
         {
-            get { return _targetObject; }
+            get
+            {
+                if (_targetObject is null)
+                {
+                    return null;
+                }
+
+                if (!_targetObject.TryGetTarget(out var targetObject))
+                {
+                    // Make sure to call this so we don't leak
+                    OnTargetObjectUnloadedInternal(null, null);
+
+                    _targetObject = null;
+                    return null;
+                }
+
+                return targetObject;
+            }
         }
 
         /// <summary>
@@ -61,6 +87,23 @@ namespace Catel.Windows.Markup
         {
             get { return _targetProperty; }
         }
+
+        /// <summary>
+        /// Gets the value of this markup extension.
+        /// </summary>
+        public object Value
+        {
+            get
+            {
+                return GetValue();
+            }
+        }
+        #endregion
+
+        #region Events
+#if !NETFX_CORE
+        public event PropertyChangedEventHandler PropertyChanged;
+#endif
         #endregion
 
         #region Methods
@@ -69,7 +112,7 @@ namespace Catel.Windows.Markup
         /// </summary>
         /// <param name="serviceProvider">A service provider helper that can provide services for the markup extension.</param>
         /// <returns>The object value to set on the property where the extension is applied.</returns>
-        public override sealed object ProvideValue(IServiceProvider serviceProvider)
+        public sealed override object ProvideValue(IServiceProvider serviceProvider)
         {
 #if NETFX_CORE
             _targetObject = null;
@@ -81,43 +124,63 @@ namespace Catel.Windows.Markup
             var target = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
             if (target != null)
             {
-                // CTL-636
-                // In a template the TargetObject is a SharedDp (internal WPF class)
-                // In that case, the markup extension itself is returned to be re-evaluated later
-                var targetObjectType = target.TargetObject.GetType();
-                if (string.Equals(targetObjectType.FullName, "System.Windows.SharedDp")) 
+                var targetObject = target.TargetObject;
+                if (targetObject != null)
+                {
+                    // CTL-636
+                    // In a template the TargetObject is a SharedDp (internal WPF class)
+                    // In that case, the markup extension itself is returned to be re-evaluated later
+                    var targetObjectType = target.TargetObject.GetType();
+                    if (string.Equals(targetObjectType.FullName, "System.Windows.SharedDp"))
                     // Checking for setter crashes other extensions (such as FontImage in Orchestra)
                     //string.Equals(targetObjectType.FullName, "System.Windows.Setter"))
-                {
-                    return this;
-                }
+                    {
+                        return this;
+                    }
 
-                _targetObject = target.TargetObject;
-                _targetProperty = target.TargetProperty;
+                    _targetObject = new WeakReference<object>(targetObject);
+                    _targetProperty = target.TargetProperty;
 
-                FrameworkElement frameworkElement;
-#if !NETFX_CORE
-                FrameworkContentElement frameworkContentElement;
-#endif
-
-                if ((frameworkElement = _targetObject as FrameworkElement) != null)
-                {
+                    if (targetObject is FrameworkElement frameworkElement)
+                    {
 #if NET
-                    _isFrameworkElementLoaded = frameworkElement.IsLoaded;
+                        _isFrameworkElementLoaded = frameworkElement.IsLoaded;
 #endif
 
-                    frameworkElement.Loaded += OnTargetObjectLoadedInternal;
-                    frameworkElement.Unloaded += OnTargetObjectUnloadedInternal;
-                }
+                        frameworkElement.Loaded += OnTargetObjectLoadedInternal;
+                        frameworkElement.Unloaded += OnTargetObjectUnloadedInternal;
+                    }
 #if !NETFX_CORE
-                else if ((frameworkContentElement = _targetObject as FrameworkContentElement) != null)
-                {
-                    _isFrameworkElementLoaded = frameworkContentElement.IsLoaded;
+                    else if (targetObject is FrameworkContentElement frameworkContentElement)
+                    {
+                        _isFrameworkElementLoaded = frameworkContentElement.IsLoaded;
 
-                    frameworkContentElement.Loaded += OnTargetObjectLoadedInternal;
-                    frameworkContentElement.Unloaded += OnTargetObjectUnloadedInternal;
-                }
+                        frameworkContentElement.Loaded += OnTargetObjectLoadedInternal;
+                        frameworkContentElement.Unloaded += OnTargetObjectUnloadedInternal;
+                    }
+                    else if (targetObject is Setter setter)
+                    {
+                        if (AllowUpdatableStyleSetters)
+                        {
+                            // Very special case, see https://github.com/Catel/Catel/issues/1231. Since this
+                            // object will be used inside a style, we will raise "OnTargetObjectLoaded" to allow
+                            // the markup extensions to register to events. This mode will never call
+                            // "OnTargetObjectUnloaded"
+
+                            OnTargetObjectLoaded();
+
+                            return new Binding
+                            {
+                                Source = this,
+                                Path = new PropertyPath(nameof(Value))
+                            };
+                        }
+
+                        //throw Log.ErrorAndCreateException<NotSupportedException>($"Note that the target object is a setter in a style, and will never be updatable without enabling 'AllowUpdatableStyleSetters'. Either enable this property or use a different base class.");
+                        Log.Warning($"Note that the target object is a setter in a style, and will never be updatable without enabling 'AllowUpdatableStyleSetters'. Either enable this property or use a different base class.");
+                    }
 #endif
+                }
             }
 #endif
 
@@ -179,53 +242,84 @@ namespace Catel.Windows.Markup
         /// </summary>
         protected void UpdateValue()
         {
+            var targetObject = TargetObject;
+            if (targetObject is null)
+            {
+                return;
+            }
+
+            if (AllowUpdatableStyleSetters && targetObject is Setter)
+            {
+                // Special case, this is binding to the Value property, raise property change & exit
+                RaisePropertyChanged(nameof(Value));
+                return;
+            }
+
             var value = GetValue();
 
-            if (_targetObject != null)
+            var targetProperty = _targetProperty;
+            if (targetProperty is DependencyProperty targetPropertyAsDependencyProperty)
             {
-                var targetPropertyAsDependencyProperty = _targetProperty as DependencyProperty;
-                if (targetPropertyAsDependencyProperty != null)
+                var obj = targetObject as DependencyObject;
+                if (obj == null)
                 {
-                    var obj = _targetObject as DependencyObject;
-                    if (obj == null)
-                    {
-                        return;
-                    }
+                    return;
+                }
 
-                    Action updateAction = () => obj.SetValue(targetPropertyAsDependencyProperty, value);
+                Action updateAction =
+#if NETFX_CORE
+                () => obj.SetValue(targetPropertyAsDependencyProperty, value);
+#else
+                () => obj.SetCurrentValue(targetPropertyAsDependencyProperty, value);
+#endif
 
 #if NETFX_CORE
-                    if (obj.Dispatcher.HasThreadAccess)
-                    {
-                        UpdateValue();
-                    }
-                    else
-                    {
-#pragma warning disable 4014
-                        obj.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => updateAction());
-#pragma warning restore 4014
-                    }
-#else
-                    if (obj.CheckAccess())
-                    {
-                        updateAction();
-                    }
-                    else
-                    {
-                        obj.Dispatcher.Invoke(updateAction);
-                    }
-#endif
+                if (obj.Dispatcher.HasThreadAccess)
+                {
+                    UpdateValue();
                 }
                 else
                 {
-                    var prop = _targetProperty as PropertyInfo;
-                    if (prop != null)
-                    {
-                        prop.SetValue(_targetObject, value, null);
-                    }
+#pragma warning disable 4014
+                    obj.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => updateAction());
+#pragma warning restore 4014
                 }
+#else
+                if (obj.CheckAccess())
+                {
+                    updateAction();
+                }
+                else
+                {
+                    obj.Dispatcher.Invoke(updateAction);
+                }
+#endif
+            }
+#if !NETFX_CORE
+            else if (targetObject is Setter setter)
+            {
+                setter.Value = value;
+                //Setter.ReceiveMarkupExtension(targetObject, new XamlSetMarkupExtensionEventArgs(null, this, _serviceProvider));
+            }
+#endif
+            else if (targetProperty is PropertyInfo propertyInfo)
+            {
+                propertyInfo.SetValue(targetObject, value, null);
+            }
+
+            RaisePropertyChanged(nameof(Value));
+        }
+
+#if !NETFX_CORE
+        protected void RaisePropertyChanged(string propertyName)
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+#endif
 
         /// <summary>
         /// Gets the value by combining the rights methods (so we don't have to repeat ourselves).
@@ -249,5 +343,4 @@ namespace Catel.Windows.Markup
         #endregion
     }
 }
-
 #endif

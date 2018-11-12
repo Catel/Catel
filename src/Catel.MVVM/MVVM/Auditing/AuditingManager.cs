@@ -142,6 +142,21 @@ namespace Catel.MVVM.Auditing
         }
 
         /// <summary>
+        /// Must be called when a specific view model type is initialized.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        internal static void OnViewModelInitialized(IViewModel viewModel)
+        {
+            lock (_instance._auditors)
+            {
+                foreach (var auditor in _instance._auditors)
+                {
+                    auditor.OnViewModelInitialized(viewModel);
+                }
+            }
+        }
+
+        /// <summary>
         /// Must be called when the property of a view model has just changed.
         /// </summary>
         /// <param name="viewModel">The view model.</param>

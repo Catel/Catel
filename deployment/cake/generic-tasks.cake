@@ -11,7 +11,7 @@ private void ValidateRequiredInput(string parameterName)
 {
     if (!Parameters.ContainsKey(parameterName))
     {
-        Error("Parameter '{0}' is required but not defined", parameterName);
+        throw new Exception(string.Format("Parameter '{0}' is required but not defined", parameterName));
     }
 }
 
@@ -22,26 +22,6 @@ private void ValidateGenericInput()
     ValidateRequiredInput("SolutionName");
     ValidateRequiredInput("Company");
     ValidateRequiredInput("RepositoryUrl");
-}
-
-//-------------------------------------------------------------
-
-private void LogSeparator(string messageFormat, params object[] args)
-{
-    Information("");
-    Information("----------------------------------------");
-    Information(messageFormat, args);
-    Information("----------------------------------------");
-    Information("");
-}
-
-//-------------------------------------------------------------
-
-private void LogSeparator()
-{
-    Information("");
-    Information("----------------------------------------");
-    Information("");
 }
 
 //-------------------------------------------------------------
@@ -104,54 +84,6 @@ private void UpdateSolutionAssemblyInfo()
 
 //-------------------------------------------------------------
 
-private string GetProjectDirectory(string projectName)
-{
-    var projectDirectory = string.Format("./src/{0}/", projectName);
-    return projectDirectory;
-}
-
-//-------------------------------------------------------------
-
-private string GetProjectFileName(string projectName)
-{
-    var fileName = string.Format("{0}{1}.csproj", GetProjectDirectory(projectName), projectName);
-    return fileName;
-}
-
-//-------------------------------------------------------------
-
-private string GetProjectSlug(string projectName)
-{
-    var slug = projectName.Replace(".", "").Replace(" ", "");
-    return slug;
-}
-
-//-------------------------------------------------------------
-
-private string GetProjectSpecificConfigurationValue(string projectName, string configurationPrefix, string fallbackValue)
-{
-    // Allow per project overrides via "[configurationPrefix][projectName]"
-    var slug = GetProjectSlug(projectName);
-    var keyToCheck = string.Format("{0}{1}", configurationPrefix, slug);
-
-    var value = GetBuildServerVariable(keyToCheck, fallbackValue);
-    return value;
-}
-
-//-------------------------------------------------------------
-
-private bool ShouldDeployProject(string projectName)
-{
-    // Allow the build server to configure this via "Deploy[ProjectName]"
-    var slug = GetProjectSlug(projectName);
-    var keyToCheck = string.Format("Deploy{0}", slug);
-
-    var shouldDeploy = bool.Parse(GetBuildServerVariable(keyToCheck, "True"));
-    return shouldDeploy;
-}
-
-//-------------------------------------------------------------
-
 Task("UpdateNuGet")
     .ContinueOnError()
     .Does(() => 
@@ -173,32 +105,47 @@ Task("UpdateNuGet")
 
 Task("RestorePackages")
     .IsDependentOn("UpdateNuGet")
+    .ContinueOnError()
     .Does(() =>
 {
+    var projects = GetFiles("./**/*.csproj");
     var solutions = GetFiles("./**/*.sln");
     
-    foreach(var solution in solutions)
+    var allFiles = new List<FilePath>();
+    //allFiles.AddRange(projects);
+    allFiles.AddRange(solutions);
+
+    foreach(var file in allFiles)
     {
-        Information("Restoring packages for {0}", solution);
+        Information("Restoring packages for {0}", file);
         
-        var nuGetRestoreSettings = new NuGetRestoreSettings();
-
-        if (!string.IsNullOrWhiteSpace(NuGetPackageSources))
+        try
         {
-            var sources = new List<string>();
+            var nuGetRestoreSettings = new NuGetRestoreSettings
+            {
+            };
 
-            foreach (var splitted in NuGetPackageSources.Split(new [] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+            if (!string.IsNullOrWhiteSpace(NuGetPackageSources))
             {
-                sources.Add(splitted);
+                var sources = new List<string>();
+
+                foreach (var splitted in NuGetPackageSources.Split(new [] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    sources.Add(splitted);
+                }
+                
+                if (sources.Count > 0)
+                {
+                    nuGetRestoreSettings.Source = sources;
+                }
             }
-            
-            if (sources.Count > 0)
-            {
-                nuGetRestoreSettings.Source = sources;
-            }
+
+            NuGetRestore(file, nuGetRestoreSettings);
         }
-
-        NuGetRestore(solution, nuGetRestoreSettings);
+        catch (Exception)
+        {
+            // Ignore
+        }
     }
 });
 
@@ -306,6 +253,12 @@ Task("CodeSign")
         Information("Found '{0}' files to code sign for '{1}'", projectFilesToSign.Count, projectToCodeSign);
 
         filesToSign.AddRange(projectFilesToSign);
+    }
+
+    if (filesToSign.Count == 0)
+    {
+        Information("Found no files to sign, skipping code signing process...");
+        return;
     }
 
     Information("Found '{0}' files to code sign, this can take a few minutes...", filesToSign.Count);

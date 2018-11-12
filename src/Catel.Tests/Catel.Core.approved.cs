@@ -1322,6 +1322,7 @@ namespace Catel.Data
     public class static IValidationContextExtensions
     {
         public static string GetValidationsAsStringList(this Catel.Data.IValidationContext validationContext, Catel.Data.ValidationResultType validationResult) { }
+        public static bool HasWarningsOrErrors(this Catel.Data.IValidationContext validationContext) { }
     }
     public interface IValidationResult
     {
@@ -2555,6 +2556,7 @@ namespace Catel.Logging
         public System.Type TargetType { get; }
         public event System.EventHandler<Catel.Logging.LogMessageEventArgs> LogMessage;
         public void Indent() { }
+        protected virtual bool ShouldIgnoreIfCatelLoggingIsDisabled() { }
         public void Unindent() { }
         public void WriteWithData(string message, object extraData, Catel.Logging.LogEvent logEvent) { }
         public void WriteWithData(string message, Catel.Logging.LogData logData, Catel.Logging.LogEvent logEvent) { }
@@ -2636,6 +2638,7 @@ namespace Catel.Logging
         public static void InfoWithData(this Catel.Logging.ILog log, string message, object extraData = null) { }
         public static void InfoWithData(this Catel.Logging.ILog log, string message, Catel.Logging.LogData logData) { }
         public static void InfoWithData(this Catel.Logging.ILog log, System.Exception exception, string message, object extraData = null) { }
+        public static bool IsCatelLoggingAndCanBeIgnored(this Catel.Logging.ILog log) { }
         public static void LogDebugHeading(this Catel.Logging.ILog log, string headingContent, string messageFormat, params object[] args) { }
         public static void LogDebugHeading1(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
         public static void LogDebugHeading2(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
@@ -3232,6 +3235,9 @@ namespace Catel.Runtime
 }
 namespace Catel.Runtime.Serialization.Binary
 {
+    [System.ObsoleteAttribute("Binary serialization should no longer be used for security reasons, see https://g" +
+        "ithub.com/Catel/Catel/issues/1216. Will be treated as an error from version 6.0." +
+        "0. Will be removed in version 6.0.0.", false)]
     public class BinarySerializationContextInfo : Catel.Runtime.Serialization.SerializationContextInfoBase<Catel.Runtime.Serialization.Binary.BinarySerializationContextInfo>
     {
         public BinarySerializationContextInfo(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> memberValues = null, System.Runtime.Serialization.Formatters.Binary.BinaryFormatter binaryFormatter = null) { }
@@ -3240,11 +3246,17 @@ namespace Catel.Runtime.Serialization.Binary
         public System.Collections.Generic.List<Catel.Data.PropertyValue> PropertyValues { get; }
         public System.Runtime.Serialization.SerializationInfo SerializationInfo { get; }
     }
+    [System.ObsoleteAttribute("Binary serialization should no longer be used for security reasons, see https://g" +
+        "ithub.com/Catel/Catel/issues/1216. Will be treated as an error from version 6.0." +
+        "0. Will be removed in version 6.0.0.", false)]
     public class BinarySerializationContextInfoFactory : Catel.Runtime.Serialization.ISerializationContextInfoFactory
     {
         public BinarySerializationContextInfoFactory() { }
         public Catel.Runtime.Serialization.ISerializationContextInfo GetSerializationContextInfo(Catel.Runtime.Serialization.ISerializer serializer, object model, object data, Catel.Runtime.Serialization.ISerializationConfiguration configuration) { }
     }
+    [System.ObsoleteAttribute("Binary serialization should no longer be used for security reasons, see https://g" +
+        "ithub.com/Catel/Catel/issues/1216. Will be treated as an error from version 6.0." +
+        "0. Will be removed in version 6.0.0.", false)]
     public class BinarySerializer : Catel.Runtime.Serialization.SerializerBase<Catel.Runtime.Serialization.Binary.BinarySerializationContextInfo>, Catel.Runtime.Serialization.Binary.IBinarySerializer, Catel.Runtime.Serialization.ISerializer
     {
         protected static Catel.Runtime.Serialization.Binary.RedirectDeserializationBinder DeserializationBinder;
@@ -3263,6 +3275,9 @@ namespace Catel.Runtime.Serialization.Binary
         protected override bool ShouldSerializeModelAsCollection(System.Type memberType) { }
         protected override void Warmup(System.Type type) { }
     }
+    [System.ObsoleteAttribute("Binary serialization should no longer be used for security reasons, see https://g" +
+        "ithub.com/Catel/Catel/issues/1216. Will be treated as an error from version 6.0." +
+        "0. Will be removed in version 6.0.0.", false)]
     public interface IBinarySerializer : Catel.Runtime.Serialization.ISerializer { }
     public sealed class RedirectDeserializationBinder : System.Runtime.Serialization.SerializationBinder
     {

@@ -486,7 +486,7 @@ namespace Catel.Tests.IoC
                 Assert.IsNotNull(instance.UiVisualizerService);
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void IfTypeFactoryIsCalledConcurrentlyItRunsFasterThanSerial()
             {
                 const int itemsPerThread = 50;

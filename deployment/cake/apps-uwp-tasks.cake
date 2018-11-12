@@ -16,7 +16,27 @@ private void ValidateUwpAppsInput()
 
 private bool HasUwpApps()
 {
-    return UwpApps != null && UwpApps.Length > 0;
+    return UwpApps != null && UwpApps.Count > 0;
+}
+
+//-------------------------------------------------------------
+
+private async Task PrepareForUwpAppsAsync()
+{
+    if (!HasUwpApps())
+    {
+        return;
+    }
+
+    // Check whether projects should be processed, `.ToList()` 
+    // is required to prevent issues with foreach
+    foreach (var uwpApp in UwpApps.ToList())
+    {
+        if (!ShouldProcessProject(uwpApp))
+        {
+            UwpApps.Remove(uwpApp);
+        }
+    }
 }
 
 //-------------------------------------------------------------
@@ -140,7 +160,7 @@ private void BuildUwpApps()
         appxUploadFileName = GetAppxUploadFileName(artifactsDirectory, uwpApp, VersionMajorMinorPatch);
         if (appxUploadFileName == null)
         {
-            Error("Couldn't determine the appxupload file using base directory '{0}'", artifactsDirectory);
+            throw new Exception(string.Format("Couldn't determine the appxupload file using base directory '{0}'", artifactsDirectory));
         }
 
         Information("Created appxupload file '{0}'", appxUploadFileName, artifactsDirectory);

@@ -42,6 +42,21 @@ namespace Catel.Tests.MVVM.Auditing
         }
 
         [TestCase]
+        public async Task OnViewModelInitializedAsync()
+        {
+            AuditingManager.Clear();
+
+            var auditor = new TestAuditor();
+            AuditingManager.RegisterAuditor(auditor);
+
+            var viewModel = new TestViewModel();
+            await viewModel.InitializeViewModelAsync();
+
+            Assert.AreEqual(true, auditor.OnViewModelInitializedCalled);
+            Assert.AreEqual(typeof(TestViewModel), auditor.OnViewModelInitializedType);
+        }
+
+        [TestCase]
         public void OnPropertyChanged()
         {
             AuditingManager.Clear();

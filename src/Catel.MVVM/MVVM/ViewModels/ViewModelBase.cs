@@ -686,10 +686,18 @@ namespace Catel.MVVM
                 var parentVm = parentViewModel as ViewModelBase;
                 if (parentVm != null)
                 {
-                    DeferValidationUntilFirstSaveCall = parentVm.DeferValidationUntilFirstSaveCall;
+                    var value = DeferValidationUntilFirstSaveCall;
+                    var parentVmValue = parentVm.DeferValidationUntilFirstSaveCall;
+
+                    if (value != parentVmValue)
+                    {
+                        Log.Debug($"DeferValidationUntilFirstCall is '{value}', but overriding value using parent view model value '{parentVmValue}'");
+
+                        DeferValidationUntilFirstSaveCall = parentVmValue;
+                    }
                 }
 
-                RaisePropertyChanged("ParentViewModel");
+                RaisePropertyChanged(nameof(ParentViewModel));
             }
         }
 
