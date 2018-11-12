@@ -8,17 +8,14 @@ namespace Catel.Tests.Collections
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Reflection;
-
     using Catel.Collections;
     using Catel.Reflection;
-
     using NUnit.Framework;
-    using System.ComponentModel;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
 
     public class FastBindingListFacts
     {
@@ -86,8 +83,10 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
-                var fastCollection = new FastBindingList<int>();
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                var fastCollection = new FastBindingList<int>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.AddItems(null));
             }
 
@@ -96,8 +95,10 @@ namespace Catel.Tests.Collections
             {
                 int counter = 0;
 
-                var fastCollection = new FastBindingList<int>();
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                var fastCollection = new FastBindingList<int>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 fastCollection.ListChanged += (sender, e) => counter++;
 
                 fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 });
@@ -116,8 +117,10 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
-                var fastCollection = new FastBindingList<int>();
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                var fastCollection = new FastBindingList<int>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.InsertItems(null, 0));
             }
 
@@ -126,8 +129,10 @@ namespace Catel.Tests.Collections
             {
                 int counter = 0;
 
-                var fastCollection = new FastBindingList<int>();
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                var fastCollection = new FastBindingList<int>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 fastCollection.ListChanged += (sender, e) => counter++;
 
                 fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0);
@@ -146,8 +151,10 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
-                var fastCollection = new FastBindingList<int>();
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                var fastCollection = new FastBindingList<int>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.RemoveItems(null));
             }
 
@@ -156,8 +163,10 @@ namespace Catel.Tests.Collections
             {
                 int counter = 0;
 
-                var fastCollection = new FastBindingList<int>(new[] { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 });
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                var fastCollection = new FastBindingList<int>(new[] { 1, 2, 3, 4, 5, 1, 2, 3, 4, 5 })
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 fastCollection.ListChanged += (sender, e) => counter++;
 
                 fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 });
@@ -178,8 +187,10 @@ namespace Catel.Tests.Collections
             {
                 int counter = 0;
 
-                var fastCollection = new FastBindingList<int>();
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                var fastCollection = new FastBindingList<int>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 fastCollection.ListChanged += (sender, e) => counter++;
 
                 using (fastCollection.SuspendChangeNotifications())
@@ -229,8 +240,10 @@ namespace Catel.Tests.Collections
             public void ResetWithoutSuspendChangeNotifications()
             {
                 var collectionChanged = false;
-                var fastCollection = new FastBindingList<int>();
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                var fastCollection = new FastBindingList<int>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 fastCollection.ListChanged += (sender, e) =>
                 {
                     collectionChanged = true;
@@ -247,8 +260,10 @@ namespace Catel.Tests.Collections
                 var counter = 0;
                 var eventArgs = (NotifyRangedListChangedEventArgs)null;
 
-                var fastCollection = new FastBindingList<int>();
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                var fastCollection = new FastBindingList<int>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 fastCollection.ListChanged += (sender, e) =>
                 {
                     counter++;
@@ -288,8 +303,10 @@ namespace Catel.Tests.Collections
                 var pdc = TypeDescriptor.GetProperties(typeof(TestModel));
                 var desc = pdc.Find("TestProperty", false);
 
-                var fastCollection = new FastBindingList<TestModel>();
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                var fastCollection = new FastBindingList<TestModel>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 fastCollection.Add(new TestModel() { TestProperty = "Test1" });
                 fastCollection.Add(new TestModel() { TestProperty = "Test2" });
                 fastCollection.Add(new TestModel() { TestProperty = "Test3" });
@@ -309,8 +326,10 @@ namespace Catel.Tests.Collections
                 var pdc = TypeDescriptor.GetProperties(typeof(TestModel));
                 var desc = pdc.Find("TestProperty", false);
 
-                var fastCollection = new FastBindingList<TestModel>();
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                var fastCollection = new FastBindingList<TestModel>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 fastCollection.Add(new TestModel() { TestProperty = "Test1" });
                 fastCollection.Add(new TestModel() { TestProperty = "Test2" });
                 fastCollection.Add(new TestModel() { TestProperty = "Test3" });
@@ -484,8 +503,10 @@ namespace Catel.Tests.Collections
                 var counter = 0;
                 var eventArgs = (NotifyListChangedEventArgs)null;
 
-                var fastCollection = new FastBindingList<TestModel>();
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                var fastCollection = new FastBindingList<TestModel>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 fastCollection.Add(new TestModel() { TestIntProperty = 1, TestStringProperty = "Test1" });
                 fastCollection.Add(new TestModel() { TestIntProperty = 2, TestStringProperty = "Test2" });
                 fastCollection.Add(new TestModel() { TestIntProperty = 3, TestStringProperty = "Test3" });
@@ -511,8 +532,10 @@ namespace Catel.Tests.Collections
                 var counter = 0;
                 var eventArgs = (NotifyRangedListChangedEventArgs)null;
 
-                var fastCollection = new FastBindingList<int>();
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                var fastCollection = new FastBindingList<int>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 fastCollection.ListChanged += (sender, e) =>
                 {
                     counter++;
@@ -540,8 +563,10 @@ namespace Catel.Tests.Collections
                 var counter = 0;
                 var eventArgs = (NotifyRangedListChangedEventArgs)null;
 
-                var fastCollection = new FastBindingList<int>();
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                var fastCollection = new FastBindingList<int>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 fastCollection.ListChanged += (sender, e) =>
                 {
                     counter++;
@@ -576,8 +601,10 @@ namespace Catel.Tests.Collections
                 var counter = 0;
                 var eventArgs = (NotifyRangedListChangedEventArgs)null;
 
-                var fastCollection = new FastBindingList<int>();
-                fastCollection.AutomaticallyDispatchChangeNotifications = false;
+                var fastCollection = new FastBindingList<int>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 fastCollection.ListChanged += (sender, e) =>
                 {
                     counter++;
@@ -649,6 +676,7 @@ namespace Catel.Tests.Collections
             public void CleanedUpSuspensionContextAfterAdding()
             {
                 var fastCollection = new FastBindingList<int>();
+
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
                     fastCollection.Add(1);
@@ -662,6 +690,7 @@ namespace Catel.Tests.Collections
             public void CleanedUpSuspensionContextAfterDoingNothing()
             {
                 var fastCollection = new FastBindingList<int>();
+
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
                 }
@@ -674,6 +703,7 @@ namespace Catel.Tests.Collections
             public void ThrowsInvalidOperationExceptionForAddingInRemovingMode()
             {
                 var fastCollection = new FastBindingList<int>();
+
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Removing))
                 {
                     Assert.Throws<InvalidOperationException>(() => fastCollection.Add(0));
@@ -684,6 +714,7 @@ namespace Catel.Tests.Collections
             public void ThrowsInvalidOperationExceptionForClearingInAddingMode()
             {
                 var fastCollection = new FastBindingList<int>();
+
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
                     Assert.Throws<InvalidOperationException>(() => fastCollection.Clear());
@@ -694,6 +725,7 @@ namespace Catel.Tests.Collections
             public void ThrowsInvalidOperationExceptionForRemovingInAddingMode()
             {
                 var fastCollection = new FastBindingList<int> { 0 };
+
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
                     Assert.Throws<InvalidOperationException>(() => fastCollection.Remove(0));
@@ -704,6 +736,7 @@ namespace Catel.Tests.Collections
             public void ThrowsInvalidOperationExceptionForSettingInAddingMode()
             {
                 var fastCollection = new FastBindingList<int> { 0 };
+
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
                     Assert.Throws<InvalidOperationException>(() => fastCollection[0] = 0);
@@ -715,6 +748,7 @@ namespace Catel.Tests.Collections
             public void ThrowsInvalidOperationExceptionForChangingMode()
             {
                 var fastCollection = new FastBindingList<int> { 0 };
+
                 using (fastCollection.SuspendChangeNotifications(SuspensionMode.Adding))
                 {
                     Assert.Throws<InvalidOperationException>(() => { using (fastCollection.SuspendChangeNotifications(SuspensionMode.Removing)) { } });
@@ -730,12 +764,17 @@ namespace Catel.Tests.Collections
             {
                 var count = 0;
                 NotifyRangedListChangedEventArgs eventArgs = null;
-                var fastCollection = new FastBindingList<int>();
+                var fastCollection = new FastBindingList<int>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
+
                 fastCollection.ListChanged += (sender, args) =>
                 {
                     count++;
                     eventArgs = args as NotifyRangedListChangedEventArgs;
                 };
+
                 using (fastCollection.SuspendChangeNotifications())
                 {
                     fastCollection.AddItems(new[] { 1, 2, 3, 4 });
@@ -752,7 +791,10 @@ namespace Catel.Tests.Collections
             {
                 var count = 0;
                 NotifyRangedListChangedEventArgs eventArgs = null;
-                var fastCollection = new FastBindingList<int>();
+                var fastCollection = new FastBindingList<int>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 fastCollection.AddItems(new[] { 1, 2, 3, 4 });
 
                 fastCollection.ListChanged += (sender, args) =>
@@ -776,10 +818,16 @@ namespace Catel.Tests.Collections
             public void RaisesTwoEvents()
             {
                 var eventArgsList = new List<NotifyRangedListChangedEventArgs>();
-                var fastCollection = new FastBindingList<int>();
+                var fastCollection = new FastBindingList<int>
+                {
+                    AutomaticallyDispatchChangeNotifications = false
+                };
                 fastCollection.AddItems(new[] { 1, 2, 3, 4 });
 
-                fastCollection.ListChanged += (sender, args) => { eventArgsList.Add(args as NotifyRangedListChangedEventArgs); };
+                fastCollection.ListChanged += (sender, args) =>
+                {
+                    eventArgsList.Add(args as NotifyRangedListChangedEventArgs);
+                };
 
                 using (fastCollection.SuspendChangeNotifications())
                 {
@@ -789,7 +837,7 @@ namespace Catel.Tests.Collections
 
                 Assert.AreEqual(2, eventArgsList.Count);
 
-                Assert.Contains(5, eventArgsList.First(args =>  args.Action == NotifyRangedListChangedAction.Add).NewItems);
+                Assert.Contains(5, eventArgsList.First(args => args.Action == NotifyRangedListChangedAction.Add).NewItems);
                 Assert.Contains(4, eventArgsList.First(args => args.Action == NotifyRangedListChangedAction.Remove).OldItems);
             }
         }

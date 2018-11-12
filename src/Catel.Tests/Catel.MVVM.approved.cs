@@ -245,7 +245,7 @@ namespace Catel.MVVM.Auditing
     }
     public class InvalidateCommandManagerOnViewModelInitializationAuditor : Catel.MVVM.Auditing.AuditorBase
     {
-        public InvalidateCommandManagerOnViewModelInitializationAuditor(Catel.MVVM.ICommandManager commandManager) { }
+        public InvalidateCommandManagerOnViewModelInitializationAuditor(Catel.MVVM.ICommandManager commandManager, Catel.Services.IDispatcherService dispatcherService) { }
         public override void OnViewModelInitialized(Catel.MVVM.IViewModel viewModel) { }
     }
 }
@@ -3243,15 +3243,19 @@ namespace Catel.Windows.Markup
         public System.Type Type { get; set; }
         public override object ProvideValue(System.IServiceProvider serviceProvider) { }
     }
-    public abstract class UpdatableMarkupExtension : System.Windows.Markup.MarkupExtension
+    public abstract class UpdatableMarkupExtension : System.Windows.Markup.MarkupExtension, System.ComponentModel.INotifyPropertyChanged
     {
         protected UpdatableMarkupExtension() { }
+        protected bool AllowUpdatableStyleSetters { get; set; }
         protected object TargetObject { get; }
         protected object TargetProperty { get; }
+        public object Value { get; }
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnTargetObjectLoaded() { }
         protected virtual void OnTargetObjectUnloaded() { }
         protected virtual object ProvideDynamicValue(System.IServiceProvider serviceProvider) { }
         public virtual object ProvideValue(System.IServiceProvider serviceProvider) { }
+        protected void RaisePropertyChanged(string propertyName) { }
         protected void UpdateValue() { }
     }
 }
