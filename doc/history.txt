@@ -39,7 +39,7 @@ Classes / members marked as obsolete
 
 Added/fixed
 ===========
-xxx
+(x) #1232 NavigationService.Navigate leads to endless loop when MainPage is MasterDetailPage
 
 Roadmap
 =======

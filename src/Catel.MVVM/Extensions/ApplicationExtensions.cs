@@ -35,6 +35,11 @@ namespace Catel
                     case TabbedPage tabbedPage:
                         activePage = tabbedPage.CurrentPage;
                         break;
+                    case MasterDetailPage masterDetailPage:
+                        activePage = masterDetailPage.Detail;
+                        break;
+                    default:
+                        return null;
                 }
             }
 
