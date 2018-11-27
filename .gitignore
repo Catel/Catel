@@ -134,3 +134,4 @@ TestResults
 BundleArtifacts/
 
 .vscode
+FodyWeavers.xsd

@@ -34,6 +34,13 @@ ValidateDockerImagesInput();
 
 private void BuildTestProjects()
 {
+    // In case of a local build and we have included / excluded anything, skip tests
+    if (IsLocalBuild && (Include.Length > 0 || Exclude.Length > 0))
+    {
+        Information("Skipping test project because this is a local build with specific includes / excludes");
+        return;
+    }
+
     foreach (var testProject in TestProjects)
     {
         LogSeparator("Building test project '{0}'", testProject);
