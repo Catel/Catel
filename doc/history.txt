@@ -40,7 +40,9 @@ Classes / members marked as obsolete
 
 Added/fixed
 ===========
+(+) #1240 Add support for .NET Core 3.0
 (x) #1232 NavigationService.Navigate leads to endless loop when MainPage is MasterDetailPage
+(x) #1236 Add missing Catel.MVVM resources to Catel.MVVM.Xamarin.Forms
 
 Roadmap
 =======
