@@ -68,6 +68,9 @@ var SonarUsername = GetBuildServerVariable("SonarUsername");
 var SonarPassword = GetBuildServerVariable("SonarPassword");
 var SonarProject = GetBuildServerVariable("SonarProject", SolutionName);
 
+// Visual Studio
+var UseVisualStudioPrerelease = bool.Parse(GetBuildServerVariable("UseVisualStudioPrerelease", "False"));
+
 // Testing
 var TestProcessBit = GetBuildServerVariable("TestProcessBit", "X86");
 

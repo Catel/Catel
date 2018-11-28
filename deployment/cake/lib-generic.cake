@@ -22,6 +22,37 @@ private void LogSeparator()
 
 //-------------------------------------------------------------
 
+private string GetVisualStudioPath(MSBuildToolVersion toolVersion)
+{
+    if (UseVisualStudioPrerelease)
+    {
+        Debug("Checking for installation of Visual Studio preview");
+
+        var path = @"C:\Program Files (x86)\Microsoft Visual Studio\Preview\Professional\MSBuild\15.0\Bin\msbuild.exe";
+
+        if (System.IO.File.Exists(path))
+        {
+            Information("Using Visual Studio preview");
+
+            return path;
+        }
+    }
+
+    // For now don't use overrides
+    return null;
+    // switch (toolVersion)
+    // {
+    //     case MSBuildToolVersion.Default:
+    //         // Latest, so don't override
+    //         return null;
+
+    //     default:
+    //         throw new ArgumentOutOfRangeException(nameof(toolVersion), toolVersion);
+    // }
+}
+
+//-------------------------------------------------------------
+
 private string GetProjectDirectory(string projectName)
 {
     var projectDirectory = string.Format("./src/{0}/", projectName);

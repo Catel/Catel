@@ -70,11 +70,17 @@ private void BuildWpfApps()
         
         var msBuildSettings = new MSBuildSettings {
             Verbosity = Verbosity.Quiet, // Verbosity.Diagnostic
-            ToolVersion = MSBuildToolVersion.VS2017,
+            ToolVersion = MSBuildToolVersion.Default,
             Configuration = ConfigurationName,
             MSBuildPlatform = MSBuildPlatform.x86, // Always require x86, see platform for actual target platform
             PlatformTarget = PlatformTarget.MSIL
         };
+
+        var toolPath = GetVisualStudioPath(msBuildSettings.ToolVersion);
+        if (!string.IsNullOrWhiteSpace(toolPath))
+        {
+            msBuildSettings.ToolPath = toolPath;
+        }
 
         // Note: we need to set OverridableOutputPath because we need to be able to respect
         // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which

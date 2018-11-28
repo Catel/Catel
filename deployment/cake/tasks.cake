@@ -50,11 +50,17 @@ private void BuildTestProjects()
         var msBuildSettings = new MSBuildSettings
         {
             Verbosity = Verbosity.Quiet, // Verbosity.Diagnostic
-            ToolVersion = MSBuildToolVersion.VS2017,
+            ToolVersion = MSBuildToolVersion.Default,
             Configuration = ConfigurationName,
             MSBuildPlatform = MSBuildPlatform.x86, // Always require x86, see platform for actual target platform
             PlatformTarget = PlatformTarget.MSIL
         };
+
+        var toolPath = GetVisualStudioPath(msBuildSettings.ToolVersion);
+        if (!string.IsNullOrWhiteSpace(toolPath))
+        {
+            msBuildSettings.ToolPath = toolPath;
+        }
 
         // Force disable SonarQube
         msBuildSettings.WithProperty("SonarQubeExclude", "true");

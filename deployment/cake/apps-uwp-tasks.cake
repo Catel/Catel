@@ -134,11 +134,17 @@ private void BuildUwpApps()
 
         var msBuildSettings = new MSBuildSettings {
             Verbosity = Verbosity.Quiet, // Verbosity.Diagnostic
-            ToolVersion = MSBuildToolVersion.VS2017,
+            ToolVersion = MSBuildToolVersion.Default,
             Configuration = ConfigurationName,
             MSBuildPlatform = MSBuildPlatform.x86, // Always require x86, see platform for actual target platform
             PlatformTarget = platform.Value
         };
+
+        var toolPath = GetVisualStudioPath(msBuildSettings.ToolVersion);
+        if (!string.IsNullOrWhiteSpace(toolPath))
+        {
+            msBuildSettings.ToolPath = toolPath;
+        }
 
         // See https://docs.microsoft.com/en-us/windows/uwp/packaging/auto-build-package-uwp-apps for all the details
         //msBuildSettings.Properties["UseDotNetNativeToolchain"] = new List<string>(new [] { "false" });

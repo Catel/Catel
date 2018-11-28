@@ -172,12 +172,23 @@ Task("Clean")
         {
             Information("Cleaning output for platform '{0}'", platform.Value);
 
-            MSBuild(SolutionFileName, configurator => 
-                configurator.SetConfiguration(ConfigurationName)
-                    .SetVerbosity(Verbosity.Minimal)
-                    .SetMSBuildPlatform(MSBuildPlatform.x86)
-                    .SetPlatformTarget(platform.Value)
-                    .WithTarget("Clean"));
+            var msBuildSettings = new MSBuildSettings {
+                Verbosity = Verbosity.Minimal,
+                ToolVersion = MSBuildToolVersion.Default,
+                Configuration = ConfigurationName,
+                MSBuildPlatform = MSBuildPlatform.x86, // Always require x86, see platform for actual target platform
+                PlatformTarget = platform.Value
+            };
+
+            var toolPath = GetVisualStudioPath(msBuildSettings.ToolVersion);
+            if (!string.IsNullOrWhiteSpace(toolPath))
+            {
+                msBuildSettings.ToolPath = toolPath;
+            }
+
+            msBuildSettings.Targets.Add("Clean");
+
+            MSBuild(SolutionFileName, msBuildSettings);
         }
         catch (System.Exception ex)
         {
