@@ -30,6 +30,7 @@ Release date
 Platform support changes
 ========================
 * #1103 / #1165 Convert to multi-targeted projects, PCL is no longer supported (.NET Standard is the replacement)
+* #1240 Add support for .NET Core 3.0
 
 Classes / members marked as obsolete
 ====================================
