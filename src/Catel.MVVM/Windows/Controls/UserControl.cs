@@ -82,7 +82,7 @@ namespace Catel.Windows.Controls
 
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
-#if !NET
+#if !NET && !NETCORE
                 // WPF already calls this method automatically
                 OnPropertyChanged(e);
 
@@ -229,7 +229,7 @@ namespace Catel.Windows.Controls
             set { UserControlLogic.DefaultUnloadBehaviorValue = value; }
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <see cref="InfoBarMessageControl"/> that can be found. 
@@ -310,7 +310,7 @@ namespace Catel.Windows.Controls
             set { _logic.SetValue<UserControlLogic>(x => x.DisableWhenNoViewModel = value); }
         }
 
-#if !NET
+#if !NET && !NETCORE
         /// <summary>
         /// Gets a value indicating whether this instance is loaded.
         /// </summary>
@@ -404,7 +404,7 @@ namespace Catel.Windows.Controls
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        
+
         protected virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
             return TaskHelper.Completed;

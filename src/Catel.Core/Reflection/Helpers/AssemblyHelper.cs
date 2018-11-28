@@ -16,7 +16,7 @@ namespace Catel.Reflection
     using IoC;
     using Logging;
 
-#if NET
+#if NET || NETCORE
     using System.Runtime.InteropServices;
 #endif
 
@@ -256,11 +256,11 @@ namespace Catel.Reflection
             }
 
             var isDynamicAssembly =
-#if NET
+#if NET || NETCORE
                 (assembly is System.Reflection.Emit.AssemblyBuilder) &&
 #endif
                 string.Equals(assembly.GetType().FullName, "System.Reflection.Emit.InternalAssemblyBuilder", StringComparison.Ordinal)
-#if NET
+#if NET || NETCORE
                 && !assembly.GlobalAssemblyCache
                 && ((Assembly.GetExecutingAssembly() != null)
                 && !string.Equals(assembly.CodeBase, Assembly.GetExecutingAssembly().CodeBase, StringComparison.OrdinalIgnoreCase))
@@ -319,7 +319,7 @@ namespace Catel.Reflection
             public string NameWithoutVersion { get; set; }
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Gets the linker timestamp.
         /// </summary>

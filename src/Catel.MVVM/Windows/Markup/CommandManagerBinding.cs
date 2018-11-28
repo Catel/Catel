@@ -47,7 +47,7 @@ namespace Catel.Windows.Markup
         /// Gets or sets the name of the command.
         /// </summary>
         /// <value>The name of the command.</value>
-#if NET
+#if NET || NETCORE
         [ConstructorArgument("commandName")]
 #endif
         public string CommandName { get; set; }

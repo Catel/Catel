@@ -36,7 +36,7 @@ namespace Catel.Windows.Threading
 
             if (dispatcher != null && !dispatcher.CheckAccess())
             {
-#if NET
+#if NET || NETCORE
                 dispatcher.Invoke(action, null);
 #elif NETFX_CORE
                 dispatcher.BeginInvoke(action);
@@ -50,7 +50,7 @@ namespace Catel.Windows.Threading
             }
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Executes the specified action synchronously at the specified priority with the specified arguments on the thread the Dispatcher is associated with.
         /// </summary>
@@ -90,7 +90,7 @@ namespace Catel.Windows.Threading
 
             if (dispatcher != null && !dispatcher.CheckAccess())
             {
-#if NET
+#if NET || NETCORE
                 dispatcher.Invoke(method, args);
 #elif NETFX_CORE
                 dispatcher.BeginInvoke(() => method.DynamicInvoke(args));
@@ -104,7 +104,7 @@ namespace Catel.Windows.Threading
             }
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Executes the specified delegate synchronously at the specified priority with the specified arguments on the thread the Dispatcher is associated with.
         /// </summary>
@@ -145,7 +145,7 @@ namespace Catel.Windows.Threading
             Invoke(dispatcher, action, true);
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Executes the specified action synchronously at the specified priority with the specified arguments on the thread that the Dispatcher was created on if required.
         /// <para />
@@ -179,7 +179,7 @@ namespace Catel.Windows.Threading
             Invoke(dispatcher, () => method.DynamicInvoke(args), true);
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Executes the specified delegate synchronously at the specified priority with the specified arguments on the thread that the Dispatcher was created on if required.
         /// <para />
@@ -226,7 +226,7 @@ namespace Catel.Windows.Threading
             action.Invoke();
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Executes the specified delegate synchronously at the specified priority with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>

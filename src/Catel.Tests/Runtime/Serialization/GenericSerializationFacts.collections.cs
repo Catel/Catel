@@ -51,7 +51,7 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                 }
 
-#if NET
+#if NET || NETCORE
                 public Country(SerializationInfo info, StreamingContext context)
                     : base(info, context)
                 {

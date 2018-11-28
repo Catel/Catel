@@ -39,7 +39,7 @@ namespace Catel.Configuration
         private readonly IObjectConverterService _objectConverterService;
         private readonly ISerializer _serializer;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         private DynamicConfiguration _localConfiguration;
         private DynamicConfiguration _roamingConfiguration;
 
@@ -85,7 +85,7 @@ namespace Catel.Configuration
             _objectConverterService = objectConverterService;
             _serializer = serializer;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             SetLocalConfigFilePath(DefaultLocalConfigFilePath);
             SetRoamingConfigFilePath(DefaultRoamingConfigFilePath);
 #endif
@@ -223,7 +223,7 @@ namespace Catel.Configuration
             }
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Sets the roaming config file path.
         /// </summary>

@@ -20,7 +20,7 @@ namespace Catel.ApiCop.Listeners
         /// <param name="line">The line.</param>
         protected override void WriteLine(string line)
         {
-#if NET
+#if NET || NETCORE
             System.Diagnostics.Trace.WriteLine(line);
 #else
             System.Diagnostics.Debug.WriteLine(line);

@@ -20,7 +20,7 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// ColorToBrushConverter
     /// </summary>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(Color), typeof(Brush))]
 #endif
     public class ColorToBrushConverter : ValueConverterBase<Color, Brush>

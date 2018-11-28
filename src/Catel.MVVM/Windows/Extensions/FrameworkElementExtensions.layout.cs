@@ -33,7 +33,7 @@ namespace Catel.Windows
         {
             Argument.IsNotNull("element", element);
 
-#if NET
+#if NET || NETCORE
             element.SnapsToDevicePixels = true;
 #endif
 

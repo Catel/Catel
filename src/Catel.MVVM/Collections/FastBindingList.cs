@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Collections
 {
@@ -25,12 +25,12 @@ namespace Catel.Collections
     [Serializable]
     public class FastBindingList<T> : BindingList<T>, ISuspendChangeNotificationsCollection
     {
-        #region Constants
+#region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private static readonly IDispatcherService _dispatcherService;
-        #endregion
+#endregion
 
-        #region Fields
+#region Fields
         private bool _sorted;
         private ListSortDirection _sortDirection = ListSortDirection.Ascending;
         private PropertyDescriptor _sortProperty;
@@ -40,9 +40,9 @@ namespace Catel.Collections
         /// </summary>
         [field: NonSerialized]
         private ExtendedSuspensionContext<T> _suspensionContext;
-        #endregion
+#endregion
 
-        #region Constructors
+#region Constructors
         /// <summary>
         /// Initializes static members of the <see cref="FastBindingList{T}"/> class.
         /// </summary>
@@ -79,9 +79,9 @@ namespace Catel.Collections
         {
             AddItems(collection);
         }
-        #endregion
+#endregion
 
-        #region Properties
+#region Properties
         /// <summary>
         /// Gets or sets a value indicating whether change to the collection is made when
         /// its notifications are suspended.
@@ -108,7 +108,7 @@ namespace Catel.Collections
         /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
         public bool AutomaticallyDispatchChangeNotifications { get; set; }
 
-        #region Overrides of BindingList
+#region Overrides of BindingList
         /// <summary>
         /// Gets a value indicating whether the list is sorted.
         /// </summary>
@@ -168,10 +168,10 @@ namespace Catel.Collections
                 return true;
             }
         }
-        #endregion Overrides of BindingList
-        #endregion
+#endregion Overrides of BindingList
+#endregion
 
-        #region Methods
+#region Methods
         /// <summary>
         /// Inserts the elements of the specified collection at the specified index.
         /// </summary>
@@ -479,7 +479,7 @@ namespace Catel.Collections
             }
         }
 
-        #region Overrides of BindingList
+#region Overrides of BindingList
         /// <summary>
         /// Apply sort.
         /// </summary>
@@ -724,8 +724,8 @@ namespace Catel.Collections
                 RaiseListChangedEvents = oldValue;
             }
         }
-        #endregion Overrides of BindingList
-        #endregion
+#endregion Overrides of BindingList
+#endregion
     }
 }
 

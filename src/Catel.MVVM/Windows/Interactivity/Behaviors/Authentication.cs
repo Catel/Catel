@@ -29,7 +29,7 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     public enum AuthenticationAction
     {
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Hides the associated control.
         /// </summary>
@@ -142,7 +142,7 @@ namespace Catel.Windows.Interactivity
 
                 switch (Action)
                 {
-#if NET
+#if NET || NETCORE
                     case AuthenticationAction.Hide:
                         AssociatedObject.Visibility = Visibility.Hidden;
                         break;

@@ -36,7 +36,7 @@ namespace Catel.Tests.MVVM.ViewModels
             viewModel.FirstName = "first name";
 
             Assert.IsFalse(viewModel.GenerateData.CanExecute(null));
-#if NET
+#if NET || NETCORE
             canExecuteChangedEvent.WaitOne(1000, false);
 #else
             canExecuteChangedEvent.WaitOne(1000);
@@ -66,7 +66,7 @@ namespace Catel.Tests.MVVM.ViewModels
             viewModel.FirstName = "first name";
 
             Assert.IsFalse(viewModel.GenerateData.CanExecute(null));
-#if NET
+#if NET || NETCORE
             canExecuteChangedEvent.WaitOne(1000, false);
 #else
             canExecuteChangedEvent.WaitOne(1000);

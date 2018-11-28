@@ -25,7 +25,7 @@ namespace Catel.Tests.Runtime.Serialization
     public class XmlSerializerFacts
     {
 
-#if NET
+#if NET || NETCORE
         [Serializable]
 #endif
         public class XmlModelWithAttributesOnly : ModelBase
@@ -40,7 +40,7 @@ namespace Catel.Tests.Runtime.Serialization
             public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
         }
 
-#if NET
+#if NET || NETCORE
         [Serializable]
 #endif
         public class XmlFamily : ModelBase
@@ -78,7 +78,7 @@ namespace Catel.Tests.Runtime.Serialization
             public static readonly PropertyData ModelsWithAttributesOnlyProperty = RegisterProperty("ModelsWithAttributesOnly", typeof(ObservableCollection<XmlModelWithAttributesOnly>), null);
         }
 
-#if NET
+#if NET || NETCORE
         [Serializable]
 #endif
         public class XmlPerson : ModelBase

@@ -4,7 +4,7 @@
 // </copyright>>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETFX_CORE
+#if NET || NETCORE || NETFX_CORE
 
 namespace Catel.Services
 {
@@ -33,7 +33,7 @@ namespace Catel.Services
     public partial class NavigationService
     {
         #region Fields
-#if NET
+#if NET || NETCORE
         private bool _appClosingByMainWindow;
         private bool _appClosedFromService;
 #endif
@@ -79,7 +79,7 @@ namespace Catel.Services
 
         partial void Initialize()
         {
-#if NET
+#if NET || NETCORE
             var mainWindow = CatelEnvironment.MainWindow;
             if (mainWindow != null)
             {
@@ -108,7 +108,7 @@ namespace Catel.Services
 
         partial void CloseMainWindow()
         {
-#if NET
+#if NET || NETCORE
             _appClosedFromService = true;
 
             var mainWindow = CatelEnvironment.MainWindow;
@@ -119,7 +119,7 @@ namespace Catel.Services
 
             if (!_appClosingByMainWindow)
             {
-#if NET
+#if NET || NETCORE
                 var app = Application.Current;
                 app.Shutdown();
 #else

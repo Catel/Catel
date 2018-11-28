@@ -114,7 +114,7 @@ namespace Catel.Tests.Reflection
             Assert.AreEqual(expected, result);
         }
 
-#if NET
+#if NET || NETCORE
         [TestCase]
         public void TheGetBuildDateTimeMethod()
         {

@@ -214,7 +214,7 @@ namespace Catel.Data
 
             var isSerializable = true;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             isSerializable = type.IsInterfaceEx() || type.IsSerializableEx();
 #endif
 

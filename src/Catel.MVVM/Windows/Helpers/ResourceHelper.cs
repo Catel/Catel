@@ -67,14 +67,14 @@ namespace Catel.Windows
             if (string.IsNullOrEmpty(shortAssemblyName))
             {
                 // Current app resource
-#if NET
+#if NET || NETCORE
                 return string.Format("pack://application:,,,/{0}", resourceUri);
 #else
                 return string.Format("/{0}", resourceUri);
 #endif
             }
 
-#if NET
+#if NET || NETCORE
             return string.Format("pack://application:,,,/{0};component/{1}", shortAssemblyName, resourceUri);
 #else
             return string.Format("/{0};component/{1}", shortAssemblyName, resourceUri);

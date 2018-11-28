@@ -383,7 +383,7 @@ namespace Catel.Runtime.Serialization.Xml
                 return true;
             }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             // Implements ISerializable
             if (type.ImplementsInterfaceEx<ISerializable>())
             {
@@ -546,7 +546,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns><c>true</c> if non-public reflection is allowed, <c>false</c> otherwise.</returns>
         protected virtual bool AllowNonPublicReflection(Type type)
         {
-#if NET
+#if NET || NETCORE
             var allowNonPublicReflection = type.IsModelBase();
 #else
             var allowNonPublicReflection = false;

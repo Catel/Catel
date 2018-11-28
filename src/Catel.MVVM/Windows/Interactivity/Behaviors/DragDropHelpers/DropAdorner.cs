@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Windows.Interactivity.DragDropHelpers
 {
@@ -111,7 +111,7 @@ namespace Catel.Windows.Interactivity.DragDropHelpers
             return new[] { startPoint, endPoint };
         }
 
-        #region IDisposable Members
+#region IDisposable Members
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -135,7 +135,7 @@ namespace Catel.Windows.Interactivity.DragDropHelpers
             }
         }
 
-        #endregion
+#endregion
     }
 }
 

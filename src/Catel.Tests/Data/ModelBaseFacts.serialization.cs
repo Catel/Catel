@@ -16,7 +16,7 @@ namespace Catel.Tests.Data
     using Catel.Logging;
     using Newtonsoft.Json;
 
-#if NET
+#if NET || NETCORE
     using System;
     using System.ComponentModel;
     using System.IO;
@@ -186,7 +186,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// Customer
         /// </summary>
-#if NET
+#if NET || NETCORE
         [Serializable]
 #endif
         public partial class Customer : ComparableModelBase
@@ -199,7 +199,7 @@ namespace Catel.Tests.Data
             {
             }
 
-#if NET
+#if NET || NETCORE
             /// <summary>
             /// Initializes a new object based on <see cref="SerializationInfo"/>.
             /// </summary>
@@ -272,7 +272,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// Project
         /// </summary>
-#if NET
+#if NET || NETCORE
         [Serializable]
 #endif
         public class Project : ComparableModelBase
@@ -285,7 +285,7 @@ namespace Catel.Tests.Data
             {
             }
 
-#if NET
+#if NET || NETCORE
             /// <summary>
             /// Initializes a new object based on <see cref="SerializationInfo"/>.
             /// </summary>
@@ -374,7 +374,7 @@ namespace Catel.Tests.Data
         [TestFixture]
         public class TheJsonSerialization
         {
-#if NET
+#if NET || NETCORE
             [Serializable]
 #endif
             [JsonObject(MemberSerialization.OptIn)]
@@ -387,7 +387,7 @@ namespace Catel.Tests.Data
                 {
                 }
 
-#if NET
+#if NET || NETCORE
                 /// <summary>
                 /// Initializes a new object based on <see cref="SerializationInfo"/>.
                 /// </summary>
@@ -417,7 +417,7 @@ namespace Catel.Tests.Data
                 #endregion
             }
 
-#if NET
+#if NET || NETCORE
             [Serializable]
 #endif
             [JsonObject(MemberSerialization.OptIn)]
@@ -430,7 +430,7 @@ namespace Catel.Tests.Data
                 {
                 }
 
-#if NET
+#if NET || NETCORE
                 /// <summary>
                 /// Initializes a new object based on <see cref="SerializationInfo"/>.
                 /// </summary>
@@ -500,7 +500,7 @@ namespace Catel.Tests.Data
             }
         }
 
-#if NET
+#if NET || NETCORE
         [TestFixture]
         public class TheBinarySerializationWithCircularReferencesIssue
         {

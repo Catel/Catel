@@ -143,7 +143,7 @@ namespace Catel.Windows.Markup
 
                     if (targetObject is FrameworkElement frameworkElement)
                     {
-#if NET
+#if NET || NETCORE
                         _isFrameworkElementLoaded = frameworkElement.IsLoaded;
 #endif
 

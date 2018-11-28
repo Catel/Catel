@@ -39,7 +39,7 @@ namespace Catel.MVVM
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-#if !NET
+#if !NET && !NETCORE
             // Only full .NET supports a reliable stopwatch. The other target frameworks don't have a reliable tick count
             // so always assume invalidated
             return true;

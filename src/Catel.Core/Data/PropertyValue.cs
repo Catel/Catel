@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PropertyValue.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -14,13 +14,13 @@ namespace Catel.Data
     /// <summary>
     /// Class holding a property value to serialize using the <see cref="ModelBase"/>.
     /// </summary>
-#if !NET && !NETSTANDARD
+#if !NET && !NETCORE && !NETSTANDARD
     [DataContract]
 #else
     [Serializable]
 #endif
     public class PropertyValue
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         : ISerializable
 #endif
     {
@@ -61,7 +61,7 @@ namespace Catel.Data
         /// Gets or sets the name of the property.
         /// </summary>
         /// <value>The name of the property.</value>
-#if !NET && !NETSTANDARD
+#if !NET && !NETCORE && !NETSTANDARD
         [DataMember]
 #endif
         public string Name { get; set; }
@@ -70,7 +70,7 @@ namespace Catel.Data
         /// Gets or sets the value of the property.
         /// </summary>
         /// <value>The value of the property.</value>
-#if !NET && !NETSTANDARD
+#if !NET && !NETCORE && !NETSTANDARD
         [DataMember]
 #endif
         public object Value { get; set; }
@@ -96,7 +96,7 @@ namespace Catel.Data
         [XmlIgnore]
         public int GraphRefId { get; set; }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyValue"/> class.
         /// </summary>

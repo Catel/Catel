@@ -58,7 +58,7 @@ namespace Catel.Tests.Data
             }
         }
 
-#if NET
+#if NET || NETCORE
         [TestFixture]
         public class TheCalculatedPropertiesChecks
         {

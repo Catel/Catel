@@ -4,7 +4,7 @@
     using System.Runtime.Serialization;
     using Catel.Data;
 
-#if NET
+#if NET || NETCORE
     [Serializable]
 #endif
     public class ClassWithoutPropertiesB : ComparableModelBase
@@ -20,7 +20,7 @@
         {
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         ///   Initializes a new object based on <see cref = "SerializationInfo" />.
         /// </summary>

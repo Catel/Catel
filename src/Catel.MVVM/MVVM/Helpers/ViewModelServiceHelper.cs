@@ -74,7 +74,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<ILocationService, LocationService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IVibrateService, VibrateService>();
 
-#if !NET
+#if !NET && !NETCORE && !NETCORE
                 serviceLocator.RegisterTypeIfNotYetRegistered<ICameraService, CameraService>();
 #endif
 
@@ -83,7 +83,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
 #endif
 
-#if NET
+#if NET || NETCORE
                 serviceLocator.RegisterTypeIfNotYetRegistered<IProcessService, ProcessService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IStartUpInfoProvider, StartUpInfoProvider>();

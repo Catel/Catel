@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
 
 namespace Catel.Data
 {
@@ -81,7 +81,7 @@ namespace Catel.Data
         [SecurityCritical]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-#if NET
+#if NET || NETCORE
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
             using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetBinarySerializer(), null)))
             {
@@ -106,7 +106,7 @@ namespace Catel.Data
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-#if NET
+#if NET || NETCORE
             if (_serializationInfo == null)
             {
                 // Probably a custom serializer which will populate us in a different way

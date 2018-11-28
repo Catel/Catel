@@ -58,7 +58,7 @@ namespace Catel.Windows.Threading
         }
 #endif
 
-#if NET
+#if NET || NETCORE
         private static readonly DispatcherOperationCallback ExitFrameCallback = ExitFrame;
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Catel.Windows.Threading
         /// <returns></returns>
         private static Dispatcher GetCurrentDispatcher()
         {
-#if NET
+#if NET || NETCORE
             var currentApplication = System.Windows.Application.Current;
             if (currentApplication != null)
             {

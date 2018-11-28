@@ -1,4 +1,4 @@
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Runtime.Serialization;
@@ -7,7 +7,7 @@ namespace Catel.Tests.Data
     /// <summary>
     /// Extended class of the <see cref="IniEntry"/> class.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [Serializable]
 #endif
     public class ExtendedIniEntry : IniEntry
@@ -38,7 +38,7 @@ namespace Catel.Tests.Data
         {
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         ///   Initializes a new object based on <see cref = "SerializationInfo" />.
         /// </summary>

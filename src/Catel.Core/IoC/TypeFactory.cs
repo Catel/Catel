@@ -580,7 +580,7 @@ namespace Catel.IoC
 
                 return instance;
             }
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             catch (MissingMethodException)
             {
                 // Ignore, we accept this

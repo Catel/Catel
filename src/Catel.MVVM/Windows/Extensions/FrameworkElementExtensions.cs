@@ -23,7 +23,7 @@ namespace Catel.Windows
     using VisualStateGroup = System.Object;
 #endif
 
-#if NET
+#if NET || NETCORE
     using System.Windows.Documents;
 #endif
 
@@ -44,7 +44,7 @@ namespace Catel.Windows
                 return;
             }
 
-#if NET
+#if NET || NETCORE
             frameworkElement.ApplyTemplate();
 
             var adornerLayer = AdornerLayer.GetAdornerLayer(frameworkElement);

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
 
 namespace Catel.Configuration
 {

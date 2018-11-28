@@ -12,7 +12,7 @@ namespace Catel.Data
     using System.Text;
     using Text;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
     using System.Diagnostics;
 #endif
 
@@ -22,7 +22,7 @@ namespace Catel.Data
     public class ValidationContext : IValidationContext
     {
         #region Fields
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// The stop watch which will give accurate modification stamps.
         /// </summary>
@@ -41,7 +41,7 @@ namespace Catel.Data
         #endregion
 
         #region Constructors
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Initializes static members of the <see cref="ValidationContext"/> class.
         /// </summary>
@@ -905,7 +905,7 @@ namespace Catel.Data
             }
             else
             {
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
                 LastModifiedTicks = _stopWatch.ElapsedTicks;
 #else
                 LastModifiedTicks = dateTime.Ticks;

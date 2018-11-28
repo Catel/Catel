@@ -18,7 +18,7 @@ namespace Catel
     using global::Windows.UI.Xaml;
 #endif
 
-#if NET
+#if NET || NETCORE
     using System.Diagnostics;
 #endif
 
@@ -142,7 +142,7 @@ namespace Catel
         {
             bool? isInDesignMode = null;
 
-#if NET
+#if NET || NETCORE
             var prop = DesignerProperties.IsInDesignModeProperty;
             isInDesignMode = (bool)DependencyPropertyDescriptor.FromProperty(prop, typeof(FrameworkElement)).Metadata.DefaultValue;
 

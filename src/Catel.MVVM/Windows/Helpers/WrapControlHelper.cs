@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Windows
 {
@@ -14,6 +14,7 @@ namespace Catel.Windows
     using Collections;
     using Controls;
     using Reflection;
+
 #if NETFX_CORE
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
@@ -23,10 +24,9 @@ namespace Catel.Windows
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Data;
-
 #endif
 
-    #region Enums
+#region Enums
     /// <summary>
     /// Available wrap options that can be used in the <see cref="WrapControlHelper"/>.
     /// </summary>
@@ -54,7 +54,7 @@ namespace Catel.Windows
         /// </summary>
         All = GenerateInlineInfoBarMessageControl | GenerateWarningAndErrorValidatorForDataContext
     }
-    #endregion
+#endregion
 
     /// <summary>
     /// An helper to wrap controls and windows with several controls, such as the <see cref="InfoBarMessageControl"/>.
@@ -63,7 +63,7 @@ namespace Catel.Windows
     public static class WrapControlHelper
     {
         
-        #region Constants
+#region Constants
         /// <summary>
         /// The name of the internal grid. Retrieve the grid with this name to add custom controls to the inner grid.
         /// </summary>
@@ -98,7 +98,7 @@ namespace Catel.Windows
         /// The name of the default cancel button.
         /// </summary>
         public const string DefaultCancelButtonName = "cancelButton";
-        #endregion
+#endregion
         
 
         /// <summary>
@@ -190,7 +190,7 @@ namespace Catel.Windows
                 outsideGrid.Resources.MergedDictionaries.Add(Application.Current.Resources);
             }
 
-            #region Generate buttons
+#region Generate buttons
 #if !NETFX_CORE
             if (buttons.Length > 0)
             {
@@ -238,7 +238,7 @@ namespace Catel.Windows
                         }
                         button.SetBinding(ButtonBase.VisibilityProperty, visibilityBinding);
                     }
-#if NET
+#if NET || NETCORE
                     button.SetResourceReference(FrameworkElement.StyleProperty, "DataWindowButtonStyle");
                     button.IsDefault = dataWindowButton.IsDefault;
                     button.IsCancel = dataWindowButton.IsCancel;
@@ -271,9 +271,9 @@ namespace Catel.Windows
                 mainContent = subDockPanel;
             }
 #endif
-            #endregion
+#endregion
 
-            #region Generate internal grid
+#region Generate internal grid
             // Create grid
             var internalGrid = new Grid();
             internalGrid.Name = InternalGridName;
@@ -281,9 +281,9 @@ namespace Catel.Windows
 
             // Grid is now the main content
             mainContent = internalGrid;
-            #endregion
+#endregion
 
-            #region Generate WarningAndErrorValidator
+#region Generate WarningAndErrorValidator
             if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateWarningAndErrorValidatorForDataContext))
             {
                 // Create warning and error validator
@@ -294,9 +294,9 @@ namespace Catel.Windows
                 // Add to grid
                 internalGrid.Children.Add(warningAndErrorValidator);
             }
-            #endregion
+#endregion
 
-            #region Generate InfoBarMessageControl
+#region Generate InfoBarMessageControl
 #if !NETFX_CORE
             if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateInlineInfoBarMessageControl) ||
                 Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateOverlayInfoBarMessageControl))
@@ -315,7 +315,7 @@ namespace Catel.Windows
                 mainContent = infoBarMessageControl;
             }
 #endif
-            #endregion
+#endregion
 
             // Set content of the outside grid
             outsideGrid.Children.Add(mainContent);

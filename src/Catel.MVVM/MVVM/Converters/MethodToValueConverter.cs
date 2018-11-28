@@ -22,7 +22,7 @@ namespace Catel.MVVM.Converters
     /// <para />
     /// Original license: CC BY-SA 2.5, compatible with the MIT license.
     /// </remarks>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(string), typeof(object))]
 #endif
     public class MethodToValueConverter : ValueConverterBase

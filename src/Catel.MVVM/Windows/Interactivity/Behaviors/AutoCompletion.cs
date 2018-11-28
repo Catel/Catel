@@ -69,7 +69,7 @@ namespace Catel.Windows.Interactivity
             _popup = new Popup();
             _popup.Child = _suggestionListBox;
 
-#if NET
+#if NET || NETCORE
             _popup.StaysOpen = false;
 #elif NETFX_CORE
             _popup.IsLightDismissEnabled = true;
@@ -170,7 +170,7 @@ namespace Catel.Windows.Interactivity
 
                 associatedObject.TextChanged += OnTextChanged;
 
-#if NET
+#if NET || NETCORE
                 associatedObject.PreviewKeyDown += OnPreviewKeyDown;
 #else
                 associatedObject.KeyDown += OnPreviewKeyDown;
@@ -200,7 +200,7 @@ namespace Catel.Windows.Interactivity
             {
                 associatedObject.TextChanged -= OnTextChanged;
 
-#if NET
+#if NET || NETCORE
                 associatedObject.PreviewKeyDown -= OnPreviewKeyDown;
 #else
                 associatedObject.KeyDown -= OnPreviewKeyDown;
@@ -229,7 +229,7 @@ namespace Catel.Windows.Interactivity
 
             _popup.Width = textBox.ActualWidth;
 
-#if NET
+#if NET || NETCORE
             _popup.PlacementTarget = textBox;
             _popup.Placement = PlacementMode.Bottom;
 #elif NETFX_CORE

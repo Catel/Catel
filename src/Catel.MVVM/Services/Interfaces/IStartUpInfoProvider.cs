@@ -14,7 +14,7 @@ namespace Catel.Services
     [ObsoleteEx(Message = "Use Orc.CommandLine instead since that has better support for parsing command lines", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
     public interface IStartUpInfoProvider
     {
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Gets the application command line argument.
         /// </summary>

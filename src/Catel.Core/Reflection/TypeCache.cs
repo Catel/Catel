@@ -29,7 +29,7 @@ namespace Catel.Reflection
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         private static readonly Queue<Assembly> _threadSafeAssemblyQueue = new Queue<Assembly>();
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Catel.Reflection
             ShouldIgnoreAssemblyEvaluators = new List<Func<Assembly, bool>>();
             ShouldIgnoreTypeEvaluators = new List<Func<Assembly, Type, bool>>();
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
 
             // Initialize the types of early loaded assemblies
@@ -135,7 +135,7 @@ namespace Catel.Reflection
         }
         #endregion
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Called when an assembly is loaded in the current <see cref="AppDomain"/>.
         /// </summary>
@@ -717,7 +717,7 @@ namespace Catel.Reflection
                     }
                 }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
                 var lateLoadedAssemblies = new List<Assembly>();
 
                 lock (_threadSafeAssemblyQueue)
@@ -877,7 +877,7 @@ namespace Catel.Reflection
                 return true;
             }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             if (assembly.ReflectionOnly)
             {
                 return true;

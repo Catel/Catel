@@ -33,7 +33,7 @@ namespace Catel.Tests.Windows
             {
                 string packUri = ResourceHelper.GetResourceUri("App.xaml");
 
-#if NET
+#if NET || NETCORE
                 Assert.AreEqual("pack://application:,,,/App.xaml", packUri);
 #else
                 Assert.AreEqual("/App.xaml", packUri);
@@ -45,7 +45,7 @@ namespace Catel.Tests.Windows
             {
                 string packUri = ResourceHelper.GetResourceUri("App.xaml", null);
 
-#if NET
+#if NET || NETCORE
                 Assert.AreEqual("pack://application:,,,/App.xaml", packUri);
 #else
                 Assert.AreEqual("/App.xaml", packUri);
@@ -57,7 +57,7 @@ namespace Catel.Tests.Windows
             {
                 string packUri = ResourceHelper.GetResourceUri("/App.xaml", null);
 
-#if NET
+#if NET || NETCORE
                 Assert.AreEqual("pack://application:,,,/App.xaml", packUri);
 #else
                 Assert.AreEqual("/App.xaml", packUri);
@@ -69,7 +69,7 @@ namespace Catel.Tests.Windows
             {
                 string packUri = ResourceHelper.GetResourceUri("App.xaml", "Catel.MVVM");
 
-#if NET
+#if NET || NETCORE
                 Assert.AreEqual("pack://application:,,,/Catel.MVVM;component/App.xaml", packUri);
 #else
                 Assert.AreEqual("/Catel.MVVM;component/App.xaml", packUri);
@@ -81,7 +81,7 @@ namespace Catel.Tests.Windows
             {
                 string packUri = ResourceHelper.GetResourceUri("/App.xaml", "Catel.MVVM");
 
-#if NET
+#if NET || NETCORE
                 Assert.AreEqual("pack://application:,,,/Catel.MVVM;component/App.xaml", packUri);
 #else
                 Assert.AreEqual("/Catel.MVVM;component/App.xaml", packUri);

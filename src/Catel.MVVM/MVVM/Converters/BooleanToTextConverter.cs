@@ -30,7 +30,7 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// BooleanToTextConverter.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(bool), typeof(string))]
 #endif
     public class BooleanToTextConverter : ValueConverterBase

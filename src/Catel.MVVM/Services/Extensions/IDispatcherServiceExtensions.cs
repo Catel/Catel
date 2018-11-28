@@ -10,7 +10,7 @@ namespace Catel.Services
     using System;
     using System.Threading.Tasks;
 
-#if NET
+#if NET || NETCORE
     using Catel.Windows.Threading;
 #endif
 

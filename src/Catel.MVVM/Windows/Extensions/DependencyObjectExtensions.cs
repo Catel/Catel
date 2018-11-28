@@ -41,7 +41,7 @@ namespace Catel.Windows
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
         public static object FindLogicalOrVisualAncestor(this DependencyObject startElement, Predicate<object> condition, int maxDepth = -1)
         {
-#if NET
+#if NET || NETCORE
             // Try to find logical ancestor one level up
             var logicalAncestor = FindLogicalAncestor(startElement, condition, 1);
             if (logicalAncestor != null)
@@ -207,7 +207,7 @@ namespace Catel.Windows
 
             try
             {
-#if NET
+#if NET || NETCORE
                 return LogicalTreeHelper.GetParent(element);
 #else
                 return VisualTreeHelper.GetParent(element);
@@ -272,7 +272,7 @@ namespace Catel.Windows
                     return FindVisualDescendant(startElementAsBorder.Child, condition);
                 }
 
-#if NET
+#if NET || NETCORE
                 var startElementAsDecorator = startElement as Decorator;
                 if (startElementAsDecorator != null)
                 {

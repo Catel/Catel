@@ -27,7 +27,7 @@ namespace Catel.Tests.Data
             Assert.IsTrue(model.HasCollectionChanged);
         }
 
-#if NET
+#if NET || NETCORE
         [TestCase]
         public void AllowsRegistrationOfCollectionViewSource()
         {

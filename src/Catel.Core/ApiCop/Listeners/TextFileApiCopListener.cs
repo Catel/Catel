@@ -19,7 +19,7 @@ namespace Catel.ApiCop.Listeners
         private Stream _fileStream;
         private StreamWriter _textWriter;
 
-#if NET
+#if NET || NETCORE
         private readonly string _fileName;
 #endif
 
@@ -32,7 +32,7 @@ namespace Catel.ApiCop.Listeners
         {
             Argument.IsNotNull("fileName", fileName);
 
-#if NET
+#if NET || NETCORE
             _fileName = fileName;
 #endif
         }
@@ -53,7 +53,7 @@ namespace Catel.ApiCop.Listeners
         /// </summary>
         protected override void BeginWriting()
         {
-#if NET
+#if NET || NETCORE
             _fileStream = new FileStream(_fileName, FileMode.Create, FileAccess.Write);
 #else
             _fileStream = new MemoryStream();

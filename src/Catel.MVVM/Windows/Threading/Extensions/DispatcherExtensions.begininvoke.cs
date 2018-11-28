@@ -101,7 +101,7 @@ namespace Catel.Windows.Threading
             return BeginInvoke(dispatcher, action, true);
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Executes the specified action asynchronously at the specified priority with the specified arguments on the thread that the Dispatcher was created on if required.
         /// <para />
@@ -137,7 +137,7 @@ namespace Catel.Windows.Threading
             return BeginInvoke(dispatcher, () => method.DynamicInvoke(args), true);
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Executes the specified delegate asynchronously at the specified priority with the specified arguments on the thread that the Dispatcher was created on if required.
         /// <para />
@@ -186,7 +186,7 @@ namespace Catel.Windows.Threading
             return GetDefaultDispatcherOperation(dispatcher);
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Executes the specified delegate asynchronously at the specified priority with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>

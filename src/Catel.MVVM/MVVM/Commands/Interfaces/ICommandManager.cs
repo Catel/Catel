@@ -11,7 +11,7 @@ namespace Catel.MVVM
     using System.Collections.Generic;
     using System.Windows.Input;
 
-#if NET
+#if NET || NETCORE
     using System.Windows;
 #endif
 
@@ -152,7 +152,7 @@ namespace Catel.MVVM
         /// </summary>
         void SubscribeToKeyboardEvents();
 
-#if NET || NETFX_CORE
+#if NET || NETCORE || NETFX_CORE
         /// <summary>
         /// Subscribes to keyboard events.
         /// </summary>

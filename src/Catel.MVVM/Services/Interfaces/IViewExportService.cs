@@ -19,7 +19,7 @@ namespace Catel.Services
         /// </summary>
         Print,
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// The clipboard export mode.
         /// </summary>

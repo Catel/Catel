@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETFX_CORE
+#if NET || NETCORE || NETFX_CORE
 
 namespace Catel.Services
 {

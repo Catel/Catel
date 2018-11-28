@@ -23,13 +23,13 @@ namespace Catel.Tests.IO
     public class PathTest
     {
         #region Fields
-#if NET
+#if NET || NETCORE
         private string _testDirectory;
 #endif
         #endregion
 
         #region Initialization & cleanup
-#if NET
+#if NET || NETCORE
         [SetUp]
         public void Initialize()
         {
@@ -58,7 +58,7 @@ namespace Catel.Tests.IO
         #endregion
 
         #region GetApplicationDataDirectory
-#if NET
+#if NET || NETCORE
         //[TestCase]
         //public void GetApplicationData_EntryAssembly()
         //{
@@ -350,7 +350,7 @@ namespace Catel.Tests.IO
             Assert.AreEqual(@"..\MyTest\MyFile.exe".ToLower(), relative.ToLower());
         }
 
-#if NET
+#if NET || NETCORE
         [TestCase]
         public void GetRelativePath_EmptyBasePath()
         {
@@ -436,7 +436,7 @@ namespace Catel.Tests.IO
         #endregion
 
         #region GetFullPath
-#if NET
+#if NET || NETCORE
         [TestCase]
         public void GetFullPath_FromRootDirectory()
         {

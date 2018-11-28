@@ -12,7 +12,7 @@ namespace Catel.MVVM.Converters
     /// Converts a value to a representive value for nullable.
     /// </summary>
     /// <remarks>Resolves problem with databinding with nullables. When textbox hasn't a value then null is expected as return value.</remarks>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(object), typeof(object))]
 #endif
     [ObsoleteEx(TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0", Message = "Converter doesn't have a target type, so this converter won't work as expected")]

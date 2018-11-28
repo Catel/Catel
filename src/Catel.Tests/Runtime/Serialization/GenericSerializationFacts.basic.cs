@@ -88,7 +88,7 @@ namespace Catel.Tests.Runtime.Serialization
                 });
             }
 
-#if NET
+#if NET || NETCORE
             [TestCase]
             public void SerializationWithPrivateMembers()
             {

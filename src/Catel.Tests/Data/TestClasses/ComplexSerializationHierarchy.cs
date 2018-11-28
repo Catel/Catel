@@ -124,7 +124,7 @@ namespace Catel.Tests.Data
         }
     }
 
-#if NET
+#if NET || NETCORE
     // Required for binary serialization
     [Serializable]
 #endif
@@ -143,7 +143,7 @@ namespace Catel.Tests.Data
         public List<Person> Persons { get; private set; }
     }
 
-#if NET
+#if NET || NETCORE
     // Required for binary serialization
     [Serializable]
 #endif
@@ -160,7 +160,7 @@ namespace Catel.Tests.Data
         public string LastName { get; set; }
     }
 
-#if NET
+#if NET || NETCORE
     [Serializable]
 #endif
     public class ScheduleAssistantSettings : ComparableModelBase
@@ -170,7 +170,7 @@ namespace Catel.Tests.Data
 
         }
 
-#if NET
+#if NET || NETCORE
         protected ScheduleAssistantSettings(SerializationInfo info, StreamingContext context)
             : base(info, context)
         { }
@@ -249,7 +249,7 @@ namespace Catel.Tests.Data
         #endregion
     }
 
-#if NET
+#if NET || NETCORE
     [Serializable]
 #endif
     public class GridSettings : ComparableModelBase
@@ -259,7 +259,7 @@ namespace Catel.Tests.Data
 
         }
 
-#if NET
+#if NET || NETCORE
         protected GridSettings(SerializationInfo info, StreamingContext context)
             : base(info, context)
         { }
@@ -320,7 +320,7 @@ namespace Catel.Tests.Data
         #endregion
     }
 
-#if NET
+#if NET || NETCORE
     [Serializable]
 #endif
     public class SortSetting
@@ -351,7 +351,7 @@ namespace Catel.Tests.Data
             {
                 return true;
             }
-            if (obj.GetType() != this.GetType())
+            if (obj.GetType() != GetType())
             {
                 return false;
             }
@@ -359,7 +359,7 @@ namespace Catel.Tests.Data
         }
     }
 
-#if NET
+#if NET || NETCORE
     [Serializable]
 #endif
     public class ColumnSettings
@@ -394,7 +394,7 @@ namespace Catel.Tests.Data
             {
                 return true;
             }
-            if (obj.GetType() != this.GetType())
+            if (obj.GetType() != GetType())
             {
                 return false;
             }

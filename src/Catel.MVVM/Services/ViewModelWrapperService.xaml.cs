@@ -98,7 +98,7 @@ namespace Catel.Services
                 vmGrid = new Grid();
                 vmGrid.Name = InnerWrapperName.GetUniqueControlName();
 
-#if NET
+#if NET || NETCORE
                 if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.CreateWarningAndErrorValidatorForViewModel))
                 {
                     var warningAndErrorValidator = new WarningAndErrorValidator();

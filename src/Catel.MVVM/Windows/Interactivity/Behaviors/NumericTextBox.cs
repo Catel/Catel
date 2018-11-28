@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Windows.Interactivity
 {
@@ -86,7 +86,7 @@ namespace Catel.Windows.Interactivity
         {
             base.Initialize();
 
-#if NET
+#if NET || NETCORE
             DataObject.AddPastingHandler(AssociatedObject, OnPaste);
 #endif
 
@@ -99,7 +99,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override void Uninitialize()
         {
-#if NET
+#if NET || NETCORE
             DataObject.RemovePastingHandler(AssociatedObject, OnPaste);
 #endif
 
@@ -121,7 +121,7 @@ namespace Catel.Windows.Interactivity
             set
             {
 #pragma warning disable WPF0036
-#if NET
+#if NET || NETCORE
                 if (value)
                 {
                     AllowedKeys.Add(Key.OemMinus);
@@ -279,7 +279,7 @@ namespace Catel.Windows.Interactivity
             }
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Called when text is pasted into the TextBox.
         /// </summary>
@@ -381,7 +381,7 @@ namespace Catel.Windows.Interactivity
         {
             string keyValue = string.Empty;
 
-#if NET
+#if NET || NETCORE
             if (e.Key == Key.Decimal)
             {
                 keyValue = GetDecimalSeparator();

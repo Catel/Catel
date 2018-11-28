@@ -356,7 +356,7 @@ namespace Catel.IO
             return fullPath;
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Returns the full path for a relative path.
         /// </summary>

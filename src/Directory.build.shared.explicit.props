@@ -63,6 +63,11 @@
     <DefineConstants>$(DefineConstants);NETCORE;NETCORE2_1;NETCOREAPP;NETCOREAPP2_1</DefineConstants>
   </PropertyGroup>
   
+  <!-- .NET Core app 3.0 -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+    <DefineConstants>$(DefineConstants);NETCORE;NETCORE3_0;NETCOREAPP;NETCOREAPP3_0</DefineConstants>
+  </PropertyGroup>
+  
   <!-- .NET Standard 2.0 -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <DefineConstants>$(DefineConstants);NETSTANDARD;NETSTANDARD2_0;NS;NS20</DefineConstants>

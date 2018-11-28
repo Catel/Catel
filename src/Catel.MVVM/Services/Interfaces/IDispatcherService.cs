@@ -22,7 +22,7 @@ namespace Catel.Services
     /// </summary>
     public interface IDispatcherService
     {
-#if NET || UWP
+#if NET || NETCORE || UWP
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>

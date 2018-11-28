@@ -309,7 +309,7 @@ namespace Catel.Reflection
             propertyInfo.SetValue(obj, value, null);
 #else
 
-#if NET
+#if NET || NETCORE
             var setMethod = propertyInfo.GetSetMethod(true);
 #else
             var setMethod = propertyInfo.GetSetMethod();

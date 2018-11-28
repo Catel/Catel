@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETFX_CORE
+#if NET || NETCORE || NETFX_CORE
 
 namespace Catel.Windows.Controls
 {
@@ -54,7 +54,7 @@ namespace Catel.Windows.Controls
             _logic = new PageLogic(this);
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
-#if !NET
+#if !NET && !NETCORE
                 // WPF already calls this method automatically
                 OnPropertyChanged(e);
 

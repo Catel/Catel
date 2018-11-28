@@ -8,7 +8,7 @@ namespace Catel
 {
     using System;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
     using System.Diagnostics;
 #else
     using System.ComponentModel;
@@ -96,7 +96,7 @@ namespace Catel
         /// <returns><c>true</c> if the process is hosted by visual studio; otherwise, <c>false</c>.</returns>
         public static bool IsProcessCurrentlyHostedByVisualStudio(bool checkParentProcesses = false)
         {
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             return IsHostedByProcess("devenv", checkParentProcesses);
 #elif XAMARIN
             return false;
@@ -117,7 +117,7 @@ namespace Catel
         /// <returns><c>true</c> if the process is hosted by sharp develop; otherwise, <c>false</c>.</returns>
         public static bool IsProcessCurrentlyHostedBySharpDevelop(bool checkParentProcesses = false)
         {
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             return IsHostedByProcess("sharpdevelop", checkParentProcesses);
 #elif XAMARIN
             return false;
@@ -138,7 +138,7 @@ namespace Catel
         /// <returns><c>true</c> if the process is hosted by expression blend; otherwise, <c>false</c>.</returns>
         public static bool IsProcessCurrentlyHostedByExpressionBlend(bool checkParentProcesses = false)
         {
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             return IsHostedByProcess("blend", checkParentProcesses);
 #elif XAMARIN
             return false;
@@ -177,7 +177,7 @@ namespace Catel
             return false;
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         private static bool IsHostedByProcess(string processName, bool supportParentProcesses = false)
         {
             try
@@ -191,7 +191,7 @@ namespace Catel
                 var currentProcessName = currentProcess.ProcessName;
                 if (supportParentProcesses && currentProcessName.ContainsIgnoreCase("vshost"))
                 {
-#if NET
+#if NET || NETCORE
                     currentProcess = currentProcess.GetParent();
                     if (currentProcess == null)
                     {

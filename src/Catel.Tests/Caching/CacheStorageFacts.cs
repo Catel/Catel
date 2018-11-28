@@ -18,7 +18,7 @@ namespace Catel.Tests.Caching
 
     public class CacheStorageFacts
     {
-#if NET
+#if NET || NETCORE
         [TestFixture]
         public class TheThreadSafeFunctionality
         {

@@ -15,7 +15,7 @@ namespace Catel.Tests
     using Catel.MVVM;
     using MVVM.Auditing;
 
-#if NET
+#if NET || NETCORE
     using System.Windows.Data;
 #endif
 
@@ -436,7 +436,7 @@ namespace Catel.Tests
                 source.GetType();
             }
 
-#if NET
+#if NET || NETCORE
             [TestCase]
             public void SupportsExplicitlyImplementedEvents()
             {
@@ -755,7 +755,7 @@ namespace Catel.Tests
                 source.GetType();
             }
 
-#if NET
+#if NET || NETCORE
             [TestCase]
             public void DoesNotLeakWithPrivateEventHandlerSubscribedFromClassItself()
             {

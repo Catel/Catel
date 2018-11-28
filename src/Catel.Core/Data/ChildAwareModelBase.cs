@@ -13,7 +13,7 @@ namespace Catel.Data
     using System.Collections.Specialized;
     using System.ComponentModel;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
     using System.Runtime.Serialization;
 #endif
 
@@ -25,7 +25,7 @@ namespace Catel.Data
         /// <summary>
         /// The change notification wrappers for all property values.
         /// </summary>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
         private Dictionary<string, ChangeNotificationWrapper> _propertyValueChangeNotificationWrappers;
@@ -46,7 +46,7 @@ namespace Catel.Data
             InitializeChildAwareModelBase();
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelBase"/> class.
         /// <para />
@@ -81,7 +81,7 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether this object should handle (thus invoke the specific events) when
         /// a property or collection value has changed.
         /// </summary>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
 #endif
         protected bool HandlePropertyAndCollectionChanges { get; set; }

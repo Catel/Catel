@@ -16,7 +16,7 @@ namespace Catel.Tests.Data
     public class SavableModelBaseTest
     {
         #region Generic Loads
-#if NET
+#if NET || NETCORE
         [TestCase]
         public void Load_FileName_SerializationMode_Binary()
         {
@@ -36,7 +36,7 @@ namespace Catel.Tests.Data
             Assert.AreEqual(originalObject, loadedObject);
         }
 
-#if NET
+#if NET || NETCORE
         [TestCase]
         public void Load_Stream_SerializationMode_Binary()
         {

@@ -10,13 +10,13 @@ namespace Catel.Services
 	/// Interface that supports file handling.
 	/// </summary>
 	public interface IFileSupport
-	{
-		#region Properties
-		/// <summary>
-		/// Gets or sets the name of the file.
-		/// </summary>
-		/// <value>The name of the file.</value>
-		string FileName { get; set; }
+    {
+        #region Properties
+        /// <summary>
+        /// Gets or sets the name of the file.
+        /// </summary>
+        /// <value>The name of the file.</value>
+        string FileName { get; set; }
 
         /// <summary>
 		/// Gets or sets the filter to use when opening or saving the file.
@@ -24,7 +24,7 @@ namespace Catel.Services
 		/// <value>The filter.</value>
 		string Filter { get; set; }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Gets or sets a value indicating whether a file dialog automatically adds an extension to a file name if the user omits an extension.
         /// </summary>
@@ -67,6 +67,6 @@ namespace Catel.Services
         /// <value><c>true</c> if warnings will be shown when an invalid file name is provided; otherwise, <c>false</c>. The default is <c>true</c>.</value>
         bool ValidateNames { get; set; }
 #endif
-		#endregion
+        #endregion
     }
 }

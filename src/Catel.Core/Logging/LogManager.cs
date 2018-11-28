@@ -14,7 +14,7 @@ namespace Catel.Logging
     using System.Threading.Tasks;
     using Reflection;
 
-#if NET
+#if NET || NETCORE
     using System.Configuration;
     using Catel.Configuration;
 #endif
@@ -261,7 +261,7 @@ namespace Catel.Logging
         /// </summary>
         static LogManager()
         {
-#if NET
+#if NET || NETCORE
             AppDomain.CurrentDomain.DomainUnload += (sender, e) => FlushAll();
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => FlushAll();
 #endif
@@ -407,7 +407,7 @@ namespace Catel.Logging
             return GetLogger(callingType);
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Loads the listeners from the specified configuration file.
         /// </summary>

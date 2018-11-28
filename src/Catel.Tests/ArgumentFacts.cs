@@ -181,7 +181,7 @@ namespace Catel.Tests
                 Argument.IsNotOutOfRange("param", 3, 1, 3);
             }
 
-#if NET
+#if NET || NETCORE
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForTooSmallDoubleParamValue()
             {
@@ -220,7 +220,7 @@ namespace Catel.Tests
                 Argument.IsMinimal("param", 3, 3);
             }
 
-#if NET
+#if NET || NETCORE
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForTooSmallDoubleParamValue()
             {
@@ -252,7 +252,7 @@ namespace Catel.Tests
                 Argument.IsMaximum("param", 3, 3);
             }
 
-#if NET
+#if NET || NETCORE
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForTooLargeDoubleParamValue()
             {

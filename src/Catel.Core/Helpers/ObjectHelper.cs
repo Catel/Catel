@@ -130,7 +130,7 @@ namespace Catel
                 return true;
             }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             if (obj == DBNull.Value)
             {
                 return true;

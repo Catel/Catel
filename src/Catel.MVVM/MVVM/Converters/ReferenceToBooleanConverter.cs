@@ -11,7 +11,7 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// Implementation of class ReferenceToBooleanConverter
     /// </summary>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(object), typeof(bool))]
 #endif
     public class ReferenceToBooleanConverter : ValueConverterBase

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Windows.Controls
 {
@@ -16,7 +16,7 @@ namespace Catel.Windows.Controls
     /// Converter for the <see cref="InfoBarMessageControl"/> to determine whether the control
     /// should be visible for the current mode and
     /// </summary>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(InfoBarMessageControlMode), typeof(Visibility), ParameterType = typeof(InfoBarMessageControlMode))]
 #endif
     public class InfoBarMessageControlVisibilityConverter : IValueConverter

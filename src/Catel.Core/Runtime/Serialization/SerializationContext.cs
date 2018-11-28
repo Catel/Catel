@@ -164,7 +164,7 @@ namespace Catel.Runtime.Serialization
         /// <value>The reference manager.</value>
         public ReferenceManager ReferenceManager { get; private set; }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Gets or sets the serialization information.
         /// </summary>

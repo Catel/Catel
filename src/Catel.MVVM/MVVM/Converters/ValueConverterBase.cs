@@ -12,13 +12,13 @@ namespace Catel.MVVM.Converters
     using Reflection;
 
 #if XAMARIN
-    
+
 #elif NETFX_CORE
 #else
     using System.ComponentModel;
 #endif
 
-#if NET
+#if NET || NETCORE
     using System.Windows.Markup;
 #endif
 
@@ -42,7 +42,7 @@ namespace Catel.MVVM.Converters
     /// </summary>
     /// <typeparam name="TConvert">The type of the convert input.</typeparam>
     /// <typeparam name="TConvertBack">The type of the convert back input.</typeparam>
-#if NET
+#if NET || NETCORE
     public abstract class ValueConverterBase<TConvert, TConvertBack> : MarkupExtension, IValueConverter
 #else
     public abstract class ValueConverterBase<TConvert, TConvertBack> : IValueConverter
@@ -85,7 +85,7 @@ namespace Catel.MVVM.Converters
         /// <remarks>
         /// Normally this value is ignored as it is in most implementations of <c>Convert</c>.
         /// </remarks>
-#if NET
+#if NET || NETCORE
         [TypeConverter(typeof(StringToTypeConverter))]
 #endif
         public Type OverrideType { get; set; }
@@ -97,7 +97,7 @@ namespace Catel.MVVM.Converters
         /// <remarks>
         /// Normally this value is ignored as it is in most implementations of <c>ConvertBack</c>.
         /// </remarks>
-#if NET
+#if NET || NETCORE
         [TypeConverter(typeof(StringToTypeConverter))]
 #endif
         public Type BackOverrideType { get; set; }
@@ -274,7 +274,7 @@ namespace Catel.MVVM.Converters
             return ConverterHelper.UnsetValue;
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// When implemented in a derived class, returns an object that is set as the value of the target property for this markup extension.
         /// </summary>

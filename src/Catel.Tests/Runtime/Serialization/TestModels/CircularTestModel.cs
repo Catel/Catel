@@ -10,16 +10,16 @@ namespace Catel.Tests.Runtime.Serialization
     using System;
     using Catel.Data;
 
-#if NET
+#if NET || NETCORE
     using System.Runtime.Serialization;
 #endif
 
-#if NET
+#if NET || NETCORE
     [Serializable]
 #endif
     public class CircularTestModel : ModelBase
     {
-#if NET
+#if NET || NETCORE
         protected CircularTestModel(SerializationInfo info, StreamingContext context)
             : base(info, context) { }
 #endif

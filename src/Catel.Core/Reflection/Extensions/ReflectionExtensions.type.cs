@@ -14,6 +14,7 @@ namespace Catel.Reflection
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+
 #if ENABLE_CACHE
     using Catel.Caching;
 #endif
@@ -351,7 +352,7 @@ namespace Catel.Reflection
 
 #if NETFX_CORE
             return type.GetTypeInfo().IsSerializable;
-#elif NET
+#elif NET || NETCORE || NETSTANDARD
             return type.IsSerializable;
 #else
             return true;

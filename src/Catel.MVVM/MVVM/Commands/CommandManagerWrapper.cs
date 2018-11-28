@@ -78,7 +78,7 @@ namespace Catel.MVVM
                 return;
             }
 
-#if NET
+#if NET || NETCORE
             View.PreviewKeyDown += OnKeyDown;
 #else
             View.KeyDown += OnKeyDown;
@@ -94,7 +94,7 @@ namespace Catel.MVVM
                 return;
             }
 
-#if NET
+#if NET || NETCORE
             View.PreviewKeyDown -= OnKeyDown;
 #else
             View.KeyDown -= OnKeyDown;

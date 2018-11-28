@@ -87,7 +87,7 @@ namespace Catel.Windows.Controls
         private readonly Dictionary<object, ValidationData> _objectValidation = new Dictionary<object, ValidationData>();
         private readonly object _objectValidationLock = new object();
 
-#if NET
+#if NET || NETCORE
         private InfoBarMessageControl _infoBarMessageControl;
 #endif
         #endregion
@@ -100,7 +100,7 @@ namespace Catel.Windows.Controls
         {
             UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<WarningAndErrorValidator>();
 
-#if NET
+#if NET || NETCORE
             Focusable = false;
 #endif
 
@@ -132,7 +132,7 @@ namespace Catel.Windows.Controls
         public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(object), typeof(WarningAndErrorValidator),
             new PropertyMetadata(null, (sender, e) => ((WarningAndErrorValidator)sender).UpdateSource(e.OldValue, e.NewValue)));
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Gets or sets a value indicating whether this warning and error validator should automatically register to the first <see cref="InfoBarMessageControl"/> it can find.
         /// </summary>
@@ -174,7 +174,7 @@ namespace Catel.Windows.Controls
         {
             Initialize();
 
-#if !NET
+#if !NET && !NETCORE
             RaiseEventsForAllErrorsAndWarnings();
 #endif
         }
@@ -194,7 +194,7 @@ namespace Catel.Windows.Controls
         /// </summary>
         private void Initialize()
         {
-#if NET
+#if NET || NETCORE
             if (AutomaticallyRegisterToInfoBarMessageControl)
             {
                 //_infoBarMessageControl = this.FindLogicalAncestorByType<InfoBarMessageControl>();
@@ -239,7 +239,7 @@ namespace Catel.Windows.Controls
 
             _objectValidation.Clear();
 
-#if NET
+#if NET || NETCORE
             if (_infoBarMessageControl != null)
             {
                 _infoBarMessageControl.UnsubscribeWarningAndErrorValidator(this);
@@ -265,7 +265,7 @@ namespace Catel.Windows.Controls
                 RemoveObjectFromWatchList(oldValue);
             }
 
-#if NET
+#if NET || NETCORE
             if (!IsLoaded)
             {
                 return;
@@ -636,7 +636,7 @@ namespace Catel.Windows.Controls
             return !string.IsNullOrEmpty(message) ? message : null;
         }
 
-#if !NET
+#if !NET && !NETCORE
         /// <summary>
         /// Raises the events for all errors and warnings.
         /// </summary>

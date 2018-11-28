@@ -12,7 +12,7 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// Converter that converts whether a collection contains items or not.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(IEnumerable), typeof(bool))]
 #endif
     public class ContainsItemsConverter : ValueConverterBase

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Tests.Data
 {
@@ -17,13 +17,13 @@ namespace Catel.Tests.Data
 
     using Moq;
 
-#if NET
+#if NET || NETCORE
     using System.Threading;
 #endif
 
     public class CompositeValidatorFacts
     {
-#if NET
+#if NET || NETCORE
         [TestFixture]
         public class TheValidationSequenceIsThreadSafe
         {

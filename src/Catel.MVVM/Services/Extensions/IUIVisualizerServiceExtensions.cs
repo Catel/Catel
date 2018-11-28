@@ -158,7 +158,7 @@ namespace Catel.Services
             return viewModelFactory;
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
         /// </summary>

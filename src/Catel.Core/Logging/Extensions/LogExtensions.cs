@@ -81,7 +81,7 @@ namespace Catel.Logging
             Write(log, LogEvent.Info, "OS Version:            {0}", Environment.OSVersion.Version);
 #endif
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             Write(log, LogEvent.Info, "64-bit OS:             {0}", Environment.Is64BitOperatingSystem);
             Write(log, LogEvent.Info, "64-bit process:        {0}", Environment.Is64BitProcess);
             Write(log, LogEvent.Info, "Processor count:       {0}", Environment.ProcessorCount);

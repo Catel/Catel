@@ -11,7 +11,7 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// Converts integer to string and back.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(string), typeof(int?))]
 #endif
     public class IntToStringConverter : ValueConverterBase

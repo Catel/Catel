@@ -545,7 +545,7 @@ namespace Catel
                     return;
                 }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
                 // Second, try explicit interface implementations
                 if (UnsubscribeFromEventUsingExplicitInterfaceImplementation(source, eventName))
                 {

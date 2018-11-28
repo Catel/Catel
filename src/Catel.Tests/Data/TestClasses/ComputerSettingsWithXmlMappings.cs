@@ -1,4 +1,4 @@
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Collections.ObjectModel;
@@ -10,7 +10,7 @@ namespace Catel.Tests.Data
     /// ComputerSettingsWithXmlMappings Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [Serializable]
 #endif
     public class ComputerSettingsWithXmlMappings : ComparableModelBase
@@ -26,7 +26,7 @@ namespace Catel.Tests.Data
         {
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         ///   Initializes a new object based on <see cref = "SerializationInfo" />.
         /// </summary>

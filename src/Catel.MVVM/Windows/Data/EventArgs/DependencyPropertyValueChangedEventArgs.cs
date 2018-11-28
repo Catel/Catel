@@ -33,7 +33,7 @@ namespace Catel.Windows.Data
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
             Argument.IsNotNull("e", e);
 
-#if NET
+#if NET || NETCORE
             FxEventArgs = e;
 #else
             FxEventArgs = this;
@@ -57,7 +57,7 @@ namespace Catel.Windows.Data
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
             Argument.IsNotNull("dependencyProperty", dependencyProperty);
 
-#if NET
+#if NET || NETCORE
             FxEventArgs = new DependencyPropertyChangedEventArgs(dependencyProperty, oldValue, newValue);
 #else
             FxEventArgs = this;
@@ -73,7 +73,7 @@ namespace Catel.Windows.Data
         /// Gets the framework event args.
         /// </summary>
         /// <value>The framework event args.</value>
-#if NET
+#if NET || NETCORE
         public DependencyPropertyChangedEventArgs FxEventArgs { get; private set; }
 #else
         public DependencyPropertyValueChangedEventArgs FxEventArgs { get; private set; }

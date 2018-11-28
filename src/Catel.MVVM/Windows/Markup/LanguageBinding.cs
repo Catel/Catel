@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Windows.Markup
 {
@@ -53,7 +53,7 @@ namespace Catel.Windows.Markup
         /// Gets or sets the resource name.
         /// </summary>
         /// <value>The resource name.</value>
-#if NET
+#if NET || NETCORE
         [ConstructorArgument("resourceName")]
 #endif
         public string ResourceName { get; set; }

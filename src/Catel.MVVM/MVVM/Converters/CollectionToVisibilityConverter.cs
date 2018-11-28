@@ -22,7 +22,7 @@ namespace Catel.MVVM.Converters
     /// </summary>
     public class CollectionToCollapsingVisibilityConverter : VisibilityConverterBase
     {
-        #region Constructors
+#region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionToCollapsingVisibilityConverter"/> class.
         /// </summary>
@@ -39,7 +39,7 @@ namespace Catel.MVVM.Converters
             : base(visibility)
         {
         }
-        #endregion
+#endregion
 
         /// <summary>
         /// Determines whether the specified value is visible.
@@ -84,7 +84,7 @@ namespace Catel.MVVM.Converters
         }
     }
 
-#if NET
+#if NET || NETCORE
     /// <summary>
     /// Convert from bool to <see cref="T:System.Windows.Visibility" /> and back.
     /// The bool value true will be converted to Visibility.Visible.

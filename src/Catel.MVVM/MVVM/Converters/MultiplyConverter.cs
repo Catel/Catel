@@ -11,7 +11,7 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// Calculate the product of given value and factor in parameter.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(int), typeof(int))]
 #endif
     public class MultiplyConverter : ValueConverterBase

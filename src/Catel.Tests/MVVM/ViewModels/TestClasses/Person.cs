@@ -39,7 +39,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
     /// Person Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [Serializable]
 #endif
     public class Person : ValidatableModelBase, IPerson
@@ -55,7 +55,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         {
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Initializes a new object based on <see cref="SerializationInfo"/>.
         /// </summary>
@@ -192,7 +192,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
     /// PersonWithDataAnnotations Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [Serializable]
 #endif
     public class PersonWithDataAnnotations : ValidatableModelBase, IPerson
@@ -205,7 +205,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         {
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Initializes a new object based on <see cref="SerializationInfo"/>.
         /// </summary>
@@ -292,7 +292,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
     /// ContactInfo Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [Serializable]
 #endif
     public class ContactInfo : ModelBase, IContactInfo
@@ -308,7 +308,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         {
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Initializes a new object based on <see cref="SerializationInfo"/>.
         /// </summary>

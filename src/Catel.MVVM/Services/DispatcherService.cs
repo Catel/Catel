@@ -67,7 +67,7 @@ namespace Catel.Services
         }
 #endif
 
-#if NET || UWP
+#if NET || NETCORE || UWP
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
@@ -77,7 +77,7 @@ namespace Catel.Services
         {
             var dispatcher = CurrentDispatcher;
 
-#if NET
+#if NET || NETCORE
             return dispatcher.InvokeAsync(action).Task;
 #else
             return dispatcher.InvokeAsync(action);
