@@ -91,7 +91,7 @@ namespace Catel.Windows.Interactivity
                 return;
             }
 
-#if (NET || UWP)
+#if NET || NETCORE || UWP
             Password = AssociatedObject.Password;
 #else
             var binding = AssociatedObject.GetBindingExpression(PasswordBox.PasswordProperty);

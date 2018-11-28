@@ -20,9 +20,10 @@ namespace Catel.Services
     using Windows.Threading;
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
 #elif !XAMARIN_FORMS
-    using Windows.Threading;
+    using Catel.Windows.Threading;
     using System.Windows.Threading;
-#else 
+    using DispatcherExtensions = Windows.Threading.DispatcherExtensions;
+#else
     using System.Threading;
     using Xamarin.Forms;
 #endif

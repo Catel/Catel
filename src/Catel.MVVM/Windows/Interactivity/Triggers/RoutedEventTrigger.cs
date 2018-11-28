@@ -21,7 +21,9 @@ namespace Catel.Windows.Interactivity
         /// Gets or sets the routed event.
         /// </summary>
         /// <value>The routed event.</value>
+#pragma warning disable WPF0107
         public RoutedEvent RoutedEvent { get; set; }
+#pragma warning restore WPF0107
         #endregion
 
         #region Methods
