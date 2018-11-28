@@ -1198,7 +1198,9 @@ namespace Catel.Reflection
 #endif
 
 #else
-#if XAMARIN
+#if NET || NETCORE || NETSTANDARD
+            return type.GetMethod(name, bindingFlags, null, types, null);
+#elif XAMARIN
             return type.GetTypeInfo().GetMethod(name, types);
 #else
             return type.GetTypeInfo().GetMethod(name, types, bindingFlags);

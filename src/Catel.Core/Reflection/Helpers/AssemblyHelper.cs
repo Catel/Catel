@@ -353,7 +353,9 @@ namespace Catel.Reflection
                 var offset = TimeSpan.FromSeconds(coffHeader.TimeDateStamp);
                 var utcTime = utcStart.Add(offset);
 
+#pragma warning disable CS0618 // Type or member is obsolete
                 var localTime = TimeZone.CurrentTimeZone.ToLocalTime(utcTime);
+#pragma warning restore CS0618 // Type or member is obsolete
                 if (localTime > DateTime.Now.AddDays(1))
                 {
                     // Something is off here, are we running a .NET core "deterministic" app?

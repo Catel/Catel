@@ -191,7 +191,7 @@ namespace Catel
                 var currentProcessName = currentProcess.ProcessName;
                 if (supportParentProcesses && currentProcessName.ContainsIgnoreCase("vshost"))
                 {
-#if NET || NETCORE
+#if NET
                     currentProcess = currentProcess.GetParent();
                     if (currentProcess == null)
                     {
