@@ -8,10 +8,10 @@ Catel history
 
 For more information about issues or new feature requests, please visit:
 
-Project website: http://www.catelproject.com
-Issue tracker:   http://www.catelproject.com/support/issue-tracker
-Documentation:   http://www.catelproject.com/support/documentation
-License:         http://www.catelproject.com/about/license
+Project website: https://www.catelproject.com
+Issue tracker:   https://www.catelproject.com/support/issue-tracker
+Documentation:   https://www.catelproject.com/support/documentation
+License:         https://www.catelproject.com/about/license
 
 Items prepended with CTL are from JIRA (old issue tracker). Items prepended with a # are from GitHub.
 
@@ -21,7 +21,7 @@ Items prepended with CTL are from JIRA (old issue tracker). Items prepended with
 Version 5.9.0
 ==================
 
-For an upgrade guide, visit http://docs.catelproject.com/vnext/setup-deployment/update-guides/
+For an upgrade guide, visit https://docs.catelproject.com/vnext/setup-deployment/update-guides/
 
 Release date
 ============
@@ -46,11 +46,11 @@ Added/fixed
 
 Roadmap
 =======
-See http://www.catelproject.com/support/issue-tracker
+See https://www.catelproject.com/support/issue-tracker
 
 Known issues
 ============
-See http://www.catelproject.com/support/issue-tracker
+See https://www.catelproject.com/support/issue-tracker
 
 
 **********************************************************
