@@ -60,6 +60,7 @@ namespace Catel.Reflection
                     }
                 }
 
+                // Note: web should only be checked in .NET
 #if NET
                 var httpApplication = HttpContextHelper.GetHttpApplicationInstance();
                 if (httpApplication != null)
@@ -76,13 +77,19 @@ namespace Catel.Reflection
                         assembly = type.Assembly;
                     }
                 }
+#endif
 
-                if (assembly == null)
+#if NET || NETCORE
+                if (assembly is null)
                 {
                     assembly = Assembly.GetEntryAssembly();
                 }
+#elif NETFX_CORE
+                assembly = global::Windows.UI.Xaml.Application.Current.GetType().GetAssemblyEx();
+#endif
 
-                if (assembly == null)
+#if NET
+                if (assembly is null)
                 {
                     var appDomain = AppDomain.CurrentDomain;
                     var setupInfo = appDomain.SetupInformation;
@@ -92,10 +99,6 @@ namespace Catel.Reflection
                                 where !x.IsDynamicAssembly() && string.Equals(x.Location, assemblyPath)
                                 select x).FirstOrDefault();
                 }
-#elif NETFX_CORE
-                assembly = global::Windows.UI.Xaml.Application.Current.GetType().GetAssemblyEx();
-#else
-                assembly = typeof(AssemblyHelper).GetAssemblyEx();
 #endif
             }
             catch (Exception ex)
@@ -103,7 +106,7 @@ namespace Catel.Reflection
                 Log.Error(ex, "Failed to get assembly");
             }
 
-            if (assembly == null)
+            if (assembly is null)
             {
                 Log.Warning("Entry assembly could not be determined, returning Catel.Core as fallback");
 
