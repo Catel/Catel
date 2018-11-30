@@ -21,6 +21,14 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
   
+  <!-- 
+    Fix for .NET Core 3.0, see https://github.com/dotnet/core-sdk/issues/192, it 
+    uses obj/release instead of [outputdirectory] 
+  -->
+  <PropertyGroup Condition=" '$(DotNetPackIntermediateOutputPath)' != '' ">
+    <IntermediateOutputPath>$(DotNetPackIntermediateOutputPath)</IntermediateOutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Update="**\*.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
