@@ -11,6 +11,7 @@ namespace Catel.Tests.MVVM.ViewModels
     using System.Threading;
     using System.Threading.Tasks;
     using Auditing;
+    using Catel.Data;
     using Catel.MVVM;
     using Catel.MVVM.Auditing;
     using NUnit.Framework;
@@ -25,6 +26,31 @@ namespace Catel.Tests.MVVM.ViewModels
             var vm = new TestViewModel();
 
             Assert.IsFalse(vm.IsDirty);
+        }
+
+        [TestCase]
+        public async Task ProtectPropertiesAfterClosingAsync()
+        {
+            var vm = new TestViewModel();
+            var freezable = (IFreezable)vm;
+
+            await vm.InitializeViewModelAsync();
+
+            vm.FirstName = "John";
+            Assert.AreEqual("John", vm.FirstName);
+            Assert.IsFalse(freezable.IsFrozen);
+
+            await vm.SaveAndCloseViewModelAsync();
+
+            vm.FirstName = "Jane";
+            Assert.AreEqual("John", vm.FirstName);
+            Assert.IsTrue(freezable.IsFrozen);
+
+            await vm.InitializeViewModelAsync();
+
+            vm.FirstName = "Jane";
+            Assert.AreEqual("Jane", vm.FirstName);
+            Assert.IsFalse(freezable.IsFrozen);
         }
 
         [TestCase]
@@ -119,7 +145,7 @@ namespace Catel.Tests.MVVM.ViewModels
 
                     lock (allViewModels)
                     {
-                        allViewModels[(int) index] = localViewModels;
+                        allViewModels[(int)index] = localViewModels;
                     }
                 });
             }
@@ -162,12 +188,14 @@ namespace Catel.Tests.MVVM.ViewModels
                     var localViewModels = new TestViewModel[personsPerThread];
                     for (int j = 0; j < personsPerThread; j++)
                     {
-                        var viewModel = new TestViewModel();
-                        viewModel.Age = 18;
+                        var viewModel = new TestViewModel
+                        {
+                            Age = 18
+                        };
                         viewModel.Age = 19;
                         localViewModels[j] = viewModel;
                     }
-                    allViewModels[(int) index] = localViewModels;
+                    allViewModels[(int)index] = localViewModels;
                 });
             }
 
@@ -213,7 +241,7 @@ namespace Catel.Tests.MVVM.ViewModels
                         viewModel.GenerateData.Execute();
                         localViewModels[j] = viewModel;
                     }
-                    allViewModels[(int) index] = localViewModels;
+                    allViewModels[(int)index] = localViewModels;
                 });
             }
 

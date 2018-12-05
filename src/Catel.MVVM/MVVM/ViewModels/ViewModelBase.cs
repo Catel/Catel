@@ -1346,6 +1346,8 @@ namespace Catel.MVVM
         {
             if (!IsInitializing && !IsInitialized)
             {
+                ((IFreezable)this).Unfreeze();
+
                 IsInitializing = true;
 
                 await InitializeAsync();
@@ -1515,6 +1517,8 @@ namespace Catel.MVVM
             IsClosed = true;
 
             await OnClosedAsync(result);
+
+            ((IFreezable)this).Freeze();
 
             var type = GetType();
 

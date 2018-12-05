@@ -48,7 +48,7 @@ namespace Catel.Data
             Argument.IsNotNull("property", property);
 
             // Is the object currently read-only (and aren't we changing that)?
-            if (IsReadOnly)
+            if (IsReadOnly || _isFrozen)
             {
                 if (property != IsReadOnlyProperty)
                 {
