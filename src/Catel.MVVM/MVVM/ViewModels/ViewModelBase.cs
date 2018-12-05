@@ -1515,6 +1515,7 @@ namespace Catel.MVVM
             // if the vm is closed)
             IsClosing = false;
             IsClosed = true;
+            IsInitialized = false;
 
             await OnClosedAsync(result);
 

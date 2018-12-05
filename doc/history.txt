@@ -43,6 +43,7 @@ Added/fixed
 (+) #1240 Add support for .NET Core 3.0
 (+) #1241 Add IFreezable on ModelBase to allow the object to freeze and protect it from property changes. The ViewModelBase
     will automatically freeze during closing and unfreeze during initialization
+(*) #1242 Reset ViewModelBase.IsInitialized in CloseViewModel to allow later re-initialization
 (x) #1232 NavigationService.Navigate leads to endless loop when MainPage is MasterDetailPage
 (x) #1236 Add missing Catel.MVVM resources to Catel.MVVM.Xamarin.Forms
 
