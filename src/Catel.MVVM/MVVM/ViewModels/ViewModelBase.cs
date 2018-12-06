@@ -20,7 +20,6 @@ namespace Catel.MVVM
     using Logging;
     using Reflection;
     using Services;
-    using System.Collections.ObjectModel;
     using Threading;
     using System.Collections.Concurrent;
 
@@ -1517,9 +1516,9 @@ namespace Catel.MVVM
             IsClosed = true;
             IsInitialized = false;
 
-            await OnClosedAsync(result);
-
             ((IFreezable)this).Freeze();
+
+            await OnClosedAsync(result);
 
             var type = GetType();
 
