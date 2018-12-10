@@ -169,113 +169,77 @@ private void PackageComponents()
         var projectDirectory = string.Format("./src/{0}", component);
         var projectFileName = string.Format("{0}/{1}.csproj", projectDirectory, component);
 
-        // Note: we have a bug where UAP10.0 cannot be packaged, for details see 
-        // https://github.com/dotnet/cli/issues/9303
-        // 
-        // Therefore we will use VS instead for packing and lose the ability to sign
-        var useDotNetPack = true;
-
         var projectFileContents = FileReadText(projectFileName);
         if (!string.IsNullOrWhiteSpace(projectFileContents))
         {
-            useDotNetPack = !projectFileContents.ToLower().Contains("uap10.0");
+            if (projectFileContents.ToLower().Contains("uap10.0"))
+            {
+                Warning("UAP 10.0 is detected as one of the target frameworks, make sure to install the latest version of .NET Core in order to pack UAP 10.0 assemblies. See https://github.com/dotnet/cli/issues/9303 for more info");
+            }
         }
 
         var outputDirectory = string.Format("{0}/{1}/", OutputRootDirectory, component);
         Information("Output directory: '{0}'", outputDirectory);
 
-        if (useDotNetPack)
+        // Step 1: remove intermediate files to ensure we have the same results on the build server, somehow NuGet 
+        // targets tries to find the resource assemblies in [ProjectName]\obj\Release\net46\de\[ProjectName].resources.dll',
+        // we won't run a clean on the project since it will clean out the actual output (which we still need for packaging)
+
+        Information("Cleaning intermediate files for component '{0}'", component);
+
+        var binFolderPattern = string.Format("{0}/bin/{1}/**.dll", projectDirectory, ConfigurationName);
+
+        Information("Deleting 'bin' directory contents using '{0}'", binFolderPattern);
+
+        var binFiles = GetFiles(binFolderPattern);
+        DeleteFiles(binFiles);
+
+        var objFolderPattern = string.Format("{0}/obj/{1}/**.dll", projectDirectory, ConfigurationName);
+
+        Information("Deleting 'bin' directory contents using '{0}'", objFolderPattern);
+
+        var objFiles = GetFiles(objFolderPattern);
+        DeleteFiles(objFiles);
+
+        Information(string.Empty);
+
+        // Step 2: Go packaging!
+
+        Information("Using 'dotnet pack' to package '{0}'", component);
+
+        var msBuildSettings = new DotNetCoreMSBuildSettings
         {
-            // Step 1: remove intermediate files to ensure we have the same results on the build server, somehow NuGet 
-            // targets tries to find the resource assemblies in [ProjectName]\obj\Release\net46\de\[ProjectName].resources.dll',
-            // we won't run a clean on the project since it will clean out the actual output (which we still need for packaging)
+            //Verbosity = DotNetCoreVerbosity.Diagnostic // DotNetCoreVerbosity.Minimal,
+        };
 
-            Information("Cleaning intermediate files for component '{0}'", component);
+        // Note: we need to set OverridableOutputPath because we need to be able to respect
+        // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
+        // are properties passed in using the command line)
+        msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
+        msBuildSettings.WithProperty("PackageOutputPath", OutputRootDirectory);
+        msBuildSettings.WithProperty("ConfigurationName", ConfigurationName);
+        msBuildSettings.WithProperty("PackageVersion", VersionNuGet);
 
-            var binFolderPattern = string.Format("{0}/bin/{1}/**.dll", projectDirectory, ConfigurationName);
+        // Fix for .NET Core 3.0, see https://github.com/dotnet/core-sdk/issues/192, it
+        // uses obj/release instead of [outputdirectory]
+        msBuildSettings.WithProperty("DotNetPackIntermediateOutputPath", outputDirectory);
 
-            Information("Deleting 'bin' directory contents using '{0}'", binFolderPattern);
+        // msBuildSettings.AddFileLogger(new MSBuildFileLoggerSettings
+        // {
+        //     Verbosity = DotNetCoreVerbosity.Diagnostic,
+        //     LogFile = System.IO.Path.Combine(OutputRootDirectory, string.Format(@"MsBuild_dotnet_pack_{0}.log", component))
+        // });
 
-            var binFiles = GetFiles(binFolderPattern);
-            DeleteFiles(binFiles);
-
-            var objFolderPattern = string.Format("{0}/obj/{1}/**.dll", projectDirectory, ConfigurationName);
-
-            Information("Deleting 'bin' directory contents using '{0}'", objFolderPattern);
-
-            var objFiles = GetFiles(objFolderPattern);
-            DeleteFiles(objFiles);
-
-            Information(string.Empty);
-
-            // Step 2: Go packaging!
-
-            Information("Using 'dotnet pack' to package '{0}'", component);
-
-            var msBuildSettings = new DotNetCoreMSBuildSettings
-            {
-                //Verbosity = DotNetCoreVerbosity.Diagnostic // DotNetCoreVerbosity.Minimal,
-            };
-
-            // Note: we need to set OverridableOutputPath because we need to be able to respect
-            // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
-            // are properties passed in using the command line)
-            msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
-            msBuildSettings.WithProperty("PackageOutputPath", OutputRootDirectory);
-            msBuildSettings.WithProperty("ConfigurationName", ConfigurationName);
-            msBuildSettings.WithProperty("PackageVersion", VersionNuGet);
-
-            // Fix for .NET Core 3.0, see https://github.com/dotnet/core-sdk/issues/192, it
-            // uses obj/release instead of [outputdirectory]
-            msBuildSettings.WithProperty("DotNetPackIntermediateOutputPath", outputDirectory);
-
-            // msBuildSettings.AddFileLogger(new MSBuildFileLoggerSettings
-            // {
-            //     Verbosity = DotNetCoreVerbosity.Diagnostic,
-            //     LogFile = System.IO.Path.Combine(OutputRootDirectory, string.Format(@"MsBuild_dotnet_pack_{0}.log", component))
-            // });
-
-            var packSettings = new DotNetCorePackSettings
-            {
-                MSBuildSettings = msBuildSettings,
-                OutputDirectory = OutputRootDirectory,
-                Configuration = ConfigurationName,
-                NoBuild = true,
-                Verbosity = msBuildSettings.Verbosity
-            };
-
-            DotNetCorePack(projectFileName, packSettings);
-        }
-        else
+        var packSettings = new DotNetCorePackSettings
         {
-            Warning("Using Visual Studio to pack instead of 'dotnet pack' for '{0}' because UAP 10.0 project was detected. Unfortunately assemblies will not be signed inside the NuGet package", component);
+            MSBuildSettings = msBuildSettings,
+            OutputDirectory = OutputRootDirectory,
+            Configuration = ConfigurationName,
+            NoBuild = true,
+            Verbosity = msBuildSettings.Verbosity
+        };
 
-            var msBuildSettings = new MSBuildSettings 
-            {
-                Verbosity = Verbosity.Minimal, // Verbosity.Diagnostic
-                ToolVersion = MSBuildToolVersion.Default,
-                Configuration = ConfigurationName,
-                MSBuildPlatform = MSBuildPlatform.x86, // Always require x86, see platform for actual target platform
-                PlatformTarget = PlatformTarget.MSIL
-            };
-
-            var toolPath = GetVisualStudioPath(msBuildSettings.ToolVersion);
-            if (!string.IsNullOrWhiteSpace(toolPath))
-            {
-                msBuildSettings.ToolPath = toolPath;
-            }
-
-            // Note: we need to set OverridableOutputPath because we need to be able to respect
-            // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
-            // are properties passed in using the command line)
-            msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
-            msBuildSettings.WithProperty("PackageOutputPath", OutputRootDirectory);
-            msBuildSettings.WithProperty("ConfigurationName", ConfigurationName);
-            msBuildSettings.WithProperty("PackageVersion", VersionNuGet);
-            msBuildSettings = msBuildSettings.WithTarget("pack");
-
-            MSBuild(projectFileName, msBuildSettings);
-        }
+        DotNetCorePack(projectFileName, packSettings);
         
         LogSeparator();
     }
