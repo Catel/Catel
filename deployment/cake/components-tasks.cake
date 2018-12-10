@@ -289,7 +289,7 @@ private void PackageComponents()
 
         foreach (var fileToSign in filesToSign)
         {
-            Information("Signing NuGet package '{0}'", fileToSign);
+            Information("Signing NuGet package '{0}' using certificate subject '{1}'", fileToSign, CodeSignCertificateSubjectName);
 
             var exitCode = StartProcess(NuGetExe, new ProcessSettings
             {

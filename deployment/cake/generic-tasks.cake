@@ -272,7 +272,7 @@ Task("CodeSign")
         return;
     }
 
-    Information("Found '{0}' files to code sign, this can take a few minutes...", filesToSign.Count);
+    Information("Found '{0}' files to code sign using subject name '{1}', this can take a few minutes...", filesToSign.Count, CodeSignCertificateSubjectName);
 
     var signToolSignSettings = new SignToolSignSettings 
     {
