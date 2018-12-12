@@ -90,6 +90,9 @@ private void BuildWebApps()
             msBuildSettings.ToolPath = toolPath;
         }
 
+        // Always disable SourceLink
+        msBuildSettings.WithProperty("EnableSourceLink", "false");
+
         // Note: we need to set OverridableOutputPath because we need to be able to respect
         // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
         // are properties passed in using the command line)

@@ -2,6 +2,8 @@
 
 #addin "nuget:?package=Cake.FileHelpers&version=3.0.0"
 
+using System.Xml.Linq;
+
 //-------------------------------------------------------------
 
 private string GetComponentNuGetRepositoryUrl(string projectName)
@@ -122,7 +124,8 @@ private void BuildComponents()
         var projectFileName = GetProjectFileName(component);
         
         var msBuildSettings = new MSBuildSettings {
-            Verbosity = Verbosity.Quiet, // Verbosity.Diagnostic
+            Verbosity = Verbosity.Quiet,
+            //Verbosity = Verbosity.Diagnostic,
             ToolVersion = MSBuildToolVersion.Default,
             Configuration = ConfigurationName,
             MSBuildPlatform = MSBuildPlatform.x86, // Always require x86, see platform for actual target platform
@@ -135,6 +138,13 @@ private void BuildComponents()
             msBuildSettings.ToolPath = toolPath;
         }
 
+        // msBuildSettings.AddFileLogger(new MSBuildFileLogger
+        // {
+        //     //Verbosity = msBuildSettings.Verbosity,
+        //     Verbosity = Verbosity.Diagnostic,
+        //     LogFile = System.IO.Path.Combine(OutputRootDirectory, string.Format(@"MsBuild_{0}_build.log", component))
+        // });
+
         // Note: we need to set OverridableOutputPath because we need to be able to respect
         // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
         // are properties passed in using the command line)
@@ -144,11 +154,72 @@ private void BuildComponents()
         msBuildSettings.WithProperty("PackageOutputPath", OutputRootDirectory);
 
         // SourceLink specific stuff
-        msBuildSettings.WithProperty("PublishRepositoryUrl", "true");
-        
-        // For SourceLink to work, the .csproj should contain something like this:
-        // <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02 " PrivateAssets="all" />
-        
+        var repositoryUrl = RepositoryUrl;
+        if (!IsLocalBuild && !string.IsNullOrWhiteSpace(repositoryUrl))
+        {       
+            Information("Repository url is specified, enabling SourceLink to commit '{0}/commit/{1}'", repositoryUrl, RepositoryCommitId);
+
+            // TODO: For now we are assuming everything is git, we might need to change that in the future
+            // See why we set the values at https://github.com/dotnet/sourcelink/issues/159#issuecomment-427639278
+            msBuildSettings.WithProperty("EnableSourceLink", "true");
+            msBuildSettings.WithProperty("EnableSourceControlManagerQueries", "false");
+            msBuildSettings.WithProperty("PublishRepositoryUrl", "true");
+            msBuildSettings.WithProperty("RepositoryType", "git");
+            msBuildSettings.WithProperty("RepositoryUrl", repositoryUrl);
+            msBuildSettings.WithProperty("RevisionId", RepositoryCommitId);
+
+            // For SourceLink to work, the .csproj should contain something like this:
+            // <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="all" />
+            var projectFileContents = System.IO.File.ReadAllText(projectFileName);
+            if (!projectFileContents.Contains("Microsoft.SourceLink.GitHub"))
+            {
+                Warning("No SourceLink reference found, automatically injecting SourceLink package reference now");
+
+                //const string MSBuildNS = (XNamespace) "http://schemas.microsoft.com/developer/msbuild/2003";
+
+                var xmlDocument = XDocument.Parse(projectFileContents);
+                var projectElement = xmlDocument.Root;
+
+                // Item group with package reference
+                var referencesItemGroup = new XElement("ItemGroup");
+                var sourceLinkPackageReference = new XElement("PackageReference");
+                sourceLinkPackageReference.Add(new XAttribute("Include", "Microsoft.SourceLink.GitHub"));
+                sourceLinkPackageReference.Add(new XAttribute("Version", "1.0.0-beta-63127-02"));
+                sourceLinkPackageReference.Add(new XAttribute("PrivateAssets", "all"));
+
+                referencesItemGroup.Add(sourceLinkPackageReference);
+                projectElement.Add(referencesItemGroup);
+
+                // Item group with source root
+                // <SourceRoot Include="{repository root}" RepositoryUrl="{repository url}"/>
+                var sourceRootItemGroup = new XElement("ItemGroup");
+                var sourceRoot = new XElement("SourceRoot");
+
+                // Required to end with a \
+                var sourceRootValue = RootDirectory;
+                if (!sourceRootValue.EndsWith("\\"))
+                {
+                    sourceRootValue += "\\";
+                };
+
+                sourceRoot.Add(new XAttribute("Include", sourceRootValue));
+                sourceRoot.Add(new XAttribute("RepositoryUrl", repositoryUrl));
+
+                // Note: since we are not allowing source control manager queries (we don't want to require a .git directory),
+                // we must specify the additional information below
+                sourceRoot.Add(new XAttribute("SourceControl", "git"));
+                sourceRoot.Add(new XAttribute("RevisionId", RepositoryCommitId));
+
+                sourceRootItemGroup.Add(sourceRoot);
+                projectElement.Add(sourceRootItemGroup);
+
+                xmlDocument.Save(projectFileName);
+
+                // Restore packages again for the dynamic package
+                RestoreNuGetPackages(projectFileName);
+            }
+        }
+
         MSBuild(projectFileName, msBuildSettings);
     }
 }
@@ -227,7 +298,7 @@ private void PackageComponents()
         // msBuildSettings.AddFileLogger(new MSBuildFileLoggerSettings
         // {
         //     Verbosity = DotNetCoreVerbosity.Diagnostic,
-        //     LogFile = System.IO.Path.Combine(OutputRootDirectory, string.Format(@"MsBuild_dotnet_pack_{0}.log", component))
+        //     LogFile = System.IO.Path.Combine(OutputRootDirectory, string.Format(@"MsBuild_{0}_pack.log", component))
         // });
 
         var packSettings = new DotNetCorePackSettings

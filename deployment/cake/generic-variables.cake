@@ -1,5 +1,27 @@
 #l "buildserver.cake"
 
+//-------------------------------------------------------------
+
+GitVersion _gitVersionContext;
+
+public GitVersion GitVersionContext
+{
+    get
+    {
+        if (_gitVersionContext is null)
+        {
+            _gitVersionContext = GitVersion(new GitVersionSettings 
+            {
+                UpdateAssemblyInfo = false
+            });
+        }
+
+        return _gitVersionContext;
+    }
+}
+
+//-------------------------------------------------------------
+
 // Target
 var Target = GetBuildServerVariable("Target", "Default");
 
@@ -11,21 +33,6 @@ var StartYear = GetBuildServerVariable("StartYear");
 var VersionMajorMinorPatch = GetBuildServerVariable("GitVersion_MajorMinorPatch", "unknown");
 var VersionFullSemVer = GetBuildServerVariable("GitVersion_FullSemVer", "unknown");
 var VersionNuGet = GetBuildServerVariable("GitVersion_NuGetVersion", "unknown");
-
-if (VersionNuGet == "unknown")
-{
-    Information("No version info specified, falling back to GitVersion");
-
-    // Fallback to GitVersion
-    var gitVersion = GitVersion(new GitVersionSettings 
-    {
-        UpdateAssemblyInfo = false
-    });
-    
-    VersionMajorMinorPatch = gitVersion.MajorMinorPatch;
-    VersionFullSemVer = gitVersion.FullSemVer;
-    VersionNuGet = gitVersion.NuGetVersionV2;
-}
 
 // NuGet
 var NuGetPackageSources = GetBuildServerVariable("NuGetPackageSources");
@@ -50,6 +57,7 @@ if (IsLocalBuild)
     ConfigurationName = "Debug";
 }
 
+var RootDirectory = System.IO.Path.GetFullPath(".");
 var OutputRootDirectory = GetBuildServerVariable("OutputRootDirectory", string.Format("./output/{0}", ConfigurationName));
 
 // Code signing
@@ -81,6 +89,26 @@ var Exclude = GetBuildServerVariable("Exclude", string.Empty);
 //-------------------------------------------------------------
 
 // Update some variables (like expanding paths, etc)
+
+if (VersionNuGet == "unknown")
+{
+    Information("No version info specified, falling back to GitVersion");
+
+    var gitVersion = GitVersionContext;
+    
+    VersionMajorMinorPatch = gitVersion.MajorMinorPatch;
+    VersionFullSemVer = gitVersion.FullSemVer;
+    VersionNuGet = gitVersion.NuGetVersionV2;
+}
+
+if (string.IsNullOrWhiteSpace(RepositoryCommitId))
+{
+    Information("No commit id specified, falling back to GitVersion");
+
+    var gitVersion = GitVersionContext;
+
+    RepositoryCommitId = gitVersion.Sha;
+}
 
 OutputRootDirectory = System.IO.Path.GetFullPath(OutputRootDirectory);
 

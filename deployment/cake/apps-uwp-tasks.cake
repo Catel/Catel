@@ -146,6 +146,9 @@ private void BuildUwpApps()
             msBuildSettings.ToolPath = toolPath;
         }
 
+        // Always disable SourceLink
+        msBuildSettings.WithProperty("EnableSourceLink", "false");
+
         // See https://docs.microsoft.com/en-us/windows/uwp/packaging/auto-build-package-uwp-apps for all the details
         //msBuildSettings.Properties["UseDotNetNativeToolchain"] = new List<string>(new [] { "false" });
         //msBuildSettings.Properties["UapAppxPackageBuildMode"] = new List<string>(new [] { "StoreUpload" });

@@ -22,6 +22,39 @@ private void LogSeparator()
 
 //-------------------------------------------------------------
 
+private void RestoreNuGetPackages(Cake.Core.IO.FilePath solutionOrProjectFileName)
+{
+    Information("Restoring packages for {0}", solutionOrProjectFileName);
+    
+    try
+    {
+        var nuGetRestoreSettings = new NuGetRestoreSettings
+        {
+        };
+
+        if (!string.IsNullOrWhiteSpace(NuGetPackageSources))
+        {
+            var sources = new List<string>();
+
+            foreach (var splitted in NuGetPackageSources.Split(new [] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                sources.Add(splitted);
+            }
+            
+            if (sources.Count > 0)
+            {
+                nuGetRestoreSettings.Source = sources;
+            }
+        }
+
+        NuGetRestore(solutionOrProjectFileName, nuGetRestoreSettings);
+    }
+    catch (Exception)
+    {
+        // Ignore
+    }
+}
+
 private string GetVisualStudioPath(MSBuildToolVersion toolVersion)
 {
     if (UseVisualStudioPrerelease)

@@ -62,6 +62,9 @@ private void BuildTestProjects()
             msBuildSettings.ToolPath = toolPath;
         }
 
+        // Always disable SourceLink
+        msBuildSettings.WithProperty("EnableSourceLink", "false");
+
         // Force disable SonarQube
         msBuildSettings.WithProperty("SonarQubeExclude", "true");
 

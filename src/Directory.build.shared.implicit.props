@@ -18,25 +18,16 @@
   </PropertyGroup>
 
   <!-- Note: Portable PDB's are disabled for now since ApiApprover breaks because of this -->
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+  <!-- <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <DebugType>pdbonly</DebugType>
-  </PropertyGroup>
+  </PropertyGroup> -->
   
   <!-- Enforce portable pdb format -->
-  <!--<PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <DebugType>portable</DebugType>
-  </PropertyGroup>-->
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
 
-  <!-- (temporary?) workaround for https://github.com/dotnet/sdk/issues/1458, but note that this breaks resources in UWP projects -->
-  <ItemGroup>
-    <!-- 
-        Disabled for now since portable PDB are disabled as well since they don't work for the full .NET Framework,
-        consider moving this to explicit with the right targets. Note that it doesn't do anything else than allowing
-        pdb files to be included in AllowedOutputExtensionsInPackageBuildOutputFolder, which is already done above
-     -->
-    <!-- <PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.8.3" PrivateAssets="All" /> -->
-  </ItemGroup>
-  
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>

@@ -117,35 +117,7 @@ Task("RestorePackages")
 
     foreach(var file in allFiles)
     {
-        Information("Restoring packages for {0}", file);
-        
-        try
-        {
-            var nuGetRestoreSettings = new NuGetRestoreSettings
-            {
-            };
-
-            if (!string.IsNullOrWhiteSpace(NuGetPackageSources))
-            {
-                var sources = new List<string>();
-
-                foreach (var splitted in NuGetPackageSources.Split(new [] { ';' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    sources.Add(splitted);
-                }
-                
-                if (sources.Count > 0)
-                {
-                    nuGetRestoreSettings.Source = sources;
-                }
-            }
-
-            NuGetRestore(file, nuGetRestoreSettings);
-        }
-        catch (Exception)
-        {
-            // Ignore
-        }
+        RestoreNuGetPackages(file);
     }
 });
 
