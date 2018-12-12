@@ -291,6 +291,20 @@ private void PackageComponents()
         msBuildSettings.WithProperty("ConfigurationName", ConfigurationName);
         msBuildSettings.WithProperty("PackageVersion", VersionNuGet);
 
+        // SourceLink specific stuff
+        var repositoryUrl = RepositoryUrl;
+        if (!IsLocalBuild && !string.IsNullOrWhiteSpace(repositoryUrl))
+        {       
+            Information("Repository url is specified, adding commit specific data to package");
+
+            // TODO: For now we are assuming everything is git, we might need to change that in the future
+            // See why we set the values at https://github.com/dotnet/sourcelink/issues/159#issuecomment-427639278
+            msBuildSettings.WithProperty("PublishRepositoryUrl", "true");
+            msBuildSettings.WithProperty("RepositoryType", "git");
+            msBuildSettings.WithProperty("RepositoryUrl", repositoryUrl);
+            msBuildSettings.WithProperty("RevisionId", RepositoryCommitId);
+        }
+
         // Fix for .NET Core 3.0, see https://github.com/dotnet/core-sdk/issues/192, it
         // uses obj/release instead of [outputdirectory]
         msBuildSettings.WithProperty("DotNetPackIntermediateOutputPath", outputDirectory);
