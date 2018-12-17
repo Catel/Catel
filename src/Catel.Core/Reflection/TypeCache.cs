@@ -101,6 +101,8 @@ namespace Catel.Reflection
             ShouldIgnoreAssemblyEvaluators = new List<Func<Assembly, bool>>();
             ShouldIgnoreTypeEvaluators = new List<Func<Assembly, Type, bool>>();
 
+            ShouldIgnoreAssemblyEvaluators.Add(new Func<Assembly, bool>(x => x.FullName?.Contains(".resources.") ?? false));
+
 #if NET || NETCORE || NETSTANDARD
             AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
 
@@ -904,7 +906,7 @@ namespace Catel.Reflection
 
             foreach (var evaluator in ShouldIgnoreAssemblyEvaluators)
             {
-                if (evaluator.Invoke(assembly))
+                if (evaluator(assembly))
                 {
                     return true;
                 }
@@ -968,7 +970,7 @@ namespace Catel.Reflection
 
             foreach (var evaluator in ShouldIgnoreTypeEvaluators)
             {
-                if (evaluator.Invoke(assembly, type))
+                if (evaluator(assembly, type))
                 {
                     return true;
                 }
