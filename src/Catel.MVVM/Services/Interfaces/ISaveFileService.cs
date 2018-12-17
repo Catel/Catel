@@ -7,18 +7,18 @@
 namespace Catel.Services
 {
     using System.Threading.Tasks;
-    
-#if NETFX_CORE
+
+#if UWP
     using System.IO;
     using global::Windows.Storage;
 #endif
 
     /// <summary>
-	/// Interface for the Save File service.
-	/// </summary>
-	public interface ISaveFileService : IFileSupport
+    /// Interface for the Save File service.
+    /// </summary>
+    public interface ISaveFileService : IFileSupport
 	{
-#if NETFX_CORE
+#if UWP
 		/// <summary>
 		/// Determines the filename of the file what will be used.
 		/// </summary>

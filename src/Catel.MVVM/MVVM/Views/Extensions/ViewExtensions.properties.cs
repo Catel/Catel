@@ -14,7 +14,7 @@ namespace Catel.MVVM.Views
 #if XAMARIN || XAMARIN_FORMS
     // nothing
     using Catel.Collections;
-#elif NETFX_CORE
+#elif UWP
     using Catel.Windows.Data;
     using global::Windows.UI.Xaml;
 #else

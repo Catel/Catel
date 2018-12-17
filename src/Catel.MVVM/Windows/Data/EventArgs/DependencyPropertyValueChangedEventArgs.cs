@@ -10,7 +10,7 @@ namespace Catel.Windows.Data
 {
     using System;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
 #else
     using System.Windows;

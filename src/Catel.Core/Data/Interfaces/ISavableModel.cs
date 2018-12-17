@@ -9,7 +9,7 @@ namespace Catel.Data
     using System.IO;
     using Runtime.Serialization;
 
-#if NETFX_CORE
+#if UWP
     using Windows.Storage.Streams;
 #endif
 
@@ -21,7 +21,7 @@ namespace Catel.Data
         #region Methods
 #if NET || NETCORE || NETSTANDARD || XAMARIN
         // No overloads required
-#elif NETFX_CORE
+#elif UWP
         /// <summary>
         /// Saves the object to an isolated storage file stream using the default formatting.
         /// </summary>

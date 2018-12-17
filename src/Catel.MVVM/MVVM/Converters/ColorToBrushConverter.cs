@@ -10,7 +10,7 @@ namespace Catel.MVVM.Converters
 {
     using System;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI;
     using global::Windows.UI.Xaml.Media;
 #else

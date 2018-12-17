@@ -19,7 +19,7 @@ namespace Catel.Services
     using Catel.Windows.Threading;
     using Threading;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
 #else
     using System.Windows.Controls;

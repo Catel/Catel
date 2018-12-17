@@ -16,7 +16,7 @@ namespace Catel.Services
     using Collections;
     using Reflection;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Controls.Primitives;

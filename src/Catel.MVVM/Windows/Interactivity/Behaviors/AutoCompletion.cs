@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETCORE || NETFX_CORE
+#if NET || NETCORE || UWP
 
 namespace Catel.Windows.Interactivity
 {
@@ -14,7 +14,7 @@ namespace Catel.Windows.Interactivity
     using IoC;
     using Input;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.Foundation;
     using global::Windows.UI;
     using global::Windows.UI.Xaml;
@@ -62,7 +62,7 @@ namespace Catel.Windows.Interactivity
             _suggestionListBox = new ListBox();
             _suggestionListBox.Margin = new Thickness(0d);
 
-#if NETFX_CORE
+#if UWP
             _suggestionListBox.Background = new SolidColorBrush(Colors.Gainsboro);
 #endif
 
@@ -71,7 +71,7 @@ namespace Catel.Windows.Interactivity
 
 #if NET || NETCORE
             _popup.StaysOpen = false;
-#elif NETFX_CORE
+#elif UWP
             _popup.IsLightDismissEnabled = true;
 #else
             // To determine
@@ -178,7 +178,7 @@ namespace Catel.Windows.Interactivity
 
                 _suggestionListBox.SelectionChanged += OnSuggestionListBoxSelectionChanged;
 
-#if NETFX_CORE
+#if UWP
                 _suggestionListBox.Tapped += OnSuggestionListBoxTapped;
 #else
                 _suggestionListBox.MouseLeftButtonUp += OnSuggestionListBoxMouseLeftButtonUp;
@@ -208,7 +208,7 @@ namespace Catel.Windows.Interactivity
 
                 _suggestionListBox.SelectionChanged -= OnSuggestionListBoxSelectionChanged;
 
-#if NETFX_CORE
+#if UWP
                 _suggestionListBox.Tapped -= OnSuggestionListBoxTapped;
 #else
                 _suggestionListBox.MouseLeftButtonUp -= OnSuggestionListBoxMouseLeftButtonUp;
@@ -232,7 +232,7 @@ namespace Catel.Windows.Interactivity
 #if NET || NETCORE
             _popup.PlacementTarget = textBox;
             _popup.Placement = PlacementMode.Bottom;
-#elif NETFX_CORE
+#elif UWP
             var offset = CalculateOffset(AssociatedObject, new Point(0, 0));
 
             _popup.HorizontalOffset = offset.X;
@@ -245,12 +245,12 @@ namespace Catel.Windows.Interactivity
 
             _popup.IsOpen = isVisible;
 
-#if NETFX_CORE
+#if UWP
             AssociatedObject.Focus(FocusState.Programmatic);
 #endif
         }
 
-#if NETFX_CORE
+#if UWP
         private static Point CalculateOffset(FrameworkElement element, Point offset)
         {
             var transform = element.TransformToVisual(Window.Current.Content);
@@ -404,7 +404,7 @@ namespace Catel.Windows.Interactivity
             }
         }
 
-#if NETFX_CORE
+#if UWP
         private void OnSuggestionListBoxTapped(object sender, TappedRoutedEventArgs e)
         {
             UpdateSuggestionBox(false);

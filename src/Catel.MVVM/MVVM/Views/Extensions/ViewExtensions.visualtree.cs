@@ -9,7 +9,7 @@ namespace Catel.MVVM.Views
 {
 #if XAMARIN || XAMARIN_FORMS
     // nothing
-#elif NETFX_CORE
+#elif UWP
     using global::Windows.UI.Xaml.Controls;
 #else
     using System.Windows.Controls;

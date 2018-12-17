@@ -12,7 +12,7 @@ namespace Catel.Windows.Data
     using System.Collections.Generic;
     using Logging;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Data;
 #else

@@ -14,7 +14,7 @@ namespace Catel.MVVM
     using Catel.Logging;
     using Catel.Services;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
 #else
     using System.Windows.Threading;

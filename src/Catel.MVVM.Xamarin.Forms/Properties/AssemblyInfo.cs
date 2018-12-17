@@ -35,7 +35,7 @@ using System.Windows.Markup;
 #endif
 
 // XmlnsDefinition is not supported in UWP
-#if !NETFX_CORE && !XAMARIN && !XAMARIN_FORMS
+#if !UWP && !XAMARIN && !XAMARIN_FORMS
 
 [assembly: XmlnsPrefix("http://schemas.catelproject.com", "catel")]
 [assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM")]

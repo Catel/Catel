@@ -10,7 +10,7 @@ namespace Catel.Windows.Input
 {
     using Catel.Data;
 
-#if NETFX_CORE
+#if UWP
     using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
     using Key = global::Windows.System.VirtualKey;
     using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;

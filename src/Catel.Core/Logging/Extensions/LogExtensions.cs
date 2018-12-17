@@ -31,7 +31,7 @@ namespace Catel.Logging
             Write(log, LogEvent.Info, "PRODUCT INFO");
             Write(log, LogEvent.Info, string.Empty);
 
-#if NETFX_CORE
+#if UWP
             var appPackage = Windows.ApplicationModel.Package.Current;
             var packageId = appPackage.Id;
 
@@ -88,7 +88,7 @@ namespace Catel.Logging
             Write(log, LogEvent.Info, "System page size:      {0}", Environment.SystemPageSize);
 #endif
 
-#if NETFX_CORE
+#if UWP
             var appPackage = Windows.ApplicationModel.Package.Current;
             var packageId = appPackage.Id;
 

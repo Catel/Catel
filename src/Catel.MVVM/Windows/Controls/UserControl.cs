@@ -17,7 +17,7 @@ namespace Catel.Windows.Controls
     using MVVM.Views;
     using MVVM;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
@@ -41,7 +41,7 @@ namespace Catel.Windows.Controls
     ///   </item>
     /// </list>
     /// </remarks>
-#if NETFX_CORE
+#if UWP
     public class UserControl : global::Windows.UI.Xaml.Controls.UserControl, IUserControl
 #else
     public class UserControl : System.Windows.Controls.UserControl, IUserControl

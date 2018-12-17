@@ -20,7 +20,7 @@ namespace Catel.Reflection
     using System.Runtime.InteropServices;
 #endif
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
 #endif
 
@@ -84,7 +84,7 @@ namespace Catel.Reflection
                 {
                     assembly = Assembly.GetEntryAssembly();
                 }
-#elif NETFX_CORE
+#elif UWP
                 assembly = global::Windows.UI.Xaml.Application.Current.GetType().GetAssemblyEx();
 #endif
 

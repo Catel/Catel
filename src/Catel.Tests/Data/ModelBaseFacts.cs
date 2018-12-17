@@ -15,7 +15,7 @@ namespace Catel.Tests.Data
 
     using NUnit.Framework;
 
-#if !NETFX_CORE
+#if !UWP
     using Catel.MVVM;
     using System.Windows.Data;
 #endif

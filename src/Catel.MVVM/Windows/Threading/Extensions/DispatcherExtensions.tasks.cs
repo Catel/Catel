@@ -12,7 +12,7 @@ namespace Catel.Windows.Threading
     using System.Threading.Tasks;
     using Logging;
 
-#if NETFX_CORE
+#if UWP
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
     using System.Windows.Threading;
 #else

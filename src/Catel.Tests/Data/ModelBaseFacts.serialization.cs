@@ -26,7 +26,7 @@ namespace Catel.Tests.Data
 
     using NUnit.Framework;
 
-#if !NETFX_CORE
+#if !UWP
     using Catel.Reflection;
     using Catel.Runtime.Serialization;
 #endif

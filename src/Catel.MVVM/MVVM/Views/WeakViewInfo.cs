@@ -9,7 +9,7 @@ namespace Catel.MVVM.Views
     using System;
     using Logging;
 
-#if NETFX_CORE
+#if UWP
     using LoadedEventArgs = System.Object;
     using LayoutUpdatedEventArgs = System.Object;
 #else

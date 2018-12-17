@@ -20,7 +20,7 @@ namespace Catel.MVVM.Converters
         : global::Xamarin.Forms.IValueConverter
 #elif XAMARIN
     // No base class
-#elif NETFX_CORE
+#elif UWP
         : global::Windows.UI.Xaml.Data.IValueConverter
 #else
         : System.Windows.Data.IValueConverter

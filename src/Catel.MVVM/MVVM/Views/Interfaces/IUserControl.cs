@@ -10,7 +10,7 @@ namespace Catel.MVVM.Views
 
 #if XAMARIN || XAMARIN_FORMS
     using ViewType = System.Object;
-#elif NETFX_CORE
+#elif UWP
     using ViewType = global::Windows.UI.Xaml.DependencyObject;
 #else
     using ViewType = System.Windows.DependencyObject;

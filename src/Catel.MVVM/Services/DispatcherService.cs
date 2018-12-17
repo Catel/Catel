@@ -16,7 +16,7 @@ namespace Catel.Services
     using global::Android.OS;
 #elif IOS
     using global::CoreFoundation;
-#elif NETFX_CORE
+#elif UWP
     using Windows.Threading;
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
 #elif !XAMARIN_FORMS

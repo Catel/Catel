@@ -12,7 +12,7 @@ namespace Catel.Windows.Markup
     using Catel.MVVM;
     using IoC;
 
-#if !NETFX_CORE
+#if !UWP
     using System.Windows.Data;
     using System.Windows.Markup;
 #endif

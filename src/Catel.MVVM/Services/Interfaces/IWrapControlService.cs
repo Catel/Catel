@@ -10,7 +10,7 @@ namespace Catel.Services
 {
     using System;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
 #else

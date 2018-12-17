@@ -20,7 +20,7 @@ namespace Catel.MVVM.Providers
 
 #if XAMARIN || XAMARIN_FORMS
     // TODO
-#elif NETFX_CORE
+#elif UWP
     using global::Windows.UI;
     using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;

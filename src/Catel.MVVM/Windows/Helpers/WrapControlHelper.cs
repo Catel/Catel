@@ -15,7 +15,7 @@ namespace Catel.Windows
     using Controls;
     using Reflection;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Controls.Primitives;
@@ -191,14 +191,12 @@ namespace Catel.Windows
             }
 
 #region Generate buttons
-#if !NETFX_CORE
+#if !UWP
             if (buttons.Length > 0)
             {
                 // Add wrappanel containing the buttons
                 var buttonsWrapPanel = new WrapPanel();
                 buttonsWrapPanel.Name = ButtonsWrapPanelName;
-#if SILVERLIGHT
-                buttonsWrapPanel.Style = Application.Current.Resources["DataWindowButtonContainerStyle"] as Style;
 #else
                 buttonsWrapPanel.SetResourceReference(FrameworkElement.StyleProperty, "DataWindowButtonContainerStyle");
 #endif
@@ -297,7 +295,7 @@ namespace Catel.Windows
 #endregion
 
 #region Generate InfoBarMessageControl
-#if !NETFX_CORE
+#if !UWP
             if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateInlineInfoBarMessageControl) ||
                 Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateOverlayInfoBarMessageControl))
             {

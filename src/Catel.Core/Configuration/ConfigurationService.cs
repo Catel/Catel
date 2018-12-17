@@ -17,7 +17,7 @@ namespace Catel.Configuration
     using Catel.Logging;
     using Runtime.Serialization.Xml;
 
-#if NETFX_CORE
+#if UWP
     using Windows.Storage;
 #else
     using System.Configuration;
@@ -311,7 +311,7 @@ namespace Catel.Configuration
             throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
 #elif ANDROID
             return _preferences.Contains(key);
-#elif NETFX_CORE
+#elif UWP
             var settings = GetSettingsContainer(container);
             return settings.Values.ContainsKey(key);
 #else
@@ -332,7 +332,7 @@ namespace Catel.Configuration
             throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
 #elif ANDROID
             return _preferences.GetString(key, null);
-#elif NETFX_CORE
+#elif UWP
             var settings = GetSettingsContainer(container);
             return (string)settings.Values[key];
 #else
@@ -355,7 +355,7 @@ namespace Catel.Configuration
             _preferences.Edit()
                         .PutString(key, value)
                         .Apply();
-#elif NETFX_CORE
+#elif UWP
             var settings = GetSettingsContainer(container);
             settings.Values[key] = value;
 #else

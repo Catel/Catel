@@ -14,7 +14,7 @@ namespace Catel.Windows
     using IoC;
     using MVVM;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Data;
 #endif

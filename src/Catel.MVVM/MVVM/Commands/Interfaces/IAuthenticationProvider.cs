@@ -11,7 +11,7 @@ namespace Catel.MVVM
     using System;
     using Catel.MVVM.Views;
 
-#if NETFX_CORE
+#if UWP
     using View = global::Windows.UI.Xaml.FrameworkElement;
 #elif ANDROID
     using View = global::Android.Views.View;

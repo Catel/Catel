@@ -14,7 +14,7 @@ namespace Catel.Services
     using System.Threading.Tasks;
     using Catel.Logging;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.System;
 #endif
 
@@ -50,7 +50,7 @@ namespace Catel.Services
 
             try
             {
-#if NETFX_CORE
+#if UWP
                 var launcher = Launcher.LaunchUriAsync(new Uri(fileName));
                 if (processCompletedCallback != null)
                 {

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETCORE || NETFX_CORE
+#if NET || NETCORE || UWP
 
 namespace Catel.Windows.Controls
 {
@@ -14,7 +14,7 @@ namespace Catel.Windows.Controls
     using MVVM.Views;
     using MVVM;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
@@ -25,7 +25,7 @@ namespace Catel.Windows.Controls
     /// <summary>
     /// <see cref="Page"/> class that supports MVVM with Catel.
     /// </summary>
-#if NETFX_CORE
+#if UWP
     public class Page : global::Windows.UI.Xaml.Controls.Page, IPage
 #else
     public class Page : System.Windows.Controls.Page, IPage

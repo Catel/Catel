@@ -4,7 +4,7 @@
 // </copyright>>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETCORE || NETFX_CORE
+#if NET || NETCORE || UWP
 
 namespace Catel.Services
 {
@@ -17,7 +17,7 @@ namespace Catel.Services
     using Catel.Windows;
     using Logging;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Navigation;

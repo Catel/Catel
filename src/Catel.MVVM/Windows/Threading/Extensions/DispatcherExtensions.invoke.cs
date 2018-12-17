@@ -11,7 +11,7 @@ namespace Catel.Windows.Threading
     using System;
     using System.Threading.Tasks;
 
-#if NETFX_CORE
+#if UWP
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
 #else
     using System.Windows.Threading;
@@ -38,7 +38,7 @@ namespace Catel.Windows.Threading
             {
 #if NET || NETCORE
                 dispatcher.Invoke(action, null);
-#elif NETFX_CORE
+#elif UWP
                 dispatcher.BeginInvoke(action);
 #else
                 dispatcher.BeginInvoke(action);
@@ -92,7 +92,7 @@ namespace Catel.Windows.Threading
             {
 #if NET || NETCORE
                 dispatcher.Invoke(method, args);
-#elif NETFX_CORE
+#elif UWP
                 dispatcher.BeginInvoke(() => method.DynamicInvoke(args));
 #else
                 dispatcher.BeginInvoke(method, args);
@@ -213,7 +213,7 @@ namespace Catel.Windows.Threading
             {
                 if (!onlyBeginInvokeWhenNoAccess || !dispatcher.CheckAccess())
                 {
-#if NETFX_CORE
+#if UWP
                     dispatcher.Invoke(action);
                     return;
 #else

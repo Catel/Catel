@@ -14,7 +14,7 @@ namespace Catel.Windows.Threading
     // Required for DispatcherOperation on all platforms
     using System.Windows.Threading;
 
-#if NETFX_CORE
+#if UWP
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
 #endif
 
@@ -23,7 +23,7 @@ namespace Catel.Windows.Threading
     /// </summary>
     public static partial class DispatcherExtensions
     {
-#if !NETFX_CORE
+#if !UWP
         /// <summary>
         /// Executes the specified action asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
@@ -173,7 +173,7 @@ namespace Catel.Windows.Threading
             {
                 if (!onlyBeginInvokeWhenNoAccess || !dispatcher.CheckAccess())
                 {
-#if NETFX_CORE
+#if UWP
                     dispatcher.BeginInvoke(action);
                     return DispatcherOperation.Default;
 #else
@@ -219,7 +219,7 @@ namespace Catel.Windows.Threading
         {
             // Fix for https://github.com/Catel/Catel/issues/1220
 
-#if NETFX_CORE
+#if UWP
             return DispatcherOperation.Default;
 #else
             //[SecurityCritical]

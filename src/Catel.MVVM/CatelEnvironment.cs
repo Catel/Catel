@@ -14,7 +14,7 @@ namespace Catel
     using Logging;
     using MVVM;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
 #endif
 
@@ -108,7 +108,7 @@ namespace Catel
         {
             get
             {
-#if NETFX_CORE
+#if UWP
                 return Window.Current;
 #else
                 var application = Application.Current;
@@ -155,7 +155,7 @@ namespace Catel
             {
                 isInDesignMode = true;
             }
-#elif NETFX_CORE
+#elif UWP
             isInDesignMode = global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
 #elif XAMARIN || XAMARIN_FORMS
             isInDesignMode = false;

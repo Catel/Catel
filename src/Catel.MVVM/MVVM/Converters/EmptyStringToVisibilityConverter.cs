@@ -11,7 +11,7 @@ namespace Catel.MVVM.Converters
     using System;
     using System.Windows;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
 #endif
 

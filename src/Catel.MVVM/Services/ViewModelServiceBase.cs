@@ -11,7 +11,7 @@ namespace Catel.Services
 #if !XAMARIN && !XAMARIN_FORMS
     using Windows.Threading;
 
-#if NETFX_CORE
+#if UWP
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
 #else
     using System.Windows.Threading;

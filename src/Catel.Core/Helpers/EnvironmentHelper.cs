@@ -100,7 +100,7 @@ namespace Catel
             return IsHostedByProcess("devenv", checkParentProcesses);
 #elif XAMARIN
             return false;
-#elif NETFX_CORE
+#elif UWP
             return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
 #else
             return DesignerProperties.IsInDesignTool;
@@ -121,7 +121,7 @@ namespace Catel
             return IsHostedByProcess("sharpdevelop", checkParentProcesses);
 #elif XAMARIN
             return false;
-#elif NETFX_CORE
+#elif UWP
             return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
 #else
             return DesignerProperties.IsInDesignTool;
@@ -142,7 +142,7 @@ namespace Catel
             return IsHostedByProcess("blend", checkParentProcesses);
 #elif XAMARIN
             return false;
-#elif NETFX_CORE
+#elif UWP
             return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
 #else
             return DesignerProperties.IsInDesignTool;

@@ -4,11 +4,11 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETCORE || NETFX_CORE
+#if NET || NETCORE || UWP
 
 namespace Catel.Services
 {
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Navigation;
@@ -31,7 +31,7 @@ namespace Catel.Services
             return GetApplicationRootFrame();
         }
 
-#if NETFX_CORE
+#if UWP
         /// <summary>
         /// Gets the application root frame.
         /// </summary>

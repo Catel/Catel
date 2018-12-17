@@ -18,7 +18,7 @@ namespace Catel.MVVM
 #if !XAMARIN && !XAMARIN_FORMS
     using InputGesture = Catel.Windows.Input.InputGesture;
 
-#if NETFX_CORE
+#if UWP
     using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
     using global::Windows.UI.Xaml;
 #else 

@@ -13,7 +13,7 @@ namespace Catel.Windows
     using System.Linq;
     using Catel.Logging;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;

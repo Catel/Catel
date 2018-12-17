@@ -10,7 +10,7 @@ namespace Catel.MVVM.Converters
     using Reflection;
 
 #if XAMARIN
-#elif NETFX_CORE
+#elif UWP
     using global::Windows.UI.Xaml;
 #else
     using System.Windows;

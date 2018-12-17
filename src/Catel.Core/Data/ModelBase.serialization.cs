@@ -16,7 +16,7 @@ namespace Catel.Data
 
 #if NET || NETCORE
     using System.Runtime.Serialization.Formatters.Binary;
-#elif NETFX_CORE
+#elif UWP
     using Windows.Storage.Streams;
 #else
     using System.IO.IsolatedStorage;

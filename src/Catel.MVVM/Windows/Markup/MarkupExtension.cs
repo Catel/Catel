@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NETFX_CORE
+#if UWP
 
 namespace Catel.Windows.Markup
 {
@@ -12,7 +12,7 @@ namespace Catel.Windows.Markup
     using System.ComponentModel;
     using Threading;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Data;
 #else
@@ -24,7 +24,7 @@ namespace Catel.Windows.Markup
     /// Custom markup extension.
     /// </summary>
     public abstract class MarkupExtension : Binding, INotifyPropertyChanged
-#if !NETFX_CORE
+#if !UWP
         , ISupportInitialize
 #endif
     {
@@ -44,7 +44,7 @@ namespace Catel.Windows.Markup
             Mode = BindingMode.OneWay;
             Path = new PropertyPath(nameof(InternalBindingValue));
 
-#if NETFX_CORE
+#if UWP
             Dispatcher.BeginInvoke(UpdateBinding);
 #endif
         }
@@ -68,7 +68,7 @@ namespace Catel.Windows.Markup
             }
         }
 
-#if !NETFX_CORE
+#if !UWP
         /// <summary>
         /// Signals the object that initialization is complete.
         /// </summary>

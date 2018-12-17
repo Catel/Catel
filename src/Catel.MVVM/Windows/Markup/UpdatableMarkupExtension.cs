@@ -13,7 +13,7 @@ namespace Catel.Windows.Markup
     using System.ComponentModel;
     using System.Reflection;
 
-#if !NETFX_CORE
+#if !UWP
     using System.Windows;
     using System.Windows.Data;
     using System.Windows.Markup;
@@ -101,7 +101,7 @@ namespace Catel.Windows.Markup
         #endregion
 
         #region Events
-#if !NETFX_CORE
+#if !UWP
         public event PropertyChangedEventHandler PropertyChanged;
 #endif
         #endregion
@@ -114,7 +114,7 @@ namespace Catel.Windows.Markup
         /// <returns>The object value to set on the property where the extension is applied.</returns>
         public sealed override object ProvideValue(IServiceProvider serviceProvider)
         {
-#if NETFX_CORE
+#if UWP
             _targetObject = null;
             _targetProperty = null;
             _serviceProvider = null;
@@ -150,7 +150,7 @@ namespace Catel.Windows.Markup
                         frameworkElement.Loaded += OnTargetObjectLoadedInternal;
                         frameworkElement.Unloaded += OnTargetObjectUnloadedInternal;
                     }
-#if !NETFX_CORE
+#if !UWP
                     else if (targetObject is FrameworkContentElement frameworkContentElement)
                     {
                         _isFrameworkElementLoaded = frameworkContentElement.IsLoaded;
@@ -267,13 +267,13 @@ namespace Catel.Windows.Markup
                 }
 
                 Action updateAction =
-#if NETFX_CORE
+#if UWP
                 () => obj.SetValue(targetPropertyAsDependencyProperty, value);
 #else
                 () => obj.SetCurrentValue(targetPropertyAsDependencyProperty, value);
 #endif
 
-#if NETFX_CORE
+#if UWP
                 if (obj.Dispatcher.HasThreadAccess)
                 {
                     UpdateValue();
@@ -295,7 +295,7 @@ namespace Catel.Windows.Markup
                 }
 #endif
             }
-#if !NETFX_CORE
+#if !UWP
             else if (targetObject is Setter setter)
             {
                 setter.Value = value;
@@ -310,7 +310,7 @@ namespace Catel.Windows.Markup
             RaisePropertyChanged(nameof(Value));
         }
 
-#if !NETFX_CORE
+#if !UWP
         protected void RaisePropertyChanged(string propertyName)
         {
             var handler = PropertyChanged;

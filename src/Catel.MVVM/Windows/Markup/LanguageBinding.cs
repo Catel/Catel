@@ -15,7 +15,7 @@ namespace Catel.Windows.Markup
     using Catel.IoC;
     using Catel.Services;
 
-#if !NETFX_CORE
+#if !UWP
     using System.Windows.Markup;
 #endif
 

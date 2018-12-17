@@ -10,10 +10,10 @@ namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
-    
+
 #if XAMARIN && !XAMARIN_FORMS
     using System.Drawing;
-#elif NETFX_CORE
+#elif UWP
     using global::Windows.Foundation;
 #else
     using System.Windows;
