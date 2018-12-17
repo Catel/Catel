@@ -10,6 +10,7 @@
 namespace Catel
 {
     using System;
+    using System.Runtime.CompilerServices;
     using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;
     using Logging;
@@ -17,6 +18,8 @@ namespace Catel
 
     public partial class ICommandManagerExtensions
     {
+        private static readonly ConditionalWeakTable<Window, ICommandManager> _commandManagerPerWindow = new ConditionalWeakTable<Window, ICommandManager>();
+
         /// <summary>
         /// Subscribes to keyboard events.
         /// <para />
@@ -29,19 +32,42 @@ namespace Catel
         {
             Argument.IsNotNull(() => commandManager);
 
-            if (window == null)
+            if (window is null)
             {
                 return;
             }
 
             var content = window?.Content as FrameworkElement;
-            if (content == null)
+            if (content is null)
             {
-                Log.Warning($"Cannot subscribe to window '{window.GetType().Name}', content is not a FrameworkElement");
+                Log.Warning($"Cannot subscribe to window '{window.GetType().Name}', content is not a FrameworkElement, will delay the subscription of events");
+
+                _commandManagerPerWindow.Add(window, commandManager);
+
+                window.Activated += OnWindowActivated;
                 return;
             }
 
             commandManager.SubscribeToKeyboardEvents(content);
+        }
+
+        private static void OnWindowActivated(object sender, WindowActivatedEventArgs e)
+        {
+            var window = (Window)sender;
+            window.Activated -= OnWindowActivated;
+
+            if (_commandManagerPerWindow.TryGetValue(window, out var commandManager))
+            {
+                _commandManagerPerWindow.Remove(window);
+
+                Log.Debug($"Window '{window.GetType().Name}' has been activated, retrying the keyboard subscriptions");
+
+                SubscribeToKeyboardEvents(commandManager, window);
+            }
+            else
+            {
+                Log.Error($"Window '{window.GetType().Name}' has been activated, but could not find an ICommandManager registration in the temporary dictionary");
+            }
         }
     }
 }
