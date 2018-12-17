@@ -19,7 +19,7 @@
     <PackageReference Include="ApiApprover" Version="7.0.1" PrivateAssets="all" />
     <PackageReference Include="ApprovalTests" Version="3.0.13" PrivateAssets="all" />
     <PackageReference Include="ApprovalUtilities" Version="3.0.13" PrivateAssets="all" />
-    <PackageReference Include="Fody" Version="3.3.2" PrivateAssets="all">
+    <PackageReference Include="Fody" Version="3.3.3" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="2.1.0" PrivateAssets="all" />
