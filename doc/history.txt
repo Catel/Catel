@@ -43,6 +43,9 @@ Added/fixed
 (+) #1240 Add support for .NET Core 3.0
 (+) #1241 Add IFreezable on ModelBase to allow the object to freeze and protect it from property changes. The ViewModelBase
     will automatically freeze during closing and unfreeze during initialization
+(*) #1192 CanExecute WeakRef is cleared when CanExecute-Lambda is in DisplayClass. This means the Command implementation in
+    Catel will no longer use weak references for the CanExecute function, take extra care for memory leaks and report them
+    if you find them so we can find a working solution
 (*) #1242 Reset ViewModelBase.IsInitialized in CloseViewModel to allow later re-initialization
 (x) #1232 NavigationService.Navigate leads to endless loop when MainPage is MasterDetailPage
 (x) #1236 Add missing Catel.MVVM resources to Catel.MVVM.Xamarin.Forms
