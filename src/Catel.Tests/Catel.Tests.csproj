@@ -17,15 +17,12 @@
 
     <ItemGroup>
     <PackageReference Include="ApiApprover" Version="7.0.1" PrivateAssets="all" />
-    <PackageReference Include="ApprovalTests" Version="3.0.13" PrivateAssets="all" />
-    <PackageReference Include="ApprovalUtilities" Version="3.0.13" PrivateAssets="all" />
     <PackageReference Include="Fody" Version="3.3.3" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="LoadAssembliesOnStartup.Fody" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Include="MethodTimer.Fody" Version="2.2.2" PrivateAssets="all" />
     <PackageReference Include="ModuleInit.Fody" Version="1.8.3" PrivateAssets="all" />
-    <PackageReference Include="Mono.Cecil" Version="0.10.0" PrivateAssets="all" />
     <PackageReference Include="Moq" Version="4.8.3" />
     <PackageReference Include="NUnit" Version="3.11.0" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="4.4.3" PrivateAssets="all" />
