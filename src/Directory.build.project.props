@@ -7,7 +7,7 @@
     <Authors>Catel</Authors>
     <PackageIconUrl>https://github.com/Catel/Assets/raw/master/packages/logo.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/Catel/Catel</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/Catel/Catel/blob/develop/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/Catel/Catel</RepositoryUrl>
   </PropertyGroup>
    
