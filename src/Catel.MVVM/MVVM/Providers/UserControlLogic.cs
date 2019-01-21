@@ -102,10 +102,6 @@ namespace Catel.MVVM.Providers
 
 #if XAMARIN
             CreateViewModelWrapper(false);
-#else
-            // NOTE: There is NO unsubscription for this subscription.
-            // Hence target control content wrapper grid will be recreated each time content changes.
-            targetView.SubscribeToPropertyChanged("Content", OnTargetControlContentChanged);
 #endif
         }
         #endregion
@@ -274,10 +270,9 @@ namespace Catel.MVVM.Providers
         /// <param name="checkIfWrapped">if set to <c>true</c>, check if the view is already wrapped.</param>
         private void CreateViewModelWrapper(bool checkIfWrapped = true)
         {
-            var dependencyResolver = this.GetDependencyResolver();
-
             var targetView = TargetView;
 
+            var dependencyResolver = this.GetDependencyResolver();
             var viewModelWrapperService = dependencyResolver.Resolve<IViewModelWrapperService>();
             if (checkIfWrapped || !viewModelWrapperService.IsWrapped(targetView))
             {
@@ -290,29 +285,19 @@ namespace Catel.MVVM.Providers
                 }
 #endif
 
-                Action action = () => viewModelWrapperService.Wrap(targetView, this, wrapOptions);
+                void action() => viewModelWrapperService.Wrap(targetView, this, wrapOptions);
 
                 // NOTE: Beginning invoke (running async) because setting of TargetControl Content property causes memory faults
                 // when this method called by TargetControlContentChanged handler. No need to await though.
 #if NETFX_CORE && !UWP
-                var dispatcher = ((FrameworkElement)TargetView).Dispatcher;
 #pragma warning disable 4014
+                var dispatcher = ((FrameworkElement)TargetView).Dispatcher;
                 dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { action(); });
 #pragma warning restore 4014
 #else
                 action();
 #endif
             }
-        }
-
-        /// <summary>
-        /// Called when the content of the target control has changed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnTargetControlContentChanged(object sender, PropertyChangedEventArgs e)
-        {
-            CreateViewModelWrapper();
         }
 
         /// <summary>

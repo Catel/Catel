@@ -51,6 +51,8 @@ Added/fixed
 (x) #1232 NavigationService.Navigate leads to endless loop when MainPage is MasterDetailPage
 (x) #1235 Application-wide commands do not work for UWP apps after upgrade to 5.8.0
 (x) #1236 Add missing Catel.MVVM resources to Catel.MVVM.Xamarin.Forms
+(x) #1251 Manually creating viewmodel grid using "__catelInnerWrapper" grid name fails => changed internal wrapper creation
+    from ContentChanged to Loaded events
 
 Roadmap
 =======
