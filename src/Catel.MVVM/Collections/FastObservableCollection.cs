@@ -381,7 +381,7 @@ namespace Catel.Collections
         /// <returns>IDisposable.</returns>
         public IDisposable SuspendChangeNotifications(SuspensionMode mode)
         {
-            if (_suspensionContext == null)
+            if (_suspensionContext is null)
             {
                 // Create new context
                 _suspensionContext = new SuspensionContext<T>(mode);
@@ -451,7 +451,7 @@ namespace Catel.Collections
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs" /> instance containing the event data.</param>
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            if (_suspensionContext == null || _suspensionContext.Count == 0)
+            if (_suspensionContext is null || _suspensionContext.Count == 0)
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {
@@ -477,7 +477,7 @@ namespace Catel.Collections
         /// <param name="e">The <see cref="PropertyChangedEventArgs" /> instance containing the event data.</param>
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            if (_suspensionContext == null || _suspensionContext.Count == 0)
+            if (_suspensionContext is null || _suspensionContext.Count == 0)
             {
                 if (AutomaticallyDispatchChangeNotifications)
                 {

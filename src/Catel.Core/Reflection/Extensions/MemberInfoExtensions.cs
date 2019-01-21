@@ -93,7 +93,7 @@ namespace Catel.Reflection
                 var parameter = parameters[i];
                 var constructorParameterType = constructorParameters[i].ParameterType;
 
-                if (parameter == null && !constructorParameterType.IsClassEx() && !constructorParameterType.IsNullableType())
+                if (parameter is null && !constructorParameterType.IsClassEx() && !constructorParameterType.IsNullableType())
                 {
                     return false;
                 }

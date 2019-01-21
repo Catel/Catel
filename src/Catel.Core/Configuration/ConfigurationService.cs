@@ -144,7 +144,7 @@ namespace Catel.Configuration
                 }
 
                 var value = GetValueFromStore(container, key);
-                if (value == null)
+                if (value is null)
                 {
                     return defaultValue;
                 }
@@ -255,7 +255,7 @@ namespace Catel.Configuration
                 _roamingConfigFilePath = DefaultRoamingConfigFilePath;
             }
 
-            if (_roamingConfiguration == null)
+            if (_roamingConfiguration is null)
             {
                 _roamingConfiguration = new DynamicConfiguration();
             }
@@ -292,7 +292,7 @@ namespace Catel.Configuration
                 _localConfigFilePath = DefaultLocalConfigFilePath;
             }
 
-            if (_localConfiguration == null)
+            if (_localConfiguration is null)
             {
                 _localConfiguration = new DynamicConfiguration();
             }

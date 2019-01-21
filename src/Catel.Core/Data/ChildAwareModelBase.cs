@@ -126,7 +126,7 @@ namespace Catel.Data
 
             lock (_lock)
             {
-                if (_propertyValueChangeNotificationWrappers == null)
+                if (_propertyValueChangeNotificationWrappers is null)
                 {
                     _propertyValueChangeNotificationWrappers = new Dictionary<string, ChangeNotificationWrapper>();
                 }

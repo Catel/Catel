@@ -148,7 +148,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override void ValidateRequiredProperties()
         {
-            if (GetDependencyProperty() == null)
+            if (GetDependencyProperty() is null)
             {
                 Log.ErrorAndCreateException<InvalidOperationException>("Dependency property is not found on the associated object, make sure to set the PropertyName or DependencyPropertyName");
             }
@@ -162,14 +162,14 @@ namespace Catel.Windows.Interactivity
             var dependencyPropertyName = UsedDependencyPropertyName;
 
             var dependencyProperty = GetDependencyProperty();
-            if (dependencyProperty == null)
+            if (dependencyProperty is null)
             {
                 Log.Error("No dependency property found on '{0}'", dependencyPropertyName);
                 return;
             }
 
             var bindingExpression = AssociatedObject.GetBindingExpression(dependencyProperty);
-            if (bindingExpression == null)
+            if (bindingExpression is null)
             {
                 Log.Error("No binding expression found on '{0}'", dependencyPropertyName);
                 return;
@@ -269,14 +269,14 @@ namespace Catel.Windows.Interactivity
             var dependencyPropertyName = UsedDependencyPropertyName;
 
             var dependencyProperty = GetDependencyProperty();
-            if (dependencyProperty == null)
+            if (dependencyProperty is null)
             {
                 Log.Error("No dependency property found on '{0}'", dependencyPropertyName);
                 return;
             }
 
             var bindingExpression = AssociatedObject.GetBindingExpression(dependencyProperty);
-            if (bindingExpression == null)
+            if (bindingExpression is null)
             {
                 Log.Warning($"Binding expression is null, make sure the binding to '{DependencyPropertyName ?? PropertyName}' is TwoWay");
                 return;
@@ -332,7 +332,7 @@ namespace Catel.Windows.Interactivity
             }
 
             var property = AssociatedObject.GetDependencyPropertyByName(dependencyPropertyName);
-            if (property == null)
+            if (property is null)
             {
                 Log.Error("Failed to retrieve dependency property '{0}' from object '{1}'", dependencyPropertyName, AssociatedObject.GetType());
             }

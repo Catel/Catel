@@ -232,7 +232,7 @@ namespace Catel.MVVM
             var executeAsync = _executeAsync;
 
             // Double check whether execution is allowed, some controls directly call Execute
-            if (executeAsync == null || IsExecuting || (!ignoreCanExecuteCheck && !CanExecute(parameter)))
+            if (executeAsync is null || IsExecuting || (!ignoreCanExecuteCheck && !CanExecute(parameter)))
             {
                 return;
             }

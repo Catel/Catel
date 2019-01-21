@@ -64,7 +64,7 @@ namespace Catel.Reflection
             where TTargetType : class
         {
             var typedInstance = instance as TTargetType;
-            if ((typedInstance == null) && (instance != null))
+            if ((typedInstance is null) && (instance != null))
             {
                 throw Log.ErrorAndCreateException<NotSupportedException>("Expected an instance of '{0}', but retrieved an instance of '{1}', cannot return the typed instance", typeof (TTargetType).Name, instance.GetType().Name);
             }
@@ -447,9 +447,9 @@ namespace Catel.Reflection
                 // Database support...
                 if (value == null)
                 {
-                    output = default(TOutput);
+                    output = default;
 
-                    if (outputType.IsValueTypeEx() && innerType == null)
+                    if (outputType.IsValueTypeEx() && innerType is null)
                     {
                         success = false;
                     }
@@ -475,7 +475,7 @@ namespace Catel.Reflection
             }
             catch (Exception)
             {
-                output = default(TOutput);
+                output = default;
                 success = false;
             }
 
@@ -532,9 +532,7 @@ namespace Catel.Reflection
         /// <returns>The casted value or when uncastable the <paramref name = "whenNullValue" /> is returned.</returns>
         public static TOutput Cast<TOutput, TInput>(TInput value, TOutput whenNullValue)
         {
-            TOutput output;
-
-            if (!TryCast(value, out output) || output == null)
+            if (!TryCast(value, out TOutput output) || output == null)
             {
                 output = whenNullValue;
             }

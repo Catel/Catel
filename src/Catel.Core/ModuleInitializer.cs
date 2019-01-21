@@ -105,7 +105,7 @@ namespace Catel.Core
         private static Configuration GetDllConfiguration()
         {
             var entryAssembly = AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
-            if (entryAssembly == null)
+            if (entryAssembly is null)
             {
                 return null;
             }

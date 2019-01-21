@@ -42,7 +42,7 @@ namespace Catel.MVVM.Converters
         /// <returns>The value to be passed to the target dependency property.</returns>
         protected override object Convert(object value, Type targetType, object parameter)
         {
-            if (CatelEnvironment.IsInDesignMode || (value == null))
+            if (CatelEnvironment.IsInDesignMode || (value is null))
             {
                 return ConverterHelper.UnsetValue;
             }

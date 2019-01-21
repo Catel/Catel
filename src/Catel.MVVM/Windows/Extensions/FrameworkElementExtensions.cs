@@ -39,7 +39,7 @@ namespace Catel.Windows
         /// <param name="frameworkElement">The framework element.</param>
         public static void HideValidationAdorner(this FrameworkElement frameworkElement)
         {
-            if (frameworkElement == null)
+            if (frameworkElement is null)
             {
                 return;
             }

@@ -62,7 +62,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         protected override void OnViewModelChanged()
         {
-            if (ViewModel == null)
+            if (ViewModel is null)
             {
                 TargetView.DataContext = null;
             }

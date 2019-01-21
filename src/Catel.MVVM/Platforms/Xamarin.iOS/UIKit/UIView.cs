@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UIView.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
@@ -55,12 +55,12 @@ namespace Catel.UIKit
             }
 
             var viewModelType = GetViewModelType();
-            if (viewModelType == null)
+            if (viewModelType is null)
             {
                 Log.Debug("GetViewModelType() returned null, using the ViewModelLocator to resolve the view model");
 
                 viewModelType = _viewModelLocator.ResolveViewModel(GetType());
-                if (viewModelType == null)
+                if (viewModelType is null)
                 {
                     const string error = "The view model of the view could not be resolved. Use either the GetViewModelType() method or IViewModelLocator";
                     Log.Error(error);
@@ -284,7 +284,7 @@ namespace Catel.UIKit
 
         private void UninitializeBindingContext()
         {
-            if (_bindingContext == null)
+            if (_bindingContext is null)
             {
                 return;
             }

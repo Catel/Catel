@@ -83,7 +83,7 @@ namespace Catel.Pooling
                 }
             }
             
-            if (valueToReturn == null)
+            if (valueToReturn is null)
             {
                 Log.Debug($"No objects available in the pool, creating new object");
 

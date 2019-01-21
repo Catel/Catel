@@ -80,13 +80,13 @@ namespace Catel.Windows.Interactivity
                 return;
             }
 
-            if (_authenticationProvider == null)
+            if (_authenticationProvider is null)
             {
                 var dependencyResolver = this.GetDependencyResolver();
                 _authenticationProvider = dependencyResolver.Resolve<IAuthenticationProvider>();
             }
 
-            if (_authenticationProvider == null)
+            if (_authenticationProvider is null)
             {
                 throw Log.ErrorAndCreateException<NotSupportedException>("No IAuthenticationProvider is registered, cannot use the Authentication behavior without an IAuthenticationProvider");
             }

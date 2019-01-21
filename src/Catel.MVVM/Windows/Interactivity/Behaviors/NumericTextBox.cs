@@ -221,7 +221,7 @@ namespace Catel.Windows.Interactivity
             }
 
             var binding = AssociatedObject.GetBindingExpression(TextBox.TextProperty);
-            if (binding == null)
+            if (binding is null)
             {
                 return;
             }

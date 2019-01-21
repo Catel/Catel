@@ -260,7 +260,7 @@ namespace Catel.Data
             {
                 lock (_lock)
                 {
-                    if (_changeCallbacksSuspensionContext == null)
+                    if (_changeCallbacksSuspensionContext is null)
                     {
                         _changeCallbacksSuspensionContext = new SuspensionContext();
                     }
@@ -301,7 +301,7 @@ namespace Catel.Data
             {
                 lock (_lock)
                 {
-                    if (_changeNotificationsSuspensionContext == null)
+                    if (_changeNotificationsSuspensionContext is null)
                     {
                         _changeNotificationsSuspensionContext = new SuspensionContext();
                     }

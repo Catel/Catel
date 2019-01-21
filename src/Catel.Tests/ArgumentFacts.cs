@@ -585,7 +585,7 @@ namespace Catel.Tests
             {
                 Argument.IsValid("myParam", "value", () => true);
                 Argument.IsValid("myParam", "value", s => s.Length < 10);
-                Argument.IsValid("myParam", (string)null, s => s == null);
+                Argument.IsValid("myParam", (string)null, s => s is null);
             }
         }
     }

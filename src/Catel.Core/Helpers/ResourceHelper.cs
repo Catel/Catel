@@ -112,7 +112,7 @@ namespace Catel
 
             using (var resource = assembly.GetManifestResourceStream(finalResourceName))
             {
-                if (resource == null)
+                if (resource is null)
                 {
                     var warning = new StringBuilder();
                     warning.AppendLine($"Failed to extract embedded resource '{finalResourceName}', possible names:");

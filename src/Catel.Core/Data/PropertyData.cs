@@ -211,7 +211,7 @@ namespace Catel.Data
                 _updatedCachedPropertyInfo = true;
 
                 var propertyInfo = containingType.GetPropertyEx(Name, BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                _cachedPropertyInfo = (propertyInfo == null) ? null : new CachedPropertyInfo(propertyInfo);
+                _cachedPropertyInfo = (propertyInfo is null) ? null : new CachedPropertyInfo(propertyInfo);
             }
 
             return _cachedPropertyInfo;

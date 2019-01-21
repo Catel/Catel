@@ -261,7 +261,7 @@ namespace Catel.Windows.Markup
             if (targetProperty is DependencyProperty targetPropertyAsDependencyProperty)
             {
                 var obj = targetObject as DependencyObject;
-                if (obj == null)
+                if (obj is null)
                 {
                     return;
                 }

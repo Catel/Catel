@@ -106,19 +106,19 @@ namespace Catel.Services
         {
             var currentApplication = Application.Current;
             var activePage = currentApplication.GetActivePage();
-            if(activePage == null)
+            if(activePage is null)
             {
                 return 0;
             }
 
             var navigation = activePage.Navigation;
-            if (navigation == null)
+            if (navigation is null)
             {
                 return 0;
             }
 
             var navigationStack = navigation.NavigationStack;
-            if (navigationStack == null)
+            if (navigationStack is null)
             {
                 return 0;
             }
@@ -135,19 +135,19 @@ namespace Catel.Services
             {
                 var currentApplication = Application.Current;
                 var activePage = currentApplication.GetActivePage();
-                if(activePage == null)
+                if(activePage is null)
                 {
                     return;
                 }
 
                 var navigation = activePage.Navigation;
-                if(navigation == null)
+                if(navigation is null)
                 {
                     return;
                 }
 
                 var navigationStack  = navigation.NavigationStack;
-                if(navigationStack == null || navigationStack.Count == 0)
+                if(navigationStack is null || navigationStack.Count == 0)
                 {
                     return;
                 }
@@ -181,13 +181,13 @@ namespace Catel.Services
         {
             var currentApplication = Application.Current;
             var activePage = currentApplication.GetActivePage();
-            if (activePage == null)
+            if (activePage is null)
             {
                 return;
             }
 
             var navigation = activePage.Navigation;
-            if (navigation == null)
+            if (navigation is null)
             {
                 return;
             }
@@ -215,13 +215,13 @@ namespace Catel.Services
             
             var currentApplication = Application.Current;
             var activePage = currentApplication.GetActivePage();
-            if (activePage == null)
+            if (activePage is null)
             {
                 return;
             }
 
             var navigation = activePage.Navigation;
-            if (navigation == null)
+            if (navigation is null)
             {
                 return;
             }

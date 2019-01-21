@@ -80,7 +80,7 @@ namespace Catel.ExceptionHandling
                 return;
             }
             
-            if (Filter == null)
+            if (Filter is null)
             {
                 _action(exception);
                 return;
@@ -172,7 +172,7 @@ namespace Catel.ExceptionHandling
                 return;
             }
 
-            if (Filter == null)
+            if (Filter is null)
             {
                 _action(exception);
                 return;

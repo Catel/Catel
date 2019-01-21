@@ -24,7 +24,7 @@ namespace Catel.MVVM.Views
 
 #if XAMARIN || XAMARIN_FORMS
             var userControl = view as IUserControl;
-            if (userControl == null)
+            if (userControl is null)
             {
                 return null;
             }

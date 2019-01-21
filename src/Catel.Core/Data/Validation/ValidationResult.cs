@@ -83,7 +83,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentException">The <paramref name="messageFormat"/> is <c>null</c> or whitespace.</exception>
         public FieldValidationResult(string propertyName, ValidationResultType validationResultType, string messageFormat, params object[] args)
-            : base(validationResultType, (args == null || args.Length == 0) ? messageFormat : string.Format(messageFormat, args))
+            : base(validationResultType, (args is null || args.Length == 0) ? messageFormat : string.Format(messageFormat, args))
         {
             Argument.IsNotNullOrWhitespace("propertyName", propertyName);
             Argument.IsNotNull("messageFormat", messageFormat);
@@ -347,7 +347,7 @@ namespace Catel.Data
         /// <param name="args">The args.</param>
         /// <exception cref="ArgumentException">The <paramref name="messageFormat"/> is <c>null</c> or whitespace.</exception>
         public BusinessRuleValidationResult(ValidationResultType validationResultType, string messageFormat, params object[] args)
-            : base(validationResultType, (args == null || args.Length == 0) ? messageFormat : string.Format(messageFormat, args))
+            : base(validationResultType, (args is null || args.Length == 0) ? messageFormat : string.Format(messageFormat, args))
         {
         }
 

@@ -202,7 +202,7 @@ namespace Catel.MVVM.Navigation
         {
             var activity = GetNavigationTarget<Activity>();
             var application = activity.Application;
-            if (application == null)
+            if (application is null)
             {
                 const string error = "To support navigation events in Android, Catel uses a custom ActivityLifecycleCallbacksListener. This requires an app instance though. Please make sure that the Android app contains an Application class.";
                 Log.Error(error);
@@ -279,7 +279,7 @@ namespace Catel.MVVM.Navigation
         protected override string GetNavigationUri(object target)
         {
             var activity = target as Activity;
-            if (activity == null)
+            if (activity is null)
             {
                 return null;
             }

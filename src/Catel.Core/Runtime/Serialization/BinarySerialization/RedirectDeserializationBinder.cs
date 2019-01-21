@@ -106,7 +106,7 @@ namespace Catel.Runtime.Serialization.Binary
 
         private bool IsTypeBinarySerializable(Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 return false;
             }
@@ -122,7 +122,7 @@ namespace Catel.Runtime.Serialization.Binary
         /// <param name="attributes">Array of attributes to search for.</param>
         private void InitializeAttributes(object decoratedObject, RedirectTypeAttribute[] attributes)
         {
-            if (decoratedObject == null)
+            if (decoratedObject is null)
             {
                 return;
             }
@@ -176,7 +176,7 @@ namespace Catel.Runtime.Serialization.Binary
 
             var typeToDeserialize = LoadType(newType) ?? (LoadType(currentTypeVersionIndependent) ?? LoadType(currentType));
 
-            if (typeToDeserialize == null)
+            if (typeToDeserialize is null)
             {
                 Log.Error("Could not load type '{0}' as '{1}'", currentType, newType);
             }

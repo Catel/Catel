@@ -286,7 +286,7 @@ namespace Catel.Runtime.Serialization
         protected virtual string SerializeUsingObjectToString(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
         {
             var toStringMethod = GetObjectToStringMethod(memberValue.GetBestMemberType());
-            if (toStringMethod == null)
+            if (toStringMethod is null)
             {
                 return null;
             }

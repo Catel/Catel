@@ -248,7 +248,7 @@ namespace Catel.ExceptionHandling
 
             lock (_exceptionHandlers)
             {
-                if (_exceptionHandlers == null)
+                if (_exceptionHandlers is null)
                 {
                     return false;
                 }
@@ -297,7 +297,7 @@ namespace Catel.ExceptionHandling
                     }
                 }
 
-                if (handler == null)
+                if (handler is null)
                 {
                     return false;
                 }

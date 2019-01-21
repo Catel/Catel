@@ -116,7 +116,7 @@ namespace Catel.Data
                     }
                 }
 
-                if (oldPropertyValues == null)
+                if (oldPropertyValues is null)
                 {
                     return;
                 }
@@ -273,7 +273,7 @@ namespace Catel.Data
         /// </summary>
         void IEditableObject.CancelEdit()
         {
-            if (_backup == null)
+            if (_backup is null)
             {
                 Log.Debug("IEditableObject is not in edit state");
                 return;
@@ -308,7 +308,7 @@ namespace Catel.Data
         /// </summary>
         void IEditableObject.EndEdit()
         {
-            if (_backup == null)
+            if (_backup is null)
             {
                 Log.Debug("IEditableObject is not in edit state");
                 return;

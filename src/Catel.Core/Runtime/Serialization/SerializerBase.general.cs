@@ -249,7 +249,7 @@ namespace Catel.Runtime.Serialization
             ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
                 x => x.SetInitializationMode(InitializationMode.Eager, GetType().GetSafeFullName(false)));
 
-            if (types == null)
+            if (types is null)
             {
                 types = TypeCache.GetTypes(x => x.IsModelBase(), false);
             }
@@ -301,7 +301,7 @@ namespace Catel.Runtime.Serialization
                 }
                 else
                 {
-                    if (scopeObject.Configuration == null)
+                    if (scopeObject.Configuration is null)
                     {
                         scopeObject.Configuration = DefaultSerializationConfiguration;
                     }
@@ -705,19 +705,19 @@ namespace Catel.Runtime.Serialization
                 }
 
                 var memberType = checkActualMemberType ? memberValue.ActualMemberType : memberValue.MemberType;
-                if (memberType == null)
+                if (memberType is null)
                 {
                     memberType = memberValue.MemberType;
                 }
 
                 var toStringMethod = GetObjectToStringMethod(memberType);
-                if (toStringMethod == null)
+                if (toStringMethod is null)
                 {
                     return false;
                 }
 
                 var parseMethod = GetObjectParseMethod(memberType);
-                if (parseMethod == null)
+                if (parseMethod is null)
                 {
                     return false;
                 }

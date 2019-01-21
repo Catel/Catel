@@ -44,7 +44,7 @@ namespace Catel.Reflection
             Argument.IsNotNullOrWhitespace("property", property);
 
             var propertyInfo = GetPropertyInfo(obj, property, ignoreCase);
-            if (propertyInfo == null)
+            if (propertyInfo is null)
             {
                 return false;
             }
@@ -54,7 +54,7 @@ namespace Catel.Reflection
 #else
             var getMethod = propertyInfo.GetGetMethod();
 #endif
-            if (getMethod == null)
+            if (getMethod is null)
             {
                 return false;
             }
@@ -200,7 +200,7 @@ namespace Catel.Reflection
             value = default(TValue);
 
             var propertyInfo = GetPropertyInfo(obj, property, ignoreCase);
-            if (propertyInfo == null)
+            if (propertyInfo is null)
             {
                 if (throwOnException)
                 {
@@ -283,7 +283,7 @@ namespace Catel.Reflection
             Argument.IsNotNullOrWhitespace("property", property);
 
             var propertyInfo = GetPropertyInfo(obj, property, ignoreCase);
-            if (propertyInfo == null)
+            if (propertyInfo is null)
             {
                 if (throwOnError)
                 {
@@ -314,7 +314,7 @@ namespace Catel.Reflection
 #else
             var setMethod = propertyInfo.GetSetMethod();
 #endif
-            if (setMethod == null)
+            if (setMethod is null)
             {
                 if (throwOnError)
                 {
@@ -354,7 +354,7 @@ namespace Catel.Reflection
 
             var bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
             var propertyInfo = baseType.GetPropertyEx(property, bindingFlags);
-            if (propertyInfo == null)
+            if (propertyInfo is null)
             {
                 throw Log.ErrorAndCreateException(s => new PropertyNotFoundException(property),
                     "Hidden property '{0}' is not found on the base type '{1}'", property, baseType.GetType().Name);

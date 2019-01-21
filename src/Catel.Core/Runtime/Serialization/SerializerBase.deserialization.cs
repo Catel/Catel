@@ -351,7 +351,7 @@ namespace Catel.Runtime.Serialization
                     if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary)
                     {
                         var targetDictionary = TypeFactory.CreateInstance(member.MemberType) as IDictionary;
-                        if (targetDictionary == null)
+                        if (targetDictionary is null)
                         {
                             throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a dictionary, but target model cannot be updated because it does not implement IDictionary",
                                 context.ModelTypeName);
@@ -391,7 +391,7 @@ namespace Catel.Runtime.Serialization
                         else
                         {
                             var targetCollection = TypeFactory.CreateInstance(member.MemberType) as IList;
-                            if (targetCollection == null)
+                            if (targetCollection is null)
                             {
                                 throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
                                     context.ModelTypeName);
@@ -440,7 +440,7 @@ namespace Catel.Runtime.Serialization
                 else if (firstMember.MemberGroup == SerializationMemberGroup.Dictionary)
                 {
                     var targetDictionary = context.Model as IDictionary;
-                    if (targetDictionary == null)
+                    if (targetDictionary is null)
                     {
                         throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a dictionary, but target model cannot be updated because it does not implement IDictionary",
                             context.ModelTypeName);
@@ -466,7 +466,7 @@ namespace Catel.Runtime.Serialization
                     else
                     {
                         var targetCollection = context.Model as IList;
-                        if (targetCollection == null)
+                        if (targetCollection is null)
                         {
                             throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
                                 context.ModelTypeName);
@@ -501,13 +501,13 @@ namespace Catel.Runtime.Serialization
         {
             // Note: don't use GetBestMemberType, it could return string type
             var parseMethod = GetObjectParseMethod(memberValue.MemberType);
-            if (parseMethod == null)
+            if (parseMethod is null)
             {
                 return null;
             }
 
             var memberValueAsString = memberValue.Value as string;
-            if (memberValueAsString == null)
+            if (memberValueAsString is null)
             {
                 return null;
             }

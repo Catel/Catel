@@ -102,7 +102,7 @@ namespace Catel.MVVM
             {
                 foreach (KeyValuePair<string, object> model in _modelObjects)
                 {
-                    if (model.Value == null)
+                    if (model.Value is null)
                     {
                         continue;
                     }

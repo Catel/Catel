@@ -158,7 +158,7 @@ namespace Catel.Caching
                 {
                     var timeSpan = _expirationTimerInterval;
 
-                    if (_expirationTimer == null)
+                    if (_expirationTimer is null)
                     {
                         // Always create timers with infinite, then update them later so we always have a populated timer field
                         _expirationTimer = new Catel.Threading.Timer(OnTimerElapsed, null, Timeout.Infinite, Timeout.Infinite);
@@ -229,7 +229,7 @@ namespace Catel.Caching
                 var value = code();
                 if (!ReferenceEquals(value, null) || _storeNullValues)
                 {
-                    if (expirationPolicy == null && _defaultExpirationPolicyInitCode != null)
+                    if (expirationPolicy is null && _defaultExpirationPolicyInitCode != null)
                     {
                         expirationPolicy = _defaultExpirationPolicyInitCode();
                     }
@@ -245,7 +245,7 @@ namespace Catel.Caching
                         _checkForExpiredItems = true;
                     }
 
-                    if (expirationPolicy != null && _expirationTimer == null)
+                    if (expirationPolicy != null && _expirationTimer is null)
                     {
                         UpdateTimer();
                     }
@@ -298,7 +298,7 @@ namespace Catel.Caching
 
                 if (!ReferenceEquals(value, null) || _storeNullValues)
                 {
-                    if (expirationPolicy == null && _defaultExpirationPolicyInitCode != null)
+                    if (expirationPolicy is null && _defaultExpirationPolicyInitCode != null)
                     {
                         expirationPolicy = _defaultExpirationPolicyInitCode();
                     }
@@ -314,7 +314,7 @@ namespace Catel.Caching
                         _checkForExpiredItems = true;
                     }
 
-                    if (expirationPolicy != null && _expirationTimer == null)
+                    if (expirationPolicy != null && _expirationTimer is null)
                     {
                         UpdateTimer();
                     }
@@ -588,7 +588,7 @@ namespace Catel.Caching
 
             if (cancel)
             {
-                if (expirationPolicy == null && _defaultExpirationPolicyInitCode != null)
+                if (expirationPolicy is null && _defaultExpirationPolicyInitCode != null)
                 {
                     expirationPolicy = _defaultExpirationPolicyInitCode.Invoke();
                 }

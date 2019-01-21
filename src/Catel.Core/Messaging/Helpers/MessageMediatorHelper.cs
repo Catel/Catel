@@ -34,7 +34,7 @@ namespace Catel.Messaging
         {
             Argument.IsNotNull("instance", instance);
 
-            if (messageMediator == null)
+            if (messageMediator is null)
             {
                 var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
                 messageMediator = dependencyResolver.Resolve<IMessageMediator>();
@@ -90,7 +90,7 @@ namespace Catel.Messaging
         {
             Argument.IsNotNull("instance", instance);
 
-            if (messageMediator == null)
+            if (messageMediator is null)
             {
                 var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
                 messageMediator = dependencyResolver.Resolve<IMessageMediator>();

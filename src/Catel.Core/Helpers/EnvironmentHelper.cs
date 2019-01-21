@@ -32,7 +32,7 @@ namespace Catel
             get
             {
                 // This is required because the logging checks for this when creating the Lazy class
-                if (_hostedByVisualStudio == null)
+                if (_hostedByVisualStudio is null)
                 {
                     return false;
                 }
@@ -50,7 +50,7 @@ namespace Catel
             get
             {
                 // This is required because the logging checks for this when creating the Lazy class
-                if (_hostedBySharpDevelop == null)
+                if (_hostedBySharpDevelop is null)
                 {
                     return false;
                 }
@@ -68,7 +68,7 @@ namespace Catel
             get
             {
                 // This is required because the logging checks for this when creating the Lazy class
-                if (_hostedByExpressionBlend == null)
+                if (_hostedByExpressionBlend is null)
                 {
                     return false;
                 }
@@ -183,7 +183,7 @@ namespace Catel
             try
             {
                 var currentProcess = Process.GetCurrentProcess();
-                if (currentProcess == null)
+                if (currentProcess is null)
                 {
                     return false;
                 }
@@ -193,7 +193,7 @@ namespace Catel
                 {
 #if NET
                     currentProcess = currentProcess.GetParent();
-                    if (currentProcess == null)
+                    if (currentProcess is null)
                     {
                         return false;
                     }

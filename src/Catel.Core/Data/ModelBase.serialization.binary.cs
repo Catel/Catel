@@ -107,7 +107,7 @@ namespace Catel.Data
         private void OnDeserialized(StreamingContext context)
         {
 #if NET || NETCORE
-            if (_serializationInfo == null)
+            if (_serializationInfo is null)
             {
                 // Probably a custom serializer which will populate us in a different way
                 return;

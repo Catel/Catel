@@ -323,7 +323,7 @@ namespace Catel.Reflection
                 var typesWithAssembly = ignoreCase ? _typesWithAssemblyLowerCase : _typesWithAssembly;
 
                 var typeNameWithAssembly = string.IsNullOrEmpty(assemblyName) ? null : TypeHelper.FormatType(assemblyName, typeName);
-                if (typeNameWithAssembly == null)
+                if (typeNameWithAssembly is null)
                 {
                     // If we have a mapping, use that instead
                     if (typesWithoutAssembly.TryGetValue(typeName, out var typeNameMapping))
@@ -439,7 +439,7 @@ namespace Catel.Reflection
                 foreach (var innerTypesShortName in innerTypesShortNames)
                 {
                     var innerType = GetType(innerTypesShortName, allowInitialization: false);
-                    if (innerType == null)
+                    if (innerType is null)
                     {
                         return null;
                     }
@@ -553,7 +553,7 @@ namespace Catel.Reflection
                 }
             }
 
-            if (typeSource == null)
+            if (typeSource is null)
             {
                 return ArrayShim.Empty<Type>();
             }
@@ -663,7 +663,7 @@ namespace Catel.Reflection
                 }
 
                 // CTL-877 Only clear when assembly != null
-                if (forceFullInitialization && assembly == null)
+                if (forceFullInitialization && assembly is null)
                 {
                     _loadedAssemblies.Clear();
                     _typesByAssembly?.Clear();
@@ -874,7 +874,7 @@ namespace Catel.Reflection
         /// <returns><c>true</c> if the assembly should be ignored, <c>false</c> otherwise.</returns>
         private static bool ShouldIgnoreAssembly(Assembly assembly)
         {
-            if (assembly == null)
+            if (assembly is null)
             {
                 return true;
             }
@@ -923,7 +923,7 @@ namespace Catel.Reflection
         /// <returns><c>true</c> if the type should be ignored, <c>false</c> otherwise.</returns>
         private static bool ShouldIgnoreType(Assembly assembly, Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 return true;
             }

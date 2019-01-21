@@ -394,7 +394,7 @@ namespace Catel.Data
                 {
                     lock (_lock)
                     {
-                        if (_validationSuspensionContext == null)
+                        if (_validationSuspensionContext is null)
                         {
                             _validationSuspensionContext = new SuspensionContext();
                         }
@@ -461,7 +461,7 @@ namespace Catel.Data
         /// <returns>IValidator.</returns>
         private IValidator GetValidator()
         {
-            if (_validator == null)
+            if (_validator is null)
             {
                 if (!_hasRetrievedValidatorOnce)
                 {
@@ -600,7 +600,7 @@ namespace Catel.Data
                         if (catelPropertyData != null)
                         {
                             var propertyInfo = catelPropertyData.GetPropertyInfo(type);
-                            if (propertyInfo == null || !propertyInfo.HasPublicGetter)
+                            if (propertyInfo is null || !propertyInfo.HasPublicGetter)
                             {
                                 PropertiesNotCausingValidation[type].Add(propertyName);
                                 return false;
@@ -777,7 +777,7 @@ namespace Catel.Data
             IsValidating = true;
 
             var existingValidationContext = _validationContext;
-            if (existingValidationContext == null)
+            if (existingValidationContext is null)
             {
                 existingValidationContext = new ValidationContext();
             }
@@ -812,7 +812,7 @@ namespace Catel.Data
                     }
 
                     var propertyInfo = propertyData.Value.GetPropertyInfo(type);
-                    if (propertyInfo == null || !propertyInfo.HasPublicGetter)
+                    if (propertyInfo is null || !propertyInfo.HasPublicGetter)
                     {
                         // Note: non-public getter, do not validate
                         ignoredOrFailedPropertyValidations.Add(propertyData.Key);

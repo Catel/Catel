@@ -89,7 +89,7 @@ namespace Catel.Windows.Interactivity
         private void SubscribeToWindowEvent()
         {
             var window = Window.GetWindow(AssociatedObject);
-            if (window == null)
+            if (window is null)
             {
                 return;
             }
@@ -104,7 +104,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         private void UnsubscribeFromWindowEvent()
         {
-            if (_currentWindow == null)
+            if (_currentWindow is null)
             {
                 return;
             }

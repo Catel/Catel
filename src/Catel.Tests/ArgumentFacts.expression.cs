@@ -412,7 +412,7 @@ namespace Catel.Tests
             public void SucceedsForIsValidInvokation2()
             {
                 this.IsValidInvokation("myValue", s => s.Length < 10);
-                this.IsValidInvokation((string)null, s => s == null);
+                this.IsValidInvokation((string)null, s => s is null);
             }
 
             [TestCase]

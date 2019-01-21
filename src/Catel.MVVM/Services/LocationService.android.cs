@@ -135,7 +135,7 @@ namespace Catel.Services
         public override ILocation GetCurrentLocation()
         {
             var location = _locationManager.GetLastKnownLocation(Provider);
-            if (location == null)
+            if (location is null)
             {
                 return null;
             }

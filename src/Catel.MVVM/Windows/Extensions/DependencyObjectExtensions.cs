@@ -186,12 +186,12 @@ namespace Catel.Windows
             return FindVisualAncestor(startElement, delegate (object o)
             {
                 var dependencyObject = o as DependencyObject;
-                if (dependencyObject == null)
+                if (dependencyObject is null)
                 {
                     return false;
                 }
 
-                return (dependencyObject.GetVisualParent() == null);
+                return (dependencyObject.GetVisualParent() is null);
             });
         }
 

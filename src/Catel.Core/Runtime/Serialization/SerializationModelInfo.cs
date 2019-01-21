@@ -43,9 +43,9 @@ namespace Catel.Runtime.Serialization
             foreach (var catelProperty in catelProperties)
             {
                 var propertyData = catelProperty.Value.Tag as PropertyData;
-                if (propertyData == null)
+                if (propertyData is null)
                 {
-                    if (catelTypeInfo == null)
+                    if (catelTypeInfo is null)
                     {
                         catelTypeInfo = PropertyDataManager.Default.GetCatelTypeInfo(modelType);
                     }
@@ -62,7 +62,7 @@ namespace Catel.Runtime.Serialization
             foreach (var field in fields)
             {
                 var fieldInfo = field.Value.Tag as FieldInfo;
-                if (fieldInfo == null)
+                if (fieldInfo is null)
                 {
                     fieldInfo = modelType.GetFieldEx(field.Key);
                 }
@@ -76,7 +76,7 @@ namespace Catel.Runtime.Serialization
             foreach (var regularProperty in regularProperties)
             {
                 var propertyInfo = regularProperty.Value.Tag as PropertyInfo;
-                if (propertyInfo == null)
+                if (propertyInfo is null)
                 {
                     propertyInfo = modelType.GetPropertyEx(regularProperty.Key);
                 }

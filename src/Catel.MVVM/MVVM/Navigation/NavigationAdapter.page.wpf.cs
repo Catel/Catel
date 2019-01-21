@@ -66,7 +66,7 @@ namespace Catel.MVVM.Navigation
 
         partial void DetermineNavigationContext()
         {
-            if (_lastNavigationContext == null)
+            if (_lastNavigationContext is null)
             {
                 _lastNavigationContext = new Dictionary<string, object>();
 
@@ -137,7 +137,7 @@ namespace Catel.MVVM.Navigation
             }
 
             var sourceDictionary = e.ExtraData as Dictionary<string, object>;
-            if (sourceDictionary == null)
+            if (sourceDictionary is null)
             {
                 sourceDictionary = new Dictionary<string, object>();
                 sourceDictionary["context"] = e.ExtraData;

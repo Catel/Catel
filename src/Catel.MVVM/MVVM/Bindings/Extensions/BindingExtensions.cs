@@ -107,7 +107,7 @@ namespace Catel.MVVM
         /// <returns>The binding value.</returns>
         public static object GetBindingValue(this Binding binding)
         {
-            if (binding == null)
+            if (binding is null)
             {
                 return null;
             }

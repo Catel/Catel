@@ -92,7 +92,7 @@ namespace Catel.Reflection
         public static string InformationalVersion(this Assembly assembly)
         {
             var version = GetAssemblyAttribute<AssemblyInformationalVersionAttribute>(assembly);
-            return version == null ? null : version.InformationalVersion;
+            return version is null ? null : version.InformationalVersion;
         }
 
         /// <summary>
@@ -182,20 +182,20 @@ namespace Catel.Reflection
             }
 
             object attributeValue = attributes[0];
-            if (attributeValue == null)
+            if (attributeValue is null)
             {
                 return string.Empty;
             }
 
             var attributeType = attributeValue.GetType();
             var propertyInfo = attributeType.GetPropertyEx(property);
-            if (propertyInfo == null)
+            if (propertyInfo is null)
             {
                 return string.Empty;
             }
 
             object propertyValue = propertyInfo.GetValue(attributeValue, null);
-            if (propertyValue == null)
+            if (propertyValue is null)
             {
                 return string.Empty;
             }

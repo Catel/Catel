@@ -151,14 +151,14 @@ namespace Catel.Services
             HandleCloseSubscription(window, data, (sender, args) => tcs.TrySetResult(args.Result), showModal);
 
             var showMethodInfo = showModal ? window.GetType().GetMethodEx("ShowDialog") : window.GetType().GetMethodEx("Show");
-            if (showModal && showMethodInfo == null)
+            if (showModal && showMethodInfo is null)
             {
                 Log.Warning("Method 'ShowDialog' not found on '{0}', falling back to 'Show'", window.GetType().Name);
 
                 showMethodInfo = window.GetType().GetMethodEx("Show");
             }
 
-            if (showMethodInfo == null)
+            if (showMethodInfo is null)
             {
                 var exception = Log.ErrorAndCreateException<NotSupportedException>($"Methods 'Show' or 'ShowDialog' not found on '{window.GetType().Name}', cannot show the window");
                 tcs.SetException(exception);

@@ -448,7 +448,7 @@ namespace Catel.Services
                     await popupLayout.DismissPopupAsync();
                 }
 
-                if (popupLayout == null)
+                if (popupLayout is null)
                 {
                     _callbacks[contentPage]?.Item2?.SafeInvoke(this, new UICompletedEventArgs(_callbacks[contentPage].Item1, null));
                     await NavigationHelper.PopModalAsync(); 

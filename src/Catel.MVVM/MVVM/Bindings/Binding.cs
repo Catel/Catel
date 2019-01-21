@@ -231,12 +231,12 @@ namespace Catel.MVVM
         /// <returns><c>true</c> if the binding is still valid; otherwise, <c>false</c>.</returns>
         private bool EnsureBindingLifetime()
         {
-            if (_source == null || _source.Instance == null)
+            if (_source is null || _source.Instance is null)
             {
                 return false;
             }
 
-            if (_target == null || _target.Instance == null)
+            if (_target is null || _target.Instance is null)
             {
                 return false;
             }

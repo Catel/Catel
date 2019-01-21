@@ -192,7 +192,7 @@ namespace Catel.Reflection
                     stringBuilder.Append("AdditionalInfo:");
 
                     var additionalInfoAsEnumerable = AdditionalInfo as IEnumerable;
-                    if (additionalInfoAsEnumerable == null || AdditionalInfo is string)
+                    if (additionalInfoAsEnumerable is null || AdditionalInfo is string)
                     {
                         stringBuilder.Append(AdditionalInfo);
                     }

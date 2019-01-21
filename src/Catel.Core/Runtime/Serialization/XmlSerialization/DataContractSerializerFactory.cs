@@ -354,7 +354,7 @@ namespace Catel.Runtime.Serialization.Xml
                 }
 
                 var propertyTypeFullName = typeToCheck.GetSafeFullName(false);
-                if (propertyTypeFullName == null)
+                if (propertyTypeFullName is null)
                 {
                     serializerTypeInfo.AddTypeAsHandled(typeToCheck);
                     continue;
@@ -372,7 +372,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns><c>true</c> if the specified type is serializable; otherwise, <c>false</c>.</returns>
         protected virtual bool IsTypeSerializable(Type type, XmlSerializerTypeInfo serializerTypeInfo)
         {
-            if (type == null)
+            if (type is null)
             {
                 return false;
             }
@@ -415,7 +415,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns><c>true</c> if the type should be handled; otherwise, <c>false</c>.</returns>
         protected virtual bool ShouldTypeBeIgnored(Type type, XmlSerializerTypeInfo serializerTypeInfo)
         {
-            if (type == null)
+            if (type is null)
             {
                 return true;
             }
@@ -797,7 +797,7 @@ namespace Catel.Runtime.Serialization.Xml
                     }
 
                     // Should have an empty constructor
-                    if (type.GetConstructorEx(ArrayShim.Empty<Type>()) == null)
+                    if (type.GetConstructorEx(ArrayShim.Empty<Type>()) is null)
                     {
                         return false;
                     }

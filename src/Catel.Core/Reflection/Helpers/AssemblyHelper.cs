@@ -300,7 +300,7 @@ namespace Catel.Reflection
 
         private static bool ShouldIgnoreAssembly(Assembly assembly, bool ignoreDynamicAssemblies)
         {
-            if (assembly == null)
+            if (assembly is null)
             {
                 return true;
             }

@@ -98,7 +98,7 @@ namespace Catel.Services
         {
             InitializeBusyIndicator();
 
-            if (status == null)
+            if (status is null)
             {
                 status = string.Empty;
             }

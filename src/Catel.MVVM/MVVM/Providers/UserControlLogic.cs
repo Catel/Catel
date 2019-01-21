@@ -335,7 +335,7 @@ namespace Catel.MVVM.Providers
 
                 Log.Debug("Finished searching for an instance of the InfoBarMessageControl");
 
-                if (_infoBarMessageControl == null)
+                if (_infoBarMessageControl is null)
                 {
                     Log.Warning("No InfoBarMessageControl is found in the visual tree of '{0}', consider using the SkipSearchingForInfoBarMessageControl property to improve performance", GetType().Name);
                 }
@@ -352,7 +352,7 @@ namespace Catel.MVVM.Providers
                 Log.Debug("Re-using existing view model");
             }
 
-            if (ViewModel == null)
+            if (ViewModel is null)
             {
                 // Try to create view model based on data context
                 await UpdateDataContextToUseViewModelAsync(TargetView.DataContext);
@@ -436,7 +436,7 @@ namespace Catel.MVVM.Providers
 
             // Fix for CTL-307: DataContextChanged is invoked before Unloaded because Parent is set to null
             var targetControlParent = TargetView.GetParent();
-            if (targetControlParent == null)
+            if (targetControlParent is null)
             {
                 return;
             }
@@ -583,13 +583,13 @@ namespace Catel.MVVM.Providers
         private void RegisterViewModelAsChild()
         {
             var parentViewModel = _parentViewModel as IRelationalViewModel;
-            if (parentViewModel == null)
+            if (parentViewModel is null)
             {
                 return;
             }
 
             var viewModel = ViewModel as IRelationalViewModel;
-            if (viewModel == null)
+            if (viewModel is null)
             {
                 return;
             }
@@ -609,13 +609,13 @@ namespace Catel.MVVM.Providers
         private void UnregisterViewModelAsChild()
         {
             var parentViewModel = _parentViewModel as IRelationalViewModel;
-            if (parentViewModel == null)
+            if (parentViewModel is null)
             {
                 return;
             }
 
             var viewModel = ViewModel as IRelationalViewModel;
-            if (viewModel == null)
+            if (viewModel is null)
             {
                 return;
             }
@@ -653,7 +653,7 @@ namespace Catel.MVVM.Providers
                 if (dataContextAsViewModel != null)
                 {
                     // If the DataContext is a view model, only create a new view model if required
-                    if (currentViewModel == null)
+                    if (currentViewModel is null)
                     {
                         ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(newDataContext);
                     }
@@ -898,7 +898,7 @@ namespace Catel.MVVM.Providers
         /// </remarks>
         private void ClearWarningsAndErrorsForObject(object obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return;
             }

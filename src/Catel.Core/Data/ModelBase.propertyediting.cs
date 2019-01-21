@@ -26,7 +26,7 @@ namespace Catel.Data
         protected internal void SetValue(string name, object value, bool notifyOnChange = true)
         {
             var property = GetPropertyData(name);
-            if ((value == null) && !property.Type.IsNullableType())
+            if ((value is null) && !property.Type.IsNullableType())
             {
                 throw Log.ErrorAndCreateException(msg => new PropertyNotNullableException(name, GetType()),
                     "Property '{0}' on type '{1}' is not nullable, cannot set value to null", name, GetType().FullName);

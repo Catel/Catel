@@ -141,7 +141,7 @@ namespace Catel.IoC
             lock (_lockObject)
             {
                 var serviceLocator = CreateServiceLocatorFunc();
-                if (serviceLocator == null)
+                if (serviceLocator is null)
                 {
                     throw Log.ErrorAndCreateException<Exception>("Failed to create the IServiceLocator instance using the factory method");
                 }
@@ -149,7 +149,7 @@ namespace Catel.IoC
                 if (!serviceLocator.IsTypeRegistered<IDependencyResolver>())
                 {
                     var dependencyResolver = CreateDependencyResolverFunc(serviceLocator);
-                    if (dependencyResolver == null)
+                    if (dependencyResolver is null)
                     {
                         throw Log.ErrorAndCreateException<Exception>("Failed to create the IDependencyResolver instance using the factory method");
                     }
@@ -160,7 +160,7 @@ namespace Catel.IoC
                 if (!serviceLocator.IsTypeRegistered<ITypeFactory>())
                 {
                     var typeFactory = CreateTypeFactoryFunc(serviceLocator);
-                    if (typeFactory == null)
+                    if (typeFactory is null)
                     {
                         throw Log.ErrorAndCreateException<Exception>("Failed to create the ITypeFactory instance using the factory method");
                     }
@@ -170,7 +170,7 @@ namespace Catel.IoC
 
                 if (initializeServiceLocator)
                 {
-                    if (_serviceLocatorInitializers == null)
+                    if (_serviceLocatorInitializers is null)
                     {
                         _serviceLocatorInitializers = new List<Type>(TypeCache.GetTypes(x => !x.IsInterfaceEx() & x.ImplementsInterfaceEx<IServiceLocatorInitializer>(), false));
                     }

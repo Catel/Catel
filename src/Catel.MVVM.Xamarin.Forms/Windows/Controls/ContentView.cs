@@ -199,7 +199,7 @@ namespace Catel.Windows.Controls
             if (viewModel != null && relationalViewModel != null)
             {
                 var parent = Parent;
-                while (parentViewModel == null && parent != null)
+                while (parentViewModel is null && parent != null)
                 {
                     var parentViewModelAsRelationalViewModel = parent.BindingContext as IRelationalViewModel;
                     var parentViewModelAsViewModel = parent.BindingContext as IViewModel;

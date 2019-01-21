@@ -120,7 +120,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="type">The type to warmup.</param>
         protected override void Warmup(Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 return;
             }
@@ -155,7 +155,7 @@ namespace Catel.Runtime.Serialization.Xml
                 {
                     case MemberType.Field:
                         var fieldInfo = type.GetFieldEx(memberName);
-                        if (fieldInfo == null)
+                        if (fieldInfo is null)
                         {
                             Log.Warning("Failed to retrieve the field info of '{0}.{1}' during warmup", type.GetSafeFullName(false), memberName);
                             return;
@@ -166,7 +166,7 @@ namespace Catel.Runtime.Serialization.Xml
 
                     case MemberType.Property:
                         var propertyInfo = type.GetPropertyEx(memberName);
-                        if (propertyInfo == null)
+                        if (propertyInfo is null)
                         {
                             Log.Warning("Failed to retrieve the property info of '{0}.{1}' during warmup", type.GetSafeFullName(false), memberName);
                             return;
@@ -592,7 +592,7 @@ namespace Catel.Runtime.Serialization.Xml
                 Log.Warning(ex, "Failed to load document from stream, falling back to empty document");
             }
 
-            var isNewDocument = document == null;
+            var isNewDocument = document is null;
             if (isNewDocument)
             {
                 var rootName = "root";
@@ -664,7 +664,7 @@ namespace Catel.Runtime.Serialization.Xml
 
                 var referenceManager = context.ReferenceManager;
                 var referenceInfo = referenceManager.GetInfoById(graphId);
-                if (referenceInfo == null)
+                if (referenceInfo is null)
                 {
                     Log.Error("Expected to find graph object with id '{0}' in ReferenceManager, but it was not found. Defaulting value for member '{1}' to null", graphId, element.Name);
                     return null;
@@ -716,19 +716,19 @@ namespace Catel.Runtime.Serialization.Xml
             if (!isDeserialized && ShouldSerializeModelAsCollection(propertyTypeToDeserialize))
             {
                 var collection = value as IList;
-                if (collection == null)
+                if (collection is null)
                 {
                     collection = CreateModelInstance(propertyTypeToDeserialize) as IList;
                 }
 
-                if (collection == null)
+                if (collection is null)
                 {
                     throw Log.ErrorAndCreateException<NotSupportedException>("Cannot deserialize type '{0}', it should implement IList in order to be deserialized", propertyTypeToDeserialize.GetSafeFullName(false));
                 }
 
                 var realCollectionType = collection.GetType();
                 var childElementType = realCollectionType.GetCollectionElementType();
-                if (childElementType == null)
+                if (childElementType is null)
                 {
                     throw Log.ErrorAndCreateException<NotSupportedException>("Cannot deserialize type '{0}', could not determine the element type of the collection", propertyTypeToDeserialize.GetSafeFullName(false));
                 }
@@ -823,7 +823,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
             {
-                if (memberValue.Value == null)
+                if (memberValue.Value is null)
                 {
                     xmlWriter.WriteStartElement(elementName);
 
@@ -961,7 +961,7 @@ namespace Catel.Runtime.Serialization.Xml
         {
             var catelNamespaceUrl = GetNamespaceUrl();
             string ns1 = element.GetPrefixOfNamespace(catelNamespaceUrl);
-            if (ns1 == null)
+            if (ns1 is null)
             {
                 var document = element.Document;
                 if (document != null)

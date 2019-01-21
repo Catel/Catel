@@ -50,7 +50,7 @@ namespace Catel.ApiCop.Rules
         /// <param name="numberOfDependencies">The number of dependencies.</param>
         public void SetNumberOfDependenciesInjected(Type type, int numberOfDependencies)
         {
-            if (type == null)
+            if (type is null)
             {
                 return;
             }

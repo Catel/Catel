@@ -46,7 +46,7 @@ namespace Catel.MVVM.Converters
         {
             object result = null;
             var str = value as string;
-            if (value != null && (str == null || !string.IsNullOrEmpty(str.Trim())))
+            if (value != null && (str is null || !string.IsNullOrEmpty(str.Trim())))
             {
                 var underlyingType = Nullable.GetUnderlyingType(targetType) ?? targetType;
 

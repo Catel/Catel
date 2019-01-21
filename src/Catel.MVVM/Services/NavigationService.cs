@@ -141,7 +141,7 @@ namespace Catel.Services
         {
             Argument.IsNotNullOrWhitespace("uri", uri);
 
-            if (parameters == null)
+            if (parameters is null)
             {
                 parameters = new Dictionary<string, object>();
             }

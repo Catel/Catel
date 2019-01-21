@@ -74,7 +74,7 @@ namespace Catel
             // Note: we must store bindingflags inside variable otherwise invalid IL will be generated
             var bindingFlags = BindingFlags.Public | BindingFlags.Static;
             var commandNameField = containerType.GetFieldEx(commandNameFieldName, bindingFlags);
-            if (commandNameField == null)
+            if (commandNameField is null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Command '{0}' is not available on container type '{1}'",
                     commandNameFieldName, containerType.GetSafeFullName(false));
@@ -101,7 +101,7 @@ namespace Catel
             var commandContainerType = (from type in TypeCache.GetTypes(allowInitialization: false)
                                         where string.Equals(type.Name, commandContainerName, StringComparison.OrdinalIgnoreCase)
                                         select type).FirstOrDefault();
-            if (commandContainerType == null)
+            if (commandContainerType is null)
             {
                 Log.Debug("Couldn't find command container '{0}', you will need to add a custom action or command manually in order to make the CompositeCommand useful", commandContainerName);
                 return;

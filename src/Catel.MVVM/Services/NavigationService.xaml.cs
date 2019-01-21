@@ -112,7 +112,7 @@ namespace Catel.Services
             _appClosedFromService = true;
 
             var mainWindow = CatelEnvironment.MainWindow;
-            if (mainWindow == null)
+            if (mainWindow is null)
             {
                 throw Log.ErrorAndCreateException<NotSupportedException>("No main window found (not running SL out of browser? Cannot close application without a window.");
             }

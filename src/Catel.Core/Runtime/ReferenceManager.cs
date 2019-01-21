@@ -83,7 +83,7 @@ namespace Catel.Runtime
         /// <param name="instance">The instance.</param>
         public void RegisterManually(int id, object instance)
         {
-            if (instance == null)
+            if (instance is null)
             {
                 return;
             }
@@ -103,7 +103,7 @@ namespace Catel.Runtime
         /// <returns>The <see cref="ReferenceInfo" /> or <c>null</c> if <paramref name="instance" /> is <c>null</c>.</returns>
         public ReferenceInfo GetInfo(object instance)
         {
-            if (instance == null)
+            if (instance is null)
             {
                 return null;
             }

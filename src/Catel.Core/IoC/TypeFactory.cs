@@ -213,7 +213,7 @@ namespace Catel.IoC
         /// <param name="typeMetaData">Metadata about object to initialize</param>
         private void InitializeAfterConstruction(object obj, TypeMetaData typeMetaData)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return;
             }
@@ -266,7 +266,7 @@ namespace Catel.IoC
         {
           Argument.IsNotNull("typeToConstruct", typeToConstruct);
 
-          if (parameters == null)
+          if (parameters is null)
           {
             parameters = ArrayShim.Empty<object>();
           }
@@ -455,7 +455,7 @@ namespace Catel.IoC
         private bool IsValidParameterValue(Type parameterType, object parameterValue)
         {
             // 1: check if value is null and if the ctor accepts that
-            var isParameterNull = (parameterValue == null);
+            var isParameterNull = (parameterValue is null);
             var isCtorParameterValueType = parameterType.IsValueTypeEx();
             if (isParameterNull && isCtorParameterValueType)
             {
@@ -552,7 +552,7 @@ namespace Catel.IoC
                         }
                     }
 
-                    if (ctorParameterValue == null)
+                    if (ctorParameterValue is null)
                     {
                         if (tag != null && _serviceLocator.IsTypeRegistered(parameterTypeToResolve, tag))
                         {
@@ -740,7 +740,7 @@ namespace Catel.IoC
             public override bool Equals(object obj)
             {
                 var cacheKey = obj as ConstructorCacheKey;
-                if (cacheKey == null)
+                if (cacheKey is null)
                 {
                     return false;
                 }
@@ -846,7 +846,7 @@ namespace Catel.IoC
                         var injectAttribute = property.GetCustomAttributeEx(typeof(InjectAttribute), false) as InjectAttribute;
                         if (injectAttribute != null)
                         {
-                            if (injectAttribute.Type == null)
+                            if (injectAttribute.Type is null)
                             {
                                 injectAttribute.Type = property.PropertyType;
                             }

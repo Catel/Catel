@@ -131,7 +131,7 @@ namespace Catel.IoC
         /// <returns>The string.</returns>
         public override string ToString()
         {
-            if (_string == null)
+            if (_string is null)
             {
                 _string = string.Format("{0} (tag = {1})", Type.FullName, ObjectToStringHelper.ToString(Tag));
             }

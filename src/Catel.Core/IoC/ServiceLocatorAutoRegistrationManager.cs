@@ -210,7 +210,7 @@ namespace Catel.IoC
                                         if (!_serviceLocator.IsTypeRegistered(attribute.InterfaceType))
                                         {
                                             var instance = typeFactory.CreateInstance(type);
-                                            if (instance == null)
+                                            if (instance is null)
                                             {
                                                 Log.Error("Failed to instantiate type '{0}', cannot automatically register the instance", type.GetSafeFullName(false));
                                             }

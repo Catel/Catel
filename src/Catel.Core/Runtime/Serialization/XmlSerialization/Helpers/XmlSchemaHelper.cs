@@ -100,7 +100,7 @@ namespace Catel.Runtime.Serialization.Xml
         {
             var attribute = (from x in type.GetCustomAttributesEx(typeof(XmlSchemaProviderAttribute), false)
                              select x as XmlSchemaProviderAttribute).FirstOrDefault();
-            if (attribute == null)
+            if (attribute is null)
             {
                 if (type.IsBasicType())
                 {
@@ -111,7 +111,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             var methodToInvoke = type.GetMethodEx(attribute.MethodName, BindingFlags.Public | BindingFlags.Static);
-            if (methodToInvoke == null)
+            if (methodToInvoke is null)
             {
                 Log.Error("Expected method '{0}.{1}' because of the XmlSchemaProvider attribute, but it was not found", type.FullName, attribute.MethodName);
                 return null;

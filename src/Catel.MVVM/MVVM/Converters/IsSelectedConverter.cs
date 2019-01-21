@@ -35,7 +35,7 @@ namespace Catel.MVVM.Converters
                 bool.TryParse((string)parameter, out param);
             }
 
-            return (value == null) ? false : !((bool)value ^ param);
+            return (value is null) ? false : !((bool)value ^ param);
         }
 
         /// <summary>

@@ -160,7 +160,7 @@ namespace Catel.MVVM
 
             lock (_lock)
             {
-                if (_viewModel == null)
+                if (_viewModel is null)
                 {
                     return;
                 }

@@ -478,7 +478,7 @@ namespace Catel
         /// <exception cref="NotSupportedException">The specified <paramref name="targetType" /> is not supported.</exception>
         public static object ToRightType(Type targetType, string value, CultureInfo cultureInfo)
         {
-            if (value == null)
+            if (value is null)
             {
                 return null;
             }

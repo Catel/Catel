@@ -231,7 +231,7 @@ namespace Catel.Services
             Argument.IsNotNullOrWhitespace("path", path);
 
             var separator = GetParentSeparator(path);
-            if (separator == null)
+            if (separator is null)
             {
                 return path;
             }

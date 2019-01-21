@@ -77,7 +77,7 @@ namespace Catel.Services
             Argument.IsNotNull("viewModel", viewModel);
 
             var view = _viewManager.GetViewsOfViewModel(viewModel).OfType<UIElement>().FirstOrDefault();
-            if (view == null)
+            if (view is null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("There no an active view for this view model of type '{0}'", viewModel.GetType().FullName);
             }

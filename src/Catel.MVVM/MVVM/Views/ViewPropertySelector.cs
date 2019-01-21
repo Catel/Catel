@@ -38,7 +38,7 @@ namespace Catel.MVVM.Views
                 return;
             }
 
-            if (targetViewType == null)
+            if (targetViewType is null)
             {
                 Log.Debug("Added property '{0}' on all views to subscribe to", propertyName);
 

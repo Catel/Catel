@@ -723,7 +723,7 @@ namespace Catel.Windows
         private void OnButtonReceivedFocus(object sender, EventArgs e)
         {
             var buttonBase = sender as ButtonBase;
-            if (buttonBase == null)
+            if (buttonBase is null)
             {
                 return;
             }
@@ -922,7 +922,7 @@ namespace Catel.Windows
             _logic.ValidateViewModel();
 
             var vm = _logic.ViewModel;
-            if (vm == null)
+            if (vm is null)
             {
                 return true;
             }

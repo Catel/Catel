@@ -68,7 +68,7 @@ namespace Catel.IoC
             public override bool Equals(object obj)
             {
                 var objAsServiceInfo = obj as ServiceInfo;
-                if (objAsServiceInfo == null)
+                if (objAsServiceInfo is null)
                 {
                     return false;
                 }
@@ -788,7 +788,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            if (serviceImplementationType == null)
+            if (serviceImplementationType is null)
             {
                 // Dynamic late-bound type
                 serviceImplementationType = typeof(LateBoundImplementation);
@@ -869,7 +869,7 @@ namespace Catel.IoC
                         instance = _typeFactory.CreateInstance((Type)instance);
                     }
 
-                    if (instance == null)
+                    if (instance is null)
                     {
                         ThrowTypeNotRegisteredException(serviceType);
                     }
@@ -896,7 +896,7 @@ namespace Catel.IoC
         private object CreateServiceInstance(ServiceLocatorRegistration registration)
         {
             object instance = _typeFactory.CreateInstance(registration.ImplementingType);
-            if (instance == null)
+            if (instance is null)
             {
                 ThrowTypeNotRegisteredException(registration.DeclaringType, "Failed to instantiate the type using the TypeFactory. Check if the required dependencies are registered as well or that the type has a valid constructor that can be used.");
             }

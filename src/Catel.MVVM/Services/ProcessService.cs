@@ -39,7 +39,7 @@ namespace Catel.Services
             var fileName = processContext.FileName;
 
             var arguments = processContext.Arguments;
-            if (arguments == null)
+            if (arguments is null)
             {
                 arguments = string.Empty;
             }

@@ -102,7 +102,7 @@ namespace Catel.Windows.Interactivity
         protected virtual IEnumerable<UIElement> GetHitElements(Point mousePosition)
         {
             var element = AssociatedObject as UIElement;
-            if (element == null)
+            if (element is null)
             {
                 return Enumerable.Empty<UIElement>();
             }
@@ -152,13 +152,13 @@ namespace Catel.Windows.Interactivity
             if (AutoFixListBoxItemTemplate)
             {
                 var associatedObjectAsGrid = AssociatedObject as Grid;
-                if (associatedObjectAsGrid == null)
+                if (associatedObjectAsGrid is null)
                 {
                     Log.Debug("AutoFixListBoxItemTemplate is set to true, but AssociatedObject is not a grid so no action will be taken");
                     return;
                 }
 
-                if (associatedObjectAsGrid.Background == null)
+                if (associatedObjectAsGrid.Background is null)
                 {
                     associatedObjectAsGrid.Background = new SolidColorBrush(Colors.Transparent);
                 }

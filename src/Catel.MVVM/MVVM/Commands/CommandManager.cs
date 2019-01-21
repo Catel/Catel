@@ -129,7 +129,7 @@ namespace Catel.MVVM
                     return;
                 }
 
-                if (compositeCommand == null)
+                if (compositeCommand is null)
                 {
                     compositeCommand = new CompositeCommand();
                 }
@@ -172,7 +172,7 @@ namespace Catel.MVVM
                     return;
                 }
 
-                if (compositeCommand == null)
+                if (compositeCommand is null)
                 {
                     compositeCommand = new CompositeCommand();
                 }
