@@ -14,6 +14,24 @@ namespace Catel.Tests.Data
 
     public partial class ModelBaseFacts
     {
+        public class NonConstructableEditableObject : EditableObject
+        {
+            public NonConstructableEditableObject(string firstName)
+            {
+                FirstName = firstName;
+            }
+
+
+            public string FirstName
+            {
+                get { return GetValue<string>(FirstNameProperty); }
+                set { SetValue(FirstNameProperty, value); }
+            }
+
+            public static readonly PropertyData FirstNameProperty = RegisterProperty(nameof(FirstName), typeof(string), null);
+            
+        }
+
         public class EditableObject : ModelBase
         {
             public EditableObject()
@@ -213,6 +231,24 @@ namespace Catel.Tests.Data
             public void CancelsChangesForSelfReferencingTypes()
             {
                 //Assert.Inconclusive("Fix in 3.1");
+            }
+
+            [TestCase]
+            public void WorksForNonConstructableEditableObject()
+            {
+                var editableObject = new NonConstructableEditableObject("Geert");
+                var editableObjectAsIEditableObject = (IEditableObject)editableObject;
+
+                editableObjectAsIEditableObject.BeginEdit();
+
+                editableObject.FirstName = "John";
+
+                Assert.AreEqual("John", editableObject.FirstName);
+
+                editableObjectAsIEditableObject.CancelEdit();
+
+                Assert.AreEqual(true, editableObject.CancelEditingCalled);
+                Assert.AreEqual("Geert", editableObject.FirstName);
             }
 
             [TestCase]

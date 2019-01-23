@@ -16,7 +16,6 @@ namespace Catel.Runtime.Serialization
     using Catel.ApiCop;
     using Catel.ApiCop.Rules;
     using Catel.Caching;
-    using Catel.Data;
     using Catel.IoC;
     using Catel.Logging;
     using Catel.Reflection;
@@ -442,11 +441,13 @@ namespace Catel.Runtime.Serialization
         /// <param name="members">The members.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="members"/> is <c>null</c>.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "PopulateModel(ISerializationContext<TSerializationContextInfo>, MemberValue[])", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         protected virtual void PopulateModel(object model, params MemberValue[] members)
         {
             Argument.IsNotNull("model", model);
-            Argument.IsNotNull("properties", members);
+            Argument.IsNotNull("members", members);
 
+            // Populate using properties
             var modelType = model.GetType();
 
             var modelInfo = _serializationModelCache.GetFromCacheOrFetch(modelType, () =>
@@ -461,6 +462,96 @@ namespace Catel.Runtime.Serialization
             foreach (var member in members)
             {
                 ObjectAdapter.SetMemberValue(model, member, modelInfo);
+            }
+        }
+
+        /// <summary>
+        /// Populates the model with the specified members.
+        /// </summary>
+        /// <param name="context">The serialization context.</param>
+        /// <param name="members">The members.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="context"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="members"/> is <c>null</c>.</exception>
+        protected virtual void PopulateModel(ISerializationContext<TSerializationContextInfo> context, List<MemberValue> members)
+        {
+            Argument.IsNotNull("model", context);
+            Argument.IsNotNull("members", members);
+
+            if (members.Count > 0)
+            {
+                var firstMember = members[0];
+                if (firstMember.MemberGroup == SerializationMemberGroup.SimpleRootObject)
+                {
+                    // Completely replace root object (this is a basic (non-reference) type)
+                    context.Model = firstMember.Value;
+                }
+                else if (firstMember.MemberGroup == SerializationMemberGroup.Dictionary)
+                {
+                    var targetDictionary = context.Model as IDictionary;
+                    if (targetDictionary is null)
+                    {
+                        throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a dictionary, but target model cannot be updated because it does not implement IDictionary",
+                            context.ModelTypeName);
+                    }
+
+                    targetDictionary.Clear();
+
+                    var sourceDictionary = firstMember.Value as IDictionary;
+                    if (sourceDictionary != null)
+                    {
+                        foreach (var key in sourceDictionary.Keys)
+                        {
+                            targetDictionary.Add(key, sourceDictionary[key]);
+                        }
+                    }
+                }
+                else if (firstMember.MemberGroup == SerializationMemberGroup.Collection)
+                {
+                    if (context.ModelType.IsArrayEx())
+                    {
+                        context.Model = firstMember.Value;
+                    }
+                    else
+                    {
+                        var targetCollection = context.Model as IList;
+                        if (targetCollection is null)
+                        {
+                            throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
+                                context.ModelTypeName);
+                        }
+
+                        targetCollection.Clear();
+
+                        var sourceCollection = firstMember.Value as IEnumerable;
+                        if (sourceCollection != null)
+                        {
+                            foreach (var item in sourceCollection)
+                            {
+                                targetCollection.Add(item);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // Populate using properties
+                    var model = context.Model;
+                    var modelType = context.ModelType;
+
+                    var modelInfo = _serializationModelCache.GetFromCacheOrFetch(modelType, () =>
+                    {
+                        var catelProperties = SerializationManager.GetCatelProperties(modelType);
+                        var fields = SerializationManager.GetFields(modelType);
+                        var regularProperties = SerializationManager.GetRegularProperties(modelType);
+
+                        return new SerializationModelInfo(modelType, catelProperties, fields, regularProperties);
+                    });
+
+                    foreach (var member in members)
+                    {
+                        ObjectAdapter.SetMemberValue(model, member, modelInfo);
+                    }
+                }
             }
         }
 

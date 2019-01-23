@@ -48,6 +48,7 @@ Added/fixed
     if you find them so we can find a working solution
 (*) #1242 Reset ViewModelBase.IsInitialized in CloseViewModel to allow later re-initialization
 (*) #1244 Ignore loading of resource assemblies to prevent race conditions related to the type cache initialization
+(*) #1253 Support ModelBase.Backup (IEditableObject.CancelEdit) feature on non-constructable models
 (x) #1232 NavigationService.Navigate leads to endless loop when MainPage is MasterDetailPage
 (x) #1235 Application-wide commands do not work for UWP apps after upgrade to 5.8.0
 (x) #1236 Add missing Catel.MVVM resources to Catel.MVVM.Xamarin.Forms

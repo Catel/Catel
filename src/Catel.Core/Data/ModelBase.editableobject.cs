@@ -87,7 +87,7 @@ namespace Catel.Data
                 }
 
                 _objectValuesBackup = new Dictionary<string, object>();
-                _objectValuesBackup.Add(nameof(ModelBase.IsDirty), _object.IsDirty);
+                _objectValuesBackup.Add(nameof(IsDirty), _object.IsDirty);
             }
 
             /// <summary>
@@ -105,14 +105,14 @@ namespace Catel.Data
 
                         if (_serializer != null)
                         {
-                            properties = _serializer.DeserializeMembers(_object.GetType(), stream, null);
+                            properties = _serializer.DeserializeMembers(_object, stream, null);
                         }
 
                         oldPropertyValues = properties.ToDictionary(property => property.Name, property => property.Value);
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex, "Failed to deserialize the data for backup, which is weird");
+                        Log.Error(ex, "Failed to deserialize the data for backup");
                     }
                 }
 
@@ -130,7 +130,7 @@ namespace Catel.Data
                     }
                 }
 
-                _object.IsDirty = (bool)_objectValuesBackup[nameof(ModelBase.IsDirty)];
+                _object.IsDirty = (bool)_objectValuesBackup[nameof(IsDirty)];
             }
             #endregion
         }
