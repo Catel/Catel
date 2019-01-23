@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Catel.Logging;
 using System;
 
@@ -15,7 +15,7 @@ internal static class MethodTimeLogger
 
     public static void Log(Type type, string methodName, long milliseconds, string message)
     {
-        if (type is null)
+        if (type == null)
         {
             return;
         }

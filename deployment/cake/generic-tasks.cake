@@ -199,7 +199,7 @@ Task("CodeSign")
         return;
     }
 
-    if (!IsLocalBuild)
+    if (IsLocalBuild)
     {
         Information("Skipping code signing because this is a local package build");
         return;
