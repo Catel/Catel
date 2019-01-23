@@ -68,8 +68,17 @@ namespace Catel.Services
                 }
 
                 var process = Process.Start(processStartInfo);
-                process.EnableRaisingEvents = true;
-                process.Exited += (sender, e) => tcs.SetResult(process.ExitCode);
+                if (process is null)
+                {
+                    Log.Debug($"Process is already completed, cannot wait for it to complete");
+
+                    tcs.SetResult(0);
+                }
+                else
+                { 
+                    process.EnableRaisingEvents = true;
+                    process.Exited += (sender, e) => tcs.SetResult(process.ExitCode);
+                }
 #endif
             }
             catch (Exception ex)

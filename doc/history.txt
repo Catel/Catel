@@ -54,6 +54,7 @@ Added/fixed
 (x) #1236 Add missing Catel.MVVM resources to Catel.MVVM.Xamarin.Forms
 (x) #1251 Manually creating viewmodel grid using "__catelInnerWrapper" grid name fails => changed internal wrapper creation
     from ContentChanged to Loaded events
+(x) #1255 Prevent NullReferenceException in ProcessService when processes end fast
 
 Roadmap
 =======
