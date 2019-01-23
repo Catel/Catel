@@ -55,6 +55,7 @@ Added/fixed
 (x) #1251 Manually creating viewmodel grid using "__catelInnerWrapper" grid name fails => changed internal wrapper creation
     from ContentChanged to Loaded events
 (x) #1255 Prevent NullReferenceException in ProcessService when processes end fast
+(x) #1256 Don't retrieve properties of string objects in AutoCompletionService
 
 Roadmap
 =======
