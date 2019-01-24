@@ -112,7 +112,7 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotNullOrWhitespace(string paramName, string paramValue)
         {
-            if (string.IsNullOrEmpty(paramValue) || (string.CompareOrdinal(paramValue.Trim(), string.Empty) == 0))
+            if (string.IsNullOrWhiteSpace(paramValue))
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' cannot be null or whitespace";
                 Log.Error(error);
