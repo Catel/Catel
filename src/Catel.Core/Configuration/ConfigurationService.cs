@@ -408,7 +408,7 @@ namespace Catel.Configuration
                 return;
             }
 
-            ConfigurationChanged.SafeInvoke(this, () => new ConfigurationChangedEventArgs(container, key, value));
+            ConfigurationChanged?.Invoke(this, new ConfigurationChangedEventArgs(container, key, value));
         }
         #endregion
     }

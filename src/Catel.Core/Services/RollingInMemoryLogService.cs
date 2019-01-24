@@ -123,7 +123,7 @@ namespace Catel.Services
 
         private void OnLogListenerLogMessage(object sender, LogMessageEventArgs e)
         {
-            LogMessage.SafeInvoke(this, e);
+            LogMessage?.Invoke(this, e);
         }
         #endregion
     }

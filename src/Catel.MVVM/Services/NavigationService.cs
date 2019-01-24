@@ -82,7 +82,7 @@ namespace Catel.Services
         public bool CloseApplication()
         {
             var eventArgs = new ApplicationClosingEventArgs();
-            ApplicationClosing.SafeInvoke(this, eventArgs);
+            ApplicationClosing?.Invoke(this, eventArgs);
             if (eventArgs.Cancel)
             {
                 Log.Info("Closing of application is canceled");
@@ -92,7 +92,7 @@ namespace Catel.Services
             CloseMainWindow();
 
 #pragma warning disable 162
-            ApplicationClosed.SafeInvoke(this);
+            ApplicationClosed?.Invoke(this, EventArgs.Empty);
             return true;
 #pragma warning restore 162
         }

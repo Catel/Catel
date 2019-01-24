@@ -491,7 +491,7 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     Contract.Requires(e != null);
 
-                    this.CollectionChanged.SafeInvoke(this, e);
+                    this.CollectionChanged?.Invoke(this, e);
                 }
 
                 protected override void OnPropertyObjectCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

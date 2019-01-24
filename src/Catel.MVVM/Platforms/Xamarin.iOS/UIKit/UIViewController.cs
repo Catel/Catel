@@ -73,7 +73,7 @@ namespace Catel.MonoTouch.UIKit
             {
                 OnPropertyChanged(e);
 
-                PropertyChanged.SafeInvoke(this, e);
+                PropertyChanged?.Invoke(this, e);
             };
 
             _logic.ViewModelChanged += (sender, e) => RaiseViewModelChanged();
@@ -82,7 +82,7 @@ namespace Catel.MonoTouch.UIKit
             {
                 OnViewModelPropertyChanged(e);
 
-                ViewModelPropertyChanged.SafeInvoke(this, e);
+                ViewModelPropertyChanged?.Invoke(this, e);
             };
 
             _logic.DetermineViewModelInstance += (sender, e) =>
@@ -95,10 +95,10 @@ namespace Catel.MonoTouch.UIKit
                 e.ViewModelType = GetViewModelType(e.DataContext);
             };
 
-            _logic.ViewLoading += (sender, e) => ViewLoading.SafeInvoke(this);
-            _logic.ViewLoaded += (sender, e) => ViewLoaded.SafeInvoke(this);
-            _logic.ViewUnloading += (sender, e) => ViewUnloading.SafeInvoke(this);
-            _logic.ViewUnloaded += (sender, e) => ViewUnloaded.SafeInvoke(this);
+            _logic.ViewLoading += (sender, e) => ViewLoading?.Invoke(this);
+            _logic.ViewLoaded += (sender, e) => ViewLoaded?.Invoke(this);
+            _logic.ViewUnloading += (sender, e) => ViewUnloading?.Invoke(this);
+            _logic.ViewUnloaded += (sender, e) => ViewUnloaded?.Invoke(this);
         }
         #endregion
 
@@ -115,7 +115,7 @@ namespace Catel.MonoTouch.UIKit
             {
                 _dataContext = value;
 
-                DataContextChanged.SafeInvoke(this);
+                DataContextChanged?.Invoke(this);
             }
         }
 
@@ -232,8 +232,8 @@ namespace Catel.MonoTouch.UIKit
         {
             OnViewModelChanged();
 
-            ViewModelChanged.SafeInvoke(this);
-            PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
+            ViewModelChanged?.Invoke(this);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ViewModel"));
 
             if (_bindingContext != null)
             {
@@ -262,7 +262,7 @@ namespace Catel.MonoTouch.UIKit
 
             RaiseViewModelChanged();
 
-            Loaded.SafeInvoke(this);
+            Loaded?.Invoke(this);
 
             InitializeBindingContext();
         }
@@ -272,7 +272,7 @@ namespace Catel.MonoTouch.UIKit
             base.ViewDidDisappear(animated);
 
             // Note: call *after* base so NavigationAdapter always gets called
-            Unloaded.SafeInvoke(this);
+            Unloaded?.Invoke(this);
 
             UninitializeBindingContext();
         }

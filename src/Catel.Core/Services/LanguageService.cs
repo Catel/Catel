@@ -59,7 +59,7 @@ namespace Catel.Services
             set
             {
                 _fallbackCulture = value;
-                LanguageUpdated.SafeInvoke(this);
+                LanguageUpdated?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -73,7 +73,7 @@ namespace Catel.Services
             set
             {
                 _preferredCulture = value;
-                LanguageUpdated.SafeInvoke(this);
+                LanguageUpdated?.Invoke(this, EventArgs.Empty);
             }
         }
 

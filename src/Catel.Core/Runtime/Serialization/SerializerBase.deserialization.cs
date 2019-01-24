@@ -164,7 +164,7 @@ namespace Catel.Runtime.Serialization
 
             var serializingEventArgs = new SerializationEventArgs(context);
 
-            Deserializing.SafeInvoke(this, serializingEventArgs);
+            Deserializing?.Invoke(this, serializingEventArgs);
 
             foreach (var serializerModifier in serializerModifiers)
             {
@@ -186,7 +186,7 @@ namespace Catel.Runtime.Serialization
                 serializerModifier.OnDeserialized(context, model);
             }
 
-            Deserialized.SafeInvoke(this, serializingEventArgs);
+            Deserialized?.Invoke(this, serializingEventArgs);
 
             return model;
         }
@@ -398,7 +398,7 @@ namespace Catel.Runtime.Serialization
             {
                 var memberSerializationEventArgs = new MemberSerializationEventArgs(context, member);
 
-                DeserializingMember.SafeInvoke(this, memberSerializationEventArgs);
+                DeserializingMember?.Invoke(this, memberSerializationEventArgs);
 
                 BeforeDeserializeMember(context, member);
 
@@ -485,7 +485,7 @@ namespace Catel.Runtime.Serialization
                     AfterDeserializeMember(context, member);
                     memberValue.Value = member.Value;
 
-                    DeserializedMember.SafeInvoke(this, memberSerializationEventArgs);
+                    DeserializedMember?.Invoke(this, memberSerializationEventArgs);
                     memberValue.Value = member.Value;
                 }
             }

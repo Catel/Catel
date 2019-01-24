@@ -757,7 +757,7 @@ namespace Catel.Windows.Controls
         /// <param name="type">The type.</param>
         private void RaiseBusinessValidationWarningOrError(object value, string message, ValidationEventAction action, ValidationType type)
         {
-            Validation.SafeInvoke(this, () => new ValidationEventArgs(value, message, action, type));
+            Validation?.Invoke(this, new ValidationEventArgs(value, message, action, type));
         }
 
         /// <summary>

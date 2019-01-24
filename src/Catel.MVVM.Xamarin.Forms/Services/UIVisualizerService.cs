@@ -266,7 +266,7 @@ namespace Catel.Services
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             await viewModel.SaveAndCloseViewModelAsync();
-            completedProc?.SafeInvoke(this, new UICompletedEventArgs(viewModel, true));
+            completedProc?.Invoke(this, new UICompletedEventArgs(viewModel, true));
             await CloseModalAsync();
         }
 
@@ -299,7 +299,7 @@ namespace Catel.Services
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             await viewModel.CancelAndCloseViewModelAsync();
-            completedProc?.SafeInvoke(this, new UICompletedEventArgs(viewModel, false));
+            completedProc?.Invoke(this, new UICompletedEventArgs(viewModel, false));
             await CloseModalAsync();
         }
 
@@ -444,13 +444,13 @@ namespace Catel.Services
                 var popupLayout = contentPage.Content as PopupLayout;
                 if (popupLayout != null && popupLayout.IsPopupActive)
                 {
-                    _callbacks[contentPage]?.Item2?.SafeInvoke(this, new UICompletedEventArgs(_callbacks[contentPage].Item1, null));
+                    _callbacks[contentPage]?.Item2?.Invoke(this, new UICompletedEventArgs(_callbacks[contentPage].Item1, null));
                     await popupLayout.DismissPopupAsync();
                 }
 
                 if (popupLayout is null)
                 {
-                    _callbacks[contentPage]?.Item2?.SafeInvoke(this, new UICompletedEventArgs(_callbacks[contentPage].Item1, null));
+                    _callbacks[contentPage]?.Item2?.Invoke(this, new UICompletedEventArgs(_callbacks[contentPage].Item1, null));
                     await NavigationHelper.PopModalAsync(); 
                 }
                 

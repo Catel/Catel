@@ -187,7 +187,7 @@ namespace Catel.MVVM
 
                 if (viewModel != null)
                 {
-                    BindingUpdateRequired.SafeInvoke(this);
+                    BindingUpdateRequired?.Invoke(this, EventArgs.Empty);
                 }
 
                 _lastViewModelId = currentViewModelId;

@@ -696,7 +696,7 @@ namespace Catel.Data
         /// <param name="validationContext">The validation context.</param>
         protected virtual void OnValidatingFields(IValidationContext validationContext)
         {
-            ValidatingFields.SafeInvoke(this);
+            ValidatingFields?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -705,7 +705,7 @@ namespace Catel.Data
         /// <param name="validationContext">The validation context.</param>
         protected virtual void OnValidatedFields(IValidationContext validationContext)
         {
-            ValidatedFields.SafeInvoke(this);
+            ValidatedFields?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -714,7 +714,7 @@ namespace Catel.Data
         /// <param name="validationContext">The validation context.</param>
         protected virtual void OnValidatingBusinessRules(IValidationContext validationContext)
         {
-            ValidatingBusinessRules.SafeInvoke(this);
+            ValidatingBusinessRules?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -723,7 +723,7 @@ namespace Catel.Data
         /// <param name="validationContext">The validation context.</param>
         protected virtual void OnValidatedBusinessRules(IValidationContext validationContext)
         {
-            ValidatedBusinessRules.SafeInvoke(this);
+            ValidatedBusinessRules?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -732,11 +732,7 @@ namespace Catel.Data
         /// <param name="validationContext">The validation context.</param>
         protected virtual void OnValidated(IValidationContext validationContext)
         {
-            var handler = _validated;
-            if (handler != null)
-            {
-                handler(this, new ValidationEventArgs(validationContext));
-            }
+            _validated?.Invoke(this, new ValidationEventArgs(validationContext));
         }
 
         /// <summary>
@@ -1039,13 +1035,13 @@ namespace Catel.Data
                 {
                     RaisePropertyChanged(ErrorMessageProperty);
 
-                    _errorsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(string.Empty));
+                    _errorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(string.Empty));
                 }
                 else
                 {
                     RaisePropertyChanged(this, new PropertyChangedEventArgs(propertyName), false, true);
 
-                    _errorsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(propertyName));
+                    _errorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
                 }
 
                 if (notifyHasErrors)
@@ -1082,13 +1078,13 @@ namespace Catel.Data
                 {
                     RaisePropertyChanged(WarningMessageProperty);
 
-                    _warningsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(string.Empty));
+                    _warningsChanged?.Invoke(this, new DataErrorsChangedEventArgs(string.Empty));
                 }
                 else
                 {
                     RaisePropertyChanged(this, new PropertyChangedEventArgs(propertyName), false, true);
 
-                    _warningsChanged.SafeInvoke(this, () => new DataErrorsChangedEventArgs(propertyName));
+                    _warningsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
                 }
 
                 if (notifyHasWarnings)

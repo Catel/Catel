@@ -353,16 +353,34 @@ namespace Catel
     }
     public class static EventHandlerExtensions
     {
+        [System.ObsoleteAttribute("Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258" +
+            ". Will be removed in version 6.0.0.", true)]
         public static bool SafeInvoke(this System.EventHandler handler, object sender) { }
+        [System.ObsoleteAttribute("Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258" +
+            ". Will be removed in version 6.0.0.", true)]
         public static bool SafeInvoke(this System.EventHandler<System.EventArgs> handler, object sender) { }
+        [System.ObsoleteAttribute("Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258" +
+            ". Will be removed in version 6.0.0.", true)]
         public static bool SafeInvoke(this System.EventHandler handler, object sender, System.EventArgs e) { }
+        [System.ObsoleteAttribute("Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258" +
+            ". Will be removed in version 6.0.0.", true)]
         public static bool SafeInvoke<TEventArgs>(this System.EventHandler<TEventArgs> handler, object sender, TEventArgs e)
             where TEventArgs : System.EventArgs { }
+        [System.ObsoleteAttribute("Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258" +
+            ". Will be removed in version 6.0.0.", true)]
         public static bool SafeInvoke<TEventArgs>(this System.EventHandler<TEventArgs> handler, object sender, System.Func<TEventArgs> fE)
             where TEventArgs : System.EventArgs { }
+        [System.ObsoleteAttribute("Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258" +
+            ". Will be removed in version 6.0.0.", true)]
         public static bool SafeInvoke(this System.ComponentModel.PropertyChangedEventHandler handler, object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
+        [System.ObsoleteAttribute("Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258" +
+            ". Will be removed in version 6.0.0.", true)]
         public static bool SafeInvoke(this System.ComponentModel.PropertyChangedEventHandler handler, object sender, System.Func<System.ComponentModel.PropertyChangedEventArgs> fE) { }
+        [System.ObsoleteAttribute("Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258" +
+            ". Will be removed in version 6.0.0.", true)]
         public static bool SafeInvoke(this System.Collections.Specialized.NotifyCollectionChangedEventHandler handler, object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) { }
+        [System.ObsoleteAttribute("Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258" +
+            ". Will be removed in version 6.0.0.", true)]
         public static bool SafeInvoke(this System.Collections.Specialized.NotifyCollectionChangedEventHandler handler, object sender, System.Func<System.Collections.Specialized.NotifyCollectionChangedEventArgs> fE) { }
         public static void UnsubscribeAllHandlers<TEventArgs>(this System.EventHandler<TEventArgs> handler)
             where TEventArgs : System.EventArgs { }

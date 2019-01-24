@@ -213,7 +213,7 @@ namespace Catel.MVVM
 
                 target.SetPropertyValue(newValue);
 
-                ValueChanged.SafeInvoke(this);
+                ValueChanged?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {

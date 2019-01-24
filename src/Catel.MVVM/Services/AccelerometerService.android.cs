@@ -46,7 +46,7 @@ namespace Catel.Services
             var dateTimeOffset = new DateTimeOffset().AddMilliseconds(e.Timestamp);
             var value = new AccelerometerValue(dateTimeOffset, e.Values[0], e.Values[1], e.Values[2]);
             var eventArgs = new AccelerometerValueChangedEventArgs(value);
-            SensorChanged.SafeInvoke(this, eventArgs);
+            SensorChanged?.Invoke(this, eventArgs);
         }
     }
 

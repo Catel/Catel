@@ -102,7 +102,7 @@ namespace Catel.Services
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         protected void OnCurrentValueChanged(object sender, TEventArgs e)
         {
-            CurrentValueChanged.SafeInvoke(sender, e);
+            CurrentValueChanged?.Invoke(sender, e);
         }
         #endregion
     }

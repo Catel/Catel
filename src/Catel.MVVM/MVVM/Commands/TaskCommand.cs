@@ -245,7 +245,7 @@ namespace Catel.MVVM
             _cancellationTokenSource = new CancellationTokenSource();
 
             var args = new CommandCanceledEventArgs(parameter);
-            Executing.SafeInvoke(this, args);
+            Executing?.Invoke(this, args);
 
             if (args.Cancel)
             {
@@ -302,7 +302,7 @@ namespace Catel.MVVM
 
             if (executionTask?.IsCanceled ?? false)
             {
-                Canceled.SafeInvoke(this, () => new CommandEventArgs(parameter));
+                Canceled?.Invoke(this, new CommandEventArgs(parameter));
             }
             else
             {
@@ -345,7 +345,7 @@ namespace Catel.MVVM
                 _reportProgress(progress);
             }
 
-            var action = new Action(() => ProgressChanged.SafeInvoke(this, () => new CommandProgressChangedEventArgs<TProgress>(progress)));
+            var action = new Action(() => ProgressChanged?.Invoke(this, new CommandProgressChangedEventArgs<TProgress>(progress)));
             AutoDispatchIfRequired(action);
         }
 

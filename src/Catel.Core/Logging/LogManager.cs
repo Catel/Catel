@@ -777,7 +777,7 @@ namespace Catel.Logging
                 return;
             }
 
-            LogMessage.SafeInvoke(sender, e);
+            LogMessage?.Invoke(sender, e);
 
             var logListeners = GetThreadSafeLogListeners();
             if (logListeners.Count == 0)

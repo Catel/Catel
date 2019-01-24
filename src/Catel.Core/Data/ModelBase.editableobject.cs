@@ -254,7 +254,7 @@ namespace Catel.Data
             }
 
             var eventArgs = new BeginEditEventArgs(this);
-            _beginEditingEvent.SafeInvoke(this, eventArgs);
+            _beginEditingEvent?.Invoke(this, eventArgs);
             OnBeginEdit(eventArgs);
 
             if (eventArgs.Cancel)
@@ -281,14 +281,14 @@ namespace Catel.Data
 
             CancelEditCompletedEventArgs cancelEditCompletedEventArgs;
             var eventArgs = new CancelEditEventArgs(this);
-            _cancelEditingEvent.SafeInvoke(this, eventArgs);
+            _cancelEditingEvent?.Invoke(this, eventArgs);
             OnCancelEdit(eventArgs);
 
             if (eventArgs.Cancel)
             {
                 Log.Info("IEditableObject.CancelEdit is canceled by the event args");
                 cancelEditCompletedEventArgs = new CancelEditCompletedEventArgs(true);
-                _cancelEditingCompletedEvent.SafeInvoke(this, cancelEditCompletedEventArgs);
+                _cancelEditingCompletedEvent?.Invoke(this, cancelEditCompletedEventArgs);
                 OnCancelEditCompleted(cancelEditCompletedEventArgs);
                 return;
             }
@@ -299,7 +299,7 @@ namespace Catel.Data
             _backup = null;
 
             cancelEditCompletedEventArgs = new CancelEditCompletedEventArgs(false);
-            _cancelEditingCompletedEvent.SafeInvoke(this, cancelEditCompletedEventArgs);
+            _cancelEditingCompletedEvent?.Invoke(this, cancelEditCompletedEventArgs);
             OnCancelEditCompleted(cancelEditCompletedEventArgs);
         }
 
@@ -315,7 +315,7 @@ namespace Catel.Data
             }
 
             var eventArgs = new EndEditEventArgs(this);
-            _endEditingEvent.SafeInvoke(this, eventArgs);
+            _endEditingEvent?.Invoke(this, eventArgs);
             OnEndEdit(eventArgs);
 
             if (eventArgs.Cancel)

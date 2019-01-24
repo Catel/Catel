@@ -607,7 +607,7 @@ namespace Catel.IoC
 
                 if (wasRemoved)
                 {
-                    TypeUnregistered.SafeInvoke(this, () => new TypeUnregisteredEventArgs(serviceType, existingRegistration.ImplementingType,
+                    TypeUnregistered?.Invoke(this, new TypeUnregisteredEventArgs(serviceType, existingRegistration.ImplementingType,
                         tag, existingRegistration.RegistrationType, existingInstance?.ImplementingInstance));
                 }
             }
@@ -767,7 +767,7 @@ namespace Catel.IoC
                 _registeredInstances[serviceInfo] = new RegisteredInstanceInfo(registeredTypeInfo, instance);
             }
 
-            TypeRegistered.SafeInvoke(this, () => new TypeRegisteredEventArgs(registeredTypeInfo.DeclaringType, registeredTypeInfo.ImplementingType, tag, RegistrationType.Singleton));
+            TypeRegistered?.Invoke(this, new TypeRegisteredEventArgs(registeredTypeInfo.DeclaringType, registeredTypeInfo.ImplementingType, tag, RegistrationType.Singleton));
 
             Log.Debug("Registered type '{0}' to instance of type '{1}'", serviceType.FullName, instance.GetType().FullName);
         }
@@ -831,7 +831,7 @@ namespace Catel.IoC
                 _registeredTypes[serviceInfo] = registeredTypeInfo;
             }
 
-            TypeRegistered.SafeInvoke(this, () => new TypeRegisteredEventArgs(registeredTypeInfo.DeclaringType, registeredTypeInfo.ImplementingType, tag, registeredTypeInfo.RegistrationType));
+            TypeRegistered?.Invoke(this, new TypeRegisteredEventArgs(registeredTypeInfo.DeclaringType, registeredTypeInfo.ImplementingType, tag, registeredTypeInfo.RegistrationType));
 
             Log.Debug("Registered type '{0}' to type '{1}'", serviceType.FullName, serviceImplementationType.FullName);
         }

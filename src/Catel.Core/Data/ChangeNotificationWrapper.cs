@@ -149,7 +149,7 @@ namespace Catel.Data
         /// </remarks>
         public void OnObjectPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            PropertyChanged.SafeInvoke(sender, e);
+            PropertyChanged?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace Catel.Data
                 }
             }
 
-            CollectionChanged.SafeInvoke(sender, e);
+            CollectionChanged?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace Catel.Data
         /// </remarks>
         public void OnObjectCollectionItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            CollectionItemPropertyChanged.SafeInvoke(sender, e);
+            CollectionItemPropertyChanged?.Invoke(sender, e);
         }
 
         /// <summary>

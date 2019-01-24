@@ -80,7 +80,7 @@ namespace Catel.Windows.Controls
                     RemoveParentChildRelationship();
 
                     base.BindingContext = value;
-                    DataContextChanged.SafeInvoke(this, new DataContextChangedEventArgs(oldContext, BindingContext));
+                    DataContextChanged?.Invoke(this, new DataContextChangedEventArgs(oldContext, BindingContext));
                 }
             }
         }
@@ -156,7 +156,7 @@ namespace Catel.Windows.Controls
 
             EnsureParentChildRelationship(dataContextChangedEventArgs.NewContext);
 
-            ViewModelChanged.SafeInvoke(this);
+            ViewModelChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

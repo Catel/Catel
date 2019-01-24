@@ -41,7 +41,7 @@ namespace Catel.Windows.Controls
 
         private void OnBindingContextChanged(object o, EventArgs eventArgs)
         {
-            DataContextChanged.SafeInvoke(this, () => new DataContextChangedEventArgs(_oldbindingContext, BindingContext));
+            DataContextChanged?.Invoke(this, new DataContextChangedEventArgs(_oldbindingContext, BindingContext));
             _oldbindingContext = BindingContext;
             RaiseViewModelChanged();
         }
@@ -72,18 +72,18 @@ namespace Catel.Windows.Controls
             _userControlLogic.ViewModelPropertyChanged += (sender, e) =>
             {
                 OnViewModelPropertyChanged(e);
-                ViewModelPropertyChanged.SafeInvoke(this, e);
+                ViewModelPropertyChanged?.Invoke(this, e);
             };
 
             Loaded += (sender, e) =>
             {
-                // _viewLoaded.SafeInvoke(this);
+                // _viewLoaded?.Invoke(this);
                 // OnLoaded(e);
             };
 
             Unloaded += (sender, e) =>
             {
-                // _viewUnloaded.SafeInvoke(this);
+                // _viewUnloaded?.Invoke(this);
                 // OnUnloaded(e);
             };
 
@@ -155,7 +155,7 @@ namespace Catel.Windows.Controls
         private void RaiseViewModelChanged()
         {
             OnViewModelChanged();
-            ViewModelChanged.SafeInvoke(this);
+            ViewModelChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace Catel.Windows.Controls
         /// </summary>
         protected override void OnAppearing()
         {
-            Loaded.SafeInvoke(this, EventArgs.Empty);
+            Loaded?.Invoke(this, EventArgs.Empty);
 
             base.OnAppearing();
         }
@@ -201,7 +201,7 @@ namespace Catel.Windows.Controls
         {
             base.OnDisappearing();
 
-            Unloaded.SafeInvoke(this, EventArgs.Empty);
+            Unloaded?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -216,13 +216,13 @@ namespace Catel.Windows.Controls
         protected sealed override bool OnBackButtonPressed()
         {
             /*
-            BackButtonPressed.SafeInvoke(this);
+            BackButtonPressed?.Invoke(this);
             var popupLayout = Content as PopupLayout;
             //// TODO: Lookup for top most popup layout.
             return popupLayout != null && popupLayout.IsPopupActive || base.OnBackButtonPressed();
             */
 
-            BackButtonPressed.SafeInvoke(this);
+            BackButtonPressed?.Invoke(this, EventArgs.Empty);
 
             return base.OnBackButtonPressed();
         }
@@ -234,7 +234,7 @@ namespace Catel.Windows.Controls
         /// <param name="eventArgs">The data context changed event args.</param>
         private void OnDataContextChanged(object sender, DataContextChangedEventArgs eventArgs)
         {
-            ViewModelChanged.SafeInvoke(this);
+            ViewModelChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

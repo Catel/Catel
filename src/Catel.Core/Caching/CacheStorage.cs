@@ -580,7 +580,7 @@ namespace Catel.Caching
             if (raiseEvents)
             {
                 var expiringEventArgs = new ExpiringEventArgs<TKey, TValue>(key, item.Value, expirationPolicy);
-                Expiring.SafeInvoke(this, expiringEventArgs);
+                Expiring?.Invoke(this, expiringEventArgs);
 
                 cancel = expiringEventArgs.Cancel;
                 expirationPolicy = expiringEventArgs.ExpirationPolicy;
@@ -604,7 +604,7 @@ namespace Catel.Caching
             if (raiseEvents)
             {
                 var expiredEventArgs = new ExpiredEventArgs<TKey, TValue>(key, item.Value, dispose);
-                Expired.SafeInvoke(this, expiredEventArgs);
+                Expired?.Invoke(this, expiredEventArgs);
 
                 dispose = expiredEventArgs.Dispose;
             }

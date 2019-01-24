@@ -508,7 +508,7 @@ namespace Catel.Services
         /// <param name="e">The <see cref="Catel.Services.CameraOperationCompletedEventArgs"/> instance containing the event data.</param>
         protected void RaiseInitialized(CameraOperationCompletedEventArgs e)
         {
-            Initialized.SafeInvoke(this, e);
+            Initialized?.Invoke(this, e);
         }
 
         /// <summary>
@@ -517,7 +517,7 @@ namespace Catel.Services
         /// <param name="e">The <see cref="Catel.Services.CameraOperationCompletedEventArgs"/> instance containing the event data.</param>
         protected void RaiseAutoFocusCompleted(CameraOperationCompletedEventArgs e)
         {
-            AutoFocusCompleted.SafeInvoke(this, e);
+            AutoFocusCompleted?.Invoke(this, e);
         }
 
         /// <summary>
@@ -526,7 +526,7 @@ namespace Catel.Services
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         protected void RaiseCaptureStarted(EventArgs e)
         {
-            CaptureStarted.SafeInvoke(this, e);
+            CaptureStarted?.Invoke(this, e);
         }
 
         /// <summary>
@@ -535,7 +535,7 @@ namespace Catel.Services
         /// <param name="e">The <see cref="Catel.Services.ContentReadyEventArgs"/> instance containing the event data.</param>
         protected void RaiseCaptureThumbnailAvailable(ContentReadyEventArgs e)
         {
-            CaptureThumbnailAvailable.SafeInvoke(this, e);
+            CaptureThumbnailAvailable?.Invoke(this, e);
         }
 
         /// <summary>
@@ -544,7 +544,7 @@ namespace Catel.Services
         /// <param name="e">The <see cref="Catel.Services.ContentReadyEventArgs"/> instance containing the event data.</param>
         protected void RaiseCaptureImageAvailable(ContentReadyEventArgs e)
         {
-            CaptureImageAvailable.SafeInvoke(this, e);
+            CaptureImageAvailable?.Invoke(this, e);
         }
 
         /// <summary>
@@ -553,7 +553,7 @@ namespace Catel.Services
         /// <param name="e">The <see cref="Catel.Services.CameraOperationCompletedEventArgs"/> instance containing the event data.</param>
         protected void RaiseCaptureCompleted(CameraOperationCompletedEventArgs e)
         {
-            CaptureCompleted.SafeInvoke(this, e);
+            CaptureCompleted?.Invoke(this, e);
         }
         #endregion
     }

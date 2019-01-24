@@ -29,7 +29,7 @@ namespace Catel.Tests.IoC
 
                 public void Dispose()
                 {
-                    Disposed.SafeInvoke(this);
+                    Disposed?.Invoke(this, System.EventArgs.Empty);
                 }
             }
 

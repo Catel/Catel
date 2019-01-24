@@ -103,7 +103,7 @@ namespace Catel.MVVM.Navigation
             }
 
             var eventArgs = new ActivityEventArgs(activity);
-            ActivityCreated.SafeInvoke(this, eventArgs);
+            ActivityCreated?.Invoke(this, eventArgs);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Catel.MVVM.Navigation
             }
 
             var eventArgs = new ActivityEventArgs(activity);
-            ActivityDestroyed.SafeInvoke(this, eventArgs);
+            ActivityDestroyed?.Invoke(this, eventArgs);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace Catel.MVVM.Navigation
             }
 
             var eventArgs = new ActivityEventArgs(activity);
-            ActivityPaused.SafeInvoke(this, eventArgs);
+            ActivityPaused?.Invoke(this, eventArgs);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace Catel.MVVM.Navigation
             }
 
             var eventArgs = new ActivityEventArgs(activity);
-            ActivityResumed.SafeInvoke(this, eventArgs);
+            ActivityResumed?.Invoke(this, eventArgs);
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace Catel.MVVM.Navigation
             }
 
             var eventArgs = new ActivityEventArgs(activity);
-            ActivityStarted.SafeInvoke(this, eventArgs);
+            ActivityStarted?.Invoke(this, eventArgs);
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace Catel.MVVM.Navigation
             }
 
             var eventArgs = new ActivityEventArgs(activity);
-            ActivityStopped.SafeInvoke(this, eventArgs);
+            ActivityStopped?.Invoke(this, eventArgs);
         }
     }
 

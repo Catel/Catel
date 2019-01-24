@@ -163,7 +163,7 @@ namespace Catel.MVVM
         /// </summary>
         private void RaiseValueChanged()
         {
-            ValueChanged.SafeInvoke(this);
+            ValueChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

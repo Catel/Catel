@@ -298,7 +298,7 @@ namespace Catel.MVVM
             {
                 try
                 {
-                    CanExecuteChanged.SafeInvoke(this);
+                    CanExecuteChanged?.Invoke(this, EventArgs.Empty);
                 }
                 catch (Exception ex)
                 {
@@ -330,7 +330,7 @@ namespace Catel.MVVM
             var action = new Action(() =>
             {
                 var eventArgs = new CommandExecutedEventArgs(this, parameter);
-                Executed.SafeInvoke(this, eventArgs);
+                Executed?.Invoke(this, eventArgs);
             });
 
             AutoDispatchIfRequired(action);

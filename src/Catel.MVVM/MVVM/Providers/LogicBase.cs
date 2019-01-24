@@ -183,8 +183,8 @@ namespace Catel.MVVM.Providers
             }
 
             // Required so the ViewLoadManager can handle the rest
-            targetView.Loaded += (sender, e) => Loaded.SafeInvoke(this);
-            targetView.Unloaded += (sender, e) => Unloaded.SafeInvoke(this);
+            targetView.Loaded += (sender, e) => Loaded?.Invoke(this, EventArgs.Empty);
+            targetView.Unloaded += (sender, e) => Unloaded?.Invoke(this, EventArgs.Empty);
 
             TargetView.DataContextChanged += OnTargetViewDataContextChanged;
 
@@ -281,7 +281,7 @@ namespace Catel.MVVM.Providers
 
                 OnViewModelChanged();
 
-                ViewModelChanged.SafeInvoke(this);
+                ViewModelChanged?.Invoke(this, EventArgs.Empty);
 
                 RaisePropertyChanged("ViewModel");
 
@@ -935,7 +935,7 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
         public virtual void OnTargetViewPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            TargetViewPropertyChanged.SafeInvoke(this, e);
+            TargetViewPropertyChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -945,7 +945,7 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         public virtual void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            ViewModelPropertyChanged.SafeInvoke(this, e);
+            ViewModelPropertyChanged?.Invoke(this, e);
         }
 
         /// <summary>
