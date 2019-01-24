@@ -3177,7 +3177,10 @@ namespace Catel.Reflection
         public static TOutput Cast<TOutput>(object value) { }
         public static TOutput Cast<TOutput, TInput>(TInput value, TOutput whenNullValue) { }
         public static string ConvertTypeToVersionIndependentType(string type, bool stripAssemblies = False) { }
+        [System.ObsoleteAttribute("Use `FormatInnerTypes(IEnumerable<string>, bool)` instead. Will be removed in ver" +
+            "sion 6.0.0.", true)]
         public static string FormatInnerTypes(string[] innerTypes, bool stripAssemblies = False) { }
+        public static string FormatInnerTypes(System.Collections.Generic.IEnumerable<string> innerTypes, bool stripAssemblies = False) { }
         public static string FormatType(string assembly, string type) { }
         public static string GetAssemblyName(string fullTypeName) { }
         public static string GetAssemblyNameWithoutOverhead(string fullyQualifiedAssemblyName) { }

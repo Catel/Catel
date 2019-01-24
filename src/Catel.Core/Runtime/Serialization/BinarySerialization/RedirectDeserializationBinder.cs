@@ -155,7 +155,7 @@ namespace Catel.Runtime.Serialization.Binary
                 }
                 else
                 {
-                    Log.Debug("Adding redirect from '{0}' to '{1}'", attribute.OriginalTypeName, attribute.NewTypeName);
+                    Log.Debug($"Adding redirect from '{attribute.OriginalTypeName}' to '{attribute.NewTypeName}'");
 
                     _redirectAttributes.Add(attribute.OriginalType, attribute);
                 }
@@ -170,15 +170,15 @@ namespace Catel.Runtime.Serialization.Binary
         /// <returns><see cref="Type"/> that the serialization should actually use.</returns>
         public override Type BindToType(string assemblyName, string typeName)
         {
-            string currentType = TypeHelper.FormatType(assemblyName, typeName);
-            string currentTypeVersionIndependent = TypeHelper.ConvertTypeToVersionIndependentType(currentType);
-            string newType = ConvertTypeToNewType(currentTypeVersionIndependent);
+            var currentType = TypeHelper.FormatType(assemblyName, typeName);
+            var currentTypeVersionIndependent = TypeHelper.ConvertTypeToVersionIndependentType(currentType);
+            var newType = ConvertTypeToNewType(currentTypeVersionIndependent);
 
-            var typeToDeserialize = LoadType(newType) ?? (LoadType(currentTypeVersionIndependent) ?? LoadType(currentType));
+            var typeToDeserialize = LoadType(newType) ?? LoadType(currentTypeVersionIndependent) ?? LoadType(currentType);
 
             if (typeToDeserialize is null)
             {
-                Log.Error("Could not load type '{0}' as '{1}'", currentType, newType);
+                Log.Error($"Could not load type '{currentType}' as '{newType}'");
             }
 
             return typeToDeserialize;
@@ -217,13 +217,13 @@ namespace Catel.Runtime.Serialization.Binary
         {
             const string InnerTypesEnd = ",";
 
-            string newType = type;
-            string[] innerTypes = TypeHelper.GetInnerTypes(newType);
+            var newType = type;
+            var innerTypes = TypeHelper.GetInnerTypes(newType);
 
             if (innerTypes.Length > 0)
             {
-                newType = newType.Replace(string.Format(CultureInfo.InvariantCulture, "[{0}]", TypeHelper.FormatInnerTypes(innerTypes, false)), string.Empty);
-                for (int i = 0; i < innerTypes.Length; i++)
+                newType = newType.Replace($"[{TypeHelper.FormatInnerTypes(innerTypes, false)}]", string.Empty);
+                for (var i = 0; i < innerTypes.Length; i++)
                 {
                     innerTypes[i] = ConvertTypeToNewType(innerTypes[i]);
                 }

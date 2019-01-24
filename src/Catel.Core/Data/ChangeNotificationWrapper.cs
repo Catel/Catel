@@ -258,6 +258,7 @@ namespace Catel.Data
                 if (_collectionItems.TryGetValue(collection, out var collectionItems))
                 {
                     var oldItems = collectionItems.ToArray();
+
                     foreach (var item in oldItems)
                     {
                         if (item.IsAlive)
@@ -271,6 +272,7 @@ namespace Catel.Data
                 }
 
                 var newItems = collection.Cast<object>().ToArray();
+
                 foreach (var item in newItems)
                 {
                     SubscribeNotifyChangedEvents(item, collection);

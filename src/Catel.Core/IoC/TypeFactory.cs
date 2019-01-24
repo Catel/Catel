@@ -679,6 +679,7 @@ namespace Catel.IoC
             _constructorCacheLock.PerformWrite(() =>
             {
                 var array = _constructorCache.ToArray();
+
                 foreach (var keyValuePair in array)
                 {
                     _constructorCache[keyValuePair.Key] = ConstructorCacheValue.Next(keyValuePair.Value, null);

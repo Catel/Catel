@@ -148,7 +148,7 @@ namespace Catel.Reflection
             var assembly = args.LoadedAssembly;
             if (ShouldIgnoreAssembly(assembly))
             {
-                Log.Debug("Reflection '{0}' is on the list to be ignored (for example, ReflectionOnly is true), cannot use this assembly", assembly.FullName);
+                Log.Debug($"Reflection '{assembly.FullName}' is on the list to be ignored (for example, ReflectionOnly is true), cannot use this assembly");
                 return;
             }
 
@@ -454,7 +454,11 @@ namespace Catel.Reflection
                 }
 
                 var firstBracketIndex = typeWithInnerTypes.IndexOf('[');
-                var typeWithImprovedInnerTypes = string.Format("{0}[{1}]", typeWithInnerTypes.Substring(0, firstBracketIndex), TypeHelper.FormatInnerTypes(innerTypesNames.ToArray()));
+
+                var part1 = typeWithInnerTypes.Substring(0, firstBracketIndex);
+                var part2 = TypeHelper.FormatInnerTypes(innerTypesNames);
+
+                var typeWithImprovedInnerTypes = $"{part1}[{part2}]";
 
                 var fallbackType = Type.GetType(typeWithImprovedInnerTypes);
                 return fallbackType;
