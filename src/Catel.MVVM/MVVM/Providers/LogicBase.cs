@@ -154,28 +154,28 @@ namespace Catel.MVVM.Providers
 
             ViewLoadManager.AddView(this);
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoading", OnViewLoadedManagerLoadingInternal, false) is null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewLoading), OnViewLoadedManagerLoadingInternal, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoading', going to subscribe without weak events");
 
                 ViewLoadManager.ViewLoading += OnViewLoadedManagerLoadingInternal;
             }
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoaded", OnViewLoadedManagerLoadedInternal, false) is null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewLoaded), OnViewLoadedManagerLoadedInternal, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoaded', going to subscribe without weak events");
 
                 ViewLoadManager.ViewLoaded += OnViewLoadedManagerLoadedInternal;
             }
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloading", OnViewLoadedManagerUnloadingInternal, false) is null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewUnloading), OnViewLoadedManagerUnloadingInternal, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloading', going to subscribe without weak events");
 
                 ViewLoadManager.ViewUnloading += OnViewLoadedManagerUnloadingInternal;
             }
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloaded", OnViewLoadedManagerUnloadedInternal, false) is null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewUnloaded), OnViewLoadedManagerUnloadedInternal, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloaded', going to subscribe without weak events");
 

@@ -102,6 +102,8 @@ namespace Catel.MVVM.Providers
 
 #if XAMARIN
             CreateViewModelWrapper(false);
+#elif !UWP
+            this.SubscribeToWeakGenericEvent<EventArgs>(targetView, nameof(FrameworkElement.Initialized), OnTargetViewInitialized, false);
 #endif
         }
         #endregion
@@ -298,6 +300,13 @@ namespace Catel.MVVM.Providers
                 action();
 #endif
             }
+        }
+
+        private void OnTargetViewInitialized(object sender, EventArgs e)
+        {
+            // Note: we can't use Content changed property notification (x:Name is not yet set), but Loaded event is too late,
+            // this event should be in-between: https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/object-lifetime-events
+            CreateViewModelWrapper();
         }
 
         /// <summary>
