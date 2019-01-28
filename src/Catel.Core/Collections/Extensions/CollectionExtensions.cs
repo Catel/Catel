@@ -66,7 +66,7 @@ namespace Catel.Collections
         {
             Argument.IsNotNull("list", list);
 
-            if (item == null)
+            if (item is null)
             {
                 return false;
             }
@@ -118,7 +118,7 @@ namespace Catel.Collections
         {
             Argument.IsNotNull("list", list);
 
-            if (item == null)
+            if (item is null)
             {
                 return false;
             }
@@ -313,7 +313,7 @@ namespace Catel.Collections
         /// <param name="action">The action.</param>
         public static void ForEach<TItem>(this IEnumerable<TItem> collection, Action<TItem> action)
         {
-            if (collection == null)
+            if (collection is null)
             {
                 return;
             }

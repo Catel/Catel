@@ -12,7 +12,7 @@ namespace Catel.Data
     using System.Xml.Serialization;
     using IoC;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
     using System.ComponentModel;
     using System.Runtime.Serialization;
 #endif
@@ -25,7 +25,7 @@ namespace Catel.Data
         /// <summary>
         /// Backing field for the <see cref="EqualityComparer{T}"/> property. Because it has custom logic, it needs a backing field.
         /// </summary>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
         private IModelEqualityComparer _equalityComparer;
@@ -33,7 +33,7 @@ namespace Catel.Data
         /// <summary>
         /// Backing field for the <see cref="GetHashCode"/> method so it only has to be calculated once to gain the best performance possible.
         /// </summary>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
         private int? _hashCode;
@@ -47,7 +47,7 @@ namespace Catel.Data
         {
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Initializes a new instance of the <see cref="ComparableModelBase"/> class.
         /// </summary>
@@ -89,7 +89,7 @@ namespace Catel.Data
         /// Gets or sets the equality comparer used to compare model bases with each other.
         /// </summary>
         /// <value>The equality comparer.</value>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -97,7 +97,7 @@ namespace Catel.Data
         {
             get
             {
-                if (_equalityComparer == null)
+                if (_equalityComparer is null)
                 {
                     var dependencyResolver = this.GetDependencyResolver();
 
@@ -130,7 +130,7 @@ namespace Catel.Data
             // throws an exception when the 2 types are not the same. Although MS does recommend not to throw exceptions,
             // they do it themselves. Check for null and check the types before feeding it to the equality comparer.
 
-            if (obj == null)
+            if (obj is null)
             {
                 return false;
             }

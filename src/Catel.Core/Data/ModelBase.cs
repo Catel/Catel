@@ -11,14 +11,14 @@ namespace Catel.Data
     using System.Xml.Serialization;
     using Logging;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
     using System.Runtime.Serialization;
 #endif
 
     /// <summary>
     /// Abstract class that serves as a base class for serializable objects.
     /// </summary>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
     [Serializable]
 #endif
     public abstract partial class ModelBase : ObservableObject, IModel
@@ -27,12 +27,12 @@ namespace Catel.Data
         /// <summary>
         /// The log.
         /// </summary>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// The empty streaming context.
         /// </summary>
@@ -43,7 +43,7 @@ namespace Catel.Data
         /// <summary>
         /// The property values.
         /// </summary>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
         internal readonly PropertyBag _propertyBag = new PropertyBag();
@@ -51,17 +51,17 @@ namespace Catel.Data
         /// <summary>
         /// Lock object.
         /// </summary>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
         internal readonly object _lock = new object();
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
         internal SuspensionContext _changeCallbacksSuspensionContext;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
         internal SuspensionContext _changeNotificationsSuspensionContext;
@@ -77,7 +77,7 @@ namespace Catel.Data
             PropertyDataManager = PropertyDataManager.Default;
         }
 
-#if !NET && !NETSTANDARD
+#if !NET && !NETCORE && !NETSTANDARD
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelBase"/> class.
         /// </summary>
@@ -111,7 +111,7 @@ namespace Catel.Data
         /// </summary>
         /// <value><c>true</c> if property change notifications should be disabled for all instances; otherwise, <c>false</c>.</value>
         /// TODO: Try to revert to internal but is required by XAMARIN_FORMS
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -121,7 +121,7 @@ namespace Catel.Data
         /// Gets the property data manager that manages the properties of this object.
         /// </summary>
         /// <value>The property data manager.</value>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -136,7 +136,7 @@ namespace Catel.Data
         /// <remarks>
         /// By default, this property is <c>false</c>.
         /// </remarks>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
 #endif
         protected bool AlwaysInvokeNotifyChanged { get; set; }
@@ -145,7 +145,7 @@ namespace Catel.Data
         /// Gets the name of the object. By default, this is the hash code of all the properties combined.
         /// </summary>
         /// <value>The name of the key.</value>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -169,7 +169,7 @@ namespace Catel.Data
         /// Gets or sets a value indicating whether this object is dirty (contains unsaved data).
         /// </summary>
         /// <value><c>true</c> if this instance is dirty; otherwise, <c>false</c>.</value>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -188,7 +188,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets or sets a value indicating whether this object is currently read-only. When the object is read-only, values can only be read, not set.
         /// </summary>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -260,7 +260,7 @@ namespace Catel.Data
             {
                 lock (_lock)
                 {
-                    if (_changeCallbacksSuspensionContext == null)
+                    if (_changeCallbacksSuspensionContext is null)
                     {
                         _changeCallbacksSuspensionContext = new SuspensionContext();
                     }
@@ -301,7 +301,7 @@ namespace Catel.Data
             {
                 lock (_lock)
                 {
-                    if (_changeNotificationsSuspensionContext == null)
+                    if (_changeNotificationsSuspensionContext is null)
                     {
                         _changeNotificationsSuspensionContext = new SuspensionContext();
                     }

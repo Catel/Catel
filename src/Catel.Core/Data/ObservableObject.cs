@@ -11,14 +11,14 @@ namespace Catel.Data
     using System.Linq.Expressions;
     using System.Xml.Schema;
 
-#if !NET && !NETSTANDARD
+#if !NET && !NETCORE && !NETSTANDARD
     using System.Runtime.Serialization;
 #endif
 
     /// <summary>
     /// Very basic class implementing the <see cref="INotifyPropertyChanged"/> interfaces.
     /// </summary>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
     [Serializable]
 #else
     [DataContract]
@@ -29,7 +29,7 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when a property of this object has changed.
         /// </summary>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
         public event PropertyChangedEventHandler PropertyChanged;
@@ -184,7 +184,7 @@ namespace Catel.Data
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void RaisePropertyChanged(object sender, AdvancedPropertyChangedEventArgs e)
         {
-            PropertyChanged.SafeInvoke(sender, e);
+            PropertyChanged?.Invoke(sender, e);
 
             if (ReferenceEquals(this, sender))
             {

@@ -7,7 +7,7 @@ namespace Catel.Services
 {
     using System.Threading.Tasks;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.Storage;
 #endif
 
@@ -54,7 +54,7 @@ namespace Catel.Services
         #endregion
 
         #region Methods
-#if NETFX_CORE
+#if UWP
         /// <summary>
         /// Determines the name of the directory what will be used.
         /// </summary>

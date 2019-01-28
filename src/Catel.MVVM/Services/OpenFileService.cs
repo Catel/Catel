@@ -11,9 +11,9 @@ namespace Catel.Services
     using Logging;
     using System.IO;
 
-#if NET
+#if NET || NETCORE
     using Microsoft.Win32;
-#elif NETFX_CORE
+#elif UWP
 
 #else
     using System.Collections.Generic;

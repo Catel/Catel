@@ -11,7 +11,7 @@ namespace Catel.Core
     using IoC;
     using Logging;
 
-#if NET
+#if NET || NETCORE
     using System.Configuration;
     using System.Reflection;
     using System.Collections.Generic;
@@ -32,7 +32,7 @@ namespace Catel.Core
         /// </summary>
         public static void Initialize()
         {
-#if NET
+#if NET || NETCORE
             try
             {
                 var configurations = new List<Configuration>();
@@ -74,7 +74,7 @@ namespace Catel.Core
             module.Initialize(serviceLocator);
         }
 
-#if NET
+#if NET || NETCORE
         private static Configuration GetExeConfiguration()
         {
             Configuration config = null;
@@ -105,7 +105,7 @@ namespace Catel.Core
         private static Configuration GetDllConfiguration()
         {
             var entryAssembly = AssemblyHelper.GetEntryAssembly() ?? Assembly.GetCallingAssembly();
-            if (entryAssembly == null)
+            if (entryAssembly is null)
             {
                 return null;
             }

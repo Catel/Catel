@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Windows.Controls
 {
@@ -17,7 +17,7 @@ namespace Catel.Windows.Controls
     using IoC;
     using Logging;
 
-#if NET
+#if NET || NETCORE
     using System.ComponentModel;
     using System.Windows.Data;
     using Exceptions = MVVM.Properties.Exceptions;
@@ -88,7 +88,7 @@ namespace Catel.Windows.Controls
             var languageService = ServiceLocator.Default.ResolveType<ILanguageService>();
             DefaultTextPropertyValue = languageService.GetString("InfoBarMessageControlErrorTitle");
 
-#if NET
+#if NET || NETCORE
             DefaultStyleKeyProperty.OverrideMetadata(typeof(InfoBarMessageControl), new FrameworkPropertyMetadata(typeof(InfoBarMessageControl)));
 #endif
         }
@@ -101,11 +101,11 @@ namespace Catel.Windows.Controls
             Text = DefaultTextPropertyValue;
             IsTabStop = false;
 
-#if !NET
+#if !NET && !NETCORE
             DefaultStyleKey = typeof (InfoBarMessageControl);
 #endif
 
-#if NET
+#if NET || NETCORE
             Focusable = false;
 #endif
 
@@ -247,8 +247,8 @@ namespace Catel.Windows.Controls
         {
             base.OnApplyTemplate();
 
-#if NET
-            if (GetTemplateChild(ElementMessageBar) == null)
+#if NET || NETCORE
+            if (GetTemplateChild(ElementMessageBar) is null)
             {
                 throw new NotSupportedException(string.Format(Exceptions.ControlTemplateMustContainPart, ElementMessageBar));
             }
@@ -332,7 +332,7 @@ namespace Catel.Windows.Controls
                 return;
             }
 
-#if NET
+#if NET || NETCORE
             Validation.AddErrorHandler(this, OnInfoBarMessageErrorValidation);
 #endif
 
@@ -349,7 +349,7 @@ namespace Catel.Windows.Controls
                 return;
             }
 
-#if NET
+#if NET || NETCORE
             Validation.RemoveErrorHandler(this, OnInfoBarMessageErrorValidation);
 #endif
 
@@ -394,7 +394,7 @@ namespace Catel.Windows.Controls
             ClearObjectMessages(bindingObject);
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Handling data errors.
         /// </summary>
@@ -450,7 +450,7 @@ namespace Catel.Windows.Controls
             UpdateMessages();
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Gets the binding object.
         /// </summary>
@@ -492,7 +492,7 @@ namespace Catel.Windows.Controls
         /// <param name="type">The validation type.</param>
         private void ProcessValidationMessage(object bindingObject, string message, ValidationEventAction action, ValidationType type)
         {
-            if ((action != ValidationEventAction.ClearAll) && (bindingObject == null))
+            if ((action != ValidationEventAction.ClearAll) && (bindingObject is null))
             {
                 Log.Warning("Null-values are not allowed when not using ValidationEventAction.ClearAll");
                 return;

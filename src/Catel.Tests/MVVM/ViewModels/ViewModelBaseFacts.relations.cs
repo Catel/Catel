@@ -64,7 +64,7 @@ namespace Catel.Tests.MVVM.ViewModels
 
             childViewModel.FirstName = string.Empty;
 
-#if NET
+#if NET || NETCORE
             validatedEvent.WaitOne(2000, false);
 #else
             validatedEvent.WaitOne(2000);
@@ -76,7 +76,7 @@ namespace Catel.Tests.MVVM.ViewModels
             validationTriggered = false;
             validatedEvent.Reset();
 
-#if NET
+#if NET || NETCORE
             validatedEvent.WaitOne(2000, false);
 #else
             validatedEvent.WaitOne(2000);
@@ -112,7 +112,7 @@ namespace Catel.Tests.MVVM.ViewModels
 
             childViewModel.FirstName = string.Empty;
 
-#if NET
+#if NET || NETCORE
             validatedEvent.WaitOne(2000, false);
 #else
             validatedEvent.WaitOne(2000);
@@ -124,7 +124,7 @@ namespace Catel.Tests.MVVM.ViewModels
             validationTriggered = false;
             validatedEvent.Reset();
 
-#if NET
+#if NET || NETCORE
             validatedEvent.WaitOne(2000, false);
 #else
             validatedEvent.WaitOne(2000);

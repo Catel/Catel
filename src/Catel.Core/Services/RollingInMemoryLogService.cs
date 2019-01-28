@@ -32,7 +32,7 @@ namespace Catel.Services
         /// <param name="logListener">The log listener. If <c>null</c>, this service will create its own log listener.</param>
         public RollingInMemoryLogService(RollingInMemoryLogListener logListener)
         {
-            if (logListener == null)
+            if (logListener is null)
             {
                 logListener = new RollingInMemoryLogListener();
                 LogManager.AddListener(logListener);
@@ -123,7 +123,7 @@ namespace Catel.Services
 
         private void OnLogListenerLogMessage(object sender, LogMessageEventArgs e)
         {
-            LogMessage.SafeInvoke(this, e);
+            LogMessage?.Invoke(this, e);
         }
         #endregion
     }

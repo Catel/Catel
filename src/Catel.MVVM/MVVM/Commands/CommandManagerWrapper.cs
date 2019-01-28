@@ -13,7 +13,7 @@ namespace Catel.MVVM
 
 #if !XAMARIN && !XAMARIN_FORMS
     using InputGesture = Catel.Windows.Input.InputGesture;
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
 #else
@@ -48,14 +48,14 @@ namespace Catel.MVVM
 
             View = view;
 
-            if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, "Loaded", OnViewLoaded, false) == null)
+            if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, "Loaded", OnViewLoaded, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'view.Loaded', going to subscribe without weak events");
 
                 view.Loaded += OnViewLoaded;
             }
 
-            if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, "Unloaded", OnViewUnloaded, false) == null)
+            if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, "Unloaded", OnViewUnloaded, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'view.Unloaded', going to subscribe without weak events");
 
@@ -78,7 +78,7 @@ namespace Catel.MVVM
                 return;
             }
 
-#if NET
+#if NET || NETCORE
             View.PreviewKeyDown += OnKeyDown;
 #else
             View.KeyDown += OnKeyDown;
@@ -94,7 +94,7 @@ namespace Catel.MVVM
                 return;
             }
 
-#if NET
+#if NET || NETCORE
             View.PreviewKeyDown -= OnKeyDown;
 #else
             View.KeyDown -= OnKeyDown;

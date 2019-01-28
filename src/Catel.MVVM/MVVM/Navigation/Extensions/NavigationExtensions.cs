@@ -9,7 +9,7 @@ namespace Catel.MVVM.Navigation
     using System;
 
 #if !XAMARIN && !XAMARIN_FORMS
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml.Navigation;
 #else
     using System.Windows.Navigation;

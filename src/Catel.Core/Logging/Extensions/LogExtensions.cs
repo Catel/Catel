@@ -31,7 +31,7 @@ namespace Catel.Logging
             Write(log, LogEvent.Info, "PRODUCT INFO");
             Write(log, LogEvent.Info, string.Empty);
 
-#if NETFX_CORE
+#if UWP
             var appPackage = Windows.ApplicationModel.Package.Current;
             var packageId = appPackage.Id;
 
@@ -81,14 +81,14 @@ namespace Catel.Logging
             Write(log, LogEvent.Info, "OS Version:            {0}", Environment.OSVersion.Version);
 #endif
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             Write(log, LogEvent.Info, "64-bit OS:             {0}", Environment.Is64BitOperatingSystem);
             Write(log, LogEvent.Info, "64-bit process:        {0}", Environment.Is64BitProcess);
             Write(log, LogEvent.Info, "Processor count:       {0}", Environment.ProcessorCount);
             Write(log, LogEvent.Info, "System page size:      {0}", Environment.SystemPageSize);
 #endif
 
-#if NETFX_CORE
+#if UWP
             var appPackage = Windows.ApplicationModel.Package.Current;
             var packageId = appPackage.Id;
 
@@ -242,7 +242,7 @@ namespace Catel.Logging
                 return;
             }
 
-            if (log == null)
+            if (log is null)
             {
                 return;
             }
@@ -274,7 +274,7 @@ namespace Catel.Logging
 
             Argument.IsNotNull("exception", exception);
 
-            if (log == null)
+            if (log is null)
             {
                 return;
             }
@@ -401,7 +401,7 @@ namespace Catel.Logging
             return ErrorAndCreateException<TException>(log, innerException, msg =>
             {
                 var exception = ExceptionFactory.CreateException<TException>(msg, innerException);
-                if (exception == null)
+                if (exception is null)
                 {
                     var error = $"Exception type '{typeof(TException).Name}' does not have a constructor accepting a string";
 
@@ -460,7 +460,7 @@ namespace Catel.Logging
             }
 
             var exception = createExceptionCallback(message);
-            if (exception == null)
+            if (exception is null)
             {
                 var error = $"Exception type '{typeof(TException).Name}' does not have a constructor accepting a string";
 

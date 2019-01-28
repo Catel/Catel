@@ -94,7 +94,7 @@ namespace Catel.MVVM.Converters
         }
     }
 
-#if NET
+#if NET || NETCORE
     /// <summary>
     /// A base class that makes it easier to create values to visibility converters.
     /// <para />

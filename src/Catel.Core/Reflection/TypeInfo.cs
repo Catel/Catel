@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TypeInfo.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -10,11 +10,11 @@ namespace Catel.Reflection
     using System.Globalization;
     using System.Reflection;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
     using System.Runtime.InteropServices;
 #endif
 
-#if !NET && !NETSTANDARD && !NETFX_CORE
+#if !NET && !NETCORE && !NETSTANDARD && !NETFX_CORE
 
     /// <summary>
     /// The type info.
@@ -129,7 +129,7 @@ namespace Catel.Reflection
             get { return _type.ReflectedType; }
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
 
         /// <summary>
         /// Gets a <see cref="T:System.Runtime.InteropServices.StructLayoutAttribute"/> that describes the layout of the current type.
@@ -243,7 +243,7 @@ namespace Catel.Reflection
             get { return _type.BaseType; }
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
 
         /// <summary>
         /// Gets the initializer for the <see cref="T:System.Type"/>.
@@ -415,7 +415,7 @@ namespace Catel.Reflection
             get { return _type.IsAutoLayout; }
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
 
         /// <summary>
         /// Gets a value indicating whether the class layout attribute SequentialLayout is selected for the <see cref="T:System.Type"/>.
@@ -549,7 +549,7 @@ namespace Catel.Reflection
         {
             get
             {
-#if !NET && !NETSTANDARD
+#if !NET && !NETCORE && !NETSTANDARD
                 return true;
 #else
                 return _type.IsSerializable;
@@ -725,7 +725,7 @@ namespace Catel.Reflection
             get { return _type.HasElementType; }
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="T:System.Type"/> can be hosted in a context.
@@ -868,7 +868,7 @@ namespace Catel.Reflection
             return _type.IsDefined(attributeType, inherit);
         }
 
-#if NET && !NET45
+#if (NET || NETCORE) && !NET45
 
         /// <summary>
         /// Retrieves the number of type information interfaces that an object provides (either 0 or 1).
@@ -1111,7 +1111,7 @@ namespace Catel.Reflection
             return _type.InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
 
         /// <summary>
         /// Invokes the specified member, using the specified binding constraints and matching the specified argument list and culture.
@@ -1294,7 +1294,7 @@ namespace Catel.Reflection
             return _type.GetArrayRank();
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Searches for a constructor whose parameters match the specified argument types and modifiers, using the specified binding constraints and the specified calling convention.
         /// </summary>
@@ -1868,7 +1868,7 @@ namespace Catel.Reflection
             return _type.GetInterfaces();
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Returns an array of <see cref="T:System.Type"/> objects representing a filtered list of interfaces implemented or inherited by the current <see cref="T:System.Type"/>.
         /// </summary>
@@ -2128,7 +2128,7 @@ namespace Catel.Reflection
             return _type.GetProperty(name, returnType, types);
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
 
         /// <summary>
         /// Searches for the specified public property whose parameters match the specified argument types.

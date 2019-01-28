@@ -23,7 +23,7 @@ using System.Windows.Markup;
 [assembly: NeutralResourcesLanguage("en-US")]
 
 // Theme info
-#if NET
+#if NET || NETCORE
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.SourceAssembly, //where theme specific resource dictionaries are located
     //(used if a resource is not found in the page, 
@@ -35,7 +35,7 @@ using System.Windows.Markup;
 #endif
 
 // XmlnsDefinition is not supported in UWP
-#if !NETFX_CORE && !XAMARIN && !XAMARIN_FORMS
+#if !UWP && !XAMARIN && !XAMARIN_FORMS
 
 [assembly: XmlnsPrefix("http://schemas.catelproject.com", "catel")]
 [assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM")]
@@ -46,7 +46,7 @@ using System.Windows.Markup;
 [assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows.Controls")]
 [assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows.Interactivity")]
 
-#if NET
+#if NET || NETCORE
 [assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows.Data")]
 [assembly: XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows.Markup")]
 #endif

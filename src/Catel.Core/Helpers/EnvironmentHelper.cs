@@ -8,7 +8,7 @@ namespace Catel
 {
     using System;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
     using System.Diagnostics;
 #else
     using System.ComponentModel;
@@ -32,7 +32,7 @@ namespace Catel
             get
             {
                 // This is required because the logging checks for this when creating the Lazy class
-                if (_hostedByVisualStudio == null)
+                if (_hostedByVisualStudio is null)
                 {
                     return false;
                 }
@@ -50,7 +50,7 @@ namespace Catel
             get
             {
                 // This is required because the logging checks for this when creating the Lazy class
-                if (_hostedBySharpDevelop == null)
+                if (_hostedBySharpDevelop is null)
                 {
                     return false;
                 }
@@ -68,7 +68,7 @@ namespace Catel
             get
             {
                 // This is required because the logging checks for this when creating the Lazy class
-                if (_hostedByExpressionBlend == null)
+                if (_hostedByExpressionBlend is null)
                 {
                     return false;
                 }
@@ -96,11 +96,11 @@ namespace Catel
         /// <returns><c>true</c> if the process is hosted by visual studio; otherwise, <c>false</c>.</returns>
         public static bool IsProcessCurrentlyHostedByVisualStudio(bool checkParentProcesses = false)
         {
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             return IsHostedByProcess("devenv", checkParentProcesses);
 #elif XAMARIN
             return false;
-#elif NETFX_CORE
+#elif UWP
             return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
 #else
             return DesignerProperties.IsInDesignTool;
@@ -117,11 +117,11 @@ namespace Catel
         /// <returns><c>true</c> if the process is hosted by sharp develop; otherwise, <c>false</c>.</returns>
         public static bool IsProcessCurrentlyHostedBySharpDevelop(bool checkParentProcesses = false)
         {
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             return IsHostedByProcess("sharpdevelop", checkParentProcesses);
 #elif XAMARIN
             return false;
-#elif NETFX_CORE
+#elif UWP
             return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
 #else
             return DesignerProperties.IsInDesignTool;
@@ -138,11 +138,11 @@ namespace Catel
         /// <returns><c>true</c> if the process is hosted by expression blend; otherwise, <c>false</c>.</returns>
         public static bool IsProcessCurrentlyHostedByExpressionBlend(bool checkParentProcesses = false)
         {
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             return IsHostedByProcess("blend", checkParentProcesses);
 #elif XAMARIN
             return false;
-#elif NETFX_CORE
+#elif UWP
             return global::Windows.ApplicationModel.DesignMode.DesignModeEnabled;
 #else
             return DesignerProperties.IsInDesignTool;
@@ -177,13 +177,13 @@ namespace Catel
             return false;
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         private static bool IsHostedByProcess(string processName, bool supportParentProcesses = false)
         {
             try
             {
                 var currentProcess = Process.GetCurrentProcess();
-                if (currentProcess == null)
+                if (currentProcess is null)
                 {
                     return false;
                 }
@@ -193,7 +193,7 @@ namespace Catel
                 {
 #if NET
                     currentProcess = currentProcess.GetParent();
-                    if (currentProcess == null)
+                    if (currentProcess is null)
                     {
                         return false;
                     }

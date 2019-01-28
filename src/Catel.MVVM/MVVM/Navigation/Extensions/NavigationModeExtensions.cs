@@ -9,7 +9,7 @@ namespace Catel.MVVM.Navigation
 {
     using System;
 
-#if NETFX_CORE
+#if UWP
     using FrameworkNavigationMode = global::Windows.UI.Xaml.Navigation.NavigationMode;
 #else
     using FrameworkNavigationMode = System.Windows.Navigation.NavigationMode;

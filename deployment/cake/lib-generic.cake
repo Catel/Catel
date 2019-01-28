@@ -22,6 +22,70 @@ private void LogSeparator()
 
 //-------------------------------------------------------------
 
+private void RestoreNuGetPackages(Cake.Core.IO.FilePath solutionOrProjectFileName)
+{
+    Information("Restoring packages for {0}", solutionOrProjectFileName);
+    
+    try
+    {
+        var nuGetRestoreSettings = new NuGetRestoreSettings
+        {
+        };
+
+        if (!string.IsNullOrWhiteSpace(NuGetPackageSources))
+        {
+            var sources = new List<string>();
+
+            foreach (var splitted in NuGetPackageSources.Split(new [] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                sources.Add(splitted);
+            }
+            
+            if (sources.Count > 0)
+            {
+                nuGetRestoreSettings.Source = sources;
+            }
+        }
+
+        NuGetRestore(solutionOrProjectFileName, nuGetRestoreSettings);
+    }
+    catch (Exception)
+    {
+        // Ignore
+    }
+}
+
+private string GetVisualStudioPath(MSBuildToolVersion toolVersion)
+{
+    if (UseVisualStudioPrerelease)
+    {
+        Debug("Checking for installation of Visual Studio preview");
+
+        var path = @"C:\Program Files (x86)\Microsoft Visual Studio\Preview\Professional\MSBuild\15.0\Bin\msbuild.exe";
+
+        if (System.IO.File.Exists(path))
+        {
+            Information("Using Visual Studio preview");
+
+            return path;
+        }
+    }
+
+    // For now don't use overrides
+    return null;
+    // switch (toolVersion)
+    // {
+    //     case MSBuildToolVersion.Default:
+    //         // Latest, so don't override
+    //         return null;
+
+    //     default:
+    //         throw new ArgumentOutOfRangeException(nameof(toolVersion), toolVersion);
+    // }
+}
+
+//-------------------------------------------------------------
+
 private string GetProjectDirectory(string projectName)
 {
     var projectDirectory = string.Format("./src/{0}/", projectName);

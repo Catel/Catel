@@ -18,7 +18,7 @@ namespace Catel.Reflection
     /// </summary>
     public static class AppDomainExtensions
     {
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// The log.
         /// </summary>
@@ -41,7 +41,7 @@ namespace Catel.Reflection
             return TypeCache.GetTypes();
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Preloads all the assemblies inside the specified directory into the specified <see cref="AppDomain" />.
         /// <para />
@@ -228,7 +228,7 @@ namespace Catel.Reflection
             }
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Creates the instance in the specified <see cref="AppDomain" /> and unwraps it.
         /// </summary>

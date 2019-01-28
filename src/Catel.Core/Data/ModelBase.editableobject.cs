@@ -16,7 +16,7 @@ namespace Catel.Data
     using Logging;
     using Runtime.Serialization;
 
-#if !NET && !NETSTANDARD
+#if !NET && !NETCORE && !NETSTANDARD
     using System.Runtime.Serialization;
 #endif
 
@@ -26,7 +26,7 @@ namespace Catel.Data
         /// <summary>
         /// Class containing backup information.
         /// </summary>
-#if !NET && !NETSTANDARD
+#if !NET && !NETCORE && !NETSTANDARD
         [DataContract]
 #endif
         private class BackupData
@@ -87,7 +87,7 @@ namespace Catel.Data
                 }
 
                 _objectValuesBackup = new Dictionary<string, object>();
-                _objectValuesBackup.Add(nameof(ModelBase.IsDirty), _object.IsDirty);
+                _objectValuesBackup.Add(nameof(IsDirty), _object.IsDirty);
             }
 
             /// <summary>
@@ -105,18 +105,18 @@ namespace Catel.Data
 
                         if (_serializer != null)
                         {
-                            properties = _serializer.DeserializeMembers(_object.GetType(), stream, null);
+                            properties = _serializer.DeserializeMembers(_object, stream, null);
                         }
 
                         oldPropertyValues = properties.ToDictionary(property => property.Name, property => property.Value);
                     }
                     catch (Exception ex)
                     {
-                        Log.Error(ex, "Failed to deserialize the data for backup, which is weird");
+                        Log.Error(ex, "Failed to deserialize the data for backup");
                     }
                 }
 
-                if (oldPropertyValues == null)
+                if (oldPropertyValues is null)
                 {
                     return;
                 }
@@ -130,7 +130,7 @@ namespace Catel.Data
                     }
                 }
 
-                _object.IsDirty = (bool)_objectValuesBackup[nameof(ModelBase.IsDirty)];
+                _object.IsDirty = (bool)_objectValuesBackup[nameof(IsDirty)];
             }
             #endregion
         }
@@ -139,12 +139,12 @@ namespace Catel.Data
         /// <summary>
         /// The backup of the current object if any backup is initiated.
         /// </summary>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
         private BackupData _backup;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
         private event EventHandler<BeginEditEventArgs> _beginEditingEvent;
@@ -159,17 +159,17 @@ namespace Catel.Data
         /// be no need for the <see cref="EditEventArgs.EditableObject"/> as
         /// the sender of the event should be the same information.
         /// </remarks>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
         private event EventHandler<EventArgs> _cancelEditingCompletedEvent;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
         private event EventHandler<CancelEditEventArgs> _cancelEditingEvent;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
         private event EventHandler<EndEditEventArgs> _endEditingEvent;
@@ -254,7 +254,7 @@ namespace Catel.Data
             }
 
             var eventArgs = new BeginEditEventArgs(this);
-            _beginEditingEvent.SafeInvoke(this, eventArgs);
+            _beginEditingEvent?.Invoke(this, eventArgs);
             OnBeginEdit(eventArgs);
 
             if (eventArgs.Cancel)
@@ -273,7 +273,7 @@ namespace Catel.Data
         /// </summary>
         void IEditableObject.CancelEdit()
         {
-            if (_backup == null)
+            if (_backup is null)
             {
                 Log.Debug("IEditableObject is not in edit state");
                 return;
@@ -281,14 +281,14 @@ namespace Catel.Data
 
             CancelEditCompletedEventArgs cancelEditCompletedEventArgs;
             var eventArgs = new CancelEditEventArgs(this);
-            _cancelEditingEvent.SafeInvoke(this, eventArgs);
+            _cancelEditingEvent?.Invoke(this, eventArgs);
             OnCancelEdit(eventArgs);
 
             if (eventArgs.Cancel)
             {
                 Log.Info("IEditableObject.CancelEdit is canceled by the event args");
                 cancelEditCompletedEventArgs = new CancelEditCompletedEventArgs(true);
-                _cancelEditingCompletedEvent.SafeInvoke(this, cancelEditCompletedEventArgs);
+                _cancelEditingCompletedEvent?.Invoke(this, cancelEditCompletedEventArgs);
                 OnCancelEditCompleted(cancelEditCompletedEventArgs);
                 return;
             }
@@ -299,7 +299,7 @@ namespace Catel.Data
             _backup = null;
 
             cancelEditCompletedEventArgs = new CancelEditCompletedEventArgs(false);
-            _cancelEditingCompletedEvent.SafeInvoke(this, cancelEditCompletedEventArgs);
+            _cancelEditingCompletedEvent?.Invoke(this, cancelEditCompletedEventArgs);
             OnCancelEditCompleted(cancelEditCompletedEventArgs);
         }
 
@@ -308,14 +308,14 @@ namespace Catel.Data
         /// </summary>
         void IEditableObject.EndEdit()
         {
-            if (_backup == null)
+            if (_backup is null)
             {
                 Log.Debug("IEditableObject is not in edit state");
                 return;
             }
 
             var eventArgs = new EndEditEventArgs(this);
-            _endEditingEvent.SafeInvoke(this, eventArgs);
+            _endEditingEvent?.Invoke(this, eventArgs);
             OnEndEdit(eventArgs);
 
             if (eventArgs.Cancel)

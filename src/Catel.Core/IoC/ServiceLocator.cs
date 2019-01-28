@@ -68,7 +68,7 @@ namespace Catel.IoC
             public override bool Equals(object obj)
             {
                 var objAsServiceInfo = obj as ServiceInfo;
-                if (objAsServiceInfo == null)
+                if (objAsServiceInfo is null)
                 {
                     return false;
                 }
@@ -607,7 +607,7 @@ namespace Catel.IoC
 
                 if (wasRemoved)
                 {
-                    TypeUnregistered.SafeInvoke(this, () => new TypeUnregisteredEventArgs(serviceType, existingRegistration.ImplementingType,
+                    TypeUnregistered?.Invoke(this, new TypeUnregisteredEventArgs(serviceType, existingRegistration.ImplementingType,
                         tag, existingRegistration.RegistrationType, existingInstance?.ImplementingInstance));
                 }
             }
@@ -767,7 +767,7 @@ namespace Catel.IoC
                 _registeredInstances[serviceInfo] = new RegisteredInstanceInfo(registeredTypeInfo, instance);
             }
 
-            TypeRegistered.SafeInvoke(this, () => new TypeRegisteredEventArgs(registeredTypeInfo.DeclaringType, registeredTypeInfo.ImplementingType, tag, RegistrationType.Singleton));
+            TypeRegistered?.Invoke(this, new TypeRegisteredEventArgs(registeredTypeInfo.DeclaringType, registeredTypeInfo.ImplementingType, tag, RegistrationType.Singleton));
 
             Log.Debug("Registered type '{0}' to instance of type '{1}'", serviceType.FullName, instance.GetType().FullName);
         }
@@ -788,7 +788,7 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            if (serviceImplementationType == null)
+            if (serviceImplementationType is null)
             {
                 // Dynamic late-bound type
                 serviceImplementationType = typeof(LateBoundImplementation);
@@ -831,7 +831,7 @@ namespace Catel.IoC
                 _registeredTypes[serviceInfo] = registeredTypeInfo;
             }
 
-            TypeRegistered.SafeInvoke(this, () => new TypeRegisteredEventArgs(registeredTypeInfo.DeclaringType, registeredTypeInfo.ImplementingType, tag, registeredTypeInfo.RegistrationType));
+            TypeRegistered?.Invoke(this, new TypeRegisteredEventArgs(registeredTypeInfo.DeclaringType, registeredTypeInfo.ImplementingType, tag, registeredTypeInfo.RegistrationType));
 
             Log.Debug("Registered type '{0}' to type '{1}'", serviceType.FullName, serviceImplementationType.FullName);
         }
@@ -869,7 +869,7 @@ namespace Catel.IoC
                         instance = _typeFactory.CreateInstance((Type)instance);
                     }
 
-                    if (instance == null)
+                    if (instance is null)
                     {
                         ThrowTypeNotRegisteredException(serviceType);
                     }
@@ -896,7 +896,7 @@ namespace Catel.IoC
         private object CreateServiceInstance(ServiceLocatorRegistration registration)
         {
             object instance = _typeFactory.CreateInstance(registration.ImplementingType);
-            if (instance == null)
+            if (instance is null)
             {
                 ThrowTypeNotRegisteredException(registration.DeclaringType, "Failed to instantiate the type using the TypeFactory. Check if the required dependencies are registered as well or that the type has a valid constructor that can be used.");
             }

@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BindingParty.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -47,7 +47,7 @@ namespace Catel.MVVM
             var instanceType = instance.GetType();
             _toStringValue = string.Format("{0}.{1}", instanceType.Name, _propertyName);
             _propertyInfo = instanceType.GetPropertyEx(_propertyName);
-            if (_propertyInfo == null)
+            if (_propertyInfo is null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Property '{0}' not found, cannot create binding", _toStringValue);
             }
@@ -115,7 +115,7 @@ namespace Catel.MVVM
             Log.Debug("Adding subscription to event '{0}'", eventName);
 
             var target = _instance.Target;
-            if (target == null)
+            if (target is null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Target is no longer alive, cannot add event subscription");
             }
@@ -133,7 +133,7 @@ namespace Catel.MVVM
         public object GetPropertyValue()
         {
             var instance = Instance;
-            if (instance == null)
+            if (instance is null)
             {
                 return null;
             }
@@ -150,7 +150,7 @@ namespace Catel.MVVM
         public void SetPropertyValue(object newValue)
         {
             var instance = Instance;
-            if (instance == null)
+            if (instance is null)
             {
                 return;
             }
@@ -163,7 +163,7 @@ namespace Catel.MVVM
         /// </summary>
         private void RaiseValueChanged()
         {
-            ValueChanged.SafeInvoke(this);
+            ValueChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETFX_CORE
+#if NET || NETCORE || UWP
 
 namespace Catel.Windows.Interactivity
 {
@@ -14,7 +14,7 @@ namespace Catel.Windows.Interactivity
     using IoC;
     using Input;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.Foundation;
     using global::Windows.UI;
     using global::Windows.UI.Xaml;
@@ -62,16 +62,16 @@ namespace Catel.Windows.Interactivity
             _suggestionListBox = new ListBox();
             _suggestionListBox.Margin = new Thickness(0d);
 
-#if NETFX_CORE
+#if UWP
             _suggestionListBox.Background = new SolidColorBrush(Colors.Gainsboro);
 #endif
 
             _popup = new Popup();
             _popup.Child = _suggestionListBox;
 
-#if NET
+#if NET || NETCORE
             _popup.StaysOpen = false;
-#elif NETFX_CORE
+#elif UWP
             _popup.IsLightDismissEnabled = true;
 #else
             // To determine
@@ -170,7 +170,7 @@ namespace Catel.Windows.Interactivity
 
                 associatedObject.TextChanged += OnTextChanged;
 
-#if NET
+#if NET || NETCORE
                 associatedObject.PreviewKeyDown += OnPreviewKeyDown;
 #else
                 associatedObject.KeyDown += OnPreviewKeyDown;
@@ -178,7 +178,7 @@ namespace Catel.Windows.Interactivity
 
                 _suggestionListBox.SelectionChanged += OnSuggestionListBoxSelectionChanged;
 
-#if NETFX_CORE
+#if UWP
                 _suggestionListBox.Tapped += OnSuggestionListBoxTapped;
 #else
                 _suggestionListBox.MouseLeftButtonUp += OnSuggestionListBoxMouseLeftButtonUp;
@@ -200,7 +200,7 @@ namespace Catel.Windows.Interactivity
             {
                 associatedObject.TextChanged -= OnTextChanged;
 
-#if NET
+#if NET || NETCORE
                 associatedObject.PreviewKeyDown -= OnPreviewKeyDown;
 #else
                 associatedObject.KeyDown -= OnPreviewKeyDown;
@@ -208,7 +208,7 @@ namespace Catel.Windows.Interactivity
 
                 _suggestionListBox.SelectionChanged -= OnSuggestionListBoxSelectionChanged;
 
-#if NETFX_CORE
+#if UWP
                 _suggestionListBox.Tapped -= OnSuggestionListBoxTapped;
 #else
                 _suggestionListBox.MouseLeftButtonUp -= OnSuggestionListBoxMouseLeftButtonUp;
@@ -229,10 +229,10 @@ namespace Catel.Windows.Interactivity
 
             _popup.Width = textBox.ActualWidth;
 
-#if NET
+#if NET || NETCORE
             _popup.PlacementTarget = textBox;
             _popup.Placement = PlacementMode.Bottom;
-#elif NETFX_CORE
+#elif UWP
             var offset = CalculateOffset(AssociatedObject, new Point(0, 0));
 
             _popup.HorizontalOffset = offset.X;
@@ -245,12 +245,12 @@ namespace Catel.Windows.Interactivity
 
             _popup.IsOpen = isVisible;
 
-#if NETFX_CORE
+#if UWP
             AssociatedObject.Focus(FocusState.Programmatic);
 #endif
         }
 
-#if NETFX_CORE
+#if UWP
         private static Point CalculateOffset(FrameworkElement element, Point offset)
         {
             var transform = element.TransformToVisual(Window.Current.Content);
@@ -270,7 +270,7 @@ namespace Catel.Windows.Interactivity
             }
 
             var associatedObject = AssociatedObject;
-            if (associatedObject == null)
+            if (associatedObject is null)
             {
                 return;
             }
@@ -339,7 +339,7 @@ namespace Catel.Windows.Interactivity
 
             UpdateSuggestions();
 
-            if (_availableSuggestions == null || _availableSuggestions.Length == 0)
+            if (_availableSuggestions is null || _availableSuggestions.Length == 0)
             {
                 UpdateSuggestionBox(false);
             }
@@ -404,7 +404,7 @@ namespace Catel.Windows.Interactivity
             }
         }
 
-#if NETFX_CORE
+#if UWP
         private void OnSuggestionListBoxTapped(object sender, TappedRoutedEventArgs e)
         {
             UpdateSuggestionBox(false);

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETFX_CORE
+#if NET || NETCORE || UWP
 
 namespace Catel.Windows.Controls
 {
@@ -14,7 +14,7 @@ namespace Catel.Windows.Controls
     using MVVM.Views;
     using MVVM;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
@@ -25,7 +25,7 @@ namespace Catel.Windows.Controls
     /// <summary>
     /// <see cref="Page"/> class that supports MVVM with Catel.
     /// </summary>
-#if NETFX_CORE
+#if UWP
     public class Page : global::Windows.UI.Xaml.Controls.Page, IPage
 #else
     public class Page : System.Windows.Controls.Page, IPage
@@ -54,18 +54,18 @@ namespace Catel.Windows.Controls
             _logic = new PageLogic(this);
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
-#if !NET
+#if !NET && !NETCORE
                 // WPF already calls this method automatically
                 OnPropertyChanged(e);
 
-                PropertyChanged.SafeInvoke(this, e);
+                PropertyChanged?.Invoke(this, e);
 #else
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
                 // on systems where NET45 is *not* installed
                 if (!string.Equals(e.PropertyName, "ActualWidth", StringComparison.InvariantCulture) &&
                     !string.Equals(e.PropertyName, "ActualHeight", StringComparison.InvariantCulture))
                 {
-                    PropertyChanged.SafeInvoke(this, e);
+                    PropertyChanged?.Invoke(this, e);
                 }
 #endif
             };
@@ -76,24 +76,24 @@ namespace Catel.Windows.Controls
             {
                 OnViewModelPropertyChanged(e);
 
-                ViewModelPropertyChanged.SafeInvoke(this, e);
+                ViewModelPropertyChanged?.Invoke(this, e);
             };
 
             Loaded += (sender, e) =>
             {
-                _viewLoaded.SafeInvoke(this);
+                _viewLoaded?.Invoke(this, EventArgs.Empty);
 
                 OnLoaded(e);
             };
 
             Unloaded += (sender, e) =>
             {
-                _viewUnloaded.SafeInvoke(this);
+                _viewUnloaded?.Invoke(this, EventArgs.Empty);
 
                 OnUnloaded(e);
             };
 
-            this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged.SafeInvoke(this, () => new Catel.MVVM.Views.DataContextChangedEventArgs(e.OldValue, e.NewValue)));
+            this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged?.Invoke(this, new Catel.MVVM.Views.DataContextChangedEventArgs(e.OldValue, e.NewValue)));
         }
         #endregion
 
@@ -182,8 +182,8 @@ namespace Catel.Windows.Controls
         {
             OnViewModelChanged();
 
-            ViewModelChanged.SafeInvoke(this);
-            PropertyChanged.SafeInvoke(this, () => new PropertyChangedEventArgs("ViewModel"));
+            ViewModelChanged?.Invoke(this, EventArgs.Empty);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewModel)));
         }
 
         /// <summary>

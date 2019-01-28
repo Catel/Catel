@@ -57,6 +57,7 @@ namespace Catel
         /// <param name="handler">The handler.</param>
         /// <param name="sender">The sender.</param>
         /// <returns><c>true</c> if the event handler was not <c>null</c>; otherwise <c>false</c>.</returns>
+        [ObsoleteEx(Message = "Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public static bool SafeInvoke(this EventHandler handler, object sender)
         {
             return SafeInvoke(handler, sender, EventArgs.Empty);
@@ -85,6 +86,7 @@ namespace Catel
         /// <param name="handler">The handler.</param>
         /// <param name="sender">The sender.</param>
         /// <returns><c>true</c> if the event handler was not <c>null</c>; otherwise <c>false</c>.</returns>
+        [ObsoleteEx(Message = "Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public static bool SafeInvoke(this EventHandler<EventArgs> handler, object sender)
         {
             return SafeInvoke(handler, sender, EventArgs.Empty);
@@ -114,6 +116,7 @@ namespace Catel
         /// <param name="sender">The sender.</param>
         /// <param name="e">The event args.</param>
         /// <returns><c>true</c> if the event handler was not <c>null</c>; otherwise <c>false</c>.</returns>
+        [ObsoleteEx(Message = "Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public static bool SafeInvoke(this EventHandler handler, object sender, EventArgs e)
         {
             if (handler != null)
@@ -150,6 +153,7 @@ namespace Catel
         /// <param name="sender">The sender.</param>
         /// <param name="e">The event args.</param>
         /// <returns><c>true</c> if the event handler was not <c>null</c>; otherwise <c>false</c>.</returns>
+        [ObsoleteEx(Message = "Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public static bool SafeInvoke<TEventArgs>(this EventHandler<TEventArgs> handler, object sender, TEventArgs e)
             where TEventArgs : EventArgs
         {
@@ -187,6 +191,7 @@ namespace Catel
         /// <param name="sender">The sender.</param>
         /// <param name="fE">The event args.</param>
         /// <returns><c>true</c> if the event handler was not <c>null</c>; otherwise <c>false</c>.</returns>
+        [ObsoleteEx(Message = "Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public static bool SafeInvoke<TEventArgs>(this EventHandler<TEventArgs> handler, object sender, Func<TEventArgs> fE)
             where TEventArgs : EventArgs
         {
@@ -223,6 +228,7 @@ namespace Catel
         /// <param name="sender">The sender.</param>
         /// <param name="e">The event args.</param>
         /// <returns><c>true</c> if the event handler was not <c>null</c>; otherwise <c>false</c>.</returns>
+        [ObsoleteEx(Message = "Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public static bool SafeInvoke(this PropertyChangedEventHandler handler, object sender, PropertyChangedEventArgs e)
         {
             if (handler != null)
@@ -258,6 +264,7 @@ namespace Catel
         /// <param name="sender">The sender.</param>
         /// <param name="fE">The event args.</param>
         /// <returns><c>true</c> if the event handler was not <c>null</c>; otherwise <c>false</c>.</returns>
+        [ObsoleteEx(Message = "Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public static bool SafeInvoke(this PropertyChangedEventHandler handler, object sender, Func<PropertyChangedEventArgs> fE)
         {
             if (handler != null)
@@ -293,6 +300,7 @@ namespace Catel
         /// <param name="sender">The sender.</param>
         /// <param name="e">The event args.</param>
         /// <returns><c>true</c> if the event handler was not <c>null</c>; otherwise <c>false</c>.</returns>
+        [ObsoleteEx(Message = "Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public static bool SafeInvoke(this NotifyCollectionChangedEventHandler handler, object sender, NotifyCollectionChangedEventArgs e)
         {
             if (handler != null)
@@ -328,6 +336,7 @@ namespace Catel
         /// <param name="sender">The sender.</param>
         /// <param name="fE">The event args.</param>
         /// <returns><c>true</c> if the event handler was not <c>null</c>; otherwise <c>false</c>.</returns>
+        [ObsoleteEx(Message = "Use handler?.Invoke(this) instead, see https://github.com/Catel/Catel/issues/1258", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public static bool SafeInvoke(this NotifyCollectionChangedEventHandler handler, object sender, Func<NotifyCollectionChangedEventArgs> fE)
         {
             if (handler != null)

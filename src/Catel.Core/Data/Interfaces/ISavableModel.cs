@@ -9,7 +9,7 @@ namespace Catel.Data
     using System.IO;
     using Runtime.Serialization;
 
-#if NETFX_CORE
+#if UWP
     using Windows.Storage.Streams;
 #endif
 
@@ -19,9 +19,9 @@ namespace Catel.Data
     public interface ISavableModel : IModel
     {
         #region Methods
-#if NET || NETSTANDARD || XAMARIN
+#if NET || NETCORE || NETSTANDARD || XAMARIN
         // No overloads required
-#elif NETFX_CORE
+#elif UWP
         /// <summary>
         /// Saves the object to an isolated storage file stream using the default formatting.
         /// </summary>

@@ -26,7 +26,7 @@ namespace Catel.MVVM.Converters
     {
         private readonly char[] SplitChars = new[] { '|', ',' };
 
-        #region Constructors
+#region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="EnumToCollapsingVisibilityConverter"/> class.
         /// </summary>
@@ -45,7 +45,7 @@ namespace Catel.MVVM.Converters
         {
             SupportInversionUsingCommandParameter = false;
         }
-        #endregion
+#endregion
 
         /// <summary>
         /// Determines what value this converter should return.
@@ -58,7 +58,7 @@ namespace Catel.MVVM.Converters
         /// </returns>
         protected override bool IsVisible(object value, Type targetType, object parameter)
         {
-            if (value == null)
+            if (value is null)
             {
                 return false;
             }
@@ -110,7 +110,7 @@ namespace Catel.MVVM.Converters
         }
     }
 
-#if NET
+#if NET || NETCORE
     /// <summary>
     /// Convert from an enum value to <see cref="Visibility"/>. The allowed values must be defined inside the <c>ConverterParameter</c> property.
     /// <para />

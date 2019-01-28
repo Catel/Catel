@@ -12,7 +12,7 @@ namespace Catel
     using Caching;
     using Catel.Logging;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
 #else
     using System.Windows;
@@ -48,7 +48,7 @@ namespace Catel
             EnsureThemeIsLoaded(resourceUri, () =>
             {
                 var application = Application.Current;
-                if (application == null)
+                if (application is null)
                 {
                     return false;
                 }

@@ -9,7 +9,7 @@ namespace Catel.Services
     using System;
     using System.Threading.Tasks;
 
-#if NETFX_CORE
+#if UWP
     /// <summary>
     /// Message box button.
     /// </summary>

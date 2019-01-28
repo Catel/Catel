@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Windows.Interactivity
 {
@@ -125,7 +125,7 @@ namespace Catel.Windows.Interactivity
             }
 
             var commandParameter = CommandParameter;
-            if ((commandParameter == null) && PassEventArgsToCommand)
+            if ((commandParameter is null) && PassEventArgsToCommand)
             {
                 commandParameter = parameter;
             }
@@ -147,7 +147,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         private void UpdateElementState()
         {
-            if ((AssociatedObject == null) || (Command == null))
+            if ((AssociatedObject is null) || (Command is null))
             {
                 return;
             }

@@ -22,7 +22,7 @@ namespace Catel.MVVM.Converters
     /// <para />
     /// Original license: CC BY-SA 2.5, compatible with the MIT license.
     /// </remarks>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(string), typeof(object))]
 #endif
     public class MethodToValueConverter : ValueConverterBase
@@ -39,14 +39,14 @@ namespace Catel.MVVM.Converters
         protected override object Convert(object value, Type targetType, object parameter)
         {
             var methodName = parameter as string;
-            if (value == null || methodName == null)
+            if (value is null || methodName is null)
             {
                 return value;
             }
 
             var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(true, true);
             var methodInfo = value.GetType().GetMethodEx(methodName, ArrayShim.Empty<Type>(), bindingFlags);
-            if (methodInfo == null)
+            if (methodInfo is null)
             {
                 return value;
             }

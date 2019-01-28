@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.MVVM.Converters
 {
@@ -17,7 +17,7 @@ namespace Catel.MVVM.Converters
     /// Converts a collection containing <see cref="ValidationError"/> objects to return the first error
     /// or an empty string in case there are no errors.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(ICollection<ValidationError>), typeof(string))]
 #endif
     public class GetFirstValidationErrorConverter : ValueConverterBase
@@ -31,24 +31,24 @@ namespace Catel.MVVM.Converters
         /// <returns>The value to be passed to the target dependency property.</returns>
         protected override object Convert(object value, Type targetType, object parameter)
         {
-            if (value == null)
+            if (value is null)
             {
                 return string.Empty;
             }
 
             var errorCollection = value as ICollection<ValidationError>;
-            if (errorCollection == null)
+            if (errorCollection is null)
             {
                 return string.Empty;
             }
 
             var firstError = errorCollection.FirstOrDefault();
-            if (firstError == null)
+            if (firstError is null)
             {
                 return string.Empty;
             }
 
-            if (firstError.ErrorContent == null)
+            if (firstError.ErrorContent is null)
             {
                 return string.Empty;
             }

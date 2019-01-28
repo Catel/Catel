@@ -9,7 +9,7 @@ namespace Catel.MVVM.Views
     using System;
     using Logging;
 
-#if NETFX_CORE
+#if UWP
     using LoadedEventArgs = System.Object;
     using LayoutUpdatedEventArgs = System.Object;
 #else
@@ -121,14 +121,14 @@ namespace Catel.MVVM.Views
             IsLoaded = isViewLoaded;
             _isViewLoadState = viewObject is IViewLoadState;
 
-            if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, "Loaded", OnViewLoadStateLoaded, false) == null)
+            if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, "Loaded", OnViewLoadStateLoaded, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'view.Loaded', going to subscribe without weak events");
 
                 ((IView) viewObject).Loaded += OnViewLoadStateLoaded;
             }
 
-            if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, "Unloaded", OnViewLoadStateUnloaded, false) == null)
+            if (this.SubscribeToWeakGenericEvent<LoadedEventArgs>(viewObject, "Unloaded", OnViewLoadStateUnloaded, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'view.Unloaded', going to subscribe without weak events");
 

@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="AssemblyExtensions.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -15,7 +15,7 @@ namespace Catel.Reflection
     /// </summary>
     public static class AssemblyExtensions
     {
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Gets the build date time of the assembly.
         /// </summary>
@@ -42,7 +42,7 @@ namespace Catel.Reflection
                 return title;
             }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             return System.IO.Path.GetFileNameWithoutExtension(assembly.CodeBase);
 #else
             throw new NotSupportedInPlatformException();
@@ -92,7 +92,7 @@ namespace Catel.Reflection
         public static string InformationalVersion(this Assembly assembly)
         {
             var version = GetAssemblyAttribute<AssemblyInformationalVersionAttribute>(assembly);
-            return version == null ? null : version.InformationalVersion;
+            return version is null ? null : version.InformationalVersion;
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("assembly", assembly);
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             string location = assembly.Location;
             return location.Substring(0, location.LastIndexOf('\\'));
 #else
@@ -182,20 +182,20 @@ namespace Catel.Reflection
             }
 
             object attributeValue = attributes[0];
-            if (attributeValue == null)
+            if (attributeValue is null)
             {
                 return string.Empty;
             }
 
             var attributeType = attributeValue.GetType();
             var propertyInfo = attributeType.GetPropertyEx(property);
-            if (propertyInfo == null)
+            if (propertyInfo is null)
             {
                 return string.Empty;
             }
 
             object propertyValue = propertyInfo.GetValue(attributeValue, null);
-            if (propertyValue == null)
+            if (propertyValue is null)
             {
                 return string.Empty;
             }

@@ -16,13 +16,14 @@ namespace Catel.Services
     using global::Android.OS;
 #elif IOS
     using global::CoreFoundation;
-#elif NETFX_CORE
+#elif UWP
     using Windows.Threading;
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
 #elif !XAMARIN_FORMS
-    using Windows.Threading;
+    using Catel.Windows.Threading;
     using System.Windows.Threading;
-#else 
+    using DispatcherExtensions = Windows.Threading.DispatcherExtensions;
+#else
     using System.Threading;
     using Xamarin.Forms;
 #endif
@@ -67,7 +68,7 @@ namespace Catel.Services
         }
 #endif
 
-#if NET || UWP
+#if NET || NETCORE || UWP
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
@@ -77,7 +78,7 @@ namespace Catel.Services
         {
             var dispatcher = CurrentDispatcher;
 
-#if NET
+#if NET || NETCORE
             return dispatcher.InvokeAsync(action).Task;
 #else
             return dispatcher.InvokeAsync(action);

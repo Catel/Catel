@@ -268,6 +268,7 @@ namespace Catel.Messaging
                 {
                     // CTL-311: first convert to array, then handle messages
                     var messageHandlers = messageHandlerList.ToArray();
+
                     foreach (var handler in messageHandlers)
                     {
                         if (TagHelper.AreTagsEqual(tag, handler.Tag))

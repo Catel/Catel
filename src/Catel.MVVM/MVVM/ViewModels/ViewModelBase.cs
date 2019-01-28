@@ -20,7 +20,6 @@ namespace Catel.MVVM
     using Logging;
     using Reflection;
     using Services;
-    using System.Collections.ObjectModel;
     using Threading;
     using System.Collections.Concurrent;
 
@@ -53,7 +52,7 @@ namespace Catel.MVVM
         /// <summary>
         /// The log.
         /// </summary>
-#if NET
+#if NET || NETCORE
         [field: NonSerialized]
 #endif
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
@@ -61,7 +60,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Dictionary containing the view model metadata of a view model type so it has to be calculated only once.
         /// </summary>
-#if NET
+#if NET || NETCORE
         [field: NonSerialized]
 #endif
 
@@ -72,7 +71,7 @@ namespace Catel.MVVM
         /// <summary>
         /// The dispatcher service used to dispatch all calls.
         /// </summary>
-#if NET
+#if NET || NETCORE
         [field: NonSerialized]
 #endif
         private readonly IDispatcherService _dispatcherService;
@@ -81,7 +80,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Value indicating whether the multiple modules warning should be ignored.
         /// </summary>
-#if NET
+#if NET || NETCORE
         [field: NonSerialized]
 #endif
         private readonly bool _ignoreMultipleModelsWarning;
@@ -89,12 +88,12 @@ namespace Catel.MVVM
         /// <summary>
         /// Value indicating whether the view model attributes are initialized. 
         /// </summary>
-#if NET
+#if NET || NETCORE
         [field: NonSerialized]
 #endif
         private bool _areViewModelAttributesIntialized;
 
-#if NET
+#if NET || NETCORE
         [field: NonSerialized]
 #endif
         private readonly object _modelLock = new object();
@@ -102,7 +101,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Dictionary of available models inside the view model.
         /// </summary>
-#if NET
+#if NET || NETCORE
         [field: NonSerialized]
 #endif
         private readonly Dictionary<string, object> _modelObjects = new Dictionary<string, object>();
@@ -110,7 +109,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Dictionary with info about the available models inside the view model.
         /// </summary>
-#if NET
+#if NET || NETCORE
         [field: NonSerialized]
 #endif
         private readonly Dictionary<string, ModelInfo> _modelObjectsInfo = new Dictionary<string, ModelInfo>();
@@ -118,7 +117,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Dictionary with data error info about a specific model.
         /// </summary>
-#if NET
+#if NET || NETCORE
         [field: NonSerialized]
 #endif
         private readonly Dictionary<string, ModelErrorInfo> _modelErrorInfo = new Dictionary<string, ModelErrorInfo>();
@@ -126,7 +125,7 @@ namespace Catel.MVVM
         /// <summary>
         /// List of child view models which can be registed by the <c>RegisterChildViewModel</c> method.
         /// </summary>
-#if NET
+#if NET || NETCORE
         [field: NonSerialized]
 #endif
         internal readonly List<IViewModel> ChildViewModels = new List<IViewModel>();
@@ -134,7 +133,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Value to determine whether child view models have errors or not.
         /// </summary>
-#if NET
+#if NET || NETCORE
         [field: NonSerialized]
 #endif
         private bool _childViewModelsHaveErrors;
@@ -143,7 +142,7 @@ namespace Catel.MVVM
         /// Gets the view model manager.
         /// </summary>
         /// <value>The view model manager.</value>
-#if NET
+#if NET || NETCORE
         [field: NonSerialized]
 #endif
         protected static readonly IViewModelManager ViewModelManager;
@@ -151,7 +150,7 @@ namespace Catel.MVVM
         /// <summary>
         /// Mappings from view model properties to models and their properties.
         /// </summary>
-#if NET
+#if NET || NETCORE
         [field: NonSerialized]
 #endif
         private readonly Dictionary<string, ViewModelToModelMapping> _viewModelToModelMap = new Dictionary<string, ViewModelToModelMapping>();
@@ -159,7 +158,7 @@ namespace Catel.MVVM
         /// <summary>
         /// The backing field for the title property.
         /// </summary>
-#if NET
+#if NET || NETCORE
         [field: NonSerialized]
 #endif
         private string _title;
@@ -228,7 +227,7 @@ namespace Catel.MVVM
 
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
-            if (serviceLocator == null)
+            if (serviceLocator is null)
             {
                 serviceLocator = ServiceLocator.Default;
             }
@@ -587,7 +586,7 @@ namespace Catel.MVVM
                 foreach (var valueProperty in mapping.ValueProperties)
                 {
                     var modelPropertyPropertyInfo = modelPropertyType.GetPropertyEx(valueProperty);
-                    if (modelPropertyPropertyInfo == null)
+                    if (modelPropertyPropertyInfo is null)
                     {
                         Log.Warning("Mapped viewmodel property '{0}' to model property '{1}' is invalid because property '{1}' is not found on the model '{2}'.\n\n" +
                                 "If the property is defined in a sub-interface, reflection does not return it as a valid property. If this is the case, you can safely ignore this warning",
@@ -647,7 +646,7 @@ namespace Catel.MVVM
                             if (_modelObjectsInfo[modelKeyValuePair.Key].SupportIEditableObject)
                             {
                                 var modelKeyValuePairValueAsModelBaseBase = modelKeyValuePair.Value as IModel;
-                                if ((modelKeyValuePairValueAsModelBaseBase == null) || !modelKeyValuePairValueAsModelBaseBase.IsInEditSession)
+                                if ((modelKeyValuePairValueAsModelBaseBase is null) || !modelKeyValuePairValueAsModelBaseBase.IsInEditSession)
                                 {
                                     EditableObjectHelper.BeginEditObject(modelKeyValuePair.Value);
                                 }
@@ -1136,7 +1135,7 @@ namespace Catel.MVVM
                 }
             }
 
-#if NET
+#if NET || NETCORE
             if (ValidateModelsOnInitialization)
             {
                 var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
@@ -1346,6 +1345,8 @@ namespace Catel.MVVM
         {
             if (!IsInitializing && !IsInitialized)
             {
+                ((IFreezable)this).Unfreeze();
+
                 IsInitializing = true;
 
                 await InitializeAsync();
@@ -1513,6 +1514,9 @@ namespace Catel.MVVM
             // if the vm is closed)
             IsClosing = false;
             IsClosed = true;
+            IsInitialized = false;
+
+            ((IFreezable)this).Freeze();
 
             await OnClosedAsync(result);
 

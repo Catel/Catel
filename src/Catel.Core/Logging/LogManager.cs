@@ -14,7 +14,7 @@ namespace Catel.Logging
     using System.Threading.Tasks;
     using Reflection;
 
-#if NET
+#if NET || NETCORE
     using System.Configuration;
     using Catel.Configuration;
 #endif
@@ -261,7 +261,7 @@ namespace Catel.Logging
         /// </summary>
         static LogManager()
         {
-#if NET
+#if NET || NETCORE
             AppDomain.CurrentDomain.DomainUnload += (sender, e) => FlushAll();
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => FlushAll();
 #endif
@@ -407,7 +407,7 @@ namespace Catel.Logging
             return GetLogger(callingType);
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Loads the listeners from the specified configuration file.
         /// </summary>
@@ -445,7 +445,7 @@ namespace Catel.Logging
         /// <param name="assembly">The assembly to determine product info. If <c>null</c>, the entry assembly will be used.</param>
         public static void LoadListenersFromConfiguration(Configuration configuration, Assembly assembly = null)
         {
-            if (configuration == null)
+            if (configuration is null)
             {
                 return;
             }
@@ -483,7 +483,7 @@ namespace Catel.Logging
                                     where logListener is DebugLogListener
                                     select logListener).FirstOrDefault();
 
-            if (debugLogListener == null)
+            if (debugLogListener is null)
             {
                 debugLogListener = new DebugLogListener
                 {
@@ -595,7 +595,7 @@ namespace Catel.Logging
                 }
 
                 var catelLog = log as ICatelLog;
-                if (catelLog == null)
+                if (catelLog is null)
                 {
                     // Handle the unlikely event where a logger with the same name is initialized before the catel logger.
                     throw new ArgumentException(string.Format("An element with the same key already exists in the {0} and does not implement {1}.", typeof(LogManager).Name, typeof(ICatelLog).Name));
@@ -777,7 +777,7 @@ namespace Catel.Logging
                 return;
             }
 
-            LogMessage.SafeInvoke(sender, e);
+            LogMessage?.Invoke(sender, e);
 
             var logListeners = GetThreadSafeLogListeners();
             if (logListeners.Count == 0)

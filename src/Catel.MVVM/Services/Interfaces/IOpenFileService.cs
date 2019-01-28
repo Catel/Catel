@@ -8,7 +8,7 @@ namespace Catel.Services
 {
     using System.Threading.Tasks;
 
-#if NETFX_CORE
+#if UWP
     using System.IO;
     using global::Windows.Storage;
 #endif
@@ -29,7 +29,7 @@ namespace Catel.Services
         /// </summary>
         string[] FileNames { get; }
 
-#if NETFX_CORE
+#if UWP
         /// <summary>
         /// Determines the filename of the file what will be used.
         /// </summary>

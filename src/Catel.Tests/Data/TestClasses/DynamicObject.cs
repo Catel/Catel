@@ -1,4 +1,4 @@
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Runtime.Serialization;
@@ -8,7 +8,7 @@ namespace Catel.Tests.Data
     /// DynamicObject Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [Serializable]
 #endif
     public class DynamicObject : ModelBase
@@ -24,7 +24,7 @@ namespace Catel.Tests.Data
         {
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         ///   Initializes a new object based on <see cref = "SerializationInfo" />.
         /// </summary>

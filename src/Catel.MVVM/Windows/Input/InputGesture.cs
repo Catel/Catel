@@ -10,7 +10,7 @@ namespace Catel.Windows.Input
 {
     using Catel.Data;
 
-#if NETFX_CORE
+#if UWP
     using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
     using Key = global::Windows.System.VirtualKey;
     using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
@@ -118,7 +118,7 @@ namespace Catel.Windows.Input
         /// <exception cref="System.NotImplementedException"></exception>
         protected bool Equals(InputGesture other)
         {
-            if (other == null)
+            if (other is null)
             {
                 return false;
             }
@@ -153,7 +153,7 @@ namespace Catel.Windows.Input
         /// <returns><c>true</c> if this gesture matches the event args, <c>false</c> otherwise.</returns>
         public bool Matches(KeyEventArgs eventArgs)
         {
-            if (eventArgs == null)
+            if (eventArgs is null)
             {
                 return false;
             }
@@ -177,7 +177,7 @@ namespace Catel.Windows.Input
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
-            if (_string == null)
+            if (_string is null)
             {
                 var format = string.Empty;
 

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
 
 // Define debug so this code doesn't get stripped out
 #define DEBUG

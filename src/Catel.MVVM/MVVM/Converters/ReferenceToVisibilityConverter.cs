@@ -21,7 +21,7 @@ namespace Catel.MVVM.Converters
     /// If the reference contains a value, Visibility.Visible will be returned. 
     /// If the reference is null, Visibility.Collapsed will be returned.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof (object), typeof (Visibility))]
 #endif
     public class ReferenceToCollapsingVisibilityConverter : VisibilityConverterBase
@@ -65,7 +65,7 @@ namespace Catel.MVVM.Converters
         }
     }
 
-#if NET
+#if NET || NETCORE
     /// <summary>
     /// Convert from reference to <see cref="Visibility"/>. 
     /// If the reference contains a value, Visibility.Visible will be returned. 

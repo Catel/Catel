@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Services
 {
@@ -14,7 +14,7 @@ namespace Catel.Services
     using System.Threading.Tasks;
     using Catel.Logging;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.System;
 #endif
 
@@ -39,7 +39,7 @@ namespace Catel.Services
             var fileName = processContext.FileName;
 
             var arguments = processContext.Arguments;
-            if (arguments == null)
+            if (arguments is null)
             {
                 arguments = string.Empty;
             }
@@ -50,7 +50,7 @@ namespace Catel.Services
 
             try
             {
-#if NETFX_CORE
+#if UWP
                 var launcher = Launcher.LaunchUriAsync(new Uri(fileName));
                 if (processCompletedCallback != null)
                 {
@@ -68,8 +68,17 @@ namespace Catel.Services
                 }
 
                 var process = Process.Start(processStartInfo);
-                process.EnableRaisingEvents = true;
-                process.Exited += (sender, e) => tcs.SetResult(process.ExitCode);
+                if (process is null)
+                {
+                    Log.Debug($"Process is already completed, cannot wait for it to complete");
+
+                    tcs.SetResult(0);
+                }
+                else
+                { 
+                    process.EnableRaisingEvents = true;
+                    process.Exited += (sender, e) => tcs.SetResult(process.ExitCode);
+                }
 #endif
             }
             catch (Exception ex)

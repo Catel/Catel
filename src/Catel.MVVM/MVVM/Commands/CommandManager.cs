@@ -18,7 +18,7 @@ namespace Catel.MVVM
 #if !XAMARIN && !XAMARIN_FORMS
     using InputGesture = Catel.Windows.Input.InputGesture;
 
-#if NETFX_CORE
+#if UWP
     using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
     using global::Windows.UI.Xaml;
 #else 
@@ -129,7 +129,7 @@ namespace Catel.MVVM
                     return;
                 }
 
-                if (compositeCommand == null)
+                if (compositeCommand is null)
                 {
                     compositeCommand = new CompositeCommand();
                 }
@@ -138,7 +138,7 @@ namespace Catel.MVVM
                 _originalCommandGestures.Add(commandName, inputGesture);
                 _commandGestures.Add(commandName, inputGesture);
 
-                CommandCreated.SafeInvoke(this, () => new CommandCreatedEventArgs(compositeCommand, commandName));
+                CommandCreated?.Invoke(this, new CommandCreatedEventArgs(compositeCommand, commandName));
             }
         }
 #else
@@ -172,7 +172,7 @@ namespace Catel.MVVM
                     return;
                 }
 
-                if (compositeCommand == null)
+                if (compositeCommand is null)
                 {
                     compositeCommand = new CompositeCommand();
                 }
@@ -181,7 +181,7 @@ namespace Catel.MVVM
 
                 InvalidateCommands();
 
-                CommandCreated.SafeInvoke(this, () => new CommandCreatedEventArgs(compositeCommand, commandName));
+                CommandCreated?.Invoke(this, new CommandCreatedEventArgs(compositeCommand, commandName));
             }
         }
 #endif

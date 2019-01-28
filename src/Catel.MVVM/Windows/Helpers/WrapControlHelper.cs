@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Windows
 {
@@ -14,7 +14,8 @@ namespace Catel.Windows
     using Collections;
     using Controls;
     using Reflection;
-#if NETFX_CORE
+
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Controls.Primitives;
@@ -23,7 +24,6 @@ namespace Catel.Windows
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Data;
-
 #endif
 
     #region Enums
@@ -62,7 +62,6 @@ namespace Catel.Windows
     [ObsoleteEx(ReplacementTypeOrMember = "Catel.Service.WrapControlService", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
     public static class WrapControlHelper
     {
-        
         #region Constants
         /// <summary>
         /// The name of the internal grid. Retrieve the grid with this name to add custom controls to the inner grid.
@@ -99,7 +98,6 @@ namespace Catel.Windows
         /// </summary>
         public const string DefaultCancelButtonName = "cancelButton";
         #endregion
-        
 
         /// <summary>
         /// Determines whether the specified <see cref="FrameworkElement"/> can be safely wrapped.
@@ -110,7 +108,7 @@ namespace Catel.Windows
         /// </returns>
         public static bool CanBeWrapped(FrameworkElement frameworkElement)
         {
-            if (frameworkElement == null)
+            if (frameworkElement is null)
             {
                 return false;
             }
@@ -170,7 +168,7 @@ namespace Catel.Windows
             {
                 if (frameworkElement.Name.StartsWith(MainContentHolderName))
                 {
-                    return (Grid) frameworkElement;
+                    return (Grid)frameworkElement;
                 }
             }
 
@@ -182,8 +180,10 @@ namespace Catel.Windows
             var mainContent = frameworkElement;
 
             // Create the outside grid, so the inner grid is never the same as the main content holder
-            var outsideGrid = new Grid();
-            outsideGrid.Name = MainContentHolderName.GetUniqueControlName();
+            var outsideGrid = new Grid
+            {
+                Name = MainContentHolderName.GetUniqueControlName()
+            };
 
             if (Application.Current != null)
             {
@@ -191,17 +191,16 @@ namespace Catel.Windows
             }
 
             #region Generate buttons
-#if !NETFX_CORE
+#if !UWP
             if (buttons.Length > 0)
             {
                 // Add wrappanel containing the buttons
-                var buttonsWrapPanel = new WrapPanel();
-                buttonsWrapPanel.Name = ButtonsWrapPanelName;
-#if SILVERLIGHT
-                buttonsWrapPanel.Style = Application.Current.Resources["DataWindowButtonContainerStyle"] as Style;
-#else
+                var buttonsWrapPanel = new WrapPanel
+                {
+                    Name = ButtonsWrapPanelName
+                };
+
                 buttonsWrapPanel.SetResourceReference(FrameworkElement.StyleProperty, "DataWindowButtonContainerStyle");
-#endif
 
                 foreach (var dataWindowButton in buttons)
                 {
@@ -217,7 +216,7 @@ namespace Catel.Windows
 
                     if (dataWindowButton.ContentBindingPath != null)
                     {
-                        Binding contentBinding = new Binding(dataWindowButton.ContentBindingPath);
+                        var contentBinding = new Binding(dataWindowButton.ContentBindingPath);
                         if (dataWindowButton.ContentValueConverter != null)
                         {
                             contentBinding.Converter = dataWindowButton.ContentValueConverter;
@@ -231,14 +230,14 @@ namespace Catel.Windows
 
                     if (dataWindowButton.VisibilityBindingPath != null)
                     {
-                        Binding visibilityBinding = new Binding(dataWindowButton.VisibilityBindingPath);
+                        var visibilityBinding = new Binding(dataWindowButton.VisibilityBindingPath);
                         if (dataWindowButton.VisibilityValueConverter != null)
                         {
                             visibilityBinding.Converter = dataWindowButton.VisibilityValueConverter;
                         }
                         button.SetBinding(ButtonBase.VisibilityProperty, visibilityBinding);
                     }
-#if NET
+#if NET || NETCORE
                     button.SetResourceReference(FrameworkElement.StyleProperty, "DataWindowButtonStyle");
                     button.IsDefault = dataWindowButton.IsDefault;
                     button.IsCancel = dataWindowButton.IsCancel;
@@ -259,8 +258,10 @@ namespace Catel.Windows
                 }
 
                 // Create dockpanel that will dock the buttons underneath the content
-                var subDockPanel = new DockPanel();
-                subDockPanel.LastChildFill = true;
+                var subDockPanel = new DockPanel
+                {
+                    LastChildFill = true
+                };
                 DockPanel.SetDock(buttonsWrapPanel, Dock.Bottom);
                 subDockPanel.Children.Add(buttonsWrapPanel);
 
@@ -275,8 +276,10 @@ namespace Catel.Windows
 
             #region Generate internal grid
             // Create grid
-            var internalGrid = new Grid();
-            internalGrid.Name = InternalGridName;
+            var internalGrid = new Grid
+            {
+                Name = InternalGridName
+            };
             internalGrid.Children.Add(mainContent);
 
             // Grid is now the main content
@@ -287,8 +290,10 @@ namespace Catel.Windows
             if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateWarningAndErrorValidatorForDataContext))
             {
                 // Create warning and error validator
-                var warningAndErrorValidator = new WarningAndErrorValidator();
-                warningAndErrorValidator.Name = WarningAndErrorValidatorName;
+                var warningAndErrorValidator = new WarningAndErrorValidator
+                {
+                    Name = WarningAndErrorValidatorName
+                };
                 warningAndErrorValidator.SetBinding(WarningAndErrorValidator.SourceProperty, new Binding());
 
                 // Add to grid
@@ -297,14 +302,16 @@ namespace Catel.Windows
             #endregion
 
             #region Generate InfoBarMessageControl
-#if !NETFX_CORE
+#if !UWP
             if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateInlineInfoBarMessageControl) ||
                 Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateOverlayInfoBarMessageControl))
             {
                 // Create info bar message control
-                var infoBarMessageControl = new InfoBarMessageControl();
-                infoBarMessageControl.Name = InfoBarMessageControlName;
-                infoBarMessageControl.Content = mainContent;
+                var infoBarMessageControl = new InfoBarMessageControl
+                {
+                    Name = InfoBarMessageControlName,
+                    Content = mainContent
+                };
 
                 if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.GenerateOverlayInfoBarMessageControl))
                 {

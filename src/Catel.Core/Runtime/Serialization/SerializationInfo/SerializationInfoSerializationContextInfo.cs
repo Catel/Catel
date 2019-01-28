@@ -26,7 +26,7 @@ namespace Catel.Runtime.Serialization
             PropertyValues = new List<PropertyValue>();
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializationInfoSerializationContextInfo" /> class.
         /// </summary>
@@ -68,7 +68,7 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="NotImplementedException"></exception>
         public ISerializationContextInfo Parent => throw new NotImplementedException();
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Gets the serialization info.
         /// </summary>

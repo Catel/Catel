@@ -11,7 +11,7 @@ namespace Catel.Windows.Input
     using System.Collections.Generic;
     using System;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Core;
     using global::Windows.System;
     using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
@@ -87,7 +87,7 @@ namespace Catel.Windows.Input
         {
             var modifiers = new List<ModifierKeys>();
 
-#if NETFX_CORE
+#if UWP
             var coreWindow = CoreWindow.GetForCurrentThread();
 
             // Control

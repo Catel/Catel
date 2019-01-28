@@ -8,7 +8,7 @@
 
 namespace Catel.Windows.Threading
 {
-#if NET
+#if NET || NETCORE
     using System;
     using System.Windows.Threading;
 #endif
@@ -18,7 +18,7 @@ namespace Catel.Windows.Threading
     /// </summary>
     public static partial class DispatcherExtensions
     {
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Gets the managed thread identifier for the specified dispatcher.
         /// </summary>

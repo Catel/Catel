@@ -82,7 +82,7 @@ namespace Catel.Data
                 return true;
             }
 
-            if (((object)x == null) || ((object)y == null))
+            if (((object)x is null) || ((object)y is null))
             {
                 return false;
             }
@@ -114,7 +114,7 @@ namespace Catel.Data
 
                         if (!ReferenceEquals(valueA, valueB))
                         {
-                            if ((valueA == null) || (valueB == null))
+                            if ((valueA is null) || (valueB is null))
                             {
                                 return false;
                             }
@@ -158,7 +158,7 @@ namespace Catel.Data
         /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
         public override int GetHashCode(ModelBase obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return 0;
             }

@@ -6,7 +6,7 @@
 
 
 
-#if NETFX_CORE
+#if UWP
 
 namespace Catel.Services
 {

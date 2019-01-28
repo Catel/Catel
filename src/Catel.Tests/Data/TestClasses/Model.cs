@@ -8,7 +8,7 @@
     /// ModelBase Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [KnownType(typeof(ModelA)), KnownType(typeof(ModelB)), Serializable]
 #endif
     public class Model : ComparableModelBase
@@ -22,7 +22,7 @@
         /// </summary>
         public Model() { }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Initializes a new object based on <see cref="SerializationInfo"/>.
         /// </summary>

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Windows.Markup
 {
@@ -15,7 +15,7 @@ namespace Catel.Windows.Markup
     using Catel.IoC;
     using Catel.Services;
 
-#if !NETFX_CORE
+#if !UWP
     using System.Windows.Markup;
 #endif
 
@@ -53,7 +53,7 @@ namespace Catel.Windows.Markup
         /// Gets or sets the resource name.
         /// </summary>
         /// <value>The resource name.</value>
-#if NET
+#if NET || NETCORE
         [ConstructorArgument("resourceName")]
 #endif
         public string ResourceName { get; set; }
@@ -91,7 +91,7 @@ namespace Catel.Windows.Markup
         /// <returns>The object value to set on the property where the extension is applied.</returns>
         protected override object ProvideDynamicValue(IServiceProvider serviceProvider)
         {
-            if (_languageService == null)
+            if (_languageService is null)
             {
                 if (ShowDesignTimeMessages())
                 {
@@ -159,7 +159,7 @@ namespace Catel.Windows.Markup
                 }
             }
 
-            if (_onLanguageUpdatedWeakListener == null)
+            if (_onLanguageUpdatedWeakListener is null)
             {
                 _onLanguageUpdatedWeakListener = this.SubscribeToWeakGenericEvent<EventArgs>(_languageService, "LanguageUpdated", OnLanguageUpdated);
             }

@@ -31,7 +31,7 @@ namespace Catel.IoC
             {
                 lock (_lockObject)
                 {
-                    if (_defaultServiceLocator == null)
+                    if (_defaultServiceLocator is null)
                     {
                         UpdateDefaultComponents();
                     }
@@ -55,7 +55,7 @@ namespace Catel.IoC
             {
                 lock (_lockObject)
                 {
-                    if (_defaultDependencyResolver == null)
+                    if (_defaultDependencyResolver is null)
                     {
                         UpdateDefaultComponents();
                     }
@@ -79,7 +79,7 @@ namespace Catel.IoC
             {
                 lock (_lockObject)
                 {
-                    if (_defaultTypeFactory == null)
+                    if (_defaultTypeFactory is null)
                     {
                         UpdateDefaultComponents();
                     }

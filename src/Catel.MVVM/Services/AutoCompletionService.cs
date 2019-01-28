@@ -12,6 +12,7 @@ namespace Catel.Services
     using System.Collections.Generic;
     using System.Linq;
     using Catel;
+    using Catel.Collections;
     using Catel.Data;
     using Catel.Reflection;
 
@@ -41,6 +42,11 @@ namespace Catel.Services
         public virtual string[] GetAutoCompleteValues(string property, string filter, IEnumerable source)
         {
             Argument.IsNotNull("source", source);
+
+            if (source is string)
+            {
+                return ArrayShim.Empty<string>();
+            }
 
             var propertyValues = new List<string>();
 

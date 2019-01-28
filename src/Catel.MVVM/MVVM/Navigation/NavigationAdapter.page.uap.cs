@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NETFX_CORE
+#if UWP
 
 namespace Catel.MVVM.Navigation
 {
@@ -14,10 +14,6 @@ namespace Catel.MVVM.Navigation
     using global::Windows.UI.Xaml.Navigation;
     using IoC;
 
-#if WINDOWS_PHONE
-    using global::Windows.Phone.UI.Input;
-#endif
-
     public partial class NavigationAdapter
     {
         private static Dictionary<string, object> _lastGlobalNavigationContext;
@@ -26,17 +22,13 @@ namespace Catel.MVVM.Navigation
         partial void Initialize()
         {
             var rootFrame = NavigationRoot as Frame;
-            if (rootFrame == null)
+            if (rootFrame is null)
             {
                 return;
             }
 
             rootFrame.Navigating += OnNavigatingEvent;
             rootFrame.Navigated += OnNavigatedEvent;
-
-#if WINDOWS_PHONE
-            HardwareButtons.BackPressed += OnBackPressed; 
-#endif
         }
 
         partial void Uninitialize()
@@ -47,29 +39,11 @@ namespace Catel.MVVM.Navigation
                 rootFrame.Navigating -= OnNavigatingEvent;
                 rootFrame.Navigated -= OnNavigatedEvent;
             }
-
-#if WINDOWS_PHONE
-            HardwareButtons.BackPressed -= OnBackPressed; 
-#endif
         }
-
-#if WINDOWS_PHONE
-        private void OnBackPressed(object sender, BackPressedEventArgs e) 
-        { 
-            var rootFrame = NavigationRoot as Frame;
-            if (rootFrame != null && rootFrame.CanGoBack) 
-            { 
-                rootFrame.GoBack();
- 
-                // Indicate the back button press is handled so the app does not exit 
-                e.Handled = true; 
-            } 
-        } 
-#endif
 
         partial void DetermineNavigationContext()
         {
-            if (_lastNavigationContext == null)
+            if (_lastNavigationContext is null)
             {
                 _lastNavigationContext = new Dictionary<string, object>();
 
@@ -97,7 +71,7 @@ namespace Catel.MVVM.Navigation
             InitializeNavigationService(false);
 
             var rootFrame = NavigationRoot as Frame;
-            if (rootFrame == null)
+            if (rootFrame is null)
             {
                 return false;
             }

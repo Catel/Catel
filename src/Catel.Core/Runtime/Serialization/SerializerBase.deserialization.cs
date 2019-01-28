@@ -9,16 +9,12 @@ namespace Catel.Runtime.Serialization
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
     using ApiCop.Rules;
     using Collections;
-    using IoC;
     using Logging;
-    using Data;
     using Reflection;
-    using Scoping;
 
     /// <summary>
     /// Base class for all serializers.
@@ -168,7 +164,7 @@ namespace Catel.Runtime.Serialization
 
             var serializingEventArgs = new SerializationEventArgs(context);
 
-            Deserializing.SafeInvoke(this, serializingEventArgs);
+            Deserializing?.Invoke(this, serializingEventArgs);
 
             foreach (var serializerModifier in serializerModifiers)
             {
@@ -177,7 +173,8 @@ namespace Catel.Runtime.Serialization
 
             BeforeDeserialization(context);
 
-            DeserializeMembers(context);
+            var deserializedMemberValues = DeserializeMembers(context);
+            PopulateModel(context, deserializedMemberValues);
 
             // Always use the deserialized model (might be a value type)
             model = context.Model;
@@ -189,7 +186,7 @@ namespace Catel.Runtime.Serialization
                 serializerModifier.OnDeserialized(context, model);
             }
 
-            Deserialized.SafeInvoke(this, serializingEventArgs);
+            Deserialized?.Invoke(this, serializingEventArgs);
 
             return model;
         }
@@ -282,6 +279,31 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// Deserializes the members.
         /// </summary>
+        /// <param name="model">The model instance.</param>
+        /// <param name="stream">The stream.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The deserialized list of member values.
+        /// </returns>
+        public virtual List<MemberValue> DeserializeMembers(object model, Stream stream, ISerializationConfiguration configuration = null)
+        {
+            Argument.IsNotNull("model", model);
+            Argument.IsNotNull("stream", stream);
+
+            using (GetCurrentSerializationScopeManager(configuration))
+            {
+                configuration = GetCurrentSerializationConfiguration(configuration);
+
+                using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Deserialization, configuration))
+                {
+                    return DeserializeMembers(context);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Deserializes the members.
+        /// </summary>
         /// <param name="modelType">Type of the model.</param>
         /// <param name="serializationContextInfo">The serialization context information.</param>
         /// <param name="configuration">The configuration.</param>
@@ -321,6 +343,45 @@ namespace Catel.Runtime.Serialization
         /// <summary>
         /// Deserializes the members.
         /// </summary>
+        /// <param name="model">The model instance.</param>
+        /// <param name="serializationContextInfo">The serialization context information.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The deserialized list of member values.
+        /// </returns>
+        public List<MemberValue> DeserializeMembers(object model, ISerializationContextInfo serializationContextInfo, ISerializationConfiguration configuration = null)
+        {
+            return DeserializeMembers(model, (TSerializationContextInfo)serializationContextInfo, configuration);
+        }
+
+        /// <summary>
+        /// Deserializes the members.
+        /// </summary>
+        /// <param name="model">The model instance.</param>
+        /// <param name="serializationContext">The serialized context.</param>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns>
+        /// The deserialized list of member values.
+        /// </returns>
+        public virtual List<MemberValue> DeserializeMembers(object model, TSerializationContextInfo serializationContext, ISerializationConfiguration configuration = null)
+        {
+            Argument.IsNotNull("model", model);
+            Argument.IsNotNull("context", serializationContext);
+
+            using (GetCurrentSerializationScopeManager(configuration))
+            {
+                configuration = GetCurrentSerializationConfiguration(configuration);
+
+                using (var finalContext = GetContext(model, model.GetType(), serializationContext, SerializationContextMode.Deserialization, configuration))
+                {
+                    return DeserializeMembers(finalContext);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Deserializes the members.
+        /// </summary>
         /// <param name="context">The context.</param>
         /// <returns>The deserialized list of member values.</returns>
         protected virtual List<MemberValue> DeserializeMembers(ISerializationContext<TSerializationContextInfo> context)
@@ -337,7 +398,7 @@ namespace Catel.Runtime.Serialization
             {
                 var memberSerializationEventArgs = new MemberSerializationEventArgs(context, member);
 
-                DeserializingMember.SafeInvoke(this, memberSerializationEventArgs);
+                DeserializingMember?.Invoke(this, memberSerializationEventArgs);
 
                 BeforeDeserializeMember(context, member);
 
@@ -351,7 +412,7 @@ namespace Catel.Runtime.Serialization
                     if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary)
                     {
                         var targetDictionary = TypeFactory.CreateInstance(member.MemberType) as IDictionary;
-                        if (targetDictionary == null)
+                        if (targetDictionary is null)
                         {
                             throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a dictionary, but target model cannot be updated because it does not implement IDictionary",
                                 context.ModelTypeName);
@@ -391,7 +452,7 @@ namespace Catel.Runtime.Serialization
                         else
                         {
                             var targetCollection = TypeFactory.CreateInstance(member.MemberType) as IList;
-                            if (targetCollection == null)
+                            if (targetCollection is null)
                             {
                                 throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
                                     context.ModelTypeName);
@@ -424,69 +485,8 @@ namespace Catel.Runtime.Serialization
                     AfterDeserializeMember(context, member);
                     memberValue.Value = member.Value;
 
-                    DeserializedMember.SafeInvoke(this, memberSerializationEventArgs);
+                    DeserializedMember?.Invoke(this, memberSerializationEventArgs);
                     memberValue.Value = member.Value;
-                }
-            }
-
-            if (deserializedMemberValues.Count > 0)
-            {
-                var firstMember = deserializedMemberValues[0];
-                if (firstMember.MemberGroup == SerializationMemberGroup.SimpleRootObject)
-                {
-                    // Completely replace root object (this is a basic (non-reference) type)
-                    context.Model = firstMember.Value;
-                }
-                else if (firstMember.MemberGroup == SerializationMemberGroup.Dictionary)
-                {
-                    var targetDictionary = context.Model as IDictionary;
-                    if (targetDictionary == null)
-                    {
-                        throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a dictionary, but target model cannot be updated because it does not implement IDictionary",
-                            context.ModelTypeName);
-                    }
-
-                    targetDictionary.Clear();
-
-                    var sourceDictionary = firstMember.Value as IDictionary;
-                    if (sourceDictionary != null)
-                    {
-                        foreach (var key in sourceDictionary.Keys)
-                        {
-                            targetDictionary.Add(key, sourceDictionary[key]);
-                        }
-                    }
-                }
-                else if (firstMember.MemberGroup == SerializationMemberGroup.Collection)
-                {
-                    if (context.ModelType.IsArrayEx())
-                    {
-                        context.Model = firstMember.Value;
-                    }
-                    else
-                    {
-                        var targetCollection = context.Model as IList;
-                        if (targetCollection == null)
-                        {
-                            throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
-                                context.ModelTypeName);
-                        }
-
-                        targetCollection.Clear();
-
-                        var sourceCollection = firstMember.Value as IEnumerable;
-                        if (sourceCollection != null)
-                        {
-                            foreach (var item in sourceCollection)
-                            {
-                                targetCollection.Add(item);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    PopulateModel(context.Model, deserializedMemberValues.ToArray());
                 }
             }
 
@@ -501,17 +501,17 @@ namespace Catel.Runtime.Serialization
         {
             // Note: don't use GetBestMemberType, it could return string type
             var parseMethod = GetObjectParseMethod(memberValue.MemberType);
-            if (parseMethod == null)
+            if (parseMethod is null)
             {
                 return null;
             }
 
             var memberValueAsString = memberValue.Value as string;
-            if (memberValueAsString == null)
+            if (memberValueAsString is null)
             {
                 return null;
             }
-            
+
             try
             {
                 var obj = parseMethod.Invoke(null, new object[] { memberValueAsString, context.Configuration.Culture });

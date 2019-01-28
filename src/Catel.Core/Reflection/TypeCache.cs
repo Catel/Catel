@@ -29,7 +29,7 @@ namespace Catel.Reflection
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         private static readonly Queue<Assembly> _threadSafeAssemblyQueue = new Queue<Assembly>();
 
         /// <summary>
@@ -101,7 +101,9 @@ namespace Catel.Reflection
             ShouldIgnoreAssemblyEvaluators = new List<Func<Assembly, bool>>();
             ShouldIgnoreTypeEvaluators = new List<Func<Assembly, Type, bool>>();
 
-#if NET || NETSTANDARD
+            ShouldIgnoreAssemblyEvaluators.Add(new Func<Assembly, bool>(x => x.FullName?.Contains(".resources.") ?? false));
+
+#if NET || NETCORE || NETSTANDARD
             AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
 
             // Initialize the types of early loaded assemblies
@@ -135,7 +137,7 @@ namespace Catel.Reflection
         }
         #endregion
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Called when an assembly is loaded in the current <see cref="AppDomain"/>.
         /// </summary>
@@ -146,7 +148,7 @@ namespace Catel.Reflection
             var assembly = args.LoadedAssembly;
             if (ShouldIgnoreAssembly(assembly))
             {
-                Log.Debug("Reflection '{0}' is on the list to be ignored (for example, ReflectionOnly is true), cannot use this assembly", assembly.FullName);
+                Log.Debug($"Reflection '{assembly.FullName}' is on the list to be ignored (for example, ReflectionOnly is true), cannot use this assembly");
                 return;
             }
 
@@ -321,7 +323,7 @@ namespace Catel.Reflection
                 var typesWithAssembly = ignoreCase ? _typesWithAssemblyLowerCase : _typesWithAssembly;
 
                 var typeNameWithAssembly = string.IsNullOrEmpty(assemblyName) ? null : TypeHelper.FormatType(assemblyName, typeName);
-                if (typeNameWithAssembly == null)
+                if (typeNameWithAssembly is null)
                 {
                     // If we have a mapping, use that instead
                     if (typesWithoutAssembly.TryGetValue(typeName, out var typeNameMapping))
@@ -437,7 +439,7 @@ namespace Catel.Reflection
                 foreach (var innerTypesShortName in innerTypesShortNames)
                 {
                     var innerType = GetType(innerTypesShortName, allowInitialization: false);
-                    if (innerType == null)
+                    if (innerType is null)
                     {
                         return null;
                     }
@@ -452,7 +454,11 @@ namespace Catel.Reflection
                 }
 
                 var firstBracketIndex = typeWithInnerTypes.IndexOf('[');
-                var typeWithImprovedInnerTypes = string.Format("{0}[{1}]", typeWithInnerTypes.Substring(0, firstBracketIndex), TypeHelper.FormatInnerTypes(innerTypesNames.ToArray()));
+
+                var part1 = typeWithInnerTypes.Substring(0, firstBracketIndex);
+                var part2 = TypeHelper.FormatInnerTypes(innerTypesNames);
+
+                var typeWithImprovedInnerTypes = $"{part1}[{part2}]";
 
                 var fallbackType = Type.GetType(typeWithImprovedInnerTypes);
                 return fallbackType;
@@ -551,7 +557,7 @@ namespace Catel.Reflection
                 }
             }
 
-            if (typeSource == null)
+            if (typeSource is null)
             {
                 return ArrayShim.Empty<Type>();
             }
@@ -661,7 +667,7 @@ namespace Catel.Reflection
                 }
 
                 // CTL-877 Only clear when assembly != null
-                if (forceFullInitialization && assembly == null)
+                if (forceFullInitialization && assembly is null)
                 {
                     _loadedAssemblies.Clear();
                     _typesByAssembly?.Clear();
@@ -717,7 +723,7 @@ namespace Catel.Reflection
                     }
                 }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
                 var lateLoadedAssemblies = new List<Assembly>();
 
                 lock (_threadSafeAssemblyQueue)
@@ -872,12 +878,12 @@ namespace Catel.Reflection
         /// <returns><c>true</c> if the assembly should be ignored, <c>false</c> otherwise.</returns>
         private static bool ShouldIgnoreAssembly(Assembly assembly)
         {
-            if (assembly == null)
+            if (assembly is null)
             {
                 return true;
             }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             if (assembly.ReflectionOnly)
             {
                 return true;
@@ -904,7 +910,7 @@ namespace Catel.Reflection
 
             foreach (var evaluator in ShouldIgnoreAssemblyEvaluators)
             {
-                if (evaluator.Invoke(assembly))
+                if (evaluator(assembly))
                 {
                     return true;
                 }
@@ -921,7 +927,7 @@ namespace Catel.Reflection
         /// <returns><c>true</c> if the type should be ignored, <c>false</c> otherwise.</returns>
         private static bool ShouldIgnoreType(Assembly assembly, Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 return true;
             }
@@ -968,7 +974,7 @@ namespace Catel.Reflection
 
             foreach (var evaluator in ShouldIgnoreTypeEvaluators)
             {
-                if (evaluator.Invoke(assembly, type))
+                if (evaluator(assembly, type))
                 {
                     return true;
                 }

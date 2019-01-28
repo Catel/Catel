@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Windows
 {
@@ -22,12 +22,10 @@ namespace Catel.Windows
         public Window()
             : base(DataWindowMode.Custom)
         {
-#if NET
             SizeToContent = SizeToContent.Manual;
             ShowInTaskbar = true;
             ResizeMode = ResizeMode.CanResize;
             WindowStartupLocation = WindowStartupLocation.Manual;
-#endif
         }
     }
 }

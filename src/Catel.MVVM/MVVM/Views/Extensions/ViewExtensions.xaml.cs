@@ -17,7 +17,7 @@ namespace Catel.MVVM.Views
     using IoC;
     using Reflection;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Media;
 #else
@@ -95,7 +95,7 @@ namespace Catel.MVVM.Views
                 parents.Add(elementParent);
             }
 
-#if NET
+#if NET || NETCORE
             var templatedParent = element.TemplatedParent as FrameworkElement;
             if (templatedParent != null)
             {

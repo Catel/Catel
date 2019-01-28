@@ -12,7 +12,7 @@ namespace Catel.Runtime.Serialization.Json
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
 
-#if NET
+#if NET || NETCORE
     using System.Runtime.Serialization;
 #endif
 

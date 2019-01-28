@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Windows.Interactivity
 {
@@ -166,7 +166,7 @@ namespace Catel.Windows.Interactivity
 
         private void ScrollToEnd()
         {
-            if (_scrollViewer == null)
+            if (_scrollViewer is null)
             {
                 return;
             }

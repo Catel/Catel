@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Runtime.Serialization.Binary
 {
@@ -58,7 +58,7 @@ namespace Catel.Runtime.Serialization.Binary
         public BinarySerializer(ISerializationManager serializationManager, ITypeFactory typeFactory, IObjectAdapter objectAdapter)
             : base(serializationManager, typeFactory, objectAdapter)
         {
-            if (DeserializationBinder == null)
+            if (DeserializationBinder is null)
             {
                 DeserializationBinder = new RedirectDeserializationBinder();
             }
@@ -253,7 +253,7 @@ namespace Catel.Runtime.Serialization.Binary
             var serializationInfo = new SerializationInfo(model.GetType(), new FormatterConverter());
             var binaryFormatter = CreateBinaryFormatter(contextMode);
 
-            if (memberValues == null)
+            if (memberValues is null)
             {
                 memberValues = new List<MemberValue>();
             }
@@ -304,7 +304,7 @@ namespace Catel.Runtime.Serialization.Binary
                 if (graphId != 0)
                 {
                     var referenceManager = context.ReferenceManager;
-                    if (referenceManager.GetInfoById(graphId) == null)
+                    if (referenceManager.GetInfoById(graphId) is null)
                     {
                         referenceManager.RegisterManually(graphId, context.Model);
                     }
@@ -461,7 +461,7 @@ namespace Catel.Runtime.Serialization.Binary
 
                 if (propertyValue.GraphId != 0)
                 {
-                    if (referenceManager.GetInfoById(propertyValue.GraphId) == null)
+                    if (referenceManager.GetInfoById(propertyValue.GraphId) is null)
                     {
                         referenceManager.RegisterManually(propertyValue.GraphId, propertyValue.Value);
                     }
@@ -471,7 +471,7 @@ namespace Catel.Runtime.Serialization.Binary
                 {
                     var graphId = propertyValue.GraphRefId;
                     var referenceInfo = referenceManager.GetInfoById(graphId);
-                    if (referenceInfo == null)
+                    if (referenceInfo is null)
                     {
                         Log.Error("Expected to find graph object with id '{0}' in ReferenceManager, but it was not found. Defaulting value for member '{1}' to null", graphId, propertyValue.Name);
                         propertyValue.Value = null;

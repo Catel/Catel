@@ -84,7 +84,7 @@ namespace Catel.Services
         /// <param name="extras">The extras.</param>
         public void OnStatusChanged(string provider, Availability status, Bundle extras)
         {
-            StatusChanged.SafeInvoke(this);
+            StatusChanged?.Invoke(this);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Catel.Services
         /// <param name="location">The new location, as a Location object.</param>
         public void OnLocationChanged(global::Android.Locations.Location location)
         {
-            LocationChanged.SafeInvoke(this);
+            LocationChanged?.Invoke(this);
         }
     }
 
@@ -135,7 +135,7 @@ namespace Catel.Services
         public override ILocation GetCurrentLocation()
         {
             var location = _locationManager.GetLastKnownLocation(Provider);
-            if (location == null)
+            if (location is null)
             {
                 return null;
             }

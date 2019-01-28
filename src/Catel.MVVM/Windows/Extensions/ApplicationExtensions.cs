@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Windows
 {
@@ -36,12 +36,12 @@ namespace Catel.Windows
                 var windowList = new List<System.Windows.Window>(application.Windows.Cast<System.Windows.Window>());
 
                 activeWindow = windowList.FirstOrDefault(x => x.IsActive && predicate(x));
-                if (activeWindow == null && windowList.Count == 1 && windowList[0].Topmost)
+                if (activeWindow is null && windowList.Count == 1 && windowList[0].Topmost)
                 {
                     activeWindow = windowList[0];
                 }
 
-                if (activeWindow == null)
+                if (activeWindow is null)
                 {
                     activeWindow = windowList.LastOrDefault(predicate);
                 }

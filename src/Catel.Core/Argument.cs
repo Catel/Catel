@@ -41,7 +41,7 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotNull(string paramName, object paramValue)
         {
-            if (paramValue == null)
+            if (paramValue is null)
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' cannot be null";
                 Log.Error(error);
@@ -112,7 +112,7 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotNullOrWhitespace(string paramName, string paramValue)
         {
-            if (string.IsNullOrEmpty(paramValue) || (string.CompareOrdinal(paramValue.Trim(), string.Empty) == 0))
+            if (string.IsNullOrWhiteSpace(paramValue))
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' cannot be null or whitespace";
                 Log.Error(error);
@@ -130,7 +130,7 @@ namespace Catel
         [DebuggerNonUserCode, DebuggerStepThrough]
         public static void IsNotNullOrEmptyArray(string paramName, Array paramValue)
         {
-            if ((paramValue == null) || (paramValue.Length == 0))
+            if ((paramValue is null) || (paramValue.Length == 0))
             {
                 var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' cannot be null or an empty array";
                 Log.Error(error);

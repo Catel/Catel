@@ -21,12 +21,12 @@ namespace Catel.MVVM.Converters
     /// The bool value true will be converted to Visibility.Visible.
     /// The bool value false will be converted to Visibility.Collapsed.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(bool), typeof(Visibility))]
 #endif
     public class BooleanToCollapsingVisibilityConverter : VisibilityConverterBase
     {
-        #region Constructors
+#region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="BooleanToCollapsingVisibilityConverter"/> class.
         /// </summary>
@@ -44,7 +44,7 @@ namespace Catel.MVVM.Converters
             : base(notVisibleVisibility)
         {
         }
-        #endregion
+#endregion
 
         /// <summary>
         /// Determines what value this converter should return.
@@ -97,7 +97,7 @@ namespace Catel.MVVM.Converters
         }
     }
 
-#if NET
+#if NET || NETCORE
     /// <summary>
     /// Convert from bool to <see cref="T:System.Windows.Visibility" /> and back.
     /// The bool value true will be converted to Visibility.Visible.

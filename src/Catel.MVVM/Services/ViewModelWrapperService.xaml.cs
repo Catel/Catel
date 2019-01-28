@@ -15,7 +15,7 @@ namespace Catel.Services
     using Catel.Reflection;
     using Catel.Windows;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Data;
@@ -44,7 +44,7 @@ namespace Catel.Services
         protected override bool IsViewWrapped(IView view)
         {
             var content = GetContent(view) as FrameworkElement;
-            if (content == null)
+            if (content is null)
             {
                 return true;
             }
@@ -64,7 +64,7 @@ namespace Catel.Services
         private IViewModelWrapper CreateViewModelGrid(IView view, object viewModelSource, WrapOptions wrapOptions)
         {
             var content = GetContent(view) as FrameworkElement;
-            if (content == null)
+            if (content is null)
             {
                 return null;
             }
@@ -91,14 +91,14 @@ namespace Catel.Services
                 }
             }
 
-            if (vmGrid == null)
+            if (vmGrid is null)
             {
                 Log.Debug($"Creating content wrapper grid for view model for view '{viewTypeName}'");
 
                 vmGrid = new Grid();
                 vmGrid.Name = InnerWrapperName.GetUniqueControlName();
 
-#if NET
+#if NET || NETCORE
                 if (Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.CreateWarningAndErrorValidatorForViewModel))
                 {
                     var warningAndErrorValidator = new WarningAndErrorValidator();
@@ -116,7 +116,7 @@ namespace Catel.Services
             }
 
             var binding = vmGrid.GetBindingExpression(FrameworkElement.DataContextProperty);
-            if (binding == null)
+            if (binding is null)
             {
                 vmGrid.SetBinding(FrameworkElement.DataContextProperty, new Binding
                 {

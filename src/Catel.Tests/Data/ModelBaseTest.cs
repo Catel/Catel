@@ -13,17 +13,17 @@
     public class ModelBaseTest
     {
         #region Fields
-#if !NETFX_CORE
+#if !UWP
         private FilesHelper _filesHelper;
 #endif
         #endregion
 
         #region Initialization and cleanup
-#if !NETFX_CORE
+#if !UWP
         [SetUp]
         public void Initialize()
         {
-            if (_filesHelper == null)
+            if (_filesHelper is null)
             {
                 _filesHelper = new FilesHelper();
             }

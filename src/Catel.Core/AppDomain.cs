@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NETFX_CORE
+#if UWP
 
 namespace System
 {
@@ -17,7 +17,7 @@ namespace System
     using Catel.Reflection;
     using MethodTimer;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.ApplicationModel;
     using global::Windows.Storage.Search;
     using Catel;
@@ -70,7 +70,7 @@ namespace System
         {
             lock (_lock)
             {
-                if (_loadedAssemblies == null)
+                if (_loadedAssemblies is null)
                 {
                     var loadedAssemblies = new List<Assembly>();
 

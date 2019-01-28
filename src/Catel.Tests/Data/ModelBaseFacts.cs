@@ -15,7 +15,7 @@ namespace Catel.Tests.Data
 
     using NUnit.Framework;
 
-#if !NETFX_CORE
+#if !UWP
     using Catel.MVVM;
     using System.Windows.Data;
 #endif
@@ -58,7 +58,7 @@ namespace Catel.Tests.Data
             }
         }
 
-#if NET
+#if NET || NETCORE
         [TestFixture]
         public class TheCalculatedPropertiesChecks
         {
@@ -74,7 +74,7 @@ namespace Catel.Tests.Data
 
                 public override bool IsValid(object obj)
                 {
-                    if (obj == null)
+                    if (obj is null)
                     {
                         return false;
                     }

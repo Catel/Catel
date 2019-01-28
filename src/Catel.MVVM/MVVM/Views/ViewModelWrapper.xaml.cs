@@ -8,7 +8,7 @@
 
 namespace Catel.MVVM.Views
 {
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml.Controls;
 #else
     using System.Windows.Controls;

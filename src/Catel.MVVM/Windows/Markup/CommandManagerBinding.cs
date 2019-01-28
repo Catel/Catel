@@ -12,7 +12,7 @@ namespace Catel.Windows.Markup
     using Catel.MVVM;
     using IoC;
 
-#if !NETFX_CORE
+#if !UWP
     using System.Windows.Data;
     using System.Windows.Markup;
 #endif
@@ -47,7 +47,7 @@ namespace Catel.Windows.Markup
         /// Gets or sets the name of the command.
         /// </summary>
         /// <value>The name of the command.</value>
-#if NET
+#if NET || NETCORE
         [ConstructorArgument("commandName")]
 #endif
         public string CommandName { get; set; }
@@ -90,7 +90,7 @@ namespace Catel.Windows.Markup
         /// <returns>System.Object.</returns>
         protected override object ProvideDynamicValue(IServiceProvider serviceProvider)
         {
-            if (_commandManager == null)
+            if (_commandManager is null)
             {
                 return null;
             }

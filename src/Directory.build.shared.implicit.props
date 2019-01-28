@@ -15,28 +15,32 @@
     <PackageOutputPath>$(ProjectDir)..\..\output\$(Configuration)\</PackageOutputPath>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb;.xml</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <Deterministic>False</Deterministic>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
-  <!-- Note: Portable PDB's are disabled for now since ApiApprover breaks because of this -->
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <DebugType>pdbonly</DebugType>
-  </PropertyGroup>
+  <!-- Workaround for binding redirects in non exe assemblies, see https://github.com/Microsoft/msbuild/issues/1310#issuecomment-309596435 -->
+  <Target Name="ForceGenerationOfBindingRedirects"
+          AfterTargets="ResolveAssemblyReferences"
+          BeforeTargets="GenerateBindingRedirects"
+          Condition="'$(AutoGenerateBindingRedirects)' == 'true'">
+    <PropertyGroup>
+      <!-- Needs to be set in a target because it has to be set after the initial evaluation in the common targets -->
+      <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    </PropertyGroup>
+  </Target>
   
+  <!-- CSharp language -->
+  <PropertyGroup>
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+
   <!-- Enforce portable pdb format -->
-  <!--<PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <DebugType>portable</DebugType>
-  </PropertyGroup>-->
+    <!-- Debug symbols are required for ApiApprover -->
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
 
-  <!-- (temporary?) workaround for https://github.com/dotnet/sdk/issues/1458, but note that this breaks resources in UWP projects -->
-  <ItemGroup>
-    <!-- 
-        Disabled for now since portable PDB are disabled as well since they don't work for the full .NET Framework,
-        consider moving this to explicit with the right targets. Note that it doesn't do anything else than allowing
-        pdb files to be included in AllowedOutputExtensionsInPackageBuildOutputFolder, which is already done above
-     -->
-    <!-- <PackageReference Include="SourceLink.Copy.PdbFiles" Version="2.8.3" PrivateAssets="All" /> -->
-  </ItemGroup>
-  
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>

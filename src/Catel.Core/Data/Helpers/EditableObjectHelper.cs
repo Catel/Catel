@@ -21,7 +21,7 @@ namespace Catel.Data
         /// <param name="obj">The object to call the <see cref="IEditableObject.BeginEdit"/> method on.</param>
         public static void BeginEditObject(object obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return;
             }
@@ -41,7 +41,7 @@ namespace Catel.Data
         /// <param name="obj">The object to call the <see cref="IEditableObject.EndEdit"/> method on.</param>
         public static void EndEditObject(object obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return;
             }
@@ -64,7 +64,7 @@ namespace Catel.Data
         /// </remarks>
         public static void CancelEditObject(object obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return;
             }

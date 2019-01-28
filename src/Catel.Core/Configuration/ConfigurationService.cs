@@ -17,7 +17,7 @@ namespace Catel.Configuration
     using Catel.Logging;
     using Runtime.Serialization.Xml;
 
-#if NETFX_CORE
+#if UWP
     using Windows.Storage;
 #else
     using System.Configuration;
@@ -39,7 +39,7 @@ namespace Catel.Configuration
         private readonly IObjectConverterService _objectConverterService;
         private readonly ISerializer _serializer;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         private DynamicConfiguration _localConfiguration;
         private DynamicConfiguration _roamingConfiguration;
 
@@ -85,7 +85,7 @@ namespace Catel.Configuration
             _objectConverterService = objectConverterService;
             _serializer = serializer;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             SetLocalConfigFilePath(DefaultLocalConfigFilePath);
             SetRoamingConfigFilePath(DefaultRoamingConfigFilePath);
 #endif
@@ -144,7 +144,7 @@ namespace Catel.Configuration
                 }
 
                 var value = GetValueFromStore(container, key);
-                if (value == null)
+                if (value is null)
                 {
                     return defaultValue;
                 }
@@ -223,7 +223,7 @@ namespace Catel.Configuration
             }
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Sets the roaming config file path.
         /// </summary>
@@ -255,7 +255,7 @@ namespace Catel.Configuration
                 _roamingConfigFilePath = DefaultRoamingConfigFilePath;
             }
 
-            if (_roamingConfiguration == null)
+            if (_roamingConfiguration is null)
             {
                 _roamingConfiguration = new DynamicConfiguration();
             }
@@ -292,7 +292,7 @@ namespace Catel.Configuration
                 _localConfigFilePath = DefaultLocalConfigFilePath;
             }
 
-            if (_localConfiguration == null)
+            if (_localConfiguration is null)
             {
                 _localConfiguration = new DynamicConfiguration();
             }
@@ -311,7 +311,7 @@ namespace Catel.Configuration
             throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
 #elif ANDROID
             return _preferences.Contains(key);
-#elif NETFX_CORE
+#elif UWP
             var settings = GetSettingsContainer(container);
             return settings.Values.ContainsKey(key);
 #else
@@ -332,7 +332,7 @@ namespace Catel.Configuration
             throw Log.ErrorAndCreateException<NotSupportedInPlatformException>("No configuration objects available");
 #elif ANDROID
             return _preferences.GetString(key, null);
-#elif NETFX_CORE
+#elif UWP
             var settings = GetSettingsContainer(container);
             return (string)settings.Values[key];
 #else
@@ -355,7 +355,7 @@ namespace Catel.Configuration
             _preferences.Edit()
                         .PutString(key, value)
                         .Apply();
-#elif NETFX_CORE
+#elif UWP
             var settings = GetSettingsContainer(container);
             settings.Values[key] = value;
 #else
@@ -408,7 +408,7 @@ namespace Catel.Configuration
                 return;
             }
 
-            ConfigurationChanged.SafeInvoke(this, () => new ConfigurationChangedEventArgs(container, key, value));
+            ConfigurationChanged?.Invoke(this, new ConfigurationChangedEventArgs(container, key, value));
         }
         #endregion
     }

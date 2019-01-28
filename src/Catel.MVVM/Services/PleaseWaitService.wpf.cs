@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Services
 {
@@ -34,7 +34,7 @@ namespace Catel.Services
 
                 Log.Debug($"Storing cursor '{overrideCursor}' overriding it to 'Wait'");
 
-                if (_previousCursor == null)
+                if (_previousCursor is null)
                 {
                     _previousCursor = overrideCursor;
                 }

@@ -20,7 +20,7 @@ namespace Catel.Windows.Controls
     using Collections;
     using Reflection;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
 
@@ -87,7 +87,7 @@ namespace Catel.Windows.Controls
         private readonly Dictionary<object, ValidationData> _objectValidation = new Dictionary<object, ValidationData>();
         private readonly object _objectValidationLock = new object();
 
-#if NET
+#if NET || NETCORE
         private InfoBarMessageControl _infoBarMessageControl;
 #endif
         #endregion
@@ -100,7 +100,7 @@ namespace Catel.Windows.Controls
         {
             UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<WarningAndErrorValidator>();
 
-#if NET
+#if NET || NETCORE
             Focusable = false;
 #endif
 
@@ -132,7 +132,7 @@ namespace Catel.Windows.Controls
         public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(object), typeof(WarningAndErrorValidator),
             new PropertyMetadata(null, (sender, e) => ((WarningAndErrorValidator)sender).UpdateSource(e.OldValue, e.NewValue)));
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Gets or sets a value indicating whether this warning and error validator should automatically register to the first <see cref="InfoBarMessageControl"/> it can find.
         /// </summary>
@@ -174,7 +174,7 @@ namespace Catel.Windows.Controls
         {
             Initialize();
 
-#if !NET
+#if !NET && !NETCORE
             RaiseEventsForAllErrorsAndWarnings();
 #endif
         }
@@ -194,7 +194,7 @@ namespace Catel.Windows.Controls
         /// </summary>
         private void Initialize()
         {
-#if NET
+#if NET || NETCORE
             if (AutomaticallyRegisterToInfoBarMessageControl)
             {
                 //_infoBarMessageControl = this.FindLogicalAncestorByType<InfoBarMessageControl>();
@@ -239,7 +239,7 @@ namespace Catel.Windows.Controls
 
             _objectValidation.Clear();
 
-#if NET
+#if NET || NETCORE
             if (_infoBarMessageControl != null)
             {
                 _infoBarMessageControl.UnsubscribeWarningAndErrorValidator(this);
@@ -265,7 +265,7 @@ namespace Catel.Windows.Controls
                 RemoveObjectFromWatchList(oldValue);
             }
 
-#if NET
+#if NET || NETCORE
             if (!IsLoaded)
             {
                 return;
@@ -315,7 +315,7 @@ namespace Catel.Windows.Controls
         /// <param name="parentEnumerable">The parent enumerable. <c>Null</c> if the object does not belong to an enumerable.</param>
         private void AddObjectToWatchList(object value, IEnumerable parentEnumerable = null)
         {
-            if (value == null)
+            if (value is null)
             {
                 return;
             }
@@ -362,7 +362,7 @@ namespace Catel.Windows.Controls
         /// <param name="value">The object to remove from the watch list.</param>
         private void RemoveObjectFromWatchList(object value)
         {
-            if (value == null)
+            if (value is null)
             {
                 return;
             }
@@ -396,7 +396,7 @@ namespace Catel.Windows.Controls
             ValidationData currentValidationData;
             ValidationData oldValidationData;
 
-            if (value == null)
+            if (value is null)
             {
                 return;
             }
@@ -549,13 +549,13 @@ namespace Catel.Windows.Controls
             }
 
             var iDataWarningInfo = value as IDataWarningInfo;
-            if ((validationType == ValidationType.Warning) && (iDataWarningInfo == null))
+            if ((validationType == ValidationType.Warning) && (iDataWarningInfo is null))
             {
                 return warningsOrErrors;
             }
 
             var iDataErrorInfo = value as IDataErrorInfo;
-            if ((validationType == ValidationType.Error) && (iDataErrorInfo == null))
+            if ((validationType == ValidationType.Error) && (iDataErrorInfo is null))
             {
                 return warningsOrErrors;
             }
@@ -636,7 +636,7 @@ namespace Catel.Windows.Controls
             return !string.IsNullOrEmpty(message) ? message : null;
         }
 
-#if !NET
+#if !NET && !NETCORE
         /// <summary>
         /// Raises the events for all errors and warnings.
         /// </summary>
@@ -757,7 +757,7 @@ namespace Catel.Windows.Controls
         /// <param name="type">The type.</param>
         private void RaiseBusinessValidationWarningOrError(object value, string message, ValidationEventAction action, ValidationType type)
         {
-            Validation.SafeInvoke(this, () => new ValidationEventArgs(value, message, action, type));
+            Validation?.Invoke(this, new ValidationEventArgs(value, message, action, type));
         }
 
         /// <summary>
@@ -945,7 +945,7 @@ namespace Catel.Windows.Controls
         /// </exception>
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return false;
             }
@@ -1019,7 +1019,7 @@ namespace Catel.Windows.Controls
         /// </exception>
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return false;
             }

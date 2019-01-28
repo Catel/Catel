@@ -14,13 +14,13 @@ namespace Catel.Windows.Interactivity.DragDropHelpers
     {
         public static bool IsNullOrEmpty(this IEnumerable lst)
         {
-            if (lst == null) return true;
+            if (lst is null) return true;
             return !lst.GetEnumerator().MoveNext();
         }
 
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> lst)
         {
-            if (lst == null) return true;
+            if (lst is null) return true;
             return !lst.Any();
         }
     }

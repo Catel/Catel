@@ -11,7 +11,7 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// Converter for formatting values.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(object), typeof(string))]
 #endif
     public class FormattingConverter : ValueConverterBase

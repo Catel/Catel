@@ -12,7 +12,7 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// ShortDateFormattingConverter
     /// </summary>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(DateTime), typeof(string))]
 #endif
     public class ShortDateFormattingConverter : FormattingConverter

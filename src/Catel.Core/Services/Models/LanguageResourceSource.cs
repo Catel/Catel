@@ -56,7 +56,7 @@ namespace Catel.Services
         /// <returns>The source string.</returns>
         public string GetSource()
         {
-#if NETFX_CORE
+#if UWP
             return string.Format("{0}|{1}", AssemblyName, ResourceFileName);
 #else
             return string.Format("{0}.{1}, {2}", NamespaceName, ResourceFileName, AssemblyName);

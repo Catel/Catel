@@ -11,7 +11,7 @@ namespace Catel.MVVM.Converters
     /// <summary>
     /// Implementation of class ReferenceToBooleanConverter
     /// </summary>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(object), typeof(bool))]
 #endif
     public class ReferenceToBooleanConverter : ValueConverterBase
@@ -25,7 +25,7 @@ namespace Catel.MVVM.Converters
         /// <returns>The value to be passed to the target dependency property.</returns>
         protected override object Convert(object value, Type targetType, object parameter)
         {
-            var isNull = value == null;
+            var isNull = value is null;
 
             if (SupportInversionUsingCommandParameter && ConverterHelper.ShouldInvert(parameter))
             {

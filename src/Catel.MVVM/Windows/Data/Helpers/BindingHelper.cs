@@ -51,7 +51,7 @@ namespace Catel.Windows.Data
         /// <param name="dependencyProperty">The dependency property.</param>
         public static void ClearBinding(DependencyObject dependencyObject, DependencyProperty dependencyProperty)
         {
-#if NET
+#if NET || NETCORE
             BindingOperations.ClearBinding(dependencyObject, dependencyProperty);
 #else
             // Other platforms do not support ClearBinding, then we use ClearValue

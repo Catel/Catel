@@ -35,7 +35,7 @@ namespace Catel.Runtime
         /// <exception cref="System.NotImplementedException"></exception>
         public int GetHashCode(TObject obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return 0;
             }

@@ -51,7 +51,7 @@ namespace Catel.Collections
         /// <returns>The <see cref="ICollection{NotifyRangedCollectionChangedEventArgs}"/>.</returns>
         public static ICollection<NotifyRangedCollectionChangedEventArgs> CreateNoneEvents<T>(this SuspensionContext<T> suspensionContext)
         {
-            Argument.IsValid(nameof(suspensionContext), suspensionContext, context => context == null || context.Mode == SuspensionMode.None);
+            Argument.IsValid(nameof(suspensionContext), suspensionContext, context => context is null || context.Mode == SuspensionMode.None);
 
             return new List<NotifyRangedCollectionChangedEventArgs> { new NotifyRangedCollectionChangedEventArgs() };
         }

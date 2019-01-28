@@ -126,10 +126,10 @@ namespace Catel.MVVM.Providers
 
             var targetViewType = targetView.GetType();
 
-            if (viewModelType == null)
+            if (viewModelType is null)
             {
                 viewModelType = (viewModel != null) ? viewModel.GetType() : _viewModelLocator.ResolveViewModel(targetViewType);
-                if (viewModelType == null)
+                if (viewModelType is null)
                 {
                     throw Log.ErrorAndCreateException<NotSupportedException>($"The view model of the view '{targetViewType.Name}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually");
                 }
@@ -154,28 +154,28 @@ namespace Catel.MVVM.Providers
 
             ViewLoadManager.AddView(this);
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoading", OnViewLoadedManagerLoadingInternal, false) == null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewLoading), OnViewLoadedManagerLoadingInternal, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoading', going to subscribe without weak events");
 
                 ViewLoadManager.ViewLoading += OnViewLoadedManagerLoadingInternal;
             }
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewLoaded", OnViewLoadedManagerLoadedInternal, false) == null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewLoaded), OnViewLoadedManagerLoadedInternal, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewLoaded', going to subscribe without weak events");
 
                 ViewLoadManager.ViewLoaded += OnViewLoadedManagerLoadedInternal;
             }
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloading", OnViewLoadedManagerUnloadingInternal, false) == null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewUnloading), OnViewLoadedManagerUnloadingInternal, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloading', going to subscribe without weak events");
 
                 ViewLoadManager.ViewUnloading += OnViewLoadedManagerUnloadingInternal;
             }
 
-            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, "ViewUnloaded", OnViewLoadedManagerUnloadedInternal, false) == null)
+            if (this.SubscribeToWeakGenericEvent<ViewLoadEventArgs>(ViewLoadManager, nameof(IViewLoadManager.ViewUnloaded), OnViewLoadedManagerUnloadedInternal, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'ViewLoadManager.ViewUnloaded', going to subscribe without weak events");
 
@@ -183,8 +183,8 @@ namespace Catel.MVVM.Providers
             }
 
             // Required so the ViewLoadManager can handle the rest
-            targetView.Loaded += (sender, e) => Loaded.SafeInvoke(this);
-            targetView.Unloaded += (sender, e) => Unloaded.SafeInvoke(this);
+            targetView.Loaded += (sender, e) => Loaded?.Invoke(this, EventArgs.Empty);
+            targetView.Unloaded += (sender, e) => Unloaded?.Invoke(this, EventArgs.Empty);
 
             TargetView.DataContextChanged += OnTargetViewDataContextChanged;
 
@@ -209,7 +209,7 @@ namespace Catel.MVVM.Providers
         {
             get
             {
-                if (_viewModelFactory == null)
+                if (_viewModelFactory is null)
                 {
                     var dependencyResolver = this.GetDependencyResolver();
                     _viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
@@ -281,7 +281,7 @@ namespace Catel.MVVM.Providers
 
                 OnViewModelChanged();
 
-                ViewModelChanged.SafeInvoke(this);
+                ViewModelChanged?.Invoke(this, EventArgs.Empty);
 
                 RaisePropertyChanged("ViewModel");
 
@@ -504,7 +504,7 @@ namespace Catel.MVVM.Providers
 
             var finalProperties = new List<string>();
 
-            if ((_viewPropertySelector == null) || (_viewPropertySelector.MustSubscribeToAllViewProperties(targetViewType)))
+            if ((_viewPropertySelector is null) || (_viewPropertySelector.MustSubscribeToAllViewProperties(targetViewType)))
             {
                 var viewProperties = TargetView.GetProperties();
                 finalProperties.AddRange(viewProperties);
@@ -776,7 +776,7 @@ namespace Catel.MVVM.Providers
         {
             await CompleteViewModelClosingAsync();
 
-            if (ViewModel == null)
+            if (ViewModel is null)
             {
                 ViewModel = CreateViewModelByUsingDataContextOrConstructor();
             }
@@ -935,7 +935,7 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
         public virtual void OnTargetViewPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            TargetViewPropertyChanged.SafeInvoke(this, e);
+            TargetViewPropertyChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -945,7 +945,7 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         public virtual void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            ViewModelPropertyChanged.SafeInvoke(this, e);
+            ViewModelPropertyChanged?.Invoke(this, e);
         }
 
         /// <summary>
@@ -984,7 +984,7 @@ namespace Catel.MVVM.Providers
         public virtual void ValidateViewModel()
         {
             var vm = ViewModel;
-            if (vm == null)
+            if (vm is null)
             {
                 return;
             }
@@ -1000,7 +1000,7 @@ namespace Catel.MVVM.Providers
         /// <returns><c>true</c> if the view model is successfully canceled; otherwise <c>false</c>.</returns>
         public virtual Task<bool> CancelViewModelAsync()
         {
-            if (ViewModel == null)
+            if (ViewModel is null)
             {
                 return TaskHelper<bool>.FromResult(true);
             }
@@ -1031,7 +1031,7 @@ namespace Catel.MVVM.Providers
         public virtual Task<bool> SaveViewModelAsync()
         {
             var vm = ViewModel;
-            if (vm == null)
+            if (vm is null)
             {
                 return TaskHelper<bool>.FromResult(true);
             }
@@ -1153,7 +1153,7 @@ namespace Catel.MVVM.Providers
                 return null;
             }
 
-            if (IgnoreNullDataContext && (injectionObject == null))
+            if (IgnoreNullDataContext && (injectionObject is null))
             {
                 Log.Info("ViewModel construction is prevented by the IgnoreNullDataContext property");
                 return null;

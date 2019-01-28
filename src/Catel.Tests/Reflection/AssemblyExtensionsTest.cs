@@ -6,6 +6,7 @@
 
 namespace Catel.Tests.Reflection
 {
+    using System;
     using System.Reflection;
     using Catel.Reflection;
 
@@ -18,8 +19,8 @@ namespace Catel.Tests.Reflection
     public class AssemblyExtensionsTest
     {
         // Note: don't use DateTime.Now.Year because we want a specific build to always compile, even in the next year
-        private const string CurrentYear = "2018";
-        private const string VersionPrefix = "5.8";
+        private static readonly string CurrentYear = DateTime.Today.Year.ToString();
+        private const string VersionPrefix = "5.9";
 
         private static readonly Assembly Assembly = typeof(AssemblyExtensionsTest).GetAssemblyEx();
 
@@ -114,7 +115,7 @@ namespace Catel.Tests.Reflection
             Assert.AreEqual(expected, result);
         }
 
-#if NET
+#if NET || NETCORE
         [TestCase]
         public void TheGetBuildDateTimeMethod()
         {

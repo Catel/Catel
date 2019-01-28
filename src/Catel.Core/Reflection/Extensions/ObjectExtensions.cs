@@ -23,7 +23,7 @@ namespace Catel.Reflection
         /// <returns>Attribute array or empty array if <paramref name="objects"/> is <c>null</c>.</returns>
         public static Attribute[] ToAttributeArray(this object[] objects)
         {
-            if (objects == null)
+            if (objects is null)
             {
                 return ArrayShim.Empty<Attribute>();
             }

@@ -134,11 +134,20 @@ private void BuildUwpApps()
 
         var msBuildSettings = new MSBuildSettings {
             Verbosity = Verbosity.Quiet, // Verbosity.Diagnostic
-            ToolVersion = MSBuildToolVersion.VS2017,
+            ToolVersion = MSBuildToolVersion.Default,
             Configuration = ConfigurationName,
             MSBuildPlatform = MSBuildPlatform.x86, // Always require x86, see platform for actual target platform
             PlatformTarget = platform.Value
         };
+
+        var toolPath = GetVisualStudioPath(msBuildSettings.ToolVersion);
+        if (!string.IsNullOrWhiteSpace(toolPath))
+        {
+            msBuildSettings.ToolPath = toolPath;
+        }
+
+        // Always disable SourceLink
+        msBuildSettings.WithProperty("EnableSourceLink", "false");
 
         // See https://docs.microsoft.com/en-us/windows/uwp/packaging/auto-build-package-uwp-apps for all the details
         //msBuildSettings.Properties["UseDotNetNativeToolchain"] = new List<string>(new [] { "false" });
@@ -198,8 +207,18 @@ private void DeployUwpApps()
 
         LogSeparator("Deploying UWP app '{0}'", uwpApp);
 
-        // TODO: How to Deploy?
-        Warning("Deploying of UWP apps is not yet implemented, please deploy '{0}' manually", uwpApp);
+        var artifactsDirectory = GetArtifactsDirectory(OutputRootDirectory);
+        var appxUploadFileName = GetAppxUploadFileName(artifactsDirectory, uwpApp, VersionMajorMinorPatch);
+
+        Information("Creating Windows Store app submission");
+
+        CreateWindowsStoreAppSubmission(appxUploadFileName, new WindowsStoreAppSubmissionSettings
+        {
+            ApplicationId = WindowsStoreAppId,
+            ClientId = WindowsStoreClientId,
+            ClientSecret = WindowsStoreClientSecret,
+            TenantId = WindowsStoreTenantId
+        });        
     }
 }
 

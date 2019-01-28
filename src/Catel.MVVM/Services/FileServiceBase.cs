@@ -9,7 +9,7 @@ namespace Catel.Services
 {
     using System;
 
-#if NET
+#if NET || NETCORE
     using Microsoft.Win32;
 #endif
 
@@ -23,7 +23,7 @@ namespace Catel.Services
         /// </summary>
         protected FileServiceBase()
         {
-#if NET
+#if NET || NETCORE
             AddExtension = true;
             CheckFileExists = false;
             CheckPathExists = true;
@@ -44,7 +44,7 @@ namespace Catel.Services
         /// <value>The filter.</value>
         public string Filter { get; set; }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Gets or sets a value indicating whether a file dialog automatically adds an extension to a file name if the user omits an extension.
         /// </summary>

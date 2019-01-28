@@ -7,12 +7,25 @@ namespace Catel.Tests.Reflection
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Catel.Reflection;
     using NUnit.Framework;
 
     public class TypeCacheFacts
     {
+        [TestFixture]
+        public class AssemblyLoading
+        {
+            [TestCase]
+            public void IgnoresResourceAssemblies()
+            {
+                var allAssemblies = TypeCache.InitializedAssemblies;
+
+                Assert.IsFalse(allAssemblies.Any(x => x.ToLower().Contains(".resources.")));
+            }
+        }
+
         [TestFixture]
         public class TheGetTypeMethod
         {
@@ -112,12 +125,12 @@ namespace Catel.Tests.Reflection
             Assert.IsNotNull(typeC);
         }
 
-        static Task<Type> LoadACAsync()
+        private static Task<Type> LoadACAsync()
         {
             return Task.Run(() => Type.GetType("A.AC, A, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"));
         }
 
-        static Task<Type> LoadABAsync()
+        private static Task<Type> LoadABAsync()
         {
             return Task.Run(() => Type.GetType("A.AB, A, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"));
         }

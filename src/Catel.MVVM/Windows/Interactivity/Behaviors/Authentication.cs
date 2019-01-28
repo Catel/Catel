@@ -8,7 +8,7 @@
 
 namespace Catel.Windows.Interactivity
 {
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
@@ -29,7 +29,7 @@ namespace Catel.Windows.Interactivity
     /// </summary>
     public enum AuthenticationAction
     {
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Hides the associated control.
         /// </summary>
@@ -80,13 +80,13 @@ namespace Catel.Windows.Interactivity
                 return;
             }
 
-            if (_authenticationProvider == null)
+            if (_authenticationProvider is null)
             {
                 var dependencyResolver = this.GetDependencyResolver();
                 _authenticationProvider = dependencyResolver.Resolve<IAuthenticationProvider>();
             }
 
-            if (_authenticationProvider == null)
+            if (_authenticationProvider is null)
             {
                 throw Log.ErrorAndCreateException<NotSupportedException>("No IAuthenticationProvider is registered, cannot use the Authentication behavior without an IAuthenticationProvider");
             }
@@ -142,7 +142,7 @@ namespace Catel.Windows.Interactivity
 
                 switch (Action)
                 {
-#if NET
+#if NET || NETCORE
                     case AuthenticationAction.Hide:
                         AssociatedObject.Visibility = Visibility.Hidden;
                         break;

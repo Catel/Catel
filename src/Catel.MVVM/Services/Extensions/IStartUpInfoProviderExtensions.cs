@@ -6,7 +6,7 @@
 
 
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Services
 {

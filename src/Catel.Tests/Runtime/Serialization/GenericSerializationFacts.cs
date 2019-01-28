@@ -81,7 +81,7 @@ namespace Catel.Tests.Runtime.Serialization
         private static void TestSerializationOnSerializers(List<ISerializer> serializers, Action<ISerializer, ISerializationConfiguration, string> action, 
             ISerializationManager serializationManager = null)
         {
-            if (serializationManager == null)
+            if (serializationManager is null)
             {
                 serializationManager = new SerializationManager();
             }

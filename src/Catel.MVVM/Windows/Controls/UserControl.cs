@@ -17,7 +17,7 @@ namespace Catel.Windows.Controls
     using MVVM.Views;
     using MVVM;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
@@ -41,7 +41,7 @@ namespace Catel.Windows.Controls
     ///   </item>
     /// </list>
     /// </remarks>
-#if NETFX_CORE
+#if UWP
     public class UserControl : global::Windows.UI.Xaml.Controls.UserControl, IUserControl
 #else
     public class UserControl : System.Windows.Controls.UserControl, IUserControl
@@ -82,18 +82,18 @@ namespace Catel.Windows.Controls
 
             _logic.TargetViewPropertyChanged += (sender, e) =>
             {
-#if !NET
+#if !NET && !NETCORE
                 // WPF already calls this method automatically
                 OnPropertyChanged(e);
 
-                PropertyChanged.SafeInvoke(this, e);
+                PropertyChanged?.Invoke(this, e);
 #else
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
                 // on systems where NET45 is *not* installed
                 if (!string.Equals(e.PropertyName, "ActualWidth", StringComparison.InvariantCulture) &&
                     !string.Equals(e.PropertyName, "ActualHeight", StringComparison.InvariantCulture))
                 {
-                    PropertyChanged.SafeInvoke(this, e);
+                    PropertyChanged?.Invoke(this, e);
                 }
 #endif
             };
@@ -105,24 +105,24 @@ namespace Catel.Windows.Controls
             {
                 OnViewModelPropertyChanged(e);
 
-                ViewModelPropertyChanged.SafeInvoke(this, e);
+                ViewModelPropertyChanged?.Invoke(this, e);
             };
 
             Loaded += (sender, e) =>
             {
-                _viewLoaded.SafeInvoke(this);
+                _viewLoaded?.Invoke(this, EventArgs.Empty);
 
                 OnLoaded(e);
             };
 
             Unloaded += (sender, e) =>
             {
-                _viewUnloaded.SafeInvoke(this);
+                _viewUnloaded?.Invoke(this, EventArgs.Empty);
 
                 OnUnloaded(e);
             };
 
-            this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged.SafeInvoke(this, () => new Catel.MVVM.Views.DataContextChangedEventArgs(e.OldValue, e.NewValue)));
+            this.AddDataContextChangedHandler((sender, e) => _viewDataContextChanged?.Invoke(this, new Catel.MVVM.Views.DataContextChangedEventArgs(e.OldValue, e.NewValue)));
         }
         #endregion
 
@@ -229,7 +229,7 @@ namespace Catel.Windows.Controls
             set { UserControlLogic.DefaultUnloadBehaviorValue = value; }
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <see cref="InfoBarMessageControl"/> that can be found. 
@@ -310,7 +310,7 @@ namespace Catel.Windows.Controls
             set { _logic.SetValue<UserControlLogic>(x => x.DisableWhenNoViewModel = value); }
         }
 
-#if !NET
+#if !NET && !NETCORE
         /// <summary>
         /// Gets a value indicating whether this instance is loaded.
         /// </summary>
@@ -376,8 +376,8 @@ namespace Catel.Windows.Controls
         {
             OnViewModelChanged();
 
-            ViewModelChanged.SafeInvoke(this);
-            PropertyChanged.SafeInvoke(this, () => new PropertyChangedEventArgs("ViewModel"));
+            ViewModelChanged?.Invoke(this, EventArgs.Empty);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewModel)));
         }
 
         /// <summary>
@@ -404,7 +404,7 @@ namespace Catel.Windows.Controls
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        
+
         protected virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
             return TaskHelper.Completed;

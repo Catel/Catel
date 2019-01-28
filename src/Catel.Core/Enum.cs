@@ -209,7 +209,7 @@ namespace Catel
 
         #region Nested type: DataBinding
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// DataBinding class.
         /// </summary>

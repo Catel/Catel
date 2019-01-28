@@ -66,7 +66,7 @@ namespace Catel.MVVM
                     }
                 }
 
-                NavigationCompleted.SafeInvoke(this);
+                NavigationCompleted?.Invoke(this, EventArgs.Empty);
 
                 OnNavigationCompleted();
             }

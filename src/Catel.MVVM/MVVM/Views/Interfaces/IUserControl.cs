@@ -10,7 +10,7 @@ namespace Catel.MVVM.Views
 
 #if XAMARIN || XAMARIN_FORMS
     using ViewType = System.Object;
-#elif NETFX_CORE
+#elif UWP
     using ViewType = global::Windows.UI.Xaml.DependencyObject;
 #else
     using ViewType = System.Windows.DependencyObject;
@@ -53,7 +53,7 @@ namespace Catel.MVVM.Views
         /// </value>
         bool SupportParentViewModelContainers { get; set; }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Gets or sets a value indicating whether to skip the search for an info bar message control. If not skipped,
         /// the user control will search for a the first <see cref="InfoBarMessageControl"/> that can be found. 

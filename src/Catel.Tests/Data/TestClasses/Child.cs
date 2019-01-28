@@ -1,10 +1,10 @@
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Runtime.Serialization;
     using Catel.Data;
 
-#if NET
+#if NET || NETCORE
     [Serializable]
 #endif
     public class Child : SavableModelBase<Child>
@@ -28,7 +28,7 @@ namespace Catel.Tests.Data
             Name = name;
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         ///   Initializes a new object based on <see cref = "SerializationInfo" />.
         /// </summary>

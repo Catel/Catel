@@ -23,8 +23,8 @@ namespace Catel
         /// <returns><c>true</c> if the objects are equal; otherwise <c>false</c>.</returns>
         public static bool AreEqual(object object1, object object2)
         {
-            var isObject1Null = object1 == null;
-            var isObject2Null = object2 == null;
+            var isObject1Null = object1 is null;
+            var isObject2Null = object2 is null;
 
             if (isObject1Null && isObject2Null)
             {
@@ -79,8 +79,8 @@ namespace Catel
         /// <returns><c>true</c> if the objects are equal references; otherwise <c>false</c>.</returns>
         public static bool AreEqualReferences(object object1, object object2)
         {
-            var isObject1Null = object1 == null;
-            var isObject2Null = object2 == null;
+            var isObject1Null = object1 is null;
+            var isObject2Null = object2 is null;
 
             if (isObject1Null && isObject2Null)
             {
@@ -125,12 +125,12 @@ namespace Catel
         /// </returns>
         public static bool IsNull(object obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return true;
             }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             if (obj == DBNull.Value)
             {
                 return true;

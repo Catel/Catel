@@ -135,7 +135,7 @@ namespace Catel.MVVM
                 HandleFieldErrors(e.PropertyName, errors);
             }
 
-            Updated.SafeInvoke(this);
+            Updated?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace Catel.MVVM
                 HandleFieldWarnings(e.PropertyName, warnings);
             }
 
-            Updated.SafeInvoke(this);
+            Updated?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

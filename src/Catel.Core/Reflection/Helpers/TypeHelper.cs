@@ -27,6 +27,14 @@ namespace Catel.Reflection
         /// A list of microsoft public key tokens.
         /// </summary>
         private static readonly HashSet<string> _microsoftPublicKeyTokens;
+
+        private const char InnerTypeCountStart = '`';
+        private const char InternalTypeStart = '+';
+        private const char InternalTypeEnd = '[';
+        private const string AllTypesStart = "[[";
+        private const char SingleTypeStart = '[';
+        private const char SingleTypeEnd = ']';
+        private static readonly char[] InnerTypeCountEnd = new[] { '[', '+' };
         #endregion
 
         #region Constructors
@@ -64,7 +72,7 @@ namespace Catel.Reflection
             where TTargetType : class
         {
             var typedInstance = instance as TTargetType;
-            if ((typedInstance == null) && (instance != null))
+            if ((typedInstance is null) && (instance != null))
             {
                 throw Log.ErrorAndCreateException<NotSupportedException>("Expected an instance of '{0}', but retrieved an instance of '{1}', cannot return the typed instance", typeof (TTargetType).Name, instance.GetType().Name);
             }
@@ -117,7 +125,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNullOrWhitespace("fullyQualifiedAssemblyName", fullyQualifiedAssemblyName);
 
-            int indexOfFirstComma = fullyQualifiedAssemblyName.IndexOf(',');
+            var indexOfFirstComma = fullyQualifiedAssemblyName.IndexOf(',');
             if (indexOfFirstComma != -1)
             {
                 return fullyQualifiedAssemblyName.Substring(0, indexOfFirstComma);
@@ -196,7 +204,7 @@ namespace Catel.Reflection
 
             fullTypeName = GetTypeName(fullTypeName);
 
-            int splitterPos = fullTypeName.LastIndexOf(".", StringComparison.Ordinal);
+            var splitterPos = fullTypeName.LastIndexOf(".", StringComparison.Ordinal);
 
             var typeName = (splitterPos != -1) ? fullTypeName.Substring(splitterPos + 1).Trim() : fullTypeName;
             return typeName;
@@ -233,7 +241,7 @@ namespace Catel.Reflection
             Argument.IsNotNullOrWhitespace("assembly", assembly);
             Argument.IsNotNullOrWhitespace("type", type);
 
-            return string.Format(CultureInfo.InvariantCulture, "{0}, {1}", type, assembly);
+            return $"{type}, {assembly}";
         }
 
         /// <summary>
@@ -242,29 +250,25 @@ namespace Catel.Reflection
         /// <param name="innerTypes">The inner types.</param>
         /// <param name="stripAssemblies">if set to <c>true</c>, the assembly names will be stripped as well.</param>
         /// <returns>string representing a combination of all inner types.</returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "FormatInnerTypes(IEnumerable<string>, bool)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public static string FormatInnerTypes(string[] innerTypes, bool stripAssemblies = false)
         {
-            string result = string.Empty;
+            return FormatInnerTypes((IEnumerable<string>)innerTypes, stripAssemblies);
+        }
 
-            for (int i = 0; i < innerTypes.Length; i++)
+        /// <summary>
+        /// Formats multiple inner types into one string.
+        /// </summary>
+        /// <param name="innerTypes">The inner types.</param>
+        /// <param name="stripAssemblies">if set to <c>true</c>, the assembly names will be stripped as well.</param>
+        /// <returns>string representing a combination of all inner types.</returns>
+        public static string FormatInnerTypes(IEnumerable<string> innerTypes, bool stripAssemblies = false)
+        {
+            return string.Join(",", innerTypes.Select(x =>
             {
-                var innerType = innerTypes[i];
-                string innerTypeName = innerType;
-                if (stripAssemblies)
-                {
-                    innerTypeName = ConvertTypeToVersionIndependentType(innerType, true);    
-                }
-
-                result += string.Format(CultureInfo.InvariantCulture, "[{0}]", innerTypeName);
-
-                // Postfix a comma if this is not the last
-                if (i < innerTypes.Length - 1)
-                {
-                    result += ",";
-                }
-            }
-
-            return result;
+                var type = stripAssemblies ? ConvertTypeToVersionIndependentType(x, true) : x;
+                return $"[{type}]";
+            }));
         }
 
         /// <summary>
@@ -280,27 +284,27 @@ namespace Catel.Reflection
 
             const string innerTypesEnd = ",";
 
-            string newType = type;
-            string[] innerTypes = GetInnerTypes(newType);
+            var newType = type;
+            var innerTypes = GetInnerTypes(newType);
 
             if (innerTypes.Length > 0)
             {
                 // Remove inner types, but never strip assemblies because we need the real original type
-                newType = newType.Replace(string.Format(CultureInfo.InvariantCulture, "[{0}]", FormatInnerTypes(innerTypes, false)), string.Empty);
-                for (int i = 0; i < innerTypes.Length; i++)
+                newType = newType.Replace($"[{FormatInnerTypes(innerTypes, false)}]", string.Empty);
+                for (var i = 0; i < innerTypes.Length; i++)
                 {
                     innerTypes[i] = ConvertTypeToVersionIndependentType(innerTypes[i], stripAssemblies);
                 }
             }
 
-            int splitterPos = newType.IndexOf(", ", StringComparison.Ordinal);
+            var splitterPos = newType.IndexOf(", ", StringComparison.Ordinal);
             var typeName = (splitterPos != -1) ? newType.Substring(0, splitterPos).Trim() : newType;
-            string assemblyName = GetAssemblyName(newType);
+            var assemblyName = GetAssemblyName(newType);
 
             // Remove version info from assembly (if not signed by Microsoft)
             if (!string.IsNullOrWhiteSpace(assemblyName) && !stripAssemblies)
             {
-                bool isMicrosoftAssembly = MicrosoftPublicKeyTokens.Any(t => assemblyName.Contains(t));
+                var isMicrosoftAssembly = MicrosoftPublicKeyTokens.Any(t => assemblyName.Contains(t));
                 if (!isMicrosoftAssembly)
                 {
                     assemblyName = GetAssemblyNameWithoutOverhead(assemblyName);
@@ -315,10 +319,10 @@ namespace Catel.Reflection
 
             if (innerTypes.Length > 0)
             {
-                int innerTypesIndex = stripAssemblies ? newType.Length : newType.IndexOf(innerTypesEnd);
+                var innerTypesIndex = stripAssemblies ? newType.Length : newType.IndexOf(innerTypesEnd);
                 if (innerTypesIndex >= 0)
                 {
-                    newType = newType.Insert(innerTypesIndex, string.Format(CultureInfo.InvariantCulture, "[{0}]", FormatInnerTypes(innerTypes, stripAssemblies)));
+                    newType = newType.Insert(innerTypesIndex, $"[{FormatInnerTypes(innerTypes, stripAssemblies)}]");
                 }
             }
 
@@ -334,14 +338,6 @@ namespace Catel.Reflection
         public static string[] GetInnerTypes(string type)
         {
             Argument.IsNotNullOrWhitespace("type", type);
-
-            const char InnerTypeCountStart = '`';
-            char[] InnerTypeCountEnd = new[] { '[', '+' };
-            const char InternalTypeStart = '+';
-            const char InternalTypeEnd = '[';
-            const string AllTypesStart = "[[";
-            const char SingleTypeStart = '[';
-            const char SingleTypeEnd = ']';
 
             var innerTypes = new List<string>();
 
@@ -360,10 +356,10 @@ namespace Catel.Reflection
                 }
 
                 // Get the number of inner types
-                int innerTypeCountEnd = -1;
+                var innerTypeCountEnd = -1;
                 foreach (var t in InnerTypeCountEnd)
                 {
-                    int index = type.IndexOf(t);
+                    var index = type.IndexOf(t);
                     if ((index != -1) && ((innerTypeCountEnd == -1) || (index < innerTypeCountEnd)))
                     {
                         // This value is more likely to be the one
@@ -382,17 +378,17 @@ namespace Catel.Reflection
                 else
                 {
                     // Remove the index, but not the numbers
-                    int internalTypeEnd = type.IndexOf(InternalTypeEnd);
+                    var internalTypeEnd = type.IndexOf(InternalTypeEnd);
                     type = type.Substring(internalTypeEnd + 1);
                 }
 
                 // Get all the inner types
-                for (int i = 0; i < innerTypeCount; i++)
+                for (var i = 0; i < innerTypeCount; i++)
                 {
                     // Get the start & end of this inner type
-                    int innerTypeStart = type.IndexOf(SingleTypeStart);
-                    int innerTypeEnd = innerTypeStart + 1;
-                    int openings = 1;
+                    var innerTypeStart = type.IndexOf(SingleTypeStart);
+                    var innerTypeEnd = innerTypeStart + 1;
+                    var openings = 1;
 
                     // Loop until we find the end
                     while (openings > 0)
@@ -447,9 +443,9 @@ namespace Catel.Reflection
                 // Database support...
                 if (value == null)
                 {
-                    output = default(TOutput);
+                    output = default;
 
-                    if (outputType.IsValueTypeEx() && innerType == null)
+                    if (outputType.IsValueTypeEx() && innerType is null)
                     {
                         success = false;
                     }
@@ -475,7 +471,7 @@ namespace Catel.Reflection
             }
             catch (Exception)
             {
-                output = default(TOutput);
+                output = default;
                 success = false;
             }
 
@@ -502,9 +498,7 @@ namespace Catel.Reflection
         /// <returns>The casted value.</returns>
         public static TOutput Cast<TOutput>(object value)
         {
-            var output = default(TOutput);
-
-            if (!TryCast(value, out output))
+            if (!TryCast(value, out TOutput output))
             {
                 var tI = value.GetType().GetSafeFullName(false);
                 var tO = typeof(TOutput).FullName;
@@ -532,9 +526,7 @@ namespace Catel.Reflection
         /// <returns>The casted value or when uncastable the <paramref name = "whenNullValue" /> is returned.</returns>
         public static TOutput Cast<TOutput, TInput>(TInput value, TOutput whenNullValue)
         {
-            TOutput output;
-
-            if (!TryCast(value, out output) || output == null)
+            if (!TryCast(value, out TOutput output) || output == null)
             {
                 output = whenNullValue;
             }

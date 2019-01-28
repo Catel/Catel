@@ -10,7 +10,7 @@ namespace Catel.Windows.Threading
 {
     using System;
     
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Core;
     using global::Windows.UI.Xaml;
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
@@ -26,7 +26,7 @@ namespace Catel.Windows.Threading
     {
         private static Dispatcher _dispatcher;
 
-#if NETFX_CORE
+#if UWP
         /// <summary>
         /// Checks the access of the dispatcher.
         /// </summary>
@@ -58,7 +58,7 @@ namespace Catel.Windows.Threading
         }
 #endif
 
-#if NET
+#if NET || NETCORE
         private static readonly DispatcherOperationCallback ExitFrameCallback = ExitFrame;
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Catel.Windows.Threading
         {
             get
             {
-                if (_dispatcher == null)
+                if (_dispatcher is null)
                 {
                     _dispatcher = GetCurrentDispatcher();
                 }
@@ -121,7 +121,7 @@ namespace Catel.Windows.Threading
         /// <returns></returns>
         private static Dispatcher GetCurrentDispatcher()
         {
-#if NET
+#if NET || NETCORE
             var currentApplication = System.Windows.Application.Current;
             if (currentApplication != null)
             {
@@ -129,7 +129,7 @@ namespace Catel.Windows.Threading
             }
             
             return Dispatcher.CurrentDispatcher;
-#elif NETFX_CORE
+#elif UWP
             var firstView = global::Windows.ApplicationModel.Core.CoreApplication.Views.FirstOrDefault();
             if (firstView != null)
             {

@@ -10,13 +10,13 @@ namespace Catel.Data
 
     using ISerializable = Catel.Runtime.Serialization.ISerializable;
 
-#if !NET && !NETSTANDARD
+#if !NET && !NETCORE && !NETSTANDARD
     using System.Reflection;
 #endif
 
-#if NET
+#if NET || NETCORE
     using System.Runtime.Serialization.Formatters.Binary;
-#elif NETFX_CORE
+#elif UWP
     using Windows.Storage.Streams;
 #else
     using System.IO.IsolatedStorage;

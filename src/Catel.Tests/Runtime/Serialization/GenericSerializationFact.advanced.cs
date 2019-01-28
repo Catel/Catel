@@ -50,7 +50,7 @@ namespace Catel.Tests.Runtime.Serialization
 
                 }
 
-#if NET
+#if NET || NETCORE
                 protected AbstractBase(SerializationInfo info, StreamingContext context)
                     : base(info, context)
                 {
@@ -74,7 +74,7 @@ namespace Catel.Tests.Runtime.Serialization
 
                 }
 
-#if NET
+#if NET || NETCORE
                 protected DerivedClass(SerializationInfo info, StreamingContext context)
                     : base(info, context)
                 {
@@ -90,7 +90,7 @@ namespace Catel.Tests.Runtime.Serialization
                     Items = new ObservableCollection<AbstractBase>();
                 }
 
-#if NET
+#if NET || NETCORE
                 protected ContainerClass(SerializationInfo info, StreamingContext context)
                     : base(info, context)
                 {

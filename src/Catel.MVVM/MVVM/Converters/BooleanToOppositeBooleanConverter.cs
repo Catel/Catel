@@ -12,7 +12,7 @@ namespace Catel.MVVM.Converters
     /// Convert a value to it's inverted value.
     /// </summary>
     /// <remarks>Currently only values of type bool are accepted.</remarks>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(bool), typeof(bool))]
 #endif
     public class BooleanToOppositeBooleanConverter : ValueConverterBase

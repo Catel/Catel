@@ -70,7 +70,7 @@ namespace Catel.IoC
                     var implementationType = type;
                     var firstInterface = implementationType.GetInterfacesEx().FirstOrDefault();
 
-                    if (firstInterface == null)
+                    if (firstInterface is null)
                     {
                         return;
                     }

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Logging
 {
@@ -89,19 +89,19 @@ namespace Catel.Logging
             ILogListener logListener = null;
 
             var type = TypeCache.GetType(Type, allowInitialization: false);
-            if (type == null)
+            if (type is null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Failed to retrieve type '{0}'", typeAsString);
             }
 
             var typeFactory = IoCConfiguration.DefaultTypeFactory;
             logListener = typeFactory.CreateInstanceWithParametersAndAutoCompletion(type, assembly) as ILogListener;
-            if (logListener == null)
+            if (logListener is null)
             {
                 logListener = typeFactory.CreateInstance(type) as ILogListener;
             }
 
-            if (logListener == null)
+            if (logListener is null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Failed to instantiate type '{0}' or it does not implement ILogListener and thus cannot be used as such", typeAsString);
             }
@@ -114,7 +114,7 @@ namespace Catel.Logging
                 }
 
                 var propertyInfo = type.GetPropertyEx(dynamicProperty.Key);
-                if (propertyInfo == null)
+                if (propertyInfo is null)
                 {
                     Log.Warning("Property '{0}.{1}' cannot be found, make sure that it exists to load the value correctly", typeAsString, dynamicProperty.Key);
                     continue;

@@ -40,7 +40,7 @@ namespace Catel.Tests.MVVM.ViewModels
                 var lastUpdated = DateTime.Now.Ticks + 1;
 
                 // Only full .NET supports reliable stopwatch, all other frameworks always assume outdated
-#if NET
+#if NET || NETCORE
                 Assert.IsFalse(vm.IsValidationSummaryOutdated(lastUpdated, true));
 #else
                 Assert.IsTrue(vm.IsValidationSummaryOutdated(lastUpdated, true));

@@ -32,7 +32,7 @@ namespace Catel.Windows.Interactivity
         {
             AssociatedObject.GotFocus += OnGotFocus;
 
-#if NET
+#if NET || NETCORE
             AssociatedObject.PreviewMouseLeftButtonDown += OnPreviewMouseLeftButtonDown;
             AssociatedObject.GotMouseCapture += OnGotMouseCapture;
             AssociatedObject.GotKeyboardFocus += OnGotKeyboardFocus;
@@ -46,7 +46,7 @@ namespace Catel.Windows.Interactivity
         {
             AssociatedObject.GotFocus -= OnGotFocus;
 
-#if NET
+#if NET || NETCORE
             AssociatedObject.PreviewMouseLeftButtonDown -= OnPreviewMouseLeftButtonDown;
             AssociatedObject.GotMouseCapture -= OnGotMouseCapture;
             AssociatedObject.GotKeyboardFocus -= OnGotKeyboardFocus;
@@ -63,7 +63,7 @@ namespace Catel.Windows.Interactivity
             SelectAllText();
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Called when the <see cref="UIElement.PreviewMouseLeftButtonDown"/> event occurs.
         /// </summary>

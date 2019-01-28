@@ -8,7 +8,7 @@
 
 namespace Catel.Windows
 {
-#if NETFX_CORE
+#if UWP
     using global::Windows.Foundation;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
@@ -33,7 +33,7 @@ namespace Catel.Windows
         {
             Argument.IsNotNull("element", element);
 
-#if NET
+#if NET || NETCORE
             element.SnapsToDevicePixels = true;
 #endif
 
@@ -49,7 +49,7 @@ namespace Catel.Windows
         {
             Argument.IsNotNull("element", element);
 
-#if NETFX_CORE
+#if UWP
             return element.Visibility == Visibility.Visible;
 #else
             return element.IsVisible;
@@ -93,7 +93,7 @@ namespace Catel.Windows
                 return false;
             }
 
-#if NETFX_CORE
+#if UWP
             var transform = element.TransformToVisual(container);
 #else
             var transform = element.TransformToAncestor(container);
@@ -102,7 +102,7 @@ namespace Catel.Windows
             var bounds = transform.TransformBounds(new Rect(0.0, 0.0, element.ActualWidth, element.ActualHeight));
             var rect = new Rect(0.0, 0.0, container.ActualWidth, container.ActualHeight);
 
-#if NETFX_CORE
+#if UWP
             var topLeft = new Point(bounds.Left, bounds.Top);
             var bottomRight = new Point(bounds.Right, bounds.Bottom);
 #else

@@ -15,7 +15,7 @@ namespace Catel
     using Runtime.Serialization;
     using Services;
 
-#if NET
+#if NET || NETCORE
     using Runtime.Serialization.Binary;
 #endif
 
@@ -41,7 +41,7 @@ namespace Catel
             serviceLocator.RegisterType<IValidatorProvider, AttributeValidatorProvider>();
             serviceLocator.RegisterType<IRegistrationConventionHandler, RegistrationConventionHandler>();
 
-#if NET
+#if NET || NETCORE
             serviceLocator.RegisterType<IBinarySerializer, BinarySerializer>();
             serviceLocator.RegisterTypeWithTag<ISerializationContextInfoFactory, BinarySerializationContextInfoFactory>(typeof(BinarySerializer));
 #endif

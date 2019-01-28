@@ -12,7 +12,7 @@ namespace Catel.Windows.Data
     using System.Collections.Generic;
     using Logging;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Data;
 #else
@@ -174,7 +174,7 @@ namespace Catel.Windows.Data
             //Log.Debug("Subscribing to changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
 
             var dependencyProperty = GetDependencyProperty<object>(frameworkElement, propertyName);
-            if (frameworkElement.GetValue(dependencyProperty) == null)
+            if (frameworkElement.GetValue(dependencyProperty) is null)
             {
                 var binding = new Binding();
 

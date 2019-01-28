@@ -1,4 +1,4 @@
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace Catel.Tests.Data
     /// ValidationTest Data object class which fully supports serialization, property changed notifications,
     /// backwards compatibility and error checking.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [Serializable]
 #endif
     public class ValidationTestModel : ValidatableModelBase
@@ -29,7 +29,7 @@ namespace Catel.Tests.Data
             BusinessRuleWarningWhenEmpty = "noerror";
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         ///   Initializes a new object based on <see cref = "SerializationInfo" />.
         /// </summary>

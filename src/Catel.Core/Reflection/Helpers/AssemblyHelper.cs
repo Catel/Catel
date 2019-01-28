@@ -16,11 +16,11 @@ namespace Catel.Reflection
     using IoC;
     using Logging;
 
-#if NET
+#if NET || NETCORE
     using System.Runtime.InteropServices;
 #endif
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
 #endif
 
@@ -60,6 +60,7 @@ namespace Catel.Reflection
                     }
                 }
 
+                // Note: web should only be checked in .NET
 #if NET
                 var httpApplication = HttpContextHelper.GetHttpApplicationInstance();
                 if (httpApplication != null)
@@ -76,13 +77,19 @@ namespace Catel.Reflection
                         assembly = type.Assembly;
                     }
                 }
+#endif
 
-                if (assembly == null)
+#if NET || NETCORE
+                if (assembly is null)
                 {
                     assembly = Assembly.GetEntryAssembly();
                 }
+#elif UWP
+                assembly = global::Windows.UI.Xaml.Application.Current.GetType().GetAssemblyEx();
+#endif
 
-                if (assembly == null)
+#if NET
+                if (assembly is null)
                 {
                     var appDomain = AppDomain.CurrentDomain;
                     var setupInfo = appDomain.SetupInformation;
@@ -92,10 +99,6 @@ namespace Catel.Reflection
                                 where !x.IsDynamicAssembly() && string.Equals(x.Location, assemblyPath)
                                 select x).FirstOrDefault();
                 }
-#elif NETFX_CORE
-                assembly = global::Windows.UI.Xaml.Application.Current.GetType().GetAssemblyEx();
-#else
-                assembly = typeof(AssemblyHelper).GetAssemblyEx();
 #endif
             }
             catch (Exception ex)
@@ -103,7 +106,7 @@ namespace Catel.Reflection
                 Log.Error(ex, "Failed to get assembly");
             }
 
-            if (assembly == null)
+            if (assembly is null)
             {
                 Log.Warning("Entry assembly could not be determined, returning Catel.Core as fallback");
 
@@ -256,11 +259,11 @@ namespace Catel.Reflection
             }
 
             var isDynamicAssembly =
-#if NET
+#if NET || NETCORE
                 (assembly is System.Reflection.Emit.AssemblyBuilder) &&
 #endif
                 string.Equals(assembly.GetType().FullName, "System.Reflection.Emit.InternalAssemblyBuilder", StringComparison.Ordinal)
-#if NET
+#if NET || NETCORE
                 && !assembly.GlobalAssemblyCache
                 && ((Assembly.GetExecutingAssembly() != null)
                 && !string.Equals(assembly.CodeBase, Assembly.GetExecutingAssembly().CodeBase, StringComparison.OrdinalIgnoreCase))
@@ -297,7 +300,7 @@ namespace Catel.Reflection
 
         private static bool ShouldIgnoreAssembly(Assembly assembly, bool ignoreDynamicAssemblies)
         {
-            if (assembly == null)
+            if (assembly is null)
             {
                 return true;
             }
@@ -319,7 +322,7 @@ namespace Catel.Reflection
             public string NameWithoutVersion { get; set; }
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Gets the linker timestamp.
         /// </summary>
@@ -353,7 +356,9 @@ namespace Catel.Reflection
                 var offset = TimeSpan.FromSeconds(coffHeader.TimeDateStamp);
                 var utcTime = utcStart.Add(offset);
 
+#pragma warning disable CS0618 // Type or member is obsolete
                 var localTime = TimeZone.CurrentTimeZone.ToLocalTime(utcTime);
+#pragma warning restore CS0618 // Type or member is obsolete
                 if (localTime > DateTime.Now.AddDays(1))
                 {
                     // Something is off here, are we running a .NET core "deterministic" app?

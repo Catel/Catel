@@ -16,7 +16,7 @@ namespace Catel.Services
     using Logging;
     using Reflection;
 
-#if NETFX_CORE
+#if UWP
     using ResourceManager = Windows.ApplicationModel.Resources.ResourceLoader;
     using Windows.ApplicationModel.Resources.Core;
     using Windows.Storage;
@@ -26,7 +26,7 @@ namespace Catel.Services
 
     public partial class LanguageService
     {
-#if NETFX_CORE
+#if UWP
         private static readonly string StartupAssemblyName = AssemblyHelper.GetEntryAssembly().GetName().Name;
 #endif
 
@@ -63,7 +63,7 @@ namespace Catel.Services
 
             if (resourceLoader != null)
             {
-#if NETFX_CORE
+#if UWP
                 var resourceContainer = GetResourceContainer(source);
 
                 // Try the language specific first
@@ -78,7 +78,7 @@ namespace Catel.Services
                                         where rm != null
                                         select rm).FirstOrDefault();
 
-                if ((finalResourceMap == null) && !cultureInfo.IsNeutralCulture)
+                if ((finalResourceMap is null) && !cultureInfo.IsNeutralCulture)
                 {
                     cultureName = cultureInfo.Parent.Name;
                     languageSpecificSource = string.Format("{0}.{1}", resourceContainer, cultureName);
@@ -89,7 +89,7 @@ namespace Catel.Services
                                         select rm).FirstOrDefault();
                 }
 
-                if (finalResourceMap == null)
+                if (finalResourceMap is null)
                 {
                     finalResourceMap = (from resourceMap in currentResourceManager.AllResourceMaps
                                         let rm = resourceMap.Value.GetSubtree(neutralSource)
@@ -126,7 +126,7 @@ namespace Catel.Services
             {
                 try
                 {
-#if NETFX_CORE
+#if UWP
                     var resourceContainer = GetResourceContainer(source);
                     var resourceLoader = ResourceManager.GetForViewIndependentUse(resourceContainer);
 #else
@@ -140,7 +140,7 @@ namespace Catel.Services
                     loadedAssemblies.Reverse();
 
                     var assembly = loadedAssemblies.FirstOrDefault(x => x.FullName.StartsWith(containingAssemblyName));
-                    if (assembly == null)
+                    if (assembly is null)
                     {
                         return null;
                     }
@@ -166,7 +166,7 @@ namespace Catel.Services
             return retrievalFunc();
         }
 
-#if NETFX_CORE
+#if UWP
         private string GetResourceContainer(string source)
         {
             var splittedString = source.Split(new[] { "|" }, StringSplitOptions.None);

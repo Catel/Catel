@@ -57,8 +57,8 @@ namespace Catel.MVVM
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        private WeakFunc<TCanExecuteParameter, bool> _canExecuteWithParameter;
-        private WeakFunc<bool> _canExecuteWithoutParameter;
+        private Func<TCanExecuteParameter, bool> _canExecuteWithParameter;
+        private Func<bool> _canExecuteWithoutParameter;
         private Action<TExecuteParameter> _executeWithParameter;
         private Action _executeWithoutParameter;
         #endregion
@@ -146,8 +146,8 @@ namespace Catel.MVVM
         protected void InitializeActions(Action<TExecuteParameter> executeWithParameter, Action executeWithoutParameter,
             Func<TCanExecuteParameter, bool> canExecuteWithParameter, Func<bool> canExecuteWithoutParameter)
         {
-            _canExecuteWithParameter = canExecuteWithParameter != null ? new WeakFunc<TCanExecuteParameter, bool>(canExecuteWithParameter.Target, canExecuteWithParameter) : null;
-            _canExecuteWithoutParameter = canExecuteWithoutParameter != null ? new WeakFunc<bool>(canExecuteWithoutParameter.Target, canExecuteWithoutParameter) : null;
+            _canExecuteWithParameter = canExecuteWithParameter;
+            _canExecuteWithoutParameter = canExecuteWithoutParameter;
 
             _executeWithParameter = executeWithParameter;
             _executeWithoutParameter = executeWithoutParameter;
@@ -200,19 +200,19 @@ namespace Catel.MVVM
                     return false;
                 }
             }
-            bool result;
 
-            if (_canExecuteWithParameter != null && _canExecuteWithParameter.Execute(parameter, out result))
+            var result = true;
+
+            if (_canExecuteWithParameter != null)
             {
-                return result;
+                result = _canExecuteWithParameter(parameter);
+            }
+            else if (_canExecuteWithoutParameter != null)
+            {
+                result = _canExecuteWithoutParameter();
             }
 
-            if (_canExecuteWithoutParameter != null && _canExecuteWithoutParameter.Execute(out result))
-            {
-                return result;
-            }
-
-            return true;
+            return result;
         }
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace Catel.MVVM
             {
                 try
                 {
-                    CanExecuteChanged.SafeInvoke(this);
+                    CanExecuteChanged?.Invoke(this, EventArgs.Empty);
                 }
                 catch (Exception ex)
                 {
@@ -330,7 +330,7 @@ namespace Catel.MVVM
             var action = new Action(() =>
             {
                 var eventArgs = new CommandExecutedEventArgs(this, parameter);
-                Executed.SafeInvoke(this, eventArgs);
+                Executed?.Invoke(this, eventArgs);
             });
 
             AutoDispatchIfRequired(action);

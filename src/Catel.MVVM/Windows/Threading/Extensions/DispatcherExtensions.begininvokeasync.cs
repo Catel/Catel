@@ -14,7 +14,7 @@ namespace Catel.Windows.Threading
     // Required for DispatcherOperation on all platforms
     using System.Windows.Threading;
 
-#if NETFX_CORE
+#if UWP
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
 #endif
 

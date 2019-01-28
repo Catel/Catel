@@ -92,7 +92,7 @@ namespace Catel.MVVM
         /// </returns>
         public virtual bool CanReuseViewModel(Type viewType, Type expectedViewModelType, Type actualViewModelType, IViewModel viewModelAsDataContext)
         {
-            if (viewModelAsDataContext == null)
+            if (viewModelAsDataContext is null)
             {
                 return false;
             }
@@ -123,7 +123,7 @@ namespace Catel.MVVM
             if (dataContext != null)
             {
                 var parameters = dataContext as object[];
-                if (parameters == null)
+                if (parameters is null)
                 {
                     parameters = new object[] { dataContext };
                 }

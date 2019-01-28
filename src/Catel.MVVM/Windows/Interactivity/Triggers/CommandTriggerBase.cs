@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Windows.Interactivity
 {
@@ -137,7 +137,7 @@ namespace Catel.Windows.Interactivity
             }
 
             var command = _command;
-            if (command == null)
+            if (command is null)
             {
                 return;
             }
@@ -240,7 +240,7 @@ namespace Catel.Windows.Interactivity
         protected virtual bool CanExecuteCommand(object parameter)
         {
             var command = _command;
-            if (command == null)
+            if (command is null)
             {
                 return false;
             }

@@ -14,6 +14,7 @@ namespace Catel.Reflection
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+
 #if ENABLE_CACHE
     using Catel.Caching;
 #endif
@@ -130,7 +131,7 @@ namespace Catel.Reflection
         public static IEnumerable<Type> GetParentTypes(this Type type)
         {
             // is there any base type?
-            if ((type == null) || (type.GetBaseTypeEx() == null))
+            if ((type is null) || (type.GetBaseTypeEx() is null))
             {
                 yield break;
             }
@@ -158,7 +159,7 @@ namespace Catel.Reflection
         /// <returns>The safe full name.</returns>
         public static string GetSafeFullName(this Type type, bool fullyQualifiedAssemblyName /* in v5, set = false */)
         {
-            if (type == null)
+            if (type is null)
             {
                 return "NullType";
             }
@@ -351,7 +352,7 @@ namespace Catel.Reflection
 
 #if NETFX_CORE
             return type.GetTypeInfo().IsSerializable;
-#elif NET
+#elif NET || NETCORE || NETSTANDARD
             return type.IsSerializable;
 #else
             return true;
@@ -1011,7 +1012,7 @@ namespace Catel.Reflection
             propertyInfo = type.GetTypeInfo().GetProperty(name, bindingFlags);
 #endif
 
-            if (propertyInfo == null)
+            if (propertyInfo is null)
             {
                 if (allowExplicitInterfaceProperties)
                 {
@@ -1197,7 +1198,9 @@ namespace Catel.Reflection
 #endif
 
 #else
-#if XAMARIN
+#if NET || NETCORE || NETSTANDARD
+            return type.GetMethod(name, bindingFlags, null, types, null);
+#elif XAMARIN
             return type.GetTypeInfo().GetMethod(name, types);
 #else
             return type.GetTypeInfo().GetMethod(name, types, bindingFlags);

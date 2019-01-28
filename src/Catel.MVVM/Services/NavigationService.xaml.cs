@@ -4,7 +4,7 @@
 // </copyright>>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETFX_CORE
+#if NET || NETCORE || UWP
 
 namespace Catel.Services
 {
@@ -17,7 +17,7 @@ namespace Catel.Services
     using Catel.Windows;
     using Logging;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Navigation;
@@ -33,7 +33,7 @@ namespace Catel.Services
     public partial class NavigationService
     {
         #region Fields
-#if NET
+#if NET || NETCORE
         private bool _appClosingByMainWindow;
         private bool _appClosedFromService;
 #endif
@@ -79,7 +79,7 @@ namespace Catel.Services
 
         partial void Initialize()
         {
-#if NET
+#if NET || NETCORE
             var mainWindow = CatelEnvironment.MainWindow;
             if (mainWindow != null)
             {
@@ -108,18 +108,18 @@ namespace Catel.Services
 
         partial void CloseMainWindow()
         {
-#if NET
+#if NET || NETCORE
             _appClosedFromService = true;
 
             var mainWindow = CatelEnvironment.MainWindow;
-            if (mainWindow == null)
+            if (mainWindow is null)
             {
                 throw Log.ErrorAndCreateException<NotSupportedException>("No main window found (not running SL out of browser? Cannot close application without a window.");
             }
 
             if (!_appClosingByMainWindow)
             {
-#if NET
+#if NET || NETCORE
                 var app = Application.Current;
                 app.Shutdown();
 #else

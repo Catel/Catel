@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Services
 {
@@ -26,7 +26,7 @@ namespace Catel.Services
         {
             get
             {
-                if (_arguments == null)
+                if (_arguments is null)
                 {
                     var commandLine = System.Environment.GetCommandLineArgs();
 

@@ -12,7 +12,7 @@ namespace Catel.Windows.Threading
     using System.Threading.Tasks;
     using Logging;
 
-#if NETFX_CORE
+#if UWP
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
     using System.Windows.Threading;
 #else
@@ -26,7 +26,7 @@ namespace Catel.Windows.Threading
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if NET || UWP
+#if NET || NETCORE || UWP
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>

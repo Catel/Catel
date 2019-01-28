@@ -24,7 +24,7 @@ namespace Catel.MVVM.Providers
         {
             Argument.IsNotNull("action", action);
 
-            if (logic == null)
+            if (logic is null)
             {
                 return;
             }
@@ -56,7 +56,7 @@ namespace Catel.MVVM.Providers
         {
             Argument.IsNotNull("function", function);
 
-            if (logic == null)
+            if (logic is null)
             {
                 return defaultValue;
             }

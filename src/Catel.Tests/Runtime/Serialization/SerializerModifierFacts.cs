@@ -37,7 +37,7 @@ namespace Catel.Tests.Runtime.Serialization
                 Assert.AreEqual("ModifiedC", clonedModelC.ModelCProperty);
             }
 
-#if NET
+#if NET || NETCORE
             [TestCase]
             public void ComplexInheritanceWorksWithBinary()
             {

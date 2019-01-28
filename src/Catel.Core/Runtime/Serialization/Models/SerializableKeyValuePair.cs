@@ -14,7 +14,7 @@ namespace Catel.Runtime.Serialization
     /// <summary>
     /// Serializable key value pair.
     /// </summary>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
     [DataContract, Serializable]
 #endif
     public class SerializableKeyValuePair

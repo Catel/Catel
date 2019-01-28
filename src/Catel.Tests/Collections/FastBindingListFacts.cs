@@ -350,7 +350,7 @@ namespace Catel.Tests.Collections
                 public int CompareTo(object obj)
                 {
                     var another = obj as TestType;
-                    if (another == null)
+                    if (another is null)
                     {
                         return -1;
                     }

@@ -103,7 +103,7 @@ namespace Catel.MVVM.Navigation
             }
 
             var eventArgs = new ActivityEventArgs(activity);
-            ActivityCreated.SafeInvoke(this, eventArgs);
+            ActivityCreated?.Invoke(this, eventArgs);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Catel.MVVM.Navigation
             }
 
             var eventArgs = new ActivityEventArgs(activity);
-            ActivityDestroyed.SafeInvoke(this, eventArgs);
+            ActivityDestroyed?.Invoke(this, eventArgs);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace Catel.MVVM.Navigation
             }
 
             var eventArgs = new ActivityEventArgs(activity);
-            ActivityPaused.SafeInvoke(this, eventArgs);
+            ActivityPaused?.Invoke(this, eventArgs);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace Catel.MVVM.Navigation
             }
 
             var eventArgs = new ActivityEventArgs(activity);
-            ActivityResumed.SafeInvoke(this, eventArgs);
+            ActivityResumed?.Invoke(this, eventArgs);
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace Catel.MVVM.Navigation
             }
 
             var eventArgs = new ActivityEventArgs(activity);
-            ActivityStarted.SafeInvoke(this, eventArgs);
+            ActivityStarted?.Invoke(this, eventArgs);
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace Catel.MVVM.Navigation
             }
 
             var eventArgs = new ActivityEventArgs(activity);
-            ActivityStopped.SafeInvoke(this, eventArgs);
+            ActivityStopped?.Invoke(this, eventArgs);
         }
     }
 
@@ -202,7 +202,7 @@ namespace Catel.MVVM.Navigation
         {
             var activity = GetNavigationTarget<Activity>();
             var application = activity.Application;
-            if (application == null)
+            if (application is null)
             {
                 const string error = "To support navigation events in Android, Catel uses a custom ActivityLifecycleCallbacksListener. This requires an app instance though. Please make sure that the Android app contains an Application class.";
                 Log.Error(error);
@@ -279,7 +279,7 @@ namespace Catel.MVVM.Navigation
         protected override string GetNavigationUri(object target)
         {
             var activity = target as Activity;
-            if (activity == null)
+            if (activity is null)
             {
                 return null;
             }

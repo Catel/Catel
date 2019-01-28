@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Windows.Interactivity
 {
@@ -21,7 +21,9 @@ namespace Catel.Windows.Interactivity
         /// Gets or sets the routed event.
         /// </summary>
         /// <value>The routed event.</value>
+#pragma warning disable WPF0107
         public RoutedEvent RoutedEvent { get; set; }
+#pragma warning restore WPF0107
         #endregion
 
         #region Methods
@@ -30,7 +32,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override void ValidateRequiredProperties()
         {
-            if (RoutedEvent == null)
+            if (RoutedEvent is null)
             {
                 throw new InvalidOperationException("RoutedEvent is a required property");
             }

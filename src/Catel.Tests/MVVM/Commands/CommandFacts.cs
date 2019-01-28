@@ -8,7 +8,7 @@
 namespace Catel.Tests.MVVM.Commands
 {
     using System;
-
+    using System.Diagnostics;
     using Catel.MVVM;
 
     using NUnit.Framework;
@@ -30,6 +30,47 @@ namespace Catel.Tests.MVVM.Commands
             {
                 var command = new Command(() => { }, () => { throw new Exception(); });
                 ExceptionTester.CallMethodAndExpectException<Exception>(() => command.Execute());
+            }
+        }
+
+        /// <summary>
+        /// See https://github.com/Catel/Catel/issues/1192
+        /// </summary>
+        [TestFixture]
+        public class CTL1192_WeakRef_CanExecute
+        {
+            public class TestDisplayClassViewModel : ViewModelBase
+            {
+                public TestDisplayClassViewModel()
+                {
+                    int localVariable = 1;
+                    TestCommand = new Command(TestFunction, () =>
+                    {
+                        Console.WriteLine("CanExecute called " + localVariable++);
+                        return false;
+                    });
+                }
+
+                public void TestFunction()
+                {
+                }
+
+                public Command TestCommand { get; set; }
+            }
+
+            [Test]
+            public void CanExecuteWeakRefLostTest()
+            {
+                var vm = new TestDisplayClassViewModel();
+
+                var canExecuteBefore = vm.TestCommand.CanExecute();
+                Console.WriteLine("CanExecute before: " + canExecuteBefore);
+
+                GC.Collect();
+
+                var canExecuteAfter = vm.TestCommand.CanExecute();
+                Console.WriteLine("CanExecute after: " + canExecuteAfter);
+                Assert.That(canExecuteAfter, Is.False);
             }
         }
     }

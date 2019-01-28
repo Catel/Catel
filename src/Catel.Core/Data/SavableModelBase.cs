@@ -12,9 +12,9 @@ namespace Catel.Data
     using Logging;
     using Catel.Runtime.Serialization;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
     using System.Runtime.Serialization;
-#elif NETFX_CORE
+#elif UWP
     using Windows.Storage.Streams;
 #else
     using System.IO.IsolatedStorage;
@@ -24,7 +24,7 @@ namespace Catel.Data
     /// Abstract class that makes the <see cref="ModelBase" /> serializable.
     /// </summary>
     /// <typeparam name="T">Type that the class should hold (same as the defined type).</typeparam>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
     [Serializable]
 #endif
     public abstract class SavableModelBase<T> : ModelBase, ISavableModel
@@ -34,7 +34,7 @@ namespace Catel.Data
         /// <summary>
         /// The log.
         /// </summary>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
@@ -48,7 +48,7 @@ namespace Catel.Data
         {
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Initializes a new instance of the <see cref="SavableModelBase{T}"/> class.
         /// </summary>
@@ -69,9 +69,9 @@ namespace Catel.Data
 
         #region Methods
         #region Saving
-#if NET || NETSTANDARD || XAMARIN
+#if NET || NETCORE || NETSTANDARD || XAMARIN
         // No overloads required
-#elif NETFX_CORE
+#elif UWP
         /// <summary>
         /// Saves the object to an isolated storage file stream using the default formatting.
         /// </summary>
@@ -113,7 +113,7 @@ namespace Catel.Data
         #endregion
 
         #region Loading
-#if NETFX_CORE
+#if UWP
         /// <summary>
         /// Loads the object from a file using a specific formatting.
         /// </summary>

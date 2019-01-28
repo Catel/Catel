@@ -47,7 +47,7 @@ namespace Catel.Tests
                 Assert.IsTrue(ObjectHelper.AreEqual(obj2, obj1));
             }
 
-#if NET
+#if NET || NETCORE
             [TestCase]
             public void ReturnsTrueForTwoDbNullValues()
             {

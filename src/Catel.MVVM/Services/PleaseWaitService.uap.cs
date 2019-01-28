@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NETFX_CORE
+#if UWP
 
 namespace Catel.Services
 {
@@ -33,7 +33,7 @@ namespace Catel.Services
 #pragma warning disable 4014
             _busyIndicator.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                if (status == null)
+                if (status is null)
                 {
                     status = string.Empty;
                 }

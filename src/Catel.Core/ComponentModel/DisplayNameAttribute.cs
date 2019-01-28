@@ -15,7 +15,7 @@ namespace Catel.ComponentModel
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Event | AttributeTargets.Field)]
     public class DisplayNameAttribute :
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         System.ComponentModel.DisplayNameAttribute
 #else
         System.Attribute
@@ -30,7 +30,7 @@ namespace Catel.ComponentModel
         /// Initializes a new instance of the <see cref="DisplayNameAttribute"/> class.
         /// </summary>
         public DisplayNameAttribute(string resourceName)
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             : base(string.Empty)
 #endif
         {
@@ -65,7 +65,7 @@ namespace Catel.ComponentModel
         /// Gets the display name.
         /// </summary>
         /// <value>The display name.</value>
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         public override string DisplayName
 #else
         public string DisplayName

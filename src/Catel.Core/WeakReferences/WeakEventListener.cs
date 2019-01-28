@@ -114,13 +114,13 @@ namespace Catel
 
             _typeForEventSubscriptions = typeForEventSubscriptions;
 
-            IsStaticEventHandler = (target == null);
+            IsStaticEventHandler = (target is null);
             if (target != null)
             {
                 _weakTarget = new WeakReference(target);
             }
 
-            IsStaticEvent = (source == null);
+            IsStaticEvent = (source is null);
             if (source != null)
             {
                 _weakSource = new WeakReference(source);
@@ -355,7 +355,7 @@ namespace Catel
             Argument.IsNotNullOrWhitespace("eventName", eventName);
             Argument.IsNotNull("handler", handler);
 
-            if ((source == null) && (target == null))
+            if ((source is null) && (target is null))
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Both the source and target are null, which means that a static event handler subscribes to a static event. In such cases, there are no memory leaks, so there is no reason to use this class");
             }
@@ -462,7 +462,7 @@ namespace Catel
             Argument.IsNotNullOrWhitespace("eventName", eventName);
 
             var eventInfo = _typeForEventSubscriptions.GetEventEx(eventName, true, true);
-            if (eventInfo == null)
+            if (eventInfo is null)
             {
                 if (source != null)
                 {
@@ -470,7 +470,7 @@ namespace Catel
                     eventInfo = sourceObjectType.GetEventEx(eventName, true, true);
                 }
 
-                if (eventInfo == null)
+                if (eventInfo is null)
                 {
                     return false;
                 }
@@ -482,7 +482,7 @@ namespace Catel
             var addMethod = eventInfo.GetAddMethod();
 #endif
 
-            if (addMethod == null)
+            if (addMethod is null)
             {
                 return false;
             }
@@ -532,7 +532,7 @@ namespace Catel
         {
             Argument.IsNotNullOrWhitespace("eventName", eventName);
 
-            if (_internalEventDelegate == null)
+            if (_internalEventDelegate is null)
             {
                 return;
             }
@@ -545,7 +545,7 @@ namespace Catel
                     return;
                 }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
                 // Second, try explicit interface implementations
                 if (UnsubscribeFromEventUsingExplicitInterfaceImplementation(source, eventName))
                 {
@@ -573,7 +573,7 @@ namespace Catel
             Argument.IsNotNullOrWhitespace("eventName", eventName);
 
             var eventInfo = _typeForEventSubscriptions.GetEventEx(eventName, true, true);
-            if (eventInfo == null)
+            if (eventInfo is null)
             {
                 if (source != null)
                 {
@@ -581,7 +581,7 @@ namespace Catel
                     eventInfo = sourceObjectType.GetEventEx(eventName, true, true);
                 }
 
-                if (eventInfo == null)
+                if (eventInfo is null)
                 {
                     return false;
                 }
@@ -593,7 +593,7 @@ namespace Catel
             var removeMethod = eventInfo.GetRemoveMethod();
 #endif
 
-            if (removeMethod == null)
+            if (removeMethod is null)
             {
                 return false;
             }
@@ -653,7 +653,7 @@ namespace Catel
         public void OnEvent(object source, TEventArgs eventArgs)
         // ReSharper restore UnusedMember.Global
         {
-            if (!IsStaticEventHandler && (Target == null))
+            if (!IsStaticEventHandler && (Target is null))
             {
                 Detach();
                 return;
@@ -691,7 +691,7 @@ namespace Catel
         /// </summary>
         public void Detach()
         {
-            if (!IsStaticEvent && (Source == null))
+            if (!IsStaticEvent && (Source is null))
             {
                 Log.Warning("Event on source '{0}' is not static, yet the source does no longer exists", typeof(TSource).FullName);
                 return;
@@ -904,7 +904,7 @@ namespace Catel
                 return type;
             });
 
-            if (eventArgsType == null)
+            if (eventArgsType is null)
             {
                 throw Log.ErrorAndCreateException<NotSupportedException>("Only handlers of type 'Action', 'PropertyChangedEventHandler', 'NotifyCollectionChangedEventHandler' or 'EventHandler<TEventArgs>' are supported. '{0}' does not belong to these supported types", handlerType.Name);
             }
@@ -928,7 +928,7 @@ namespace Catel
                 }
             }
 
-            if (methodInfo == null)
+            if (methodInfo is null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Expected to find the SubscribeToWeakEventWithExplicitSourceType on WeakEventListener<TTarget, TSource, TEventArgs>, but did not find it");
             }
@@ -1154,7 +1154,7 @@ namespace Catel
                 }
             }
 
-            if (methodInfo == null)
+            if (methodInfo is null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Expected to find the SubscribeToWeakEventWithExplicitSourceType on WeakEventListener<TTarget, TSource>, but did not find it");
             }

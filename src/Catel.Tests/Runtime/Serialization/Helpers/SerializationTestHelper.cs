@@ -26,7 +26,7 @@ namespace Catel.Tests.Runtime.Serialization
     {
         public static IXmlSerializer GetXmlSerializer(ISerializationManager serializationManager = null)
         {
-            if (serializationManager == null)
+            if (serializationManager is null)
             {
                 serializationManager = new SerializationManager();
             }
@@ -37,7 +37,7 @@ namespace Catel.Tests.Runtime.Serialization
 
         public static IBinarySerializer GetBinarySerializer(ISerializationManager serializationManager = null)
         {
-            if (serializationManager == null)
+            if (serializationManager is null)
             {
                 serializationManager = new SerializationManager();
             }
@@ -48,7 +48,7 @@ namespace Catel.Tests.Runtime.Serialization
 
         public static IJsonSerializer GetJsonSerializer(ISerializationManager serializationManager = null)
         {
-            if (serializationManager == null)
+            if (serializationManager is null)
             {
                 serializationManager = new SerializationManager();
             }

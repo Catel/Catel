@@ -1,4 +1,4 @@
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@ namespace Catel.Tests.Data
     using System.Runtime.Serialization;
     using Catel.Data;
 
-#if NET
+#if NET || NETCORE
     [Serializable]
 #endif
     public class ObjectWithValidation : ValidatableModelBase
@@ -31,7 +31,7 @@ namespace Catel.Tests.Data
             NonCatelPropertyWithAnnotations = "default value";
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         ///   Initializes a new object based on <see cref = "SerializationInfo" />.
         /// </summary>

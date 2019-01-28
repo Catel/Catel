@@ -11,7 +11,7 @@ namespace Catel.IO
     using System.Reflection;
     using Reflection;
 
-#if NETFX_CORE
+#if UWP
     using Windows.Storage;
 #endif
 
@@ -132,7 +132,7 @@ namespace Catel.IO
             var assembly = AssemblyHelper.GetEntryAssembly();
 
 #if !NETFX_CORE
-            if (assembly == null)
+            if (assembly is null)
             {
                 assembly = Assembly.GetCallingAssembly();
             }
@@ -356,7 +356,7 @@ namespace Catel.IO
             return fullPath;
         }
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Returns the full path for a relative path.
         /// </summary>

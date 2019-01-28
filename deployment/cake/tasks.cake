@@ -34,6 +34,13 @@ ValidateDockerImagesInput();
 
 private void BuildTestProjects()
 {
+    // In case of a local build and we have included / excluded anything, skip tests
+    if (IsLocalBuild && (Include.Length > 0 || Exclude.Length > 0))
+    {
+        Information("Skipping test project because this is a local build with specific includes / excludes");
+        return;
+    }
+
     foreach (var testProject in TestProjects)
     {
         LogSeparator("Building test project '{0}'", testProject);
@@ -43,11 +50,20 @@ private void BuildTestProjects()
         var msBuildSettings = new MSBuildSettings
         {
             Verbosity = Verbosity.Quiet, // Verbosity.Diagnostic
-            ToolVersion = MSBuildToolVersion.VS2017,
+            ToolVersion = MSBuildToolVersion.Default,
             Configuration = ConfigurationName,
             MSBuildPlatform = MSBuildPlatform.x86, // Always require x86, see platform for actual target platform
             PlatformTarget = PlatformTarget.MSIL
         };
+
+        var toolPath = GetVisualStudioPath(msBuildSettings.ToolVersion);
+        if (!string.IsNullOrWhiteSpace(toolPath))
+        {
+            msBuildSettings.ToolPath = toolPath;
+        }
+
+        // Always disable SourceLink
+        msBuildSettings.WithProperty("EnableSourceLink", "false");
 
         // Force disable SonarQube
         msBuildSettings.WithProperty("SonarQubeExclude", "true");
@@ -99,7 +115,7 @@ Task("Build")
     .IsDependentOn("CleanupCode")
     .Does(async () =>
 {
-    var enableSonar = !string.IsNullOrWhiteSpace(SonarUrl);
+    var enableSonar = !SonarDisabled && !string.IsNullOrWhiteSpace(SonarUrl);
     if (enableSonar)
     {
         SonarBegin(new SonarBeginSettings 
@@ -122,7 +138,7 @@ Task("Build")
     }
     else
     {
-        Information("Skipping Sonar integration since url is not specified");
+        Information("Skipping Sonar integration since url is not specified or it has been explicitly disabled");
     }
 
     BuildComponents();
@@ -131,7 +147,7 @@ Task("Build")
     BuildWpfApps();
     BuildDockerImages();
 
-    if (!string.IsNullOrWhiteSpace(SonarUrl))
+    if (enableSonar)
     {
         SonarEnd(new SonarEndSettings 
         {

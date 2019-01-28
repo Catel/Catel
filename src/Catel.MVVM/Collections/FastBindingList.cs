@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Collections
 {
@@ -25,12 +25,12 @@ namespace Catel.Collections
     [Serializable]
     public class FastBindingList<T> : BindingList<T>, ISuspendChangeNotificationsCollection
     {
-        #region Constants
+#region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private static readonly IDispatcherService _dispatcherService;
-        #endregion
+#endregion
 
-        #region Fields
+#region Fields
         private bool _sorted;
         private ListSortDirection _sortDirection = ListSortDirection.Ascending;
         private PropertyDescriptor _sortProperty;
@@ -40,9 +40,9 @@ namespace Catel.Collections
         /// </summary>
         [field: NonSerialized]
         private ExtendedSuspensionContext<T> _suspensionContext;
-        #endregion
+#endregion
 
-        #region Constructors
+#region Constructors
         /// <summary>
         /// Initializes static members of the <see cref="FastBindingList{T}"/> class.
         /// </summary>
@@ -79,9 +79,9 @@ namespace Catel.Collections
         {
             AddItems(collection);
         }
-        #endregion
+#endregion
 
-        #region Properties
+#region Properties
         /// <summary>
         /// Gets or sets a value indicating whether change to the collection is made when
         /// its notifications are suspended.
@@ -108,7 +108,7 @@ namespace Catel.Collections
         /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
         public bool AutomaticallyDispatchChangeNotifications { get; set; }
 
-        #region Overrides of BindingList
+#region Overrides of BindingList
         /// <summary>
         /// Gets a value indicating whether the list is sorted.
         /// </summary>
@@ -168,10 +168,10 @@ namespace Catel.Collections
                 return true;
             }
         }
-        #endregion Overrides of BindingList
-        #endregion
+#endregion Overrides of BindingList
+#endregion
 
-        #region Methods
+#region Methods
         /// <summary>
         /// Inserts the elements of the specified collection at the specified index.
         /// </summary>
@@ -363,7 +363,7 @@ namespace Catel.Collections
         /// <returns>IDisposable.</returns>
         public IDisposable SuspendChangeNotifications(SuspensionMode mode)
         {
-            if (_suspensionContext == null)
+            if (_suspensionContext is null)
             {
                 // Create new context
                 _suspensionContext = new ExtendedSuspensionContext<T>(mode);
@@ -479,7 +479,7 @@ namespace Catel.Collections
             }
         }
 
-        #region Overrides of BindingList
+#region Overrides of BindingList
         /// <summary>
         /// Apply sort.
         /// </summary>
@@ -491,7 +491,7 @@ namespace Catel.Collections
             _sortDirection = direction;
 
             var list = Items as List<T>;
-            if (list == null)
+            if (list is null)
             {
                 return;
             }
@@ -502,15 +502,15 @@ namespace Catel.Collections
 
                 var lhsValue = lhs == null ? null : _sortProperty.GetValue(lhs);
                 var rhsValue = rhs == null ? null : _sortProperty.GetValue(rhs);
-                if (lhsValue == null && rhsValue == null) // both values are null, both equal
+                if (lhsValue is null && rhsValue is null) // both values are null, both equal
                 {
                     result = 0;
                 }
-                else if (lhsValue == null) // lhs value is null, rhs not, rhs value is greater
+                else if (lhsValue is null) // lhs value is null, rhs not, rhs value is greater
                 {
                     result = - 1;
                 }
-                else if (rhsValue == null) // rhs value is null, lhs not, lhs value is greater
+                else if (rhsValue is null) // rhs value is null, lhs not, lhs value is greater
                 {
                     result = 1;
                 }
@@ -572,13 +572,13 @@ namespace Catel.Collections
         /// <param name="key">The value of property to match.</param>
         protected override int FindCore(PropertyDescriptor prop, object key)
         {
-            if (prop == null)
+            if (prop is null)
             {
                 return -1;
             }
 
             var list = Items as List<T>;
-            if (list == null)
+            if (list is null)
             {
                 return -1;
             }
@@ -621,7 +621,7 @@ namespace Catel.Collections
 
                 base.InsertItem(index, item);
 
-                if (suspensionContext == null)
+                if (suspensionContext is null)
                 {
                     OnListChanged(new NotifyListChangedEventArgs(ListChangedType.ItemAdded, index, item));
                 }
@@ -724,8 +724,8 @@ namespace Catel.Collections
                 RaiseListChangedEvents = oldValue;
             }
         }
-        #endregion Overrides of BindingList
-        #endregion
+#endregion Overrides of BindingList
+#endregion
     }
 }
 

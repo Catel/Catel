@@ -10,7 +10,7 @@ namespace Catel.Windows
 {
     using System.Windows;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
@@ -23,7 +23,7 @@ namespace Catel.Windows
     using VisualStateGroup = System.Object;
 #endif
 
-#if NET
+#if NET || NETCORE
     using System.Windows.Documents;
 #endif
 
@@ -39,12 +39,12 @@ namespace Catel.Windows
         /// <param name="frameworkElement">The framework element.</param>
         public static void HideValidationAdorner(this FrameworkElement frameworkElement)
         {
-            if (frameworkElement == null)
+            if (frameworkElement is null)
             {
                 return;
             }
 
-#if NET
+#if NET || NETCORE
             frameworkElement.ApplyTemplate();
 
             var adornerLayer = AdornerLayer.GetAdornerLayer(frameworkElement);

@@ -18,7 +18,7 @@ namespace Catel.Windows.Data
 
     using Reflection;
 
-#if NETFX_CORE
+#if UWP
     using global::Windows.UI.Xaml;
 #else
     using System.Windows;
@@ -221,7 +221,7 @@ namespace Catel.Windows.Data
                     }
                     else if (propertyInfo != null)
                     {
-#if NETFX_CORE
+#if UWP
                         var propertyValue = propertyInfo.GetValue(null);
                         dependencyProperty = propertyValue as DependencyProperty;
 #else
@@ -234,7 +234,7 @@ namespace Catel.Windows.Data
                         continue;
                     }
 
-                    if (dependencyProperty == null)
+                    if (dependencyProperty is null)
                     {
                         continue;
                     }

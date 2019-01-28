@@ -81,7 +81,7 @@ namespace Catel.Services
         {
             Argument.IsNotNull("viewModelType", viewModelType);
 
-            if (viewModelType.GetInterfaceEx(typeof(IViewModel).FullName, false) == null)
+            if (viewModelType.GetInterfaceEx(typeof(IViewModel).FullName, false) is null)
             {
                 throw new ArgumentException("The argument must implement IViewModel interface", "viewModelType");
             }
@@ -158,7 +158,7 @@ namespace Catel.Services
             return viewModelFactory;
         }
 
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// Creates a window in non-modal state. If a window with the specified viewModelType exists, the window is activated instead of being created.
         /// </summary>
@@ -180,7 +180,7 @@ namespace Catel.Services
 
             var viewModelManager = dependencyResolver.Resolve<IViewModelManager>();
             var viewModel = viewModelManager.GetFirstOrDefaultInstance(typeof(TViewModel));
-            if (viewModel == null)
+            if (viewModel is null)
             {
                 var viewModelFactory = GetViewModelFactory(uiVisualizerService);
                 var vm = viewModelFactory.CreateViewModel(typeof(TViewModel), model, scope);
@@ -192,7 +192,7 @@ namespace Catel.Services
             var viewManager = dependencyResolver.Resolve<IViewManager>();
             var view = viewManager.GetFirstOrDefaultInstance(viewType);
             var window = view as System.Windows.Window;
-            if (view == null || window == null)
+            if (view is null || window is null)
             {
                 return uiVisualizerService.ShowAsync(viewModel, completedProc);
             }
@@ -209,7 +209,7 @@ namespace Catel.Services
         public static bool? ActivateWindow(Window window)
         {
             var activateMethodInfo = window.GetType().GetMethodEx("Activate");
-            if (activateMethodInfo == null)
+            if (activateMethodInfo is null)
             {
                 throw Log.ErrorAndCreateException<NotSupportedException>("Method 'Activate' not found on '{0}', cannot activate the window", window.GetType().Name);
             }

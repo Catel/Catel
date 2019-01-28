@@ -85,7 +85,7 @@ namespace Catel.Data
 #endif
 
             object realDefaultValue = createDefaultValue;
-            if (createDefaultValue == null)
+            if (createDefaultValue is null)
             {
                 realDefaultValue = default(TValue);
             }
@@ -207,14 +207,14 @@ namespace Catel.Data
             Argument.IsNotNullOrWhitespace("name", name);
             Argument.IsNotNull("type", type);
 
-            if (createDefaultValue == null)
+            if (createDefaultValue is null)
             {
                 createDefaultValue = () => type.IsValueTypeEx() ? Activator.CreateInstance(type) : null;
             }
 
             var isSerializable = true;
 
-#if NET || NETSTANDARD
+#if NET || NETCORE || NETSTANDARD
             isSerializable = type.IsInterfaceEx() || type.IsSerializableEx();
 #endif
 
@@ -274,7 +274,7 @@ namespace Catel.Data
             var type = GetType();
 
             var reflectedProperty = type.GetPropertyEx(property.Name, BindingFlags.FlattenHierarchy | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            if (reflectedProperty == null)
+            if (reflectedProperty is null)
             {
                 Log.Warning("Property '{0}' is registered after construction of type '{1}', but could not be found using reflection", property.Name, type.FullName);
             }
@@ -320,7 +320,7 @@ namespace Catel.Data
             bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool lateRegistration, bool isCalculatedProperty)
         {
             var objectType = GetType();
-            if ((defaultValue == null) && !type.IsNullableType())
+            if ((defaultValue is null) && !type.IsNullableType())
             {
                 throw Log.ErrorAndCreateException(msg => new PropertyNotNullableException(name, objectType),
                     "Property '{0}' is not nullable, please provide a valid (not null) default value", name);

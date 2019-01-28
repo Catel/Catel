@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Services
 {
@@ -15,7 +15,8 @@ namespace Catel.Services
     using Catel.Windows.Controls;
     using Collections;
     using Reflection;
-#if NETFX_CORE
+
+#if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Controls.Primitives;
@@ -24,7 +25,6 @@ namespace Catel.Services
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Data;
-
 #endif
 
     /// <summary>
@@ -41,7 +41,7 @@ namespace Catel.Services
         /// </returns>
         public bool CanBeWrapped(FrameworkElement frameworkElement)
         {
-            if (frameworkElement == null)
+            if (frameworkElement is null)
             {
                 return false;
             }
@@ -101,7 +101,7 @@ namespace Catel.Services
             {
                 if (frameworkElement.Name.StartsWith(WrapControlServiceControlNames.MainContentHolderName))
                 {
-                    return (Grid) frameworkElement;
+                    return (Grid)frameworkElement;
                 }
             }
 
@@ -113,8 +113,10 @@ namespace Catel.Services
             var mainContent = frameworkElement;
 
             // Create the outside grid, so the inner grid is never the same as the main content holder
-            var outsideGrid = new Grid();
-            outsideGrid.Name = WrapControlServiceControlNames.MainContentHolderName.GetUniqueControlName();
+            var outsideGrid = new Grid
+            {
+                Name = WrapControlServiceControlNames.MainContentHolderName.GetUniqueControlName()
+            };
 
             if (Application.Current != null)
             {
@@ -126,13 +128,12 @@ namespace Catel.Services
             if (buttons.Length > 0)
             {
                 // Add wrappanel containing the buttons
-                var buttonsWrapPanel = new WrapPanel();
-                buttonsWrapPanel.Name = WrapControlServiceControlNames.ButtonsWrapPanelName;
-#if SILVERLIGHT
-                buttonsWrapPanel.Style = Application.Current.Resources["DataWindowButtonContainerStyle"] as Style;
-#else
+                var buttonsWrapPanel = new WrapPanel
+                {
+                    Name = WrapControlServiceControlNames.ButtonsWrapPanelName
+                };
+
                 buttonsWrapPanel.SetResourceReference(FrameworkElement.StyleProperty, "DataWindowButtonContainerStyle");
-#endif
 
                 foreach (var dataWindowButton in buttons)
                 {
@@ -148,7 +149,7 @@ namespace Catel.Services
 
                     if (dataWindowButton.ContentBindingPath != null)
                     {
-                        Binding contentBinding = new Binding(dataWindowButton.ContentBindingPath);
+                        var contentBinding = new Binding(dataWindowButton.ContentBindingPath);
                         if (dataWindowButton.ContentValueConverter != null)
                         {
                             contentBinding.Converter = dataWindowButton.ContentValueConverter;
@@ -162,14 +163,14 @@ namespace Catel.Services
 
                     if (dataWindowButton.VisibilityBindingPath != null)
                     {
-                        Binding visibilityBinding = new Binding(dataWindowButton.VisibilityBindingPath);
+                        var visibilityBinding = new Binding(dataWindowButton.VisibilityBindingPath);
                         if (dataWindowButton.VisibilityValueConverter != null)
                         {
                             visibilityBinding.Converter = dataWindowButton.VisibilityValueConverter;
                         }
                         button.SetBinding(ButtonBase.VisibilityProperty, visibilityBinding);
                     }
-#if NET
+#if NET || NETCORE
                     button.SetResourceReference(FrameworkElement.StyleProperty, "DataWindowButtonStyle");
                     button.IsDefault = dataWindowButton.IsDefault;
                     button.IsCancel = dataWindowButton.IsCancel;
@@ -190,8 +191,10 @@ namespace Catel.Services
                 }
 
                 // Create dockpanel that will dock the buttons underneath the content
-                var subDockPanel = new DockPanel();
-                subDockPanel.LastChildFill = true;
+                var subDockPanel = new DockPanel
+                {
+                    LastChildFill = true
+                };
                 DockPanel.SetDock(buttonsWrapPanel, Dock.Bottom);
                 subDockPanel.Children.Add(buttonsWrapPanel);
 
@@ -206,8 +209,10 @@ namespace Catel.Services
 
             #region Generate internal grid
             // Create grid
-            var internalGrid = new Grid();
-            internalGrid.Name = WrapControlServiceControlNames.InternalGridName;
+            var internalGrid = new Grid
+            {
+                Name = WrapControlServiceControlNames.InternalGridName
+            };
             internalGrid.Children.Add(mainContent);
 
             // Grid is now the main content
@@ -218,8 +223,10 @@ namespace Catel.Services
             if (Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.GenerateWarningAndErrorValidatorForDataContext))
             {
                 // Create warning and error validator
-                var warningAndErrorValidator = new WarningAndErrorValidator();
-                warningAndErrorValidator.Name = WrapControlServiceControlNames.WarningAndErrorValidatorName;
+                var warningAndErrorValidator = new WarningAndErrorValidator
+                {
+                    Name = WrapControlServiceControlNames.WarningAndErrorValidatorName
+                };
                 warningAndErrorValidator.SetBinding(WarningAndErrorValidator.SourceProperty, new Binding());
 
                 // Add to grid
@@ -233,9 +240,11 @@ namespace Catel.Services
                 Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.GenerateOverlayInfoBarMessageControl))
             {
                 // Create info bar message control
-                var infoBarMessageControl = new InfoBarMessageControl();
-                infoBarMessageControl.Name = WrapControlServiceControlNames.InfoBarMessageControlName;
-                infoBarMessageControl.Content = mainContent;
+                var infoBarMessageControl = new InfoBarMessageControl
+                {
+                    Name = WrapControlServiceControlNames.InfoBarMessageControlName,
+                    Content = mainContent
+                };
 
                 if (Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.GenerateOverlayInfoBarMessageControl))
                 {

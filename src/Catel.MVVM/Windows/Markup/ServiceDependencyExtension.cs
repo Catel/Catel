@@ -4,14 +4,14 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET
+#if NET || NETCORE
 
 namespace Catel.Windows.Markup
 {
     using System;
     using IoC;
 
-#if !NETFX_CORE
+#if !UWP
     using System.Windows.Markup;
 #endif
 
@@ -43,7 +43,7 @@ namespace Catel.Windows.Markup
         /// Gets or sets the type.
         /// </summary>
         /// <value>The type.</value>
-#if NET
+#if NET || NETCORE
         [ConstructorArgument("type")]
 #endif
         public Type Type { get; set; }

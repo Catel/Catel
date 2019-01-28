@@ -16,7 +16,7 @@ namespace Catel.MVVM.Converters
     /// Converts a view model to a view. This converter is very useful to dynamically load 
     /// view content.
     /// </summary>
-#if NET
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(object), typeof(object))]
 #endif
     public class ViewModelToViewConverter : ValueConverterBase
@@ -42,7 +42,7 @@ namespace Catel.MVVM.Converters
         /// <returns>The value to be passed to the target dependency property.</returns>
         protected override object Convert(object value, Type targetType, object parameter)
         {
-            if (CatelEnvironment.IsInDesignMode || (value == null))
+            if (CatelEnvironment.IsInDesignMode || (value is null))
             {
                 return ConverterHelper.UnsetValue;
             }

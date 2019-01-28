@@ -9,13 +9,13 @@ namespace Catel.MVVM.Converters
     using System;
 
     /// <summary>
-	/// Converts a selected value to either true of false.
-	/// </summary>
-	/// <remarks>
-	/// This converter is very usefull when a mutual exclusive selection must be made
-	/// Original code found at http://geekswithblogs.net/claraoscura/archive/2008/10/17/125901.aspx
-	/// </remarks>
-#if NET
+    /// Converts a selected value to either true of false.
+    /// </summary>
+    /// <remarks>
+    /// This converter is very usefull when a mutual exclusive selection must be made
+    /// Original code found at http://geekswithblogs.net/claraoscura/archive/2008/10/17/125901.aspx
+    /// </remarks>
+#if NET || NETCORE
     [System.Windows.Data.ValueConversion(typeof(bool?), typeof(bool))]
 #endif
     public class IsSelectedConverter : ValueConverterBase
@@ -35,7 +35,7 @@ namespace Catel.MVVM.Converters
                 bool.TryParse((string)parameter, out param);
             }
 
-            return (value == null) ? false : !((bool)value ^ param);
+            return (value is null) ? false : !((bool)value ^ param);
         }
 
         /// <summary>

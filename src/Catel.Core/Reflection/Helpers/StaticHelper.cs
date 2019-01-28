@@ -27,7 +27,7 @@ namespace Catel.Reflection
 #endif
         public static Type GetCallingType()
         {
-#if NET
+#if NET || NETCORE
             var frame = new StackFrame(2, false);
             var type = frame.GetMethod().DeclaringType;
 #elif NETFX_CORE

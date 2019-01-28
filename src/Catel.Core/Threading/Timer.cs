@@ -275,7 +275,7 @@ namespace Catel.Threading
         {
             lock (_lock)
             {
-                if (_cancellationTokenSource == null)
+                if (_cancellationTokenSource is null)
                 {
                     _cancellationTokenSource = new CancellationTokenSource();
                 }

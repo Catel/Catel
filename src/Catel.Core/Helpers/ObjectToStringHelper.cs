@@ -53,7 +53,7 @@ namespace Catel
         /// <returns>A <see cref="string" /> that represents the instance.</returns>
         public static string ToString(object instance, CultureInfo cultureInfo)
         {
-            if (instance == null)
+            if (instance is null)
             {
                 return "null";
             }
@@ -96,7 +96,7 @@ namespace Catel
         /// <returns>A <see cref="string"/> that represents the type of the instance.</returns>
         public static string ToTypeString(object instance)
         {
-            if (instance == null)
+            if (instance is null)
             {
                 return "null";
             }
@@ -120,13 +120,13 @@ namespace Catel
         /// <returns>A <see cref="string"/> that represents the type of the instance.</returns>
         public static string ToFullTypeString(object instance)
         {
-            if (instance == null)
+            if (instance is null)
             {
                 return "null";
             }
 
             var type = instance as Type;
-            if (type == null)
+            if (type is null)
             {
                 type = instance.GetType();
             }

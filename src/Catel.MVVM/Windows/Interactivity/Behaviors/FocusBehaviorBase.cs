@@ -31,7 +31,7 @@ namespace Catel.Windows.Interactivity
     /// <summary>
     /// Base class for focus behaviors.
     /// </summary>
-#if NET
+#if NET || NETCORE
     public class FocusBehaviorBase : BehaviorBase<FrameworkElement>
 #else
     public class FocusBehaviorBase : BehaviorBase<Control>
@@ -49,7 +49,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         public FocusBehaviorBase()
         {
-#if NET
+#if NET || NETCORE
             FocusDelay = 0;
 #else
             FocusDelay = 500;
@@ -125,7 +125,7 @@ namespace Catel.Windows.Interactivity
             _timer.Stop();
             _timer.Tick -= OnTimerTick;
 
-#if NET
+#if NET || NETCORE
             SetFocus();
 #else
             AssociatedObject.Dispatcher.BeginInvoke(() => SetFocus());

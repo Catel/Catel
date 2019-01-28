@@ -28,7 +28,7 @@ namespace Catel.Windows
         /// </summary>
         public static void EnsurePackUriIsAllowed()
         {
-#if !NETFX_CORE
+#if !UWP
             if (!UriParser.IsKnownScheme("pack"))
             {
                 Log.Debug("Pack uri is not yet allowed, adding it as known scheme");
@@ -67,14 +67,14 @@ namespace Catel.Windows
             if (string.IsNullOrEmpty(shortAssemblyName))
             {
                 // Current app resource
-#if NET
+#if NET || NETCORE
                 return string.Format("pack://application:,,,/{0}", resourceUri);
 #else
                 return string.Format("/{0}", resourceUri);
 #endif
             }
 
-#if NET
+#if NET || NETCORE
             return string.Format("pack://application:,,,/{0};component/{1}", shortAssemblyName, resourceUri);
 #else
             return string.Format("/{0};component/{1}", shortAssemblyName, resourceUri);
@@ -112,7 +112,7 @@ namespace Catel.Windows
         {
             Argument.IsNotNull("uri", uri);
 
-#if NETFX_CORE
+#if UWP
             return false;
 #else
             try

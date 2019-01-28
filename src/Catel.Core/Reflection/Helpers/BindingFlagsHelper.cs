@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="BindingFlagsHelper.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -14,7 +14,7 @@ namespace Catel.Reflection
     /// </summary>
     public static class BindingFlagsHelper
     {
-#if NET
+#if NET || NETCORE
         /// <summary>
         /// The default binding flags.
         /// </summary>

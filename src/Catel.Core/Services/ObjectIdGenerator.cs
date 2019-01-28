@@ -48,7 +48,7 @@ namespace Catel.Services
         {
             lock (_syncObj)
             {
-                if (_releasedUniqueIdentifiers == null)
+                if (_releasedUniqueIdentifiers is null)
                 {
                     _releasedUniqueIdentifiers = new Queue<TUniqueIdentifier>();
                 }

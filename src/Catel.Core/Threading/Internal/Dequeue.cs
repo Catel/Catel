@@ -667,7 +667,7 @@ namespace Catel.Threading
         /// </exception>
         void ICollection<T>.CopyTo(T[] array, int arrayIndex)
         {
-            if (array == null)
+            if (array is null)
             {
                 throw new ArgumentNullException("array", "Array is null");
             }
@@ -775,7 +775,7 @@ namespace Catel.Threading
 
         void System.Collections.ICollection.CopyTo(Array array, int index)
         {
-            if (array == null)
+            if (array is null)
             {
                 throw new ArgumentNullException("array", "Destination array cannot be null.");
             }
