@@ -225,7 +225,7 @@ namespace Catel.Windows
                 if (!string.Equals(e.PropertyName, "ActualWidth", StringComparison.InvariantCulture) &&
                     !string.Equals(e.PropertyName, "ActualHeight", StringComparison.InvariantCulture))
                 {
-                    PropertyChanged.SafeInvoke(this, e);
+                    PropertyChanged?.Invoke(this, e);
                 }
             };
 
@@ -236,19 +236,19 @@ namespace Catel.Windows
             {
                 OnViewModelPropertyChanged(sender, e);
 
-                ViewModelPropertyChanged.SafeInvoke(this, e);
+                ViewModelPropertyChanged?.Invoke(this, e);
             };
 
             Loaded += (sender, e) =>
             {
-                _viewLoaded.SafeInvoke(this);
+                _viewLoaded?.Invoke(this, EventArgs.Empty);
 
                 OnLoaded(e);
             };
 
             Unloaded += (sender, e) =>
             {
-                _viewUnloaded.SafeInvoke(this);
+                _viewUnloaded?.Invoke(this, EventArgs.Empty);
 
                 OnUnloaded(e);
             };
@@ -267,7 +267,7 @@ namespace Catel.Windows
             CanCloseUsingEscape = true;
 
             Loaded += (sender, e) => Initialize();
-            DataContextChanged += (sender, e) => _viewDataContextChanged.SafeInvoke(this, () => new DataContextChangedEventArgs(e.OldValue, e.NewValue));
+            DataContextChanged += (sender, e) => _viewDataContextChanged?.Invoke(this, new DataContextChangedEventArgs(e.OldValue, e.NewValue));
 
             // #1150 Subscribe in dispatcher to allow derived types to be the first handler
             Dispatcher.BeginInvoke(() =>
@@ -624,8 +624,8 @@ namespace Catel.Windows
         {
             OnViewModelChanged();
 
-            ViewModelChanged.SafeInvoke(this);
-            PropertyChanged.SafeInvoke(this, () => new PropertyChangedEventArgs("ViewModel"));
+            ViewModelChanged?.Invoke(this, EventArgs.Empty);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewModel)));
         }
 
         /// <summary>
@@ -723,7 +723,7 @@ namespace Catel.Windows
         private void OnButtonReceivedFocus(object sender, EventArgs e)
         {
             var buttonBase = sender as ButtonBase;
-            if (buttonBase == null)
+            if (buttonBase is null)
             {
                 return;
             }
@@ -922,7 +922,7 @@ namespace Catel.Windows
             _logic.ValidateViewModel();
 
             var vm = _logic.ViewModel;
-            if (vm == null)
+            if (vm is null)
             {
                 return true;
             }

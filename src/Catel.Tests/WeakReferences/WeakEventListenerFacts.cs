@@ -132,27 +132,27 @@ namespace Catel.Tests
             #region Methods
             public static void RaiseStaticEvent()
             {
-                StaticEvent.SafeInvoke(null, () => new ViewModelClosedEventArgs(new TestViewModel(), true));
+                StaticEvent?.Invoke(null, new ViewModelClosedEventArgs(new TestViewModel(), true));
             }
 
             public void RaisePublicEvent()
             {
-                PublicEvent.SafeInvoke(this, () => new ViewModelClosedEventArgs(new TestViewModel(), true));
+                PublicEvent?.Invoke(this, new ViewModelClosedEventArgs(new TestViewModel(), true));
             }
 
             public void RaisePrivateEvent()
             {
-                PrivateEvent.SafeInvoke(this, EventArgs.Empty);
+                PrivateEvent?.Invoke(this, EventArgs.Empty);
             }
 
             public void RaisePropertyChangedEvent()
             {
-                PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs(string.Empty));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
             }
 
             public void RaiseCollectionChangedEvent()
             {
-                CollectionChanged.SafeInvoke(this, () => new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             }
             #endregion
 

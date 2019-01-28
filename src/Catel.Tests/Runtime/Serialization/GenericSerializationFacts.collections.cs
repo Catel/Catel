@@ -155,7 +155,7 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     Contract.Ensures(Contract.Result<IEnumerable<Type>>() != null);
 
-                    if (countryTypes == null)
+                    if (countryTypes is null)
                     {
                         countryTypes = AppDomain.CurrentDomain.GetLoadedAssemblies(true)
                                 .SelectMany(a => a.GetTypes())
@@ -186,7 +186,7 @@ namespace Catel.Tests.Runtime.Serialization
                 public static Type[] GetKnownTypes()
                 {
                     var assembly = AppDomain.CurrentDomain.GetLoadedAssemblies(false).FirstOrDefault(a => a.FullName.StartsWith("DynamicClasses", StringComparison.Ordinal));
-                    var types = new List<Type>(assembly == null ? ArrayShim.Empty<Type>() : assembly.GetTypes().Where(t => t.Name.StartsWith("DynamicClass", StringComparison.Ordinal)).ToArray());
+                    var types = new List<Type>(assembly is null ? ArrayShim.Empty<Type>() : assembly.GetTypes().Where(t => t.Name.StartsWith("DynamicClass", StringComparison.Ordinal)).ToArray());
 
                     return types.ToArray();
                 }
@@ -491,7 +491,7 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     Contract.Requires(e != null);
 
-                    this.CollectionChanged.SafeInvoke(this, e);
+                    this.CollectionChanged?.Invoke(this, e);
                 }
 
                 protected override void OnPropertyObjectCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

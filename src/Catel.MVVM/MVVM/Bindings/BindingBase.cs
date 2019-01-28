@@ -43,7 +43,7 @@ namespace Catel.MVVM
         /// <returns>The string representation of this object.</returns>
         public override string ToString()
         {
-            if (_toStringValue == null)
+            if (_toStringValue is null)
             {
                 _toStringValue = DetermineToString();
             }

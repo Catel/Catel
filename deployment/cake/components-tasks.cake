@@ -329,7 +329,7 @@ private void PackageComponents()
         LogSeparator();
     }
 
-    var codeSign = (!IsCiBuild && !string.IsNullOrWhiteSpace(CodeSignCertificateSubjectName));
+    var codeSign = (!IsCiBuild && !IsLocalBuild && !string.IsNullOrWhiteSpace(CodeSignCertificateSubjectName));
     if (codeSign)
     {
         // For details, see https://docs.microsoft.com/en-us/nuget/create-packages/sign-a-package

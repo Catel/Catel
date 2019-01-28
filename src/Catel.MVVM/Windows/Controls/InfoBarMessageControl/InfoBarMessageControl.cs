@@ -248,7 +248,7 @@ namespace Catel.Windows.Controls
             base.OnApplyTemplate();
 
 #if NET || NETCORE
-            if (GetTemplateChild(ElementMessageBar) == null)
+            if (GetTemplateChild(ElementMessageBar) is null)
             {
                 throw new NotSupportedException(string.Format(Exceptions.ControlTemplateMustContainPart, ElementMessageBar));
             }
@@ -492,7 +492,7 @@ namespace Catel.Windows.Controls
         /// <param name="type">The validation type.</param>
         private void ProcessValidationMessage(object bindingObject, string message, ValidationEventAction action, ValidationType type)
         {
-            if ((action != ValidationEventAction.ClearAll) && (bindingObject == null))
+            if ((action != ValidationEventAction.ClearAll) && (bindingObject is null))
             {
                 Log.Warning("Null-values are not allowed when not using ValidationEventAction.ClearAll");
                 return;

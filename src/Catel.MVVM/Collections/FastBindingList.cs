@@ -363,7 +363,7 @@ namespace Catel.Collections
         /// <returns>IDisposable.</returns>
         public IDisposable SuspendChangeNotifications(SuspensionMode mode)
         {
-            if (_suspensionContext == null)
+            if (_suspensionContext is null)
             {
                 // Create new context
                 _suspensionContext = new ExtendedSuspensionContext<T>(mode);
@@ -491,7 +491,7 @@ namespace Catel.Collections
             _sortDirection = direction;
 
             var list = Items as List<T>;
-            if (list == null)
+            if (list is null)
             {
                 return;
             }
@@ -502,15 +502,15 @@ namespace Catel.Collections
 
                 var lhsValue = lhs == null ? null : _sortProperty.GetValue(lhs);
                 var rhsValue = rhs == null ? null : _sortProperty.GetValue(rhs);
-                if (lhsValue == null && rhsValue == null) // both values are null, both equal
+                if (lhsValue is null && rhsValue is null) // both values are null, both equal
                 {
                     result = 0;
                 }
-                else if (lhsValue == null) // lhs value is null, rhs not, rhs value is greater
+                else if (lhsValue is null) // lhs value is null, rhs not, rhs value is greater
                 {
                     result = - 1;
                 }
-                else if (rhsValue == null) // rhs value is null, lhs not, lhs value is greater
+                else if (rhsValue is null) // rhs value is null, lhs not, lhs value is greater
                 {
                     result = 1;
                 }
@@ -572,13 +572,13 @@ namespace Catel.Collections
         /// <param name="key">The value of property to match.</param>
         protected override int FindCore(PropertyDescriptor prop, object key)
         {
-            if (prop == null)
+            if (prop is null)
             {
                 return -1;
             }
 
             var list = Items as List<T>;
-            if (list == null)
+            if (list is null)
             {
                 return -1;
             }
@@ -621,7 +621,7 @@ namespace Catel.Collections
 
                 base.InsertItem(index, item);
 
-                if (suspensionContext == null)
+                if (suspensionContext is null)
                 {
                     OnListChanged(new NotifyListChangedEventArgs(ListChangedType.ItemAdded, index, item));
                 }

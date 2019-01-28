@@ -141,7 +141,7 @@ namespace Catel.MVVM.Converters
                 if (converterIndex < Converters.Count - 1)
                 {
                     nextConverter = Converters[converterIndex + 1];
-                    if (nextConverter == null)
+                    if (nextConverter is null)
                     {
                         throw Log.ErrorAndCreateException<InvalidOperationException>("The Converters collection of the ValueConverterGroup contains a null reference at index: " + (converterIndex + 1));
                     }
@@ -152,7 +152,7 @@ namespace Catel.MVVM.Converters
                 if (converterIndex > 0)
                 {
                     nextConverter = Converters[converterIndex - 1];
-                    if (nextConverter == null)
+                    if (nextConverter is null)
                     {
                         throw Log.ErrorAndCreateException<InvalidOperationException>("The Converters collection of the ValueConverterGroup contains a null reference at index: " + (converterIndex - 1));
                     }

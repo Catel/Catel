@@ -207,7 +207,7 @@ namespace Catel.MVVM.Views
         /// <param name="viewModel">The view model.</param>
         private void UninitializeViewModel(IViewModel viewModel)
         {
-            if (viewModel == null)
+            if (viewModel is null)
             {
                 return;
             }
@@ -308,7 +308,7 @@ namespace Catel.MVVM.Views
             Argument.IsNotNullOrWhitespace("viewPropertyName", viewPropertyName);
             Argument.IsNotNullOrWhitespace("viewModelPropertyName", viewModelPropertyName);
 
-            if (viewModel == null)
+            if (viewModel is null)
             {
                 Log.Warning("Cannot transfer value from view to view model because view model is null");
                 return;
@@ -348,7 +348,7 @@ namespace Catel.MVVM.Views
             Argument.IsNotNullOrWhitespace("viewPropertyName", viewPropertyName);
             Argument.IsNotNullOrWhitespace("viewModelPropertyName", viewModelPropertyName);
 
-            if (viewModel == null)
+            if (viewModel is null)
             {
                 Log.Warning("Cannot transfer value from view model to view because view model is null");
                 return;

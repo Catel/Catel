@@ -121,7 +121,7 @@ namespace Catel.Data
         /// <returns><c>true</c> if it is useful to create a <see cref="ChangeNotificationWrapper"/>; otherwise, <c>false</c>.</returns>
         public static bool IsUsefulForObject(object obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return false;
             }
@@ -149,7 +149,7 @@ namespace Catel.Data
         /// </remarks>
         public void OnObjectPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            PropertyChanged.SafeInvoke(sender, e);
+            PropertyChanged?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace Catel.Data
                 }
             }
 
-            CollectionChanged.SafeInvoke(sender, e);
+            CollectionChanged?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace Catel.Data
         /// </remarks>
         public void OnObjectCollectionItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            CollectionItemPropertyChanged.SafeInvoke(sender, e);
+            CollectionItemPropertyChanged?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace Catel.Data
         /// </summary>
         public void UpdateCollectionSubscriptions(ICollection collection)
         {
-            if (collection == null)
+            if (collection is null)
             {
                 return;
             }
@@ -258,6 +258,7 @@ namespace Catel.Data
                 if (_collectionItems.TryGetValue(collection, out var collectionItems))
                 {
                     var oldItems = collectionItems.ToArray();
+
                     foreach (var item in oldItems)
                     {
                         if (item.IsAlive)
@@ -271,6 +272,7 @@ namespace Catel.Data
                 }
 
                 var newItems = collection.Cast<object>().ToArray();
+
                 foreach (var item in newItems)
                 {
                     SubscribeNotifyChangedEvents(item, collection);
@@ -286,7 +288,7 @@ namespace Catel.Data
         /// <remarks>No need to check for weak events, they are unsubscribed automatically.</remarks>
         public void UnsubscribeNotifyChangedEvents(object value, ICollection parentCollection)
         {
-            if (value == null)
+            if (value is null)
             {
                 return;
             }
@@ -319,7 +321,7 @@ namespace Catel.Data
         /// <param name="parentCollection">If not <c>null</c>, this is a collection item which should use <see cref="OnObjectCollectionItemPropertyChanged"/>.</param>
         public void SubscribeNotifyChangedEvents(object value, ICollection parentCollection)
         {
-            if (value == null)
+            if (value is null)
             {
                 return;
             }
@@ -359,7 +361,7 @@ namespace Catel.Data
 
         private void SubscribeNotifyChangedEvent(object value, EventChangeType eventChangeType, ICollection parentCollection)
         {
-            if (value == null)
+            if (value is null)
             {
                 return;
             }
@@ -372,12 +374,12 @@ namespace Catel.Data
                 switch (eventChangeType)
                 {
                     case EventChangeType.Property:
-                        if (_weakPropertyChangedListenersTable == null)
+                        if (_weakPropertyChangedListenersTable is null)
                         {
                             _weakPropertyChangedListenersTable = new ConditionalWeakTable<object, IWeakEventListener>();
                         }
 
-                        if (_weakPropertyChangedListeners == null)
+                        if (_weakPropertyChangedListeners is null)
                         {
                             _weakPropertyChangedListeners = new List<IWeakEventListener>();
                         }
@@ -387,17 +389,17 @@ namespace Catel.Data
                         break;
 
                     case EventChangeType.Collection:
-                        if (_weakCollectionChangedListenersTable == null)
+                        if (_weakCollectionChangedListenersTable is null)
                         {
                             _weakCollectionChangedListenersTable = new ConditionalWeakTable<object, IWeakEventListener>();
                         }
 
-                        if (_weakCollectionChangedListeners == null)
+                        if (_weakCollectionChangedListeners is null)
                         {
                             _weakCollectionChangedListeners = new List<IWeakEventListener>();
                         }
 
-                        if (_collectionItems == null)
+                        if (_collectionItems is null)
                         {
                             _collectionItems = new ConditionalWeakTable<object, List<WeakReference>>();
                         }
@@ -425,7 +427,7 @@ namespace Catel.Data
                         if (parentCollection != null)
                         {
                             weakListener = this.SubscribeToWeakPropertyChangedEvent(value, OnObjectCollectionItemPropertyChanged, false);
-                            if (weakListener == null)
+                            if (weakListener is null)
                             {
                                 Log.Debug("Failed to use weak events to subscribe to 'value.PropertyChanged', going to subscribe without weak events");
 
@@ -438,7 +440,7 @@ namespace Catel.Data
                         else
                         {
                             weakListener = this.SubscribeToWeakPropertyChangedEvent(value, OnObjectPropertyChanged, false);
-                            if (weakListener == null)
+                            if (weakListener is null)
                             {
                                 Log.Debug("Failed to use weak events to subscribe to 'value.PropertyChanged', going to subscribe without weak events");
 
@@ -449,7 +451,7 @@ namespace Catel.Data
 
                     case EventChangeType.Collection:
                         weakListener = this.SubscribeToWeakCollectionChangedEvent(value, OnObjectCollectionChanged, false);
-                        if (weakListener == null)
+                        if (weakListener is null)
                         {
                             Log.Debug("Failed to use weak events to subscribe to 'value.CollectionChanged', going to subscribe without weak events");
 
@@ -475,7 +477,7 @@ namespace Catel.Data
 
         private void UnsubscribeNotifyChangedEvent(object value, EventChangeType eventChangeType, ICollection parentCollection)
         {
-            if (value == null)
+            if (value is null)
             {
                 return;
             }

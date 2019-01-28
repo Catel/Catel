@@ -74,7 +74,7 @@ namespace Catel.Windows.Interactivity
             var p = e.GetPosition(itemsControl);
 
             _myData = UIHelpers.GetItemFromPointInItemsControl(itemsControl, p);
-            if (_myData == null)
+            if (_myData is null)
             {
                 return;
             }
@@ -248,7 +248,7 @@ namespace Catel.Windows.Interactivity
         /// <param name="insertIndex">Index <paramref name="item"/> should be inserted at.</param>
         protected virtual void AddItem(ItemsControl itemsControl, object item, int insertIndex)
         {
-            if (itemsControl == null)
+            if (itemsControl is null)
             {
                 return;
             }
@@ -271,12 +271,12 @@ namespace Catel.Windows.Interactivity
         /// <param name="itemToRemove">The item to remove.</param>
         protected virtual void RemoveItem(ItemsControl itemsControl, object itemToRemove)
         {
-            if (itemsControl == null)
+            if (itemsControl is null)
             {
                 return;
             }
 
-            if (itemToRemove == null)
+            if (itemToRemove is null)
             {
                 return;
             }
@@ -304,7 +304,7 @@ namespace Catel.Windows.Interactivity
         /// </returns>
         protected virtual bool CanDrag(ItemsControl itemsControl, object item)
         {
-            return (ItemType == null) || ItemType.IsInstanceOfType(item);
+            return (ItemType is null) || ItemType.IsInstanceOfType(item);
         }
 
         /// <summary>
@@ -317,7 +317,7 @@ namespace Catel.Windows.Interactivity
         /// </returns>
         protected virtual bool CanDrop(ItemsControl itemsControl, object item)
         {
-            return (ItemType == null) || ItemType.IsInstanceOfType(item);
+            return (ItemType is null) || ItemType.IsInstanceOfType(item);
         }
         #endregion
 
@@ -385,7 +385,7 @@ namespace Catel.Windows.Interactivity
         private bool IsDropPointBeforeItem(ItemsControl itemsControl, DragEventArgs e)
         {
             var selectedItemContainer = UIHelpers.GetItemContainerFromPointInItemsControl(itemsControl, e.GetPosition(itemsControl)) as FrameworkElement;
-            if (selectedItemContainer == null)
+            if (selectedItemContainer is null)
             {
                 return false;
             }
@@ -409,7 +409,7 @@ namespace Catel.Windows.Interactivity
 
         private void InitializeDragAdorner(UIElement itemsControl, object dragData, Point startPosition)
         {
-            if (DataTemplate == null)
+            if (DataTemplate is null)
             {
                 return;
             }
@@ -419,7 +419,7 @@ namespace Catel.Windows.Interactivity
             }
 
             var adornerLayer = AdornerLayer.GetAdornerLayer(itemsControl);
-            if (adornerLayer == null)
+            if (adornerLayer is null)
             {
                 return;
             }
@@ -444,7 +444,7 @@ namespace Catel.Windows.Interactivity
             }
             var adornerLayer = AdornerLayer.GetAdornerLayer(itemsControl);
             var itemContainer = UIHelpers.GetItemContainerFromPointInItemsControl(itemsControl, e.GetPosition(itemsControl));
-            if (adornerLayer == null || itemContainer == null)
+            if (adornerLayer is null || itemContainer is null)
             {
                 return;
             }
@@ -455,7 +455,7 @@ namespace Catel.Windows.Interactivity
 
         private void UpdateDropAdorner(ItemsControl itemsControl, DragEventArgs e)
         {
-            if (_myDropAdorner == null)
+            if (_myDropAdorner is null)
             {
                 return;
             }
@@ -479,7 +479,7 @@ namespace Catel.Windows.Interactivity
 
         private bool DataIsPresent(DragEventArgs e)
         {
-            if (ItemType == null)
+            if (ItemType is null)
             {
                 return !(e.Data.GetFormats().IsNullOrEmpty());
             }
@@ -512,7 +512,7 @@ namespace Catel.Windows.Interactivity
             }
 
             var data = e.Data.GetData(format);
-            if (data == null)
+            if (data is null)
             {
                 return null;
             }

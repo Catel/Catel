@@ -232,7 +232,7 @@ namespace Catel.MVVM.Navigation
 
             DetermineNavigationContext();
 
-            NavigatedTo.SafeInvoke(this, e);
+            NavigatedTo?.Invoke(this, e);
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace Catel.MVVM.Navigation
 
             Log.Debug("Navigating away from '{0}'", NavigationTargetType);
 
-            NavigatingAway.SafeInvoke(this, e);
+            NavigatingAway?.Invoke(this, e);
 
             if (!e.Cancel && e.NavigationMode == NavigationMode.Back)
             {
@@ -274,7 +274,7 @@ namespace Catel.MVVM.Navigation
 
             Log.Debug("Navigated away from '{0}'", NavigationTargetType);
 
-            NavigatedAway.SafeInvoke(this, e);
+            NavigatedAway?.Invoke(this, e);
         }
         #endregion
     }

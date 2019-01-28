@@ -161,7 +161,7 @@ namespace Catel.Data
                 foreach (var propertyData in catelTypeInfo.GetCatelProperties())
                 {
                     var cachedPropertyInfo = propertyData.Value.GetPropertyInfo(type);
-                    if (cachedPropertyInfo == null)
+                    if (cachedPropertyInfo is null)
                     {
                         // Dynamic property, not mapped (always fixed)
                         continue;

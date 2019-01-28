@@ -43,7 +43,7 @@ namespace Catel.MVVM.Converters
                 return false;
             }
 
-            return (value == null) ? false : (int)value == param;
+            return (value is null) ? false : (int)value == param;
         }
 
         /// <summary>

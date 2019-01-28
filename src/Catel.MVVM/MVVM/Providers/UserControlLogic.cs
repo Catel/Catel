@@ -102,10 +102,8 @@ namespace Catel.MVVM.Providers
 
 #if XAMARIN
             CreateViewModelWrapper(false);
-#else
-            // NOTE: There is NO unsubscription for this subscription.
-            // Hence target control content wrapper grid will be recreated each time content changes.
-            targetView.SubscribeToPropertyChanged("Content", OnTargetControlContentChanged);
+#elif !UWP
+            this.SubscribeToWeakGenericEvent<EventArgs>(targetView, nameof(FrameworkElement.Initialized), OnTargetViewInitialized, false);
 #endif
         }
         #endregion
@@ -274,10 +272,9 @@ namespace Catel.MVVM.Providers
         /// <param name="checkIfWrapped">if set to <c>true</c>, check if the view is already wrapped.</param>
         private void CreateViewModelWrapper(bool checkIfWrapped = true)
         {
-            var dependencyResolver = this.GetDependencyResolver();
-
             var targetView = TargetView;
 
+            var dependencyResolver = this.GetDependencyResolver();
             var viewModelWrapperService = dependencyResolver.Resolve<IViewModelWrapperService>();
             if (checkIfWrapped || !viewModelWrapperService.IsWrapped(targetView))
             {
@@ -290,13 +287,13 @@ namespace Catel.MVVM.Providers
                 }
 #endif
 
-                Action action = () => viewModelWrapperService.Wrap(targetView, this, wrapOptions);
+                void action() => viewModelWrapperService.Wrap(targetView, this, wrapOptions);
 
                 // NOTE: Beginning invoke (running async) because setting of TargetControl Content property causes memory faults
                 // when this method called by TargetControlContentChanged handler. No need to await though.
 #if NETFX_CORE && !UWP
-                var dispatcher = ((FrameworkElement)TargetView).Dispatcher;
 #pragma warning disable 4014
+                var dispatcher = ((FrameworkElement)TargetView).Dispatcher;
                 dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { action(); });
 #pragma warning restore 4014
 #else
@@ -305,13 +302,10 @@ namespace Catel.MVVM.Providers
             }
         }
 
-        /// <summary>
-        /// Called when the content of the target control has changed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
-        private void OnTargetControlContentChanged(object sender, PropertyChangedEventArgs e)
+        private void OnTargetViewInitialized(object sender, EventArgs e)
         {
+            // Note: we can't use Content changed property notification (x:Name is not yet set), but Loaded event is too late,
+            // this event should be in-between: https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/object-lifetime-events
             CreateViewModelWrapper();
         }
 
@@ -350,7 +344,7 @@ namespace Catel.MVVM.Providers
 
                 Log.Debug("Finished searching for an instance of the InfoBarMessageControl");
 
-                if (_infoBarMessageControl == null)
+                if (_infoBarMessageControl is null)
                 {
                     Log.Warning("No InfoBarMessageControl is found in the visual tree of '{0}', consider using the SkipSearchingForInfoBarMessageControl property to improve performance", GetType().Name);
                 }
@@ -367,7 +361,7 @@ namespace Catel.MVVM.Providers
                 Log.Debug("Re-using existing view model");
             }
 
-            if (ViewModel == null)
+            if (ViewModel is null)
             {
                 // Try to create view model based on data context
                 await UpdateDataContextToUseViewModelAsync(TargetView.DataContext);
@@ -451,7 +445,7 @@ namespace Catel.MVVM.Providers
 
             // Fix for CTL-307: DataContextChanged is invoked before Unloaded because Parent is set to null
             var targetControlParent = TargetView.GetParent();
-            if (targetControlParent == null)
+            if (targetControlParent is null)
             {
                 return;
             }
@@ -598,13 +592,13 @@ namespace Catel.MVVM.Providers
         private void RegisterViewModelAsChild()
         {
             var parentViewModel = _parentViewModel as IRelationalViewModel;
-            if (parentViewModel == null)
+            if (parentViewModel is null)
             {
                 return;
             }
 
             var viewModel = ViewModel as IRelationalViewModel;
-            if (viewModel == null)
+            if (viewModel is null)
             {
                 return;
             }
@@ -624,13 +618,13 @@ namespace Catel.MVVM.Providers
         private void UnregisterViewModelAsChild()
         {
             var parentViewModel = _parentViewModel as IRelationalViewModel;
-            if (parentViewModel == null)
+            if (parentViewModel is null)
             {
                 return;
             }
 
             var viewModel = ViewModel as IRelationalViewModel;
-            if (viewModel == null)
+            if (viewModel is null)
             {
                 return;
             }
@@ -668,7 +662,7 @@ namespace Catel.MVVM.Providers
                 if (dataContextAsViewModel != null)
                 {
                     // If the DataContext is a view model, only create a new view model if required
-                    if (currentViewModel == null)
+                    if (currentViewModel is null)
                     {
                         ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(newDataContext);
                     }
@@ -913,7 +907,7 @@ namespace Catel.MVVM.Providers
         /// </remarks>
         private void ClearWarningsAndErrorsForObject(object obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return;
             }

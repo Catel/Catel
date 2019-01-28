@@ -23,7 +23,7 @@ namespace Catel.Windows.Input
         /// <returns><c>true</c> if the specified input gesture is empty; otherwise, <c>false</c>.</returns>
         public static bool IsEmpty(this Catel.Windows.Input.InputGesture inputGesture)
         {
-            if (inputGesture == null)
+            if (inputGesture is null)
             {
                 return true;
             }

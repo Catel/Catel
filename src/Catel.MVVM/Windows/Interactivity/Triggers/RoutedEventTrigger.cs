@@ -32,7 +32,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override void ValidateRequiredProperties()
         {
-            if (RoutedEvent == null)
+            if (RoutedEvent is null)
             {
                 throw new InvalidOperationException("RoutedEvent is a required property");
             }

@@ -108,7 +108,7 @@ namespace Catel.Windows
         /// </returns>
         public static bool CanBeWrapped(FrameworkElement frameworkElement)
         {
-            if (frameworkElement == null)
+            if (frameworkElement is null)
             {
                 return false;
             }

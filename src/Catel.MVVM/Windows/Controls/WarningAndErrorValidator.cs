@@ -315,7 +315,7 @@ namespace Catel.Windows.Controls
         /// <param name="parentEnumerable">The parent enumerable. <c>Null</c> if the object does not belong to an enumerable.</param>
         private void AddObjectToWatchList(object value, IEnumerable parentEnumerable = null)
         {
-            if (value == null)
+            if (value is null)
             {
                 return;
             }
@@ -362,7 +362,7 @@ namespace Catel.Windows.Controls
         /// <param name="value">The object to remove from the watch list.</param>
         private void RemoveObjectFromWatchList(object value)
         {
-            if (value == null)
+            if (value is null)
             {
                 return;
             }
@@ -396,7 +396,7 @@ namespace Catel.Windows.Controls
             ValidationData currentValidationData;
             ValidationData oldValidationData;
 
-            if (value == null)
+            if (value is null)
             {
                 return;
             }
@@ -549,13 +549,13 @@ namespace Catel.Windows.Controls
             }
 
             var iDataWarningInfo = value as IDataWarningInfo;
-            if ((validationType == ValidationType.Warning) && (iDataWarningInfo == null))
+            if ((validationType == ValidationType.Warning) && (iDataWarningInfo is null))
             {
                 return warningsOrErrors;
             }
 
             var iDataErrorInfo = value as IDataErrorInfo;
-            if ((validationType == ValidationType.Error) && (iDataErrorInfo == null))
+            if ((validationType == ValidationType.Error) && (iDataErrorInfo is null))
             {
                 return warningsOrErrors;
             }
@@ -757,7 +757,7 @@ namespace Catel.Windows.Controls
         /// <param name="type">The type.</param>
         private void RaiseBusinessValidationWarningOrError(object value, string message, ValidationEventAction action, ValidationType type)
         {
-            Validation.SafeInvoke(this, () => new ValidationEventArgs(value, message, action, type));
+            Validation?.Invoke(this, new ValidationEventArgs(value, message, action, type));
         }
 
         /// <summary>
@@ -945,7 +945,7 @@ namespace Catel.Windows.Controls
         /// </exception>
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return false;
             }
@@ -1019,7 +1019,7 @@ namespace Catel.Windows.Controls
         /// </exception>
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            if (obj is null)
             {
                 return false;
             }

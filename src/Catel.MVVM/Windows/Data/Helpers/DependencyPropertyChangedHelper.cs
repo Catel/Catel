@@ -174,7 +174,7 @@ namespace Catel.Windows.Data
             //Log.Debug("Subscribing to changed event of '{0}' for framework element '{1}'", frameworkElement.GetType().FullName, propertyName);
 
             var dependencyProperty = GetDependencyProperty<object>(frameworkElement, propertyName);
-            if (frameworkElement.GetValue(dependencyProperty) == null)
+            if (frameworkElement.GetValue(dependencyProperty) is null)
             {
                 var binding = new Binding();
 

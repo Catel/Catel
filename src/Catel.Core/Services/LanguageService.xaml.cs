@@ -78,7 +78,7 @@ namespace Catel.Services
                                         where rm != null
                                         select rm).FirstOrDefault();
 
-                if ((finalResourceMap == null) && !cultureInfo.IsNeutralCulture)
+                if ((finalResourceMap is null) && !cultureInfo.IsNeutralCulture)
                 {
                     cultureName = cultureInfo.Parent.Name;
                     languageSpecificSource = string.Format("{0}.{1}", resourceContainer, cultureName);
@@ -89,7 +89,7 @@ namespace Catel.Services
                                         select rm).FirstOrDefault();
                 }
 
-                if (finalResourceMap == null)
+                if (finalResourceMap is null)
                 {
                     finalResourceMap = (from resourceMap in currentResourceManager.AllResourceMaps
                                         let rm = resourceMap.Value.GetSubtree(neutralSource)
@@ -140,7 +140,7 @@ namespace Catel.Services
                     loadedAssemblies.Reverse();
 
                     var assembly = loadedAssemblies.FirstOrDefault(x => x.FullName.StartsWith(containingAssemblyName));
-                    if (assembly == null)
+                    if (assembly is null)
                     {
                         return null;
                     }

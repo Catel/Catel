@@ -91,7 +91,7 @@ namespace Catel.Windows.Markup
         /// <returns>The object value to set on the property where the extension is applied.</returns>
         protected override object ProvideDynamicValue(IServiceProvider serviceProvider)
         {
-            if (_languageService == null)
+            if (_languageService is null)
             {
                 if (ShowDesignTimeMessages())
                 {
@@ -159,7 +159,7 @@ namespace Catel.Windows.Markup
                 }
             }
 
-            if (_onLanguageUpdatedWeakListener == null)
+            if (_onLanguageUpdatedWeakListener is null)
             {
                 _onLanguageUpdatedWeakListener = this.SubscribeToWeakGenericEvent<EventArgs>(_languageService, "LanguageUpdated", OnLanguageUpdated);
             }

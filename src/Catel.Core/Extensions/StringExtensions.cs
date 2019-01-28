@@ -54,7 +54,7 @@ namespace Catel
         /// <returns><c>true</c> if the strings are equal, <c>false</c> otherwise.</returns>
         public static bool EqualsIgnoreCase(this string str, string valueToCheck)
         {
-            if (str == null)
+            if (str is null)
             {
                 return false;
             }
@@ -82,7 +82,7 @@ namespace Catel
         /// <returns><c>true</c> if the string starts with the value to check, <c>false</c> otherwise.</returns>
         public static bool StartsWithIgnoreCase(this string str, string valueToCheck)
         {
-            if (str == null)
+            if (str is null)
             {
                 return false;
             }
@@ -104,7 +104,7 @@ namespace Catel
         /// <returns><c>true</c> if the string ends with the value to check, <c>false</c> otherwise.</returns>
         public static bool EndsWithIgnoreCase(this string str, string valueToCheck)
         {
-            if (str == null)
+            if (str is null)
             {
                 return false;
             }
@@ -126,7 +126,7 @@ namespace Catel
         /// <returns>The index or <c>-1</c> if not found.</returns>
         public static int IndexOfIgnoreCase(this string str, string valueToCheck)
         {
-            if (str == null)
+            if (str is null)
             {
                 return -1;
             }
@@ -165,7 +165,7 @@ namespace Catel
         /// <returns><c>true</c> if the string equals any of the values, <c>false</c> otherwise.</returns>
         public static bool EqualsAny(this string str, params string[] values)
         {
-            if (str == null)
+            if (str is null)
             {
                 return false;
             }
@@ -189,7 +189,7 @@ namespace Catel
         /// <returns><c>true</c> if the string equals any of the values, <c>false</c> otherwise.</returns>
         public static bool EqualsAnyIgnoreCase(this string str, params string[] values)
         {
-            if (str == null)
+            if (str is null)
             {
                 return false;
             }

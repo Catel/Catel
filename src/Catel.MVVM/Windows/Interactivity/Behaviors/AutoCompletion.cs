@@ -270,7 +270,7 @@ namespace Catel.Windows.Interactivity
             }
 
             var associatedObject = AssociatedObject;
-            if (associatedObject == null)
+            if (associatedObject is null)
             {
                 return;
             }
@@ -339,7 +339,7 @@ namespace Catel.Windows.Interactivity
 
             UpdateSuggestions();
 
-            if (_availableSuggestions == null || _availableSuggestions.Length == 0)
+            if (_availableSuggestions is null || _availableSuggestions.Length == 0)
             {
                 UpdateSuggestionBox(false);
             }

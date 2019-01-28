@@ -58,7 +58,7 @@ namespace Catel.MVVM.Providers
         #region Methods
         private void CreateNavigationAdapter(bool comingFromLoadedEvent)
         {
-            if (_navigationAdapter == null)
+            if (_navigationAdapter is null)
             {
                 var serviceLocator = this.GetServiceLocator();
                 var navigationService = serviceLocator.ResolveType<INavigationRootService>();
@@ -199,10 +199,10 @@ namespace Catel.MVVM.Providers
         protected void EnsureViewModel()
         {
             var vm = ViewModel;
-            if (vm == null)
+            if (vm is null)
             {
                 vm = ConstructViewModelUsingArgumentOrDefaultConstructor(null);
-                if (vm == null)
+                if (vm is null)
                 {
                     throw Log.ErrorAndCreateException<InvalidViewModelException>("ViewModel cannot be null");
                 }

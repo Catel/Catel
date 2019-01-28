@@ -41,7 +41,7 @@ namespace Catel.MVVM
             var command = new Command(execute, () =>
             {
                 var validationSummary = property.Invoke();
-                return ((validationSummary == null) || !validationSummary.HasErrors);
+                return ((validationSummary is null) || !validationSummary.HasErrors);
             }, tag);
 
             return command;
@@ -68,7 +68,7 @@ namespace Catel.MVVM
             var command = new Command<TExecuteParameter>(execute, parameter =>
             {
                 var validationSummary = property.Invoke();
-                return ((validationSummary == null) || !validationSummary.HasErrors);
+                return ((validationSummary is null) || !validationSummary.HasErrors);
             }, tag);
 
             return command;
@@ -94,7 +94,7 @@ namespace Catel.MVVM
             var command = new TaskCommand(execute, () =>
             {
                 var validationSummary = property.Invoke();
-                return ((validationSummary == null) || !validationSummary.HasErrors);
+                return ((validationSummary is null) || !validationSummary.HasErrors);
             }, tag);
 
             return command;
@@ -121,7 +121,7 @@ namespace Catel.MVVM
             var command = new TaskCommand<TExecuteParameter>(execute, parameter =>
             {
                 var validationSummary = property.Invoke();
-                return ((validationSummary == null) || !validationSummary.HasErrors);
+                return ((validationSummary is null) || !validationSummary.HasErrors);
             }, tag);
 
             return command;

@@ -160,7 +160,7 @@ namespace Catel.Runtime.Serialization.Json
             if (modelType.ImplementsInterfaceEx<ICustomJsonSerializable>())
             {
                 var customModel = CreateModelInstance(modelType) as ICustomJsonSerializable;
-                if (customModel == null)
+                if (customModel is null)
                 {
                     throw Log.ErrorAndCreateException<SerializationException>($"'{modelType.GetSafeFullName(false)}' implements ICustomJsonSerializable but could not be instantiated");
                 }
@@ -210,7 +210,7 @@ namespace Catel.Runtime.Serialization.Json
                 {
                     var modelTypeOverrideValue = (string)typeNameProperty.Value;
                     var modelTypeOverride = TypeCache.GetTypeWithoutAssembly(modelTypeOverrideValue, allowInitialization: false);
-                    if (modelTypeOverride == null)
+                    if (modelTypeOverride is null)
                     {
                         Log.Warning("Object was serialized as '{0}', but the type is not available. Using original type '{1}'", modelTypeOverrideValue, modelType.GetSafeFullName(false));
                     }
@@ -402,7 +402,7 @@ namespace Catel.Runtime.Serialization.Json
                     foreach (var key in sourceDictionary.Keys)
                     {
                         var stringKey = key as string;
-                        if (stringKey == null)
+                        if (stringKey is null)
                         {
                             stringKey = ObjectToStringHelper.ToString(key);
                         }
@@ -471,7 +471,7 @@ namespace Catel.Runtime.Serialization.Json
             }
             else if (ShouldSerializeAsDictionary(context.ModelType))
             {
-                if (serializationContext.JsonProperties == null)
+                if (serializationContext.JsonProperties is null)
                 {
                     var jsonObject = JObject.Load(jsonReader);
                     serializationContext.JsonProperties = jsonObject.Properties().ToDictionary(x => x.Name, x => x);
@@ -479,7 +479,7 @@ namespace Catel.Runtime.Serialization.Json
             }
             else if (ShouldSerializeAsCollection(context.ModelType))
             {
-                if (serializationContext.JsonArray == null)
+                if (serializationContext.JsonArray is null)
                 {
                     var jsonArray = JArray.Load(jsonReader);
                     serializationContext.JsonArray = jsonArray;
@@ -487,7 +487,7 @@ namespace Catel.Runtime.Serialization.Json
             }
             else
             {
-                if (serializationContext.JsonProperties == null)
+                if (serializationContext.JsonProperties is null)
                 {
                     var jsonObject = JObject.Load(jsonReader);
                     serializationContext.JsonProperties = jsonObject.Properties().ToDictionary(x => x.Name, x => x);
@@ -540,7 +540,7 @@ namespace Catel.Runtime.Serialization.Json
                         var graphId = (int)graphIdProperty.Value;
                         var referenceManager = context.ReferenceManager;
                         var referenceInfo = referenceManager.GetInfoById(graphId);
-                        if (referenceInfo == null)
+                        if (referenceInfo is null)
                         {
                             Log.Error("Expected to find graph object with id '{0}' in ReferenceManager, but it was not found. Defaulting value for member '{1}' to null", graphId, memberValue.Name);
                             return null;
@@ -858,7 +858,7 @@ namespace Catel.Runtime.Serialization.Json
 #endif
                     }
 
-                    if (jsonWriter == null)
+                    if (jsonWriter is null)
                     {
                         var streamWriter = new StreamWriter(stream, Encoding.UTF8);
                         jsonWriter = new JsonTextWriter(streamWriter);
@@ -883,7 +883,7 @@ namespace Catel.Runtime.Serialization.Json
 #endif
                     }
 
-                    if (jsonReader == null)
+                    if (jsonReader is null)
                     {
                         var streamReader = new StreamReader(stream, Encoding.UTF8);
                         jsonReader = new JsonTextReader(streamReader);

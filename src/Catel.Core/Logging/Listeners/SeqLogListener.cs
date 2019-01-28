@@ -130,7 +130,7 @@ namespace Catel.Logging
         {
             lock (_syncObj)
             {
-                if (_webClient == null)
+                if (_webClient is null)
                 {
                     _webClient = new WebClient { Encoding = Encoding.UTF8 };
 

@@ -100,7 +100,7 @@ namespace Catel.Reflection
                     memberExpression = propertyExpression as MemberExpression;
                 }
 
-                if (memberExpression == null)
+                if (memberExpression is null)
                 {
                     if (nested)
                     {
@@ -112,7 +112,7 @@ namespace Catel.Reflection
                 }
 
                 var propertyInfo = memberExpression.Member as PropertyInfo;
-                if (propertyInfo == null)
+                if (propertyInfo is null)
                 {
                     if (nested)
                     {

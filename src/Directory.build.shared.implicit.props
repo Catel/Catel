@@ -15,16 +15,29 @@
     <PackageOutputPath>$(ProjectDir)..\..\output\$(Configuration)\</PackageOutputPath>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb;.xml</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <Deterministic>False</Deterministic>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
-  <!-- Note: Portable PDB's are disabled for now since ApiApprover breaks because of this -->
-  <!-- <PropertyGroup Condition="'$(Configuration)'=='Release'">
-    <DebugType>pdbonly</DebugType>
-  </PropertyGroup> -->
+  <!-- Workaround for binding redirects in non exe assemblies, see https://github.com/Microsoft/msbuild/issues/1310#issuecomment-309596435 -->
+  <Target Name="ForceGenerationOfBindingRedirects"
+          AfterTargets="ResolveAssemblyReferences"
+          BeforeTargets="GenerateBindingRedirects"
+          Condition="'$(AutoGenerateBindingRedirects)' == 'true'">
+    <PropertyGroup>
+      <!-- Needs to be set in a target because it has to be set after the initial evaluation in the common targets -->
+      <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    </PropertyGroup>
+  </Target>
   
+  <!-- CSharp language -->
+  <PropertyGroup>
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+
   <!-- Enforce portable pdb format -->
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <DebugType>portable</DebugType>
+    <!-- Debug symbols are required for ApiApprover -->
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 

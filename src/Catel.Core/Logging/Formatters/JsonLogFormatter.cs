@@ -142,7 +142,7 @@ namespace Catel.Logging
 
         private static void WriteLiteral(object value, TextWriter textWriter, bool forceQuotation = false)
         {
-            if (value == null)
+            if (value is null)
             {
                 textWriter.Write("null");
                 return;

@@ -142,7 +142,7 @@ namespace Catel.MVVM.Views
             try
             {
                 var userControl = element as IUserControl;
-                if (userControl == null)
+                if (userControl is null)
                 {
                     return null;
                 }

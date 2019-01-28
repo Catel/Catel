@@ -63,7 +63,7 @@ namespace Catel
             var expressionToHandle = GetExpressionToHandle(propertyExpression);
 
             var body = expressionToHandle as MemberExpression;
-            if (body == null)
+            if (body is null)
             {
                 Log.Warning("Failed to retrieve the body of the expression (value is null)");
                 return null;

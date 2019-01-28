@@ -26,7 +26,7 @@ namespace Catel.Reflection
         /// <returns><c>true</c> if this type is a class type; otherwise, <c>false</c>.</returns>
         public static bool IsClassType(this Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 return false;
             }
@@ -51,7 +51,7 @@ namespace Catel.Reflection
         /// <returns><c>true</c> if the specified type is a collection; otherwise, <c>false</c>.</returns>
         public static bool IsCollection(this Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 return false;
             }
@@ -71,7 +71,7 @@ namespace Catel.Reflection
         /// <returns><c>true</c> if the specified type is a dictionary; otherwise, <c>false</c>.</returns>
         public static bool IsDictionary(this Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 return false;
             }
@@ -97,7 +97,7 @@ namespace Catel.Reflection
         /// <returns>True if the type is nullable, otherwise false.</returns>
         public static bool IsNullableType(this Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 return false;
             }

@@ -44,7 +44,7 @@ namespace Catel
         public static async Task<bool> SafeInvokeAsync<TEventArgs>(this AsyncEventHandler<TEventArgs> handler, object sender, TEventArgs e, bool allowParallelExecution = true)
             where TEventArgs : EventArgs
         {
-            if (handler == null)
+            if (handler is null)
             {
                 return false;
             }

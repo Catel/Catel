@@ -37,7 +37,7 @@ namespace Catel.Services
         /// </summary>
         protected virtual Frame GetApplicationRootFrame()
         {
-            if (_rootFrame == null)
+            if (_rootFrame is null)
             {
                 if (Window.Current != null)
                 {
@@ -53,7 +53,7 @@ namespace Catel.Services
         /// </summary>
         protected virtual Frame GetApplicationRootFrame()
         {
-            if (_rootFrame == null)
+            if (_rootFrame is null)
             {
                 var application = Application.Current;
                 if (application != null)

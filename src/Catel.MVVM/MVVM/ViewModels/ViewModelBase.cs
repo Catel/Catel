@@ -227,7 +227,7 @@ namespace Catel.MVVM
 
             _ignoreMultipleModelsWarning = ignoreMultipleModelsWarning;
 
-            if (serviceLocator == null)
+            if (serviceLocator is null)
             {
                 serviceLocator = ServiceLocator.Default;
             }
@@ -586,7 +586,7 @@ namespace Catel.MVVM
                 foreach (var valueProperty in mapping.ValueProperties)
                 {
                     var modelPropertyPropertyInfo = modelPropertyType.GetPropertyEx(valueProperty);
-                    if (modelPropertyPropertyInfo == null)
+                    if (modelPropertyPropertyInfo is null)
                     {
                         Log.Warning("Mapped viewmodel property '{0}' to model property '{1}' is invalid because property '{1}' is not found on the model '{2}'.\n\n" +
                                 "If the property is defined in a sub-interface, reflection does not return it as a valid property. If this is the case, you can safely ignore this warning",
@@ -646,7 +646,7 @@ namespace Catel.MVVM
                             if (_modelObjectsInfo[modelKeyValuePair.Key].SupportIEditableObject)
                             {
                                 var modelKeyValuePairValueAsModelBaseBase = modelKeyValuePair.Value as IModel;
-                                if ((modelKeyValuePairValueAsModelBaseBase == null) || !modelKeyValuePairValueAsModelBaseBase.IsInEditSession)
+                                if ((modelKeyValuePairValueAsModelBaseBase is null) || !modelKeyValuePairValueAsModelBaseBase.IsInEditSession)
                                 {
                                     EditableObjectHelper.BeginEditObject(modelKeyValuePair.Value);
                                 }

@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Activity.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -41,7 +41,7 @@ namespace Catel.Android.App
             {
                 OnPropertyChanged(e);
 
-                PropertyChanged.SafeInvoke(this, e);
+                PropertyChanged?.Invoke(this, e);
             };
 
             _logic.ViewModelChanged += (sender, e) => RaiseViewModelChanged();
@@ -50,7 +50,7 @@ namespace Catel.Android.App
             {
                 OnViewModelPropertyChanged(e);
 
-                ViewModelPropertyChanged.SafeInvoke(this, e);
+                ViewModelPropertyChanged?.Invoke(this, e);
             };
         }
         #endregion
@@ -70,7 +70,7 @@ namespace Catel.Android.App
 
                 _dataContext = value;
 
-                DataContextChanged.SafeInvoke(this, () => new DataContextChangedEventArgs(oldValue, newValue));
+                DataContextChanged?.Invoke(this, new DataContextChangedEventArgs(oldValue, newValue));
             }
         }
 
@@ -158,8 +158,8 @@ namespace Catel.Android.App
         {
             OnViewModelChanged();
 
-            ViewModelChanged.SafeInvoke(this);
-            PropertyChanged.SafeInvoke(this, () => new PropertyChangedEventArgs("ViewModel"));
+            ViewModelChanged?.Invoke(this);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewModel)));
 
             if (_bindingContext != null)
             {
@@ -188,7 +188,7 @@ namespace Catel.Android.App
 
             RaiseViewModelChanged();
 
-            Loaded.SafeInvoke(this);
+            Loaded?.Invoke(this);
 
             InitializeBindingContext();
         }
@@ -202,7 +202,7 @@ namespace Catel.Android.App
             base.OnPause();
 
             // Note: call *after* base so NavigationAdapter always gets called
-            Unloaded.SafeInvoke(this);
+            Unloaded?.Invoke(this);
 
             UninitializeBindingContext();
         }
@@ -221,7 +221,7 @@ namespace Catel.Android.App
 
         private void UninitializeBindingContext()
         {
-            if (_bindingContext == null)
+            if (_bindingContext is null)
             {
                 return;
             }

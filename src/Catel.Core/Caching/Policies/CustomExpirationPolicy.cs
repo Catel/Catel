@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CustomExpirationPolicy.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -54,7 +54,7 @@ namespace Catel.Caching.Policies
         {
             get
             {
-                return _isExpiredFunc == null || _isExpiredFunc.Invoke();
+                return _isExpiredFunc is null || _isExpiredFunc.Invoke();
             }
         }
         #endregion

@@ -48,7 +48,7 @@ namespace Catel
             EnsureThemeIsLoaded(resourceUri, () =>
             {
                 var application = Application.Current;
-                if (application == null)
+                if (application is null)
                 {
                     return false;
                 }

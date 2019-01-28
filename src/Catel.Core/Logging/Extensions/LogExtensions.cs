@@ -242,7 +242,7 @@ namespace Catel.Logging
                 return;
             }
 
-            if (log == null)
+            if (log is null)
             {
                 return;
             }
@@ -274,7 +274,7 @@ namespace Catel.Logging
 
             Argument.IsNotNull("exception", exception);
 
-            if (log == null)
+            if (log is null)
             {
                 return;
             }
@@ -401,7 +401,7 @@ namespace Catel.Logging
             return ErrorAndCreateException<TException>(log, innerException, msg =>
             {
                 var exception = ExceptionFactory.CreateException<TException>(msg, innerException);
-                if (exception == null)
+                if (exception is null)
                 {
                     var error = $"Exception type '{typeof(TException).Name}' does not have a constructor accepting a string";
 
@@ -460,7 +460,7 @@ namespace Catel.Logging
             }
 
             var exception = createExceptionCallback(message);
-            if (exception == null)
+            if (exception is null)
             {
                 var error = $"Exception type '{typeof(TException).Name}' does not have a constructor accepting a string";
 

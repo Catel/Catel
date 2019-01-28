@@ -58,7 +58,7 @@ namespace Catel.MVVM.Converters
         /// </returns>
         protected override bool IsVisible(object value, Type targetType, object parameter)
         {
-            if (value == null)
+            if (value is null)
             {
                 return false;
             }

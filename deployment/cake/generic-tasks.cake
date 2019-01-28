@@ -199,6 +199,12 @@ Task("CodeSign")
         return;
     }
 
+    if (IsLocalBuild)
+    {
+        Information("Skipping code signing because this is a local package build");
+        return;
+    }
+
     if (string.IsNullOrWhiteSpace(CodeSignCertificateSubjectName))
     {
         Information("Skipping code signing because the certificate subject name was not specified");

@@ -70,7 +70,7 @@ namespace System
         {
             lock (_lock)
             {
-                if (_loadedAssemblies == null)
+                if (_loadedAssemblies is null)
                 {
                     var loadedAssemblies = new List<Assembly>();
 

@@ -35,7 +35,7 @@ namespace Catel.Windows.Interactivity
             base.Initialize();
 
             var viewModelContainer = AssociatedObject as IViewModelContainer;
-            if (viewModelContainer == null)
+            if (viewModelContainer is null)
             {
                 string error = string.Format("This behavior can only be used on IViewModelContainer classes, '{0}' does not implement; IViewModelContainer", AssociatedObject.GetType().GetSafeFullName(false));
 
@@ -77,7 +77,7 @@ namespace Catel.Windows.Interactivity
             var viewModelContainer = AssociatedObject as IViewModelContainer;
             if (viewModelContainer != null)
             {
-                AssociatedObject.Visibility = (viewModelContainer.ViewModel == null) ? Visibility.Collapsed : Visibility.Visible;
+                AssociatedObject.Visibility = (viewModelContainer.ViewModel is null) ? Visibility.Collapsed : Visibility.Visible;
             }
         }
     }

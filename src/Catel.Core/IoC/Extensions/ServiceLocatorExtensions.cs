@@ -93,7 +93,7 @@ namespace Catel.IoC
             Argument.IsNotNull("parameters", parameters);
 
             var registrationInfo = serviceLocator.GetRegistrationInfo(serviceType, tag);
-            if (registrationInfo == null)
+            if (registrationInfo is null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("The service locator could not return the registration info for type '{0}' with tag '{1}', cannot resolve type",
                     serviceType.FullName, ObjectToStringHelper.ToString(tag));

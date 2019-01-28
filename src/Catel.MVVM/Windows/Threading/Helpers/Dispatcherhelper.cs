@@ -106,7 +106,7 @@ namespace Catel.Windows.Threading
         {
             get
             {
-                if (_dispatcher == null)
+                if (_dispatcher is null)
                 {
                     _dispatcher = GetCurrentDispatcher();
                 }

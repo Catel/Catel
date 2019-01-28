@@ -39,7 +39,7 @@ namespace Catel.Reflection
 
                 stringBuilder.Append(GetMethodBaseSignaturePrefix(constructorInfo));
                 stringBuilder.Append("ctor(");
-                var param = constructorInfo.GetParameters().Select(p => string.Format("{0} {1}", p.ParameterType.Name, p.Name)).ToArray();
+                var param = constructorInfo.GetParameters().Select(p => $"{p.ParameterType.Name} {p.Name}");
                 stringBuilder.Append(string.Join(", ", param));
                 stringBuilder.Append(")");
 
@@ -59,11 +59,11 @@ namespace Catel.Reflection
         {
             if (constructors != null && constructors.Count > 1)
             {
-                List<ConstructorDistance> constructorDistances = new List<ConstructorDistance>();
+                var constructorDistances = new List<ConstructorDistance>();
+
                 foreach (var constructor in constructors)
                 {
-                    int distance;
-                    if (constructor.TryGetConstructorDistanceByParametersMatch(parameters, out distance))
+                    if (constructor.TryGetConstructorDistanceByParametersMatch(parameters, out var distance))
                     {
                         constructorDistances.Add(new ConstructorDistance(distance, constructor));
                     }
@@ -93,7 +93,7 @@ namespace Catel.Reflection
                 var parameter = parameters[i];
                 var constructorParameterType = constructorParameters[i].ParameterType;
 
-                if (parameter == null && !constructorParameterType.IsClassEx() && !constructorParameterType.IsNullableType())
+                if (parameter is null && !constructorParameterType.IsClassEx() && !constructorParameterType.IsNullableType())
                 {
                     return false;
                 }
@@ -138,7 +138,7 @@ namespace Catel.Reflection
                 stringBuilder.Append(methodInfo.ReturnType.Name + " ");
 
                 stringBuilder.Append(methodInfo.Name + "(");
-                var param = methodInfo.GetParameters().Select(p => string.Format("{0} {1}", p.ParameterType.Name, p.Name)).ToArray();
+                var param = methodInfo.GetParameters().Select(p => $"{p.ParameterType.Name} {p.Name}");
                 stringBuilder.Append(string.Join(", ", param));
                 stringBuilder.Append(")");
 

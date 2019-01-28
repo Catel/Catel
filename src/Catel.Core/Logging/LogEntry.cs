@@ -93,7 +93,7 @@ namespace Catel.Logging
         {
             get
             {
-                if (_logData == null)
+                if (_logData is null)
                 {
                     _logData = new LogData();
                 }

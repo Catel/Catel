@@ -23,14 +23,14 @@ namespace Catel.MVVM
         partial void SubscribeToKeyboardEventsInternal()
         {
             var application = Application.Current;
-            if (application == null)
+            if (application is null)
             {
                 Log.Warning("Application.Current is null, cannot subscribe to keyboard events");
                 return;
             }
 
             FrameworkElement mainView = application.MainWindow;
-            if (mainView == null)
+            if (mainView is null)
             {
                 if (!_subscribedToApplicationActivedEvent)
                 {

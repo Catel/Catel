@@ -28,7 +28,7 @@ namespace Catel.MVVM.Navigation
             throw new MustBeImplementedException();
 
             //var activity = target as Activity;
-            //if (activity == null)
+            //if (activity is null)
             //{
             //    return null;
             //}

@@ -41,7 +41,7 @@ namespace Catel.Services
         /// </returns>
         public bool CanBeWrapped(FrameworkElement frameworkElement)
         {
-            if (frameworkElement == null)
+            if (frameworkElement is null)
             {
                 return false;
             }

@@ -9,6 +9,7 @@ namespace Catel.Tests.Reflection
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using Catel.Collections;
     using Catel.Data;
     using Catel.Reflection;
 
@@ -96,7 +97,7 @@ namespace Catel.Tests.Reflection
             [TestCase]
             public void ReturnsEmptyStringForEmptyArray()
             {
-                Assert.AreEqual(string.Empty, TypeHelper.FormatInnerTypes(new string[] {}));
+                Assert.AreEqual(string.Empty, TypeHelper.FormatInnerTypes((IEnumerable<string>)ArrayShim.Empty<string>()));
             }
 
             [TestCase]
@@ -104,7 +105,7 @@ namespace Catel.Tests.Reflection
             {
                 string expectedValue = "[string],[string],[int]";
 
-                string actualValue = TypeHelper.FormatInnerTypes(new[] {"string", "string", "int"});
+                string actualValue = TypeHelper.FormatInnerTypes((IEnumerable<string>)new[] {"string", "string", "int"});
 
                 Assert.AreEqual(expectedValue, actualValue);
             }

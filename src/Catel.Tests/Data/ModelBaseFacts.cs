@@ -74,7 +74,7 @@ namespace Catel.Tests.Data
 
                 public override bool IsValid(object obj)
                 {
-                    if (obj == null)
+                    if (obj is null)
                     {
                         return false;
                     }

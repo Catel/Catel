@@ -180,7 +180,7 @@ namespace Catel.MVVM.Views
                 return;
             }
 
-            if (view == null)
+            if (view is null)
             {
                 return;
             }

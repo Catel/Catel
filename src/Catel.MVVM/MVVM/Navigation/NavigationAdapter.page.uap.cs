@@ -22,7 +22,7 @@ namespace Catel.MVVM.Navigation
         partial void Initialize()
         {
             var rootFrame = NavigationRoot as Frame;
-            if (rootFrame == null)
+            if (rootFrame is null)
             {
                 return;
             }
@@ -43,7 +43,7 @@ namespace Catel.MVVM.Navigation
 
         partial void DetermineNavigationContext()
         {
-            if (_lastNavigationContext == null)
+            if (_lastNavigationContext is null)
             {
                 _lastNavigationContext = new Dictionary<string, object>();
 
@@ -71,7 +71,7 @@ namespace Catel.MVVM.Navigation
             InitializeNavigationService(false);
 
             var rootFrame = NavigationRoot as Frame;
-            if (rootFrame == null)
+            if (rootFrame is null)
             {
                 return false;
             }

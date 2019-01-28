@@ -184,7 +184,7 @@ namespace Catel.Data
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void RaisePropertyChanged(object sender, AdvancedPropertyChangedEventArgs e)
         {
-            PropertyChanged.SafeInvoke(sender, e);
+            PropertyChanged?.Invoke(sender, e);
 
             if (ReferenceEquals(this, sender))
             {

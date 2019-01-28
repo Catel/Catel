@@ -221,7 +221,7 @@ namespace Catel.Windows.Interactivity
                         }
 
                         var sourceAsPropertyChanged = e.NewValue as INotifyPropertyChanged;
-                        if (sourceAsPropertyChanged == null)
+                        if (sourceAsPropertyChanged is null)
                         {
                             throw new InvalidOperationException("Source does not implement interface 'INotifyfPropertyChanged', either implement it or change the 'FocusMode'");
                         }

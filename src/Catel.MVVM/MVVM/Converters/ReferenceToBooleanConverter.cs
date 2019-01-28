@@ -25,7 +25,7 @@ namespace Catel.MVVM.Converters
         /// <returns>The value to be passed to the target dependency property.</returns>
         protected override object Convert(object value, Type targetType, object parameter)
         {
-            var isNull = value == null;
+            var isNull = value is null;
 
             if (SupportInversionUsingCommandParameter && ConverterHelper.ShouldInvert(parameter))
             {

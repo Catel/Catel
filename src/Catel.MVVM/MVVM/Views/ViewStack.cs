@@ -88,11 +88,11 @@ namespace Catel.MVVM.Views
 
                 if (_isViewStackLoaded)
                 {
-                    ViewStackLoaded.SafeInvoke(this, eventArgs);
+                    ViewStackLoaded?.Invoke(this, eventArgs);
                 }
                 else
                 {
-                    ViewStackUnloaded.SafeInvoke(this, eventArgs);
+                    ViewStackUnloaded?.Invoke(this, eventArgs);
                 }
             }
         }
@@ -284,14 +284,14 @@ namespace Catel.MVVM.Views
 
         private void RaiseViewLoaded()
         {
-            ViewLoaded.SafeInvoke(this, () => new ViewStackPartEventArgs(_viewInfo.View));
+            ViewLoaded?.Invoke(this, new ViewStackPartEventArgs(_viewInfo.View));
 
             MarkAsLoaded();
         }
 
         private void RaiseViewUnloaded()
         {
-            ViewUnloaded.SafeInvoke(this, () => new ViewStackPartEventArgs(_viewInfo.View));
+            ViewUnloaded?.Invoke(this, new ViewStackPartEventArgs(_viewInfo.View));
         }
 
         private void OnViewLoaded(object sender, EventArgs e)
@@ -329,13 +329,13 @@ namespace Catel.MVVM.Views
         private void OnChildViewStackLoaded(object sender, ViewStackPartEventArgs e)
         {
             // Pass on as routed event
-            ViewStackLoaded.SafeInvoke(this, e);
+            ViewStackLoaded?.Invoke(this, e);
         }
 
         private void OnChildViewStackUnloaded(object sender, ViewStackPartEventArgs e)
         {
             // Pass on as routed event
-            ViewStackUnloaded.SafeInvoke(this, e);
+            ViewStackUnloaded?.Invoke(this, e);
         }
         #endregion
     }

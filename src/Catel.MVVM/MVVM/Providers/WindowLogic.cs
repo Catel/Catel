@@ -122,7 +122,7 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="Catel.MVVM.ViewModelClosedEventArgs"/> instance containing the event data.</param>
         public override async Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
-            if (_closeInitiatedByViewModel == null)
+            if (_closeInitiatedByViewModel is null)
             {
                 _closeInitiatedByViewModel = true;
                 _closeInitiatedByViewModelResult = e.Result;
@@ -173,7 +173,7 @@ namespace Catel.MVVM.Providers
         // ReSharper restore UnusedMember.Local
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
-            if (_closeInitiatedByViewModel == null)
+            if (_closeInitiatedByViewModel is null)
             {
                 _closeInitiatedByViewModel = false;
 
@@ -195,7 +195,7 @@ namespace Catel.MVVM.Providers
         private void InvokeCloseDynamically()
         {
             var closeMethod = TargetWindow.GetType().GetMethodEx("Close");
-            if (closeMethod == null)
+            if (closeMethod is null)
             {
                 throw Log.ErrorAndCreateException<NotSupportedException>("Cannot close any window without a public 'Close()' method, implement the 'Close()' method on '{0}'", TargetWindow.GetType().Name);
             }

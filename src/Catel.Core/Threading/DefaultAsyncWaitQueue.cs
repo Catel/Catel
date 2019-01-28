@@ -108,7 +108,7 @@ namespace Catel.Threading
                 }
             }
 
-            if (tcs == null)
+            if (tcs is null)
             {
                 return new CancelDisposable();
             }

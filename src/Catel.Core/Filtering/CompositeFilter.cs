@@ -48,7 +48,7 @@ namespace Catel
         /// <returns><c>true</c> if the match is a successful hit, <c>false</c> otherwise.</returns>
         public bool Matches(T target)
         {
-            if (target == null)
+            if (target is null)
             {
                 return false;
             }

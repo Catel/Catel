@@ -54,7 +54,7 @@ namespace Catel.MVVM
             Mode = mode;
             ConverterType = converterType;
 
-            var propertiesLength = 1 + (additionalPropertiesToWatch == null ? 0 : additionalPropertiesToWatch.Length);
+            var propertiesLength = 1 + (additionalPropertiesToWatch is null ? 0 : additionalPropertiesToWatch.Length);
             ValueProperties = new string[propertiesLength]; ;
             ValueProperties[0] = valueProperty;
 
@@ -63,7 +63,7 @@ namespace Catel.MVVM
                 additionalPropertiesToWatch?.CopyTo(ValueProperties, 1);
             }
 
-            var argsLength = 1 + (additionalConstructorArgs == null ? 0 : additionalConstructorArgs.Length);
+            var argsLength = 1 + (additionalConstructorArgs is null ? 0 : additionalConstructorArgs.Length);
             var args = new object[argsLength];
             args[0] = ValueProperties;
 
@@ -74,7 +74,7 @@ namespace Catel.MVVM
 
             var typeFactory = this.GetTypeFactory();
             var converter = (IViewModelToModelConverter)typeFactory.CreateInstanceWithParameters(ConverterType, args);
-            if (converter == null)
+            if (converter is null)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Failed to create converter '{ConverterType}'");
             }

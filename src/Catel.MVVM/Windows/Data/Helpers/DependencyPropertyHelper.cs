@@ -234,7 +234,7 @@ namespace Catel.Windows.Data
                         continue;
                     }
 
-                    if (dependencyProperty == null)
+                    if (dependencyProperty is null)
                     {
                         continue;
                     }

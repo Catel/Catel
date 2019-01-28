@@ -117,7 +117,7 @@ namespace Catel.Runtime.Serialization
 
             var serializingEventArgs = new SerializationEventArgs(context);
 
-            Serializing.SafeInvoke(this, serializingEventArgs);
+            Serializing?.Invoke(this, serializingEventArgs);
 
             foreach (var serializerModifier in serializerModifiers)
             {
@@ -136,7 +136,7 @@ namespace Catel.Runtime.Serialization
                 serializerModifier.OnSerialized(context, model);
             }
 
-            Serialized.SafeInvoke(this, serializingEventArgs);
+            Serialized?.Invoke(this, serializingEventArgs);
         }
 
         /// <summary>
@@ -252,7 +252,7 @@ namespace Catel.Runtime.Serialization
 
                     var memberSerializationEventArgs = new MemberSerializationEventArgs(context, member);
 
-                    SerializingMember.SafeInvoke(this, memberSerializationEventArgs);
+                    SerializingMember?.Invoke(this, memberSerializationEventArgs);
 
                     BeforeSerializeMember(context, member);
 
@@ -274,7 +274,7 @@ namespace Catel.Runtime.Serialization
 
                     AfterSerializeMember(context, member);
 
-                    SerializedMember.SafeInvoke(this, memberSerializationEventArgs);
+                    SerializedMember?.Invoke(this, memberSerializationEventArgs);
                 }
             }
         }
@@ -286,7 +286,7 @@ namespace Catel.Runtime.Serialization
         protected virtual string SerializeUsingObjectToString(ISerializationContext<TSerializationContextInfo> context, MemberValue memberValue)
         {
             var toStringMethod = GetObjectToStringMethod(memberValue.GetBestMemberType());
-            if (toStringMethod == null)
+            if (toStringMethod is null)
             {
                 return null;
             }

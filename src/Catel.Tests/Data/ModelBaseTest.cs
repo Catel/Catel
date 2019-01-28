@@ -23,7 +23,7 @@
         [SetUp]
         public void Initialize()
         {
-            if (_filesHelper == null)
+            if (_filesHelper is null)
             {
                 _filesHelper = new FilesHelper();
             }

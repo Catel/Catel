@@ -31,24 +31,24 @@ namespace Catel.MVVM.Converters
         /// <returns>The value to be passed to the target dependency property.</returns>
         protected override object Convert(object value, Type targetType, object parameter)
         {
-            if (value == null)
+            if (value is null)
             {
                 return string.Empty;
             }
 
             var errorCollection = value as ICollection<ValidationError>;
-            if (errorCollection == null)
+            if (errorCollection is null)
             {
                 return string.Empty;
             }
 
             var firstError = errorCollection.FirstOrDefault();
-            if (firstError == null)
+            if (firstError is null)
             {
                 return string.Empty;
             }
 
-            if (firstError.ErrorContent == null)
+            if (firstError.ErrorContent is null)
             {
                 return string.Empty;
             }

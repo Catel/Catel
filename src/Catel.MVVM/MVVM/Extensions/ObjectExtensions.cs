@@ -22,7 +22,7 @@ namespace Catel.MVVM
         /// <returns><c>true</c> if the data context is a sentinel; otherwise, <c>false</c>.</returns>
         public static bool IsSentinelBindingObject(this object dataContext)
         {
-            if (dataContext == null)
+            if (dataContext is null)
             {
                 return false;
             }

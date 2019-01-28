@@ -69,7 +69,7 @@ namespace Catel.Data
             lock (_hashSet)
             {
                 // We can't store null, but we need to raise string.Empty
-                if (propertyName == null)
+                if (propertyName is null)
                 {
                     propertyName = string.Empty;
                 }

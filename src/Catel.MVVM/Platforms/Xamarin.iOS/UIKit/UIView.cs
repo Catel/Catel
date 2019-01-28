@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UIView.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2014 Catel development team. All rights reserved.
 // </copyright>
@@ -55,12 +55,12 @@ namespace Catel.UIKit
             }
 
             var viewModelType = GetViewModelType();
-            if (viewModelType == null)
+            if (viewModelType is null)
             {
                 Log.Debug("GetViewModelType() returned null, using the ViewModelLocator to resolve the view model");
 
                 viewModelType = _viewModelLocator.ResolveViewModel(GetType());
-                if (viewModelType == null)
+                if (viewModelType is null)
                 {
                     const string error = "The view model of the view could not be resolved. Use either the GetViewModelType() method or IViewModelLocator";
                     Log.Error(error);
@@ -73,7 +73,7 @@ namespace Catel.UIKit
             {
                 OnPropertyChanged(e);
 
-                PropertyChanged.SafeInvoke(this, e);
+                PropertyChanged?.Invoke(this, e);
             };
 
             _logic.ViewModelChanged += (sender, e) => RaiseViewModelChanged();
@@ -82,7 +82,7 @@ namespace Catel.UIKit
             {
                 OnViewModelPropertyChanged(e);
 
-                ViewModelPropertyChanged.SafeInvoke(this, e);
+                ViewModelPropertyChanged?.Invoke(this, e);
             };
 
             _logic.DetermineViewModelInstance += (sender, e) =>
@@ -95,10 +95,10 @@ namespace Catel.UIKit
                 e.ViewModelType = GetViewModelType(e.DataContext);
             };
 
-            _logic.ViewLoading += (sender, e) => ViewLoading.SafeInvoke(this);
-            _logic.ViewLoaded += (sender, e) => ViewLoaded.SafeInvoke(this);
-            _logic.ViewUnloading += (sender, e) => ViewUnloading.SafeInvoke(this);
-            _logic.ViewUnloaded += (sender, e) => ViewUnloaded.SafeInvoke(this);
+            _logic.ViewLoading += (sender, e) => ViewLoading?.Invoke(this);
+            _logic.ViewLoaded += (sender, e) => ViewLoaded?.Invoke(this);
+            _logic.ViewUnloading += (sender, e) => ViewUnloading?.Invoke(this);
+            _logic.ViewUnloaded += (sender, e) => ViewUnloaded?.Invoke(this);
         }
         #endregion
 
@@ -114,7 +114,7 @@ namespace Catel.UIKit
             {
                 _dataContext = value;
 
-                DataContextChanged.SafeInvoke(this);
+                DataContextChanged?.Invoke(this);
             }
         }
 
@@ -225,8 +225,8 @@ namespace Catel.UIKit
         {
             OnViewModelChanged();
 
-            ViewModelChanged.SafeInvoke(this);
-            PropertyChanged.SafeInvoke(this, new PropertyChangedEventArgs("ViewModel"));
+            ViewModelChanged?.Invoke(this);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ViewModel"));
 
             if (_bindingContext != null)
             {
@@ -255,7 +255,7 @@ namespace Catel.UIKit
 
             RaiseViewModelChanged();
 
-            Loaded.SafeInvoke(this);
+            Loaded?.Invoke(this);
 
             InitializeBindingContext();
         }
@@ -265,7 +265,7 @@ namespace Catel.UIKit
             base.ViewDidDisappear(animated);
 
             // Note: call *after* base so NavigationAdapter always gets called
-            Unloaded.SafeInvoke(this);
+            Unloaded?.Invoke(this);
 
             UninitializeBindingContext();
         }
@@ -284,7 +284,7 @@ namespace Catel.UIKit
 
         private void UninitializeBindingContext()
         {
-            if (_bindingContext == null)
+            if (_bindingContext is null)
             {
                 return;
             }

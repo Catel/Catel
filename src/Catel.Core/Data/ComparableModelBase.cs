@@ -97,7 +97,7 @@ namespace Catel.Data
         {
             get
             {
-                if (_equalityComparer == null)
+                if (_equalityComparer is null)
                 {
                     var dependencyResolver = this.GetDependencyResolver();
 
@@ -130,7 +130,7 @@ namespace Catel.Data
             // throws an exception when the 2 types are not the same. Although MS does recommend not to throw exceptions,
             // they do it themselves. Check for null and check the types before feeding it to the equality comparer.
 
-            if (obj == null)
+            if (obj is null)
             {
                 return false;
             }
