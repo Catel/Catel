@@ -22,7 +22,7 @@
     </PackageReference>
     <PackageReference Include="MethodTimer.Fody" Version="2.3.0" PrivateAssets="all" />
     <PackageReference Include="ModuleInit.Fody" Version="1.9.0" PrivateAssets="all" />
-    <PackageReference Include="NewtonSoft.Json" Version="11.0.2" />
+    <PackageReference Include="NewtonSoft.Json" Version="12.0.1" />
     <PackageReference Include="Obsolete.Fody" Version="4.4.3" PrivateAssets="all" />
     <PackageReference Include="WpfAnalyzers" Version="2.2.0.2" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

@@ -41,7 +41,7 @@ Classes / members marked as obsolete
 
 Added/fixed
 ===========
-...
+(*) #1261 Update NewtonSoft.Json to 12.x
 
 Roadmap
 =======
