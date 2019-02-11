@@ -2314,6 +2314,8 @@ namespace Catel.Services
         public override bool Equals(object obj) { }
         public bool Equals(Catel.Services.Size size) { }
         public override int GetHashCode() { }
+        public static bool ==(Catel.Services.Size a, Catel.Services.Size b) { }
+        public static bool !=(Catel.Services.Size a, Catel.Services.Size b) { }
         public override string ToString() { }
     }
     [System.ObsoleteAttribute("Use Orc.CommandLine instead since that has better support for parsing command lin" +

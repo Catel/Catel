@@ -268,6 +268,7 @@ namespace Catel
         public bool MatchesAll(T target) { }
         public bool MatchesAny(T target) { }
         public bool MatchesNone(T target) { }
+        public static Catel.CompositePredicate<T> +(Catel.CompositePredicate<T> invokes, System.Predicate<T> filter) { }
     }
     public class CoreModule : Catel.IoC.IServiceLocatorInitializer
     {
@@ -1131,6 +1132,8 @@ namespace Catel.Data
         protected Catel.Data.IModelEqualityComparer EqualityComparer { get; set; }
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
+        public static bool ==(Catel.Data.ComparableModelBase firstObject, Catel.Data.ComparableModelBase secondObject) { }
+        public static bool !=(Catel.Data.ComparableModelBase firstObject, Catel.Data.ComparableModelBase secondObject) { }
     }
     public sealed class CompositeValidator : Catel.Data.IValidator
     {
@@ -2425,6 +2428,8 @@ namespace Catel.IoC
         public System.Type Type { get; }
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
+        public static bool ==(Catel.IoC.TypeRequestInfo firstObject, Catel.IoC.TypeRequestInfo secondObject) { }
+        public static bool !=(Catel.IoC.TypeRequestInfo firstObject, Catel.IoC.TypeRequestInfo secondObject) { }
         public override string ToString() { }
     }
     public class TypeRequestPath : Catel.IoC.ITypeRequestPath
@@ -4138,6 +4143,7 @@ namespace Catel.Threading
         public System.Threading.Tasks.Task<T> AsTask() { }
         public System.Runtime.CompilerServices.ConfiguredTaskAwaitable<T> ConfigureAwait(bool continueOnCapturedContext) { }
         public System.Runtime.CompilerServices.TaskAwaiter<T> GetAwaiter() { }
+        public static System.Threading.Tasks.Task<T> op_Implicit(Catel.Threading.AwaitableDisposable<T> source) { }
     }
     [System.Diagnostics.DebuggerDisplayAttribute("Count = {Count}")]
     [System.Diagnostics.DebuggerTypeProxyAttribute(typeof(Catel.Threading.DefaultAsyncWaitQueue<>.DebugView))]
