@@ -138,6 +138,7 @@ private void BuildComponents()
             msBuildSettings.ToolPath = toolPath;
         }
 
+        // Enable for file logging
         // msBuildSettings.AddFileLogger(new MSBuildFileLogger
         // {
         //     //Verbosity = msBuildSettings.Verbosity,
@@ -145,6 +146,14 @@ private void BuildComponents()
         //     LogFile = System.IO.Path.Combine(OutputRootDirectory, string.Format(@"MsBuild_{0}_build.log", component))
         // });
 
+        // Enable for bin logging
+        msBuildSettings.BinaryLogger = new MSBuildBinaryLogSettings
+        {
+            Enabled = true,
+            Imports = MSBuildBinaryLogImports.Embed,
+            FileName = System.IO.Path.Combine(OutputRootDirectory, string.Format(@"MsBuild_{0}.binlog", component))
+        };
+        
         // Note: we need to set OverridableOutputPath because we need to be able to respect
         // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
         // are properties passed in using the command line)

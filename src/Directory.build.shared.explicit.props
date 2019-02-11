@@ -52,7 +52,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
     </None>
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Remove="Platforms\**\*.cs;Resources\**\*.cs" />
     <Page Remove="Platforms\**\*.xaml" />
@@ -95,7 +95,7 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
-    <Compile Include="Platforms\net\**\*.cs" />
+    <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\net\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\net\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
   </ItemGroup>
@@ -106,7 +106,7 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <Compile Include="Platforms\netstandard2.0\**\*.cs" />
+    <Compile Include="Platforms\netstandard2.0\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\netstandard2.0\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\netstandard2.0\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
   </ItemGroup>
@@ -128,7 +128,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net451' OR '$(TargetFramework)' == 'net452'">
-    <Compile Include="Platforms\net\**\*.cs" />
+    <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\net\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\net\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
   </ItemGroup>
@@ -150,19 +150,19 @@
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net46' OR '$(TargetFramework)' == 'net461' OR '$(TargetFramework)' == 'net462'">
-    <Compile Include="Platforms\net\**\*.cs" />
+    <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\net\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\net\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
   </ItemGroup>
 
   <!-- .NET 4.7 -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net47' ">
-    <EnableWpfProjectSetup>true</EnableWpfProjectSetup>   
+    <EnableWpfProjectSetup>true</EnableWpfProjectSetup>
     <DefineConstants>$(DefineConstants);NET;NET47;NET470</DefineConstants>
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'net47' ">
-    <Compile Include="Platforms\net\**\*.cs" />
+    <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\net\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\net\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
   </ItemGroup>
@@ -174,7 +174,7 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
-    <Compile Include="Platforms\uap10.0\**\*.cs" />
+    <Compile Include="Platforms\uap10.0\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\uap10.0\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\uap10.0\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
   </ItemGroup>
@@ -185,7 +185,7 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'xamarin.ios10' ">
-    <Compile Include="Platforms\xamarin.ios\**\*.cs" />
+    <Compile Include="Platforms\xamarin.ios\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\xamarin.ios\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\xamarin.ios\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
   </ItemGroup>
@@ -196,8 +196,9 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'monoandroid70' ">
-    <Compile Include="Platforms\xamarin.android\**\*.cs" />
+    <Compile Include="Platforms\xamarin.android\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\xamarin.android\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\xamarin.ioandroid\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
   </ItemGroup>
+  
 </Project>

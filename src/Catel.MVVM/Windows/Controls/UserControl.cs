@@ -310,12 +310,12 @@ namespace Catel.Windows.Controls
             set { _logic.SetValue<UserControlLogic>(x => x.DisableWhenNoViewModel = value); }
         }
 
-#if !NET && !NETCORE
+#if !NET && !NETCORE && !UWP
         /// <summary>
         /// Gets a value indicating whether this instance is loaded.
         /// </summary>
         /// <value><c>true</c> if this instance is loaded; otherwise, <c>false</c>.</value>
-        public bool IsLoaded
+        public new bool IsLoaded
         {
             get { return _logic.GetValue<UserControlLogic, bool>(x => x.IsTargetViewLoaded, true); }
         }

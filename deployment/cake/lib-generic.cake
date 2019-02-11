@@ -59,15 +59,22 @@ private string GetVisualStudioPath(MSBuildToolVersion toolVersion)
 {
     if (UseVisualStudioPrerelease)
     {
-        Debug("Checking for installation of Visual Studio preview");
+        Debug("Checking for installation of Visual Studio 2019 preview");
 
-        var path = @"C:\Program Files (x86)\Microsoft Visual Studio\Preview\Professional\MSBuild\15.0\Bin\msbuild.exe";
-
-        if (System.IO.File.Exists(path))
+        var pathFor2019 = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Preview\MSBuild\Current\Bin\msbuild.exe";
+        if (System.IO.File.Exists(pathFor2019))
         {
-            Information("Using Visual Studio preview");
+            Information("Using Visual Studio 2019 preview");
+            return pathFor2019;
+        }
 
-            return path;
+        Debug("Checking for installation of Visual Studio 2017 preview");
+
+        var pathFor2017 = @"C:\Program Files (x86)\Microsoft Visual Studio\Preview\Professional\MSBuild\15.0\Bin\msbuild.exe";
+        if (System.IO.File.Exists(pathFor2017))
+        {
+            Information("Using Visual Studio 2017 preview");
+            return pathFor2017;
         }
     }
 
