@@ -315,7 +315,7 @@ namespace Catel.Windows.Controls
         /// Gets a value indicating whether this instance is loaded.
         /// </summary>
         /// <value><c>true</c> if this instance is loaded; otherwise, <c>false</c>.</value>
-        public new bool IsLoaded
+        public bool IsLoaded
         {
             get { return _logic.GetValue<UserControlLogic, bool>(x => x.IsTargetViewLoaded, true); }
         }
