@@ -228,13 +228,15 @@ private void PackageComponents()
 
         var projectDirectory = string.Format("./src/{0}", component);
         var projectFileName = string.Format("{0}/{1}.csproj", projectDirectory, component);
+        var useDotNetCore = true;
 
         var projectFileContents = FileReadText(projectFileName);
         if (!string.IsNullOrWhiteSpace(projectFileContents))
         {
             if (projectFileContents.ToLower().Contains("uap10.0"))
             {
-                Warning("UAP 10.0 is detected as one of the target frameworks, make sure to install the latest version of .NET Core in order to pack UAP 10.0 assemblies. See https://github.com/dotnet/cli/issues/9303 for more info");
+                //Warning("UAP 10.0 is detected as one of the target frameworks, make sure to install the latest version of .NET Core in order to pack UAP 10.0 assemblies. See https://github.com/dotnet/cli/issues/9303 for more info");
+                useDotNetCore = false;
             }
         }
 
@@ -264,59 +266,107 @@ private void PackageComponents()
         Information(string.Empty);
 
         // Step 2: Go packaging!
-
-        Information("Using 'dotnet pack' to package '{0}'", component);
-
-        var msBuildSettings = new DotNetCoreMSBuildSettings
+        if (useDotNetCore)
         {
-            //Verbosity = DotNetCoreVerbosity.Diagnostic // DotNetCoreVerbosity.Minimal,
-        };
+            Information("Using 'dotnet pack' to package '{0}'", component);
 
-        ConfigureMsBuildForDotNetCore(msBuildSettings, component, "pack", allowVsPrerelease: false);
+            var msBuildSettings = new DotNetCoreMSBuildSettings
+            {
+                //Verbosity = DotNetCoreVerbosity.Diagnostic // DotNetCoreVerbosity.Minimal,
+            };
 
-        // Note: we need to set OverridableOutputPath because we need to be able to respect
-        // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
-        // are properties passed in using the command line)
-        msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
-        msBuildSettings.WithProperty("PackageOutputPath", OutputRootDirectory);
-        msBuildSettings.WithProperty("ConfigurationName", ConfigurationName);
-        msBuildSettings.WithProperty("PackageVersion", VersionNuGet);
+            ConfigureMsBuildForDotNetCore(msBuildSettings, component, "pack", allowVsPrerelease: false);
 
-        // SourceLink specific stuff
-        var repositoryUrl = RepositoryUrl;
-        if (!IsLocalBuild && !string.IsNullOrWhiteSpace(repositoryUrl))
-        {       
-            Information("Repository url is specified, adding commit specific data to package");
+            // Note: we need to set OverridableOutputPath because we need to be able to respect
+            // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
+            // are properties passed in using the command line)
+            msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
+            msBuildSettings.WithProperty("PackageOutputPath", OutputRootDirectory);
+            msBuildSettings.WithProperty("ConfigurationName", ConfigurationName);
+            msBuildSettings.WithProperty("PackageVersion", VersionNuGet);
 
-            // TODO: For now we are assuming everything is git, we might need to change that in the future
-            // See why we set the values at https://github.com/dotnet/sourcelink/issues/159#issuecomment-427639278
-            msBuildSettings.WithProperty("PublishRepositoryUrl", "true");
-            msBuildSettings.WithProperty("RepositoryType", "git");
-            msBuildSettings.WithProperty("RepositoryUrl", repositoryUrl);
-            msBuildSettings.WithProperty("RevisionId", RepositoryCommitId);
+            // SourceLink specific stuff
+            var repositoryUrl = RepositoryUrl;
+            if (!IsLocalBuild && !string.IsNullOrWhiteSpace(repositoryUrl))
+            {       
+                Information("Repository url is specified, adding commit specific data to package");
+
+                // TODO: For now we are assuming everything is git, we might need to change that in the future
+                // See why we set the values at https://github.com/dotnet/sourcelink/issues/159#issuecomment-427639278
+                msBuildSettings.WithProperty("PublishRepositoryUrl", "true");
+                msBuildSettings.WithProperty("RepositoryType", "git");
+                msBuildSettings.WithProperty("RepositoryUrl", repositoryUrl);
+                msBuildSettings.WithProperty("RevisionId", RepositoryCommitId);
+            }
+
+            // Fix for .NET Core 3.0, see https://github.com/dotnet/core-sdk/issues/192, it
+            // uses obj/release instead of [outputdirectory]
+            msBuildSettings.WithProperty("DotNetPackIntermediateOutputPath", outputDirectory);
+
+            var packSettings = new DotNetCorePackSettings
+            {
+                MSBuildSettings = msBuildSettings,
+                OutputDirectory = OutputRootDirectory,
+                Configuration = ConfigurationName,
+                NoBuild = true,
+                Verbosity = msBuildSettings.Verbosity
+            };
+
+            // Note: we need to set the binlog on the pack settings, not on the msbuild settings
+            var binLogArgs = string.Format("-bl:\"{0}\";ProjectImports=Embed", 
+                System.IO.Path.Combine(OutputRootDirectory, string.Format(@"MsBuild_{0}_{1}.binlog", component, "pack")));
+
+            packSettings.ArgumentCustomization = args => args.Append(binLogArgs);
+
+            DotNetCorePack(projectFileName, packSettings);
+        }
+        else
+        {
+            Information("Using 'msbuild' to package '{0}'", component);
+
+            var msBuildSettings = new MSBuildSettings {
+                Verbosity = Verbosity.Quiet,
+                //Verbosity = Verbosity.Diagnostic,
+                ToolVersion = MSBuildToolVersion.Default,
+                Configuration = ConfigurationName,
+                MSBuildPlatform = MSBuildPlatform.x86, // Always require x86, see platform for actual target platform
+                PlatformTarget = PlatformTarget.MSIL
+            };
+
+            ConfigureMsBuild(msBuildSettings, component, "pack");
+
+            // Note: we need to set OverridableOutputPath because we need to be able to respect
+            // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
+            // are properties passed in using the command line)
+            msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
+            msBuildSettings.WithProperty("PackageOutputPath", OutputRootDirectory);
+            msBuildSettings.WithProperty("ConfigurationName", ConfigurationName);
+            msBuildSettings.WithProperty("PackageVersion", VersionNuGet);
+
+            // SourceLink specific stuff
+            var repositoryUrl = RepositoryUrl;
+            if (!IsLocalBuild && !string.IsNullOrWhiteSpace(repositoryUrl))
+            {       
+                Information("Repository url is specified, adding commit specific data to package");
+
+                // TODO: For now we are assuming everything is git, we might need to change that in the future
+                // See why we set the values at https://github.com/dotnet/sourcelink/issues/159#issuecomment-427639278
+                msBuildSettings.WithProperty("PublishRepositoryUrl", "true");
+                msBuildSettings.WithProperty("RepositoryType", "git");
+                msBuildSettings.WithProperty("RepositoryUrl", repositoryUrl);
+                msBuildSettings.WithProperty("RevisionId", RepositoryCommitId);
+            }
+            
+            // Fix for .NET Core 3.0, see https://github.com/dotnet/core-sdk/issues/192, it
+            // uses obj/release instead of [outputdirectory]
+            msBuildSettings.WithProperty("DotNetPackIntermediateOutputPath", outputDirectory);
+            
+            msBuildSettings.WithProperty("NoBuild", "true");
+            msBuildSettings.Targets.Add("Pack");
+
+            MSBuild(projectFileName, msBuildSettings);
         }
 
-        // Fix for .NET Core 3.0, see https://github.com/dotnet/core-sdk/issues/192, it
-        // uses obj/release instead of [outputdirectory]
-        msBuildSettings.WithProperty("DotNetPackIntermediateOutputPath", outputDirectory);
-
-        var packSettings = new DotNetCorePackSettings
-        {
-            MSBuildSettings = msBuildSettings,
-            OutputDirectory = OutputRootDirectory,
-            Configuration = ConfigurationName,
-            NoBuild = true,
-            Verbosity = msBuildSettings.Verbosity
-        };
-
-        // Note: we need to set the binlog on the pack settings, not on the msbuild settings
-        var binLogArgs = string.Format("-bl:\"{0}\";ProjectImports=Embed", 
-            System.IO.Path.Combine(OutputRootDirectory, string.Format(@"MsBuild_{0}_{1}.binlog", component, "pack")));
-
-        packSettings.ArgumentCustomization = args => args.Append(binLogArgs);
-
-        DotNetCorePack(projectFileName, packSettings);
-        
         LogSeparator();
     }
 
