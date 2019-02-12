@@ -1,3 +1,5 @@
+#pragma warning disable 1998
+
 #l "docker-variables.cake"
 #l "lib-octopusdeploy.cake"
 

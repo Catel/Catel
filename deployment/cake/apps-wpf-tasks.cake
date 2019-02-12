@@ -1,3 +1,5 @@
+#pragma warning disable 1998
+
 #l "apps-wpf-variables.cake"
 
 #addin "nuget:?package=Cake.Squirrel&version=0.13.0"
