@@ -118,11 +118,7 @@ private void BuildDockerImages()
             PlatformTarget = PlatformTarget.MSIL
         };
 
-        var toolPath = GetVisualStudioPath(msBuildSettings.ToolVersion);
-        if (!string.IsNullOrWhiteSpace(toolPath))
-        {
-            msBuildSettings.ToolPath = toolPath;
-        }
+        ConfigureMsBuild(msBuildSettings, dockerImage);
 
         // Always disable SourceLink
         msBuildSettings.WithProperty("EnableSourceLink", "false");

@@ -55,18 +55,47 @@ private void RestoreNuGetPackages(Cake.Core.IO.FilePath solutionOrProjectFileNam
     }
 }
 
+//-------------------------------------------------------------
+
+private void ConfigureMsBuild(MSBuildSettings msBuildSettings, string projectName)
+{
+    var toolPath = GetVisualStudioPath(msBuildSettings.ToolVersion);
+    if (!string.IsNullOrWhiteSpace(toolPath))
+    {
+        msBuildSettings.ToolPath = toolPath;
+    }
+
+    // Enable for file logging
+    msBuildSettings.AddFileLogger(new MSBuildFileLogger
+    {
+        //Verbosity = msBuildSettings.Verbosity,
+        Verbosity = Verbosity.Diagnostic,
+        LogFile = System.IO.Path.Combine(OutputRootDirectory, string.Format(@"MsBuild_{0}_build.log", projectName))
+    });
+
+    // Enable for bin logging
+    msBuildSettings.BinaryLogger = new MSBuildBinaryLogSettings
+    {
+        Enabled = true,
+        Imports = MSBuildBinaryLogImports.Embed,
+        FileName = System.IO.Path.Combine(OutputRootDirectory, string.Format(@"MsBuild_{0}.binlog", projectName))
+    };
+}
+
+//-------------------------------------------------------------
+
 private string GetVisualStudioPath(MSBuildToolVersion toolVersion)
 {
     if (UseVisualStudioPrerelease)
     {
-        //Debug("Checking for installation of Visual Studio 2019 preview");
-        //
-        //var pathFor2019 = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Preview\MSBuild\Current\Bin\msbuild.exe";
-        //if (System.IO.File.Exists(pathFor2019))
-        //{
-        //    Information("Using Visual Studio 2019 preview");
-        //    return pathFor2019;
-        //}
+        Debug("Checking for installation of Visual Studio 2019 preview");
+
+        var pathFor2019 = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Preview\MSBuild\Current\Bin\msbuild.exe";
+        if (System.IO.File.Exists(pathFor2019))
+        {
+            Information("Using Visual Studio 2019 preview");
+            return pathFor2019;
+        }
 
         Debug("Checking for installation of Visual Studio 2017 preview");
 

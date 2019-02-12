@@ -84,11 +84,7 @@ private void BuildWebApps()
             PlatformTarget = PlatformTarget.MSIL
         };
 
-        var toolPath = GetVisualStudioPath(msBuildSettings.ToolVersion);
-        if (!string.IsNullOrWhiteSpace(toolPath))
-        {
-            msBuildSettings.ToolPath = toolPath;
-        }
+        ConfigureMsBuild(msBuildSettings, webApp);
 
         // Always disable SourceLink
         msBuildSettings.WithProperty("EnableSourceLink", "false");

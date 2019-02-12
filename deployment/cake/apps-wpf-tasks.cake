@@ -4,7 +4,7 @@
 #addin "nuget:?package=MagicChunks&version=2.0.0.119"
 //#addin "nuget:?Cake.AzureStorage&version=0.14.0"
 
-#tool "nuget:?package=Squirrel.Windows&version=1.8.0"
+#tool "nuget:?package=Squirrel.Windows&version=1.9.1"
 #tool "nuget:?package=AzureStorageSync&version=2.0.0-alpha0028&prerelease"
 
 //-------------------------------------------------------------
@@ -76,11 +76,7 @@ private void BuildWpfApps()
             PlatformTarget = PlatformTarget.MSIL
         };
 
-        var toolPath = GetVisualStudioPath(msBuildSettings.ToolVersion);
-        if (!string.IsNullOrWhiteSpace(toolPath))
-        {
-            msBuildSettings.ToolPath = toolPath;
-        }
+        ConfigureMsBuild(msBuildSettings, wpfApp);
 
         // Always disable SourceLink
         msBuildSettings.WithProperty("EnableSourceLink", "false");
