@@ -144,7 +144,8 @@ Task("Clean")
         {
             Information("Cleaning output for platform '{0}'", platform.Value);
 
-            var msBuildSettings = new MSBuildSettings {
+            var msBuildSettings = new MSBuildSettings
+            {
                 Verbosity = Verbosity.Minimal,
                 ToolVersion = MSBuildToolVersion.Default,
                 Configuration = ConfigurationName,
@@ -152,11 +153,7 @@ Task("Clean")
                 PlatformTarget = platform.Value
             };
 
-            var toolPath = GetVisualStudioPath(msBuildSettings.ToolVersion);
-            if (!string.IsNullOrWhiteSpace(toolPath))
-            {
-                msBuildSettings.ToolPath = toolPath;
-            }
+            ConfigureMsBuild(msBuildSettings, platform.Key, "clean");
 
             msBuildSettings.Targets.Add("Clean");
 
