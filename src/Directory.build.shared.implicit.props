@@ -45,7 +45,7 @@
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <Compile Include="..\*.cs">
       <SonarQubeExclude>true</SonarQubeExclude>

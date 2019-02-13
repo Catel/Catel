@@ -124,14 +124,15 @@ private string GetVisualStudioPath(bool? allowVsPrerelease = null)
 {
     if ((allowVsPrerelease ?? true) && UseVisualStudioPrerelease)
     {
-        //Debug("Checking for installation of Visual Studio 2019 preview");
+        Debug("Checking for installation of Visual Studio 2019 preview");
 
-        //var pathFor2019Preview = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Preview\MSBuild\Current\Bin\msbuild.exe";
-        //if (System.IO.File.Exists(pathFor2019Preview))
-        //{
-        //    Information("Using Visual Studio 2019 preview");
-        //    return pathFor2019Preview;
-        //}
+        var pathFor2019Preview = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Preview\MSBuild\Current\Bin\msbuild.exe";
+        if (System.IO.File.Exists(pathFor2019Preview))
+        {
+           Information("Using Visual Studio 2019 preview, note that SonarQube will be disabled since it's not (yet) compatible with VS2019");
+           SonarDisabled = true;
+           return pathFor2019Preview;
+        }
 
         Debug("Checking for installation of Visual Studio 2017 preview");
 
