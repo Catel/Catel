@@ -766,20 +766,19 @@ namespace Catel.Windows
         }
 
         /// <summary>
-        /// Invoked when the content of this control has been changed. This method will add the dynamic controls automatically.
+        /// Invoked when the control has been initialized.
         /// </summary>
-        /// <param name="oldContent">Old content.</param>
-        /// <param name="newContent">New content.</param>
-        protected override void OnContentChanged(object oldContent, object newContent)
+        /// <param name="e">The event args.</param>
+        protected override void OnInitialized(EventArgs e)
         {
-            base.OnContentChanged(oldContent, newContent);
+            base.OnInitialized(e);
 
             if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }
 
-            var newContentAsFrameworkElement = newContent as FrameworkElement;
+            var newContentAsFrameworkElement = Content as FrameworkElement;
             if (_isWrapped || !WrapControlService.CanBeWrapped(newContentAsFrameworkElement))
             {
                 return;
