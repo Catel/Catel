@@ -2477,7 +2477,7 @@ namespace Catel.Windows
         protected System.Threading.Tasks.Task OnCancelExecuteAsync() { }
         protected bool OnCloseCanExecute() { }
         protected void OnCloseExecute() { }
-        protected override void OnContentChanged(object oldContent, object newContent) { }
+        protected override void OnInitialized(System.EventArgs e) { }
         protected virtual void OnInternalGridChanged() { }
         protected override void OnKeyDown(System.Windows.Input.KeyEventArgs e) { }
         protected virtual void OnLoaded(System.EventArgs e) { }
