@@ -43,6 +43,7 @@ Added/fixed
 ===========
 (*) #1261 Update NewtonSoft.Json to 12.x
 (*) #1268 Initialize VM grid in DataWindow.Initialized instead of DataWindow.ContentChanged
+(x) #1259 DataWindow should respect the focusFirstControl parameter
 
 Roadmap
 =======

@@ -121,6 +121,7 @@ namespace Catel.Windows
 
         private static readonly IWrapControlService WrapControlService = ServiceLocator.Default.ResolveType<IWrapControlService>();
 
+        private readonly bool _focusFirstControl;
         private bool _isWrapped;
         private bool _forceClose;
 
@@ -275,11 +276,13 @@ namespace Catel.Windows
                 Closing += OnDataWindowClosing;
             });
 
+            _focusFirstControl = focusFirstControl;
+
             if (setOwnerAndFocus)
             {
                 this.SetOwnerWindowAndFocus(focusFirstControl: focusFirstControl);
             }
-            else if(focusFirstControl)
+            else if (focusFirstControl)
             {
                 this.FocusFirstControl();
             }
@@ -840,7 +843,10 @@ namespace Catel.Windows
             {
                 internalGrid.SetResourceReference(StyleProperty, "WindowGridStyle");
 
-                newContentAsFrameworkElement.FocusFirstControl();
+                if (_focusFirstControl)
+                {
+                    newContentAsFrameworkElement.FocusFirstControl();
+                }
 
                 _defaultOkCommand = (from button in _buttons
                                      where button.IsDefault
