@@ -54,6 +54,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Include="**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" Exclude="App.xaml" />
+    <Compile Update="**\*.xaml.cs" SubType="Designer" DependentUpon="%(Filename)" />
+    <Compile Update="$(IntermediateOutputPath)**\*.g.cs" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(OutputType)' == 'WinExe'">
+    <ApplicationDefinition Include="App.xaml" SubType="Designer" Generator="MSBuild:Compile" />
+    <Compile Update="App.xaml.cs" SubType="Designer" DependentUpon="%(Filename)" />
+    <Compile Update="$(IntermediateOutputPath)**\App.g.cs" Visible="false" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <Compile Remove="Platforms\**\*.cs;Resources\**\*.cs" />
     <Page Remove="Platforms\**\*.xaml" />
     <!-- This is here so that the conditionally included files below are all visible in VS -->
