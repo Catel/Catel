@@ -103,7 +103,13 @@ namespace Catel.MVVM.Providers
 #if XAMARIN
             CreateViewModelWrapper(false);
 #elif !UWP
+            // For non-UWP, we *cannot* use the ContentChanged event (it doesn't have the x:Name available)
             this.SubscribeToWeakGenericEvent<EventArgs>(targetView, nameof(FrameworkElement.Initialized), OnTargetViewInitialized, false);
+#else
+            // For UWP, we *can* use the ContentChanged event (it does have x:Name available)
+            // NOTE: There is NO unsubscription for this subscription.
+            // Hence target control content wrapper grid will be recreated each time content changes.
+            targetView.SubscribeToPropertyChanged(nameof(global::Windows.UI.Xaml.Controls.UserControl.Content), OnTargetViewContentChanged);
 #endif
         }
         #endregion
@@ -302,12 +308,24 @@ namespace Catel.MVVM.Providers
             }
         }
 
+#if !UWP
         private void OnTargetViewInitialized(object sender, EventArgs e)
         {
             // Note: we can't use Content changed property notification (x:Name is not yet set), but Loaded event is too late,
             // this event should be in-between: https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/object-lifetime-events
             CreateViewModelWrapper();
         }
+#else  
+        /// <summary>
+        /// Called when the content of the target control has changed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
+        private void OnTargetViewContentChanged(object sender, PropertyChangedEventArgs e)
+        {
+            CreateViewModelWrapper();
+        }
+#endif
 
         /// <summary>
         /// Called when the <c>TargetView</c> has just been loaded.

@@ -45,6 +45,7 @@ Added/fixed
 (*) #1268 Initialize VM grid in DataWindow.Initialized instead of DataWindow.ContentChanged
 (*) #1269 Create VM Auditor to subscribe keyboard events instead of CommandManager constructor
 (x) #1259 DataWindow should respect the focusFirstControl parameter
+(x) #1267 Fix binding errors on UserControl for UWP
 
 Roadmap
 =======
