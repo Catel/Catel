@@ -42,8 +42,12 @@ namespace Catel
 
 #if !XAMARIN
             var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
-            var auditor = typeFactory.CreateInstance<InvalidateCommandManagerOnViewModelInitializationAuditor>();
-            AuditingManager.RegisterAuditor(auditor);
+
+            var invalidateCommandManagerOnViewModelInitializationAuditor = typeFactory.CreateInstance<InvalidateCommandManagerOnViewModelInitializationAuditor>();
+            AuditingManager.RegisterAuditor(invalidateCommandManagerOnViewModelInitializationAuditor);
+
+            var subscribeKeyboardEventsOnViewModelCreationAuditor = typeFactory.CreateInstance<SubscribeKeyboardEventsOnViewModelCreationAuditor>();
+            AuditingManager.RegisterAuditor(subscribeKeyboardEventsOnViewModelCreationAuditor);
 #endif
 
             DesignTimeHelper.InitializeDesignTime();

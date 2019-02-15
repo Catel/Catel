@@ -248,6 +248,11 @@ namespace Catel.MVVM.Auditing
         public InvalidateCommandManagerOnViewModelInitializationAuditor(Catel.MVVM.ICommandManager commandManager, Catel.Services.IDispatcherService dispatcherService) { }
         public override void OnViewModelInitialized(Catel.MVVM.IViewModel viewModel) { }
     }
+    public class SubscribeKeyboardEventsOnViewModelCreationAuditor : Catel.MVVM.Auditing.AuditorBase
+    {
+        public SubscribeKeyboardEventsOnViewModelCreationAuditor(Catel.MVVM.ICommandManager commandManager) { }
+        public override void OnViewModelCreated(Catel.MVVM.IViewModel viewModel) { }
+    }
 }
 namespace Catel.MVVM
 {

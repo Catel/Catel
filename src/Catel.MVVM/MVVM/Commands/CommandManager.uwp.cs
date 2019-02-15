@@ -20,7 +20,14 @@ namespace Catel.MVVM
 
         partial void SubscribeToKeyboardEventsInternal()
         {
-            this.SubscribeToKeyboardEvents(Window.Current);
+            var currentWindow = Window.Current;
+            if (currentWindow is null)
+            {
+                Log.Info("Window.Current is null, cannot subscribe to keyboard events");
+                return;
+            }
+
+            this.SubscribeToKeyboardEvents(currentWindow);
         }
 
         /// <summary>
