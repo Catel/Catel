@@ -11,16 +11,19 @@ namespace Catel.Windows.Controls
     using System;
     using System.ComponentModel;
     using System.Threading.Tasks;
-    using System.Windows;
     using Catel.Threading;
     using MVVM.Providers;
     using MVVM.Views;
     using MVVM;
 
 #if UWP
+    using global::Windows.UI;
     using global::Windows.UI.Xaml;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Markup;
     using UIEventArgs = System.EventArgs;
 #endif
 
@@ -379,6 +382,27 @@ namespace Catel.Windows.Controls
             ViewModelChanged?.Invoke(this, EventArgs.Empty);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewModel)));
         }
+
+#if NET || NETCORE
+        /// <summary>
+        /// Adds a specified object as the child of a System.Windows.Controls.ContentControl.
+        /// </summary>
+        /// <param name="value">The object to add.</param>
+        protected override void AddChild(object value)
+        {
+            // Fix for https://github.com/Catel/Catel/issues/1260, make sure to create the grid first (and we force it, this
+            // might be a non-xaml (e.g. non-InitializeComponent) control
+            var wrapper = _logic.CreateViewModelWrapper(true);
+            if (wrapper != null)
+            {
+                // Pass on to the grid
+                ((IAddChild)Content).AddChild(value);
+                return;
+            }
+
+            base.AddChild(value);
+        }
+#endif
 
         /// <summary>
         /// Called when the <see cref="ViewModel"/> has changed.

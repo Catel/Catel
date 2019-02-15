@@ -1459,6 +1459,8 @@ namespace Catel.MVVM.Providers
         public bool SkipSearchingForInfoBarMessageControl { get; set; }
         public bool SupportParentViewModelContainers { get; set; }
         public Catel.MVVM.Providers.UnloadBehavior UnloadBehavior { get; set; }
+        public Catel.MVVM.Views.IViewModelWrapper CreateViewModelWrapper(bool force = False) { }
+        public object GetViewModelWrapper() { }
         public override void OnTargetViewDataContextChanged(object sender, Catel.MVVM.Views.DataContextChangedEventArgs e) { }
         public override System.Threading.Tasks.Task OnTargetViewLoadedAsync(object sender, System.EventArgs e) { }
         public override System.Threading.Tasks.Task OnTargetViewUnloadedAsync(object sender, System.EventArgs e) { }
@@ -2085,6 +2087,7 @@ namespace Catel.Services
     public interface IViewModelService : Catel.Services.IService { }
     public interface IViewModelWrapperService
     {
+        Catel.MVVM.Views.IViewModelWrapper GetWrapper(Catel.MVVM.Views.IView view);
         bool IsWrapped(Catel.MVVM.Views.IView view);
         Catel.MVVM.Views.IViewModelWrapper Wrap(Catel.MVVM.Views.IView view, object viewModelSource, Catel.Services.WrapOptions wrapOptions);
     }
@@ -2382,6 +2385,7 @@ namespace Catel.Services
     public class ViewModelWrapperService : Catel.Services.ViewModelWrapperServiceBase, Catel.Services.IViewModelWrapperService
     {
         public ViewModelWrapperService() { }
+        public Catel.MVVM.Views.IViewModelWrapper GetWrapper(Catel.MVVM.Views.IView view) { }
         protected override bool IsViewWrapped(Catel.MVVM.Views.IView view) { }
         public bool IsWrapped(Catel.MVVM.Views.IView view) { }
         public Catel.MVVM.Views.IViewModelWrapper Wrap(Catel.MVVM.Views.IView view, object viewModelSource, Catel.Services.WrapOptions wrapOptions) { }
@@ -2432,6 +2436,7 @@ namespace Catel.Services
     {
         None = 0,
         CreateWarningAndErrorValidatorForViewModel = 1,
+        Force = 2,
     }
 }
 namespace Catel.Windows
@@ -2713,6 +2718,7 @@ namespace Catel.Windows.Controls
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         public event System.EventHandler<System.EventArgs> ViewModelChanged;
         public event System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> ViewModelPropertyChanged;
+        protected override void AddChild(object value) { }
         protected virtual void OnLoaded(System.EventArgs e) { }
         protected virtual void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
         protected virtual void OnUnloaded(System.EventArgs e) { }

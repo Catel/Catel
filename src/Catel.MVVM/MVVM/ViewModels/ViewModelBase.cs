@@ -163,7 +163,7 @@ namespace Catel.MVVM
 #endif
         private string _title;
 
-        private IObjectIdGenerator<int> _objectIdGenerator;
+        private readonly IObjectIdGenerator<int> _objectIdGenerator;
         #endregion
 
         #region Constructors

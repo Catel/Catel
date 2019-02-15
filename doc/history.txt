@@ -41,6 +41,7 @@ Classes / members marked as obsolete
 
 Added/fixed
 ===========
+(*) #1260 Allow classes derived from Catel.UserControl to use the AddChild method 
 (*) #1261 Update NewtonSoft.Json to 12.x
 (*) #1268 Initialize VM grid in DataWindow.Initialized instead of DataWindow.ContentChanged
 (*) #1269 Create VM Auditor to subscribe keyboard events instead of CommandManager constructor

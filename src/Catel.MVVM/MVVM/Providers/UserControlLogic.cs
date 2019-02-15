@@ -101,7 +101,7 @@ namespace Catel.MVVM.Providers
 #endif
 
 #if XAMARIN
-            CreateViewModelWrapper(false);
+            CreateViewModelWrapper();
 #elif !UWP
             // For non-UWP, we *cannot* use the ContentChanged event (it doesn't have the x:Name available)
             this.SubscribeToWeakGenericEvent<EventArgs>(targetView, nameof(FrameworkElement.Initialized), OnTargetViewInitialized, false);
@@ -275,14 +275,16 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Creates the view model wrapper.
         /// </summary>
-        /// <param name="checkIfWrapped">if set to <c>true</c>, check if the view is already wrapped.</param>
-        private void CreateViewModelWrapper(bool checkIfWrapped = true)
+        /// <param name="force">If set the <c>true</c>, this will add the <see cref="WrapOptions.Force"/> flag.</param>
+        public IViewModelWrapper CreateViewModelWrapper(bool force = false)
         {
             var targetView = TargetView;
 
             var dependencyResolver = this.GetDependencyResolver();
             var viewModelWrapperService = dependencyResolver.Resolve<IViewModelWrapperService>();
-            if (checkIfWrapped || !viewModelWrapperService.IsWrapped(targetView))
+
+            var wrapper = viewModelWrapperService.GetWrapper(targetView);
+            if (wrapper is null)
             {
                 var wrapOptions = WrapOptions.None;
 
@@ -293,19 +295,26 @@ namespace Catel.MVVM.Providers
                 }
 #endif
 
-                void action() => viewModelWrapperService.Wrap(targetView, this, wrapOptions);
+                if (force)
+                {
+                    wrapOptions |= WrapOptions.Force;
+                }
 
-                // NOTE: Beginning invoke (running async) because setting of TargetControl Content property causes memory faults
-                // when this method called by TargetControlContentChanged handler. No need to await though.
-#if NETFX_CORE && !UWP
-#pragma warning disable 4014
-                var dispatcher = ((FrameworkElement)TargetView).Dispatcher;
-                dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { action(); });
-#pragma warning restore 4014
-#else
-                action();
-#endif
+                wrapper = viewModelWrapperService.Wrap(targetView, this, wrapOptions);
             }
+
+            return wrapper;
+        }
+
+        /// <summary>
+        /// Gets the view model wrapper. If the view is not wrapped, this method will return <c>null</c>.
+        /// </summary>
+        /// <returns>The view model wrapper or <c>null</c>.</returns>
+        public object GetViewModelWrapper()
+        {
+            var dependencyResolver = this.GetDependencyResolver();
+            var viewModelWrapperService = dependencyResolver.Resolve<IViewModelWrapperService>();
+            return viewModelWrapperService.GetWrapper(TargetView);
         }
 
 #if !UWP

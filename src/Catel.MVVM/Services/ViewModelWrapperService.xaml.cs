@@ -34,8 +34,6 @@ namespace Catel.Services
     {
         private const string InnerWrapperName = "__catelInnerWrapper";
 
-        private readonly ConditionalWeakTable<object, object> _weakIsWrappingTable = new ConditionalWeakTable<object, object>();
-
         /// <summary>
         /// Determines whether the specified view is wrapped.
         /// </summary>
@@ -64,19 +62,12 @@ namespace Catel.Services
         private IViewModelWrapper CreateViewModelGrid(IView view, object viewModelSource, WrapOptions wrapOptions)
         {
             var content = GetContent(view) as FrameworkElement;
-            if (content is null)
-            {
-                return null;
-            }
-
-            if (_weakIsWrappingTable.TryGetValue(view, out var tempObj))
+            if (!Enum<WrapOptions>.Flags.IsFlagSet(wrapOptions, WrapOptions.Force) && content is null)
             {
                 return null;
             }
 
             var viewTypeName = view.GetType().Name;
-
-            _weakIsWrappingTable.Add(view, new object());
 
             Grid vmGrid = null;
 
@@ -109,7 +100,12 @@ namespace Catel.Services
 #endif
 
                 SetContent(view, null);
-                vmGrid.Children.Add(content);
+
+                if (content != null)
+                {
+                    vmGrid.Children.Add(content);
+                }
+
                 SetContent(view, vmGrid);
 
                 Log.Debug($"Created content wrapper grid for view model for view '{viewTypeName}'");
