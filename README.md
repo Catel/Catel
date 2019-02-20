@@ -125,6 +125,26 @@ public class PersonViewModel : ViewModelBase
 }
 ```
 
+## Building Catel
+
+Note that you should run these commands using powershell in the root of the repository.
+
+### Running a build
+
+`.\build.ps1 -target build`
+
+### Running a build with unit tests
+
+`.\build.ps1 -target buildandtest`
+
+### Running a build with local packages
+
+Note that this assumes a local packages directory at `C:\Source\_packages`, which can be added to the NuGet feeds:
+
+![](doc/nuget_local_packages.png)
+
+`.\build.ps1 -target buildandpackagelocal`
+
 ## Apps using Catel
 
 There are a lot of (both free & commercial) apps using Catel. This list provides a few examples that are built 
