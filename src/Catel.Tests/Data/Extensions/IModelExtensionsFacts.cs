@@ -112,10 +112,20 @@
                 pluginChangeNotifications = 0;
                 presetChangeNotifications = 0;
 
+                Assert.IsTrue(pluginContainer.IsDirty);
+
                 pluginContainer.ClearIsDirtyOnAllChildren();
 
                 Assert.AreEqual(100, pluginChangeNotifications);
                 Assert.AreEqual(50000, presetChangeNotifications);
+
+                // Test https://github.com/Catel/Catel/issues/1262
+                Assert.IsFalse(pluginContainer.IsDirty);
+
+                foreach (var plugin in pluginContainer.Plugins)
+                {
+                    Assert.IsFalse(plugin.IsDirty);
+                }
             }
 
             [Test]
@@ -171,10 +181,20 @@
                 pluginChangeNotifications = 0;
                 presetChangeNotifications = 0;
 
+                Assert.IsTrue(pluginContainer.IsDirty);
+
                 pluginContainer.ClearIsDirtyOnAllChildren(true);
 
                 Assert.AreEqual(0, pluginChangeNotifications);
                 Assert.AreEqual(0, presetChangeNotifications);
+
+                // Test https://github.com/Catel/Catel/issues/1262
+                Assert.IsFalse(pluginContainer.IsDirty);
+
+                foreach (var plugin in pluginContainer.Plugins)
+                {
+                    Assert.IsFalse(plugin.IsDirty);
+                }
             }
         }
     }
