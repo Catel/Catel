@@ -1231,6 +1231,9 @@ namespace Catel.Data
     }
     public class static IModelExtensions
     {
+        public static void ClearIsDirtyOnAllChildren(this Catel.Data.IModel model, bool suspendNotifications = False) { }
+        [System.ObsoleteAttribute("Use `ClearIsDirtyOnAllChildren(IModel, bool)` instead. Will be removed in version" +
+            " 6.0.0.", true)]
         public static void ClearIsDirtyOnAllChilds(this Catel.Data.IModel model) { }
         public static byte[] ToByteArray(this Catel.Data.IModel model, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
         public static System.Xml.Linq.XDocument ToXml(this Catel.Data.IModel model, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
