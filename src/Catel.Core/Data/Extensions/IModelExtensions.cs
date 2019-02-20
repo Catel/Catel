@@ -60,6 +60,19 @@ namespace Catel.Data
                     return;
                 }
 
+                // Note 1: we need to add it first (to prevent circular references)
+                handledReferences.Add(modelEditor);
+
+                // Note 2: handle children first so we can clear the parent last to prevent
+                // it from changing back to dirty again
+                var catelTypeInfo = ModelBase.PropertyDataManager.GetCatelTypeInfo(obj.GetType());
+                foreach (var property in catelTypeInfo.GetCatelProperties())
+                {
+                    var value = modelEditor.GetValue(property.Value.Name);
+
+                    ClearIsDirtyOnAllChildren(value, handledReferences, suspendNotifications);
+                }
+
                 if (suspendNotifications)
                 {
                     modelEditor.SetValueFastButUnsecure(nameof(ModelBase.IsDirty), false);
@@ -67,16 +80,6 @@ namespace Catel.Data
                 else
                 {
                     modelEditor.SetValue(nameof(ModelBase.IsDirty), false);
-                }
-
-                handledReferences.Add(modelEditor);
-
-                var catelTypeInfo = ModelBase.PropertyDataManager.GetCatelTypeInfo(obj.GetType());
-                foreach (var property in catelTypeInfo.GetCatelProperties())
-                {
-                    var value = modelEditor.GetValue(property.Value.Name);
-
-                    ClearIsDirtyOnAllChildren(value, handledReferences, suspendNotifications);
                 }
             }
             else if (objAsIEnumerable != null)
