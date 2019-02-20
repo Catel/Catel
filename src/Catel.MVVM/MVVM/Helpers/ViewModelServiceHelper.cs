@@ -83,8 +83,11 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
 #endif
 
-#if NET || NETCORE
+#if NET || NETCORE || UWP
                 serviceLocator.RegisterTypeIfNotYetRegistered<IProcessService, ProcessService>();
+#endif
+
+#if NET || NETCORE
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IStartUpInfoProvider, StartUpInfoProvider>();
 #endif
