@@ -45,8 +45,8 @@
             }
 
             [TestCase(1000, 0)]
-            [TestCase(2100, 1)]
-            [TestCase(4100, 2)]
+            [TestCase(2400, 1)]
+            [TestCase(4400, 2)]
             public async Task TestMultipleBatchesAsync(int millisecondsToWait, int expectedFlushCount)
             {
                 var listener = new CustomBatchLogListener();
