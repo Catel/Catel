@@ -13,7 +13,7 @@ Issue tracker:   https://www.catelproject.com/support/issue-tracker
 Documentation:   https://www.catelproject.com/support/documentation
 License:         https://www.catelproject.com/about/license
 
-Items prepended with CTL are from JIRA (old issue tracker). Items prepended with a # are from GitHub.
+Items prefixed with 'CTL' are from JIRA (old issue tracker). Items prefixed with '#' are from GitHub.
 
 **********************************************************
 

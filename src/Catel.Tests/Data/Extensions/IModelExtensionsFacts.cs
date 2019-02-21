@@ -45,6 +45,14 @@
 
         public class PluginContainer : ChildAwareModelBase
         {
+            public string Name
+            {
+                get { return GetValue<string>(NameProperty); }
+                set { SetValue(NameProperty, value); }
+            }
+
+            public static readonly PropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), null);
+
             public FastObservableCollection<Plugin> Plugins
             {
                 get { return GetValue<FastObservableCollection<Plugin>>(PluginsProperty); }
@@ -65,7 +73,10 @@
                 var pluginChangeNotifications = 0;
                 var presetChangeNotifications = 0;
 
-                var pluginContainer = new PluginContainer();
+                var pluginContainer = new PluginContainer
+                {
+                    Name = "test"
+                };
 
                 for (int i = 0; i < 100; i++)
                 {
@@ -134,7 +145,10 @@
                 var pluginChangeNotifications = 0;
                 var presetChangeNotifications = 0;
 
-                var pluginContainer = new PluginContainer();
+                var pluginContainer = new PluginContainer
+                {
+                    Name = "test"
+                };
 
                 for (int i = 0; i < 100; i++)
                 {
