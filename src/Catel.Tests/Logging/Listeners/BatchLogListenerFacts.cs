@@ -44,6 +44,7 @@
                 }
             }
 
+            [Explicit]
             [TestCase(1000, 0)]
             [TestCase(2400, 1)]
             [TestCase(4400, 2)]
