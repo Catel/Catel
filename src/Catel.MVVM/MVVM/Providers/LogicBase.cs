@@ -18,6 +18,7 @@ namespace Catel.MVVM.Providers
     using Views;
     using Reflection;
     using Threading;
+    using Catel.Services;
 
     /// <summary>
     /// Available unload behaviors.
@@ -69,6 +70,7 @@ namespace Catel.MVVM.Providers
         private static readonly IViewModelLocator _viewModelLocator;
         private static readonly IViewManager _viewManager;
         private static readonly IViewPropertySelector _viewPropertySelector;
+        private static readonly IViewContextService _viewContextService;
 
         /// <summary>
         /// The view model instances currently held by this provider. This value should only be used
@@ -103,6 +105,7 @@ namespace Catel.MVVM.Providers
             _viewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
             _viewManager = dependencyResolver.Resolve<IViewManager>();
             _viewPropertySelector = dependencyResolver.Resolve<IViewPropertySelector>();
+            _viewContextService = dependencyResolver.Resolve<IViewContextService>();
             ViewLoadManager = dependencyResolver.Resolve<IViewLoadManager>();
         }
 
@@ -530,6 +533,21 @@ namespace Catel.MVVM.Providers
         }
 
         /// <summary>
+        /// Gets the data context for the current view.
+        /// </summary>
+        /// <param name="view">The view to retrieve the data context from.</param>
+        /// <returns>The data context.</returns>
+        protected virtual object GetDataContext(IView view)
+        {
+            if (view is null)
+            {
+                return null;
+            }
+
+            return _viewContextService.GetContext(view);
+        }
+
+        /// <summary>
         /// Sets the data context of the target control.
         /// <para />
         /// This method is abstract because the real logic implementation knows how to set the data context (for example,
@@ -543,7 +561,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         protected IViewModel CreateViewModelByUsingDataContextOrConstructor()
         {
-            var dataContext = TargetView.DataContext;
+            var dataContext = GetDataContext(TargetView);
 
             // It might be possible that a view model is already set, so use it if the datacontext is a view model
             var dataContextAsIViewModel = dataContext as IViewModel;
@@ -714,7 +732,7 @@ namespace Catel.MVVM.Providers
 
             IsTargetViewLoaded = true;
 
-            var dataContext = view?.DataContext;
+            var dataContext = GetDataContext(view);
             LastKnownDataContext = (dataContext != null) ? new WeakReference(dataContext) : null;
 
             await OnTargetViewLoadedAsync(sender, e);
@@ -887,11 +905,12 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
-            Log.Debug($"DataContext of TargetView '{TargetViewType?.Name}' has changed to '{ObjectToStringHelper.ToTypeString(TargetView.DataContext)}'");
+            var dataContext = GetDataContext(TargetView);
+
+            Log.Debug($"DataContext of TargetView '{TargetViewType?.Name}' has changed to '{ObjectToStringHelper.ToTypeString(dataContext)}'");
 
             LastKnownDataContext = null;
 
-            var dataContext = TargetView.DataContext;
             if (ReferenceEquals(dataContext, null))
             {
                 return;

@@ -391,7 +391,8 @@ namespace Catel.MVVM.Providers
             if (ViewModel is null)
             {
                 // Try to create view model based on data context
-                await UpdateDataContextToUseViewModelAsync(TargetView.DataContext);
+                var dataContext = GetDataContext(TargetView);
+                await UpdateDataContextToUseViewModelAsync(dataContext);
             }
 
             if (DisableWhenNoViewModel)
@@ -479,7 +480,7 @@ namespace Catel.MVVM.Providers
 
             base.OnTargetViewDataContextChanged(sender, e);
 
-            var dataContext = TargetView.DataContext;
+            var dataContext = GetDataContext(TargetView);
             if (dataContext.IsSentinelBindingObject())
             {
                 return;

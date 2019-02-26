@@ -1381,6 +1381,7 @@ namespace Catel.MVVM.Providers
         protected System.Threading.Tasks.Task CompleteViewModelClosingAsync() { }
         protected Catel.MVVM.IViewModel ConstructViewModelUsingArgumentOrDefaultConstructor(object injectionObject) { }
         protected Catel.MVVM.IViewModel CreateViewModelByUsingDataContextOrConstructor() { }
+        protected virtual object GetDataContext(Catel.MVVM.Views.IView view) { }
         protected bool IsCurrentDataContext(Catel.MVVM.Views.DataContextChangedEventArgs e) { }
         public virtual void OnTargetViewDataContextChanged(object sender, Catel.MVVM.Views.DataContextChangedEventArgs e) { }
         public virtual System.Threading.Tasks.Task OnTargetViewLoadedAsync(object sender, System.EventArgs e) { }
@@ -2078,6 +2079,10 @@ namespace Catel.Services
         void Start(System.TimeSpan duration);
         void Stop();
     }
+    public interface IViewContextService
+    {
+        object GetContext(Catel.MVVM.Views.IView view);
+    }
     public interface IViewExportService
     {
         [System.ObsoleteAttribute("Use `ExportAsync` instead. Will be removed in version 6.0.0.", true)]
@@ -2369,6 +2374,11 @@ namespace Catel.Services
         public VibrateService() { }
         public void Start(System.TimeSpan duration) { }
         public void Stop() { }
+    }
+    public class ViewContextService : Catel.Services.IViewContextService
+    {
+        public ViewContextService() { }
+        public object GetContext(Catel.MVVM.Views.IView view) { }
     }
     public class ViewExportService : Catel.Services.ServiceBase, Catel.Services.IViewExportService
     {

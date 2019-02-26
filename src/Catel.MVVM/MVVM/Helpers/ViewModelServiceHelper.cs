@@ -61,6 +61,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationRootService, NavigationRootService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IViewContextService, ViewContextService>();
 
 #if !XAMARIN && !XAMARIN_FORMS
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();

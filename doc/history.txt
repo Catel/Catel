@@ -41,6 +41,7 @@ Classes / members marked as obsolete
 
 Added/fixed
 ===========
+(+) #1249 Add ViewModelContextService to allow runtime overrides of the DataContext to use for view model injection
 (+) #1272 Implement IProcessService for UWP
 (*) #1260 Allow classes derived from Catel.UserControl to use the AddChild method 
 (*) #1261 Update NewtonSoft.Json to 12.x
