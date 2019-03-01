@@ -66,6 +66,9 @@ private void ConfigureMsBuild(MSBuildSettings msBuildSettings, string projectNam
         msBuildSettings.ToolPath = toolPath;
     }
 
+    // Use as much CPU as possible
+    msBuildSettings.MaxCpuCount = 0;
+    
     // Enable for file logging
     msBuildSettings.AddFileLogger(new MSBuildFileLogger
     {
@@ -94,6 +97,9 @@ private void ConfigureMsBuildForDotNetCore(DotNetCoreMSBuildSettings msBuildSett
         msBuildSettings.ToolPath = toolPath;
     }
 
+    // Use as much CPU as possible
+    msBuildSettings.MaxCpuCount = 0;
+    
     // Enable for file logging
     msBuildSettings.AddFileLogger(new MSBuildFileLoggerSettings
     {
