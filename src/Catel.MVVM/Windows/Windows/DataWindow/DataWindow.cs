@@ -305,7 +305,7 @@ namespace Catel.Windows
         /// This property is very useful when using views in transitions where the view model is no longer required.
         /// </summary>
         /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         public bool PreventViewModelCreation
         {
             get { return _logic.GetValue<WindowLogic, bool>(x => x.PreventViewModelCreation); }
