@@ -21,10 +21,6 @@ namespace Catel.IoC
     using Catel.Collections;
     using Catel.Linq;
 
-#if !XAMARIN
-    using System.Dynamic;
-#endif
-
     /// <summary>
     /// Type factory which will cache constructors to ensure the best performance available.
     /// <para />
@@ -937,7 +933,9 @@ namespace Catel.IoC
                 }
 
 #if !XAMARIN
-                if (parameterType == typeof(DynamicObject))
+                // Because we check on string, we don't need a dependency
+                //if (parameterType.FullName == typeof(DynamicObject))
+                if (parameterType.FullName == "System.Dynamic.DynamicObject")
                 {
                     counter++;
                     continue;
