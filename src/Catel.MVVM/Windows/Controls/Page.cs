@@ -20,6 +20,7 @@ namespace Catel.Windows.Controls
 #else
     using System.Windows;
     using UIEventArgs = System.EventArgs;
+    using Catel.Reflection;
 #endif
 
     /// <summary>
@@ -32,6 +33,8 @@ namespace Catel.Windows.Controls
 #endif
     {
         #region Fields
+        private static bool? HasVmProperty;
+
         private readonly PageLogic _logic;
 
         private event EventHandler<EventArgs> _viewLoaded;
@@ -49,6 +52,11 @@ namespace Catel.Windows.Controls
             if (CatelEnvironment.IsInDesignMode)
             {
                 return;
+            }
+
+            if (HasVmProperty is null)
+            {
+                HasVmProperty = GetType().GetPropertyEx("VM") != null;
             }
 
             _logic = new PageLogic(this);
@@ -70,7 +78,10 @@ namespace Catel.Windows.Controls
 #endif
             };
 
-            _logic.ViewModelChanged += (sender, e) => RaiseViewModelChanged();
+            _logic.ViewModelChanged += (sender, e) =>
+            {
+                RaiseViewModelChanged();
+            };
 
             _logic.ViewModelPropertyChanged += (sender, e) =>
             {
@@ -199,6 +210,11 @@ namespace Catel.Windows.Controls
 
             ViewModelChanged?.Invoke(this, EventArgs.Empty);
             RaisePropertyChanged(nameof(ViewModel));
+
+            if (HasVmProperty ?? false)
+            {
+                RaisePropertyChanged("VM");
+            }
         }
 
         /// <summary>

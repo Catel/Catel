@@ -29,6 +29,7 @@ namespace Catel.Windows
     using Catel.Threading;
     using Threading;
     using IoC;
+    using Catel.Reflection;
 
     /// <summary>
     /// Mode of the <see cref="DataWindow"/>.
@@ -109,17 +110,11 @@ namespace Catel.Windows
     /// </summary>
     public class DataWindow : System.Windows.Window, IDataWindow
     {
-        #region Constants
-        /// <summary>
-        /// Offset of the window to the sides of the primary monitor.
-        /// </summary>
-        private const int Offset = 50;
-        #endregion
-
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private static readonly IWrapControlService WrapControlService = ServiceLocator.Default.ResolveType<IWrapControlService>();
+
+        private static bool? HasVmProperty;
 
         private readonly bool _focusFirstControl;
         private bool _isWrapped;
@@ -199,6 +194,11 @@ namespace Catel.Windows
                 return;
             }
 
+            if (HasVmProperty is null)
+            {
+                HasVmProperty = GetType().GetPropertyEx("VM") != null;
+            }
+
             // Set window style (WPF doesn't allow styling on root elements of XAML files, too bad)
             // For more info, see http://social.msdn.microsoft.com/Forums/en-US/wpf/thread/3059c0e4-c372-4da2-b384-28f271feef05/
             SetResourceReference(StyleProperty, typeof(DataWindow));
@@ -223,8 +223,8 @@ namespace Catel.Windows
             {
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
                 // on systems where NET45 is *not* installed
-                if (!string.Equals(e.PropertyName, "ActualWidth", StringComparison.InvariantCulture) &&
-                    !string.Equals(e.PropertyName, "ActualHeight", StringComparison.InvariantCulture))
+                if (!string.Equals(e.PropertyName, nameof(ActualWidth), StringComparison.InvariantCulture) &&
+                    !string.Equals(e.PropertyName, nameof(ActualHeight), StringComparison.InvariantCulture))
                 {
                     PropertyChanged?.Invoke(this, e);
                 }
@@ -644,6 +644,11 @@ namespace Catel.Windows
 
             ViewModelChanged?.Invoke(this, EventArgs.Empty);
             RaisePropertyChanged(nameof(ViewModel));
+
+            if (HasVmProperty ?? false)
+            {
+                RaisePropertyChanged("VM");
+            }
         }
 
         /// <summary>

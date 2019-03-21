@@ -25,6 +25,7 @@ namespace Catel.Windows.Controls
     using System.Windows.Controls;
     using System.Windows.Markup;
     using UIEventArgs = System.EventArgs;
+    using Catel.Reflection;
 #endif
 
     /// <summary>
@@ -51,6 +52,8 @@ namespace Catel.Windows.Controls
 #endif
     {
         #region Fields
+        private static bool? HasVmProperty;
+
         private readonly UserControlLogic _logic;
 
         private event EventHandler<EventArgs> _viewLoaded;
@@ -77,6 +80,11 @@ namespace Catel.Windows.Controls
             if (CatelEnvironment.IsInDesignMode)
             {
                 return;
+            }
+
+            if (HasVmProperty is null)
+            {
+                HasVmProperty = GetType().GetPropertyEx("VM") != null;
             }
 
             this.FixBlurriness();
@@ -397,6 +405,11 @@ namespace Catel.Windows.Controls
 
             ViewModelChanged?.Invoke(this, EventArgs.Empty);
             RaisePropertyChanged(nameof(ViewModel));
+
+            if (HasVmProperty ?? false)
+            {
+                RaisePropertyChanged("VM");
+            }
         }
 
         /// <summary>

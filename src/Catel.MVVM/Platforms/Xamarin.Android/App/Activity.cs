@@ -19,6 +19,8 @@ namespace Catel.Android.App
     public class Activity : global::Android.App.Activity, IPage
     {
         #region Fields
+        private static bool? HasVmProperty;
+
         private readonly PageLogic _logic;
         private object _dataContext;
 
@@ -34,6 +36,11 @@ namespace Catel.Android.App
             if (CatelEnvironment.IsInDesignMode)
             {
                 return;
+            }
+
+            if (HasVmProperty is null)
+            {
+                HasVmProperty = GetType().GetPropertyEx("VM") != null;
             }
 
             _logic = new PageLogic(this);
@@ -175,6 +182,11 @@ namespace Catel.Android.App
 
             ViewModelChanged?.Invoke(this);
             RaisePropertyChanged(nameof(ViewModel));
+
+            if (HasVmProperty ?? false)
+            {
+                RaisePropertyChanged("VM");
+            }
 
             if (_bindingContext != null)
             {

@@ -24,8 +24,9 @@ namespace Catel.MonoTouch.UIKit
     {
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private static readonly IViewModelLocator _viewModelLocator;
+
+        private static bool? HasVmProperty;
 
         private readonly PageLogic _logic;
         private object _dataContext;
@@ -52,6 +53,11 @@ namespace Catel.MonoTouch.UIKit
             if (CatelEnvironment.IsInDesignMode)
             {
                 return;
+            }
+
+            if (HasVmProperty is null)
+            {
+                HasVmProperty = GetType().GetPropertyEx("VM") != null;
             }
 
             var viewModelType = GetViewModelType();
@@ -249,6 +255,11 @@ namespace Catel.MonoTouch.UIKit
 
             ViewModelChanged?.Invoke(this);
             RaisePropertyChanged(nameof(ViewModel));
+
+            if (HasVmProperty ?? false)
+            {
+                RaisePropertyChanged("VM");
+            }
 
             if (_bindingContext != null)
             {
