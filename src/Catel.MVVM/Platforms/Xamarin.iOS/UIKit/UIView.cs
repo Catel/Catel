@@ -241,12 +241,21 @@ namespace Catel.UIKit
             OnViewModelChanged();
 
             ViewModelChanged?.Invoke(this);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ViewModel"));
+            RaisePropertyChanged(nameof(ViewModel));
 
             if (_bindingContext != null)
             {
                 _bindingContext.DetermineIfBindingsAreRequired(ViewModel);
             }
+        }
+
+        /// <summary>
+        /// Raises the <c>PropertyChanged</c> event.
+        /// </summary>
+        /// <param name="propertyName">The property name to raise the event for.</param>
+        protected virtual void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>

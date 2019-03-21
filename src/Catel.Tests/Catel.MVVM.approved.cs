@@ -2522,6 +2522,7 @@ namespace Catel.Windows
         protected virtual System.Threading.Tasks.Task OnViewModelClosedAsync(object sender, Catel.MVVM.ViewModelClosedEventArgs e) { }
         protected virtual void OnViewModelPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
         protected void RaiseCanExecuteChangedForAllCommands() { }
+        protected virtual void RaisePropertyChanged(string propertyName) { }
         protected virtual bool ValidateData() { }
     }
     public class DataWindowButton
@@ -2717,6 +2718,7 @@ namespace Catel.Windows.Controls
         protected virtual void OnUnloaded(System.EventArgs e) { }
         protected virtual void OnViewModelChanged() { }
         protected virtual void OnViewModelPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
+        protected virtual void RaisePropertyChanged(string propertyName) { }
     }
     public class UserControl : System.Windows.Controls.UserControl, Catel.MVVM.IViewModelContainer, Catel.MVVM.Views.IUserControl, Catel.MVVM.Views.IView, System.ComponentModel.INotifyPropertyChanged
     {
@@ -2756,6 +2758,7 @@ namespace Catel.Windows.Controls
         protected virtual void OnViewModelChanged() { }
         protected virtual System.Threading.Tasks.Task OnViewModelClosedAsync(object sender, Catel.MVVM.ViewModelClosedEventArgs e) { }
         protected virtual void OnViewModelPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
+        protected virtual void RaisePropertyChanged(string propertyName) { }
     }
     public enum ValidationEventAction
     {

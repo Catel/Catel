@@ -643,7 +643,16 @@ namespace Catel.Windows
             OnViewModelChanged();
 
             ViewModelChanged?.Invoke(this, EventArgs.Empty);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewModel)));
+            RaisePropertyChanged(nameof(ViewModel));
+        }
+
+        /// <summary>
+        /// Raises the <c>PropertyChanged</c> event.
+        /// </summary>
+        /// <param name="propertyName">The property name to raise the event for.</param>
+        protected virtual void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
