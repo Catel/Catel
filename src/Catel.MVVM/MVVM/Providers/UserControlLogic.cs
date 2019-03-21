@@ -93,7 +93,6 @@ namespace Catel.MVVM.Providers
 
             SupportParentViewModelContainers = DefaultSupportParentViewModelContainersValue;
             UnloadBehavior = DefaultUnloadBehaviorValue;
-            CloseViewModelOnUnloaded = true;
 
 #if NET || NETCORE
             SkipSearchingForInfoBarMessageControl = DefaultSkipSearchingForInfoBarMessageControlValue;
@@ -127,7 +126,18 @@ namespace Catel.MVVM.Providers
         /// <value>
         /// <c>true</c> if the view model should be closed when the control is unloaded; otherwise, <c>false</c>.
         /// </value>
-        public bool CloseViewModelOnUnloaded { get; set; }
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        public bool CloseViewModelOnUnloaded
+        {
+            get
+            {
+                return ViewModelLifetimeManagement == ViewModelLifetimeManagement.Automatic;
+            }
+            set
+            {
+                ViewModelLifetimeManagement = value ? ViewModelLifetimeManagement.Automatic : ViewModelLifetimeManagement.PartlyManual;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether parent view model containers are supported. If supported,
@@ -373,7 +383,7 @@ namespace Catel.MVVM.Providers
 
                 if (_infoBarMessageControl is null)
                 {
-                    Log.Warning("No InfoBarMessageControl is found in the visual tree of '{0}', consider using the SkipSearchingForInfoBarMessageControl property to improve performance", GetType().Name);
+                    Log.Warning($"No InfoBarMessageControl is found in the visual tree of '{GetType().Name}', consider using the SkipSearchingForInfoBarMessageControl property to improve performance");
                 }
             }
             else
@@ -382,17 +392,25 @@ namespace Catel.MVVM.Providers
             }
 #endif
 
-            if (!CloseViewModelOnUnloaded && (ViewModel != null))
-            {
-                // Re-use view model
-                Log.Debug("Re-using existing view model");
-            }
-
             if (ViewModel is null)
             {
-                // Try to create view model based on data context
-                var dataContext = GetDataContext(TargetView);
-                await UpdateDataContextToUseViewModelAsync(dataContext);
+                if (ViewModelLifetimeManagement != ViewModelLifetimeManagement.FullyManual)
+                {
+                    // Try to create view model based on data context
+                    var dataContext = GetDataContext(TargetView);
+                    await UpdateDataContextToUseViewModelAsync(dataContext);
+                }
+                else
+                {
+                    Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not creating view model on loaded event for '{TargetViewType?.Name}'");
+                }
+            }
+            else
+            {
+                if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.PartlyManual)
+                {
+                    Log.Debug("Re-using existing view model");
+                }
             }
 
             if (DisableWhenNoViewModel)
@@ -417,14 +435,14 @@ namespace Catel.MVVM.Providers
 
             UnsubscribeFromParentViewModelContainer();
 
-            if (CloseViewModelOnUnloaded)
+            if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.Automatic)
             {
                 var result = GetViewModelResultValueFromUnloadBehavior();
                 await CloseAndDisposeViewModelAsync(result);
             }
             else
             {
-                Log.Debug("Skipping 'CloseAndDisposeViewModel' because 'CloseViewModelOnUnloaded' is set to false.");
+                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not closing view model on unloaded event for '{TargetViewType?.Name}'");
             }
         }
 
@@ -488,6 +506,8 @@ namespace Catel.MVVM.Providers
 
             if (!IsUnloading)
             {
+                // Note: don't respect view model lifetime management here, the IViewModelFactory should return null if
+                // no vm should be created and users *really* want to disable this kind of core Catel behavior
                 await UpdateDataContextToUseViewModelAsync(dataContext);
             }
         }
@@ -921,7 +941,14 @@ namespace Catel.MVVM.Providers
 
                 IgnoreNullDataContext = true;
 
-                await CloseAndDisposeViewModelAsync(null);
+                if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.Automatic)
+                {
+                    await CloseAndDisposeViewModelAsync(null);
+                }
+                else
+                {
+                    Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not closing view model on parent view model closing event for '{TargetViewType?.Name}'");
+                }
             }
         }
 

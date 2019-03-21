@@ -38,6 +38,7 @@ Classes / members marked as obsolete
 * #1209 Mark IStartupInfoProvider as obsolete in favor of Orc.CommandLine since that implementation takes better care of supporting different quote styles (e.g. allows ')
 * #1216 Mark binary serializers as obsolete due to potential security issues in the binary serialization engine of .NET itself (see https://github.com/Catel/Catel/issues/1216)
 * #1258 Mark SafeInvoke obsolete in favor of handler?.Invoke(this, event args);
+* #1284 Mark 'CloseViewModelOnUnloaded' and 'PreventViewModelCreation' in favor of 'ViewModelLifetimeManagement'
 
 Added/fixed
 ===========
@@ -48,6 +49,7 @@ Added/fixed
 (*) #1268 Initialize VM grid in DataWindow.Initialized instead of DataWindow.ContentChanged
 (*) #1269 Create VM Auditor to subscribe keyboard events instead of CommandManager constructor
 (*) #1270 Add faster override for IModelExtensions.ClearIsDirtyOnAllChildren() (add suspendNotifications parameter)
+(*) #1284 Replace 'CloseViewModelOnUnloaded' and 'PreventViewModelCreation' with 'ViewModelLifetimeManagement'
 (x) #1259 DataWindow should respect the focusFirstControl parameter
 (x) #1262 IModelExtensions.ClearIsDirtyOnAllChildren() not working with a collection of ModelBase
 (x) #1267 Fix binding errors on UserControl for UWP

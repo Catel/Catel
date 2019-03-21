@@ -93,8 +93,8 @@ namespace Catel.Windows.Controls
 #else
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
                 // on systems where NET45 is *not* installed
-                if (!string.Equals(e.PropertyName, "ActualWidth", StringComparison.InvariantCulture) &&
-                    !string.Equals(e.PropertyName, "ActualHeight", StringComparison.InvariantCulture))
+                if (!string.Equals(e.PropertyName, nameof(ActualWidth), StringComparison.InvariantCulture) &&
+                    !string.Equals(e.PropertyName, nameof(ActualHeight), StringComparison.InvariantCulture))
                 {
                     PropertyChanged?.Invoke(this, e);
                 }
@@ -145,6 +145,7 @@ namespace Catel.Windows.Controls
         /// This property is very useful when using views in transitions where the view model is no longer required.
         /// </summary>
         /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public bool PreventViewModelCreation
         {
             get { return _logic.GetValue<UserControlLogic, bool>(x => x.PreventViewModelCreation); }
@@ -172,10 +173,25 @@ namespace Catel.Windows.Controls
         /// <value>
         /// <c>true</c> if the view model should be closed when the control is unloaded; otherwise, <c>false</c>.
         /// </value>
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.PartlyManual", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public bool CloseViewModelOnUnloaded
         {
             get { return _logic.GetValue<UserControlLogic, bool>(x => x.CloseViewModelOnUnloaded, true); }
             set { _logic.SetValue<UserControlLogic>(x => x.CloseViewModelOnUnloaded = value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a the view model lifetime management.
+        /// <para />
+        /// By default, this value is <see cref="ViewModelLifetimeManagement"/>.
+        /// </summary>
+        /// <value>
+        /// The view model lifetime management.
+        /// </value>
+        public ViewModelLifetimeManagement ViewModelLifetimeManagement
+        {
+            get { return _logic.GetValue<UserControlLogic, ViewModelLifetimeManagement>(x => x.ViewModelLifetimeManagement); }
+            set { _logic.SetValue<UserControlLogic>(x => x.ViewModelLifetimeManagement = value); }
         }
 
         /// <summary>

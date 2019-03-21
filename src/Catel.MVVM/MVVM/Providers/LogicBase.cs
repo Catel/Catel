@@ -147,6 +147,7 @@ namespace Catel.MVVM.Providers
             ViewModel = viewModel;
 
             ViewModelBehavior = (viewModel != null) ? LogicViewModelBehavior.Injected : LogicViewModelBehavior.Dynamic;
+            ViewModelLifetimeManagement = ViewModelLifetimeManagement.Automatic;
 
             if (ViewModel != null)
             {
@@ -308,6 +309,11 @@ namespace Catel.MVVM.Providers
         public LogicViewModelBehavior ViewModelBehavior { get; private set; }
 
         /// <summary>
+        /// Gets or sets the view model lifetime management.
+        /// </summary>
+        public ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
+
+        /// <summary>
         /// Gets the type of the view model.
         /// </summary>
         /// <value>The type of the view model.</value>
@@ -320,6 +326,7 @@ namespace Catel.MVVM.Providers
         /// This property is very useful when using views in transitions where the view model is no longer required.
         /// </summary>
         /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public bool PreventViewModelCreation { get; set; }
 
         /// <summary>
@@ -794,6 +801,12 @@ namespace Catel.MVVM.Providers
         {
             await CompleteViewModelClosingAsync();
 
+            if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.FullyManual)
+            {
+                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not creating view model on loaded event for '{TargetViewType?.Name}'");
+                return;
+            }
+
             if (ViewModel is null)
             {
                 ViewModel = CreateViewModelByUsingDataContextOrConstructor();
@@ -1166,6 +1179,13 @@ namespace Catel.MVVM.Providers
                 return ViewModel;
             }
 
+            if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.FullyManual)
+            {
+                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', preventing view model creation for '{TargetViewType?.Name}'");
+                return null;
+            }
+
+            // Can be removed soon, now managed via ViewModelLifetimeManagement
             if (PreventViewModelCreation)
             {
                 Log.Info("ViewModel construction is prevented by the PreventViewModelCreation property");
