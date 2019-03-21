@@ -2481,8 +2481,8 @@ namespace Catel.Windows
         protected System.Collections.ObjectModel.ReadOnlyCollection<System.Windows.Input.ICommand> Commands { get; }
         protected Catel.Windows.DataWindowDefaultButton DefaultButton { get; }
         protected Catel.Windows.DataWindowMode Mode { get; }
-        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be removed in version" +
-            " 6.0.0.", true)]
+        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be treated as an erro" +
+            "r from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool PreventViewModelCreation { get; set; }
         public Catel.MVVM.IViewModel ViewModel { get; }
         public Catel.MVVM.ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
@@ -2697,8 +2697,8 @@ namespace Catel.Windows.Controls
     public class Page : System.Windows.Controls.Page, Catel.MVVM.IViewModelContainer, Catel.MVVM.Views.INavigationView, Catel.MVVM.Views.IPage, Catel.MVVM.Views.IView, System.ComponentModel.INotifyPropertyChanged
     {
         public Page() { }
-        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be removed in version" +
-            " 6.0.0.", true)]
+        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be treated as an erro" +
+            "r from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool PreventViewModelCreation { get; set; }
         public Catel.MVVM.IViewModel ViewModel { get; }
         public Catel.MVVM.ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
@@ -2722,8 +2722,8 @@ namespace Catel.Windows.Controls
     {
         public UserControl() { }
         public UserControl(Catel.MVVM.IViewModel viewModel) { }
-        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.PartlyManual` instead. Will be removed in versio" +
-            "n 6.0.0.", true)]
+        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.PartlyManual` instead. Will be treated as an err" +
+            "or from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool CloseViewModelOnUnloaded { get; set; }
         public bool CreateWarningAndErrorValidatorForViewModel { get; set; }
         public static bool DefaultCreateWarningAndErrorValidatorForViewModelValue { get; set; }
@@ -2731,8 +2731,8 @@ namespace Catel.Windows.Controls
         public static bool DefaultSupportParentViewModelContainersValue { get; set; }
         public static Catel.MVVM.Providers.UnloadBehavior DefaultUnloadBehaviorValue { get; set; }
         public bool DisableWhenNoViewModel { get; set; }
-        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be removed in version" +
-            " 6.0.0.", true)]
+        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be treated as an erro" +
+            "r from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool PreventViewModelCreation { get; set; }
         public bool SkipSearchingForInfoBarMessageControl { get; set; }
         public bool SupportParentViewModelContainers { get; set; }

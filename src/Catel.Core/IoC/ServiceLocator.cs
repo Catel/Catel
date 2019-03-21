@@ -419,7 +419,7 @@ namespace Catel.IoC
                 {
                     if (CanResolveNonAbstractTypesWithoutRegistration && serviceType.IsClassEx() && !serviceType.IsAbstractEx())
                     {
-                        return _typeFactory.CreateInstance(serviceType);
+                        return _typeFactory.CreateInstanceWithTag(serviceType, tag);
                     }
 
                     ThrowTypeNotRegisteredException(serviceType);
@@ -866,7 +866,7 @@ namespace Catel.IoC
 
                     if (instance != null && instance is Type)
                     {
-                        instance = _typeFactory.CreateInstance((Type)instance);
+                        instance = _typeFactory.CreateInstanceWithTag((Type)instance, serviceInfo.Tag);
                     }
 
                     if (instance is null)
@@ -895,7 +895,7 @@ namespace Catel.IoC
         /// <returns>The service instance.</returns>
         private object CreateServiceInstance(ServiceLocatorRegistration registration)
         {
-            object instance = _typeFactory.CreateInstance(registration.ImplementingType);
+            var instance = _typeFactory.CreateInstanceWithTag(registration.ImplementingType, registration.Tag);
             if (instance is null)
             {
                 ThrowTypeNotRegisteredException(registration.DeclaringType, "Failed to instantiate the type using the TypeFactory. Check if the required dependencies are registered as well or that the type has a valid constructor that can be used.");

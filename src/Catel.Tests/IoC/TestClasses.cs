@@ -17,6 +17,11 @@
 
     }
 
+    public interface ITestInterface3
+    {
+        ITestInterface1 TestInterface1 { get; }
+    }
+
     public class TestClass1 : ITestInterface, ITestInterface1, INotifyPropertyChanged
     {
         public TestClass1()
@@ -41,5 +46,19 @@
         }
 
         public string Name { get; set; }
+    }
+
+    public class TestClass3 : ITestInterface, ITestInterface3
+    {
+        public TestClass3(ITestInterface1 testInterface1)
+        {
+            TestInterface1 = testInterface1;
+
+            Name = "created via injection";
+        }
+
+        public string Name { get; set; }
+
+        public ITestInterface1 TestInterface1 { get; }
     }
 }

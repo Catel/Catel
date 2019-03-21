@@ -519,7 +519,7 @@ namespace Catel.IoC
             {
                 var finalParameters = new List<object>(parameters);
                 var ctorParameters = constructor.GetParameters();
-                for (int i = parameters.Length; i < ctorParameters.Length; i++)
+                for (var i = parameters.Length; i < ctorParameters.Length; i++)
                 {
                     object ctorParameterValue = null;
 
@@ -529,7 +529,7 @@ namespace Catel.IoC
                         var collectionElementType = parameterTypeToResolve.GetCollectionElementType();
                         if (collectionElementType != null && _serviceLocator.IsTypeRegisteredWithOrWithoutTag(collectionElementType))
                         {
-                            IEnumerable ctorParameterValueLocal = _serviceLocator.ResolveTypes(collectionElementType).Cast(collectionElementType);
+                            var ctorParameterValueLocal = _serviceLocator.ResolveTypes(collectionElementType).Cast(collectionElementType);
                             
                             if (parameterTypeToResolve.IsArray)
                             {
@@ -550,7 +550,7 @@ namespace Catel.IoC
 
                     if (ctorParameterValue is null)
                     {
-                        if (tag != null && _serviceLocator.IsTypeRegistered(parameterTypeToResolve, tag))
+                        if (!(tag is null) && _serviceLocator.IsTypeRegistered(parameterTypeToResolve, tag))
                         {
                             // Use preferred tag
                             ctorParameterValue = _serviceLocator.ResolveType(parameterTypeToResolve, tag);

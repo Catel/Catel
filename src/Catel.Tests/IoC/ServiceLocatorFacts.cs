@@ -171,6 +171,21 @@ namespace Catel.Tests.IoC
                 var firstService = serviceLocator.ResolveType(typeof(ITestInterface), "1");
                 Assert.AreEqual(typeof(TestClass2), firstService.GetType());
             }
+
+            [TestCase]
+            public void ResolvesInnerDependenciesWithRightTag()
+            {
+                var serviceLocator = IoCFactory.CreateServiceLocator();
+                serviceLocator.RegisterType(typeof(ITestInterface1), typeof(TestClass1), "1");
+                serviceLocator.RegisterType(typeof(ITestInterface2), typeof(TestClass2), "1");
+                serviceLocator.RegisterType(typeof(ITestInterface3), typeof(TestClass3), "1");
+
+                var testInterface1 = serviceLocator.ResolveType<ITestInterface1>("1");
+
+                var firstService = (ITestInterface3)serviceLocator.ResolveType(typeof(ITestInterface3), "1");
+                Assert.AreEqual(typeof(TestClass3), firstService.GetType());
+                Assert.IsTrue(ReferenceEquals(testInterface1, firstService.TestInterface1));
+            }
             #endregion
         }
 
