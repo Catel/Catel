@@ -114,8 +114,6 @@ namespace Catel.Windows
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private static readonly IWrapControlService WrapControlService = ServiceLocator.Default.ResolveType<IWrapControlService>();
 
-        private static bool? HasVmProperty;
-
         private readonly bool _focusFirstControl;
         private bool _isWrapped;
         private bool _forceClose;
@@ -192,11 +190,6 @@ namespace Catel.Windows
             if (CatelEnvironment.IsInDesignMode)
             {
                 return;
-            }
-
-            if (HasVmProperty is null)
-            {
-                HasVmProperty = GetType().GetPropertyEx("VM") != null;
             }
 
             // Set window style (WPF doesn't allow styling on root elements of XAML files, too bad)
@@ -645,7 +638,7 @@ namespace Catel.Windows
             ViewModelChanged?.Invoke(this, EventArgs.Empty);
             RaisePropertyChanged(nameof(ViewModel));
 
-            if (HasVmProperty ?? false)
+            if (_logic.HasVmProperty)
             {
                 RaisePropertyChanged("VM");
             }

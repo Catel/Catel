@@ -20,8 +20,6 @@ namespace Catel.Android.App
     public class Fragment : global::Android.App.Fragment, IUserControl
     {
         #region Fields
-        private static bool? HasVmProperty;
-
         private readonly UserControlLogic _logic;
         private object _dataContext;
         private object _tag;
@@ -49,11 +47,6 @@ namespace Catel.Android.App
             if (CatelEnvironment.IsInDesignMode)
             {
                 return;
-            }
-
-            if (HasVmProperty is null)
-            {
-                HasVmProperty = GetType().GetPropertyEx("VM") != null;
             }
 
             _logic = new UserControlLogic(this, null);
@@ -257,7 +250,7 @@ namespace Catel.Android.App
             ViewModelChanged?.Invoke(this);
             RaisePropertyChanged(nameof(ViewModel));
 
-            if (HasVmProperty ?? false)
+            if (_logic.HasVmProperty)
             {
                 RaisePropertyChanged("VM");
             }

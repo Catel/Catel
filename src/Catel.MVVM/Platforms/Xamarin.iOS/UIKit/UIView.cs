@@ -26,8 +26,6 @@ namespace Catel.UIKit
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private static readonly IViewModelLocator _viewModelLocator;
 
-        private static bool? HasVmProperty;
-
         private readonly UserControlLogic _logic;
         private object _dataContext;
 
@@ -53,11 +51,6 @@ namespace Catel.UIKit
             if (CatelEnvironment.IsInDesignMode)
             {
                 return;
-            }
-
-            if (HasVmProperty is null)
-            {
-                HasVmProperty = GetType().GetPropertyEx("VM") != null;
             }
 
             var viewModelType = GetViewModelType();
@@ -249,7 +242,7 @@ namespace Catel.UIKit
             ViewModelChanged?.Invoke(this);
             RaisePropertyChanged(nameof(ViewModel));
 
-            if (HasVmProperty ?? false)
+            if (_logic.HasVmProperty)
             {
                 RaisePropertyChanged("VM");
             }
