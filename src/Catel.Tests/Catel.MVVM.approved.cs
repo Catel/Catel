@@ -1357,6 +1357,7 @@ namespace Catel.MVVM.Providers
         protected static readonly Catel.MVVM.Views.IViewLoadManager ViewLoadManager;
         protected LogicBase(Catel.MVVM.Views.IView targetView, System.Type viewModelType = null, Catel.MVVM.IViewModel viewModel = null) { }
         protected virtual bool CanViewBeLoaded { get; }
+        public bool HasVmProperty { get; }
         protected bool IgnoreNullDataContext { get; set; }
         protected bool IsClosingViewModel { get; }
         protected bool IsLoading { get; }
