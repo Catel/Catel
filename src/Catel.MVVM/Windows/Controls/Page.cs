@@ -13,6 +13,7 @@ namespace Catel.Windows.Controls
     using MVVM.Providers;
     using MVVM.Views;
     using MVVM;
+    using Catel.Reflection;
 
 #if UWP
     using global::Windows.UI.Xaml;
@@ -20,7 +21,6 @@ namespace Catel.Windows.Controls
 #else
     using System.Windows;
     using UIEventArgs = System.EventArgs;
-    using Catel.Reflection;
 #endif
 
     /// <summary>
