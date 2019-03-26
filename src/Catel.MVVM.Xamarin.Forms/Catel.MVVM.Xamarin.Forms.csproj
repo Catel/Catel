@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <AssemblyName>Catel.MVVM</AssemblyName>
-    <RootNamespace>Catel</RootNamespace>
+    <RootNamespace>Catel.MVVM</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageId>Catel.MVVM.Xamarin.Forms</PackageId>
     <PackageVersion>3.0.0-alpha0001</PackageVersion>

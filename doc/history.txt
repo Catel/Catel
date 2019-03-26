@@ -18,6 +18,39 @@ Items prefixed with 'CTL' are from JIRA (old issue tracker). Items prefixed with
 **********************************************************
 
 ==================
+Version 5.11.0
+==================
+
+For an upgrade guide, visit https://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date
+============
+2019/../..
+
+Platform support changes
+========================
+...
+
+Classes / members marked as obsolete
+====================================
+...
+
+Added/fixed
+===========
+(x) #1267 Catel.MVVM.Xamarin.Forms MessageBox showing without buttons
+
+Roadmap
+=======
+See https://www.catelproject.com/support/issue-tracker
+
+Known issues
+============
+See https://www.catelproject.com/support/issue-tracker
+
+
+**********************************************************
+
+==================
 Version 5.10.0
 ==================
 
