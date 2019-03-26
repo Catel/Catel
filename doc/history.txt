@@ -59,6 +59,7 @@ Added/fixed
 (x) #1267 Fix binding errors on UserControl for UWP
 (x) #1286 ServiceLocator.ResolveType with tag should pass tag to TypeFactory
 (x) #1289 AssemblyHelper.GetLoadedAssemblies(System.AppDomain) causes System.MissingMethodException in Xamarin.UWP
+(x) #1267 Catel.MVVM.Xamarin.Forms MessageBox showing without buttons
 
 Roadmap
 =======
