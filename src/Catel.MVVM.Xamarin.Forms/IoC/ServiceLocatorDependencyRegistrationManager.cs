@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ServiceLocatorDependencyRegistrationManager.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.IoC
+﻿namespace Catel.IoC
 {
     using System;
     using System.Linq;
@@ -49,7 +43,7 @@ namespace Catel.IoC
         /// <param name="serviceLocator">The service locator</param>
         public ServiceLocatorDependencyRegistrationManager(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull(()=> serviceLocator);
+            Argument.IsNotNull(() => serviceLocator);
 
             _serviceLocator = serviceLocator;
         }
@@ -60,7 +54,8 @@ namespace Catel.IoC
         public void Initialize()
         {
             TypeCache.AssemblyLoaded += OnTypeCacheAssemblyLoaded;
-            foreach (var assembly in AppDomain.CurrentDomain.GetLoadedAssemblies())
+
+            foreach (var assembly in AssemblyHelper.GetLoadedAssemblies())
             {
                 LoadServiceFromAssembly(assembly);
             }

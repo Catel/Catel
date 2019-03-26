@@ -1,11 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Application.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2016 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Xamarin.Forms
+﻿namespace Catel.Xamarin.Forms
 {
     using global::Xamarin.Forms;
     using IoC;
@@ -46,6 +39,7 @@ namespace Catel.Xamarin.Forms
             var mainPage = typeFactory.CreateInstance<TMainPage>();
             
             mainPage.BindingContext = viewModelFactory.CreateViewModel(viewModelType, null);
+
             Initialize(mainPage);
         }
 

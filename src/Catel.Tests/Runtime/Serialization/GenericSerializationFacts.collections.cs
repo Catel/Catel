@@ -157,7 +157,7 @@ namespace Catel.Tests.Runtime.Serialization
 
                     if (countryTypes is null)
                     {
-                        countryTypes = AppDomain.CurrentDomain.GetLoadedAssemblies(true)
+                        countryTypes = AssemblyHelper.GetLoadedAssemblies(AppDomain.CurrentDomain, true)
                                 .SelectMany(a => a.GetTypes())
                                 .Where(t => typeof(Country).IsAssignableFrom(t))
                                 .ToList();
@@ -185,7 +185,7 @@ namespace Catel.Tests.Runtime.Serialization
                 #region Public Methods and Operators
                 public static Type[] GetKnownTypes()
                 {
-                    var assembly = AppDomain.CurrentDomain.GetLoadedAssemblies(false).FirstOrDefault(a => a.FullName.StartsWith("DynamicClasses", StringComparison.Ordinal));
+                    var assembly = AssemblyHelper.GetLoadedAssemblies(AppDomain.CurrentDomain, false).FirstOrDefault(a => a.FullName.StartsWith("DynamicClasses", StringComparison.Ordinal));
                     var types = new List<Type>(assembly is null ? ArrayShim.Empty<Type>() : assembly.GetTypes().Where(t => t.Name.StartsWith("DynamicClass", StringComparison.Ordinal)).ToArray());
 
                     return types.ToArray();
