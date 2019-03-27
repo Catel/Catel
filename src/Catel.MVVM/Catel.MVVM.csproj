@@ -1,11 +1,11 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>net45;net46;net47;netcoreapp3.0;uap10.0</TargetFrameworks>
     <AssemblyName>Catel.MVVM</AssemblyName>
     <RootNamespace>Catel.MVVM</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageId>Catel.MVVM</PackageId>
-    <PackageVersion>3.0.0-alpha0001</PackageVersion>
+    <PackageVersion>5.10.0-beta0013</PackageVersion>
     <Description>Catel.MVVM library.</Description>
     <PackageTags>catel;mvvm;view;viewmodel;model;interaction;interactivity;behaviors;xamarin</PackageTags>
   </PropertyGroup>

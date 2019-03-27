@@ -1,12 +1,12 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <!--<TargetFrameworks>net45;net46;net47;netcoreapp3.0;uap10.0;netstandard2.0;xamarin.ios10;monoandroid70</TargetFrameworks>-->
-    <TargetFrameworks>net45;net46;net47;netcoreapp3.0;uap10.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net45;net46;net47;netcoreapp3.0;uap10.0;uap10.0.16299;netstandard2.0</TargetFrameworks>
     <AssemblyName>Catel.Core</AssemblyName>
     <RootNamespace>Catel</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageId>Catel.Core</PackageId>
-    <PackageVersion>3.0.0-alpha0001</PackageVersion>
+    <PackageVersion>5.10.0-beta0013</PackageVersion>
     <Description>Catel.Core library.</Description>
     <PackageTags>catel;argument;checking;guard;logging;log;ioc;dependency;resolver;factory;configuration;data;model;messaging;messenger;reflection;scope;scoping;caching;cache;weak;reference;event</PackageTags>
   </PropertyGroup>
@@ -55,6 +55,15 @@
   <!-- UAP 10.0 -->
   <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.2" />
+    <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.WindowsRuntime" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
+  </ItemGroup>
+
+  <!-- UAP 10.0.16299 -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.2" />
+    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
     <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
     <PackageReference Include="System.Runtime.WindowsRuntime" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />

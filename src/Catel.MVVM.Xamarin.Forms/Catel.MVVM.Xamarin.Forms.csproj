@@ -1,11 +1,11 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <AssemblyName>Catel.MVVM</AssemblyName>
     <RootNamespace>Catel.MVVM</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageId>Catel.MVVM.Xamarin.Forms</PackageId>
-    <PackageVersion>3.0.0-alpha0001</PackageVersion>
+    <PackageVersion>5.10.0-beta0013</PackageVersion>
     <Description>Catel.MVVM.Xamarin.Forms library.</Description>
     <PackageTags>catel;mvvm;view;viewmodel;model;interaction;interactivity;behaviors;xamarin;forms</PackageTags>
     <DefineConstants>$(DefineConstants);XAMARIN;XAMARIN_FORMS;XF</DefineConstants>
