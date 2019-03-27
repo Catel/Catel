@@ -54,7 +54,7 @@ Added/fixed
 (*) #1270 Add faster override for IModelExtensions.ClearIsDirtyOnAllChildren() (add suspendNotifications parameter)
 (*) #1284 Replace 'CloseViewModelOnUnloaded' and 'PreventViewModelCreation' with 'ViewModelLifetimeManagement'
 (*) #1291 Update Xamarin.Forms to 3.6
-(x) #1267 Catel.MVVM.Xamarin.Forms MessageBox showing without buttons
+(x) #1252 Catel.MVVM.Xamarin.Forms MessageBox showing without buttons
 (x) #1259 DataWindow should respect the focusFirstControl parameter
 (x) #1262 IModelExtensions.ClearIsDirtyOnAllChildren() not working with a collection of ModelBase
 (x) #1267 Fix binding errors on UserControl for UWP
