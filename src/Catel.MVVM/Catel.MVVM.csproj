@@ -1,6 +1,6 @@
 <Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net45;net46;net47;netcoreapp3.0;uap10.0</TargetFrameworks>
+    <TargetFrameworks>net45;net46;net47;netcoreapp3.0;uap10.0;uap10.0.16299</TargetFrameworks>
     <AssemblyName>Catel.MVVM</AssemblyName>
     <RootNamespace>Catel.MVVM</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -77,6 +77,13 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.0" />
+  </ItemGroup>
+  
+  <!-- UAP 10.0.16299 -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.0" />
   </ItemGroup>
   
