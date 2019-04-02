@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ReflectionExtensions.methodinfo.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -11,7 +11,7 @@ namespace Catel.Reflection
     using System;
     using System.Reflection;
 
-#if NETFX_CORE
+#if UAP_DEFAULT
     using System.Linq;
 #endif
 
@@ -30,7 +30,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("methodInfo", methodInfo);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return methodInfo.GetCustomAttributes(inherit).ToArray();
 #else
             return methodInfo.GetCustomAttributes(inherit).ToAttributeArray();
@@ -42,7 +42,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("methodInfo", methodInfo);
             Argument.IsNotNull("attributeType", attributeType);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return methodInfo.GetCustomAttributes(attributeType, inherit).ToArray();
 #else
             return methodInfo.GetCustomAttributes(attributeType, inherit).ToAttributeArray();

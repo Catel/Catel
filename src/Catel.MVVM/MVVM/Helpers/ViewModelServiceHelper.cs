@@ -61,6 +61,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewModelFactory, ViewModelFactory>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationRootService, NavigationRootService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IViewContextService, ViewContextService>();
 
 #if !XAMARIN && !XAMARIN_FORMS
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
@@ -83,8 +84,11 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
 #endif
 
-#if NET || NETCORE
+#if NET || NETCORE || UWP
                 serviceLocator.RegisterTypeIfNotYetRegistered<IProcessService, ProcessService>();
+#endif
+
+#if NET || NETCORE
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IStartUpInfoProvider, StartUpInfoProvider>();
 #endif

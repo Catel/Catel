@@ -8,6 +8,7 @@
 namespace Catel.Services
 {
     using System;
+    using System.Runtime.CompilerServices;
     using Logging;
     using MVVM.Views;
 
@@ -17,6 +18,9 @@ namespace Catel.Services
     public partial class ViewModelWrapperService : ViewModelWrapperServiceBase, IViewModelWrapperService
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private readonly IViewModelWrapper _tempObject = default(IViewModelWrapper);
+        private readonly ConditionalWeakTable<IView, IViewModelWrapper> _wrappers = new ConditionalWeakTable<IView, IViewModelWrapper>();
 
         /// <summary>
         /// Determines whether the specified view is already wrapped.
@@ -44,12 +48,48 @@ namespace Catel.Services
             Argument.IsNotNull("view", view);
             Argument.IsNotNull("viewModelSource", viewModelSource);
 
+            if (!_wrappers.TryGetValue(view, out var wrapper))
+            {
+                try
+                {
+                    // This is "sort of" a lock, we might recursively call this while we are
+                    // creating the wrapper, so need to skip *while* we are creating it
+                    _wrappers.Add(view, _tempObject);
+
 #if XAMARIN || XAMARIN_FORMS
-            var viewModelWrapper = new ViewModelWrapper(view);
-            return viewModelWrapper;
+                    wrapper = new ViewModelWrapper(view);
 #else
-            return CreateViewModelGrid(view, viewModelSource, wrapOptions);
+                    wrapper = CreateViewModelGrid(view, viewModelSource, wrapOptions);
 #endif
+                }
+                finally
+                {
+                    // Remove the temp object
+                    _wrappers.Remove(view);
+                }
+
+                if (wrapper != null)
+                {
+                    _wrappers.Add(view, wrapper);
+                }
+            }
+
+            return wrapper;
+        }
+
+        /// <summary>
+        /// Gets the existing view model wrapper for the view. If there is none, this method will return <c>null</c>.
+        /// </summary>
+        /// <param name="view">The view to get the wrapper for.</param>
+        /// <returns>The existing view model wrapper or <c>null</c> if there is no wrapper.</returns>
+        public IViewModelWrapper GetWrapper(IView view)
+        {
+            if (_wrappers.TryGetValue(view, out var wrapper))
+            {
+                return wrapper;
+            }
+
+            return null;
         }
     }
 }

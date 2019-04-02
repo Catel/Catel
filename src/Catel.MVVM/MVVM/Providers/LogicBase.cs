@@ -18,6 +18,7 @@ namespace Catel.MVVM.Providers
     using Views;
     using Reflection;
     using Threading;
+    using Catel.Services;
 
     /// <summary>
     /// Available unload behaviors.
@@ -69,6 +70,8 @@ namespace Catel.MVVM.Providers
         private static readonly IViewModelLocator _viewModelLocator;
         private static readonly IViewManager _viewManager;
         private static readonly IViewPropertySelector _viewPropertySelector;
+        private static readonly IViewContextService _viewContextService;
+        private static readonly Dictionary<Type, bool> _hasVmPropertyCache = new Dictionary<Type, bool>();
 
         /// <summary>
         /// The view model instances currently held by this provider. This value should only be used
@@ -80,12 +83,12 @@ namespace Catel.MVVM.Providers
         private bool _isFirstValidationAfterLoaded = true;
 
         /// <summary>
-        /// The view load manager
+        /// The view load manager.
         /// </summary>
         protected static readonly IViewLoadManager ViewLoadManager;
 
         /// <summary>
-        /// The lock object
+        /// The lock object.
         /// </summary>
         protected readonly object _lockObject = new object();
 
@@ -103,6 +106,7 @@ namespace Catel.MVVM.Providers
             _viewModelLocator = dependencyResolver.Resolve<IViewModelLocator>();
             _viewManager = dependencyResolver.Resolve<IViewManager>();
             _viewPropertySelector = dependencyResolver.Resolve<IViewPropertySelector>();
+            _viewContextService = dependencyResolver.Resolve<IViewContextService>();
             ViewLoadManager = dependencyResolver.Resolve<IViewLoadManager>();
         }
 
@@ -126,6 +130,14 @@ namespace Catel.MVVM.Providers
 
             var targetViewType = targetView.GetType();
 
+            if (!_hasVmPropertyCache.TryGetValue(targetViewType, out var hasVmProperty))
+            {
+                hasVmProperty = targetViewType.GetPropertyEx("VM") != null;
+                _hasVmPropertyCache[targetViewType] = hasVmProperty;
+            }
+
+            HasVmProperty = hasVmProperty;
+
             if (viewModelType is null)
             {
                 viewModelType = (viewModel != null) ? viewModel.GetType() : _viewModelLocator.ResolveViewModel(targetViewType);
@@ -144,6 +156,7 @@ namespace Catel.MVVM.Providers
             ViewModel = viewModel;
 
             ViewModelBehavior = (viewModel != null) ? LogicViewModelBehavior.Injected : LogicViewModelBehavior.Dynamic;
+            ViewModelLifetimeManagement = ViewModelLifetimeManagement.Automatic;
 
             if (ViewModel != null)
             {
@@ -305,10 +318,20 @@ namespace Catel.MVVM.Providers
         public LogicViewModelBehavior ViewModelBehavior { get; private set; }
 
         /// <summary>
+        /// Gets or sets the view model lifetime management.
+        /// </summary>
+        public ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
+
+        /// <summary>
         /// Gets the type of the view model.
         /// </summary>
         /// <value>The type of the view model.</value>
         public Type ViewModelType { get; private set; }
+
+        /// <summary>
+        /// Gets a value whether the target view has a 'VM' property available.
+        /// </summary>
+        public bool HasVmProperty { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the view model container should prevent the 
@@ -317,6 +340,7 @@ namespace Catel.MVVM.Providers
         /// This property is very useful when using views in transitions where the view model is no longer required.
         /// </summary>
         /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public bool PreventViewModelCreation { get; set; }
 
         /// <summary>
@@ -530,6 +554,21 @@ namespace Catel.MVVM.Providers
         }
 
         /// <summary>
+        /// Gets the data context for the current view.
+        /// </summary>
+        /// <param name="view">The view to retrieve the data context from.</param>
+        /// <returns>The data context.</returns>
+        protected virtual object GetDataContext(IView view)
+        {
+            if (view is null)
+            {
+                return null;
+            }
+
+            return _viewContextService.GetContext(view);
+        }
+
+        /// <summary>
         /// Sets the data context of the target control.
         /// <para />
         /// This method is abstract because the real logic implementation knows how to set the data context (for example,
@@ -543,7 +582,7 @@ namespace Catel.MVVM.Providers
         /// </summary>
         protected IViewModel CreateViewModelByUsingDataContextOrConstructor()
         {
-            var dataContext = TargetView.DataContext;
+            var dataContext = GetDataContext(TargetView);
 
             // It might be possible that a view model is already set, so use it if the datacontext is a view model
             var dataContextAsIViewModel = dataContext as IViewModel;
@@ -714,7 +753,7 @@ namespace Catel.MVVM.Providers
 
             IsTargetViewLoaded = true;
 
-            var dataContext = view?.DataContext;
+            var dataContext = GetDataContext(view);
             LastKnownDataContext = (dataContext != null) ? new WeakReference(dataContext) : null;
 
             await OnTargetViewLoadedAsync(sender, e);
@@ -775,6 +814,12 @@ namespace Catel.MVVM.Providers
         public virtual async Task OnTargetViewLoadedAsync(object sender, EventArgs e)
         {
             await CompleteViewModelClosingAsync();
+
+            if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.FullyManual)
+            {
+                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not creating view model on loaded event for '{TargetViewType?.Name}'");
+                return;
+            }
 
             if (ViewModel is null)
             {
@@ -887,11 +932,12 @@ namespace Catel.MVVM.Providers
                 return;
             }
 
-            Log.Debug($"DataContext of TargetView '{TargetViewType?.Name}' has changed to '{ObjectToStringHelper.ToTypeString(TargetView.DataContext)}'");
+            var dataContext = GetDataContext(TargetView);
+
+            Log.Debug($"DataContext of TargetView '{TargetViewType?.Name}' has changed to '{ObjectToStringHelper.ToTypeString(dataContext)}'");
 
             LastKnownDataContext = null;
 
-            var dataContext = TargetView.DataContext;
             if (ReferenceEquals(dataContext, null))
             {
                 return;
@@ -1147,6 +1193,13 @@ namespace Catel.MVVM.Providers
                 return ViewModel;
             }
 
+            if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.FullyManual)
+            {
+                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', preventing view model creation for '{TargetViewType?.Name}'");
+                return null;
+            }
+
+            // Can be removed soon, now managed via ViewModelLifetimeManagement
             if (PreventViewModelCreation)
             {
                 Log.Info("ViewModel construction is prevented by the PreventViewModelCreation property");

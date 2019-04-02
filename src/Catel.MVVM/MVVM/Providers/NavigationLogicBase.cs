@@ -101,7 +101,14 @@ namespace Catel.MVVM.Providers
 
             CreateNavigationAdapter(true);
 
-            EnsureViewModel();
+            if (ViewModelLifetimeManagement != ViewModelLifetimeManagement.FullyManual)
+            {
+                EnsureViewModel();
+            }
+            else
+            {
+                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not creating view model on loaded event for '{TargetViewType?.Name}'");
+            }
         }
 
         /// <summary>
@@ -149,7 +156,14 @@ namespace Catel.MVVM.Providers
         /// <param name="e">The <see cref="NavigatedEventArgs" /> instance containing the event data.</param>
         protected virtual void OnNavigatedToPage(NavigatedEventArgs e)
         {
-            EnsureViewModel();
+            if (ViewModelLifetimeManagement != ViewModelLifetimeManagement.FullyManual)
+            {
+                EnsureViewModel();
+            }
+            else
+            {
+                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not creating view model on navigation event for '{TargetViewType?.Name}'");
+            }
 
             var viewModelAsViewModelBase = ViewModel as ViewModelBase;
             if (viewModelAsViewModelBase != null)
@@ -168,6 +182,12 @@ namespace Catel.MVVM.Providers
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             bool? result = true;
+
+            if (ViewModelLifetimeManagement != ViewModelLifetimeManagement.Automatic)
+            {
+                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not closing view model on navigation event for '{TargetViewType?.Name}'");
+                return;
+            }
 
             result = await SaveAndCloseViewModelAsync();
 

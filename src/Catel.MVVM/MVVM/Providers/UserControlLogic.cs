@@ -93,7 +93,6 @@ namespace Catel.MVVM.Providers
 
             SupportParentViewModelContainers = DefaultSupportParentViewModelContainersValue;
             UnloadBehavior = DefaultUnloadBehaviorValue;
-            CloseViewModelOnUnloaded = true;
 
 #if NET || NETCORE
             SkipSearchingForInfoBarMessageControl = DefaultSkipSearchingForInfoBarMessageControlValue;
@@ -101,9 +100,15 @@ namespace Catel.MVVM.Providers
 #endif
 
 #if XAMARIN
-            CreateViewModelWrapper(false);
+            CreateViewModelWrapper();
 #elif !UWP
+            // For non-UWP, we *cannot* use the ContentChanged event (it doesn't have the x:Name available)
             this.SubscribeToWeakGenericEvent<EventArgs>(targetView, nameof(FrameworkElement.Initialized), OnTargetViewInitialized, false);
+#else
+            // For UWP, we *can* use the ContentChanged event (it does have x:Name available)
+            // NOTE: There is NO unsubscription for this subscription.
+            // Hence target control content wrapper grid will be recreated each time content changes.
+            targetView.SubscribeToPropertyChanged(nameof(global::Windows.UI.Xaml.Controls.UserControl.Content), OnTargetViewContentChanged);
 #endif
         }
         #endregion
@@ -121,7 +126,18 @@ namespace Catel.MVVM.Providers
         /// <value>
         /// <c>true</c> if the view model should be closed when the control is unloaded; otherwise, <c>false</c>.
         /// </value>
-        public bool CloseViewModelOnUnloaded { get; set; }
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        public bool CloseViewModelOnUnloaded
+        {
+            get
+            {
+                return ViewModelLifetimeManagement == ViewModelLifetimeManagement.Automatic;
+            }
+            set
+            {
+                ViewModelLifetimeManagement = value ? ViewModelLifetimeManagement.Automatic : ViewModelLifetimeManagement.PartlyManual;
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether parent view model containers are supported. If supported,
@@ -269,14 +285,16 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Creates the view model wrapper.
         /// </summary>
-        /// <param name="checkIfWrapped">if set to <c>true</c>, check if the view is already wrapped.</param>
-        private void CreateViewModelWrapper(bool checkIfWrapped = true)
+        /// <param name="force">If set the <c>true</c>, this will add the <see cref="WrapOptions.Force"/> flag.</param>
+        public IViewModelWrapper CreateViewModelWrapper(bool force = false)
         {
             var targetView = TargetView;
 
             var dependencyResolver = this.GetDependencyResolver();
             var viewModelWrapperService = dependencyResolver.Resolve<IViewModelWrapperService>();
-            if (checkIfWrapped || !viewModelWrapperService.IsWrapped(targetView))
+
+            var wrapper = viewModelWrapperService.GetWrapper(targetView);
+            if (wrapper is null)
             {
                 var wrapOptions = WrapOptions.None;
 
@@ -287,27 +305,46 @@ namespace Catel.MVVM.Providers
                 }
 #endif
 
-                void action() => viewModelWrapperService.Wrap(targetView, this, wrapOptions);
+                if (force)
+                {
+                    wrapOptions |= WrapOptions.Force;
+                }
 
-                // NOTE: Beginning invoke (running async) because setting of TargetControl Content property causes memory faults
-                // when this method called by TargetControlContentChanged handler. No need to await though.
-#if NETFX_CORE && !UWP
-#pragma warning disable 4014
-                var dispatcher = ((FrameworkElement)TargetView).Dispatcher;
-                dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => { action(); });
-#pragma warning restore 4014
-#else
-                action();
-#endif
+                wrapper = viewModelWrapperService.Wrap(targetView, this, wrapOptions);
             }
+
+            return wrapper;
         }
 
+        /// <summary>
+        /// Gets the view model wrapper. If the view is not wrapped, this method will return <c>null</c>.
+        /// </summary>
+        /// <returns>The view model wrapper or <c>null</c>.</returns>
+        public object GetViewModelWrapper()
+        {
+            var dependencyResolver = this.GetDependencyResolver();
+            var viewModelWrapperService = dependencyResolver.Resolve<IViewModelWrapperService>();
+            return viewModelWrapperService.GetWrapper(TargetView);
+        }
+
+#if !UWP
         private void OnTargetViewInitialized(object sender, EventArgs e)
         {
             // Note: we can't use Content changed property notification (x:Name is not yet set), but Loaded event is too late,
             // this event should be in-between: https://docs.microsoft.com/en-us/dotnet/framework/wpf/advanced/object-lifetime-events
             CreateViewModelWrapper();
         }
+#else  
+        /// <summary>
+        /// Called when the content of the target control has changed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
+        private void OnTargetViewContentChanged(object sender, PropertyChangedEventArgs e)
+        {
+            CreateViewModelWrapper();
+        }
+#endif
 
         /// <summary>
         /// Called when the <c>TargetView</c> has just been loaded.
@@ -346,7 +383,7 @@ namespace Catel.MVVM.Providers
 
                 if (_infoBarMessageControl is null)
                 {
-                    Log.Warning("No InfoBarMessageControl is found in the visual tree of '{0}', consider using the SkipSearchingForInfoBarMessageControl property to improve performance", GetType().Name);
+                    Log.Warning($"No InfoBarMessageControl is found in the visual tree of '{GetType().Name}', consider using the SkipSearchingForInfoBarMessageControl property to improve performance");
                 }
             }
             else
@@ -355,16 +392,25 @@ namespace Catel.MVVM.Providers
             }
 #endif
 
-            if (!CloseViewModelOnUnloaded && (ViewModel != null))
-            {
-                // Re-use view model
-                Log.Debug("Re-using existing view model");
-            }
-
             if (ViewModel is null)
             {
-                // Try to create view model based on data context
-                await UpdateDataContextToUseViewModelAsync(TargetView.DataContext);
+                if (ViewModelLifetimeManagement != ViewModelLifetimeManagement.FullyManual)
+                {
+                    // Try to create view model based on data context
+                    var dataContext = GetDataContext(TargetView);
+                    await UpdateDataContextToUseViewModelAsync(dataContext);
+                }
+                else
+                {
+                    Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not creating view model on loaded event for '{TargetViewType?.Name}'");
+                }
+            }
+            else
+            {
+                if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.PartlyManual)
+                {
+                    Log.Debug("Re-using existing view model");
+                }
             }
 
             if (DisableWhenNoViewModel)
@@ -389,14 +435,14 @@ namespace Catel.MVVM.Providers
 
             UnsubscribeFromParentViewModelContainer();
 
-            if (CloseViewModelOnUnloaded)
+            if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.Automatic)
             {
                 var result = GetViewModelResultValueFromUnloadBehavior();
                 await CloseAndDisposeViewModelAsync(result);
             }
             else
             {
-                Log.Debug("Skipping 'CloseAndDisposeViewModel' because 'CloseViewModelOnUnloaded' is set to false.");
+                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not closing view model on unloaded event for '{TargetViewType?.Name}'");
             }
         }
 
@@ -452,7 +498,7 @@ namespace Catel.MVVM.Providers
 
             base.OnTargetViewDataContextChanged(sender, e);
 
-            var dataContext = TargetView.DataContext;
+            var dataContext = GetDataContext(TargetView);
             if (dataContext.IsSentinelBindingObject())
             {
                 return;
@@ -460,6 +506,8 @@ namespace Catel.MVVM.Providers
 
             if (!IsUnloading)
             {
+                // Note: don't respect view model lifetime management here, the IViewModelFactory should return null if
+                // no vm should be created and users *really* want to disable this kind of core Catel behavior
                 await UpdateDataContextToUseViewModelAsync(dataContext);
             }
         }
@@ -893,7 +941,14 @@ namespace Catel.MVVM.Providers
 
                 IgnoreNullDataContext = true;
 
-                await CloseAndDisposeViewModelAsync(null);
+                if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.Automatic)
+                {
+                    await CloseAndDisposeViewModelAsync(null);
+                }
+                else
+                {
+                    Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not closing view model on parent view model closing event for '{TargetViewType?.Name}'");
+                }
             }
         }
 

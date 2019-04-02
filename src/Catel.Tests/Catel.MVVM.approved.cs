@@ -248,6 +248,11 @@ namespace Catel.MVVM.Auditing
         public InvalidateCommandManagerOnViewModelInitializationAuditor(Catel.MVVM.ICommandManager commandManager, Catel.Services.IDispatcherService dispatcherService) { }
         public override void OnViewModelInitialized(Catel.MVVM.IViewModel viewModel) { }
     }
+    public class SubscribeKeyboardEventsOnViewModelCreationAuditor : Catel.MVVM.Auditing.AuditorBase
+    {
+        public SubscribeKeyboardEventsOnViewModelCreationAuditor(Catel.MVVM.ICommandManager commandManager) { }
+        public override void OnViewModelCreated(Catel.MVVM.IViewModel viewModel) { }
+    }
 }
 namespace Catel.MVVM
 {
@@ -895,6 +900,12 @@ namespace Catel.MVVM
         public virtual Catel.MVVM.IViewModel CreateViewModel(System.Type viewModelType, object dataContext, object tag = null) { }
         public virtual bool IsViewModelWithModelInjection(System.Type viewModelType) { }
     }
+    public enum ViewModelLifetimeManagement
+    {
+        Automatic = 0,
+        PartlyManual = 1,
+        FullyManual = 2,
+    }
     public class ViewModelLocator : Catel.MVVM.LocatorBase, Catel.MVVM.ILocator, Catel.MVVM.IViewModelLocator
     {
         public ViewModelLocator() { }
@@ -1346,12 +1357,15 @@ namespace Catel.MVVM.Providers
         protected static readonly Catel.MVVM.Views.IViewLoadManager ViewLoadManager;
         protected LogicBase(Catel.MVVM.Views.IView targetView, System.Type viewModelType = null, Catel.MVVM.IViewModel viewModel = null) { }
         protected virtual bool CanViewBeLoaded { get; }
+        public bool HasVmProperty { get; }
         protected bool IgnoreNullDataContext { get; set; }
         protected bool IsClosingViewModel { get; }
         protected bool IsLoading { get; }
         public bool IsTargetViewLoaded { get; }
         protected bool IsUnloading { get; }
         protected System.WeakReference LastKnownDataContext { get; }
+        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be removed in version" +
+            " 6.0.0.", true)]
         public bool PreventViewModelCreation { get; set; }
         protected internal Catel.MVVM.Views.IView TargetView { get; set; }
         protected System.Type TargetViewType { get; }
@@ -1359,6 +1373,7 @@ namespace Catel.MVVM.Providers
         public Catel.MVVM.IViewModel ViewModel { get; set; }
         public Catel.MVVM.Providers.LogicViewModelBehavior ViewModelBehavior { get; }
         protected Catel.MVVM.IViewModelFactory ViewModelFactory { get; }
+        public Catel.MVVM.ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
         public System.Type ViewModelType { get; }
         public event System.EventHandler<Catel.MVVM.Providers.DetermineViewModelInstanceEventArgs> DetermineViewModelInstance;
         public event System.EventHandler<Catel.MVVM.Providers.DetermineViewModelTypeEventArgs> DetermineViewModelType;
@@ -1376,6 +1391,7 @@ namespace Catel.MVVM.Providers
         protected System.Threading.Tasks.Task CompleteViewModelClosingAsync() { }
         protected Catel.MVVM.IViewModel ConstructViewModelUsingArgumentOrDefaultConstructor(object injectionObject) { }
         protected Catel.MVVM.IViewModel CreateViewModelByUsingDataContextOrConstructor() { }
+        protected virtual object GetDataContext(Catel.MVVM.Views.IView view) { }
         protected bool IsCurrentDataContext(Catel.MVVM.Views.DataContextChangedEventArgs e) { }
         public virtual void OnTargetViewDataContextChanged(object sender, Catel.MVVM.Views.DataContextChangedEventArgs e) { }
         public virtual System.Threading.Tasks.Task OnTargetViewLoadedAsync(object sender, System.EventArgs e) { }
@@ -1442,6 +1458,7 @@ namespace Catel.MVVM.Providers
     public class UserControlLogic : Catel.MVVM.Providers.LogicBase
     {
         public UserControlLogic(Catel.MVVM.Views.IView targetView, System.Type viewModelType = null, Catel.MVVM.IViewModel viewModel = null) { }
+        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement` instead. Will be removed in version 6.0.0.", true)]
         public bool CloseViewModelOnUnloaded { get; set; }
         public bool CreateWarningAndErrorValidatorForViewModel { get; set; }
         public static bool DefaultCreateWarningAndErrorValidatorForViewModelValue { get; set; }
@@ -1454,6 +1471,8 @@ namespace Catel.MVVM.Providers
         public bool SkipSearchingForInfoBarMessageControl { get; set; }
         public bool SupportParentViewModelContainers { get; set; }
         public Catel.MVVM.Providers.UnloadBehavior UnloadBehavior { get; set; }
+        public Catel.MVVM.Views.IViewModelWrapper CreateViewModelWrapper(bool force = False) { }
+        public object GetViewModelWrapper() { }
         public override void OnTargetViewDataContextChanged(object sender, Catel.MVVM.Views.DataContextChangedEventArgs e) { }
         public override System.Threading.Tasks.Task OnTargetViewLoadedAsync(object sender, System.EventArgs e) { }
         public override System.Threading.Tasks.Task OnTargetViewUnloadedAsync(object sender, System.EventArgs e) { }
@@ -2071,6 +2090,10 @@ namespace Catel.Services
         void Start(System.TimeSpan duration);
         void Stop();
     }
+    public interface IViewContextService
+    {
+        object GetContext(Catel.MVVM.Views.IView view);
+    }
     public interface IViewExportService
     {
         [System.ObsoleteAttribute("Use `ExportAsync` instead. Will be removed in version 6.0.0.", true)]
@@ -2080,6 +2103,7 @@ namespace Catel.Services
     public interface IViewModelService : Catel.Services.IService { }
     public interface IViewModelWrapperService
     {
+        Catel.MVVM.Views.IViewModelWrapper GetWrapper(Catel.MVVM.Views.IView view);
         bool IsWrapped(Catel.MVVM.Views.IView view);
         Catel.MVVM.Views.IViewModelWrapper Wrap(Catel.MVVM.Views.IView view, object viewModelSource, Catel.Services.WrapOptions wrapOptions);
     }
@@ -2314,6 +2338,8 @@ namespace Catel.Services
         public override bool Equals(object obj) { }
         public bool Equals(Catel.Services.Size size) { }
         public override int GetHashCode() { }
+        public static bool ==(Catel.Services.Size a, Catel.Services.Size b) { }
+        public static bool !=(Catel.Services.Size a, Catel.Services.Size b) { }
         public override string ToString() { }
     }
     [System.ObsoleteAttribute("Use Orc.CommandLine instead since that has better support for parsing command lin" +
@@ -2360,6 +2386,11 @@ namespace Catel.Services
         public void Start(System.TimeSpan duration) { }
         public void Stop() { }
     }
+    public class ViewContextService : Catel.Services.IViewContextService
+    {
+        public ViewContextService() { }
+        public object GetContext(Catel.MVVM.Views.IView view) { }
+    }
     public class ViewExportService : Catel.Services.ServiceBase, Catel.Services.IViewExportService
     {
         public ViewExportService(Catel.MVVM.Views.IViewManager viewManager, Catel.Services.ISaveFileService saveFileService) { }
@@ -2375,6 +2406,7 @@ namespace Catel.Services
     public class ViewModelWrapperService : Catel.Services.ViewModelWrapperServiceBase, Catel.Services.IViewModelWrapperService
     {
         public ViewModelWrapperService() { }
+        public Catel.MVVM.Views.IViewModelWrapper GetWrapper(Catel.MVVM.Views.IView view) { }
         protected override bool IsViewWrapped(Catel.MVVM.Views.IView view) { }
         public bool IsWrapped(Catel.MVVM.Views.IView view) { }
         public Catel.MVVM.Views.IViewModelWrapper Wrap(Catel.MVVM.Views.IView view, object viewModelSource, Catel.Services.WrapOptions wrapOptions) { }
@@ -2425,6 +2457,7 @@ namespace Catel.Services
     {
         None = 0,
         CreateWarningAndErrorValidatorForViewModel = 1,
+        Force = 2,
     }
 }
 namespace Catel.Windows
@@ -2449,8 +2482,11 @@ namespace Catel.Windows
         protected System.Collections.ObjectModel.ReadOnlyCollection<System.Windows.Input.ICommand> Commands { get; }
         protected Catel.Windows.DataWindowDefaultButton DefaultButton { get; }
         protected Catel.Windows.DataWindowMode Mode { get; }
+        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be treated as an erro" +
+            "r from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool PreventViewModelCreation { get; set; }
         public Catel.MVVM.IViewModel ViewModel { get; }
+        public Catel.MVVM.ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
         public System.Type ViewModelType { get; }
         public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
         public event System.EventHandler<System.EventArgs> _viewLoaded;
@@ -2475,7 +2511,7 @@ namespace Catel.Windows
         protected System.Threading.Tasks.Task OnCancelExecuteAsync() { }
         protected bool OnCloseCanExecute() { }
         protected void OnCloseExecute() { }
-        protected override void OnContentChanged(object oldContent, object newContent) { }
+        protected override void OnInitialized(System.EventArgs e) { }
         protected virtual void OnInternalGridChanged() { }
         protected override void OnKeyDown(System.Windows.Input.KeyEventArgs e) { }
         protected virtual void OnLoaded(System.EventArgs e) { }
@@ -2487,6 +2523,7 @@ namespace Catel.Windows
         protected virtual System.Threading.Tasks.Task OnViewModelClosedAsync(object sender, Catel.MVVM.ViewModelClosedEventArgs e) { }
         protected virtual void OnViewModelPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
         protected void RaiseCanExecuteChangedForAllCommands() { }
+        protected virtual void RaisePropertyChanged(string propertyName) { }
         protected virtual bool ValidateData() { }
     }
     public class DataWindowButton
@@ -2662,8 +2699,11 @@ namespace Catel.Windows.Controls
     public class Page : System.Windows.Controls.Page, Catel.MVVM.IViewModelContainer, Catel.MVVM.Views.INavigationView, Catel.MVVM.Views.IPage, Catel.MVVM.Views.IView, System.ComponentModel.INotifyPropertyChanged
     {
         public Page() { }
+        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be treated as an erro" +
+            "r from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool PreventViewModelCreation { get; set; }
         public Catel.MVVM.IViewModel ViewModel { get; }
+        public Catel.MVVM.ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
         public System.Type ViewModelType { get; }
         public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
         public event System.EventHandler<System.EventArgs> _viewLoaded;
@@ -2679,11 +2719,14 @@ namespace Catel.Windows.Controls
         protected virtual void OnUnloaded(System.EventArgs e) { }
         protected virtual void OnViewModelChanged() { }
         protected virtual void OnViewModelPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
+        protected virtual void RaisePropertyChanged(string propertyName) { }
     }
     public class UserControl : System.Windows.Controls.UserControl, Catel.MVVM.IViewModelContainer, Catel.MVVM.Views.IUserControl, Catel.MVVM.Views.IView, System.ComponentModel.INotifyPropertyChanged
     {
         public UserControl() { }
         public UserControl(Catel.MVVM.IViewModel viewModel) { }
+        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.PartlyManual` instead. Will be treated as an err" +
+            "or from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool CloseViewModelOnUnloaded { get; set; }
         public bool CreateWarningAndErrorValidatorForViewModel { get; set; }
         public static bool DefaultCreateWarningAndErrorValidatorForViewModelValue { get; set; }
@@ -2691,11 +2734,14 @@ namespace Catel.Windows.Controls
         public static bool DefaultSupportParentViewModelContainersValue { get; set; }
         public static Catel.MVVM.Providers.UnloadBehavior DefaultUnloadBehaviorValue { get; set; }
         public bool DisableWhenNoViewModel { get; set; }
+        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be treated as an erro" +
+            "r from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool PreventViewModelCreation { get; set; }
         public bool SkipSearchingForInfoBarMessageControl { get; set; }
         public bool SupportParentViewModelContainers { get; set; }
         public Catel.MVVM.Providers.UnloadBehavior UnloadBehavior { get; set; }
         public Catel.MVVM.IViewModel ViewModel { get; }
+        public Catel.MVVM.ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
         public System.Type ViewModelType { get; }
         public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
         public event System.EventHandler<System.EventArgs> _viewLoaded;
@@ -2706,12 +2752,14 @@ namespace Catel.Windows.Controls
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         public event System.EventHandler<System.EventArgs> ViewModelChanged;
         public event System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> ViewModelPropertyChanged;
+        protected override void AddChild(object value) { }
         protected virtual void OnLoaded(System.EventArgs e) { }
         protected virtual void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
         protected virtual void OnUnloaded(System.EventArgs e) { }
         protected virtual void OnViewModelChanged() { }
         protected virtual System.Threading.Tasks.Task OnViewModelClosedAsync(object sender, Catel.MVVM.ViewModelClosedEventArgs e) { }
         protected virtual void OnViewModelPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
+        protected virtual void RaisePropertyChanged(string propertyName) { }
     }
     public enum ValidationEventAction
     {

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETCORE
+#if NET || NETCORE || UWP
 
 namespace Catel.Services
 {
@@ -51,11 +51,7 @@ namespace Catel.Services
             try
             {
 #if UWP
-                var launcher = Launcher.LaunchUriAsync(new Uri(fileName));
-                if (processCompletedCallback != null)
-                {
-                    launcher.Completed += (sender, e) => tcs.SetResult(0);
-                }
+                await Launcher.LaunchUriAsync(new Uri(fileName));
 #else
                 var processStartInfo = new ProcessStartInfo(fileName, arguments)
                 {

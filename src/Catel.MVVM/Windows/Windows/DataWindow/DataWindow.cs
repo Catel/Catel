@@ -29,6 +29,7 @@ namespace Catel.Windows
     using Catel.Threading;
     using Threading;
     using IoC;
+    using Catel.Reflection;
 
     /// <summary>
     /// Mode of the <see cref="DataWindow"/>.
@@ -109,18 +110,11 @@ namespace Catel.Windows
     /// </summary>
     public class DataWindow : System.Windows.Window, IDataWindow
     {
-        #region Constants
-        /// <summary>
-        /// Offset of the window to the sides of the primary monitor.
-        /// </summary>
-        private const int Offset = 50;
-        #endregion
-
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private static readonly IWrapControlService WrapControlService = ServiceLocator.Default.ResolveType<IWrapControlService>();
 
+        private readonly bool _focusFirstControl;
         private bool _isWrapped;
         private bool _forceClose;
 
@@ -222,8 +216,8 @@ namespace Catel.Windows
             {
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
                 // on systems where NET45 is *not* installed
-                if (!string.Equals(e.PropertyName, "ActualWidth", StringComparison.InvariantCulture) &&
-                    !string.Equals(e.PropertyName, "ActualHeight", StringComparison.InvariantCulture))
+                if (!string.Equals(e.PropertyName, nameof(ActualWidth), StringComparison.InvariantCulture) &&
+                    !string.Equals(e.PropertyName, nameof(ActualHeight), StringComparison.InvariantCulture))
                 {
                     PropertyChanged?.Invoke(this, e);
                 }
@@ -275,11 +269,13 @@ namespace Catel.Windows
                 Closing += OnDataWindowClosing;
             });
 
+            _focusFirstControl = focusFirstControl;
+
             if (setOwnerAndFocus)
             {
                 this.SetOwnerWindowAndFocus(focusFirstControl: focusFirstControl);
             }
-            else if(focusFirstControl)
+            else if (focusFirstControl)
             {
                 this.FocusFirstControl();
             }
@@ -302,10 +298,25 @@ namespace Catel.Windows
         /// This property is very useful when using views in transitions where the view model is no longer required.
         /// </summary>
         /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         public bool PreventViewModelCreation
         {
             get { return _logic.GetValue<WindowLogic, bool>(x => x.PreventViewModelCreation); }
             set { _logic.SetValue<WindowLogic>(x => x.PreventViewModelCreation = value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a the view model lifetime management.
+        /// <para />
+        /// By default, this value is <see cref="ViewModelLifetimeManagement"/>.
+        /// </summary>
+        /// <value>
+        /// The view model lifetime management.
+        /// </value>
+        public ViewModelLifetimeManagement ViewModelLifetimeManagement
+        {
+            get { return _logic.GetValue<WindowLogic, ViewModelLifetimeManagement>(x => x.ViewModelLifetimeManagement); }
+            set { _logic.SetValue<WindowLogic>(x => x.ViewModelLifetimeManagement = value); }
         }
 
         /// <summary>
@@ -625,7 +636,21 @@ namespace Catel.Windows
             OnViewModelChanged();
 
             ViewModelChanged?.Invoke(this, EventArgs.Empty);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewModel)));
+            RaisePropertyChanged(nameof(ViewModel));
+
+            if (_logic.HasVmProperty)
+            {
+                RaisePropertyChanged("VM");
+            }
+        }
+
+        /// <summary>
+        /// Raises the <c>PropertyChanged</c> event.
+        /// </summary>
+        /// <param name="propertyName">The property name to raise the event for.</param>
+        protected virtual void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
@@ -766,20 +791,19 @@ namespace Catel.Windows
         }
 
         /// <summary>
-        /// Invoked when the content of this control has been changed. This method will add the dynamic controls automatically.
+        /// Invoked when the control has been initialized.
         /// </summary>
-        /// <param name="oldContent">Old content.</param>
-        /// <param name="newContent">New content.</param>
-        protected override void OnContentChanged(object oldContent, object newContent)
+        /// <param name="e">The event args.</param>
+        protected override void OnInitialized(EventArgs e)
         {
-            base.OnContentChanged(oldContent, newContent);
+            base.OnInitialized(e);
 
             if (CatelEnvironment.IsInDesignMode)
             {
                 return;
             }
 
-            var newContentAsFrameworkElement = newContent as FrameworkElement;
+            var newContentAsFrameworkElement = Content as FrameworkElement;
             if (_isWrapped || !WrapControlService.CanBeWrapped(newContentAsFrameworkElement))
             {
                 return;
@@ -841,7 +865,10 @@ namespace Catel.Windows
             {
                 internalGrid.SetResourceReference(StyleProperty, "WindowGridStyle");
 
-                newContentAsFrameworkElement.FocusFirstControl();
+                if (_focusFirstControl)
+                {
+                    newContentAsFrameworkElement.FocusFirstControl();
+                }
 
                 _defaultOkCommand = (from button in _buttons
                                      where button.IsDefault

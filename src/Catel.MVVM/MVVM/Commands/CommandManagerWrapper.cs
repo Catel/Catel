@@ -48,14 +48,14 @@ namespace Catel.MVVM
 
             View = view;
 
-            if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, "Loaded", OnViewLoaded, false) is null)
+            if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, nameof(FrameworkElement.Loaded), OnViewLoaded, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'view.Loaded', going to subscribe without weak events");
 
                 view.Loaded += OnViewLoaded;
             }
 
-            if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, "Unloaded", OnViewUnloaded, false) is null)
+            if (this.SubscribeToWeakGenericEvent<RoutedEventArgs>(view, nameof(FrameworkElement.Unloaded), OnViewUnloaded, false) is null)
             {
                 Log.Debug("Failed to use weak events to subscribe to 'view.Unloaded', going to subscribe without weak events");
 

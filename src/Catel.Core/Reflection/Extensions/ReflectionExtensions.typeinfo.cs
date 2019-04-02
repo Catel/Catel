@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NETFX_CORE || NET || NETSTANDARD
+#if UAP || NET || NETSTANDARD
 
 namespace Catel.Reflection
 {
@@ -144,7 +144,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("typeInfo", typeInfo);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             var source = typeInfo.DeclaredConstructors.ToArray();
 #else
             var source = typeInfo.GetConstructors(bindingFlags);

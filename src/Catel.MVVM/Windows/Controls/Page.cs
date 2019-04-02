@@ -13,6 +13,7 @@ namespace Catel.Windows.Controls
     using MVVM.Providers;
     using MVVM.Views;
     using MVVM;
+    using Catel.Reflection;
 
 #if UWP
     using global::Windows.UI.Xaml;
@@ -62,15 +63,18 @@ namespace Catel.Windows.Controls
 #else
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
                 // on systems where NET45 is *not* installed
-                if (!string.Equals(e.PropertyName, "ActualWidth", StringComparison.InvariantCulture) &&
-                    !string.Equals(e.PropertyName, "ActualHeight", StringComparison.InvariantCulture))
+                if (!string.Equals(e.PropertyName, nameof(ActualWidth), StringComparison.InvariantCulture) &&
+                    !string.Equals(e.PropertyName, nameof(ActualHeight), StringComparison.InvariantCulture))
                 {
                     PropertyChanged?.Invoke(this, e);
                 }
 #endif
             };
 
-            _logic.ViewModelChanged += (sender, e) => RaiseViewModelChanged();
+            _logic.ViewModelChanged += (sender, e) =>
+            {
+                RaiseViewModelChanged();
+            };
 
             _logic.ViewModelPropertyChanged += (sender, e) =>
             {
@@ -113,6 +117,7 @@ namespace Catel.Windows.Controls
         /// This property is very useful when using views in transitions where the view model is no longer required.
         /// </summary>
         /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         public bool PreventViewModelCreation
         {
             get { return _logic.GetValue<PageLogic, bool>(x => x.PreventViewModelCreation); }
@@ -126,6 +131,20 @@ namespace Catel.Windows.Controls
         public IViewModel ViewModel
         {
             get { return _logic.GetValue<PageLogic, IViewModel>(x => x.ViewModel); }
+        }
+
+        /// <summary>
+        /// Gets or sets a the view model lifetime management.
+        /// <para />
+        /// By default, this value is <see cref="ViewModelLifetimeManagement"/>.
+        /// </summary>
+        /// <value>
+        /// The view model lifetime management.
+        /// </value>
+        public ViewModelLifetimeManagement ViewModelLifetimeManagement
+        {
+            get { return _logic.GetValue<PageLogic, ViewModelLifetimeManagement>(x => x.ViewModelLifetimeManagement); }
+            set { _logic.SetValue<PageLogic>(x => x.ViewModelLifetimeManagement = value); }
         }
         #endregion
 
@@ -183,7 +202,21 @@ namespace Catel.Windows.Controls
             OnViewModelChanged();
 
             ViewModelChanged?.Invoke(this, EventArgs.Empty);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewModel)));
+            RaisePropertyChanged(nameof(ViewModel));
+
+            if (_logic.HasVmProperty)
+            {
+                RaisePropertyChanged("VM");
+            }
+        }
+
+        /// <summary>
+        /// Raises the <c>PropertyChanged</c> event.
+        /// </summary>
+        /// <param name="propertyName">The property name to raise the event for.</param>
+        protected virtual void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>

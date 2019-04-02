@@ -50,9 +50,6 @@ namespace Catel.MVVM
         /// </summary>
         public CommandManager()
         {
-#if !XAMARIN && !XAMARIN_FORMS
-            SubscribeToKeyboardEvents();
-#endif
         }
 
         #region Properties

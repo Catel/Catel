@@ -11,16 +11,20 @@ namespace Catel.Windows.Controls
     using System;
     using System.ComponentModel;
     using System.Threading.Tasks;
-    using System.Windows;
     using Catel.Threading;
     using MVVM.Providers;
     using MVVM.Views;
     using MVVM;
+    using Catel.Reflection;
 
 #if UWP
+    using global::Windows.UI;
     using global::Windows.UI.Xaml;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Markup;
     using UIEventArgs = System.EventArgs;
 #endif
 
@@ -90,8 +94,8 @@ namespace Catel.Windows.Controls
 #else
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
                 // on systems where NET45 is *not* installed
-                if (!string.Equals(e.PropertyName, "ActualWidth", StringComparison.InvariantCulture) &&
-                    !string.Equals(e.PropertyName, "ActualHeight", StringComparison.InvariantCulture))
+                if (!string.Equals(e.PropertyName, nameof(ActualWidth), StringComparison.InvariantCulture) &&
+                    !string.Equals(e.PropertyName, nameof(ActualHeight), StringComparison.InvariantCulture))
                 {
                     PropertyChanged?.Invoke(this, e);
                 }
@@ -142,6 +146,7 @@ namespace Catel.Windows.Controls
         /// This property is very useful when using views in transitions where the view model is no longer required.
         /// </summary>
         /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         public bool PreventViewModelCreation
         {
             get { return _logic.GetValue<UserControlLogic, bool>(x => x.PreventViewModelCreation); }
@@ -169,10 +174,25 @@ namespace Catel.Windows.Controls
         /// <value>
         /// <c>true</c> if the view model should be closed when the control is unloaded; otherwise, <c>false</c>.
         /// </value>
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.PartlyManual", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         public bool CloseViewModelOnUnloaded
         {
             get { return _logic.GetValue<UserControlLogic, bool>(x => x.CloseViewModelOnUnloaded, true); }
             set { _logic.SetValue<UserControlLogic>(x => x.CloseViewModelOnUnloaded = value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a the view model lifetime management.
+        /// <para />
+        /// By default, this value is <see cref="ViewModelLifetimeManagement"/>.
+        /// </summary>
+        /// <value>
+        /// The view model lifetime management.
+        /// </value>
+        public ViewModelLifetimeManagement ViewModelLifetimeManagement
+        {
+            get { return _logic.GetValue<UserControlLogic, ViewModelLifetimeManagement>(x => x.ViewModelLifetimeManagement); }
+            set { _logic.SetValue<UserControlLogic>(x => x.ViewModelLifetimeManagement = value); }
         }
 
         /// <summary>
@@ -310,7 +330,7 @@ namespace Catel.Windows.Controls
             set { _logic.SetValue<UserControlLogic>(x => x.DisableWhenNoViewModel = value); }
         }
 
-#if !NET && !NETCORE
+#if !NET && !NETCORE && !UWP
         /// <summary>
         /// Gets a value indicating whether this instance is loaded.
         /// </summary>
@@ -377,8 +397,43 @@ namespace Catel.Windows.Controls
             OnViewModelChanged();
 
             ViewModelChanged?.Invoke(this, EventArgs.Empty);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewModel)));
+            RaisePropertyChanged(nameof(ViewModel));
+
+            if (_logic.HasVmProperty)
+            {
+                RaisePropertyChanged("VM");
+            }
         }
+
+        /// <summary>
+        /// Raises the <c>PropertyChanged</c> event.
+        /// </summary>
+        /// <param name="propertyName">The property name to raise the event for.</param>
+        protected virtual void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+#if NET || NETCORE
+        /// <summary>
+        /// Adds a specified object as the child of a System.Windows.Controls.ContentControl.
+        /// </summary>
+        /// <param name="value">The object to add.</param>
+        protected override void AddChild(object value)
+        {
+            // Fix for https://github.com/Catel/Catel/issues/1260, make sure to create the grid first (and we force it, this
+            // might be a non-xaml (e.g. non-InitializeComponent) control
+            var wrapper = _logic.CreateViewModelWrapper(true);
+            if (wrapper != null)
+            {
+                // Pass on to the grid
+                ((IAddChild)Content).AddChild(value);
+                return;
+            }
+
+            base.AddChild(value);
+        }
+#endif
 
         /// <summary>
         /// Called when the <see cref="ViewModel"/> has changed.

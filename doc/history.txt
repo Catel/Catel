@@ -13,7 +13,62 @@ Issue tracker:   https://www.catelproject.com/support/issue-tracker
 Documentation:   https://www.catelproject.com/support/documentation
 License:         https://www.catelproject.com/about/license
 
-Items prepended with CTL are from JIRA (old issue tracker). Items prepended with a # are from GitHub.
+Items prefixed with 'CTL' are from JIRA (old issue tracker). Items prefixed with '#' are from GitHub.
+
+**********************************************************
+
+==================
+Version 5.10.0
+==================
+
+For an upgrade guide, visit https://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date
+============
+2019/04/02
+
+Platform support changes
+========================
+* #1103 / #1165 Convert to multi-targeted projects, PCL is no longer supported (.NET Standard is the replacement)
+* #1240 Add support for .NET Core 3.0
+
+Classes / members marked as obsolete
+====================================
+* #1124 Mark NullableValueConverter as obsolete since converter doesn't have a target type, so this converter won't work as expected NullableValueConverter
+* #1209 Mark IStartupInfoProvider as obsolete in favor of Orc.CommandLine since that implementation takes better care of supporting different quote styles (e.g. allows ')
+* #1216 Mark binary serializers as obsolete due to potential security issues in the binary serialization engine of .NET itself (see https://github.com/Catel/Catel/issues/1216)
+* #1258 Mark SafeInvoke obsolete in favor of handler?.Invoke(this, event args);
+* #1284 Mark 'CloseViewModelOnUnloaded' and 'PreventViewModelCreation' in favor of 'ViewModelLifetimeManagement'
+
+Added/fixed
+===========
+(+) #1249 Add ViewModelContextService to allow runtime overrides of the DataContext to use for view model injection
+(+) #1283 Add ViewModelLifetimeManagement to all views
+(+) #1272 Implement IProcessService for UWP
+(+) #1287 Add RaisePropertyChanged to view base classes
+(+) #1288 Add reserved 'VM' property on views with automatic change notifications
+(*) #1260 Allow classes derived from Catel.UserControl to use the AddChild method 
+(*) #1261 Update NewtonSoft.Json to 12.x
+(*) #1268 Initialize VM grid in DataWindow.Initialized instead of DataWindow.ContentChanged
+(*) #1269 Create VM Auditor to subscribe keyboard events instead of CommandManager constructor
+(*) #1270 Add faster override for IModelExtensions.ClearIsDirtyOnAllChildren() (add suspendNotifications parameter)
+(*) #1284 Replace 'CloseViewModelOnUnloaded' and 'PreventViewModelCreation' with 'ViewModelLifetimeManagement'
+(*) #1291 Update Xamarin.Forms to 3.6
+(x) #1252 Catel.MVVM.Xamarin.Forms MessageBox showing without buttons
+(x) #1259 DataWindow should respect the focusFirstControl parameter
+(x) #1262 IModelExtensions.ClearIsDirtyOnAllChildren() not working with a collection of ModelBase
+(x) #1267 Fix binding errors on UserControl for UWP
+(x) #1286 ServiceLocator.ResolveType with tag should pass tag to TypeFactory
+(x) #1289 AssemblyHelper.GetLoadedAssemblies(System.AppDomain) causes System.MissingMethodException in Xamarin.UWP
+
+Roadmap
+=======
+See https://www.catelproject.com/support/issue-tracker
+
+Known issues
+============
+See https://www.catelproject.com/support/issue-tracker
+
 
 **********************************************************
 
@@ -37,6 +92,7 @@ Classes / members marked as obsolete
 * #1124 Mark NullableValueConverter as obsolete since converter doesn't have a target type, so this converter won't work as expected NullableValueConverter
 * #1209 Mark IStartupInfoProvider as obsolete in favor of Orc.CommandLine since that implementation takes better care of supporting different quote styles (e.g. allows ')
 * #1216 Mark binary serializers as obsolete due to potential security issues in the binary serialization engine of .NET itself (see https://github.com/Catel/Catel/issues/1216)
+* #1258 Mark SafeInvoke obsolete in favor of handler?.Invoke(this, event args);
 
 Added/fixed
 ===========

@@ -102,10 +102,25 @@ namespace Catel.Android.App
         /// This property is very useful when using views in transitions where the view model is no longer required.
         /// </summary>
         /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public bool PreventViewModelCreation
         {
             get { return _logic.GetValue<UserControlLogic, bool>(x => x.PreventViewModelCreation); }
             set { _logic.SetValue<UserControlLogic>(x => x.PreventViewModelCreation = value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a the view model lifetime management.
+        /// <para />
+        /// By default, this value is <see cref="ViewModelLifetimeManagement"/>.
+        /// </summary>
+        /// <value>
+        /// The view model lifetime management.
+        /// </value>
+        public ViewModelLifetimeManagement ViewModelLifetimeManagement
+        {
+            get { return _logic.GetValue<UserControlLogic, ViewModelLifetimeManagement>(x => x.ViewModelLifetimeManagement); }
+            set { _logic.SetValue<UserControlLogic>(x => x.ViewModelLifetimeManagement = value); }
         }
 
         /// <summary>
@@ -233,7 +248,12 @@ namespace Catel.Android.App
             OnViewModelChanged();
 
             ViewModelChanged?.Invoke(this);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewModel)));
+            RaisePropertyChanged(nameof(ViewModel));
+
+            if (_logic.HasVmProperty)
+            {
+                RaisePropertyChanged("VM");
+            }
 
             if (_bindingContext != null)
             {
@@ -242,12 +262,21 @@ namespace Catel.Android.App
         }
 
         /// <summary>
+        /// Raises the <c>PropertyChanged</c> event.
+        /// </summary>
+        /// <param name="propertyName">The property name to raise the event for.</param>
+        protected virtual void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
         /// Gets the view model as a type.
         /// </summary>
         /// <typeparam name="TViewModel">The type of the view model.</typeparam>
         /// <returns>The view model of <c>null</c>.</returns>
         protected TViewModel GetViewModel<TViewModel>()
-            where TViewModel : class, IViewModel
+                where TViewModel : class, IViewModel
         {
             return ViewModel as TViewModel;
         }
