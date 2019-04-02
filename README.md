@@ -75,7 +75,7 @@ features are listed below:
 
 This model has automatic change notifications and validation.
 
-```
+```csharp
 public class Person : ValidatableModelBase
 {
     public string FirstName { get; set; }
@@ -104,7 +104,7 @@ This is a view model with:
 - Automatic injection of the DataContext
 - Automatic mapping of properties & validation from model => view model
 
-```
+```csharp
 public class PersonViewModel : ViewModelBase
 {
     public PersonViewModel(Person person)
