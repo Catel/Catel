@@ -241,7 +241,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().GetCustomAttributes(inherit).ToArray();
 #else
             return type.GetCustomAttributes(inherit).ToAttributeArray();
@@ -262,7 +262,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("attributeType", attributeType);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().GetCustomAttributes(attributeType, inherit).ToArray();
 #else
             return type.GetCustomAttributes(attributeType, inherit).ToAttributeArray();
@@ -279,7 +279,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().ContainsGenericParameters;
 #else
             return type.ContainsGenericParameters;
@@ -296,7 +296,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().Assembly;
 #else
             return type.Assembly;
@@ -313,7 +313,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().Assembly.FullName;
 #else
             return type.Assembly.FullName;
@@ -333,7 +333,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("typeToCheck", typeToCheck);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return (type.GetTypeInfo().BaseType == typeToCheck);
 #else
             return type.BaseType == typeToCheck;
@@ -350,7 +350,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().IsSerializable;
 #elif NET || NETCORE || NETSTANDARD
             return type.IsSerializable;
@@ -369,7 +369,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().IsPublic;
 #else
             return type.IsPublic;
@@ -386,7 +386,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().IsNestedPublic;
 #else
             return type.IsNestedPublic;
@@ -403,7 +403,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().IsInterface;
 #else
             return type.IsInterface;
@@ -419,7 +419,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().IsAbstract;
 #else
             return type.IsAbstract;
@@ -435,7 +435,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().IsArray;
 #else
             return type.IsArray;
@@ -451,7 +451,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().IsClass;
 #else
             return type.IsClass;
@@ -468,7 +468,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().IsValueType;
 #else
             return type.IsValueType;
@@ -485,7 +485,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().IsGenericType;
 #else
             return type.IsGenericType;
@@ -502,7 +502,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().IsGenericTypeDefinition;
 #else
             return type.IsGenericTypeDefinition;
@@ -549,7 +549,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().IsPrimitive;
 #else
             return type.IsPrimitive;
@@ -566,7 +566,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().IsEnum;
 #else
             return type.IsEnum;
@@ -582,7 +582,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return false;
 #else
             return type.IsCOMObject;
@@ -605,7 +605,7 @@ namespace Catel.Reflection
                 throw new NotSupportedException(string.Format("The type '{0}' is not generic, cannot get generic type", type.FullName));
             }
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().GetGenericTypeDefinition();
 #else
             return type.GetGenericTypeDefinition();
@@ -622,7 +622,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().GenericTypeArguments;
 #else
             return type.GetGenericArguments();
@@ -639,7 +639,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().GetElementType();
 #else
             return type.GetElementType();
@@ -660,7 +660,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             var interfaces = type.GetInterfacesEx();
             foreach (var iface in interfaces)
             {
@@ -686,7 +686,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().ImplementedInterfaces.ToArray();
 #else
             return type.GetInterfaces();
@@ -748,7 +748,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().BaseType;
 #else
             return type.BaseType;
@@ -768,7 +768,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("typeToCheck", typeToCheck);
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().IsAssignableFrom(typeToCheck.GetTypeInfo());
 #else
             return type.IsAssignableFrom(typeToCheck);
@@ -827,13 +827,13 @@ namespace Catel.Reflection
 
 #if ENABLE_CACHE
             var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Constructor, BindingFlags.Default, types);
-#if NETFX_CORE
+#if UAP_DEFAULT
             return _constructorCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetConstructor(types, BindingFlagsHelper.GetFinalBindingFlags(false, false)));
 #else
             return _constructorCache.GetFromCacheOrFetch(cacheKey, () => type.GetConstructor(types));
 #endif
 #else
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().GetConstructor(types, BindingFlagsHelper.GetFinalBindingFlags(false, false));
 #else
             return type.GetConstructor(types);
@@ -853,13 +853,13 @@ namespace Catel.Reflection
 
 #if ENABLE_CACHE
             var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Constructor, BindingFlags.Default, "allctors");
-#if NETFX_CORE
+#if UAP_DEFAULT
             return _constructorsCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().DeclaredConstructors.ToArray());
 #else
             return _constructorsCache.GetFromCacheOrFetch(cacheKey, type.GetConstructors);
 #endif
 #else
-#if NETFX_CORE
+#if UAP_DEFAULT
             return type.GetTypeInfo().DeclaredConstructors.ToArray();
 #else
             return type.GetConstructors();
@@ -1191,7 +1191,7 @@ namespace Catel.Reflection
 #if ENABLE_CACHE
             var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Method, bindingFlags, new object[] {name, types});
 
-#if NETFX_CORE
+#if UAP_DEFAULT
             return _methodCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetMethod(name, bindingFlags));
 #else
             return _methodCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetMethod(name, bindingFlags, null, types, null));

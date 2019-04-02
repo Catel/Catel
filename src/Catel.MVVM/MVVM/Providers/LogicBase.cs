@@ -71,6 +71,7 @@ namespace Catel.MVVM.Providers
         private static readonly IViewManager _viewManager;
         private static readonly IViewPropertySelector _viewPropertySelector;
         private static readonly IViewContextService _viewContextService;
+        private static readonly Dictionary<Type, bool> _hasVmPropertyCache = new Dictionary<Type, bool>();
 
         /// <summary>
         /// The view model instances currently held by this provider. This value should only be used
@@ -82,12 +83,12 @@ namespace Catel.MVVM.Providers
         private bool _isFirstValidationAfterLoaded = true;
 
         /// <summary>
-        /// The view load manager
+        /// The view load manager.
         /// </summary>
         protected static readonly IViewLoadManager ViewLoadManager;
 
         /// <summary>
-        /// The lock object
+        /// The lock object.
         /// </summary>
         protected readonly object _lockObject = new object();
 
@@ -128,6 +129,14 @@ namespace Catel.MVVM.Providers
             Argument.IsNotNull("targetView", targetView);
 
             var targetViewType = targetView.GetType();
+
+            if (!_hasVmPropertyCache.TryGetValue(targetViewType, out var hasVmProperty))
+            {
+                hasVmProperty = targetViewType.GetPropertyEx("VM") != null;
+                _hasVmPropertyCache[targetViewType] = hasVmProperty;
+            }
+
+            HasVmProperty = hasVmProperty;
 
             if (viewModelType is null)
             {
@@ -318,6 +327,11 @@ namespace Catel.MVVM.Providers
         /// </summary>
         /// <value>The type of the view model.</value>
         public Type ViewModelType { get; private set; }
+
+        /// <summary>
+        /// Gets a value whether the target view has a 'VM' property available.
+        /// </summary>
+        public bool HasVmProperty { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the view model container should prevent the 

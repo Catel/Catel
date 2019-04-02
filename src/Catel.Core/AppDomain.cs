@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if UWP
+#if UAP_DEFAULT
 
 namespace System
 {
@@ -17,12 +17,10 @@ namespace System
     using Catel.Reflection;
     using MethodTimer;
 
-#if UWP
     using global::Windows.ApplicationModel;
     using global::Windows.Storage.Search;
     using Catel;
     using Collections.Immutable;
-#endif
 
     /// <summary>
     /// WinRT implementation of the AppDomain class.
@@ -74,7 +72,6 @@ namespace System
                 {
                     var loadedAssemblies = new List<Assembly>();
 
-#if UWP
                     var folder = Package.Current.InstalledLocation;
 
                     // Note: normally it's bad practice to use task.Wait(), but GetAssemblies must be blocking to cache it all
@@ -129,12 +126,6 @@ namespace System
                             Log.Warning(ex, $"Failed to load assembly '{file}'");
                         }
                     }
-#else
-                    var currentdomain = typeof(string).GetTypeInfo().Assembly.GetType("System.AppDomain").GetRuntimeProperty("CurrentDomain").GetMethod.Invoke(null, ArrayShim.Empty<object>());
-                    var method = currentdomain.GetType().GetRuntimeMethod("GetAssemblies", ArrayShim.Empty<Type>());
-                    var assemblies = method.Invoke(currentdomain, ArrayShim.Empty<object>()) as Assembly[];
-                    loadedAssemblies.AddRange(assemblies);
-#endif
 
                     _loadedAssemblies = loadedAssemblies.ToArray();
                 }
@@ -143,7 +134,6 @@ namespace System
             }
         }
 
-#if NETFX_CORE
         //[Time]
         private Assembly LoadAssemblyFromFile(global::Windows.Storage.StorageFile file)
         {
@@ -165,7 +155,6 @@ namespace System
                 return null;
             }
         }
-#endif
         #endregion
     }
 }

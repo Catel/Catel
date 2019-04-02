@@ -25,7 +25,7 @@ For an upgrade guide, visit https://docs.catelproject.com/vnext/setup-deployment
 
 Release date
 ============
-2019/../..
+2019/04/02
 
 Platform support changes
 ========================
@@ -45,15 +45,21 @@ Added/fixed
 (+) #1249 Add ViewModelContextService to allow runtime overrides of the DataContext to use for view model injection
 (+) #1283 Add ViewModelLifetimeManagement to all views
 (+) #1272 Implement IProcessService for UWP
+(+) #1287 Add RaisePropertyChanged to view base classes
+(+) #1288 Add reserved 'VM' property on views with automatic change notifications
 (*) #1260 Allow classes derived from Catel.UserControl to use the AddChild method 
 (*) #1261 Update NewtonSoft.Json to 12.x
 (*) #1268 Initialize VM grid in DataWindow.Initialized instead of DataWindow.ContentChanged
 (*) #1269 Create VM Auditor to subscribe keyboard events instead of CommandManager constructor
 (*) #1270 Add faster override for IModelExtensions.ClearIsDirtyOnAllChildren() (add suspendNotifications parameter)
 (*) #1284 Replace 'CloseViewModelOnUnloaded' and 'PreventViewModelCreation' with 'ViewModelLifetimeManagement'
+(*) #1291 Update Xamarin.Forms to 3.6
+(x) #1252 Catel.MVVM.Xamarin.Forms MessageBox showing without buttons
 (x) #1259 DataWindow should respect the focusFirstControl parameter
 (x) #1262 IModelExtensions.ClearIsDirtyOnAllChildren() not working with a collection of ModelBase
 (x) #1267 Fix binding errors on UserControl for UWP
+(x) #1286 ServiceLocator.ResolveType with tag should pass tag to TypeFactory
+(x) #1289 AssemblyHelper.GetLoadedAssemblies(System.AppDomain) causes System.MissingMethodException in Xamarin.UWP
 
 Roadmap
 =======

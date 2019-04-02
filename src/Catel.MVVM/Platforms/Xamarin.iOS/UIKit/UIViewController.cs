@@ -24,7 +24,6 @@ namespace Catel.MonoTouch.UIKit
     {
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private static readonly IViewModelLocator _viewModelLocator;
 
         private readonly PageLogic _logic;
@@ -248,12 +247,26 @@ namespace Catel.MonoTouch.UIKit
             OnViewModelChanged();
 
             ViewModelChanged?.Invoke(this);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ViewModel"));
+            RaisePropertyChanged(nameof(ViewModel));
+
+            if (_logic.HasVmProperty)
+            {
+                RaisePropertyChanged("VM");
+            }
 
             if (_bindingContext != null)
             {
                 _bindingContext.DetermineIfBindingsAreRequired(ViewModel);
             }
+        }
+
+        /// <summary>
+        /// Raises the <c>PropertyChanged</c> event.
+        /// </summary>
+        /// <param name="propertyName">The property name to raise the event for.</param>
+        protected virtual void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>

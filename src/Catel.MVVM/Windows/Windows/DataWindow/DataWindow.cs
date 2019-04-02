@@ -29,6 +29,7 @@ namespace Catel.Windows
     using Catel.Threading;
     using Threading;
     using IoC;
+    using Catel.Reflection;
 
     /// <summary>
     /// Mode of the <see cref="DataWindow"/>.
@@ -109,16 +110,8 @@ namespace Catel.Windows
     /// </summary>
     public class DataWindow : System.Windows.Window, IDataWindow
     {
-        #region Constants
-        /// <summary>
-        /// Offset of the window to the sides of the primary monitor.
-        /// </summary>
-        private const int Offset = 50;
-        #endregion
-
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         private static readonly IWrapControlService WrapControlService = ServiceLocator.Default.ResolveType<IWrapControlService>();
 
         private readonly bool _focusFirstControl;
@@ -223,8 +216,8 @@ namespace Catel.Windows
             {
                 // Do not call this for ActualWidth and ActualHeight WPF, will cause problems with NET 40 
                 // on systems where NET45 is *not* installed
-                if (!string.Equals(e.PropertyName, "ActualWidth", StringComparison.InvariantCulture) &&
-                    !string.Equals(e.PropertyName, "ActualHeight", StringComparison.InvariantCulture))
+                if (!string.Equals(e.PropertyName, nameof(ActualWidth), StringComparison.InvariantCulture) &&
+                    !string.Equals(e.PropertyName, nameof(ActualHeight), StringComparison.InvariantCulture))
                 {
                     PropertyChanged?.Invoke(this, e);
                 }
@@ -305,7 +298,7 @@ namespace Catel.Windows
         /// This property is very useful when using views in transitions where the view model is no longer required.
         /// </summary>
         /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
+        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         public bool PreventViewModelCreation
         {
             get { return _logic.GetValue<WindowLogic, bool>(x => x.PreventViewModelCreation); }
@@ -643,7 +636,21 @@ namespace Catel.Windows
             OnViewModelChanged();
 
             ViewModelChanged?.Invoke(this, EventArgs.Empty);
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ViewModel)));
+            RaisePropertyChanged(nameof(ViewModel));
+
+            if (_logic.HasVmProperty)
+            {
+                RaisePropertyChanged("VM");
+            }
+        }
+
+        /// <summary>
+        /// Raises the <c>PropertyChanged</c> event.
+        /// </summary>
+        /// <param name="propertyName">The property name to raise the event for.</param>
+        protected virtual void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
