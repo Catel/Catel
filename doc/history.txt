@@ -42,7 +42,7 @@ Classes / members marked as obsolete
 
 Added/fixed
 ===========
-TODO
+(x) #1302 Implement support for disposing of IDisposable ViewModels in WindowLogic
 
 Roadmap
 =======

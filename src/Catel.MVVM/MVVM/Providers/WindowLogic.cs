@@ -109,7 +109,7 @@ namespace Catel.MVVM.Providers
             var vm = ViewModel;
             if (vm != null && !vm.IsClosed)
             {
-                await CloseViewModelAsync(null);
+                await CloseAndDisposeViewModelAsync(null);
             }
 
             ViewModel = null;
@@ -183,10 +183,41 @@ namespace Catel.MVVM.Providers
                     Log.Warning("Failed to get the 'DialogResult' property of window type '{0}', using 'null' as dialog result", TargetWindow.GetType().Name);
                 }
 
-                await CloseViewModelAsync(dialogResult);
+                await CloseAndDisposeViewModelAsync(dialogResult);
             }
 
             _targetWindowClosedWeakEventListener.Detach();
+        }
+
+        /// <summary>
+        /// Closes and disposes the current view model.
+        /// </summary>
+        /// <param name="result"><c>true</c> if the view model should be saved; <c>false</c> if the view model should be canceled; <c>null</c> if it should only be closed.</param>
+        private async Task CloseAndDisposeViewModelAsync(bool? result)
+        {
+            var vm = ViewModel;
+            if (vm != null)
+            {
+                if (result.HasValue)
+                {
+                    if (result.Value)
+                    {
+                        await vm.SaveViewModelAsync();
+                    }
+                    else
+                    {
+                        await vm.CancelViewModelAsync();
+                    }
+                }
+
+                await CloseViewModelAsync(result);
+
+                var disposable = vm as IDisposable;
+                if (disposable != null)
+                {
+                    disposable.Dispose();
+                }
+            }
         }
 
         /// <summary>
