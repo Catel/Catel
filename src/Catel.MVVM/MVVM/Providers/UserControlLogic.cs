@@ -747,7 +747,7 @@ namespace Catel.MVVM.Providers
                 if (currentViewModel != null)
                 {
                     var result = GetViewModelResultValueFromUnloadBehavior();
-                    await CloseAndDisposeViewModelAsync(result);
+                    await CloseViewModelAsync(result, true);
                 }
 
                 ViewModel = ConstructViewModelUsingArgumentOrDefaultConstructor(modelToInject);
@@ -756,7 +756,7 @@ namespace Catel.MVVM.Providers
 
         /// <summary>
         /// Gets the view model result value based on the <see cref="UnloadBehavior"/> property so it can be used for
-        /// the <see cref="CloseAndDisposeViewModelAsync"/> method.
+        /// the <see cref="LogicBase.CloseViewModelAsync(bool?)"/> method.
         /// </summary>
         /// <returns>The right value.</returns>
         private bool? GetViewModelResultValueFromUnloadBehavior()
@@ -779,37 +779,6 @@ namespace Catel.MVVM.Providers
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Closes and disposes the current view model.
-        /// </summary>
-        /// <param name="result"><c>true</c> if the view model should be saved; <c>false</c> if the view model should be canceled; <c>null</c> if it should only be closed.</param>
-        private async Task CloseAndDisposeViewModelAsync(bool? result)
-        {
-            var vm = ViewModel;
-            if (vm != null)
-            {
-                if (result.HasValue)
-                {
-                    if (result.Value)
-                    {
-                        await vm.SaveViewModelAsync();
-                    }
-                    else
-                    {
-                        await vm.CancelViewModelAsync();
-                    }
-                }
-
-                await CloseViewModelAsync(result);
-
-                var disposable = vm as IDisposable;
-                if (disposable != null)
-                {
-                    disposable.Dispose();
-                }
-            }
         }
 
         /// <summary>
