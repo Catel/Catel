@@ -109,7 +109,7 @@ namespace Catel.MVVM.Providers
             var vm = ViewModel;
             if (vm != null && !vm.IsClosed)
             {
-                await CloseAndDisposeViewModelAsync(null);
+                await CloseViewModelAsync(null, true);
             }
 
             ViewModel = null;
