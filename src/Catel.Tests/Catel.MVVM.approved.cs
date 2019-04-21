@@ -1388,6 +1388,7 @@ namespace Catel.MVVM.Providers
         public System.Threading.Tasks.Task<bool> CancelAndCloseViewModelAsync() { }
         public virtual System.Threading.Tasks.Task<bool> CancelViewModelAsync() { }
         public virtual System.Threading.Tasks.Task CloseViewModelAsync(System.Nullable<bool> result) { }
+        public virtual System.Threading.Tasks.Task CloseViewModelAsync(System.Nullable<bool> result, bool dispose) { }
         protected System.Threading.Tasks.Task CompleteViewModelClosingAsync() { }
         protected Catel.MVVM.IViewModel ConstructViewModelUsingArgumentOrDefaultConstructor(object injectionObject) { }
         protected Catel.MVVM.IViewModel CreateViewModelByUsingDataContextOrConstructor() { }
