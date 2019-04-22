@@ -70,7 +70,8 @@
     <Compile Remove="Platforms\**\*.cs;Resources\**\*.cs" />
     <Page Remove="Platforms\**\*.xaml" />
     <!-- This is here so that the conditionally included files below are all visible in VS -->
-    <None Include="Platforms\**\*.*;Resources\**\*.*" />
+    <None Include="Platforms\**\*.*" />
+    <None Include="Resources\**\*.*" Exclude="Resources\**\*.xaml" />
     <EmbeddedResource Include="Resources\Files\**\*.*" />
     <Resource Include="Resources\Fonts\**\*.ttf" />
     <Resource Include="Resources\Images\**\*.png" />
@@ -108,10 +109,9 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
-    <None Remove="Platforms\net\**\*.xaml" />
+    <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\net\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\net\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
-    <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
   
   <!-- .NET Standard 2.0 -->
@@ -120,10 +120,9 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <None Remove="Platforms\netstandard2.0\**\*.xaml" />
+    <Compile Include="Platforms\netstandard2.0\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\netstandard2.0\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\netstandard2.0\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
-    <Compile Include="Platforms\netstandard2.0\**\*.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
 
   <!-- .NET 4.5 -->
@@ -143,10 +142,9 @@
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net451' OR '$(TargetFramework)' == 'net452'">
-    <None Remove="Platforms\net\**\*.xaml" />
+    <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\net\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\net\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
-    <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
 
   <!-- .NET 4.6 -->
@@ -161,15 +159,14 @@
   </PropertyGroup>
   
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
-    <EnableWpfProjectSetup>true</EnableWpfProjectSetup>   
+    <EnableWpfProjectSetup>true</EnableWpfProjectSetup>
     <DefineConstants>$(DefineConstants);NET;NET46;NET462</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net46' OR '$(TargetFramework)' == 'net461' OR '$(TargetFramework)' == 'net462'">
-    <None Remove="Platforms\net\**\*.xaml" />
+    <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\net\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\net\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
-    <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
 
   <!-- .NET 4.7 -->
@@ -179,16 +176,15 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'net47' ">
-    <None Remove="Platforms\net\**\*.xaml" />
+    <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\net\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\net\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
-    <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
   
   <!-- UAP 10.0 -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
     <EnableDefaultXamlItems>true</EnableDefaultXamlItems>
-    <DefineConstants>$(DefineConstants);UAP;UAP_DEFAULT;NETFX_CORE;UWP;WINDOWS_UWP</DefineConstants>
+    <DefineConstants>$(DefineConstants);UAP;NETFX_CORE;UWP;WINDOWS_UWP</DefineConstants>
   </PropertyGroup>
   
   <PropertyGroup Condition=" '$(TargetFramework)' == 'uap10.0.16299' ">
@@ -196,11 +192,10 @@
     <DefineConstants>$(DefineConstants);UAP;UAP_16299;NETFX_CORE;UWP;WINDOWS_UWP</DefineConstants>
   </PropertyGroup>
   
-  <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' OR '$(TargetFramework)' == 'uap10.0.16299'">
-    <None Remove="Platforms\uap10.0\**\*.xaml" />
+  <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' OR '$(TargetFramework)' == 'uap10.0.16299' ">
+    <Compile Include="Platforms\uap10.0\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\uap10.0\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\uap10.0\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
-    <Compile Include="Platforms\uap10.0\**\*.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
 
   <!-- Xamarin.iOS -->
@@ -209,10 +204,9 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'xamarin.ios10' ">
-    <None Remove="Platforms\xamarin.ios\**\*.xaml" />
+    <Compile Include="Platforms\xamarin.ios\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\xamarin.ios\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\xamarin.ios\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
-    <Compile Include="Platforms\xamarin.ios\**\*.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
 
   <!-- Xamarin.Android -->
@@ -221,10 +215,9 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'monoandroid70' ">
-    <None Remove="Platforms\xamarin.android\**\*.xaml" />
+    <Compile Include="Platforms\xamarin.android\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\xamarin.android\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\xamarin.ioandroid\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
-    <Compile Include="Platforms\xamarin.android\**\*.cs" DependentUpon="%(Filename)" />
   </ItemGroup>
   
 </Project>
