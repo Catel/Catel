@@ -184,7 +184,7 @@
   <!-- UAP 10.0 -->
   <PropertyGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
     <EnableDefaultXamlItems>true</EnableDefaultXamlItems>
-    <DefineConstants>$(DefineConstants);UAP;NETFX_CORE;UWP;WINDOWS_UWP</DefineConstants>
+    <DefineConstants>$(DefineConstants);UAP;UAP_DEFAULT;NETFX_CORE;UWP;WINDOWS_UWP</DefineConstants>
   </PropertyGroup>
   
   <PropertyGroup Condition=" '$(TargetFramework)' == 'uap10.0.16299' ">
