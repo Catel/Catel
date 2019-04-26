@@ -53,19 +53,6 @@
     </None>
   </ItemGroup>
 
-  <!-- Only required for MSBuild Sdk Extras < 2.x -->
-  <!--<ItemGroup>
-    <Page Include="**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" Exclude="App.xaml" />
-    <Compile Update="**\*.xaml.cs" SubType="Designer" DependentUpon="%(Filename)" />
-    <Compile Update="$(IntermediateOutputPath)**\*.g.cs" Visible="false" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(OutputType)' == 'WinExe'">
-    <ApplicationDefinition Include="App.xaml" SubType="Designer" Generator="MSBuild:Compile" />
-    <Compile Update="App.xaml.cs" SubType="Designer" DependentUpon="%(Filename)" />
-    <Compile Update="$(IntermediateOutputPath)**\App.g.cs" Visible="false" />
-  </ItemGroup>-->
-  
   <ItemGroup>
     <Compile Remove="Platforms\**\*.cs;Resources\**\*.cs" />
     <Page Remove="Platforms\**\*.xaml" />
@@ -109,6 +96,7 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+    <None Remove="Platforms\net\**\*.cs;Platforms\net\**\*.xaml;Platforms\net\**\*.xaml.cs" />
     <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\net\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\net\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
@@ -120,6 +108,7 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <None Remove="Platforms\netstandard2.0\**\*.cs;Platforms\netstandard2.0\**\*.xaml;Platforms\netstandard2.0\**\*.xaml.cs" />
     <Compile Include="Platforms\netstandard2.0\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\netstandard2.0\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\netstandard2.0\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
@@ -142,6 +131,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net451' OR '$(TargetFramework)' == 'net452'">
+    <None Remove="Platforms\net\**\*.cs;Platforms\net\**\*.xaml;Platforms\net\**\*.xaml.cs" />
     <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\net\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\net\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
@@ -164,6 +154,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net46' OR '$(TargetFramework)' == 'net461' OR '$(TargetFramework)' == 'net462'">
+    <None Remove="Platforms\net\**\*.cs;Platforms\net\**\*.xaml;Platforms\net\**\*.xaml.cs" />
     <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\net\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\net\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
@@ -176,6 +167,7 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'net47' ">
+    <None Remove="Platforms\net\**\*.cs;Platforms\net\**\*.xaml;Platforms\net\**\*.xaml.cs" />
     <Compile Include="Platforms\net\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\net\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\net\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
@@ -193,6 +185,7 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' OR '$(TargetFramework)' == 'uap10.0.16299' ">
+    <None Remove="Platforms\uap10.0\**\*.cs;Platforms\uap10.0\**\*.xaml;Platforms\uap10.0\**\*.xaml.cs" />
     <Compile Include="Platforms\uap10.0\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\uap10.0\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\uap10.0\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
@@ -204,6 +197,7 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'xamarin.ios10' ">
+    <None Remove="Platforms\xamarin.ios\**\*.cs;Platforms\xamarin.ios\**\*.xaml;Platforms\xamarin.ios\**\*.xaml.cs" />
     <Compile Include="Platforms\xamarin.ios\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\xamarin.ios\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\xamarin.ios\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
@@ -215,6 +209,7 @@
   </PropertyGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'monoandroid70' ">
+    <None Remove="Platforms\xamarin.android\**\*.cs;Platforms\xamarin.android\**\*.xaml;Platforms\xamarin.android\**\*.xaml.cs" />
     <Compile Include="Platforms\xamarin.android\**\*.cs" DependentUpon="%(Filename)" />
     <Page Include="Platforms\xamarin.android\**\*.xaml" SubType="Designer" Generator="MSBuild:Compile" />
     <Compile Update="Platforms\xamarin.ioandroid\**\*.xaml.cs" SubType="Code" DependentUpon="%(Filename)" />
