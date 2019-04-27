@@ -43,6 +43,7 @@ Classes / members marked as obsolete
 Added/fixed
 ===========
 (x) #1302 Implement support for disposing of IDisposable ViewModels in WindowLogic
+(+) #1308 Add EventArgsConverter Support in EventToCommand
 
 Roadmap
 =======

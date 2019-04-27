@@ -9,7 +9,7 @@
 namespace Catel.Windows.Interactivity
 {
     using System;
-
+    using MVVM.Converters;
 #if UWP
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
@@ -50,6 +50,14 @@ namespace Catel.Windows.Interactivity
         /// <c>true</c> if the <see cref="EventArgs"/> passed to the event handler should be passed to the command; otherwise, <c>false</c>.
         /// </value>
         public bool PassEventArgsToCommand { get; set; }
+
+        /// <summary>
+        /// Gets or sets an <see cref="IEventArgsConverter"/> that will convert an <see cref="EventArgs"/> object to a neutral object for consumption.
+        /// </summary>
+        /// <value>
+        /// Converter that implements <see cref="IEventArgsConverter"/> that will be passed should <see cref="PassEventArgsToCommand"/> be <c>true</c>; otherwise <c>false</c>.
+        /// </value>
+        public IEventArgsConverter EventArgsConverter { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the invocation of the command should be prevented when the
@@ -127,7 +135,7 @@ namespace Catel.Windows.Interactivity
             var commandParameter = CommandParameter;
             if ((commandParameter is null) && PassEventArgsToCommand)
             {
-                commandParameter = parameter;
+                commandParameter = EventArgsConverter != null ? EventArgsConverter.Convert(AssociatedObject, parameter) : parameter;
             }
 
             ExecuteCommand(commandParameter);
