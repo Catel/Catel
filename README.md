@@ -127,6 +127,22 @@ public class PersonViewModel : ViewModelBase
 
 ## Building Catel
 
+**Prerequisites** 
+
+Catel requires Visual Studio 2019 to compile successfully. You also need to ensure you have the following features installed:
+
+- .NET desktop development
+- Universal Windows Platform development
+- Mobile development with .NET
+- .NET Core cross-platform development
+- Select the following components from Individual components
+  - Windows 10 SDK (10.0.16299.0) 
+  - MSVC v141 and v142 (ARM, ARM64 and x64/x86) 
+  - C++ ATL v141 and v142 (ARM, ARM64 and x86 & x64)  build tools
+  - C++ MFC v141 and v142 (ARM, ARM64 and x86 & x64) build tools
+- [Latest Version of .NET Core 3.0 Preview SDK](https://dotnet.microsoft.com/download/dotnet-core/3.0)
+  - Ensure you enable **Use previews of the .NET Core SDK** under Tools -> Options -> Projects and Solutions -> .NET Core
+
 Note that you should run these commands using powershell in the root of the repository.
 
 ### Running a build

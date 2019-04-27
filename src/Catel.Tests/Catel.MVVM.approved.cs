@@ -1096,7 +1096,13 @@ namespace Catel.MVVM.Converters
         public EnumToCollapsingVisibilityConverter() { }
         protected override bool IsVisible(object value, System.Type targetType, object parameter) { }
     }
-    public class EnumToHidingVisibilityConverter : Catel.MVVM.Converters.EnumToCollapsingVisibilityConverter
+    public abstract class EventArgsConverterBase<TArgs> : IEventArgsConverter
+    {
+	    public EventArgsConverterBase() { }
+	    object IEventArgsConverter.Convert(object sender, object args) { }
+	    protected abstract object Convert(object sender, TArgs args);
+    }
+	public class EnumToHidingVisibilityConverter : Catel.MVVM.Converters.EnumToCollapsingVisibilityConverter
     {
         public EnumToHidingVisibilityConverter() { }
     }
@@ -1138,6 +1144,7 @@ namespace Catel.MVVM.Converters
         protected override object Convert(object value, System.Type targetType, object parameter) { }
         protected override object ConvertBack(object value, System.Type targetType, object parameter) { }
     }
+    public interface IEventArgsConverter { }
     public interface IValueConverter : System.Windows.Data.IValueConverter { }
     public class LanguageConverter : Catel.MVVM.Converters.ValueConverterBase<string>
     {
@@ -3054,6 +3061,7 @@ namespace Catel.Windows.Interactivity
         public EventToCommand() { }
         public bool DisableAssociatedObjectOnCannotExecute { get; set; }
         public bool PassEventArgsToCommand { get; set; }
+        public IEventArgsConverter EventArgsConverter { get; set; }
         public bool PreventInvocationIfAssociatedObjectIsDisabled { get; set; }
         public void Invoke() { }
         protected override void Invoke(object parameter) { }
