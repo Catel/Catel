@@ -1096,15 +1096,15 @@ namespace Catel.MVVM.Converters
         public EnumToCollapsingVisibilityConverter() { }
         protected override bool IsVisible(object value, System.Type targetType, object parameter) { }
     }
-    public abstract class EventArgsConverterBase<TArgs> : IEventArgsConverter
-    {
-	    public EventArgsConverterBase() { }
-	    object IEventArgsConverter.Convert(object sender, object args) { }
-	    protected abstract object Convert(object sender, TArgs args);
-    }
-	public class EnumToHidingVisibilityConverter : Catel.MVVM.Converters.EnumToCollapsingVisibilityConverter
+    public class EnumToHidingVisibilityConverter : Catel.MVVM.Converters.EnumToCollapsingVisibilityConverter
     {
         public EnumToHidingVisibilityConverter() { }
+    }
+    public abstract class EventArgsConverterBase<TArgs> : Catel.MVVM.Converters.IEventArgsConverter
+        where TArgs : System.EventArgs
+    {
+        protected EventArgsConverterBase() { }
+        protected abstract object Convert(object sender, TArgs args);
     }
     [System.Windows.Data.ValueConversionAttribute(typeof(object), typeof(string))]
     public class FormattingConverter : Catel.MVVM.Converters.ValueConverterBase
@@ -1122,6 +1122,10 @@ namespace Catel.MVVM.Converters
     public abstract class HidingVisibilityConverterBase : Catel.MVVM.Converters.VisibilityConverterBase
     {
         protected HidingVisibilityConverterBase() { }
+    }
+    public interface IEventArgsConverter
+    {
+        object Convert(object sender, object args);
     }
     [System.Windows.Data.ValueConversionAttribute(typeof(string), typeof(System.Nullable<int>))]
     public class IntToStringConverter : Catel.MVVM.Converters.ValueConverterBase
@@ -1144,7 +1148,6 @@ namespace Catel.MVVM.Converters
         protected override object Convert(object value, System.Type targetType, object parameter) { }
         protected override object ConvertBack(object value, System.Type targetType, object parameter) { }
     }
-    public interface IEventArgsConverter { }
     public interface IValueConverter : System.Windows.Data.IValueConverter { }
     public class LanguageConverter : Catel.MVVM.Converters.ValueConverterBase<string>
     {
@@ -3060,8 +3063,8 @@ namespace Catel.Windows.Interactivity
         public static readonly System.Windows.DependencyProperty DisableAssociatedObjectOnCannotExecuteProperty;
         public EventToCommand() { }
         public bool DisableAssociatedObjectOnCannotExecute { get; set; }
+        public Catel.MVVM.Converters.IEventArgsConverter EventArgsConverter { get; set; }
         public bool PassEventArgsToCommand { get; set; }
-        public IEventArgsConverter EventArgsConverter { get; set; }
         public bool PreventInvocationIfAssociatedObjectIsDisabled { get; set; }
         public void Invoke() { }
         protected override void Invoke(object parameter) { }
