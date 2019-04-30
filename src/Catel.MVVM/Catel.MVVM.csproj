@@ -77,14 +77,14 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.1" />
   </ItemGroup>
   
   <!-- UAP 10.0.16299 -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.1" />
   </ItemGroup>
   
   <!-- .NET Standard 2.0 -->
