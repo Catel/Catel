@@ -883,7 +883,8 @@ namespace Catel.Reflection
                 return true;
             }
 
-#if NET || NETCORE || NETSTANDARD
+            // Note: don't check with .NET Standard, it's "not implemented by design"
+#if NET || NETSTANDARD
             if (assembly.ReflectionOnly)
             {
                 return true;
