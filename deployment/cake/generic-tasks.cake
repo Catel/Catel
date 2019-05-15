@@ -28,38 +28,28 @@ private void ValidateGenericInput()
 
 private void CleanUpCode(bool failOnChanges)
 {
-    Information("Cleaning up code using CodeCleanup (R# command line tools)");
+    Information("Cleaning up code using dotnet-format");
 
-    Information("Code cleanup is (temporarily) disabled. The following will need to be supported for being able to use CodeCleanup:");
-    Information("- respect xml indentation for xml comments (seems to enforce to 4 spaces)");
-    Information("- respect xml indentation for xml files");
-    Information("- don't change the order of regions / members or maybe them configurable via .editorConfig");
-    Information("- ignore wildcard files as configured at the bottom of .editorConfig");
+    // --check: return non-0 exit code if changes are needed
+    // --dry-run: don't save files
 
-    // var processFileName = "./tools/JetBrains.ReSharper.CommandLineTools.2018.1.3/tools/cleanupcode.exe";
-    // var processArguments = string.Format("{0} -o=\".\\output\\codecleanup.xml\"", SolutionFileName);
+    // Note: disabled for now, see:
+    // * https://github.com/onovotny/MSBuildSdkExtras/issues/164
+    // * https://github.com/microsoft/msbuild/issues/4376
+    // var arguments = new List<string>();
 
-    // using (var process = StartAndReturnProcess(processFileName, new ProcessSettings 
-    //     { 
-    //         Arguments = processArguments 
-    //     }))
-    // {
-    //     process.WaitForExit();
-
-    //     var exitCode = process.GetExitCode();
-
-    //     Information("CodeCleanup exited with exit code: '{0}'", exitCode);
-        
-    //     if (exitCode != 0)
-    //     {
-    //         throw new Exception("Unexpected exit code '{0}' from CodeCleanup");
-    //     }
-    // }
+    // //arguments.Add("--dry-run");
 
     // if (failOnChanges)
     // {
-    //     // TODO: Do a diff. If there are changes, throw an exception
+    //     arguments.Add("--check");
     // }
+
+    // DotNetCoreTool(null, "format", string.Join(" ", arguments),
+    //     new DotNetCoreToolSettings
+    //     {
+    //         WorkingDirectory = "./src/"
+    //     });
 }
 
 //-------------------------------------------------------------
@@ -178,7 +168,6 @@ Task("Clean")
 //-------------------------------------------------------------
 
 Task("CleanupCode")
-    .ContinueOnError()
     .Does(() => 
 {
     CleanUpCode(true);
