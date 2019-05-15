@@ -24,7 +24,7 @@
     <PackageReference Include="MethodTimer.Fody" Version="2.3.3" PrivateAssets="all" />
     <PackageReference Include="ModuleInit.Fody" Version="2.0.0" PrivateAssets="all" />
     <PackageReference Include="Moq" Version="4.8.3" />
-    <PackageReference Include="NUnit" Version="3.11.0" PrivateAssets="all" />
+    <PackageReference Include="NUnit" Version="3.12.0" PrivateAssets="all" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
     <PackageReference Include="Obsolete.Fody" Version="4.4.3" PrivateAssets="all" />
     <PackageReference Include="PublicApiGenerator" Version="8.1.0" PrivateAssets="all" />    
