@@ -92,6 +92,12 @@ dotnet_style_require_accessibility_modifiers = always:warning
 dotnet_separate_import_directive_groups = false
 
 #---------------------------------------------------------------------------------------
+# Usings inside the namespace
+#---------------------------------------------------------------------------------------
+
+csharp_using_directive_placement = inside_namespace:error
+
+#---------------------------------------------------------------------------------------
 # Avoid "this." and "Me." if not necessary
 #---------------------------------------------------------------------------------------
 
