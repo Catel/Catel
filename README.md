@@ -131,6 +131,8 @@ public class PersonViewModel : ViewModelBase
 
 Catel requires Visual Studio 2019 to compile successfully. You also need to ensure you have the following features installed:
 
+Note that the `.vsconfig` in the src root should notify about missing components when opening the solution.
+
 - .NET desktop development
 - Universal Windows Platform development
 - Mobile development with .NET
