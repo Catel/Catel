@@ -3186,6 +3186,11 @@ namespace Catel.Reflection
         public static void InitializeTypes(string assemblyName, bool forceFullInitialization, bool allowMultithreadedInitialization = True) { }
         public static void InitializeTypes(System.Reflection.Assembly assembly = null, bool forceFullInitialization = False, bool allowMultithreadedInitialization = False) { }
     }
+    public class static TypeCacheEvaluator
+    {
+        public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, bool>> AssemblyEvaluators { get; }
+        public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, System.Type, bool>> TypeEvaluators { get; }
+    }
     public class static TypeExtensions
     {
         public static System.Type GetCollectionElementType(this System.Type type) { }

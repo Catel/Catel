@@ -98,11 +98,6 @@ namespace Catel.Reflection
 
         static TypeCache()
         {
-            ShouldIgnoreAssemblyEvaluators = new List<Func<Assembly, bool>>();
-            ShouldIgnoreTypeEvaluators = new List<Func<Assembly, Type, bool>>();
-
-            ShouldIgnoreAssemblyEvaluators.Add(new Func<Assembly, bool>(x => x.FullName?.Contains(".resources.") ?? false));
-
 #if NET || NETCORE || NETSTANDARD
             AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
 
@@ -226,13 +221,25 @@ namespace Catel.Reflection
         /// Gets the evaluators used to determine whether a specific assembly should be ignored.
         /// </summary>
         /// <value>The should ignore assembly function.</value>
-        public static List<Func<Assembly, bool>> ShouldIgnoreAssemblyEvaluators { get; private set; }
+        public static List<Func<Assembly, bool>> ShouldIgnoreAssemblyEvaluators
+        {
+            get
+            {
+                return TypeCacheEvaluator.AssemblyEvaluators;
+            }
+        }
 
         /// <summary>
         /// Gets the evaluators used to determine whether a specific type should be ignored.
         /// </summary>
         /// <value>The should ignore assembly function.</value>
-        public static List<Func<Assembly, Type, bool>> ShouldIgnoreTypeEvaluators { get; private set; }
+        public static List<Func<Assembly, Type, bool>> ShouldIgnoreTypeEvaluators
+        {
+            get
+            {
+                return TypeCacheEvaluator.TypeEvaluators;
+            }
+        }
 
         #region Events
         /// <summary>
@@ -909,7 +916,7 @@ namespace Catel.Reflection
             //    return true;
             //}
 
-            foreach (var evaluator in ShouldIgnoreAssemblyEvaluators)
+            foreach (var evaluator in TypeCacheEvaluator.AssemblyEvaluators)
             {
                 if (evaluator(assembly))
                 {
@@ -973,7 +980,7 @@ namespace Catel.Reflection
                 return true;
             }
 
-            foreach (var evaluator in ShouldIgnoreTypeEvaluators)
+            foreach (var evaluator in TypeCacheEvaluator.TypeEvaluators)
             {
                 if (evaluator(assembly, type))
                 {
