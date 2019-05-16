@@ -890,8 +890,8 @@ namespace Catel.Reflection
                 return true;
             }
 
-            // Note: don't check with .NET Standard, it's "not implemented by design"
-#if NET || NETSTANDARD
+            // Note: don't check with .NET Standard / .NET Core, it's "not implemented by design"
+#if NET
             if (assembly.ReflectionOnly)
             {
                 return true;
