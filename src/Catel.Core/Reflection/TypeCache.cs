@@ -100,16 +100,6 @@ namespace Catel.Reflection
         {
 #if NET || NETCORE || NETSTANDARD
             AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
-
-            // Initialize the types of early loaded assemblies
-            lock (_lockObject)
-            {
-                var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-                foreach (var assembly in assemblies)
-                {
-                    InitializeTypes(assembly);
-                }
-            }
 #endif
         }
 
@@ -604,7 +594,7 @@ namespace Catel.Reflection
         /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
         /// <param name="allowMultithreadedInitialization">If <c>true</c>, allow multithreaded initialization.</param>
         /// <exception cref="ArgumentException">The <paramref name="assemblyName"/> is <c>null</c> or whitespace.</exception>
-        public static void InitializeTypes(string assemblyName, bool forceFullInitialization, bool allowMultithreadedInitialization = true)
+        public static void InitializeTypes(string assemblyName, bool forceFullInitialization, bool allowMultithreadedInitialization = false)
         {
             // Important note: only allow explicit multithreaded initialization
 
