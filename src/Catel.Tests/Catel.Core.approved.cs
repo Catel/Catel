@@ -3183,7 +3183,7 @@ namespace Catel.Reflection
         public static System.Type[] GetTypesOfAssembly(System.Reflection.Assembly assembly, System.Func<System.Type, bool> predicate = null) { }
         public static System.Type GetTypeWithAssembly(string typeName, string assemblyName, bool ignoreCase = False, bool allowInitialization = True) { }
         public static System.Type GetTypeWithoutAssembly(string typeNameWithoutAssembly, bool ignoreCase = False, bool allowInitialization = True) { }
-        public static void InitializeTypes(string assemblyName, bool forceFullInitialization, bool allowMultithreadedInitialization = True) { }
+        public static void InitializeTypes(string assemblyName, bool forceFullInitialization, bool allowMultithreadedInitialization = False) { }
         public static void InitializeTypes(System.Reflection.Assembly assembly = null, bool forceFullInitialization = False, bool allowMultithreadedInitialization = False) { }
     }
     public class static TypeCacheEvaluator
