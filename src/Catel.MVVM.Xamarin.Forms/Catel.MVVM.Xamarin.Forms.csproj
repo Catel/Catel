@@ -23,7 +23,7 @@
     </PackageReference>
     <PackageReference Include="MethodTimer.Fody" Version="2.3.3" PrivateAssets="all" />
     <PackageReference Include="ModuleInit.Fody" Version="2.0.0" PrivateAssets="all" />
-    <PackageReference Include="Obsolete.Fody" Version="4.4.3" PrivateAssets="all" />
+    <PackageReference Include="Obsolete.Fody" Version="5.0.0" PrivateAssets="all" />
     <PackageReference Include="Xamarin.Forms" Version="3.6.0.344457" />
   </ItemGroup>
   
