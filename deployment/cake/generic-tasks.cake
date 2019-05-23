@@ -2,7 +2,9 @@
 
 #addin "nuget:?package=MagicChunks&version=2.0.0.119"
 #addin "nuget:?package=Cake.FileHelpers&version=3.0.0"
+#addin "nuget:?package=Cake.DependencyCheck&version=1.2.0"
 
+#tool "nuget:?package=DependencyCheck.Runner.Tool&include=./**/dependency-check.sh&include=./**/dependency-check.bat"
 #tool "nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2018.1.3"
 
 //-------------------------------------------------------------
@@ -50,6 +52,21 @@ private void CleanUpCode(bool failOnChanges)
     //     {
     //         WorkingDirectory = "./src/"
     //     });
+}
+
+//-------------------------------------------------------------
+
+private void VerifyDependencies(string pathToScan = "./src/**/*.csproj")
+{
+    Information("Verifying dependencies for security vulnerabilities in '{0}'", pathToScan);
+
+    DependencyCheck(new DependencyCheckSettings
+    {
+        Project = SolutionName,
+        Scan = pathToScan,
+        FailOnCVSS = "0",
+        Format = "HTML"
+    });
 }
 
 //-------------------------------------------------------------
@@ -163,6 +180,21 @@ Task("Clean")
             Recursive = true
         });
     }
+});
+
+//-------------------------------------------------------------
+
+Task("VerifyDependencies")
+    .IsDependentOn("Prepare")
+    .Does(async () =>
+{
+    if (DependencyCheckDisabled)
+    {
+        Information("Dependency analysis is disabled");
+        return;
+    }
+
+    VerifyDependencies();
 });
 
 //-------------------------------------------------------------

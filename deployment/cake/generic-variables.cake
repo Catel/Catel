@@ -70,6 +70,9 @@ var RepositoryUrl = GetBuildServerVariable("RepositoryUrl", showValue: true);
 var RepositoryBranchName = GetBuildServerVariable("RepositoryBranchName", showValue: true);
 var RepositoryCommitId = GetBuildServerVariable("RepositoryCommitId", showValue: true);
 
+// Dependency checks
+var DependencyCheckDisabled = bool.Parse(GetBuildServerVariable("DependencyCheckDisabled", "False", showValue: true));
+
 // SonarQube
 var SonarDisabled = bool.Parse(GetBuildServerVariable("SonarDisabled", "False", showValue: true));
 var SonarUrl = GetBuildServerVariable("SonarUrl", showValue: true);
