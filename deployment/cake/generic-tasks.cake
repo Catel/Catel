@@ -65,7 +65,8 @@ private void VerifyDependencies(string pathToScan = "./src/**/*.csproj")
         Project = SolutionName,
         Scan = pathToScan,
         FailOnCVSS = "0",
-        Format = "HTML"
+        Format = "HTML",
+        Data = "%temp%/dependency-check/data"
     });
 }
 
