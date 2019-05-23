@@ -125,6 +125,20 @@ public class PersonViewModel : ViewModelBase
 }
 ```
 
+## How to contribute
+
+### Support on Open Collective
+
+Please consider supporting [Catel on Open Collective](https://opencollective.com/catel).
+
+### Translating
+
+To add translations to Catel, the Multilingual App Toolkit (MAT) is required. 
+
+1. Download the [MAT Editor](https://developer.microsoft.com/en-us/windows/develop/multilingual-app-toolkit)
+2. Open your specific language (or create it) in the `MultilingualResources` folder, e.g. `./src/Catel.MVVM/MultilingualResources/Catel.MVVM.nl.xlf`
+3. Edit the xlf file and create a pull request (PR) with only this file
+
 ## Building Catel
 
 **Prerequisites** 
