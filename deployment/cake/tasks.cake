@@ -108,6 +108,7 @@ Task("UpdateInfo")
 Task("Build")
     .IsDependentOn("Clean")
     .IsDependentOn("UpdateInfo")
+    .IsDependentOn("VerifyDependencies")
     .IsDependentOn("CleanupCode")
     .Does(async () =>
 {
