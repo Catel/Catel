@@ -60,14 +60,15 @@ private void VerifyDependencies(string pathToScan = "./src/**/*.csproj")
 {
     Information("Verifying dependencies for security vulnerabilities in '{0}'", pathToScan);
 
-    DependencyCheck(new DependencyCheckSettings
-    {
-        Project = SolutionName,
-        Scan = pathToScan,
-        FailOnCVSS = "0",
-        Format = "HTML",
-        Data = "%temp%/dependency-check/data"
-    });
+    // Disabled for now
+    //DependencyCheck(new DependencyCheckSettings
+    //{
+    //    Project = SolutionName,
+    //    Scan = pathToScan,
+    //    FailOnCVSS = "0",
+    //    Format = "HTML",
+    //    Data = "%temp%/dependency-check/data"
+    //});
 }
 
 //-------------------------------------------------------------
