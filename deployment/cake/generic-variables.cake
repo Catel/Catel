@@ -60,6 +60,9 @@ if (IsLocalBuild)
 var RootDirectory = System.IO.Path.GetFullPath(".");
 var OutputRootDirectory = GetBuildServerVariable("OutputRootDirectory", string.Format("./output/{0}", ConfigurationName), showValue: true);
 
+// SourceLink
+var SourceLinkDisabled = bool.Parse(GetBuildServerVariable("SourceLinkDisabled", "False", showValue: true));
+
 // Code signing
 var CodeSignWildCard = GetBuildServerVariable("CodeSignWildcard", showValue: true);
 var CodeSignCertificateSubjectName = GetBuildServerVariable("CodeSignCertificateSubjectName", Company, showValue: true);
