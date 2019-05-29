@@ -35,7 +35,7 @@ var VersionFullSemVer = GetBuildServerVariable("GitVersion_FullSemVer", "unknown
 var VersionNuGet = GetBuildServerVariable("GitVersion_NuGetVersion", "unknown", showValue: true);
 
 // NuGet
-var NuGetPackageSources = GetBuildServerVariable("NuGetPackageSources", showValue: false);
+var NuGetPackageSources = GetBuildServerVariable("NuGetPackageSources", showValue: true);
 var NuGetExe = "./tools/nuget.exe";
 var NuGetLocalPackagesDirectory = "c:\\source\\_packages";
 
