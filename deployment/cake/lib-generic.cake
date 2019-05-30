@@ -22,6 +22,17 @@ private void LogSeparator()
 
 //-------------------------------------------------------------
 
+private string GetTempDirectory(string section, string projectName)
+{
+    var tempDirectory = Directory(string.Format("./temp/{0}/{1}", section, projectName));
+
+    CreateDirectory(tempDirectory);
+
+    return tempDirectory;
+}
+
+//-------------------------------------------------------------
+
 private void RestoreNuGetPackages(Cake.Core.IO.FilePath solutionOrProjectFileName)
 {
     Information("Restoring packages for {0}", solutionOrProjectFileName);

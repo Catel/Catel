@@ -19,6 +19,7 @@ TestResult.xml
 [Rr]elease/
 [Oo]utput*/
 [Pp]ackages*/
+[Tt]emp/
 bin
 obj
 [Ll]ib/*
