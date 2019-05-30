@@ -44,6 +44,7 @@ Added/fixed
 ===========
 (+) #1308 Add EventArgsConverter Support in EventToCommand
 (+) #1324 Add TypeCacheEvaluator separate to TypeCache to allow customization of already loaded assemblies
+(*) #1337 Don't throw exception in UIVisualizerService when same view is being re-registered multiple times
 (x) #1302 Implement support for disposing of IDisposable ViewModels in WindowLogic
 (x) #1320 Don't check for reflection only assemblies on .NET Core and .NET Standard (throws NotImplementedException)
 
