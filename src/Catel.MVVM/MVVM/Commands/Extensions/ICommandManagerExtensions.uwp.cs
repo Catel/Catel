@@ -40,6 +40,11 @@ namespace Catel
             var content = window?.Content as FrameworkElement;
             if (content is null)
             {
+                if (_commandManagerPerWindow.TryGetValue(window, out var existingCommandManager))
+                {
+                    return;
+                }
+
                 Log.Warning($"Cannot subscribe to window '{window.GetType().Name}', content is not a FrameworkElement, will delay the subscription of events");
 
                 _commandManagerPerWindow.Add(window, commandManager);
