@@ -4,7 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 namespace Catel.IoC
 {
     using System;
@@ -21,9 +20,10 @@ namespace Catel.IoC
         /// <param name="serviceImplementationType">Type of the service implementation.</param>
         /// <param name="tag">The tag.</param>
         /// <param name="registrationType">Type of the registration.</param>
+        /// <param name="instance">The instance of a service.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceImplementationType"/> is <c>null</c>.</exception>
-        public TypeInstantiatedEventArgs(Type serviceType, Type serviceImplementationType, object tag, RegistrationType registrationType)
+        public TypeInstantiatedEventArgs(Type serviceType, Type serviceImplementationType, object tag, RegistrationType registrationType, object instance)
         {
             Argument.IsNotNull("serviceType", serviceType);
             Argument.IsNotNull("serviceImplementationType", serviceImplementationType);
@@ -32,6 +32,7 @@ namespace Catel.IoC
             ServiceImplementationType = serviceImplementationType;
             Tag = tag;
             RegistrationType = registrationType;
+            Instance = instance;
         }
 
         /// <summary>
@@ -57,5 +58,11 @@ namespace Catel.IoC
         /// </summary>
         /// <value>The type of the registration.</value>
         public RegistrationType RegistrationType { get; private set; }
+
+        /// <summary>
+        /// Gets the resolved instance.
+        /// </summary>
+        /// <value>The resolved instance.</value>
+        public object Instance { get;  }
     }
 }
