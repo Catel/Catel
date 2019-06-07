@@ -1005,12 +1005,23 @@ namespace Catel.Reflection
 
             PropertyInfo propertyInfo = null;
 
+            try
+            {
 #if ENABLE_CACHE
-            var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Property, bindingFlags, name);
-            propertyInfo = _propertyCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetProperty(name, bindingFlags));
+                var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Property, bindingFlags, name);
+                propertyInfo = _propertyCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetProperty(name, bindingFlags));
 #else
-            propertyInfo = type.GetTypeInfo().GetProperty(name, bindingFlags);
+                propertyInfo = type.GetTypeInfo().GetProperty(name, bindingFlags);
 #endif
+            }
+            catch (AmbiguousMatchException)
+            {
+                // Fallback mechanism
+                var allProperties = type.GetPropertiesEx(bindingFlags);
+
+                // Assume the "best" one is first in the list
+                propertyInfo = allProperties.FirstOrDefault(x => x.Name.Equals(name));
+            }
 
             if (propertyInfo is null)
             {
