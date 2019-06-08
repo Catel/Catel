@@ -136,6 +136,18 @@ namespace Catel.Tests.Reflection
         [TestFixture]
         public class TheGetPropertyExMethod
         {
+            public class TestViewModel : ApplicationViewModel
+            {
+                public new IPerson Variable1 { get; set; }
+
+            }
+
+            public class ApplicationViewModel
+            {
+                public INameProvider Variable1 { get; set; }
+
+            }
+
             public interface IPerson : INameProvider
             {
                 
@@ -149,6 +161,17 @@ namespace Catel.Tests.Reflection
             public class Person : IPerson
             {
                 string INameProvider.FirstName { get { return "John"; } }
+            }
+
+            [TestCase]
+            public void PreventsAmbiguousMatchExceptionForAmbiguousProperties()
+            {
+                // Note: see https://github.com/Catel/Catel/issues/1325
+
+                var propertyInfo = typeof(TestViewModel).GetPropertyEx(nameof(TestViewModel.Variable1));
+
+                Assert.IsNotNull(propertyInfo);
+                Assert.AreEqual(typeof(IPerson), propertyInfo.PropertyType);
             }
 
             [TestCase]
