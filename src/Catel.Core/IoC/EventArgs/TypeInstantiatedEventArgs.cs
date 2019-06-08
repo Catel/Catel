@@ -20,6 +20,20 @@ namespace Catel.IoC
         /// <param name="serviceImplementationType">Type of the service implementation.</param>
         /// <param name="tag">The tag.</param>
         /// <param name="registrationType">Type of the registration.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="serviceImplementationType"/> is <c>null</c>.</exception>
+        public TypeInstantiatedEventArgs(Type serviceType, Type serviceImplementationType, object tag, RegistrationType registrationType)
+            : this(serviceType, serviceImplementationType, tag, registrationType, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TypeInstantiatedEventArgs" /> class.
+        /// </summary>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <param name="serviceImplementationType">Type of the service implementation.</param>
+        /// <param name="tag">The tag.</param>
+        /// <param name="registrationType">Type of the registration.</param>
         /// <param name="instance">The instance of a service.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceImplementationType"/> is <c>null</c>.</exception>
@@ -62,7 +76,7 @@ namespace Catel.IoC
         /// <summary>
         /// Gets the resolved instance.
         /// </summary>
-        /// <value>The resolved instance.</value>
+        /// <value>The resolved instance or null.</value>
         public object Instance { get;  }
     }
 }

@@ -24,7 +24,7 @@ namespace Catel.Tests.IoC.EventArgs
 
                 var resolved = serviceLocator.ResolveType<IInterfaceA>();
 
-                Assert.AreEqual(resolved, instance);
+                Assert.IsTrue(ReferenceEquals(resolved, instance));
             }
 
             public interface IInterfaceA
