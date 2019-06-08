@@ -905,7 +905,7 @@ namespace Catel.IoC
             if (handler != null)
             {
                 handler(this, new TypeInstantiatedEventArgs(registration.DeclaringType, registration.ImplementingType,
-                    registration.Tag, registration.RegistrationType));
+                    registration.Tag, registration.RegistrationType, instance));
             }
 
             return instance;
