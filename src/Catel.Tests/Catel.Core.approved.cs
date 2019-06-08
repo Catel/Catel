@@ -2406,6 +2406,8 @@ namespace Catel.IoC
     public class TypeInstantiatedEventArgs : System.EventArgs
     {
         public TypeInstantiatedEventArgs(System.Type serviceType, System.Type serviceImplementationType, object tag, Catel.IoC.RegistrationType registrationType) { }
+        public TypeInstantiatedEventArgs(System.Type serviceType, System.Type serviceImplementationType, object tag, Catel.IoC.RegistrationType registrationType, object instance) { }
+        public object Instance { get; }
         public Catel.IoC.RegistrationType RegistrationType { get; }
         public System.Type ServiceImplementationType { get; }
         public System.Type ServiceType { get; }

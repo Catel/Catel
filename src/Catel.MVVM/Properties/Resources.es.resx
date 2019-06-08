@@ -12,4 +12,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Apply" xml:space="preserve">
+    <value>Aplicar</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Cerrar</value>
+  </data>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value>Sin éxito</value>
+  </data>
+  <data name="InfoBarMessageControlErrorTitle" xml:space="preserve">
+    <value>Los siguientes errores y/o advertencias fueron encontradas en la información (Coloque el raton encima para desplegar)</value>
+  </data>
+  <data name="InfoTitle" xml:space="preserve">
+    <value>Información</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Espere por favor</value>
+  </data>
+  <data name="WarningTitle" xml:space="preserve">
+    <value>Advertencia</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sí</value>
+  </data>
 </root>
