@@ -257,7 +257,7 @@ namespace Catel.IoC
                 }
 
                 // Last resort
-                if (IsTypeRegisteredByMissingTypeHandler(serviceType))
+                if (IsTypeRegisteredByMissingTypeHandler(serviceType, null))
                 {
                     return true;
                 }
@@ -302,7 +302,7 @@ namespace Catel.IoC
                 // TODO: Can register, 
 
                 // Last resort
-                if (IsTypeRegisteredByMissingTypeHandler(serviceType))
+                if (IsTypeRegisteredByMissingTypeHandler(serviceType, tag))
                 {
                     return true;
                 }
@@ -703,13 +703,14 @@ namespace Catel.IoC
         /// Determines whether the specified service type is registered by missing type handler.
         /// </summary>
         /// <param name="serviceType">The type of the service.</param>
+        /// <param name="tag">Tag to resolve or null</param>
         /// <returns><c>true</c> if the specified service type is registered; otherwise, <c>false</c>.</returns>
-        private bool IsTypeRegisteredByMissingTypeHandler(Type serviceType)
+        private bool IsTypeRegisteredByMissingTypeHandler(Type serviceType, object tag)
         {
             var missingTypeHandler = MissingType;
             if (missingTypeHandler != null)
             {
-                var eventArgs = new MissingTypeEventArgs(serviceType);
+                var eventArgs = new MissingTypeEventArgs(serviceType, tag);
                 missingTypeHandler(this, eventArgs);
 
                 if (eventArgs.ImplementingInstance != null)
