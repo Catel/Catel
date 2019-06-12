@@ -26,7 +26,8 @@ namespace Catel.IoC
         /// Type of the interface.
         /// </param>
         /// <exception cref="ArgumentNullException">The <paramref name="interfaceType"/> is <c>null</c>.</exception>
-        public MissingTypeEventArgs(Type interfaceType) : this(interfaceType, null)
+        public MissingTypeEventArgs(Type interfaceType) 
+            : this(interfaceType, null)
         {
         }
 
