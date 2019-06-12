@@ -2174,6 +2174,7 @@ namespace Catel.IoC
     public class MissingTypeEventArgs : System.EventArgs
     {
         public MissingTypeEventArgs(System.Type interfaceType) { }
+        public MissingTypeEventArgs(System.Type interfaceType, object tag) { }
         public object ImplementingInstance { get; set; }
         public System.Type ImplementingType { get; set; }
         public System.Type InterfaceType { get; }
