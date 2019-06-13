@@ -827,7 +827,7 @@ namespace Catel.IoC
                 Log.Debug("Registering type '{0}' to type '{1}'", serviceType.FullName, serviceImplementationType.FullName);
 
                 registeredTypeInfo = new ServiceLocatorRegistration(serviceType, serviceImplementationType, tag, registrationType,
-                    x => (createServiceFunc != null) ? createServiceFunc(x) : CreateServiceInstance(x));
+                    x => CreateServiceInstanceWrapper(createServiceFunc ?? DefaultCreateServiceFunc, x));
 
                 _registeredTypes[serviceInfo] = registeredTypeInfo;
             }
@@ -890,13 +890,25 @@ namespace Catel.IoC
         }
 
         /// <summary>
-        /// Creates the service instance.
+        /// Default create service function, uses <see cref="_typeFactory"/> to create a service instance.
         /// </summary>
         /// <param name="registration">The registration.</param>
         /// <returns>The service instance.</returns>
-        private object CreateServiceInstance(ServiceLocatorRegistration registration)
+        private object DefaultCreateServiceFunc(ServiceLocatorRegistration registration)
         {
             var instance = _typeFactory.CreateInstanceWithTag(registration.ImplementingType, registration.Tag);
+            return instance;
+        }
+
+        /// <summary>
+        /// Wraps the provided <paramref name="createServiceFunc"/> and raises the TypeInstantiated event with the created service instance.
+        /// </summary>
+        /// <param name="createServiceFunc">A function which creates a service instance.</param>
+        /// <param name="registration">The registration.</param>
+        /// <returns>The service instance.</returns>
+        private object CreateServiceInstanceWrapper(Func<ServiceLocatorRegistration, object> createServiceFunc, ServiceLocatorRegistration registration)
+        {
+            var instance = createServiceFunc(registration);
             if (instance is null)
             {
                 ThrowTypeNotRegisteredException(registration.DeclaringType, "Failed to instantiate the type using the TypeFactory. Check if the required dependencies are registered as well or that the type has a valid constructor that can be used.");
