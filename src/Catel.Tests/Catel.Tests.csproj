@@ -16,7 +16,7 @@
   </PropertyGroup>
 
     <ItemGroup>
-    <PackageReference Include="ApiApprover" Version="8.1.0" PrivateAssets="all" />
+    <PackageReference Include="ApiApprover" Version="9.0.0" PrivateAssets="all" />
     <PackageReference Include="Fody" Version="5.0.6" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
