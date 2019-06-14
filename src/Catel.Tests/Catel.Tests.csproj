@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net46</TargetFrameworks>
+    <TargetFrameworks>net47</TargetFrameworks>
     <AssemblyName>Catel.Tests</AssemblyName>
     <RootNamespace>Catel.Tests</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -16,7 +16,7 @@
   </PropertyGroup>
 
     <ItemGroup>
-    <PackageReference Include="ApiApprover" Version="9.0.0" PrivateAssets="all" />
+    <PackageReference Include="ApprovalTests" Version="4.0.0" />
     <PackageReference Include="Fody" Version="5.0.6" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

@@ -7,11 +7,15 @@
 
 namespace Catel.Tests
 {
+    using System.IO;
+    using System.Reflection;
     using System.Runtime.CompilerServices;
-    using ApiApprover;
+    using ApprovalTests;
+    using ApprovalTests.Namers;
     using Catel.MVVM;
     using Catel.Runtime.Serialization.Json;
     using NUnit.Framework;
+    using PublicApiGenerator;
 
     [TestFixture]
     public class PublicApiFacts
@@ -38,6 +42,32 @@ namespace Catel.Tests
             var assembly = typeof(JsonSerializer).Assembly;
 
             PublicApiApprover.ApprovePublicApi(assembly);
+        }
+    }
+
+    internal static class PublicApiApprover
+    {
+        public static void ApprovePublicApi(Assembly assembly)
+        {
+            var publicApi = ApiGenerator.GeneratePublicApi(assembly);
+            var writer = new ApprovalTextWriter(publicApi, "cs");
+            var approvalNamer = new AssemblyPathNamer(assembly.Location);
+            Approvals.Verify(writer, approvalNamer, Approvals.GetReporter());
+        }
+    }
+
+    internal class AssemblyPathNamer : UnitTestFrameworkNamer
+    {
+        private readonly string _name;
+
+        public AssemblyPathNamer(string assemblyPath)
+        {
+            _name = Path.GetFileNameWithoutExtension(assemblyPath);
+        }
+
+        public override string Name
+        {
+            get { return _name; }
         }
     }
 }

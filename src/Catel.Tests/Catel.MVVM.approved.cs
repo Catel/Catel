@@ -1,6 +1,6 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Catel.Tests")]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.6", FrameworkDisplayName=".NET Framework 4.6")]
+[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.7", FrameworkDisplayName=".NET Framework 4.7")]
 [assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.MVVM")]
 [assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.MVVM.Converters")]
 [assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.MVVM.Providers")]
@@ -269,37 +269,6 @@ namespace Catel.MVVM
     {
         public Command(System.Action execute, System.Func<bool> canExecute = null, object tag = null) { }
     }
-    public class Command<TExecuteParameter> : Catel.MVVM.Command<TExecuteParameter, TExecuteParameter>
-    {
-        public Command(System.Action execute, System.Func<bool> canExecute = null, object tag = null) { }
-        public Command(System.Action<TExecuteParameter> execute, System.Func<TExecuteParameter, bool> canExecute = null, object tag = null) { }
-    }
-    public class Command<TExecuteParameter, TCanExecuteParameter> : Catel.MVVM.CommandBase, Catel.MVVM.ICatelCommand, Catel.MVVM.ICatelCommand<TExecuteParameter, TCanExecuteParameter>, System.Windows.Input.ICommand
-    {
-        public Command(System.Action execute, System.Func<bool> canExecute = null, object tag = null) { }
-        public Command(System.Action<TExecuteParameter> execute, System.Func<TCanExecuteParameter, bool> canExecute = null, object tag = null) { }
-        public bool AutomaticallyDispatchEvents { get; set; }
-        public object Tag { get; }
-        public event System.EventHandler CanExecuteChanged;
-        public event System.EventHandler<Catel.MVVM.CommandExecutedEventArgs> Executed;
-        [System.ObsoleteAttribute("Use `No replacement` instead. Will be removed in version 6.0.0.", true)]
-        public event Catel.AsyncEventHandler<Catel.MVVM.CommandExecutedEventArgs> ExecutedAsync;
-        public bool CanExecute() { }
-        public bool CanExecute(object parameter) { }
-        public virtual bool CanExecute(TCanExecuteParameter parameter) { }
-        public void Execute() { }
-        public void Execute(object parameter) { }
-        public void Execute(TExecuteParameter parameter) { }
-        protected virtual void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck) { }
-        [System.ObsoleteAttribute("Use `Execute(TExecuteParameter, bool)` instead. Will be removed in version 6.0.0." +
-            "", true)]
-        protected virtual System.Threading.Tasks.Task ExecuteAsync(TExecuteParameter parameter, bool ignoreCanExecuteCheck) { }
-        protected void InitializeActions(System.Action<TExecuteParameter> executeWithParameter, System.Action executeWithoutParameter, System.Func<TCanExecuteParameter, bool> canExecuteWithParameter, System.Func<bool> canExecuteWithoutParameter) { }
-        public virtual void RaiseCanExecuteChanged() { }
-        protected virtual void RaiseExecuted(object parameter) { }
-        [System.ObsoleteAttribute("Use `RaiseExecuted(object)` instead. Will be removed in version 6.0.0.", true)]
-        protected System.Threading.Tasks.Task RaiseExecutedAsync(object parameter) { }
-    }
     public abstract class CommandBase
     {
         [System.CLSCompliantAttribute(false)]
@@ -392,6 +361,37 @@ namespace Catel.MVVM
     {
         public CommandProgressChangedEventArgs(TProgress progress) { }
         public TProgress Progress { get; set; }
+    }
+    public class Command<TExecuteParameter> : Catel.MVVM.Command<TExecuteParameter, TExecuteParameter>
+    {
+        public Command(System.Action execute, System.Func<bool> canExecute = null, object tag = null) { }
+        public Command(System.Action<TExecuteParameter> execute, System.Func<TExecuteParameter, bool> canExecute = null, object tag = null) { }
+    }
+    public class Command<TExecuteParameter, TCanExecuteParameter> : Catel.MVVM.CommandBase, Catel.MVVM.ICatelCommand, Catel.MVVM.ICatelCommand<TExecuteParameter, TCanExecuteParameter>, System.Windows.Input.ICommand
+    {
+        public Command(System.Action execute, System.Func<bool> canExecute = null, object tag = null) { }
+        public Command(System.Action<TExecuteParameter> execute, System.Func<TCanExecuteParameter, bool> canExecute = null, object tag = null) { }
+        public bool AutomaticallyDispatchEvents { get; set; }
+        public object Tag { get; }
+        public event System.EventHandler CanExecuteChanged;
+        public event System.EventHandler<Catel.MVVM.CommandExecutedEventArgs> Executed;
+        [System.ObsoleteAttribute("Use `No replacement` instead. Will be removed in version 6.0.0.", true)]
+        public event Catel.AsyncEventHandler<Catel.MVVM.CommandExecutedEventArgs> ExecutedAsync;
+        public bool CanExecute() { }
+        public bool CanExecute(object parameter) { }
+        public virtual bool CanExecute(TCanExecuteParameter parameter) { }
+        public void Execute() { }
+        public void Execute(object parameter) { }
+        public void Execute(TExecuteParameter parameter) { }
+        protected virtual void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck) { }
+        [System.ObsoleteAttribute("Use `Execute(TExecuteParameter, bool)` instead. Will be removed in version 6.0.0." +
+            "", true)]
+        protected virtual System.Threading.Tasks.Task ExecuteAsync(TExecuteParameter parameter, bool ignoreCanExecuteCheck) { }
+        protected void InitializeActions(System.Action<TExecuteParameter> executeWithParameter, System.Action executeWithoutParameter, System.Func<TCanExecuteParameter, bool> canExecuteWithParameter, System.Func<bool> canExecuteWithoutParameter) { }
+        public virtual void RaiseCanExecuteChanged() { }
+        protected virtual void RaiseExecuted(object parameter) { }
+        [System.ObsoleteAttribute("Use `RaiseExecuted(object)` instead. Will be removed in version 6.0.0.", true)]
+        protected System.Threading.Tasks.Task RaiseExecutedAsync(object parameter) { }
     }
     public class CompositeCommand : Catel.MVVM.Command, Catel.MVVM.ICatelCommand, Catel.MVVM.ICompositeCommand, System.Windows.Input.ICommand
     {
@@ -508,10 +508,6 @@ namespace Catel.MVVM
         System.Collections.Generic.List<string> NamingConventions { get; }
         void ClearCache();
     }
-    public class InvalidViewModelException : System.Exception
-    {
-        public InvalidViewModelException(string message) { }
-    }
     public interface IProgressNotifyableViewModel : Catel.Data.IValidatable, Catel.MVVM.IViewModel, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged
     {
         string DetailedMessage { get; }
@@ -627,6 +623,10 @@ namespace Catel.MVVM
         object[] ConvertBack(object value, Catel.MVVM.IViewModel viewModel);
         bool ShouldConvert(string propertyName);
     }
+    public class InvalidViewModelException : System.Exception
+    {
+        public InvalidViewModelException(string message) { }
+    }
     public abstract class LocatorBase : Catel.MVVM.ILocator
     {
         protected LocatorBase() { }
@@ -684,16 +684,6 @@ namespace Catel.MVVM
         protected override object Convert(object value, System.Type targetType, object parameter) { }
         protected string GetDisplayName(Catel.ComponentModel.DisplayNameAttribute attribute) { }
     }
-    public class ProgressiveTaskCommand<TProgress> : Catel.MVVM.TaskCommand<object, object, TProgress>
-        where TProgress : Catel.MVVM.ITaskProgressReport
-    {
-        public ProgressiveTaskCommand(System.Func<System.Threading.CancellationToken, System.IProgress<TProgress>, System.Threading.Tasks.Task> execute, System.Func<bool> canExecute = null, System.Action<TProgress> reportProgress = null, object tag = null) { }
-    }
-    public class ProgressiveTaskCommand<TProgress, TExecuteParameter> : Catel.MVVM.TaskCommand<TExecuteParameter, TExecuteParameter, TProgress>
-        where TProgress : Catel.MVVM.ITaskProgressReport
-    {
-        public ProgressiveTaskCommand(System.Func<System.Threading.CancellationToken, System.IProgress<TProgress>, System.Threading.Tasks.Task> execute, System.Func<bool> canExecute = null, System.Action<TProgress> reportProgress = null, object tag = null) { }
-    }
     public class ProgressNotifyableViewModel : Catel.MVVM.ViewModelBase, Catel.Data.IValidatable, Catel.MVVM.IProgressNotifyableViewModel, Catel.MVVM.IViewModel, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged
     {
         public static readonly Catel.Data.PropertyData DetailedMessageProperty;
@@ -718,6 +708,16 @@ namespace Catel.MVVM
         [Catel.MVVM.ViewModelToModelAttribute("Task", "Percentage")]
         public int TaskPercentage { get; }
         public void UpdateStatus(int currentItem, int totalItems, Catel.MVVM.Tasks.ITask task) { }
+    }
+    public class ProgressiveTaskCommand<TProgress> : Catel.MVVM.TaskCommand<object, object, TProgress>
+        where TProgress : Catel.MVVM.ITaskProgressReport
+    {
+        public ProgressiveTaskCommand(System.Func<System.Threading.CancellationToken, System.IProgress<TProgress>, System.Threading.Tasks.Task> execute, System.Func<bool> canExecute = null, System.Action<TProgress> reportProgress = null, object tag = null) { }
+    }
+    public class ProgressiveTaskCommand<TProgress, TExecuteParameter> : Catel.MVVM.TaskCommand<TExecuteParameter, TExecuteParameter, TProgress>
+        where TProgress : Catel.MVVM.ITaskProgressReport
+    {
+        public ProgressiveTaskCommand(System.Func<System.Threading.CancellationToken, System.IProgress<TProgress>, System.Threading.Tasks.Task> execute, System.Func<bool> canExecute = null, System.Action<TProgress> reportProgress = null, object tag = null) { }
     }
     public class PropertyNotFoundInModelException : System.Exception
     {
@@ -762,8 +762,8 @@ namespace Catel.MVVM
         public event System.EventHandler<Catel.MVVM.CommandEventArgs> Canceled;
         public event System.EventHandler<Catel.MVVM.CommandCanceledEventArgs> Executing;
         public event System.EventHandler<Catel.MVVM.CommandProgressChangedEventArgs<TProgress>> ProgressChanged;
-        public void Cancel() { }
         public override bool CanExecute(TCanExecuteParameter parameter) { }
+        public void Cancel() { }
         protected override void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck) { }
         public override void RaiseCanExecuteChanged() { }
     }
@@ -1127,6 +1127,7 @@ namespace Catel.MVVM.Converters
     {
         object Convert(object sender, object args);
     }
+    public interface IValueConverter : System.Windows.Data.IValueConverter { }
     [System.Windows.Data.ValueConversionAttribute(typeof(string), typeof(System.Nullable<int>))]
     public class IntToStringConverter : Catel.MVVM.Converters.ValueConverterBase
     {
@@ -1148,7 +1149,6 @@ namespace Catel.MVVM.Converters
         protected override object Convert(object value, System.Type targetType, object parameter) { }
         protected override object ConvertBack(object value, System.Type targetType, object parameter) { }
     }
-    public interface IValueConverter : System.Windows.Data.IValueConverter { }
     public class LanguageConverter : Catel.MVVM.Converters.ValueConverterBase<string>
     {
         public LanguageConverter() { }
@@ -1363,8 +1363,8 @@ namespace Catel.MVVM.Providers
     }
     public abstract class LogicBase : Catel.Data.ObservableObject, Catel.IUniqueIdentifyable, Catel.MVVM.Views.IViewLoadState
     {
-        protected readonly object _lockObject;
         protected static readonly Catel.MVVM.Views.IViewLoadManager ViewLoadManager;
+        protected readonly object _lockObject;
         protected LogicBase(Catel.MVVM.Views.IView targetView, System.Type viewModelType = null, Catel.MVVM.IViewModel viewModel = null) { }
         protected virtual bool CanViewBeLoaded { get; }
         public bool HasVmProperty { get; }
@@ -1718,9 +1718,9 @@ namespace Catel.MVVM.Views
         public Catel.MVVM.Views.IView View { get; }
         public event System.EventHandler<System.EventArgs> Loaded;
         public event System.EventHandler<System.EventArgs> Unloaded;
-        public void OnViewLoaded(object sender, System.EventArgs e) { }
         public void OnViewLoadStateLoaded(object sender, System.EventArgs e) { }
         public void OnViewLoadStateUnloaded(object sender, System.EventArgs e) { }
+        public void OnViewLoaded(object sender, System.EventArgs e) { }
         public void OnViewUnloaded(object sender, System.EventArgs e) { }
     }
 }
@@ -2349,9 +2349,9 @@ namespace Catel.Services
         public override bool Equals(object obj) { }
         public bool Equals(Catel.Services.Size size) { }
         public override int GetHashCode() { }
+        public override string ToString() { }
         public static bool ==(Catel.Services.Size a, Catel.Services.Size b) { }
         public static bool !=(Catel.Services.Size a, Catel.Services.Size b) { }
-        public override string ToString() { }
     }
     [System.ObsoleteAttribute("Use Orc.CommandLine instead since that has better support for parsing command lin" +
         "es. Will be removed in version 6.0.0.", true)]
@@ -2499,15 +2499,15 @@ namespace Catel.Windows
         public Catel.MVVM.IViewModel ViewModel { get; }
         public Catel.MVVM.ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
         public System.Type ViewModelType { get; }
-        public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
-        public event System.EventHandler<System.EventArgs> _viewLoaded;
-        public event System.EventHandler<System.EventArgs> _viewUnloaded;
         public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> Catel.MVVM.Views.IView.DataContextChanged;
         public event System.EventHandler<System.EventArgs> Catel.MVVM.Views.IView.Loaded;
         public event System.EventHandler<System.EventArgs> Catel.MVVM.Views.IView.Unloaded;
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         public event System.EventHandler<System.EventArgs> ViewModelChanged;
         public event System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> ViewModelPropertyChanged;
+        public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
+        public event System.EventHandler<System.EventArgs> _viewLoaded;
+        public event System.EventHandler<System.EventArgs> _viewUnloaded;
         protected void AddCustomButton(Catel.Windows.DataWindowButton dataWindowButton) { }
         protected virtual System.Threading.Tasks.Task<bool> ApplyChangesAsync() { }
         protected virtual System.Threading.Tasks.Task<bool> DiscardChangesAsync() { }
@@ -2716,15 +2716,15 @@ namespace Catel.Windows.Controls
         public Catel.MVVM.IViewModel ViewModel { get; }
         public Catel.MVVM.ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
         public System.Type ViewModelType { get; }
-        public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
-        public event System.EventHandler<System.EventArgs> _viewLoaded;
-        public event System.EventHandler<System.EventArgs> _viewUnloaded;
         public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> Catel.MVVM.Views.IView.DataContextChanged;
         public event System.EventHandler<System.EventArgs> Catel.MVVM.Views.IView.Loaded;
         public event System.EventHandler<System.EventArgs> Catel.MVVM.Views.IView.Unloaded;
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         public event System.EventHandler<System.EventArgs> ViewModelChanged;
         public event System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> ViewModelPropertyChanged;
+        public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
+        public event System.EventHandler<System.EventArgs> _viewLoaded;
+        public event System.EventHandler<System.EventArgs> _viewUnloaded;
         protected virtual void OnLoaded(System.EventArgs e) { }
         protected virtual void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
         protected virtual void OnUnloaded(System.EventArgs e) { }
@@ -2754,15 +2754,15 @@ namespace Catel.Windows.Controls
         public Catel.MVVM.IViewModel ViewModel { get; }
         public Catel.MVVM.ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
         public System.Type ViewModelType { get; }
-        public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
-        public event System.EventHandler<System.EventArgs> _viewLoaded;
-        public event System.EventHandler<System.EventArgs> _viewUnloaded;
         public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> Catel.MVVM.Views.IView.DataContextChanged;
         public event System.EventHandler<System.EventArgs> Catel.MVVM.Views.IView.Loaded;
         public event System.EventHandler<System.EventArgs> Catel.MVVM.Views.IView.Unloaded;
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         public event System.EventHandler<System.EventArgs> ViewModelChanged;
         public event System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> ViewModelPropertyChanged;
+        public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
+        public event System.EventHandler<System.EventArgs> _viewLoaded;
+        public event System.EventHandler<System.EventArgs> _viewUnloaded;
         protected override void AddChild(object value) { }
         protected virtual void OnLoaded(System.EventArgs e) { }
         protected virtual void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
@@ -3354,5 +3354,17 @@ namespace Catel.Windows.Threading
     {
         public static System.Windows.Threading.Dispatcher CurrentDispatcher { get; }
         public static void DoEvents() { }
+    }
+}
+namespace XamlGeneratedNamespace
+{
+    public sealed class GeneratedInternalTypeHelper : System.Windows.Markup.InternalTypeHelper
+    {
+        public GeneratedInternalTypeHelper() { }
+        protected override void AddEventHandler(System.Reflection.EventInfo eventInfo, object target, System.Delegate handler) { }
+        protected override System.Delegate CreateDelegate(System.Type delegateType, object target, string handler) { }
+        protected override object CreateInstance(System.Type type, System.Globalization.CultureInfo culture) { }
+        protected override object GetPropertyValue(System.Reflection.PropertyInfo propertyInfo, object target, System.Globalization.CultureInfo culture) { }
+        protected override void SetPropertyValue(System.Reflection.PropertyInfo propertyInfo, object target, object value, System.Globalization.CultureInfo culture) { }
     }
 }
