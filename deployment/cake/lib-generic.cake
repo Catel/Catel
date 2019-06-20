@@ -5,9 +5,9 @@ var _dotNetCoreCache = new Dictionary<string, bool>();
 private void LogSeparator(string messageFormat, params object[] args)
 {
     Information("");
-    Information("----------------------------------------");
+    Information("--------------------------------------------------------------------------------");
     Information(messageFormat, args);
-    Information("----------------------------------------");
+    Information("--------------------------------------------------------------------------------");
     Information("");
 }
 
@@ -16,7 +16,7 @@ private void LogSeparator(string messageFormat, params object[] args)
 private void LogSeparator()
 {
     Information("");
-    Information("----------------------------------------");
+    Information("--------------------------------------------------------------------------------");
     Information("");
 }
 
