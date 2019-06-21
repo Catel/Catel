@@ -371,7 +371,7 @@ namespace Catel.Collections
         /// <param name="newSet">The new set.</param>
         /// <param name="updateExistingSet">if set to <c>true</c>, the existing set will be updated, otherwise a new collection will be created and the existing set will remain unchanged.</param>
         /// <returns>IEnumerable&lt;T&gt;.</returns>
-        public static IEnumerable<T> SynchronizeCollection<T>(this IList<T> existingSet, IEnumerable<T> newSet, bool updateExistingSet = true)
+        public static IEnumerable<T> SynchronizeCollection<T>(this ICollection<T> existingSet, IEnumerable<T> newSet, bool updateExistingSet = true)
         {
             var finalSet = updateExistingSet ? existingSet : new List<T>(existingSet);
             var itemsToRemove = new List<T>(existingSet);
