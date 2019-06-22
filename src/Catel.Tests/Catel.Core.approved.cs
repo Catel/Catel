@@ -884,6 +884,7 @@ namespace Catel.Collections
         public static void ReplaceRange<T>(this System.Collections.Generic.ICollection<T> collection, System.Collections.Generic.IEnumerable<T> range) { }
         public static void Sort<T>(this System.Collections.Generic.IList<T> existingSet, System.Func<T, T, int> comparer = null) { }
         public static System.Collections.Generic.IEnumerable<T> SynchronizeCollection<T>(this System.Collections.Generic.IList<T> existingSet, System.Collections.Generic.IEnumerable<T> newSet, bool updateExistingSet = True) { }
+        public static System.Collections.Generic.IEnumerable<T> SynchronizeCollection<T>(this System.Collections.Generic.ICollection<T> existingSet, System.Collections.Generic.IEnumerable<T> newSet, bool updateExistingSet = True) { }
         public static System.Array ToArray(this System.Collections.IEnumerable collection, System.Type elementType) { }
     }
     public class static CollectionHelper
