@@ -373,7 +373,7 @@ namespace Catel.Collections
         /// <returns>IEnumerable&lt;T&gt;.</returns>
         public static IEnumerable<T> SynchronizeCollection<T>(this IList<T> existingSet, IEnumerable<T> newSet, bool updateExistingSet = true)
         {
-            return SynchronizeCollection((ICollection<T>)existingSet), newSet, updateExistingSet);
+            return SynchronizeCollection((ICollection<T>)existingSet, newSet, updateExistingSet);
         }
         
         /// <summary>
