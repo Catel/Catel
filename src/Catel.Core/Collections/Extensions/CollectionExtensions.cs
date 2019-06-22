@@ -362,7 +362,20 @@ namespace Catel.Collections
 
             return array;
         }
-
+        
+        /// <summary>
+        /// Synchronizes the collection by adding / removing items that are in the new set.
+        /// </summary>
+        /// <typeparam name="T">The type of the collection item.</typeparam>
+        /// <param name="existingSet">The existing set.</param>
+        /// <param name="newSet">The new set.</param>
+        /// <param name="updateExistingSet">if set to <c>true</c>, the existing set will be updated, otherwise a new collection will be created and the existing set will remain unchanged.</param>
+        /// <returns>IEnumerable&lt;T&gt;.</returns>
+        public static IEnumerable<T> SynchronizeCollection<T>(this IList<T> existingSet, IEnumerable<T> newSet, bool updateExistingSet = true)
+        {
+            return SynchronizeCollection((ICollection<T>)existingSet), newSet, updateExistingSet);
+        }
+        
         /// <summary>
         /// Synchronizes the collection by adding / removing items that are in the new set.
         /// </summary>
