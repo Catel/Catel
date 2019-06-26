@@ -59,7 +59,7 @@ namespace Catel.Data
         {
             Argument.IsNotNullOrWhitespace("filePath", filePath);
 
-            using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite))
+            using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
                 Save(model, fileStream, serializer);
             }
