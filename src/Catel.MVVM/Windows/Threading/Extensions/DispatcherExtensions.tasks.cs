@@ -159,6 +159,8 @@ namespace Catel.Windows.Threading
                 try
                 {
                     action();
+
+                    SetResult(tcs, true);
                 }
                 catch (Exception ex)
                 {
@@ -166,7 +168,6 @@ namespace Catel.Windows.Threading
                 }
             }), priority, null);
 
-            dispatcherOperation.Completed += (sender, e) => SetResult(tcs, true);
             dispatcherOperation.Aborted += (sender, e) => SetCanceled(tcs);
 
             return tcs.Task;
@@ -230,35 +231,36 @@ namespace Catel.Windows.Threading
             return await dispatcher.RunWithResultAsync(token => functionAsync(), CancellationToken.None, priority);
         }
 
-        private static async Task<T> RunWithResultAsync<T>(this Dispatcher dispatcher, Func<CancellationToken, Task<T>> functionAsync, 
+        private static async Task<T> RunWithResultAsync<T>(this Dispatcher dispatcher, Func<CancellationToken, Task<T>> functionAsync,
             CancellationToken cancellationToken, DispatcherPriority priority)
         {
             var tcs = new TaskCompletionSource<T>();
 #if UWP
-            await dispatcher.RunAsync(priority.ToCoreDispatcherPriority(), () =>
+            await dispatcher.RunAsync(priority.ToCoreDispatcherPriority(), async () =>
 
 #else
-            var dispatcherOperation = dispatcher.BeginInvoke(new Action(() =>
+            var dispatcherOperation = dispatcher.BeginInvoke(new Action(async () =>
 #endif
             {
                 try
                 {
-                    functionAsync(cancellationToken).ContinueWith(t =>
-                    {
-                        if (t.IsFaulted)
-                        {
-                            tcs.TrySetException(t.Exception ?? new Exception("Unknown error"));
-                            return;
-                        }
-                        
-                        if (t.IsCanceled)
-                        {
-                            SetCanceled(tcs);
-                            return;
-                        }
+                    var task = functionAsync(cancellationToken);
 
-                        SetResult(tcs, t.Result);
-                    }, cancellationToken);
+                    await task;
+
+                    if (task.IsFaulted)
+                    {
+                        tcs.TrySetException(task.Exception ?? new Exception("Unknown error"));
+                        return;
+                    }
+
+                    if (task.IsCanceled)
+                    {
+                        SetCanceled(tcs);
+                        return;
+                    }
+
+                    SetResult(tcs, task.Result);
                 }
                 catch (Exception ex)
                 {
@@ -268,8 +270,8 @@ namespace Catel.Windows.Threading
 #if !UWP
             }), priority, null);
 
-            //IMPORTANT: don't handle 'dispatcherOperation.Completed' event.
-            //We should only signal to awaiter when the operation is really done
+            // IMPORTANT: don't handle 'dispatcherOperation.Completed' event.
+            // We should only signal to awaiter when the operation is really done
 
             dispatcherOperation.Aborted += (sender, e) => SetCanceled(tcs);
 #else
@@ -310,7 +312,7 @@ namespace Catel.Windows.Threading
             return true;
         }
 #endif
-            }
+    }
 }
 
 #endif

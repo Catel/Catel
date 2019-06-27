@@ -45,7 +45,7 @@ namespace Catel.Services
             var currentDispatcher = DispatcherHelper.CurrentDispatcher;
             if (currentDispatcher != null)
             {
-                Log.Debug("Successfully Initialized current dispatcher");
+                Log.Debug("Successfully initialized current dispatcher");
             }
             else
             {
