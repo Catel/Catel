@@ -4,8 +4,8 @@
   -->
   
   <PropertyGroup>
-    <NoWarn>$(NoWarn);CS1591;CS1998;NU1603;NU1605;NU1608;NU1701</NoWarn>
-    <NoError>$(NoError);CS1591;CS1998;NU1603;NU1605;NU1608;NU1701</NoError>
+    <NoWarn>$(NoWarn);CS1591;CS1998;NU1603;NU1605;NU1608;NU1701;AD0001</NoWarn>
+    <NoError>$(NoError);CS1591;CS1998;NU1603;NU1605;NU1608;NU1701;AD0001</NoError>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
