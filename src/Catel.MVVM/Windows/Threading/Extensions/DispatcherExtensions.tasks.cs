@@ -9,6 +9,7 @@
 namespace Catel.Windows.Threading
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using Logging;
 
@@ -68,6 +69,54 @@ namespace Catel.Windows.Threading
         }
 
         /// <summary>
+        /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on.
+        /// </summary>
+        /// <param name="dispatcher">The dispatcher.</param>
+        /// <param name="actionAsync">The asynchronous operation without returning a value.</param>
+        /// <returns>The task representing the asynchronous operation.</returns>
+        public static Task InvokeAsync(this Dispatcher dispatcher, Func<Task> actionAsync)
+        {
+            return RunAsync(dispatcher, actionAsync, DispatcherPriority.Normal);
+        }
+
+        /// <summary>
+        /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on with supporting of cancellation token.
+        /// </summary>
+        /// <param name="dispatcher">The dispatcher.</param>
+        /// <param name="actionAsync">The cancellation token.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The task representing the asynchronous operation.</returns>
+        public static Task InvokeAsync(this Dispatcher dispatcher, Func<CancellationToken, Task> actionAsync, CancellationToken cancellationToken)
+        {
+            return RunAsync(dispatcher, actionAsync, cancellationToken, DispatcherPriority.Normal);
+        }
+
+        /// <summary>
+        /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on with the ability to return value.
+        /// </summary>
+        /// <typeparam name="T">The type of the result of the asynchronous operation.</typeparam>
+        /// <param name="dispatcher">The dispatcher.</param>
+        /// <param name="funcAsync">The asynchronous operation which returns a value.</param>
+        /// <returns>The task representing the asynchronous operation with the returning value.</returns>
+        public static Task<T> InvokeAsync<T>(this Dispatcher dispatcher, Func<Task<T>> funcAsync)
+        {
+            return InvokeAsync(dispatcher, funcAsync, DispatcherPriority.Normal);
+        }
+
+        /// <summary>
+        /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on with the ability to return value with supporting of cancellation token.
+        /// </summary>
+        /// <typeparam name="T">The type of the result of the asynchronous operation.</typeparam>
+        /// <param name="dispatcher">The dispatcher.</param>
+        /// <param name="funcAsync">The asynchronous operation which returns a value and supports cancelling.</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>The task representing the asynchronous operation with the returning value.</returns>
+        public static Task<T> InvokeAsync<T>(this Dispatcher dispatcher, Func<CancellationToken, Task<T>> funcAsync, CancellationToken cancellationToken)
+        {
+            return InvokeAsync(dispatcher, funcAsync, cancellationToken, DispatcherPriority.Normal);
+        }
+
+        /// <summary>
         /// Executes the specified delegate asynchronously at the specified priority with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
         /// <typeparam name="T">The type of the result.</typeparam>
@@ -81,6 +130,16 @@ namespace Catel.Windows.Threading
             {
                 return func();
             }, priority);
+        }
+
+        private static Task<T> InvokeAsync<T>(this Dispatcher dispatcher, Func<Task<T>> funcAsync, DispatcherPriority priority)
+        {
+            return RunWithResultAsync(dispatcher, funcAsync, priority);
+        }
+
+        private static Task<T> InvokeAsync<T>(this Dispatcher dispatcher, Func<CancellationToken, Task<T>> funcAsync, CancellationToken cancellationToken, DispatcherPriority priority)
+        {
+            return RunWithResultAsync(dispatcher, funcAsync, cancellationToken, priority);
         }
 
         private static Task RunAsync(this Dispatcher dispatcher, Action action, DispatcherPriority priority)
@@ -112,6 +171,25 @@ namespace Catel.Windows.Threading
 
             return tcs.Task;
 #endif
+        }
+
+        private static async Task RunAsync(this Dispatcher dispatcher, Func<Task> actionAsync, DispatcherPriority priority)
+        {
+            await dispatcher.RunWithResultAsync(async token =>
+            {
+                await actionAsync();
+                return (object)null;
+            }, CancellationToken.None, priority);
+        }
+
+        private static async Task RunAsync(this Dispatcher dispatcher, Func<CancellationToken, Task> actionAsync,
+            CancellationToken cancellationToken, DispatcherPriority priority)
+        {
+            await dispatcher.RunWithResultAsync(async token =>
+            {
+                await actionAsync(cancellationToken);
+                return (object)null;
+            }, cancellationToken, priority);
         }
 
         private static async Task<T> RunWithResultAsync<T>(this Dispatcher dispatcher, Func<T> function, DispatcherPriority priority)
@@ -147,6 +225,59 @@ namespace Catel.Windows.Threading
             return result;
         }
 
+        private static async Task<T> RunWithResultAsync<T>(this Dispatcher dispatcher, Func<Task<T>> functionAsync, DispatcherPriority priority)
+        {
+            return await dispatcher.RunWithResultAsync(token => functionAsync(), CancellationToken.None, priority);
+        }
+
+        private static async Task<T> RunWithResultAsync<T>(this Dispatcher dispatcher, Func<CancellationToken, Task<T>> functionAsync, 
+            CancellationToken cancellationToken, DispatcherPriority priority)
+        {
+            var tcs = new TaskCompletionSource<T>();
+#if UWP
+            await dispatcher.RunAsync(priority.ToCoreDispatcherPriority(), () =>
+
+#else
+            var dispatcherOperation = dispatcher.BeginInvoke(new Action(() =>
+#endif
+            {
+                try
+                {
+                    functionAsync(cancellationToken).ContinueWith(t =>
+                    {
+                        if (t.IsFaulted)
+                        {
+                            tcs.TrySetException(t.Exception ?? new Exception("Unknown error"));
+                            return;
+                        }
+                        
+                        if (t.IsCanceled)
+                        {
+                            SetCanceled(tcs);
+                            return;
+                        }
+
+                        SetResult(tcs, t.Result);
+                    }, cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    // NOTE: in theory, it could have been already set before
+                    tcs.TrySetException(ex);
+                }
+#if !UWP
+            }), priority, null);
+
+            //IMPORTANT: don't handle 'dispatcherOperation.Completed' event.
+            //We should only signal to awaiter when the operation is really done
+
+            dispatcherOperation.Aborted += (sender, e) => SetCanceled(tcs);
+#else
+            });
+#endif
+            return await tcs.Task;
+        }
+
         private static bool SetResult<T>(TaskCompletionSource<T> tcs, T result)
         {
             if (tcs.Task.IsCanceled)
@@ -179,7 +310,7 @@ namespace Catel.Windows.Threading
             return true;
         }
 #endif
-    }
+            }
 }
 
 #endif
