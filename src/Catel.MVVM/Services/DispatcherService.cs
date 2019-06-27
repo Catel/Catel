@@ -25,7 +25,6 @@ namespace Catel.Services
     using System.Windows.Threading;
     using DispatcherExtensions = Windows.Threading.DispatcherExtensions;
 #else
-    using System.Threading;
     using Xamarin.Forms;
 #endif
 
