@@ -6,6 +6,60 @@ using System.Xml.Linq;
 
 //-------------------------------------------------------------
 
+private void EnsureChocolateyLicenseFile(string projectName)
+{
+    // Required for Chocolatey
+
+    var projectDirectory = GetProjectDirectory(projectName);
+    var outputDirectory = GetProjectOutputDirectory(projectName);
+
+    // Check if it already exists
+    var fileName = string.Format("{0}/LICENSE.txt", outputDirectory);
+    if (!FileExists(fileName))
+    {
+        Information("Creating Chocolatey license file for '{0}'", projectName);
+
+        // Option 1: Copy from root
+        var sourceFile = "./LICENSE";
+        if (FileExists(sourceFile))
+        {
+            Information("Using license file from repository");
+
+            CopyFile(sourceFile, fileName);
+            return;
+        }
+
+        // Option 2: use expression (PackageLicenseExpression)
+        throw new Exception("Cannot find ./LICENSE, which is required for Chocolatey");
+    }
+}
+
+//-------------------------------------------------------------
+
+private void EnsureChocolateyVerificationFile(string projectName)
+{
+    // Required for Chocolatey
+
+    var projectDirectory = GetProjectDirectory(projectName);
+    var outputDirectory = GetProjectOutputDirectory(projectName);
+
+    // Check if it already exists
+    var fileName = string.Format("{0}/VERIFICATION.txt", outputDirectory);
+    if (!FileExists(fileName))
+    {
+        Information("Creating Chocolatey verification file for '{0}'", projectName);
+        
+        System.IO.File.WriteAllText(fileName, @"VERIFICATION
+Verification is intended to assist the Chocolatey moderators and community
+in verifying that this package's contents are trustworthy.
+ 
+<Include details of how to verify checksum contents>
+<If software vendor, explain that here - checksum verification instructions are optional>");
+    }
+}
+
+//-------------------------------------------------------------
+
 private string GetToolsNuGetRepositoryUrls(string projectName)
 {
     // Allow per project overrides via "NuGetRepositoryUrlFor[ProjectName]"
@@ -137,7 +191,7 @@ private void BuildTools()
         // Note: we need to set OverridableOutputPath because we need to be able to respect
         // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
         // are properties passed in using the command line)
-        var outputDirectory = string.Format("{0}/{1}/", OutputRootDirectory, tool);
+        var outputDirectory = GetProjectOutputDirectory(tool);
         Information("Output directory: '{0}'", outputDirectory);
         msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
         msBuildSettings.WithProperty("PackageOutputPath", OutputRootDirectory);
@@ -179,7 +233,7 @@ private void PackageTools()
 
         var projectDirectory = string.Format("./src/{0}", tool);
         var projectFileName = string.Format("{0}/{1}.csproj", projectDirectory, tool);
-        var outputDirectory = string.Format("{0}/{1}/", OutputRootDirectory, tool);
+        var outputDirectory = GetProjectOutputDirectory(tool);
         Information("Output directory: '{0}'", outputDirectory);
 
         // Step 1: remove intermediate files to ensure we have the same results on the build server, somehow NuGet 
@@ -204,7 +258,11 @@ private void PackageTools()
 
         Information(string.Empty);
 
-        // Step 2: Go packaging!
+        // Step 2: Ensure chocolatey stuff
+        EnsureChocolateyLicenseFile(tool);
+        EnsureChocolateyVerificationFile(tool);
+
+        // Step 3: Go packaging!
         Information("Using 'msbuild' to package '{0}'", tool);
 
         var msBuildSettings = new MSBuildSettings {
@@ -247,6 +305,7 @@ private void PackageTools()
         // As described in the this issue: https://github.com/NuGet/Home/issues/4360
         // we should not use IsTool, but set BuildOutputTargetFolder instead
         msBuildSettings.WithProperty("BuildOutputTargetFolder", "tools");
+        msBuildSettings.WithProperty("NoDefaultExcludes", "true");
         //msBuildSettings.WithProperty("IsTool", "true");
 
         msBuildSettings.WithProperty("NoBuild", "true");
