@@ -1,6 +1,7 @@
 #l "lib-generic.cake"
 #l "lib-nuget.cake"
 #l "lib-sourcelink.cake"
+#l "issuetrackers.cake"
 #l "generic-tasks.cake"
 #l "apps-uwp-tasks.cake"
 #l "apps-web-tasks.cake"
@@ -303,6 +304,17 @@ Task("Deploy")
     DeployWpfApps();
     DeployDockerImages();
     DeployGitHubPages();
+});
+
+//-------------------------------------------------------------
+
+Task("Finalize")
+    // Note: no dependency on 'deploy' since we might have already deployed the solution
+    .Does(async () =>
+{
+    Information("Finalizing release '{0}'", VersionFullSemVer);
+
+    await CreateAndReleaseVersionAsync();
 });
 
 //-------------------------------------------------------------
