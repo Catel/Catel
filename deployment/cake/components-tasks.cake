@@ -137,7 +137,7 @@ private void BuildComponents()
         // Note: we need to set OverridableOutputPath because we need to be able to respect
         // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
         // are properties passed in using the command line)
-        var outputDirectory = string.Format("{0}/{1}/", OutputRootDirectory, component);
+        var outputDirectory = GetProjectOutputDirectory(component);
         Information("Output directory: '{0}'", outputDirectory);
         msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
         msBuildSettings.WithProperty("PackageOutputPath", OutputRootDirectory);
@@ -179,7 +179,7 @@ private void PackageComponents()
 
         var projectDirectory = string.Format("./src/{0}", component);
         var projectFileName = string.Format("{0}/{1}.csproj", projectDirectory, component);
-        var outputDirectory = string.Format("{0}/{1}/", OutputRootDirectory, component);
+        var outputDirectory = GetProjectOutputDirectory(component);
         Information("Output directory: '{0}'", outputDirectory);
 
         // Step 1: remove intermediate files to ensure we have the same results on the build server, somehow NuGet 
