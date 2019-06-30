@@ -54,7 +54,14 @@
 
   <!-- This will include LICENSE.txt and VERIFICATION.txt for Chocolatey -->
   <ItemGroup>
-    <None Include="$(OverridableOutputPath)\LICENSE.txt;$(OverridableOutputPath)\VERIFICATION.txt">
+    <None Include="$(OverridableOutputPath)\LICENSE.txt"
+          Condition="Exists('$(OverridableOutputPath)\LICENSE.txt')">
+      <Pack>true</Pack>
+      <PackagePath>tools</PackagePath>
+    </None>
+
+    <None Include="$(OverridableOutputPath)\VERIFICATION.txt"
+          Condition="Exists('$(OverridableOutputPath)\VERIFICATION.txt')">
       <Pack>true</Pack>
       <PackagePath>tools</PackagePath>
     </None>
