@@ -29,6 +29,11 @@
     <IntermediateOutputPath>$(DotNetPackIntermediateOutputPath)</IntermediateOutputPath>
   </PropertyGroup>
 
+  <!-- Fix for MVC analyzers -->
+  <PropertyGroup>
+    <WarningsNotAsErrors>CS8034;$(WarningsNotAsErrors)</WarningsNotAsErrors>
+  </PropertyGroup>
+
   <!-- Workaround for pdb files for non-core platforms, see https://github.com/dotnet/sdk/issues/1458, 
        but don't apply to UWP apps, see https://github.com/GeertvanHorrik/UwpResourcesIssue -->
   <Choose>

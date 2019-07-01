@@ -213,11 +213,15 @@ private void PackageDockerImages()
         msBuildSettings.WithProperty("ConfigurationName", ConfigurationName);
         msBuildSettings.WithProperty("PackageVersion", VersionNuGet);
 
+        // Disable code analyses, we experienced publish issues with mvc .net core projects
+        msBuildSettings.WithProperty("RunCodeAnalysis", "false");
+
         var publishSettings = new DotNetCorePublishSettings
         {
             MSBuildSettings = msBuildSettings,
             OutputDirectory = outputDirectory,
-            Configuration = ConfigurationName
+            Configuration = ConfigurationName,
+            //NoBuild = true
         };
 
         DotNetCorePublish(projectFileName, publishSettings);
