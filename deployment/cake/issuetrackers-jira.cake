@@ -1,4 +1,4 @@
-#tool "nuget:?package=JiraCli&version=1.2.0-beta0002"
+#tool "nuget:?package=JiraCli&version=1.2.0-beta0002&prerelease"
 
 var JiraUrl = GetBuildServerVariable("JiraUrl", showValue: true);
 var JiraUsername = GetBuildServerVariable("JiraUsername", showValue: true);
