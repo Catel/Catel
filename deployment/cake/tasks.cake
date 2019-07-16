@@ -17,7 +17,7 @@
 #addin "nuget:?package=Cake.Sonar&version=1.1.0"
 
 #tool "nuget:?package=MSBuild.SonarQube.Runner.Tool&version=4.3.0"
-#tool "nuget:?package=GitVersion.CommandLine&version=4.0.0-beta0012"
+#tool "nuget:?package=GitVersion.CommandLine&version=4.0.0-beta0012&prerelease"
 
 //-------------------------------------------------------------
 
