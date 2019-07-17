@@ -1425,7 +1425,7 @@ namespace Catel.Data
         [System.Security.SecurityCriticalAttribute()]
         public virtual void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         protected Catel.Data.PropertyData GetPropertyData(string name) { }
-        protected Catel.Runtime.Serialization.ISerializer GetSerializerForIEditableObject() { }
+        protected virtual Catel.Runtime.Serialization.ISerializer GetSerializerForIEditableObject() { }
         protected internal object GetValue(string name) { }
         protected TValue GetValue<TValue>(string name) { }
         protected object GetValue(Catel.Data.PropertyData property) { }

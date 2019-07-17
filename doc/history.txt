@@ -55,6 +55,7 @@ Added/fixed
 (x) #1320 Don't check for reflection only assemblies on .NET Core and .NET Standard (throws NotImplementedException)
 (x) #1339 SubscribeToKeyboardEvents fails with 'An item with the same key has already been added' for UWP
 (x) #1325 AmbiguousMatchException for properties declared with 'new' in GetPropertyEx
+(x) #1371 ModelBase changes rollback (IEditableObject) doesn't work with JsonSerializer
 
 Roadmap
 =======
