@@ -209,7 +209,7 @@ private void PackageGitHubPages()
 
 //-------------------------------------------------------------
 
-private void DeployGitHubPages()
+private async Task DeployGitHubPagesAsync()
 {
     if (!HasGitHubPages())
     {
@@ -263,5 +263,7 @@ private void DeployGitHubPages()
         Information("4) Pushing code back to repository '{0}'", repositoryUrl);
 
         GitPush(temporaryDirectory, userName, apiToken);
+
+        await NotifyAsync(gitHubPage, string.Format("Deployed to GitHub pages"), TargetType.GitHubPages);
     }
 }

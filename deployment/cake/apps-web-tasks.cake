@@ -162,7 +162,7 @@ private void PackageWebApps()
 
 //-------------------------------------------------------------
 
-private void DeployWebApps()
+private async Task DeployWebAppsAsync()
 {
     if (!HasWebApps())
     {
@@ -215,6 +215,8 @@ private void DeployWebApps()
             Force = true,
             NoRawLog = true,
         });
+
+        await NotifyAsync(webApp, string.Format("Deployed to Octopus Deploy"), TargetType.WebApp);
     }
 }
 
@@ -250,7 +252,7 @@ Task("PackageWebApps")
 
 Task("DeployWebApps")
     .IsDependentOn("PackageWebApps")
-    .Does(() =>
+    .Does(async () =>
 {
-    DeployWebApps();
+    await DeployWebAppsAsync();
 });

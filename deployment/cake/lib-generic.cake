@@ -1,5 +1,24 @@
 var _dotNetCoreCache = new Dictionary<string, bool>();
 
+public enum TargetType
+{
+    Unknown,
+
+    Component,
+
+    DockerImage,
+
+    GitHubPages,
+
+    Tool,
+
+    UwpApp,
+
+    WebApp,
+
+    WpfApp
+}
+
 //-------------------------------------------------------------
 
 private void LogSeparator(string messageFormat, params object[] args)
@@ -213,6 +232,17 @@ private string GetProjectSlug(string projectName)
 {
     var slug = projectName.Replace(".", "").Replace(" ", "");
     return slug;
+}
+
+//-------------------------------------------------------------
+
+private string GetTargetSpecificConfigurationValue(TargetType targetType, string configurationPrefix, string fallbackValue)
+{
+    // Allow per project overrides via "[configurationPrefix][targetType]"
+    var keyToCheck = string.Format("{0}{1}", configurationPrefix, targetType);
+
+    var value = GetBuildServerVariable(keyToCheck, fallbackValue);
+    return value;
 }
 
 //-------------------------------------------------------------

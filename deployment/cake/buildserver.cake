@@ -70,7 +70,7 @@ private string GetBuildServerVariableForCache(string variableName, string defaul
     var overrideFile = "./build.cakeoverrides";
     if (System.IO.File.Exists(overrideFile))
     {
-        var sb = new StringBuilder(string.Empty, 128);
+        var sb = new StringBuilder(string.Empty, 256);
         var lengthRead = GetPrivateProfileString("General", variableName, null, sb, (uint)sb.Capacity, overrideFile);
         if (lengthRead > 0)
         {

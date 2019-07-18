@@ -260,7 +260,7 @@ private void PackageDockerImages()
 
 //-------------------------------------------------------------
 
-private void DeployDockerImages()
+private async Task DeployDockerImagesAsync()
 {
     if (!HasDockerImages())
     {
@@ -350,6 +350,8 @@ private void DeployDockerImages()
                 Force = true,
                 NoRawLog = true,
             });
+
+            await NotifyAsync(dockerImage, string.Format("Deployed to Octopus Deploy"), TargetType.DockerImage);
         }
         finally
         {
@@ -398,7 +400,7 @@ Task("PackageDockerImages")
 
 Task("DeployDockerImages")
     .IsDependentOn("PackageDockerImages")
-    .Does(() =>
+    .Does(async () =>
 {
-    DeployDockerImages();
+    await DeployDockerImagesAsync();
 });

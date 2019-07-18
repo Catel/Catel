@@ -275,7 +275,7 @@ private void PackageComponents()
 
 //-------------------------------------------------------------
 
-private void DeployComponents()
+private async Task DeployComponentsAsync()
 {
     if (!HasComponents())
     {
@@ -306,6 +306,8 @@ private void DeployComponents()
             Source = nuGetRepositoryUrl,
             ApiKey = nuGetRepositoryApiKey
         });
+
+        await NotifyAsync(component, string.Format("Deployed to NuGet store"), TargetType.Component);
     }
 }
 
@@ -341,7 +343,7 @@ Task("PackageComponents")
 
 Task("DeployComponents")
     .IsDependentOn("PackageComponents")
-    .Does(() =>
+    .Does(async () =>
 {
-    DeployComponents();
+    await DeployComponentsAsync();
 });

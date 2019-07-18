@@ -189,7 +189,7 @@ private void PackageUwpApps()
 
 //-------------------------------------------------------------
 
-private void DeployUwpApps()
+private async Task DeployUwpAppsAsync()
 {
     if (!HasUwpApps())
     {
@@ -217,7 +217,9 @@ private void DeployUwpApps()
             ClientId = WindowsStoreClientId,
             ClientSecret = WindowsStoreClientSecret,
             TenantId = WindowsStoreTenantId
-        });        
+        });    
+
+        await NotifyAsync(uwpApp, string.Format("Deployed to store"), TargetType.UwpApp);
     }
 }
 
@@ -253,7 +255,7 @@ Task("PackageUwpApps")
 
 Task("DeployUwpApps")
     .IsDependentOn("PackageUwpApps")
-    .Does(() =>
+    .Does(async () =>
 {
-    DeployUwpApps();
+    await DeployUwpAppsAsync();
 });
