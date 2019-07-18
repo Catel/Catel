@@ -2,6 +2,7 @@
 #l "lib-nuget.cake"
 #l "lib-sourcelink.cake"
 #l "issuetrackers.cake"
+#l "notifications.cake"
 #l "generic-tasks.cake"
 #l "apps-uwp-tasks.cake"
 #l "apps-web-tasks.cake"
@@ -295,15 +296,15 @@ Task("Deploy")
     // Note: no dependency on 'package' since we might have already packaged the solution
     // Make sure we have the temporary "project.assets.json" in case we need to package with Visual Studio
     .IsDependentOn("RestorePackages")
-    .Does(() =>
+    .Does(async () =>
 {
-    DeployComponents();
-    DeployTools();
-    DeployUwpApps();
-    DeployWebApps();
-    DeployWpfApps();
-    DeployDockerImages();
-    DeployGitHubPages();
+    await DeployComponentsAsync();
+    await DeployToolsAsync();
+    await DeployUwpAppsAsync();
+    await DeployWebAppsAsync();
+    await DeployWpfAppsAsync();
+    await DeployDockerImagesAsync();
+    await DeployGitHubPagesAsync();
 });
 
 //-------------------------------------------------------------
@@ -351,8 +352,40 @@ Task("BuildAndDeploy")
 
 //-------------------------------------------------------------
 
-Task("Default")
-    .IsDependentOn("BuildAndPackage");
+Task("Default")    
+    .Does(async () =>
+{
+    Error("No target specified, please specify one of the following targets:\n" +
+          " - Prepare\n" +
+          " - UpdateInfo\n" +
+          " - Build\n" + 
+          " - Test\n" + 
+          " - Package\n" + 
+          " - Deploy\n" + 
+          " - Finalize\n\n" + 
+          "or one of the combined ones:\n" +
+          " - BuildAndTest\n" + 
+          " - BuildAndPackage\n" + 
+          " - BuildAndPackageLocal\n" + 
+          " - BuildAndDeploy\n");
+});
+
+
+//-------------------------------------------------------------
+// Test wrappers
+//-------------------------------------------------------------
+
+Task("TestNotifications")    
+    .Does(async () =>
+{
+    await NotifyAsync("MyProject", "This is a generic test");
+    await NotifyAsync("MyProject", "This is a component test", TargetType.Component);
+    await NotifyAsync("MyProject", "This is a docker image test", TargetType.DockerImage);
+    await NotifyAsync("MyProject", "This is a web app test", TargetType.WebApp);
+    await NotifyAsync("MyProject", "This is a wpf app test", TargetType.WpfApp);
+    await NotifyErrorAsync("MyProject", "This is an error");
+});
+
 
 //-------------------------------------------------------------
 

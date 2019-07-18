@@ -339,7 +339,7 @@ private void PackageTools()
 
 //-------------------------------------------------------------
 
-private void DeployTools()
+private async Task DeployToolsAsync()
 {
     if (!HasTools())
     {
@@ -378,6 +378,8 @@ private void DeployTools()
                 ApiKey = nuGetServer.ApiKey
             });
         }
+
+        await NotifyAsync(tool, string.Format("Deployed to NuGet store(s)"), TargetType.Tool);
     }
 }
 
@@ -413,7 +415,7 @@ Task("PackageTools")
 
 Task("DeployTools")
     .IsDependentOn("PackageTools")
-    .Does(() =>
+    .Does(async () =>
 {
-    DeployTools();
+    await DeployToolsAsync();
 });

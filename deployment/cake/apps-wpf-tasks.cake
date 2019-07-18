@@ -336,7 +336,7 @@ private void PackageWpfApps()
 
 //-------------------------------------------------------------
 
-private void DeployWpfApps()
+private async Task DeployWpfAppsAsync()
 {
     if (!HasWpfApps())
     {
@@ -379,6 +379,8 @@ private void DeployWpfApps()
         {
             throw new Exception(string.Format("Received unexpected exit code '{0}' for WPF app '{1}'", exitCode, wpfApp));
         }
+
+        await NotifyAsync(wpfApp, string.Format("Deployed to target"), TargetType.WpfApp);
     }
 }
 
@@ -414,7 +416,7 @@ Task("PackageWpfApps")
 
 Task("DeployWpfApps")
     .IsDependentOn("PackageWpfApps")
-    .Does(() =>
+    .Does(async () =>
 {
-    DeployWpfApps();
+    await DeployWpfAppsAsync();
 });
