@@ -32,21 +32,6 @@ namespace Catel.Services
         Task InvokeAsync(Action action);
 
         /// <summary>
-        /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on.
-        /// </summary>
-        /// <param name="actionAsync">The asynchronous operation without returning a value.</param>
-        /// <returns>The task representing the asynchronous operation.</returns>
-        Task InvokeAsync(Func<Task> actionAsync);
-
-        /// <summary>
-        /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on with supporting of cancellation token.
-        /// </summary>
-        /// <param name="actionAsync">The asynchronous operation without returning a value.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The task representing the asynchronous operation.</returns>
-        Task InvokeAsync(Func<CancellationToken, Task> actionAsync, CancellationToken cancellationToken);
-
-        /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
         /// <param name="method">The method.</param>
@@ -63,12 +48,27 @@ namespace Catel.Services
         Task<T> InvokeAsync<T>(Func<T> func);
 
         /// <summary>
+        /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on.
+        /// </summary>
+        /// <param name="actionAsync">The asynchronous operation without returning a value.</param>
+        /// <returns>The task representing the asynchronous operation.</returns>
+        Task InvokeTaskAsync(Func<Task> actionAsync);
+
+        /// <summary>
+        /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on with supporting of cancellation token.
+        /// </summary>
+        /// <param name="actionAsync">The asynchronous operation without returning a value.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The task representing the asynchronous operation.</returns>
+        Task InvokeTaskAsync(Func<CancellationToken, Task> actionAsync, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on with the ability to return value.
         /// </summary>
         /// <typeparam name="T">The type of the result of the asynchronous operation.</typeparam>
         /// <param name="funcAsync">The asynchronous operation which returns a value.</param>
         /// <returns>The task representing the asynchronous operation with the returning value.</returns>
-        Task<T> InvokeAsync<T>(Func<Task<T>> funcAsync);
+        Task<T> InvokeTaskAsync<T>(Func<Task<T>> funcAsync);
 
         /// <summary>
         /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on with the ability to return value with supporting of cancellation token.
@@ -77,7 +77,7 @@ namespace Catel.Services
         /// <param name="funcAsync">The asynchronous operation which returns a value and supports cancelling.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The task representing the asynchronous operation with the returning value.</returns>
-        Task<T> InvokeAsync<T>(Func<CancellationToken, Task<T>> funcAsync, CancellationToken cancellationToken);
+        Task<T> InvokeTaskAsync<T>(Func<CancellationToken, Task<T>> funcAsync, CancellationToken cancellationToken);
 #endif
 
         /// <summary>
