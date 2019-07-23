@@ -3352,6 +3352,10 @@ namespace Catel.Windows.Threading
         public static System.Threading.Tasks.Task InvokeAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
         public static System.Threading.Tasks.Task InvokeAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
         public static System.Threading.Tasks.Task<T> InvokeAsync<T>(this System.Windows.Threading.Dispatcher dispatcher, System.Func<T> func) { }
+        public static System.Threading.Tasks.Task InvokeAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Func<System.Threading.Tasks.Task> actionAsync) { }
+        public static System.Threading.Tasks.Task InvokeAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Threading.CancellationToken cancellationToken) { }
+        public static System.Threading.Tasks.Task<T> InvokeAsync<T>(this System.Windows.Threading.Dispatcher dispatcher, System.Func<System.Threading.Tasks.Task<T>> funcAsync) { }
+        public static System.Threading.Tasks.Task<T> InvokeAsync<T>(this System.Windows.Threading.Dispatcher dispatcher, System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken) { }
         public static System.Threading.Tasks.Task<T> InvokeAsync<T>(this System.Windows.Threading.Dispatcher dispatcher, System.Func<T> func, System.Windows.Threading.DispatcherPriority priority) { }
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Action action) { }
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority) { }
