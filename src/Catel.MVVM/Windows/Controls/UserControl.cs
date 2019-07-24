@@ -423,7 +423,7 @@ namespace Catel.Windows.Controls
         {
             // Fix for https://github.com/Catel/Catel/issues/1260, make sure to create the grid first (and we force it, this
             // might be a non-xaml (e.g. non-InitializeComponent) control
-            if (!DesignerProperties.GetIsInDesignMode(this))
+            if (!CatelEnvironment.IsInDesignMode)
             {
                 var wrapper = _logic.CreateViewModelWrapper(true);
                 if (wrapper != null)
