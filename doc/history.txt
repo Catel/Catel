@@ -56,6 +56,7 @@ Added/fixed
 (x) #1339 SubscribeToKeyboardEvents fails with 'An item with the same key has already been added' for UWP
 (x) #1325 AmbiguousMatchException for properties declared with 'new' in GetPropertyEx
 (x) #1371 ModelBase changes rollback (IEditableObject) doesn't work with JsonSerializer
+(x) #1374 Object reference not set to an instance at design time when calling UserControl.AddChild
 
 Roadmap
 =======
