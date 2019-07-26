@@ -22,6 +22,11 @@ namespace Catel.Data
 
     public partial class ModelBase
     {
+#if NET || NETCORE || NETSTANDARD
+        [field: NonSerialized]
+#endif
+        internal ISerializer _editableObjectSerializer;
+
         #region Internal classes
         /// <summary>
         /// Class containing backup information.
@@ -234,8 +239,13 @@ namespace Catel.Data
         /// Gets the serializer for the <see cref="IEditableObject"/> interface implementation.
         /// </summary>
         /// <returns>The <see cref="ISerializer"/>.</returns>
-        protected ISerializer GetSerializerForIEditableObject()
+        protected virtual ISerializer GetSerializerForIEditableObject()
         {
+            if (!(_editableObjectSerializer is null))
+            {
+                return _editableObjectSerializer;
+            }
+
             var dependencyResolver = this.GetDependencyResolver();
 
             var serializer = dependencyResolver.Resolve<ISerializer>();

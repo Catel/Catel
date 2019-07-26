@@ -1835,12 +1835,12 @@ namespace Catel.Services
         public void BeginInvoke(System.Action action, bool onlyBeginInvokeWhenNoAccess = True) { }
         public void Invoke(System.Action action, bool onlyInvokeWhenNoAccess = True) { }
         public System.Threading.Tasks.Task InvokeAsync(System.Action action) { }
-        public System.Threading.Tasks.Task InvokeAsync(System.Func<System.Threading.Tasks.Task> actionAsync) { }
-        public System.Threading.Tasks.Task InvokeAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task InvokeAsync(System.Delegate method, params object[] args) { }
         public System.Threading.Tasks.Task<T> InvokeAsync<T>(System.Func<T> func) { }
-        public System.Threading.Tasks.Task<T> InvokeAsync<T>(System.Func<System.Threading.Tasks.Task<T>> funcAsync) { }
-        public System.Threading.Tasks.Task<T> InvokeAsync<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task InvokeTaskAsync(System.Func<System.Threading.Tasks.Task> actionAsync) { }
+        public System.Threading.Tasks.Task InvokeTaskAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.Tasks.Task<T>> funcAsync) { }
+        public System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken) { }
     }
     public enum ExportMode
     {
@@ -1919,12 +1919,12 @@ namespace Catel.Services
         void BeginInvoke(System.Action action, bool onlyBeginInvokeWhenNoAccess = True);
         void Invoke(System.Action action, bool onlyInvokeWhenNoAccess = True);
         System.Threading.Tasks.Task InvokeAsync(System.Action action);
-        System.Threading.Tasks.Task InvokeAsync(System.Func<System.Threading.Tasks.Task> actionAsync);
-        System.Threading.Tasks.Task InvokeAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task InvokeAsync(System.Delegate method, params object[] args);
         System.Threading.Tasks.Task<T> InvokeAsync<T>(System.Func<T> func);
-        System.Threading.Tasks.Task<T> InvokeAsync<T>(System.Func<System.Threading.Tasks.Task<T>> funcAsync);
-        System.Threading.Tasks.Task<T> InvokeAsync<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task InvokeTaskAsync(System.Func<System.Threading.Tasks.Task> actionAsync);
+        System.Threading.Tasks.Task InvokeTaskAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.Tasks.Task<T>> funcAsync);
+        System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken);
     }
     public class static IDispatcherServiceExtensions
     {

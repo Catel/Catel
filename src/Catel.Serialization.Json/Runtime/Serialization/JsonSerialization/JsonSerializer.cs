@@ -885,6 +885,17 @@ namespace Catel.Runtime.Serialization.Json
 
                     if (jsonReader is null)
                     {
+#if DEBUG
+                        var streamPosition = stream.Position;
+
+                        var debugStreamReader = new StreamReader(stream, Encoding.UTF8);
+                        var content = debugStreamReader.ReadToEnd();
+
+                        Log.Debug(content);
+
+                        stream.Position = streamPosition;
+#endif
+
                         var streamReader = new StreamReader(stream, Encoding.UTF8);
                         jsonReader = new JsonTextReader(streamReader);
                     }

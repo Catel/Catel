@@ -7,9 +7,13 @@
 namespace Catel.Tests.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using Catel.Data;
-
+    using Catel.IoC;
+    using Catel.Runtime.Serialization;
+    using Catel.Runtime.Serialization.Json;
+    using Catel.Runtime.Serialization.Xml;
     using NUnit.Framework;
 
     public partial class ModelBaseFacts
@@ -196,18 +200,10 @@ namespace Catel.Tests.Data
             [TestCase]
             public void CancelsChangesCorrectlyForSimpleTypes()
             {
-                var iniEntry = ModelBaseTestHelper.CreateIniEntryObject();
-                var iniEntryAsIEditableObject = (IEditableObject)iniEntry;
-
-                iniEntry.Value = "MyOldValue";
-
-                iniEntryAsIEditableObject.BeginEdit();
-
-                iniEntry.Value = "MyNewValue";
-
-                iniEntryAsIEditableObject.CancelEdit();
-
-                Assert.AreEqual("MyOldValue", iniEntry.Value);
+                CancelEdit(() => ModelBaseTestHelper.CreateIniEntryObject(),
+                    x => x.Value = "MyOldValue",
+                    x => x.Value = "MyNewValue",
+                    x => Assert.AreEqual("MyOldValue", x.Value));
             }
 
             [TestCase]
@@ -321,6 +317,34 @@ namespace Catel.Tests.Data
                 editableObjectAsIEditableObject.CancelEdit();
 
                 Assert.AreEqual(2, editableObject.IgnoredPropertyInBackup);
+            }
+
+            public void CancelEdit<TModel>(Func<TModel> createModel, Action<TModel> beforeBeginEdit, Action<TModel> afterBeginEdit, Action<TModel> assert)
+                where TModel : ModelBase
+            {
+                var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
+
+                var serializers = new List<ISerializer>();
+                serializers.Add(dependencyResolver.Resolve<XmlSerializer>());
+                serializers.Add(dependencyResolver.Resolve<JsonSerializer>());
+
+                foreach (var serializer in serializers)
+                {
+                    var model = createModel();
+                    model._editableObjectSerializer = serializer;
+
+                    var modelAsIEditableObject = (IEditableObject)model;
+
+                    beforeBeginEdit(model);
+
+                    modelAsIEditableObject.BeginEdit();
+
+                    afterBeginEdit(model);
+
+                    modelAsIEditableObject.CancelEdit();
+
+                    assert(model);
+                }
             }
         }
 
