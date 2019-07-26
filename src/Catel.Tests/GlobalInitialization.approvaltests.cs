@@ -4,11 +4,14 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-
+using System.IO;
+using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
+using ApprovalTests.Reporters.Windows;
 
 #if DEBUG
-[assembly: UseReporter(typeof(BeyondCompare4Reporter), typeof(DiffReporter), typeof(AllFailingTestsClipboardReporter))]
+[assembly: UseReporter(typeof(DiffReporter))]
 #else
 [assembly: UseReporter(typeof(DiffReporter))]
 #endif
+

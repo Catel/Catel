@@ -98,23 +98,8 @@ namespace Catel.Reflection
 
         static TypeCache()
         {
-            ShouldIgnoreAssemblyEvaluators = new List<Func<Assembly, bool>>();
-            ShouldIgnoreTypeEvaluators = new List<Func<Assembly, Type, bool>>();
-
-            ShouldIgnoreAssemblyEvaluators.Add(new Func<Assembly, bool>(x => x.FullName?.Contains(".resources.") ?? false));
-
 #if NET || NETCORE || NETSTANDARD
             AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoaded;
-
-            // Initialize the types of early loaded assemblies
-            lock (_lockObject)
-            {
-                var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-                foreach (var assembly in assemblies)
-                {
-                    InitializeTypes(assembly);
-                }
-            }
 #endif
         }
 
@@ -226,13 +211,25 @@ namespace Catel.Reflection
         /// Gets the evaluators used to determine whether a specific assembly should be ignored.
         /// </summary>
         /// <value>The should ignore assembly function.</value>
-        public static List<Func<Assembly, bool>> ShouldIgnoreAssemblyEvaluators { get; private set; }
+        public static List<Func<Assembly, bool>> ShouldIgnoreAssemblyEvaluators
+        {
+            get
+            {
+                return TypeCacheEvaluator.AssemblyEvaluators;
+            }
+        }
 
         /// <summary>
         /// Gets the evaluators used to determine whether a specific type should be ignored.
         /// </summary>
         /// <value>The should ignore assembly function.</value>
-        public static List<Func<Assembly, Type, bool>> ShouldIgnoreTypeEvaluators { get; private set; }
+        public static List<Func<Assembly, Type, bool>> ShouldIgnoreTypeEvaluators
+        {
+            get
+            {
+                return TypeCacheEvaluator.TypeEvaluators;
+            }
+        }
 
         #region Events
         /// <summary>
@@ -597,7 +594,7 @@ namespace Catel.Reflection
         /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
         /// <param name="allowMultithreadedInitialization">If <c>true</c>, allow multithreaded initialization.</param>
         /// <exception cref="ArgumentException">The <paramref name="assemblyName"/> is <c>null</c> or whitespace.</exception>
-        public static void InitializeTypes(string assemblyName, bool forceFullInitialization, bool allowMultithreadedInitialization = true)
+        public static void InitializeTypes(string assemblyName, bool forceFullInitialization, bool allowMultithreadedInitialization = false)
         {
             // Important note: only allow explicit multithreaded initialization
 
@@ -883,7 +880,8 @@ namespace Catel.Reflection
                 return true;
             }
 
-#if NET || NETCORE || NETSTANDARD
+            // Note: don't check with .NET Standard / .NET Core, it's "not implemented by design"
+#if NET
             if (assembly.ReflectionOnly)
             {
                 return true;
@@ -908,7 +906,7 @@ namespace Catel.Reflection
             //    return true;
             //}
 
-            foreach (var evaluator in ShouldIgnoreAssemblyEvaluators)
+            foreach (var evaluator in TypeCacheEvaluator.AssemblyEvaluators)
             {
                 if (evaluator(assembly))
                 {
@@ -972,7 +970,7 @@ namespace Catel.Reflection
                 return true;
             }
 
-            foreach (var evaluator in ShouldIgnoreTypeEvaluators)
+            foreach (var evaluator in TypeCacheEvaluator.TypeEvaluators)
             {
                 if (evaluator(assembly, type))
                 {

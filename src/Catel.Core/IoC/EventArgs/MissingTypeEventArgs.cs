@@ -26,14 +26,27 @@ namespace Catel.IoC
         /// Type of the interface.
         /// </param>
         /// <exception cref="ArgumentNullException">The <paramref name="interfaceType"/> is <c>null</c>.</exception>
-        public MissingTypeEventArgs(Type interfaceType)
+        public MissingTypeEventArgs(Type interfaceType) 
+            : this(interfaceType, null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MissingTypeEventArgs"/> class. 
+        /// </summary>
+        /// <param name="interfaceType">
+        /// Type of the interface.
+        /// </param>
+        /// <param name="tag">a tag</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="interfaceType"/> is <c>null</c>.</exception>
+        public MissingTypeEventArgs(Type interfaceType, object tag)
         {
             Argument.IsNotNull("interfaceType", interfaceType);
 
             InterfaceType = interfaceType;
             RegistrationType = RegistrationType.Singleton;
+            Tag = tag;
         }
-
         #endregion
 
         #region Properties

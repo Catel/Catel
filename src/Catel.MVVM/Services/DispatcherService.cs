@@ -8,6 +8,7 @@
 namespace Catel.Services
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
     using Logging;
 
@@ -24,7 +25,6 @@ namespace Catel.Services
     using System.Windows.Threading;
     using DispatcherExtensions = Windows.Threading.DispatcherExtensions;
 #else
-    using System.Threading;
     using Xamarin.Forms;
 #endif
 
@@ -45,7 +45,7 @@ namespace Catel.Services
             var currentDispatcher = DispatcherHelper.CurrentDispatcher;
             if (currentDispatcher != null)
             {
-                Log.Debug("Successfully Initialized current dispatcher");
+                Log.Debug("Successfully initialized current dispatcher");
             }
             else
             {
@@ -109,6 +109,57 @@ namespace Catel.Services
             var dispatcher = CurrentDispatcher;
 
             return DispatcherExtensions.InvokeAsync(dispatcher, func);
+        }
+
+        /// <summary>
+        /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on
+        /// </summary>
+        /// <param name="actionAsync">The asynchronous operation without returning a value</param>
+        /// <returns>The task representing the asynchronous operation</returns>
+        public Task InvokeTaskAsync(Func<Task> actionAsync)
+        {
+            var dispatcher = CurrentDispatcher;
+
+            return DispatcherExtensions.InvokeAsync(dispatcher, actionAsync);
+        }
+
+        /// <summary>
+        /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on with supporting of CancellationToken
+        /// </summary>
+        /// <param name="actionAsync">The asynchronous operation without returning a value</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The task representing the asynchronous operation</returns>
+        public Task InvokeTaskAsync(Func<CancellationToken, Task> actionAsync, CancellationToken cancellationToken)
+        {
+            var dispatcher = CurrentDispatcher;
+
+            return DispatcherExtensions.InvokeAsync(dispatcher, actionAsync, cancellationToken);
+        }
+        /// <summary>
+        /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on with the ability to return value.
+        /// </summary>
+        /// <typeparam name="T">The type of the result of the asynchronous operation</typeparam>
+        /// <param name="funcAsync">The asynchronous operation which returns a value</param>
+        /// <returns>The task representing the asynchronous operation with the returning value</returns>
+        public Task<T> InvokeTaskAsync<T>(Func<Task<T>> funcAsync)
+        {
+            var dispatcher = CurrentDispatcher;
+
+            return DispatcherExtensions.InvokeAsync(dispatcher, funcAsync);
+        }
+
+        /// <summary>
+        /// Executes the specified asynchronous operation on the thread that the Dispatcher was created on with the ability to return value with supporting of CancellationToken
+        /// </summary>
+        /// <typeparam name="T">The type of the result of the asynchronous operation</typeparam>
+        /// <param name="funcAsync">The asynchronous operation which returns a value and supports cancelling</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The task representing the asynchronous operation with the returning value</returns>
+        public Task<T> InvokeTaskAsync<T>(Func<CancellationToken, Task<T>> funcAsync, CancellationToken cancellationToken)
+        {
+            var dispatcher = CurrentDispatcher;
+
+            return DispatcherExtensions.InvokeAsync(dispatcher, funcAsync, cancellationToken);
         }
 #endif
 

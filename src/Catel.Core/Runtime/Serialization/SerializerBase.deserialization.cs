@@ -271,7 +271,7 @@ namespace Catel.Runtime.Serialization
 
                 using (var context = GetContext(modelType, stream, SerializationContextMode.Deserialization, configuration))
                 {
-                    return DeserializeMembers(context);
+                    return DeserializeMembersOnly(context);
                 }
             }
         }
@@ -296,7 +296,7 @@ namespace Catel.Runtime.Serialization
 
                 using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Deserialization, configuration))
                 {
-                    return DeserializeMembers(context);
+                    return DeserializeMembersOnly(context);
                 }
             }
         }
@@ -335,7 +335,7 @@ namespace Catel.Runtime.Serialization
 
                 using (var finalContext = GetContext(modelType, serializationContext, SerializationContextMode.Deserialization, configuration))
                 {
-                    return DeserializeMembers(finalContext);
+                    return DeserializeMembersOnly(finalContext);
                 }
             }
         }
@@ -374,9 +374,20 @@ namespace Catel.Runtime.Serialization
 
                 using (var finalContext = GetContext(model, model.GetType(), serializationContext, SerializationContextMode.Deserialization, configuration))
                 {
-                    return DeserializeMembers(finalContext);
+                    return DeserializeMembersOnly(finalContext);
                 }
             }
+        }
+
+        private List<MemberValue> DeserializeMembersOnly(ISerializationContext<TSerializationContextInfo> context)
+        {
+            BeforeDeserialization(context);
+
+            var members = DeserializeMembers(context);
+
+            AfterDeserialization(context);
+
+            return members;
         }
 
         /// <summary>

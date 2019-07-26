@@ -109,7 +109,7 @@ namespace Catel.MVVM.Providers
             var vm = ViewModel;
             if (vm != null && !vm.IsClosed)
             {
-                await CloseViewModelAsync(null);
+                await CloseViewModelAsync(null, true);
             }
 
             ViewModel = null;
@@ -183,7 +183,7 @@ namespace Catel.MVVM.Providers
                     Log.Warning("Failed to get the 'DialogResult' property of window type '{0}', using 'null' as dialog result", TargetWindow.GetType().Name);
                 }
 
-                await CloseViewModelAsync(dialogResult);
+                await CloseViewModelAsync(dialogResult, true);
             }
 
             _targetWindowClosedWeakEventListener.Detach();

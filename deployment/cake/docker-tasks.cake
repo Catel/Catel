@@ -4,7 +4,7 @@
 #l "lib-octopusdeploy.cake"
 
 #addin "nuget:?package=Cake.FileHelpers&version=3.0.0"
-#addin "nuget:?package=Cake.Docker&version=0.9.6 "
+#addin "nuget:?package=Cake.Docker&version=0.9.9"
 
 //-------------------------------------------------------------
 
@@ -32,12 +32,34 @@ private string GetDockerRegistryPassword(string projectName)
 
 //-------------------------------------------------------------
 
+private string GetDockerImageName(string projectName)
+{
+    var name = projectName.Replace(".", "-");
+    return name.ToLower();
+}
+
+//-------------------------------------------------------------
+
 private string GetDockerImageTag(string projectName, string version)
 {
     var dockerRegistryUrl = GetDockerRegistryUrl(projectName);
 
-    var tag = string.Format("{0}/{1}:v{2}", dockerRegistryUrl, projectName.Replace(".", "-"), version);
+    var tag = string.Format("{0}/{1}:{2}", dockerRegistryUrl, GetDockerImageName(projectName), version);
     return tag.ToLower();
+}
+
+//-------------------------------------------------------------
+
+private void ConfigureDockerSettings(AutoToolSettings dockerSettings)
+{
+    var engineUrl = DockerEngineUrl;
+    if (!string.IsNullOrWhiteSpace(engineUrl))
+    {
+        Information("Using remote docker engine: '{0}'", engineUrl);
+
+        dockerSettings.ArgumentCustomization = args => args.Prepend($"-H {engineUrl}");
+        //dockerSettings.BuildArg = new [] { $"DOCKER_HOST={engineUrl}" };
+    }
 }
 
 //-------------------------------------------------------------
@@ -146,17 +168,40 @@ private void PackageDockerImages()
         return;
     }
 
+    // The following directories are being created, ready for docker images to be used:
+    // ./output => output of the publish step
+    // ./config => docker image and config files, in case they need to be packed as well
+
     foreach (var dockerImage in DockerImages)
     {
         LogSeparator("Packaging docker image '{0}'", dockerImage);
 
         var projectFileName = string.Format("./src/{0}/{0}.csproj", dockerImage);
-        var dockerImageSpecificationFileName = string.Format("./deployment/docker/{0}/{0}", dockerImage);
+        var dockerImageSpecificationDirectory = string.Format("./deployment/docker/{0}/", dockerImage);
+        var dockerImageSpecificationFileName = string.Format("{0}/{1}", dockerImageSpecificationDirectory, dockerImage);
 
-        var outputDirectory = string.Format("{0}/{1}/", OutputRootDirectory, dockerImage);
+        var outputRootDirectory =  string.Format("{0}/{1}/output", OutputRootDirectory, dockerImage);
+
+        Information("1) Preparing ./config for package '{0}'", dockerImage);
+
+        // ./config
+        var confTargetDirectory = string.Format("{0}/conf", outputRootDirectory);
+        Information("Conf directory: '{0}'", confTargetDirectory);
+
+        CreateDirectory(confTargetDirectory);
+
+        var confSourceDirectory = string.Format("{0}*", dockerImageSpecificationDirectory);
+        Information("Copying files from '{0}' => '{1}'", confSourceDirectory, confTargetDirectory);
+
+        CopyFiles(confSourceDirectory, confTargetDirectory, true);
+
+        LogSeparator();
+
+        Information("2) Preparing ./output using 'dotnet publish' for package '{0}'", dockerImage);
+
+        // ./output
+        var outputDirectory = string.Format("{0}/output", outputRootDirectory);
         Information("Output directory: '{0}'", outputDirectory);
-
-        Information("1) Using 'dotnet publish' to package '{0}'", dockerImage);
 
         var msBuildSettings = new DotNetCoreMSBuildSettings();
 
@@ -176,8 +221,10 @@ private void PackageDockerImages()
         };
 
         DotNetCorePublish(projectFileName, publishSettings);
-        
-        Information("2) Using 'docker build' to package '{0}'", dockerImage);
+
+        LogSeparator();
+
+        Information("3) Using 'docker build' to package '{0}'", dockerImage);
 
         // docker build ..\..\output\Release\platform -f .\Dockerfile
 
@@ -189,11 +236,19 @@ private void PackageDockerImages()
         // Note: to prevent all output & source files to be copied to the docker context, we will set the
         // output directory as context (to keep the footprint as small as possible)
 
-        DockerBuild(new DockerImageBuildSettings
+        var dockerSettings = new DockerImageBuildSettings
         {
+            NoCache = true, // Don't use cache, always make sure to fetch the right images
             File = dockerImageSpecificationFileName,
+            Platform = "linux",
             Tag = new string[] { GetDockerImageTag(dockerImage, VersionNuGet) }
-        }, outputDirectory);
+        };
+
+        ConfigureDockerSettings(dockerSettings);
+
+        Information("Docker files source directory: '{0}'", outputRootDirectory);
+
+        DockerBuild(dockerSettings, outputRootDirectory);
 
         LogSeparator();
     }
@@ -221,6 +276,7 @@ private void DeployDockerImages()
         var dockerRegistryUrl = GetDockerRegistryUrl(dockerImage);
         var dockerRegistryUserName = GetDockerRegistryUserName(dockerImage);
         var dockerRegistryPassword = GetDockerRegistryPassword(dockerImage);
+        var dockerImageName = GetDockerImageName(dockerImage);
         var dockerImageTag = GetDockerImageTag(dockerImage, VersionNuGet);
         var octopusRepositoryUrl = GetOctopusRepositoryUrl(dockerImage);
         var octopusRepositoryApiKey = GetOctopusRepositoryApiKey(dockerImage);
@@ -234,19 +290,27 @@ private void DeployDockerImages()
         // Note: we are logging in each time because the registry might be different per container
         Information("Logging in to docker @ '{0}'", dockerRegistryUrl);
 
-        DockerLogin(new DockerRegistryLoginSettings
+        var dockerLoginSettings = new DockerRegistryLoginSettings
         {
             Username = dockerRegistryUserName,
             Password = dockerRegistryPassword
-        }, dockerRegistryUrl);
+        };
+
+        ConfigureDockerSettings(dockerLoginSettings);
+
+        DockerLogin(dockerLoginSettings, dockerRegistryUrl);
 
         try
         {
             Information("Pushing docker images with tag '{0}' to '{1}'", dockerImageTag, dockerRegistryUrl);
 
-            DockerPush(new DockerImagePushSettings
+            var dockerImagePushSettings = new DockerImagePushSettings
             {
-            }, dockerImageTag);
+            };
+
+            ConfigureDockerSettings(dockerImagePushSettings);
+
+            DockerPush(dockerImagePushSettings, dockerImageTag);
 
             if (string.IsNullOrWhiteSpace(octopusRepositoryUrl))
             {
@@ -262,7 +326,11 @@ private void DeployDockerImages()
                 ApiKey = octopusRepositoryApiKey,
                 ReleaseNumber = VersionNuGet,
                 DefaultPackageVersion = VersionNuGet,
-                IgnoreExisting = true
+                IgnoreExisting = true,
+                Packages = new Dictionary<string, string>
+                {
+                    { dockerImageName, VersionNuGet }
+                }
             });
 
             Information("Deploying release '{0}' via Octopus Deploy", VersionNuGet);
@@ -283,9 +351,13 @@ private void DeployDockerImages()
         {
             Information("Logging out of docker @ '{0}'", dockerRegistryUrl);
 
-            DockerLogout(new DockerRegistryLogoutSettings
+            var dockerLogoutSettings = new DockerRegistryLogoutSettings
             {
-            }, dockerRegistryUrl);
+            };
+
+            ConfigureDockerSettings(dockerLogoutSettings);
+
+            DockerLogout(dockerLogoutSettings, dockerRegistryUrl);
         }
     }
 }

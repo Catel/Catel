@@ -163,9 +163,7 @@ namespace Catel.Runtime.Serialization
                         return;
                     }
 
-                    SerializeMembers(context, members);
-
-                    AppendContextToStream(context, stream);
+                    SerializeMembersOnly(context, stream, members);
                 }
             }
         }
@@ -212,6 +210,17 @@ namespace Catel.Runtime.Serialization
         /// <param name="context">The context.</param>
         protected virtual void AfterSerialization(ISerializationContext<TSerializationContextInfo> context)
         {
+        }
+
+        private void SerializeMembersOnly(ISerializationContext<TSerializationContextInfo> context, Stream stream, List<MemberValue> membersToSerialize)
+        {
+            BeforeSerialization(context);
+
+            SerializeMembers(context, membersToSerialize);
+
+            AfterSerialization(context);
+
+            AppendContextToStream(context, stream);
         }
 
         /// <summary>

@@ -8,51 +8,51 @@
       <group id="CATEL.MVVM/PROPERTIES/RESOURCES.RESX" datatype="resx">
         <trans-unit id="Apply" translate="yes" xml:space="preserve">
           <source>Apply</source>
-          <target state="new">Apply</target>
+          <target state="translated">Aplicar</target>
         </trans-unit>
         <trans-unit id="Cancel" translate="yes" xml:space="preserve">
           <source>Cancel</source>
-          <target state="new">Cancel</target>
+          <target state="translated">Cancelar</target>
         </trans-unit>
         <trans-unit id="Close" translate="yes" xml:space="preserve">
           <source>Close</source>
-          <target state="new">Close</target>
+          <target state="translated">Cerrar</target>
         </trans-unit>
         <trans-unit id="ErrorTitle" translate="yes" xml:space="preserve">
           <source>Error</source>
-          <target state="new">Error</target>
+          <target state="translated">Error</target>
         </trans-unit>
         <trans-unit id="Failed" translate="yes" xml:space="preserve">
           <source>Failed</source>
-          <target state="new">Failed</target>
+          <target state="translated">Sin éxito</target>
         </trans-unit>
         <trans-unit id="InfoBarMessageControlErrorTitle" translate="yes" xml:space="preserve">
           <source>The following warnings and/or errors were found (hover to view):</source>
-          <target state="new">The following warnings and/or errors were found (hover to view):</target>
+          <target state="translated">Los siguientes errores y/o advertencias fueron encontradas en la información (Coloque el raton encima para desplegar)</target>
         </trans-unit>
         <trans-unit id="InfoTitle" translate="yes" xml:space="preserve">
           <source>Information</source>
-          <target state="new">Information</target>
+          <target state="translated">Información</target>
         </trans-unit>
         <trans-unit id="No" translate="yes" xml:space="preserve">
           <source>No</source>
-          <target state="new">No</target>
+          <target state="translated">No</target>
         </trans-unit>
         <trans-unit id="OK" translate="yes" xml:space="preserve">
           <source>OK</source>
-          <target state="new">OK</target>
+          <target state="translated">OK</target>
         </trans-unit>
         <trans-unit id="PleaseWait" translate="yes" xml:space="preserve">
           <source>Please wait</source>
-          <target state="new">Please wait</target>
+          <target state="translated">Espere por favor</target>
         </trans-unit>
         <trans-unit id="WarningTitle" translate="yes" xml:space="preserve">
           <source>Warning</source>
-          <target state="new">Warning</target>
+          <target state="translated">Advertencia</target>
         </trans-unit>
         <trans-unit id="Yes" translate="yes" xml:space="preserve">
           <source>Yes</source>
-          <target state="new">Yes</target>
+          <target state="translated">Sí</target>
         </trans-unit>
       </group>
     </body>

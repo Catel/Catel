@@ -75,7 +75,7 @@ features are listed below:
 
 This model has automatic change notifications and validation.
 
-```
+```csharp
 public class Person : ValidatableModelBase
 {
     public string FirstName { get; set; }
@@ -104,7 +104,7 @@ This is a view model with:
 - Automatic injection of the DataContext
 - Automatic mapping of properties & validation from model => view model
 
-```
+```csharp
 public class PersonViewModel : ViewModelBase
 {
     public PersonViewModel(Person person)
@@ -125,7 +125,39 @@ public class PersonViewModel : ViewModelBase
 }
 ```
 
+## How to contribute
+
+### Support on Open Collective
+
+Please consider supporting [Catel on Open Collective](https://opencollective.com/catel).
+
+### Translating
+
+To add translations to Catel, the Multilingual App Toolkit (MAT) is required. 
+
+1. Download the [MAT Editor](https://developer.microsoft.com/en-us/windows/develop/multilingual-app-toolkit)
+2. Open your specific language (or create it) in the `MultilingualResources` folder, e.g. `./src/Catel.MVVM/MultilingualResources/Catel.MVVM.nl.xlf`
+3. Edit the xlf file and create a pull request (PR) with only this file
+
 ## Building Catel
+
+**Prerequisites** 
+
+Catel requires Visual Studio 2019 to compile successfully. You also need to ensure you have the following features installed:
+
+Note that the `.vsconfig` in the src root should notify about missing components when opening the solution.
+
+- .NET desktop development
+- Universal Windows Platform development
+- Mobile development with .NET
+- .NET Core cross-platform development
+- Select the following components from Individual components
+  - Windows 10 SDK (10.0.16299.0) 
+  - MSVC v141 and v142 (ARM, ARM64 and x64/x86) 
+  - C++ ATL v141 and v142 (ARM, ARM64 and x86 & x64)  build tools
+  - C++ MFC v141 and v142 (ARM, ARM64 and x86 & x64) build tools
+- [Latest Version of .NET Core 3.0 Preview SDK](https://dotnet.microsoft.com/download/dotnet-core/3.0)
+  - Ensure you enable **Use previews of the .NET Core SDK** under Tools -> Options -> Projects and Solutions -> .NET Core
 
 Note that you should run these commands using powershell in the root of the repository.
 

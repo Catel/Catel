@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UIVisualizerService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
+﻿#if !XAMARIN && !XAMARIN_FORMS
 
 namespace Catel.Services
 {
@@ -94,15 +88,15 @@ namespace Catel.Services
 
             lock (RegisteredWindows)
             {
-                if (RegisteredWindows.ContainsKey(name))
+                if (RegisteredWindows.TryGetValue(name, out var existingRegistration))
                 {
-                    if (throwExceptionIfExists)
+                    if (existingRegistration != windowType && throwExceptionIfExists)
                     {
                         throw new InvalidOperationException($"View model '{name}' already registered");
                     }
                 }
 
-                RegisteredWindows.Add(name, windowType);
+                RegisteredWindows[name] = windowType;
 
                 Log.Debug("Registered view model '{0}' in combination with '{1}' in the UIVisualizerService", name, windowType.FullName);
             }

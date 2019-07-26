@@ -20,6 +20,12 @@ internal static class MethodTimeLogger
             return;
         }
 
+        if (milliseconds == 0)
+        {
+            // Don't log superfast methods
+            return;
+        }
+
         var finalMessage = $"[METHODTIMER] {type.Name}.{methodName} took '{milliseconds}' ms";
 
         if (!string.IsNullOrWhiteSpace(message))

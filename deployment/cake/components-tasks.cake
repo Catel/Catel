@@ -144,7 +144,7 @@ private void BuildComponents()
 
         // SourceLink specific stuff
         var repositoryUrl = RepositoryUrl;
-        if (!IsLocalBuild && !string.IsNullOrWhiteSpace(repositoryUrl))
+        if (!SourceLinkDisabled && !IsLocalBuild && !string.IsNullOrWhiteSpace(repositoryUrl))
         {       
             Information("Repository url is specified, enabling SourceLink to commit '{0}/commit/{1}'", repositoryUrl, RepositoryCommitId);
 

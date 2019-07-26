@@ -1104,7 +1104,15 @@ namespace Catel.MVVM.Providers
         /// <summary>
         /// Closes the view model.
         /// </summary>
-        public async virtual Task CloseViewModelAsync(bool? result)
+        public virtual Task CloseViewModelAsync(bool? result)
+        {
+            return CloseViewModelAsync(result, false);
+        }
+
+        /// <summary>
+        /// Closes and disposes the view model.
+        /// </summary>
+        public async virtual Task CloseViewModelAsync(bool? result, bool dispose)
         {
             var vm = ViewModel;
             if (vm != null)
@@ -1127,6 +1135,15 @@ namespace Catel.MVVM.Providers
                     if (!isClosing && !vm.IsClosed)
                     {
                         await vm.CloseViewModelAsync(result);
+
+                        if (dispose)
+                        {
+                            var disposable = vm as IDisposable;
+                            if (disposable != null)
+                            {
+                                disposable.Dispose();
+                            }
+                        }
                     }
 
                     ViewModel = null;

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Items xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <GenericSerializationFacts.CollectionSerializationFacts.Country xmlns="http://schemas.datacontract.org/2004/07/Catel.Tests.Runtime.Serialization">
+    <Id>19721f5a-b406-4079-89b3-1011005425ae</Id>
+    <IsoCode>AF</IsoCode>
+    <Description>Afghanistan</Description>
+    <CreateDate>0001-01-01T00:00:00</CreateDate>
+    <CreateUserId>00000000-0000-0000-0000-000000000000</CreateUserId>
+    <DeleteDate IsNull="true" />
+    <DeleteUserId IsNull="true" />
+    <IsDeleted>false</IsDeleted>
+    <TimeStamp IsNull="true" />
+    <UpdateDate>0001-01-01T00:00:00</UpdateDate>
+    <UpdateUserId>00000000-0000-0000-0000-000000000000</UpdateUserId>
+  </GenericSerializationFacts.CollectionSerializationFacts.Country>
+  <GenericSerializationFacts.CollectionSerializationFacts.Country xmlns="http://schemas.datacontract.org/2004/07/Catel.Tests.Runtime.Serialization">
+    <Id>19721f5a-b406-4079-89b3-1011005425af</Id>
+    <IsoCode>AG</IsoCode>
+    <Description>Agypt</Description>
+    <CreateDate>0001-01-01T00:00:00</CreateDate>
+    <CreateUserId>00000000-0000-0000-0000-000000000000</CreateUserId>
+    <DeleteDate IsNull="true" />
+    <DeleteUserId IsNull="true" />
+    <IsDeleted>false</IsDeleted>
+    <TimeStamp IsNull="true" />
+    <UpdateDate>0001-01-01T00:00:00</UpdateDate>
+    <UpdateUserId>00000000-0000-0000-0000-000000000000</UpdateUserId>
+  </GenericSerializationFacts.CollectionSerializationFacts.Country>
+</Items>

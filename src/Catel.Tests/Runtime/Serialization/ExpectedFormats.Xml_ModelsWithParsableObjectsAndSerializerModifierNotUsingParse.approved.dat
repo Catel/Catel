@@ -1,4 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<TestModelWithParsableMembersWithoutAttributes graphid="1" xmlns:ctl="http://schemas.catelproject.com">
-  <Vector type="System.String">1|2|3</Vector>
-</TestModelWithParsableMembersWithoutAttributes>
