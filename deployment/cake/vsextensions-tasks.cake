@@ -65,15 +65,6 @@ private void UpdateInfoForVsExtensions()
             { "PackageManifest/Metadata/Identity/@Version", version },
             { "PackageManifest/Metadata/Identity/@Publisher", VsExtensionsPublisherName }
         });
-
-        // Step 2: update vs gallery manifest
-        var vsGalleryManifestFileName = string.Format("{0}\\source.extension.vsgallerymanifest", projectDirectory);
-
-        var fileContents = System.IO.File.ReadAllText(vsGalleryManifestFileName);
-
-        fileContents = fileContents.Replace("[PUBLISHERNAME]", VsExtensionsPublisherName);
-
-        System.IO.File.WriteAllText(vsGalleryManifestFileName, fileContents);
     }
 }
 
@@ -153,6 +144,7 @@ private async Task DeployVsExtensionsAsync()
 
         LogSeparator("Deploying vs extension '{0}'", vsExtension);
 
+        // Step 1: copy the output stuff
         var vsExtensionOutputDirectory = GetProjectOutputDirectory(vsExtension);
         var payloadFileName = string.Format(@"{0}\{1}.vsix", vsExtensionOutputDirectory, vsExtension);
 
@@ -164,6 +156,14 @@ private async Task DeployVsExtensionsAsync()
         var vsGalleryManifestTargetFileName = string.Format(@"{0}\source.extension.vsgallerymanifest", vsExtensionOutputDirectory);
         CopyFile(vsGalleryManifestSourceFileName, vsGalleryManifestTargetFileName);
 
+        // Step 2: update vs gallery manifest
+        var fileContents = System.IO.File.ReadAllText(vsGalleryManifestTargetFileName);
+
+        fileContents = fileContents.Replace("[PUBLISHERNAME]", VsExtensionsPublisherName);
+
+        System.IO.File.WriteAllText(vsGalleryManifestTargetFileName, fileContents);
+
+        // Step 3: go ahead and publish
         StartProcess(vsixPublisherExeFileName, new ProcessSettings 
         {
             Arguments = new ProcessArgumentBuilder()
