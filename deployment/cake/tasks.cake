@@ -11,6 +11,7 @@
 #l "tools-tasks.cake"
 #l "docker-tasks.cake"
 #l "github-pages-tasks.cake"
+#l "vsextensions-tasks.cake"
 #l "tests.cake"
 
 #addin "nuget:?package=System.Net.Http&version=4.3.3"
@@ -37,6 +38,7 @@ ValidateComponentsInput();
 ValidateToolsInput();
 ValidateDockerImagesInput();
 ValidateGitHubPagesInput();
+ValidateVsExtensionsInput();
 
 //-------------------------------------------------------------
 
@@ -96,6 +98,7 @@ Task("Prepare")
     await PrepareForWpfAppsAsync();
     await PrepareForDockerImagesAsync();
     await PrepareForGitHubPagesAsync();
+    await PrepareForVsExtensionsAsync();
 });
 
 //-------------------------------------------------------------
@@ -113,6 +116,7 @@ Task("UpdateInfo")
     UpdateInfoForWpfApps();
     UpdateInfoForDockerImages();
     UpdateInfoForGitHubPages();
+    UpdateInfoForVsExtensions();
 });
 
 //-------------------------------------------------------------
@@ -157,6 +161,7 @@ Task("Build")
     BuildWpfApps();
     BuildDockerImages();
     BuildGitHubPages();
+    BuildVsExtensions();
 
     if (enableSonar)
     {
@@ -263,6 +268,7 @@ Task("Package")
     PackageWpfApps();
     PackageDockerImages();
     PackageGitHubPages();
+    PackageVsExtensions();
 });
 
 //-------------------------------------------------------------
@@ -305,6 +311,7 @@ Task("Deploy")
     await DeployWpfAppsAsync();
     await DeployDockerImagesAsync();
     await DeployGitHubPagesAsync();
+    await DeployVsExtensionsAsync();
 });
 
 //-------------------------------------------------------------

@@ -14,6 +14,8 @@ public enum TargetType
 
     UwpApp,
 
+    VsExtension,
+
     WebApp,
 
     WpfApp
@@ -156,14 +158,16 @@ private void ConfigureMsBuildForDotNetCore(DotNetCoreMSBuildSettings msBuildSett
 
 //-------------------------------------------------------------
 
-private string GetVisualStudioPath(bool? allowVsPrerelease = null)
+private string GetVisualStudioDirectory(bool? allowVsPrerelease = null)
 {
+    // TODO: Support different editions (e.g. Professional, Enterprise, Community, etc)
+
     if ((allowVsPrerelease ?? true) && UseVisualStudioPrerelease)
     {
         Debug("Checking for installation of Visual Studio 2019 preview");
 
-        var pathFor2019Preview = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Preview\MSBuild\Current\Bin\msbuild.exe";
-        if (System.IO.File.Exists(pathFor2019Preview))
+        var pathFor2019Preview = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Preview\";
+        if (System.IO.Directory.Exists(pathFor2019Preview))
         {
            Information("Using Visual Studio 2019 preview, note that SonarQube will be disabled since it's not (yet) compatible with VS2019");
            SonarDisabled = true;
@@ -172,8 +176,8 @@ private string GetVisualStudioPath(bool? allowVsPrerelease = null)
 
         Debug("Checking for installation of Visual Studio 2017 preview");
 
-        var pathFor2017Preview = @"C:\Program Files (x86)\Microsoft Visual Studio\Preview\Professional\MSBuild\15.0\Bin\msbuild.exe";
-        if (System.IO.File.Exists(pathFor2017Preview))
+        var pathFor2017Preview = @"C:\Program Files (x86)\Microsoft Visual Studio\Preview\Professional\";
+        if (System.IO.Directory.Exists(pathFor2017Preview))
         {
             Information("Using Visual Studio 2017 preview");
             return pathFor2017Preview;
@@ -182,8 +186,8 @@ private string GetVisualStudioPath(bool? allowVsPrerelease = null)
     
     Debug("Checking for installation of Visual Studio 2019");
 
-    var pathFor2019 = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\MSBuild\Current\Bin\msbuild.exe";
-    if (System.IO.File.Exists(pathFor2019))
+    var pathFor2019 = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\";
+    if (System.IO.Directory.Exists(pathFor2019))
     {
        Information("Using Visual Studio 2019");
        return pathFor2019;
@@ -191,8 +195,8 @@ private string GetVisualStudioPath(bool? allowVsPrerelease = null)
 
     Debug("Checking for installation of Visual Studio 2017");
 
-    var pathFor2017 = @"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\msbuild.exe";
-    if (System.IO.File.Exists(pathFor2017))
+    var pathFor2017 = @"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\";
+    if (System.IO.Directory.Exists(pathFor2017))
     {
         Information("Using Visual Studio 2017");
         return pathFor2017;
@@ -200,6 +204,30 @@ private string GetVisualStudioPath(bool? allowVsPrerelease = null)
 
     // Failed
     return null;
+}
+
+//-------------------------------------------------------------
+
+private string GetVisualStudioPath(bool? allowVsPrerelease = null)
+{
+    var potentialPaths = new []
+    {
+        @"MSBuild\Current\Bin\msbuild.exe",
+        @"MSBuild\15.0\Bin\msbuild.exe"
+    };
+
+    var directory = GetVisualStudioDirectory(allowVsPrerelease);
+
+    foreach (var potentialPath in potentialPaths)
+    {
+        var pathToCheck = string.Format(@"{0}\{1}", directory, potentialPath);
+        if (System.IO.File.Exists(pathToCheck))
+        {
+            return pathToCheck;
+        }
+    }
+
+    throw new Exception("Could not find the path to Visual Studio (msbuild.exe)");
 }
 
 //-------------------------------------------------------------
