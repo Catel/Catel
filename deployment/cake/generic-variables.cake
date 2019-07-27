@@ -33,6 +33,7 @@ var StartYear = GetBuildServerVariable("StartYear", showValue: true);
 var VersionMajorMinorPatch = GetBuildServerVariable("GitVersion_MajorMinorPatch", "unknown", showValue: true);
 var VersionFullSemVer = GetBuildServerVariable("GitVersion_FullSemVer", "unknown", showValue: true);
 var VersionNuGet = GetBuildServerVariable("GitVersion_NuGetVersion", "unknown", showValue: true);
+var VersionCommitsSinceVersionSource = GetBuildServerVariable("GitVersion_CommitsSinceVersionSource", "unknown", showValue: true);
 
 // NuGet
 var NuGetPackageSources = GetBuildServerVariable("NuGetPackageSources", showValue: true);
@@ -106,7 +107,10 @@ if (VersionNuGet == "unknown")
     VersionMajorMinorPatch = gitVersion.MajorMinorPatch;
     VersionFullSemVer = gitVersion.FullSemVer;
     VersionNuGet = gitVersion.NuGetVersionV2;
+    VersionCommitsSinceVersionSource = (gitVersion.CommitsSinceVersionSource ?? 0).ToString();
 }
+
+Information("Defined version: '{0}', commits since version source: '{1}'", VersionFullSemVer, VersionCommitsSinceVersionSource);
 
 if (string.IsNullOrWhiteSpace(RepositoryCommitId))
 {
