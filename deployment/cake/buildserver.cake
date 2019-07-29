@@ -32,7 +32,7 @@ public void SetBuildServerVariable(string variableName, string value)
 
 //-------------------------------------------------------------
 
-public bool GetBuildServerVariableAsBool(string variableName, bool defaultValue = null, bool showValue = false)
+public bool GetBuildServerVariableAsBool(string variableName, bool defaultValue, bool showValue = false)
 {
     var value = defaultValue;
 
