@@ -72,7 +72,7 @@ private async Task PrepareForComponentsAsync()
 
                 Information("Deleting already existing NuGet cached version from '{0}'", cacheDirectory);
                 
-                DeleteDirectory(cacheDirectory, new DeleteDirectorySettings()
+                DeleteDirectory(cacheDirectory, new DeleteDirectorySettings
                 {
                     Force = true,
                     Recursive = true

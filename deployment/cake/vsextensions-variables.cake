@@ -1,6 +1,6 @@
 #l "buildserver.cake"
 
-var VsExtensionsPublisherName = GetBuildServerVariable("VsExtensionsPublisherName", showValue: false);
+var VsExtensionsPublisherName = GetBuildServerVariable("VsExtensionsPublisherName", showValue: true);
 var VsExtensionsPersonalAccessToken = GetBuildServerVariable("VsExtensionsPersonalAccessToken", showValue: false);
 
 //-------------------------------------------------------------

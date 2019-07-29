@@ -23,6 +23,8 @@
 
 //-------------------------------------------------------------
 
+Initialize();
+
 Information("Running target '{0}'", Target);
 Information("Using output directory '{0}'", OutputRootDirectory);
 
@@ -39,6 +41,106 @@ ValidateToolsInput();
 ValidateDockerImagesInput();
 ValidateGitHubPagesInput();
 ValidateVsExtensionsInput();
+
+//-------------------------------------------------------------
+
+public void Initialize()
+{
+    LogSeparator("Initializing versioning");
+
+    if (string.IsNullOrWhiteSpace(VersionNuGet) || VersionNuGet == "unknown")
+    {
+        Information("No version info specified, falling back to GitVersion");
+
+        var gitVersion = GitVersionContext;
+        
+        VersionMajorMinorPatch = gitVersion.MajorMinorPatch;
+        VersionFullSemVer = gitVersion.FullSemVer;
+        VersionNuGet = gitVersion.NuGetVersionV2;
+        VersionCommitsSinceVersionSource = (gitVersion.CommitsSinceVersionSource ?? 0).ToString();
+    }
+
+    var versionToCheck = VersionFullSemVer;
+    if (versionToCheck.Contains("alpha"))
+    {
+        IsAlphaBuild = true;
+    }
+    else if (versionToCheck.Contains("beta"))
+    {
+        IsBetaBuild = true;
+    }
+    else
+    {
+        IsOfficialBuild = true;
+    }
+
+    Information("Defined version: '{0}', commits since version source: '{1}'", VersionFullSemVer, VersionCommitsSinceVersionSource);
+
+    if (string.IsNullOrWhiteSpace(RepositoryCommitId))
+    {
+        Information("No commit id specified, falling back to GitVersion");
+
+        var gitVersion = GitVersionContext;
+
+        RepositoryCommitId = gitVersion.Sha;
+    }
+
+    OutputRootDirectory = System.IO.Path.GetFullPath(OutputRootDirectory);
+
+    LogSeparator("Initializing the state of the build");
+
+    // Determine some special variables
+    Channel = DetermineChannel();
+    PublishType = DeterminePublishType();
+
+    Information($"IsAlphaBuild: {IsAlphaBuild}");
+    Information($"IsBetaBuild: {IsBetaBuild}");
+    Information($"IsOfficialBuild: {IsOfficialBuild}");
+    Information($"Channel: {Channel}");
+    Information($"PublishType: {PublishType}");
+}
+
+//-------------------------------------------------------------
+
+private string DetermineChannel()
+{
+    var version = VersionFullSemVer;
+
+    var channel = "stable";
+
+    if (IsAlphaBuild)
+    {
+        channel = "alpha";
+    }
+    else if (IsBetaBuild)
+    {
+        channel = "beta";
+    }
+
+    return channel;
+}
+
+//-------------------------------------------------------------
+
+private string DeterminePublishType()
+{
+    var publishType = "Unknown";
+
+    if (IsOfficialBuild)
+    {
+        publishType = "Official";
+    }
+    else if (IsBetaBuild)
+    {
+        publishType = "Beta";
+    }
+    else if (IsAlphaBuild)
+    {
+        publishType = "Alpha";
+    }
+    
+    return publishType;
+}
 
 //-------------------------------------------------------------
 
@@ -85,6 +187,40 @@ private void BuildTestProjects()
         MSBuild(projectFileName, msBuildSettings);
     }
 }
+
+//-------------------------------------------------------------
+
+Task("Initialize")
+    .Does(async () =>
+{
+    LogSeparator("Writing special values back to build server");
+
+    var displayVersion = VersionFullSemVer;
+    if (IsCiBuild)
+    {
+        displayVersion += " ci";
+    }
+
+    SetBuildServerVersion(displayVersion);
+
+    var variablesToUpdate = new Dictionary<string, string>();
+    variablesToUpdate["channel"] = Channel;
+    variablesToUpdate["publishType"] = PublishType.ToString();
+    variablesToUpdate["isAlphaBuild"] = IsAlphaBuild.ToString();
+    variablesToUpdate["isBetaBuild"] = IsBetaBuild.ToString();
+    variablesToUpdate["isOfficialBuild"] = IsOfficialBuild.ToString();
+
+    // Also write back versioning (then it can be cached), "worst case scenario" it's writing back the same versions
+    variablesToUpdate["GitVersion_MajorMinorPatch"] = VersionMajorMinorPatch;
+    variablesToUpdate["GitVersion_FullSemVer"] = VersionFullSemVer;
+    variablesToUpdate["GitVersion_NuGetVersion"] = VersionNuGet;
+    variablesToUpdate["GitVersion_CommitsSinceVersionSource"] = VersionCommitsSinceVersionSource;
+
+    foreach (var variableToUpdate in variablesToUpdate)
+    {
+        SetBuildServerVariable(variableToUpdate.Key, variableToUpdate.Value);
+    }
+});
 
 //-------------------------------------------------------------
 
@@ -332,12 +468,14 @@ Task("Finalize")
 //-------------------------------------------------------------
 
 Task("BuildAndTest")
+    .IsDependentOn("Initialize")
     .IsDependentOn("Build")
     .IsDependentOn("Test");
 
 //-------------------------------------------------------------
 
 Task("BuildAndPackage")
+    .IsDependentOn("Initialize")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .IsDependentOn("Package");
@@ -345,6 +483,7 @@ Task("BuildAndPackage")
 //-------------------------------------------------------------
 
 Task("BuildAndPackageLocal")
+    .IsDependentOn("Initialize")
     .IsDependentOn("Build")
     //.IsDependentOn("Test") // Note: don't test for performance on local builds
     .IsDependentOn("PackageLocal");
@@ -352,6 +491,7 @@ Task("BuildAndPackageLocal")
 //-------------------------------------------------------------
 
 Task("BuildAndDeploy")
+    .IsDependentOn("Initialize")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .IsDependentOn("Package")
