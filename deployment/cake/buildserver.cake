@@ -18,6 +18,20 @@ Dictionary<string, string> _buildServerVariableCache = null;
 
 //-------------------------------------------------------------
 
+public void SetBuildServerVersion(string version)
+{
+    SetContinuaCIVersion(version);
+}
+
+//-------------------------------------------------------------
+
+public void SetBuildServerVariable(string variableName, string value)
+{
+    SetContinuaCIVariable(variableName, value);
+}
+
+//-------------------------------------------------------------
+
 public string GetBuildServerVariable(string variableName, string defaultValue = null, bool showValue = false)
 {
     if (_buildServerVariableCache == null)
