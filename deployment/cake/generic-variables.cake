@@ -78,10 +78,10 @@ var NuGetLocalPackagesDirectory = "c:\\source\\_packages";
 var SolutionName = GetBuildServerVariable("SolutionName", showValue: true);
 var SolutionAssemblyInfoFileName = "./src/SolutionAssemblyInfo.cs";
 var SolutionFileName = string.Format("./src/{0}", string.Format("{0}.sln", SolutionName));
-var IsCiBuild = bool.Parse(GetBuildServerVariable("IsCiBuild", "False", showValue: true));
-var IsAlphaBuild = bool.Parse(GetBuildServerVariable("IsAlphaBuild", "False", showValue: true));
-var IsBetaBuild = bool.Parse(GetBuildServerVariable("IsBetaBuild", "False", showValue: true));
-var IsOfficialBuild = bool.Parse(GetBuildServerVariable("IsOfficialBuild", "False", showValue: true));
+var IsCiBuild = GetBuildServerVariableAsBool("IsCiBuild", false, showValue: true);
+var IsAlphaBuild = GetBuildServerVariableAsBool("IsAlphaBuild", false, showValue: true);
+var IsBetaBuild = GetBuildServerVariableAsBool("IsBetaBuild", false, showValue: true);
+var IsOfficialBuild = GetBuildServerVariableAsBool("IsOfficialBuild", false, showValue: true);
 var IsLocalBuild = Target.ToLower().Contains("local");
 var PublishType = GetBuildServerVariable("PublishType", "Unknown", showValue: true);
 var ConfigurationName = GetBuildServerVariable("ConfigurationName", "Release", showValue: true);
@@ -97,7 +97,7 @@ var RootDirectory = System.IO.Path.GetFullPath(".");
 var OutputRootDirectory = GetBuildServerVariable("OutputRootDirectory", string.Format("./output/{0}", ConfigurationName), showValue: true);
 
 // SourceLink
-var SourceLinkDisabled = bool.Parse(GetBuildServerVariable("SourceLinkDisabled", "False", showValue: true));
+var SourceLinkDisabled = GetBuildServerVariableAsBool("SourceLinkDisabled", false, showValue: true);
 
 // Code signing
 var CodeSignWildCard = GetBuildServerVariable("CodeSignWildcard", showValue: true);
@@ -112,17 +112,17 @@ var RepositoryUsername = GetBuildServerVariable("RepositoryUsername", showValue:
 var RepositoryPassword = GetBuildServerVariable("RepositoryPassword", showValue: false);
 
 // Dependency checks
-var DependencyCheckDisabled = bool.Parse(GetBuildServerVariable("DependencyCheckDisabled", "False", showValue: true));
+var DependencyCheckDisabled = GetBuildServerVariableAsBool("DependencyCheckDisabled", false, showValue: true);
 
 // SonarQube
-var SonarDisabled = bool.Parse(GetBuildServerVariable("SonarDisabled", "False", showValue: true));
+var SonarDisabled = GetBuildServerVariableAsBool("SonarDisabled", false, showValue: true);
 var SonarUrl = GetBuildServerVariable("SonarUrl", showValue: true);
 var SonarUsername = GetBuildServerVariable("SonarUsername", showValue: false);
 var SonarPassword = GetBuildServerVariable("SonarPassword", showValue: false);
 var SonarProject = GetBuildServerVariable("SonarProject", SolutionName, showValue: true);
 
 // Visual Studio
-var UseVisualStudioPrerelease = bool.Parse(GetBuildServerVariable("UseVisualStudioPrerelease", "False", showValue: true));
+var UseVisualStudioPrerelease = GetBuildServerVariableAsBool("UseVisualStudioPrerelease", false, showValue: true);
 
 // Testing
 var TestProcessBit = GetBuildServerVariable("TestProcessBit", "X86", showValue: true);

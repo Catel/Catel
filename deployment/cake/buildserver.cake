@@ -32,6 +32,20 @@ public void SetBuildServerVariable(string variableName, string value)
 
 //-------------------------------------------------------------
 
+public bool GetBuildServerVariableAsBool(string variableName, bool defaultValue = null, bool showValue = false)
+{
+    var value = defaultValue;
+
+    if (bool.TryParse(GetBuildServerVariable(variableName, "unknown", showValue: showValue), out var retrievedValue))
+    {
+        value = retrievedValue;
+    }
+
+    return value;
+}
+
+//-------------------------------------------------------------
+
 public string GetBuildServerVariable(string variableName, string defaultValue = null, bool showValue = false)
 {
     if (_buildServerVariableCache == null)

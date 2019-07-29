@@ -3,7 +3,7 @@
 // Generic
 var DeploymentsShare = GetBuildServerVariable("DeploymentsShare", showValue: true);
 var Channel = GetBuildServerVariable("Channel", showValue: true);
-var UpdateDeploymentsShare = bool.Parse(GetBuildServerVariable("UpdateDeploymentsShare", "true", showValue: true));
+var UpdateDeploymentsShare = GetBuildServerVariableAsBool("UpdateDeploymentsShare", true, showValue: true);
 
 // Inno Setup
 
