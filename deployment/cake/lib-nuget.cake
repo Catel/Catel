@@ -16,7 +16,7 @@ public class NuGetServer
 
 //-------------------------------------------------------------
 
-public List<NuGetServer> GetNuGetServers(string urls, string apiKeys)
+public static List<NuGetServer> GetNuGetServers(string urls, string apiKeys)
 {
     var splittedUrls = urls.Split(new [] { ";" }, StringSplitOptions.None);
     var splittedApiKeys = apiKeys.Split(new [] { ";" }, StringSplitOptions.None);

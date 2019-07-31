@@ -4,11 +4,30 @@
 
 //-------------------------------------------------------------
 
-public async Task CreateAndReleaseVersionAsync()
+public interface IIssueTracker
 {
-    LogSeparator("Creating and releasing version");
+    Task CreateAndReleaseVersionAsync();
+}
 
-    await CreateAndReleaseVersionInJiraAsync();
+//-------------------------------------------------------------
 
-    // TODO: Add more issue tracker integrations (such as GitHub)
+public class IssueTrackerIntegration : IntegrationBase
+{
+    private readonly List<IIssueTracker> _issueTrackers = new List<IIssueTracker>();
+
+    public IssueTrackerIntegration(BuildContext buildContext)
+        : base(buildContext)
+    {
+        _issueTrackers.Add(new JiraIssueTracker(buildContext));
+    }
+
+    public async Task CreateAndReleaseVersionAsync()
+    {
+        BuildContext.CakeContext.LogSeparator("Creating and releasing version");
+
+        foreach (var issueTracker in _issueTrackers)
+        {
+            await issueTracker.CreateAndReleaseVersionAsync();
+        }
+    }
 }

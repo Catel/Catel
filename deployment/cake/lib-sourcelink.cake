@@ -1,4 +1,4 @@
-public void InjectSourceLinkInProjectFile(string projectFileName)
+public static void InjectSourceLinkInProjectFile(BuildContext buildContext, string projectFileName)
 {
     // For SourceLink to work, the .csproj should contain something like this:
     // <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="all" />
@@ -8,7 +8,7 @@ public void InjectSourceLinkInProjectFile(string projectFileName)
         return;
     }
 
-    Warning("No SourceLink reference found, automatically injecting SourceLink package reference now");
+    buildContext.CakeContext.Warning("No SourceLink reference found, automatically injecting SourceLink package reference now");
 
     //const string MSBuildNS = (XNamespace) "http://schemas.microsoft.com/developer/msbuild/2003";
 
@@ -31,19 +31,19 @@ public void InjectSourceLinkInProjectFile(string projectFileName)
     var sourceRoot = new XElement("SourceRoot");
 
     // Required to end with a \
-    var sourceRootValue = RootDirectory;
+    var sourceRootValue = buildContext.General.RootDirectory;
     if (!sourceRootValue.EndsWith("\\"))
     {
         sourceRootValue += "\\";
     };
 
     sourceRoot.Add(new XAttribute("Include", sourceRootValue));
-    sourceRoot.Add(new XAttribute("RepositoryUrl", RepositoryUrl));
+    sourceRoot.Add(new XAttribute("RepositoryUrl", buildContext.General.Repository.Url));
 
     // Note: since we are not allowing source control manager queries (we don't want to require a .git directory),
     // we must specify the additional information below
     sourceRoot.Add(new XAttribute("SourceControl", "git"));
-    sourceRoot.Add(new XAttribute("RevisionId", RepositoryCommitId));
+    sourceRoot.Add(new XAttribute("RevisionId", buildContext.General.Repository.CommitId));
 
     sourceRootItemGroup.Add(sourceRoot);
     projectElement.Add(sourceRootItemGroup);
@@ -51,5 +51,5 @@ public void InjectSourceLinkInProjectFile(string projectFileName)
     xmlDocument.Save(projectFileName);
 
     // Restore packages again for the dynamic package
-    RestoreNuGetPackages(projectFileName);
+    RestoreNuGetPackages(buildContext, projectFileName);
 }

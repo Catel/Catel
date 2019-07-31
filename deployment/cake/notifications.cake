@@ -12,23 +12,42 @@ public enum NotificationType
 
 //-------------------------------------------------------------
 
-public async Task NotifyDefaultAsync(string project, string message, TargetType targetType = TargetType.Unknown)
+public interface INotifier
 {
-    await NotifyAsync(project, message, targetType, NotificationType.Info);
+    Task NotifyAsync(string project, string message, TargetType targetType = TargetType.Unknown, NotificationType notificationType = NotificationType.Info);
 }
 
 //-------------------------------------------------------------
 
-public async Task NotifyErrorAsync(string project, string message, TargetType targetType = TargetType.Unknown)
+public class NotificationsIntegration : IntegrationBase
 {
-    await NotifyAsync(project, string.Format("ERROR: {0}", message), targetType, NotificationType.Error);
-}
+    private readonly List<INotifier> _notifiers = new List<INotifier>();
 
-//-------------------------------------------------------------
+    public NotificationsIntegration(BuildContext buildContext)
+        : base(buildContext)
+    {
+        _notifiers.Add(new MsTeamsNotifier(buildContext));
+    }
 
-public async Task NotifyAsync(string project, string message, TargetType targetType = TargetType.Unknown, NotificationType notificationType = NotificationType.Info)
-{
-    await NotifyMsTeamsAsync(project, message, targetType, notificationType);
+    public async Task NotifyDefaultAsync(string project, string message, TargetType targetType = TargetType.Unknown)
+    {
+        await NotifyAsync(project, message, targetType, NotificationType.Info);
+    }
 
-    // TODO: Add more notification systems here such as Slack
+    //-------------------------------------------------------------
+
+    public async Task NotifyErrorAsync(string project, string message, TargetType targetType = TargetType.Unknown)
+    {
+        await NotifyAsync(project, string.Format("ERROR: {0}", message), targetType, NotificationType.Error);
+    }
+
+    //-------------------------------------------------------------
+
+    public async Task NotifyAsync(string project, string message, TargetType targetType = TargetType.Unknown, NotificationType notificationType = NotificationType.Info)
+    {
+        foreach (var notifier in _notifiers)
+        {
+            await notifier.NotifyAsync(project, message, targetType, notificationType);
+        }
+    }
 }
