@@ -1,53 +1,86 @@
-public void SetContinuaCIVersion(string version)
+public class ContinuaCIBuildServer : IBuildServer
 {
-    if (ContinuaCI.IsRunningOnContinuaCI)
+    public ContinuaCIBuildServer(ICakeContext cakeContext)
     {
-        Information("Setting version '{0}' in Continua CI", version);
+        CakeContext = cakeContext;
+    }
+
+    public ICakeContext CakeContext { get; private set; }
+
+    public void PinBuild(string comment)
+    {
+        var continuaCIContext = GetContinuaCIContext();
+        if (!continuaCIContext.IsRunningOnContinuaCI)
+        {
+            return;
+        }
+
+        CakeContext.Information("Pinning build in Continua CI");
+
+        var message = string.Format("@@continua[pinBuild comment='{0}' appendComment='{1}']", 
+            comment, !string.IsNullOrWhiteSpace(comment));
+        WriteIntegration(message);
+    }
+
+    public void SetVersion(string version)
+    {
+        var continuaCIContext = GetContinuaCIContext();
+        if (!continuaCIContext.IsRunningOnContinuaCI)
+        {
+            return;
+        }
+
+        CakeContext.Information("Setting version '{0}' in Continua CI", version);
 
         var message = string.Format("@@continua[setBuildVersion value='{0}']", version);
-        WriteContinuaCiIntegration(message);
+        WriteIntegration(message);
     }
-}
 
-//-------------------------------------------------------------
-
-public void SetContinuaCIVariable(string variableName, string value)
-{
-    if (ContinuaCI.IsRunningOnContinuaCI)
+    public void SetVariable(string variableName, string value)
     {
-        Information("Setting variable '{0}' to '{1}' in Continua CI", variableName, value);
+        var continuaCIContext = GetContinuaCIContext();
+        if (!continuaCIContext.IsRunningOnContinuaCI)
+        {
+            return;
+        }
+
+        CakeContext.Information("Setting variable '{0}' to '{1}' in Continua CI", variableName, value);
     
         var message = string.Format("@@continua[setVariable name='{0}' value='{1}' skipIfNotDefined='true']", variableName, value);
-        WriteContinuaCiIntegration(message);
+        WriteIntegration(message);
     }
-}
 
-//-------------------------------------------------------------
-
-public Tuple<bool, string> GetContinuaCIVariable(string variableName, string defaultValue)
-{
-    var exists = false;
-    var value = string.Empty;
-
-    if (ContinuaCI.IsRunningOnContinuaCI)
+    public Tuple<bool, string> GetVariable(string variableName, string defaultValue)
     {
-        var buildServerVariables = ContinuaCI.Environment.Variable;
+        var continuaCIContext = GetContinuaCIContext();
+        if (!continuaCIContext.IsRunningOnContinuaCI)
+        {
+            return new Tuple<bool, string>(false, string.Empty);
+        }
+
+        var exists = false;
+        var value = string.Empty;
+
+        var buildServerVariables = continuaCIContext.Environment.Variable;
         if (buildServerVariables.ContainsKey(variableName))
         {
-            Information("Variable '{0}' is specified via Continua CI", variableName);
+            CakeContext.Information("Variable '{0}' is specified via Continua CI", variableName);
         
             exists = true;
             value = buildServerVariables[variableName];
         }
+        
+        return new Tuple<bool, string>(exists, value);
     }
 
-    return new Tuple<bool, string>(exists, value);
-}
+    private IContinuaCIProvider GetContinuaCIContext()
+    {
+        return CakeContext.ContinuaCI();
+    }
 
-//-------------------------------------------------------------
-
-private void WriteContinuaCiIntegration(string message)
-{
-    // Must be Console.WriteLine
-    Information(message);
+    private void WriteIntegration(string message)
+    {
+        // Must be Console.WriteLine
+        CakeContext.Information(message);
+    }
 }

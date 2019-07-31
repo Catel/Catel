@@ -1,16 +1,46 @@
 #l "buildserver.cake"
 
-// Generic
-var DeploymentsShare = GetBuildServerVariable("DeploymentsShare", showValue: true);
-var Channel = GetBuildServerVariable("Channel", showValue: true);
-var UpdateDeploymentsShare = GetBuildServerVariableAsBool("UpdateDeploymentsShare", true, showValue: true);
+//-------------------------------------------------------------
 
-// Inno Setup
+public class WpfContext : BuildContextWithItemsBase
+{
+    public WpfContext(IBuildContext parentBuildContext)
+        : base(parentBuildContext)
+    {
+    }
 
-// Squirrel
 
-// Azure sync
-var AzureDeploymentsStorageConnectionString = GetBuildServerVariable("AzureDeploymentsStorageConnectionString");
+    public string DeploymentsShare { get; set; }
+    public string Channel { get; set; }
+    public bool UpdateDeploymentsShare { get; set; }
+    public string AzureDeploymentsStorageConnectionString { get; set; }
+
+    protected override void ValidateContext()
+    {
+
+    }
+    
+    protected override void LogStateInfoForContext()
+    {
+        CakeContext.Information($"Found '{Items.Count}' wpf projects");
+    }
+}
+
+//-------------------------------------------------------------
+
+private WpfContext InitializeWpfContext(BuildContext buildContext, IBuildContext parentBuildContext)
+{
+    var data = new WpfContext(parentBuildContext)
+    {
+        Items = WpfApps ?? new List<string>(),
+        DeploymentsShare = buildContext.BuildServer.GetVariable("DeploymentsShare", showValue: true),
+        Channel = buildContext.BuildServer.GetVariable("Channel", showValue: true),
+        UpdateDeploymentsShare = buildContext.BuildServer.GetVariableAsBool("UpdateDeploymentsShare", true, showValue: true),
+        AzureDeploymentsStorageConnectionString = buildContext.BuildServer.GetVariable("AzureDeploymentsStorageConnectionString")
+    };
+
+    return data;
+}
 
 //-------------------------------------------------------------
 
