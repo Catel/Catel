@@ -95,6 +95,8 @@ public class VersionContext : BuildContextBase
                 gitVersionSettings.Url = generalContext.Repository.Url;
                 gitVersionSettings.Branch = generalContext.Repository.BranchName;
                 gitVersionSettings.Commit = generalContext.Repository.CommitId;
+                gitVersionSettings.NoFetch = false;
+                gitVersionSettings.WorkingDirectory = generalContext.RootDirectory;
             }
 
             _gitVersionContext = CakeContext.GitVersion(gitVersionSettings);
