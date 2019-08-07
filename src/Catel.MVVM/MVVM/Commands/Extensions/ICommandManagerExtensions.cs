@@ -98,7 +98,8 @@ namespace Catel
 
             var commandContainerName = string.Format("{0}CommandContainer", commandName.Replace(".", string.Empty));
 
-            var commandContainerType = (from type in TypeCache.GetTypes(allowInitialization: false)
+            // https://github.com/Catel/Catel/issues/1383: CommandManager.CreateCommandWithGesture does not create CommandContainer
+            var commandContainerType = (from type in TypeCache.GetTypes(allowInitialization: true)
                                         where string.Equals(type.Name, commandContainerName, StringComparison.OrdinalIgnoreCase)
                                         select type).FirstOrDefault();
             if (commandContainerType is null)
