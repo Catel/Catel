@@ -48,7 +48,7 @@ namespace Catel.Tests.Reflection
         [TestCase]
         public void VersionWithSeparatorAutomatic()
         {
-            string expected = VersionPrefix;
+            string expected = VersionPrefix.Substring(0, VersionPrefix.IndexOf(".", 2));
 
             var result = Assembly.Version(1);
 
