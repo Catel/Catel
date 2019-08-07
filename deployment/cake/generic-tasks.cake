@@ -21,15 +21,6 @@ private void ValidateRequiredInput(string parameterName)
 
 //-------------------------------------------------------------
 
-private void ValidateGenericInput()
-{
-    ValidateRequiredInput("SolutionName");
-    ValidateRequiredInput("Company");
-    ValidateRequiredInput("RepositoryUrl");
-}
-
-//-------------------------------------------------------------
-
 private void CleanUpCode(bool failOnChanges)
 {
     Information("Cleaning up code using dotnet-format");
@@ -75,38 +66,41 @@ private void VerifyDependencies(string pathToScan = "./src/**/*.csproj")
 
 //-------------------------------------------------------------
 
-private void UpdateSolutionAssemblyInfo()
+private void UpdateSolutionAssemblyInfo(BuildContext buildContext)
 {
-    Information("Updating assembly info to '{0}'", VersionFullSemVer);
+    Information("Updating assembly info to '{0}'", buildContext.General.Version.FullSemVer);
 
-    var assemblyInfoParseResult = ParseAssemblyInfo(SolutionAssemblyInfoFileName);
+    var assemblyInfoParseResult = ParseAssemblyInfo(buildContext.General.Solution.AssemblyInfoFileName);
 
     var assemblyInfo = new AssemblyInfoSettings 
     {
-        Company = assemblyInfoParseResult.Company,
-        Version = VersionMajorMinorPatch,
-        FileVersion = VersionMajorMinorPatch,
-        InformationalVersion = VersionFullSemVer,
-        Copyright = string.Format("Copyright © {0} {1} - {2}", Company, StartYear, DateTime.Now.Year)
+        Company = buildContext.General.Copyright.Company,
+        Version = buildContext.General.Version.MajorMinorPatch,
+        FileVersion = buildContext.General.Version.MajorMinorPatch,
+        InformationalVersion = buildContext.General.Version.FullSemVer,
+        Copyright = string.Format("Copyright © {0} {1} - {2}", 
+            buildContext.General.Copyright.Company, buildContext.General.Copyright.StartYear, DateTime.Now.Year)
     };
 
-    CreateAssemblyInfo(SolutionAssemblyInfoFileName, assemblyInfo);
+    CreateAssemblyInfo(buildContext.General.Solution.AssemblyInfoFileName, assemblyInfo);
 }
 
 //-------------------------------------------------------------
 
 Task("UpdateNuGet")
     .ContinueOnError()
-    .Does(() => 
+    .Does<BuildContext>(buildContext => 
 {
     Information("Making sure NuGet is using the latest version");
 
-    var exitCode = StartProcess(NuGetExe, new ProcessSettings
+    var nuGetExecutable = buildContext.General.NuGet.Executable;
+
+    var exitCode = StartProcess(nuGetExecutable, new ProcessSettings
     {
         Arguments = "update -self"
     });
 
-    var newNuGetVersionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(NuGetExe);
+    var newNuGetVersionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(nuGetExecutable);
     var newNuGetVersion = newNuGetVersionInfo.FileVersion;
 
     Information("Updating NuGet.exe exited with '{0}', version is '{1}'", exitCode, newNuGetVersion);
@@ -117,7 +111,7 @@ Task("UpdateNuGet")
 Task("RestorePackages")
     .IsDependentOn("UpdateNuGet")
     .ContinueOnError()
-    .Does(() =>
+    .Does<BuildContext>(buildContext =>
 {
     var projects = GetFiles("./**/*.csproj");
     var solutions = GetFiles("./**/*.sln");
@@ -128,7 +122,7 @@ Task("RestorePackages")
 
     foreach(var file in allFiles)
     {
-        RestoreNuGetPackages(file);
+        RestoreNuGetPackages(buildContext, file);
     }
 });
 
@@ -141,7 +135,7 @@ Task("RestorePackages")
 Task("Clean")
     .IsDependentOn("RestorePackages")
     .ContinueOnError()
-    .Does(() => 
+    .Does<BuildContext>(buildContext => 
 {
     var platforms = new Dictionary<string, PlatformTarget>();
     platforms["AnyCPU"] = PlatformTarget.MSIL;
@@ -159,16 +153,16 @@ Task("Clean")
             {
                 Verbosity = Verbosity.Minimal,
                 ToolVersion = MSBuildToolVersion.Default,
-                Configuration = ConfigurationName,
+                Configuration = buildContext.General.Solution.ConfigurationName,
                 MSBuildPlatform = MSBuildPlatform.x86, // Always require x86, see platform for actual target platform
                 PlatformTarget = platform.Value
             };
 
-            ConfigureMsBuild(msBuildSettings, platform.Key, "clean");
+            ConfigureMsBuild(buildContext, msBuildSettings, platform.Key, "clean");
 
             msBuildSettings.Targets.Add("Clean");
 
-            MSBuild(SolutionFileName, msBuildSettings);
+            MSBuild(buildContext.General.Solution.FileName, msBuildSettings);
         }
         catch (System.Exception ex)
         {
@@ -176,9 +170,10 @@ Task("Clean")
         }
     }
 
-    if (DirectoryExists(OutputRootDirectory))
+    var outputDirectory = buildContext.General.OutputRootDirectory;
+    if (DirectoryExists(outputDirectory))
     {
-        DeleteDirectory(OutputRootDirectory, new DeleteDirectorySettings()
+        DeleteDirectory(outputDirectory, new DeleteDirectorySettings()
         {
             Force = true,
             Recursive = true
@@ -192,19 +187,19 @@ Task("VerifyDependencies")
     .IsDependentOn("Prepare")
     .Does(async () =>
 {
-    if (DependencyCheckDisabled)
-    {
-        Information("Dependency analysis is disabled");
-        return;
-    }
+    // if (DependencyCheckDisabled)
+    // {
+    //     Information("Dependency analysis is disabled");
+    //     return;
+    // }
 
-    VerifyDependencies();
+    // VerifyDependencies();
 });
 
 //-------------------------------------------------------------
 
 Task("CleanupCode")
-    .Does(() => 
+    .Does<BuildContext>(buildContext => 
 {
     CleanUpCode(true);
 });
@@ -213,21 +208,22 @@ Task("CleanupCode")
 
 Task("CodeSign")
     .ContinueOnError()
-    .Does(() =>
+    .Does<BuildContext>(buildContext =>
 {
-    if (IsCiBuild)
+    if (buildContext.General.IsCiBuild)
     {
         Information("Skipping code signing because this is a CI build");
         return;
     }
 
-    if (IsLocalBuild)
+    if (buildContext.General.IsLocalBuild)
     {
         Information("Skipping code signing because this is a local package build");
         return;
     }
 
-    if (string.IsNullOrWhiteSpace(CodeSignCertificateSubjectName))
+    var certificateSubjectName = buildContext.General.CodeSign.CertificateSubjectName;
+    if (string.IsNullOrWhiteSpace(certificateSubjectName))
     {
         Information("Skipping code signing because the certificate subject name was not specified");
         return;
@@ -237,12 +233,12 @@ Task("CodeSign")
 
     // Note: only code-sign components & wpf apps, skip test projects & uwp apps
     var projectsToCodeSign = new List<string>();
-    projectsToCodeSign.AddRange(Components);
-    projectsToCodeSign.AddRange(WpfApps);
+    projectsToCodeSign.AddRange(buildContext.Components.Items);
+    projectsToCodeSign.AddRange(buildContext.Wpf.Items);
 
     foreach (var projectToCodeSign in projectsToCodeSign)
     {
-        var codeSignWildCard = CodeSignWildCard;
+        var codeSignWildCard = buildContext.General.CodeSign.WildCard;
         if (string.IsNullOrWhiteSpace(codeSignWildCard))
         {
             // Empty, we need to override with project name for valid default value
@@ -251,7 +247,7 @@ Task("CodeSign")
     
         var projectFilesToSign = new List<FilePath>();
 
-        var outputDirectory = string.Format("{0}/{1}", OutputRootDirectory, projectToCodeSign);
+        var outputDirectory = string.Format("{0}/{1}", buildContext.General.OutputRootDirectory, projectToCodeSign);
 
         var exeSignFilesSearchPattern = string.Format("{0}/**/*{1}*.exe", outputDirectory, codeSignWildCard);
         Information(exeSignFilesSearchPattern);
@@ -272,13 +268,13 @@ Task("CodeSign")
         return;
     }
 
-    Information("Found '{0}' files to code sign using subject name '{1}', this can take a few minutes...", filesToSign.Count, CodeSignCertificateSubjectName);
+    Information("Found '{0}' files to code sign using subject name '{1}', this can take a few minutes...", filesToSign.Count, certificateSubjectName);
 
     var signToolSignSettings = new SignToolSignSettings 
     {
         AppendSignature = false,
-        TimeStampUri = new Uri(CodeSignTimeStampUri),
-        CertSubjectName = CodeSignCertificateSubjectName
+        TimeStampUri = new Uri(buildContext.General.CodeSign.TimeStampUri),
+        CertSubjectName = certificateSubjectName
     };
 
     Sign(filesToSign, signToolSignSettings);
