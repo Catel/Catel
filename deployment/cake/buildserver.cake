@@ -5,112 +5,177 @@
 
 using System.Runtime.InteropServices;
 
-[DllImport("kernel32.dll", CharSet=CharSet.Unicode)]
-static extern uint GetPrivateProfileString(
-   string lpAppName, 
-   string lpKeyName,
-   string lpDefault, 
-   StringBuilder lpReturnedString, 
-   uint nSize,
-   string lpFileName);
-
-Dictionary<string, string> _buildServerVariableCache = null;
-
-//-------------------------------------------------------------
-
-public string GetBuildServerVariable(string variableName, string defaultValue = null, bool showValue = false)
+public interface IBuildServer
 {
-    if (_buildServerVariableCache == null)
-    {
-        _buildServerVariableCache = new Dictionary<string, string>();
-    }
-
-    var cacheKey = string.Format("{0}__{1}", variableName ?? string.Empty, defaultValue ?? string.Empty);
-
-    if (!_buildServerVariableCache.TryGetValue(cacheKey, out string value))
-    {
-        value = GetBuildServerVariableForCache(variableName, defaultValue, showValue);
-        //if (value != defaultValue &&
-        //    !string.IsNullOrEmpty(value) && 
-        //    !string.IsNullOrEmpty(defaultValue))
-        //{
-            var valueForLog = showValue ? value : "********";
-            Information("{0}: '{1}'", variableName, valueForLog);
-        //}
-        
-        _buildServerVariableCache[cacheKey] = value;
-    }
-    //else
-    //{
-    //    Information("Retrieved value for '{0}' from cache", variableName);
-    //}
-    
-    return value;
+    void PinBuild(string comment);
+    void SetVersion(string version);
+    void SetVariable(string name, string value);
+    Tuple<bool, string> GetVariable(string variableName, string defaultValue);
 }
 
 //-------------------------------------------------------------
 
-private string GetBuildServerVariableForCache(string variableName, string defaultValue = null, bool showValue = false)
+public class BuildServerIntegration : IIntegration
 {
-    var argumentValue = Argument(variableName, "non-existing");
-    if (argumentValue != "non-existing")
+    [DllImport("kernel32.dll", CharSet=CharSet.Unicode)]
+    static extern uint GetPrivateProfileString(
+        string lpAppName, 
+        string lpKeyName,
+        string lpDefault, 
+        StringBuilder lpReturnedString, 
+        uint nSize,
+        string lpFileName);
+
+    private readonly Dictionary<string, object> _parameters;
+    private readonly List<IBuildServer> _buildServers = new List<IBuildServer>();
+    private readonly Dictionary<string, string> _buildServerVariableCache = new Dictionary<string, string>();
+
+    // This is a special integration that only gets ICakeContext, not the BuildContext
+    public BuildServerIntegration(ICakeContext cakeContext, Dictionary<string, object> parameters)
     {
-        Information("Variable '{0}' is specified via an argument", variableName);
-    
-        return argumentValue;
+        CakeContext = cakeContext;
+        _parameters = parameters;
+
+        _buildServers.Add(new ContinuaCIBuildServer(cakeContext));
     }
 
-    // Just a forwarder, change this line to use a different build server
-    var buildServerVariable = GetContinuaCIVariable(variableName, defaultValue);
-    if (buildServerVariable.Item1)
+    public ICakeContext CakeContext { get; private set; }
+
+    public void PinBuild(string comment)
     {
-        return buildServerVariable.Item2;
+        foreach (var buildServer in _buildServers)
+        {
+            buildServer.PinBuild(comment);
+        }        
     }
 
-    var overrideFile = "./build.cakeoverrides";
-    if (System.IO.File.Exists(overrideFile))
+    //-------------------------------------------------------------
+
+    public void SetVersion(string version)
     {
-        var sb = new StringBuilder(string.Empty, 128);
-        var lengthRead = GetPrivateProfileString("General", variableName, null, sb, (uint)sb.Capacity, overrideFile);
-        if (lengthRead > 0)
+        foreach (var buildServer in _buildServers)
         {
-            Information("Variable '{0}' is specified via build.cakeoverrides", variableName);
-        
-            return sb.ToString();
+            buildServer.SetVersion(version);
         }
     }
-    
-    if (HasEnvironmentVariable(variableName))
+
+    //-------------------------------------------------------------
+
+    public void SetVariable(string variableName, string value)
     {
-        Information("Variable '{0}' is specified via an environment variable", variableName);
-    
-        return EnvironmentVariable(variableName);
-    }
-    
-    var parameters = Parameters;
-    if (parameters.TryGetValue(variableName, out var parameter))
-    {
-        Information("Variable '{0}' is specified via the Parameters dictionary", variableName);
-    
-        if (parameter is null)
+        foreach (var buildServer in _buildServers)
         {
-            return null;
+            buildServer.SetVariable(variableName, value);
         }
-    
-        if (parameter is string)
+    }
+
+    //-------------------------------------------------------------
+
+    public bool GetVariableAsBool(string variableName, bool defaultValue, bool showValue = false)
+    {
+        var value = defaultValue;
+
+        if (bool.TryParse(GetVariable(variableName, "unknown", showValue: showValue), out var retrievedValue))
         {
-            return (string)parameter;
+            value = retrievedValue;
+        }
+
+        return value;
+    }
+
+    //-------------------------------------------------------------
+
+    public string GetVariable(string variableName, string defaultValue = null, bool showValue = false)
+    {
+        var cacheKey = string.Format("{0}__{1}", variableName ?? string.Empty, defaultValue ?? string.Empty);
+
+        if (!_buildServerVariableCache.TryGetValue(cacheKey, out string value))
+        {
+            value = GetVariableForCache(variableName, defaultValue, showValue);
+            //if (value != defaultValue &&
+            //    !string.IsNullOrEmpty(value) && 
+            //    !string.IsNullOrEmpty(defaultValue))
+            //{
+                var valueForLog = showValue ? value : "********";
+                CakeContext.Information("{0}: '{1}'", variableName, valueForLog);
+            //}
+            
+            _buildServerVariableCache[cacheKey] = value;
+        }
+        //else
+        //{
+        //    Information("Retrieved value for '{0}' from cache", variableName);
+        //}
+        
+        return value;
+    }
+
+    //-------------------------------------------------------------
+
+    private string GetVariableForCache(string variableName, string defaultValue = null, bool showValue = false)
+    {
+        var argumentValue = CakeContext.Argument(variableName, "non-existing");
+        if (argumentValue != "non-existing")
+        {
+            CakeContext.Information("Variable '{0}' is specified via an argument", variableName);
+
+            return argumentValue;
+        }
+
+        // Check each build server
+        foreach (var buildServer in _buildServers)
+        {
+            var buildServerVariable = buildServer.GetVariable(variableName, defaultValue);
+            if (buildServerVariable.Item1)
+            {
+                return buildServerVariable.Item2;
+            }
+        }
+
+        var overrideFile = "./build.cakeoverrides";
+        if (System.IO.File.Exists(overrideFile))
+        {
+            var sb = new StringBuilder(string.Empty, 256);
+            var lengthRead = GetPrivateProfileString("General", variableName, null, sb, (uint)sb.Capacity, overrideFile);
+            if (lengthRead > 0)
+            {
+                CakeContext.Information("Variable '{0}' is specified via build.cakeoverrides", variableName);
+            
+                return sb.ToString();
+            }
         }
         
-        if (parameter is Func<string>)
+        if (CakeContext.HasEnvironmentVariable(variableName))
         {
-            return ((Func<string>)parameter).Invoke();
+            CakeContext.Information("Variable '{0}' is specified via an environment variable", variableName);
+        
+            return CakeContext.EnvironmentVariable(variableName);
         }
         
-        throw new Exception(string.Format("Parameter is defined as '{0}', but that type is not supported yet...", parameter.GetType().Name));
+        if (_parameters.TryGetValue(variableName, out var parameter))
+        {
+            CakeContext.Information("Variable '{0}' is specified via the Parameters dictionary", variableName);
+        
+            if (parameter is null)
+            {
+                return null;
+            }
+        
+            if (parameter is string)
+            {
+                return (string)parameter;
+            }
+            
+            if (parameter is Func<string>)
+            {
+                return ((Func<string>)parameter).Invoke();
+            }
+            
+            throw new Exception(string.Format("Parameter is defined as '{0}', but that type is not supported yet...", parameter.GetType().Name));
+        }
+        
+        CakeContext.Information("Variable '{0}' is not specified, returning default value", variableName);
+        
+        return defaultValue ?? string.Empty;
     }
-    
-    Information("Variable '{0}' is not specified, returning default value", variableName);
-    
-    return defaultValue ?? string.Empty;
 }
