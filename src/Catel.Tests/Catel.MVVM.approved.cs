@@ -250,7 +250,7 @@ namespace Catel.MVVM.Auditing
     }
     public class SubscribeKeyboardEventsOnViewModelCreationAuditor : Catel.MVVM.Auditing.AuditorBase
     {
-        public SubscribeKeyboardEventsOnViewModelCreationAuditor(Catel.MVVM.ICommandManager commandManager) { }
+        public SubscribeKeyboardEventsOnViewModelCreationAuditor(Catel.MVVM.ICommandManager commandManager, Catel.Services.IDispatcherService dispatcherService) { }
         public override void OnViewModelCreated(Catel.MVVM.IViewModel viewModel) { }
     }
 }

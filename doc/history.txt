@@ -30,6 +30,8 @@ Release date
 Added/fixed
 ===========
 (x) #1383 CommandManager.CreateCommandWithGesture does not create CommandContainer
+(x) #1385 ViewModelBase cannot be constructed on different thread: "The calling thread can not 
+    access this object because the object is owned by another thread"
 
 Platform support changes
 ========================
