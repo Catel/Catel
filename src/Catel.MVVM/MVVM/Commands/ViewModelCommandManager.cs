@@ -275,18 +275,24 @@ namespace Catel.MVVM
         {
             CommandHandler[] syncHandlers;
             AsyncCommandHandler[] asyncHandlers;
+            var commandName = string.Empty;
 
             lock (_lock)
             {
                 syncHandlers = _commandHandlers.ToArray();
                 asyncHandlers = _asyncCommandHandlers.ToArray();
+
+                if (!_commands.TryGetValue(e.Command, out commandName))
+                {
+                    commandName = "unknown";
+                }
             }
 
             foreach (var handler in syncHandlers)
             {
                 if (handler != null)
                 {
-                    handler(_viewModel, _commands[e.Command], e.Command, e.CommandParameter);
+                    handler(_viewModel, commandName, e.Command, e.CommandParameter);
                 }
             }
 
@@ -294,7 +300,7 @@ namespace Catel.MVVM
             {
                 if (handler != null)
                 {
-                    await handler(_viewModel, _commands[e.Command], e.Command, e.CommandParameter);
+                    await handler(_viewModel, commandName, e.Command, e.CommandParameter);
                 }
             }
         }
