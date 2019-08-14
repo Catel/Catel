@@ -373,8 +373,9 @@ private static string GetVisualStudioDirectory(BuildContext buildContext, bool? 
         var pathFor2019Preview = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Preview\";
         if (System.IO.Directory.Exists(pathFor2019Preview))
         {
-           buildContext.CakeContext.Information("Using Visual Studio 2019 preview, note that SonarQube will be disabled since it's not (yet) compatible with VS2019");
-           buildContext.General.SonarQube.IsDisabled = true;
+           // Note: SonarQube supports VS 2019 now
+           //buildContext.CakeContext.Information("Using Visual Studio 2019 preview, note that SonarQube will be disabled since it's not (yet) compatible with VS2019");
+           //buildContext.General.SonarQube.IsDisabled = true;
            return pathFor2019Preview;
         }
 
