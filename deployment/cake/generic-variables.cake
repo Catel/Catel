@@ -343,8 +343,6 @@ private GeneralContext InitializeGeneralContext(BuildContext buildContext, IBuil
         ConfigurationName = buildContext.BuildServer.GetVariable("ConfigurationName", "Release", showValue: true)
     };
 
-    data.RootDirectory = System.IO.Path.GetFullPath(".");
-    data.OutputRootDirectory = System.IO.Path.GetFullPath(buildContext.BuildServer.GetVariable("OutputRootDirectory", string.Format("./output/{0}", data.Solution.ConfigurationName), showValue: true));
     data.IsCiBuild = buildContext.BuildServer.GetVariableAsBool("IsCiBuild", false, showValue: true);
     data.IsAlphaBuild = buildContext.BuildServer.GetVariableAsBool("IsAlphaBuild", false, showValue: true);
     data.IsBetaBuild = buildContext.BuildServer.GetVariableAsBool("IsBetaBuild", false, showValue: true);
@@ -359,6 +357,10 @@ private GeneralContext InitializeGeneralContext(BuildContext buildContext, IBuil
         parentBuildContext.CakeContext.Warning("Enforcing configuration 'Debug' because this is seems to be a local build, do not publish this package!");
         data.Solution.ConfigurationName = "Debug";
     }
+
+    // Important: do *after* initializing the configuration name
+    data.RootDirectory = System.IO.Path.GetFullPath(".");
+    data.OutputRootDirectory = System.IO.Path.GetFullPath(buildContext.BuildServer.GetVariable("OutputRootDirectory", string.Format("./output/{0}", data.Solution.ConfigurationName), showValue: true));
 
     data.SourceLink = new SourceLinkContext(data)
     {
