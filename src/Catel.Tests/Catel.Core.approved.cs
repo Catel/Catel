@@ -305,9 +305,9 @@ namespace Catel
         public static System.Collections.Generic.List<TEnum> GetValues() { }
         public static TEnum Parse(string input, bool ignoreCase = False) { }
         public static System.Collections.Generic.List<TEnum> ToList() { }
-        public static bool TryParse(string input, out System.Nullable<> result) { }
+        public static bool TryParse(string input, out System.Nullable<TEnum> result) { }
         public static bool TryParse(string input, out TEnum result) { }
-        public static bool TryParse(string input, bool ignoreCase, out System.Nullable<> result) { }
+        public static bool TryParse(string input, bool ignoreCase, out System.Nullable<TEnum> result) { }
         public static bool TryParse(string input, bool ignoreCase, out TEnum result) { }
         public class static DataBinding<TEnum>
             where TEnum :  struct, System.IComparable, System.IFormattable
@@ -1426,13 +1426,13 @@ namespace Catel.Data
         public virtual void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         protected Catel.Data.PropertyData GetPropertyData(string name) { }
         protected virtual Catel.Runtime.Serialization.ISerializer GetSerializerForIEditableObject() { }
-        protected internal object GetValue(string name) { }
+        protected object GetValue(string name) { }
         protected TValue GetValue<TValue>(string name) { }
         protected object GetValue(Catel.Data.PropertyData property) { }
         protected TValue GetValue<TValue>(Catel.Data.PropertyData property) { }
         protected virtual T GetValueFromPropertyBag<T>(string propertyName) { }
         protected virtual void InitializeCustomProperties() { }
-        protected internal void InitializePropertyAfterConstruction(Catel.Data.PropertyData property) { }
+        protected void InitializePropertyAfterConstruction(Catel.Data.PropertyData property) { }
         protected bool IsModelBaseProperty(string name) { }
         public bool IsPropertyRegistered(string name) { }
         protected static bool IsPropertyRegistered(System.Type type, string name) { }
@@ -1451,14 +1451,14 @@ namespace Catel.Data
         public static Catel.Data.PropertyData RegisterProperty<TValue>(string name, System.Type type, TValue defaultValue, System.EventHandler<Catel.Data.AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = True, bool includeInBackup = True) { }
         public static Catel.Data.PropertyData RegisterProperty(string name, System.Type type, System.Func<object> createDefaultValue = null, System.EventHandler<Catel.Data.AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = True, bool includeInBackup = True) { }
         protected virtual void SetDirty(string propertyName) { }
-        protected internal void SetValue(string name, object value, bool notifyOnChange = True) { }
-        protected internal void SetValue(Catel.Data.PropertyData property, object value, bool notifyOnChange = True) { }
+        protected void SetValue(string name, object value, bool notifyOnChange = True) { }
+        protected void SetValue(Catel.Data.PropertyData property, object value, bool notifyOnChange = True) { }
         protected virtual void SetValueToPropertyBag(string propertyName, object value) { }
         protected virtual bool ShouldPropertyChangeUpdateIsDirty(string propertyName) { }
         public System.IDisposable SuspendChangeCallbacks() { }
         public System.IDisposable SuspendChangeNotifications(bool raiseOnResume = True) { }
         public override string ToString() { }
-        protected internal static void UnregisterProperty(System.Type modelType, string name) { }
+        protected static void UnregisterProperty(System.Type modelType, string name) { }
     }
     public class static ModelBaseExtensions
     {
@@ -1481,15 +1481,15 @@ namespace Catel.Data
         public ObservableObject() { }
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(Catel.Data.AdvancedPropertyChangedEventArgs e) { }
-        protected internal void RaisePropertyChanged<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression) { }
-        protected internal void RaisePropertyChanged<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression, object newValue) { }
-        protected internal void RaisePropertyChanged<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression, object oldValue, object newValue) { }
-        protected internal void RaisePropertyChanged(string propertyName) { }
-        protected internal void RaisePropertyChanged(string propertyName, object newValue) { }
-        protected internal void RaisePropertyChanged(string propertyName, object oldValue, object newValue) { }
-        protected internal void RaisePropertyChanged(object sender, string propertyName) { }
-        protected internal void RaisePropertyChanged(object sender, string propertyName, object newValue) { }
-        protected internal void RaisePropertyChanged(object sender, string propertyName, object oldValue, object newValue) { }
+        protected void RaisePropertyChanged<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression) { }
+        protected void RaisePropertyChanged<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression, object newValue) { }
+        protected void RaisePropertyChanged<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression, object oldValue, object newValue) { }
+        protected void RaisePropertyChanged(string propertyName) { }
+        protected void RaisePropertyChanged(string propertyName, object newValue) { }
+        protected void RaisePropertyChanged(string propertyName, object oldValue, object newValue) { }
+        protected void RaisePropertyChanged(object sender, string propertyName) { }
+        protected void RaisePropertyChanged(object sender, string propertyName, object newValue) { }
+        protected void RaisePropertyChanged(object sender, string propertyName, object oldValue, object newValue) { }
         protected virtual void RaisePropertyChanged(object sender, Catel.Data.AdvancedPropertyChangedEventArgs e) { }
     }
     public class static ObservableObjectExtensions
@@ -2871,7 +2871,7 @@ namespace Catel.Messaging
         bool UnregisterRecipientAndIgnoreTags(object recipient);
     }
     public abstract class MessageBase<TMessage, TData>
-        where TMessage : Catel.Messaging.MessageBase<, >, new ()
+        where TMessage : Catel.Messaging.MessageBase<TMessage, TData>, new ()
     {
         protected MessageBase() { }
         protected MessageBase(TData data) { }
@@ -4158,7 +4158,7 @@ namespace Catel.Threading
         public static System.Threading.Tasks.Task<T> op_Implicit(Catel.Threading.AwaitableDisposable<T> source) { }
     }
     [System.Diagnostics.DebuggerDisplayAttribute("Count = {Count}")]
-    [System.Diagnostics.DebuggerTypeProxyAttribute(typeof(Catel.Threading.DefaultAsyncWaitQueue<>.DebugView))]
+    [System.Diagnostics.DebuggerTypeProxyAttribute(typeof(Catel.Threading.DefaultAsyncWaitQueue<T>.DebugView))]
     public sealed class DefaultAsyncWaitQueue<T> : Catel.Threading.IAsyncWaitQueue<T>
     {
         public DefaultAsyncWaitQueue() { }

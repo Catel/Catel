@@ -807,16 +807,16 @@ namespace Catel.MVVM
         [Catel.Data.ExcludeFromValidationAttribute()]
         protected bool InvalidateCommandsOnPropertyChanged { get; set; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected internal bool IsCanceling { get; }
+        protected bool IsCanceling { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
         public bool IsClosed { get; }
-        protected internal bool IsClosing { get; }
+        protected bool IsClosing { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected internal bool IsInitialized { get; }
+        protected bool IsInitialized { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected internal bool IsInitializing { get; }
+        protected bool IsInitializing { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected internal bool IsSaving { get; }
+        protected bool IsSaving { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
         protected Catel.MVVM.Navigation.NavigationContext NavigationContext { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
@@ -830,7 +830,7 @@ namespace Catel.MVVM
         [Catel.Data.ExcludeFromValidationAttribute()]
         protected bool ValidateModelsOnInitialization { get; set; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected internal Catel.MVVM.IViewModelCommandManager ViewModelCommandManager { get; }
+        protected Catel.MVVM.IViewModelCommandManager ViewModelCommandManager { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
         public System.DateTime ViewModelConstructionTime { get; }
         public event Catel.AsyncEventHandler<System.EventArgs> CanceledAsync;
@@ -1377,7 +1377,7 @@ namespace Catel.MVVM.Providers
         [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be removed in version" +
             " 6.0.0.", true)]
         public bool PreventViewModelCreation { get; set; }
-        protected internal Catel.MVVM.Views.IView TargetView { get; set; }
+        protected Catel.MVVM.Views.IView TargetView { get; set; }
         protected System.Type TargetViewType { get; }
         public int UniqueIdentifier { get; }
         public Catel.MVVM.IViewModel ViewModel { get; set; }
