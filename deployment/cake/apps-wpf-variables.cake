@@ -39,6 +39,13 @@ private WpfContext InitializeWpfContext(BuildContext buildContext, IBuildContext
         AzureDeploymentsStorageConnectionString = buildContext.BuildServer.GetVariable("AzureDeploymentsStorageConnectionString")
     };
 
+    if (string.IsNullOrWhiteSpace(data.Channel))
+    {
+        data.Channel = DetermineChannel(buildContext.General);
+
+        data.CakeContext.Information($"Determined channel '{data.Channel}' for wpf projects");
+    }
+
     return data;
 }
 

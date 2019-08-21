@@ -291,13 +291,15 @@ public class WpfProcessor : ProcessorBase
         else if (BuildContext.General.IsAlphaBuild)
         {
             // Single channel
-            channels.Add(BuildContext.Wpf.Channel);
+            channels.Add("alpha");
         }
         else
         {
             // Unknown build type, just just a single channel
             channels.Add(BuildContext.Wpf.Channel);
         }
+
+        CakeContext.Information("Found '{0}' target channels", channels.Count);
 
         foreach (var wpfApp in BuildContext.Wpf.Items)
         {
