@@ -3,6 +3,7 @@
     This file applies to all projects automatically. Project specific values should go into Directory.build.project.props
   -->
 
-  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.implicit.props" /> 
-  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.project.props" /> 
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.implicit.props" />
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.project.props" />
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.analyzers.props" />
 </Project>
