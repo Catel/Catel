@@ -297,17 +297,16 @@ namespace Catel.Logging
 
                 using (var fileStream = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.Read))
                 {
-                    using (var writer = new StreamWriter(fileStream))
+                    var writer = new StreamWriter(fileStream);
+
+                    foreach (var batchEntry in batchEntries)
                     {
-                        foreach (var batchEntry in batchEntries)
-                        {
-                            var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Data, batchEntry.Time);
+                        var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Data, batchEntry.Time);
 
-                            writer.WriteLine(message);
-                        }
-
-                        writer.Flush();
+                        await writer.WriteLineAsync(message);
                     }
+
+                    await writer.FlushAsync();
                 }
             }
             catch (Exception)

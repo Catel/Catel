@@ -56,7 +56,9 @@
                     timeouts.Add(timeout);
                 }
 
+#pragma warning disable CL0001 // Use async overload inside this async method
                 ParallelHelper.ExecuteInParallel(timeouts, x => timer.Change(x, x), 10);
+#pragma warning restore CL0001 // Use async overload inside this async method
 
                 Assert.AreNotEqual(0, changeCount);
             }
