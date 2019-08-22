@@ -21,7 +21,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="MethodTimer.Fody" Version="3.0.0" PrivateAssets="all" />
-    <PackageReference Include="ModuleInit.Fody" Version="2.0.0" PrivateAssets="all" />
+    <PackageReference Include="ModuleInit.Fody" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Include="NewtonSoft.Json" Version="12.0.2" />
     <PackageReference Include="Obsolete.Fody" Version="5.0.0" PrivateAssets="all" />
   </ItemGroup>
