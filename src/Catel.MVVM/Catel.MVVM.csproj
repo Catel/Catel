@@ -20,7 +20,7 @@
     <PackageReference Include="Fody" Version="6.0.0" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MethodTimer.Fody" Version="3.0.0" PrivateAssets="all" />
+    <PackageReference Include="MethodTimer.Fody" Version="3.1.0" PrivateAssets="all" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="5.0.0" PrivateAssets="all" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
