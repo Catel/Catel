@@ -29,7 +29,7 @@ Release date
 
 Added/fixed
 ===========
-xxx
+(x) #1408 Logging in TypeFactory uses wrong parameter name
 
 Platform support changes
 ========================
