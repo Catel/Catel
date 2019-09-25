@@ -474,16 +474,16 @@ namespace Catel.Collections
                 {
                     Insert(tempKey, (TValue)value, append);
                 }
-                catch (InvalidCastException e)
+                catch (InvalidCastException ex)
                 {
-                    Log.Error(e);
+                    Log.Error(ex);
 
                     throw;
                 }
             }
-            catch (InvalidCastException e)
+            catch (InvalidCastException ex)
             {
-                Log.Error(e);
+                Log.Error(ex);
 
                 throw;
             }
