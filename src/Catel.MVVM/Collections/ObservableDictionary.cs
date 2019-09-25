@@ -152,7 +152,7 @@ namespace Catel.Collections
         /// <inheritdoc cref="IDeserializationCallback.OnDeserialization"/>
         public void OnDeserialization(object sender)
         {
-            if (_serializationInfo == null)
+            if (_serializationInfo is null)
             {
                 return;
             }
@@ -359,11 +359,24 @@ namespace Catel.Collections
         /// <inheritdoc cref="IDictionary{TKey, TValue}.TryGetValue"/>
         public bool TryGetValue(TKey key, out TValue value)
         {
-            bool result = _collection.Contains(key);
+#if NETCORE
+            if (!_collection.TryGetValue(key, out KeyValuePair<TKey,> item))
+            {
+                value = default;
+
+                return false;
+            }
+
+            value = item.Value;
+
+            return true;
+#else
+            result = _collection.Contains(key);
 
             value = result ? _collection[key].Value : default;
 
             return result;
+#endif
         }
 
         /// <inheritdoc cref="IEnumerable.GetEnumerator"/>
@@ -406,8 +419,6 @@ namespace Catel.Collections
 
         private static bool IsCompatibleKey(object key)
         {
-            Argument.IsNotNull(nameof(key), key);
-
             return key is TKey;
         }
 
@@ -450,7 +461,7 @@ namespace Catel.Collections
 
         private void InsertObject(object key, object value, bool append)
         {
-            if (value == null && default(TValue) != null)
+            if (value is null && default(TValue) != null)
             {
                 throw Log.ErrorAndCreateException<ArgumentNullException>("Argument '{0}' cannot be null.", nameof(value));
             }
