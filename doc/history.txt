@@ -29,6 +29,7 @@ Release date
 
 Added/fixed
 ===========
+(+) #1421 ObservableDictionary for supporting UI controls that utilize Dictionaries
 (x) #1408 Logging in TypeFactory uses wrong parameter name
 
 Platform support changes
