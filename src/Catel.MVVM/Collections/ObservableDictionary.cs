@@ -360,7 +360,7 @@ namespace Catel.Collections
         public bool TryGetValue(TKey key, out TValue value)
         {
 #if NETCORE
-            if (!_collection.TryGetValue(key, out KeyValuePair<TKey,> item))
+            if (!_collection.TryGetValue(key, out KeyValuePair<TKey, TValue> item))
             {
                 value = default;
 
@@ -371,7 +371,7 @@ namespace Catel.Collections
 
             return true;
 #else
-            result = _collection.Contains(key);
+            var result = _collection.Contains(key);
 
             value = result ? _collection[key].Value : default;
 
