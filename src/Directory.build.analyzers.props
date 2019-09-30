@@ -4,6 +4,6 @@
   -->
 
   <ItemGroup>
-    <PackageReference Include="CatenaLogic.Analyzers" Version="1.0.0-alpha0005" PrivateAssets="All" />
+    <PackageReference Include="CatenaLogic.Analyzers" Version="1.0.0-alpha0019" PrivateAssets="All" />
   </ItemGroup>
 </Project>
