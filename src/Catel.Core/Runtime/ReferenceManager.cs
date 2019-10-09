@@ -113,7 +113,20 @@ namespace Catel.Runtime
             {
                 if (_referenceInfoByInstance.TryGetValue(instance, out var referenceInfo))
                 {
-                    referenceInfo.IsFirstUsage = false;
+                    if (!referenceInfo.Id.HasValue)
+                    {
+                        if (autoAssignId)
+                        {
+                            referenceInfo.Id = GetNextId();
+
+                            AddReferenceInfo(referenceInfo);
+                        }
+                    }
+                    else
+                    {
+                        // Only treat as non-first usage if we already had a valid id
+                        referenceInfo.IsFirstUsage = false;
+                    }
                 }
                 else
                 {
