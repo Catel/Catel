@@ -68,6 +68,16 @@ namespace Catel.Runtime.Serialization
         /// <exception cref="NotImplementedException"></exception>
         public ISerializationContextInfo Parent => throw new NotImplementedException();
 
+        /// <summary>
+        /// Gets a value indicating whether the context should auto generate graph ids for new object instances.
+        /// </summary>
+        /// <param name="context">The current serialization context.</param>
+        /// <returns><c>true</c> if graph ids should automatically be generated, <c>false</c> if they should be registered manually.</returns>
+        public bool ShouldAutoGenerateGraphIds(ISerializationContext context)
+        {
+            return true;
+        }
+
 #if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Gets the serialization info.

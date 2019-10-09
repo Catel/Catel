@@ -433,11 +433,11 @@ namespace Catel.Runtime.Serialization.Binary
                     var shouldSerializeAsCollection = memberValue.MemberGroup == SerializationMemberGroup.Collection;
                     if (referenceInfo.IsFirstUsage || shouldSerializeAsCollection)
                     {
-                        propertyValue.GraphId = referenceInfo.Id;
+                        propertyValue.GraphId = referenceInfo.Id.Value;
                     }
                     else
                     {
-                        propertyValue.GraphRefId = referenceInfo.Id;
+                        propertyValue.GraphRefId = referenceInfo.Id.Value;
                         propertyValue.Value = null;
                     }
                 }

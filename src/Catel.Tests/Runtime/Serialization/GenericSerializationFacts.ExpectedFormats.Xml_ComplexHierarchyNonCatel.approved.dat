@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Family graphid="1" xmlns:ctl="http://schemas.catelproject.com">
   <LastName>Family last name</LastName>
-  <Persons xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="2" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-    <Person xmlns="http://schemas.datacontract.org/2004/07/Catel.Tests.Data">
-      <FirstName>Mrs.</FirstName>
-      <Gender>Female</Gender>
-      <LastName>Doe</LastName>
+  <Persons xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="2">
+    <Person xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="3" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" i:type="ctl1:Person">
+      <ctl1:FirstName>Mrs.</ctl1:FirstName>
+      <ctl1:Gender>Female</ctl1:Gender>
+      <ctl1:LastName>Doe</ctl1:LastName>
     </Person>
-    <Person xmlns="http://schemas.datacontract.org/2004/07/Catel.Tests.Data">
-      <FirstName>Mr.</FirstName>
-      <Gender>Male</Gender>
-      <LastName>Bla</LastName>
+    <Person xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="4" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" i:type="ctl1:Person">
+      <ctl1:FirstName>Mr.</ctl1:FirstName>
+      <ctl1:Gender>Male</ctl1:Gender>
+      <ctl1:LastName>Bla</ctl1:LastName>
     </Person>
   </Persons>
 </Family>

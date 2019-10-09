@@ -18,7 +18,7 @@ namespace Catel.Runtime
         /// <param name="instance">The instance.</param>
         /// <param name="id">The unique identifier.</param>
         /// <param name="isFirstUsage">if set to <c>true</c>, this is the first usage of this instance.</param>
-        public ReferenceInfo(object instance, int id, bool isFirstUsage)
+        public ReferenceInfo(object instance, int? id, bool isFirstUsage)
         {
             Instance = instance;
             Id = id;
@@ -35,7 +35,7 @@ namespace Catel.Runtime
         /// Gets the unique identifier.
         /// </summary>
         /// <value>The unique identifier.</value>
-        public int Id { get; private set; }
+        public int? Id { get; internal set; }
 
         /// <summary>
         /// Gets a value indicating whether this is the first usage of this instance.

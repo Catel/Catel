@@ -84,7 +84,7 @@ namespace Catel.Tests.Runtime
             {
                 var referenceManager = new ReferenceManager();
 
-                Assert.IsNull(referenceManager.GetInfo(null));
+                Assert.IsNull(referenceManager.GetInfo(null, false));
             }
 
             [TestCase]

@@ -196,7 +196,7 @@ namespace Catel.Runtime.Serialization
             var serializable = Model as ISerializable;
             if (serializable != null)
             {
-                var registrationInfo = ReferenceManager.GetInfo(serializable);
+                var registrationInfo = ReferenceManager.GetInfo(serializable, Context.ShouldAutoGenerateGraphIds(this));
 
                 //// Note: we need to use the x.Tag instead of x.Instance.ContextMode here because we might be serializing a different thing
                 //switch ((SerializationContextMode)x.Tag)
@@ -229,7 +229,7 @@ namespace Catel.Runtime.Serialization
             var serializable = Model as ISerializable;
             if (serializable != null)
             {
-                var registrationInfo = ReferenceManager.GetInfo(serializable);
+                var registrationInfo = ReferenceManager.GetInfo(serializable, Context.ShouldAutoGenerateGraphIds(this));
 
                 //// Note: we need to use the x.Tag instead of x.Instance.ContextMode here because we might be serializing a different thing
                 //switch ((SerializationContextMode)x.Tag)

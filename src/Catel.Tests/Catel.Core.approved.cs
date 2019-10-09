@@ -3257,8 +3257,8 @@ namespace Catel.Runtime
     }
     public class ReferenceInfo
     {
-        public ReferenceInfo(object instance, int id, bool isFirstUsage) { }
-        public int Id { get; }
+        public ReferenceInfo(object instance, System.Nullable<int> id, bool isFirstUsage) { }
+        public System.Nullable<int> Id { get; }
         public object Instance { get; }
         public bool IsFirstUsage { get; }
     }
@@ -3266,7 +3266,7 @@ namespace Catel.Runtime
     {
         public ReferenceManager() { }
         public int Count { get; }
-        public Catel.Runtime.ReferenceInfo GetInfo(object instance) { }
+        public Catel.Runtime.ReferenceInfo GetInfo(object instance, bool autoAssignId = True) { }
         public Catel.Runtime.ReferenceInfo GetInfoAt(int index) { }
         public Catel.Runtime.ReferenceInfo GetInfoById(int id) { }
         public void RegisterManually(int id, object instance) { }
@@ -3289,6 +3289,7 @@ namespace Catel.Runtime.Serialization.Binary
         public System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> MemberValues { get; }
         public System.Collections.Generic.List<Catel.Data.PropertyValue> PropertyValues { get; }
         public System.Runtime.Serialization.SerializationInfo SerializationInfo { get; }
+        public override bool ShouldAutoGenerateGraphIds(Catel.Runtime.Serialization.ISerializationContext context) { }
     }
     [System.ObsoleteAttribute("Binary serialization should no longer be used for security reasons, see https://g" +
         "ithub.com/Catel/Catel/issues/1216. Will be treated as an error from version 6.0." +
@@ -3398,7 +3399,10 @@ namespace Catel.Runtime.Serialization
     {
         public static System.Type FindParentType(this Catel.Runtime.Serialization.ISerializationContext serializationContext, System.Func<System.Type, bool> predicate, int maxLevels = -1) { }
     }
-    public interface ISerializationContextInfo { }
+    public interface ISerializationContextInfo
+    {
+        bool ShouldAutoGenerateGraphIds(Catel.Runtime.Serialization.ISerializationContext context);
+    }
     public interface ISerializationContextInfoFactory
     {
         Catel.Runtime.Serialization.ISerializationContextInfo GetSerializationContextInfo(Catel.Runtime.Serialization.ISerializer serializer, object model, object data, Catel.Runtime.Serialization.ISerializationConfiguration configuration);
@@ -3557,6 +3561,7 @@ namespace Catel.Runtime.Serialization
         public SerializationContextInfoBase() { }
         public Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> Context { get; }
         protected virtual void OnContextUpdated(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context) { }
+        public virtual bool ShouldAutoGenerateGraphIds(Catel.Runtime.Serialization.ISerializationContext context) { }
     }
     public enum SerializationContextMode
     {
@@ -3608,6 +3613,7 @@ namespace Catel.Runtime.Serialization
         public Catel.Runtime.Serialization.ISerializationContextInfo Parent { get; }
         public System.Collections.Generic.List<Catel.Data.PropertyValue> PropertyValues { get; }
         public System.Runtime.Serialization.SerializationInfo SerializationInfo { get; }
+        public bool ShouldAutoGenerateGraphIds(Catel.Runtime.Serialization.ISerializationContext context) { }
     }
     public class SerializationManager : Catel.Runtime.Serialization.ISerializationManager
     {

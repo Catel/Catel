@@ -203,7 +203,7 @@ namespace Catel.Runtime.Serialization.Xml
             {
                 Log.Debug("Reference manager contains no objects yet, adding initial reference which is the first model in the graph");
 
-                referenceManager.GetInfo(context.Model);
+                referenceManager.GetInfo(context.Model, true);
             }
         }
 
@@ -691,7 +691,7 @@ namespace Catel.Runtime.Serialization.Xml
                         memberValue.Name, memberValue.MemberType.FullName, attributeValue);
                 }
             }
-
+            
             var isDeserialized = false;
 
             if (propertyTypeToDeserialize == typeof(string) && ShouldSerializeUsingParseAndToString(memberValue, false))
@@ -710,6 +710,13 @@ namespace Catel.Runtime.Serialization.Xml
                 {
                     memberValue.Value = tempValue;
                 }
+            }
+
+            // Serialization dictionaries as collections
+            if (!isDeserialized && ShouldSerializeAsDictionary(propertyTypeToDeserialize))
+            {
+                // Force deserialization as List<>
+                propertyTypeToDeserialize = typeof(List<SerializableKeyValuePair>);
             }
 
             // Special case if a Catel ModelBase should be serialized as collection
@@ -740,10 +747,45 @@ namespace Catel.Runtime.Serialization.Xml
                 {
                     using (var xmlReader = childElement.CreateReader())
                     {
-                        var childValue = serializer.ReadObject(xmlReader, false);
+                        object childValue = null;
+
+                        // Step 1: check for graph attributes
+                        xmlReader.Read();
+
+                        var collectionItemGraphRefIdAttribute = xmlReader.GetAttribute(GraphRefId);
+                        var collectionItemGraphIdAttribute = xmlReader.GetAttribute(GraphId);
+
+                        if (!string.IsNullOrWhiteSpace(collectionItemGraphRefIdAttribute))
+                        {
+                            var graphId = int.Parse(collectionItemGraphRefIdAttribute);
+
+                            var referenceManager = context.ReferenceManager;
+                            var referenceInfo = referenceManager.GetInfoById(graphId);
+                            if (referenceInfo is null)
+                            {
+                                Log.Error("Expected to find graph object with id '{0}' in ReferenceManager, but it was not found. Defaulting value for member '{1}' to null", graphId, element.Name);
+                            }
+
+                            childValue = referenceInfo?.Instance;
+                        }
+
+                        // Step 2: deserialize anyway
+                        if (childValue is null)
+                        {
+                            childValue = serializer.ReadObject(xmlReader, false);
+                        }
+
                         if (childValue != null)
                         {
                             collection.Add(childValue);
+
+                            if (!string.IsNullOrWhiteSpace(collectionItemGraphIdAttribute))
+                            {
+                                var graphId = int.Parse(collectionItemGraphIdAttribute);
+
+                                var referenceManager = context.ReferenceManager;
+                                referenceManager.RegisterManually(graphId, childValue);
+                            }
                         }
                     }
                 }
@@ -753,12 +795,7 @@ namespace Catel.Runtime.Serialization.Xml
                 isDeserialized = true;
             }
 
-            if (!isDeserialized && ShouldSerializeAsDictionary(propertyTypeToDeserialize))
-            {
-                // Force deserialization as List<>
-                propertyTypeToDeserialize = typeof(List<SerializableKeyValuePair>);
-            }
-
+            // Fallback to .net serialization
             if (!isDeserialized)
             {
                 var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, propertyTypeToDeserialize, xmlName, null, null);
@@ -806,7 +843,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="modelType">Type of the model.</param>
         private void WriteXmlElement(ISerializationContext<XmlSerializationContextInfo> context, XElement element, string elementName, MemberValue memberValue, Type modelType)
         {
-            var contextInfo = context.Context;
             var namespacePrefix = GetNamespacePrefix();
             var stringBuilder = new StringBuilder();
             var xmlWriterSettings = new XmlWriterSettings();
@@ -843,33 +879,19 @@ namespace Catel.Runtime.Serialization.Xml
                     // We might have added more known types in the serializer
                     additionalKnownTypes.AddRange(serializer.KnownTypes);
 
+                    var referenceManager = context.ReferenceManager;
                     ReferenceInfo referenceInfo = null;
                     var serializeElement = true;
 
                     if (memberValue.MemberGroup != SerializationMemberGroup.Collection)
                     {
-                        var isClassType = memberTypeToSerialize.IsClassType();
-                        if (isClassType)
+                        if (memberTypeToSerialize.IsClassType())
                         {
-                            var referenceManager = context.ReferenceManager;
-                            referenceInfo = referenceManager.GetInfo(memberValue.Value);
+                            referenceInfo = referenceManager.GetInfo(memberValue.Value, true);
 
-                            if (!referenceInfo.IsFirstUsage)
+                            if (WriteXmlElementAsGraphReference(xmlWriter, referenceInfo, memberTypeToSerialize, 
+                                    elementName, namespacePrefix))
                             {
-                                // Note: we don't want to call GetSafeFullName if we don't have to
-                                if (LogManager.IsDebugEnabled ?? false)
-                                {
-                                    Log.Debug("Existing reference detected for element type '{0}' with id '{1}', only storing id", memberTypeToSerialize.GetSafeFullName(false), referenceInfo.Id);
-                                }
-
-                                //serializer.WriteStartObject(xmlWriter, memberValue.Value);
-                                xmlWriter.WriteStartElement(elementName);
-
-                                xmlWriter.WriteAttributeString(namespacePrefix, GraphRefId, null, referenceInfo.Id.ToString());
-
-                                //serializer.WriteEndObject(xmlWriter);
-                                xmlWriter.WriteEndElement();
-
                                 serializeElement = false;
                             }
                         }
@@ -882,22 +904,7 @@ namespace Catel.Runtime.Serialization.Xml
 
                         xmlWriter.WriteStartElement(elementName);
 
-                        xmlNamespace = _xmlNamespaceManager.GetNamespace(memberTypeToSerialize, namespacePrefix);
-                        if (xmlNamespace != null)
-                        {
-                            xmlWriter.WriteAttributeString("xmlns", xmlNamespace.Prefix, null, xmlNamespace.Uri);
-                        }
-
-                        if (referenceInfo != null)
-                        {
-                            xmlWriter.WriteAttributeString(namespacePrefix, GraphId, null, referenceInfo.Id.ToString());
-                        }
-
-                        if (memberTypeToSerialize != memberValue.MemberType)
-                        {
-                            var memberTypeToSerializerName = TypeHelper.GetTypeName(memberTypeToSerialize.FullName);
-                            xmlWriter.WriteAttributeString(namespacePrefix, "type", null, memberTypeToSerializerName);
-                        }
+                        AddObjectMetadata(xmlWriter, memberTypeToSerialize, memberValue.MemberType, referenceInfo, namespacePrefix);
 
                         // In special cases, we need to write our own collection items. One case is where a custom ModelBase
                         // implements IList and gets inside a StackOverflow
@@ -909,12 +916,21 @@ namespace Catel.Runtime.Serialization.Xml
                             {
                                 foreach (var item in collection)
                                 {
-                                    var subItemElementName = GetXmlElementName(item.GetType(), item, null);
-                                    xmlWriter.WriteStartElement(subItemElementName);
+                                    var itemType = item.GetType();
+                                    var subItemElementName = GetXmlElementName(itemType, item, null);
+                                    referenceInfo = referenceManager.GetInfo(item, true);
 
-                                    serializer.WriteObjectContent(xmlWriter, item);
+                                    if (!WriteXmlElementAsGraphReference( xmlWriter, referenceInfo, itemType, 
+                                            subItemElementName, namespacePrefix))
+                                    {
+                                        xmlWriter.WriteStartElement(subItemElementName);
 
-                                    xmlWriter.WriteEndElement();
+                                        AddObjectMetadata(xmlWriter, itemType, itemType, referenceInfo, namespacePrefix);
+
+                                        serializer.WriteObjectContent(xmlWriter, item);
+
+                                        xmlWriter.WriteEndElement();
+                                    }
                                 }
 
                                 serialized = true;
@@ -938,6 +954,57 @@ namespace Catel.Runtime.Serialization.Xml
             element.Add(childElement);
         }
 
+        private void AddObjectMetadata(XmlWriter xmlWriter, Type memberTypeToSerialize, Type actualMemberType,
+            ReferenceInfo referenceInfo, string namespacePrefix)
+        {
+            var xmlNamespace = _xmlNamespaceManager.GetNamespace(memberTypeToSerialize, namespacePrefix);
+            if (xmlNamespace != null)
+            {
+                xmlWriter.WriteAttributeString("xmlns", xmlNamespace.Prefix, null, xmlNamespace.Uri);
+            }
+
+            if (referenceInfo != null)
+            {
+                xmlWriter.WriteAttributeString(namespacePrefix, GraphId, null, referenceInfo.Id.ToString());
+            }
+
+            if (memberTypeToSerialize != actualMemberType)
+            {
+                var memberTypeToSerializerName = TypeHelper.GetTypeName(memberTypeToSerialize.FullName);
+                xmlWriter.WriteAttributeString(namespacePrefix, "type", null, memberTypeToSerializerName);
+            }
+        }
+
+        private bool WriteXmlElementAsGraphReference(XmlWriter xmlWriter, ReferenceInfo referenceInfo, Type memberTypeToSerialize, string elementName, string namespacePrefix)
+        {
+            var isClassType = memberTypeToSerialize.IsClassType();
+            if (!isClassType)
+            {
+                return false;
+            }
+
+            if (!referenceInfo.IsFirstUsage)
+            {
+                // Note: we don't want to call GetSafeFullName if we don't have to
+                if (LogManager.IsDebugEnabled ?? false)
+                {
+                    Log.Debug($"Existing reference detected for element type '{memberTypeToSerialize.GetSafeFullName(false)}' with id '{referenceInfo.Id}', only storing id");
+                }
+
+                //serializer.WriteStartObject(xmlWriter, memberValue.Value);
+                xmlWriter.WriteStartElement(elementName);
+
+                xmlWriter.WriteAttributeString(namespacePrefix, GraphRefId, null, referenceInfo.Id.ToString());
+
+                //serializer.WriteEndObject(xmlWriter);
+                xmlWriter.WriteEndElement();
+
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Adds the reference unique identifier as attribute.
         /// </summary>
@@ -947,7 +1014,7 @@ namespace Catel.Runtime.Serialization.Xml
         private void AddReferenceId(ISerializationContext context, XElement element, object model)
         {
             var referenceManager = context.ReferenceManager;
-            var referenceInfo = referenceManager.GetInfo(model);
+            var referenceInfo = referenceManager.GetInfo(model, true);
 
             element.Add(new XAttribute(GraphId, referenceInfo.Id));
         }

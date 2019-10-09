@@ -198,6 +198,42 @@ namespace Catel.Tests.Runtime.Serialization
                 }, false);
             }
 
+            [TestCase]
+            public void CorrectlyHandlesSameInstancesInGraphUsingCollections()
+            {
+                var testModel = new TestModelWithNestedListMembers();
+
+                var level2_1 = new TestModelWithNestedListMembers_Level2
+                {
+                    Name = "John Doe"
+                };
+
+                var level1_1 = new TestModelWithNestedListMembers_Level1
+                {
+                    Name = "A",
+                };
+
+                level1_1.Children.Add(level2_1);
+
+                var level1_2 = new TestModelWithNestedListMembers_Level1
+                {
+                    Name = "B",
+                };
+
+                level1_2.Children.Add(level2_1);
+
+                testModel.Children.Add(level1_1);
+                testModel.Children.Add(level1_2);
+
+                TestSerializationOnXmlSerializer((serializer, config, description) =>
+                {
+                    var clonedGraph = SerializationTestHelper.SerializeAndDeserialize(testModel, serializer, config);
+
+                    Assert.IsNotNull(clonedGraph, description);
+                    Assert.IsTrue(ReferenceEquals(clonedGraph.Children[0].Children[0], clonedGraph.Children[1].Children[0]), description);
+                }, false);
+            }
+
             [TestCase] // CTL-550
             public void CorrectlyHandlesSameInstancesOfNonCatelObjectsInGraph()
             {

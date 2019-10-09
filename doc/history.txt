@@ -31,6 +31,7 @@ Added/fixed
 ===========
 (+) #1421 ObservableDictionary for supporting UI controls that utilize Dictionaries
 (x) #1408 Logging in TypeFactory uses wrong parameter name
+(x) #1434 Serialization should respect graph ids when deserializing collections
 
 Platform support changes
 ========================

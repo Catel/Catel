@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <IniFile graphid="1" xmlns:ctl="http://schemas.catelproject.com">
   <FileName>MyIniFile</FileName>
-  <IniEntryCollection xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="2" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-    <IniEntry xmlns="http://schemas.datacontract.org/2004/07/Catel.Tests.Data">
+  <IniEntryCollection xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="2">
+    <IniEntry xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="3" i:type="ctl1:IniEntry" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
       <Group>Group 0</Group>
       <Key>Key 0</Key>
       <Value>Value 0</Value>
       <IniEntryType>Public</IniEntryType>
     </IniEntry>
-    <IniEntry xmlns="http://schemas.datacontract.org/2004/07/Catel.Tests.Data">
+    <IniEntry xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="4" i:type="ctl1:IniEntry" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
       <Group>Group 1</Group>
       <Key>Key 1</Key>
       <Value>Value 1</Value>
       <IniEntryType>Private</IniEntryType>
     </IniEntry>
-    <IniEntry xmlns="http://schemas.datacontract.org/2004/07/Catel.Tests.Data">
+    <IniEntry xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="5" i:type="ctl1:IniEntry" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
       <Group>Group 2</Group>
       <Key>Key 2</Key>
       <Value>Value 2</Value>
