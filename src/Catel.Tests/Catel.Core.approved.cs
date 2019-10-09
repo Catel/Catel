@@ -3898,6 +3898,7 @@ namespace Catel.Runtime.Serialization.Xml
         public System.Xml.Linq.XElement Element { get; }
         public System.Collections.Generic.HashSet<System.Type> KnownTypes { get; }
         public object Model { get; }
+        public System.Xml.XmlWriterSettings XmlWriterSettings { get; }
         protected override void OnContextUpdated(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
     }
     public class XmlSerializationContextInfoFactory : Catel.Runtime.Serialization.ISerializationContextInfoFactory

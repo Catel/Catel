@@ -24,7 +24,6 @@ namespace Catel.Runtime.Serialization.Xml
         private readonly object _lockObject = new object();
         //private DataContractSerializer _dataContractSerializer;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlSerializationContextInfo" /> class.
         /// </summary>
@@ -98,7 +97,11 @@ namespace Catel.Runtime.Serialization.Xml
 
             Initialize(xmlContent, model);
         }
-        #endregion
+
+        /// <summary>
+        /// Gets the xml writer settings.
+        /// </summary>
+        public XmlWriterSettings XmlWriterSettings { get; private set; }
 
         /// <summary>
         /// Gets the list of known types from the current stack.
@@ -151,6 +154,14 @@ namespace Catel.Runtime.Serialization.Xml
 
             Element = element;
             Model = model;
+
+            XmlWriterSettings = new XmlWriterSettings
+            {
+                OmitXmlDeclaration = true,
+                CheckCharacters = false,
+                ConformanceLevel = ConformanceLevel.Fragment,
+                NamespaceHandling = NamespaceHandling.OmitDuplicates
+            };
         }
         #endregion
     }

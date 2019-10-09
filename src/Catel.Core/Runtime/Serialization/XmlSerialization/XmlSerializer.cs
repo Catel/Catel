@@ -845,19 +845,13 @@ namespace Catel.Runtime.Serialization.Xml
         {
             var namespacePrefix = GetNamespacePrefix();
             var stringBuilder = new StringBuilder();
-            var xmlWriterSettings = new XmlWriterSettings();
             XmlNamespace xmlNamespace = null;
-
-            xmlWriterSettings.OmitXmlDeclaration = true;
-            xmlWriterSettings.CheckCharacters = false;
-            xmlWriterSettings.ConformanceLevel = ConformanceLevel.Fragment;
-            xmlWriterSettings.NamespaceHandling = NamespaceHandling.OmitDuplicates;
 
 #if XAMARIN
             var defaultNamespace = "http://www.w3.org/2000/xmlns/";
 #endif
 
-            using (var xmlWriter = XmlWriter.Create(stringBuilder, xmlWriterSettings))
+            using (var xmlWriter = XmlWriter.Create(stringBuilder, context.Context.XmlWriterSettings))
             {
                 if (memberValue.Value is null)
                 {
