@@ -27,5 +27,14 @@ namespace Catel.Tests.Data
         }
 
         public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), null);
+
+
+        public bool IsEnabled
+        {
+            get { return GetValue<bool>(IsEnabledProperty); }
+            set { SetValue(IsEnabledProperty, value); }
+        }
+
+        public static readonly PropertyData IsEnabledProperty = RegisterProperty("IsEnabled", typeof(bool), null);
     }
 }

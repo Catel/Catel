@@ -106,10 +106,12 @@ namespace Catel.Runtime.Serialization
 
             try
             {
+                var finalValue = BoxingCache.GetBoxedValue(member.Value);
+
                 var modelEditor = model as IModelEditor;
                 if (modelEditor != null && modelInfo.CatelPropertyNames.Contains(member.Name))
                 {
-                    modelEditor.SetValueFastButUnsecure(member.Name, member.Value);
+                    modelEditor.SetValueFastButUnsecure(member.Name, finalValue);
                 }
                 else if (modelInfo.PropertyNames.Contains(member.Name))
                 {
@@ -118,7 +120,7 @@ namespace Catel.Runtime.Serialization
                     var propertySerializable = model as IPropertySerializable;
                     if (propertySerializable != null)
                     {
-                        set = propertySerializable.SetPropertyValue(member.Name, member.Value);
+                        set = propertySerializable.SetPropertyValue(member.Name, finalValue);
                     }
 
                     if (!set)
@@ -126,14 +128,14 @@ namespace Catel.Runtime.Serialization
                         var memberMetadata = modelInfo.PropertiesByName[member.Name];
                         if (memberMetadata != null)
                         {
-                            ((PropertyInfo)memberMetadata.Tag).SetValue(model, member.Value, null);
+                            ((PropertyInfo)memberMetadata.Tag).SetValue(model, finalValue, null);
                             set = true;
                         }
                     }
 
                     if (!set)
                     {
-                        Log.Warning("Failed to set property '{0}.{1}' because the member cannot be found on the model", modelType.GetSafeFullName(false), member.Name);
+                        Log.Warning($"Failed to set property '{modelType.GetSafeFullName(false)}.{member.Name}' because the member cannot be found on the model");
                     }
                 }
                 else if (modelInfo.FieldNames.Contains(member.Name))
@@ -143,7 +145,7 @@ namespace Catel.Runtime.Serialization
                     var fieldSerializable = model as IFieldSerializable;
                     if (fieldSerializable != null)
                     {
-                        set = fieldSerializable.SetFieldValue(member.Name, member.Value);
+                        set = fieldSerializable.SetFieldValue(member.Name, finalValue);
                     }
 
                     if (!set)
@@ -151,20 +153,20 @@ namespace Catel.Runtime.Serialization
                         var memberMetadata = modelInfo.FieldsByName[member.Name];
                         if (memberMetadata != null)
                         {
-                            ((FieldInfo)memberMetadata.Tag).SetValue(model, member.Value);
+                            ((FieldInfo)memberMetadata.Tag).SetValue(model, finalValue);
                             set = true;
                         }
                     }
 
                     if (!set)
                     {
-                        Log.Warning("Failed to set field '{0}.{1}' because the member cannot be found on the model", modelType.GetSafeFullName(false), member.Name);
+                        Log.Warning($"Failed to set field '{modelType.GetSafeFullName(false)}.{member.Name}' because the member cannot be found on the model");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Failed to populate '{0}.{1}', setting the member value threw an exception", modelType.GetSafeFullName(false), member.Name);
+                Log.Warning(ex, $"Failed to populate '{modelType.GetSafeFullName(false)}.{member.Name}', setting the member value threw an exception");
             }
         }
     }

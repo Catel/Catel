@@ -166,6 +166,28 @@ namespace Catel.Tests.Data
         }
 
         [TestFixture]
+        public class BoxingFeature
+        {
+            [TestCase]
+            public void CorrectlyCachesBoxedValues()
+            {
+                var model = new PersonTestModel();
+
+                var isEnabled1 = model.GetValue(nameof(PersonTestModel.IsEnabled));
+                var isEnabled2 = model.GetValue(nameof(PersonTestModel.IsEnabled));
+
+                Assert.IsTrue(ReferenceEquals(isEnabled1, isEnabled2));
+
+                model.SetValue(nameof(PersonTestModel.IsEnabled), true);
+
+                isEnabled1 = model.GetValue(nameof(PersonTestModel.IsEnabled));
+                isEnabled2 = model.GetValue(nameof(PersonTestModel.IsEnabled));
+
+                Assert.IsTrue(ReferenceEquals(isEnabled1, isEnabled2));
+            }
+        }
+
+        [TestFixture]
         public class TheBeginEditMethod
         {
             [TestCase]

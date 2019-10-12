@@ -97,7 +97,7 @@ namespace Catel.Services
                 if (modelBase.IsPropertyRegistered(propertyName))
                 {
                     var modelEditor = (IModelEditor)modelBase;
-                    value = modelEditor.GetValueFastButUnsecure(propertyName);
+                    value = modelEditor.GetValueFastButUnsecure<object>(propertyName);
                 }
             }
             else
