@@ -73,7 +73,7 @@ namespace Catel.Data
     public class BoxingCache<T>
     {
         private readonly Dictionary<T, object> _boxedValues = new Dictionary<T, object>();
-        private readonly Dictionary<object, T> _unboxedValues = new Dictionary<object, T>();
+        //private readonly Dictionary<object, T> _unboxedValues = new Dictionary<object, T>();
 
         /// <summary>
         /// Gets the default instance of the boxing cache.
@@ -93,10 +93,10 @@ namespace Catel.Data
                 _boxedValues[value] = boxedValue;
             }
 
-            lock (_unboxedValues)
-            {
-                _unboxedValues[boxedValue] = value;
-            }
+            //lock (_unboxedValues)
+            //{
+            //    _unboxedValues[boxedValue] = value;
+            //}
 
             return boxedValue;
         }
@@ -114,10 +114,10 @@ namespace Catel.Data
                 _boxedValues[unboxedValue] = boxedValue;
             }
 
-            lock (_unboxedValues)
-            {
-                _unboxedValues[boxedValue] = unboxedValue;
-            }
+            //lock (_unboxedValues)
+            //{
+            //    _unboxedValues[boxedValue] = unboxedValue;
+            //}
 
             return unboxedValue;
         }
@@ -147,15 +147,16 @@ namespace Catel.Data
         /// <returns>The unboxed value.</returns>
         public T GetUnboxedValue(object boxedValue)
         {
-            lock (_unboxedValues)
-            {
-                if (!_unboxedValues.TryGetValue(boxedValue, out var unboxedValue))
-                {
-                    unboxedValue = AddBoxedValue(boxedValue);
-                }
+            return (T)boxedValue;
+            //lock (_unboxedValues)
+            //{
+            //    if (!_unboxedValues.TryGetValue(boxedValue, out var unboxedValue))
+            //    {
+            //        unboxedValue = AddBoxedValue(boxedValue);
+            //    }
 
-                return unboxedValue;
-            }
+            //    return unboxedValue;
+            //}
         }
     }
 }
