@@ -6,8 +6,6 @@
 
 #pragma warning disable 1591
 
-// #define ENABLE_CACHE
-
 namespace Catel.Reflection
 {
     using System;
@@ -15,82 +13,15 @@ namespace Catel.Reflection
     using System.Linq;
     using System.Reflection;
 
-#if ENABLE_CACHE
-    using Catel.Caching;
-#endif
-
     /// <summary>
     /// Reflection extension class.
     /// </summary>
     public static partial class ReflectionExtensions
     {
-#if ENABLE_CACHE
-        /// <summary>
-        /// The _constructors cache.
-        /// </summary>
-        private static readonly CacheStorage<ReflectionCacheKey, ConstructorInfo[]> _constructorsCache = new CacheStorage<ReflectionCacheKey, ConstructorInfo[]>(storeNullValues: true);
-
-        /// <summary>
-        /// The _constructor cache.
-        /// </summary>
-        private static readonly CacheStorage<ReflectionCacheKey, ConstructorInfo> _constructorCache = new CacheStorage<ReflectionCacheKey, ConstructorInfo>(storeNullValues: true);
-
-        /// <summary>
-        /// The _fields cache.
-        /// </summary>
-        private static readonly CacheStorage<ReflectionCacheKey, FieldInfo[]> _fieldsCache = new CacheStorage<ReflectionCacheKey, FieldInfo[]>(storeNullValues: true);
-
-        /// <summary>
-        /// The _field cache.
-        /// </summary>
-        private static readonly CacheStorage<ReflectionCacheKey, FieldInfo> _fieldCache = new CacheStorage<ReflectionCacheKey, FieldInfo>(storeNullValues: true);
-
-        /// <summary>
-        /// The _properties cache.
-        /// </summary>
-        private static readonly CacheStorage<ReflectionCacheKey, PropertyInfo[]> _propertiesCache = new CacheStorage<ReflectionCacheKey, PropertyInfo[]>(storeNullValues: true);
-
-        /// <summary>
-        /// The _property cache.
-        /// </summary>
-        private static readonly CacheStorage<ReflectionCacheKey, PropertyInfo> _propertyCache = new CacheStorage<ReflectionCacheKey, PropertyInfo>(storeNullValues: true);
-
-        /// <summary>
-        /// The _events cache.
-        /// </summary>
-        private static readonly CacheStorage<ReflectionCacheKey, EventInfo[]> _eventsCache = new CacheStorage<ReflectionCacheKey, EventInfo[]>(storeNullValues: true);
-
-        /// <summary>
-        /// The _event cache.
-        /// </summary>
-        private static readonly CacheStorage<ReflectionCacheKey, EventInfo> _eventCache = new CacheStorage<ReflectionCacheKey, EventInfo>(storeNullValues: true);
-
-        /// <summary>
-        /// The _methods cache.
-        /// </summary>
-        private static readonly CacheStorage<ReflectionCacheKey, MethodInfo[]> _methodsCache = new CacheStorage<ReflectionCacheKey, MethodInfo[]>(storeNullValues: true);
-
-        /// <summary>
-        /// The _method cache.
-        /// </summary>
-        private static readonly CacheStorage<ReflectionCacheKey, MethodInfo> _methodCache = new CacheStorage<ReflectionCacheKey, MethodInfo>(storeNullValues: true);
-
-        /// <summary>
-        /// The type distance cache.
-        /// </summary>
-        private static CacheStorage<string, int> _typeDistanceCacheStorage = new CacheStorage<string, int>();
-
-        /// <summary>
-        /// The _makeGenericTypeCacheStorage cache.
-        /// </summary>
-        private static readonly CacheStorage<string, Type> _makeGenericTypeCacheStorage = new CacheStorage<string, Type>();
-#endif
-
-
         /// <summary>
         /// Dictionary containing all possible implicit conversions of system types.
         /// </summary>
-        private static readonly Dictionary<Type, HashSet<Type>> _convertableDictionary = new Dictionary<Type, HashSet<Type>>
+        private static readonly Dictionary<Type, HashSet<Type>> ConvertableDictionary = new Dictionary<Type, HashSet<Type>>
             {
                 {typeof (decimal), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char)}},
                 {typeof (double), new HashSet<Type> {typeof (sbyte), typeof (byte), typeof (short), typeof (ushort), typeof (int), typeof (uint), typeof (long), typeof (ulong), typeof (char), typeof (float)}},
@@ -118,9 +49,8 @@ namespace Catel.Reflection
             var assemblyName = type.GetAssemblyFullNameEx();
 
             return assemblyName.StartsWith("Catel.Core") ||
-                assemblyName.StartsWith("Catel.Mvc") ||
                 assemblyName.StartsWith("Catel.MVVM") ||
-                assemblyName.StartsWith("Catel.Extensions");
+                assemblyName.StartsWith("Catel.Serialization");
         }
 
         /// <summary>
@@ -222,12 +152,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNullOrEmptyArray("typeArguments", typeArguments);
 
-#if ENABLE_CACHE
-            var key = typeArguments.Aggregate(type.AssemblyQualifiedName + ";", (current, typeArgument) => current + typeArgument.AssemblyQualifiedName + ";");
-            return _makeGenericTypeCacheStorage.GetFromCacheOrFetch(key, () => type.MakeGenericType(typeArguments));
-#else
             return type.MakeGenericType(typeArguments);
-#endif
         }
 
         /// <summary>
@@ -314,7 +239,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
 
 #if UAP_DEFAULT
-            return type.GetTypeInfo().Assembly.FullName;
+            return type.GetAssemblyEx().FullName;
 #else
             return type.Assembly.FullName;
 #endif
@@ -334,7 +259,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("typeToCheck", typeToCheck);
 
 #if UAP_DEFAULT
-            return (type.GetTypeInfo().BaseType == typeToCheck);
+            return type.GetTypeInfo().BaseType == typeToCheck;
 #else
             return type.BaseType == typeToCheck;
 #endif
@@ -459,7 +384,7 @@ namespace Catel.Reflection
         }
 
         /// <summary>
-        /// The is value type ex.
+        /// Determines whether the specified type is a value type.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns>The is value type ex.</returns>
@@ -469,7 +394,8 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
 
 #if UAP_DEFAULT
-            return type.GetTypeInfo().IsValueType;
+            return typeof(IConvertible).IsAssignableFromEx(type);
+            //return type.GetTypeInfo().IsValueType;
 #else
             return type.IsValueType;
 #endif
@@ -508,7 +434,7 @@ namespace Catel.Reflection
             return type.IsGenericTypeDefinition;
 #endif
         }
-        
+
         /// <summary>
         /// Returns whether the specified type implements the specified interface.
         /// </summary>
@@ -693,50 +619,45 @@ namespace Catel.Reflection
 #endif
         }
 
-      /// <summary>
-      /// Gets the distance between types.
-      /// </summary>
-      /// <param name="fromType">The type</param>
-      /// <param name="toType">The base type</param>
-      /// <returns>The distance distance between types or -1 if the <paramref name="toType"/> is not assignable from the <paramref name="fromType"/></returns>
-      public static int GetTypeDistance(this Type fromType, Type toType)
-      {
-        Argument.IsNotNull("type", fromType);
-        Argument.IsNotNull("baseType", toType);
-
-#if ENABLE_CACHE
-          var cacheKey = $"fromType:{fromType.FullName};toType:{toType.FullName}";
-          return _typeDistanceCacheStorage.GetFromCacheOrFetch(cacheKey, () => GetDistanceInternal(fromType, toType));
-#else
-        return GetTypeDistanceInternal(fromType, toType);
-#endif
-      }
-
-      /// <summary>
-      /// Gets the distance between types.
-      /// </summary>
-      /// <param name="fromType">The type</param>
-      /// <param name="toType">The base type</param>
-      /// <returns>The distance distance between types or -1 if the <paramref name="toType"/> is not assignable from the <paramref name="fromType"/></returns>
-      /// <remarks>
-      /// Don't use this method directly use <see cref="GetTypeDistance"/> instead.
-      /// </remarks>
-      private static int GetTypeDistanceInternal(Type fromType, Type toType)
-      {
-        if (!toType.IsAssignableFromEx(fromType))
+        /// <summary>
+        /// Gets the distance between types.
+        /// </summary>
+        /// <param name="fromType">The type</param>
+        /// <param name="toType">The base type</param>
+        /// <returns>The distance distance between types or -1 if the <paramref name="toType"/> is not assignable from the <paramref name="fromType"/></returns>
+        public static int GetTypeDistance(this Type fromType, Type toType)
         {
-          return -1;
+            Argument.IsNotNull("type", fromType);
+            Argument.IsNotNull("baseType", toType);
+
+            return GetTypeDistanceInternal(fromType, toType);
         }
 
-        int distance = 0;
-        while (fromType != toType && !(toType.IsInterfaceEx() && !fromType.ImplementsInterfaceEx(toType)))
+        /// <summary>
+        /// Gets the distance between types.
+        /// </summary>
+        /// <param name="fromType">The type</param>
+        /// <param name="toType">The base type</param>
+        /// <returns>The distance distance between types or -1 if the <paramref name="toType"/> is not assignable from the <paramref name="fromType"/></returns>
+        /// <remarks>
+        /// Don't use this method directly use <see cref="GetTypeDistance"/> instead.
+        /// </remarks>
+        private static int GetTypeDistanceInternal(Type fromType, Type toType)
         {
-          fromType = fromType.GetBaseTypeEx();
-          distance++;
-        }
+            if (!toType.IsAssignableFromEx(fromType))
+            {
+                return -1;
+            }
 
-        return distance;
-      }
+            var distance = 0;
+            while (fromType != toType && !(toType.IsInterfaceEx() && !fromType.ImplementsInterfaceEx(toType)))
+            {
+                fromType = fromType.GetBaseTypeEx();
+                distance++;
+            }
+
+            return distance;
+        }
 
         /// <summary>
         /// The get base type ex.
@@ -768,11 +689,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("typeToCheck", typeToCheck);
 
-#if UAP_DEFAULT
-            return type.GetTypeInfo().IsAssignableFrom(typeToCheck.GetTypeInfo());
-#else
             return type.IsAssignableFrom(typeToCheck);
-#endif
         }
 
         /// <summary>
@@ -790,7 +707,7 @@ namespace Catel.Reflection
 
             var instanceType = objectToCheck.GetType();
 
-            if (_convertableDictionary.TryGetValue(type, out var convertableHashSet))
+            if (ConvertableDictionary.TryGetValue(type, out var convertableHashSet))
             {
                 if (convertableHashSet.Contains(instanceType))
                 {
@@ -803,11 +720,11 @@ namespace Catel.Reflection
                 return true;
             }
 
-            bool castable = (from method in type.GetMethodsEx(BindingFlags.Public | BindingFlags.Static)
-                             where method.ReturnType == instanceType &&
-                                   method.Name.Equals("op_Implicit", StringComparison.Ordinal) ||
-                                   method.Name.Equals("op_Explicit", StringComparison.Ordinal)
-                             select method).Any();
+            var castable = (from method in type.GetMethodsEx(BindingFlags.Public | BindingFlags.Static)
+                            where method.ReturnType == instanceType &&
+                                  method.Name.Equals("op_Implicit", StringComparison.Ordinal) ||
+                                  method.Name.Equals("op_Explicit", StringComparison.Ordinal)
+                            select method).Any();
 
             return castable;
         }
@@ -825,19 +742,10 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNull("types", types);
 
-#if ENABLE_CACHE
-            var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Constructor, BindingFlags.Default, types);
-#if UAP_DEFAULT
-            return _constructorCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetConstructor(types, BindingFlagsHelper.GetFinalBindingFlags(false, false)));
-#else
-            return _constructorCache.GetFromCacheOrFetch(cacheKey, () => type.GetConstructor(types));
-#endif
-#else
 #if UAP_DEFAULT
             return type.GetTypeInfo().GetConstructor(types, BindingFlagsHelper.GetFinalBindingFlags(false, false));
 #else
             return type.GetConstructor(types);
-#endif
 #endif
         }
 
@@ -851,19 +759,10 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if ENABLE_CACHE
-            var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Constructor, BindingFlags.Default, "allctors");
-#if UAP_DEFAULT
-            return _constructorsCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().DeclaredConstructors.ToArray());
-#else
-            return _constructorsCache.GetFromCacheOrFetch(cacheKey, type.GetConstructors);
-#endif
-#else
 #if UAP_DEFAULT
             return type.GetTypeInfo().DeclaredConstructors.ToArray();
 #else
             return type.GetConstructors();
-#endif
 #endif
         }
 
@@ -893,12 +792,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if ENABLE_CACHE
-            var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Member, bindingFlags, name);
-            return _fieldCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetMember(name, bindingFlags));
-#else
             return type.GetTypeInfo().GetMember(name, bindingFlags);
-#endif
         }
 
         /// <summary>
@@ -930,12 +824,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("name", name);
 
-#if ENABLE_CACHE
-            var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Field, bindingFlags, name);
-            return _fieldCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetField(name, bindingFlags));
-#else
             return type.GetTypeInfo().GetField(name, bindingFlags);
-#endif
         }
 
         /// <summary>
@@ -962,12 +851,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if ENABLE_CACHE
-            var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Field, bindingFlags);
-            return _fieldsCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetFields(bindingFlags));
-#else
             return type.GetTypeInfo().GetFields(bindingFlags);
-#endif
         }
 
         /// <summary>
@@ -1007,12 +891,7 @@ namespace Catel.Reflection
 
             try
             {
-#if ENABLE_CACHE
-                var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Property, bindingFlags, name);
-                propertyInfo = _propertyCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetProperty(name, bindingFlags));
-#else
                 propertyInfo = type.GetTypeInfo().GetProperty(name, bindingFlags);
-#endif
             }
             catch (AmbiguousMatchException)
             {
@@ -1065,12 +944,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if ENABLE_CACHE
-            var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Property, bindingFlags);
-            return _propertiesCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetProperties(bindingFlags));
-#else
             return type.GetTypeInfo().GetProperties(bindingFlags);
-#endif
         }
 
         /// <summary>
@@ -1102,12 +976,7 @@ namespace Catel.Reflection
             Argument.IsNotNullOrWhitespace("name", name);
             Argument.IsNotNull("type", type);
 
-#if ENABLE_CACHE
-            var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Event, bindingFlags, name);
-            return _eventCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetEvent(name, bindingFlags));
-#else
             return type.GetTypeInfo().GetEvent(name, bindingFlags);
-#endif
         }
 
         /// <summary>
@@ -1121,14 +990,9 @@ namespace Catel.Reflection
         public static EventInfo[] GetEventsEx(this Type type, bool flattenHierarchy = true, bool allowStaticMembers = false)
         {
             Argument.IsNotNull("type", type);
-            BindingFlags bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers);
+            var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers);
 
-#if ENABLE_CACHE
-            var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Event, bindingFlags);
-            return _eventsCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetEvents(bindingFlags));
-#else
             return type.GetTypeInfo().GetEvents(bindingFlags);
-#endif
         }
 
         /// <summary>
@@ -1160,12 +1024,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("name", name);
 
-#if ENABLE_CACHE
-            var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Method, bindingFlags, name);
-            return _methodCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetMethod(name, bindingFlags));
-#else
             return type.GetTypeInfo().GetMethod(name, bindingFlags);
-#endif
         }
 
         /// <summary>
@@ -1199,23 +1058,12 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("name", name);
 
-#if ENABLE_CACHE
-            var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Method, bindingFlags, new object[] {name, types});
-
-#if UAP_DEFAULT
-            return _methodCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetMethod(name, bindingFlags));
-#else
-            return _methodCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetMethod(name, bindingFlags, null, types, null));
-#endif
-
-#else
 #if NET || NETCORE || NETSTANDARD
             return type.GetMethod(name, bindingFlags, null, types, null);
 #elif XAMARIN
             return type.GetTypeInfo().GetMethod(name, types);
 #else
             return type.GetTypeInfo().GetMethod(name, types, bindingFlags);
-#endif
 #endif
         }
 
@@ -1243,12 +1091,7 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-#if ENABLE_CACHE
-            var cacheKey = new ReflectionCacheKey(type, ReflectionTypes.Method, bindingFlags);
-            return _methodsCache.GetFromCacheOrFetch(cacheKey, () => type.GetTypeInfo().GetMethods(bindingFlags));
-#else
             return type.GetTypeInfo().GetMethods(bindingFlags);
-#endif
         }
     }
 }
