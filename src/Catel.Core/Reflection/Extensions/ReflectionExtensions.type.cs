@@ -394,7 +394,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
 
 #if UAP_DEFAULT
-            return typeof(IConvertible).IsAssignableFromEx(type);
+            return (type is IConvertible);
             //return type.GetTypeInfo().IsValueType;
 #else
             return type.IsValueType;
