@@ -1062,10 +1062,14 @@ namespace Catel.Data
         public AttributeValidatorProvider() { }
         protected override Catel.Data.IValidator GetValidator(System.Type targetType) { }
     }
+    public class static BoxingCache
+    {
+        public static object GetBoxedValue(object value) { }
+    }
     public class BoxingCache<T>
-        where T :  struct
     {
         public BoxingCache() { }
+        public static Catel.Data.BoxingCache<T> Default { get; }
         protected T AddBoxedValue(object boxedValue) { }
         protected object AddUnboxedValue(T value) { }
         public object GetBoxedValue(T value) { }
@@ -1220,9 +1224,16 @@ namespace Catel.Data
     {
         object GetValue(string propertyName);
         TValue GetValue<TValue>(string propertyName);
+        [System.ObsoleteAttribute("Use `GetValueFastButUnsecure<TValue>(string)` instead. Will be treated as an erro" +
+            "r from version 6.0.0. Will be removed in version 6.0.0.", false)]
         object GetValueFastButUnsecure(string propertyName);
+        TValue GetValueFastButUnsecure<TValue>(string propertyName);
         void SetValue(string propertyName, object value);
+        void SetValue<TValue>(string propertyName, TValue value);
+        [System.ObsoleteAttribute("Use `SetValueFastButUnsecure<TValue>(string, TValue)` instead. Will be treated as" +
+            " an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         void SetValueFastButUnsecure(string propertyName, object value);
+        void SetValueFastButUnsecure<TValue>(string propertyName, TValue value);
     }
     public interface IModelEqualityComparer : System.Collections.IEqualityComparer
     {
@@ -1424,10 +1435,13 @@ namespace Catel.Data
         public event System.EventHandler<System.ComponentModel.EndEditEventArgs> _endEditingEvent;
         [System.Security.SecurityCriticalAttribute()]
         public virtual void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        protected static object GetObjectValue<TValue>(TValue value) { }
         protected Catel.Data.PropertyData GetPropertyData(string name) { }
         protected virtual Catel.Runtime.Serialization.ISerializer GetSerializerForIEditableObject() { }
         protected object GetValue(string name) { }
         protected TValue GetValue<TValue>(string name) { }
+        [System.ObsoleteAttribute("Use `GetValue<TValue>(string)` instead. Will be treated as an error from version " +
+            "6.0.0. Will be removed in version 6.0.0.", false)]
         protected object GetValue(Catel.Data.PropertyData property) { }
         protected TValue GetValue<TValue>(Catel.Data.PropertyData property) { }
         protected virtual T GetValueFromPropertyBag<T>(string propertyName) { }
@@ -1451,8 +1465,13 @@ namespace Catel.Data
         public static Catel.Data.PropertyData RegisterProperty<TValue>(string name, System.Type type, TValue defaultValue, System.EventHandler<Catel.Data.AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = True, bool includeInBackup = True) { }
         public static Catel.Data.PropertyData RegisterProperty(string name, System.Type type, System.Func<object> createDefaultValue = null, System.EventHandler<Catel.Data.AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = True, bool includeInBackup = True) { }
         protected virtual void SetDirty(string propertyName) { }
+        protected void SetValue<TValue>(string name, TValue value, bool notifyOnChange = True) { }
         protected void SetValue(string name, object value, bool notifyOnChange = True) { }
         protected void SetValue(Catel.Data.PropertyData property, object value, bool notifyOnChange = True) { }
+        protected void SetValue<TValue>(Catel.Data.PropertyData property, TValue value, bool notifyOnChange = True) { }
+        protected virtual void SetValueToPropertyBag<TValue>(string propertyName, TValue value) { }
+        [System.ObsoleteAttribute("Use `SetValueToPropertyBag<TValue>(string, TValue)` instead. Will be treated as a" +
+            "n error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         protected virtual void SetValueToPropertyBag(string propertyName, object value) { }
         protected virtual bool ShouldPropertyChangeUpdateIsDirty(string propertyName) { }
         public System.IDisposable SuspendChangeCallbacks() { }

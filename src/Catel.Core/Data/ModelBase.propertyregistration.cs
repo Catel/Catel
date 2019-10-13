@@ -122,11 +122,11 @@ namespace Catel.Data
             var value = defaultValue as Delegate;
             if (value != null)
             {
-                return RegisterProperty(name, type, () => value.DynamicInvoke(), propertyChangedEventHandler,
+                return RegisterProperty(name, type, () => GetObjectValue(value.DynamicInvoke()), propertyChangedEventHandler,
                     includeInSerialization, includeInBackup, false);
             }
 
-            return RegisterProperty(name, type, () => defaultValue, propertyChangedEventHandler,
+            return RegisterProperty(name, type, () => GetObjectValue(defaultValue), propertyChangedEventHandler,
                 includeInSerialization, includeInBackup, false);
         }
 
@@ -176,11 +176,11 @@ namespace Catel.Data
             var value = defaultValue as Delegate;
             if (value != null)
             {
-                return RegisterProperty(name, type, () => value.DynamicInvoke(), propertyChangedEventHandler,
+                return RegisterProperty(name, type, () => GetObjectValue<TValue>((TValue)value.DynamicInvoke()), propertyChangedEventHandler,
                     includeInSerialization, includeInBackup, isModelBaseProperty);
             }
 
-            return RegisterProperty(name, type, () => defaultValue, propertyChangedEventHandler,
+            return RegisterProperty(name, type, () => GetObjectValue<TValue>(defaultValue), propertyChangedEventHandler,
                 includeInSerialization, includeInBackup, isModelBaseProperty);
         }
 

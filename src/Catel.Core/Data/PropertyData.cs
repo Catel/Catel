@@ -194,7 +194,7 @@ namespace Catel.Data
         /// <returns>Default value of the property.</returns>
         public TValue GetDefaultValue<TValue>()
         {
-            return (DefaultValue is TValue) ? (TValue)DefaultValue : default(TValue);
+            return (DefaultValue is TValue) ? (TValue)DefaultValue : default;
         }
 
         /// <summary>
