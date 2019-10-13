@@ -666,29 +666,27 @@ namespace Catel.Runtime.Serialization.Xml
                 var referenceInfo = referenceManager.GetInfoById(graphId);
                 if (referenceInfo is null)
                 {
-                    Log.Error("Expected to find graph object with id '{0}' in ReferenceManager, but it was not found. Defaulting value for member '{1}' to null", graphId, element.Name);
+                    Log.Error($"Expected to find graph object with id '{graphId}' in ReferenceManager, but it was not found. Defaulting value for member '{element.Name}' to null");
                     return null;
                 }
 
                 return referenceInfo.Instance;
             }
 
-            var typeAttribute = element.Attribute("type"); // .GetAttribute("type", "http://schemas.catelproject.com");
+            var typeAttribute = element.Attribute("type");
             var attributeValue = (typeAttribute != null) ? typeAttribute.Value : null;
             if (!string.IsNullOrEmpty(attributeValue))
             {
                 var typeToDeserialize = TypeCache.GetTypeWithoutAssembly(attributeValue, allowInitialization: false);
                 if (typeToDeserialize != null && propertyTypeToDeserialize != typeToDeserialize)
                 {
-                    Log.Debug("Property type for property '{0}' is '{1}' but found type info that it should be deserialized as '{2}'",
-                        memberValue.Name, memberValue.MemberType.FullName, attributeValue);
+                    Log.Debug($"Property type for property '{memberValue.Name}' is '{memberValue.MemberType.FullName}' but found type info that it should be deserialized as '{attributeValue}'");
 
                     propertyTypeToDeserialize = typeToDeserialize;
                 }
                 else
                 {
-                    Log.Warning("Property type for property '{0}' is '{1}' but found type info that it should be deserialized as '{2}'. Unfortunately the type cannot be found so the deserialization will probably fail.",
-                        memberValue.Name, memberValue.MemberType.FullName, attributeValue);
+                    Log.Warning($"Property type for property '{memberValue.Name}' is '{memberValue.MemberType.FullName}' but found type info that it should be deserialized as '{attributeValue}'. Unfortunately the type cannot be found so the deserialization will probably fail.");
                 }
             }
             

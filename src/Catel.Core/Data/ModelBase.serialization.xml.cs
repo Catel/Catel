@@ -13,9 +13,12 @@ namespace Catel.Data
     using Runtime.Serialization.Xml;
     using Runtime.Serialization;
     using Scoping;
+    using System;
 
     public partial class ModelBase
     {
+        private static readonly Func<SerializationScope> XmlSerializationScopeFactory = new Func<SerializationScope>(() => new SerializationScope(SerializationFactory.GetXmlSerializer(), null));
+
         /// <summary>
         /// This method is reserved and should not be used. When implementing the IXmlSerializable interface, you should return null (Nothing in Visual Basic) from this method, and instead, if specifying a custom schema is required, apply the <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"/> to the class.
         /// </summary>
@@ -42,7 +45,7 @@ namespace Catel.Data
             var contextInfo = new XmlSerializationContextInfo(reader, this);
 
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetXmlSerializer(), null)))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, XmlSerializationScopeFactory))
             {
                 var serializer = scopeManager.ScopeObject.Serializer;
                 serializer.Deserialize(this, contextInfo, scopeManager.ScopeObject.Configuration);
@@ -56,7 +59,7 @@ namespace Catel.Data
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetXmlSerializer(), null)))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, XmlSerializationScopeFactory))
             {
                 var type = GetType();
                 var element = new XElement(type.Name);
