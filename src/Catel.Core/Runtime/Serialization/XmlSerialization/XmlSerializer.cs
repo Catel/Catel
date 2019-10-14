@@ -38,6 +38,7 @@ namespace Catel.Runtime.Serialization.Xml
         #endregion
 
         #region Constants
+        private const string XmlIsNull = "IsNull";
         private const string XmlType = "type";
         private const string XmlGraphId = "graphid";
         private const string XmlGraphRefId = "graphrefid";
@@ -139,7 +140,10 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             var xmlReader = context.Context.XmlReader;
-            xmlReader.Read();
+            if (xmlReader.NodeType == XmlNodeType.None)
+            {
+                xmlReader.Read();
+            }
 
             return base.Deserialize(model, context);
         }
@@ -245,9 +249,10 @@ namespace Catel.Runtime.Serialization.Xml
         {
             base.BeforeDeserialization(context);
 
+            var namespacePrefix = GetNamespacePrefix();
             var xmlReader = context.Context.XmlReader;
 
-            var graphIdAttributeValue = xmlReader.GetAttribute(XmlGraphId);
+            var graphIdAttributeValue = xmlReader.GetAttribute($"{namespacePrefix}:{XmlGraphId}");
             if (!string.IsNullOrWhiteSpace(graphIdAttributeValue))
             {
                 var graphId = int.Parse(graphIdAttributeValue);
@@ -696,12 +701,13 @@ namespace Catel.Runtime.Serialization.Xml
         {
             object value = null;
 
+            var namespacePrefix = GetNamespacePrefix();
             var xmlReader = context.Context.XmlReader;
             var xmlName = xmlReader.LocalName;
 
             var propertyTypeToDeserialize = memberValue.MemberType;
 
-            var isNullAttributeValue = xmlReader.GetAttribute("IsNull");
+            var isNullAttributeValue = xmlReader.GetAttribute($"{namespacePrefix}:{XmlIsNull}");
             var isNull = !string.IsNullOrWhiteSpace(isNullAttributeValue) ? StringToObjectHelper.ToBool(isNullAttributeValue) : false;
             if (isNull)
             {
@@ -709,9 +715,9 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             // Fix for CTL-555, note that we'll use this method at the end of the method, once we've read the model
-            var graphIdAttributeValue = xmlReader.GetAttribute(XmlGraphId);
+            var graphIdAttributeValue = xmlReader.GetAttribute($"{namespacePrefix}:{XmlGraphId}");
 
-            var graphRefIdAttributeValue = xmlReader.GetAttribute(XmlGraphRefId);
+            var graphRefIdAttributeValue = xmlReader.GetAttribute($"{namespacePrefix}:{XmlGraphRefId}");
             if (!string.IsNullOrWhiteSpace(graphRefIdAttributeValue))
             {
                 var graphId = int.Parse(graphRefIdAttributeValue);
@@ -727,7 +733,7 @@ namespace Catel.Runtime.Serialization.Xml
                 return referenceInfo.Instance;
             }
 
-            var typeAttributeValue = xmlReader.GetAttribute(XmlType);
+            var typeAttributeValue = xmlReader.GetAttribute($"{namespacePrefix}:{XmlType}");
             if (!string.IsNullOrEmpty(typeAttributeValue))
             {
                 var typeToDeserialize = TypeCache.GetTypeWithoutAssembly(typeAttributeValue, allowInitialization: false);
@@ -817,8 +823,8 @@ namespace Catel.Runtime.Serialization.Xml
                     object childValue = null;
 
                     // Step 1: check for graph attributes
-                    var collectionItemGraphRefIdAttribute = xmlReader.GetAttribute(XmlGraphRefId);
-                    var collectionItemGraphIdAttribute = xmlReader.GetAttribute(XmlGraphId);
+                    var collectionItemGraphRefIdAttribute = xmlReader.GetAttribute($"{namespacePrefix}:{XmlGraphRefId}");
+                    var collectionItemGraphIdAttribute = xmlReader.GetAttribute($"{namespacePrefix}:{XmlGraphId}");
 
                     if (!string.IsNullOrWhiteSpace(collectionItemGraphRefIdAttribute))
                     {
@@ -855,6 +861,9 @@ namespace Catel.Runtime.Serialization.Xml
                 }
 
                 value = collection;
+
+                // Exit the collection
+                xmlReader.Read();
 
                 isDeserialized = true;
             }
@@ -918,7 +927,7 @@ namespace Catel.Runtime.Serialization.Xml
                 xmlWriter.WriteAttributeString("xmlns", namespacePrefix, defaultNamespace, "http://schemas.catelproject.com");
 #endif
 
-                xmlWriter.WriteAttributeString(namespacePrefix, "IsNull", null, "true");
+                xmlWriter.WriteAttributeString(namespacePrefix, XmlIsNull, null, "true");
                 xmlWriter.WriteEndElement();
             }
             else
