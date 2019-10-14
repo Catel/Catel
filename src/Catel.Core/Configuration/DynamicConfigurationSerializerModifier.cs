@@ -51,17 +51,19 @@ namespace Catel.Configuration
             var dynamicConfiguration = (DynamicConfiguration)model;
 
             var xmlSerializationContext = ((ISerializationContext<XmlSerializationContextInfo>)context).Context;
-            var element = xmlSerializationContext.Element;
 
-            if (element != null)
+            var reader = xmlSerializationContext.XmlReader;
+            if (reader != null)
             {
-                foreach (var childElement in element.Elements())
+                while (reader.Read())
                 {
-                    var elementName = childElement.Name.LocalName;
+                    if (reader.NodeType == System.Xml.XmlNodeType.Element)
+                    {
+                        var elementName = reader.LocalName;
 
-                    dynamicConfiguration.RegisterConfigurationKey(elementName);
-
-                    dynamicConfiguration.MarkConfigurationValueAsSet(elementName);
+                        dynamicConfiguration.RegisterConfigurationKey(elementName);
+                        dynamicConfiguration.MarkConfigurationValueAsSet(elementName);
+                    }
                 }
             }
         }

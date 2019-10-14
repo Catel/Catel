@@ -21,20 +21,20 @@ namespace Catel.Runtime.Serialization.Xml
     /// </summary>
     public class XmlSerializationContextInfo : SerializationContextInfoBase<XmlSerializationContextInfo>
     {
-        private readonly object _lockObject = new object();
-        //private DataContractSerializer _dataContractSerializer;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlSerializationContextInfo" /> class.
         /// </summary>
-        /// <param name="element">The element.</param>
+        /// <param name="xmlWriter">The xml writer.</param>
         /// <param name="model">The model, is allowed to be null for value types.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="element" /> is <c>null</c>.</exception>
-        public XmlSerializationContextInfo(XElement element, object model)
+        /// <exception cref="ArgumentNullException">The <paramref name="xmlWriter" /> is <c>null</c>.</exception>
+        public XmlSerializationContextInfo(XmlWriter xmlWriter, object model)
         {
-            Argument.IsNotNull("element", element);
+            Argument.IsNotNull("element", xmlWriter);
+            Argument.IsNotNull("model", model);
 
-            Initialize(element, model);
+            XmlWriter = xmlWriter;
+
+            Initialize(model);
         }
 
         /// <summary>
@@ -44,64 +44,25 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="model">The model.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="xmlReader" /> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
-        public XmlSerializationContextInfo(XmlReader xmlReader, ModelBase model)
+        public XmlSerializationContextInfo(XmlReader xmlReader, object model)
         {
             Argument.IsNotNull("xmlReader", xmlReader);
             Argument.IsNotNull("model", model);
 
-            var modelType = model.GetType();
-            var elementStart = string.Format("<{0}", modelType.Name);
+            XmlReader = xmlReader;
 
-            if (xmlReader.HasAttributes)
-            {
-                for (int i = 0; i < xmlReader.AttributeCount; i++)
-                {
-                    xmlReader.MoveToAttribute(i);
-
-                    var attributeName = xmlReader.LocalName;
-                    var attributeValue = xmlReader.Value;
-
-                    elementStart += string.Format(" {0}=\"{1}\"", attributeName, attributeValue);
-                }
-
-                xmlReader.MoveToElement();
-            }
-
-            elementStart += ">";
-
-            xmlReader.MoveToContent();
-
-            var xmlContent = xmlReader.ReadInnerXml();
-            if (xmlContent.StartsWith("&lt;"))
-            {
-                xmlContent = System.Net.WebUtility.HtmlDecode(xmlContent);
-            }
-
-            var elementEnd = string.Format("</{0}>", modelType.Name);
-
-            var finalXmlContent = string.Format("{0}{1}{2}", elementStart, xmlContent, elementEnd);
-            Initialize(finalXmlContent, model);
+            Initialize(model);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="XmlSerializationContextInfo"/> class.
+        /// Gets the xml writer.
         /// </summary>
-        /// <param name="xmlContent">Content of the XML.</param>
-        /// <param name="model">The model.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="xmlContent" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
-        public XmlSerializationContextInfo(string xmlContent, ModelBase model)
-        {
-            Argument.IsNotNull("xmlContent", xmlContent);
-            Argument.IsNotNull("model", model);
-
-            Initialize(xmlContent, model);
-        }
+        public XmlWriter XmlWriter { get; private set; }
 
         /// <summary>
-        /// Gets the xml writer settings.
+        /// Gets the xml reader.
         /// </summary>
-        public XmlWriterSettings XmlWriterSettings { get; private set; }
+        public XmlReader XmlReader { get; private set; }
 
         /// <summary>
         /// Gets the list of known types from the current stack.
@@ -110,12 +71,6 @@ namespace Catel.Runtime.Serialization.Xml
         /// The known types.
         /// </value>
         public HashSet<Type> KnownTypes { get; private set; }
-
-        /// <summary>
-        /// Gets the element.
-        /// </summary>
-        /// <value>The element.</value>
-        public XElement Element { get; private set; }
 
         /// <summary>
         /// Gets the model.
@@ -141,27 +96,10 @@ namespace Catel.Runtime.Serialization.Xml
             }
         }
 
-        private void Initialize(string xmlContent, object model)
+        private void Initialize(object model)
         {
             KnownTypes = new HashSet<Type>();
-
-            Initialize(XElement.Parse(xmlContent), model);
-        }
-
-        private void Initialize(XElement element, object model)
-        {
-            KnownTypes = new HashSet<Type>();
-
-            Element = element;
             Model = model;
-
-            XmlWriterSettings = new XmlWriterSettings
-            {
-                OmitXmlDeclaration = true,
-                CheckCharacters = false,
-                ConformanceLevel = ConformanceLevel.Fragment,
-                NamespaceHandling = NamespaceHandling.OmitDuplicates
-            };
         }
         #endregion
     }

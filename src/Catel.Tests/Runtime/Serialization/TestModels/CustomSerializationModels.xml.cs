@@ -11,22 +11,25 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
     using Catel.Data;
     using System.Xml.Linq;
     using Catel.Runtime.Serialization.Xml;
+    using System.Xml;
 
     public class CustomXmlSerializationModel : CustomSerializationModelBase, ICustomXmlSerializable
     {
-        void ICustomXmlSerializable.Serialize(XElement xmlElement)
+        void ICustomXmlSerializable.Serialize(XmlWriter xmlWriter)
         {
-            xmlElement.Add(new XElement("FirstName")
-            {
-                Value = FirstName
-            });
+            xmlWriter.WriteElementString("FirstName", FirstName);
 
             IsCustomSerialized = true;
         }
 
-        void ICustomXmlSerializable.Deserialize(XElement xmlElement)
+        void ICustomXmlSerializable.Deserialize(XmlReader xmlReader)
         {
-            FirstName = xmlElement.Element("FirstName").Value;
+            xmlReader.MoveToContent();
+
+            if (xmlReader.LocalName == "FirstName")
+            {
+                FirstName = xmlReader.ReadElementContentAsString();
+            }
 
             IsCustomDeserialized = true;
         }
