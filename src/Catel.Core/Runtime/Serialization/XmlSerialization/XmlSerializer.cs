@@ -406,7 +406,7 @@ namespace Catel.Runtime.Serialization.Xml
                         memberName = propertyDataManager.MapPropertyNameToXmlElementName(modelType, memberToDeserialize.Name);
                     }
 
-                    if (ShouldSerializeAsDictionary(memberToDeserialize.ActualMemberType))
+                    if (ShouldSerializeAsDictionary(memberToDeserialize.GetBestMemberType()))
                     {
                         // Fixed name for items inside dictionaries
                         memberName = "Items";
