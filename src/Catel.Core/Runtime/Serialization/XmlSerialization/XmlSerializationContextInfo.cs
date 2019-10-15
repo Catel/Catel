@@ -33,6 +33,7 @@ namespace Catel.Runtime.Serialization.Xml
             Argument.IsNotNull("model", model);
 
             XmlWriter = xmlWriter;
+            IsRootObject = xmlWriter.WriteState == WriteState.Start;
 
             Initialize(model);
         }
@@ -50,9 +51,15 @@ namespace Catel.Runtime.Serialization.Xml
             Argument.IsNotNull("model", model);
 
             XmlReader = xmlReader;
+            IsRootObject = xmlReader.NodeType == XmlNodeType.None;
 
             Initialize(model);
         }
+
+        /// <summary>
+        /// Gets whether this object is the root object of the xml graph.
+        /// </summary>
+        public bool IsRootObject { get; private set; }
 
         /// <summary>
         /// Gets the xml writer.

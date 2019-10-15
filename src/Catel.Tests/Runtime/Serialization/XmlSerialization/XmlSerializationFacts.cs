@@ -233,7 +233,6 @@ namespace Catel.Tests.Runtime.Serialization
                 var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, SerializationTestHelper.GetXmlSerializer(),
                     new XmlSerializationConfiguration
                     {
-                        OptimalizationMode = mode
                     });
 
                 Assert.AreEqual(family.LastName, newFamily.LastName);
@@ -261,7 +260,7 @@ namespace Catel.Tests.Runtime.Serialization
                 var newFamily = SerializationTestHelper.SerializeAndDeserialize(family, SerializationTestHelper.GetXmlSerializer(),
                     new XmlSerializationConfiguration
                     {
-                        OptimalizationMode = mode
+                        // No longer using optimization mode, but keep this test alive
                     });
 
                 Assert.AreEqual(family.LastName, newFamily.LastName);

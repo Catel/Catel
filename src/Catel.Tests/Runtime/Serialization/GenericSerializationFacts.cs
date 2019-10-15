@@ -81,27 +81,14 @@ namespace Catel.Tests.Runtime.Serialization
         private static void TestSerializationOnSerializers(List<ISerializer> serializers, Action<ISerializer, ISerializationConfiguration, string> action, 
             ISerializationManager serializationManager = null)
         {
-            if (serializationManager is null)
-            {
-                serializationManager = new SerializationManager();
-            }
-
             var serializerConfigurations = new Dictionary<Type, List<ISerializationConfiguration>>();
 
             serializerConfigurations[typeof(XmlSerializer)] = new List<ISerializationConfiguration>(new[]
             {
                 new XmlSerializationConfiguration
                 {
-                    OptimalizationMode = XmlSerializerOptimalizationMode.Performance
+                    // Default config
                 },
-                new XmlSerializationConfiguration
-                {
-                    OptimalizationMode = XmlSerializerOptimalizationMode.PrettyXml
-                },
-                //new XmlSerializationConfiguration
-                //{
-                //    OptimalizationMode = XmlSerializerOptimalizationMode.PrettyXmlAgressive
-                //},
             });
 
 #pragma warning disable CS0618

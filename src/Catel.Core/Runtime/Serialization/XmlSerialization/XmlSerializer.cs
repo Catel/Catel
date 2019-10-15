@@ -95,33 +95,7 @@ namespace Catel.Runtime.Serialization.Xml
                 return;
             }
 
-            var rootName = "root";
-            if (model != null)
-            {
-                rootName = _rootNameCache.GetFromCacheOrFetch(context.ModelType, () =>
-                {
-                    return GetXmlElementName(context.ModelType, model, null);
-                });
-            }
-
-            var xmlWriter = context.Context.XmlWriter;
-
-            var isRootObject = (xmlWriter.WriteState == WriteState.Start);
-            if (isRootObject)
-            {
-                xmlWriter.WriteStartElement(rootName);
-
-                EnsureNamespaceInXmlWriter(xmlWriter, null);
-
-                AddReferenceId(context, context.Model);
-            }
-
             base.Serialize(model, context);
-
-            if (isRootObject)
-            {
-                xmlWriter.WriteEndElement();
-            }
         }
 
         /// <summary>
@@ -137,12 +111,6 @@ namespace Catel.Runtime.Serialization.Xml
             {
                 customXmlSerializable.Deserialize(context.Context.XmlReader);
                 return customXmlSerializable;
-            }
-
-            var xmlReader = context.Context.XmlReader;
-            if (xmlReader.NodeType == XmlNodeType.None)
-            {
-                xmlReader.Read();
             }
 
             return base.Deserialize(model, context);
@@ -232,12 +200,26 @@ namespace Catel.Runtime.Serialization.Xml
         {
             base.BeforeSerialization(context);
 
-            var referenceManager = context.ReferenceManager;
-            if (referenceManager.Count == 0)
+            if (WriteDocumentStartIfRequired(context))
             {
-                Log.Debug("Reference manager contains no objects yet, adding initial reference which is the first model in the graph");
+                var referenceManager = context.ReferenceManager;
+                if (referenceManager.Count == 0)
+                {
+                    Log.Debug("Reference manager contains no objects yet, adding initial reference which is the first model in the graph");
 
-                referenceManager.GetInfo(context.Model, true);
+                    referenceManager.GetInfo(context.Model, true);
+                }
+            }
+        }
+
+        protected override void AfterSerialization(ISerializationContext<XmlSerializationContextInfo> context)
+        {
+            base.AfterSerialization(context);
+
+            if (context.Context.IsRootObject && !ShouldSerializeAsCollection(context.ModelType))
+            {
+                var xmlWriter = context.Context.XmlWriter;
+                xmlWriter.WriteEndElement();
             }
         }
 
@@ -249,8 +231,13 @@ namespace Catel.Runtime.Serialization.Xml
         {
             base.BeforeDeserialization(context);
 
-            var namespacePrefix = GetNamespacePrefix();
             var xmlReader = context.Context.XmlReader;
+            if (xmlReader.NodeType == XmlNodeType.None)
+            {
+                xmlReader.Read();
+            }
+
+            var namespacePrefix = GetNamespacePrefix();
 
             var graphIdAttributeValue = xmlReader.GetAttribute($"{namespacePrefix}:{XmlGraphId}");
             if (!string.IsNullOrWhiteSpace(graphIdAttributeValue))
@@ -266,6 +253,58 @@ namespace Catel.Runtime.Serialization.Xml
                 }
 
                 referenceManager.RegisterManually(graphId, context.Model);
+            }
+        }
+
+        /// <summary>
+        /// Serializes the members.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="membersToSerialize">The members to serialize.</param>
+        protected override void SerializeMembers(ISerializationContext<XmlSerializationContextInfo> context, List<MemberValue> membersToSerialize)
+        {
+            if (membersToSerialize.Count == 0)
+            {
+                return;
+            }
+
+            var modelType = context.ModelType;
+
+            var propertyDataManager = PropertyDataManager.Default;
+
+            // Important: we need to respect the xml order (since it's a forward-only writer). We will do this in 
+            // 2 steps:
+            // 1: attributes
+            // 2: elements
+
+            var orderedMembersToSerializer = new List<MemberValue>();
+
+            foreach (var memberToSerialize in membersToSerialize)
+            {
+                if (propertyDataManager.IsPropertyNameMappedToXmlAttribute(modelType, memberToSerialize.Name))
+                {
+                    // Insert at the beginning
+                    orderedMembersToSerializer.Insert(0, memberToSerialize);
+                }
+                else
+                {
+                    // Insert at the end
+                    orderedMembersToSerializer.Add(memberToSerialize);
+                }
+            }
+
+            // Now we can do sorted serialization (attributes first)
+            using (GetCurrentSerializationScopeManager(context.Configuration))
+            {
+                var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType);
+
+                foreach (var member in orderedMembersToSerializer)
+                {
+                    if (StartMemberSerialization(context, member, serializerModifiers))
+                    {
+                        EndMemberSerialization(context, member);
+                    }
+                }
             }
         }
 
@@ -308,7 +347,7 @@ namespace Catel.Runtime.Serialization.Xml
             {
                 var attributeName = propertyDataManager.MapPropertyNameToXmlAttributeName(modelType, memberValue.Name);
 
-                Log.Debug("Serializing property {0}.{1} as xml attribute '{2}'", modelType.FullName, memberValue.Name, attributeName);
+                //Log.Debug("Serializing property {0}.{1} as xml attribute '{2}'", modelType.FullName, memberValue.Name, attributeName);
 
                 WriteXmlAttribute(context, attributeName, memberValue);
             }
@@ -321,7 +360,7 @@ namespace Catel.Runtime.Serialization.Xml
                     elementName = propertyDataManager.MapPropertyNameToXmlElementName(modelType, memberValue.Name);
                 }
 
-                Log.Debug("Serializing property {0}.{1} as xml element '{2}'", modelType.FullName, memberValue.Name, elementName);
+                //Log.Debug("Serializing property {0}.{1} as xml element '{2}'", modelType.FullName, memberValue.Name, elementName);
 
                 WriteXmlElement(context, elementName, memberValue, modelType);
             }
@@ -367,6 +406,12 @@ namespace Catel.Runtime.Serialization.Xml
                         memberName = propertyDataManager.MapPropertyNameToXmlElementName(modelType, memberToDeserialize.Name);
                     }
 
+                    if (ShouldSerializeAsDictionary(memberToDeserialize.ActualMemberType))
+                    {
+                        // Fixed name for items inside dictionaries
+                        memberName = "Items";
+                    }
+
                     elementMembers.Add(memberName, memberToDeserialize);
                 }
             }
@@ -385,46 +430,89 @@ namespace Catel.Runtime.Serialization.Xml
                 }
             }
 
-            xmlReader.MoveToContent();
-            xmlReader.Read();
+            if (xmlReader.NodeType == XmlNodeType.None)
+            {
+                xmlReader.Read();
+            }
+            else if (xmlReader.IsEmptyElement)
+            {
+                // No reading required
+            }
+            else if (!ShouldSerializeAsCollection(modelType) && !ShouldSerializeAsDictionary(modelType))
+            {
+                xmlReader.MoveToContent();
+                xmlReader.Read();
+            }
 
             // Step 2: elements
-            while (true)
+            if (elementMembers.Count > 0)
             {
-                if (xmlReader.NodeType == XmlNodeType.EndElement &&
-                    xmlReader.LocalName.Equals(startMember))
+                while (true)
                 {
-                    // We've hit the end of the object
-                    break;
-                }
-
-                if (xmlReader.NodeType != XmlNodeType.Element &&
-                    xmlReader.NodeType != XmlNodeType.EndElement)
-                {
-                    xmlReader.MoveToContent();
-                    continue;
-                }
-
-                var localName = xmlReader.LocalName;
-                if (elementMembers.TryGetValue(localName, out var elementMemberValue))
-                {
-                    StartMemberDeserialization(context, elementMemberValue);
-
-                    var serializationObject = DeserializeMember(context, elementMemberValue);
-
-                    var finalMemberValue = EndMemberDeserialization(context, elementMemberValue, serializationObject, serializerModifiers);
-                    if (finalMemberValue != null)
+                    if (!FindNextContentElement(xmlReader, startMember))
                     {
-                        deserializedMemberValues.Add(finalMemberValue);
+                        // End of object
+                        break;
                     }
-                }
-                else
-                {
-                    Log.Debug($"Ignoring member '{localName}'");
+
+                    var localName = xmlReader.LocalName;
+                    if (elementMembers.TryGetValue(localName, out var elementMemberValue))
+                    {
+                        StartMemberDeserialization(context, elementMemberValue);
+
+                        var serializationObject = DeserializeMember(context, elementMemberValue);
+
+                        var finalMemberValue = EndMemberDeserialization(context, elementMemberValue, serializationObject, serializerModifiers);
+                        if (finalMemberValue != null)
+                        {
+                            deserializedMemberValues.Add(finalMemberValue);
+                        }
+                    }
+                    else
+                    {
+                        Log.Debug($"Ignoring member '{localName}'");
+                    }
                 }
             }
 
             return deserializedMemberValues;
+        }
+
+        /// <summary>
+        /// Finds the next content element in the current xml reader.
+        /// </summary>
+        /// <param name="xmlReader"></param>
+        /// <param name="startMember"></param>
+        /// <returns></returns>
+        protected bool FindNextContentElement(XmlReader xmlReader, string startMember)
+        {
+            if (xmlReader.NodeType == XmlNodeType.None)
+            {
+                // Reached end of document
+                return false;
+            }
+
+            if (xmlReader.NodeType == XmlNodeType.EndElement)
+            {
+                if (xmlReader.LocalName.Equals(startMember))
+                {
+                    // We've hit the end of the object
+                    return false;
+                }
+                else
+                {
+                    // End of any object, move to content
+                    xmlReader.Read();
+                    xmlReader.MoveToContent();
+                }
+            }
+
+            if (xmlReader.NodeType != XmlNodeType.Element)
+            {
+                xmlReader.MoveToContent();
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -543,19 +631,6 @@ namespace Catel.Runtime.Serialization.Xml
         {
             var xmlWriter = context.Context.XmlWriter;
             xmlWriter.Flush();
-
-            //var element = context.Context.Element;
-            //var document = new XDocument(element);
-
-            //OptimizeXDocument(document, context);
-
-            //if (ShouldSerializeAsCollection(context.ModelType))
-            //{
-            //    // Because we have 'Items\Items' for collections, remote the root
-            //    document = new XDocument(document.Root.FirstNode);
-            //}
-
-            //document.Save(stream);
         }
 
         /// <summary>
@@ -607,6 +682,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// </summary>
         /// <param name="context">The context.</param>
         /// <returns></returns>
+        [ObsoleteEx(Message = "Using XmlWriter / XmlReader, use the corresponding settings instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         protected virtual XmlSerializerOptimalizationMode GetXmlOptimalizationMode(ISerializationContext<XmlSerializationContextInfo> context)
         {
             var optimalizationMode = XmlSerializerOptimalizationMode.Performance;
@@ -656,12 +732,19 @@ namespace Catel.Runtime.Serialization.Xml
             SerializationContextMode contextMode, ISerializationConfiguration configuration)
         {
             XmlSerializationContextInfo contextInfo = null;
+            var xmlConfiguration = configuration as XmlSerializationConfiguration;
 
             try
             {
                 if (stream.Length != 0)
                 {
-                    var xmlReader = XmlReader.Create(stream);
+                    var xmlReaderSettings = xmlConfiguration?.ReaderSettings ?? new XmlReaderSettings
+                    {
+                        CheckCharacters = false,
+                        IgnoreComments = true,
+                    };
+
+                    var xmlReader = XmlReader.Create(stream, xmlReaderSettings);
 
                     contextInfo = new XmlSerializationContextInfo(xmlReader, model);
                 }
@@ -674,13 +757,15 @@ namespace Catel.Runtime.Serialization.Xml
             var isNewDocument = contextInfo is null;
             if (isNewDocument)
             {
-                var xmlWriter = XmlWriter.Create(stream, new XmlWriterSettings
+                var xmlWriterSettings = xmlConfiguration?.WriterSettings ?? new XmlWriterSettings
                 {
-                    OmitXmlDeclaration = true,
+                    OmitXmlDeclaration = false,
                     CheckCharacters = false,
                     ConformanceLevel = ConformanceLevel.Fragment,
                     NamespaceHandling = NamespaceHandling.OmitDuplicates
-                });
+                };
+
+                var xmlWriter = XmlWriter.Create(stream, xmlWriterSettings);
 
                 contextInfo = new XmlSerializationContextInfo(xmlWriter, model);
             }
@@ -711,6 +796,9 @@ namespace Catel.Runtime.Serialization.Xml
             var isNull = !string.IsNullOrWhiteSpace(isNullAttributeValue) ? StringToObjectHelper.ToBool(isNullAttributeValue) : false;
             if (isNull)
             {
+                // Enforce read so we move to the next thing
+                xmlReader.Read();
+
                 return null;
             }
 
@@ -729,6 +817,9 @@ namespace Catel.Runtime.Serialization.Xml
                     Log.Error($"Expected to find graph object with id '{graphId}' in ReferenceManager, but it was not found. Defaulting value for member '{xmlName}' to null");
                     return null;
                 }
+
+                // Enforce read so we move to the next thing
+                xmlReader.Read();
 
                 return referenceInfo.Instance;
             }
@@ -754,7 +845,7 @@ namespace Catel.Runtime.Serialization.Xml
             if (propertyTypeToDeserialize == typeof(string) && ShouldSerializeUsingParseAndToString(memberValue, false))
             {
                 var tempValue = memberValue.Value;
-                memberValue.Value = xmlReader.ReadContentAsString();
+                memberValue.Value = xmlReader.ReadElementContentAsString();
 
                 var parsedValue = DeserializeUsingObjectParse(context, memberValue);
                 if (parsedValue != null)
@@ -799,63 +890,72 @@ namespace Catel.Runtime.Serialization.Xml
 
                 var serializer = _dataContractSerializerFactory.GetDataContractSerializer(propertyTypeToDeserialize, childElementType, xmlName, null, null);
 
-                var startMember = xmlReader.LocalName;
-
-                xmlReader.MoveToContent();
-                xmlReader.Read();
-
-                while (true)
+                // Only read collection nodes when there are nodes available
+                if (!xmlReader.IsEmptyElement)
                 {
-                    if (xmlReader.NodeType == XmlNodeType.EndElement &&
-                        xmlReader.LocalName.Equals(startMember))
+                    var startMember = xmlReader.LocalName;
+
+                    xmlReader.MoveToContent();
+                    xmlReader.Read();
+
+                    while (true)
                     {
-                        // We've hit the end of the collection
-                        break;
-                    }
-
-                    if (xmlReader.NodeType != XmlNodeType.Element &&
-                        xmlReader.NodeType != XmlNodeType.EndElement)
-                    {
-                        xmlReader.MoveToContent();
-                        continue;
-                    }
-
-                    object childValue = null;
-
-                    // Step 1: check for graph attributes
-                    var collectionItemGraphRefIdAttribute = xmlReader.GetAttribute($"{namespacePrefix}:{XmlGraphRefId}");
-                    var collectionItemGraphIdAttribute = xmlReader.GetAttribute($"{namespacePrefix}:{XmlGraphId}");
-
-                    if (!string.IsNullOrWhiteSpace(collectionItemGraphRefIdAttribute))
-                    {
-                        var graphId = int.Parse(collectionItemGraphRefIdAttribute);
-
-                        var referenceManager = context.ReferenceManager;
-                        var referenceInfo = referenceManager.GetInfoById(graphId);
-                        if (referenceInfo is null)
+                        if (xmlReader.NodeType == XmlNodeType.EndElement &&
+                            xmlReader.LocalName.Equals(startMember))
                         {
-                            Log.Error("Expected to find graph object with id '{0}' in ReferenceManager, but it was not found. Defaulting value for member '{1}' to null", graphId, xmlName);
+                            // We've hit the end of the collection
+                            break;
                         }
 
-                        childValue = referenceInfo?.Instance;
-                    }
-
-                    // Step 2: deserialize anyway
-                    if (childValue is null)
-                    {
-                        childValue = serializer.ReadObject(xmlReader, false);
-                    }
-
-                    if (childValue != null)
-                    {
-                        collection.Add(childValue);
-
-                        if (!string.IsNullOrWhiteSpace(collectionItemGraphIdAttribute))
+                        if (xmlReader.NodeType != XmlNodeType.Element &&
+                            xmlReader.NodeType != XmlNodeType.EndElement)
                         {
-                            var graphId = int.Parse(collectionItemGraphIdAttribute);
+                            xmlReader.MoveToContent();
+                            continue;
+                        }
+
+                        object childValue = null;
+
+                        // Step 1: check for graph attributes
+                        var collectionItemGraphRefIdAttribute = xmlReader.GetAttribute($"{namespacePrefix}:{XmlGraphRefId}");
+                        var collectionItemGraphIdAttribute = xmlReader.GetAttribute($"{namespacePrefix}:{XmlGraphId}");
+
+                        if (!string.IsNullOrWhiteSpace(collectionItemGraphRefIdAttribute))
+                        {
+                            var graphId = int.Parse(collectionItemGraphRefIdAttribute);
 
                             var referenceManager = context.ReferenceManager;
-                            referenceManager.RegisterManually(graphId, childValue);
+                            var referenceInfo = referenceManager.GetInfoById(graphId);
+                            if (referenceInfo is null)
+                            {
+                                Log.Error("Expected to find graph object with id '{0}' in ReferenceManager, but it was not found. Defaulting value for member '{1}' to null", graphId, xmlName);
+                            }
+                            else
+                            {
+                                childValue = referenceInfo?.Instance;
+
+                                // Enforce read so we move to the next thing
+                                xmlReader.Read();
+                            }
+                        }
+
+                        // Step 2: deserialize anyway
+                        if (childValue is null)
+                        {
+                            childValue = serializer.ReadObject(xmlReader, false);
+                        }
+
+                        if (childValue != null)
+                        {
+                            collection.Add(childValue);
+
+                            if (!string.IsNullOrWhiteSpace(collectionItemGraphIdAttribute))
+                            {
+                                var graphId = int.Parse(collectionItemGraphIdAttribute);
+
+                                var referenceManager = context.ReferenceManager;
+                                referenceManager.RegisterManually(graphId, childValue);
+                            }
                         }
                     }
                 }
@@ -933,12 +1033,7 @@ namespace Catel.Runtime.Serialization.Xml
             else
             {
                 var memberTypeToSerialize = memberValue.GetBestMemberType();
-                var additionalKnownTypes = context.Context.KnownTypes;
-                var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, null, additionalKnownTypes.ToList());
-
-                // We might have added more known types in the serializer
-                additionalKnownTypes.AddRange(serializer.KnownTypes);
-
+                
                 var referenceManager = context.ReferenceManager;
                 ReferenceInfo referenceInfo = null;
                 var serializeElement = true;
@@ -959,7 +1054,20 @@ namespace Catel.Runtime.Serialization.Xml
 
                 if (serializeElement)
                 {
-                    xmlWriter.WriteStartElement(elementName);
+                    var additionalKnownTypes = context.Context.KnownTypes;
+
+                    var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, null, additionalKnownTypes.ToList());
+
+                    // We might have added more known types in the serializer
+                    additionalKnownTypes.AddRange(serializer.KnownTypes);
+
+                    // Sometimes we are very late with the document start (e.g. when serialization a dictionary), but at this stage we should really
+                    // force the document start
+                    var writeElementWrapper = !WriteDocumentStartIfRequired(context, true);
+                    if (writeElementWrapper)
+                    {
+                        xmlWriter.WriteStartElement(elementName);
+                    }
 
                     AddObjectMetadata(xmlWriter, memberTypeToSerialize, memberValue.MemberType, referenceInfo, namespacePrefix);
 
@@ -971,6 +1079,13 @@ namespace Catel.Runtime.Serialization.Xml
                         var collection = memberValue.Value as IEnumerable;
                         if (collection != null)
                         {
+                            if (modelType.IsArrayEx())
+                            {
+                                // Get array specific serializer
+                                var arrayType = modelType.GetElementTypeEx();
+                                serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, arrayType, elementName, null, additionalKnownTypes.ToList());
+                            }
+
                             foreach (var item in collection)
                             {
                                 var itemType = item.GetType();
@@ -1005,6 +1120,39 @@ namespace Catel.Runtime.Serialization.Xml
             }
         }
 
+        private bool WriteDocumentStartIfRequired(ISerializationContext<XmlSerializationContextInfo> context, bool skipCollectionCheck = false)
+        {
+            var xmlWriter = context.Context.XmlWriter;
+            if (xmlWriter.WriteState != WriteState.Start)
+            {
+                return false;
+            }
+
+            // Collections are special, don't write document start if this is a root collection (and otherwise we already have a document start)
+            if (!skipCollectionCheck && ShouldSerializeAsCollection(context.ModelType))
+            {
+                return false;
+            }
+
+            var model = context.Model;
+            var rootName = "root";
+            if (model != null)
+            {
+                rootName = _rootNameCache.GetFromCacheOrFetch(context.ModelType, () =>
+                {
+                    return GetXmlElementName(context.ModelType, model, null);
+                });
+            }
+
+            xmlWriter.WriteStartElement(rootName);
+
+            EnsureNamespaceInXmlWriter(context, xmlWriter, null);
+
+            AddReferenceId(context, context.Model);
+
+            return true;
+        }
+
         private void AddObjectMetadata(XmlWriter xmlWriter, Type memberTypeToSerialize, Type actualMemberType,
             ReferenceInfo referenceInfo, string namespacePrefix)
         {
@@ -1036,12 +1184,8 @@ namespace Catel.Runtime.Serialization.Xml
                     Log.Debug($"Existing reference detected for element type '{memberTypeToSerialize.GetSafeFullName(false)}' with id '{referenceInfo.Id}', only storing id");
                 }
 
-                //serializer.WriteStartObject(xmlWriter, memberValue.Value);
                 xmlWriter.WriteStartElement(elementName);
-
                 xmlWriter.WriteAttributeString(namespacePrefix, XmlGraphRefId, null, referenceInfo.Id.ToString());
-
-                //serializer.WriteEndObject(xmlWriter);
                 xmlWriter.WriteEndElement();
 
                 return true;
@@ -1068,15 +1212,20 @@ namespace Catel.Runtime.Serialization.Xml
         /// <summary>
         /// Ensures the catel namespace in the xml document.
         /// </summary>
+        /// <param name="context">The serialization context.</param>
         /// <param name="xmlWriter">The xml writer.</param>
         /// <param name="xmlNamespace">The xml namespace.</param>
-        private void EnsureNamespaceInXmlWriter(XmlWriter xmlWriter, XmlNamespace xmlNamespace)
+        private void EnsureNamespaceInXmlWriter(ISerializationContext<XmlSerializationContextInfo> context, XmlWriter xmlWriter, XmlNamespace xmlNamespace)
         {
             var catelNamespacePrefix = GetNamespacePrefix();
             var catelNamespaceUrl = GetNamespaceUrl();
 
             xmlWriter.WriteAttributeString(catelNamespacePrefix, "http://www.w3.org/2000/xmlns/", catelNamespaceUrl);
-            xmlWriter.WriteAttributeString("i", "http://www.w3.org/2000/xmlns/", "http://www.w3.org/2001/XMLSchema-instance");
+
+            if (!context.ModelType.IsArrayEx())
+            {
+                xmlWriter.WriteAttributeString("i", "http://www.w3.org/2000/xmlns/", "http://www.w3.org/2001/XMLSchema-instance");
+            }
 
             if (xmlNamespace != null)
             {
