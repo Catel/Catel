@@ -125,37 +125,37 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
     [TestFixture]
     public class Serialization
     {
-        [TestCase, Explicit]
-        public void DictionaryWithKnownTypes()
-        {
-            var dictionary = new DictionaryTestClass();
+        //[TestCase, Explicit]
+        //public void DictionaryWithKnownTypes()
+        //{
+        //    var dictionary = new DictionaryTestClass();
 
-            dictionary.Values.Add("A", new ModelBaseFacts.Person
-            {
-                FirstName = "John",
-                LastName = "Doe"
-            });
+        //    dictionary.Values.Add("A", new ModelBaseFacts.Person
+        //    {
+        //        FirstName = "John",
+        //        LastName = "Doe"
+        //    });
 
-            dictionary.Values.Add("B", new ModelBaseFacts.Person
-            {
-                FirstName = "Jane",
-                LastName = "Doe"
-            });
+        //    dictionary.Values.Add("B", new ModelBaseFacts.Person
+        //    {
+        //        FirstName = "Jane",
+        //        LastName = "Doe"
+        //    });
 
-            var dictionary2 = SerializationTestHelper.SerializeAndDeserialize(dictionary, SerializationTestHelper.GetXmlSerializer());
+        //    var dictionary2 = SerializationTestHelper.SerializeAndDeserialize(dictionary, SerializationTestHelper.GetXmlSerializer());
 
-            Assert.AreEqual(dictionary, dictionary2);
+        //    Assert.AreEqual(dictionary, dictionary2);
 
-            var dic1Elem1 = dictionary.Values.ElementAt(0);
-            var dic2Elem1 = dictionary2.Values.ElementAt(0);
+        //    var dic1Elem1 = dictionary.Values.ElementAt(0);
+        //    var dic2Elem1 = dictionary2.Values.ElementAt(0);
 
-            Assert.AreEqual(dic1Elem1, dic2Elem1);
+        //    Assert.AreEqual(dic1Elem1, dic2Elem1);
 
-            var dic1Elem2 = dictionary.Values.ElementAt(1);
-            var dic2Elem2 = dictionary2.Values.ElementAt(1);
+        //    var dic1Elem2 = dictionary.Values.ElementAt(1);
+        //    var dic2Elem2 = dictionary2.Values.ElementAt(1);
 
-            Assert.AreEqual(dic1Elem2, dic2Elem2);
-        }
+        //    Assert.AreEqual(dic1Elem2, dic2Elem2);
+        //}
 
         [TestCase]
         public void EnumerableOfInterfacesViaKnownTypes_SameNameDifferentNamespaces_SaveLoadRoundTrip()
