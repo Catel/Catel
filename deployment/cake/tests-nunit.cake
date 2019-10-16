@@ -23,7 +23,7 @@ private static void RunTestsUsingNUnit(BuildContext buildContext, string project
         NoColor = true,
         NoResults = false,
         X86 = string.Equals(buildContext.Tests.ProcessBit, "X86", StringComparison.OrdinalIgnoreCase),
-        Timeout = 60,
+        Timeout = 60 * 1000, // 60 seconds
         Workers = 1
         //Work = testResultsDirectory
     });
