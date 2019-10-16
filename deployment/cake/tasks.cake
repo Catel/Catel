@@ -385,11 +385,19 @@ Task("PackageLocal")
 
     foreach (var component in buildContext.Components.Items)
     {
-        Information("Copying build artifact for '{0}'", component);
-    
-        var sourceFile = string.Format("{0}/{1}.{2}.nupkg", buildContext.General.OutputRootDirectory, 
-            component, buildContext.General.Version.NuGet);
-        CopyFiles(new [] { sourceFile }, localPackagesDirectory);
+        try
+        {
+            Information("Copying build artifact for '{0}'", component);
+        
+            var sourceFile = string.Format("{0}/{1}.{2}.nupkg", buildContext.General.OutputRootDirectory, 
+                component, buildContext.General.Version.NuGet);
+            CopyFiles(new [] { sourceFile }, localPackagesDirectory);
+        }
+        catch (Exception)
+        {
+            // Ignore
+            Warning("Failed to copy build artifacts for '{0}'", component);
+        }
     }
 });
 
