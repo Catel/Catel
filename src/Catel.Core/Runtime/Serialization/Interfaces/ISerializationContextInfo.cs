@@ -12,7 +12,7 @@ namespace Catel.Runtime.Serialization
     /// <summary>
     /// Serialization context info.
     /// </summary>
-    public interface ISerializationContextInfo : IDisposable
+    public interface ISerializationContextInfo
     {
         /// <summary>
         /// Gets a value indicating whether the context should auto generate graph ids for new object instances.

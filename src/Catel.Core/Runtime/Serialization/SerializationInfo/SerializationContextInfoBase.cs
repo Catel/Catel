@@ -6,7 +6,7 @@
     /// <typeparam name="TSerializationContextInfo">The type of the serialization context information.</typeparam>
     /// <seealso cref="Catel.Runtime.Serialization.ISerializationContextInfo" />
     /// <seealso cref="Catel.Runtime.Serialization.ISerializationContextContainer" />
-    public abstract class SerializationContextInfoBase<TSerializationContextInfo> : Disposable, ISerializationContextInfo, ISerializationContextContainer
+    public abstract class SerializationContextInfoBase<TSerializationContextInfo> : ISerializationContextInfo, ISerializationContextContainer
         where TSerializationContextInfo : class, ISerializationContextInfo
     {
         protected SerializationContextInfoBase()

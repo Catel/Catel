@@ -1,107 +1,107 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ComputerSettings graphid="1" xmlns:ctl="http://schemas.catelproject.com">
+<ComputerSettings xmlns:ctl="http://schemas.catelproject.com" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" ctl:graphid="1">
   <ComputerName>MyComputer</ComputerName>
-  <IniFileCollection xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="2" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-    <IniFile xmlns="http://schemas.datacontract.org/2004/07/Catel.Tests.Data">
+  <IniFileCollection ctl:graphid="2">
+    <IniFile ctl:graphid="3" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" i:type="d0p0:IniFile">
       <FileName>Initial file 1</FileName>
-      <IniEntryCollection xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="4">
-        <ctl1:IniEntry xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="5" i:type="ctl1:IniEntry" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-          <ctl1:Group>G1</ctl1:Group>
-          <ctl1:Key>K1</ctl1:Key>
-          <ctl1:Value>V1</ctl1:Value>
-          <ctl1:IniEntryType>Public</ctl1:IniEntryType>
-        </ctl1:IniEntry>
+      <IniEntryCollection ctl:graphid="4">
+        <IniEntry ctl:graphid="5" i:type="d0p0:IniEntry">
+          <Group>G1</Group>
+          <Key>K1</Key>
+          <Value>V1</Value>
+          <IniEntryType>Public</IniEntryType>
+        </IniEntry>
       </IniEntryCollection>
     </IniFile>
-    <IniFile xmlns="http://schemas.datacontract.org/2004/07/Catel.Tests.Data">
+    <IniFile ctl:graphid="6" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" i:type="d0p0:IniFile">
       <FileName>Initial file 2</FileName>
-      <IniEntryCollection xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="7">
-        <ctl1:IniEntry xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="8" i:type="ctl1:IniEntry" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-          <ctl1:Group>G2</ctl1:Group>
-          <ctl1:Key>K2</ctl1:Key>
-          <ctl1:Value>V2</ctl1:Value>
-          <ctl1:IniEntryType>Public</ctl1:IniEntryType>
-        </ctl1:IniEntry>
+      <IniEntryCollection ctl:graphid="7">
+        <IniEntry ctl:graphid="8" i:type="d0p0:IniEntry">
+          <Group>G2</Group>
+          <Key>K2</Key>
+          <Value>V2</Value>
+          <IniEntryType>Public</IniEntryType>
+        </IniEntry>
       </IniEntryCollection>
     </IniFile>
-    <IniFile xmlns="http://schemas.datacontract.org/2004/07/Catel.Tests.Data">
+    <IniFile ctl:graphid="9" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" i:type="d0p0:IniFile">
       <FileName>Initial file 3</FileName>
-      <IniEntryCollection xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="10">
-        <ctl1:IniEntry xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="11" i:type="ctl1:IniEntry" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-          <ctl1:Group>G3</ctl1:Group>
-          <ctl1:Key>K3</ctl1:Key>
-          <ctl1:Value>V3</ctl1:Value>
-          <ctl1:IniEntryType>Public</ctl1:IniEntryType>
-        </ctl1:IniEntry>
+      <IniEntryCollection ctl:graphid="10">
+        <IniEntry ctl:graphid="11" i:type="d0p0:IniEntry">
+          <Group>G3</Group>
+          <Key>K3</Key>
+          <Value>V3</Value>
+          <IniEntryType>Public</IniEntryType>
+        </IniEntry>
       </IniEntryCollection>
     </IniFile>
-    <IniFile xmlns="http://schemas.datacontract.org/2004/07/Catel.Tests.Data">
+    <IniFile ctl:graphid="12" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" i:type="d0p0:IniFile">
       <FileName>MyFile 0</FileName>
-      <IniEntryCollection xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="13">
-        <ctl1:IniEntry xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="14" i:type="ctl1:IniEntry" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-          <ctl1:Group>Group 0</ctl1:Group>
-          <ctl1:Key>Key 0</ctl1:Key>
-          <ctl1:Value>Value 0</ctl1:Value>
-          <ctl1:IniEntryType>Public</ctl1:IniEntryType>
-        </ctl1:IniEntry>
-        <ctl1:IniEntry xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="15" i:type="ctl1:IniEntry" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-          <ctl1:Group>Group 1</ctl1:Group>
-          <ctl1:Key>Key 1</ctl1:Key>
-          <ctl1:Value>Value 1</ctl1:Value>
-          <ctl1:IniEntryType>Private</ctl1:IniEntryType>
-        </ctl1:IniEntry>
-        <ctl1:IniEntry xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="16" i:type="ctl1:IniEntry" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-          <ctl1:Group>Group 2</ctl1:Group>
-          <ctl1:Key>Key 2</ctl1:Key>
-          <ctl1:Value>Value 2</ctl1:Value>
-          <ctl1:IniEntryType>Public</ctl1:IniEntryType>
-        </ctl1:IniEntry>
+      <IniEntryCollection ctl:graphid="13">
+        <IniEntry ctl:graphid="14" i:type="d0p0:IniEntry">
+          <Group>Group 0</Group>
+          <Key>Key 0</Key>
+          <Value>Value 0</Value>
+          <IniEntryType>Public</IniEntryType>
+        </IniEntry>
+        <IniEntry ctl:graphid="15" i:type="d0p0:IniEntry">
+          <Group>Group 1</Group>
+          <Key>Key 1</Key>
+          <Value>Value 1</Value>
+          <IniEntryType>Private</IniEntryType>
+        </IniEntry>
+        <IniEntry ctl:graphid="16" i:type="d0p0:IniEntry">
+          <Group>Group 2</Group>
+          <Key>Key 2</Key>
+          <Value>Value 2</Value>
+          <IniEntryType>Public</IniEntryType>
+        </IniEntry>
       </IniEntryCollection>
     </IniFile>
-    <IniFile xmlns="http://schemas.datacontract.org/2004/07/Catel.Tests.Data">
+    <IniFile ctl:graphid="17" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" i:type="d0p0:IniFile">
       <FileName>MyFile 1</FileName>
-      <IniEntryCollection xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="18">
-        <ctl1:IniEntry xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="19" i:type="ctl1:IniEntry" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-          <ctl1:Group>Group 0</ctl1:Group>
-          <ctl1:Key>Key 0</ctl1:Key>
-          <ctl1:Value>Value 0</ctl1:Value>
-          <ctl1:IniEntryType>Public</ctl1:IniEntryType>
-        </ctl1:IniEntry>
-        <ctl1:IniEntry xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="20" i:type="ctl1:IniEntry" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-          <ctl1:Group>Group 1</ctl1:Group>
-          <ctl1:Key>Key 1</ctl1:Key>
-          <ctl1:Value>Value 1</ctl1:Value>
-          <ctl1:IniEntryType>Private</ctl1:IniEntryType>
-        </ctl1:IniEntry>
-        <ctl1:IniEntry xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="21" i:type="ctl1:IniEntry" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-          <ctl1:Group>Group 2</ctl1:Group>
-          <ctl1:Key>Key 2</ctl1:Key>
-          <ctl1:Value>Value 2</ctl1:Value>
-          <ctl1:IniEntryType>Public</ctl1:IniEntryType>
-        </ctl1:IniEntry>
+      <IniEntryCollection ctl:graphid="18">
+        <IniEntry ctl:graphid="19" i:type="d0p0:IniEntry">
+          <Group>Group 0</Group>
+          <Key>Key 0</Key>
+          <Value>Value 0</Value>
+          <IniEntryType>Public</IniEntryType>
+        </IniEntry>
+        <IniEntry ctl:graphid="20" i:type="d0p0:IniEntry">
+          <Group>Group 1</Group>
+          <Key>Key 1</Key>
+          <Value>Value 1</Value>
+          <IniEntryType>Private</IniEntryType>
+        </IniEntry>
+        <IniEntry ctl:graphid="21" i:type="d0p0:IniEntry">
+          <Group>Group 2</Group>
+          <Key>Key 2</Key>
+          <Value>Value 2</Value>
+          <IniEntryType>Public</IniEntryType>
+        </IniEntry>
       </IniEntryCollection>
     </IniFile>
-    <IniFile xmlns="http://schemas.datacontract.org/2004/07/Catel.Tests.Data">
+    <IniFile ctl:graphid="22" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" i:type="d0p0:IniFile">
       <FileName>MyFile 2</FileName>
-      <IniEntryCollection xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays" graphid="23">
-        <ctl1:IniEntry xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="24" i:type="ctl1:IniEntry" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-          <ctl1:Group>Group 0</ctl1:Group>
-          <ctl1:Key>Key 0</ctl1:Key>
-          <ctl1:Value>Value 0</ctl1:Value>
-          <ctl1:IniEntryType>Public</ctl1:IniEntryType>
-        </ctl1:IniEntry>
-        <ctl1:IniEntry xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="25" i:type="ctl1:IniEntry" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-          <ctl1:Group>Group 1</ctl1:Group>
-          <ctl1:Key>Key 1</ctl1:Key>
-          <ctl1:Value>Value 1</ctl1:Value>
-          <ctl1:IniEntryType>Private</ctl1:IniEntryType>
-        </ctl1:IniEntry>
-        <ctl1:IniEntry xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="26" i:type="ctl1:IniEntry" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-          <ctl1:Group>Group 2</ctl1:Group>
-          <ctl1:Key>Key 2</ctl1:Key>
-          <ctl1:Value>Value 2</ctl1:Value>
-          <ctl1:IniEntryType>Public</ctl1:IniEntryType>
-        </ctl1:IniEntry>
+      <IniEntryCollection ctl:graphid="23">
+        <IniEntry ctl:graphid="24" i:type="d0p0:IniEntry">
+          <Group>Group 0</Group>
+          <Key>Key 0</Key>
+          <Value>Value 0</Value>
+          <IniEntryType>Public</IniEntryType>
+        </IniEntry>
+        <IniEntry ctl:graphid="25" i:type="d0p0:IniEntry">
+          <Group>Group 1</Group>
+          <Key>Key 1</Key>
+          <Value>Value 1</Value>
+          <IniEntryType>Private</IniEntryType>
+        </IniEntry>
+        <IniEntry ctl:graphid="26" i:type="d0p0:IniEntry">
+          <Group>Group 2</Group>
+          <Key>Key 2</Key>
+          <Value>Value 2</Value>
+          <IniEntryType>Public</IniEntryType>
+        </IniEntry>
       </IniEntryCollection>
     </IniFile>
   </IniFileCollection>

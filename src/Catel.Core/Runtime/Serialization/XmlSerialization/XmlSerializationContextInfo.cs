@@ -34,6 +34,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             XmlWriter = xmlWriter;
             IsRootObject = xmlWriter.WriteState == WriteState.Start;
+            AllowCustomXmlSerialization = true;
 
             Initialize(model);
         }
@@ -52,6 +53,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             XmlReader = xmlReader;
             IsRootObject = xmlReader.NodeType == XmlNodeType.None;
+            AllowCustomXmlSerialization = true;
 
             Initialize(model);
         }
@@ -84,6 +86,13 @@ namespace Catel.Runtime.Serialization.Xml
         /// </summary>
         /// <value>The model.</value>
         public object Model { get; private set; }
+
+        /// <summary>
+        /// Gets or sets whether custom xml serialization is allowed via the <see cref="ICustomXmlSerializable"/> interface.
+        /// <para />
+        /// The default value is <c>true</c>.
+        /// </summary>
+        public bool AllowCustomXmlSerialization { get; set; }
 
         #region Methods
         protected override void OnContextUpdated(ISerializationContext<XmlSerializationContextInfo> context)

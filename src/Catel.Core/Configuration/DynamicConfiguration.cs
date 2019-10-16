@@ -7,6 +7,9 @@
 namespace Catel.Configuration
 {
     using System.Collections.Generic;
+    using System.Xml;
+    using Catel.IoC;
+    using Catel.Runtime.Serialization.Xml;
     using Data;
     using Runtime.Serialization;
 
@@ -14,7 +17,7 @@ namespace Catel.Configuration
     /// Dynamic configuration.
     /// </summary>
     [SerializerModifier(typeof(DynamicConfigurationSerializerModifier))]
-    public class DynamicConfiguration : ModelBase
+    public class DynamicConfiguration : ModelBase, ICustomXmlSerializable
     {
         private readonly HashSet<string> _propertiesSetAtLeastOnce = new HashSet<string>();
 
@@ -95,5 +98,45 @@ namespace Catel.Configuration
             }
         }
         #endregion
+
+        public void Serialize(XmlWriter xmlWriter)
+        {
+            if (xmlWriter != null)
+            {
+                var xmlSerializer = ServiceLocator.Default.ResolveType<IXmlSerializer>();
+                xmlSerializer.Serialize(this, new XmlSerializationContextInfo(xmlWriter, this)
+                {
+                    AllowCustomXmlSerialization = false
+                });
+            }
+        }
+
+        public void Deserialize(XmlReader xmlReader)
+        {
+            if (xmlReader != null)
+            {
+                if (xmlReader.ReadState == ReadState.Initial)
+                {
+                    xmlReader.Read();
+                }
+
+                xmlReader.MoveToContent();
+
+                var parentNode = xmlReader.LocalName;
+
+                xmlReader.Read();
+                
+                while (xmlReader.MoveToNextContentElement(parentNode))
+                {
+                    var elementName = xmlReader.LocalName;
+                    var value = xmlReader.ReadElementContentAsString();
+
+                    RegisterConfigurationKey(elementName);
+                    MarkConfigurationValueAsSet(elementName);
+
+                    SetValue(elementName, value);
+                }
+            }
+        }
     }
 }

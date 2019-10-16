@@ -612,6 +612,7 @@ namespace Catel
     {
         public static System.Globalization.CultureInfo DefaultCulture { get; set; }
         public static bool ToBool(string value) { }
+        public static byte ToByte(string value) { }
         public static byte[] ToByteArray(string value) { }
         public static System.DateTime ToDateTime(string value) { }
         public static System.DateTime ToDateTime(string value, System.Globalization.CultureInfo cultureInfo) { }
@@ -990,13 +991,15 @@ namespace Catel.Configuration
         protected virtual bool ValueExists(Catel.Configuration.ConfigurationContainer container, string key) { }
     }
     [Catel.Runtime.Serialization.SerializerModifierAttribute(typeof(Catel.Configuration.DynamicConfigurationSerializerModifier))]
-    public class DynamicConfiguration : Catel.Data.ModelBase
+    public class DynamicConfiguration : Catel.Data.ModelBase, Catel.Runtime.Serialization.Xml.ICustomXmlSerializable
     {
         public DynamicConfiguration() { }
+        public void Deserialize(System.Xml.XmlReader xmlReader) { }
         public object GetConfigurationValue(string name) { }
         public bool IsConfigurationValueSet(string name) { }
         public void MarkConfigurationValueAsSet(string name) { }
         public void RegisterConfigurationKey(string name) { }
+        public void Serialize(System.Xml.XmlWriter xmlWriter) { }
         public void SetConfigurationValue(string name, object value) { }
     }
     public class static DynamicConfigurationExtensions
@@ -1006,7 +1009,6 @@ namespace Catel.Configuration
     public class DynamicConfigurationSerializerModifier : Catel.Runtime.Serialization.SerializerModifierBase
     {
         public DynamicConfigurationSerializerModifier(Catel.Runtime.Serialization.ISerializationManager serializationManager) { }
-        public override void OnDeserializing(Catel.Runtime.Serialization.ISerializationContext context, object model) { }
         public override void OnSerializing(Catel.Runtime.Serialization.ISerializationContext context, object model) { }
     }
     public interface IConfigurationService
@@ -3577,7 +3579,7 @@ namespace Catel.Runtime.Serialization
     public abstract class SerializationContextInfoBase<TSerializationContextInfo> : Catel.Runtime.Serialization.ISerializationContextContainer, Catel.Runtime.Serialization.ISerializationContextInfo
         where TSerializationContextInfo :  class, Catel.Runtime.Serialization.ISerializationContextInfo
     {
-        public SerializationContextInfoBase() { }
+        protected SerializationContextInfoBase() { }
         public Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> Context { get; }
         protected virtual void OnContextUpdated(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context) { }
         public virtual bool ShouldAutoGenerateGraphIds(Catel.Runtime.Serialization.ISerializationContext context) { }
@@ -3753,6 +3755,8 @@ namespace Catel.Runtime.Serialization
         public virtual System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(object model, TSerializationContextInfo serializationContext, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
         protected virtual System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context) { }
         protected virtual object DeserializeUsingObjectParse(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
+        protected virtual Catel.Runtime.Serialization.MemberValue EndMemberDeserialization(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue member, Catel.Runtime.Serialization.SerializationObject serializationObject, System.Collections.Generic.IEnumerable<Catel.Runtime.Serialization.ISerializerModifier> serializerModifiers) { }
+        protected void EndMemberSerialization(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue member) { }
         protected Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> GetContext(System.Type modelType, TSerializationContextInfo context, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
         protected Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> GetContext(System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
         protected virtual Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> GetContext(object model, System.Type modelType, TSerializationContextInfo context, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
@@ -3792,6 +3796,8 @@ namespace Catel.Runtime.Serialization
         protected virtual bool ShouldSerializeEnumAsString(Catel.Runtime.Serialization.MemberValue memberValue, bool checkActualMemberType) { }
         protected virtual bool ShouldSerializeModelAsCollection(System.Type memberType) { }
         protected virtual bool ShouldSerializeUsingParseAndToString(Catel.Runtime.Serialization.MemberValue memberValue, bool checkActualMemberType) { }
+        protected virtual void StartMemberDeserialization(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue member) { }
+        protected bool StartMemberSerialization(Catel.Runtime.Serialization.ISerializationContext<TSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue member, Catel.Runtime.Serialization.ISerializerModifier[] serializerModifiers) { }
         public void Warmup(System.Collections.Generic.IEnumerable<System.Type> types, int typesPerThread = 1000) { }
         protected abstract void Warmup(System.Type type);
     }
@@ -3823,6 +3829,10 @@ namespace Catel.Runtime.Serialization
         public virtual void OnDeserializing(Catel.Runtime.Serialization.ISerializationContext context, TModel model) { }
         public virtual void OnSerialized(Catel.Runtime.Serialization.ISerializationContext context, TModel model) { }
         public virtual void OnSerializing(Catel.Runtime.Serialization.ISerializationContext context, TModel model) { }
+    }
+    public class static XmlReaderExtensions
+    {
+        public static bool MoveToNextContentElement(this System.Xml.XmlReader xmlReader, string startMember) { }
     }
 }
 namespace Catel.Runtime.Serialization.Xml
@@ -3861,8 +3871,8 @@ namespace Catel.Runtime.Serialization.Xml
     }
     public interface ICustomXmlSerializable
     {
-        void Deserialize(System.Xml.Linq.XElement xmlElement);
-        void Serialize(System.Xml.Linq.XElement xmlElement);
+        void Deserialize(System.Xml.XmlReader xmlReader);
+        void Serialize(System.Xml.XmlWriter xmlWriter);
     }
     public interface IDataContractSerializerFactory
     {
@@ -3907,17 +3917,22 @@ namespace Catel.Runtime.Serialization.Xml
     public class XmlSerializationConfiguration : Catel.Runtime.Serialization.SerializationConfiguration
     {
         public XmlSerializationConfiguration() { }
+        [System.ObsoleteAttribute("Using XmlWriter / XmlReader, use the corresponding settings instead. Will be remo" +
+            "ved in version 6.0.0.", true)]
         public Catel.Runtime.Serialization.Xml.XmlSerializerOptimalizationMode OptimalizationMode { get; set; }
+        public System.Xml.XmlReaderSettings ReaderSettings { get; set; }
+        public System.Xml.XmlWriterSettings WriterSettings { get; set; }
     }
     public class XmlSerializationContextInfo : Catel.Runtime.Serialization.SerializationContextInfoBase<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo>
     {
-        public XmlSerializationContextInfo(System.Xml.Linq.XElement element, object model) { }
-        public XmlSerializationContextInfo(System.Xml.XmlReader xmlReader, Catel.Data.ModelBase model) { }
-        public XmlSerializationContextInfo(string xmlContent, Catel.Data.ModelBase model) { }
-        public System.Xml.Linq.XElement Element { get; }
+        public XmlSerializationContextInfo(System.Xml.XmlWriter xmlWriter, object model) { }
+        public XmlSerializationContextInfo(System.Xml.XmlReader xmlReader, object model) { }
+        public bool AllowCustomXmlSerialization { get; set; }
+        public bool IsRootObject { get; }
         public System.Collections.Generic.HashSet<System.Type> KnownTypes { get; }
         public object Model { get; }
-        public System.Xml.XmlWriterSettings XmlWriterSettings { get; }
+        public System.Xml.XmlReader XmlReader { get; }
+        public System.Xml.XmlWriter XmlWriter { get; }
         protected override void OnContextUpdated(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
     }
     public class XmlSerializationContextInfoFactory : Catel.Runtime.Serialization.ISerializationContextInfoFactory
@@ -3928,22 +3943,25 @@ namespace Catel.Runtime.Serialization.Xml
     public class XmlSerializer : Catel.Runtime.Serialization.SerializerBase<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo>, Catel.Runtime.Serialization.ISerializer, Catel.Runtime.Serialization.Xml.IXmlSerializer
     {
         public XmlSerializer(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Runtime.Serialization.Xml.IDataContractSerializerFactory dataContractSerializerFactory, Catel.Runtime.Serialization.Xml.IXmlNamespaceManager xmlNamespaceManager, Catel.IoC.ITypeFactory typeFactory, Catel.Runtime.Serialization.IObjectAdapter objectAdapter) { }
+        protected override void AfterSerialization(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
         protected override void AppendContextToStream(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, System.IO.Stream stream) { }
         protected override void BeforeDeserialization(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
         protected override void BeforeSerialization(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
         protected override object Deserialize(object model, Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
         protected override Catel.Runtime.Serialization.SerializationObject DeserializeMember(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
+        protected override System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> DeserializeMembers(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
         [System.ObsoleteAttribute("Use `GetSerializationContextInfo` instead. Will be removed in version 6.0.0.", true)]
         protected override Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> GetContext(object model, System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration configuration) { }
         protected virtual string GetNamespacePrefix() { }
         protected virtual string GetNamespaceUrl() { }
         protected override Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> GetSerializationContextInfo(object model, System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration configuration) { }
         protected string GetXmlElementName(System.Type modelType, object model, string memberName) { }
+        [System.ObsoleteAttribute("Using XmlWriter / XmlReader, use the corresponding settings instead. Will be remo" +
+            "ved in version 6.0.0.", true)]
         protected virtual Catel.Runtime.Serialization.Xml.XmlSerializerOptimalizationMode GetXmlOptimalizationMode(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
-        protected virtual void OptimizeXDocument(System.Xml.Linq.XDocument document, Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
-        protected virtual void OptimizeXElement(System.Xml.Linq.XElement element, Catel.Runtime.Serialization.Xml.XmlSerializerOptimalizationMode optimalizationMode) { }
         protected override void Serialize(object model, Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
         protected override void SerializeMember(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
+        protected override void SerializeMembers(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> membersToSerialize) { }
         protected override bool ShouldIgnoreMember(object model, string propertyName) { }
         protected override void Warmup(System.Type type) { }
     }

@@ -22,6 +22,7 @@ namespace Catel.Runtime.Serialization.Xml
     using IoC;
     using Logging;
     using Reflection;
+    using System.Runtime.Serialization;
 
     /// <summary>
     /// The xml serializer.
@@ -88,28 +89,31 @@ namespace Catel.Runtime.Serialization.Xml
         /// <param name="context">The context.</param>
         protected override void Serialize(object model, ISerializationContext<XmlSerializationContextInfo> context)
         {
-            var customXmlSerializable = model as ICustomXmlSerializable;
-            if (customXmlSerializable != null)
+            if (context.Context.AllowCustomXmlSerialization)
             {
-                var xmlWriter = context.Context.XmlWriter;
-
-                if (context.Context.IsRootObject)
+                var customXmlSerializable = model as ICustomXmlSerializable;
+                if (customXmlSerializable != null)
                 {
-                    var rootName = GetObjectRootName(context);
+                    var xmlWriter = context.Context.XmlWriter;
 
-                    xmlWriter.WriteStartElement(rootName);
+                    if (context.Context.IsRootObject)
+                    {
+                        var rootName = GetObjectRootName(context);
 
-                    EnsureNamespaceInXmlWriter(context, xmlWriter, null);
+                        xmlWriter.WriteStartElement(rootName);
+
+                        EnsureNamespaceInXmlWriter(context, xmlWriter, null);
+                    }
+
+                    customXmlSerializable.Serialize(xmlWriter);
+
+                    if (context.Context.IsRootObject)
+                    {
+                        xmlWriter.WriteEndElement();
+                    }
+
+                    return;
                 }
-
-                customXmlSerializable.Serialize(xmlWriter);
-
-                if (context.Context.IsRootObject)
-                {
-                    xmlWriter.WriteEndElement();
-                }
-
-                return;
             }
 
             base.Serialize(model, context);
@@ -123,14 +127,17 @@ namespace Catel.Runtime.Serialization.Xml
         /// <returns></returns>
         protected override object Deserialize(object model, ISerializationContext<XmlSerializationContextInfo> context)
         {
-            var customXmlSerializable = model as ICustomXmlSerializable;
-            if (customXmlSerializable != null)
+            if (context.Context.AllowCustomXmlSerialization)
             {
-                var xmlReader = context.Context.XmlReader;
+                var customXmlSerializable = model as ICustomXmlSerializable;
+                if (customXmlSerializable != null)
+                {
+                    var xmlReader = context.Context.XmlReader;
 
-                customXmlSerializable.Deserialize(xmlReader);
+                    customXmlSerializable.Deserialize(xmlReader);
 
-                return customXmlSerializable;
+                    return customXmlSerializable;
+                }
             }
 
             return base.Deserialize(model, context);
@@ -204,6 +211,7 @@ namespace Catel.Runtime.Serialization.Xml
                     xmlName = propertyDataManager.MapPropertyNameToXmlElementName(type, memberName);
                 }
 
+                // Cache
                 _dataContractSerializerFactory.GetDataContractSerializer(type, memberRepresentedType, xmlName, null, null);
             }
             catch (Exception ex)
@@ -255,11 +263,12 @@ namespace Catel.Runtime.Serialization.Xml
             if (xmlReader.NodeType == XmlNodeType.None)
             {
                 xmlReader.Read();
+                xmlReader.MoveToContent();
             }
 
             var namespacePrefix = GetNamespacePrefix();
 
-            var graphIdAttributeValue = xmlReader.GetAttribute($"{namespacePrefix}:{XmlGraphId}");
+            var graphIdAttributeValue = GetSpecialAttributeValue(xmlReader, namespacePrefix, XmlGraphId);
             if (!string.IsNullOrWhiteSpace(graphIdAttributeValue))
             {
                 var graphId = int.Parse(graphIdAttributeValue);
@@ -469,7 +478,7 @@ namespace Catel.Runtime.Serialization.Xml
             {
                 while (true)
                 {
-                    if (!FindNextContentElement(xmlReader, startMember))
+                    if (!xmlReader.MoveToNextContentElement(startMember))
                     {
                         // End of object
                         break;
@@ -496,43 +505,6 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             return deserializedMemberValues;
-        }
-
-        /// <summary>
-        /// Finds the next content element in the current xml reader.
-        /// </summary>
-        /// <param name="xmlReader"></param>
-        /// <param name="startMember"></param>
-        /// <returns></returns>
-        protected bool FindNextContentElement(XmlReader xmlReader, string startMember)
-        {
-            if (xmlReader.NodeType == XmlNodeType.None)
-            {
-                // Reached end of document
-                return false;
-            }
-
-            if (xmlReader.NodeType == XmlNodeType.EndElement)
-            {
-                if (xmlReader.LocalName.Equals(startMember))
-                {
-                    // We've hit the end of the object
-                    return false;
-                }
-                else
-                {
-                    // End of any object, move to content
-                    xmlReader.Read();
-                    xmlReader.MoveToContent();
-                }
-            }
-
-            if (xmlReader.NodeType != XmlNodeType.Element)
-            {
-                xmlReader.MoveToContent();
-            }
-
-            return true;
         }
 
         /// <summary>
@@ -781,8 +753,9 @@ namespace Catel.Runtime.Serialization.Xml
                 {
                     OmitXmlDeclaration = false,
                     CheckCharacters = false,
-                    ConformanceLevel = ConformanceLevel.Fragment,
-                    NamespaceHandling = NamespaceHandling.OmitDuplicates
+                    ConformanceLevel = ConformanceLevel.Document,
+                    NamespaceHandling = NamespaceHandling.OmitDuplicates,
+                    Indent = true
                 };
 
                 var xmlWriter = XmlWriter.Create(stream, xmlWriterSettings);
@@ -812,7 +785,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             var propertyTypeToDeserialize = memberValue.MemberType;
 
-            var isNullAttributeValue = xmlReader.GetAttribute($"{namespacePrefix}:{XmlIsNull}");
+            var isNullAttributeValue = GetSpecialAttributeValue(xmlReader, namespacePrefix, XmlIsNull);
             var isNull = !string.IsNullOrWhiteSpace(isNullAttributeValue) ? StringToObjectHelper.ToBool(isNullAttributeValue) : false;
             if (isNull)
             {
@@ -823,9 +796,9 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             // Fix for CTL-555, note that we'll use this method at the end of the method, once we've read the model
-            var graphIdAttributeValue = xmlReader.GetAttribute($"{namespacePrefix}:{XmlGraphId}");
+            var graphIdAttributeValue = GetSpecialAttributeValue(xmlReader, namespacePrefix, XmlGraphId);
 
-            var graphRefIdAttributeValue = xmlReader.GetAttribute($"{namespacePrefix}:{XmlGraphRefId}");
+            var graphRefIdAttributeValue = GetSpecialAttributeValue(xmlReader, namespacePrefix, XmlGraphRefId);
             if (!string.IsNullOrWhiteSpace(graphRefIdAttributeValue))
             {
                 var graphId = int.Parse(graphRefIdAttributeValue);
@@ -844,7 +817,7 @@ namespace Catel.Runtime.Serialization.Xml
                 return referenceInfo.Instance;
             }
 
-            var typeAttributeValue = xmlReader.GetAttribute($"{namespacePrefix}:{XmlType}");
+            var typeAttributeValue = GetSpecialAttributeValue(xmlReader, namespacePrefix, XmlType);
             if (!string.IsNullOrEmpty(typeAttributeValue))
             {
                 var typeToDeserialize = TypeCache.GetTypeWithoutAssembly(typeAttributeValue, allowInitialization: false);
@@ -908,7 +881,7 @@ namespace Catel.Runtime.Serialization.Xml
                     throw Log.ErrorAndCreateException<NotSupportedException>("Cannot deserialize type '{0}', could not determine the element type of the collection", propertyTypeToDeserialize.GetSafeFullName(false));
                 }
 
-                var serializer = _dataContractSerializerFactory.GetDataContractSerializer(propertyTypeToDeserialize, childElementType, xmlName, null, null);
+                var serializer = GetDataContractSerializer(context, propertyTypeToDeserialize, childElementType, xmlName);
 
                 // Only read collection nodes when there are nodes available
                 if (!xmlReader.IsEmptyElement)
@@ -937,8 +910,8 @@ namespace Catel.Runtime.Serialization.Xml
                         object childValue = null;
 
                         // Step 1: check for graph attributes
-                        var collectionItemGraphRefIdAttribute = xmlReader.GetAttribute($"{namespacePrefix}:{XmlGraphRefId}");
-                        var collectionItemGraphIdAttribute = xmlReader.GetAttribute($"{namespacePrefix}:{XmlGraphId}");
+                        var collectionItemGraphRefIdAttribute = GetSpecialAttributeValue(xmlReader, namespacePrefix, XmlGraphRefId);
+                        var collectionItemGraphIdAttribute = GetSpecialAttributeValue(xmlReader, namespacePrefix, XmlGraphId);
 
                         if (!string.IsNullOrWhiteSpace(collectionItemGraphRefIdAttribute))
                         {
@@ -991,9 +964,34 @@ namespace Catel.Runtime.Serialization.Xml
             // Fallback to .net serialization
             if (!isDeserialized)
             {
-                var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, propertyTypeToDeserialize, xmlName, null, null);
+                // Try to be super fast, otherwise fall back to DataContractSerializer
+                if (propertyTypeToDeserialize == typeof(string))
+                {
+                    value = xmlReader.ReadElementContentAsString();
 
-                value = serializer.ReadObject(xmlReader, false);
+                    isDeserialized = true;
+                }
+                else if (propertyTypeToDeserialize.IsPrimitiveEx())
+                {
+                    // Note: verified the source code of XmlReader, it reads as string, then uses
+                    // XmlConvert to convert to the right type, so the performance should be similar
+                    var stringValue = xmlReader.ReadElementContentAsString();
+                    if (!string.IsNullOrWhiteSpace(stringValue))
+                    {
+                        value = StringToObjectHelper.ToRightType(propertyTypeToDeserialize, stringValue);
+
+                        isDeserialized = true;
+                    }
+                }
+
+                if (!isDeserialized)
+                {
+                    var serializer = GetDataContractSerializer(context, modelType, propertyTypeToDeserialize, xmlName);
+
+                    value = serializer.ReadObject(xmlReader, false);
+
+                    isDeserialized = true;
+                }
             }
 
             // Fix for CTL-555
@@ -1006,6 +1004,12 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             return value;
+        }
+
+        private string GetSpecialAttributeValue(XmlReader xmlReader, string namespacePrefix, string attributeName)
+        {
+            // Backwards compatibility
+            return xmlReader.GetAttribute($"{namespacePrefix}:{attributeName}") ?? xmlReader.GetAttribute(attributeName);
         }
 
         /// <summary>
@@ -1053,7 +1057,7 @@ namespace Catel.Runtime.Serialization.Xml
             else
             {
                 var memberTypeToSerialize = memberValue.GetBestMemberType();
-                
+
                 var referenceManager = context.ReferenceManager;
                 ReferenceInfo referenceInfo = null;
                 var serializeElement = true;
@@ -1074,13 +1078,6 @@ namespace Catel.Runtime.Serialization.Xml
 
                 if (serializeElement)
                 {
-                    var additionalKnownTypes = context.Context.KnownTypes;
-
-                    var serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, memberTypeToSerialize, elementName, null, additionalKnownTypes.ToList());
-
-                    // We might have added more known types in the serializer
-                    additionalKnownTypes.AddRange(serializer.KnownTypes);
-
                     // Sometimes we are very late with the document start (e.g. when serialization a dictionary), but at this stage we should really
                     // force the document start
                     var writeElementWrapper = !WriteDocumentStartIfRequired(context, true);
@@ -1102,9 +1099,10 @@ namespace Catel.Runtime.Serialization.Xml
                             if (modelType.IsArrayEx())
                             {
                                 // Get array specific serializer
-                                var arrayType = modelType.GetElementTypeEx();
-                                serializer = _dataContractSerializerFactory.GetDataContractSerializer(modelType, arrayType, elementName, null, additionalKnownTypes.ToList());
+                                memberTypeToSerialize = modelType.GetElementTypeEx();
                             }
+
+                            var serializer = GetDataContractSerializer(context, modelType, memberTypeToSerialize, elementName);
 
                             foreach (var item in collection)
                             {
@@ -1132,7 +1130,26 @@ namespace Catel.Runtime.Serialization.Xml
 
                     if (!serialized)
                     {
-                        serializer.WriteObjectContent(xmlWriter, memberValue.Value);
+                        // Try to be super fast, otherwise fall back to .net serializer (DataContractSerializer)
+                        if (memberTypeToSerialize == typeof(string))
+                        {
+                            var stringValue = memberValue.Value as string;
+                            if (!string.IsNullOrEmpty(stringValue))
+                            {
+                                xmlWriter.WriteString(stringValue);
+                            }
+                        }
+                        else if (memberTypeToSerialize.IsPrimitiveEx())
+                        {
+                            // We won't handle custom structs ourselves
+                            var stringValue = ObjectToStringHelper.ToString(memberValue.Value);
+                            xmlWriter.WriteString(stringValue);
+                        }
+                        else
+                        {
+                            var serializer = GetDataContractSerializer(context, modelType, memberTypeToSerialize, elementName);
+                            serializer.WriteObjectContent(xmlWriter, memberValue.Value);
+                        }
                     }
 
                     xmlWriter.WriteEndElement();
@@ -1219,6 +1236,31 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             return false;
+        }
+
+        private DataContractSerializer GetDataContractSerializer(ISerializationContext<XmlSerializationContextInfo> context,
+            Type propertyTypeToDeserialize, Type childElementType, string xmlName)
+        {
+            var additionalKnownTypes = context.Context.KnownTypes;
+
+            //var parentContext = context.Parent;
+            //while (parentContext != null)
+            //{
+            //    var parentType = parentContext.ModelType;
+            //    if (parentType != null && !additionalKnownTypes.Contains(parentType))
+            //    {
+            //        additionalKnownTypes.Add(parentType);
+            //    }
+
+            //    parentContext = parentContext.Parent;
+            //}
+
+            var serializer = _dataContractSerializerFactory.GetDataContractSerializer(propertyTypeToDeserialize, childElementType, xmlName, null, additionalKnownTypes.ToList());
+
+            // We might have added more known types in the serializer
+            additionalKnownTypes.AddRange(serializer.KnownTypes);
+
+            return serializer;
         }
 
         /// <summary>

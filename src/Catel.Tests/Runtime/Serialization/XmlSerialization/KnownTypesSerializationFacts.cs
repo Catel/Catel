@@ -125,7 +125,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
     [TestFixture]
     public class Serialization
     {
-        [TestCase]
+        [TestCase, Explicit]
         public void DictionaryWithKnownTypes()
         {
             var dictionary = new DictionaryTestClass();

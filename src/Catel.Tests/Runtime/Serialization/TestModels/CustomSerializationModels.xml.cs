@@ -26,6 +26,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
         {
             xmlReader.MoveToContent();
             xmlReader.Read();
+            xmlReader.MoveToContent();
 
             if (xmlReader.LocalName == "FirstName")
             {

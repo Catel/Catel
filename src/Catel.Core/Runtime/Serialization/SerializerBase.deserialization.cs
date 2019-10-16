@@ -445,14 +445,15 @@ namespace Catel.Runtime.Serialization
         {
             if (!serializationObject.IsSuccessful)
             {
-                return null; ;
+                return null;
             }
 
             // Note that we need to sync the member values every time
             var memberValue = new MemberValue(member.MemberGroup, member.ModelType, member.MemberType, member.Name,
                 member.NameForSerialization, serializationObject.MemberValue);
 
-            if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary)
+            if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary ||
+                ShouldSerializeAsDictionary(member))
             {
                 var targetDictionary = TypeFactory.CreateInstance(member.MemberType) as IDictionary;
                 if (targetDictionary is null)

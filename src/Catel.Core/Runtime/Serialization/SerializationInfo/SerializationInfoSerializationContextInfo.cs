@@ -15,7 +15,7 @@ namespace Catel.Runtime.Serialization
     /// Class containing all information about the serialization info (.NET only) serialization context.
     /// </summary>
     [ObsoleteEx(Message = "No longer needed, confusing name", TreatAsErrorFromVersion = "5.6", RemoveInVersion = "6.0")]
-    public class SerializationInfoSerializationContextInfo : Disposable, ISerializationContextInfo
+    public class SerializationInfoSerializationContextInfo : ISerializationContextInfo
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializationInfoSerializationContextInfo"/> class.
