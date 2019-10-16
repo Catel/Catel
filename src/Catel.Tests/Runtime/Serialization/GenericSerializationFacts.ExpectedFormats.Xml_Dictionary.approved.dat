@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Items xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
-  <SerializableKeyValuePair xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Runtime.Serialization" graphid="2" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" i:type="ctl1:SerializableKeyValuePair">
-    <ctl1:Key xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:string">skip</ctl1:Key>
-    <ctl1:Value xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:int">1</ctl1:Value>
+<Items xmlns:ctl="http://schemas.catelproject.com" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" ctl:graphid="1">
+  <SerializableKeyValuePair ctl:graphid="2" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Runtime.Serialization" i:type="d0p0:SerializableKeyValuePair">
+    <d0p0:Key xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:string">skip</d0p0:Key>
+    <d0p0:Value xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:int">1</d0p0:Value>
   </SerializableKeyValuePair>
-  <SerializableKeyValuePair xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Runtime.Serialization" graphid="3" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" i:type="ctl1:SerializableKeyValuePair">
-    <ctl1:Key xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:string">take</ctl1:Key>
-    <ctl1:Value xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:int">2</ctl1:Value>
+  <SerializableKeyValuePair ctl:graphid="3" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Runtime.Serialization" i:type="d0p0:SerializableKeyValuePair">
+    <d0p0:Key xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:string">take</d0p0:Key>
+    <d0p0:Value xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:int">2</d0p0:Value>
   </SerializableKeyValuePair>
-  <SerializableKeyValuePair xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Runtime.Serialization" graphid="4" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" i:type="ctl1:SerializableKeyValuePair">
-    <ctl1:Key xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:string">some other string</ctl1:Key>
-    <ctl1:Value xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:int">3</ctl1:Value>
+  <SerializableKeyValuePair ctl:graphid="4" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Runtime.Serialization" i:type="d0p0:SerializableKeyValuePair">
+    <d0p0:Key xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:string">some other string</d0p0:Key>
+    <d0p0:Value xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:int">3</d0p0:Value>
   </SerializableKeyValuePair>
 </Items>

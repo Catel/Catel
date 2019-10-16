@@ -9,7 +9,7 @@
     public abstract class SerializationContextInfoBase<TSerializationContextInfo> : ISerializationContextInfo, ISerializationContextContainer
         where TSerializationContextInfo : class, ISerializationContextInfo
     {
-        public SerializationContextInfoBase()
+        protected SerializationContextInfoBase()
         {
         }
 

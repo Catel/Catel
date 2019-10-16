@@ -18,6 +18,10 @@ namespace Catel.Data
 
     public partial class ModelBase
     {
+#if NET || NETCORE
+        private static readonly Func<SerializationScope> BinarySerializationScopeFactory = new Func<SerializationScope>(() => new SerializationScope(SerializationFactory.GetBinarySerializer(), null));
+#endif
+
         /// <summary>
         /// The <see cref="SerializationInfo"/> that is retrieved and will be used for deserialization.
         /// </summary>
@@ -83,7 +87,7 @@ namespace Catel.Data
         {
 #if NET || NETCORE
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetBinarySerializer(), null)))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, BinarySerializationScopeFactory))
             {
                 var serializer = scopeManager.ScopeObject.Serializer;
                 var configuration = scopeManager.ScopeObject.Configuration;
@@ -114,7 +118,7 @@ namespace Catel.Data
             }
 
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetBinarySerializer(), null)))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, BinarySerializationScopeFactory))
             {
                 var serializer = scopeManager.ScopeObject.Serializer;
                 var configuration = scopeManager.ScopeObject.Configuration;

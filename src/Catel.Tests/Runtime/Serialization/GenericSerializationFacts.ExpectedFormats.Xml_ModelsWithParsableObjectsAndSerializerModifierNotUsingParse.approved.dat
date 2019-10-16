@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TestModelWithParsableMembersWithoutAttributes graphid="1" xmlns:ctl="http://schemas.catelproject.com">
-  <Vector type="System.String">1|2|3</Vector>
+<TestModelWithParsableMembersWithoutAttributes xmlns:ctl="http://schemas.catelproject.com" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" ctl:graphid="1">
+  <Vector ctl:type="System.String">1|2|3</Vector>
 </TestModelWithParsableMembersWithoutAttributes>

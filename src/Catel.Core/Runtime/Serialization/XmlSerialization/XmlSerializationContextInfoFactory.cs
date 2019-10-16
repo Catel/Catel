@@ -6,6 +6,7 @@
 
 namespace Catel.Runtime.Serialization.Xml
 {
+    using System;
     using System.Xml.Linq;
 
     /// <summary>
@@ -25,7 +26,8 @@ namespace Catel.Runtime.Serialization.Xml
         /// </returns>
         public ISerializationContextInfo GetSerializationContextInfo(ISerializer serializer, object model, object data, ISerializationConfiguration configuration)
         {
-            return new XmlSerializationContextInfo((XElement)data, model);
+            throw new NotImplementedException();
+            //return new XmlSerializationContextInfo((XElement)data, model);
         }
     }
 }

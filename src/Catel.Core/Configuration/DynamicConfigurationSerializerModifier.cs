@@ -7,7 +7,6 @@
 namespace Catel.Configuration
 {
     using Runtime.Serialization;
-    using Runtime.Serialization.Xml;
 
     /// <summary>
     /// Dynamic configuration serializer modifier.
@@ -37,33 +36,6 @@ namespace Catel.Configuration
             _serializationManager.Clear(model.GetType());
 
             base.OnSerializing(context, model);
-        }
-
-        /// <summary>
-        /// Called when the object is about to be deserialized.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="model">The model.</param>
-        public override void OnDeserializing(ISerializationContext context, object model)
-        {
-            base.OnDeserializing(context, model);
-
-            var dynamicConfiguration = (DynamicConfiguration)model;
-
-            var xmlSerializationContext = ((ISerializationContext<XmlSerializationContextInfo>)context).Context;
-            var element = xmlSerializationContext.Element;
-
-            if (element != null)
-            {
-                foreach (var childElement in element.Elements())
-                {
-                    var elementName = childElement.Name.LocalName;
-
-                    dynamicConfiguration.RegisterConfigurationKey(elementName);
-
-                    dynamicConfiguration.MarkConfigurationValueAsSet(elementName);
-                }
-            }
         }
     }
 }

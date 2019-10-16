@@ -17,16 +17,16 @@ namespace Catel.Runtime.Serialization.Xml
         /// <summary>
         /// Serializes the object to the specified xml element.
         /// </summary>
-        /// <param name="xmlElement">The XML element.</param>
-        void Serialize(XElement xmlElement);
+        /// <param name="xmlWriter">The XML writer.</param>
+        void Serialize(System.Xml.XmlWriter xmlWriter);
 
         /// <summary>
         /// Serializes the object from the specified xml element.
         /// <para />
         /// Note that the object is always constructed by the serialization engine, the
-        /// object itself must read the values from the <paramref name="xmlElement" />.
+        /// object itself must read the values from the <paramref name="xmlReader" />.
         /// </summary>
-        /// <param name="xmlElement">The XML element.</param>
-        void Deserialize(XElement xmlElement);
+        /// <param name="xmlReader">The XML element.</param>
+        void Deserialize(System.Xml.XmlReader xmlReader);
     }
 }

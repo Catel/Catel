@@ -55,13 +55,13 @@ namespace Catel.Scoping
 
             if (createScopeFunction != null)
             {
-                Log.Debug("Custom function to create the scope is provided, creating custom scope for type '{0}' with name '{1}'", TypeName, _scopeName);
+                Log.Debug($"Custom function to create the scope is provided, creating custom scope for type '{TypeName}' with name '{_scopeName}'");
 
                 _scopeObject = createScopeFunction();
             }
             else
             {
-                Log.Debug("No custom function to create the scope is provided, creating custom scope for type '{0}' with name '{1}' using TypeFactory", TypeName, _scopeName);
+                Log.Debug($"No custom function to create the scope is provided, creating custom scope for type '{TypeName}' with name '{_scopeName}' using TypeFactory");
 
                 var typeFactory = this.GetTypeFactory();
                 _scopeObject = typeFactory.CreateInstance<T>();
@@ -122,7 +122,7 @@ namespace Catel.Scoping
             {
                 _refCount += 1;
 
-                Log.Debug("Referencing type '{0}' with scope name '{1}', new ref count is {2}", TypeName, _scopeName, _refCount);
+                Log.Debug($"Referencing type '{TypeName}' with scope name '{_scopeName}', new ref count is {_refCount}");
             }
         }
 
@@ -132,11 +132,11 @@ namespace Catel.Scoping
             {
                 _refCount -= 1;
 
-                Log.Debug("Dereferencing type '{0}' with scope name '{1}', new ref count is {2}", TypeName, _scopeName, _refCount);
+                Log.Debug($"Dereferencing type '{TypeName}' with scope name '{_scopeName}', new ref count is {_refCount}");
 
                 if (_refCount == 0)
                 {
-                    Log.Debug("Type '{0}' with scope name '{1}' has reached a ref count of 0, scope is closed now", TypeName, _scopeName);
+                    Log.Debug($"Type '{TypeName}' with scope name '{_scopeName}' has reached a ref count of 0, scope is closed now");
 
                     var scopeObjectAsDisposable = _scopeObject as IDisposable;
                     if (scopeObjectAsDisposable != null)
@@ -190,13 +190,13 @@ namespace Catel.Scoping
 
                 if (_instances.TryGetValue(scopeName, out var scopeManagerStoredInstance))
                 {
-                    Log.Debug("Returning existing scope for type '{0}' with name '{1}'", TypeName, scopeName);
+                    Log.Debug($"Returning existing scope for type '{TypeName}' with name '{scopeName}'");
 
                     scopeManager = (ScopeManager<T>) scopeManagerStoredInstance;
                 }
                 else
                 {
-                    Log.Debug("Creating new scope for type '{0}' with name '{1}'", TypeName, scopeName);
+                    Log.Debug($"Creating new scope for type '{TypeName}' with name '{scopeName}'");
 
                     scopeManager = new ScopeManager<T>(scopeName, createScopeFunction);
                     _instances[scopeName] = scopeManager;

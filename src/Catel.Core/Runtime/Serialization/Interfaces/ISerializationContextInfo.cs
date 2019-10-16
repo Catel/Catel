@@ -7,6 +7,8 @@
 
 namespace Catel.Runtime.Serialization
 {
+    using System;
+
     /// <summary>
     /// Serialization context info.
     /// </summary>

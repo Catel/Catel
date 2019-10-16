@@ -381,6 +381,9 @@ namespace Catel.Runtime.Serialization
 
         private List<MemberValue> DeserializeMembersOnly(ISerializationContext<TSerializationContextInfo> context)
         {
+            ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
+                x => x.SetInitializationMode(InitializationMode.Lazy, GetType().GetSafeFullName(false)));
+
             BeforeDeserialization(context);
 
             var members = DeserializeMembers(context);
@@ -397,9 +400,6 @@ namespace Catel.Runtime.Serialization
         /// <returns>The deserialized list of member values.</returns>
         protected virtual List<MemberValue> DeserializeMembers(ISerializationContext<TSerializationContextInfo> context)
         {
-            ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
-                x => x.SetInitializationMode(InitializationMode.Lazy, GetType().GetSafeFullName(false)));
-
             var deserializedMemberValues = new List<MemberValue>();
 
             var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType).Reverse();
@@ -407,101 +407,130 @@ namespace Catel.Runtime.Serialization
             var membersToDeserialize = GetSerializableMembers(context, context.Model);
             foreach (var member in membersToDeserialize)
             {
-                var memberSerializationEventArgs = new MemberSerializationEventArgs(context, member);
-
-                DeserializingMember?.Invoke(this, memberSerializationEventArgs);
-
-                BeforeDeserializeMember(context, member);
+                StartMemberDeserialization(context, member);
 
                 var serializationObject = DeserializeMember(context, member);
-                if (serializationObject.IsSuccessful)
+
+                var finalMemberValue = EndMemberDeserialization(context, member, serializationObject, serializerModifiers);
+                if (finalMemberValue != null)
                 {
-                    // Note that we need to sync the member values every time
-                    var memberValue = new MemberValue(member.MemberGroup, member.ModelType, member.MemberType, member.Name,
-                        member.NameForSerialization, serializationObject.MemberValue);
-
-                    if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary)
-                    {
-                        var targetDictionary = TypeFactory.CreateInstance(member.MemberType) as IDictionary;
-                        if (targetDictionary is null)
-                        {
-                            throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a dictionary, but target model cannot be updated because it does not implement IDictionary",
-                                context.ModelTypeName);
-                        }
-
-                        var enumerable = memberValue.Value as List<SerializableKeyValuePair>;
-                        if (enumerable != null)
-                        {
-                            foreach (var item in enumerable)
-                            {
-                                targetDictionary.Add(item.Key, item.Value);
-                            }
-                        }
-                        else
-                        {
-                            var sourceDictionary = memberValue.Value as IDictionary;
-                            if (sourceDictionary != null)
-                            {
-                                foreach (var key in sourceDictionary.Keys)
-                                {
-                                    targetDictionary.Add(key, sourceDictionary[key]);
-                                }
-                            }
-                        }
-
-                        member.Value = targetDictionary;
-                    }
-                    else if (memberValue.MemberGroup == SerializationMemberGroup.Collection)
-                    {
-                        var sourceCollection = memberValue.Value as IEnumerable;
-
-                        if (member.MemberType.IsArrayEx())
-                        {
-                            var elementType = member.MemberType.GetElementTypeEx();
-                            member.Value = sourceCollection.ToArray(elementType);
-                        }
-                        else
-                        {
-                            var targetCollection = TypeFactory.CreateInstance(member.MemberType) as IList;
-                            if (targetCollection is null)
-                            {
-                                throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
-                                    context.ModelTypeName);
-                            }
-
-                            if (sourceCollection != null)
-                            {
-                                foreach (var item in sourceCollection)
-                                {
-                                    targetCollection.Add(item);
-                                }
-                            }
-
-                            member.Value = targetCollection;
-                        }
-                    }
-                    else
-                    {
-                        member.Value = memberValue.Value;
-                    }
-
-                    deserializedMemberValues.Add(memberValue);
-
-                    foreach (var serializerModifier in serializerModifiers)
-                    {
-                        serializerModifier.DeserializeMember(context, member);
-                        memberValue.Value = member.Value;
-                    }
-
-                    AfterDeserializeMember(context, member);
-                    memberValue.Value = member.Value;
-
-                    DeserializedMember?.Invoke(this, memberSerializationEventArgs);
-                    memberValue.Value = member.Value;
+                    deserializedMemberValues.Add(finalMemberValue);
                 }
             }
 
             return deserializedMemberValues;
+        }
+
+        /// <summary>
+        /// Starts member deserialization by invoking all the right events.
+        /// </summary>
+        /// <param name="context">The serialization context.</param>
+        /// <param name="member">The member that is about to be deserialized.</param>
+        protected virtual void StartMemberDeserialization(ISerializationContext<TSerializationContextInfo> context, MemberValue member)
+        {
+            DeserializingMember?.Invoke(this, new MemberSerializationEventArgs(context, member));
+
+            BeforeDeserializeMember(context, member);
+        }
+
+        /// <summary>
+        /// Ends member deserialization by invoking all the right events and running the modifiers.
+        /// </summary>
+        /// <param name="context">The serialization context.</param>
+        /// <param name="member">The member that has been deserialized.</param>
+        /// <param name="serializationObject">Result of the member deserialization.</param>
+        /// <param name="serializerModifiers">The serializer modifiers.</param>
+        protected virtual MemberValue EndMemberDeserialization(ISerializationContext<TSerializationContextInfo> context, MemberValue member,
+            SerializationObject serializationObject, IEnumerable<ISerializerModifier> serializerModifiers)
+        {
+            if (!serializationObject.IsSuccessful)
+            {
+                return null;
+            }
+
+            // Note that we need to sync the member values every time
+            var memberValue = new MemberValue(member.MemberGroup, member.ModelType, member.MemberType, member.Name,
+                member.NameForSerialization, serializationObject.MemberValue);
+
+            if (memberValue.MemberGroup == SerializationMemberGroup.Dictionary ||
+                ShouldSerializeAsDictionary(member))
+            {
+                var targetDictionary = TypeFactory.CreateInstance(member.MemberType) as IDictionary;
+                if (targetDictionary is null)
+                {
+                    throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a dictionary, but target model cannot be updated because it does not implement IDictionary",
+                        context.ModelTypeName);
+                }
+
+                var enumerable = memberValue.Value as List<SerializableKeyValuePair>;
+                if (enumerable != null)
+                {
+                    foreach (var item in enumerable)
+                    {
+                        targetDictionary.Add(item.Key, item.Value);
+                    }
+                }
+                else
+                {
+                    var sourceDictionary = memberValue.Value as IDictionary;
+                    if (sourceDictionary != null)
+                    {
+                        foreach (var key in sourceDictionary.Keys)
+                        {
+                            targetDictionary.Add(key, sourceDictionary[key]);
+                        }
+                    }
+                }
+
+                member.Value = targetDictionary;
+            }
+            else if (memberValue.MemberGroup == SerializationMemberGroup.Collection)
+            {
+                var sourceCollection = memberValue.Value as IEnumerable;
+
+                if (member.MemberType.IsArrayEx())
+                {
+                    var elementType = member.MemberType.GetElementTypeEx();
+                    member.Value = sourceCollection.ToArray(elementType);
+                }
+                else
+                {
+                    var targetCollection = TypeFactory.CreateInstance(member.MemberType) as IList;
+                    if (targetCollection is null)
+                    {
+                        throw Log.ErrorAndCreateException<NotSupportedException>("'{0}' seems to be a collection, but target model cannot be updated because it does not implement IList",
+                            context.ModelTypeName);
+                    }
+
+                    if (sourceCollection != null)
+                    {
+                        foreach (var item in sourceCollection)
+                        {
+                            targetCollection.Add(item);
+                        }
+                    }
+
+                    member.Value = targetCollection;
+                }
+            }
+            else
+            {
+                member.Value = memberValue.Value;
+            }
+
+            foreach (var serializerModifier in serializerModifiers)
+            {
+                serializerModifier.DeserializeMember(context, member);
+                memberValue.Value = member.Value;
+            }
+
+            AfterDeserializeMember(context, member);
+            memberValue.Value = member.Value;
+
+            DeserializedMember?.Invoke(this, new MemberSerializationEventArgs(context, member));
+            memberValue.Value = member.Value;
+
+            return memberValue;
         }
 
         /// <summary>

@@ -76,7 +76,7 @@ namespace Catel.Data
         /// </summary>
         void ISerializable.StartDeserialization()
         {
-            Log.Debug("Start deserialization of '{0}'", GetType().Name);
+            Log.Debug($"Start deserialization of '{GetType().Name}'");
 
             OnDeserializing();
         }
@@ -86,7 +86,7 @@ namespace Catel.Data
         /// </summary>
         void ISerializable.FinishDeserialization()
         {
-            Log.Debug("Finish deserialization of '{0}'", GetType().Name);
+            Log.Debug($"Finish deserialization of '{GetType().Name}'");
 
             OnDeserialized();
         }
