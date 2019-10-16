@@ -91,7 +91,24 @@ namespace Catel.Runtime.Serialization.Xml
             var customXmlSerializable = model as ICustomXmlSerializable;
             if (customXmlSerializable != null)
             {
-                customXmlSerializable.Serialize(context.Context.XmlWriter);
+                var xmlWriter = context.Context.XmlWriter;
+
+                if (context.Context.IsRootObject)
+                {
+                    var rootName = GetObjectRootName(context);
+
+                    xmlWriter.WriteStartElement(rootName);
+
+                    EnsureNamespaceInXmlWriter(context, xmlWriter, null);
+                }
+
+                customXmlSerializable.Serialize(xmlWriter);
+
+                if (context.Context.IsRootObject)
+                {
+                    xmlWriter.WriteEndElement();
+                }
+
                 return;
             }
 
@@ -109,7 +126,10 @@ namespace Catel.Runtime.Serialization.Xml
             var customXmlSerializable = model as ICustomXmlSerializable;
             if (customXmlSerializable != null)
             {
-                customXmlSerializable.Deserialize(context.Context.XmlReader);
+                var xmlReader = context.Context.XmlReader;
+
+                customXmlSerializable.Deserialize(xmlReader);
+
                 return customXmlSerializable;
             }
 
@@ -1134,6 +1154,19 @@ namespace Catel.Runtime.Serialization.Xml
                 return false;
             }
 
+            var rootName = GetObjectRootName(context);
+
+            xmlWriter.WriteStartElement(rootName);
+
+            EnsureNamespaceInXmlWriter(context, xmlWriter, null);
+
+            AddReferenceId(context, context.Model);
+
+            return true;
+        }
+
+        private string GetObjectRootName(ISerializationContext<XmlSerializationContextInfo> context)
+        {
             var model = context.Model;
             var rootName = "root";
             if (model != null)
@@ -1144,13 +1177,7 @@ namespace Catel.Runtime.Serialization.Xml
                 });
             }
 
-            xmlWriter.WriteStartElement(rootName);
-
-            EnsureNamespaceInXmlWriter(context, xmlWriter, null);
-
-            AddReferenceId(context, context.Model);
-
-            return true;
+            return rootName;
         }
 
         private void AddObjectMetadata(XmlWriter xmlWriter, Type memberTypeToSerialize, Type actualMemberType,
