@@ -9,7 +9,7 @@ namespace Catel.Runtime.Serialization
 {
     using System;
     using System.Reflection;
-    using Data;
+    using Catel.Data;
     using Logging;
     using Reflection;
 
@@ -19,6 +19,15 @@ namespace Catel.Runtime.Serialization
     public class ObjectAdapter : IObjectAdapter
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
+        private readonly Data.IObjectAdapter _objectAdapter;
+
+        public ObjectAdapter(Data.IObjectAdapter objectAdapter)
+        {
+            Argument.IsNotNull(() => objectAdapter);
+
+            _objectAdapter = objectAdapter;
+        }
 
         /// <summary>
         /// Gets the member value.
@@ -33,57 +42,41 @@ namespace Catel.Runtime.Serialization
 
             try
             {
+                object value = null;
+
                 var modelEditor = model as IModelEditor;
                 if (modelEditor != null && modelInfo.CatelPropertyNames.Contains(memberName))
                 {
                     var memberMetadata = modelInfo.CatelPropertiesByName[memberName];
-                    var actualPropertyValue = modelEditor.GetValueFastButUnsecure(memberName);
+                    if (_objectAdapter.GetMemberValue(model, memberName, ref value))
+                    {
+                        var propertyValue = new MemberValue(SerializationMemberGroup.CatelProperty, modelType, memberMetadata.MemberType,
+                            memberMetadata.MemberName, memberMetadata.MemberNameForSerialization, value);
 
-                    var propertyValue = new MemberValue(SerializationMemberGroup.CatelProperty, modelType, memberMetadata.MemberType, 
-                        memberMetadata.MemberName, memberMetadata.MemberNameForSerialization, actualPropertyValue);
-                    return propertyValue;
+                        return propertyValue;
+                    }
                 }
 
                 if (modelInfo.PropertiesByName.TryGetValue(memberName, out var propertyMemberMetadata))
                 {
-                    object value = null;
-                    var get = false;
-
-                    var propertySerializable = model as IPropertySerializable;
-                    if (propertySerializable != null)
+                    if (_objectAdapter.GetMemberValue(model, memberName, ref value))
                     {
-                        get = propertySerializable.GetPropertyValue(memberName, ref value);
-                    }
+                        var propertyValue = new MemberValue(SerializationMemberGroup.RegularProperty, modelType, propertyMemberMetadata.MemberType,
+                            propertyMemberMetadata.MemberName, propertyMemberMetadata.MemberNameForSerialization, value);
 
-                    if (!get)
-                    {
-                        value = ((PropertyInfo)propertyMemberMetadata.Tag).GetValue(model, null);
+                        return propertyValue;
                     }
-
-                    var propertyValue = new MemberValue(SerializationMemberGroup.RegularProperty, modelType, propertyMemberMetadata.MemberType, 
-                        propertyMemberMetadata.MemberName, propertyMemberMetadata.MemberNameForSerialization, value);
-                    return propertyValue;
                 }
 
                 if (modelInfo.FieldsByName.TryGetValue(memberName, out var fieldMemberMetadata))
                 {
-                    object value = null;
-                    var get = false;
-
-                    var fieldSerializable = model as IFieldSerializable;
-                    if (fieldSerializable != null)
+                    if (_objectAdapter.GetMemberValue(model, memberName, ref value))
                     {
-                        get = fieldSerializable.GetFieldValue(memberName, ref value);
-                    }
+                        var fieldValue = new MemberValue(SerializationMemberGroup.Field, modelType, fieldMemberMetadata.MemberType,
+                            fieldMemberMetadata.MemberName, fieldMemberMetadata.MemberNameForSerialization, value);
 
-                    if (!get)
-                    {
-                        value = ((FieldInfo)fieldMemberMetadata.Tag).GetValue(model);
+                        return fieldValue;
                     }
-
-                    var fieldValue = new MemberValue(SerializationMemberGroup.Field, modelType, fieldMemberMetadata.MemberType,
-                        fieldMemberMetadata.MemberName, fieldMemberMetadata.MemberNameForSerialization, value);
-                    return fieldValue;
                 }
             }
             catch (Exception ex)
@@ -108,61 +101,7 @@ namespace Catel.Runtime.Serialization
             {
                 var finalValue = BoxingCache.GetBoxedValue(member.Value);
 
-                var modelEditor = model as IModelEditor;
-                if (modelEditor != null && modelInfo.CatelPropertyNames.Contains(member.Name))
-                {
-                    modelEditor.SetValueFastButUnsecure(member.Name, finalValue);
-                }
-                else if (modelInfo.PropertyNames.Contains(member.Name))
-                {
-                    var set = false;
-
-                    var propertySerializable = model as IPropertySerializable;
-                    if (propertySerializable != null)
-                    {
-                        set = propertySerializable.SetPropertyValue(member.Name, finalValue);
-                    }
-
-                    if (!set)
-                    {
-                        var memberMetadata = modelInfo.PropertiesByName[member.Name];
-                        if (memberMetadata != null)
-                        {
-                            ((PropertyInfo)memberMetadata.Tag).SetValue(model, finalValue, null);
-                            set = true;
-                        }
-                    }
-
-                    if (!set)
-                    {
-                        Log.Warning($"Failed to set property '{modelType.GetSafeFullName(false)}.{member.Name}' because the member cannot be found on the model");
-                    }
-                }
-                else if (modelInfo.FieldNames.Contains(member.Name))
-                {
-                    var set = false;
-
-                    var fieldSerializable = model as IFieldSerializable;
-                    if (fieldSerializable != null)
-                    {
-                        set = fieldSerializable.SetFieldValue(member.Name, finalValue);
-                    }
-
-                    if (!set)
-                    {
-                        var memberMetadata = modelInfo.FieldsByName[member.Name];
-                        if (memberMetadata != null)
-                        {
-                            ((FieldInfo)memberMetadata.Tag).SetValue(model, finalValue);
-                            set = true;
-                        }
-                    }
-
-                    if (!set)
-                    {
-                        Log.Warning($"Failed to set field '{modelType.GetSafeFullName(false)}.{member.Name}' because the member cannot be found on the model");
-                    }
-                }
+                _objectAdapter.SetMemberValue(model, member.Name, finalValue);
             }
             catch (Exception ex)
             {

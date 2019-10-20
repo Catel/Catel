@@ -1230,6 +1230,7 @@ namespace Catel.Data
             "r from version 6.0.0. Will be removed in version 6.0.0.", false)]
         object GetValueFastButUnsecure(string propertyName);
         TValue GetValueFastButUnsecure<TValue>(string propertyName);
+        bool IsPropertyRegistered(string propertyName);
         void SetValue(string propertyName, object value);
         void SetValue<TValue>(string propertyName, TValue value);
         [System.ObsoleteAttribute("Use `SetValueFastButUnsecure<TValue>(string, TValue)` instead. Will be treated as" +
@@ -1253,6 +1254,11 @@ namespace Catel.Data
         public static System.Xml.Linq.XDocument ToXml(this Catel.Data.IModel model, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null) { }
     }
     public interface IModelSerialization : Catel.Runtime.Serialization.ISerializable, System.Runtime.Serialization.ISerializable, System.Xml.Serialization.IXmlSerializable { }
+    public interface IObjectAdapter
+    {
+        bool GetMemberValue<TValue>(object instance, string memberName, ref TValue value);
+        bool SetMemberValue<TValue>(object instance, string memberName, TValue value);
+    }
     public interface ISavableModel : Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IModelSerialization, Catel.Runtime.Serialization.ISerializable, System.ComponentModel.IAdvancedEditableObject, System.ComponentModel.IEditableObject, System.ComponentModel.INotifyPropertyChanged, System.Runtime.Serialization.ISerializable, System.Xml.Serialization.IXmlSerializable
     {
         void Save(System.IO.Stream stream, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null);
@@ -1608,6 +1614,16 @@ namespace Catel.Data
         public Catel.Data.PropertyData PropertyData { get; }
         public object Value { get; set; }
         public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+    }
+    public class ReflectionObjectAdapter : Catel.Data.IObjectAdapter
+    {
+        public ReflectionObjectAdapter() { }
+        protected virtual bool GetFieldValue<TValue>(object instance, string memberName, ref TValue value) { }
+        public virtual bool GetMemberValue<TValue>(object instance, string memberName, ref TValue value) { }
+        protected virtual bool GetPropertyValue<TValue>(object instance, string memberName, ref TValue value) { }
+        protected virtual bool SetFieldValue<TValue>(object instance, string memberName, TValue value) { }
+        public virtual bool SetMemberValue<TValue>(object instance, string memberName, TValue value) { }
+        protected virtual bool SetPropertyValue<TValue>(object instance, string memberName, TValue value) { }
     }
     public abstract class SavableModelBase<T> : Catel.Data.ModelBase, Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IModelSerialization, Catel.Data.ISavableModel, Catel.Runtime.Serialization.ISerializable, System.ComponentModel.IAdvancedEditableObject, System.ComponentModel.IEditableObject, System.ComponentModel.INotifyPropertyChanged, System.Runtime.Serialization.ISerializable, System.Xml.Serialization.IXmlSerializable
         where T :  class
@@ -3546,7 +3562,7 @@ namespace Catel.Runtime.Serialization
     }
     public class ObjectAdapter : Catel.Runtime.Serialization.IObjectAdapter
     {
-        public ObjectAdapter() { }
+        public ObjectAdapter(Catel.Data.IObjectAdapter objectAdapter) { }
         public virtual Catel.Runtime.Serialization.MemberValue GetMemberValue(object model, string memberName, Catel.Runtime.Serialization.SerializationModelInfo modelInfo) { }
         public virtual void SetMemberValue(object model, Catel.Runtime.Serialization.MemberValue member, Catel.Runtime.Serialization.SerializationModelInfo modelInfo) { }
     }
