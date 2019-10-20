@@ -124,6 +124,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>FastMemberInvoker.caches.g.tt</DependentUpon>
     </Compile>
+        
+    <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.getfieldmethods.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>FastMemberInvoker.getfieldmethods.g.cs</LastGenOutput>
+    </None>
+    <Compile Update="Reflection\FastMemberInvoker\FastMemberInvoker.getfieldmethods.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FastMemberInvoker.getfieldmethods.g.tt</DependentUpon>
+    </Compile>
     
     <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.getpropertymethods.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -145,6 +155,16 @@
       <AutoGen>True</AutoGen>
     </Compile>
 
+    <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.setfieldmethods.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>FastMemberInvoker.setfieldmethods.g.cs</LastGenOutput>
+    </None>
+    <Compile Update="Reflection\FastMemberInvoker\FastMemberInvoker.setfieldmethods.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FastMemberInvoker.setfieldmethods.g.tt</DependentUpon>
+    </Compile>
+      
     <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.setpropertymethods.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>FastMemberInvoker.setpropertymethods.g.cs</LastGenOutput>

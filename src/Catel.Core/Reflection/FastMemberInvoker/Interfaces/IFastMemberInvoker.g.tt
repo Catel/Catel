@@ -31,6 +31,9 @@ foreach (TypeCode typeCode in typeCodes)
 	}
 
 #>
+        bool TryGetFieldValue(object entity, string fieldName, out <#= typeCode #> item);
+        bool SetFieldValue(object entity, string fieldName, <#= typeCode #> item);
+
         bool TryGetPropertyValue(object entity, string propertyName, out <#= typeCode #> item);
         bool SetPropertyValue(object entity, string propertyName, <#= typeCode #> item);
 

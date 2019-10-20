@@ -30,27 +30,21 @@ foreach (TypeCode typeCode in typeCodes)
 		continue;
 	}
 
+	string typeCodeGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "FieldGettersCache";
 #>
+		public bool TryGetFieldValue(TEntity entity, string fieldName, out <#= typeCode #> item)
+		{
+			if (<#= typeCodeGetterCacheName #>.TryGetValue(fieldName, out Func<TEntity, <#= typeCode #>> getter))
+			{
+				item = getter(entity);
 
-        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out <#= typeCode #> item)
-        {
-            return TryGetFieldValue((TEntity)entity, fieldName, out item);
-        }
+				return true;
+			}
 
-        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, <#= typeCode #> item)
-        {
-            return SetFieldValue((TEntity)entity, fieldName, item);
-        }
+			item = default;
 
-        bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out <#= typeCode #> item)
-        {
-            return TryGetPropertyValue((TEntity)entity, propertyName, out item);
-        }
-
-        bool IFastMemberInvoker.SetPropertyValue(object entity, string propertyName, <#= typeCode #> item)
-        {
-            return SetPropertyValue((TEntity)entity, propertyName, item);
-        }
+			return false;
+		}
 
 <# } #>
 	}

@@ -14,6 +14,16 @@ namespace Catel.Reflection
 	public partial class FastMemberInvoker<TEntity>
 	{
 
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out Object item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, Object item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
+
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out Object item)
         {
             return TryGetPropertyValue((TEntity)entity, propertyName, out item);
@@ -24,6 +34,16 @@ namespace Catel.Reflection
             return SetPropertyValue((TEntity)entity, propertyName, item);
         }
 
+
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out Boolean item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, Boolean item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
 
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out Boolean item)
         {
@@ -36,6 +56,16 @@ namespace Catel.Reflection
         }
 
 
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out Char item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, Char item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
+
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out Char item)
         {
             return TryGetPropertyValue((TEntity)entity, propertyName, out item);
@@ -46,6 +76,16 @@ namespace Catel.Reflection
             return SetPropertyValue((TEntity)entity, propertyName, item);
         }
 
+
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out SByte item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, SByte item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
 
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out SByte item)
         {
@@ -58,6 +98,16 @@ namespace Catel.Reflection
         }
 
 
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out Byte item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, Byte item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
+
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out Byte item)
         {
             return TryGetPropertyValue((TEntity)entity, propertyName, out item);
@@ -68,6 +118,16 @@ namespace Catel.Reflection
             return SetPropertyValue((TEntity)entity, propertyName, item);
         }
 
+
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out Int16 item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, Int16 item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
 
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out Int16 item)
         {
@@ -80,6 +140,16 @@ namespace Catel.Reflection
         }
 
 
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out UInt16 item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, UInt16 item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
+
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out UInt16 item)
         {
             return TryGetPropertyValue((TEntity)entity, propertyName, out item);
@@ -90,6 +160,16 @@ namespace Catel.Reflection
             return SetPropertyValue((TEntity)entity, propertyName, item);
         }
 
+
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out Int32 item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, Int32 item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
 
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out Int32 item)
         {
@@ -102,6 +182,16 @@ namespace Catel.Reflection
         }
 
 
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out UInt32 item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, UInt32 item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
+
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out UInt32 item)
         {
             return TryGetPropertyValue((TEntity)entity, propertyName, out item);
@@ -112,6 +202,16 @@ namespace Catel.Reflection
             return SetPropertyValue((TEntity)entity, propertyName, item);
         }
 
+
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out Int64 item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, Int64 item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
 
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out Int64 item)
         {
@@ -124,6 +224,16 @@ namespace Catel.Reflection
         }
 
 
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out UInt64 item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, UInt64 item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
+
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out UInt64 item)
         {
             return TryGetPropertyValue((TEntity)entity, propertyName, out item);
@@ -134,6 +244,16 @@ namespace Catel.Reflection
             return SetPropertyValue((TEntity)entity, propertyName, item);
         }
 
+
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out Single item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, Single item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
 
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out Single item)
         {
@@ -146,6 +266,16 @@ namespace Catel.Reflection
         }
 
 
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out Double item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, Double item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
+
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out Double item)
         {
             return TryGetPropertyValue((TEntity)entity, propertyName, out item);
@@ -156,6 +286,16 @@ namespace Catel.Reflection
             return SetPropertyValue((TEntity)entity, propertyName, item);
         }
 
+
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out Decimal item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, Decimal item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
 
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out Decimal item)
         {
@@ -168,6 +308,16 @@ namespace Catel.Reflection
         }
 
 
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out DateTime item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, DateTime item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
+
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out DateTime item)
         {
             return TryGetPropertyValue((TEntity)entity, propertyName, out item);
@@ -178,6 +328,16 @@ namespace Catel.Reflection
             return SetPropertyValue((TEntity)entity, propertyName, item);
         }
 
+
+        bool IFastMemberInvoker.TryGetFieldValue(object entity, string fieldName, out String item)
+        {
+            return TryGetFieldValue((TEntity)entity, fieldName, out item);
+        }
+
+        bool IFastMemberInvoker.SetFieldValue(object entity, string fieldName, String item)
+        {
+            return SetFieldValue((TEntity)entity, fieldName, item);
+        }
 
         bool IFastMemberInvoker.TryGetPropertyValue(object entity, string propertyName, out String item)
         {
