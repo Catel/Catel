@@ -31,7 +31,7 @@
         {
             Argument.IsNotNullOrWhitespace(() => propertyName);
 
-            var property = typeof(T).GetRuntimeProperty(propertyName);
+            var property = typeof(T).GetPropertyEx(propertyName);
             return property?.GetMethod is null ? null : CreatePropertyGetter<T>(property);
         }
 

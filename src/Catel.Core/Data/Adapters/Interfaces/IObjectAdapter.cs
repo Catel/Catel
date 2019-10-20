@@ -13,7 +13,7 @@
         /// <param name="memberName">The member name.</param>
         /// <param name="value">The member value to update.</param>
         /// <returns><c>true</c> if the member was retrieved; otherwise <c>false</c>.</returns>
-        bool GetMemberValue<TValue>(object instance, string memberName, ref TValue value);
+        bool GetMemberValue<TValue>(object instance, string memberName, out TValue value);
 
         /// <summary>
         /// Sets the member value of the instance.

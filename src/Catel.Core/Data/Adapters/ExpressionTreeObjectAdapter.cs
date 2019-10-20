@@ -1,6 +1,7 @@
 ﻿namespace Catel.Data
 {
     using System;
+    using System.Collections.Generic;
     using Catel.Logging;
     using Catel.Reflection;
     using Catel.Runtime.Serialization;
@@ -12,6 +13,8 @@
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        private readonly Dictionary<Type, IFastMemberInvoker> _fastMemberInvokerCache = new Dictionary<Type, IFastMemberInvoker>();
+
         /// <summary>
         /// Gets the property value of the instance.
         /// </summary>
@@ -20,7 +23,7 @@
         /// <param name="memberName">The member name.</param>
         /// <param name="value">The member value to update.</param>
         /// <returns><c>true</c> if the member was retrieved; otherwise <c>false</c>.</returns>
-        public virtual bool GetMemberValue<TValue>(object instance, string memberName, ref TValue value)
+        public virtual bool GetMemberValue<TValue>(object instance, string memberName, out TValue value)
         {
             try
             {
@@ -32,22 +35,33 @@
                     return true;
                 }
 
-                //if (GetPropertyValue(instance, memberName, ref value))
-                //{
-                //    return true;
-                //}
+                var modelType = instance.GetType();
 
-                //if (GetFieldValue(instance, memberName, ref value))
-                //{
-                //    return true;
-                //}
+                if (!_fastMemberInvokerCache.TryGetValue(modelType, out var fastMemberInvoker))
+                {
+                    fastMemberInvoker = GetFastMemberInvoker(modelType);
+                    _fastMemberInvokerCache[modelType] = fastMemberInvoker;
+                }
+
+                if (fastMemberInvoker.TryGetPropertyValue(instance, memberName, out value))
+                {
+                    return true;
+                }
+
+                if (fastMemberInvoker.TryGetFieldValue(instance, memberName, out value))
+                {
+                    return true;
+                }
+
+                return false;
             }
             catch (Exception ex)
             {
                 Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", instance.GetType().GetSafeFullName(false), memberName);
             }
 
-            return default;
+            value = default;
+            return false;
         }
 
         /// <summary>
@@ -68,15 +82,23 @@
                     return true;
                 }
 
-                //if (SetPropertyValue(instance, memberName, value))
-                //{
-                //    return true;
-                //}
+                var modelType = instance.GetType();
 
-                //if (SetFieldValue(instance, memberName, value))
-                //{
-                //    return true;
-                //}
+                if (!_fastMemberInvokerCache.TryGetValue(modelType, out var fastMemberInvoker))
+                {
+                    fastMemberInvoker = GetFastMemberInvoker(modelType);
+                    _fastMemberInvokerCache[modelType] = fastMemberInvoker;
+                }
+
+                if (fastMemberInvoker.SetPropertyValue(instance, memberName, value))
+                {
+                    return true;
+                }
+
+                if (fastMemberInvoker.SetFieldValue(instance, memberName, value))
+                {
+                    return true;
+                }
 
                 Log.Warning($"Failed to set member '{instance.GetType().GetSafeFullName(false)}.{memberName}' because the member cannot be found on the model");
             }

@@ -32,11 +32,15 @@ foreach (TypeCode typeCode in typeCodes)
 		continue;
 	}
 
-	string typeCodeSetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "PropertySettersCache";
-	string typeCodeGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "PropertyGettersCache";
+	string typeCodeFieldSetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "FieldSettersCache";
+	string typeCodeFieldGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "FieldGettersCache";
+	string typeCodePropertySetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "PropertySettersCache";
+	string typeCodePropertyGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "PropertyGettersCache";
 #>
-		IReadOnlyDictionary<string, Func<TEntity,  <#= typeCode #>>> <#= typeCodeGetterCacheName #>;
-		IReadOnlyDictionary<string, Action<TEntity, <#= typeCode #>>> <#= typeCodeSetterCacheName #>;
+		IReadOnlyDictionary<string, Func<TEntity,  <#= typeCode #>>> <#= typeCodeFieldGetterCacheName #>;
+		IReadOnlyDictionary<string, Action<TEntity, <#= typeCode #>>> <#= typeCodeFieldSetterCacheName #>;
+		IReadOnlyDictionary<string, Func<TEntity,  <#= typeCode #>>> <#= typeCodePropertyGetterCacheName #>;
+		IReadOnlyDictionary<string, Action<TEntity, <#= typeCode #>>> <#= typeCodePropertySetterCacheName #>;
 
 <# } #>
 		public FastMemberInvoker()
@@ -49,12 +53,16 @@ foreach (TypeCode typeCode in typeCodes)
 		continue;
 	}
 
-	string typeCodeSetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "SettersCache";
-	string typeCodeGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "GettersCache";
+	string typeCodeFieldSetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "FieldSettersCache";
+	string typeCodeFieldGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "FieldGettersCache";
+	string typeCodePropertySetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "PropertySettersCache";
+	string typeCodePropertyGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "PropertyGettersCache";
 
 #>
-			<#= typeCodeGetterCacheName #> = ExpressionBuilder.CreatePropertyGetters<TEntity, <#= typeCode #>>();
-			<#= typeCodeSetterCacheName #> = ExpressionBuilder.CreatePropertySetters<TEntity, <#= typeCode #>>();
+			<#= typeCodeFieldGetterCacheName #> = ExpressionBuilder.CreateFieldGetters<TEntity, <#= typeCode #>>();
+			<#= typeCodeFieldSetterCacheName #> = ExpressionBuilder.CreateFieldSetters<TEntity, <#= typeCode #>>();
+			<#= typeCodePropertyGetterCacheName #> = ExpressionBuilder.CreatePropertyGetters<TEntity, <#= typeCode #>>();
+			<#= typeCodePropertySetterCacheName #> = ExpressionBuilder.CreatePropertySetters<TEntity, <#= typeCode #>>();
 
 <# } #>
 		}

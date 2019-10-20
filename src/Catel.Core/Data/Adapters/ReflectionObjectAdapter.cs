@@ -20,7 +20,7 @@
         /// <param name="memberName">The member name.</param>
         /// <param name="value">The member value to update.</param>
         /// <returns><c>true</c> if the member was retrieved; otherwise <c>false</c>.</returns>
-        public virtual bool GetMemberValue<TValue>(object instance, string memberName, ref TValue value)
+        public virtual bool GetMemberValue<TValue>(object instance, string memberName, out TValue value)
         {
             try
             {
@@ -32,12 +32,12 @@
                     return true;
                 }
 
-                if (GetPropertyValue(instance, memberName, ref value))
+                if (GetPropertyValue(instance, memberName, out value))
                 {
                     return true;
                 }
 
-                if (GetFieldValue(instance, memberName, ref value))
+                if (GetFieldValue(instance, memberName, out value))
                 {
                     return true;
                 }
@@ -47,7 +47,8 @@
                 Log.Warning(ex, "Failed to get value of member '{0}.{1}', skipping item during serialization", instance.GetType().GetSafeFullName(false), memberName);
             }
 
-            return default;
+            value = default;
+            return false;
         }
 
         /// <summary>
@@ -58,7 +59,7 @@
         /// <param name="memberName">The member name.</param>
         /// <param name="value">The value which will be updated if the member was read.</param>
         /// <returns><c>true</c> if the member value was retrieved; otherwise <c>false</c>.</returns>
-        protected virtual bool GetPropertyValue<TValue>(object instance, string memberName, ref TValue value)
+        protected virtual bool GetPropertyValue<TValue>(object instance, string memberName, out TValue value)
         {
             if (instance is IPropertySerializable serializable)
             {
@@ -77,6 +78,7 @@
                 return true;
             }
 
+            value = default;
             return false;
         }
 
@@ -88,7 +90,7 @@
         /// <param name="memberName">The member name.</param>
         /// <param name="value">The value which will be updated if the member was read.</param>
         /// <returns><c>true</c> if the member value was retrieved; otherwise <c>false</c>.</returns>
-        protected virtual bool GetFieldValue<TValue>(object instance, string memberName, ref TValue value)
+        protected virtual bool GetFieldValue<TValue>(object instance, string memberName, out TValue value)
         {
             if (instance is IFieldSerializable serializable)
             {
@@ -107,6 +109,7 @@
                 return true;
             }
 
+            value = default;
             return false;
         }
 

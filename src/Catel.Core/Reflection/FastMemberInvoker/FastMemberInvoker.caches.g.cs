@@ -15,103 +15,167 @@ namespace Catel.Reflection
 
 	public partial class FastMemberInvoker<TEntity>
 	{
+		IReadOnlyDictionary<string, Func<TEntity,  Object>> _objectFieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, Object>> _objectFieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  Object>> _objectPropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, Object>> _objectPropertySettersCache;
 
+		IReadOnlyDictionary<string, Func<TEntity,  Boolean>> _booleanFieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, Boolean>> _booleanFieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  Boolean>> _booleanPropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, Boolean>> _booleanPropertySettersCache;
 
+		IReadOnlyDictionary<string, Func<TEntity,  Char>> _charFieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, Char>> _charFieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  Char>> _charPropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, Char>> _charPropertySettersCache;
 
+		IReadOnlyDictionary<string, Func<TEntity,  SByte>> _sbyteFieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, SByte>> _sbyteFieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  SByte>> _sbytePropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, SByte>> _sbytePropertySettersCache;
 
+		IReadOnlyDictionary<string, Func<TEntity,  Byte>> _byteFieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, Byte>> _byteFieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  Byte>> _bytePropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, Byte>> _bytePropertySettersCache;
 
+		IReadOnlyDictionary<string, Func<TEntity,  Int16>> _int16FieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, Int16>> _int16FieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  Int16>> _int16PropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, Int16>> _int16PropertySettersCache;
 
+		IReadOnlyDictionary<string, Func<TEntity,  UInt16>> _uint16FieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, UInt16>> _uint16FieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  UInt16>> _uint16PropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, UInt16>> _uint16PropertySettersCache;
 
+		IReadOnlyDictionary<string, Func<TEntity,  Int32>> _int32FieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, Int32>> _int32FieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  Int32>> _int32PropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, Int32>> _int32PropertySettersCache;
 
+		IReadOnlyDictionary<string, Func<TEntity,  UInt32>> _uint32FieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, UInt32>> _uint32FieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  UInt32>> _uint32PropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, UInt32>> _uint32PropertySettersCache;
 
+		IReadOnlyDictionary<string, Func<TEntity,  Int64>> _int64FieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, Int64>> _int64FieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  Int64>> _int64PropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, Int64>> _int64PropertySettersCache;
 
+		IReadOnlyDictionary<string, Func<TEntity,  UInt64>> _uint64FieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, UInt64>> _uint64FieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  UInt64>> _uint64PropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, UInt64>> _uint64PropertySettersCache;
 
+		IReadOnlyDictionary<string, Func<TEntity,  Single>> _singleFieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, Single>> _singleFieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  Single>> _singlePropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, Single>> _singlePropertySettersCache;
 
+		IReadOnlyDictionary<string, Func<TEntity,  Double>> _doubleFieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, Double>> _doubleFieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  Double>> _doublePropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, Double>> _doublePropertySettersCache;
 
+		IReadOnlyDictionary<string, Func<TEntity,  Decimal>> _decimalFieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, Decimal>> _decimalFieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  Decimal>> _decimalPropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, Decimal>> _decimalPropertySettersCache;
 
+		IReadOnlyDictionary<string, Func<TEntity,  DateTime>> _datetimeFieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, DateTime>> _datetimeFieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  DateTime>> _datetimePropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, DateTime>> _datetimePropertySettersCache;
 
+		IReadOnlyDictionary<string, Func<TEntity,  String>> _stringFieldGettersCache;
+		IReadOnlyDictionary<string, Action<TEntity, String>> _stringFieldSettersCache;
 		IReadOnlyDictionary<string, Func<TEntity,  String>> _stringPropertyGettersCache;
 		IReadOnlyDictionary<string, Action<TEntity, String>> _stringPropertySettersCache;
 
 		public FastMemberInvoker()
 		{
-			_objectGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Object>();
-			_objectSettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Object>();
+			_objectFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Object>();
+			_objectFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Object>();
+			_objectPropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Object>();
+			_objectPropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Object>();
 
-			_booleanGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Boolean>();
-			_booleanSettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Boolean>();
+			_booleanFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Boolean>();
+			_booleanFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Boolean>();
+			_booleanPropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Boolean>();
+			_booleanPropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Boolean>();
 
-			_charGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Char>();
-			_charSettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Char>();
+			_charFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Char>();
+			_charFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Char>();
+			_charPropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Char>();
+			_charPropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Char>();
 
-			_sbyteGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, SByte>();
-			_sbyteSettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, SByte>();
+			_sbyteFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, SByte>();
+			_sbyteFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, SByte>();
+			_sbytePropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, SByte>();
+			_sbytePropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, SByte>();
 
-			_byteGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Byte>();
-			_byteSettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Byte>();
+			_byteFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Byte>();
+			_byteFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Byte>();
+			_bytePropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Byte>();
+			_bytePropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Byte>();
 
-			_int16GettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Int16>();
-			_int16SettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Int16>();
+			_int16FieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Int16>();
+			_int16FieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Int16>();
+			_int16PropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Int16>();
+			_int16PropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Int16>();
 
-			_uint16GettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, UInt16>();
-			_uint16SettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, UInt16>();
+			_uint16FieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, UInt16>();
+			_uint16FieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, UInt16>();
+			_uint16PropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, UInt16>();
+			_uint16PropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, UInt16>();
 
-			_int32GettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Int32>();
-			_int32SettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Int32>();
+			_int32FieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Int32>();
+			_int32FieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Int32>();
+			_int32PropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Int32>();
+			_int32PropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Int32>();
 
-			_uint32GettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, UInt32>();
-			_uint32SettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, UInt32>();
+			_uint32FieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, UInt32>();
+			_uint32FieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, UInt32>();
+			_uint32PropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, UInt32>();
+			_uint32PropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, UInt32>();
 
-			_int64GettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Int64>();
-			_int64SettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Int64>();
+			_int64FieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Int64>();
+			_int64FieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Int64>();
+			_int64PropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Int64>();
+			_int64PropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Int64>();
 
-			_uint64GettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, UInt64>();
-			_uint64SettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, UInt64>();
+			_uint64FieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, UInt64>();
+			_uint64FieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, UInt64>();
+			_uint64PropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, UInt64>();
+			_uint64PropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, UInt64>();
 
-			_singleGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Single>();
-			_singleSettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Single>();
+			_singleFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Single>();
+			_singleFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Single>();
+			_singlePropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Single>();
+			_singlePropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Single>();
 
-			_doubleGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Double>();
-			_doubleSettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Double>();
+			_doubleFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Double>();
+			_doubleFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Double>();
+			_doublePropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Double>();
+			_doublePropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Double>();
 
-			_decimalGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Decimal>();
-			_decimalSettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Decimal>();
+			_decimalFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Decimal>();
+			_decimalFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Decimal>();
+			_decimalPropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Decimal>();
+			_decimalPropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Decimal>();
 
-			_datetimeGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, DateTime>();
-			_datetimeSettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, DateTime>();
+			_datetimeFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, DateTime>();
+			_datetimeFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, DateTime>();
+			_datetimePropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, DateTime>();
+			_datetimePropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, DateTime>();
 
-			_stringGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, String>();
-			_stringSettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, String>();
+			_stringFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, String>();
+			_stringFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, String>();
+			_stringPropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, String>();
+			_stringPropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, String>();
 
 		}
 	}
