@@ -13,194 +13,226 @@ namespace Catel.Reflection
 
 	public partial class FastMemberInvoker<TEntity>
 	{
-		public bool SetPropertyValue(TEntity entity, string propertyName, Object value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Object item)
 		{
-			if (_objectPropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Object> setter))
+			if (_objectPropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Object> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Boolean value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Boolean item)
 		{
-			if (_booleanPropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Boolean> setter))
+			if (_booleanPropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Boolean> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Char value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Char item)
 		{
-			if (_charPropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Char> setter))
+			if (_charPropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Char> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, SByte value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out SByte item)
 		{
-			if (_sbytePropertySettersCache.TryGetValue(propertyName, out Action<TEntity, SByte> setter))
+			if (_sbytePropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, SByte> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Byte value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Byte item)
 		{
-			if (_bytePropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Byte> setter))
+			if (_bytePropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Byte> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Int16 value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int16 item)
 		{
-			if (_int16PropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Int16> setter))
+			if (_int16PropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Int16> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, UInt16 value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt16 item)
 		{
-			if (_uint16PropertySettersCache.TryGetValue(propertyName, out Action<TEntity, UInt16> setter))
+			if (_uint16PropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, UInt16> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Int32 value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int32 item)
 		{
-			if (_int32PropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Int32> setter))
+			if (_int32PropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Int32> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, UInt32 value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt32 item)
 		{
-			if (_uint32PropertySettersCache.TryGetValue(propertyName, out Action<TEntity, UInt32> setter))
+			if (_uint32PropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, UInt32> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Int64 value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int64 item)
 		{
-			if (_int64PropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Int64> setter))
+			if (_int64PropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Int64> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, UInt64 value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt64 item)
 		{
-			if (_uint64PropertySettersCache.TryGetValue(propertyName, out Action<TEntity, UInt64> setter))
+			if (_uint64PropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, UInt64> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Single value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Single item)
 		{
-			if (_singlePropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Single> setter))
+			if (_singlePropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Single> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Double value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Double item)
 		{
-			if (_doublePropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Double> setter))
+			if (_doublePropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Double> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Decimal value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Decimal item)
 		{
-			if (_decimalPropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Decimal> setter))
+			if (_decimalPropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Decimal> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, DateTime value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out DateTime item)
 		{
-			if (_datetimePropertySettersCache.TryGetValue(propertyName, out Action<TEntity, DateTime> setter))
+			if (_datetimePropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, DateTime> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, String value)
+		public bool TryGetPropertyValue(TEntity entity, string propertyName, out String item)
 		{
-			if (_stringPropertySettersCache.TryGetValue(propertyName, out Action<TEntity, String> setter))
+			if (_stringPropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, String> getter))
 			{
-				setter(entity, value);
+				item = getter(entity);
 
 				return true;
 			}
+
+			item = default;
 
 			return false;
 		}

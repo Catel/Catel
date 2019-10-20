@@ -77,7 +77,7 @@
                 //{
                 //    return true;
                 //}
-                
+
                 Log.Warning($"Failed to set member '{instance.GetType().GetSafeFullName(false)}.{memberName}' because the member cannot be found on the model");
             }
             catch (Exception ex)
@@ -86,6 +86,17 @@
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Gets the fast member invoker to use.
+        /// </summary>
+        /// <param name="modelType">The model type to get the fast member invoker for.</param>
+        /// <returns>The <see cref="FastMemberInvoker{TEntity}"/> for the specified model type.</returns>
+        protected virtual IFastMemberInvoker GetFastMemberInvoker(Type modelType)
+        {
+            var typeDefinition = typeof(FastMemberInvoker<>).MakeGenericTypeEx(modelType);
+            return (IFastMemberInvoker)Activator.CreateInstance(typeDefinition);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Catel.Reflection
 {
 	using System;
 
-	public partial class FastMemberInvoker<TEntity>
+	public partial interface IFastMemberInvoker
 	{
 <# 
 foreach (TypeCode typeCode in typeCodes) 
@@ -30,21 +30,9 @@ foreach (TypeCode typeCode in typeCodes)
 		continue;
 	}
 
-	string typeCodeGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "PropertyGettersCache";
 #>
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out <#= typeCode #> item)
-		{
-			if (<#= typeCodeGetterCacheName #>.TryGetValue(propertyName, out Func<TEntity, <#= typeCode #>> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
+        bool TryGetPropertyValue(object entity, string propertyName, out <#= typeCode #> item);
+        bool SetPropertyValue(object entity, string propertyName, <#= typeCode #> item);
 
 <# } #>
 	}

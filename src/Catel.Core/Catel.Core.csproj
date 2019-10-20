@@ -135,6 +135,16 @@
       <DependentUpon>FastMemberInvoker.getpropertymethods.g.tt</DependentUpon>
     </Compile>
 
+    <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.interfaceimplementation.g.tt">
+      <LastGenOutput>FastMemberInvoker.interfaceimplementation.g.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <Compile Update="Reflection\FastMemberInvoker\FastMemberInvoker.interfaceimplementation.g.cs">
+      <DependentUpon>FastMemberInvoker.interfaceimplementation.g.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+
     <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.setpropertymethods.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>FastMemberInvoker.setpropertymethods.g.cs</LastGenOutput>
@@ -145,6 +155,15 @@
       <DependentUpon>FastMemberInvoker.setpropertymethods.g.tt</DependentUpon>
     </Compile>
 
+    <None Update="Reflection\FastMemberInvoker\Interfaces\IFastMemberInvoker.g.tt">
+      <LastGenOutput>IFastMemberInvoker.g.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <Compile Update="Reflection\FastMemberInvoker\Interfaces\IFastMemberInvoker.g.cs">
+      <DependentUpon>IFastMemberInvoker.g.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
   </ItemGroup>
 
   <!-- Required for T4 templates -->

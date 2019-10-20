@@ -10,7 +10,7 @@
     /// <summary>
     /// Wrapper class allowing fast member access as an alternative to reflection.
     /// </summary>
-    public partial class FastMemberInvoker<TEntity>
+    public partial class FastMemberInvoker<TEntity> : IFastMemberInvoker
         where TEntity : class
     {
         protected virtual Action<TEntity, TMemberType> Compile<TMemberType>(Expression<Action<TEntity, TMemberType>> expression)
