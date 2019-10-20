@@ -8,7 +8,7 @@
     /// <summary>
     /// Object adapter allowing to customize reflection and property mappings.
     /// </summary>
-    public class ExpressionTreeObjectAdapter : IObjectAdapter
+    public partial class ExpressionTreeObjectAdapter : IObjectAdapter
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
