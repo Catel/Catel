@@ -66,7 +66,7 @@
             }
 
             [TestCase]
-            public void ReturnsFalseForNonExistingField()
+            public void ReturnsFalseForNonExistingProperty()
             {
                 var fastMemberInvoker = new FastMemberInvoker<TestClassWithRegularMembers>();
 
