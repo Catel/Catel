@@ -20,6 +20,7 @@ namespace Catel.Reflection
 {
 	using System;
 	using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using Catel.Linq.Expressions;
 
 	public partial class FastMemberInvoker<TEntity>
@@ -32,39 +33,84 @@ foreach (TypeCode typeCode in typeCodes)
 		continue;
 	}
 
-	string typeCodeFieldSetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "FieldSettersCache";
-	string typeCodeFieldGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "FieldGettersCache";
-	string typeCodePropertySetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "PropertySettersCache";
-	string typeCodePropertyGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "PropertyGettersCache";
+	string typeCodeSetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "SettersCache";
+	string typeCodeGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "GettersCache";
 #>
-		IReadOnlyDictionary<string, Func<TEntity,  <#= typeCode #>>> <#= typeCodeFieldGetterCacheName #>;
-		IReadOnlyDictionary<string, Action<TEntity, <#= typeCode #>>> <#= typeCodeFieldSetterCacheName #>;
-		IReadOnlyDictionary<string, Func<TEntity,  <#= typeCode #>>> <#= typeCodePropertyGetterCacheName #>;
-		IReadOnlyDictionary<string, Action<TEntity, <#= typeCode #>>> <#= typeCodePropertySetterCacheName #>;
+		private readonly Dictionary<string, Func<TEntity, <#= typeCode #>>> <#= typeCodeGetterCacheName #> = new Dictionary<string, Func<TEntity, <#= typeCode #>>>();
+		private readonly Dictionary<string, Action<TEntity, <#= typeCode #>>> <#= typeCodeSetterCacheName #> = new Dictionary<string, Action<TEntity, <#= typeCode #>>>();
+
+        private Func<TEntity, <#= typeCode #>> Get<#= typeCode #>FieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!<#= typeCodeGetterCacheName #>.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, <#= typeCode #>>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                <#= typeCodeGetterCacheName #>[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Func<TEntity, <#= typeCode #>> Get<#= typeCode #>PropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!<#= typeCodeGetterCacheName #>.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, <#= typeCode #>>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                <#= typeCodeGetterCacheName #>[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Action<TEntity, <#= typeCode #>> Get<#= typeCode #>FieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!<#= typeCodeSetterCacheName #>.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, <#= typeCode #>>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                <#= typeCodeSetterCacheName #>[key] = setter;
+            }
+
+            return setter;
+        }
+
+        private Action<TEntity, <#= typeCode #>> Get<#= typeCode #>PropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!<#= typeCodeSetterCacheName #>.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, <#= typeCode #>>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                <#= typeCodeSetterCacheName #>[key] = setter;
+            }
+
+            return setter;
+        }
 
 <# } #>
-		public FastMemberInvoker()
-		{
-<#
-foreach (TypeCode typeCode in typeCodes) 
-{
-	if (typeCode == TypeCode.Empty || typeCode == TypeCode.DBNull)
-	{
-		continue;
-	}
-
-	string typeCodeFieldSetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "FieldSettersCache";
-	string typeCodeFieldGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "FieldGettersCache";
-	string typeCodePropertySetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "PropertySettersCache";
-	string typeCodePropertyGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "PropertyGettersCache";
-
-#>
-			<#= typeCodeFieldGetterCacheName #> = ExpressionBuilder.CreateFieldGetters<TEntity, <#= typeCode #>>();
-			<#= typeCodeFieldSetterCacheName #> = ExpressionBuilder.CreateFieldSetters<TEntity, <#= typeCode #>>();
-			<#= typeCodePropertyGetterCacheName #> = ExpressionBuilder.CreatePropertyGetters<TEntity, <#= typeCode #>>();
-			<#= typeCodePropertySetterCacheName #> = ExpressionBuilder.CreatePropertySetters<TEntity, <#= typeCode #>>();
-
-<# } #>
-		}
 	}
 }

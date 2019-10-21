@@ -19,9 +19,50 @@
 namespace Catel.Reflection
 {
 	using System;
+    using Catel.Data;
 
 	public partial class FastMemberInvoker<TEntity>
 	{
+        public bool SetPropertyValue<TValue>(object entity, string fieldName, TValue value)
+        {
+<# 
+foreach (TypeCode typeCode in typeCodes) 
+{
+    if (typeCode == TypeCode.Empty || typeCode == TypeCode.DBNull)
+    {
+        continue;
+    }
+
+#>
+            if (typeof(TValue) == typeof(<#= typeCode #>))
+            {
+<# 
+    if (typeCode == TypeCode.Object)
+    {
+#>
+                var finalValue = (object)value;
+<#
+    }
+    else
+    {
+#>
+                var finalValue = Convert.To<#= typeCode #>(value);
+<#
+    }
+#>
+
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
+
+<#
+                }
+#>
+            return false;
+        }
+
 <# 
 foreach (TypeCode typeCode in typeCodes) 
 {
@@ -30,19 +71,19 @@ foreach (TypeCode typeCode in typeCodes)
 		continue;
 	}
 
-	string typeCodeSetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "PropertySettersCache";
+	string typeCodeSetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "SettersCache";
 #>
-		public bool SetPropertyValue(TEntity entity, string propertyName, <#= typeCode #> value)
-		{
-			if (<#= typeCodeSetterCacheName #>.TryGetValue(propertyName, out Action<TEntity, <#= typeCode #>> setter))
-			{
-				setter(entity, value);
+        public bool SetPropertyValue(TEntity entity, string propertyName, <#= typeCode #> value)
+        {
+            var setter = Get<#= typeCode #>PropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
 
-				return true;
-			}
-
-			return false;
-		}
+            return false;
+        }
 
 <# } #>
 	}

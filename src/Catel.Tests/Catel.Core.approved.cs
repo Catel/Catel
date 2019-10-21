@@ -1182,6 +1182,13 @@ namespace Catel.Data
     {
         public ExcludeFromValidationAttribute() { }
     }
+    public class ExpressionTreeObjectAdapter : Catel.Data.IObjectAdapter
+    {
+        public ExpressionTreeObjectAdapter() { }
+        protected virtual Catel.Reflection.IFastMemberInvoker GetFastMemberInvoker(System.Type modelType) { }
+        public virtual bool GetMemberValue<TValue>(object instance, string memberName, out TValue value) { }
+        public virtual bool SetMemberValue<TValue>(object instance, string memberName, TValue value) { }
+    }
     public class FieldValidationResult : Catel.Data.ValidationResult, Catel.Data.IFieldValidationResult, Catel.Data.IValidationResult
     {
         public FieldValidationResult(Catel.Data.PropertyData property, Catel.Data.ValidationResultType validationResultType, string messageFormat, params object[] args) { }
@@ -1256,7 +1263,7 @@ namespace Catel.Data
     public interface IModelSerialization : Catel.Runtime.Serialization.ISerializable, System.Runtime.Serialization.ISerializable, System.Xml.Serialization.IXmlSerializable { }
     public interface IObjectAdapter
     {
-        bool GetMemberValue<TValue>(object instance, string memberName, ref TValue value);
+        bool GetMemberValue<TValue>(object instance, string memberName, out TValue value);
         bool SetMemberValue<TValue>(object instance, string memberName, TValue value);
     }
     public interface ISavableModel : Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IModelSerialization, Catel.Runtime.Serialization.ISerializable, System.ComponentModel.IAdvancedEditableObject, System.ComponentModel.IEditableObject, System.ComponentModel.INotifyPropertyChanged, System.Runtime.Serialization.ISerializable, System.Xml.Serialization.IXmlSerializable
@@ -1618,9 +1625,9 @@ namespace Catel.Data
     public class ReflectionObjectAdapter : Catel.Data.IObjectAdapter
     {
         public ReflectionObjectAdapter() { }
-        protected virtual bool GetFieldValue<TValue>(object instance, string memberName, ref TValue value) { }
-        public virtual bool GetMemberValue<TValue>(object instance, string memberName, ref TValue value) { }
-        protected virtual bool GetPropertyValue<TValue>(object instance, string memberName, ref TValue value) { }
+        protected virtual bool GetFieldValue<TValue>(object instance, string memberName, out TValue value) { }
+        public virtual bool GetMemberValue<TValue>(object instance, string memberName, out TValue value) { }
+        protected virtual bool GetPropertyValue<TValue>(object instance, string memberName, out TValue value) { }
         protected virtual bool SetFieldValue<TValue>(object instance, string memberName, TValue value) { }
         public virtual bool SetMemberValue<TValue>(object instance, string memberName, TValue value) { }
         protected virtual bool SetPropertyValue<TValue>(object instance, string memberName, TValue value) { }
@@ -2508,6 +2515,36 @@ namespace Catel.Linq
         public static System.Collections.IEnumerable ToSystemArray(this System.Collections.IEnumerable instance, System.Type type) { }
     }
 }
+namespace Catel.Linq.Expressions
+{
+    public class static ExpressionBuilder
+    {
+        public static System.Linq.Expressions.Expression<System.Func<T, TField>> CreateFieldGetter<T, TField>(string fieldName) { }
+        public static System.Linq.Expressions.Expression<System.Func<T, TField>> CreateFieldGetter<T, TField>(System.Reflection.FieldInfo fieldInfo) { }
+        public static System.Linq.Expressions.Expression<System.Func<T, object>> CreateFieldGetter<T>(string fieldName) { }
+        public static System.Linq.Expressions.Expression<System.Func<T, object>> CreateFieldGetter<T>(System.Reflection.FieldInfo fieldInfo) { }
+        public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Func<T, TField>>> CreateFieldGetters<T, TField>() { }
+        public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Func<T, object>>> CreateFieldGetters<T>() { }
+        public static System.Linq.Expressions.Expression<System.Action<T, TField>> CreateFieldSetter<T, TField>(string fieldName) { }
+        public static System.Linq.Expressions.Expression<System.Action<T, TField>> CreateFieldSetter<T, TField>(System.Reflection.FieldInfo fieldInfo) { }
+        public static System.Linq.Expressions.Expression<System.Action<T, object>> CreateFieldSetter<T>(string fieldName) { }
+        public static System.Linq.Expressions.Expression<System.Action<T, object>> CreateFieldSetter<T>(System.Reflection.FieldInfo fieldInfo) { }
+        public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Action<T, object>>> CreateFieldSetters<T>() { }
+        public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Action<T, TField>>> CreateFieldSetters<T, TField>() { }
+        public static System.Linq.Expressions.Expression<System.Func<T, TProperty>> CreatePropertyGetter<T, TProperty>(string propertyName) { }
+        public static System.Linq.Expressions.Expression<System.Func<T, TProperty>> CreatePropertyGetter<T, TProperty>(System.Reflection.PropertyInfo propertyInfo) { }
+        public static System.Linq.Expressions.Expression<System.Func<T, object>> CreatePropertyGetter<T>(string propertyName) { }
+        public static System.Linq.Expressions.Expression<System.Func<T, object>> CreatePropertyGetter<T>(System.Reflection.PropertyInfo propertyInfo) { }
+        public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Func<T, TProperty>>> CreatePropertyGetters<T, TProperty>() { }
+        public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Func<T, object>>> CreatePropertyGetters<T>() { }
+        public static System.Linq.Expressions.Expression<System.Action<T, TProperty>> CreatePropertySetter<T, TProperty>(string propertyName) { }
+        public static System.Linq.Expressions.Expression<System.Action<T, TProperty>> CreatePropertySetter<T, TProperty>(System.Reflection.PropertyInfo propertyInfo) { }
+        public static System.Linq.Expressions.Expression<System.Action<T, object>> CreatePropertySetter<T>(string propertyName) { }
+        public static System.Linq.Expressions.Expression<System.Action<T, object>> CreatePropertySetter<T>(System.Reflection.PropertyInfo propertyInfo) { }
+        public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Action<T, object>>> CreatePropertySetters<T>() { }
+        public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Action<T, TProperty>>> CreatePropertySetters<T, TProperty>() { }
+    }
+}
 namespace Catel.Logging
 {
     public abstract class BatchLogListenerBase : Catel.Logging.LogListenerBase, Catel.Logging.IBatchLogListener
@@ -3076,9 +3113,91 @@ namespace Catel.Reflection
         public static System.Delegate CreateDelegate(System.Type delegateType, object target, string methodName) { }
         public static System.Delegate CreateDelegate(System.Type delegateType, object target, System.Reflection.MethodInfo methodInfo) { }
     }
+    public class FastMemberInvoker<TEntity> : Catel.Reflection.IFastMemberInvoker
+        where TEntity :  class
+    {
+        public FastMemberInvoker() { }
+        protected virtual System.Action<TEntity, TMemberType> Compile<TMemberType>(System.Linq.Expressions.Expression<System.Action<TEntity, TMemberType>> expression) { }
+        protected virtual System.Func<TEntity, TMemberType> Compile<TMemberType>(System.Linq.Expressions.Expression<System.Func<TEntity, TMemberType>> expression) { }
+        public bool SetFieldValue<TValue>(object entity, string fieldName, TValue value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, object value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, bool value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, char value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, sbyte value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, byte value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, short value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, ushort value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, int value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, uint value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, long value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, ulong value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, float value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, double value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, decimal value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, System.DateTime value) { }
+        public bool SetFieldValue(TEntity entity, string fieldName, string value) { }
+        public bool SetPropertyValue<TValue>(object entity, string fieldName, TValue value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, object value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, bool value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, char value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, sbyte value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, byte value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, short value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, ushort value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, int value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, uint value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, long value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, ulong value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, float value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, double value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, decimal value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, System.DateTime value) { }
+        public bool SetPropertyValue(TEntity entity, string propertyName, string value) { }
+        public bool TryGetFieldValue<TValue>(object entity, string fieldName, out TValue value) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out object item) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out bool item) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out char item) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out sbyte item) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out byte item) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out short item) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out ushort item) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out int item) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out uint item) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out long item) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out ulong item) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out float item) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out double item) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out decimal item) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out System.DateTime item) { }
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out string item) { }
+        public bool TryGetPropertyValue<TValue>(object entity, string propertyName, out TValue value) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out object item) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out bool item) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out char item) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out sbyte item) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out byte item) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out short item) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out ushort item) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out int item) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out uint item) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out long item) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out ulong item) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out float item) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out double item) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out decimal item) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out System.DateTime item) { }
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out string item) { }
+    }
     public interface IEntryAssemblyResolver
     {
         System.Reflection.Assembly Resolve();
+    }
+    public interface IFastMemberInvoker
+    {
+        bool SetFieldValue<TValue>(object entity, string fieldName, TValue value);
+        bool SetPropertyValue<TValue>(object entity, string propertyName, TValue value);
+        bool TryGetFieldValue<TValue>(object entity, string fieldName, out TValue value);
+        bool TryGetPropertyValue<TValue>(object entity, string propertyName, out TValue value);
     }
     public class static MemberInfoExtensions
     {

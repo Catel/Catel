@@ -11,172 +11,1210 @@ namespace Catel.Reflection
 {
 	using System;
 	using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using Catel.Linq.Expressions;
 
 	public partial class FastMemberInvoker<TEntity>
 	{
-		IReadOnlyDictionary<string, Func<TEntity,  Object>> _objectFieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Object>> _objectFieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  Object>> _objectPropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Object>> _objectPropertySettersCache;
+		private readonly Dictionary<string, Func<TEntity, Object>> _objectGettersCache = new Dictionary<string, Func<TEntity, Object>>();
+		private readonly Dictionary<string, Action<TEntity, Object>> _objectSettersCache = new Dictionary<string, Action<TEntity, Object>>();
 
-		IReadOnlyDictionary<string, Func<TEntity,  Boolean>> _booleanFieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Boolean>> _booleanFieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  Boolean>> _booleanPropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Boolean>> _booleanPropertySettersCache;
+        private Func<TEntity, Object> GetObjectFieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
 
-		IReadOnlyDictionary<string, Func<TEntity,  Char>> _charFieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Char>> _charFieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  Char>> _charPropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Char>> _charPropertySettersCache;
+            if (!_objectGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Object>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
 
-		IReadOnlyDictionary<string, Func<TEntity,  SByte>> _sbyteFieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, SByte>> _sbyteFieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  SByte>> _sbytePropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, SByte>> _sbytePropertySettersCache;
+                _objectGettersCache[key] = getter;
+            }
 
-		IReadOnlyDictionary<string, Func<TEntity,  Byte>> _byteFieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Byte>> _byteFieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  Byte>> _bytePropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Byte>> _bytePropertySettersCache;
+            return getter;
+        }
 
-		IReadOnlyDictionary<string, Func<TEntity,  Int16>> _int16FieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Int16>> _int16FieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  Int16>> _int16PropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Int16>> _int16PropertySettersCache;
+        private Func<TEntity, Object> GetObjectPropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
 
-		IReadOnlyDictionary<string, Func<TEntity,  UInt16>> _uint16FieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, UInt16>> _uint16FieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  UInt16>> _uint16PropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, UInt16>> _uint16PropertySettersCache;
+            if (!_objectGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Object>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
 
-		IReadOnlyDictionary<string, Func<TEntity,  Int32>> _int32FieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Int32>> _int32FieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  Int32>> _int32PropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Int32>> _int32PropertySettersCache;
+                _objectGettersCache[key] = getter;
+            }
 
-		IReadOnlyDictionary<string, Func<TEntity,  UInt32>> _uint32FieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, UInt32>> _uint32FieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  UInt32>> _uint32PropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, UInt32>> _uint32PropertySettersCache;
+            return getter;
+        }
 
-		IReadOnlyDictionary<string, Func<TEntity,  Int64>> _int64FieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Int64>> _int64FieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  Int64>> _int64PropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Int64>> _int64PropertySettersCache;
+        private Action<TEntity, Object> GetObjectFieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
 
-		IReadOnlyDictionary<string, Func<TEntity,  UInt64>> _uint64FieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, UInt64>> _uint64FieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  UInt64>> _uint64PropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, UInt64>> _uint64PropertySettersCache;
+            if (!_objectSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Object>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
 
-		IReadOnlyDictionary<string, Func<TEntity,  Single>> _singleFieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Single>> _singleFieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  Single>> _singlePropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Single>> _singlePropertySettersCache;
+                _objectSettersCache[key] = setter;
+            }
 
-		IReadOnlyDictionary<string, Func<TEntity,  Double>> _doubleFieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Double>> _doubleFieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  Double>> _doublePropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Double>> _doublePropertySettersCache;
+            return setter;
+        }
 
-		IReadOnlyDictionary<string, Func<TEntity,  Decimal>> _decimalFieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Decimal>> _decimalFieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  Decimal>> _decimalPropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, Decimal>> _decimalPropertySettersCache;
+        private Action<TEntity, Object> GetObjectPropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
 
-		IReadOnlyDictionary<string, Func<TEntity,  DateTime>> _datetimeFieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, DateTime>> _datetimeFieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  DateTime>> _datetimePropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, DateTime>> _datetimePropertySettersCache;
+            if (!_objectSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Object>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
 
-		IReadOnlyDictionary<string, Func<TEntity,  String>> _stringFieldGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, String>> _stringFieldSettersCache;
-		IReadOnlyDictionary<string, Func<TEntity,  String>> _stringPropertyGettersCache;
-		IReadOnlyDictionary<string, Action<TEntity, String>> _stringPropertySettersCache;
+                _objectSettersCache[key] = setter;
+            }
 
-		public FastMemberInvoker()
-		{
-			_objectFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Object>();
-			_objectFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Object>();
-			_objectPropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Object>();
-			_objectPropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Object>();
+            return setter;
+        }
 
-			_booleanFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Boolean>();
-			_booleanFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Boolean>();
-			_booleanPropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Boolean>();
-			_booleanPropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Boolean>();
+		private readonly Dictionary<string, Func<TEntity, Boolean>> _booleanGettersCache = new Dictionary<string, Func<TEntity, Boolean>>();
+		private readonly Dictionary<string, Action<TEntity, Boolean>> _booleanSettersCache = new Dictionary<string, Action<TEntity, Boolean>>();
 
-			_charFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Char>();
-			_charFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Char>();
-			_charPropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Char>();
-			_charPropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Char>();
+        private Func<TEntity, Boolean> GetBooleanFieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
 
-			_sbyteFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, SByte>();
-			_sbyteFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, SByte>();
-			_sbytePropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, SByte>();
-			_sbytePropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, SByte>();
+            if (!_booleanGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Boolean>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
 
-			_byteFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Byte>();
-			_byteFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Byte>();
-			_bytePropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Byte>();
-			_bytePropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Byte>();
+                _booleanGettersCache[key] = getter;
+            }
 
-			_int16FieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Int16>();
-			_int16FieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Int16>();
-			_int16PropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Int16>();
-			_int16PropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Int16>();
+            return getter;
+        }
 
-			_uint16FieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, UInt16>();
-			_uint16FieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, UInt16>();
-			_uint16PropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, UInt16>();
-			_uint16PropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, UInt16>();
+        private Func<TEntity, Boolean> GetBooleanPropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
 
-			_int32FieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Int32>();
-			_int32FieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Int32>();
-			_int32PropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Int32>();
-			_int32PropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Int32>();
+            if (!_booleanGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Boolean>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
 
-			_uint32FieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, UInt32>();
-			_uint32FieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, UInt32>();
-			_uint32PropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, UInt32>();
-			_uint32PropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, UInt32>();
+                _booleanGettersCache[key] = getter;
+            }
 
-			_int64FieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Int64>();
-			_int64FieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Int64>();
-			_int64PropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Int64>();
-			_int64PropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Int64>();
+            return getter;
+        }
 
-			_uint64FieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, UInt64>();
-			_uint64FieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, UInt64>();
-			_uint64PropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, UInt64>();
-			_uint64PropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, UInt64>();
+        private Action<TEntity, Boolean> GetBooleanFieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
 
-			_singleFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Single>();
-			_singleFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Single>();
-			_singlePropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Single>();
-			_singlePropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Single>();
+            if (!_booleanSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Boolean>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
 
-			_doubleFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Double>();
-			_doubleFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Double>();
-			_doublePropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Double>();
-			_doublePropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Double>();
+                _booleanSettersCache[key] = setter;
+            }
 
-			_decimalFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, Decimal>();
-			_decimalFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, Decimal>();
-			_decimalPropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, Decimal>();
-			_decimalPropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, Decimal>();
+            return setter;
+        }
 
-			_datetimeFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, DateTime>();
-			_datetimeFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, DateTime>();
-			_datetimePropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, DateTime>();
-			_datetimePropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, DateTime>();
+        private Action<TEntity, Boolean> GetBooleanPropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
 
-			_stringFieldGettersCache = ExpressionBuilder.CreateFieldGetters<TEntity, String>();
-			_stringFieldSettersCache = ExpressionBuilder.CreateFieldSetters<TEntity, String>();
-			_stringPropertyGettersCache = ExpressionBuilder.CreatePropertyGetters<TEntity, String>();
-			_stringPropertySettersCache = ExpressionBuilder.CreatePropertySetters<TEntity, String>();
+            if (!_booleanSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Boolean>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
 
-		}
+                _booleanSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+		private readonly Dictionary<string, Func<TEntity, Char>> _charGettersCache = new Dictionary<string, Func<TEntity, Char>>();
+		private readonly Dictionary<string, Action<TEntity, Char>> _charSettersCache = new Dictionary<string, Action<TEntity, Char>>();
+
+        private Func<TEntity, Char> GetCharFieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_charGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Char>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _charGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Func<TEntity, Char> GetCharPropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_charGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Char>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _charGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Action<TEntity, Char> GetCharFieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_charSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Char>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _charSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+        private Action<TEntity, Char> GetCharPropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_charSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Char>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _charSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+		private readonly Dictionary<string, Func<TEntity, SByte>> _sbyteGettersCache = new Dictionary<string, Func<TEntity, SByte>>();
+		private readonly Dictionary<string, Action<TEntity, SByte>> _sbyteSettersCache = new Dictionary<string, Action<TEntity, SByte>>();
+
+        private Func<TEntity, SByte> GetSByteFieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_sbyteGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, SByte>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _sbyteGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Func<TEntity, SByte> GetSBytePropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_sbyteGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, SByte>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _sbyteGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Action<TEntity, SByte> GetSByteFieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_sbyteSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, SByte>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _sbyteSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+        private Action<TEntity, SByte> GetSBytePropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_sbyteSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, SByte>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _sbyteSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+		private readonly Dictionary<string, Func<TEntity, Byte>> _byteGettersCache = new Dictionary<string, Func<TEntity, Byte>>();
+		private readonly Dictionary<string, Action<TEntity, Byte>> _byteSettersCache = new Dictionary<string, Action<TEntity, Byte>>();
+
+        private Func<TEntity, Byte> GetByteFieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_byteGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Byte>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _byteGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Func<TEntity, Byte> GetBytePropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_byteGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Byte>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _byteGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Action<TEntity, Byte> GetByteFieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_byteSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Byte>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _byteSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+        private Action<TEntity, Byte> GetBytePropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_byteSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Byte>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _byteSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+		private readonly Dictionary<string, Func<TEntity, Int16>> _int16GettersCache = new Dictionary<string, Func<TEntity, Int16>>();
+		private readonly Dictionary<string, Action<TEntity, Int16>> _int16SettersCache = new Dictionary<string, Action<TEntity, Int16>>();
+
+        private Func<TEntity, Int16> GetInt16FieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_int16GettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Int16>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _int16GettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Func<TEntity, Int16> GetInt16PropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_int16GettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Int16>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _int16GettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Action<TEntity, Int16> GetInt16FieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_int16SettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Int16>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _int16SettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+        private Action<TEntity, Int16> GetInt16PropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_int16SettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Int16>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _int16SettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+		private readonly Dictionary<string, Func<TEntity, UInt16>> _uint16GettersCache = new Dictionary<string, Func<TEntity, UInt16>>();
+		private readonly Dictionary<string, Action<TEntity, UInt16>> _uint16SettersCache = new Dictionary<string, Action<TEntity, UInt16>>();
+
+        private Func<TEntity, UInt16> GetUInt16FieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_uint16GettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, UInt16>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _uint16GettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Func<TEntity, UInt16> GetUInt16PropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_uint16GettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, UInt16>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _uint16GettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Action<TEntity, UInt16> GetUInt16FieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_uint16SettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, UInt16>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _uint16SettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+        private Action<TEntity, UInt16> GetUInt16PropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_uint16SettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, UInt16>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _uint16SettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+		private readonly Dictionary<string, Func<TEntity, Int32>> _int32GettersCache = new Dictionary<string, Func<TEntity, Int32>>();
+		private readonly Dictionary<string, Action<TEntity, Int32>> _int32SettersCache = new Dictionary<string, Action<TEntity, Int32>>();
+
+        private Func<TEntity, Int32> GetInt32FieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_int32GettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Int32>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _int32GettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Func<TEntity, Int32> GetInt32PropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_int32GettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Int32>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _int32GettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Action<TEntity, Int32> GetInt32FieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_int32SettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Int32>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _int32SettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+        private Action<TEntity, Int32> GetInt32PropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_int32SettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Int32>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _int32SettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+		private readonly Dictionary<string, Func<TEntity, UInt32>> _uint32GettersCache = new Dictionary<string, Func<TEntity, UInt32>>();
+		private readonly Dictionary<string, Action<TEntity, UInt32>> _uint32SettersCache = new Dictionary<string, Action<TEntity, UInt32>>();
+
+        private Func<TEntity, UInt32> GetUInt32FieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_uint32GettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, UInt32>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _uint32GettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Func<TEntity, UInt32> GetUInt32PropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_uint32GettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, UInt32>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _uint32GettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Action<TEntity, UInt32> GetUInt32FieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_uint32SettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, UInt32>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _uint32SettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+        private Action<TEntity, UInt32> GetUInt32PropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_uint32SettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, UInt32>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _uint32SettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+		private readonly Dictionary<string, Func<TEntity, Int64>> _int64GettersCache = new Dictionary<string, Func<TEntity, Int64>>();
+		private readonly Dictionary<string, Action<TEntity, Int64>> _int64SettersCache = new Dictionary<string, Action<TEntity, Int64>>();
+
+        private Func<TEntity, Int64> GetInt64FieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_int64GettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Int64>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _int64GettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Func<TEntity, Int64> GetInt64PropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_int64GettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Int64>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _int64GettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Action<TEntity, Int64> GetInt64FieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_int64SettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Int64>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _int64SettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+        private Action<TEntity, Int64> GetInt64PropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_int64SettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Int64>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _int64SettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+		private readonly Dictionary<string, Func<TEntity, UInt64>> _uint64GettersCache = new Dictionary<string, Func<TEntity, UInt64>>();
+		private readonly Dictionary<string, Action<TEntity, UInt64>> _uint64SettersCache = new Dictionary<string, Action<TEntity, UInt64>>();
+
+        private Func<TEntity, UInt64> GetUInt64FieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_uint64GettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, UInt64>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _uint64GettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Func<TEntity, UInt64> GetUInt64PropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_uint64GettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, UInt64>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _uint64GettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Action<TEntity, UInt64> GetUInt64FieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_uint64SettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, UInt64>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _uint64SettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+        private Action<TEntity, UInt64> GetUInt64PropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_uint64SettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, UInt64>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _uint64SettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+		private readonly Dictionary<string, Func<TEntity, Single>> _singleGettersCache = new Dictionary<string, Func<TEntity, Single>>();
+		private readonly Dictionary<string, Action<TEntity, Single>> _singleSettersCache = new Dictionary<string, Action<TEntity, Single>>();
+
+        private Func<TEntity, Single> GetSingleFieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_singleGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Single>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _singleGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Func<TEntity, Single> GetSinglePropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_singleGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Single>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _singleGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Action<TEntity, Single> GetSingleFieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_singleSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Single>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _singleSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+        private Action<TEntity, Single> GetSinglePropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_singleSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Single>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _singleSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+		private readonly Dictionary<string, Func<TEntity, Double>> _doubleGettersCache = new Dictionary<string, Func<TEntity, Double>>();
+		private readonly Dictionary<string, Action<TEntity, Double>> _doubleSettersCache = new Dictionary<string, Action<TEntity, Double>>();
+
+        private Func<TEntity, Double> GetDoubleFieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_doubleGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Double>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _doubleGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Func<TEntity, Double> GetDoublePropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_doubleGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Double>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _doubleGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Action<TEntity, Double> GetDoubleFieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_doubleSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Double>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _doubleSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+        private Action<TEntity, Double> GetDoublePropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_doubleSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Double>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _doubleSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+		private readonly Dictionary<string, Func<TEntity, Decimal>> _decimalGettersCache = new Dictionary<string, Func<TEntity, Decimal>>();
+		private readonly Dictionary<string, Action<TEntity, Decimal>> _decimalSettersCache = new Dictionary<string, Action<TEntity, Decimal>>();
+
+        private Func<TEntity, Decimal> GetDecimalFieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_decimalGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, Decimal>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _decimalGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Func<TEntity, Decimal> GetDecimalPropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_decimalGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, Decimal>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _decimalGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Action<TEntity, Decimal> GetDecimalFieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_decimalSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, Decimal>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _decimalSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+        private Action<TEntity, Decimal> GetDecimalPropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_decimalSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, Decimal>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _decimalSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+		private readonly Dictionary<string, Func<TEntity, DateTime>> _datetimeGettersCache = new Dictionary<string, Func<TEntity, DateTime>>();
+		private readonly Dictionary<string, Action<TEntity, DateTime>> _datetimeSettersCache = new Dictionary<string, Action<TEntity, DateTime>>();
+
+        private Func<TEntity, DateTime> GetDateTimeFieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_datetimeGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, DateTime>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _datetimeGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Func<TEntity, DateTime> GetDateTimePropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_datetimeGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, DateTime>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _datetimeGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Action<TEntity, DateTime> GetDateTimeFieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_datetimeSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, DateTime>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _datetimeSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+        private Action<TEntity, DateTime> GetDateTimePropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_datetimeSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, DateTime>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _datetimeSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+		private readonly Dictionary<string, Func<TEntity, String>> _stringGettersCache = new Dictionary<string, Func<TEntity, String>>();
+		private readonly Dictionary<string, Action<TEntity, String>> _stringSettersCache = new Dictionary<string, Action<TEntity, String>>();
+
+        private Func<TEntity, String> GetStringFieldGetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_stringGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, String>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _stringGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Func<TEntity, String> GetStringPropertyGetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_stringGettersCache.TryGetValue(key, out var getter))
+            {
+                var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, String>(memberName);
+                if (getterExpression != null)
+                {
+                    getter = Compile(getterExpression);
+                }
+
+                _stringGettersCache[key] = getter;
+            }
+
+            return getter;
+        }
+
+        private Action<TEntity, String> GetStringFieldSetter(string memberName)
+        {
+            var key = $"field_{memberName}";
+
+            if (!_stringSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, String>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _stringSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
+        private Action<TEntity, String> GetStringPropertySetter(string memberName)
+        {
+            var key = $"property_{memberName}";
+
+            if (!_stringSettersCache.TryGetValue(key, out var setter))
+            {
+                var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, String>(memberName);
+                if (setterExpression != null)
+                {
+                    setter = Compile(setterExpression);
+                }
+
+                _stringSettersCache[key] = setter;
+            }
+
+            return setter;
+        }
+
 	}
 }

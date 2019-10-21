@@ -9,233 +9,528 @@
 
 namespace Catel.Reflection
 {
-	using System;
-
-	public partial class FastMemberInvoker<TEntity>
-	{
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out Object item)
-		{
-			if (_objectFieldGettersCache.TryGetValue(fieldName, out Func<TEntity, Object> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out Boolean item)
-		{
-			if (_booleanFieldGettersCache.TryGetValue(fieldName, out Func<TEntity, Boolean> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out Char item)
-		{
-			if (_charFieldGettersCache.TryGetValue(fieldName, out Func<TEntity, Char> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out SByte item)
-		{
-			if (_sbyteFieldGettersCache.TryGetValue(fieldName, out Func<TEntity, SByte> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out Byte item)
-		{
-			if (_byteFieldGettersCache.TryGetValue(fieldName, out Func<TEntity, Byte> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out Int16 item)
-		{
-			if (_int16FieldGettersCache.TryGetValue(fieldName, out Func<TEntity, Int16> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt16 item)
-		{
-			if (_uint16FieldGettersCache.TryGetValue(fieldName, out Func<TEntity, UInt16> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out Int32 item)
-		{
-			if (_int32FieldGettersCache.TryGetValue(fieldName, out Func<TEntity, Int32> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt32 item)
-		{
-			if (_uint32FieldGettersCache.TryGetValue(fieldName, out Func<TEntity, UInt32> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out Int64 item)
-		{
-			if (_int64FieldGettersCache.TryGetValue(fieldName, out Func<TEntity, Int64> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt64 item)
-		{
-			if (_uint64FieldGettersCache.TryGetValue(fieldName, out Func<TEntity, UInt64> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out Single item)
-		{
-			if (_singleFieldGettersCache.TryGetValue(fieldName, out Func<TEntity, Single> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out Double item)
-		{
-			if (_doubleFieldGettersCache.TryGetValue(fieldName, out Func<TEntity, Double> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out Decimal item)
-		{
-			if (_decimalFieldGettersCache.TryGetValue(fieldName, out Func<TEntity, Decimal> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out DateTime item)
-		{
-			if (_datetimeFieldGettersCache.TryGetValue(fieldName, out Func<TEntity, DateTime> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetFieldValue(TEntity entity, string fieldName, out String item)
-		{
-			if (_stringFieldGettersCache.TryGetValue(fieldName, out Func<TEntity, String> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-	}
+    using System;
+    using Catel.Data;
+
+    public partial class FastMemberInvoker<TEntity>
+    {
+        public bool TryGetFieldValue<TValue>(object entity, string fieldName, out TValue value)
+        {
+            if (typeof(TValue) == typeof(Object))
+            {
+                Object localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Object>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Boolean))
+            {
+                Boolean localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Boolean>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Char))
+            {
+                Char localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Char>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(SByte))
+            {
+                SByte localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<SByte>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Byte))
+            {
+                Byte localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Byte>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Int16))
+            {
+                Int16 localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Int16>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(UInt16))
+            {
+                UInt16 localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<UInt16>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Int32))
+            {
+                Int32 localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Int32>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(UInt32))
+            {
+                UInt32 localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<UInt32>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Int64))
+            {
+                Int64 localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Int64>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(UInt64))
+            {
+                UInt64 localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<UInt64>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Single))
+            {
+                Single localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Single>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Double))
+            {
+                Double localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Double>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Decimal))
+            {
+                Decimal localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Decimal>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(DateTime))
+            {
+                DateTime localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<DateTime>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(String))
+            {
+                String localValue;
+
+                if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<String>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            value = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Object item)
+        {
+            var getter = GetObjectFieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Boolean item)
+        {
+            var getter = GetBooleanFieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Char item)
+        {
+            var getter = GetCharFieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out SByte item)
+        {
+            var getter = GetSByteFieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Byte item)
+        {
+            var getter = GetByteFieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Int16 item)
+        {
+            var getter = GetInt16FieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt16 item)
+        {
+            var getter = GetUInt16FieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Int32 item)
+        {
+            var getter = GetInt32FieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt32 item)
+        {
+            var getter = GetUInt32FieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Int64 item)
+        {
+            var getter = GetInt64FieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt64 item)
+        {
+            var getter = GetUInt64FieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Single item)
+        {
+            var getter = GetSingleFieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Double item)
+        {
+            var getter = GetDoubleFieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out Decimal item)
+        {
+            var getter = GetDecimalFieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out DateTime item)
+        {
+            var getter = GetDateTimeFieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetFieldValue(TEntity entity, string fieldName, out String item)
+        {
+            var getter = GetStringFieldGetter(fieldName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+    }
 }

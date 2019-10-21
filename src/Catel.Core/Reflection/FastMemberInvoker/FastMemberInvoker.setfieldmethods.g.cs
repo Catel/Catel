@@ -9,201 +9,367 @@
 
 namespace Catel.Reflection
 {
-	using System;
+    using System;
+    using Catel.Data;
 
 	public partial class FastMemberInvoker<TEntity>
 	{
-		public bool SetFieldValue(TEntity entity, string fieldName, Object value)
-		{
-			if (_objectFieldSettersCache.TryGetValue(fieldName, out Action<TEntity, Object> setter))
-			{
-				setter(entity, value);
+        public bool SetFieldValue<TValue>(object entity, string fieldName, TValue value)
+        {
+            if (typeof(TValue) == typeof(Object))
+            {
+                var finalValue = (object)value;
 
-				return true;
-			}
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-			return false;
-		}
+            if (typeof(TValue) == typeof(Boolean))
+            {
+                var finalValue = Convert.ToBoolean(value);
 
-		public bool SetFieldValue(TEntity entity, string fieldName, Boolean value)
-		{
-			if (_booleanFieldSettersCache.TryGetValue(fieldName, out Action<TEntity, Boolean> setter))
-			{
-				setter(entity, value);
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-				return true;
-			}
+            if (typeof(TValue) == typeof(Char))
+            {
+                var finalValue = Convert.ToChar(value);
 
-			return false;
-		}
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-		public bool SetFieldValue(TEntity entity, string fieldName, Char value)
-		{
-			if (_charFieldSettersCache.TryGetValue(fieldName, out Action<TEntity, Char> setter))
-			{
-				setter(entity, value);
+            if (typeof(TValue) == typeof(SByte))
+            {
+                var finalValue = Convert.ToSByte(value);
 
-				return true;
-			}
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-			return false;
-		}
+            if (typeof(TValue) == typeof(Byte))
+            {
+                var finalValue = Convert.ToByte(value);
 
-		public bool SetFieldValue(TEntity entity, string fieldName, SByte value)
-		{
-			if (_sbyteFieldSettersCache.TryGetValue(fieldName, out Action<TEntity, SByte> setter))
-			{
-				setter(entity, value);
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-				return true;
-			}
+            if (typeof(TValue) == typeof(Int16))
+            {
+                var finalValue = Convert.ToInt16(value);
 
-			return false;
-		}
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-		public bool SetFieldValue(TEntity entity, string fieldName, Byte value)
-		{
-			if (_byteFieldSettersCache.TryGetValue(fieldName, out Action<TEntity, Byte> setter))
-			{
-				setter(entity, value);
+            if (typeof(TValue) == typeof(UInt16))
+            {
+                var finalValue = Convert.ToUInt16(value);
 
-				return true;
-			}
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-			return false;
-		}
+            if (typeof(TValue) == typeof(Int32))
+            {
+                var finalValue = Convert.ToInt32(value);
 
-		public bool SetFieldValue(TEntity entity, string fieldName, Int16 value)
-		{
-			if (_int16FieldSettersCache.TryGetValue(fieldName, out Action<TEntity, Int16> setter))
-			{
-				setter(entity, value);
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-				return true;
-			}
+            if (typeof(TValue) == typeof(UInt32))
+            {
+                var finalValue = Convert.ToUInt32(value);
 
-			return false;
-		}
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-		public bool SetFieldValue(TEntity entity, string fieldName, UInt16 value)
-		{
-			if (_uint16FieldSettersCache.TryGetValue(fieldName, out Action<TEntity, UInt16> setter))
-			{
-				setter(entity, value);
+            if (typeof(TValue) == typeof(Int64))
+            {
+                var finalValue = Convert.ToInt64(value);
 
-				return true;
-			}
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-			return false;
-		}
+            if (typeof(TValue) == typeof(UInt64))
+            {
+                var finalValue = Convert.ToUInt64(value);
 
-		public bool SetFieldValue(TEntity entity, string fieldName, Int32 value)
-		{
-			if (_int32FieldSettersCache.TryGetValue(fieldName, out Action<TEntity, Int32> setter))
-			{
-				setter(entity, value);
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-				return true;
-			}
+            if (typeof(TValue) == typeof(Single))
+            {
+                var finalValue = Convert.ToSingle(value);
 
-			return false;
-		}
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-		public bool SetFieldValue(TEntity entity, string fieldName, UInt32 value)
-		{
-			if (_uint32FieldSettersCache.TryGetValue(fieldName, out Action<TEntity, UInt32> setter))
-			{
-				setter(entity, value);
+            if (typeof(TValue) == typeof(Double))
+            {
+                var finalValue = Convert.ToDouble(value);
 
-				return true;
-			}
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-			return false;
-		}
+            if (typeof(TValue) == typeof(Decimal))
+            {
+                var finalValue = Convert.ToDecimal(value);
 
-		public bool SetFieldValue(TEntity entity, string fieldName, Int64 value)
-		{
-			if (_int64FieldSettersCache.TryGetValue(fieldName, out Action<TEntity, Int64> setter))
-			{
-				setter(entity, value);
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-				return true;
-			}
+            if (typeof(TValue) == typeof(DateTime))
+            {
+                var finalValue = Convert.ToDateTime(value);
 
-			return false;
-		}
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-		public bool SetFieldValue(TEntity entity, string fieldName, UInt64 value)
-		{
-			if (_uint64FieldSettersCache.TryGetValue(fieldName, out Action<TEntity, UInt64> setter))
-			{
-				setter(entity, value);
+            if (typeof(TValue) == typeof(String))
+            {
+                var finalValue = Convert.ToString(value);
 
-				return true;
-			}
+                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		public bool SetFieldValue(TEntity entity, string fieldName, Single value)
-		{
-			if (_singleFieldSettersCache.TryGetValue(fieldName, out Action<TEntity, Single> setter))
-			{
-				setter(entity, value);
+        public bool SetFieldValue(TEntity entity, string fieldName, Object value)
+        {
+            var setter = GetObjectFieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
 
-				return true;
-			}
+            return false;
+        }
 
-			return false;
-		}
+        public bool SetFieldValue(TEntity entity, string fieldName, Boolean value)
+        {
+            var setter = GetBooleanFieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
 
-		public bool SetFieldValue(TEntity entity, string fieldName, Double value)
-		{
-			if (_doubleFieldSettersCache.TryGetValue(fieldName, out Action<TEntity, Double> setter))
-			{
-				setter(entity, value);
+            return false;
+        }
 
-				return true;
-			}
+        public bool SetFieldValue(TEntity entity, string fieldName, Char value)
+        {
+            var setter = GetCharFieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		public bool SetFieldValue(TEntity entity, string fieldName, Decimal value)
-		{
-			if (_decimalFieldSettersCache.TryGetValue(fieldName, out Action<TEntity, Decimal> setter))
-			{
-				setter(entity, value);
+        public bool SetFieldValue(TEntity entity, string fieldName, SByte value)
+        {
+            var setter = GetSByteFieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
 
-				return true;
-			}
+            return false;
+        }
 
-			return false;
-		}
+        public bool SetFieldValue(TEntity entity, string fieldName, Byte value)
+        {
+            var setter = GetByteFieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
 
-		public bool SetFieldValue(TEntity entity, string fieldName, DateTime value)
-		{
-			if (_datetimeFieldSettersCache.TryGetValue(fieldName, out Action<TEntity, DateTime> setter))
-			{
-				setter(entity, value);
+            return false;
+        }
 
-				return true;
-			}
+        public bool SetFieldValue(TEntity entity, string fieldName, Int16 value)
+        {
+            var setter = GetInt16FieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		public bool SetFieldValue(TEntity entity, string fieldName, String value)
-		{
-			if (_stringFieldSettersCache.TryGetValue(fieldName, out Action<TEntity, String> setter))
-			{
-				setter(entity, value);
+        public bool SetFieldValue(TEntity entity, string fieldName, UInt16 value)
+        {
+            var setter = GetUInt16FieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
 
-				return true;
-			}
+            return false;
+        }
 
-			return false;
-		}
+        public bool SetFieldValue(TEntity entity, string fieldName, Int32 value)
+        {
+            var setter = GetInt32FieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetFieldValue(TEntity entity, string fieldName, UInt32 value)
+        {
+            var setter = GetUInt32FieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetFieldValue(TEntity entity, string fieldName, Int64 value)
+        {
+            var setter = GetInt64FieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetFieldValue(TEntity entity, string fieldName, UInt64 value)
+        {
+            var setter = GetUInt64FieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetFieldValue(TEntity entity, string fieldName, Single value)
+        {
+            var setter = GetSingleFieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetFieldValue(TEntity entity, string fieldName, Double value)
+        {
+            var setter = GetDoubleFieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetFieldValue(TEntity entity, string fieldName, Decimal value)
+        {
+            var setter = GetDecimalFieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetFieldValue(TEntity entity, string fieldName, DateTime value)
+        {
+            var setter = GetDateTimeFieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetFieldValue(TEntity entity, string fieldName, String value)
+        {
+            var setter = GetStringFieldSetter(fieldName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
 
 	}
 }

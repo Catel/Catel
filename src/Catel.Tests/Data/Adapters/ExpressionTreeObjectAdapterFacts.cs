@@ -8,7 +8,7 @@
     using Catel.Data;
     using NUnit.Framework;
 
-    public class ReflectionObjectAdapterFacts
+    public class ExpressionTreeObjectAdapterFacts
     {
         public class TestClassWithRegularMembers
         {
@@ -23,7 +23,7 @@
             [TestCase]
             public void SetsCatelModelPropertyValue()
             {
-                var adapter = new ReflectionObjectAdapter();
+                var adapter = new ExpressionTreeObjectAdapter();
                 var model = new PersonTestModel();
 
                 Assert.IsTrue(adapter.SetMemberValue(model, nameof(PersonTestModel.FirstName), "John"));
@@ -33,7 +33,7 @@
             [TestCase]
             public void SetsRegularPropertyValue()
             {
-                var adapter = new ReflectionObjectAdapter();
+                var adapter = new ExpressionTreeObjectAdapter();
                 var model = new TestClassWithRegularMembers();
 
                 Assert.IsTrue(adapter.SetMemberValue(model, nameof(TestClassWithRegularMembers.StringProperty), "John"));
@@ -43,7 +43,7 @@
             [TestCase]
             public void SetsFieldValue()
             {
-                var adapter = new ReflectionObjectAdapter();
+                var adapter = new ExpressionTreeObjectAdapter();
                 var model = new TestClassWithRegularMembers();
 
                 Assert.IsTrue(adapter.SetMemberValue(model, nameof(TestClassWithRegularMembers.StringField), "John"));
@@ -53,7 +53,7 @@
             [TestCase]
             public void ReturnsFalseForNonExistingMember()
             {
-                var adapter = new ReflectionObjectAdapter();
+                var adapter = new ExpressionTreeObjectAdapter();
                 var model = new TestClassWithRegularMembers();
 
                 Assert.IsFalse(adapter.SetMemberValue(model, "NotExistingMember", "John"));
@@ -66,7 +66,7 @@
             [TestCase]
             public void GetsCatelModelPropertyValue()
             {
-                var adapter = new ReflectionObjectAdapter();
+                var adapter = new ExpressionTreeObjectAdapter();
                 var model = new PersonTestModel
                 {
                     FirstName = "John"
@@ -81,7 +81,7 @@
             [TestCase]
             public void GetsRegularPropertyValue()
             {
-                var adapter = new ReflectionObjectAdapter();
+                var adapter = new ExpressionTreeObjectAdapter();
                 var model = new TestClassWithRegularMembers
                 {
                     StringProperty = "John"
@@ -96,7 +96,7 @@
             [TestCase]
             public void GetsFieldValue()
             {
-                var adapter = new ReflectionObjectAdapter();
+                var adapter = new ExpressionTreeObjectAdapter();
                 var model = new TestClassWithRegularMembers
                 {
                     StringField = "John"
@@ -111,7 +111,7 @@
             [TestCase]
             public void ReturnsFalseForNonExistingMember()
             {
-                var adapter = new ReflectionObjectAdapter();
+                var adapter = new ExpressionTreeObjectAdapter();
                 var model = new TestClassWithRegularMembers();
                 string value = string.Empty;
 

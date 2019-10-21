@@ -18,34 +18,71 @@
 
 namespace Catel.Reflection
 {
-	using System;
+    using System;
+    using Catel.Data;
 
-	public partial class FastMemberInvoker<TEntity>
-	{
+    public partial class FastMemberInvoker<TEntity>
+    {
+        public bool TryGetPropertyValue<TValue>(object entity, string propertyName, out TValue value)
+        {
 <# 
 foreach (TypeCode typeCode in typeCodes) 
 {
-	if (typeCode == TypeCode.Empty || typeCode == TypeCode.DBNull)
-	{
-		continue;
-	}
+    if (typeCode == TypeCode.Empty || typeCode == TypeCode.DBNull)
+    {
+        continue;
+    }
 
-	string typeCodeGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "PropertyGettersCache";
 #>
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out <#= typeCode #> item)
-		{
-			if (<#= typeCodeGetterCacheName #>.TryGetValue(propertyName, out Func<TEntity, <#= typeCode #>> getter))
-			{
-				item = getter(entity);
+            if (typeof(TValue) == typeof(<#= typeCode #>))
+            {
+                <#= typeCode #> localValue;
 
-				return true;
-			}
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<<#= typeCode #>>.Default.GetBoxedValue(localValue);
 
-			item = default;
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
 
-			return false;
-		}
+<#
+}
+#>
+            value = default;
+            return false;
+        }
+
+<# 
+foreach (TypeCode typeCode in typeCodes) 
+{
+    if (typeCode == TypeCode.Empty || typeCode == TypeCode.DBNull)
+    {
+        continue;
+    }
+
+    string typeCodeGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "PropertyGettersCache";
+#>
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out <#= typeCode #> item)
+        {
+            var getter = Get<#= typeCode #>PropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
 
 <# } #>
-	}
+    }
 }

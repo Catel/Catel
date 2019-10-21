@@ -1,16 +1,14 @@
 ﻿namespace Catel.Reflection
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Text;
-    using System.Threading.Tasks;
-
     /// <summary>
     /// Wrapper allowing fast member access as an alternative to reflection.
     /// </summary>
     public partial interface IFastMemberInvoker
     {
+        bool TryGetFieldValue<TValue>(object entity, string fieldName, out TValue value);
+        bool TryGetPropertyValue<TValue>(object entity, string propertyName, out TValue value);
+
+        bool SetFieldValue<TValue>(object entity, string fieldName, TValue value);
+        bool SetPropertyValue<TValue>(object entity, string propertyName, TValue value);
     }
 }

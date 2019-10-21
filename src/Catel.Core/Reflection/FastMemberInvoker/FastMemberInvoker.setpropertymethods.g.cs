@@ -10,200 +10,366 @@
 namespace Catel.Reflection
 {
 	using System;
+    using Catel.Data;
 
 	public partial class FastMemberInvoker<TEntity>
 	{
-		public bool SetPropertyValue(TEntity entity, string propertyName, Object value)
-		{
-			if (_objectPropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Object> setter))
-			{
-				setter(entity, value);
+        public bool SetPropertyValue<TValue>(object entity, string fieldName, TValue value)
+        {
+            if (typeof(TValue) == typeof(Object))
+            {
+                var finalValue = (object)value;
 
-				return true;
-			}
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-			return false;
-		}
+            if (typeof(TValue) == typeof(Boolean))
+            {
+                var finalValue = Convert.ToBoolean(value);
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Boolean value)
-		{
-			if (_booleanPropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Boolean> setter))
-			{
-				setter(entity, value);
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-				return true;
-			}
+            if (typeof(TValue) == typeof(Char))
+            {
+                var finalValue = Convert.ToChar(value);
 
-			return false;
-		}
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Char value)
-		{
-			if (_charPropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Char> setter))
-			{
-				setter(entity, value);
+            if (typeof(TValue) == typeof(SByte))
+            {
+                var finalValue = Convert.ToSByte(value);
 
-				return true;
-			}
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-			return false;
-		}
+            if (typeof(TValue) == typeof(Byte))
+            {
+                var finalValue = Convert.ToByte(value);
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, SByte value)
-		{
-			if (_sbytePropertySettersCache.TryGetValue(propertyName, out Action<TEntity, SByte> setter))
-			{
-				setter(entity, value);
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-				return true;
-			}
+            if (typeof(TValue) == typeof(Int16))
+            {
+                var finalValue = Convert.ToInt16(value);
 
-			return false;
-		}
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Byte value)
-		{
-			if (_bytePropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Byte> setter))
-			{
-				setter(entity, value);
+            if (typeof(TValue) == typeof(UInt16))
+            {
+                var finalValue = Convert.ToUInt16(value);
 
-				return true;
-			}
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-			return false;
-		}
+            if (typeof(TValue) == typeof(Int32))
+            {
+                var finalValue = Convert.ToInt32(value);
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Int16 value)
-		{
-			if (_int16PropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Int16> setter))
-			{
-				setter(entity, value);
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-				return true;
-			}
+            if (typeof(TValue) == typeof(UInt32))
+            {
+                var finalValue = Convert.ToUInt32(value);
 
-			return false;
-		}
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, UInt16 value)
-		{
-			if (_uint16PropertySettersCache.TryGetValue(propertyName, out Action<TEntity, UInt16> setter))
-			{
-				setter(entity, value);
+            if (typeof(TValue) == typeof(Int64))
+            {
+                var finalValue = Convert.ToInt64(value);
 
-				return true;
-			}
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-			return false;
-		}
+            if (typeof(TValue) == typeof(UInt64))
+            {
+                var finalValue = Convert.ToUInt64(value);
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Int32 value)
-		{
-			if (_int32PropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Int32> setter))
-			{
-				setter(entity, value);
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-				return true;
-			}
+            if (typeof(TValue) == typeof(Single))
+            {
+                var finalValue = Convert.ToSingle(value);
 
-			return false;
-		}
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, UInt32 value)
-		{
-			if (_uint32PropertySettersCache.TryGetValue(propertyName, out Action<TEntity, UInt32> setter))
-			{
-				setter(entity, value);
+            if (typeof(TValue) == typeof(Double))
+            {
+                var finalValue = Convert.ToDouble(value);
 
-				return true;
-			}
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-			return false;
-		}
+            if (typeof(TValue) == typeof(Decimal))
+            {
+                var finalValue = Convert.ToDecimal(value);
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Int64 value)
-		{
-			if (_int64PropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Int64> setter))
-			{
-				setter(entity, value);
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-				return true;
-			}
+            if (typeof(TValue) == typeof(DateTime))
+            {
+                var finalValue = Convert.ToDateTime(value);
 
-			return false;
-		}
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, UInt64 value)
-		{
-			if (_uint64PropertySettersCache.TryGetValue(propertyName, out Action<TEntity, UInt64> setter))
-			{
-				setter(entity, value);
+            if (typeof(TValue) == typeof(String))
+            {
+                var finalValue = Convert.ToString(value);
 
-				return true;
-			}
+                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
+                {
+                    return true;
+                }
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Single value)
-		{
-			if (_singlePropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Single> setter))
-			{
-				setter(entity, value);
+        public bool SetPropertyValue(TEntity entity, string propertyName, Object value)
+        {
+            var setter = GetObjectPropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
 
-				return true;
-			}
+            return false;
+        }
 
-			return false;
-		}
+        public bool SetPropertyValue(TEntity entity, string propertyName, Boolean value)
+        {
+            var setter = GetBooleanPropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Double value)
-		{
-			if (_doublePropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Double> setter))
-			{
-				setter(entity, value);
+            return false;
+        }
 
-				return true;
-			}
+        public bool SetPropertyValue(TEntity entity, string propertyName, Char value)
+        {
+            var setter = GetCharPropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, Decimal value)
-		{
-			if (_decimalPropertySettersCache.TryGetValue(propertyName, out Action<TEntity, Decimal> setter))
-			{
-				setter(entity, value);
+        public bool SetPropertyValue(TEntity entity, string propertyName, SByte value)
+        {
+            var setter = GetSBytePropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
 
-				return true;
-			}
+            return false;
+        }
 
-			return false;
-		}
+        public bool SetPropertyValue(TEntity entity, string propertyName, Byte value)
+        {
+            var setter = GetBytePropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, DateTime value)
-		{
-			if (_datetimePropertySettersCache.TryGetValue(propertyName, out Action<TEntity, DateTime> setter))
-			{
-				setter(entity, value);
+            return false;
+        }
 
-				return true;
-			}
+        public bool SetPropertyValue(TEntity entity, string propertyName, Int16 value)
+        {
+            var setter = GetInt16PropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		public bool SetPropertyValue(TEntity entity, string propertyName, String value)
-		{
-			if (_stringPropertySettersCache.TryGetValue(propertyName, out Action<TEntity, String> setter))
-			{
-				setter(entity, value);
+        public bool SetPropertyValue(TEntity entity, string propertyName, UInt16 value)
+        {
+            var setter = GetUInt16PropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
 
-				return true;
-			}
+            return false;
+        }
 
-			return false;
-		}
+        public bool SetPropertyValue(TEntity entity, string propertyName, Int32 value)
+        {
+            var setter = GetInt32PropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetPropertyValue(TEntity entity, string propertyName, UInt32 value)
+        {
+            var setter = GetUInt32PropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetPropertyValue(TEntity entity, string propertyName, Int64 value)
+        {
+            var setter = GetInt64PropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetPropertyValue(TEntity entity, string propertyName, UInt64 value)
+        {
+            var setter = GetUInt64PropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetPropertyValue(TEntity entity, string propertyName, Single value)
+        {
+            var setter = GetSinglePropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetPropertyValue(TEntity entity, string propertyName, Double value)
+        {
+            var setter = GetDoublePropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetPropertyValue(TEntity entity, string propertyName, Decimal value)
+        {
+            var setter = GetDecimalPropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetPropertyValue(TEntity entity, string propertyName, DateTime value)
+        {
+            var setter = GetDateTimePropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetPropertyValue(TEntity entity, string propertyName, String value)
+        {
+            var setter = GetStringPropertySetter(propertyName);
+            if (setter != null)
+            {
+                setter(entity, value);
+                return true;
+            }
+
+            return false;
+        }
 
 	}
 }

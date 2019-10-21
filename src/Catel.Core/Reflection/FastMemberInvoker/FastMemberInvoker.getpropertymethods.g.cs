@@ -9,233 +9,528 @@
 
 namespace Catel.Reflection
 {
-	using System;
-
-	public partial class FastMemberInvoker<TEntity>
-	{
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Object item)
-		{
-			if (_objectPropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Object> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Boolean item)
-		{
-			if (_booleanPropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Boolean> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Char item)
-		{
-			if (_charPropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Char> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out SByte item)
-		{
-			if (_sbytePropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, SByte> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Byte item)
-		{
-			if (_bytePropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Byte> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int16 item)
-		{
-			if (_int16PropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Int16> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt16 item)
-		{
-			if (_uint16PropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, UInt16> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int32 item)
-		{
-			if (_int32PropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Int32> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt32 item)
-		{
-			if (_uint32PropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, UInt32> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int64 item)
-		{
-			if (_int64PropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Int64> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt64 item)
-		{
-			if (_uint64PropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, UInt64> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Single item)
-		{
-			if (_singlePropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Single> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Double item)
-		{
-			if (_doublePropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Double> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out Decimal item)
-		{
-			if (_decimalPropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, Decimal> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out DateTime item)
-		{
-			if (_datetimePropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, DateTime> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-		public bool TryGetPropertyValue(TEntity entity, string propertyName, out String item)
-		{
-			if (_stringPropertyGettersCache.TryGetValue(propertyName, out Func<TEntity, String> getter))
-			{
-				item = getter(entity);
-
-				return true;
-			}
-
-			item = default;
-
-			return false;
-		}
-
-	}
+    using System;
+    using Catel.Data;
+
+    public partial class FastMemberInvoker<TEntity>
+    {
+        public bool TryGetPropertyValue<TValue>(object entity, string propertyName, out TValue value)
+        {
+            if (typeof(TValue) == typeof(Object))
+            {
+                Object localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Object>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Boolean))
+            {
+                Boolean localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Boolean>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Char))
+            {
+                Char localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Char>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(SByte))
+            {
+                SByte localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<SByte>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Byte))
+            {
+                Byte localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Byte>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Int16))
+            {
+                Int16 localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Int16>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(UInt16))
+            {
+                UInt16 localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<UInt16>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Int32))
+            {
+                Int32 localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Int32>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(UInt32))
+            {
+                UInt32 localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<UInt32>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Int64))
+            {
+                Int64 localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Int64>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(UInt64))
+            {
+                UInt64 localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<UInt64>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Single))
+            {
+                Single localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Single>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Double))
+            {
+                Double localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Double>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(Decimal))
+            {
+                Decimal localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<Decimal>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(DateTime))
+            {
+                DateTime localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<DateTime>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            if (typeof(TValue) == typeof(String))
+            {
+                String localValue;
+
+                if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
+                {
+                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
+                    var boxedValue = BoxingCache<String>.Default.GetBoxedValue(localValue);
+
+                    value = (TValue)boxedValue;
+                    return true;
+                }
+                else
+                {
+                    value = default;
+                    return false;
+                }
+            }
+
+            value = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Object item)
+        {
+            var getter = GetObjectPropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Boolean item)
+        {
+            var getter = GetBooleanPropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Char item)
+        {
+            var getter = GetCharPropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out SByte item)
+        {
+            var getter = GetSBytePropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Byte item)
+        {
+            var getter = GetBytePropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int16 item)
+        {
+            var getter = GetInt16PropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt16 item)
+        {
+            var getter = GetUInt16PropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int32 item)
+        {
+            var getter = GetInt32PropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt32 item)
+        {
+            var getter = GetUInt32PropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int64 item)
+        {
+            var getter = GetInt64PropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt64 item)
+        {
+            var getter = GetUInt64PropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Single item)
+        {
+            var getter = GetSinglePropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Double item)
+        {
+            var getter = GetDoublePropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out Decimal item)
+        {
+            var getter = GetDecimalPropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out DateTime item)
+        {
+            var getter = GetDateTimePropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+        public bool TryGetPropertyValue(TEntity entity, string propertyName, out String item)
+        {
+            var getter = GetStringPropertyGetter(propertyName);
+            if (getter != null)
+            {
+                item = getter(entity);
+                return true;
+            }
+
+            item = default;
+            return false;
+        }
+
+    }
 }
