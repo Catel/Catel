@@ -90,9 +90,9 @@
 
             var target = Expression.Parameter(targetType, "target");
             var body = Expression.Field(target, fieldInfo);
-            var convert = Expression.Convert(body, typeof(TField));
 
-            var lambda = Expression.Lambda<Func<T, TField>>(convert, target);
+            var finalExpression = GetCastOrConvertExpression(body, typeof(TField));
+            var lambda = Expression.Lambda<Func<T, TField>>(finalExpression, target);
             return lambda;
         }
     }

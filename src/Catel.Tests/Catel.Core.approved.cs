@@ -3136,7 +3136,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, decimal value) { }
         public bool SetFieldValue(TEntity entity, string fieldName, System.DateTime value) { }
         public bool SetFieldValue(TEntity entity, string fieldName, string value) { }
-        public bool SetPropertyValue<TValue>(object entity, string fieldName, TValue value) { }
+        public bool SetPropertyValue<TValue>(object entity, string propertyName, TValue value) { }
         public bool SetPropertyValue(TEntity entity, string propertyName, object value) { }
         public bool SetPropertyValue(TEntity entity, string propertyName, bool value) { }
         public bool SetPropertyValue(TEntity entity, string propertyName, char value) { }

@@ -51,10 +51,7 @@ foreach (TypeCode typeCode in typeCodes)
     }
 #>
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
 <#

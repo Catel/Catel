@@ -101,6 +101,15 @@ namespace Catel.Runtime.Serialization
             {
                 var finalValue = BoxingCache.GetBoxedValue(member.Value);
 
+                // In this very special occasion, we will not use ObjectAdapter since it 
+                // will cause property change notifications (which we don't want during deserialization)
+                var modelEditor = model as IModelEditor;
+                if (modelEditor != null && modelInfo.CatelPropertyNames.Contains(member.Name))
+                {
+                    modelEditor.SetValueFastButUnsecure(member.Name, finalValue);
+                    return;
+                }
+
                 _objectAdapter.SetMemberValue(model, member.Name, finalValue);
             }
             catch (Exception ex)

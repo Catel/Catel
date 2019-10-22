@@ -41,7 +41,7 @@ foreach (TypeCode typeCode in typeCodes)
 
         private Func<TEntity, <#= typeCode #>> Get<#= typeCode #>FieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_<#= typeCode #>";
 
             if (!<#= typeCodeGetterCacheName #>.TryGetValue(key, out var getter))
             {
@@ -59,7 +59,7 @@ foreach (TypeCode typeCode in typeCodes)
 
         private Func<TEntity, <#= typeCode #>> Get<#= typeCode #>PropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_<#= typeCode #>";
 
             if (!<#= typeCodeGetterCacheName #>.TryGetValue(key, out var getter))
             {
@@ -77,7 +77,7 @@ foreach (TypeCode typeCode in typeCodes)
 
         private Action<TEntity, <#= typeCode #>> Get<#= typeCode #>FieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_<#= typeCode #>";
 
             if (!<#= typeCodeSetterCacheName #>.TryGetValue(key, out var setter))
             {
@@ -95,7 +95,7 @@ foreach (TypeCode typeCode in typeCodes)
 
         private Action<TEntity, <#= typeCode #>> Get<#= typeCode #>PropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_<#= typeCode #>";
 
             if (!<#= typeCodeSetterCacheName #>.TryGetValue(key, out var setter))
             {

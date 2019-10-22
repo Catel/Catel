@@ -91,10 +91,14 @@
             }
 
             var target = Expression.Parameter(targetType, "target");
-            var parameter = Expression.Parameter(typeof(TProperty), "property");
-            var body = Expression.Call(target, methodInfo, Expression.Convert(parameter, propertyInfo.PropertyType));
+            var targetExpression = GetCastOrConvertExpression(target, typeof(T));
 
-            var lambda = Expression.Lambda<Action<T, TProperty>>(body, target, parameter);
+            var valueParameter = Expression.Parameter(typeof(TProperty), "property");
+            var valueParameterExpression = GetCastOrConvertExpression(valueParameter, propertyInfo.PropertyType);
+
+            var body = Expression.Call(targetExpression, methodInfo, valueParameterExpression);
+
+            var lambda = Expression.Lambda<Action<T, TProperty>>(body, target, valueParameter);
             return lambda;
         }
     }

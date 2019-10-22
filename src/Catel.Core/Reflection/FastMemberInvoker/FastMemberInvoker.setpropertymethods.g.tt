@@ -23,7 +23,7 @@ namespace Catel.Reflection
 
 	public partial class FastMemberInvoker<TEntity>
 	{
-        public bool SetPropertyValue<TValue>(object entity, string fieldName, TValue value)
+        public bool SetPropertyValue<TValue>(object entity, string propertyName, TValue value)
         {
 <# 
 foreach (TypeCode typeCode in typeCodes) 
@@ -51,10 +51,7 @@ foreach (TypeCode typeCode in typeCodes)
     }
 #>
 
-                if (SetPropertyValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 
 <#

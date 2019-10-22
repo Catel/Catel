@@ -20,160 +20,112 @@ namespace Catel.Reflection
             {
                 var finalValue = (object)value;
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Boolean))
             {
                 var finalValue = Convert.ToBoolean(value);
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Char))
             {
                 var finalValue = Convert.ToChar(value);
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(SByte))
             {
                 var finalValue = Convert.ToSByte(value);
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Byte))
             {
                 var finalValue = Convert.ToByte(value);
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Int16))
             {
                 var finalValue = Convert.ToInt16(value);
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(UInt16))
             {
                 var finalValue = Convert.ToUInt16(value);
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Int32))
             {
                 var finalValue = Convert.ToInt32(value);
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(UInt32))
             {
                 var finalValue = Convert.ToUInt32(value);
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Int64))
             {
                 var finalValue = Convert.ToInt64(value);
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(UInt64))
             {
                 var finalValue = Convert.ToUInt64(value);
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Single))
             {
                 var finalValue = Convert.ToSingle(value);
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Double))
             {
                 var finalValue = Convert.ToDouble(value);
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Decimal))
             {
                 var finalValue = Convert.ToDecimal(value);
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(DateTime))
             {
                 var finalValue = Convert.ToDateTime(value);
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             if (typeof(TValue) == typeof(String))
             {
                 var finalValue = Convert.ToString(value);
 
-                if (SetFieldValue((TEntity)entity, fieldName, finalValue))
-                {
-                    return true;
-                }
+                return SetFieldValue((TEntity)entity, fieldName, finalValue);
             }
 
             return false;

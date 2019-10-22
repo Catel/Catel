@@ -89,12 +89,15 @@
             }
 
             var target = Expression.Parameter(targetType, "target");
-            var parameter = Expression.Parameter(typeof(TField), "field");
+            var targetExpression = GetCastOrConvertExpression(target, typeof(T));
 
-            var fieldExp = Expression.Field(target, fieldInfo);
-            var body = Expression.Assign(fieldExp, Expression.Convert(parameter, fieldInfo.FieldType));
+            var valueParameter = Expression.Parameter(typeof(TField), "field");
+            var valueParameterExpression = GetCastOrConvertExpression(valueParameter, fieldInfo.FieldType);
 
-            var lambda = Expression.Lambda<Action<T, TField>>(body, target, parameter);
+            var fieldExpression = Expression.Field(targetExpression, fieldInfo);
+            var body = Expression.Assign(fieldExpression, valueParameterExpression);
+
+            var lambda = Expression.Lambda<Action<T, TField>>(body, target, valueParameter);
             return lambda;
         }
     }
