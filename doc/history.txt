@@ -31,6 +31,8 @@ Added/fixed
 ===========
 (+) #1421 ObservableDictionary for supporting UI controls that utilize Dictionaries
 (+) #1437 Cache boxed value type values in ModelBase
+(+) #1439 Add Catel.Data.IObjectAdapter with a Reflection and Expression Tree implementation
+    to provide faster (unknown) model property mappings
 (*) #1435 Decrease XmlWriterSettings allocations during serialization by caching it
 (*) #1436 Decrease allocations of objects during (de)serialization
 (*) #1441 Clean up TypeExtensions with system extensions for UAP

@@ -49,7 +49,8 @@ namespace Catel
             serviceLocator.RegisterType<IXmlSerializer, XmlSerializer>();
             serviceLocator.RegisterType<IXmlNamespaceManager, XmlNamespaceManager>();
             serviceLocator.RegisterType<ISerializationManager, SerializationManager>();
-            serviceLocator.RegisterType<IObjectAdapter, ObjectAdapter>();
+            serviceLocator.RegisterType<Catel.Runtime.Serialization.IObjectAdapter, Catel.Runtime.Serialization.ObjectAdapter>();
+            serviceLocator.RegisterType<Catel.Data.IObjectAdapter, Catel.Data.ExpressionTreeObjectAdapter>();
 
             serviceLocator.RegisterType<ISerializer, XmlSerializer>();
             serviceLocator.RegisterTypeWithTag<ISerializationContextInfoFactory, XmlSerializationContextInfoFactory>(typeof(XmlSerializer));
