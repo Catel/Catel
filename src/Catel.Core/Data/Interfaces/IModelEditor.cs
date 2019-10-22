@@ -17,6 +17,13 @@ namespace Catel.Data
     {
         #region Methods
         /// <summary>
+        /// Checks whether the specified property name is available.
+        /// </summary>
+        /// <param name="propertyName">The name of the property to check.</param>
+        /// <returns><c>true</c> if the specified property is available; otherwise <c>false</c>.</returns>
+        bool IsPropertyRegistered(string propertyName);
+
+        /// <summary>
         /// Gets the value of the specified property.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>

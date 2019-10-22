@@ -10,12 +10,12 @@
     <Description>Catel.Core library.</Description>
     <PackageTags>catel;argument;checking;guard;logging;log;ioc;dependency;resolver;factory;configuration;data;model;messaging;messenger;reflection;scope;scoping;caching;cache;weak;reference;event</PackageTags>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <!-- SonarQube requires a project guid -->
     <ProjectGuid>3B47FC74-57AD-4F8B-B9C6-7F31FF39687B</ProjectGuid>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="Catel.Fody" Version="4.3.0" PrivateAssets="all" />
     <PackageReference Include="Fody" Version="6.0.2" PrivateAssets="all">
@@ -28,30 +28,30 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.6.0" />
     <PackageReference Include="System.Runtime.Serialization.Xml" Version="4.3.0" />
   </ItemGroup>
-  
+
   <!-- .NET 4.5 -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
     <Reference Include="System.Configuration" />
   </ItemGroup>
-  
+
   <!-- .NET 4.6 -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
     <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
     <Reference Include="System.Configuration" />
   </ItemGroup>
-  
+
   <!-- .NET 4.7 -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
     <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
   </ItemGroup>
-  
+
   <!-- .NET Core 3.0 -->
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
     <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
   </ItemGroup>
-  
+
   <!-- UAP 10.0 -->
   <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0'">
     <PackageReference Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
@@ -83,7 +83,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
-  
+
   <!-- Xamarin.Android -->
   <ItemGroup Condition="'$(TargetFramework)' == 'monoandroid70'">
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
@@ -94,11 +94,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Update="NETStandard.Library" Version="2.0.3" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -106,14 +106,91 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
- 
+
+  <ItemGroup>
+    <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.caches.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>FastMemberInvoker.caches.g.cs</LastGenOutput>
+    </None>
+    <Compile Update="Reflection\FastMemberInvoker\FastMemberInvoker.caches.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FastMemberInvoker.caches.g.tt</DependentUpon>
+    </Compile>
+        
+    <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.getfieldmethods.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>FastMemberInvoker.getfieldmethods.g.cs</LastGenOutput>
+    </None>
+    <Compile Update="Reflection\FastMemberInvoker\FastMemberInvoker.getfieldmethods.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FastMemberInvoker.getfieldmethods.g.tt</DependentUpon>
+    </Compile>
+    
+    <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.getpropertymethods.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>FastMemberInvoker.getpropertymethods.g.cs</LastGenOutput>
+    </None>
+    <Compile Update="Reflection\FastMemberInvoker\FastMemberInvoker.getpropertymethods.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FastMemberInvoker.getpropertymethods.g.tt</DependentUpon>
+    </Compile>
+
+    <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.interfaceimplementation.g.tt">
+      <LastGenOutput>FastMemberInvoker.interfaceimplementation.g.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <Compile Update="Reflection\FastMemberInvoker\FastMemberInvoker.interfaceimplementation.g.cs">
+      <DependentUpon>FastMemberInvoker.interfaceimplementation.g.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+
+    <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.setfieldmethods.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>FastMemberInvoker.setfieldmethods.g.cs</LastGenOutput>
+    </None>
+    <Compile Update="Reflection\FastMemberInvoker\FastMemberInvoker.setfieldmethods.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FastMemberInvoker.setfieldmethods.g.tt</DependentUpon>
+    </Compile>
+      
+    <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.setpropertymethods.g.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>FastMemberInvoker.setpropertymethods.g.cs</LastGenOutput>
+    </None>
+    <Compile Update="Reflection\FastMemberInvoker\FastMemberInvoker.setpropertymethods.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FastMemberInvoker.setpropertymethods.g.tt</DependentUpon>
+    </Compile>
+
+    <None Update="Reflection\FastMemberInvoker\Interfaces\IFastMemberInvoker.g.tt">
+      <LastGenOutput>IFastMemberInvoker.g.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <Compile Update="Reflection\FastMemberInvoker\Interfaces\IFastMemberInvoker.g.cs">
+      <DependentUpon>IFastMemberInvoker.g.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <!-- Required for T4 templates -->
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.mat.props')" />
 </Project>
