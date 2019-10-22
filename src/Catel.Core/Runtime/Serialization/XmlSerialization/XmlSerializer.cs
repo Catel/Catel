@@ -500,6 +500,8 @@ namespace Catel.Runtime.Serialization.Xml
                     else
                     {
                         Log.Debug($"Ignoring member '{localName}'");
+
+                        xmlReader.Read();
                     }
                 }
             }

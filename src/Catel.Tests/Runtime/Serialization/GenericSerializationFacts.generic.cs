@@ -38,7 +38,7 @@ namespace Catel.Tests.Runtime.Serialization
             public class A : SavableModelBase<A>
             {
                 [IncludeInSerialization]
-                private readonly int _count;
+                private int _count;
 
                 public A(int count)
                 {
@@ -47,7 +47,7 @@ namespace Catel.Tests.Runtime.Serialization
 
                 public A()
                 {
-                    ; //empty for deserialization
+                    //empty for deserialization
                 }
 
                 protected A(SerializationInfo info, StreamingContext context)
@@ -66,7 +66,7 @@ namespace Catel.Tests.Runtime.Serialization
                 where T : A
             {
                 [IncludeInSerialization]
-                private readonly T _item;
+                private T _item;
 
                 public B(T item)
                 {
@@ -75,7 +75,7 @@ namespace Catel.Tests.Runtime.Serialization
 
                 public B()
                 {
-                    ; //empty for deserialization
+                    //empty for deserialization
                 }
 
                 protected B(SerializationInfo info, StreamingContext context)

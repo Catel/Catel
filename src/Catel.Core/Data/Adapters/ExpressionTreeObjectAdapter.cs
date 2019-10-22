@@ -35,6 +35,26 @@
                     return true;
                 }
 
+                if (instance is IPropertySerializable propertySerializable)
+                {
+                    object objectValue = null;
+                    if (propertySerializable.GetPropertyValue(memberName, ref objectValue))
+                    {
+                        value = (TValue)objectValue;
+                        return true;
+                    }
+                }
+
+                if (instance is IFieldSerializable fieldSerializable)
+                {
+                    object objectValue = null;
+                    if (fieldSerializable.GetFieldValue(memberName, ref objectValue))
+                    {
+                        value = (TValue)objectValue;
+                        return true;
+                    }
+                }
+
                 var modelType = instance.GetType();
 
                 if (!_fastMemberInvokerCache.TryGetValue(modelType, out var fastMemberInvoker))
@@ -78,8 +98,25 @@
                 var modelEditor = instance as IModelEditor;
                 if (modelEditor != null && modelEditor.IsPropertyRegistered(memberName))
                 {
-                    modelEditor.SetValueFastButUnsecure(memberName, value);
+                    // Don't use SetValueFastbutUnsecure, change notifications must be possible
+                    modelEditor.SetValue(memberName, value);
                     return true;
+                }
+
+                if (instance is IPropertySerializable propertySerializable)
+                {
+                    if (propertySerializable.SetPropertyValue(memberName, value))
+                    {
+                        return true;
+                    }
+                }
+
+                if (instance is IFieldSerializable fieldSerializable)
+                {
+                    if (fieldSerializable.SetFieldValue(memberName, value))
+                    {
+                        return true;
+                    }
                 }
 
                 var modelType = instance.GetType();

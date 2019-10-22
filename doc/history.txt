@@ -35,6 +35,7 @@ Added/fixed
     to provide faster (unknown) model property mappings
 (*) #1435 Decrease XmlWriterSettings allocations during serialization by caching it
 (*) #1436 Decrease allocations of objects during (de)serialization
+(*) #1440 Use ObjectAdapter in ViewModelBase for property mappings
 (*) #1441 Clean up TypeExtensions with system extensions for UAP
 (x) #1408 Logging in TypeFactory uses wrong parameter name
 (x) #1434 Serialization should respect graph ids when deserializing collections

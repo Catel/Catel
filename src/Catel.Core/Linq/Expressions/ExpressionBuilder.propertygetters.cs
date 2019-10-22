@@ -92,9 +92,9 @@
 
             var target = Expression.Parameter(targetType, "target");
             var body = Expression.Call(target, methodInfo);
-            var convert = Expression.Convert(body, typeof(TProperty));
 
-            var lambda = Expression.Lambda<Func<T, TProperty>>(convert, target);
+            var finalExpression = GetCastOrConvertExpression(body, typeof(TProperty));
+            var lambda = Expression.Lambda<Func<T, TProperty>>(finalExpression, target);
             return lambda;
         }
     }

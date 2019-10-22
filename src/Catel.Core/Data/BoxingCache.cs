@@ -129,6 +129,11 @@ namespace Catel.Data
         /// <returns>The boxed value.</returns>
         public object GetBoxedValue(T value)
         {
+            if (ReferenceEquals(value, null))
+            {
+                return null;
+            }
+
             lock (_boxedValues)
             {
                 if (!_boxedValues.TryGetValue(value, out var boxedValue))

@@ -849,6 +849,7 @@ namespace Catel.MVVM
     public abstract class ViewModelBase : Catel.Data.ValidatableModelBase, Catel.Data.IValidatable, Catel.IUniqueIdentifyable, Catel.MVVM.IRelationalViewModel, Catel.MVVM.IViewModel, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged
     {
         protected static readonly Catel.MVVM.IViewModelManager ViewModelManager;
+        protected readonly Catel.Data.IObjectAdapter _objectAdapter;
         protected ViewModelBase() { }
         protected ViewModelBase(bool supportIEditableObject, bool ignoreMultipleModelsWarning = False, bool skipViewModelAttributesInitialization = False) { }
         protected ViewModelBase(Catel.IoC.IServiceLocator serviceLocator, bool supportIEditableObject = True, bool ignoreMultipleModelsWarning = False, bool skipViewModelAttributesInitialization = False) { }

@@ -21,7 +21,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Object> GetObjectFieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Object";
 
             if (!_objectGettersCache.TryGetValue(key, out var getter))
             {
@@ -39,7 +39,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Object> GetObjectPropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Object";
 
             if (!_objectGettersCache.TryGetValue(key, out var getter))
             {
@@ -57,7 +57,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Object> GetObjectFieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Object";
 
             if (!_objectSettersCache.TryGetValue(key, out var setter))
             {
@@ -75,7 +75,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Object> GetObjectPropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Object";
 
             if (!_objectSettersCache.TryGetValue(key, out var setter))
             {
@@ -96,7 +96,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Boolean> GetBooleanFieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Boolean";
 
             if (!_booleanGettersCache.TryGetValue(key, out var getter))
             {
@@ -114,7 +114,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Boolean> GetBooleanPropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Boolean";
 
             if (!_booleanGettersCache.TryGetValue(key, out var getter))
             {
@@ -132,7 +132,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Boolean> GetBooleanFieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Boolean";
 
             if (!_booleanSettersCache.TryGetValue(key, out var setter))
             {
@@ -150,7 +150,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Boolean> GetBooleanPropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Boolean";
 
             if (!_booleanSettersCache.TryGetValue(key, out var setter))
             {
@@ -171,7 +171,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Char> GetCharFieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Char";
 
             if (!_charGettersCache.TryGetValue(key, out var getter))
             {
@@ -189,7 +189,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Char> GetCharPropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Char";
 
             if (!_charGettersCache.TryGetValue(key, out var getter))
             {
@@ -207,7 +207,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Char> GetCharFieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Char";
 
             if (!_charSettersCache.TryGetValue(key, out var setter))
             {
@@ -225,7 +225,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Char> GetCharPropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Char";
 
             if (!_charSettersCache.TryGetValue(key, out var setter))
             {
@@ -246,7 +246,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, SByte> GetSByteFieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_SByte";
 
             if (!_sbyteGettersCache.TryGetValue(key, out var getter))
             {
@@ -264,7 +264,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, SByte> GetSBytePropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_SByte";
 
             if (!_sbyteGettersCache.TryGetValue(key, out var getter))
             {
@@ -282,7 +282,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, SByte> GetSByteFieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_SByte";
 
             if (!_sbyteSettersCache.TryGetValue(key, out var setter))
             {
@@ -300,7 +300,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, SByte> GetSBytePropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_SByte";
 
             if (!_sbyteSettersCache.TryGetValue(key, out var setter))
             {
@@ -321,7 +321,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Byte> GetByteFieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Byte";
 
             if (!_byteGettersCache.TryGetValue(key, out var getter))
             {
@@ -339,7 +339,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Byte> GetBytePropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Byte";
 
             if (!_byteGettersCache.TryGetValue(key, out var getter))
             {
@@ -357,7 +357,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Byte> GetByteFieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Byte";
 
             if (!_byteSettersCache.TryGetValue(key, out var setter))
             {
@@ -375,7 +375,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Byte> GetBytePropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Byte";
 
             if (!_byteSettersCache.TryGetValue(key, out var setter))
             {
@@ -396,7 +396,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Int16> GetInt16FieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Int16";
 
             if (!_int16GettersCache.TryGetValue(key, out var getter))
             {
@@ -414,7 +414,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Int16> GetInt16PropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Int16";
 
             if (!_int16GettersCache.TryGetValue(key, out var getter))
             {
@@ -432,7 +432,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Int16> GetInt16FieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Int16";
 
             if (!_int16SettersCache.TryGetValue(key, out var setter))
             {
@@ -450,7 +450,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Int16> GetInt16PropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Int16";
 
             if (!_int16SettersCache.TryGetValue(key, out var setter))
             {
@@ -471,7 +471,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, UInt16> GetUInt16FieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_UInt16";
 
             if (!_uint16GettersCache.TryGetValue(key, out var getter))
             {
@@ -489,7 +489,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, UInt16> GetUInt16PropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_UInt16";
 
             if (!_uint16GettersCache.TryGetValue(key, out var getter))
             {
@@ -507,7 +507,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, UInt16> GetUInt16FieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_UInt16";
 
             if (!_uint16SettersCache.TryGetValue(key, out var setter))
             {
@@ -525,7 +525,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, UInt16> GetUInt16PropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_UInt16";
 
             if (!_uint16SettersCache.TryGetValue(key, out var setter))
             {
@@ -546,7 +546,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Int32> GetInt32FieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Int32";
 
             if (!_int32GettersCache.TryGetValue(key, out var getter))
             {
@@ -564,7 +564,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Int32> GetInt32PropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Int32";
 
             if (!_int32GettersCache.TryGetValue(key, out var getter))
             {
@@ -582,7 +582,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Int32> GetInt32FieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Int32";
 
             if (!_int32SettersCache.TryGetValue(key, out var setter))
             {
@@ -600,7 +600,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Int32> GetInt32PropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Int32";
 
             if (!_int32SettersCache.TryGetValue(key, out var setter))
             {
@@ -621,7 +621,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, UInt32> GetUInt32FieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_UInt32";
 
             if (!_uint32GettersCache.TryGetValue(key, out var getter))
             {
@@ -639,7 +639,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, UInt32> GetUInt32PropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_UInt32";
 
             if (!_uint32GettersCache.TryGetValue(key, out var getter))
             {
@@ -657,7 +657,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, UInt32> GetUInt32FieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_UInt32";
 
             if (!_uint32SettersCache.TryGetValue(key, out var setter))
             {
@@ -675,7 +675,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, UInt32> GetUInt32PropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_UInt32";
 
             if (!_uint32SettersCache.TryGetValue(key, out var setter))
             {
@@ -696,7 +696,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Int64> GetInt64FieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Int64";
 
             if (!_int64GettersCache.TryGetValue(key, out var getter))
             {
@@ -714,7 +714,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Int64> GetInt64PropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Int64";
 
             if (!_int64GettersCache.TryGetValue(key, out var getter))
             {
@@ -732,7 +732,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Int64> GetInt64FieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Int64";
 
             if (!_int64SettersCache.TryGetValue(key, out var setter))
             {
@@ -750,7 +750,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Int64> GetInt64PropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Int64";
 
             if (!_int64SettersCache.TryGetValue(key, out var setter))
             {
@@ -771,7 +771,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, UInt64> GetUInt64FieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_UInt64";
 
             if (!_uint64GettersCache.TryGetValue(key, out var getter))
             {
@@ -789,7 +789,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, UInt64> GetUInt64PropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_UInt64";
 
             if (!_uint64GettersCache.TryGetValue(key, out var getter))
             {
@@ -807,7 +807,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, UInt64> GetUInt64FieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_UInt64";
 
             if (!_uint64SettersCache.TryGetValue(key, out var setter))
             {
@@ -825,7 +825,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, UInt64> GetUInt64PropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_UInt64";
 
             if (!_uint64SettersCache.TryGetValue(key, out var setter))
             {
@@ -846,7 +846,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Single> GetSingleFieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Single";
 
             if (!_singleGettersCache.TryGetValue(key, out var getter))
             {
@@ -864,7 +864,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Single> GetSinglePropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Single";
 
             if (!_singleGettersCache.TryGetValue(key, out var getter))
             {
@@ -882,7 +882,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Single> GetSingleFieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Single";
 
             if (!_singleSettersCache.TryGetValue(key, out var setter))
             {
@@ -900,7 +900,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Single> GetSinglePropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Single";
 
             if (!_singleSettersCache.TryGetValue(key, out var setter))
             {
@@ -921,7 +921,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Double> GetDoubleFieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Double";
 
             if (!_doubleGettersCache.TryGetValue(key, out var getter))
             {
@@ -939,7 +939,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Double> GetDoublePropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Double";
 
             if (!_doubleGettersCache.TryGetValue(key, out var getter))
             {
@@ -957,7 +957,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Double> GetDoubleFieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Double";
 
             if (!_doubleSettersCache.TryGetValue(key, out var setter))
             {
@@ -975,7 +975,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Double> GetDoublePropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Double";
 
             if (!_doubleSettersCache.TryGetValue(key, out var setter))
             {
@@ -996,7 +996,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Decimal> GetDecimalFieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Decimal";
 
             if (!_decimalGettersCache.TryGetValue(key, out var getter))
             {
@@ -1014,7 +1014,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, Decimal> GetDecimalPropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Decimal";
 
             if (!_decimalGettersCache.TryGetValue(key, out var getter))
             {
@@ -1032,7 +1032,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Decimal> GetDecimalFieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_Decimal";
 
             if (!_decimalSettersCache.TryGetValue(key, out var setter))
             {
@@ -1050,7 +1050,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, Decimal> GetDecimalPropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_Decimal";
 
             if (!_decimalSettersCache.TryGetValue(key, out var setter))
             {
@@ -1071,7 +1071,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, DateTime> GetDateTimeFieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_DateTime";
 
             if (!_datetimeGettersCache.TryGetValue(key, out var getter))
             {
@@ -1089,7 +1089,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, DateTime> GetDateTimePropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_DateTime";
 
             if (!_datetimeGettersCache.TryGetValue(key, out var getter))
             {
@@ -1107,7 +1107,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, DateTime> GetDateTimeFieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_DateTime";
 
             if (!_datetimeSettersCache.TryGetValue(key, out var setter))
             {
@@ -1125,7 +1125,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, DateTime> GetDateTimePropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_DateTime";
 
             if (!_datetimeSettersCache.TryGetValue(key, out var setter))
             {
@@ -1146,7 +1146,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, String> GetStringFieldGetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_String";
 
             if (!_stringGettersCache.TryGetValue(key, out var getter))
             {
@@ -1164,7 +1164,7 @@ namespace Catel.Reflection
 
         private Func<TEntity, String> GetStringPropertyGetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_String";
 
             if (!_stringGettersCache.TryGetValue(key, out var getter))
             {
@@ -1182,7 +1182,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, String> GetStringFieldSetter(string memberName)
         {
-            var key = $"field_{memberName}";
+            var key = $"field_{memberName}_as_String";
 
             if (!_stringSettersCache.TryGetValue(key, out var setter))
             {
@@ -1200,7 +1200,7 @@ namespace Catel.Reflection
 
         private Action<TEntity, String> GetStringPropertySetter(string memberName)
         {
-            var key = $"property_{memberName}";
+            var key = $"property_{memberName}_as_String";
 
             if (!_stringSettersCache.TryGetValue(key, out var setter))
             {
