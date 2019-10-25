@@ -6,6 +6,8 @@
 
 namespace Catel.Data
 {
+    using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
 
     using Reflection;
@@ -18,6 +20,8 @@ namespace Catel.Data
     /// </summary>
     public class AdvancedPropertyChangedEventArgs : PropertyChangedEventArgs
     {
+        private static readonly Dictionary<Type, IFastMemberInvoker> FastMemberInvokersCache = new Dictionary<Type, IFastMemberInvoker>();
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="AdvancedPropertyChangedEventArgs"/>"/> class.
@@ -111,9 +115,26 @@ namespace Catel.Data
             // Last resort to get the new value
             if (!isNewValueMeaningful && !string.IsNullOrEmpty(propertyName))
             {
-                if (PropertyHelper.TryGetPropertyValue(originalSender, propertyName, out newValue))
+                var originalSenderType = originalSender?.GetType();
+                if (originalSenderType != null)
                 {
-                    isNewValueMeaningful = true;
+                    IFastMemberInvoker fastMemberInvoker = null;
+
+                    lock (FastMemberInvokersCache)
+                    {
+                        if (!FastMemberInvokersCache.TryGetValue(originalSenderType, out fastMemberInvoker))
+                        {
+                            var fastMemberInvokerType = typeof(FastMemberInvoker<>).MakeGenericTypeEx(originalSenderType);
+                            fastMemberInvoker = (IFastMemberInvoker)Activator.CreateInstance(fastMemberInvokerType);
+
+                            FastMemberInvokersCache[originalSenderType] = fastMemberInvoker;
+                        }
+                    }
+
+                    if (fastMemberInvoker.TryGetPropertyValue(originalSender, propertyName, out newValue))
+                    {
+                        isNewValueMeaningful = true;
+                    }
                 }
             }
 

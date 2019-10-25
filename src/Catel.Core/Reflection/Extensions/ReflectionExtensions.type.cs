@@ -394,8 +394,8 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
 
 #if UAP_DEFAULT
-            return (type is IConvertible);
-            //return type.GetTypeInfo().IsValueType;
+            //return (type is IConvertible); // Note: don't use, breaks UAP version
+            return type.GetTypeInfo().IsValueType;
 #else
             return type.IsValueType;
 #endif

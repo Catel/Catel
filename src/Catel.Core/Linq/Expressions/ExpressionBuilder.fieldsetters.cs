@@ -12,6 +12,14 @@
 
     public static partial class ExpressionBuilder
     {
+        public static Expression<Action<object, TField>> CreateFieldSetter<TField>(Type modelType, string fieldName)
+        {
+            Argument.IsNotNullOrWhitespace(() => fieldName);
+
+            var field = modelType.GetFieldEx(fieldName);
+            return field is null ? null : CreateFieldSetter<object, TField>(field);
+        }
+
         public static Expression<Action<T, TField>> CreateFieldSetter<T, TField>(string fieldName)
         {
             Argument.IsNotNullOrWhitespace(() => fieldName);

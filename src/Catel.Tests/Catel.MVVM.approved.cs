@@ -1809,7 +1809,7 @@ namespace Catel.Services
     }
     public class AutoCompletionService : Catel.Services.IAutoCompletionService
     {
-        public AutoCompletionService() { }
+        public AutoCompletionService(Catel.Data.IObjectAdapter objectAdapter) { }
         public virtual string[] GetAutoCompleteValues(string property, string filter, System.Collections.IEnumerable source) { }
     }
     public class CameraOperationCompletedEventArgs : System.EventArgs

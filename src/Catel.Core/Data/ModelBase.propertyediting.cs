@@ -8,13 +8,19 @@
 namespace Catel.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
-
+    using Catel.Linq.Expressions;
     using Logging;
     using Reflection;
 
     public partial class ModelBase
     {
+#if NET || NETCORE || NETSTANDARD
+        [field: NonSerialized]
+#endif
+        private static readonly Dictionary<string, object> _calculatedPropertyExpressions = new Dictionary<string, object>();
+
         /// <summary>
         /// Gets the object value for the specified value. This method allows caching of boxed objects.
         /// </summary>
@@ -259,7 +265,18 @@ namespace Catel.Data
 
             if (property.IsCalculatedProperty)
             {
-                return PropertyHelper.GetPropertyValue(this, property.Name);
+                // Note: don't use IObjectAdapter since it might cause a stackoverflow going into
+                // this method again
+                var expression = GetPropertyGetterExpression<object>(property.Name);
+                if (expression is null)
+                {
+                    // Fall back to reflection
+                    return PropertyHelper.GetPropertyValue(this, property.Name);
+                }
+                else
+                {
+                    return expression(this);
+                }
             }
 
             return GetValueFromPropertyBag<object>(property.Name);
@@ -278,10 +295,42 @@ namespace Catel.Data
 
             if (property.IsCalculatedProperty)
             {
-                return (TValue)PropertyHelper.GetPropertyValue(this, property.Name);
+                // Note: don't use IObjectAdapter since it might cause a stackoverflow going into
+                // this method again
+                var expression = GetPropertyGetterExpression<TValue>(property.Name);
+                if (expression is null)
+                {
+                    // Fall back to reflection
+                    return (TValue)PropertyHelper.GetPropertyValue(this, property.Name);
+                }
+                else
+                {
+                    return expression(this);
+                }
             }
 
             return GetValueFromPropertyBag<TValue>(property.Name);
+        }
+
+        /// <summary>
+        /// Gets a property getter expression to create super fast access to calculated properties of this object.
+        /// </summary>
+        /// <typeparam name="TValue">The value of the property.</typeparam>
+        /// <param name="propertyName">The property name.</param>
+        /// <returns>The compiled expression for the specified property name.</returns>
+        protected Func<object, TValue> GetPropertyGetterExpression<TValue>(string propertyName)
+        {
+            var key = $"{propertyName}_as_{typeof(TValue).Name}";
+
+            if (!_calculatedPropertyExpressions.TryGetValue(key, out var getter))
+            {
+                var expression = ExpressionBuilder.CreatePropertyGetter<TValue>(GetType(), propertyName);
+                getter = expression?.Compile();
+
+                _calculatedPropertyExpressions[key] = getter;
+            }
+
+            return (Func<object, TValue>)getter;
         }
 
         /// <summary>

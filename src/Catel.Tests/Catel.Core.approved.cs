@@ -1452,6 +1452,7 @@ namespace Catel.Data
         public virtual void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         protected static object GetObjectValue<TValue>(TValue value) { }
         protected Catel.Data.PropertyData GetPropertyData(string name) { }
+        protected System.Func<object, TValue> GetPropertyGetterExpression<TValue>(string propertyName) { }
         protected virtual Catel.Runtime.Serialization.ISerializer GetSerializerForIEditableObject() { }
         protected object GetValue(string name) { }
         protected TValue GetValue<TValue>(string name) { }
@@ -1670,6 +1671,7 @@ namespace Catel.Data
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         protected bool IsValidating { get; }
         protected virtual bool IsValidationSuspended { get; }
+        protected Catel.Data.IObjectAdapter ObjectAdapter { get; set; }
         protected bool ValidateUsingDataAnnotations { get; set; }
         public event System.EventHandler<Catel.Data.ValidationEventArgs> Catel.Data.IValidatable.Validated;
         public event System.EventHandler<Catel.Data.ValidationEventArgs> Catel.Data.IValidatable.Validating;
@@ -2519,24 +2521,28 @@ namespace Catel.Linq.Expressions
 {
     public class static ExpressionBuilder
     {
+        public static System.Linq.Expressions.Expression<System.Func<object, TField>> CreateFieldGetter<TField>(System.Type modelType, string fieldName) { }
         public static System.Linq.Expressions.Expression<System.Func<T, TField>> CreateFieldGetter<T, TField>(string fieldName) { }
         public static System.Linq.Expressions.Expression<System.Func<T, TField>> CreateFieldGetter<T, TField>(System.Reflection.FieldInfo fieldInfo) { }
         public static System.Linq.Expressions.Expression<System.Func<T, object>> CreateFieldGetter<T>(string fieldName) { }
         public static System.Linq.Expressions.Expression<System.Func<T, object>> CreateFieldGetter<T>(System.Reflection.FieldInfo fieldInfo) { }
         public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Func<T, TField>>> CreateFieldGetters<T, TField>() { }
         public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Func<T, object>>> CreateFieldGetters<T>() { }
+        public static System.Linq.Expressions.Expression<System.Action<object, TField>> CreateFieldSetter<TField>(System.Type modelType, string fieldName) { }
         public static System.Linq.Expressions.Expression<System.Action<T, TField>> CreateFieldSetter<T, TField>(string fieldName) { }
         public static System.Linq.Expressions.Expression<System.Action<T, TField>> CreateFieldSetter<T, TField>(System.Reflection.FieldInfo fieldInfo) { }
         public static System.Linq.Expressions.Expression<System.Action<T, object>> CreateFieldSetter<T>(string fieldName) { }
         public static System.Linq.Expressions.Expression<System.Action<T, object>> CreateFieldSetter<T>(System.Reflection.FieldInfo fieldInfo) { }
         public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Action<T, object>>> CreateFieldSetters<T>() { }
         public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Action<T, TField>>> CreateFieldSetters<T, TField>() { }
+        public static System.Linq.Expressions.Expression<System.Func<object, TProperty>> CreatePropertyGetter<TProperty>(System.Type modelType, string propertyName) { }
         public static System.Linq.Expressions.Expression<System.Func<T, TProperty>> CreatePropertyGetter<T, TProperty>(string propertyName) { }
         public static System.Linq.Expressions.Expression<System.Func<T, TProperty>> CreatePropertyGetter<T, TProperty>(System.Reflection.PropertyInfo propertyInfo) { }
         public static System.Linq.Expressions.Expression<System.Func<T, object>> CreatePropertyGetter<T>(string propertyName) { }
         public static System.Linq.Expressions.Expression<System.Func<T, object>> CreatePropertyGetter<T>(System.Reflection.PropertyInfo propertyInfo) { }
         public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Func<T, TProperty>>> CreatePropertyGetters<T, TProperty>() { }
         public static System.Collections.Generic.IReadOnlyDictionary<string, System.Linq.Expressions.Expression<System.Func<T, object>>> CreatePropertyGetters<T>() { }
+        public static System.Linq.Expressions.Expression<System.Action<object, TProperty>> CreatePropertySetter<TProperty>(System.Type modelType, string propertyName) { }
         public static System.Linq.Expressions.Expression<System.Action<T, TProperty>> CreatePropertySetter<T, TProperty>(string propertyName) { }
         public static System.Linq.Expressions.Expression<System.Action<T, TProperty>> CreatePropertySetter<T, TProperty>(System.Reflection.PropertyInfo propertyInfo) { }
         public static System.Linq.Expressions.Expression<System.Action<T, object>> CreatePropertySetter<T>(string propertyName) { }

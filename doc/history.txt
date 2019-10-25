@@ -37,7 +37,8 @@ Added/fixed
 (*) #1436 Decrease allocations of objects during (de)serialization
 (*) #1440 Use ObjectAdapter in ViewModelBase for property mappings
 (*) #1441 Clean up TypeExtensions with system extensions for UAP
-(*) #1455 
+(*) #1454 Minimize usage of PropertyHelper where possible
+(*) #1455 Move code snippets to Catel.Templates and deploy in the Visual Studio marketplace
 (x) #1408 Logging in TypeFactory uses wrong parameter name
 (x) #1434 Serialization should respect graph ids when deserializing collections
 

@@ -12,6 +12,14 @@
 
     public static partial class ExpressionBuilder
     {
+        public static Expression<Func<object, TField>> CreateFieldGetter<TField>(Type modelType, string fieldName)
+        {
+            Argument.IsNotNullOrWhitespace(() => fieldName);
+
+            var field = modelType.GetFieldEx(fieldName);
+            return field is null ? null : CreateFieldGetter<object, TField>(field);
+        }
+
         public static Expression<Func<T, TField>> CreateFieldGetter<T, TField>(string fieldName)
         {
             Argument.IsNotNullOrWhitespace(() => fieldName);
@@ -88,8 +96,10 @@
                 return null;
             }
 
-            var target = Expression.Parameter(targetType, "target");
-            var body = Expression.Field(target, fieldInfo);
+            var target = Expression.Parameter(typeof(T), "target");
+            var targetExpression = GetCastOrConvertExpression(target, targetType);
+
+            var body = Expression.Field(targetExpression, fieldInfo);
 
             var finalExpression = GetCastOrConvertExpression(body, typeof(TField));
             var lambda = Expression.Lambda<Func<T, TField>>(finalExpression, target);

@@ -9,7 +9,7 @@ namespace Catel.MVVM.Views
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-
+    using Catel.Data;
     using Logging;
     using Reflection;
 
@@ -56,14 +56,18 @@ namespace Catel.MVVM.Views
         /// Initializes a new instance of the <see cref="ViewToViewModelMappingHelper"/> class.
         /// </summary>
         /// <param name="viewModelContainer">The view model container.</param>
+        /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelContainer"/> is <c>null</c>.</exception>
-        public ViewToViewModelMappingHelper(IViewModelContainer viewModelContainer)
+        public ViewToViewModelMappingHelper(IViewModelContainer viewModelContainer, IObjectAdapter objectAdapter)
         {
             Argument.IsNotNull("viewModelContainer", viewModelContainer);
+            Argument.IsNotNull("objectAdapter", objectAdapter);
 
             Log.Debug("Initializing view model container to manage ViewToViewModel mappings");
 
             ViewModelContainer = viewModelContainer;
+            ObjectAdapter = objectAdapter;
+
             var viewModelContainerType = ViewModelContainerType;
 
             if (!_viewToViewModelMappingContainers.ContainsKey(viewModelContainerType))
@@ -86,6 +90,12 @@ namespace Catel.MVVM.Views
         /// </summary>
         /// <value>The view model container.</value>
         public IViewModelContainer ViewModelContainer { get; private set; }
+
+        /// <summary>
+        /// Gets the object adapter used to map property values.
+        /// </summary>
+        /// <value>The object adapter.</value>
+        public IObjectAdapter ObjectAdapter { get; private set; }
 
         /// <summary>
         /// Gets the type of the view model container.
@@ -111,8 +121,9 @@ namespace Catel.MVVM.Views
         /// Initializes the <see cref="ViewToViewModelMapping"/> for the specified <see cref="IViewModelContainer"/>.
         /// </summary>
         /// <param name="viewModelContainer">The view model container to initialize the mappings for.</param>
+        /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModelContainer"/> is <c>null</c>.</exception>
-        public static void InitializeViewToViewModelMappings(IViewModelContainer viewModelContainer)
+        public static void InitializeViewToViewModelMappings(IViewModelContainer viewModelContainer, IObjectAdapter objectAdapter)
         {
             Argument.IsNotNull("viewModelContainer", viewModelContainer);
 
@@ -121,7 +132,7 @@ namespace Catel.MVVM.Views
                 return;
             }
 
-            _viewModelContainers.Add(viewModelContainer, new ViewToViewModelMappingHelper(viewModelContainer));
+            _viewModelContainers.Add(viewModelContainer, new ViewToViewModelMappingHelper(viewModelContainer, objectAdapter));
         }
 
         /// <summary>
@@ -383,18 +394,25 @@ namespace Catel.MVVM.Views
         /// This method does not check the type of the properties. If the types are incorrect, an exception will be thrown by
         /// the .NET Framework.
         /// </remarks>
-        private static void TransferValue(object source, string sourcePropertyName, object target, string targetPropertyName)
+        private void TransferValue(object source, string sourcePropertyName, object target, string targetPropertyName)
         {
             Argument.IsNotNull("source", source);
             Argument.IsNotNull("target", target);
             Argument.IsNotNullOrWhitespace("sourcePropertyName", sourcePropertyName);
             Argument.IsNotNullOrWhitespace("targetPropertyName", targetPropertyName);
 
-            object valueToTransfer = PropertyHelper.GetPropertyValue(source, sourcePropertyName, false);
+            if (!ObjectAdapter.GetMemberValue(source, sourcePropertyName, out object valueToTransfer))
+            {
+                return;
+            }
 
             Log.Debug("Transferring value of {0}.{1} to {2}.{3}", source.GetType().Name, sourcePropertyName, target.GetType().Name, targetPropertyName);
 
-            PropertyHelper.SetPropertyValue(target, targetPropertyName, valueToTransfer, false);
+            if (!ObjectAdapter.SetMemberValue(target, targetPropertyName, valueToTransfer))
+            {
+                Log.Warning($"Failed to transfer value, is the property not writeable?");
+                return;
+            }
         }
         #endregion
     }
