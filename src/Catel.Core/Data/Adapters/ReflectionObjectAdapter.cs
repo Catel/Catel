@@ -127,7 +127,7 @@
                 var modelEditor = instance as IModelEditor;
                 if (modelEditor != null && modelEditor.IsPropertyRegistered(memberName))
                 {
-                    modelEditor.SetValueFastButUnsecure<TValue>(memberName, value);
+                    modelEditor.SetValue(memberName, value);
                     return true;
                 }
 

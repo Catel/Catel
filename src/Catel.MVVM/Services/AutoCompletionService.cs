@@ -14,19 +14,23 @@ namespace Catel.Services
     using Catel;
     using Catel.Collections;
     using Catel.Data;
-    using Catel.Reflection;
 
     /// <summary>
     /// Service to implement auto completion features.
     /// </summary>
     public class AutoCompletionService : IAutoCompletionService
     {
+        private readonly IObjectAdapter _objectAdapter;
+
         #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoCompletionService"/> class.
         /// </summary>
-        public AutoCompletionService()
+        public AutoCompletionService(IObjectAdapter objectAdapter)
         {
+            Argument.IsNotNull(() => objectAdapter);
+
+            _objectAdapter = objectAdapter;
         }
         #endregion
 
@@ -87,23 +91,9 @@ namespace Catel.Services
             return orderedPropertyValues.OrderBy(x => x).ToArray();
         }
 
-        private static string GetPropertyValue(object obj, string propertyName)
+        private string GetPropertyValue(object obj, string propertyName)
         {
-            object value = null;
-
-            var modelBase = obj as ModelBase;
-            if (modelBase != null)
-            {
-                if (modelBase.IsPropertyRegistered(propertyName))
-                {
-                    var modelEditor = (IModelEditor)modelBase;
-                    value = modelEditor.GetValueFastButUnsecure<object>(propertyName);
-                }
-            }
-            else
-            {
-                value = PropertyHelper.GetPropertyValue(obj, propertyName, false);
-            }
+            _objectAdapter.GetMemberValue(obj, propertyName, out object value);
 
             return ObjectToStringHelper.ToString(value);
         }

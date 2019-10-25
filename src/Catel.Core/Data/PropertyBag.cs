@@ -10,6 +10,7 @@ namespace Catel.Data
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
+    using Catel.Reflection;
 
     /// <summary>
     /// Class that is able to manage all properties of a specific object in a thread-safe manner.
@@ -138,7 +139,13 @@ namespace Catel.Data
             {
                 if (_properties.TryGetValue(propertyName, out var propertyValue))
                 {
-                    return (TValue) propertyValue;
+                    return (TValue)propertyValue;
+
+                    //// Safe-guard null values for value types
+                    //if (!(propertyValue is null) || typeof(TValue).IsNullableType())
+                    //{
+                    //    return (TValue)propertyValue;
+                    //}
                 }
 
                 return defaultValue;

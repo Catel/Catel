@@ -71,6 +71,7 @@ namespace Catel.MVVM.Providers
         private static readonly IViewManager _viewManager;
         private static readonly IViewPropertySelector _viewPropertySelector;
         private static readonly IViewContextService _viewContextService;
+        private static readonly IObjectAdapter _objectAdapter;
         private static readonly Dictionary<Type, bool> _hasVmPropertyCache = new Dictionary<Type, bool>();
 
         /// <summary>
@@ -107,6 +108,7 @@ namespace Catel.MVVM.Providers
             _viewManager = dependencyResolver.Resolve<IViewManager>();
             _viewPropertySelector = dependencyResolver.Resolve<IViewPropertySelector>();
             _viewContextService = dependencyResolver.Resolve<IViewContextService>();
+            _objectAdapter = dependencyResolver.Resolve<IObjectAdapter>();
             ViewLoadManager = dependencyResolver.Resolve<IViewLoadManager>();
         }
 
@@ -763,7 +765,7 @@ namespace Catel.MVVM.Providers
             var targetViewAsViewModelContainer = TargetView as IViewModelContainer;
             if (targetViewAsViewModelContainer != null)
             {
-                ViewToViewModelMappingHelper.InitializeViewToViewModelMappings(targetViewAsViewModelContainer);
+                ViewToViewModelMappingHelper.InitializeViewToViewModelMappings(targetViewAsViewModelContainer, _objectAdapter);
             }
 
             TargetView.Dispatch(() =>

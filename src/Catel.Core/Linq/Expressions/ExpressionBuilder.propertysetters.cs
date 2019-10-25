@@ -12,6 +12,14 @@
 
     public static partial class ExpressionBuilder
     {
+        public static Expression<Action<object, TProperty>> CreatePropertySetter<TProperty>(Type modelType, string propertyName)
+        {
+            Argument.IsNotNullOrWhitespace(() => propertyName);
+
+            var property = modelType.GetPropertyEx(propertyName);
+            return property?.SetMethod is null ? null : CreatePropertySetter<object, TProperty>(property);
+        }
+
         public static Expression<Action<T, TProperty>> CreatePropertySetter<T, TProperty>(string propertyName)
         {
             Argument.IsNotNullOrWhitespace(() => propertyName);

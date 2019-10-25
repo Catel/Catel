@@ -100,7 +100,12 @@ namespace Catel.Data
 #endif
         private readonly HashSet<string> _propertiesCurrentlyBeingValidated = new HashSet<string>();
 
-#if !NETFX_CORE
+#if NET || NETCORE || NETSTANDARD
+        [field: NonSerialized]
+#endif
+        private IObjectAdapter _objectAdapter;
+
+#if !UWP
 
 #if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
@@ -189,7 +194,7 @@ namespace Catel.Data
         /// <summary>
         /// Gets or sets a value indicating whether this object is validated or not.
         /// </summary>
-#if !NETFX_CORE
+#if !UWP
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -201,7 +206,7 @@ namespace Catel.Data
         /// By default, this value retrieves the default validator from them <see cref="IValidatorProvider"/> if it is
         /// registered in the <see cref="Catel.IoC.ServiceLocator"/>.
         /// </summary>
-#if !NETFX_CORE
+#if !UWP
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -215,13 +220,32 @@ namespace Catel.Data
         /// Gets the validation context which contains all information about the validation.
         /// </summary>
         /// <value>The validation context.</value>
-#if !NETFX_CORE
+#if !UWP
         [Browsable(false)]
 #endif
         [XmlIgnore]
         IValidationContext IValidatable.ValidationContext
         {
             get { return _validationContext; }
+        }
+
+        /// <summary>
+        /// Gets or sets the object adapter. If unset, this value will be retrieved via the default <see cref="IDependencyResolver"/>
+        /// as soon as it is required.
+        /// </summary>
+        protected IObjectAdapter ObjectAdapter
+        {
+            get
+            {
+                if (_objectAdapter is null)
+                {
+                    var dependencyResolver = this.GetDependencyResolver();
+                    _objectAdapter = dependencyResolver.TryResolve<IObjectAdapter>();
+                }
+
+                return _objectAdapter;
+            }
+            set => _objectAdapter = value;
         }
 
         /// <summary>
@@ -258,7 +282,7 @@ namespace Catel.Data
         /// Unlike the <see cref="SuspendValidations"/> method, this property will not prevent validation. It will only
         /// prevent the error interfaces to not expose them.
         /// </remarks>
-#if !NETFX_CORE
+#if !UWP
         [Browsable(false)]
 #endif
         protected bool HideValidationResults { get; set; }
@@ -583,7 +607,7 @@ namespace Catel.Data
                 return true;
             }
 
-#if !NETFX_CORE
+#if !UWP
             var type = GetType();
 
             try
@@ -613,15 +637,27 @@ namespace Catel.Data
 
                     if (!handled)
                     {
-                        if (!PropertyHelper.IsPublicProperty(this, propertyName))
+                        var objectAdapter = ObjectAdapter;
+                        if (objectAdapter is null)
+                        {
+                            // Fall back to reflection
+                            if (!PropertyHelper.IsPublicProperty(this, propertyName))
+                            {
+                                Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in the current platform", propertyName);
+
+                                PropertiesNotCausingValidation[type].Add(propertyName);
+                                return false;
+                            }
+
+                            value = PropertyHelper.GetPropertyValue(this, propertyName);
+                        }
+                        else if (!_objectAdapter.GetMemberValue(this, propertyName, out value))
                         {
                             Log.Debug("Property '{0}' is not a public property, cannot validate non-public properties in the current platform", propertyName);
 
                             PropertiesNotCausingValidation[type].Add(propertyName);
                             return false;
                         }
-
-                        value = PropertyHelper.GetPropertyValue(this, propertyName);
                     }
 
                     if (!_dataAnnotationsValidationContext.TryGetValue(propertyName, out var validationContext))
@@ -818,7 +854,7 @@ namespace Catel.Data
                     ValidatePropertyUsingAnnotations(propertyData.Key);
                 }
 
-#if !NETFX_CORE
+#if !UWP
                 // Validate non-catel properties as well for attribute validation
                 foreach (var propertyInfo in catelTypeInfo.GetNonCatelProperties())
                 {
@@ -878,7 +914,7 @@ namespace Catel.Data
                         validator.ValidateFields(this, fieldValidationResults);
                     }
 
-#if !NETFX_CORE
+#if !UWP
                     // Support annotation validation
                     fieldValidationResults.AddRange(from fieldAnnotationValidation in _dataAnnotationValidationResults
                                                     where !string.IsNullOrEmpty(fieldAnnotationValidation.Value)
@@ -1241,7 +1277,7 @@ namespace Catel.Data
         /// <value>
         /// <c>true</c> if this instance has errors; otherwise, <c>false</c>.
         /// </value>
-#if !NETFX_CORE
+#if !UWP
         [Browsable(false)]
 #endif
         [XmlIgnore]
@@ -1318,7 +1354,7 @@ namespace Catel.Data
         /// <value>
         /// <c>true</c> if this instance has warnings; otherwise, <c>false</c>.
         /// </value>
-#if !NETFX_CORE
+#if !UWP
         [Browsable(false)]
 #endif
         [XmlIgnore]

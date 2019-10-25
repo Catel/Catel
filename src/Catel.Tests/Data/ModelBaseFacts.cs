@@ -94,11 +94,29 @@ namespace Catel.Tests.Data
                 }
             }
 
+            public class ComputedPropertiesModel : ModelBase
+            {
+                protected override void InitializeCustomProperties()
+                {
+                    var propertyData = RegisterProperty(nameof(ComputedProperty), typeof(bool));
+
+                    InitializePropertyAfterConstruction(propertyData);
+                }
+
+                public bool ComputedProperty
+                {
+                    get
+                    {
+                        return true;
+                    }
+                }
+            }
+
             public class LatePropertyRegistrationModel : ValidatableModelBase
             {
                 protected override void InitializeCustomProperties()
                 {
-                    var propertyData = RegisterProperty("CanSave", typeof(bool));
+                    var propertyData = RegisterProperty(nameof(CanSave), typeof(bool));
 
                     InitializePropertyAfterConstruction(propertyData);
                 }
@@ -122,8 +140,20 @@ namespace Catel.Tests.Data
                 validation.Validate(true);
                 Assert.IsFalse(validation.HasErrors);
 
-                var propertyData = PropertyDataManager.Default.GetPropertyData(typeof(LatePropertyRegistrationModel), "CanSave");
+                var propertyData = PropertyDataManager.Default.GetPropertyData(typeof(LatePropertyRegistrationModel), nameof(LatePropertyRegistrationModel.CanSave));
                 Assert.IsTrue(propertyData.IsCalculatedProperty);
+            }
+
+            [TestCase]
+            public void CorrectlyRetrievesCalculatedPropertyValues()
+            {
+                var model = new ComputedPropertiesModel();
+
+                var propertyData = PropertyDataManager.Default.GetPropertyData(typeof(ComputedPropertiesModel), nameof(ComputedPropertiesModel.ComputedProperty));
+                Assert.IsTrue(propertyData.IsCalculatedProperty);
+
+                var propertyValue = ((IModelEditor)model).GetValue<bool>(nameof(ComputedPropertiesModel.ComputedProperty));
+                Assert.IsTrue(propertyValue);
             }
         }
 #endif
