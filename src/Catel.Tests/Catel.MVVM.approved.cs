@@ -1917,7 +1917,8 @@ namespace Catel.Services
         public string InitialDirectory { get; set; }
         public string Title { get; set; }
         public bool ValidateNames { get; set; }
-        protected void ConfigureFileDialog(Microsoft.Win32.FileDialog fileDialog) { }
+        protected virtual void ConfigureFileDialog(Microsoft.Win32.FileDialog fileDialog) { }
+        protected virtual string GetInitialDirectory() { }
     }
     [System.FlagsAttribute()]
     public enum FlashMode

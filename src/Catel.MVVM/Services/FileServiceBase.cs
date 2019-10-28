@@ -8,6 +8,7 @@
 namespace Catel.Services
 {
     using System;
+    using System.IO;
 
 #if NET || NETCORE
     using Microsoft.Win32;
@@ -88,19 +89,38 @@ namespace Catel.Services
         public bool ValidateNames { get; set; }
 
         /// <summary>
+        /// Gets the initial directory used for the file dialog.
+        /// <para />
+        /// The default implementation not only uses the <see cref="InitialDirectory"/> property, but also
+        /// checks whether it actually exists on disk to prevent exceptions.
+        /// </summary>
+        /// <returns>The inital directory.</returns>
+        protected virtual string GetInitialDirectory()
+        {
+            var initialDirectory = InitialDirectory;
+            if (!string.IsNullOrWhiteSpace(initialDirectory))
+            {
+                if (!Directory.Exists(initialDirectory))
+                {
+                    initialDirectory = null;
+                }
+                else
+                {
+                    initialDirectory = IO.Path.AppendTrailingSlash(initialDirectory);
+                }
+            }
+
+            return initialDirectory;
+        }
+
+        /// <summary>
         /// Configures the file dialog.
         /// </summary>
         /// <param name="fileDialog">The file dialog.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="fileDialog"/> is <c>null</c>.</exception>
-        protected void ConfigureFileDialog(FileDialog fileDialog)
+        protected virtual void ConfigureFileDialog(FileDialog fileDialog)
         {
             Argument.IsNotNull("fileDialog", fileDialog);
-
-            string initialDirectory = string.Empty;
-            if (!string.IsNullOrEmpty(InitialDirectory))
-            {
-                initialDirectory = IO.Path.AppendTrailingSlash(InitialDirectory);
-            }
 
             fileDialog.Filter = Filter;
             fileDialog.FileName = FileName;
@@ -109,7 +129,7 @@ namespace Catel.Services
             fileDialog.CheckFileExists = CheckFileExists;
             fileDialog.CheckPathExists = CheckPathExists;
             fileDialog.FilterIndex = FilterIndex;
-            fileDialog.InitialDirectory = initialDirectory;
+            fileDialog.InitialDirectory = GetInitialDirectory();
             fileDialog.Title = Title;
             fileDialog.ValidateNames = ValidateNames;
         }
