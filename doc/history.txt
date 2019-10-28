@@ -41,6 +41,7 @@ Added/fixed
 (*) #1455 Move code snippets to Catel.Templates and deploy in the Visual Studio marketplace
 (x) #1408 Logging in TypeFactory uses wrong parameter name
 (x) #1434 Serialization should respect graph ids when deserializing collections
+(x) #1453 FileSupport => SaveFileService & OpenFileService: Bug if InitialDirectory does not exist
 
 Platform support changes
 ========================
