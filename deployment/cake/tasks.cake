@@ -109,9 +109,6 @@ Setup<BuildContext>(setupContext =>
 
     //  Important: build server first so other integrations can read values from config
     buildContext.BuildServer = GetBuildServerIntegration();
-    buildContext.IssueTracker = new IssueTrackerIntegration(buildContext);
-    buildContext.Notifications = new NotificationsIntegration(buildContext);
-    buildContext.OctopusDeploy = new OctopusDeployIntegration(buildContext);
 
     setupContext.LogSeparator("Creating build context");
 
@@ -126,6 +123,11 @@ Setup<BuildContext>(setupContext =>
     buildContext.VsExtensions = InitializeVsExtensionsContext(buildContext, buildContext);
     buildContext.Web = InitializeWebContext(buildContext, buildContext);
     buildContext.Wpf = InitializeWpfContext(buildContext, buildContext);
+
+    // Other integrations last
+    buildContext.IssueTracker = new IssueTrackerIntegration(buildContext);
+    buildContext.Notifications = new NotificationsIntegration(buildContext);
+    buildContext.OctopusDeploy = new OctopusDeployIntegration(buildContext);
 
     setupContext.LogSeparator("Validating build context");
 
