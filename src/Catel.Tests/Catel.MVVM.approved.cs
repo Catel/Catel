@@ -11,7 +11,7 @@
 [assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.Windows.Interactivity")]
 [assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.Windows.Markup")]
 [assembly: System.Windows.Markup.XmlnsPrefixAttribute("http://schemas.catelproject.com", "catel")]
-[assembly: System.Windows.ThemeInfoAttribute(System.Windows.ResourceDictionaryLocation.SourceAssembly, System.Windows.ResourceDictionaryLocation.SourceAssembly)]
+[assembly: System.Windows.ThemeInfoAttribute(System.Windows.ResourceDictionaryLocation.None, System.Windows.ResourceDictionaryLocation.SourceAssembly)]
 namespace Catel
 {
     public class static CatelEnvironment
