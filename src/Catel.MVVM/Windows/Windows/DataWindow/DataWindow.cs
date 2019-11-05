@@ -729,7 +729,14 @@ namespace Catel.Windows
         {
             try
             {
-                DialogResult = result;
+                if (System.Windows.Interop.ComponentDispatcher.IsThreadModal)
+                {
+                    DialogResult = result;
+                }
+                else
+                {
+                    Close();
+                }
                 return true;
             }
             catch (InvalidOperationException ex)
