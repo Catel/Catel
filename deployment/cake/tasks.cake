@@ -2,6 +2,7 @@
 #l "lib-nuget.cake"
 #l "lib-sourcelink.cake"
 #l "issuetrackers.cake"
+#l "sourcecontrol.cake"
 #l "notifications.cake"
 #l "generic-tasks.cake"
 #l "apps-uwp-tasks.cake"
@@ -68,6 +69,7 @@ public class BuildContext : BuildContextBase
     public BuildServerIntegration BuildServer { get; set; }
     public IssueTrackerIntegration IssueTracker { get; set; }
     public NotificationsIntegration Notifications { get; set; }
+    public SourceControlIntegration SourceControl { get; set; }
     public OctopusDeployIntegration OctopusDeploy { get; set; }
 
     // Contexts
@@ -128,6 +130,7 @@ Setup<BuildContext>(setupContext =>
     buildContext.IssueTracker = new IssueTrackerIntegration(buildContext);
     buildContext.Notifications = new NotificationsIntegration(buildContext);
     buildContext.OctopusDeploy = new OctopusDeployIntegration(buildContext);
+    buildContext.SourceControl = new SourceControlIntegration(buildContext);
 
     setupContext.LogSeparator("Validating build context");
 
@@ -219,6 +222,8 @@ Task("Build")
     .IsDependentOn("CleanupCode")
     .Does<BuildContext>(async buildContext =>
 {
+    await buildContext.SourceControl.MarkBuildAsPendingAsync("Build");
+    
     var sonarUrl = buildContext.General.SonarQube.Url;
 
     var enableSonar = !buildContext.General.SonarQube.IsDisabled && 
@@ -333,20 +338,38 @@ Task("Build")
     }
 
     BuildTestProjects(buildContext);
+
+    await buildContext.SourceControl.MarkBuildAsSucceededAsync("Build");
+})
+.OnError<BuildContext>(async (ex, buildContext) => 
+{
+    await buildContext.SourceControl.MarkBuildAsFailedAsync("Build");
+
+    throw ex;
 });
 
 //-------------------------------------------------------------
 
 Task("Test")
     // Note: no dependency on 'build' since we might have already built the solution
-    .Does<BuildContext>(buildContext =>
-{
+    .Does<BuildContext>(async buildContext =>
+{    
+    await buildContext.SourceControl.MarkBuildAsPendingAsync("Test");
+    
     foreach (var testProject in buildContext.Tests.Items)
     {
         buildContext.CakeContext.LogSeparator("Running tests for '{0}'", testProject);
 
         RunUnitTests(buildContext, testProject);
     }
+
+    await buildContext.SourceControl.MarkBuildAsSucceededAsync("Test");
+})
+.OnError<BuildContext>(async (ex, buildContext) => 
+{
+    await buildContext.SourceControl.MarkBuildAsFailedAsync("Test");
+    
+    throw ex;
 });
 
 //-------------------------------------------------------------
@@ -507,6 +530,24 @@ Task("TestNotifications")
     await buildContext.Notifications.NotifyAsync("MyProject", "This is a web app test", TargetType.WebApp);
     await buildContext.Notifications.NotifyAsync("MyProject", "This is a wpf app test", TargetType.WpfApp);
     await buildContext.Notifications.NotifyErrorAsync("MyProject", "This is an error");
+});
+
+//-------------------------------------------------------------
+
+Task("TestSourceControl")    
+    .Does<BuildContext>(async buildContext =>
+{
+    await buildContext.SourceControl.MarkBuildAsPendingAsync("Build");
+
+    await System.Threading.Tasks.Task.Delay(5 * 1000);
+
+    await buildContext.SourceControl.MarkBuildAsSucceededAsync("Build");
+
+    await buildContext.SourceControl.MarkBuildAsPendingAsync("Test");
+
+    await System.Threading.Tasks.Task.Delay(5 * 1000);
+
+    await buildContext.SourceControl.MarkBuildAsSucceededAsync("Test");
 });
 
 //-------------------------------------------------------------
