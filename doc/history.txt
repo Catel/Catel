@@ -40,6 +40,7 @@ Added/fixed
 (*) #1454 Minimize usage of PropertyHelper where possible
 (*) #1455 Move code snippets to Catel.Templates and deploy in the Visual Studio marketplace
 (*) #1467 Update ThemeInfo theme specific resource dictionary to None
+(*) #1473 Support serialization of manually registered properties on DynamicConfiguration
 (x) #1408 Logging in TypeFactory uses wrong parameter name
 (x) #1434 Serialization should respect graph ids when deserializing collections
 (x) #1453 FileSupport => SaveFileService & OpenFileService: Bug if InitialDirectory does not exist

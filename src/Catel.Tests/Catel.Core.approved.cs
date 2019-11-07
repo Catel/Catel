@@ -993,6 +993,7 @@ namespace Catel.Configuration
     [Catel.Runtime.Serialization.SerializerModifierAttribute(typeof(Catel.Configuration.DynamicConfigurationSerializerModifier))]
     public class DynamicConfiguration : Catel.Data.ModelBase, Catel.Runtime.Serialization.Xml.ICustomXmlSerializable
     {
+        protected static readonly System.Collections.Generic.HashSet<string> DynamicProperties;
         public DynamicConfiguration() { }
         public virtual void Deserialize(System.Xml.XmlReader xmlReader) { }
         public virtual object GetConfigurationValue(string name) { }

@@ -19,6 +19,8 @@ namespace Catel.Configuration
     [SerializerModifier(typeof(DynamicConfigurationSerializerModifier))]
     public class DynamicConfiguration : ModelBase, ICustomXmlSerializable
     {
+        protected static readonly HashSet<string> DynamicProperties = new HashSet<string>();
+
         private readonly HashSet<string> _propertiesSetAtLeastOnce = new HashSet<string>();
 
         #region Methods
@@ -28,6 +30,9 @@ namespace Catel.Configuration
         /// <param name="name">The name.</param>
         public virtual void RegisterConfigurationKey(string name)
         {
+            // Dynamic registrations
+            DynamicProperties.Add(name);
+
             if (IsConfigurationValueSet(name))
             {
                 return;
@@ -113,6 +118,9 @@ namespace Catel.Configuration
 
         public virtual void Deserialize(XmlReader xmlReader)
         {
+            var propertyDataManager = PropertyDataManager.Default;
+            var type = GetType();
+
             if (xmlReader != null)
             {
                 if (xmlReader.ReadState == ReadState.Initial)
@@ -125,16 +133,32 @@ namespace Catel.Configuration
                 var parentNode = xmlReader.LocalName;
 
                 xmlReader.Read();
-                
+
                 while (xmlReader.MoveToNextContentElement(parentNode))
                 {
                     var elementName = xmlReader.LocalName;
                     var value = xmlReader.ReadElementContentAsString();
 
-                    RegisterConfigurationKey(elementName);
-                    MarkConfigurationValueAsSet(elementName);
+                    var valueSet = false;
 
-                    SetValue(elementName, value);
+                    if (!DynamicProperties.Contains(elementName) && propertyDataManager.IsPropertyRegistered(type, elementName))
+                    {
+                        // If registered property, cast & set
+                        var propertyData = propertyDataManager.GetPropertyData(type, elementName);
+                        var finalValue = StringToObjectHelper.ToRightType(propertyData.Type, value);
+                        SetValue(elementName, finalValue);
+
+                        valueSet = true;
+                    }
+
+                    if (!valueSet)
+                    {
+                        // Set dynamic value as string
+                        RegisterConfigurationKey(elementName);
+                        MarkConfigurationValueAsSet(elementName);
+
+                        SetValue(elementName, value);
+                    }
                 }
             }
         }
