@@ -45,6 +45,7 @@ Added/fixed
 (x) #1434 Serialization should respect graph ids when deserializing collections
 (x) #1453 FileSupport => SaveFileService & OpenFileService: Bug if InitialDirectory does not exist
 (x) #1469 Prevent first chance exceptions about DialogResult when window is not shown modal
+(x) #1474 DependencyObjectExtensions.FindLogicalOrVisualAncestor returns null when it should find a parent
 
 Platform support changes
 ========================

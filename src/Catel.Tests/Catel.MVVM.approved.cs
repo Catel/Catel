@@ -2641,11 +2641,14 @@ namespace Catel.Windows
     {
         public static object FindLogicalAncestor(this System.Windows.DependencyObject startElement, System.Predicate<object> condition, int maxDepth = -1) { }
         public static T FindLogicalAncestorByType<T>(this System.Windows.DependencyObject startElement) { }
+        public static T FindLogicalAncestorByType<T>(this System.Windows.DependencyObject startElement, int maxDepth) { }
         public static object FindLogicalOrVisualAncestor(this System.Windows.DependencyObject startElement, System.Predicate<object> condition, int maxDepth = -1) { }
         public static T FindLogicalOrVisualAncestorByType<T>(this System.Windows.DependencyObject startElement) { }
+        public static T FindLogicalOrVisualAncestorByType<T>(this System.Windows.DependencyObject startElement, int maxDepth) { }
         public static System.Windows.DependencyObject FindLogicalRoot(this System.Windows.DependencyObject startElement) { }
         public static object FindVisualAncestor(this System.Windows.DependencyObject startElement, System.Predicate<object> condition, int maxDepth = -1) { }
         public static T FindVisualAncestorByType<T>(this System.Windows.DependencyObject startElement) { }
+        public static T FindVisualAncestorByType<T>(this System.Windows.DependencyObject startElement, int maxDepth) { }
         public static System.Windows.DependencyObject FindVisualDescendant(this System.Windows.DependencyObject startElement, System.Predicate<object> condition) { }
         public static System.Windows.DependencyObject FindVisualDescendantByName(this System.Windows.DependencyObject startElement, string name) { }
         public static T FindVisualDescendantByType<T>(this System.Windows.DependencyObject startElement)
