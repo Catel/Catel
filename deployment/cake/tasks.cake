@@ -20,7 +20,7 @@
 #addin "nuget:?package=Cake.Sonar&version=1.1.22"
 
 #tool "nuget:?package=MSBuild.SonarQube.Runner.Tool&version=4.6.0"
-#tool "nuget:?package=GitVersion.CommandLine&version=5.1.2-beta1.12&prerelease"
+#tool "nuget:?package=GitVersion.CommandLine&version=5.1.2-beta1.17&prerelease"
 
 //-------------------------------------------------------------
 // BACKWARDS COMPATIBILITY CODE - START
