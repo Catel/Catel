@@ -26,7 +26,7 @@ namespace Catel.Configuration
         /// Registers the configuration key.
         /// </summary>
         /// <param name="name">The name.</param>
-        public void RegisterConfigurationKey(string name)
+        public virtual void RegisterConfigurationKey(string name)
         {
             if (IsConfigurationValueSet(name))
             {
@@ -43,7 +43,7 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>System.String.</returns>
-        public object GetConfigurationValue(string name)
+        public virtual object GetConfigurationValue(string name)
         {
             RegisterConfigurationKey(name);
 
@@ -55,7 +55,7 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
-        public void SetConfigurationValue(string name, object value)
+        public virtual void SetConfigurationValue(string name, object value)
         {
             RegisterConfigurationKey(name);
 
@@ -69,7 +69,7 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns><c>true</c> if the property is set; otherwise, <c>false</c>.</returns>
-        public bool IsConfigurationValueSet(string name)
+        public virtual bool IsConfigurationValueSet(string name)
         {
             Argument.IsNotNull("name", name);
 
@@ -88,7 +88,7 @@ namespace Catel.Configuration
         /// Marks the property as set at least once so it doesn't have a default value.
         /// </summary>
         /// <param name="name">The name.</param>
-        public void MarkConfigurationValueAsSet(string name)
+        public virtual void MarkConfigurationValueAsSet(string name)
         {
             Argument.IsNotNull("name", name);
 
@@ -99,7 +99,7 @@ namespace Catel.Configuration
         }
         #endregion
 
-        public void Serialize(XmlWriter xmlWriter)
+        public virtual void Serialize(XmlWriter xmlWriter)
         {
             if (xmlWriter != null)
             {
@@ -111,7 +111,7 @@ namespace Catel.Configuration
             }
         }
 
-        public void Deserialize(XmlReader xmlReader)
+        public virtual void Deserialize(XmlReader xmlReader)
         {
             if (xmlReader != null)
             {

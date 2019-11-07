@@ -994,13 +994,13 @@ namespace Catel.Configuration
     public class DynamicConfiguration : Catel.Data.ModelBase, Catel.Runtime.Serialization.Xml.ICustomXmlSerializable
     {
         public DynamicConfiguration() { }
-        public void Deserialize(System.Xml.XmlReader xmlReader) { }
-        public object GetConfigurationValue(string name) { }
-        public bool IsConfigurationValueSet(string name) { }
-        public void MarkConfigurationValueAsSet(string name) { }
-        public void RegisterConfigurationKey(string name) { }
-        public void Serialize(System.Xml.XmlWriter xmlWriter) { }
-        public void SetConfigurationValue(string name, object value) { }
+        public virtual void Deserialize(System.Xml.XmlReader xmlReader) { }
+        public virtual object GetConfigurationValue(string name) { }
+        public virtual bool IsConfigurationValueSet(string name) { }
+        public virtual void MarkConfigurationValueAsSet(string name) { }
+        public virtual void RegisterConfigurationKey(string name) { }
+        public virtual void Serialize(System.Xml.XmlWriter xmlWriter) { }
+        public virtual void SetConfigurationValue(string name, object value) { }
     }
     public class static DynamicConfigurationExtensions
     {
