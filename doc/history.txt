@@ -46,6 +46,7 @@ Added/fixed
 (x) #1453 FileSupport => SaveFileService & OpenFileService: Bug if InitialDirectory does not exist
 (x) #1469 Prevent first chance exceptions about DialogResult when window is not shown modal
 (x) #1474 DependencyObjectExtensions.FindLogicalOrVisualAncestor returns null when it should find a parent
+(x) #1476 Fix rare potential "collection was modified" enumeration in TypeCache
 
 Platform support changes
 ========================
