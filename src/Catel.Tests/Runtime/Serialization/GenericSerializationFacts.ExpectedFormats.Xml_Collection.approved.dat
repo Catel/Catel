@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Items xmlns:ctl="http://schemas.catelproject.com" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" ctl:graphid="1">
-  <Country ctl:graphid="2" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Tests.Runtime.Serialization" i:type="d0p0:GenericSerializationFacts.CollectionSerializationFacts.Country">
+<Items xmlns:ctl="http://schemas.catelproject.com" ctl:graphid="1">
+  <Country ctl:graphid="2" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Tests.Runtime.Serialization" i:type="d0p0:GenericSerializationFacts.CollectionSerializationFacts.Country" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
     <Id>19721f5a-b406-4079-89b3-1011005425ae</Id>
     <IsoCode>AF</IsoCode>
     <Description>Afghanistan</Description>
@@ -13,7 +13,7 @@
     <UpdateDate>0001-01-01T00:00:00</UpdateDate>
     <UpdateUserId>00000000-0000-0000-0000-000000000000</UpdateUserId>
   </Country>
-  <Country ctl:graphid="3" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Tests.Runtime.Serialization" i:type="d0p0:GenericSerializationFacts.CollectionSerializationFacts.Country">
+  <Country ctl:graphid="3" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Tests.Runtime.Serialization" i:type="d0p0:GenericSerializationFacts.CollectionSerializationFacts.Country" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
     <Id>19721f5a-b406-4079-89b3-1011005425af</Id>
     <IsoCode>AG</IsoCode>
     <Description>Agypt</Description>

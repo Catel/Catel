@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Items xmlns:ctl="http://schemas.catelproject.com" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" ctl:graphid="1">
-  <SerializableKeyValuePair ctl:graphid="2" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Runtime.Serialization" i:type="d0p0:SerializableKeyValuePair">
+<Items xmlns:ctl="http://schemas.catelproject.com" ctl:graphid="1">
+  <SerializableKeyValuePair ctl:graphid="2" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Runtime.Serialization" i:type="d0p0:SerializableKeyValuePair">
     <d0p0:Key xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:string">skip</d0p0:Key>
     <d0p0:Value xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:int">1</d0p0:Value>
   </SerializableKeyValuePair>
-  <SerializableKeyValuePair ctl:graphid="3" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Runtime.Serialization" i:type="d0p0:SerializableKeyValuePair">
+  <SerializableKeyValuePair ctl:graphid="3" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Runtime.Serialization" i:type="d0p0:SerializableKeyValuePair">
     <d0p0:Key xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:string">take</d0p0:Key>
     <d0p0:Value xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:int">2</d0p0:Value>
   </SerializableKeyValuePair>
-  <SerializableKeyValuePair ctl:graphid="4" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Runtime.Serialization" i:type="d0p0:SerializableKeyValuePair">
+  <SerializableKeyValuePair ctl:graphid="4" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:d0p0="http://schemas.datacontract.org/2004/07/Catel.Runtime.Serialization" i:type="d0p0:SerializableKeyValuePair">
     <d0p0:Key xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:string">some other string</d0p0:Key>
     <d0p0:Value xmlns:d1p1="http://www.w3.org/2001/XMLSchema" i:type="d1p1:int">3</d0p0:Value>
   </SerializableKeyValuePair>

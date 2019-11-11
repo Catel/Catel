@@ -104,7 +104,7 @@ namespace Catel.Runtime.Serialization
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
 
-                using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Deserialization, configuration))
+                using (var context = GetSerializationContextInfo(model, model.GetType(), stream, SerializationContextMode.Deserialization, configuration))
                 {
                     return Deserialize(model, context);
                 }
@@ -294,7 +294,7 @@ namespace Catel.Runtime.Serialization
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
 
-                using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Deserialization, configuration))
+                using (var context = GetSerializationContextInfo(model, model.GetType(), stream, SerializationContextMode.Deserialization, configuration))
                 {
                     return DeserializeMembersOnly(context);
                 }
