@@ -9,6 +9,7 @@
 #l "apps-web-tasks.cake"
 #l "apps-wpf-tasks.cake"
 #l "components-tasks.cake"
+#l "dependencies-tasks.cake"
 #l "tools-tasks.cake"
 #l "docker-tasks.cake"
 #l "github-pages-tasks.cake"
@@ -60,6 +61,7 @@ public class BuildContext : BuildContextBase
         : base(cakeContext)
     {
         Processors = new List<IProcessor>();
+        AllProjects = new List<string>();
     }
 
     public List<IProcessor> Processors { get; private set; }
@@ -77,6 +79,7 @@ public class BuildContext : BuildContextBase
     public TestsContext Tests { get; set; }
 
     public ComponentsContext Components { get; set; }
+    public DependenciesContext Dependencies { get; set; }
     public DockerImagesContext DockerImages { get; set; }
     public GitHubPagesContext GitHubPages { get; set; }
     public ToolsContext Tools { get; set; }
@@ -84,6 +87,8 @@ public class BuildContext : BuildContextBase
     public VsExtensionsContext VsExtensions { get; set; }
     public WebContext Web { get; set; }
     public WpfContext Wpf { get; set; }
+
+    public List<string> AllProjects { get; private set; }
 
     protected override void ValidateContext()
     {
@@ -118,6 +123,7 @@ Setup<BuildContext>(setupContext =>
     buildContext.Tests = InitializeTestsContext(buildContext, buildContext);
 
     buildContext.Components = InitializeComponentsContext(buildContext, buildContext);
+    buildContext.Dependencies = InitializeDependenciesContext(buildContext, buildContext);
     buildContext.DockerImages = InitializeDockerImagesContext(buildContext, buildContext);
     buildContext.GitHubPages = InitializeGitHubPagesContext(buildContext, buildContext);
     buildContext.Tools = InitializeToolsContext(buildContext, buildContext);
@@ -125,6 +131,18 @@ Setup<BuildContext>(setupContext =>
     buildContext.VsExtensions = InitializeVsExtensionsContext(buildContext, buildContext);
     buildContext.Web = InitializeWebContext(buildContext, buildContext);
     buildContext.Wpf = InitializeWpfContext(buildContext, buildContext);
+
+    // All projects, but dependencies first & tests last
+    buildContext.AllProjects.AddRange(buildContext.Dependencies.Items);
+    buildContext.AllProjects.AddRange(buildContext.Components.Items);
+    buildContext.AllProjects.AddRange(buildContext.DockerImages.Items);
+    buildContext.AllProjects.AddRange(buildContext.GitHubPages.Items);
+    buildContext.AllProjects.AddRange(buildContext.Tools.Items);
+    buildContext.AllProjects.AddRange(buildContext.Uwp.Items);
+    buildContext.AllProjects.AddRange(buildContext.VsExtensions.Items);
+    buildContext.AllProjects.AddRange(buildContext.Web.Items);
+    buildContext.AllProjects.AddRange(buildContext.Wpf.Items);
+    buildContext.AllProjects.AddRange(buildContext.Tests.Items);
 
     // Other integrations last
     buildContext.IssueTracker = new IssueTrackerIntegration(buildContext);
@@ -138,6 +156,8 @@ Setup<BuildContext>(setupContext =>
 
     setupContext.LogSeparator("Creating processors");
 
+    // Note: always put dependencies processor first (it's a dependency after all)
+    buildContext.Processors.Add(new DependenciesProcessor(buildContext));
     buildContext.Processors.Add(new ComponentsProcessor(buildContext));
     buildContext.Processors.Add(new DockerImagesProcessor(buildContext));
     buildContext.Processors.Add(new GitHubPagesProcessor(buildContext));
@@ -217,6 +237,7 @@ Task("UpdateInfo")
 
 Task("Build")
     .IsDependentOn("Clean")
+    .IsDependentOn("RestorePackages")
     .IsDependentOn("UpdateInfo")
     //.IsDependentOn("VerifyDependencies")
     .IsDependentOn("CleanupCode")
@@ -341,9 +362,9 @@ Task("Build")
 
     await buildContext.SourceControl.MarkBuildAsSucceededAsync("Build");
 })
-.OnError<BuildContext>(async (ex, buildContext) => 
+.OnError<BuildContext>((ex, buildContext) => 
 {
-    await buildContext.SourceControl.MarkBuildAsFailedAsync("Build");
+    buildContext.SourceControl.MarkBuildAsFailedAsync("Build").Wait();
 
     throw ex;
 });
@@ -365,10 +386,10 @@ Task("Test")
 
     await buildContext.SourceControl.MarkBuildAsSucceededAsync("Test");
 })
-.OnError<BuildContext>(async (ex, buildContext) => 
+.OnError<BuildContext>((ex, buildContext) => 
 {
-    await buildContext.SourceControl.MarkBuildAsFailedAsync("Test");
-    
+    buildContext.SourceControl.MarkBuildAsFailedAsync("Test").Wait();
+
     throw ex;
 });
 

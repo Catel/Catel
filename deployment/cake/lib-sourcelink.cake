@@ -1,5 +1,24 @@
+public static bool IsSourceLinkSupported(BuildContext buildContext, string projectFileName)
+{
+    // Only support C# projects
+    if (!projectFileName.EndsWith(".csproj"))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+//-------------------------------------------------------------
+
 public static void InjectSourceLinkInProjectFile(BuildContext buildContext, string projectFileName)
 {
+    // Only support C# projects
+    if (!IsSourceLinkSupported(buildContext, projectFileName))
+    {
+        return;
+    }
+
     // For SourceLink to work, the .csproj should contain something like this:
     // <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="all" />
     var projectFileContents = System.IO.File.ReadAllText(projectFileName);
