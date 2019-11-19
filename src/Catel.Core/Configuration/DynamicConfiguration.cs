@@ -6,9 +6,11 @@
 
 namespace Catel.Configuration
 {
+    using System;
     using System.Collections.Generic;
     using System.Xml;
     using Catel.IoC;
+    using Catel.Reflection;
     using Catel.Runtime.Serialization.Xml;
     using Data;
     using Runtime.Serialization;
@@ -22,6 +24,7 @@ namespace Catel.Configuration
         protected static readonly HashSet<string> DynamicProperties = new HashSet<string>();
 
         private readonly HashSet<string> _propertiesSetAtLeastOnce = new HashSet<string>();
+        private IXmlSerializer _xmlSerializer;
 
         #region Methods
         /// <summary>
@@ -104,11 +107,21 @@ namespace Catel.Configuration
         }
         #endregion
 
+        protected virtual IXmlSerializer GetXmlSerializer()
+        {
+            if (_xmlSerializer is null)
+            {
+                _xmlSerializer = ServiceLocator.Default.ResolveType<IXmlSerializer>();
+            }
+
+            return _xmlSerializer;
+        }
+
         public virtual void Serialize(XmlWriter xmlWriter)
         {
             if (xmlWriter != null)
             {
-                var xmlSerializer = ServiceLocator.Default.ResolveType<IXmlSerializer>();
+                var xmlSerializer = GetXmlSerializer();
                 xmlSerializer.Serialize(this, new XmlSerializationContextInfo(xmlWriter, this)
                 {
                     AllowCustomXmlSerialization = false
@@ -136,8 +149,35 @@ namespace Catel.Configuration
 
                 while (xmlReader.MoveToNextContentElement(parentNode))
                 {
+                    var valueRead = false;
+                    object value = null;
+
                     var elementName = xmlReader.LocalName;
-                    var value = xmlReader.ReadElementContentAsString();
+
+                    // If simple property
+                    var typeAttribute = xmlReader.GetAttribute("ctl:type");
+                    if (typeAttribute != null)
+                    {
+                        var elementType = TypeCache.GetTypeWithoutAssembly(typeAttribute);
+                        if (elementType != null)
+                        {
+                            if (elementType != typeof(string) && !elementType.IsValueTypeEx())
+                            {
+                                var instance = Activator.CreateInstance(elementType);
+
+                                // Complex object, use xml serializer
+                                var xmlSerializer = GetXmlSerializer();
+                                value = xmlSerializer.Deserialize(elementType, new XmlSerializationContextInfo(xmlReader, instance));
+                                valueRead = true;
+                            }
+                        }
+                    }
+
+                    if (!valueRead)
+                    {
+                        value = xmlReader.ReadElementContentAsString();
+                        valueRead = true;
+                    }
 
                     var valueSet = false;
 
@@ -145,8 +185,13 @@ namespace Catel.Configuration
                     {
                         // If registered property, cast & set
                         var propertyData = propertyDataManager.GetPropertyData(type, elementName);
-                        var finalValue = StringToObjectHelper.ToRightType(propertyData.Type, value);
-                        SetValue(elementName, finalValue);
+
+                        if (value is string stringValue)
+                        {
+                            value = StringToObjectHelper.ToRightType(propertyData.Type, stringValue);
+                        }
+    
+                        SetValue(elementName, value);
 
                         valueSet = true;
                     }

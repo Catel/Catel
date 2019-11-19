@@ -17,15 +17,14 @@ namespace Catel.Tests.Configuration
     using Catel.IO;
     using NUnit.Framework;
 
-    [TestFixture, Explicit]
+    [TestFixture]
     public class DynamicConfigurationFacts
     {
         private const string ExpectedXml = "﻿<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
-"<DynamicConfiguration graphid=\"1\" xmlns:ctl=\"http://schemas.catelproject.com\">\r\n" +
-"  <ComplexSetting IsNull=\"true\" />\r\n" +
-"  <KeyX type=\"System.String\">Value X</KeyX>\r\n" +
-"  <KeyY type=\"System.String\">Value Y</KeyY>\r\n" +
-"  <KeyZ.SomeAddition type=\"System.String\">Value Z</KeyZ.SomeAddition>\r\n" +
+"<DynamicConfiguration xmlns:ctl=\"http://schemas.catelproject.com\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n" +
+"  <KeyX ctl:type=\"System.String\">Value X</KeyX>\r\n" +
+"  <KeyY ctl:type=\"System.String\">Value Y</KeyY>\r\n" +
+"  <KeyZ.SomeAddition ctl:type=\"System.String\">Value Z</KeyZ.SomeAddition>\r\n" +
 "</DynamicConfiguration>";
 
         public class ComplexSetting : ModelBase
