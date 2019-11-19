@@ -22,6 +22,7 @@ namespace Catel.Tests.Configuration
     {
         private const string ExpectedXml = "﻿<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
 "<DynamicConfiguration xmlns:ctl=\"http://schemas.catelproject.com\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n" +
+"  <ComplexSetting ctl:IsNull=\"true\" />\r\n" +
 "  <KeyX ctl:type=\"System.String\">Value X</KeyX>\r\n" +
 "  <KeyY ctl:type=\"System.String\">Value Y</KeyY>\r\n" +
 "  <KeyZ.SomeAddition ctl:type=\"System.String\">Value Z</KeyZ.SomeAddition>\r\n" +
