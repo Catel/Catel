@@ -17,7 +17,7 @@ namespace Catel.Tests.Configuration
     using Catel.IO;
     using NUnit.Framework;
 
-    [TestFixture]
+    [TestFixture, Explicit]
     public class DynamicConfigurationFacts
     {
         private const string ExpectedXml = "﻿<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
