@@ -974,9 +974,10 @@ namespace Catel.Configuration
     }
     public class ConfigurationService : Catel.Configuration.IConfigurationService
     {
-        public ConfigurationService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.Xml.IXmlSerializer serializer) { }
-        public ConfigurationService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.ISerializer serializer) { }
+        public ConfigurationService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.Xml.IXmlSerializer serializer, Catel.Services.IAppDataService appDataService) { }
+        public ConfigurationService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.ISerializer serializer, Catel.Services.IAppDataService appDataService) { }
         public event System.EventHandler<Catel.Configuration.ConfigurationChangedEventArgs> ConfigurationChanged;
+        protected virtual string GetConfigurationFileName(Catel.IO.ApplicationDataTarget applicationDataTarget) { }
         protected virtual string GetFinalKey(string key) { }
         protected virtual Catel.Configuration.DynamicConfiguration GetSettingsContainer(Catel.Configuration.ConfigurationContainer container) { }
         public T GetValue<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = null) { }
@@ -4136,11 +4137,20 @@ namespace Catel.Scoping
 }
 namespace Catel.Services
 {
+    public class AppDataService : Catel.Services.IAppDataService
+    {
+        public AppDataService() { }
+        public virtual string GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget applicationDataTarget) { }
+    }
     public class GuidObjectIdGenerator<TObjectType> : Catel.Services.ObjectIdGenerator<TObjectType, System.Guid>
         where TObjectType :  class
     {
         public GuidObjectIdGenerator() { }
         protected override System.Guid GenerateUniqueIdentifier() { }
+    }
+    public interface IAppDataService
+    {
+        string GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget applicationDataTarget);
     }
     public interface ILanguageService
     {
