@@ -41,11 +41,11 @@ namespace Catel.ApiCop.Rules
             {
                 var propertyBag = GetPropertyBagForTag(tag);
 
-                if (!propertyBag.IsPropertyAvailable("TotalCount"))
+                if (!propertyBag.IsAvailable("TotalCount"))
                 {
-                    propertyBag.SetPropertyValue("TotalCount", 0);
-                    propertyBag.SetPropertyValue("UsedCount", 0);
-                    propertyBag.SetPropertyValue("UnusedCount", 0);
+                    propertyBag.SetValue("TotalCount", 0);
+                    propertyBag.SetValue("UsedCount", 0);
+                    propertyBag.SetValue("UnusedCount", 0);
                 }
 
                 propertyBag.UpdatePropertyValue<int>("TotalCount", x => x + 1);
@@ -79,8 +79,8 @@ namespace Catel.ApiCop.Rules
                     return true;
                 }
 
-                var totalCount = propertyBag.GetPropertyValue<int>("TotalCount");
-                var usedCount = propertyBag.GetPropertyValue<int>("UsedCount");
+                var totalCount = propertyBag.GetValue<int>("TotalCount");
+                var usedCount = propertyBag.GetValue<int>("UsedCount");
 
                 return usedCount == totalCount;
             }
@@ -100,8 +100,8 @@ namespace Catel.ApiCop.Rules
             }
 
             return string.Format("[{0}] Feature used '{1}' of '{2}' times, consider turning it off by default", tag,
-                propertyBag.GetPropertyValue<int>("UsedCount"),
-                propertyBag.GetPropertyValue<int>("TotalCount"));
+                propertyBag.GetValue<int>("UsedCount"),
+                propertyBag.GetValue<int>("TotalCount"));
         }
     }
 }

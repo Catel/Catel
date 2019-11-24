@@ -61,7 +61,7 @@ namespace Catel.ApiCop.Rules
         public override bool IsValid(IApiCop apiCop, string tag)
         {
             var propertyBag = GetPropertyBagForTag(tag);
-            var actualInitializationMode = propertyBag.GetPropertyValue("ActualInitializationMode", InitializationMode.Lazy);
+            var actualInitializationMode = propertyBag.GetValue("ActualInitializationMode", InitializationMode.Lazy);
 
             return actualInitializationMode == RecommendedInitializationMode;
         }
@@ -107,7 +107,7 @@ namespace Catel.ApiCop.Rules
                 return;
             }
 
-            propertyBag.SetPropertyValue("ActualInitializationMode", initializationMode);
+            propertyBag.SetValue("ActualInitializationMode", initializationMode);
         }
     }
 } 

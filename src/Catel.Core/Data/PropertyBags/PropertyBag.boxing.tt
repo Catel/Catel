@@ -43,10 +43,10 @@ foreach (TypeCode typeCode in typeCodes)
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, <#= typeCode.ToString() #> value)
+        public void SetValue(string propertyName, <#= typeCode.ToString() #> value)
         {
             var boxedValue = <#= storageName #>.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
 <#

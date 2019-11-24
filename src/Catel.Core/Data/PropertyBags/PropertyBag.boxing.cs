@@ -22,10 +22,10 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, Boolean value)
+        public void SetValue(string propertyName, Boolean value)
         {
             var boxedValue = BooleanBoxingCache.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
         private static readonly BoxingCache<Char> CharBoxingCache = new BoxingCache<Char>();
@@ -36,10 +36,10 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, Char value)
+        public void SetValue(string propertyName, Char value)
         {
             var boxedValue = CharBoxingCache.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
         private static readonly BoxingCache<SByte> SByteBoxingCache = new BoxingCache<SByte>();
@@ -50,10 +50,10 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, SByte value)
+        public void SetValue(string propertyName, SByte value)
         {
             var boxedValue = SByteBoxingCache.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
         private static readonly BoxingCache<Byte> ByteBoxingCache = new BoxingCache<Byte>();
@@ -64,10 +64,10 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, Byte value)
+        public void SetValue(string propertyName, Byte value)
         {
             var boxedValue = ByteBoxingCache.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
         private static readonly BoxingCache<Int16> Int16BoxingCache = new BoxingCache<Int16>();
@@ -78,10 +78,10 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, Int16 value)
+        public void SetValue(string propertyName, Int16 value)
         {
             var boxedValue = Int16BoxingCache.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
         private static readonly BoxingCache<UInt16> UInt16BoxingCache = new BoxingCache<UInt16>();
@@ -92,10 +92,10 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, UInt16 value)
+        public void SetValue(string propertyName, UInt16 value)
         {
             var boxedValue = UInt16BoxingCache.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
         private static readonly BoxingCache<Int32> Int32BoxingCache = new BoxingCache<Int32>();
@@ -106,10 +106,10 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, Int32 value)
+        public void SetValue(string propertyName, Int32 value)
         {
             var boxedValue = Int32BoxingCache.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
         private static readonly BoxingCache<UInt32> UInt32BoxingCache = new BoxingCache<UInt32>();
@@ -120,10 +120,10 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, UInt32 value)
+        public void SetValue(string propertyName, UInt32 value)
         {
             var boxedValue = UInt32BoxingCache.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
         private static readonly BoxingCache<Int64> Int64BoxingCache = new BoxingCache<Int64>();
@@ -134,10 +134,10 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, Int64 value)
+        public void SetValue(string propertyName, Int64 value)
         {
             var boxedValue = Int64BoxingCache.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
         private static readonly BoxingCache<UInt64> UInt64BoxingCache = new BoxingCache<UInt64>();
@@ -148,10 +148,10 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, UInt64 value)
+        public void SetValue(string propertyName, UInt64 value)
         {
             var boxedValue = UInt64BoxingCache.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
         private static readonly BoxingCache<Single> SingleBoxingCache = new BoxingCache<Single>();
@@ -162,10 +162,10 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, Single value)
+        public void SetValue(string propertyName, Single value)
         {
             var boxedValue = SingleBoxingCache.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
         private static readonly BoxingCache<Double> DoubleBoxingCache = new BoxingCache<Double>();
@@ -176,10 +176,10 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, Double value)
+        public void SetValue(string propertyName, Double value)
         {
             var boxedValue = DoubleBoxingCache.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
         private static readonly BoxingCache<Decimal> DecimalBoxingCache = new BoxingCache<Decimal>();
@@ -190,10 +190,10 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, Decimal value)
+        public void SetValue(string propertyName, Decimal value)
         {
             var boxedValue = DecimalBoxingCache.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
         private static readonly BoxingCache<DateTime> DateTimeBoxingCache = new BoxingCache<DateTime>();
@@ -204,10 +204,10 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, DateTime value)
+        public void SetValue(string propertyName, DateTime value)
         {
             var boxedValue = DateTimeBoxingCache.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
         private static readonly BoxingCache<String> StringBoxingCache = new BoxingCache<String>();
@@ -218,10 +218,10 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        public void SetPropertyValue(string propertyName, String value)
+        public void SetValue(string propertyName, String value)
         {
             var boxedValue = StringBoxingCache.GetBoxedValue(value);
-            SetPropertyValue(propertyName, boxedValue);
+            SetValue<object>(propertyName, boxedValue);
         }
 
     }

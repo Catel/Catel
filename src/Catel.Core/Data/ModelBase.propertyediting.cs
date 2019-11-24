@@ -181,7 +181,7 @@ namespace Catel.Data
             lock (_lock)
             {
                 var objectValue = GetObjectValue(value);
-                _propertyBag.SetPropertyValue(propertyName, objectValue);
+                _propertyBag.SetValue(propertyName, objectValue);
             }
         }
 
@@ -199,7 +199,7 @@ namespace Catel.Data
         {
             lock (_lock)
             {
-                _propertyBag.SetPropertyValue(propertyName, value);
+                _propertyBag.SetValue(propertyName, value);
             }
         }
 
@@ -216,7 +216,7 @@ namespace Catel.Data
         {
             lock (_lock)
             {
-                return _propertyBag.GetPropertyValue<T>(propertyName);
+                return _propertyBag.GetValue<T>(propertyName);
             }
         }
 

@@ -1566,24 +1566,24 @@ namespace Catel.Data
         [System.ObsoleteAttribute("Use `IsAvailable` instead. Will be treated as an error from version 5.13.0. Will " +
             "be removed in version 6.0.0.", false)]
         public bool IsPropertyAvailable(string propertyName) { }
-        public void SetPropertyValue(string propertyName, bool value) { }
-        public void SetPropertyValue(string propertyName, char value) { }
-        public void SetPropertyValue(string propertyName, sbyte value) { }
-        public void SetPropertyValue(string propertyName, byte value) { }
-        public void SetPropertyValue(string propertyName, short value) { }
-        public void SetPropertyValue(string propertyName, ushort value) { }
-        public void SetPropertyValue(string propertyName, int value) { }
-        public void SetPropertyValue(string propertyName, uint value) { }
-        public void SetPropertyValue(string propertyName, long value) { }
-        public void SetPropertyValue(string propertyName, ulong value) { }
-        public void SetPropertyValue(string propertyName, float value) { }
-        public void SetPropertyValue(string propertyName, double value) { }
-        public void SetPropertyValue(string propertyName, decimal value) { }
-        public void SetPropertyValue(string propertyName, System.DateTime value) { }
-        public void SetPropertyValue(string propertyName, string value) { }
         [System.ObsoleteAttribute("Use `SetValue<TValue>` instead. Will be treated as an error from version 5.13.0. " +
             "Will be removed in version 6.0.0.", false)]
         public void SetPropertyValue(string propertyName, object value) { }
+        public void SetValue(string propertyName, bool value) { }
+        public void SetValue(string propertyName, char value) { }
+        public void SetValue(string propertyName, sbyte value) { }
+        public void SetValue(string propertyName, byte value) { }
+        public void SetValue(string propertyName, short value) { }
+        public void SetValue(string propertyName, ushort value) { }
+        public void SetValue(string propertyName, int value) { }
+        public void SetValue(string propertyName, uint value) { }
+        public void SetValue(string propertyName, long value) { }
+        public void SetValue(string propertyName, ulong value) { }
+        public void SetValue(string propertyName, float value) { }
+        public void SetValue(string propertyName, double value) { }
+        public void SetValue(string propertyName, decimal value) { }
+        public void SetValue(string propertyName, System.DateTime value) { }
+        public void SetValue(string propertyName, string value) { }
         public override void SetValue<TValue>(string name, TValue value) { }
         public void UpdatePropertyValue<TValue>(string propertyName, System.Func<TValue, TValue> update) { }
     }
