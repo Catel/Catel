@@ -14,114 +14,138 @@ namespace Catel.Tests.Data
 
     public class PropertyBagFacts
     {
-        [TestFixture]
-        public class TheIsPropertyAvailableMethod
+        [TestFixture(typeof(PropertyBag))]
+        [TestFixture(typeof(TypedPropertyBag))]
+        public class TheIsAvailableMethod<TPropertyBag>
+            where TPropertyBag : IPropertyBag, new()
         {
+            private IPropertyBag _propertyBag;
+
+            [SetUp]
+            public void CreatePropertyBag()
+            {
+                _propertyBag = new TPropertyBag();
+            }
+
             [TestCase]
             public void ThrowsArgumentExceptionForInvalidPropertyName()
             {
-                var propertyBag = new PropertyBag();
-
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyBag.IsPropertyAvailable(null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyBag.IsPropertyAvailable(string.Empty));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => _propertyBag.IsAvailable(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => _propertyBag.IsAvailable(string.Empty));
             }
 
             [TestCase]
             public void ReturnsFalseForNonRegisteredPropertyName()
             {
-                var propertyBag = new PropertyBag();
-
-                Assert.IsFalse(propertyBag.IsPropertyAvailable("MyProperty"));
+                Assert.IsFalse(_propertyBag.IsAvailable("MyProperty"));
             }
 
             [TestCase]
             public void ReturnsTrueForRegisteredPropertyName()
             {
-                var propertyBag = new PropertyBag();
-                propertyBag.SetPropertyValue("MyProperty", 1);
+                _propertyBag.SetValue("MyProperty", 1);
 
-                Assert.IsTrue(propertyBag.IsPropertyAvailable("MyProperty"));
+                Assert.IsTrue(_propertyBag.IsAvailable("MyProperty"));
             }
         }
 
-        [TestFixture]
-        public class TheGetAllPropertiesMethod
+        [TestFixture(typeof(PropertyBag))]
+        [TestFixture(typeof(TypedPropertyBag))]
+        public class TheGetAllNamesMethod<TPropertyBag>
+            where TPropertyBag : IPropertyBag, new()
         {
-            [TestCase]
-            public void ReturnsAllRegisteredPropertiesWithCorrectValues()
-            {
-                var propertyBag = new PropertyBag();
-                propertyBag.SetPropertyValue("FirstProperty", 1);
-                propertyBag.SetPropertyValue("SecondProperty", "test");
+            private IPropertyBag _propertyBag;
 
-                var allProperties = propertyBag.GetAllProperties().ToList();
+            [SetUp]
+            public void CreatePropertyBag()
+            {
+                _propertyBag = new TPropertyBag();
+            }
+
+            [TestCase]
+            public void ReturnsAllRegisteredProperties()
+            {
+                _propertyBag.SetValue("FirstProperty", 1);
+                _propertyBag.SetValue("SecondProperty", "test");
+
+                var allProperties = _propertyBag.GetAllNames().ToList();
 
                 Assert.AreEqual(2, allProperties.Count);
 
-                Assert.AreEqual("FirstProperty", allProperties[0].Key);
-                Assert.AreEqual(1, allProperties[0].Value);
+                Assert.AreEqual("FirstProperty", allProperties[0]);
+                //Assert.AreEqual(1, allProperties[0].Value);
 
-                Assert.AreEqual("SecondProperty", allProperties[1].Key);
-                Assert.AreEqual("test", allProperties[1].Value);
+                Assert.AreEqual("SecondProperty", allProperties[1]);
+                //Assert.AreEqual("test", allProperties[1].Value);
             }
         }
 
-        [TestFixture]
-        public class TheGetPropertyValueMethod
+        [TestFixture(typeof(PropertyBag))]
+        [TestFixture(typeof(TypedPropertyBag))]
+        public class TheGetValueMethod<TPropertyBag>
+            where TPropertyBag : IPropertyBag, new()
         {
+            private IPropertyBag _propertyBag;
+
+            [SetUp]
+            public void CreatePropertyBag()
+            {
+                _propertyBag = new TPropertyBag();
+            }
+
             [TestCase]
             public void ThrowsArgumentExceptionForInvalidPropertyName()
             {
-                var propertyBag = new PropertyBag();
-
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyBag.GetPropertyValue<object>(null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyBag.GetPropertyValue<object>(string.Empty));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => _propertyBag.GetValue<object>(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => _propertyBag.GetValue<object>(string.Empty));
             }
 
             [TestCase]
             public void ReturnsDefaultValueForNonRegisteredProperty()
             {
-                var propertyBag = new PropertyBag();
-
-                Assert.AreEqual(null, propertyBag.GetPropertyValue<string>("StringProperty"));
-                Assert.AreEqual(0, propertyBag.GetPropertyValue<int>("IntProperty"));
+                Assert.AreEqual(null, _propertyBag.GetValue<string>("StringProperty"));
+                Assert.AreEqual(0, _propertyBag.GetValue<int>("IntProperty"));
             }
 
             [TestCase]
             public void ReturnsRightPropertyValue()
             {
-                var propertyBag = new PropertyBag();
-
-                propertyBag.SetPropertyValue("StringProperty", "test");
-                propertyBag.SetPropertyValue("IntProperty", 1);
+                _propertyBag.SetValue("StringProperty", "test");
+                _propertyBag.SetValue("IntProperty", 1);
                 
-                Assert.AreEqual("test", propertyBag.GetPropertyValue<string>("StringProperty"));
-                Assert.AreEqual(1, propertyBag.GetPropertyValue<int>("IntProperty"));
+                Assert.AreEqual("test", _propertyBag.GetValue<string>("StringProperty"));
+                Assert.AreEqual(1, _propertyBag.GetValue<int>("IntProperty"));
             }
         }
 
-        [TestFixture]
-        public class TheSetPropertyValueMethod
+        [TestFixture(typeof(PropertyBag))]
+        [TestFixture(typeof(TypedPropertyBag))]
+        public class TheSetValueMethod<TPropertyBag>
+            where TPropertyBag : PropertyBag, new()
         {
+            private IPropertyBag _propertyBag;
+
+            [SetUp]
+            public void CreatePropertyBag()
+            {
+                _propertyBag = new TPropertyBag();
+            }
+
             [TestCase]
             public void ThrowsArgumentExceptionForInvalidPropertyName()
             {
-                var propertyBag = new PropertyBag();
-
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyBag.SetPropertyValue(null, null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => propertyBag.SetPropertyValue(string.Empty, null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => _propertyBag.SetValue<object>(null, null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => _propertyBag.SetValue<object>(string.Empty, null));
             }
 
             [TestCase]
             public void SetsPropertyCorrectly()
             {
-                var propertyBag = new PropertyBag();
+                _propertyBag.SetValue("StringProperty", "A");
+                Assert.AreEqual("A", _propertyBag.GetValue<string>("StringProperty"));
 
-                propertyBag.SetPropertyValue("StringProperty", "A");
-                Assert.AreEqual("A", propertyBag.GetPropertyValue<string>("StringProperty"));
-
-                propertyBag.SetPropertyValue("StringProperty", "B");
-                Assert.AreEqual("B", propertyBag.GetPropertyValue<string>("StringProperty"));
+                _propertyBag.SetValue("StringProperty", "B");
+                Assert.AreEqual("B", _propertyBag.GetValue<string>("StringProperty"));
             }
         }
     }

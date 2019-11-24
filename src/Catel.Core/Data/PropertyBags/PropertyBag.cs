@@ -15,7 +15,7 @@ namespace Catel.Data
     /// <summary>
     /// Class that is able to manage all properties of a specific object in a thread-safe manner.
     /// </summary>
-    public partial class PropertyBag : INotifyPropertyChanged
+    public partial class PropertyBag : PropertyBagBase
     {
         #region Fields
         private readonly object _lockObject = new object();
@@ -30,13 +30,6 @@ namespace Catel.Data
         public PropertyBag()
         {
         }
-        #endregion
-
-        #region INotifyPropertyChanged Members
-        /// <summary>
-        /// Occurs when a property value changes.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
         #region Properties
@@ -76,13 +69,19 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <returns><c>true</c> if the property is available; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "IsAvailable", TreatAsErrorFromVersion = "5.13", RemoveInVersion = "6.0")]
         public bool IsPropertyAvailable(string propertyName)
         {
-            Argument.IsNotNullOrWhitespace("propertyName", propertyName);
+            return IsAvailable(propertyName);
+        }
+
+        public override bool IsAvailable(string name)
+        {
+            Argument.IsNotNullOrWhitespace("name", name);
 
             lock (_lockObject)
             {
-                return _properties.ContainsKey(propertyName);
+                return _properties.ContainsKey(name);
             }
         }
 
@@ -98,12 +97,11 @@ namespace Catel.Data
             }
         }
 
-        private void RaisePropertyChanged(string propertyName)
+        public override string[] GetAllNames()
         {
-            var handler = PropertyChanged;
-            if (handler != null)
+            lock (_lockObject)
             {
-                handler(this, new PropertyChangedEventArgs(propertyName));
+                return _properties.Keys.ToArray();
             }
         }
 
@@ -116,6 +114,7 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <returns>The property value or the default value of <typeparamref name="TValue" /> if the property does not exist.</returns>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "GetValue<TValue>", TreatAsErrorFromVersion = "5.13", RemoveInVersion = "6.0")]
         public TValue GetPropertyValue<TValue>(string propertyName)
         {
             return GetPropertyValue(propertyName, default(TValue));
@@ -131,13 +130,19 @@ namespace Catel.Data
         /// <param name="defaultValue">The default value.</param>
         /// <returns>The property value or the default value of <typeparamref name="TValue" /> if the property does not exist.</returns>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "GetValue<TValue>", TreatAsErrorFromVersion = "5.13", RemoveInVersion = "6.0")]
         public TValue GetPropertyValue<TValue>(string propertyName, TValue defaultValue)
         {
-            Argument.IsNotNullOrWhitespace("propertyName", propertyName);
+            return GetValue<TValue>(propertyName, defaultValue);
+        }
+
+        public override TValue GetValue<TValue>(string name, TValue defaultValue = default)
+        {
+            Argument.IsNotNullOrWhitespace("name", name);
 
             lock (_lockObject)
             {
-                if (_properties.TryGetValue(propertyName, out var propertyValue))
+                if (_properties.TryGetValue(name, out var propertyValue))
                 {
                     return (TValue)propertyValue;
 
@@ -158,24 +163,30 @@ namespace Catel.Data
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
+        [ObsoleteEx(ReplacementTypeOrMember = "SetValue<TValue>", TreatAsErrorFromVersion = "5.13", RemoveInVersion = "6.0")]
         public void SetPropertyValue(string propertyName, object value)
         {
-            Argument.IsNotNullOrWhitespace("propertyName", propertyName);
+            SetValue(propertyName, value);
+        }
+
+        public override void SetValue<TValue>(string name, TValue value)
+        {
+            Argument.IsNotNullOrWhitespace("name", name);
 
             var raisePropertyChanged = false;
 
             lock (_lockObject)
             {
-                if (!_properties.TryGetValue(propertyName, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, value))
+                if (!_properties.TryGetValue(name, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, value))
                 {
-                    _properties[propertyName] = value;
+                    _properties[name] = value;
                     raisePropertyChanged = true;
                 }
             }
 
             if (raisePropertyChanged)
             {
-                RaisePropertyChanged(propertyName);
+                RaisePropertyChanged(name);
             }
         }
 

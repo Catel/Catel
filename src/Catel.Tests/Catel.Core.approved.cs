@@ -1269,6 +1269,13 @@ namespace Catel.Data
         bool GetMemberValue<TValue>(object instance, string memberName, out TValue value);
         bool SetMemberValue<TValue>(object instance, string memberName, TValue value);
     }
+    public interface IPropertyBag : System.ComponentModel.INotifyPropertyChanged
+    {
+        string[] GetAllNames();
+        TValue GetValue<TValue>(string name, TValue defaultValue = null);
+        bool IsAvailable(string name);
+        void SetValue<TValue>(string name, TValue value);
+    }
     public interface ISavableModel : Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IModelSerialization, Catel.Runtime.Serialization.ISerializable, System.ComponentModel.IAdvancedEditableObject, System.ComponentModel.IEditableObject, System.ComponentModel.INotifyPropertyChanged, System.Runtime.Serialization.ISerializable, System.Xml.Serialization.IXmlSerializable
     {
         void Save(System.IO.Stream stream, Catel.Runtime.Serialization.ISerializer serializer, Catel.Runtime.Serialization.ISerializationConfiguration configuration = null);
@@ -1540,25 +1547,54 @@ namespace Catel.Data
         public string PropertyName { get; }
         public System.Type PropertyType { get; }
     }
-    public class PropertyBag : System.ComponentModel.INotifyPropertyChanged
+    public class PropertyBag : Catel.Data.PropertyBagBase
     {
         public PropertyBag() { }
         public object this[string name] { get; set; }
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        public override string[] GetAllNames() { }
         public System.Collections.Generic.Dictionary<string, object> GetAllProperties() { }
+        [System.ObsoleteAttribute("Use `GetValue<TValue>` instead. Will be treated as an error from version 5.13.0. " +
+            "Will be removed in version 6.0.0.", false)]
         public TValue GetPropertyValue<TValue>(string propertyName) { }
+        [System.ObsoleteAttribute("Use `GetValue<TValue>` instead. Will be treated as an error from version 5.13.0. " +
+            "Will be removed in version 6.0.0.", false)]
         public TValue GetPropertyValue<TValue>(string propertyName, TValue defaultValue) { }
+        public override TValue GetValue<TValue>(string name, TValue defaultValue = null) { }
         public void Import(System.Collections.Generic.Dictionary<string, object> propertiesToImport) { }
+        public override bool IsAvailable(string name) { }
+        [System.ObsoleteAttribute("Use `IsAvailable` instead. Will be treated as an error from version 5.13.0. Will " +
+            "be removed in version 6.0.0.", false)]
         public bool IsPropertyAvailable(string propertyName) { }
         public void SetPropertyValue(string propertyName, bool value) { }
+        public void SetPropertyValue(string propertyName, char value) { }
+        public void SetPropertyValue(string propertyName, sbyte value) { }
+        public void SetPropertyValue(string propertyName, byte value) { }
         public void SetPropertyValue(string propertyName, short value) { }
         public void SetPropertyValue(string propertyName, ushort value) { }
         public void SetPropertyValue(string propertyName, int value) { }
         public void SetPropertyValue(string propertyName, uint value) { }
         public void SetPropertyValue(string propertyName, long value) { }
         public void SetPropertyValue(string propertyName, ulong value) { }
+        public void SetPropertyValue(string propertyName, float value) { }
+        public void SetPropertyValue(string propertyName, double value) { }
+        public void SetPropertyValue(string propertyName, decimal value) { }
+        public void SetPropertyValue(string propertyName, System.DateTime value) { }
+        public void SetPropertyValue(string propertyName, string value) { }
+        [System.ObsoleteAttribute("Use `SetValue<TValue>` instead. Will be treated as an error from version 5.13.0. " +
+            "Will be removed in version 6.0.0.", false)]
         public void SetPropertyValue(string propertyName, object value) { }
+        public override void SetValue<TValue>(string name, TValue value) { }
         public void UpdatePropertyValue<TValue>(string propertyName, System.Func<TValue, TValue> update) { }
+    }
+    public abstract class PropertyBagBase : Catel.Data.IPropertyBag, System.ComponentModel.INotifyPropertyChanged
+    {
+        protected PropertyBagBase() { }
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        public abstract string[] GetAllNames();
+        public abstract TValue GetValue<TValue>(string name, TValue defaultValue = null);
+        public abstract bool IsAvailable(string name);
+        protected void RaisePropertyChanged(string propertyName) { }
+        public abstract void SetValue<TValue>(string name, TValue value);
     }
     public class PropertyData
     {
@@ -1653,6 +1689,30 @@ namespace Catel.Data
         public void Add(string propertyName) { }
         public void Decrement() { }
         public void Increment() { }
+    }
+    public class TypedPropertyBag : Catel.Data.PropertyBagBase
+    {
+        public TypedPropertyBag() { }
+        public override string[] GetAllNames() { }
+        protected System.Collections.Generic.Dictionary<string, bool> GetBooleanStorage() { }
+        protected System.Collections.Generic.Dictionary<string, byte> GetByteStorage() { }
+        protected System.Collections.Generic.Dictionary<string, char> GetCharStorage() { }
+        protected System.Collections.Generic.Dictionary<string, System.DateTime> GetDateTimeStorage() { }
+        protected System.Collections.Generic.Dictionary<string, decimal> GetDecimalStorage() { }
+        protected System.Collections.Generic.Dictionary<string, double> GetDoubleStorage() { }
+        protected System.Collections.Generic.Dictionary<string, short> GetInt16Storage() { }
+        protected System.Collections.Generic.Dictionary<string, int> GetInt32Storage() { }
+        protected System.Collections.Generic.Dictionary<string, long> GetInt64Storage() { }
+        protected System.Collections.Generic.Dictionary<string, object> GetObjectStorage() { }
+        protected System.Collections.Generic.Dictionary<string, sbyte> GetSByteStorage() { }
+        protected System.Collections.Generic.Dictionary<string, float> GetSingleStorage() { }
+        protected System.Collections.Generic.Dictionary<string, string> GetStringStorage() { }
+        protected System.Collections.Generic.Dictionary<string, ushort> GetUInt16Storage() { }
+        protected System.Collections.Generic.Dictionary<string, uint> GetUInt32Storage() { }
+        protected System.Collections.Generic.Dictionary<string, ulong> GetUInt64Storage() { }
+        public override TValue GetValue<TValue>(string name, TValue defaultValue = null) { }
+        public override bool IsAvailable(string name) { }
+        public override void SetValue<TValue>(string name, TValue value) { }
     }
     public abstract class ValidatableModelBase : Catel.Data.ModelBase, Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IModelSerialization, Catel.Data.IValidatable, Catel.Data.IValidatableModel, Catel.Runtime.Serialization.ISerializable, System.ComponentModel.IAdvancedEditableObject, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.IEditableObject, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged, System.Runtime.Serialization.ISerializable, System.Xml.Serialization.IXmlSerializable
     {

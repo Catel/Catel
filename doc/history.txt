@@ -29,6 +29,7 @@ Release date
 
 Added/fixed
 ===========
+(+) #1319 Add TypedPropertyBag to prevent boxing
 (+) #1421 ObservableDictionary for supporting UI controls that utilize Dictionaries
 (+) #1437 Cache boxed value type values in ModelBase
 (+) #1439 Add Catel.Data.IObjectAdapter with a Reflection and Expression Tree implementation

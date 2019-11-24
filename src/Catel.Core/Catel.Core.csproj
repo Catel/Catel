@@ -115,6 +115,26 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Data\PropertyBags\PropertyBag.boxing.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PropertyBag.boxing.cs</LastGenOutput>
+    </None>
+    <Compile Update="Data\PropertyBags\PropertyBag.boxing.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PropertyBag.boxing.tt</DependentUpon>
+    </Compile>    
+    
+    <None Update="Data\PropertyBags\TypedPropertyBag.storage.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TypedPropertyBag.storage.cs</LastGenOutput>
+    </None>
+    <Compile Update="Data\PropertyBags\TypedPropertyBag.storage.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TypedPropertyBag.storage.tt</DependentUpon>
+    </Compile>
+    
     <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.caches.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>FastMemberInvoker.caches.g.cs</LastGenOutput>
