@@ -115,6 +115,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Data\BoxingCache.boxedvalues.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>BoxingCache.boxedvalues.cs</LastGenOutput>
+    </None>
+    <Compile Update="Data\BoxingCache.boxedvalues.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BoxingCache.boxedvalues.tt</DependentUpon>
+    </Compile>
+    
     <None Update="Data\PropertyBags\PropertyBag.boxing.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>PropertyBag.boxing.cs</LastGenOutput>
