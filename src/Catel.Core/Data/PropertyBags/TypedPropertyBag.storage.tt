@@ -127,7 +127,6 @@ foreach (TypeCode typeCode in typeCodes)
             Argument.IsNotNullOrWhitespace(nameof(name), name);
 
             var targetValue = typeof(TValue);
-
 <# 
 foreach (TypeCode typeCode in typeCodes) 
 {
@@ -138,6 +137,8 @@ foreach (TypeCode typeCode in typeCodes)
 #>
             if (targetValue == typeof(<#= typeCode.ToString() #>))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, <#= typeCode.ToString() #>);
                 var storage = Get<#= typeCode.ToString() #>Storage();
@@ -146,8 +147,6 @@ foreach (TypeCode typeCode in typeCodes)
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
 <#
@@ -156,6 +155,8 @@ foreach (TypeCode typeCode in typeCodes)
 
             // Fallback to object store
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, object);
                 var storage = GetObjectStorage();
@@ -164,8 +165,6 @@ foreach (TypeCode typeCode in typeCodes)
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
         }

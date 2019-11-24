@@ -466,9 +466,10 @@ namespace Catel.Data
             Argument.IsNotNullOrWhitespace(nameof(name), name);
 
             var targetValue = typeof(TValue);
-
             if (targetValue == typeof(Boolean))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, Boolean);
                 var storage = GetBooleanStorage();
@@ -477,12 +478,12 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
             if (targetValue == typeof(Char))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, Char);
                 var storage = GetCharStorage();
@@ -491,12 +492,12 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
             if (targetValue == typeof(SByte))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, SByte);
                 var storage = GetSByteStorage();
@@ -505,12 +506,12 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
             if (targetValue == typeof(Byte))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, Byte);
                 var storage = GetByteStorage();
@@ -519,12 +520,12 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
             if (targetValue == typeof(Int16))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, Int16);
                 var storage = GetInt16Storage();
@@ -533,12 +534,12 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
             if (targetValue == typeof(UInt16))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, UInt16);
                 var storage = GetUInt16Storage();
@@ -547,12 +548,12 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
             if (targetValue == typeof(Int32))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, Int32);
                 var storage = GetInt32Storage();
@@ -561,12 +562,12 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
             if (targetValue == typeof(UInt32))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, UInt32);
                 var storage = GetUInt32Storage();
@@ -575,12 +576,12 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
             if (targetValue == typeof(Int64))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, Int64);
                 var storage = GetInt64Storage();
@@ -589,12 +590,12 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
             if (targetValue == typeof(UInt64))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, UInt64);
                 var storage = GetUInt64Storage();
@@ -603,12 +604,12 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
             if (targetValue == typeof(Single))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, Single);
                 var storage = GetSingleStorage();
@@ -617,12 +618,12 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
             if (targetValue == typeof(Double))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, Double);
                 var storage = GetDoubleStorage();
@@ -631,12 +632,12 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
             if (targetValue == typeof(Decimal))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, Decimal);
                 var storage = GetDecimalStorage();
@@ -645,12 +646,12 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
             if (targetValue == typeof(DateTime))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, DateTime);
                 var storage = GetDateTimeStorage();
@@ -659,12 +660,12 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
             if (targetValue == typeof(String))
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, String);
                 var storage = GetStringStorage();
@@ -673,13 +674,13 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
 
             // Fallback to object store
             {
+                EnsureIntegrity(name, typeof(TValue));
+
                 var tr = __makeref(value);
                 var bagValue = __refvalue(tr, object);
                 var storage = GetObjectStorage();
@@ -688,8 +689,6 @@ namespace Catel.Data
                 {
                     storage[name] = bagValue;
                 }
-                
-                AddName(name);
                 return;
             }
         }
