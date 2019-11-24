@@ -12,7 +12,7 @@ namespace Catel.Data
 {
 	using System;
 
-	public static partial class BoxingHelper
+	public static partial class BoxingCache
 	{
         /// <summary>
         /// Converts the specified value into a cached boxed value in case of value type to decrease memory pressure after serialization.

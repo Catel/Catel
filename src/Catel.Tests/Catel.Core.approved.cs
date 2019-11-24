@@ -1550,6 +1550,7 @@ namespace Catel.Data
     public class PropertyBag : Catel.Data.PropertyBagBase
     {
         public PropertyBag() { }
+        public PropertyBag(System.Collections.Generic.IDictionary<string, object> propertyDictionary) { }
         public object this[string name] { get; set; }
         public override string[] GetAllNames() { }
         public System.Collections.Generic.Dictionary<string, object> GetAllProperties() { }

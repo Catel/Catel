@@ -20,7 +20,7 @@ namespace Catel.Data
         #region Fields
         private readonly object _lockObject = new object();
 
-        private readonly Dictionary<string, object> _properties = new Dictionary<string, object>();
+        private readonly IDictionary<string, object> _properties;
         #endregion
 
         #region Constructors
@@ -28,7 +28,19 @@ namespace Catel.Data
         /// Initializes a new instance of the <see cref="PropertyBag"/> class.
         /// </summary>
         public PropertyBag()
+            : this(new Dictionary<string, object>())
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PropertyBag"/> class.
+        /// </summary>
+        /// <param name="propertyDictionary">The property dictionary.</param>
+        public PropertyBag(IDictionary<string, object> propertyDictionary)
+        {
+            Argument.IsNotNull(() => propertyDictionary);
+
+            _properties = propertyDictionary;
         }
         #endregion
 

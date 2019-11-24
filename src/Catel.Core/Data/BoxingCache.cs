@@ -14,7 +14,7 @@ namespace Catel.Data
     /// <summary>
     /// Boxing cache helper.
     /// </summary>
-    public static class BoxingCache
+    public static partial class BoxingCache
     {
         // Partial class, see T4 template
     }
