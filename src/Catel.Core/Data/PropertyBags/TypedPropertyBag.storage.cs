@@ -465,8 +465,14 @@ namespace Catel.Data
         {
             Argument.IsNotNullOrWhitespace(nameof(name), name);
 
+            var raisePropertyChanged = false;
+
             var targetValue = typeof(TValue);
-            if (targetValue == typeof(Boolean))
+            if (false) 
+            {
+                // dummy code to enable switches
+            }
+            else if (targetValue == typeof(Boolean))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -476,11 +482,14 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
-            if (targetValue == typeof(Char))
+            else if (targetValue == typeof(Char))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -490,11 +499,14 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
-            if (targetValue == typeof(SByte))
+            else if (targetValue == typeof(SByte))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -504,11 +516,14 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
-            if (targetValue == typeof(Byte))
+            else if (targetValue == typeof(Byte))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -518,11 +533,14 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
-            if (targetValue == typeof(Int16))
+            else if (targetValue == typeof(Int16))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -532,11 +550,14 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
-            if (targetValue == typeof(UInt16))
+            else if (targetValue == typeof(UInt16))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -546,11 +567,14 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
-            if (targetValue == typeof(Int32))
+            else if (targetValue == typeof(Int32))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -560,11 +584,14 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
-            if (targetValue == typeof(UInt32))
+            else if (targetValue == typeof(UInt32))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -574,11 +601,14 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
-            if (targetValue == typeof(Int64))
+            else if (targetValue == typeof(Int64))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -588,11 +618,14 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
-            if (targetValue == typeof(UInt64))
+            else if (targetValue == typeof(UInt64))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -602,11 +635,14 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
-            if (targetValue == typeof(Single))
+            else if (targetValue == typeof(Single))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -616,11 +652,14 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
-            if (targetValue == typeof(Double))
+            else if (targetValue == typeof(Double))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -630,11 +669,14 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
-            if (targetValue == typeof(Decimal))
+            else if (targetValue == typeof(Decimal))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -644,11 +686,14 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
-            if (targetValue == typeof(DateTime))
+            else if (targetValue == typeof(DateTime))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -658,11 +703,14 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
-            if (targetValue == typeof(String))
+            else if (targetValue == typeof(String))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -672,12 +720,16 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
 
             // Fallback to object store
+            else 
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -687,9 +739,17 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, bagValue))
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
+            }
+
+            if (raisePropertyChanged)
+            {
+                RaisePropertyChanged(name);
             }
         }
     }

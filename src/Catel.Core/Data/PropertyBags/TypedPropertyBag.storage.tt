@@ -126,7 +126,13 @@ foreach (TypeCode typeCode in typeCodes)
         {
             Argument.IsNotNullOrWhitespace(nameof(name), name);
 
+            var raisePropertyChanged = false;
+
             var targetValue = typeof(TValue);
+            if (false) 
+            {
+                // dummy code to enable switches
+            }
 <# 
 foreach (TypeCode typeCode in typeCodes) 
 {
@@ -135,7 +141,7 @@ foreach (TypeCode typeCode in typeCodes)
 		continue;
 	}
 #>
-            if (targetValue == typeof(<#= typeCode.ToString() #>))
+            else if (targetValue == typeof(<#= typeCode.ToString() #>))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -145,15 +151,19 @@ foreach (TypeCode typeCode in typeCodes)
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || propertyValue != bagValue)
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
             }
 <#
 }
 #>
 
             // Fallback to object store
+            else 
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -163,9 +173,17 @@ foreach (TypeCode typeCode in typeCodes)
 
                 lock (storage)
                 {
-                    storage[name] = bagValue;
+                    if (!storage.TryGetValue(name, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, bagValue))
+                    {
+                        storage[name] = bagValue;
+                        raisePropertyChanged = true;
+                    }
                 }
-                return;
+            }
+
+            if (raisePropertyChanged)
+            {
+                RaisePropertyChanged(name);
             }
         }
     }

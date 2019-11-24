@@ -147,6 +147,50 @@ namespace Catel.Tests.Data
                 _propertyBag.SetValue("StringProperty", "B");
                 Assert.AreEqual("B", _propertyBag.GetValue<string>("StringProperty"));
             }
+
+            [TestCase]
+            public void RaisesChangeNotificationForDifferentPropertyValues()
+            {
+                var eventCount = 0;
+
+                _propertyBag.PropertyChanged += (sender, e) =>
+                {
+                    if (e.PropertyName == "ChangeNotificationTest")
+                    {
+                        eventCount++;
+                    }
+                };
+
+                _propertyBag.SetValue("ChangeNotificationTest", "ABC");
+
+                Assert.AreEqual(1, eventCount);
+
+                _propertyBag.SetValue("ChangeNotificationTest", "DEF");
+
+                Assert.AreEqual(2, eventCount);
+            }
+
+            [TestCase]
+            public void DoesNotRaiseChangeNotificationForSamePropertyValues()
+            {
+                var eventCount = 0;
+
+                _propertyBag.PropertyChanged += (sender, e) =>
+                {
+                    if (e.PropertyName == "ChangeNotificationTest2")
+                    {
+                        eventCount++;
+                    }
+                };
+
+                _propertyBag.SetValue("ChangeNotificationTest2", "ABC");
+
+                Assert.AreEqual(1, eventCount);
+
+                _propertyBag.SetValue("ChangeNotificationTest2", "ABC");
+
+                Assert.AreEqual(1, eventCount);
+            }
         }
     }
 }
