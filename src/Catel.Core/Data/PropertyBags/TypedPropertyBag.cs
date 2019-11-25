@@ -35,6 +35,19 @@
             }
         }
 
+        private Type GetRegisteredPropertyType(string name)
+        {
+            lock (_propertyTypes)
+            {
+                if (_propertyTypes.TryGetValue(name, out var existingType))
+                {
+                    return existingType;
+                }
+            }
+
+            return null;
+        }
+
         private void EnsureIntegrity(string name, Type type)
         {
             lock (_propertyTypes)

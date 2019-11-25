@@ -21,12 +21,23 @@
         //}
 
         [TestCase]
-        public void PreventsRegistrationWithDifferent()
+        public void PreventsRegistrationWithDifferentTypes()
         {
             var propertyBag = new TypedPropertyBag();
 
             propertyBag.SetValue("Int", 42);
             ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => propertyBag.SetValue("Int", new object()));
+        }
+
+        [TestCase]
+        public void AutomaticallyCastsObjectsToRightTypesIfPossible()
+        {
+            var propertyBag = new TypedPropertyBag();
+
+            propertyBag.SetValue("Int", 42);
+            propertyBag.SetValue("Int", (object)52);
+
+            Assert.AreEqual(52, propertyBag.GetValue("Int", 0));
         }
     }
 }

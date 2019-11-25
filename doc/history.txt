@@ -45,6 +45,7 @@ Added/fixed
 (*) #1467 Update ThemeInfo theme specific resource dictionary to None
 (*) #1473 Support serialization of manually registered properties on DynamicConfiguration
 (*) #1490 Update minimum target version for UAP to 10.0.16299
+(*) #1491 Use TypedPropertyBag instead of PropertyBag by default in ModelBase
 (x) #1408 Logging in TypeFactory uses wrong parameter name
 (x) #1434 Serialization should respect graph ids when deserializing collections
 (x) #1453 FileSupport => SaveFileService & OpenFileService: Bug if InitialDirectory does not exist

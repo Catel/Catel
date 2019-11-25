@@ -1,6 +1,7 @@
 ﻿namespace Catel.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
 
     /// <summary>
@@ -31,12 +32,18 @@
         /// <param name="name">Name of the property.</param>
         /// <returns><c>true</c> if the property is available; otherwise, <c>false</c>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
-        public bool IsAvailable(string name);
+        bool IsAvailable(string name);
 
         /// <summary>
         /// Gets all the available property names in the property bag.
         /// </summary>
         /// <returns>An array of property names.</returns>
-        public string[] GetAllNames();
+        string[] GetAllNames();
+
+        /// <summary>
+        /// Gets all the properties and their values that are registered in this property bag.
+        /// </summary>
+        /// <returns>A dictionary containing all the properties and their values.</returns>
+        Dictionary<string, object> GetAllProperties();
     }
 }

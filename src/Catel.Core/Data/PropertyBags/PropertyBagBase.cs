@@ -25,6 +25,8 @@
 
         public abstract void SetValue<TValue>(string name, TValue value);
 
+        public abstract Dictionary<string, object> GetAllProperties();
+
         /// <summary>
         /// Raises the property changed notification event for the specified property.
         /// </summary>

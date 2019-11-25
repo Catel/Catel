@@ -101,7 +101,7 @@ namespace Catel.Data
         /// Gets all the currently available properties in the property bag.
         /// </summary>
         /// <returns>A list of all property names and values.</returns>
-        public Dictionary<string, object> GetAllProperties()
+        public override Dictionary<string, object> GetAllProperties()
         {
             lock (_lockObject)
             {

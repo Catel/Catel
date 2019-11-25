@@ -1069,6 +1069,21 @@ namespace Catel.Data
     }
     public class static BoxingCache
     {
+        public static object GetBoxedValue(bool value) { }
+        public static object GetBoxedValue(char value) { }
+        public static object GetBoxedValue(sbyte value) { }
+        public static object GetBoxedValue(byte value) { }
+        public static object GetBoxedValue(short value) { }
+        public static object GetBoxedValue(ushort value) { }
+        public static object GetBoxedValue(int value) { }
+        public static object GetBoxedValue(uint value) { }
+        public static object GetBoxedValue(long value) { }
+        public static object GetBoxedValue(ulong value) { }
+        public static object GetBoxedValue(float value) { }
+        public static object GetBoxedValue(double value) { }
+        public static object GetBoxedValue(decimal value) { }
+        public static object GetBoxedValue(System.DateTime value) { }
+        public static object GetBoxedValue(string value) { }
         public static object GetBoxedValue(object value) { }
     }
     public class BoxingCache<T>
@@ -1272,6 +1287,7 @@ namespace Catel.Data
     public interface IPropertyBag : System.ComponentModel.INotifyPropertyChanged
     {
         string[] GetAllNames();
+        System.Collections.Generic.Dictionary<string, object> GetAllProperties();
         TValue GetValue<TValue>(string name, TValue defaultValue = null);
         bool IsAvailable(string name);
         void SetValue<TValue>(string name, TValue value);
@@ -1458,6 +1474,7 @@ namespace Catel.Data
         public event System.EventHandler<System.EventArgs> _cancelEditingCompletedEvent;
         public event System.EventHandler<System.ComponentModel.CancelEditEventArgs> _cancelEditingEvent;
         public event System.EventHandler<System.ComponentModel.EndEditEventArgs> _endEditingEvent;
+        protected virtual Catel.Data.IPropertyBag CreatePropertyBag() { }
         [System.Security.SecurityCriticalAttribute()]
         public virtual void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         protected static object GetObjectValue<TValue>(TValue value) { }
@@ -1553,7 +1570,7 @@ namespace Catel.Data
         public PropertyBag(System.Collections.Generic.IDictionary<string, object> propertyDictionary) { }
         public object this[string name] { get; set; }
         public override string[] GetAllNames() { }
-        public System.Collections.Generic.Dictionary<string, object> GetAllProperties() { }
+        public override System.Collections.Generic.Dictionary<string, object> GetAllProperties() { }
         [System.ObsoleteAttribute("Use `GetValue<TValue>` instead. Will be treated as an error from version 5.13.0. " +
             "Will be removed in version 6.0.0.", false)]
         public TValue GetPropertyValue<TValue>(string propertyName) { }
@@ -1592,6 +1609,7 @@ namespace Catel.Data
         protected PropertyBagBase() { }
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         public abstract string[] GetAllNames();
+        public abstract System.Collections.Generic.Dictionary<string, object> GetAllProperties();
         public abstract TValue GetValue<TValue>(string name, TValue defaultValue = null);
         public abstract bool IsAvailable(string name);
         protected void RaisePropertyChanged(string propertyName) { }
@@ -1695,6 +1713,7 @@ namespace Catel.Data
     {
         public TypedPropertyBag() { }
         public override string[] GetAllNames() { }
+        public override System.Collections.Generic.Dictionary<string, object> GetAllProperties() { }
         protected System.Collections.Generic.Dictionary<string, bool> GetBooleanStorage() { }
         protected System.Collections.Generic.Dictionary<string, byte> GetByteStorage() { }
         protected System.Collections.Generic.Dictionary<string, char> GetCharStorage() { }

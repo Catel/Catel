@@ -23,6 +23,27 @@ namespace Catel.Data
 
 	public static partial class BoxingCache
 	{
+<# 
+foreach (TypeCode typeCode in typeCodes) 
+{
+	if (typeCode == TypeCode.Empty || typeCode == TypeCode.DBNull || typeCode == TypeCode.Object)
+	{
+		continue;
+	}
+#>
+        /// <summary>
+        /// Converts the specified <#= typeCode.ToString() #> value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>An object representing the value.</returns>
+        public static object GetBoxedValue(<#= typeCode.ToString() #> value)
+        {
+            return BoxingCache<<#= typeCode.ToString() #>>.Default.GetBoxedValue(value);
+        }
+
+<#
+}
+#>
         /// <summary>
         /// Converts the specified value into a cached boxed value in case of value type to decrease memory pressure after serialization.
         /// </summary>

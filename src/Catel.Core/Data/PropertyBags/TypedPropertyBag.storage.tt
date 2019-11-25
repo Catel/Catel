@@ -23,6 +23,7 @@ namespace Catel.Data
     using System;
     using System.Linq;
     using System.Collections.Generic;
+    using Catel.Logging;
     using Catel.Reflection;
 
     public partial class TypedPropertyBag
@@ -36,7 +37,7 @@ foreach (TypeCode typeCode in typeCodes)
 	}
 
     string storageType = "Dictionary<string, " + typeCode.ToString() + ">";
-	string storageName = "_" + typeCode.ToString().ToLowerInvariant() + "SettersCache";
+	string storageName = "_" + typeCode.ToString().ToLowerInvariant() + "Storage";
 
 #>
         private <#= storageType #> <#= storageName #>;
@@ -53,7 +54,7 @@ foreach (TypeCode typeCode in typeCodes)
 	}
 
     string storageType = "Dictionary<string, " + typeCode.ToString() + ">";
-	string storageName = "_" + typeCode.ToString().ToLowerInvariant() + "SettersCache";
+	string storageName = "_" + typeCode.ToString().ToLowerInvariant() + "Storage";
 
 #>
         protected <#= storageType #> Get<#= typeCode.ToString() #>Storage()
@@ -74,7 +75,17 @@ foreach (TypeCode typeCode in typeCodes)
         {
             Argument.IsNotNullOrWhitespace(nameof(name), name);
 
-            var targetValue = typeof(TValue);
+            // Get from the right dictionary and see if we need to convert to TValue
+            var propertyType = GetRegisteredPropertyType(name);
+            if (propertyType is null)
+            {
+                // Not registered!
+                return defaultValue;
+            }
+
+            var targetType = typeof(TValue);
+
+            // TODO: Get from right dictionary and cast / convert if needed
 
 <# 
 foreach (TypeCode typeCode in typeCodes) 
@@ -84,7 +95,7 @@ foreach (TypeCode typeCode in typeCodes)
 		continue;
 	}
 #>
-            if (targetValue == typeof(<#= typeCode.ToString() #>))
+            if (targetType == typeof(<#= typeCode.ToString() #>))
             {
                 var storage = Get<#= typeCode.ToString() #>Storage();
 
@@ -126,12 +137,57 @@ foreach (TypeCode typeCode in typeCodes)
         {
             Argument.IsNotNullOrWhitespace(nameof(name), name);
 
+            var stored = false;
             var raisePropertyChanged = false;
 
-            var targetValue = typeof(TValue);
-            if (false) 
+            var targetType = typeof(TValue);
+            if (typeof(TValue) == typeof(object)) 
             {
-                // dummy code to enable switches
+                // Fastest path, if users use SetValue<object>(), we might need to convert
+                var propertyType = GetRegisteredPropertyType(name);
+                if (propertyType is null)
+                {
+                    // Just store as object
+                    EnsureIntegrity(name, typeof(TValue));
+
+                    var tr = __makeref(value);
+                    var bagValue = __refvalue(tr, object);
+                    var storage = GetObjectStorage();
+
+                    lock (storage)
+                    {
+                        if (!storage.TryGetValue(name, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, bagValue))
+                        {
+                            storage[name] = bagValue;
+                            raisePropertyChanged = true;
+                        }
+                    }
+
+                    stored = true;
+                }
+                else
+                {
+                    // Slowest path, we need to cast and store in the right dictionary
+<# 
+foreach (TypeCode typeCode in typeCodes) 
+{
+	if (typeCode == TypeCode.Empty || typeCode == TypeCode.DBNull || typeCode == TypeCode.Object)
+	{
+		continue;
+	}
+#>
+                    if (propertyType == typeof(<#= typeCode.ToString() #>))
+                    {
+                        var castValue = (<#= typeCode.ToString() #>)(object)value;
+                        SetValue<<#= typeCode.ToString() #>>(name, castValue);
+                        return;
+                    }
+
+<#
+}
+#>
+                    throw Log.ErrorAndCreateException<NotSupportedException>($"Property '{name}' is set as '{targetType.FullName}' but was registered as '{propertyType.FullName}' and cannot be casted / converted automatically");
+                }
             }
 <# 
 foreach (TypeCode typeCode in typeCodes) 
@@ -141,7 +197,7 @@ foreach (TypeCode typeCode in typeCodes)
 		continue;
 	}
 #>
-            else if (targetValue == typeof(<#= typeCode.ToString() #>))
+            if (!stored && targetType == typeof(<#= typeCode.ToString() #>))
             {
                 EnsureIntegrity(name, typeof(TValue));
 
@@ -157,34 +213,59 @@ foreach (TypeCode typeCode in typeCodes)
                         raisePropertyChanged = true;
                     }
                 }
+
+                stored = true;
             }
+
 <#
 }
 #>
-
-            // Fallback to object store
-            else 
-            {
-                EnsureIntegrity(name, typeof(TValue));
-
-                var tr = __makeref(value);
-                var bagValue = __refvalue(tr, object);
-                var storage = GetObjectStorage();
-
-                lock (storage)
-                {
-                    if (!storage.TryGetValue(name, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, bagValue))
-                    {
-                        storage[name] = bagValue;
-                        raisePropertyChanged = true;
-                    }
-                }
-            }
 
             if (raisePropertyChanged)
             {
                 RaisePropertyChanged(name);
             }
+        }
+
+        public override Dictionary<string, object> GetAllProperties()
+        {
+            var values = new Dictionary<string, object>();
+
+            // Note: don't use methods, we don't want to lazy-instantiate the storage
+<# 
+foreach (TypeCode typeCode in typeCodes) 
+{
+	if (typeCode == TypeCode.Empty || typeCode == TypeCode.DBNull || typeCode == TypeCode.Object)
+	{
+		continue;
+	}
+
+    var storageName = typeCode.ToString().ToLowerInvariant() + "Storage";
+#>
+            var <#= storageName #> = _<#= storageName #>;
+            if (<#= storageName #> != null)
+            {
+                 // Unfortunately we have to box to object here...
+                 foreach (var propertyPair in <#= storageName #>)
+                 {
+                     values[propertyPair.Key] = BoxingCache.GetBoxedValue(propertyPair.Value);
+                 }
+            }
+
+<#
+}
+#>
+
+            var objectStorage = _objectStorage;
+            if (objectStorage != null)
+            {
+                foreach (var propertyPair in objectStorage)
+                {
+                    values[propertyPair.Key] = propertyPair.Value;
+                }
+            }
+
+            return values;
         }
     }
 }
