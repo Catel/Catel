@@ -40,10 +40,9 @@ foreach (TypeCode typeCode in typeCodes)
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<<#= typeCode #>>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else

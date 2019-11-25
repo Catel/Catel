@@ -22,10 +22,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<Object>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
@@ -41,10 +40,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<Boolean>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
@@ -60,10 +58,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<Char>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
@@ -79,10 +76,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<SByte>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
@@ -98,10 +94,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<Byte>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
@@ -117,10 +112,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<Int16>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
@@ -136,10 +130,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<UInt16>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
@@ -155,10 +148,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<Int32>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
@@ -174,10 +166,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<UInt32>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
@@ -193,10 +184,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<Int64>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
@@ -212,10 +202,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<UInt64>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
@@ -231,10 +220,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<Single>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
@@ -250,10 +238,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<Double>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
@@ -269,10 +256,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<Decimal>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
@@ -288,10 +274,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<DateTime>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
@@ -307,10 +292,9 @@ namespace Catel.Reflection
 
                 if (TryGetPropertyValue((TEntity)entity, propertyName, out localValue))
                 {
-                    // Note: very unfortunate that we can't directly cast, we need to cast to object, then to the right TValue
-                    var boxedValue = BoxingCache<String>.Default.GetBoxedValue(localValue);
-
-                    value = (TValue)boxedValue;
+                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
+                    var tr = __makeref(localValue);
+                    value = __refvalue(tr, TValue);
                     return true;
                 }
                 else
