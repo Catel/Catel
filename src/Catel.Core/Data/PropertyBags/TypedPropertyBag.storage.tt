@@ -85,8 +85,6 @@ foreach (TypeCode typeCode in typeCodes)
 
             var targetType = typeof(TValue);
 
-            // TODO: Get from right dictionary and cast / convert if needed
-
 <# 
 foreach (TypeCode typeCode in typeCodes) 
 {
@@ -103,6 +101,7 @@ foreach (TypeCode typeCode in typeCodes)
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -111,6 +110,7 @@ foreach (TypeCode typeCode in typeCodes)
 
                 return default;
             }
+
 <#
 }
 #>
@@ -123,9 +123,10 @@ foreach (TypeCode typeCode in typeCodes)
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        var tr = __makeref(bagValue);
-                        var value = __refvalue(tr, TValue);
-                        return value;
+                        // Simply cast
+                        //var tr = __makeref(bagValue);
+                        //var value = __refvalue(tr, TValue);
+                        return (TValue)bagValue;
                     }
                 }
 
@@ -143,30 +144,15 @@ foreach (TypeCode typeCode in typeCodes)
             var targetType = typeof(TValue);
             if (typeof(TValue) == typeof(object)) 
             {
-                // Fastest path, if users use SetValue<object>(), we might need to convert
+                // If users use SetValue<object>(), we might need to convert
                 var propertyType = GetRegisteredPropertyType(name);
-                if (propertyType is null)
+                if (propertyType != null)
                 {
-                    // Just store as object
-                    EnsureIntegrity(name, typeof(TValue));
-
-                    var tr = __makeref(value);
-                    var bagValue = __refvalue(tr, object);
-                    var storage = GetObjectStorage();
-
-                    lock (storage)
+                    if (propertyType.IsValueTypeEx() && value is null)
                     {
-                        if (!storage.TryGetValue(name, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, bagValue))
-                        {
-                            storage[name] = bagValue;
-                            raisePropertyChanged = true;
-                        }
+                        throw Log.ErrorAndCreateException<InvalidOperationException>($"Property '{name}' cannot be updated with a null value since it represents a value of '{propertyType.FullName}'");
                     }
 
-                    stored = true;
-                }
-                else
-                {
                     // Slowest path, we need to cast and store in the right dictionary
 <# 
 foreach (TypeCode typeCode in typeCodes) 
@@ -178,15 +164,18 @@ foreach (TypeCode typeCode in typeCodes)
 #>
                     if (propertyType == typeof(<#= typeCode.ToString() #>))
                     {
+                        //if (value is <#= typeCode.ToString() #> typedValue)
+                        //{
                         var castValue = (<#= typeCode.ToString() #>)(object)value;
                         SetValue<<#= typeCode.ToString() #>>(name, castValue);
                         return;
+                        //}
                     }
 
 <#
 }
 #>
-                    throw Log.ErrorAndCreateException<NotSupportedException>($"Property '{name}' is set as '{targetType.FullName}' but was registered as '{propertyType.FullName}' and cannot be casted / converted automatically");
+                    // Fallback to object storage
                 }
             }
 <# 
@@ -220,6 +209,28 @@ foreach (TypeCode typeCode in typeCodes)
 <#
 }
 #>
+
+            if (!stored)
+            {
+                // Just store as object (and check integrity as object)
+                EnsureIntegrity(name, typeof(object));
+
+                // No need for special casting, just store as object
+                //var tr = __makeref(value);
+                //var bagValue = __refvalue(tr, object);
+                var storage = GetObjectStorage();
+
+                lock (storage)
+                {
+                    if (!storage.TryGetValue(name, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, value))
+                    {
+                        storage[name] = value;
+                        raisePropertyChanged = true;
+                    }
+                }
+
+                stored = true;
+            }
 
             if (raisePropertyChanged)
             {

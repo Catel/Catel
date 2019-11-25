@@ -121,7 +121,7 @@ namespace Catel.Tests.Data
         [TestFixture(typeof(PropertyBag))]
         [TestFixture(typeof(TypedPropertyBag))]
         public class TheSetValueMethod<TPropertyBag>
-            where TPropertyBag : PropertyBag, new()
+            where TPropertyBag : IPropertyBag, new()
         {
             private IPropertyBag _propertyBag;
 

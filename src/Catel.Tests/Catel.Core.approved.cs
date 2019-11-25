@@ -1146,7 +1146,7 @@ namespace Catel.Data
         protected virtual void OnPropertyObjectCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) { }
         protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
         protected virtual void OnPropertyObjectPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
-        protected override void SetValueToPropertyBag(string propertyName, object value) { }
+        protected override void SetValueToPropertyBag<TValue>(string propertyName, TValue value) { }
     }
     public abstract class ComparableModelBase : Catel.Data.ModelBase
     {

@@ -103,7 +103,7 @@ namespace Catel.Data
         /// <returns>The <see cref="IPropertyBag"/> to be used by this object.</returns>
         protected virtual IPropertyBag CreatePropertyBag()
         {
-            return new TypedPropertyBag();
+            return new PropertyBag();
         }
 
         /// <summary>
@@ -203,10 +203,7 @@ namespace Catel.Data
         [ObsoleteEx(ReplacementTypeOrMember = "SetValueToPropertyBag<TValue>(string, TValue)", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         protected virtual void SetValueToPropertyBag(string propertyName, object value)
         {
-            lock (_lock)
-            {
-                _propertyBag.SetValue(propertyName, value);
-            }
+            SetValueToPropertyBag<object>(propertyName, value);
         }
 
         /// <summary>

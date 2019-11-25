@@ -211,8 +211,6 @@ namespace Catel.Data
 
             var targetType = typeof(TValue);
 
-            // TODO: Get from right dictionary and cast / convert if needed
-
             if (targetType == typeof(Boolean))
             {
                 var storage = GetBooleanStorage();
@@ -221,6 +219,7 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -229,6 +228,7 @@ namespace Catel.Data
 
                 return default;
             }
+
             if (targetType == typeof(Char))
             {
                 var storage = GetCharStorage();
@@ -237,6 +237,7 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -245,6 +246,7 @@ namespace Catel.Data
 
                 return default;
             }
+
             if (targetType == typeof(SByte))
             {
                 var storage = GetSByteStorage();
@@ -253,6 +255,7 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -261,6 +264,7 @@ namespace Catel.Data
 
                 return default;
             }
+
             if (targetType == typeof(Byte))
             {
                 var storage = GetByteStorage();
@@ -269,6 +273,7 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -277,6 +282,7 @@ namespace Catel.Data
 
                 return default;
             }
+
             if (targetType == typeof(Int16))
             {
                 var storage = GetInt16Storage();
@@ -285,6 +291,7 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -293,6 +300,7 @@ namespace Catel.Data
 
                 return default;
             }
+
             if (targetType == typeof(UInt16))
             {
                 var storage = GetUInt16Storage();
@@ -301,6 +309,7 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -309,6 +318,7 @@ namespace Catel.Data
 
                 return default;
             }
+
             if (targetType == typeof(Int32))
             {
                 var storage = GetInt32Storage();
@@ -317,6 +327,7 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -325,6 +336,7 @@ namespace Catel.Data
 
                 return default;
             }
+
             if (targetType == typeof(UInt32))
             {
                 var storage = GetUInt32Storage();
@@ -333,6 +345,7 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -341,6 +354,7 @@ namespace Catel.Data
 
                 return default;
             }
+
             if (targetType == typeof(Int64))
             {
                 var storage = GetInt64Storage();
@@ -349,6 +363,7 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -357,6 +372,7 @@ namespace Catel.Data
 
                 return default;
             }
+
             if (targetType == typeof(UInt64))
             {
                 var storage = GetUInt64Storage();
@@ -365,6 +381,7 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -373,6 +390,7 @@ namespace Catel.Data
 
                 return default;
             }
+
             if (targetType == typeof(Single))
             {
                 var storage = GetSingleStorage();
@@ -381,6 +399,7 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -389,6 +408,7 @@ namespace Catel.Data
 
                 return default;
             }
+
             if (targetType == typeof(Double))
             {
                 var storage = GetDoubleStorage();
@@ -397,6 +417,7 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -405,6 +426,7 @@ namespace Catel.Data
 
                 return default;
             }
+
             if (targetType == typeof(Decimal))
             {
                 var storage = GetDecimalStorage();
@@ -413,6 +435,7 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -421,6 +444,7 @@ namespace Catel.Data
 
                 return default;
             }
+
             if (targetType == typeof(DateTime))
             {
                 var storage = GetDateTimeStorage();
@@ -429,6 +453,7 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -437,6 +462,7 @@ namespace Catel.Data
 
                 return default;
             }
+
             if (targetType == typeof(String))
             {
                 var storage = GetStringStorage();
@@ -445,6 +471,7 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
+                        // Simply cast
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
                         return value;
@@ -453,6 +480,7 @@ namespace Catel.Data
 
                 return default;
             }
+
 
             // Fallback to object store
             {
@@ -462,9 +490,10 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        var tr = __makeref(bagValue);
-                        var value = __refvalue(tr, TValue);
-                        return value;
+                        // Simply cast
+                        //var tr = __makeref(bagValue);
+                        //var value = __refvalue(tr, TValue);
+                        return (TValue)bagValue;
                     }
                 }
 
@@ -482,137 +511,167 @@ namespace Catel.Data
             var targetType = typeof(TValue);
             if (typeof(TValue) == typeof(object)) 
             {
-                // Fastest path, if users use SetValue<object>(), we might need to convert
+                // If users use SetValue<object>(), we might need to convert
                 var propertyType = GetRegisteredPropertyType(name);
-                if (propertyType is null)
+                if (propertyType != null)
                 {
-                    // Just store as object
-                    EnsureIntegrity(name, typeof(TValue));
-
-                    var tr = __makeref(value);
-                    var bagValue = __refvalue(tr, object);
-                    var storage = GetObjectStorage();
-
-                    lock (storage)
+                    if (propertyType.IsValueTypeEx() && value is null)
                     {
-                        if (!storage.TryGetValue(name, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, bagValue))
-                        {
-                            storage[name] = bagValue;
-                            raisePropertyChanged = true;
-                        }
+                        throw Log.ErrorAndCreateException<InvalidOperationException>($"Property '{name}' cannot be updated with a null value since it represents a value of '{propertyType.FullName}'");
                     }
 
-                    stored = true;
-                }
-                else
-                {
                     // Slowest path, we need to cast and store in the right dictionary
                     if (propertyType == typeof(Boolean))
                     {
+                        //if (value is Boolean typedValue)
+                        //{
                         var castValue = (Boolean)(object)value;
                         SetValue<Boolean>(name, castValue);
                         return;
+                        //}
                     }
 
                     if (propertyType == typeof(Char))
                     {
+                        //if (value is Char typedValue)
+                        //{
                         var castValue = (Char)(object)value;
                         SetValue<Char>(name, castValue);
                         return;
+                        //}
                     }
 
                     if (propertyType == typeof(SByte))
                     {
+                        //if (value is SByte typedValue)
+                        //{
                         var castValue = (SByte)(object)value;
                         SetValue<SByte>(name, castValue);
                         return;
+                        //}
                     }
 
                     if (propertyType == typeof(Byte))
                     {
+                        //if (value is Byte typedValue)
+                        //{
                         var castValue = (Byte)(object)value;
                         SetValue<Byte>(name, castValue);
                         return;
+                        //}
                     }
 
                     if (propertyType == typeof(Int16))
                     {
+                        //if (value is Int16 typedValue)
+                        //{
                         var castValue = (Int16)(object)value;
                         SetValue<Int16>(name, castValue);
                         return;
+                        //}
                     }
 
                     if (propertyType == typeof(UInt16))
                     {
+                        //if (value is UInt16 typedValue)
+                        //{
                         var castValue = (UInt16)(object)value;
                         SetValue<UInt16>(name, castValue);
                         return;
+                        //}
                     }
 
                     if (propertyType == typeof(Int32))
                     {
+                        //if (value is Int32 typedValue)
+                        //{
                         var castValue = (Int32)(object)value;
                         SetValue<Int32>(name, castValue);
                         return;
+                        //}
                     }
 
                     if (propertyType == typeof(UInt32))
                     {
+                        //if (value is UInt32 typedValue)
+                        //{
                         var castValue = (UInt32)(object)value;
                         SetValue<UInt32>(name, castValue);
                         return;
+                        //}
                     }
 
                     if (propertyType == typeof(Int64))
                     {
+                        //if (value is Int64 typedValue)
+                        //{
                         var castValue = (Int64)(object)value;
                         SetValue<Int64>(name, castValue);
                         return;
+                        //}
                     }
 
                     if (propertyType == typeof(UInt64))
                     {
+                        //if (value is UInt64 typedValue)
+                        //{
                         var castValue = (UInt64)(object)value;
                         SetValue<UInt64>(name, castValue);
                         return;
+                        //}
                     }
 
                     if (propertyType == typeof(Single))
                     {
+                        //if (value is Single typedValue)
+                        //{
                         var castValue = (Single)(object)value;
                         SetValue<Single>(name, castValue);
                         return;
+                        //}
                     }
 
                     if (propertyType == typeof(Double))
                     {
+                        //if (value is Double typedValue)
+                        //{
                         var castValue = (Double)(object)value;
                         SetValue<Double>(name, castValue);
                         return;
+                        //}
                     }
 
                     if (propertyType == typeof(Decimal))
                     {
+                        //if (value is Decimal typedValue)
+                        //{
                         var castValue = (Decimal)(object)value;
                         SetValue<Decimal>(name, castValue);
                         return;
+                        //}
                     }
 
                     if (propertyType == typeof(DateTime))
                     {
+                        //if (value is DateTime typedValue)
+                        //{
                         var castValue = (DateTime)(object)value;
                         SetValue<DateTime>(name, castValue);
                         return;
+                        //}
                     }
 
                     if (propertyType == typeof(String))
                     {
+                        //if (value is String typedValue)
+                        //{
                         var castValue = (String)(object)value;
                         SetValue<String>(name, castValue);
                         return;
+                        //}
                     }
 
-                    throw Log.ErrorAndCreateException<NotSupportedException>($"Property '{name}' is set as '{targetType.FullName}' but was registered as '{propertyType.FullName}' and cannot be casted / converted automatically");
+                    // Fallback to object storage
                 }
             }
             if (!stored && targetType == typeof(Boolean))
@@ -915,6 +974,28 @@ namespace Catel.Data
                 stored = true;
             }
 
+
+            if (!stored)
+            {
+                // Just store as object (and check integrity as object)
+                EnsureIntegrity(name, typeof(object));
+
+                // No need for special casting, just store as object
+                //var tr = __makeref(value);
+                //var bagValue = __refvalue(tr, object);
+                var storage = GetObjectStorage();
+
+                lock (storage)
+                {
+                    if (!storage.TryGetValue(name, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, value))
+                    {
+                        storage[name] = value;
+                        raisePropertyChanged = true;
+                    }
+                }
+
+                stored = true;
+            }
 
             if (raisePropertyChanged)
             {

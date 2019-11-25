@@ -104,9 +104,9 @@ namespace Catel.Data
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
-        protected override void SetValueToPropertyBag(string propertyName, object value)
+        protected override void SetValueToPropertyBag<TValue>(string propertyName, TValue value)
         {
-            base.SetValueToPropertyBag(propertyName, value);
+            base.SetValueToPropertyBag<TValue>(propertyName, value);
 
             HandleObjectEventsSubscription(propertyName, value);
         }

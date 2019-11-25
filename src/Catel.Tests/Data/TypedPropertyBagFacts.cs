@@ -21,12 +21,30 @@
         //}
 
         [TestCase]
-        public void PreventsRegistrationWithDifferentTypes()
+        public void PreventsRegistrationWithNullValue()
         {
             var propertyBag = new TypedPropertyBag();
 
             propertyBag.SetValue("Int", 42);
-            ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => propertyBag.SetValue("Int", new object()));
+            ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => propertyBag.SetValue("Int", (object)null));
+        }
+
+        [TestCase]
+        public void PreventsRegistrationWithDifferentTypes_1()
+        {
+            var propertyBag = new TypedPropertyBag();
+
+            propertyBag.SetValue("Int", 42);
+            ExceptionTester.CallMethodAndExpectException<InvalidCastException>(() => propertyBag.SetValue("Int", (object)true));
+        }
+
+        [TestCase]
+        public void PreventsRegistrationWithDifferentTypes_2()
+        {
+            var propertyBag = new TypedPropertyBag();
+
+            propertyBag.SetValue("Int", 42);
+            ExceptionTester.CallMethodAndExpectException<InvalidCastException>(() => propertyBag.SetValue("Int", new object()));
         }
 
         [TestCase]
