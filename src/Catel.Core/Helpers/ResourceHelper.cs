@@ -100,7 +100,7 @@ namespace Catel
         /// <param name="targetStream">The target stream to write the resource to.</param>
         public static void ExtractEmbeddedResource(this Assembly assembly, string assemblyName, string relativeResourceName, Stream targetStream)
         {
-            Argument.IsNotNull(() => assembly);
+            Argument.IsNotNull(nameof(assembly), assembly);
 
             Log.Debug("Extracting embedded resource '{0}' from assembly '{1}'", relativeResourceName, assembly.FullName);
 

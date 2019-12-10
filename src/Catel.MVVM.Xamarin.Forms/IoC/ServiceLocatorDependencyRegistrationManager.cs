@@ -43,7 +43,7 @@
         /// <param name="serviceLocator">The service locator</param>
         public ServiceLocatorDependencyRegistrationManager(IServiceLocator serviceLocator)
         {
-            Argument.IsNotNull(() => serviceLocator);
+            Argument.IsNotNull(nameof(serviceLocator), serviceLocator);
 
             _serviceLocator = serviceLocator;
         }

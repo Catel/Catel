@@ -28,7 +28,7 @@ namespace Catel.Services
         /// </summary>
         public AutoCompletionService(IObjectAdapter objectAdapter)
         {
-            Argument.IsNotNull(() => objectAdapter);
+            Argument.IsNotNull(nameof(objectAdapter), objectAdapter);
 
             _objectAdapter = objectAdapter;
         }

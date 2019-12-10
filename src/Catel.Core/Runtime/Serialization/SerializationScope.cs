@@ -19,7 +19,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="configuration">The configuration.</param>
         public SerializationScope(ISerializer serializer, ISerializationConfiguration configuration)
         {
-            Argument.IsNotNull(() => serializer);
+            Argument.IsNotNull(nameof(serializer), serializer);
 
             Serializer = serializer;
             Configuration = configuration;

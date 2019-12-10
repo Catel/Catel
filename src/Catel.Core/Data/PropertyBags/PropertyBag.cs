@@ -38,7 +38,7 @@ namespace Catel.Data
         /// <param name="propertyDictionary">The property dictionary.</param>
         public PropertyBag(IDictionary<string, object> propertyDictionary)
         {
-            Argument.IsNotNull(() => propertyDictionary);
+            Argument.IsNotNull(nameof(propertyDictionary), propertyDictionary);
 
             _properties = propertyDictionary;
         }

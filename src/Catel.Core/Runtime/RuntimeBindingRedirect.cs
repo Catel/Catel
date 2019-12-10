@@ -39,7 +39,7 @@ namespace Catel.Runtime
         /// <param name="appDomain">The application domain.</param>
         public RuntimeBindingRedirect(AppDomain appDomain)
         {
-            Argument.IsNotNull(() => appDomain);
+            Argument.IsNotNull(nameof(appDomain), appDomain);
 
             _appDomain = appDomain;
             _appDomain.AssemblyResolve += OnAssemblyResolve;

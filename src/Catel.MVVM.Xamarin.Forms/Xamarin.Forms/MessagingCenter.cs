@@ -26,10 +26,10 @@
         /// <exception cref="System.ArgumentNullException">The <paramref name="alertArguments"/> is <c>null</c>.</exception>
         private static TaskCompletionSource<bool> Send(object sender, Type typeOfSender, string message, AlertArguments alertArguments)
         {
-            Argument.IsNotNull(() => sender);
-            Argument.IsNotNull(() => typeOfSender);
-            Argument.IsOfType(() => sender, typeOfSender);
-            Argument.IsNotNull(() => alertArguments);
+            Argument.IsNotNull(nameof(sender), sender);
+            Argument.IsNotNull(nameof(typeOfSender), typeOfSender);
+            Argument.IsOfType(nameof(sender), sender, typeOfSender);
+            Argument.IsNotNull(nameof(alertArguments), alertArguments);
 
             var type = typeof(global::Xamarin.Forms.MessagingCenter);
             //// TODO: Use reflection API instead but reflection API requires some fixes.

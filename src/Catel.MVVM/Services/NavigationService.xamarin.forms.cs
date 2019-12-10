@@ -52,9 +52,9 @@ namespace Catel.Services
         /// <param name="viewModelFactory">The viewmodel factory.</param>
         public NavigationService(ITypeFactory typeFactory, IViewLocator viewLocator, IViewModelLocator viewModelLocator, IViewModelFactory viewModelFactory)
         {
-            Argument.IsNotNull(() => typeFactory);
-            Argument.IsNotNull(() => viewLocator);
-            Argument.IsNotNull(() => viewModelLocator);
+            Argument.IsNotNull(nameof(typeFactory), typeFactory);
+            Argument.IsNotNull(nameof(viewLocator), viewLocator);
+            Argument.IsNotNull(nameof(viewModelLocator), viewModelLocator);
 
             _typeFactory = typeFactory;
             _viewLocator = viewLocator;

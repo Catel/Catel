@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ContentPage.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -66,7 +66,7 @@ namespace Catel.Windows.Controls
         /// <exception cref="System.ArgumentNullException">The <paramref name="view" /> is <c>null</c>.</exception>
         public async Task<bool> ShowPopupAsync(View view)
         {
-            Argument.IsNotNull(() => view);
+            Argument.IsNotNull(nameof(view), view);
 
             await DismissPopupAsync();
 
