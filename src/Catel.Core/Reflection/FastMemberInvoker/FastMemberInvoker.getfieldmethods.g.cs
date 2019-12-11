@@ -16,15 +16,14 @@ namespace Catel.Reflection
     {
         public bool TryGetFieldValue<TValue>(object entity, string fieldName, out TValue value)
         {
-            if (typeof(TValue) == typeof(Object))
+            if (!typeof(TValue).IsValueTypeEx())
             {
-                Object localValue;
+                object localValue;
 
                 if (TryGetFieldValue((TEntity)entity, fieldName, out localValue))
                 {
-                    // This prevents the requirement for boxing, see https://github.com/Catel/Catel/issues/1450
-                    var tr = __makeref(localValue);
-                    value = __refvalue(tr, TValue);
+                    // Already object, so no need to work around boxing
+                    value = (TValue)localValue;
                     return true;
                 }
                 else
