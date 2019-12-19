@@ -149,7 +149,7 @@ namespace Catel.IoC
                     {
                         if (!_hasInspectedTypesAtLeastOnce)
                         {
-                            foreach (var type in TypeCache.GetTypes(allowInitialization: false))
+                            foreach (var type in TypeCache.GetTypes(allowInitialization: true))
                             {
                                 _pendingTypes.Enqueue(type);
                             }
@@ -182,8 +182,7 @@ namespace Catel.IoC
                     {
                         var type = _pendingTypes.Dequeue();
 
-                        ServiceLocatorRegistrationAttribute attribute;
-                        if (type.TryGetAttribute(out attribute))
+                        if (type.TryGetAttribute(out ServiceLocatorRegistrationAttribute attribute))
                         {
                             // CTL-780: support open generics
                             if (!type.IsGenericTypeEx() && (type.IsAbstractEx() || !attribute.InterfaceType.IsAssignableFromEx(type)))
