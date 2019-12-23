@@ -18,6 +18,39 @@ Items prefixed with 'CTL' are from JIRA (old issue tracker). Items prefixed with
 **********************************************************
 
 ==================
+Version 6.0.0
+==================
+
+For an upgrade guide, visit https://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date
+============
+2020/xx/xx
+
+Added/fixed
+===========
+
+
+Platform support changes
+========================
+-
+
+Classes / members marked as obsolete in major release (6.x)
+===========================================================
+-
+
+Roadmap
+=======
+See https://www.catelproject.com/support/issue-tracker
+
+Known issues
+============
+See https://www.catelproject.com/support/issue-tracker
+
+
+**********************************************************
+
+==================
 Version 5.12.0
 ==================
 
