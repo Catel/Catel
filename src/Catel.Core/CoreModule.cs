@@ -35,6 +35,7 @@ namespace Catel
             Argument.IsNotNull("serviceLocator", serviceLocator);
 
             serviceLocator.RegisterType<ILanguageService, LanguageService>();
+            serviceLocator.RegisterType<IAppDataService, AppDataService>();
             serviceLocator.RegisterInstance<IExceptionService>(ExceptionService.Default);
             serviceLocator.RegisterInstance<IMessageMediator>(MessageMediator.Default);
 
@@ -49,7 +50,8 @@ namespace Catel
             serviceLocator.RegisterType<IXmlSerializer, XmlSerializer>();
             serviceLocator.RegisterType<IXmlNamespaceManager, XmlNamespaceManager>();
             serviceLocator.RegisterType<ISerializationManager, SerializationManager>();
-            serviceLocator.RegisterType<IObjectAdapter, ObjectAdapter>();
+            serviceLocator.RegisterType<Catel.Runtime.Serialization.IObjectAdapter, Catel.Runtime.Serialization.ObjectAdapter>();
+            serviceLocator.RegisterType<Catel.Data.IObjectAdapter, Catel.Data.ExpressionTreeObjectAdapter>();
 
             serviceLocator.RegisterType<ISerializer, XmlSerializer>();
             serviceLocator.RegisterTypeWithTag<ISerializationContextInfoFactory, XmlSerializationContextInfoFactory>(typeof(XmlSerializer));

@@ -46,7 +46,7 @@ namespace Catel.Data
 #if NET || NETCORE || NETSTANDARD
         [field: NonSerialized]
 #endif
-        internal readonly PropertyBag _propertyBag = new PropertyBag();
+        internal IPropertyBag _propertyBag;
 
         /// <summary>
         /// Lock object.
@@ -227,6 +227,8 @@ namespace Catel.Data
         private void Initialize()
         {
             AlwaysInvokeNotifyChanged = false;
+
+            _propertyBag = CreatePropertyBag();
 
             InitializeProperties();
 

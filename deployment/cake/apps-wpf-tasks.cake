@@ -251,26 +251,12 @@ public class WpfProcessor : ProcessorBase
             // Note: we need to set OverridableOutputPath because we need to be able to respect
             // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
             // are properties passed in using the command line)
-            var outputDirectory = string.Format("{0}/{1}/", BuildContext.General.OutputRootDirectory, wpfApp);
+            var outputDirectory = GetProjectOutputDirectory(BuildContext, wpfApp);
             CakeContext.Information("Output directory: '{0}'", outputDirectory);
             msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
             msBuildSettings.WithProperty("PackageOutputPath", BuildContext.General.OutputRootDirectory);
 
             CakeContext.MSBuild(projectFileName, msBuildSettings);
-            
-            CakeContext.Information("Deleting unnecessary files for WPF app '{0}'", wpfApp);
-            
-            var extensionsToDelete = new [] { ".pdb", ".RoslynCA.json" };
-            
-            foreach (var extensionToDelete in extensionsToDelete)
-            {
-                var searchPattern = string.Format("{0}**/*{1}", outputDirectory, extensionToDelete);
-                var filesToDelete = CakeContext.GetFiles(searchPattern);
-
-                CakeContext.Information("Deleting '{0}' files using search pattern '{1}'", filesToDelete.Count, searchPattern);
-                
-                CakeContext.DeleteFiles(filesToDelete);
-            }
         }
     }
 
@@ -305,7 +291,7 @@ public class WpfProcessor : ProcessorBase
         else if (BuildContext.General.IsAlphaBuild)
         {
             // Single channel
-            channels.Add(BuildContext.Wpf.Channel);
+            channels.Add("alpha");
         }
         else
         {
@@ -313,8 +299,25 @@ public class WpfProcessor : ProcessorBase
             channels.Add(BuildContext.Wpf.Channel);
         }
 
+        CakeContext.Information("Found '{0}' target channels", channels.Count);
+
         foreach (var wpfApp in BuildContext.Wpf.Items)
         {
+            CakeContext.Information("Deleting unnecessary files for WPF app '{0}'", wpfApp);
+            
+            var outputDirectory = GetProjectOutputDirectory(BuildContext, wpfApp);
+            var extensionsToDelete = new [] { ".pdb", ".RoslynCA.json" };
+            
+            foreach (var extensionToDelete in extensionsToDelete)
+            {
+                var searchPattern = string.Format("{0}**/*{1}", outputDirectory, extensionToDelete);
+                var filesToDelete = CakeContext.GetFiles(searchPattern);
+
+                CakeContext.Information("Deleting '{0}' files using search pattern '{1}'", filesToDelete.Count, searchPattern);
+                
+                CakeContext.DeleteFiles(filesToDelete);
+            }
+
             foreach (var channel in channels)
             {
                 CakeContext.Information("Packaging WPF app '{0}' for channel '{1}'", wpfApp, channel);

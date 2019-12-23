@@ -30,7 +30,7 @@ namespace Catel
         /// <exception cref="ArgumentNullException">The <paramref name="commandManager"/> is <c>null</c>.</exception>
         public static void SubscribeToKeyboardEvents(this ICommandManager commandManager, Window window)
         {
-            Argument.IsNotNull(() => commandManager);
+            Argument.IsNotNull(nameof(commandManager), commandManager);
 
             if (window is null)
             {

@@ -126,7 +126,7 @@ namespace Catel.Logging
         /// <exception cref="ArgumentException">The <paramref name="filePath" /> is <c>null</c> or whitespace.</exception>
         public FileLogListener(string filePath, int maxSizeInKiloBytes, Assembly assembly = null)
         {
-            Argument.IsNotNullOrWhitespace(() => filePath);
+            Argument.IsNotNullOrWhitespace(nameof(filePath), filePath);
 
             Initialize(false, assembly);
 
@@ -297,17 +297,16 @@ namespace Catel.Logging
 
                 using (var fileStream = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.Read))
                 {
-                    using (var writer = new StreamWriter(fileStream))
+                    var writer = new StreamWriter(fileStream);
+
+                    foreach (var batchEntry in batchEntries)
                     {
-                        foreach (var batchEntry in batchEntries)
-                        {
-                            var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Data, batchEntry.Time);
+                        var message = FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Data, batchEntry.Time);
 
-                            writer.WriteLine(message);
-                        }
-
-                        writer.Flush();
+                        await writer.WriteLineAsync(message);
                     }
+
+                    await writer.FlushAsync();
                 }
             }
             catch (Exception)

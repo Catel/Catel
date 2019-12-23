@@ -26,6 +26,18 @@ namespace Catel.MVVM
         bool IsClosed { get; }
 
         /// <summary>
+        /// Gets a value indicating whether this instance is saved at least once.
+        /// </summary>
+        /// <value><c>true</c> if this instance is saved at least once; otherwise, <c>false</c>.</value>
+        bool IsSaved { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is canceled at least once.
+        /// </summary>
+        /// <value><c>true</c> if this instance is canceled at least once; otherwise, <c>false</c>.</value>
+        bool IsCanceled { get; }
+
+        /// <summary>
         /// Gets the title of the view model.
         /// </summary>
         /// <value>The title.</value>

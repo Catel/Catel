@@ -46,7 +46,7 @@ namespace Catel.Runtime
         /// <summary>
         /// The hashset containing the used ids.
         /// </summary>
-        private readonly HashSet<int> _usedIds = new HashSet<int>(); 
+        private readonly HashSet<int> _usedIds = new HashSet<int>();
         #endregion
 
         #region Constructors
@@ -100,8 +100,9 @@ namespace Catel.Runtime
         /// Gets the info for the specified instance.
         /// </summary>
         /// <param name="instance">The instance.</param>
+        /// <param name="autoAssignId">If set to <c>true</c>, a unique graph id will automatically be reserved for this object. Note that it's recommended to set this to <c>false</c> during deserialization.</param>
         /// <returns>The <see cref="ReferenceInfo" /> or <c>null</c> if <paramref name="instance" /> is <c>null</c>.</returns>
-        public ReferenceInfo GetInfo(object instance)
+        public ReferenceInfo GetInfo(object instance, bool autoAssignId = true)
         {
             if (instance is null)
             {
@@ -112,11 +113,30 @@ namespace Catel.Runtime
             {
                 if (_referenceInfoByInstance.TryGetValue(instance, out var referenceInfo))
                 {
-                    referenceInfo.IsFirstUsage = false;
+                    if (!referenceInfo.Id.HasValue)
+                    {
+                        if (autoAssignId)
+                        {
+                            referenceInfo.Id = GetNextId();
+
+                            AddReferenceInfo(referenceInfo);
+                        }
+                    }
+                    else
+                    {
+                        // Only treat as non-first usage if we already had a valid id
+                        referenceInfo.IsFirstUsage = false;
+                    }
                 }
                 else
                 {
-                    var id = GetNextId();
+                    int? id = null;
+
+                    if (autoAssignId)
+                    {
+                        id = GetNextId();
+                    }
+
                     referenceInfo = new ReferenceInfo(instance, id, true);
 
                     AddReferenceInfo(referenceInfo);
@@ -165,17 +185,31 @@ namespace Catel.Runtime
                 var id = referenceInfo.Id;
                 var instance = referenceInfo.Instance;
 
-                if (_referenceInfoByInstance.ContainsKey(instance) || _usedIds.Contains(id))
+                if (id.HasValue && _usedIds.Contains(id.Value))
                 {
                     return false;
                 }
 
-                _referenceInfoByInstance.Add(instance, referenceInfo);
-                _referenceInfoById.Add(id, referenceInfo);
+                if (_referenceInfoByInstance.TryGetValue(instance, out var existingReferenceInfo))
+                {
+                    existingReferenceInfo.Id = id;
+                }
+                else
+                {
+                    _referenceInfoByInstance.Add(instance, referenceInfo);
+                }
 
-                _usedIds.Add(id);
+                // We might be adding a late id
+                var added = false;
+                if (id.HasValue)
+                {
+                    _referenceInfoById.Add(id.Value, existingReferenceInfo ?? referenceInfo);
+                    _usedIds.Add(id.Value);
 
-                return true;
+                    added = true;
+                }
+
+                return added;
             }
         }
 

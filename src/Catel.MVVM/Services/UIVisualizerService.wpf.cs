@@ -117,9 +117,20 @@ namespace Catel.Services
 
                     PropertyHelper.TryGetPropertyValue(window, "DialogResult", out bool? dialogResult);
 
+                    if (dialogResult is null)
+                    {
+                        // See https://github.com/Catel/Catel/issues/1503, even though there is no real DialogResult,
+                        // we will get the result from the VM instead
+                        var vm = data as IViewModel;
+                        if (vm != null)
+                        {
+                            dialogResult = vm.GetResult();
+                        }
+                    }
+
                     try
                     {
-                        completedProc(this, new UICompletedEventArgs(data, isModal ? dialogResult : null));
+                        completedProc(this, new UICompletedEventArgs(data, dialogResult));
                     }
                     finally
                     {

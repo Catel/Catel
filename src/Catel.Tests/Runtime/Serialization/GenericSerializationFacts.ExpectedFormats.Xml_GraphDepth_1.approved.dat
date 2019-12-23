@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<IniEntry graphid="1" xmlns:ctl="http://schemas.catelproject.com">
+<IniEntry xmlns:ctl="http://schemas.catelproject.com" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" ctl:graphid="1">
   <Group>MyGroup</Group>
   <Key>MyKey</Key>
   <Value>MyValue</Value>

@@ -11,7 +11,7 @@
 [assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.Windows.Interactivity")]
 [assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.Windows.Markup")]
 [assembly: System.Windows.Markup.XmlnsPrefixAttribute("http://schemas.catelproject.com", "catel")]
-[assembly: System.Windows.ThemeInfoAttribute(System.Windows.ResourceDictionaryLocation.SourceAssembly, System.Windows.ResourceDictionaryLocation.SourceAssembly)]
+[assembly: System.Windows.ThemeInfoAttribute(System.Windows.ResourceDictionaryLocation.None, System.Windows.ResourceDictionaryLocation.SourceAssembly)]
 namespace Catel
 {
     public class static CatelEnvironment
@@ -66,6 +66,13 @@ namespace Catel
 }
 namespace Catel.Collections
 {
+    public class static EnumerableExtensions
+    {
+        public static Catel.Collections.ObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TElement> elementSelector, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
+        public static Catel.Collections.ObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TElement> elementSelector) { }
+        public static Catel.Collections.ObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
+        public static Catel.Collections.ObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector) { }
+    }
     public class ExtendedSuspensionContext<T>
     {
         public ExtendedSuspensionContext(Catel.Collections.SuspensionMode mode) { }
@@ -185,6 +192,55 @@ namespace Catel.Collections
         public int NewStartingIndex { get; }
         public System.Collections.IList OldItems { get; }
         public int OldStartingIndex { get; }
+    }
+    public class ObservableDictionary<TKey, TValue> : System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IDictionary<TKey, TValue>, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IReadOnlyCollection<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IReadOnlyDictionary<TKey, TValue>, System.Collections.ICollection, System.Collections.IDictionary, System.Collections.IEnumerable, System.Collections.Specialized.INotifyCollectionChanged, System.ComponentModel.INotifyPropertyChanged, System.Runtime.Serialization.IDeserializationCallback, System.Runtime.Serialization.ISerializable
+    {
+        public ObservableDictionary() { }
+        public ObservableDictionary(System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
+        public ObservableDictionary(System.Collections.Generic.IDictionary<TKey, TValue> dictionary) { }
+        public ObservableDictionary(System.Collections.Generic.IDictionary<TKey, TValue> dictionary, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
+        protected ObservableDictionary(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        public bool AutomaticallyDispatchChangeNotifications { get; set; }
+        public System.Collections.Generic.IEqualityComparer<TKey> Comparer { get; }
+        public int Count { get; }
+        public bool IsFixedSize { get; }
+        public bool IsReadOnly { get; }
+        public bool IsSynchronized { get; }
+        public object this[object key] { get; set; }
+        public TValue this[TKey key] { get; set; }
+        public System.Collections.Generic.Dictionary<TKey, TValue>.KeyCollection Keys { get; }
+        public object SyncRoot { get; }
+        public System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection Values { get; }
+        public event System.Collections.Specialized.NotifyCollectionChangedEventHandler CollectionChanged;
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        public void Add(object key, object value) { }
+        public void Add(TKey key, TValue value) { }
+        public void Add(System.Collections.Generic.KeyValuePair<TKey, TValue> item) { }
+        public void Clear() { }
+        public bool Contains(object key) { }
+        public bool Contains(System.Collections.Generic.KeyValuePair<TKey, TValue> item) { }
+        public bool ContainsKey(TKey key) { }
+        public void CopyTo(System.Array array, int index) { }
+        public void CopyTo(System.Collections.Generic.KeyValuePair<, >[] array, int arrayIndex) { }
+        public System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<TKey, TValue>> GetEnumerator() { }
+        public virtual void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        protected virtual void OnCollectionChanged() { }
+        protected virtual void OnCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedAction action, System.Collections.Generic.KeyValuePair<TKey, TValue> changedItem, int index) { }
+        protected virtual void OnCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedAction action, System.Collections.Generic.KeyValuePair<TKey, TValue> newItem, System.Collections.Generic.KeyValuePair<TKey, TValue> oldItem, int index) { }
+        public void OnDeserialization(object sender) { }
+        protected virtual void OnPropertyChanged(string propertyName) { }
+        public bool Remove(TKey key) { }
+        public bool TryGetValue(TKey key, out TValue value) { }
+        public struct Enumerator<TKey, TValue> : System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.IDictionaryEnumerator, System.Collections.IEnumerator, System.IDisposable
+        {
+            public System.Collections.Generic.KeyValuePair<TKey, TValue> Current { get; }
+            public System.Collections.DictionaryEntry Entry { get; }
+            public object Key { get; }
+            public object Value { get; }
+            public void Dispose() { }
+            public bool MoveNext() { }
+            public void Reset() { }
+        }
     }
 }
 namespace Catel.Data
@@ -543,7 +599,9 @@ namespace Catel.MVVM
     }
     public interface IViewModel : Catel.Data.IValidatable, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged
     {
+        bool IsCanceled { get; }
         bool IsClosed { get; }
+        bool IsSaved { get; }
         string Title { get; }
         int UniqueIdentifier { get; }
         public event Catel.AsyncEventHandler<System.EventArgs> CanceledAsync;
@@ -575,6 +633,7 @@ namespace Catel.MVVM
         public static System.Threading.Tasks.Task AwaitClosingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
         public static System.Threading.Tasks.Task<bool> AwaitSavingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
         public static System.Threading.Tasks.Task<bool> CancelAndCloseViewModelAsync(this Catel.MVVM.IViewModel viewModel) { }
+        public static System.Nullable<bool> GetResult(this Catel.MVVM.IViewModel viewModel) { }
         public static System.Threading.Tasks.Task<bool> SaveAndCloseViewModelAsync(this Catel.MVVM.IViewModel viewModel) { }
     }
     public interface IViewModelFactory
@@ -793,6 +852,7 @@ namespace Catel.MVVM
     public abstract class ViewModelBase : Catel.Data.ValidatableModelBase, Catel.Data.IValidatable, Catel.IUniqueIdentifyable, Catel.MVVM.IRelationalViewModel, Catel.MVVM.IViewModel, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged
     {
         protected static readonly Catel.MVVM.IViewModelManager ViewModelManager;
+        protected readonly Catel.Data.IObjectAdapter _objectAdapter;
         protected ViewModelBase() { }
         protected ViewModelBase(bool supportIEditableObject, bool ignoreMultipleModelsWarning = False, bool skipViewModelAttributesInitialization = False) { }
         protected ViewModelBase(Catel.IoC.IServiceLocator serviceLocator, bool supportIEditableObject = True, bool ignoreMultipleModelsWarning = False, bool skipViewModelAttributesInitialization = False) { }
@@ -807,16 +867,20 @@ namespace Catel.MVVM
         [Catel.Data.ExcludeFromValidationAttribute()]
         protected bool InvalidateCommandsOnPropertyChanged { get; set; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected internal bool IsCanceling { get; }
+        public bool IsCanceled { get; }
+        [Catel.Data.ExcludeFromValidationAttribute()]
+        protected bool IsCanceling { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
         public bool IsClosed { get; }
-        protected internal bool IsClosing { get; }
+        protected bool IsClosing { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected internal bool IsInitialized { get; }
+        protected bool IsInitialized { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected internal bool IsInitializing { get; }
+        protected bool IsInitializing { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected internal bool IsSaving { get; }
+        public bool IsSaved { get; }
+        [Catel.Data.ExcludeFromValidationAttribute()]
+        protected bool IsSaving { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
         protected Catel.MVVM.Navigation.NavigationContext NavigationContext { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
@@ -830,7 +894,7 @@ namespace Catel.MVVM
         [Catel.Data.ExcludeFromValidationAttribute()]
         protected bool ValidateModelsOnInitialization { get; set; }
         [Catel.Data.ExcludeFromValidationAttribute()]
-        protected internal Catel.MVVM.IViewModelCommandManager ViewModelCommandManager { get; }
+        protected Catel.MVVM.IViewModelCommandManager ViewModelCommandManager { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
         public System.DateTime ViewModelConstructionTime { get; }
         public event Catel.AsyncEventHandler<System.EventArgs> CanceledAsync;
@@ -1377,7 +1441,7 @@ namespace Catel.MVVM.Providers
         [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be removed in version" +
             " 6.0.0.", true)]
         public bool PreventViewModelCreation { get; set; }
-        protected internal Catel.MVVM.Views.IView TargetView { get; set; }
+        protected Catel.MVVM.Views.IView TargetView { get; set; }
         protected System.Type TargetViewType { get; }
         public int UniqueIdentifier { get; }
         public Catel.MVVM.IViewModel ViewModel { get; set; }
@@ -1752,7 +1816,7 @@ namespace Catel.Services
     }
     public class AutoCompletionService : Catel.Services.IAutoCompletionService
     {
-        public AutoCompletionService() { }
+        public AutoCompletionService(Catel.Data.IObjectAdapter objectAdapter) { }
         public virtual string[] GetAutoCompleteValues(string property, string filter, System.Collections.IEnumerable source) { }
     }
     public class CameraOperationCompletedEventArgs : System.EventArgs
@@ -1860,7 +1924,8 @@ namespace Catel.Services
         public string InitialDirectory { get; set; }
         public string Title { get; set; }
         public bool ValidateNames { get; set; }
-        protected void ConfigureFileDialog(Microsoft.Win32.FileDialog fileDialog) { }
+        protected virtual void ConfigureFileDialog(Microsoft.Win32.FileDialog fileDialog) { }
+        protected virtual string GetInitialDirectory() { }
     }
     [System.FlagsAttribute()]
     public enum FlashMode
@@ -2583,11 +2648,14 @@ namespace Catel.Windows
     {
         public static object FindLogicalAncestor(this System.Windows.DependencyObject startElement, System.Predicate<object> condition, int maxDepth = -1) { }
         public static T FindLogicalAncestorByType<T>(this System.Windows.DependencyObject startElement) { }
+        public static T FindLogicalAncestorByType<T>(this System.Windows.DependencyObject startElement, int maxDepth) { }
         public static object FindLogicalOrVisualAncestor(this System.Windows.DependencyObject startElement, System.Predicate<object> condition, int maxDepth = -1) { }
         public static T FindLogicalOrVisualAncestorByType<T>(this System.Windows.DependencyObject startElement) { }
+        public static T FindLogicalOrVisualAncestorByType<T>(this System.Windows.DependencyObject startElement, int maxDepth) { }
         public static System.Windows.DependencyObject FindLogicalRoot(this System.Windows.DependencyObject startElement) { }
         public static object FindVisualAncestor(this System.Windows.DependencyObject startElement, System.Predicate<object> condition, int maxDepth = -1) { }
         public static T FindVisualAncestorByType<T>(this System.Windows.DependencyObject startElement) { }
+        public static T FindVisualAncestorByType<T>(this System.Windows.DependencyObject startElement, int maxDepth) { }
         public static System.Windows.DependencyObject FindVisualDescendant(this System.Windows.DependencyObject startElement, System.Predicate<object> condition) { }
         public static System.Windows.DependencyObject FindVisualDescendantByName(this System.Windows.DependencyObject startElement, string name) { }
         public static T FindVisualDescendantByType<T>(this System.Windows.DependencyObject startElement)

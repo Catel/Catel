@@ -26,8 +26,8 @@ namespace Catel.Services
         /// <param name="state">The state.</param>
         public void StoreState(string key, IState state)
         {
-            Argument.IsNotNull(() => key);
-            Argument.IsNotNull(() => state);
+            Argument.IsNotNull(nameof(key), key);
+            Argument.IsNotNull(nameof(state), state);
 
             lock (_states)
             {
@@ -44,7 +44,7 @@ namespace Catel.Services
         /// <returns></returns>
         public IState LoadState(string key)
         {
-            Argument.IsNotNull(() => key);
+            Argument.IsNotNull(nameof(key), key);
 
             lock (_states)
             {

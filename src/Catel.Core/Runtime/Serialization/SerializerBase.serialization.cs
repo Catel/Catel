@@ -155,7 +155,7 @@ namespace Catel.Runtime.Serialization
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
 
-                using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Serialization, configuration))
+                using (var context = GetSerializationContextInfo(model, model.GetType(), stream, SerializationContextMode.Serialization, configuration))
                 {
                     var members = GetSerializableMembers(context, model, membersToIgnore);
                     if (members.Count == 0)
@@ -214,6 +214,9 @@ namespace Catel.Runtime.Serialization
 
         private void SerializeMembersOnly(ISerializationContext<TSerializationContextInfo> context, Stream stream, List<MemberValue> membersToSerialize)
         {
+            ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
+                x => x.SetInitializationMode(InitializationMode.Lazy, GetType().GetSafeFullName(false)));
+
             BeforeSerialization(context);
 
             SerializeMembers(context, membersToSerialize);
@@ -230,9 +233,6 @@ namespace Catel.Runtime.Serialization
         /// <param name="membersToSerialize">The members to serialize.</param>
         protected virtual void SerializeMembers(ISerializationContext<TSerializationContextInfo> context, List<MemberValue> membersToSerialize)
         {
-            ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
-                x => x.SetInitializationMode(InitializationMode.Lazy, GetType().GetSafeFullName(false)));
-
             if (membersToSerialize.Count == 0)
             {
                 return;
@@ -244,48 +244,71 @@ namespace Catel.Runtime.Serialization
 
                 foreach (var member in membersToSerialize)
                 {
-                    bool skipByModifiers = false;
-                    foreach (var serializerModifier in serializerModifiers)
+                    if (StartMemberSerialization(context, member, serializerModifiers))
                     {
-                        if (serializerModifier.ShouldIgnoreMember(context, context.Model, member))
-                        {
-                            skipByModifiers = true;
-                            break;
-                        }
+                        EndMemberSerialization(context, member);
                     }
-
-                    if (skipByModifiers)
-                    {
-                        continue;
-                    }
-
-                    var memberSerializationEventArgs = new MemberSerializationEventArgs(context, member);
-
-                    SerializingMember?.Invoke(this, memberSerializationEventArgs);
-
-                    BeforeSerializeMember(context, member);
-
-                    foreach (var serializerModifier in serializerModifiers)
-                    {
-                        serializerModifier.SerializeMember(context, member);
-                    }
-
-                    if (ShouldSerializeUsingParseAndToString(member, true))
-                    {
-                        var objectToStringValue = SerializeUsingObjectToString(context, member);
-                        if (!string.IsNullOrWhiteSpace(objectToStringValue))
-                        {
-                            member.Value = objectToStringValue;
-                        }
-                    }
-
-                    SerializeMember(context, member);
-
-                    AfterSerializeMember(context, member);
-
-                    SerializedMember?.Invoke(this, memberSerializationEventArgs);
                 }
             }
+        }
+
+        /// <summary>
+        /// Starts member serialization by invoking all the right events.
+        /// </summary>
+        /// <param name="context">The serialization context.</param>
+        /// <param name="member">The member that is about to be serialized.</param>
+        /// <param name="serializerModifiers">The serializer modifiers.</param>
+        protected bool StartMemberSerialization(ISerializationContext<TSerializationContextInfo> context, 
+            MemberValue member, ISerializerModifier[] serializerModifiers)
+        {
+            var skipByModifiers = false;
+            foreach (var serializerModifier in serializerModifiers)
+            {
+                if (serializerModifier.ShouldIgnoreMember(context, context.Model, member))
+                {
+                    skipByModifiers = true;
+                    break;
+                }
+            }
+
+            if (skipByModifiers)
+            {
+                return false;
+            }
+
+            SerializingMember?.Invoke(this, new MemberSerializationEventArgs(context, member));
+
+            BeforeSerializeMember(context, member);
+
+            foreach (var serializerModifier in serializerModifiers)
+            {
+                serializerModifier.SerializeMember(context, member);
+            }
+
+            if (ShouldSerializeUsingParseAndToString(member, true))
+            {
+                var objectToStringValue = SerializeUsingObjectToString(context, member);
+                if (!string.IsNullOrWhiteSpace(objectToStringValue))
+                {
+                    member.Value = objectToStringValue;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Ends member serialization by invoking all the right events and running the modifiers.
+        /// </summary>
+        /// <param name="context">The serialization context.</param>
+        /// <param name="member">The member that has been deserialized.</param>
+        protected void EndMemberSerialization(ISerializationContext<TSerializationContextInfo> context, MemberValue member)
+        {
+            SerializeMember(context, member);
+
+            AfterSerializeMember(context, member);
+
+            SerializedMember?.Invoke(this, new MemberSerializationEventArgs(context, member));
         }
 
         /// <summary>

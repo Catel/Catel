@@ -38,6 +38,7 @@ namespace Catel.Configuration
         private readonly ISerializationManager _serializationManager;
         private readonly IObjectConverterService _objectConverterService;
         private readonly ISerializer _serializer;
+        private readonly IAppDataService _appDataService;
 
 #if NET || NETCORE || NETSTANDARD
         private DynamicConfiguration _localConfiguration;
@@ -45,9 +46,6 @@ namespace Catel.Configuration
 
         private string _localConfigFilePath;
         private string _roamingConfigFilePath;
-
-        private static readonly string DefaultLocalConfigFilePath = Path.Combine(Path.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserLocal), "configuration.xml");
-        private static readonly string DefaultRoamingConfigFilePath = Path.Combine(Path.GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget.UserRoaming), "configuration.xml");
 #elif ANDROID
         private readonly global::Android.Content.ISharedPreferences _preferences =
             global::Android.Preferences.PreferenceManager.GetDefaultSharedPreferences(global::Android.App.Application.Context);
@@ -62,9 +60,10 @@ namespace Catel.Configuration
         /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="objectConverterService">The object converter service.</param>
         /// <param name="serializer">The serializer.</param>
+        /// <param name="appDataService">The application data service.</param>
         public ConfigurationService(ISerializationManager serializationManager,
-            IObjectConverterService objectConverterService, IXmlSerializer serializer)
-            : this(serializationManager, objectConverterService, (ISerializer)serializer)
+            IObjectConverterService objectConverterService, IXmlSerializer serializer, IAppDataService appDataService)
+            : this(serializationManager, objectConverterService, (ISerializer)serializer, appDataService)
         {
         }
 
@@ -74,20 +73,27 @@ namespace Catel.Configuration
         /// <param name="serializationManager">The serialization manager.</param>
         /// <param name="objectConverterService">The object converter service.</param>
         /// <param name="serializer">The serializer.</param>
+        /// <param name="appDataService">The application data service.</param>
         public ConfigurationService(ISerializationManager serializationManager,
-            IObjectConverterService objectConverterService, ISerializer serializer)
+            IObjectConverterService objectConverterService, ISerializer serializer,
+            IAppDataService appDataService)
         {
             Argument.IsNotNull("serializationManager", serializationManager);
             Argument.IsNotNull("objectConverterService", objectConverterService);
             Argument.IsNotNull("serializer", serializer);
+            Argument.IsNotNull("appDataService", appDataService);
 
             _serializationManager = serializationManager;
             _objectConverterService = objectConverterService;
             _serializer = serializer;
+            _appDataService = appDataService;
 
 #if NET || NETCORE || NETSTANDARD
-            SetLocalConfigFilePath(DefaultLocalConfigFilePath);
-            SetRoamingConfigFilePath(DefaultRoamingConfigFilePath);
+            var defaultLocalConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserLocal);
+            var defaultRoamingConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserRoaming);
+
+            SetLocalConfigFilePath(defaultLocalConfigFilePath);
+            SetRoamingConfigFilePath(defaultRoamingConfigFilePath);
 #endif
         }
 
@@ -99,6 +105,17 @@ namespace Catel.Configuration
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Gets the configuration file name for the specified application data target.
+        /// </summary>
+        /// <param name="applicationDataTarget">The application data target.</param>
+        /// <returns>Returns the full configuration filename for the specified application data target.</returns>
+        protected virtual string GetConfigurationFileName(Catel.IO.ApplicationDataTarget applicationDataTarget)
+        {
+            var filename = Path.Combine(_appDataService.GetApplicationDataDirectory(applicationDataTarget), "configuration.xml");
+            return filename;
+        }
+
         /// <summary>
         /// Suspends the notifications of this service until the returned object is disposed.
         /// </summary>
@@ -252,7 +269,7 @@ namespace Catel.Configuration
             {
                 Log.Error(ex, "Failed to load roaming configuration, using default settings");
 
-                _roamingConfigFilePath = DefaultRoamingConfigFilePath;
+                _roamingConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserRoaming);
             }
 
             if (_roamingConfiguration is null)
@@ -289,7 +306,7 @@ namespace Catel.Configuration
             {
                 Log.Error(ex, "Failed to load local configuration, using default settings");
 
-                _localConfigFilePath = DefaultLocalConfigFilePath;
+                _localConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserLocal);
             }
 
             if (_localConfiguration is null)

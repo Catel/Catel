@@ -67,6 +67,16 @@ namespace Catel.Runtime.Serialization.Binary
         /// </summary>
         /// <value>The serialization info.</value>
         public SerializationInfo SerializationInfo { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether the context should auto generate graph ids for new object instances.
+        /// </summary>
+        /// <param name="context">The current serialization context.</param>
+        /// <returns><c>true</c> if graph ids should automatically be generated, <c>false</c> if they should be registered manually.</returns>
+        public override bool ShouldAutoGenerateGraphIds(ISerializationContext context)
+        {
+            return true;
+        }
     }
 }
 

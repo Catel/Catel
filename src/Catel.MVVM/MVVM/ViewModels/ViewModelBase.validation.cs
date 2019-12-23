@@ -133,13 +133,13 @@ namespace Catel.MVVM
                     if (childViewModel.HasErrors)
                     {
                         _childViewModelsHaveErrors = true;
-                        RaisePropertyChanged(() => HasErrors);
+                        RaisePropertyChanged(nameof(HasErrors));
                     }
                 }
 
                 if (!_childViewModelsHaveErrors && _childViewModelsHaveErrors != previousValue)
                 {
-                    RaisePropertyChanged(() => HasErrors);
+                    RaisePropertyChanged(nameof(HasErrors));
                 }
             }
         }

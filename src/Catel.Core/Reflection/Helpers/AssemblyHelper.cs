@@ -333,7 +333,7 @@ namespace Catel.Reflection
         /// </remarks>
         public static DateTime GetLinkerTimestamp(string fileName)
         {
-            Argument.IsNotNullOrWhitespace(() => fileName);
+            Argument.IsNotNullOrWhitespace(nameof(fileName), fileName);
 
             var buffer = new byte[Math.Max(Marshal.SizeOf(typeof(_IMAGE_FILE_HEADER)), 4)];
 

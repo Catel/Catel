@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net45;net46;net47;netcoreapp3.0;uap10.0;uap10.0.16299</TargetFrameworks>
+    <TargetFrameworks>net45;net46;net47;netcoreapp3.0;uap10.0.16299</TargetFrameworks>
     <AssemblyName>Catel.MVVM</AssemblyName>
     <RootNamespace>Catel.MVVM</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -16,14 +16,14 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Catel.Fody" Version="4.0.0" PrivateAssets="all" />
-    <PackageReference Include="Fody" Version="5.1.0" PrivateAssets="all">
+    <PackageReference Include="Catel.Fody" Version="4.3.0" PrivateAssets="all" />
+    <PackageReference Include="Fody" Version="6.0.4" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="MethodTimer.Fody" Version="3.0.0" PrivateAssets="all" />
-    <PackageReference Include="ModuleInit.Fody" Version="2.0.0" PrivateAssets="all" />
-    <PackageReference Include="Obsolete.Fody" Version="5.0.0" PrivateAssets="all" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
+    <PackageReference Include="MethodTimer.Fody" Version="3.1.2" PrivateAssets="all" />
+    <PackageReference Include="ModuleInit.Fody" Version="2.1.0" PrivateAssets="all" />
+    <PackageReference Include="Obsolete.Fody" Version="5.1.0" PrivateAssets="all" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.6.0" />
   </ItemGroup>
   
   <!-- .NET 4.5 -->
@@ -107,7 +107,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Update="NETStandard.Library" Version="2.0.1" />
+    <PackageReference Update="NETStandard.Library" Version="2.0.3" />
   </ItemGroup>
   
   <ItemGroup>

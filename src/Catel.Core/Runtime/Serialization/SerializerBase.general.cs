@@ -10,6 +10,7 @@ namespace Catel.Runtime.Serialization
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Globalization;
     using System.IO;
     using System.Reflection;
@@ -601,7 +602,7 @@ namespace Catel.Runtime.Serialization
             var fields = SerializationManager.GetFields(modelType);
             if (fields.TryGetValue(memberName, out var field))
             {
-                return field.MemberType; ;
+                return field.MemberType;
             }
 
             return null;
@@ -615,6 +616,16 @@ namespace Catel.Runtime.Serialization
         /// <returns><c>true</c> if the model should be serialized as a collection, <c>false</c> otherwise.</returns>
         protected virtual bool ShouldSerializeModelAsCollection(Type memberType)
         {
+            if (memberType.IsGenericTypeEx())
+            {
+                var genericTypeDefinition = memberType.GetGenericTypeDefinitionEx();
+                if (genericTypeDefinition == typeof(List<>) ||
+                    genericTypeDefinition == typeof(ObservableCollection<>))
+                {
+                    return true;
+                }
+            }
+
             if (memberType.IsDecoratedWithAttribute<SerializeAsCollectionAttribute>())
             {
                 return true;

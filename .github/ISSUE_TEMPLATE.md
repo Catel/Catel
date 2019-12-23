@@ -1,3 +1,10 @@
+# IF YOU DON'T ANSWER THIS TEMPLATE - THE BOT WILL AUTOMATICALLY CLOSE YOUR ISSUE!
+
+## Please provide as much detail as possible
+* Output Window Messages
+* Your Code (small reproducible sample)
+* If there is an exception/crash - provide the full stack trace
+
 *IF BUG, INCLUDE THIS PART:*
 
 ### Steps to reproduce
@@ -17,8 +24,6 @@ Tell us what should happen
 
 Tell us what happens instead
 Can you also include a screen shot?
-
-
 
 *IF IT IS A NEW FEATURE REQUEST, INCLUDE THIS PART:*
 

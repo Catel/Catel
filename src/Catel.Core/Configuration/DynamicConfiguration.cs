@@ -6,7 +6,12 @@
 
 namespace Catel.Configuration
 {
+    using System;
     using System.Collections.Generic;
+    using System.Xml;
+    using Catel.IoC;
+    using Catel.Reflection;
+    using Catel.Runtime.Serialization.Xml;
     using Data;
     using Runtime.Serialization;
 
@@ -14,17 +19,23 @@ namespace Catel.Configuration
     /// Dynamic configuration.
     /// </summary>
     [SerializerModifier(typeof(DynamicConfigurationSerializerModifier))]
-    public class DynamicConfiguration : ModelBase
+    public class DynamicConfiguration : ModelBase, ICustomXmlSerializable
     {
+        protected static readonly HashSet<string> DynamicProperties = new HashSet<string>();
+
         private readonly HashSet<string> _propertiesSetAtLeastOnce = new HashSet<string>();
+        private IXmlSerializer _xmlSerializer;
 
         #region Methods
         /// <summary>
         /// Registers the configuration key.
         /// </summary>
         /// <param name="name">The name.</param>
-        public void RegisterConfigurationKey(string name)
+        public virtual void RegisterConfigurationKey(string name)
         {
+            // Dynamic registrations
+            DynamicProperties.Add(name);
+
             if (IsConfigurationValueSet(name))
             {
                 return;
@@ -40,7 +51,7 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>System.String.</returns>
-        public object GetConfigurationValue(string name)
+        public virtual object GetConfigurationValue(string name)
         {
             RegisterConfigurationKey(name);
 
@@ -52,7 +63,7 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
-        public void SetConfigurationValue(string name, object value)
+        public virtual void SetConfigurationValue(string name, object value)
         {
             RegisterConfigurationKey(name);
 
@@ -66,7 +77,7 @@ namespace Catel.Configuration
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns><c>true</c> if the property is set; otherwise, <c>false</c>.</returns>
-        public bool IsConfigurationValueSet(string name)
+        public virtual bool IsConfigurationValueSet(string name)
         {
             Argument.IsNotNull("name", name);
 
@@ -85,7 +96,7 @@ namespace Catel.Configuration
         /// Marks the property as set at least once so it doesn't have a default value.
         /// </summary>
         /// <param name="name">The name.</param>
-        public void MarkConfigurationValueAsSet(string name)
+        public virtual void MarkConfigurationValueAsSet(string name)
         {
             Argument.IsNotNull("name", name);
 
@@ -95,5 +106,106 @@ namespace Catel.Configuration
             }
         }
         #endregion
+
+        protected virtual IXmlSerializer GetXmlSerializer()
+        {
+            if (_xmlSerializer is null)
+            {
+                _xmlSerializer = ServiceLocator.Default.ResolveType<IXmlSerializer>();
+            }
+
+            return _xmlSerializer;
+        }
+
+        public virtual void Serialize(XmlWriter xmlWriter)
+        {
+            if (xmlWriter != null)
+            {
+                var xmlSerializer = GetXmlSerializer();
+                xmlSerializer.Serialize(this, new XmlSerializationContextInfo(xmlWriter, this)
+                {
+                    AllowCustomXmlSerialization = false
+                });
+            }
+        }
+
+        public virtual void Deserialize(XmlReader xmlReader)
+        {
+            var propertyDataManager = PropertyDataManager.Default;
+            var type = GetType();
+
+            if (xmlReader != null)
+            {
+                if (xmlReader.ReadState == ReadState.Initial)
+                {
+                    xmlReader.Read();
+                }
+
+                xmlReader.MoveToContent();
+
+                var parentNode = xmlReader.LocalName;
+
+                xmlReader.Read();
+
+                while (xmlReader.MoveToNextContentElement(parentNode))
+                {
+                    var valueRead = false;
+                    object value = null;
+
+                    var elementName = xmlReader.LocalName;
+
+                    // If simple property
+                    var typeAttribute = xmlReader.GetAttribute("ctl:type");
+                    if (typeAttribute != null)
+                    {
+                        var elementType = TypeCache.GetTypeWithoutAssembly(typeAttribute);
+                        if (elementType != null)
+                        {
+                            if (elementType != typeof(string) && !elementType.IsValueTypeEx())
+                            {
+                                var instance = Activator.CreateInstance(elementType);
+
+                                // Complex object, use xml serializer
+                                var xmlSerializer = GetXmlSerializer();
+                                value = xmlSerializer.Deserialize(elementType, new XmlSerializationContextInfo(xmlReader, instance));
+                                valueRead = true;
+                            }
+                        }
+                    }
+
+                    if (!valueRead)
+                    {
+                        value = xmlReader.ReadElementContentAsString();
+                        valueRead = true;
+                    }
+
+                    var valueSet = false;
+
+                    if (!DynamicProperties.Contains(elementName) && propertyDataManager.IsPropertyRegistered(type, elementName))
+                    {
+                        // If registered property, cast & set
+                        var propertyData = propertyDataManager.GetPropertyData(type, elementName);
+
+                        if (value is string stringValue)
+                        {
+                            value = StringToObjectHelper.ToRightType(propertyData.Type, stringValue);
+                        }
+    
+                        SetValue(elementName, value);
+
+                        valueSet = true;
+                    }
+
+                    if (!valueSet)
+                    {
+                        // Set dynamic value as string
+                        RegisterConfigurationKey(elementName);
+                        MarkConfigurationValueAsSet(elementName);
+
+                        SetValue(elementName, value);
+                    }
+                }
+            }
+        }
     }
 }

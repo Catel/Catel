@@ -36,7 +36,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
         // This method returns the array of known types.
         static Type[] KnownTypes()
         {
-            return new [] { typeof(PluginA.Params), typeof(PluginB.Params) };
+            return new[] { typeof(PluginA.Params), typeof(PluginB.Params) };
         }
     }
 
@@ -125,45 +125,37 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
     [TestFixture]
     public class Serialization
     {
-        [TestCase]
-        public void DictionaryWithKnownTypes()
-        {
-            var dictionary = new DictionaryTestClass();
+        //[TestCase, Explicit]
+        //public void DictionaryWithKnownTypes()
+        //{
+        //    var dictionary = new DictionaryTestClass();
 
-            dictionary.Values.Add("A", new ModelBaseFacts.Person
-            {
-                FirstName = "John",
-                LastName = "Doe"
-            });
+        //    dictionary.Values.Add("A", new ModelBaseFacts.Person
+        //    {
+        //        FirstName = "John",
+        //        LastName = "Doe"
+        //    });
 
-            dictionary.Values.Add("B", new ModelBaseFacts.Person
-            {
-                FirstName = "Jane",
-                LastName = "Doe"
-            });
+        //    dictionary.Values.Add("B", new ModelBaseFacts.Person
+        //    {
+        //        FirstName = "Jane",
+        //        LastName = "Doe"
+        //    });
 
-            using (var memoryStream = new MemoryStream())
-            {
-                var serializer = SerializationFactory.GetXmlSerializer();
-                serializer.Serialize(dictionary, memoryStream);
+        //    var dictionary2 = SerializationTestHelper.SerializeAndDeserialize(dictionary, SerializationTestHelper.GetXmlSerializer());
 
-                memoryStream.Position = 0L;
+        //    Assert.AreEqual(dictionary, dictionary2);
 
-                var dictionary2 = serializer.Deserialize<DictionaryTestClass>(memoryStream);
+        //    var dic1Elem1 = dictionary.Values.ElementAt(0);
+        //    var dic2Elem1 = dictionary2.Values.ElementAt(0);
 
-                Assert.AreEqual(dictionary, dictionary2);
+        //    Assert.AreEqual(dic1Elem1, dic2Elem1);
 
-                var dic1Elem1 = dictionary.Values.ElementAt(0);
-                var dic2Elem1 = dictionary2.Values.ElementAt(0);
+        //    var dic1Elem2 = dictionary.Values.ElementAt(1);
+        //    var dic2Elem2 = dictionary2.Values.ElementAt(1);
 
-                Assert.AreEqual(dic1Elem1, dic2Elem1);
-
-                var dic1Elem2 = dictionary.Values.ElementAt(1);
-                var dic2Elem2 = dictionary2.Values.ElementAt(1);
-
-                Assert.AreEqual(dic1Elem2, dic2Elem2);
-            }
-        }
+        //    Assert.AreEqual(dic1Elem2, dic2Elem2);
+        //}
 
         [TestCase]
         public void EnumerableOfInterfacesViaKnownTypes_SameNameDifferentNamespaces_SaveLoadRoundTrip()
@@ -232,17 +224,17 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
             foreach (var collectionType in typeList)
             {
                 var serializer = new DataContractSerializerFactory().
-                    GetDataContractSerializer(typeof (ContainerAbstractClasses), collectionType, "TestXmlName", null, null);
+                    GetDataContractSerializer(typeof(ContainerAbstractClasses), collectionType, "TestXmlName", null, null);
 
-                Assert.IsTrue(serializer.KnownTypes.Contains(typeof (PluginA.Params)));
-                Assert.IsTrue(serializer.KnownTypes.Contains(typeof (PluginB.Params)));
+                Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginA.Params)));
+                Assert.IsTrue(serializer.KnownTypes.Contains(typeof(PluginB.Params)));
             }
         }
 
         [TestCase]
         public void DataContractSerializerFactory_InstanceTest()
         {
-            var itemList = new IParams[] {new PluginA.Params {SettingA = "TestA"}, new PluginB.Params {SettingB = "TestB"}};
+            var itemList = new IParams[] { new PluginA.Params { SettingA = "TestA" }, new PluginB.Params { SettingB = "TestB" } };
 
 
             var containerList = new ICollection[]

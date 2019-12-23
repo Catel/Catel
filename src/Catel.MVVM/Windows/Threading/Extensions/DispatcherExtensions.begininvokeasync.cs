@@ -38,8 +38,8 @@ namespace Catel.Windows.Threading
         /// </remarks>
         public static async Task BeginInvokeAsync(this Dispatcher dispatcher, Func<Task> func)
         {
-            Argument.IsNotNull(() => dispatcher);
-            Argument.IsNotNull(() => func);
+            Argument.IsNotNull(nameof(dispatcher), dispatcher);
+            Argument.IsNotNull(nameof(func), func);
 
             var tcs = new TaskCompletionSource<object>();
 

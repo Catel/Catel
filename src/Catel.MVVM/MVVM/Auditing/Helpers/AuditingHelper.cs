@@ -10,6 +10,8 @@ namespace Catel.MVVM.Auditing
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Threading.Tasks;
+    using Catel.Data;
+    using Catel.IoC;
     using Reflection;
     using Threading;
 
@@ -20,6 +22,7 @@ namespace Catel.MVVM.Auditing
     public static class AuditingHelper
     {
         private static readonly HashSet<string> KnownIgnoredPropertyNames = new HashSet<string>();
+        private static readonly IObjectAdapter ObjectAdapter = ServiceLocator.Default.ResolveType<IObjectAdapter>();
 
         /// <summary>
         /// Initializes static members of the <see cref="AuditingHelper"/> class.
@@ -113,7 +116,7 @@ namespace Catel.MVVM.Auditing
             object propertyValue = null;
             if (!string.IsNullOrEmpty(e.PropertyName) && !KnownIgnoredPropertyNames.Contains(e.PropertyName))
             {
-                PropertyHelper.TryGetPropertyValue(viewModel, e.PropertyName, out propertyValue);
+                ObjectAdapter.GetMemberValue(viewModel, e.PropertyName, out propertyValue);
             }
 
             AuditingManager.OnPropertyChanged(viewModel, e.PropertyName, propertyValue);
@@ -210,7 +213,7 @@ namespace Catel.MVVM.Auditing
                 return TaskHelper.Completed;
             }
 
-            var viewModel = (IViewModel) sender;
+            var viewModel = (IViewModel)sender;
             AuditingManager.OnViewModelClosed(viewModel);
 
             UnsubscribeEvents(viewModel);

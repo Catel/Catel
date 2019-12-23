@@ -66,6 +66,10 @@ namespace Catel.MVVM
 
         private static readonly ConcurrentDictionary<Type, ViewModelMetadata> _metaData = new ConcurrentDictionary<Type, ViewModelMetadata>();
 
+        /// <summary>
+        /// The object adapter responsible for the property mappings.
+        /// </summary>
+        protected readonly IObjectAdapter _objectAdapter;
 
 #if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
@@ -232,8 +236,10 @@ namespace Catel.MVVM
                 serviceLocator = ServiceLocator.Default;
             }
 
-#if !XAMARIN && !XAMARIN_FORMS
             DependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
+            _objectAdapter = DependencyResolver.Resolve<IObjectAdapter>();
+
+#if !XAMARIN && !XAMARIN_FORMS
             _dispatcherService = DependencyResolver.Resolve<IDispatcherService>();
 #endif
             var type = GetType();
@@ -412,6 +418,20 @@ namespace Catel.MVVM
         /// <value><c>true</c> if the view model is closed; otherwise, <c>false</c>.</value>
         [ExcludeFromValidation]
         public bool IsClosed { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is saved at least once.
+        /// </summary>
+        /// <value><c>true</c> if this instance is saved at least once; otherwise, <c>false</c>.</value>
+        [ExcludeFromValidation]
+        public bool IsSaved { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is canceled at least once.
+        /// </summary>
+        /// <value><c>true</c> if this instance is canceled at least once; otherwise, <c>false</c>.</value>
+        [ExcludeFromValidation]
+        public bool IsCanceled { get; private set; }
 
         /// <summary>
         /// Gets the title of the view model.
@@ -849,11 +869,11 @@ namespace Catel.MVVM
                 var model = _modelObjects[mapping.ModelProperty];
                 if (model != null)
                 {
-                    object value = GetValue(mapping.ViewModelProperty);
+                    var value = GetValue(mapping.ViewModelProperty);
                     var modelValues = mapping.Converter.ConvertBack(value, this);
-                    for (int i = 0; i < mapping.ValueProperties.Length; i++)
+                    for (var i = 0; i < mapping.ValueProperties.Length; i++)
                     {
-                        if (PropertyHelper.TrySetPropertyValue(model, mapping.ValueProperties[i], modelValues[i], false))
+                        if (_objectAdapter.SetMemberValue(model, mapping.ValueProperties[i], modelValues[i]))
                         {
                             Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", mapping.ValueProperties, model.GetType().Name, ObjectToStringHelper.ToString(value));
                         }
@@ -906,7 +926,7 @@ namespace Catel.MVVM
                     }
 
                     // Since the model has been changed, copy all values from the model to the view model
-                    foreach (KeyValuePair<string, ViewModelToModelMapping> viewModelToModelMap in _viewModelToModelMap)
+                    foreach (var viewModelToModelMap in _viewModelToModelMap)
                     {
                         var mapping = viewModelToModelMap.Value;
                         var converter = mapping.Converter;
@@ -924,7 +944,11 @@ namespace Catel.MVVM
                                 for (var index = 0; index < mapping.ValueProperties.Length; index++)
                                 {
                                     var property = mapping.ValueProperties[index];
-                                    values[index] = PropertyHelper.GetPropertyValue(newModelValue, property, false);
+
+                                    if (_objectAdapter.GetMemberValue(newModelValue, property, out object memberValue))
+                                    {
+                                        values[index] = memberValue;
+                                    }
                                 }
                             }
                             else
@@ -983,7 +1007,7 @@ namespace Catel.MVVM
                                         {
                                             mapping.IgnoredProperties.AddRange(propertiesToSet);
 
-                                            if (PropertyHelper.TrySetPropertyValue(model, propertiesToSet[index], valuesToSet[index], false))
+                                            if (_objectAdapter.SetMemberValue(model, propertiesToSet[index], valuesToSet[index]))
                                             {
                                                 Log.Debug("Updated property '{0}' on model type '{1}' to '{2}'", propertiesToSet[index], model.GetType().Name, ObjectToStringHelper.ToString(valuesToSet[index]));
 
@@ -1070,7 +1094,11 @@ namespace Catel.MVVM
                             for (var index = 0; index < mapping.ValueProperties.Length; index++)
                             {
                                 var property = mapping.ValueProperties[index];
-                                values[index] = PropertyHelper.GetPropertyValue(sender, property, false);
+
+                                if (_objectAdapter.GetMemberValue(sender, property, out object modelValue))
+                                {
+                                    values[index] = modelValue;
+                                }
                             }
 
                             var convertedValue = mapping.Converter.Convert(values, this);
@@ -1419,6 +1447,7 @@ namespace Catel.MVVM
 
             await CanceledAsync.SafeInvokeAsync(this);
 
+            IsCanceled = true;
             IsCanceling = false;
 
             return true;
@@ -1482,6 +1511,8 @@ namespace Catel.MVVM
                 }
 
                 await SavedAsync.SafeInvokeAsync(this);
+
+                IsSaved = true;
             }
 
             IsSaving = false;

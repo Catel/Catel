@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ModelC graphid="1" xmlns:ctl="http://schemas.catelproject.com">
+<ModelC xmlns:ctl="http://schemas.catelproject.com" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" ctl:graphid="1">
   <D>D</D>
-  <E xmlns:ctl1="http://schemas.datacontract.org/2004/07/Catel.Tests.Data" graphid="2" type="Catel.Tests.Data.ModelA">
+  <E ctl:graphid="2" ctl:type="Catel.Tests.Data.ModelA">
     <B>B</B>
     <A>A</A>
   </E>

@@ -4,7 +4,7 @@
     {
         public ProcessResult(ProcessContext context)
         {
-            Argument.IsNotNull(() => context);
+            Argument.IsNotNull(nameof(context), context);
 
             Context = context;
         }

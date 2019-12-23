@@ -13,9 +13,12 @@ namespace Catel.Data
     using Runtime.Serialization.Xml;
     using Runtime.Serialization;
     using Scoping;
+    using System;
 
     public partial class ModelBase
     {
+        private static readonly Func<SerializationScope> XmlSerializationScopeFactory = new Func<SerializationScope>(() => new SerializationScope(SerializationFactory.GetXmlSerializer(), null));
+
         /// <summary>
         /// This method is reserved and should not be used. When implementing the IXmlSerializable interface, you should return null (Nothing in Visual Basic) from this method, and instead, if specifying a custom schema is required, apply the <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute"/> to the class.
         /// </summary>
@@ -42,7 +45,7 @@ namespace Catel.Data
             var contextInfo = new XmlSerializationContextInfo(reader, this);
 
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetXmlSerializer(), null)))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, XmlSerializationScopeFactory))
             {
                 var serializer = scopeManager.ScopeObject.Serializer;
                 serializer.Deserialize(this, contextInfo, scopeManager.ScopeObject.Configuration);
@@ -55,40 +58,15 @@ namespace Catel.Data
         /// <param name="writer">The <see cref="T:System.Xml.XmlWriter"/> stream to which the object is serialized.</param>
         void IXmlSerializable.WriteXml(XmlWriter writer)
         {
+            // Note: although this XmlWriter doesn't have settings, it has an internal writer that
+            // is used (with the correct settings). For more details, see the source at:
+            // https://referencesource.microsoft.com/#System.Runtime.Serialization/System/Runtime/Serialization/XmlSerializableWriter.cs
+
             var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
-            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(SerializationFactory.GetXmlSerializer(), null)))
+            using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, XmlSerializationScopeFactory))
             {
-                var type = GetType();
-                var element = new XElement(type.Name);
                 var serializer = scopeManager.ScopeObject.Serializer;
-                serializer.Serialize(this, new XmlSerializationContextInfo(element, this), scopeManager.ScopeObject.Configuration);
-
-                // The serializer gives us the full element, but we only need the actual content. According to
-                // http://stackoverflow.com/questions/3793/best-way-to-get-innerxml-of-an-xelement, this method is the fastest:
-                var reader = element.CreateReader();
-                reader.MoveToContent();
-
-                // CTL-710: fix attributes on top level elements
-                if (reader.HasAttributes)
-                {
-                    for (var i = 0; i < reader.AttributeCount; i++)
-                    {
-                        reader.MoveToAttribute(i);
-
-                        var attributePrefix = reader.Prefix;
-                        var attributeLocalName = reader.LocalName;
-                        var attributeNs = reader.NamespaceURI;
-                        var attributeValue = reader.Value;
-
-                        writer.WriteAttributeString(attributePrefix, attributeLocalName, attributeNs, attributeValue);
-                    }
-
-                    reader.MoveToElement();
-                }
-
-                var elementContent = reader.ReadInnerXml();
-
-                writer.WriteRaw(elementContent);
+                serializer.Serialize(this, new XmlSerializationContextInfo(writer, this), scopeManager.ScopeObject.Configuration);
             }
         }
     }

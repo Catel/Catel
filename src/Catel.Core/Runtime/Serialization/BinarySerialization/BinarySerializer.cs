@@ -55,7 +55,7 @@ namespace Catel.Runtime.Serialization.Binary
         /// <param name="typeFactory">The type factory.</param>
         /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        public BinarySerializer(ISerializationManager serializationManager, ITypeFactory typeFactory, IObjectAdapter objectAdapter)
+        public BinarySerializer(ISerializationManager serializationManager, ITypeFactory typeFactory, Catel.Runtime.Serialization.IObjectAdapter objectAdapter)
             : base(serializationManager, typeFactory, objectAdapter)
         {
             if (DeserializationBinder is null)
@@ -108,7 +108,7 @@ namespace Catel.Runtime.Serialization.Binary
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
 
-                using (var context = (SerializationContext<BinarySerializationContextInfo>) GetContext(model, model.GetType(),
+                using (var context = (SerializationContext<BinarySerializationContextInfo>)GetSerializationContextInfo(model, model.GetType(),
                     stream, SerializationContextMode.Deserialization, configuration))
                 {
                     var referenceManager = context.ReferenceManager;
@@ -433,11 +433,11 @@ namespace Catel.Runtime.Serialization.Binary
                     var shouldSerializeAsCollection = memberValue.MemberGroup == SerializationMemberGroup.Collection;
                     if (referenceInfo.IsFirstUsage || shouldSerializeAsCollection)
                     {
-                        propertyValue.GraphId = referenceInfo.Id;
+                        propertyValue.GraphId = referenceInfo.Id.Value;
                     }
                     else
                     {
-                        propertyValue.GraphRefId = referenceInfo.Id;
+                        propertyValue.GraphRefId = referenceInfo.Id.Value;
                         propertyValue.Value = null;
                     }
                 }

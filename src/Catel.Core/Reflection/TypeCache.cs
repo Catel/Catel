@@ -64,7 +64,7 @@ namespace Catel.Reflection
         /// Cache containing all the types based on a string. This way, it is easy to retrieve a type based on a 
         /// string containing the type name and assembly without the overhead, such as <c>Catel.TypeHelper, Catel.Core</c>.
         /// </summary>
-        private static readonly Dictionary<string, Type> _typesWithAssemblyLowerCase = new Dictionary<string, Type>(DefaultCollectionSizeForTypes, StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, Type> _typesWithAssemblyIgnoreCase = new Dictionary<string, Type>(DefaultCollectionSizeForTypes, StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Cache containing all the types based without an assembly. This means that a type with this format:
@@ -80,7 +80,7 @@ namespace Catel.Reflection
         /// <para />
         /// The values resolved from this dictionary can be used as key in the <see cref="_typesWithAssembly"/> dictionary.
         /// </summary>
-        private static readonly Dictionary<string, string> _typesWithoutAssemblyLowerCase = new Dictionary<string, string>(DefaultCollectionSizeForTypes, StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, string> _typesWithoutAssemblyIgnoreCase = new Dictionary<string, string>(DefaultCollectionSizeForTypes, StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// The list of loaded assemblies which do not required additional initialization again.
@@ -316,8 +316,8 @@ namespace Catel.Reflection
 
             lock (_lockObject)
             {
-                var typesWithoutAssembly = ignoreCase ? _typesWithoutAssemblyLowerCase : _typesWithoutAssembly;
-                var typesWithAssembly = ignoreCase ? _typesWithAssemblyLowerCase : _typesWithAssembly;
+                var typesWithoutAssembly = ignoreCase ? _typesWithoutAssemblyIgnoreCase : _typesWithoutAssembly;
+                var typesWithAssembly = ignoreCase ? _typesWithAssemblyIgnoreCase : _typesWithAssembly;
 
                 var typeNameWithAssembly = string.IsNullOrEmpty(assemblyName) ? null : TypeHelper.FormatType(assemblyName, typeName);
                 if (typeNameWithAssembly is null)
@@ -566,12 +566,18 @@ namespace Catel.Reflection
 
                 try
                 {
-                    if (predicate != null)
+                    // Important, accessing the type source should happen inside the lock. We lock
+                    // every time so the collection can be modified in between retries so we always run
+                    // against the latest possible state
+                    lock (_lockObject)
                     {
-                        return typeSource.Values.Where(predicate).ToArray();
-                    }
+                        if (predicate != null)
+                        {
+                            return typeSource.Values.Where(predicate).ToArray();
+                        }
 
-                    return typeSource.Values.ToArray();
+                        return typeSource.Values.ToArray();
+                    }
                 }
                 catch (Exception)
                 {
@@ -669,9 +675,9 @@ namespace Catel.Reflection
                     _loadedAssemblies.Clear();
                     _typesByAssembly?.Clear();
                     _typesWithAssembly?.Clear();
-                    _typesWithAssemblyLowerCase?.Clear();
+                    _typesWithAssemblyIgnoreCase?.Clear();
                     _typesWithoutAssembly?.Clear();
-                    _typesWithoutAssemblyLowerCase?.Clear();
+                    _typesWithoutAssemblyIgnoreCase?.Clear();
                 }
 
                 var assembliesToInitialize = checkSingleAssemblyOnly ? new List<Assembly>(new[] { assembly }) : AssemblyHelper.GetLoadedAssemblies();
@@ -860,11 +866,11 @@ namespace Catel.Reflection
                 typesByAssembly[newFullType] = type;
 
                 _typesWithAssembly[newFullType] = type;
-                _typesWithAssemblyLowerCase[newFullType] = type;
+                _typesWithAssemblyIgnoreCase[newFullType] = type;
 
                 var typeNameWithoutAssembly = TypeHelper.GetTypeName(newFullType);
                 _typesWithoutAssembly[typeNameWithoutAssembly] = newFullType;
-                _typesWithoutAssemblyLowerCase[typeNameWithoutAssembly] = newFullType;
+                _typesWithoutAssemblyIgnoreCase[typeNameWithoutAssembly] = newFullType;
             }
         }
 

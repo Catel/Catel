@@ -7,16 +7,30 @@
 
 namespace Catel.Data
 {
+    using System;
     using System.Collections.Generic;
+    using Catel.Reflection;
+
+    /// <summary>
+    /// Boxing cache helper.
+    /// </summary>
+    public static partial class BoxingCache
+    {
+        // Partial class, see T4 template
+    }
 
     /// <summary>
     /// Caches boxed objects to minimize the memory footprint for boxed value types.
     /// </summary>
     public class BoxingCache<T>
-        where T : struct
     {
         private readonly Dictionary<T, object> _boxedValues = new Dictionary<T, object>();
-        private readonly Dictionary<object, T> _unboxedValues = new Dictionary<object, T>();
+        //private readonly Dictionary<object, T> _unboxedValues = new Dictionary<object, T>();
+
+        /// <summary>
+        /// Gets the default instance of the boxing cache.
+        /// </summary>
+        public static BoxingCache<T> Default { get; private set; } = new BoxingCache<T>();
 
         /// <summary>
         /// Adds the value to the cache.
@@ -31,10 +45,10 @@ namespace Catel.Data
                 _boxedValues[value] = boxedValue;
             }
 
-            lock (_unboxedValues)
-            {
-                _unboxedValues[boxedValue] = value;
-            }
+            //lock (_unboxedValues)
+            //{
+            //    _unboxedValues[boxedValue] = value;
+            //}
 
             return boxedValue;
         }
@@ -52,10 +66,10 @@ namespace Catel.Data
                 _boxedValues[unboxedValue] = boxedValue;
             }
 
-            lock (_unboxedValues)
-            {
-                _unboxedValues[boxedValue] = unboxedValue;
-            }
+            //lock (_unboxedValues)
+            //{
+            //    _unboxedValues[boxedValue] = unboxedValue;
+            //}
 
             return unboxedValue;
         }
@@ -67,6 +81,11 @@ namespace Catel.Data
         /// <returns>The boxed value.</returns>
         public object GetBoxedValue(T value)
         {
+            if (ReferenceEquals(value, null))
+            {
+                return null;
+            }
+
             lock (_boxedValues)
             {
                 if (!_boxedValues.TryGetValue(value, out var boxedValue))
@@ -85,15 +104,16 @@ namespace Catel.Data
         /// <returns>The unboxed value.</returns>
         public T GetUnboxedValue(object boxedValue)
         {
-            lock (_unboxedValues)
-            {
-                if (!_unboxedValues.TryGetValue(boxedValue, out var unboxedValue))
-                {
-                    unboxedValue = AddBoxedValue(boxedValue);
-                }
+            return (T)boxedValue;
+            //lock (_unboxedValues)
+            //{
+            //    if (!_unboxedValues.TryGetValue(boxedValue, out var unboxedValue))
+            //    {
+            //        unboxedValue = AddBoxedValue(boxedValue);
+            //    }
 
-                return unboxedValue;
-            }
+            //    return unboxedValue;
+            //}
         }
     }
 }

@@ -72,6 +72,17 @@ namespace Catel
         }
 
         /// <summary>
+        /// Converts a string to a byte.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>The byte array value of the string.</returns>
+        public static byte ToByte(string value)
+        {
+            var bytes = ToByteArray(value);
+            return bytes.Length > 0 ? bytes[0] : default;
+        }
+
+        /// <summary>
         /// Converts a string to a byte array.
         /// </summary>
         /// <param name="value">The value.</param>
@@ -83,7 +94,7 @@ namespace Catel
                 return ArrayShim.Empty<byte>();
             }
 
-            var encoding = new UTF8Encoding();
+            var encoding = UTF8Encoding.UTF8;
             return encoding.GetBytes(value);
         }
 
@@ -109,7 +120,7 @@ namespace Catel
 
             if (string.IsNullOrWhiteSpace(value))
             {
-                return default(DateTime);
+                return default;
             }
 
             return DateTime.Parse(value, cultureInfo);
@@ -492,6 +503,11 @@ namespace Catel
                 targetType == typeof(bool?))
             {
                 return ToBool(value);
+            }
+
+            if (targetType == typeof(byte))
+            {
+                return ToByte(value);
             }
 
             if (targetType == typeof(byte[]))

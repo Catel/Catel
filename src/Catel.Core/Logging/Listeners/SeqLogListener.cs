@@ -87,19 +87,18 @@ namespace Catel.Logging
             try
             {
                 var textWriter = new StringWriter();
-                textWriter.Write("{\"events\":[");
+                await textWriter.WriteAsync("{\"events\":[");
 
                 var logEntries = batchEntries.Select(batchEntry => FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Data, FastDateTime.Now)).Aggregate((log1, log2) => string.Format("{0},{1}", log1, log2));
 
-                textWriter.Write(logEntries);
-                textWriter.Write("]}");
+                await textWriter.WriteAsync(logEntries);
+                await textWriter.WriteAsync("]}");
 
                 var message = textWriter.ToString();
 
                 InitializeWebClient();
 
-                _webClient.UploadString(WebApiUrl, message);
-
+                _webClient.UploadStringAsync(new Uri(WebApiUrl), message);
             }
             catch (Exception)
             {
