@@ -108,7 +108,7 @@ namespace Catel.Runtime.Serialization.Binary
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
 
-                using (var context = (SerializationContext<BinarySerializationContextInfo>) GetContext(model, model.GetType(),
+                using (var context = (SerializationContext<BinarySerializationContextInfo>)GetSerializationContextInfo(model, model.GetType(),
                     stream, SerializationContextMode.Deserialization, configuration))
                 {
                     var referenceManager = context.ReferenceManager;

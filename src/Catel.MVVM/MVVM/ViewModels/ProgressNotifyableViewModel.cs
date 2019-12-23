@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ProgressNotifyableViewModel.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -196,7 +196,7 @@ namespace Catel.MVVM
             _currentItem = currentItem;
             _totalItems = totalItems;
 
-            RaisePropertyChanged(() => Percentage);
+            RaisePropertyChanged(nameof(Percentage));
         }
 
         #endregion
@@ -211,7 +211,7 @@ namespace Catel.MVVM
         /// <summary>Occurs when the value of the TaskPercentage property is changed.</summary>
         private void OnTaskPercentageChanged()
         {
-            RaisePropertyChanged(() => Percentage);
+            RaisePropertyChanged(nameof(Percentage));
         }
         #endregion
     }

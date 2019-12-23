@@ -19,8 +19,8 @@ namespace Catel.MVVM.Auditing
         public InvalidateCommandManagerOnViewModelInitializationAuditor(ICommandManager commandManager,
             IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull(() => commandManager);
-            Argument.IsNotNull(() => dispatcherService);
+            Argument.IsNotNull(nameof(commandManager), commandManager);
+            Argument.IsNotNull(nameof(dispatcherService), dispatcherService);
 
             _commandManager = commandManager;
             _dispatcherService = dispatcherService;

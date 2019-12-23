@@ -599,7 +599,9 @@ namespace Catel.MVVM
     }
     public interface IViewModel : Catel.Data.IValidatable, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged
     {
+        bool IsCanceled { get; }
         bool IsClosed { get; }
+        bool IsSaved { get; }
         string Title { get; }
         int UniqueIdentifier { get; }
         public event Catel.AsyncEventHandler<System.EventArgs> CanceledAsync;
@@ -631,6 +633,7 @@ namespace Catel.MVVM
         public static System.Threading.Tasks.Task AwaitClosingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
         public static System.Threading.Tasks.Task<bool> AwaitSavingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
         public static System.Threading.Tasks.Task<bool> CancelAndCloseViewModelAsync(this Catel.MVVM.IViewModel viewModel) { }
+        public static System.Nullable<bool> GetResult(this Catel.MVVM.IViewModel viewModel) { }
         public static System.Threading.Tasks.Task<bool> SaveAndCloseViewModelAsync(this Catel.MVVM.IViewModel viewModel) { }
     }
     public interface IViewModelFactory
@@ -864,6 +867,8 @@ namespace Catel.MVVM
         [Catel.Data.ExcludeFromValidationAttribute()]
         protected bool InvalidateCommandsOnPropertyChanged { get; set; }
         [Catel.Data.ExcludeFromValidationAttribute()]
+        public bool IsCanceled { get; }
+        [Catel.Data.ExcludeFromValidationAttribute()]
         protected bool IsCanceling { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
         public bool IsClosed { get; }
@@ -872,6 +877,8 @@ namespace Catel.MVVM
         protected bool IsInitialized { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
         protected bool IsInitializing { get; }
+        [Catel.Data.ExcludeFromValidationAttribute()]
+        public bool IsSaved { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
         protected bool IsSaving { get; }
         [Catel.Data.ExcludeFromValidationAttribute()]
@@ -2641,11 +2648,14 @@ namespace Catel.Windows
     {
         public static object FindLogicalAncestor(this System.Windows.DependencyObject startElement, System.Predicate<object> condition, int maxDepth = -1) { }
         public static T FindLogicalAncestorByType<T>(this System.Windows.DependencyObject startElement) { }
+        public static T FindLogicalAncestorByType<T>(this System.Windows.DependencyObject startElement, int maxDepth) { }
         public static object FindLogicalOrVisualAncestor(this System.Windows.DependencyObject startElement, System.Predicate<object> condition, int maxDepth = -1) { }
         public static T FindLogicalOrVisualAncestorByType<T>(this System.Windows.DependencyObject startElement) { }
+        public static T FindLogicalOrVisualAncestorByType<T>(this System.Windows.DependencyObject startElement, int maxDepth) { }
         public static System.Windows.DependencyObject FindLogicalRoot(this System.Windows.DependencyObject startElement) { }
         public static object FindVisualAncestor(this System.Windows.DependencyObject startElement, System.Predicate<object> condition, int maxDepth = -1) { }
         public static T FindVisualAncestorByType<T>(this System.Windows.DependencyObject startElement) { }
+        public static T FindVisualAncestorByType<T>(this System.Windows.DependencyObject startElement, int maxDepth) { }
         public static System.Windows.DependencyObject FindVisualDescendant(this System.Windows.DependencyObject startElement, System.Predicate<object> condition) { }
         public static System.Windows.DependencyObject FindVisualDescendantByName(this System.Windows.DependencyObject startElement, string name) { }
         public static T FindVisualDescendantByType<T>(this System.Windows.DependencyObject startElement)

@@ -20,6 +20,28 @@ namespace Catel.MVVM
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
+        /// Gets the result of the view model by checking the <see cref="IViewModel.IsSaved"/> and <see cref="IViewModel.IsCanceled"/> properties.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <returns><c>true</c> if the view model is saved; <c>false</c> if the view model is canceled; otherwise <c>null</c>.</returns>
+        public static bool? GetResult(this IViewModel viewModel)
+        {
+            if (viewModel != null)
+            {
+                if (viewModel.IsSaved)
+                {
+                    return true;
+                }
+                else if (viewModel.IsCanceled)
+                {
+                    return false;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Saves the data, but also closes the view model in the same call if the save succeeds.
         /// </summary>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>

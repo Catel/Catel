@@ -16,115 +16,98 @@ namespace Catel.Reflection
 	{
         public bool SetPropertyValue<TValue>(object entity, string propertyName, TValue value)
         {
-            if (typeof(TValue) == typeof(Object))
+            if (!typeof(TValue).IsValueTypeEx())
             {
-                var finalValue = (object)value;
-
-                return SetPropertyValue((TEntity)entity, propertyName, finalValue);
+                return SetPropertyValue((TEntity)entity, propertyName, (object)value);
             }
 
             if (typeof(TValue) == typeof(Boolean))
             {
                 var finalValue = Convert.ToBoolean(value);
-
                 return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Char))
             {
                 var finalValue = Convert.ToChar(value);
-
                 return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 
             if (typeof(TValue) == typeof(SByte))
             {
                 var finalValue = Convert.ToSByte(value);
-
                 return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Byte))
             {
                 var finalValue = Convert.ToByte(value);
-
                 return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Int16))
             {
                 var finalValue = Convert.ToInt16(value);
-
                 return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 
             if (typeof(TValue) == typeof(UInt16))
             {
                 var finalValue = Convert.ToUInt16(value);
-
                 return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Int32))
             {
                 var finalValue = Convert.ToInt32(value);
-
                 return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 
             if (typeof(TValue) == typeof(UInt32))
             {
                 var finalValue = Convert.ToUInt32(value);
-
                 return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Int64))
             {
                 var finalValue = Convert.ToInt64(value);
-
                 return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 
             if (typeof(TValue) == typeof(UInt64))
             {
                 var finalValue = Convert.ToUInt64(value);
-
                 return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Single))
             {
                 var finalValue = Convert.ToSingle(value);
-
                 return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Double))
             {
                 var finalValue = Convert.ToDouble(value);
-
                 return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 
             if (typeof(TValue) == typeof(Decimal))
             {
                 var finalValue = Convert.ToDecimal(value);
-
                 return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 
             if (typeof(TValue) == typeof(DateTime))
             {
                 var finalValue = Convert.ToDateTime(value);
-
                 return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 
             if (typeof(TValue) == typeof(String))
             {
                 var finalValue = Convert.ToString(value);
-
                 return SetPropertyValue((TEntity)entity, propertyName, finalValue);
             }
 

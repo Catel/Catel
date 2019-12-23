@@ -11,7 +11,7 @@
     using MVVM;
     using MVVM.Views;
     using Windows.Controls;
-    
+
     using ContentPage = Windows.Controls.ContentPage;
 
     /// <summary>
@@ -47,9 +47,9 @@
         /// <exception cref="System.ArgumentNullException">The <paramref name="languageService" /> is <c>null</c>.</exception>
         public UIVisualizerService(IViewLocator viewLocator, ITypeFactory typeFactory, ILanguageService languageService)
         {
-            Argument.IsNotNull(() => viewLocator);
-            Argument.IsNotNull(() => typeFactory);
-            Argument.IsNotNull(() => languageService);
+            Argument.IsNotNull(nameof(viewLocator), viewLocator);
+            Argument.IsNotNull(nameof(typeFactory), typeFactory);
+            Argument.IsNotNull(nameof(languageService), languageService);
 
             _viewLocator = viewLocator;
             _typeFactory = typeFactory;
@@ -135,12 +135,12 @@
         /// </exception>
         public async Task<bool?> ShowAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
-            Argument.IsNotNull(() => viewModel);
+            Argument.IsNotNull(nameof(viewModel), viewModel);
 
             bool? result = null;
             var viewModelType = viewModel.GetType();
             var resolvedView = _viewLocator.ResolveView(viewModelType);
-            var view = (View) _typeFactory.CreateInstance(resolvedView);
+            var view = (View)_typeFactory.CreateInstance(resolvedView);
 
             if (view is IView)
             {
@@ -445,9 +445,9 @@
                 if (popupLayout is null)
                 {
                     _callbacks[contentPage]?.Item2?.Invoke(this, new UICompletedEventArgs(_callbacks[contentPage].Item1, null));
-                    await NavigationHelper.PopModalAsync(); 
+                    await NavigationHelper.PopModalAsync();
                 }
-                
+
                 contentPage.BackButtonPressed -= OnBackButtonPressed;
             }
         }

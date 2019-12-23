@@ -126,7 +126,7 @@ namespace Catel.Logging
         /// <exception cref="ArgumentException">The <paramref name="filePath" /> is <c>null</c> or whitespace.</exception>
         public FileLogListener(string filePath, int maxSizeInKiloBytes, Assembly assembly = null)
         {
-            Argument.IsNotNullOrWhitespace(() => filePath);
+            Argument.IsNotNullOrWhitespace(nameof(filePath), filePath);
 
             Initialize(false, assembly);
 

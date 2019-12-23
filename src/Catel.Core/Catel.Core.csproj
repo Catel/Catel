@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <!--<TargetFrameworks>net45;net46;net47;netcoreapp3.0;uap10.0;netstandard2.0;xamarin.ios10;monoandroid70</TargetFrameworks>-->
-    <TargetFrameworks>net45;net46;net47;netcoreapp3.0;uap10.0;uap10.0.16299;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net45;net46;net47;netcoreapp3.0;uap10.0.16299;netstandard2.0</TargetFrameworks>
     <AssemblyName>Catel.Core</AssemblyName>
     <RootNamespace>Catel</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -115,6 +115,36 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Data\BoxingCache.boxedvalues.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>BoxingCache.boxedvalues.cs</LastGenOutput>
+    </None>
+    <Compile Update="Data\BoxingCache.boxedvalues.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>BoxingCache.boxedvalues.tt</DependentUpon>
+    </Compile>
+    
+    <None Update="Data\PropertyBags\PropertyBag.boxing.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PropertyBag.boxing.cs</LastGenOutput>
+    </None>
+    <Compile Update="Data\PropertyBags\PropertyBag.boxing.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PropertyBag.boxing.tt</DependentUpon>
+    </Compile>    
+    
+    <None Update="Data\PropertyBags\TypedPropertyBag.storage.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TypedPropertyBag.storage.cs</LastGenOutput>
+    </None>
+    <Compile Update="Data\PropertyBags\TypedPropertyBag.storage.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TypedPropertyBag.storage.tt</DependentUpon>
+    </Compile>
+    
     <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.caches.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>FastMemberInvoker.caches.g.cs</LastGenOutput>

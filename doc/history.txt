@@ -25,25 +25,34 @@ For an upgrade guide, visit https://docs.catelproject.com/vnext/setup-deployment
 
 Release date
 ============
-2019/xx/xx
+2019/12/23
 
 Added/fixed
 ===========
+(+) #1319 Add TypedPropertyBag to prevent boxing
 (+) #1421 ObservableDictionary for supporting UI controls that utilize Dictionaries
 (+) #1437 Cache boxed value type values in ModelBase
 (+) #1439 Add Catel.Data.IObjectAdapter with a Reflection and Expression Tree implementation
     to provide faster (unknown) model property mappings
+(+) #1488 Add IAppDataService to allow customization of the application data base directories
 (*) #1435 Decrease XmlWriterSettings allocations during serialization by caching it
 (*) #1436 Decrease allocations of objects during (de)serialization
 (*) #1440 Use ObjectAdapter in ViewModelBase for property mappings
 (*) #1441 Clean up TypeExtensions with system extensions for UAP
+(*) #1450 Remove boxing from value to TValue in FastMemberInvoker
 (*) #1454 Minimize usage of PropertyHelper where possible
 (*) #1455 Move code snippets to Catel.Templates and deploy in the Visual Studio marketplace
 (*) #1467 Update ThemeInfo theme specific resource dictionary to None
+(*) #1473 Support serialization of manually registered properties on DynamicConfiguration
+(*) #1490 Update minimum target version for UAP to 10.0.16299
+(*) #1503 Return result of view model in UIVisualizerService.ShowAsync()
 (x) #1408 Logging in TypeFactory uses wrong parameter name
 (x) #1434 Serialization should respect graph ids when deserializing collections
 (x) #1453 FileSupport => SaveFileService & OpenFileService: Bug if InitialDirectory does not exist
 (x) #1469 Prevent first chance exceptions about DialogResult when window is not shown modal
+(x) #1474 DependencyObjectExtensions.FindLogicalOrVisualAncestor returns null when it should find a parent
+(x) #1476 Fix rare potential "collection was modified" enumeration in TypeCache
+(x) #1504 ServiceLocator is not registering services decorated with attribute "ServiceLocatorRegistration"
 
 Platform support changes
 ========================

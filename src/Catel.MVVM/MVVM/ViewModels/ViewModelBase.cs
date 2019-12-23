@@ -420,6 +420,20 @@ namespace Catel.MVVM
         public bool IsClosed { get; private set; }
 
         /// <summary>
+        /// Gets a value indicating whether this instance is saved at least once.
+        /// </summary>
+        /// <value><c>true</c> if this instance is saved at least once; otherwise, <c>false</c>.</value>
+        [ExcludeFromValidation]
+        public bool IsSaved { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is canceled at least once.
+        /// </summary>
+        /// <value><c>true</c> if this instance is canceled at least once; otherwise, <c>false</c>.</value>
+        [ExcludeFromValidation]
+        public bool IsCanceled { get; private set; }
+
+        /// <summary>
         /// Gets the title of the view model.
         /// </summary>
         /// <value>The title.</value>
@@ -1433,6 +1447,7 @@ namespace Catel.MVVM
 
             await CanceledAsync.SafeInvokeAsync(this);
 
+            IsCanceled = true;
             IsCanceling = false;
 
             return true;
@@ -1496,6 +1511,8 @@ namespace Catel.MVVM
                 }
 
                 await SavedAsync.SafeInvokeAsync(this);
+
+                IsSaved = true;
             }
 
             IsSaving = false;

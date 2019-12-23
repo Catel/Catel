@@ -35,6 +35,7 @@ namespace Catel
             Argument.IsNotNull("serviceLocator", serviceLocator);
 
             serviceLocator.RegisterType<ILanguageService, LanguageService>();
+            serviceLocator.RegisterType<IAppDataService, AppDataService>();
             serviceLocator.RegisterInstance<IExceptionService>(ExceptionService.Default);
             serviceLocator.RegisterInstance<IMessageMediator>(MessageMediator.Default);
 

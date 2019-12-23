@@ -11,8 +11,8 @@ namespace Catel.MVVM.Auditing
 
         public SubscribeKeyboardEventsOnViewModelCreationAuditor(ICommandManager commandManager, IDispatcherService dispatcherService)
         {
-            Argument.IsNotNull(() => commandManager);
-            Argument.IsNotNull(() => dispatcherService);
+            Argument.IsNotNull(nameof(commandManager), commandManager);
+            Argument.IsNotNull(nameof(dispatcherService), dispatcherService);
 
             _commandManager = commandManager;
             _dispatcherService = dispatcherService;

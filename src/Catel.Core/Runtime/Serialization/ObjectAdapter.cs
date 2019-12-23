@@ -24,7 +24,7 @@ namespace Catel.Runtime.Serialization
 
         public ObjectAdapter(Data.IObjectAdapter objectAdapter)
         {
-            Argument.IsNotNull(() => objectAdapter);
+            Argument.IsNotNull(nameof(objectAdapter), objectAdapter);
 
             _objectAdapter = objectAdapter;
         }

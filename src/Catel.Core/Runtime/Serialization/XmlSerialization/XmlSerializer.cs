@@ -1245,18 +1245,6 @@ namespace Catel.Runtime.Serialization.Xml
         {
             var additionalKnownTypes = context.Context.KnownTypes;
 
-            //var parentContext = context.Parent;
-            //while (parentContext != null)
-            //{
-            //    var parentType = parentContext.ModelType;
-            //    if (parentType != null && !additionalKnownTypes.Contains(parentType))
-            //    {
-            //        additionalKnownTypes.Add(parentType);
-            //    }
-
-            //    parentContext = parentContext.Parent;
-            //}
-
             var serializer = _dataContractSerializerFactory.GetDataContractSerializer(propertyTypeToDeserialize, childElementType, xmlName, null, additionalKnownTypes.ToList());
 
             // We might have added more known types in the serializer
@@ -1293,8 +1281,12 @@ namespace Catel.Runtime.Serialization.Xml
 
             xmlWriter.WriteAttributeString(catelNamespacePrefix, "http://www.w3.org/2000/xmlns/", catelNamespaceUrl);
 
-            if (!context.ModelType.IsArrayEx())
+            if (!context.ModelType.IsCollection() && !context.ModelType.IsArrayEx())
             {
+                // Only write when this is not a collection, otherwise the internal DataContractSerializer will
+                // throw an exception about "'xmlns:i' is a duplicate attribute name.". There is a downside that
+                // the i: namespace will be written several times, but that's better than not having objects
+                // serialized (due to the exception)
                 xmlWriter.WriteAttributeString("i", "http://www.w3.org/2000/xmlns/", "http://www.w3.org/2001/XMLSchema-instance");
             }
 

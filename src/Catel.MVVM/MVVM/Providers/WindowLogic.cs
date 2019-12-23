@@ -183,6 +183,17 @@ namespace Catel.MVVM.Providers
                     Log.Warning("Failed to get the 'DialogResult' property of window type '{0}', using 'null' as dialog result", TargetWindow.GetType().Name);
                 }
 
+                if (dialogResult is null)
+                {
+                    // See https://github.com/Catel/Catel/issues/1503, even though there is no real DialogResult,
+                    // we will get the result from the VM instead
+                    var vm = ViewModel;
+                    if (vm != null)
+                    {
+                        dialogResult = vm.GetResult();
+                    }
+                }
+
                 await CloseViewModelAsync(dialogResult, true);
             }
 

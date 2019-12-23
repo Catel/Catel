@@ -566,12 +566,18 @@ namespace Catel.Reflection
 
                 try
                 {
-                    if (predicate != null)
+                    // Important, accessing the type source should happen inside the lock. We lock
+                    // every time so the collection can be modified in between retries so we always run
+                    // against the latest possible state
+                    lock (_lockObject)
                     {
-                        return typeSource.Values.Where(predicate).ToArray();
-                    }
+                        if (predicate != null)
+                        {
+                            return typeSource.Values.Where(predicate).ToArray();
+                        }
 
-                    return typeSource.Values.ToArray();
+                        return typeSource.Values.ToArray();
+                    }
                 }
                 catch (Exception)
                 {

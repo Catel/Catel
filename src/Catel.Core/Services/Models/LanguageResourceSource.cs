@@ -23,9 +23,9 @@ namespace Catel.Services
         /// <param name="resourceFileName">Name of the resource file.</param>
         public LanguageResourceSource(string assemblyName, string namespaceName, string resourceFileName)
         {
-            Argument.IsNotNullOrWhitespace(() => assemblyName);
-            Argument.IsNotNullOrWhitespace(() => namespaceName);
-            Argument.IsNotNullOrWhitespace(() => resourceFileName);
+            Argument.IsNotNullOrWhitespace(nameof(assemblyName), assemblyName);
+            Argument.IsNotNullOrWhitespace(nameof(namespaceName), namespaceName);
+            Argument.IsNotNullOrWhitespace(nameof(resourceFileName), resourceFileName);
 
             AssemblyName = assemblyName;
             NamespaceName = namespaceName;

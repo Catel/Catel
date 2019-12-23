@@ -14,7 +14,7 @@
     {
         public static Expression<Action<object, TField>> CreateFieldSetter<TField>(Type modelType, string fieldName)
         {
-            Argument.IsNotNullOrWhitespace(() => fieldName);
+            Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
             var field = modelType.GetFieldEx(fieldName);
             return field is null ? null : CreateFieldSetter<object, TField>(field);
@@ -22,7 +22,7 @@
 
         public static Expression<Action<T, TField>> CreateFieldSetter<T, TField>(string fieldName)
         {
-            Argument.IsNotNullOrWhitespace(() => fieldName);
+            Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
             var field = typeof(T).GetFieldEx(fieldName);
             return field is null ? null : CreateFieldSetter<T, TField>(field);
@@ -30,14 +30,14 @@
 
         public static Expression<Action<T, TField>> CreateFieldSetter<T, TField>(FieldInfo fieldInfo)
         {
-            Argument.IsNotNull(() => fieldInfo);
+            Argument.IsNotNull(nameof(fieldInfo), fieldInfo);
 
             return CreateFieldSetterExpression<T, TField>(fieldInfo);
         }
 
         public static Expression<Action<T, object>> CreateFieldSetter<T>(string fieldName)
         {
-            Argument.IsNotNullOrWhitespace(() => fieldName);
+            Argument.IsNotNullOrWhitespace(nameof(fieldName), fieldName);
 
             var field = typeof(T).GetFieldEx(fieldName);
             return field is null ? null : CreateFieldSetter<T>(field);
@@ -45,7 +45,7 @@
 
         public static Expression<Action<T, object>> CreateFieldSetter<T>(FieldInfo fieldInfo)
         {
-            Argument.IsNotNull(() => fieldInfo);
+            Argument.IsNotNull(nameof(fieldInfo), fieldInfo);
 
             return CreateFieldSetterExpression<T, object>(fieldInfo);
         }

@@ -54,15 +54,14 @@ namespace Catel.Data
         protected internal void SetValue<TValue>(string name, TValue value, bool notifyOnChange = true)
         {
             var property = GetPropertyData(name);
-            var objectValue = GetObjectValue(value);
 
-            if ((objectValue is null) && !property.Type.IsNullableType())
+            if ((value is null) && !property.Type.IsNullableType())
             {
                 throw Log.ErrorAndCreateException(msg => new PropertyNotNullableException(name, GetType()),
                     "Property '{0}' on type '{1}' is not nullable, cannot set value to null", name, GetType().FullName);
             }
 
-            SetValue(property, objectValue, notifyOnChange);
+            SetValue(property, value, notifyOnChange);
         }
 
         /// <summary>
@@ -95,6 +94,28 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
         protected internal void SetValue(PropertyData property, object value, bool notifyOnChange = true)
         {
+            SetValue<object>(property, value, notifyOnChange);
+        }
+
+        /// <summary>
+        /// Creates the property bag implementation that will be used by this model.
+        /// </summary>
+        /// <returns>The <see cref="IPropertyBag"/> to be used by this object.</returns>
+        protected virtual IPropertyBag CreatePropertyBag()
+        {
+            return new PropertyBag();
+        }
+
+        /// <summary>
+        /// Sets the value of a specific property.
+        /// </summary>
+        /// <param name="property">The property to set.</param>
+        /// <param name="value">Value of the property.</param>
+        /// <param name="notifyOnChange">If <c>true</c>, the <see cref="INotifyPropertyChanged.PropertyChanged"/> event will be invoked.</param>
+        /// <exception cref="PropertyNotNullableException">The property is not nullable, but <paramref name="value"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
+        protected internal void SetValue<TValue>(PropertyData property, TValue value, bool notifyOnChange = true)
+        {
             Argument.IsNotNull("property", property);
 
             // Is the object currently read-only (and aren't we changing that)?
@@ -123,13 +144,13 @@ namespace Catel.Data
             }
 
             var notify = false;
-            object oldValue = null;
+            TValue oldValue;
 
             lock (_lock)
             {
                 var changeNotificationsSuspensionContext = _changeNotificationsSuspensionContext;
 
-                oldValue = GetValueFromPropertyBag<object>(property.Name);
+                oldValue = GetValueFromPropertyBag<TValue>(property.Name);
                 var areOldAndNewValuesEqual = ObjectHelper.AreEqualReferences(oldValue, value);
 
                 if (!areOldAndNewValuesEqual)
@@ -149,22 +170,8 @@ namespace Catel.Data
             // Notify outside lock
             if (notify)
             {
-                RaisePropertyChanged(property.Name, oldValue, value);
+                RaisePropertyChanged(property.Name, BoxingCache.GetBoxedValue(oldValue), BoxingCache.GetBoxedValue(value));
             }
-        }
-
-        /// <summary>
-        /// Sets the value of a specific property.
-        /// </summary>
-        /// <param name="property">The property to set.</param>
-        /// <param name="value">Value of the property.</param>
-        /// <param name="notifyOnChange">If <c>true</c>, the <see cref="INotifyPropertyChanged.PropertyChanged"/> event will be invoked.</param>
-        /// <exception cref="PropertyNotNullableException">The property is not nullable, but <paramref name="value"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
-        protected internal void SetValue<TValue>(PropertyData property, TValue value, bool notifyOnChange = true)
-        {
-            var objectValue = GetObjectValue(value);
-            SetValue(property, objectValue, notifyOnChange);
         }
 
         /// <summary>
@@ -180,8 +187,7 @@ namespace Catel.Data
         {
             lock (_lock)
             {
-                var objectValue = GetObjectValue(value);
-                _propertyBag.SetPropertyValue(propertyName, objectValue);
+                _propertyBag.SetValue(propertyName, value);
             }
         }
 
@@ -197,10 +203,7 @@ namespace Catel.Data
         [ObsoleteEx(ReplacementTypeOrMember = "SetValueToPropertyBag<TValue>(string, TValue)", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         protected virtual void SetValueToPropertyBag(string propertyName, object value)
         {
-            lock (_lock)
-            {
-                _propertyBag.SetPropertyValue(propertyName, value);
-            }
+            SetValueToPropertyBag<object>(propertyName, value);
         }
 
         /// <summary>
@@ -216,7 +219,7 @@ namespace Catel.Data
         {
             lock (_lock)
             {
-                return _propertyBag.GetPropertyValue<T>(propertyName);
+                return _propertyBag.GetValue<T>(propertyName);
             }
         }
 

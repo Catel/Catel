@@ -22,7 +22,7 @@ namespace Catel
         /// <exception cref="System.ArgumentNullException">The <paramref name="this"/> is <c>null</c>.</exception>
         public static Page GetActivePage(this Application @this)
         {
-            Argument.IsNotNull(() => @this);
+            Argument.IsNotNull(nameof(@this), @this);
 
             Page activePage = Application.Current.MainPage;
             while (!(activePage is ContentPage))

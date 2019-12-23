@@ -41,6 +41,8 @@ namespace Catel.Windows
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
         public static object FindLogicalOrVisualAncestor(this DependencyObject startElement, Predicate<object> condition, int maxDepth = -1)
         {
+            // Try to be super fast, simple mode (just 1 level)
+
 #if NET || NETCORE
             // Try to find logical ancestor one level up
             var logicalAncestor = FindLogicalAncestor(startElement, condition, 1);
@@ -52,6 +54,24 @@ namespace Catel.Windows
 
             // Try to find visual ancestor one level up
             var visualAncestor = FindVisualAncestor(startElement, condition, 1);
+            if (visualAncestor != null)
+            {
+                return visualAncestor;
+            }
+
+            // Go into "expensive mode" (search all levels)
+
+#if NET || NETCORE
+            // Try to find logical ancestor at any level
+            logicalAncestor = FindLogicalAncestor(startElement, condition, maxDepth);
+            if (logicalAncestor != null)
+            {
+                return logicalAncestor;
+            }
+#endif
+
+            // Try to find visual ancestor at any level
+            visualAncestor = FindVisualAncestor(startElement, condition, maxDepth);
             if (visualAncestor != null)
             {
                 return visualAncestor;
@@ -79,7 +99,19 @@ namespace Catel.Windows
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
         public static T FindLogicalOrVisualAncestorByType<T>(this DependencyObject startElement)
         {
-            return (T)FindLogicalOrVisualAncestor(startElement, o => o is T);
+            return FindLogicalOrVisualAncestorByType<T>(startElement, -1);
+        }
+
+        /// <summary>
+        /// Finds the logical or visual ancestor by type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="startElement">The start element.</param>
+        /// <param name="maxDepth">The maximum number of levels to go up when searching for the parent. If smaller than 0, no maximum is used.</param>
+        /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
+        public static T FindLogicalOrVisualAncestorByType<T>(this DependencyObject startElement, int maxDepth)
+        {
+            return (T)FindLogicalOrVisualAncestor(startElement, o => o is T, maxDepth);
         }
 
         /// <summary>
@@ -145,7 +177,19 @@ namespace Catel.Windows
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
         public static T FindLogicalAncestorByType<T>(this DependencyObject startElement)
         {
-            return (T)FindLogicalAncestor(startElement, o => o is T);
+            return FindLogicalAncestorByType<T>(startElement, -1);
+        }
+
+        /// <summary>
+        /// Finds the logical ancestor by type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="startElement">The start element.</param>
+        /// <param name="maxDepth">The maximum number of levels to go up when searching for the parent. If smaller than 0, no maximum is used.</param>
+        /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
+        public static T FindLogicalAncestorByType<T>(this DependencyObject startElement, int maxDepth)
+        {
+            return (T)FindLogicalAncestor(startElement, o => o is T, maxDepth);
         }
 
         /// <summary>
@@ -156,7 +200,19 @@ namespace Catel.Windows
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
         public static T FindVisualAncestorByType<T>(this DependencyObject startElement)
         {
-            return (T)FindVisualAncestor(startElement, o => o is T);
+            return FindVisualAncestorByType<T>(startElement, -1);
+        }
+
+        /// <summary>
+        /// Finds the visual ancestor by type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="startElement">The start element.</param>
+        /// <param name="maxDepth">The maximum number of levels to go up when searching for the parent. If smaller than 0, no maximum is used.</param>
+        /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
+        public static T FindVisualAncestorByType<T>(this DependencyObject startElement, int maxDepth)
+        {
+            return (T)FindVisualAncestor(startElement, o => o is T, maxDepth);
         }
 
         /// <summary>

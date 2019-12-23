@@ -14,57 +14,9 @@ namespace Catel.Data
     /// <summary>
     /// Boxing cache helper.
     /// </summary>
-    public static class BoxingCache
+    public static partial class BoxingCache
     {
-        /// <summary>
-        /// Converts the specified value into a cached boxed value in case of value type to decrease memory pressure after serialization.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns>An object representing the value.</returns>
-        public static object GetBoxedValue(object value)
-        {
-            object objectValue = value;
-
-            if (value != null)
-            {
-                var valueType = value.GetType();
-                if (valueType.IsValueTypeEx())
-                {
-                    if (valueType == typeof(Guid))
-                    {
-                        objectValue = BoxingCache<Guid>.Default.GetBoxedValue((Guid)value);
-                    }
-                    else if (valueType == typeof(bool))
-                    {
-                        objectValue = BoxingCache<bool>.Default.GetBoxedValue((bool)value);
-                    }
-                    else if (valueType == typeof(short))
-                    {
-                        objectValue = BoxingCache<short>.Default.GetBoxedValue((short)value);
-                    }
-                    else if (valueType == typeof(ushort))
-                    {
-                        objectValue = BoxingCache<ushort>.Default.GetBoxedValue((ushort)value);
-                    }
-                    else if (valueType == typeof(int))
-                    {
-                        objectValue = BoxingCache<int>.Default.GetBoxedValue((int)value);
-                    }
-                    else if (valueType == typeof(uint))
-                    {
-                        objectValue = BoxingCache<uint>.Default.GetBoxedValue((uint)value);
-                    }
-
-                    // TODO: add more value types to support
-                }
-            }
-            else
-            {
-                objectValue = value;
-            }
-
-            return objectValue;
-        }
+        // Partial class, see T4 template
     }
 
     /// <summary>

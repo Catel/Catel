@@ -974,9 +974,10 @@ namespace Catel.Configuration
     }
     public class ConfigurationService : Catel.Configuration.IConfigurationService
     {
-        public ConfigurationService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.Xml.IXmlSerializer serializer) { }
-        public ConfigurationService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.ISerializer serializer) { }
+        public ConfigurationService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.Xml.IXmlSerializer serializer, Catel.Services.IAppDataService appDataService) { }
+        public ConfigurationService(Catel.Runtime.Serialization.ISerializationManager serializationManager, Catel.Services.IObjectConverterService objectConverterService, Catel.Runtime.Serialization.ISerializer serializer, Catel.Services.IAppDataService appDataService) { }
         public event System.EventHandler<Catel.Configuration.ConfigurationChangedEventArgs> ConfigurationChanged;
+        protected virtual string GetConfigurationFileName(Catel.IO.ApplicationDataTarget applicationDataTarget) { }
         protected virtual string GetFinalKey(string key) { }
         protected virtual Catel.Configuration.DynamicConfiguration GetSettingsContainer(Catel.Configuration.ConfigurationContainer container) { }
         public T GetValue<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = null) { }
@@ -993,14 +994,16 @@ namespace Catel.Configuration
     [Catel.Runtime.Serialization.SerializerModifierAttribute(typeof(Catel.Configuration.DynamicConfigurationSerializerModifier))]
     public class DynamicConfiguration : Catel.Data.ModelBase, Catel.Runtime.Serialization.Xml.ICustomXmlSerializable
     {
+        protected static readonly System.Collections.Generic.HashSet<string> DynamicProperties;
         public DynamicConfiguration() { }
-        public void Deserialize(System.Xml.XmlReader xmlReader) { }
-        public object GetConfigurationValue(string name) { }
-        public bool IsConfigurationValueSet(string name) { }
-        public void MarkConfigurationValueAsSet(string name) { }
-        public void RegisterConfigurationKey(string name) { }
-        public void Serialize(System.Xml.XmlWriter xmlWriter) { }
-        public void SetConfigurationValue(string name, object value) { }
+        public virtual void Deserialize(System.Xml.XmlReader xmlReader) { }
+        public virtual object GetConfigurationValue(string name) { }
+        protected virtual Catel.Runtime.Serialization.Xml.IXmlSerializer GetXmlSerializer() { }
+        public virtual bool IsConfigurationValueSet(string name) { }
+        public virtual void MarkConfigurationValueAsSet(string name) { }
+        public virtual void RegisterConfigurationKey(string name) { }
+        public virtual void Serialize(System.Xml.XmlWriter xmlWriter) { }
+        public virtual void SetConfigurationValue(string name, object value) { }
     }
     public class static DynamicConfigurationExtensions
     {
@@ -1066,6 +1069,21 @@ namespace Catel.Data
     }
     public class static BoxingCache
     {
+        public static object GetBoxedValue(bool value) { }
+        public static object GetBoxedValue(char value) { }
+        public static object GetBoxedValue(sbyte value) { }
+        public static object GetBoxedValue(byte value) { }
+        public static object GetBoxedValue(short value) { }
+        public static object GetBoxedValue(ushort value) { }
+        public static object GetBoxedValue(int value) { }
+        public static object GetBoxedValue(uint value) { }
+        public static object GetBoxedValue(long value) { }
+        public static object GetBoxedValue(ulong value) { }
+        public static object GetBoxedValue(float value) { }
+        public static object GetBoxedValue(double value) { }
+        public static object GetBoxedValue(decimal value) { }
+        public static object GetBoxedValue(System.DateTime value) { }
+        public static object GetBoxedValue(string value) { }
         public static object GetBoxedValue(object value) { }
     }
     public class BoxingCache<T>
@@ -1128,7 +1146,7 @@ namespace Catel.Data
         protected virtual void OnPropertyObjectCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) { }
         protected virtual void OnPropertyObjectCollectionItemPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
         protected virtual void OnPropertyObjectPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
-        protected override void SetValueToPropertyBag(string propertyName, object value) { }
+        protected override void SetValueToPropertyBag<TValue>(string propertyName, TValue value) { }
     }
     public abstract class ComparableModelBase : Catel.Data.ModelBase
     {
@@ -1265,6 +1283,14 @@ namespace Catel.Data
     {
         bool GetMemberValue<TValue>(object instance, string memberName, out TValue value);
         bool SetMemberValue<TValue>(object instance, string memberName, TValue value);
+    }
+    public interface IPropertyBag : System.ComponentModel.INotifyPropertyChanged
+    {
+        string[] GetAllNames();
+        System.Collections.Generic.Dictionary<string, object> GetAllProperties();
+        TValue GetValue<TValue>(string name, TValue defaultValue = null);
+        bool IsAvailable(string name);
+        void SetValue<TValue>(string name, TValue value);
     }
     public interface ISavableModel : Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IModelSerialization, Catel.Runtime.Serialization.ISerializable, System.ComponentModel.IAdvancedEditableObject, System.ComponentModel.IEditableObject, System.ComponentModel.INotifyPropertyChanged, System.Runtime.Serialization.ISerializable, System.Xml.Serialization.IXmlSerializable
     {
@@ -1448,6 +1474,7 @@ namespace Catel.Data
         public event System.EventHandler<System.EventArgs> _cancelEditingCompletedEvent;
         public event System.EventHandler<System.ComponentModel.CancelEditEventArgs> _cancelEditingEvent;
         public event System.EventHandler<System.ComponentModel.EndEditEventArgs> _endEditingEvent;
+        protected virtual Catel.Data.IPropertyBag CreatePropertyBag() { }
         [System.Security.SecurityCriticalAttribute()]
         public virtual void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         protected static object GetObjectValue<TValue>(TValue value) { }
@@ -1537,25 +1564,56 @@ namespace Catel.Data
         public string PropertyName { get; }
         public System.Type PropertyType { get; }
     }
-    public class PropertyBag : System.ComponentModel.INotifyPropertyChanged
+    public class PropertyBag : Catel.Data.PropertyBagBase
     {
         public PropertyBag() { }
+        public PropertyBag(System.Collections.Generic.IDictionary<string, object> propertyDictionary) { }
         public object this[string name] { get; set; }
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        public System.Collections.Generic.Dictionary<string, object> GetAllProperties() { }
+        public override string[] GetAllNames() { }
+        public override System.Collections.Generic.Dictionary<string, object> GetAllProperties() { }
+        [System.ObsoleteAttribute("Use `GetValue<TValue>` instead. Will be treated as an error from version 5.13.0. " +
+            "Will be removed in version 6.0.0.", false)]
         public TValue GetPropertyValue<TValue>(string propertyName) { }
+        [System.ObsoleteAttribute("Use `GetValue<TValue>` instead. Will be treated as an error from version 5.13.0. " +
+            "Will be removed in version 6.0.0.", false)]
         public TValue GetPropertyValue<TValue>(string propertyName, TValue defaultValue) { }
+        public override TValue GetValue<TValue>(string name, TValue defaultValue = null) { }
         public void Import(System.Collections.Generic.Dictionary<string, object> propertiesToImport) { }
+        public override bool IsAvailable(string name) { }
+        [System.ObsoleteAttribute("Use `IsAvailable` instead. Will be treated as an error from version 5.13.0. Will " +
+            "be removed in version 6.0.0.", false)]
         public bool IsPropertyAvailable(string propertyName) { }
-        public void SetPropertyValue(string propertyName, bool value) { }
-        public void SetPropertyValue(string propertyName, short value) { }
-        public void SetPropertyValue(string propertyName, ushort value) { }
-        public void SetPropertyValue(string propertyName, int value) { }
-        public void SetPropertyValue(string propertyName, uint value) { }
-        public void SetPropertyValue(string propertyName, long value) { }
-        public void SetPropertyValue(string propertyName, ulong value) { }
+        [System.ObsoleteAttribute("Use `SetValue<TValue>` instead. Will be treated as an error from version 5.13.0. " +
+            "Will be removed in version 6.0.0.", false)]
         public void SetPropertyValue(string propertyName, object value) { }
+        public void SetValue(string propertyName, bool value) { }
+        public void SetValue(string propertyName, char value) { }
+        public void SetValue(string propertyName, sbyte value) { }
+        public void SetValue(string propertyName, byte value) { }
+        public void SetValue(string propertyName, short value) { }
+        public void SetValue(string propertyName, ushort value) { }
+        public void SetValue(string propertyName, int value) { }
+        public void SetValue(string propertyName, uint value) { }
+        public void SetValue(string propertyName, long value) { }
+        public void SetValue(string propertyName, ulong value) { }
+        public void SetValue(string propertyName, float value) { }
+        public void SetValue(string propertyName, double value) { }
+        public void SetValue(string propertyName, decimal value) { }
+        public void SetValue(string propertyName, System.DateTime value) { }
+        public void SetValue(string propertyName, string value) { }
+        public override void SetValue<TValue>(string name, TValue value) { }
         public void UpdatePropertyValue<TValue>(string propertyName, System.Func<TValue, TValue> update) { }
+    }
+    public abstract class PropertyBagBase : Catel.Data.IPropertyBag, System.ComponentModel.INotifyPropertyChanged
+    {
+        protected PropertyBagBase() { }
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        public abstract string[] GetAllNames();
+        public abstract System.Collections.Generic.Dictionary<string, object> GetAllProperties();
+        public abstract TValue GetValue<TValue>(string name, TValue defaultValue = null);
+        public abstract bool IsAvailable(string name);
+        protected void RaisePropertyChanged(string propertyName) { }
+        public abstract void SetValue<TValue>(string name, TValue value);
     }
     public class PropertyData
     {
@@ -1650,6 +1708,31 @@ namespace Catel.Data
         public void Add(string propertyName) { }
         public void Decrement() { }
         public void Increment() { }
+    }
+    public class TypedPropertyBag : Catel.Data.PropertyBagBase
+    {
+        public TypedPropertyBag() { }
+        public override string[] GetAllNames() { }
+        public override System.Collections.Generic.Dictionary<string, object> GetAllProperties() { }
+        protected System.Collections.Generic.Dictionary<string, bool> GetBooleanStorage() { }
+        protected System.Collections.Generic.Dictionary<string, byte> GetByteStorage() { }
+        protected System.Collections.Generic.Dictionary<string, char> GetCharStorage() { }
+        protected System.Collections.Generic.Dictionary<string, System.DateTime> GetDateTimeStorage() { }
+        protected System.Collections.Generic.Dictionary<string, decimal> GetDecimalStorage() { }
+        protected System.Collections.Generic.Dictionary<string, double> GetDoubleStorage() { }
+        protected System.Collections.Generic.Dictionary<string, short> GetInt16Storage() { }
+        protected System.Collections.Generic.Dictionary<string, int> GetInt32Storage() { }
+        protected System.Collections.Generic.Dictionary<string, long> GetInt64Storage() { }
+        protected System.Collections.Generic.Dictionary<string, object> GetObjectStorage() { }
+        protected System.Collections.Generic.Dictionary<string, sbyte> GetSByteStorage() { }
+        protected System.Collections.Generic.Dictionary<string, float> GetSingleStorage() { }
+        protected System.Collections.Generic.Dictionary<string, string> GetStringStorage() { }
+        protected System.Collections.Generic.Dictionary<string, ushort> GetUInt16Storage() { }
+        protected System.Collections.Generic.Dictionary<string, uint> GetUInt32Storage() { }
+        protected System.Collections.Generic.Dictionary<string, ulong> GetUInt64Storage() { }
+        public override TValue GetValue<TValue>(string name, TValue defaultValue = null) { }
+        public override bool IsAvailable(string name) { }
+        public override void SetValue<TValue>(string name, TValue value) { }
     }
     public abstract class ValidatableModelBase : Catel.Data.ModelBase, Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IModelSerialization, Catel.Data.IValidatable, Catel.Data.IValidatableModel, Catel.Runtime.Serialization.ISerializable, System.ComponentModel.IAdvancedEditableObject, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.IEditableObject, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged, System.Runtime.Serialization.ISerializable, System.Xml.Serialization.IXmlSerializable
     {
@@ -4135,11 +4218,20 @@ namespace Catel.Scoping
 }
 namespace Catel.Services
 {
+    public class AppDataService : Catel.Services.IAppDataService
+    {
+        public AppDataService() { }
+        public virtual string GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget applicationDataTarget) { }
+    }
     public class GuidObjectIdGenerator<TObjectType> : Catel.Services.ObjectIdGenerator<TObjectType, System.Guid>
         where TObjectType :  class
     {
         public GuidObjectIdGenerator() { }
         protected override System.Guid GenerateUniqueIdentifier() { }
+    }
+    public interface IAppDataService
+    {
+        string GetApplicationDataDirectory(Catel.IO.ApplicationDataTarget applicationDataTarget);
     }
     public interface ILanguageService
     {

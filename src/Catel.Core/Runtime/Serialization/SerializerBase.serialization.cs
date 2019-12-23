@@ -155,7 +155,7 @@ namespace Catel.Runtime.Serialization
             {
                 configuration = GetCurrentSerializationConfiguration(configuration);
 
-                using (var context = GetContext(model, model.GetType(), stream, SerializationContextMode.Serialization, configuration))
+                using (var context = GetSerializationContextInfo(model, model.GetType(), stream, SerializationContextMode.Serialization, configuration))
                 {
                     var members = GetSerializableMembers(context, model, membersToIgnore);
                     if (members.Count == 0)

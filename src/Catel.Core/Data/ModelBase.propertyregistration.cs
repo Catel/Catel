@@ -335,7 +335,7 @@ namespace Catel.Data
 
             lock (_lock)
             {
-                if (!_propertyBag.IsPropertyAvailable(name))
+                if (!_propertyBag.IsAvailable(name))
                 {
                     SetValueToPropertyBag(name, defaultValue);
                 }

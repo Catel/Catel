@@ -45,7 +45,7 @@ namespace Catel.Services
 
         public NavigationService(INavigationRootService navigationRootService)
         {
-            Argument.IsNotNull(() => navigationRootService);
+            Argument.IsNotNull(nameof(navigationRootService), navigationRootService);
 
             NavigationRootService = navigationRootService;
 
