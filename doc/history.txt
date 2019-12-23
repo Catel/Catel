@@ -25,7 +25,7 @@ For an upgrade guide, visit https://docs.catelproject.com/vnext/setup-deployment
 
 Release date
 ============
-2019/xx/xx
+2019/12/23
 
 Added/fixed
 ===========
