@@ -15,7 +15,7 @@ namespace Catel.Collections
     /// Context class the hold all relevant data while notifications are suspended.
     /// </summary>
     /// <typeparam name="T">Type of the elements contained by the suspending collection.</typeparam>
-    internal class SuspensionContext<T>
+    public class SuspensionContext<T>
     {
         #region Fields
         /// <summary>
