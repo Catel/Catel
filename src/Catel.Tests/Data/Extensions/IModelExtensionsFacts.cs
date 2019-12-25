@@ -28,14 +28,14 @@
 
             public static readonly PropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), null);
 
-            public FastObservableCollection<Preset> Presets
+            public DispatcherFastObservableCollection<Preset> Presets
             {
-                get { return GetValue<FastObservableCollection<Preset>>(PresetsProperty); }
+                get { return GetValue<DispatcherFastObservableCollection<Preset>>(PresetsProperty); }
                 set { SetValue(PresetsProperty, value); }
             }
 
             public static readonly PropertyData PresetsProperty = RegisterProperty(nameof(Presets), typeof(FastObservableCollection<Preset>),
-                () => new FastObservableCollection<Preset>());
+                () => new DispatcherFastObservableCollection<Preset>());
 
             public void ClearDirty()
             {
@@ -53,14 +53,14 @@
 
             public static readonly PropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), null);
 
-            public FastObservableCollection<Plugin> Plugins
+            public DispatcherFastObservableCollection<Plugin> Plugins
             {
-                get { return GetValue<FastObservableCollection<Plugin>>(PluginsProperty); }
+                get { return GetValue<DispatcherFastObservableCollection<Plugin>>(PluginsProperty); }
                 set { SetValue(PluginsProperty, value); }
             }
 
             public static readonly PropertyData PluginsProperty = RegisterProperty(nameof(Plugins), typeof(FastObservableCollection<Plugin>),
-                () => new FastObservableCollection<Plugin>());
+                () => new DispatcherFastObservableCollection<Plugin>());
 
         }
 

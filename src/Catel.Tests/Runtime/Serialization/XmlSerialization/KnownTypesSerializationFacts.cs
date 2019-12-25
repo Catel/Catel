@@ -240,7 +240,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
             var containerList = new ICollection[]
             {
                 new Collection<IParams>(itemList), new List<IParams>(itemList),
-                new FastObservableCollection<IParams>(itemList),
+                new DispatcherFastObservableCollection<IParams>(itemList),
                 new Collection<KeyValuePair<IParams, object>>(new[]
                 {
                     new KeyValuePair<IParams, object>(itemList[0], new object()),

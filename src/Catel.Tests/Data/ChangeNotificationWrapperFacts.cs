@@ -220,7 +220,7 @@ namespace Catel.Tests.Data
             [TestCase]
             public void HandlesCollectionChangesCorrectlyInSuspensionModeMixedConsolidate()
             {
-                var collection = new FastObservableCollection<TestModel>
+                var collection = new DispatcherFastObservableCollection<TestModel>
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
@@ -310,7 +310,7 @@ namespace Catel.Tests.Data
             [TestCase]
             public void HandlesChangesOfSuspendedFastObservableCollectionCorrectly()
             {
-                var collection = new FastObservableCollection<TestModel>
+                var collection = new DispatcherFastObservableCollection<TestModel>
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
@@ -342,7 +342,7 @@ namespace Catel.Tests.Data
             [TestCase]
             public void HandlesClearOfSuspendedFastObservableCollectionCorrectly()
             {
-                var collection = new FastObservableCollection<TestModel>
+                var collection = new DispatcherFastObservableCollection<TestModel>
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };

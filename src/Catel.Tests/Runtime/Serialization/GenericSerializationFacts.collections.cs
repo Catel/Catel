@@ -247,9 +247,9 @@ namespace Catel.Tests.Runtime.Serialization
                 #region Constants and Fields
 
                 public static readonly PropertyData ItemsProperty = RegisterProperty
-                    <ModelObservableCollectionBase<T>, FastObservableCollection<T>>(
+                    <ModelObservableCollectionBase<T>, DispatcherFastObservableCollection<T>>(
                         // ReSharper restore StaticFieldInGenericType
-                        o => o.Items, () => new FastObservableCollection<T>());
+                        o => o.Items, () => new DispatcherFastObservableCollection<T>());
 
                 #endregion
 
@@ -287,9 +287,9 @@ namespace Catel.Tests.Runtime.Serialization
                     }
                 }
 
-                public FastObservableCollection<T> Items
+                public DispatcherFastObservableCollection<T> Items
                 {
-                    get { return this.GetValue<FastObservableCollection<T>>(ItemsProperty); }
+                    get { return this.GetValue<DispatcherFastObservableCollection<T>>(ItemsProperty); }
                     set { SetValue(ItemsProperty, value); }
                 }
 

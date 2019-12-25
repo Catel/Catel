@@ -4,12 +4,33 @@
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.ComponentModel;
+    using System.Runtime.Serialization;
     using Catel.IoC;
     using Catel.Services;
 
     public class DispatcherObservableDictionary<TKey, TValue> : ObservableDictionary<TKey, TValue>
     {
         private readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() => IoCConfiguration.DefaultDependencyResolver.Resolve<IDispatcherService>());
+
+        public DispatcherObservableDictionary()
+        {
+        }
+
+        public DispatcherObservableDictionary(IEqualityComparer<TKey> comparer) : base(comparer)
+        {
+        }
+
+        public DispatcherObservableDictionary(IDictionary<TKey, TValue> dictionary) : base(dictionary)
+        {
+        }
+
+        public DispatcherObservableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer) : base(dictionary, comparer)
+        {
+        }
+
+        protected DispatcherObservableDictionary(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.

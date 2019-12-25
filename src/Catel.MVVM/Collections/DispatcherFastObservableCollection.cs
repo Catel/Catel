@@ -1,6 +1,7 @@
 ﻿namespace Catel.Collections
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
@@ -20,8 +21,13 @@
         /// </summary>
         public DispatcherFastObservableCollection()
         {
-            AutomaticallyDispatchChangeNotifications = true;
         }
+
+        public DispatcherFastObservableCollection(IEnumerable<T> collection) : base(collection)
+        {
+        }
+
+
 
         /// <summary>
         /// Notifies external classes of property changes.
@@ -38,6 +44,7 @@
             }
 
         }
+
         /// <summary>
         /// Raises the <c>ObservableCollection{T}.PropertyChanged</c> event, but also makes sure the event is dispatched to the UI thread.
         /// </summary>
@@ -75,6 +82,6 @@
         /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
         /// </summary>
         /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
-        public bool AutomaticallyDispatchChangeNotifications { get; set; }
+        public bool AutomaticallyDispatchChangeNotifications { get; set; } = true;
     }
 }

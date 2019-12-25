@@ -29,14 +29,17 @@ namespace Catel.Collections
         /// </summary>
         public DispatcherFastBindingList()
         {
-            AutomaticallyDispatchChangeNotifications = true;
+        }
+
+        public DispatcherFastBindingList(IEnumerable<T> collection) : base(collection)
+        {
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
         /// </summary>
         /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
-        public bool AutomaticallyDispatchChangeNotifications { get; set; }
+        public bool AutomaticallyDispatchChangeNotifications { get; set; } = true;
       
         /// <summary>
         /// Notifies external classes of property changes.
