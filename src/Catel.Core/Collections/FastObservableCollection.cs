@@ -28,13 +28,7 @@ namespace Catel.Collections
     public class FastObservableCollection<T> : ObservableCollection<T>, ISuspendChangeNotificationsCollection
     {
         #region Constants
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        private static readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() =>
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            return dependencyResolver.Resolve<IDispatcherService>();
-        });
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();       
         #endregion
 
         #region Fields
@@ -52,8 +46,7 @@ namespace Catel.Collections
         /// Initializes a new instance of the <see cref="FastObservableCollection{T}" /> class.
         /// </summary>
         public FastObservableCollection()
-        {
-            AutomaticallyDispatchChangeNotifications = true;
+        {  
         }
 
         /// <summary>
@@ -95,11 +88,7 @@ namespace Catel.Collections
         /// <value><c>True</c> if notifications are suspended, otherwise, <c>false</c>.</value>
         public bool NotificationsSuspended => _suspensionContext != null;
 
-        /// <summary>
-        /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
-        /// </summary>
-        /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
-        public bool AutomaticallyDispatchChangeNotifications { get; set; }
+     
         #endregion
 
         #region Methods
@@ -416,52 +405,32 @@ namespace Catel.Collections
         /// <summary>
         /// Notifies external classes of property changes.
         /// </summary>
-        protected void NotifyChanges()
-        {
-            Action action = () =>
-            {
-                // Create event args list
-                var eventArgsList = _suspensionContext.CreateEvents();
+        protected virtual void NotifyChanges()
+        {            
+            // Create event args list
+            var eventArgsList = _suspensionContext.CreateEvents();
 
-                // Fire events
-                if (eventArgsList.Count != 0)
+            // Fire events
+            if (eventArgsList.Count != 0)
+            {
+                OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+                OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+                foreach (var eventArgs in eventArgsList)
                 {
-                    OnPropertyChanged(new PropertyChangedEventArgs("Count"));
-                    OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-                    foreach (var eventArgs in eventArgsList)
-                    {
-                        OnCollectionChanged(eventArgs);
-                    }
+                    OnCollectionChanged(eventArgs);
                 }
-            };
-
-            if (AutomaticallyDispatchChangeNotifications)
-            {
-                _dispatcherService.Value.BeginInvokeIfRequired(action);
-            }
-            else
-            {
-                action();
-            }
+            }            
         }
 
         /// <summary>
-        /// Raises the <see cref="ObservableCollection{T}.CollectionChanged" /> event, but also makes sure the event is dispatched to the UI thread.
+        /// Raises the <see cref="ObservableCollection{T}.CollectionChanged" /> event.
         /// </summary>
         /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs" /> instance containing the event data.</param>
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             if (_suspensionContext is null || _suspensionContext.Count == 0)
             {
-                if (AutomaticallyDispatchChangeNotifications)
-                {
-                    _dispatcherService.Value.BeginInvokeIfRequired(() => base.OnCollectionChanged(e));
-                }
-                else
-                {
-                    base.OnCollectionChanged(e);
-                }
-
+                base.OnCollectionChanged(e);
                 return;
             }
 
@@ -472,21 +441,14 @@ namespace Catel.Collections
         }
 
         /// <summary>
-        /// Raises the <c>ObservableCollection{T}.PropertyChanged</c> event, but also makes sure the event is dispatched to the UI thread.
+        /// Raises the <c>ObservableCollection{T}.PropertyChanged</c> event.
         /// </summary>
         /// <param name="e">The <see cref="PropertyChangedEventArgs" /> instance containing the event data.</param>
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             if (_suspensionContext is null || _suspensionContext.Count == 0)
             {
-                if (AutomaticallyDispatchChangeNotifications)
-                {
-                    _dispatcherService.Value.BeginInvokeIfRequired(() => base.OnPropertyChanged(e));
-                }
-                else
-                {
                     base.OnPropertyChanged(e);
-                }
             }
         }
 

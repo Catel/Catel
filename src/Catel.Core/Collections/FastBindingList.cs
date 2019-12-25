@@ -27,7 +27,6 @@ namespace Catel.Collections
     {
 #region Constants
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        private static readonly IDispatcherService _dispatcherService;
 #endregion
 
 #region Fields
@@ -43,21 +42,14 @@ namespace Catel.Collections
 #endregion
 
 #region Constructors
-        /// <summary>
-        /// Initializes static members of the <see cref="FastBindingList{T}"/> class.
-        /// </summary>
-        static FastBindingList()
-        {
-            var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
-            _dispatcherService = dependencyResolver.Resolve<IDispatcherService>();
-        }
+       
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FastBindingList{T}" /> class.
         /// </summary>
         public FastBindingList()
         {
-            AutomaticallyDispatchChangeNotifications = true;
+            
         }
 
         /// <summary>
@@ -102,11 +94,7 @@ namespace Catel.Collections
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
-        /// </summary>
-        /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
-        public bool AutomaticallyDispatchChangeNotifications { get; set; }
+        
 
 #region Overrides of BindingList
         /// <summary>
@@ -401,46 +389,38 @@ namespace Catel.Collections
         /// <summary>
         /// Notifies external classes of property changes.
         /// </summary>
-        protected void NotifyChanges()
+        protected virtual void NotifyChanges()
         {
-            Action action = () =>
+            // Create event args
+            var eventArgsList = new List<ListChangedEventArgs>();
+
+            var suspensionContext = _suspensionContext;
+            if (suspensionContext != null)
             {
-                // Create event args
-                var eventArgsList = new List<ListChangedEventArgs>();
-
-                var suspensionContext = _suspensionContext;
-                if (suspensionContext != null)
+                if (suspensionContext.NewItems.Count != 0)
                 {
-                    if (suspensionContext.NewItems.Count != 0)
-                    {
-                        eventArgsList.Add(new NotifyRangedListChangedEventArgs(NotifyRangedListChangedAction.Add, suspensionContext.NewItems, suspensionContext.NewItemIndices));
-                    }
-
-                    if (suspensionContext.OldItems.Count != 0)
-                    {
-                        eventArgsList.Add(new NotifyRangedListChangedEventArgs(NotifyRangedListChangedAction.Remove, suspensionContext.OldItems, suspensionContext.OldItemIndices));
-                    }
-                }
-                else
-                {
-                    eventArgsList.Add(new NotifyListChangedEventArgs(ListChangedType.Reset));
+                    eventArgsList.Add(new NotifyRangedListChangedEventArgs(NotifyRangedListChangedAction.Add, suspensionContext.NewItems, suspensionContext.NewItemIndices));
                 }
 
-                // Fire events
-                foreach (var eventArgs in eventArgsList)
+                if (suspensionContext.OldItems.Count != 0)
                 {
-                    OnListChanged(eventArgs);
+                    eventArgsList.Add(new NotifyRangedListChangedEventArgs(NotifyRangedListChangedAction.Remove, suspensionContext.OldItems, suspensionContext.OldItemIndices));
                 }
-            };
-
-            if (AutomaticallyDispatchChangeNotifications)
-            {
-                _dispatcherService.BeginInvokeIfRequired(action);
             }
             else
             {
-                action();
+                eventArgsList.Add(new NotifyListChangedEventArgs(ListChangedType.Reset));
             }
+
+            // Fire events
+            foreach (var eventArgs in eventArgsList)
+            {
+                OnListChanged(eventArgs);
+            }
+
+
+           
+            
         }
 
         /// <summary>
@@ -456,9 +436,9 @@ namespace Catel.Collections
                 {
                     e = new NotifyListChangedEventArgs(e.ListChangedType,
                         e.NewIndex,
-                        e.NewIndex >= 0 ? this[e.NewIndex] : default(T),
+                        e.NewIndex >= 0 ? this[e.NewIndex] : default,
                         e.OldIndex,
-                        e.OldIndex >= 0 ? this[e.OldIndex] : default(T));
+                        e.OldIndex >= 0 ? this[e.OldIndex] : default);
                 }
                 else
                 {
@@ -469,14 +449,7 @@ namespace Catel.Collections
                 }
             }
 
-            if (AutomaticallyDispatchChangeNotifications)
-            {
-                _dispatcherService.BeginInvokeIfRequired(() => base.OnListChanged(e));
-            }
-            else
-            {
-                base.OnListChanged(e);
-            }
+            base.OnListChanged(e);
         }
 
 #region Overrides of BindingList

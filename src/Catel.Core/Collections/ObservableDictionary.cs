@@ -56,7 +56,7 @@ namespace Catel.Collections
 
         private readonly IndexedKeyedCollection<TKey, TValue> _collection;
 
-        private readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() => IoCConfiguration.DefaultDependencyResolver.Resolve<IDispatcherService>());
+
 
 #if NET || NETCORE
         [field: NonSerialized]
@@ -118,11 +118,7 @@ namespace Catel.Collections
             _serializationInfo = info;
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
-        /// </summary>
-        /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
-        public bool AutomaticallyDispatchChangeNotifications { get; set; } = true;
+
 
         /// <see cref="Dictionary{TKey,TValue}.Comparer"/>>
         public IEqualityComparer<TKey> Comparer { get; }
@@ -490,27 +486,17 @@ namespace Catel.Collections
         }
 
         /// <summary>
-        /// Raises the <see cref="INotifyCollectionChanged.CollectionChanged"/> event while also ensuring that it is dispatched to the UI thread.
-        /// <remarks>Set <see cref="AutomaticallyDispatchChangeNotifications"/> to <c>false</c> if you do not wish to dispatch to the UI.</remarks>
+        /// Raises the <see cref="INotifyCollectionChanged.CollectionChanged"/> event.
         /// </summary>
         protected virtual void OnCollectionChanged()
         {
             OnPropertyChanged();
-
-            if (AutomaticallyDispatchChangeNotifications)
-            {
-                _dispatcherService.Value.BeginInvokeIfRequired(() => CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)));
-            }
-            else
-            {
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-            }
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         /// <summary>
-        /// Raises the <see cref="INotifyCollectionChanged.CollectionChanged"/> event while also ensuring that it is dispatched to the UI thread.
+        /// Raises the <see cref="INotifyCollectionChanged.CollectionChanged"/> event.
         /// </summary>
-        /// <remarks>Set <see cref="AutomaticallyDispatchChangeNotifications"/> to <c>false</c> if you do not wish to dispatch to the UI.</remarks>
         /// <param name="action">The <see cref="NotifyCollectionChangedAction"/> operation that was executed.</param>
         /// <param name="changedItem">The updated item.</param>
         /// <param name="index">The index value of the updated item.</param>
@@ -518,20 +504,12 @@ namespace Catel.Collections
         {
             OnPropertyChanged();
 
-            if (AutomaticallyDispatchChangeNotifications)
-            {
-                _dispatcherService.Value.BeginInvokeIfRequired(() => CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action, changedItem, index)));
-            }
-            else
-            {
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action, changedItem, index));
-            }
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action, changedItem, index));
         }
 
         /// <summary>
-        /// Raises the <see cref="INotifyCollectionChanged.CollectionChanged"/> event while also ensuring that it is dispatched to the UI thread.
+        /// Raises the <see cref="INotifyCollectionChanged.CollectionChanged"/> event.
         /// </summary>
-        /// <remarks>Set <see cref="AutomaticallyDispatchChangeNotifications"/> to <c>false</c> if you do not wish to dispatch to the UI.</remarks>
         /// <param name="action">The <see cref="NotifyCollectionChangedAction"/> operation that was executed.</param>
         /// <param name="newItem">The new item.</param>
         /// <param name="oldItem">The old item.</param>
@@ -539,15 +517,7 @@ namespace Catel.Collections
         protected virtual void OnCollectionChanged(NotifyCollectionChangedAction action, KeyValuePair<TKey, TValue> newItem, KeyValuePair<TKey, TValue> oldItem, int index)
         {
             OnPropertyChanged();
-
-            if (AutomaticallyDispatchChangeNotifications)
-            {
-                _dispatcherService.Value.BeginInvokeIfRequired(() => CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action, newItem, oldItem, index)));
-            }
-            else
-            {
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action, newItem, oldItem, index));
-            }
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(action, newItem, oldItem, index));
         }
 
         private void OnPropertyChanged()
@@ -559,20 +529,12 @@ namespace Catel.Collections
         }
 
         /// <summary>
-        /// Raises the <see cref="INotifyPropertyChanged.PropertyChanged"/> event while also ensuring that it is dispatched to the UI thread.
+        /// Raises the <see cref="INotifyPropertyChanged.PropertyChanged"/> event.
         /// </summary>
-        /// <remarks>Set <see cref="AutomaticallyDispatchChangeNotifications"/> to <c>false</c> if you do not wish to dispatch to the UI.</remarks>
         /// <param name="propertyName">The target property to invoke <see cref="INotifyPropertyChanged.PropertyChanged"/> on.</param>
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            if (AutomaticallyDispatchChangeNotifications)
-            {
-                _dispatcherService.Value.BeginInvokeIfRequired(() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)));
-            }
-            else
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
 #if NET || NETCORE
