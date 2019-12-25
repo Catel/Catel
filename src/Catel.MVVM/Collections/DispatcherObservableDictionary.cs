@@ -16,77 +16,49 @@
         /// </summary>
         /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
         public bool AutomaticallyDispatchChangeNotifications { get; set; } = true;
-
-        /// <summary>
-        /// Raises the <see cref="INotifyCollectionChanged.CollectionChanged"/> event while also ensuring that it is dispatched to the UI thread.
-        /// <remarks>Set <see cref="AutomaticallyDispatchChangeNotifications"/> to <c>false</c> if you do not wish to dispatch to the UI.</remarks>
-        /// </summary>
-        protected override void OnCollectionChanged()
+        
+        protected override void NotifyChanges()
         {
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.Value.BeginInvokeIfRequired(base.OnCollectionChanged);
+                _dispatcherService.Value.BeginInvokeIfRequired(base.NotifyChanges);
             }
             else
             {
-                base.OnCollectionChanged();
+                base.NotifyChanges();
             }
         }
 
         /// <summary>
-        /// Raises the <see cref="INotifyCollectionChanged.CollectionChanged"/> event while also ensuring that it is dispatched to the UI thread.
+        /// Raises the <c>ObservableCollection{T}.PropertyChanged</c> event, but also makes sure the event is dispatched to the UI thread.
         /// </summary>
-        /// <remarks>Set <see cref="AutomaticallyDispatchChangeNotifications"/> to <c>false</c> if you do not wish to dispatch to the UI.</remarks>
-        /// <param name="action">The <see cref="NotifyCollectionChangedAction"/> operation that was executed.</param>
-        /// <param name="changedItem">The updated item.</param>
-        /// <param name="index">The index value of the updated item.</param>
-        protected override void OnCollectionChanged(NotifyCollectionChangedAction action, KeyValuePair<TKey, TValue> changedItem, int index)
+        /// <param name="e">The <see cref="PropertyChangedEventArgs" /> instance containing the event data.</param>
+        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.Value.BeginInvokeIfRequired(() => base.OnCollectionChanged(action, changedItem, index));
+                _dispatcherService.Value.BeginInvokeIfRequired(() => base.OnPropertyChanged(e));
             }
             else
             {
-                base.OnCollectionChanged(action, changedItem, index);
+                base.OnPropertyChanged(e);
             }
 
         }
 
         /// <summary>
-        /// Raises the <see cref="INotifyCollectionChanged.CollectionChanged"/> event while also ensuring that it is dispatched to the UI thread.
+        /// Raises the <see cref="ObservableDictionary{TKey, TValue}.CollectionChanged" /> event, but also makes sure the event is dispatched to the UI thread.
         /// </summary>
-        /// <remarks>Set <see cref="AutomaticallyDispatchChangeNotifications"/> to <c>false</c> if you do not wish to dispatch to the UI.</remarks>
-        /// <param name="action">The <see cref="NotifyCollectionChangedAction"/> operation that was executed.</param>
-        /// <param name="newItem">The new item.</param>
-        /// <param name="oldItem">The old item.</param>
-        /// <param name="index">The index value of the old item affected.</param>
-        protected override void OnCollectionChanged(NotifyCollectionChangedAction action, KeyValuePair<TKey, TValue> newItem, KeyValuePair<TKey, TValue> oldItem, int index)
+        /// <param name="e">The <see cref="NotifyCollectionChangedEventArgs" /> instance containing the event data.</param>
+        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             if (AutomaticallyDispatchChangeNotifications)
             {
-                _dispatcherService.Value.BeginInvokeIfRequired(() => base.OnCollectionChanged(action, newItem, oldItem, index));
+                _dispatcherService.Value.BeginInvokeIfRequired(() => base.OnCollectionChanged(e));
             }
             else
             {
-                base.OnCollectionChanged(action, newItem, oldItem, index);
-            }
-        }
-
-        /// <summary>
-        /// Raises the <see cref="INotifyPropertyChanged.PropertyChanged"/> event while also ensuring that it is dispatched to the UI thread.
-        /// </summary>
-        /// <remarks>Set <see cref="AutomaticallyDispatchChangeNotifications"/> to <c>false</c> if you do not wish to dispatch to the UI.</remarks>
-        /// <param name="propertyName">The target property to invoke <see cref="INotifyPropertyChanged.PropertyChanged"/> on.</param>
-        protected override void OnPropertyChanged(string propertyName)
-        {
-            if (AutomaticallyDispatchChangeNotifications)
-            {
-                _dispatcherService.Value.BeginInvokeIfRequired(() => base.OnPropertyChanged(propertyName));
-            }
-            else
-            {
-                base.OnPropertyChanged(propertyName);
+                base.OnCollectionChanged(e);
             }
         }
     }
