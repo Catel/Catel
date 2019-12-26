@@ -1208,13 +1208,6 @@ namespace Catel.MVVM.Providers
                 return null;
             }
 
-            // Can be removed soon, now managed via ViewModelLifetimeManagement
-            if (PreventViewModelCreation)
-            {
-                Log.Info("ViewModel construction is prevented by the PreventViewModelCreation property");
-                return null;
-            }
-
             if (IgnoreNullDataContext && (injectionObject is null))
             {
                 Log.Info("ViewModel construction is prevented by the IgnoreNullDataContext property");

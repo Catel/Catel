@@ -50,11 +50,6 @@ namespace Catel.Tests.Runtime.Serialization
                     //empty for deserialization
                 }
 
-                protected A(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
-
                 public int Count
                 {
                     get { return _count; }
@@ -76,11 +71,6 @@ namespace Catel.Tests.Runtime.Serialization
                 public B()
                 {
                     //empty for deserialization
-                }
-
-                protected B(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
                 }
 
                 public T Item

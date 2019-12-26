@@ -28,7 +28,6 @@ namespace Catel.Tests.Runtime.Serialization
     using Catel.Logging;
     using Catel.Reflection;
     using Catel.Runtime.Serialization;
-    using Catel.Runtime.Serialization.Binary;
     using Catel.Runtime.Serialization.Json;
     using Catel.Runtime.Serialization.Xml;
     using Data;
@@ -50,13 +49,6 @@ namespace Catel.Tests.Runtime.Serialization
                 public Country()
                 {
                 }
-
-#if NET || NETCORE
-                public Country(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
-#endif
 
                 [Key]
                 public Guid Id
@@ -261,11 +253,6 @@ namespace Catel.Tests.Runtime.Serialization
                     {
                         ((ICollection<T>)this.Items).AddRange(enumeration);
                     }
-                }
-
-                protected ModelObservableCollectionBase(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
                 }
 
                 #endregion
@@ -529,12 +516,6 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                 }
 
-                protected Floor(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
-
-
                 public string Name
                 {
                     get { return this.GetValue<string>(NameProperty); }
@@ -555,11 +536,6 @@ namespace Catel.Tests.Runtime.Serialization
                 public FloorCollection()
                 {
                 }
-
-                protected FloorCollection(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
             }
 
             [Serializable]
@@ -569,22 +545,12 @@ namespace Catel.Tests.Runtime.Serialization
                 public FloorCollectionAsCollection()
                 {
                 }
-
-                protected FloorCollectionAsCollection(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
             }
 
             [Serializable]
             public class Building : ModelBase
             {
                 public Building()
-                {
-                }
-
-                protected Building(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
                 {
                 }
 
@@ -613,11 +579,6 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                 }
 
-                protected BuildingAsCollection(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
-
                 public string Name
                 {
                     get { return this.GetValue<string>(NameProperty); }
@@ -642,11 +603,6 @@ namespace Catel.Tests.Runtime.Serialization
                 public BuildingCollection()
                 {
                 }
-
-                protected BuildingCollection(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
             }
 
             [Serializable]
@@ -654,11 +610,6 @@ namespace Catel.Tests.Runtime.Serialization
             public class BuildingCollectionAsCollection : ModelObservableCollectionBase<BuildingAsCollection>
             {
                 public BuildingCollectionAsCollection()
-                {
-                }
-
-                protected BuildingCollectionAsCollection(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
                 {
                 }
             }

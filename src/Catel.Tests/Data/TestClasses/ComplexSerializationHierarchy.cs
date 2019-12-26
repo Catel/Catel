@@ -170,12 +170,6 @@ namespace Catel.Tests.Data
 
         }
 
-#if NET || NETCORE
-        protected ScheduleAssistantSettings(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        { }
-#endif
-
         #region SelectedResource property
 
         /// <summary>
@@ -258,12 +252,6 @@ namespace Catel.Tests.Data
         {
 
         }
-
-#if NET || NETCORE
-        protected GridSettings(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        { }
-#endif
 
         #region SortSettings property
 

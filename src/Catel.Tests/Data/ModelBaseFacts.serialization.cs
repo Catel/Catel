@@ -198,18 +198,6 @@ namespace Catel.Tests.Data
             public Customer()
             {
             }
-
-#if NET || NETCORE
-            /// <summary>
-            /// Initializes a new object based on <see cref="SerializationInfo"/>.
-            /// </summary>
-            /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
-            /// <param name="context"><see cref="StreamingContext"/>.</param>
-            protected Customer(SerializationInfo info, StreamingContext context)
-                : base(info, context)
-            {
-            }
-#endif
             #endregion
 
             #region Properties
@@ -284,18 +272,6 @@ namespace Catel.Tests.Data
             public Project()
             {
             }
-
-#if NET || NETCORE
-            /// <summary>
-            /// Initializes a new object based on <see cref="SerializationInfo"/>.
-            /// </summary>
-            /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
-            /// <param name="context"><see cref="StreamingContext"/>.</param>
-            protected Project(SerializationInfo info, StreamingContext context)
-                : base(info, context)
-            {
-            }
-#endif
             #endregion
 
             #region Properties
@@ -387,17 +363,6 @@ namespace Catel.Tests.Data
                 {
                 }
 
-#if NET || NETCORE
-                /// <summary>
-                /// Initializes a new object based on <see cref="SerializationInfo"/>.
-                /// </summary>
-                /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
-                /// <param name="context"><see cref="StreamingContext"/>.</param>
-                protected JsonInnerModel(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
-#endif
 
                 #region Properties
                 /// <summary>
@@ -430,17 +395,6 @@ namespace Catel.Tests.Data
                 {
                 }
 
-#if NET || NETCORE
-                /// <summary>
-                /// Initializes a new object based on <see cref="SerializationInfo"/>.
-                /// </summary>
-                /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
-                /// <param name="context"><see cref="StreamingContext"/>.</param>
-                protected JsonExampleModel(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
-#endif
                 #region Properties
                 /// <summary>
                 /// Gets or sets the property value.

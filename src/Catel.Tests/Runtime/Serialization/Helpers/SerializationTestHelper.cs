@@ -16,7 +16,6 @@ namespace Catel.Tests.Runtime.Serialization
     using System.Xml.Linq;
     using Catel.Data;
     using Catel.Runtime.Serialization;
-    using Catel.Runtime.Serialization.Binary;
     using System.Diagnostics;
     using Catel.IoC;
     using Catel.Runtime.Serialization.Json;
@@ -32,17 +31,6 @@ namespace Catel.Tests.Runtime.Serialization
             }
 
             var serializer = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<XmlSerializer>(serializationManager);
-            return serializer;
-        }
-
-        public static IBinarySerializer GetBinarySerializer(ISerializationManager serializationManager = null)
-        {
-            if (serializationManager is null)
-            {
-                serializationManager = new SerializationManager();
-            }
-
-            var serializer = TypeFactory.Default.CreateInstanceWithParametersAndAutoCompletion<BinarySerializer>(serializationManager);
             return serializer;
         }
 
@@ -77,15 +65,12 @@ namespace Catel.Tests.Runtime.Serialization
 
                 if (Debugger.IsAttached)
                 {
-                    if (!(serializer is BinarySerializer))
-                    {
-                        var streamReader = new StreamReader(memoryStream);
-                        var streamAsText = streamReader.ReadToEnd();
+                    var streamReader = new StreamReader(memoryStream);
+                    var streamAsText = streamReader.ReadToEnd();
 
-                        Console.WriteLine(streamAsText);
+                    Console.WriteLine(streamAsText);
 
-                        memoryStream.Position = 0L;
-                    }
+                    memoryStream.Position = 0L;
                 }
 
                 // Note: we use model.GetType to always ensure the correct type (even if 'object' type is specified)

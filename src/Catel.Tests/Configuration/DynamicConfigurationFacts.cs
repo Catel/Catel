@@ -36,11 +36,6 @@ namespace Catel.Tests.Configuration
                 
             }
 
-            public ComplexSetting(SerializationInfo info, StreamingContext context) 
-                : base(info, context)
-            {
-            }
-
             /// <summary>
             /// Gets or sets the property value.
             /// </summary>

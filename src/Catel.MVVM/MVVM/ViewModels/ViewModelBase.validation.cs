@@ -165,7 +165,7 @@ namespace Catel.MVVM
                     }
                 }
 
-                var model = GetValue(mapping.ModelProperty);
+                var model = GetValue<object>(mapping.ModelProperty);
                 string[] modelProperties = mapping.ValueProperties;
 
                 foreach (var modelProperty in modelProperties)

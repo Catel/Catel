@@ -28,7 +28,6 @@ namespace Catel.Tests.Runtime.Serialization
     using Catel.Logging;
     using Catel.Reflection;
     using Catel.Runtime.Serialization;
-    using Catel.Runtime.Serialization.Binary;
     using Catel.Runtime.Serialization.Json;
     using Catel.Runtime.Serialization.Xml;
     using Data;
@@ -50,13 +49,6 @@ namespace Catel.Tests.Runtime.Serialization
 
                 }
 
-#if NET || NETCORE
-                protected AbstractBase(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
-#endif
-
                 public string Name
                 {
                     get { return GetValue<string>(NameProperty); }
@@ -73,13 +65,6 @@ namespace Catel.Tests.Runtime.Serialization
                 {
 
                 }
-
-#if NET || NETCORE
-                protected DerivedClass(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
-#endif
             }
 
             [Serializable]
@@ -89,13 +74,6 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     Items = new ObservableCollection<AbstractBase>();
                 }
-
-#if NET || NETCORE
-                protected ContainerClass(SerializationInfo info, StreamingContext context)
-                    : base(info, context)
-                {
-                }
-#endif
 
                 public ObservableCollection<AbstractBase> Items
                 {
@@ -135,7 +113,7 @@ namespace Catel.Tests.Runtime.Serialization
                     Assert.AreEqual(null, clonedModel.ExcludedCatelProperty, description);
                     Assert.AreEqual("included", clonedModel.IncludedCatelProperty, description);
 
-                    Assert.AreEqual(null, clonedModel.GetValue(TestModel.ExcludedProtectedCatelPropertyProperty.Name), description);
+                    Assert.AreEqual(null, ((IModelEditor)clonedModel).GetValue<object>(TestModel.ExcludedProtectedCatelPropertyProperty.Name), description);
                 });
             }
 

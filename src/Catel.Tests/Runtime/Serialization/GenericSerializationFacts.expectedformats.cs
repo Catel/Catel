@@ -12,11 +12,6 @@
         [TestFixture]
         public partial class ExpectedFormats
         {
-            [MethodImpl(MethodImplOptions.NoInlining)]
-            private void TestBinarySerializationWithExpectedFormat(object obj, ISerializationManager serializationManager = null, [CallerMemberName]string name = null)
-            {
-                TestSerializationWithExpectedFormat(SerializationTestHelper.GetBinarySerializer(serializationManager), name, obj);
-            }
 
             [MethodImpl(MethodImplOptions.NoInlining)]
             private void TestXmlSerializationWithExpectedFormat(object obj, ISerializationManager serializationManager = null, [CallerMemberName]string name = null)

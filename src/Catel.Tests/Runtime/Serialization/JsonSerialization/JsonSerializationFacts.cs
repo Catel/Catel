@@ -13,7 +13,6 @@ namespace Catel.Tests.Runtime.Serialization
     using System.IO;
     using Catel.IoC;
     using Catel.Runtime.Serialization;
-    using Catel.Runtime.Serialization.Binary;
     using Catel.Runtime.Serialization.Json;
     using NUnit.Framework;
     using TestModels;

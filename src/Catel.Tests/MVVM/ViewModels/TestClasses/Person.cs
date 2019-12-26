@@ -54,18 +54,6 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         public Person()
         {
         }
-
-#if NET || NETCORE
-        /// <summary>
-        /// Initializes a new object based on <see cref="SerializationInfo"/>.
-        /// </summary>
-        /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
-        /// <param name="context"><see cref="StreamingContext"/>.</param>
-        protected Person(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-#endif
         #endregion
 
         #region Properties
@@ -204,18 +192,6 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         public PersonWithDataAnnotations()
         {
         }
-
-#if NET || NETCORE
-        /// <summary>
-        /// Initializes a new object based on <see cref="SerializationInfo"/>.
-        /// </summary>
-        /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
-        /// <param name="context"><see cref="StreamingContext"/>.</param>
-        protected PersonWithDataAnnotations(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-#endif
         #endregion
 
         #region Properties
@@ -307,18 +283,6 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         public ContactInfo()
         {
         }
-
-#if NET || NETCORE
-        /// <summary>
-        /// Initializes a new object based on <see cref="SerializationInfo"/>.
-        /// </summary>
-        /// <param name="info"><see cref="SerializationInfo"/> that contains the information.</param>
-        /// <param name="context"><see cref="StreamingContext"/>.</param>
-        protected ContactInfo(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-#endif
         #endregion
 
         #region Properties

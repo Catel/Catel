@@ -37,24 +37,6 @@ namespace Catel.Tests.Runtime.Serialization
                 Assert.AreEqual("ModifiedC", clonedModelC.ModelCProperty);
             }
 
-#if NET || NETCORE
-            [TestCase]
-            public void ComplexInheritanceWorksWithBinary()
-            {
-                var modelC = new TestModels.ModelC();
-
-                Assert.IsNull(modelC.ModelAProperty);
-                Assert.IsNull(modelC.ModelBProperty);
-                Assert.IsNull(modelC.ModelCProperty);
-
-                var clonedModelC = SerializationTestHelper.SerializeAndDeserialize(modelC, SerializationFactory.GetBinarySerializer());
-
-                Assert.AreEqual("ModifiedA", clonedModelC.ModelAProperty);
-                Assert.AreEqual("ModifiedB", clonedModelC.ModelBProperty);
-                Assert.AreEqual("ModifiedC", clonedModelC.ModelCProperty);
-            }
-#endif
-
             [TestCase]
             public void MembersIgnoredViaModifier()
             {

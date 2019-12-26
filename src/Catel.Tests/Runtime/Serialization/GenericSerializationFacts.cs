@@ -12,7 +12,6 @@ namespace Catel.Tests.Runtime.Serialization
     using Catel.Logging;
     using Catel.Reflection;
     using Catel.Runtime.Serialization;
-    using Catel.Runtime.Serialization.Binary;
     using Catel.Runtime.Serialization.Json;
     using Catel.Runtime.Serialization.Xml;
 
@@ -26,16 +25,6 @@ namespace Catel.Tests.Runtime.Serialization
             var serializers = new List<ISerializer>();
 
             serializers.Add(SerializationTestHelper.GetXmlSerializer(serializationManager));
-
-            TestSerializationOnSerializers(serializers, action, serializationManager);
-        }
-
-        private static void TestSerializationOnBinarySerializer(Action<ISerializer, ISerializationConfiguration, string> action,
-            bool testWithoutGraphIdsAsWell = true, ISerializationManager serializationManager = null)
-        {
-            var serializers = new List<ISerializer>();
-
-            serializers.Add(SerializationTestHelper.GetBinarySerializer(serializationManager));
 
             TestSerializationOnSerializers(serializers, action, serializationManager);
         }
@@ -64,7 +53,6 @@ namespace Catel.Tests.Runtime.Serialization
             var serializers = new List<ISerializer>();
 
             serializers.Add(SerializationTestHelper.GetXmlSerializer(serializationManager));
-            serializers.Add(SerializationTestHelper.GetBinarySerializer(serializationManager));
             serializers.Add(SerializationTestHelper.GetJsonSerializer(serializationManager));
 
             if (testWithoutGraphIdsAsWell)
@@ -90,13 +78,6 @@ namespace Catel.Tests.Runtime.Serialization
                     // Default config
                 },
             });
-
-#pragma warning disable CS0618
-            serializerConfigurations[typeof(BinarySerializer)] = new List<ISerializationConfiguration>(new[]
-            {
-                new SerializationConfiguration()
-            });
-#pragma warning restore CS0618
 
             serializerConfigurations[typeof(JsonSerializer)] = new List<ISerializationConfiguration>(new[]
             {
