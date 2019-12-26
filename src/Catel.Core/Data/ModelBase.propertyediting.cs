@@ -192,21 +192,6 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Sets the value fast without checking for any constraints or additional logic such as change notifications. This 
-        /// means that if this method is used incorrectly, it can throw random exceptions.
-        /// <para />
-        /// This is a wrapper around the _propertyValues field. Don't use the field directly, always use
-        /// this method because it takes care of locking and event subscriptions.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <param name="value">The value.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "SetValueToPropertyBag<TValue>(string, TValue)", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
-        protected virtual void SetValueToPropertyBag(string propertyName, object value)
-        {
-            SetValueToPropertyBag<object>(propertyName, value);
-        }
-
-        /// <summary>
         /// Gets the value fast without checking for any constraints. This means that if this method is used incorrectly,
         /// it can throw random exceptions.
         /// <para />
@@ -224,21 +209,6 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Gets the value of a specific property.
-        /// </summary>
-        /// <param name="name">Name of the property.</param>
-        /// <returns>Object value of the property.</returns>
-        /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
-        protected internal object GetValue(string name)
-        {
-            Argument.IsNotNullOrEmpty("name", name);
-
-            var propertyData = PropertyDataManager.GetPropertyData(GetType(), name);
-
-            return GetValue(propertyData);
-        }
-
-        /// <summary>
         /// Gets the typed value of a specific property.
         /// </summary>
         /// <typeparam name="TValue">The type of the value.</typeparam>
@@ -252,37 +222,6 @@ namespace Catel.Data
             var propertyData = PropertyDataManager.GetPropertyData(GetType(), name);
 
             return GetValue<TValue>(propertyData);
-        }
-
-        /// <summary>
-        /// Gets the value of a specific property.
-        /// </summary>
-        /// <param name="property"><see cref="PropertyData"/> of the property.</param>
-        /// <returns>Object value of the property.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
-        /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetValue<TValue>(string)", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
-        protected object GetValue(PropertyData property)
-        {
-            Argument.IsNotNull("property", property);
-
-            if (property.IsCalculatedProperty)
-            {
-                // Note: don't use IObjectAdapter since it might cause a stackoverflow going into
-                // this method again
-                var expression = GetPropertyGetterExpression<object>(property.Name);
-                if (expression is null)
-                {
-                    // Fall back to reflection
-                    return PropertyHelper.GetPropertyValue(this, property.Name);
-                }
-                else
-                {
-                    return expression(this);
-                }
-            }
-
-            return GetValueFromPropertyBag<object>(property.Name);
         }
 
         /// <summary>
@@ -343,35 +282,9 @@ namespace Catel.Data
         /// <returns>The value of the property.</returns>
         /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "IModelEditor.GetValue<TValue>(string)", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
-        object IModelEditor.GetValue(string propertyName)
-        {
-            return GetValue(propertyName);
-        }
-
-        /// <summary>
-        /// Gets the value of the specified property.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns>The value of the property.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
         TValue IModelEditor.GetValue<TValue>(string propertyName)
         {
             return GetValue<TValue>(propertyName);
-        }
-
-        /// <summary>
-        /// Sets the value of the specified property.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <param name="value">The value.</param>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "IModelEditor.SetValue<TValue>(string, TValue)", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
-        void IModelEditor.SetValue(string propertyName, object value)
-        {
-            SetValue(propertyName, value);
         }
 
         /// <summary>
@@ -394,38 +307,9 @@ namespace Catel.Data
         /// <remarks>
         /// Note that this method does not do any sanity checks. Use at your own risk!
         /// </remarks>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetValueFastButUnsecure<TValue>(string)", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
-        object IModelEditor.GetValueFastButUnsecure(string propertyName)
-        {
-            return GetValueFromPropertyBag<object>(propertyName);
-        }
-
-        /// <summary>
-        /// Gets the value in the fastest way possible without doing sanity checks.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns>The value.</returns>
-        /// <remarks>
-        /// Note that this method does not do any sanity checks. Use at your own risk!
-        /// </remarks>
         TValue IModelEditor.GetValueFastButUnsecure<TValue>(string propertyName)
         {
             return GetValueFromPropertyBag<TValue>(propertyName);
-        }
-
-        /// <summary>
-        /// Sets the value in the fastest way possible without doing sanity checks.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <param name="value">The value.</param>
-        /// <returns>The value.</returns>
-        /// <remarks>
-        /// Note that this method does not do any sanity checks. Use at your own risk!
-        /// </remarks>
-        [ObsoleteEx(ReplacementTypeOrMember = "SetValueFastButUnsecure<TValue>(string, TValue)", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
-        void IModelEditor.SetValueFastButUnsecure(string propertyName, object value)
-        {
-            SetValueToPropertyBag(propertyName, value);
         }
 
         /// <summary>

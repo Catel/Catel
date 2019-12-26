@@ -47,21 +47,6 @@ namespace Catel.Data
         protected SavableModelBase()
         {
         }
-
-#if NET || NETCORE || NETSTANDARD
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SavableModelBase{T}"/> class.
-        /// </summary>
-        /// <param name="info">SerializationInfo object, null if this is the first time construction.</param>
-        /// <param name="context">StreamingContext object, simple pass a default new StreamingContext() if this is the first time construction.</param>
-        /// <remarks>
-        /// Call this method, even when constructing the object for the first time (thus not deserializing).
-        /// </remarks>
-        protected SavableModelBase(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-#endif
         #endregion
 
         #region Properties
@@ -108,7 +93,7 @@ namespace Catel.Data
 
             serializer.Serialize(this, stream, configuration);
 
-            this.ClearIsDirtyOnAllChilds();
+            this.ClearIsDirtyOnAllChildren();
         }
         #endregion
 

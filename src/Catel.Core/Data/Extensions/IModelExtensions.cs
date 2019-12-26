@@ -20,16 +20,6 @@ namespace Catel.Data
         /// Clears the <see cref="ModelBase.IsDirty" /> on all childs.
         /// </summary>
         /// <param name="model">The model.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "ClearIsDirtyOnAllChildren(IModel, bool)", TreatAsErrorFromVersion = "5.10", RemoveInVersion = "6.0")]
-        public static void ClearIsDirtyOnAllChilds(this IModel model)
-        {
-            ClearIsDirtyOnAllChildren(model, false);
-        }
-
-        /// <summary>
-        /// Clears the <see cref="ModelBase.IsDirty" /> on all childs.
-        /// </summary>
-        /// <param name="model">The model.</param>
         /// <param name="suspendNotifications">If set to <c>true</c>, the change will not be raised using the <see cref="INotifyPropertyChanged"/> interface.</param>
         public static void ClearIsDirtyOnAllChildren(this IModel model, bool suspendNotifications = false)
         {
@@ -68,7 +58,7 @@ namespace Catel.Data
                 var catelTypeInfo = ModelBase.PropertyDataManager.GetCatelTypeInfo(obj.GetType());
                 foreach (var property in catelTypeInfo.GetCatelProperties())
                 {
-                    var value = modelEditor.GetValue(property.Value.Name);
+                    var value = modelEditor.GetValue<object>(property.Value.Name);
 
                     ClearIsDirtyOnAllChildren(value, handledReferences, suspendNotifications);
                 }

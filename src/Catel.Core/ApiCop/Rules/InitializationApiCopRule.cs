@@ -102,7 +102,7 @@ namespace Catel.ApiCop.Rules
         public void SetInitializationMode(InitializationMode initializationMode, string tag)
         {
             var propertyBag = GetPropertyBagForTag(tag);
-            if (propertyBag.IsPropertyAvailable("ActualInitializationMode"))
+            if (propertyBag.IsAvailable("ActualInitializationMode"))
             {
                 return;
             }

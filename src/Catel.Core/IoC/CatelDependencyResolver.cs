@@ -48,21 +48,6 @@ namespace Catel.IoC
         }
 
         /// <summary>
-        /// Determines whether all types specified can be resolved. Though <see cref="ResolveAll"/> will return <c>null</c>
-        /// at the array index when a type cannot be resolved, this method will actually check whether all the specified types
-        /// are registered.
-        /// <para />
-        /// It is still possible to call <see cref="ResolveAll"/>, even when this method returns <c>false</c>.
-        /// </summary>
-        /// <param name="types">The types.</param>
-        /// <returns><c>true</c> if all types specified can be resolved; otherwise, <c>false</c>.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "CanResolveMultiple", TreatAsErrorFromVersion = "5.2", RemoveInVersion = "6.0")]
-        public bool CanResolveAll(Type[] types)
-        {
-            return CanResolveMultiple(types);
-        }
-
-        /// <summary>
         /// Determines whether all types specified can be resolved. Though <see cref="ResolveMultiple"/> will return <c>null</c>
         /// at the array index when a type cannot be resolved, this method will actually check whether all the specified types
         /// are registered.
@@ -80,7 +65,7 @@ namespace Catel.IoC
                 return true;
             }
 
-            return _serviceLocator.AreAllTypesRegistered(types);
+            return _serviceLocator.AreMultipleTypesRegistered(types);
         }
 
         /// <summary>
@@ -96,18 +81,6 @@ namespace Catel.IoC
             Argument.IsNotNull("type", type);
 
             return _serviceLocator.ResolveType(type, tag);
-        }
-
-        /// <summary>
-        /// Resolves the specified types with the specified tag.
-        /// </summary>
-        /// <param name="types">The types.</param>
-        /// <param name="tag">The tag.</param>
-        /// <returns>A list of resolved types. If one of the types cannot be resolved, that location in the array will be <c>null</c>.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "ResolveMultiple", TreatAsErrorFromVersion = "5.2", RemoveInVersion = "6.0")]
-        public object[] ResolveAll(Type[] types, object tag = null)
-        {
-            return ResolveMultiple(types, tag);
         }
 
         /// <summary>

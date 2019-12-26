@@ -100,22 +100,6 @@ namespace Catel.Services
                 }
             }
         }
-
-        /// <summary>
-        /// Exports the <paramref name="viewModel" />'s view to the print or clipboard or file.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="exportMode">The export mode.</param>
-        /// <param name="dpiX">The dpi X.</param>
-        /// <param name="dpiY">The dpi Y.</param>
-        /// <exception cref="System.InvalidOperationException"></exception>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="viewModel" /> is <c>null</c>.</exception>
-        /// <remarks>If <paramref name="exportMode" /> is <see cref="ExportMode.Print" /> then the <paramref name="dpiX" /> and <paramref name="dpiY" /> argument will be ignored.</remarks>
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(ExportAsync), TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public virtual async void Export(IViewModel viewModel, ExportMode exportMode = ExportMode.Print, double dpiX = 96, double dpiY = 96)
-        {
-            await ExportAsync(viewModel, exportMode, dpiX, dpiY);
-        }
         #endregion
 
         #region Methods

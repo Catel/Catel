@@ -110,7 +110,7 @@ namespace Catel.Data
                     if (!propertyData.IsModelBaseProperty)
                     {
                         object valueA = propertyValue.Value;
-                        object valueB = y.GetValue(propertyValue.Key);
+                        object valueB = ((IModelEditor)y).GetValue<object>(propertyValue.Key);
 
                         if (!ReferenceEquals(valueA, valueB))
                         {

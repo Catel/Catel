@@ -33,18 +33,6 @@ namespace Catel.Services
         /// Initializes a new instance of the <see cref="MessageService"/> class.
         /// </summary>
         /// <param name="dispatcherService">The dispatcher service.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
-        [ObsoleteEx(Message = "Backwards compatible constructor, use MessageService(IDispatcherService, ILanguageService) instead", TreatAsErrorFromVersion = "5.3", RemoveInVersion = "6.0")]
-        public MessageService(IDispatcherService dispatcherService)
-            : this(dispatcherService, dispatcherService?.GetDependencyResolver().Resolve<ILanguageService>())
-        {
-            // Note: backwards compatibility ctor
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MessageService"/> class.
-        /// </summary>
-        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="languageService">The language service.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="languageService"/> is <c>null</c>.</exception>

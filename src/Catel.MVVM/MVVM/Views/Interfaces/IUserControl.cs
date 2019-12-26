@@ -24,18 +24,14 @@ namespace Catel.MVVM.Views
     public interface IUserControl : IView
     {
         /// <summary>
-        /// Gets or sets a value indicating whether the user control should close any existing
-        /// view model when the control is unloaded from the visual tree.
+        /// Gets or sets a the view model lifetime management.
         /// <para />
-        /// Set this property to <c>false</c> if a view model should be kept alive and re-used
-        /// for unloading/loading instead of creating a new one.
-        /// <para />
-        /// By default, this value is <c>true</c>.
+        /// By default, this value is <see cref="ViewModelLifetimeManagement"/>.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if the view model should be closed when the control is unloaded; otherwise, <c>false</c>.
+        /// The view model lifetime management.
         /// </value>
-        bool CloseViewModelOnUnloaded { get; set; }
+        ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether parent view model containers are supported. If supported,

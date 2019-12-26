@@ -29,12 +29,6 @@ namespace Catel.MVVM
         event EventHandler<CommandExecutedEventArgs> Executed;
 
         /// <summary>
-        /// Occurs when the command has just been executed successfully.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = "No replacement", TreatAsErrorFromVersion = "5.1", RemoveInVersion = "6.0")]
-        event AsyncEventHandler<CommandExecutedEventArgs> ExecutedAsync;
-
-        /// <summary>
         /// Raises the <see cref="ICommand.CanExecuteChanged"/> event.
         /// </summary>
         void RaiseCanExecuteChanged();

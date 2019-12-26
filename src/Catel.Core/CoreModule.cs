@@ -13,13 +13,8 @@ namespace Catel
     using IoC;
     using Messaging;
     using Runtime.Serialization;
-    using Services;
-
-#if NET || NETCORE
-    using Runtime.Serialization.Binary;
-#endif
-
     using Runtime.Serialization.Xml;
+    using Services;
 
     /// <summary>
     /// Core module which allows the registration of default services in the service locator.
@@ -42,10 +37,6 @@ namespace Catel
             serviceLocator.RegisterType<IValidatorProvider, AttributeValidatorProvider>();
             serviceLocator.RegisterType<IRegistrationConventionHandler, RegistrationConventionHandler>();
 
-#if NET || NETCORE
-            serviceLocator.RegisterType<IBinarySerializer, BinarySerializer>();
-            serviceLocator.RegisterTypeWithTag<ISerializationContextInfoFactory, BinarySerializationContextInfoFactory>(typeof(BinarySerializer));
-#endif
             serviceLocator.RegisterType<IDataContractSerializerFactory, DataContractSerializerFactory>();
             serviceLocator.RegisterType<IXmlSerializer, XmlSerializer>();
             serviceLocator.RegisterType<IXmlNamespaceManager, XmlNamespaceManager>();

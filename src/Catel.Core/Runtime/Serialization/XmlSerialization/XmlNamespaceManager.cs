@@ -40,7 +40,7 @@ namespace Catel.Runtime.Serialization.Xml
         {
             Argument.IsNotNull("type", type);
 
-            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+            var scopeName = SerializationContextHelper.GetSerializationScopeName();
             using (var scopeManager = ScopeManager<SerializationContextScope<XmlSerializationContextInfo>>.GetScopeManager(scopeName))
             {
                 EnsureSubscribedToScope(scopeManager, scopeName);

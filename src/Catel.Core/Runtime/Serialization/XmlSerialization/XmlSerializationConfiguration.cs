@@ -19,17 +19,7 @@ namespace Catel.Runtime.Serialization.Xml
         /// </summary>
         public XmlSerializationConfiguration()
         {
-            OptimalizationMode = XmlSerializerOptimalizationMode.Performance;
         }
-
-        /// <summary>
-        /// Gets or sets the optimalization mode.
-        /// </summary>
-        /// <value>
-        /// The optimalization mode.
-        /// </value>
-        [ObsoleteEx(Message = "Using XmlWriter / XmlReader, use the corresponding settings instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public XmlSerializerOptimalizationMode OptimalizationMode { get; set; }
 
         /// <summary>
         /// Gets or sets the xml writer settings.

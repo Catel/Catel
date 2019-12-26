@@ -869,7 +869,7 @@ namespace Catel.MVVM
                 var model = _modelObjects[mapping.ModelProperty];
                 if (model != null)
                 {
-                    var value = GetValue(mapping.ViewModelProperty);
+                    var value = GetValue<object>(mapping.ViewModelProperty);
                     var modelValues = mapping.Converter.ConvertBack(value, this);
                     for (var i = 0; i < mapping.ValueProperties.Length; i++)
                     {
@@ -917,7 +917,7 @@ namespace Catel.MVVM
                         UninitializeModelInternal(e.PropertyName, oldModelValue, ModelCleanUpMode.CancelEdit);
                     }
 
-                    var newModelValue = GetValue(e.PropertyName);
+                    var newModelValue = GetValue<object>(e.PropertyName);
                     _modelObjects[e.PropertyName] = newModelValue;
 
                     if (newModelValue != null)
@@ -981,7 +981,7 @@ namespace Catel.MVVM
                             var modelInfo = _modelObjectsInfo[mapping.ModelProperty];
                             if (!modelInfo.IsCanceling)
                             {
-                                var viewModelValue = GetValue(e.PropertyName);
+                                var viewModelValue = GetValue<object>(e.PropertyName);
                                 var propertiesToSet = mapping.ValueProperties;
 
 #if !XAMARIN_FORMS
@@ -1125,7 +1125,7 @@ namespace Catel.MVVM
         {
             Argument.IsNotNull("modelProperty", modelProperty);
 
-            var model = GetValue(modelProperty);
+            var model = GetValue<IModel>(modelProperty);
 
             UninitializeModelInternal(modelProperty, model, modelCleanUpMode);
             InitializeModelInternal(modelProperty, model);

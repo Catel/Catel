@@ -279,7 +279,7 @@ namespace Catel.Runtime.Serialization
         /// <returns></returns>
         protected virtual ScopeManager<SerializationScope> GetCurrentSerializationScopeManager(ISerializationConfiguration configuration)
         {
-            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+            var scopeName = SerializationContextHelper.GetSerializationScopeName();
             var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, () => new SerializationScope(this, configuration ?? DefaultSerializationConfiguration));
             return scopeManager;
         }
@@ -393,24 +393,6 @@ namespace Catel.Runtime.Serialization
         }
 
         /// <summary>
-        /// Gets the context.
-        /// </summary>
-        /// <param name="model">The model, can be <c>null</c> for value types.</param>
-        /// <param name="modelType">Type of the model.</param>
-        /// <param name="stream">The stream.</param>
-        /// <param name="contextMode">The context mode.</param>
-        /// <param name="configuration">The configuration.</param>
-        /// <returns>
-        /// The serialization context.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="model" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="modelType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="configuration" /> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetSerializationContextInfo", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
-        protected abstract ISerializationContext<TSerializationContextInfo> GetContext(object model, Type modelType, Stream stream,
-            SerializationContextMode contextMode, ISerializationConfiguration configuration);
-
-        /// <summary>
         /// Gets the serializer specific serialization context info.
         /// </summary>
         /// <param name="model">The model, can be <c>null</c> for value types.</param>
@@ -434,37 +416,6 @@ namespace Catel.Runtime.Serialization
         /// <param name="context">The context.</param>
         /// <param name="stream">The stream.</param>
         protected abstract void AppendContextToStream(ISerializationContext<TSerializationContextInfo> context, Stream stream);
-
-        /// <summary>
-        /// Populates the model with the specified members.
-        /// </summary>
-        /// <param name="model">The model.</param>
-        /// <param name="members">The members.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="model"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="members"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "PopulateModel(ISerializationContext<TSerializationContextInfo>, MemberValue[])", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        protected virtual void PopulateModel(object model, params MemberValue[] members)
-        {
-            Argument.IsNotNull("model", model);
-            Argument.IsNotNull("members", members);
-
-            // Populate using properties
-            var modelType = model.GetType();
-
-            var modelInfo = _serializationModelCache.GetFromCacheOrFetch(modelType, () =>
-            {
-                var catelProperties = SerializationManager.GetCatelProperties(modelType);
-                var fields = SerializationManager.GetFields(modelType);
-                var regularProperties = SerializationManager.GetRegularProperties(modelType);
-
-                return new SerializationModelInfo(modelType, catelProperties, fields, regularProperties);
-            });
-
-            foreach (var member in members)
-            {
-                ObjectAdapter.SetMemberValue(model, member, modelInfo);
-            }
-        }
 
         /// <summary>
         /// Populates the model with the specified members.

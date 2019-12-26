@@ -111,14 +111,6 @@ namespace Catel.MVVM
         /// Occurs when the command has just been executed successfully.
         /// </summary>
         public event EventHandler<CommandExecutedEventArgs> Executed;
-
-        /// <summary>
-        /// Occurs when the command has just been executed successfully.
-        /// </summary>
-#pragma warning disable CS0067
-        [ObsoleteEx(ReplacementTypeOrMember = "No replacement", TreatAsErrorFromVersion = "5.1", RemoveInVersion = "6.0")]
-        public event AsyncEventHandler<CommandExecutedEventArgs> ExecutedAsync;
-#pragma warning restore CS0067
         #endregion
 
         #region Properties
@@ -277,19 +269,6 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Defines the method to be called when the command is invoked.
-        /// </summary>
-        /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, this object can be set to null.</param>
-        /// <param name="ignoreCanExecuteCheck">if set to <c>true</c>, the check on <see cref="CanExecute()"/> will be used before actually executing the action.</param>
-        [ObsoleteEx(ReplacementTypeOrMember = "Execute(TExecuteParameter, bool)", TreatAsErrorFromVersion = "5.1", RemoveInVersion = "6.0")]
-        protected virtual Task ExecuteAsync(TExecuteParameter parameter, bool ignoreCanExecuteCheck)
-        {
-            Execute(parameter, ignoreCanExecuteCheck);
-
-            return TaskHelper.Completed;
-        }
-
-        /// <summary>
         /// Raises the <see cref="CanExecuteChanged"/> event.
         /// </summary>
         public virtual void RaiseCanExecuteChanged()
@@ -305,19 +284,6 @@ namespace Catel.MVVM
                     Log.Warning(ex, "Failed to raise CanExecuteChanged");
                 }
             });
-        }
-
-        /// <summary>
-        /// Raises the <see cref="Executed" /> event.
-        /// </summary>
-        /// <param name="parameter">The parameter.</param>
-        /// <returns>Task.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "RaiseExecuted(object)", TreatAsErrorFromVersion = "5.1", RemoveInVersion = "6.0")]
-        protected Task RaiseExecutedAsync(object parameter)
-        {
-            RaiseExecuted(parameter);
-
-            return TaskHelper.Completed;
         }
 
         /// <summary>

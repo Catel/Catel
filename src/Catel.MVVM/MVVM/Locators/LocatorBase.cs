@@ -218,25 +218,6 @@ namespace Catel.MVVM
         }
 
         /// <summary>
-        /// Gets the type from string. This is a helper method to easily 
-        /// </summary>
-        /// <param name="fullTypeName">Full name of the type.</param>
-        /// <returns>The resolved type or <c>null</c> if the type could not be resolved.</returns>
-        /// <remarks>
-        /// Internally, this method uses <see cref="TypeCache.GetType(string, bool, bool)"/>.
-        /// </remarks>
-        [ObsoleteEx(ReplacementTypeOrMember = "TypeCache.GetType", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        protected static Type GetTypeFromString(string fullTypeName)
-        {
-            if (string.IsNullOrEmpty(fullTypeName))
-            {
-                return null;
-            }
-
-            return TypeCache.GetType(fullTypeName, allowInitialization: false);
-        }
-
-        /// <summary>
         /// Resolves a single naming convention.
         /// <para />
         /// This method is abstract because each locator should or could use its own naming convention to resolve

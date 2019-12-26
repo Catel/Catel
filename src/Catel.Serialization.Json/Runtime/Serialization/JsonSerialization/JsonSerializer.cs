@@ -791,26 +791,6 @@ namespace Catel.Runtime.Serialization.Json
         }
 
         /// <summary>
-        /// Gets the context.
-        /// </summary>
-        /// <param name="model">The model, can be <c>null</c> for value types.</param>
-        /// <param name="modelType">Type of the model.</param>
-        /// <param name="stream">The stream.</param>
-        /// <param name="contextMode">The context mode.</param>
-        /// <param name="configuration">The configuration.</param>
-        /// <returns>
-        /// ISerializationContext{SerializationInfo}.
-        /// </returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetSerializationContextInfo", TreatAsErrorFromVersion = "5.6", RemoveInVersion = "6.0")]
-#pragma warning disable 672
-        protected override ISerializationContext<JsonSerializationContextInfo> GetContext(object model, Type modelType, Stream stream,
-#pragma warning restore 672
-            SerializationContextMode contextMode, ISerializationConfiguration configuration)
-        {
-            return GetSerializationContextInfo(model, modelType, stream, contextMode, configuration);
-        }
-
-        /// <summary>
         /// Gets the serializer specific serialization context info.
         /// </summary>
         /// <param name="model">The model, can be <c>null</c> for value types.</param>

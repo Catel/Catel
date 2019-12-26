@@ -115,31 +115,6 @@ namespace Catel.MVVM.Providers
 
         #region Properties
         /// <summary>
-        /// Gets or sets a value indicating whether the user control should close any existing
-        /// view model when the control is unloaded from the visual tree.
-        /// <para />
-        /// Set this property to <c>false</c> if a view model should be kept alive and re-used
-        /// for unloading/loading instead of creating a new one.
-        /// <para />
-        /// By default, this value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the view model should be closed when the control is unloaded; otherwise, <c>false</c>.
-        /// </value>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public bool CloseViewModelOnUnloaded
-        {
-            get
-            {
-                return ViewModelLifetimeManagement == ViewModelLifetimeManagement.Automatic;
-            }
-            set
-            {
-                ViewModelLifetimeManagement = value ? ViewModelLifetimeManagement.Automatic : ViewModelLifetimeManagement.PartlyManual;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether parent view model containers are supported. If supported,
         /// the user control will search for the <see cref="IViewModelContainer"/> interface. During this search, the user control 
         /// will use both the visual and logical tree.

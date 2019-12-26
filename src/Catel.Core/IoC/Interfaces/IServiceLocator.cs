@@ -202,39 +202,7 @@ namespace Catel.IoC
         /// <param name="types">The types that should be registered.</param>
         /// <returns><c>true</c> if all the specified types are registered with this instance of the <see cref="IServiceLocator" />; otherwise <c>false</c>.</returns>
         /// <exception cref="ArgumentException">The <paramref name="types"/> is <c>null</c> or an empty array.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "AreMultipleTypesRegistered", TreatAsErrorFromVersion = "5.2", RemoveInVersion = "6.0")]
-        bool AreAllTypesRegistered(params Type[] types);
-
-        /// <summary>
-        /// Determines whether all the specified types are registered with the service locator.
-        /// </summary>
-        /// <remarks>
-        /// Note that this method is written for optimalization by the <see cref="TypeFactory"/>. This means that the 
-        /// <see cref="TypeFactory"/> does not need to call the <see cref="ServiceLocator"/> several times to construct
-        /// a single type using dependency injection.
-        /// <para />
-        /// Only use this method if you know what you are doing, otherwise use the <see cref="ServiceLocator.IsTypeRegistered"/> instead.
-        /// </remarks>
-        /// <param name="types">The types that should be registered.</param>
-        /// <returns><c>true</c> if all the specified types are registered with this instance of the <see cref="IServiceLocator" />; otherwise <c>false</c>.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="types"/> is <c>null</c> or an empty array.</exception>
         bool AreMultipleTypesRegistered(params Type[] types);
-
-        /// <summary>
-        /// Resolves all the specified types.
-        /// </summary>
-        /// <remarks>
-        /// Note that this method is written for optimalization by the <see cref="TypeFactory"/>. This means that the 
-        /// <see cref="TypeFactory"/> does not need to call the <see cref="ServiceLocator"/> several times to construct
-        /// a single type using dependency injection.
-        /// <para />
-        /// Only use this method if you know what you are doing, otherwise use the <see cref="ServiceLocator.IsTypeRegistered"/> instead.
-        /// </remarks>
-        /// <param name="types">The collection of types that should be resolved.</param>
-        /// <returns>The resolved types in the same order as the types.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="types"/> is <c>null</c> or an empty array.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "ResolveMultipleTypes", TreatAsErrorFromVersion = "5.2", RemoveInVersion = "6.0")]
-        object[] ResolveAllTypes(params Type[] types);
 
         /// <summary>
         /// Resolves all the specified types.

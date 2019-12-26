@@ -671,44 +671,6 @@ namespace Catel.Runtime.Serialization.Xml
         }
 
         /// <summary>
-        /// Gets the XML optimalization mode. First, the value will be retrieved from the <c>context.Configuration</c> value if
-        /// it's of type <c>XmlSerializationConfiguration</c>.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <returns></returns>
-        [ObsoleteEx(Message = "Using XmlWriter / XmlReader, use the corresponding settings instead", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        protected virtual XmlSerializerOptimalizationMode GetXmlOptimalizationMode(ISerializationContext<XmlSerializationContextInfo> context)
-        {
-            var optimalizationMode = XmlSerializerOptimalizationMode.Performance;
-
-            var xmlSerializationConfiguration = context.Configuration as XmlSerializationConfiguration;
-            if (xmlSerializationConfiguration != null)
-            {
-                optimalizationMode = xmlSerializationConfiguration.OptimalizationMode;
-            }
-
-            return optimalizationMode;
-        }
-
-        /// <summary>
-        /// Gets the context.
-        /// </summary>
-        /// <param name="model">The model, can be <c>null</c> for value types.</param>
-        /// <param name="modelType">Type of the model.</param>
-        /// <param name="stream">The stream.</param>
-        /// <param name="contextMode">The context mode.</param>
-        /// <param name="configuration">The configuration.</param>
-        /// <returns>
-        /// ISerializationContext{SerializationInfo}.
-        /// </returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetSerializationContextInfo", TreatAsErrorFromVersion = "5.6", RemoveInVersion = "6.0")]
-        protected override ISerializationContext<XmlSerializationContextInfo> GetContext(object model, Type modelType, Stream stream,
-            SerializationContextMode contextMode, ISerializationConfiguration configuration)
-        {
-            return GetSerializationContextInfo(model, modelType, stream, contextMode, configuration);
-        }
-
-        /// <summary>
         /// Gets the serializer specific serialization context info.
         /// </summary>
         /// <param name="model">The model, can be <c>null</c> for value types.</param>

@@ -163,19 +163,6 @@ namespace Catel.Data
         {
             InitializeModelValidation();
         }
-
-#if NET || NETCORE || NETSTANDARD
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ValidatableModelBase"/> class.
-        /// </summary>
-        /// <param name="info">The information.</param>
-        /// <param name="context">The context.</param>
-        protected ValidatableModelBase(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            InitializeModelValidation();
-        }
-#endif
         #endregion
 
         #region Properties
@@ -630,7 +617,7 @@ namespace Catel.Data
                                 return false;
                             }
 
-                            value = GetValue(catelPropertyData);
+                            value = GetValue<object>(catelPropertyData);
                             handled = true;
                         }
                     }
@@ -933,7 +920,7 @@ namespace Catel.Data
                     // As the last step, sync the field validation results with the context
                     foreach (var fieldValidationResult in fieldValidationResults)
                     {
-                        validationContext.AddFieldValidationResult(fieldValidationResult);
+                        validationContext.Add(fieldValidationResult);
                     }
                     #endregion
 
@@ -962,7 +949,7 @@ namespace Catel.Data
                     // As the last step, sync the field validation results with the context
                     foreach (var businessRuleValidationResult in businessRuleValidationResults)
                     {
-                        validationContext.AddBusinessRuleValidationResult(businessRuleValidationResult);
+                        validationContext.Add(businessRuleValidationResult);
                     }
                     #endregion
 

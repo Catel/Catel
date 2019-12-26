@@ -53,7 +53,7 @@ namespace Catel.Data
 
             foreach (var property in catelTypeInfo.GetCatelProperties())
             {
-                var propertyValue = model.GetValue(property.Key);
+                var propertyValue = model.GetValue<object>(property.Key);
                 var enumerable = propertyValue as IEnumerable;
                 if (enumerable != null && !(propertyValue is string))
                 {

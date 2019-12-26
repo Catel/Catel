@@ -262,8 +262,8 @@ namespace Catel.Logging
         static LogManager()
         {
 #if NET || NETCORE
-            AppDomain.CurrentDomain.DomainUnload += (sender, e) => FlushAll();
-            AppDomain.CurrentDomain.UnhandledException += (sender, e) => FlushAll();
+            AppDomain.CurrentDomain.DomainUnload += async (sender, e) => await FlushAllAsync();
+            AppDomain.CurrentDomain.UnhandledException += async (sender, e) => await FlushAllAsync();
 #endif
         }
         #endregion
@@ -649,17 +649,6 @@ namespace Catel.Logging
             {
                 await logListenerToFlush.FlushAsync();
             }
-        }
-
-        /// <summary>
-        /// Flushes all listeners that implement the <see cref="IBatchLogListener" /> by calling <see cref="IBatchLogListener.FlushAsync" />.
-        /// </summary>
-        [ObsoleteEx(ReplacementTypeOrMember = nameof(FlushAllAsync), Message = "Since listeners only have FlushAsync, a non-async flush doesn't make sense", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-#pragma warning disable AvoidAsyncVoid // Avoid async void
-        public static async void FlushAll()
-#pragma warning restore AvoidAsyncVoid // Avoid async void
-        {
-            await FlushAllAsync();
         }
 
         /// <summary>

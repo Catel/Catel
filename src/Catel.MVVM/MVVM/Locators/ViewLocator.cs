@@ -73,7 +73,7 @@ namespace Catel.MVVM
             var viewModelTypeName = TypeHelper.GetTypeNameWithAssembly(viewModelType.AssemblyQualifiedName);
 
             var resolvedType = Resolve(viewModelTypeName);
-            return GetTypeFromString(resolvedType);
+            return TypeCache.GetType(resolvedType);
         }
 
         /// <summary>

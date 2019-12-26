@@ -46,24 +46,6 @@ namespace Catel.Data
             InitializeChildAwareModelBase();
         }
 
-#if NET || NETCORE || NETSTANDARD
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModelBase"/> class.
-        /// <para />
-        /// Only constructor for the ModelBase.
-        /// </summary>
-        /// <param name="info">SerializationInfo object, null if this is the first time construction.</param>
-        /// <param name="context">StreamingContext object, simple pass a default new StreamingContext() if this is the first time construction.</param>
-        /// <remarks>
-        /// Call this method, even when constructing the object for the first time (thus not deserializing).
-        /// </remarks>
-        protected ChildAwareModelBase(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            InitializeChildAwareModelBase();
-        }
-#endif
-
         /// <summary>
         /// Gets or sets a value indicating whether event subscriptions of child values should be disabled.
         /// <para />

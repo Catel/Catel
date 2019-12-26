@@ -38,26 +38,12 @@ namespace Catel.Data
 #endif
         private int? _hashCode;
 
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ComparableModelBase"/> class.
         /// </summary>
         protected ComparableModelBase()
         {
         }
-
-#if NET || NETCORE || NETSTANDARD
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ComparableModelBase"/> class.
-        /// </summary>
-        /// <param name="info">The information.</param>
-        /// <param name="context">The context.</param>
-        protected ComparableModelBase(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-#endif
 
         #region Operators
         /// <summary>

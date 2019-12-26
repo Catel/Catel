@@ -336,16 +336,6 @@ namespace Catel.MVVM.Providers
         public bool HasVmProperty { get; private set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the view model container should prevent the 
-        /// creation of a view model.
-        /// <para />
-        /// This property is very useful when using views in transitions where the view model is no longer required.
-        /// </summary>
-        /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public bool PreventViewModelCreation { get; set; }
-
-        /// <summary>
         /// Gets the target control of this MVVM provider.
         /// </summary>
         /// <value>The target control.</value>

@@ -27,7 +27,7 @@ namespace Catel.IoC
         /// <summary>
         /// A single null element array of objects.
         /// </summary>
-        private static object[] SingleNullElementArrayOfObjects = new object[1]{ null };
+        private static readonly object[] SingleNullElementArrayOfObjects = new object[1]{ null };
         #endregion
 
         #region Fields

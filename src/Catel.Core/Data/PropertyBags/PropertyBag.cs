@@ -52,8 +52,8 @@ namespace Catel.Data
         /// <returns>The value of the property.</returns>
         public object this[string name]
         {
-            get { return GetPropertyValue<object>(name); }
-            set { SetPropertyValue(name, value); }
+            get { return GetValue<object>(name); }
+            set { SetValue(name, value); }
         }
         #endregion
 
@@ -71,20 +71,8 @@ namespace Catel.Data
 
             foreach (var property in propertiesToImport)
             {
-                SetPropertyValue(property.Key, property.Value);
+                SetValue(property.Key, property.Value);
             }
-        }
-
-        /// <summary>
-        /// Determines whether the specified property is available on the property bag, which means it has a value.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns><c>true</c> if the property is available; otherwise, <c>false</c>.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "IsAvailable", TreatAsErrorFromVersion = "5.13", RemoveInVersion = "6.0")]
-        public bool IsPropertyAvailable(string propertyName)
-        {
-            return IsAvailable(propertyName);
         }
 
         public override bool IsAvailable(string name)
@@ -117,37 +105,6 @@ namespace Catel.Data
             }
         }
 
-        /// <summary>
-        /// Gets the property value.
-        /// <para />
-        /// If the property is not yet created, the default value will be returned.
-        /// </summary>
-        /// <typeparam name="TValue">The type of the value.</typeparam>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <returns>The property value or the default value of <typeparamref name="TValue" /> if the property does not exist.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetValue<TValue>", TreatAsErrorFromVersion = "5.13", RemoveInVersion = "6.0")]
-        public TValue GetPropertyValue<TValue>(string propertyName)
-        {
-            return GetPropertyValue(propertyName, default(TValue));
-        }
-
-        /// <summary>
-        /// Gets the property value.
-        /// <para />
-        /// If the property is not yet created, the default value will be returned.
-        /// </summary>
-        /// <typeparam name="TValue">The type of the value.</typeparam>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <param name="defaultValue">The default value.</param>
-        /// <returns>The property value or the default value of <typeparamref name="TValue" /> if the property does not exist.</returns>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "GetValue<TValue>", TreatAsErrorFromVersion = "5.13", RemoveInVersion = "6.0")]
-        public TValue GetPropertyValue<TValue>(string propertyName, TValue defaultValue)
-        {
-            return GetValue<TValue>(propertyName, defaultValue);
-        }
-
         public override TValue GetValue<TValue>(string name, TValue defaultValue = default)
         {
             Argument.IsNotNullOrWhitespace("name", name);
@@ -167,18 +124,6 @@ namespace Catel.Data
 
                 return defaultValue;
             }
-        }
-
-        /// <summary>
-        /// Sets the property value.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        /// <param name="value">The value.</param>
-        /// <exception cref="ArgumentException">The <paramref name="propertyName" /> is <c>null</c> or whitespace.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "SetValue<TValue>", TreatAsErrorFromVersion = "5.13", RemoveInVersion = "6.0")]
-        public void SetPropertyValue(string propertyName, object value)
-        {
-            SetValue(propertyName, value);
         }
 
         public override void SetValue<TValue>(string name, TValue value)
@@ -224,7 +169,7 @@ namespace Catel.Data
                 var value = (TValue) propertyValue;
                 var updatedValue = update(value);
 
-                SetPropertyValue(propertyName, updatedValue);
+                SetValue(propertyName, updatedValue);
             }
         }
         #endregion

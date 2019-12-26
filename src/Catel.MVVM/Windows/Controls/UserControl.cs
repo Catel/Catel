@@ -140,45 +140,12 @@ namespace Catel.Windows.Controls
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the view model container should prevent the 
-        /// creation of a view model.
-        /// <para />
-        /// This property is very useful when using views in transitions where the view model is no longer required.
-        /// </summary>
-        /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
-        public bool PreventViewModelCreation
-        {
-            get { return _logic.GetValue<UserControlLogic, bool>(x => x.PreventViewModelCreation); }
-            set { _logic.SetValue<UserControlLogic>(x => x.PreventViewModelCreation = value); }
-        }
-
-        /// <summary>
         /// Gets the view model that is contained by the container.
         /// </summary>
         /// <value>The view model.</value>
         public IViewModel ViewModel
         {
             get { return _logic.GetValue<UserControlLogic, IViewModel>(x => x.ViewModel); }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the user control should close any existing
-        /// view model when the control is unloaded from the visual tree.
-        /// <para />
-        /// Set this property to <c>false</c> if a view model should be kept alive and re-used
-        /// for unloading/loading instead of creating a new one.
-        /// <para />
-        /// By default, this value is <c>true</c>.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if the view model should be closed when the control is unloaded; otherwise, <c>false</c>.
-        /// </value>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.PartlyManual", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
-        public bool CloseViewModelOnUnloaded
-        {
-            get { return _logic.GetValue<UserControlLogic, bool>(x => x.CloseViewModelOnUnloaded, true); }
-            set { _logic.SetValue<UserControlLogic>(x => x.CloseViewModelOnUnloaded = value); }
         }
 
         /// <summary>

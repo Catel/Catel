@@ -26,7 +26,7 @@ namespace Catel.MVVM
         /// <summary>
         /// The log.
         /// </summary>
-        private static ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Registers the default view model services.
@@ -90,7 +90,6 @@ namespace Catel.MVVM
 
 #if NET || NETCORE
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IStartUpInfoProvider, StartUpInfoProvider>();
 #endif
 
 #if XAMARIN_FORMS

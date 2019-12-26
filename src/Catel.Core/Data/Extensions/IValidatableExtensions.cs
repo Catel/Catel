@@ -35,7 +35,7 @@ namespace Catel.Data
         /// <param name="validatable">The validatable model.</param>
         /// <param name="businessRuleValidationResult">The business rule validation result.</param>
         /// <param name="validate">if set to <c>true</c> [validate].</param>
-        public static void AddBusinessRuleValidationResult(this IValidatable validatable, IBusinessRuleValidationResult businessRuleValidationResult, bool validate = false)
+        public static void Add(this IValidatable validatable, IBusinessRuleValidationResult businessRuleValidationResult, bool validate = false)
         {
             Argument.IsNotNull("modelValidation", validatable);
             Argument.IsNotNull("businessRuleValidationResult", businessRuleValidationResult);
@@ -44,7 +44,7 @@ namespace Catel.Data
             validating = (sender, e) =>
             {
                 validatable.Validating -= validating;
-                e.ValidationContext.AddBusinessRuleValidationResult(businessRuleValidationResult);
+                e.ValidationContext.Add(businessRuleValidationResult);
             };
 
             validatable.Validating += validating;
@@ -61,7 +61,7 @@ namespace Catel.Data
         /// <param name="validatable">The validatable model.</param>
         /// <param name="fieldValidationResult">The field validation result.</param>
         /// <param name="validate">if set to <c>true</c> [validate].</param>
-        public static void AddFieldValidationResult(this IValidatable validatable, IFieldValidationResult fieldValidationResult, bool validate = false)
+        public static void Add(this IValidatable validatable, IFieldValidationResult fieldValidationResult, bool validate = false)
         {
             Argument.IsNotNull("modelValidation", validatable);
             Argument.IsNotNull("fieldValidationResult", fieldValidationResult);
@@ -70,7 +70,7 @@ namespace Catel.Data
             validating = (sender, e) =>
             {
                 validatable.Validating -= validating;
-                e.ValidationContext.AddFieldValidationResult(fieldValidationResult);
+                e.ValidationContext.Add(fieldValidationResult);
             };
 
             validatable.Validating += validating;

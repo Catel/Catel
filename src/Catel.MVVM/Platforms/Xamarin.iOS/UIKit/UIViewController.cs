@@ -133,20 +133,6 @@ namespace Catel.MonoTouch.UIKit
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the view model container should prevent the 
-        /// creation of a view model.
-        /// <para />
-        /// This property is very useful when using views in transitions where the view model is no longer required.
-        /// </summary>
-        /// <value><c>true</c> if the view model container should prevent view model creation; otherwise, <c>false</c>.</value>
-        [ObsoleteEx(ReplacementTypeOrMember = "ViewModelLifetimeManagement.FullyManual", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public bool PreventViewModelCreation
-        {
-            get { return _logic.GetValue<PageLogic, bool>(x => x.PreventViewModelCreation); }
-            set { _logic.SetValue<PageLogic>(x => x.PreventViewModelCreation = value); }
-        }
-
-        /// <summary>
         /// Gets or sets a the view model lifetime management.
         /// <para />
         /// By default, this value is <see cref="ViewModelLifetimeManagement"/>.

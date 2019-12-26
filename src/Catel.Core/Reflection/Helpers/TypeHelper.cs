@@ -250,18 +250,6 @@ namespace Catel.Reflection
         /// <param name="innerTypes">The inner types.</param>
         /// <param name="stripAssemblies">if set to <c>true</c>, the assembly names will be stripped as well.</param>
         /// <returns>string representing a combination of all inner types.</returns>
-        [ObsoleteEx(ReplacementTypeOrMember = "FormatInnerTypes(IEnumerable<string>, bool)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public static string FormatInnerTypes(string[] innerTypes, bool stripAssemblies = false)
-        {
-            return FormatInnerTypes((IEnumerable<string>)innerTypes, stripAssemblies);
-        }
-
-        /// <summary>
-        /// Formats multiple inner types into one string.
-        /// </summary>
-        /// <param name="innerTypes">The inner types.</param>
-        /// <param name="stripAssemblies">if set to <c>true</c>, the assembly names will be stripped as well.</param>
-        /// <returns>string representing a combination of all inner types.</returns>
         public static string FormatInnerTypes(IEnumerable<string> innerTypes, bool stripAssemblies = false)
         {
             return string.Join(",", innerTypes.Select(x =>

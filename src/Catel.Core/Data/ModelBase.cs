@@ -32,14 +32,6 @@ namespace Catel.Data
 #endif
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-#if NET || NETCORE || NETSTANDARD
-        /// <summary>
-        /// The empty streaming context.
-        /// </summary>
-        [field: NonSerialized]
-        private static readonly StreamingContext EmptyStreamingContext = new StreamingContext();
-#endif
-
         /// <summary>
         /// The property values.
         /// </summary>
@@ -77,32 +69,13 @@ namespace Catel.Data
             PropertyDataManager = PropertyDataManager.Default;
         }
 
-#if !NET && !NETCORE && !NETSTANDARD
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelBase"/> class.
         /// </summary>
         protected ModelBase()
         {
-            // Note: this initializes the model without serialization context
-
             Initialize();
         }
-#else
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModelBase"/> class.
-        /// </summary>
-        /// <remarks>
-        /// Must have a public constructor in order to be serializable.
-        /// </remarks>
-        // ReSharper disable PublicConstructorInAbstractClass
-        protected ModelBase()
-            // ReSharper restore PublicConstructorInAbstractClass
-            : this(null, EmptyStreamingContext)
-        {
-            // Do not write anything in this constructor. Use the Initialize method or the
-            // OnInitializing or OnInitialized methods instead.
-        }
-#endif
         #endregion
 
         #region Properties

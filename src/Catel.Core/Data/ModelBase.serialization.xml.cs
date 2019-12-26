@@ -44,7 +44,7 @@ namespace Catel.Data
 
             var contextInfo = new XmlSerializationContextInfo(reader, this);
 
-            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+            var scopeName = SerializationContextHelper.GetSerializationScopeName();
             using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, XmlSerializationScopeFactory))
             {
                 var serializer = scopeManager.ScopeObject.Serializer;
@@ -62,7 +62,7 @@ namespace Catel.Data
             // is used (with the correct settings). For more details, see the source at:
             // https://referencesource.microsoft.com/#System.Runtime.Serialization/System/Runtime/Serialization/XmlSerializableWriter.cs
 
-            var scopeName = SerializationContextHelper.GetSerializationReferenceManagerScopeName();
+            var scopeName = SerializationContextHelper.GetSerializationScopeName();
             using (var scopeManager = ScopeManager<SerializationScope>.GetScopeManager(scopeName, XmlSerializationScopeFactory))
             {
                 var serializer = scopeManager.ScopeObject.Serializer;

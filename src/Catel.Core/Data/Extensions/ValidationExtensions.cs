@@ -55,11 +55,11 @@ namespace Catel.Data
                     case ValidationContextChangeType.Added:
                         if (validationResultAsField != null)
                         {
-                            validationContext.AddFieldValidationResult(validationResultAsField);
+                            validationContext.Add(validationResultAsField);
                         }
                         else if (validationResultAsBusinessRule != null)
                         {
-                            validationContext.AddBusinessRuleValidationResult(validationResultAsBusinessRule);
+                            validationContext.Add(validationResultAsBusinessRule);
                         }
                         break;
 
@@ -68,11 +68,11 @@ namespace Catel.Data
                         {
                             if (validationResultAsField != null)
                             {
-                                validationContext.RemoveFieldValidationResult(validationResultAsField);
+                                validationContext.Remove(validationResultAsField);
                             }
                             else if (validationResultAsBusinessRule != null)
                             {
-                                validationContext.RemoveBusinessRuleValidationResult(validationResultAsBusinessRule);
+                                validationContext.Remove(validationResultAsBusinessRule);
                             }
                         }
                         break;
