@@ -12,7 +12,7 @@ namespace Catel.Collections
     /// <summary>
     /// The suspension mode extensions.
     /// </summary>
-    internal static class SuspensionModeExtensions
+    public static class SuspensionModeExtensions
     {
         #region Fields
         /// <summary>

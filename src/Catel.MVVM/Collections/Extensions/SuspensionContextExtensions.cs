@@ -14,7 +14,7 @@ namespace Catel.Collections
     /// <summary>
     /// The suspension context extensions.
     /// </summary>
-    internal static class SuspensionContextExtensions
+    public static class SuspensionContextExtensions
     {
         #region Methods
         /// <summary>
