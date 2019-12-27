@@ -29,11 +29,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _objectGettersCache[key] = getter;
                 }
-
-                _objectGettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -47,9 +45,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _objectGettersCache[key] = getter;
+                    _objectGettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -65,9 +62,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _objectSettersCache[key] = setter;
+                    _objectSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -83,9 +79,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _objectSettersCache[key] = setter;
+                    _objectSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -104,11 +99,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _booleanGettersCache[key] = getter;
                 }
-
-                _booleanGettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -122,9 +115,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _booleanGettersCache[key] = getter;
+                    _booleanGettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -140,9 +132,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _booleanSettersCache[key] = setter;
+                    _booleanSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -158,9 +149,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _booleanSettersCache[key] = setter;
+                    _booleanSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -179,11 +169,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _charGettersCache[key] = getter;
                 }
-
-                _charGettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -197,9 +185,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _charGettersCache[key] = getter;
+                    _charGettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -215,9 +202,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _charSettersCache[key] = setter;
+                    _charSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -233,9 +219,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _charSettersCache[key] = setter;
+                    _charSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -254,11 +239,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _sbyteGettersCache[key] = getter;
                 }
-
-                _sbyteGettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -272,9 +255,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _sbyteGettersCache[key] = getter;
+                    _sbyteGettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -290,9 +272,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _sbyteSettersCache[key] = setter;
+                    _sbyteSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -308,9 +289,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _sbyteSettersCache[key] = setter;
+                    _sbyteSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -329,11 +309,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _byteGettersCache[key] = getter;
                 }
-
-                _byteGettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -347,9 +325,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _byteGettersCache[key] = getter;
+                    _byteGettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -365,9 +342,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _byteSettersCache[key] = setter;
+                    _byteSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -383,9 +359,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _byteSettersCache[key] = setter;
+                    _byteSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -404,11 +379,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _int16GettersCache[key] = getter;
                 }
-
-                _int16GettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -422,9 +395,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _int16GettersCache[key] = getter;
+                    _int16GettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -440,9 +412,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _int16SettersCache[key] = setter;
+                    _int16SettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -458,9 +429,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _int16SettersCache[key] = setter;
+                    _int16SettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -479,11 +449,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _uint16GettersCache[key] = getter;
                 }
-
-                _uint16GettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -497,9 +465,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _uint16GettersCache[key] = getter;
+                    _uint16GettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -515,9 +482,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _uint16SettersCache[key] = setter;
+                    _uint16SettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -533,9 +499,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _uint16SettersCache[key] = setter;
+                    _uint16SettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -554,11 +519,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _int32GettersCache[key] = getter;
                 }
-
-                _int32GettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -572,9 +535,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _int32GettersCache[key] = getter;
+                    _int32GettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -590,9 +552,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _int32SettersCache[key] = setter;
+                    _int32SettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -608,9 +569,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _int32SettersCache[key] = setter;
+                    _int32SettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -629,11 +589,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _uint32GettersCache[key] = getter;
                 }
-
-                _uint32GettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -647,9 +605,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _uint32GettersCache[key] = getter;
+                    _uint32GettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -665,9 +622,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _uint32SettersCache[key] = setter;
+                    _uint32SettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -683,9 +639,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _uint32SettersCache[key] = setter;
+                    _uint32SettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -704,11 +659,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _int64GettersCache[key] = getter;
                 }
-
-                _int64GettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -722,9 +675,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _int64GettersCache[key] = getter;
+                    _int64GettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -740,9 +692,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _int64SettersCache[key] = setter;
+                    _int64SettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -758,9 +709,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _int64SettersCache[key] = setter;
+                    _int64SettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -779,11 +729,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _uint64GettersCache[key] = getter;
                 }
-
-                _uint64GettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -797,9 +745,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _uint64GettersCache[key] = getter;
+                    _uint64GettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -815,9 +762,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _uint64SettersCache[key] = setter;
+                    _uint64SettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -833,9 +779,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _uint64SettersCache[key] = setter;
+                    _uint64SettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -854,11 +799,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _singleGettersCache[key] = getter;
                 }
-
-                _singleGettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -872,9 +815,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _singleGettersCache[key] = getter;
+                    _singleGettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -890,9 +832,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _singleSettersCache[key] = setter;
+                    _singleSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -908,9 +849,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _singleSettersCache[key] = setter;
+                    _singleSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -929,11 +869,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _doubleGettersCache[key] = getter;
                 }
-
-                _doubleGettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -947,9 +885,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _doubleGettersCache[key] = getter;
+                    _doubleGettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -965,9 +902,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _doubleSettersCache[key] = setter;
+                    _doubleSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -983,9 +919,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _doubleSettersCache[key] = setter;
+                    _doubleSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -1004,11 +939,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _decimalGettersCache[key] = getter;
                 }
-
-                _decimalGettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -1022,9 +955,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _decimalGettersCache[key] = getter;
+                    _decimalGettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -1040,9 +972,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _decimalSettersCache[key] = setter;
+                    _decimalSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -1058,9 +989,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _decimalSettersCache[key] = setter;
+                    _decimalSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -1079,11 +1009,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _datetimeGettersCache[key] = getter;
                 }
-
-                _datetimeGettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -1097,9 +1025,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _datetimeGettersCache[key] = getter;
+                    _datetimeGettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -1115,9 +1042,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _datetimeSettersCache[key] = setter;
+                    _datetimeSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -1133,9 +1059,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _datetimeSettersCache[key] = setter;
+                    _datetimeSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -1154,11 +1079,9 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    _stringGettersCache[key] = getter;
                 }
-
-                _stringGettersCache[key] = getter;
             }
-
             return getter;
         }
 
@@ -1172,9 +1095,8 @@ namespace Catel.Reflection
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                _stringGettersCache[key] = getter;
+                    _stringGettersCache[key] = getter;
+                }                
             }
 
             return getter;
@@ -1190,9 +1112,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _stringSettersCache[key] = setter;
+                    _stringSettersCache[key] = setter;
+                }                
             }
 
             return setter;
@@ -1208,9 +1129,8 @@ namespace Catel.Reflection
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                _stringSettersCache[key] = setter;
+                    _stringSettersCache[key] = setter;
+                }                
             }
 
             return setter;

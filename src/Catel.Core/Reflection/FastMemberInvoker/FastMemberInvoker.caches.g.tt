@@ -49,11 +49,9 @@ foreach (TypeCode typeCode in typeCodes)
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
+                    <#= typeCodeGetterCacheName #>[key] = getter;
                 }
-
-                <#= typeCodeGetterCacheName #>[key] = getter;
             }
-
             return getter;
         }
 
@@ -67,9 +65,8 @@ foreach (TypeCode typeCode in typeCodes)
                 if (getterExpression != null)
                 {
                     getter = Compile(getterExpression);
-                }
-
-                <#= typeCodeGetterCacheName #>[key] = getter;
+                    <#= typeCodeGetterCacheName #>[key] = getter;
+                }                
             }
 
             return getter;
@@ -85,9 +82,8 @@ foreach (TypeCode typeCode in typeCodes)
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                <#= typeCodeSetterCacheName #>[key] = setter;
+                    <#= typeCodeSetterCacheName #>[key] = setter;
+                }                
             }
 
             return setter;
@@ -103,9 +99,8 @@ foreach (TypeCode typeCode in typeCodes)
                 if (setterExpression != null)
                 {
                     setter = Compile(setterExpression);
-                }
-
-                <#= typeCodeSetterCacheName #>[key] = setter;
+                    <#= typeCodeSetterCacheName #>[key] = setter;
+                }                
             }
 
             return setter;
