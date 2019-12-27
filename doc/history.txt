@@ -29,13 +29,15 @@ Release date
 
 Added/fixed
 ===========
+(-) #1209 Remove IStartupInfoProvider in favor of Orc.CommandLine 
 (-) #1216 Remove binary serialization (due to potential security issues)
-(-) #1285 Remove support for .NET 4.5
+
 (-) #1492 Remove ModelBase.SetValue(string, object, bool)
 
 Platform support changes
 ========================
--
+(+) #1505 Add support for .NET 4.8
+(-) #1285 Remove support for .NET 4.5
 
 Classes / members marked as obsolete in major release (6.x)
 ===========================================================
