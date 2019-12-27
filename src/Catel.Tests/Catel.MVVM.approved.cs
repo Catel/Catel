@@ -3007,21 +3007,6 @@ namespace Catel.Windows.Interactivity
         protected override void OnAssociatedObjectLoaded() { }
         protected override void OnAssociatedObjectUnloaded() { }
     }
-    public class DragDrop : Catel.Windows.Interactivity.BehaviorBase<System.Windows.Controls.ItemsControl>
-    {
-        public DragDrop() { }
-        public System.Windows.DataTemplate DataTemplate { get; set; }
-        public System.Windows.Controls.Orientation DropIndication { get; set; }
-        public System.Type ItemType { get; set; }
-        protected virtual void AddItem(System.Windows.Controls.ItemsControl itemsControl, object item, int insertIndex) { }
-        protected virtual bool CanDrag(System.Windows.Controls.ItemsControl itemsControl, object item) { }
-        protected virtual bool CanDrop(System.Windows.Controls.ItemsControl itemsControl, object item) { }
-        public void Dispose() { }
-        protected virtual void Dispose(bool disposing) { }
-        protected override void OnAssociatedObjectLoaded() { }
-        protected override void OnAssociatedObjectUnloaded() { }
-        protected virtual void RemoveItem(System.Windows.Controls.ItemsControl itemsControl, object itemToRemove) { }
-    }
     public class EventToCommand : Catel.Windows.Interactivity.CommandTriggerActionBase<System.Windows.FrameworkElement>
     {
         public static readonly System.Windows.DependencyProperty DisableAssociatedObjectOnCannotExecuteProperty;
