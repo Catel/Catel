@@ -30,6 +30,8 @@ Release date
 Added/fixed
 ===========
 (-) #1216 Remove binary serialization (due to potential security issues)
+(-) #1285 Remove support for .NET 4.5
+(-) #1492 Remove ModelBase.SetValue(string, object, bool)
 
 Platform support changes
 ========================
