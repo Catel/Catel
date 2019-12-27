@@ -105,7 +105,7 @@ namespace Catel.Services
 
             if (processCompletedCallback != null)
             {
-                task.ContinueWith(x => processCompletedCallback(task.Result.ExitCode));
+                task.ContinueWith(x => processCompletedCallback(processContext, task.Result.ExitCode));
             }
         }
 

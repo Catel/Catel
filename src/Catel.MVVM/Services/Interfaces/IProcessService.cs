@@ -12,7 +12,7 @@ namespace Catel.Services
     /// <summary>
     /// Delegate to invoke when a process of the <see cref="IProcessService"/> is completed.
     /// </summary>
-    public delegate void ProcessCompletedDelegate(int exitCode);
+    public delegate void ProcessCompletedDelegate(ProcessContext processorContext, int exitCode);
 
     /// <summary>
     /// Interface for the Process service.

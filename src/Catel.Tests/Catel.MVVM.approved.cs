@@ -2314,7 +2314,7 @@ namespace Catel.Services
         public void UpdateStatus(int currentItem, int totalItems, string statusFormat = "") { }
     }
     public delegate void PleaseWaitWorkDelegate();
-    public delegate void ProcessCompletedDelegate(int exitCode);
+    public delegate void ProcessCompletedDelegate(Catel.Services.ProcessContext processorContext, int exitCode);
     public class ProcessContext
     {
         public ProcessContext() { }
