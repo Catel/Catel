@@ -52,18 +52,11 @@ namespace Catel.MVVM
         /// <summary>
         /// The log.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// Dictionary containing the view model metadata of a view model type so it has to be calculated only once.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
-
         private static readonly ConcurrentDictionary<Type, ViewModelMetadata> _metaData = new ConcurrentDictionary<Type, ViewModelMetadata>();
 
         /// <summary>
@@ -75,96 +68,60 @@ namespace Catel.MVVM
         /// <summary>
         /// The dispatcher service used to dispatch all calls.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private readonly IDispatcherService _dispatcherService;
 #endif
 
         /// <summary>
         /// Value indicating whether the multiple modules warning should be ignored.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private readonly bool _ignoreMultipleModelsWarning;
 
         /// <summary>
         /// Value indicating whether the view model attributes are initialized. 
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private bool _areViewModelAttributesIntialized;
 
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private readonly object _modelLock = new object();
 
         /// <summary>
         /// Dictionary of available models inside the view model.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private readonly Dictionary<string, object> _modelObjects = new Dictionary<string, object>();
 
         /// <summary>
         /// Dictionary with info about the available models inside the view model.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private readonly Dictionary<string, ModelInfo> _modelObjectsInfo = new Dictionary<string, ModelInfo>();
 
         /// <summary>
         /// Dictionary with data error info about a specific model.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private readonly Dictionary<string, ModelErrorInfo> _modelErrorInfo = new Dictionary<string, ModelErrorInfo>();
 
         /// <summary>
         /// List of child view models which can be registed by the <c>RegisterChildViewModel</c> method.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         internal readonly List<IViewModel> ChildViewModels = new List<IViewModel>();
 
         /// <summary>
         /// Value to determine whether child view models have errors or not.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private bool _childViewModelsHaveErrors;
 
         /// <summary>
         /// Gets the view model manager.
         /// </summary>
         /// <value>The view model manager.</value>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         protected static readonly IViewModelManager ViewModelManager;
 
         /// <summary>
         /// Mappings from view model properties to models and their properties.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private readonly Dictionary<string, ViewModelToModelMapping> _viewModelToModelMap = new Dictionary<string, ViewModelToModelMapping>();
 
         /// <summary>
         /// The backing field for the title property.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private string _title;
 
         private readonly IObjectIdGenerator<int> _objectIdGenerator;

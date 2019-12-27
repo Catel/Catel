@@ -34,9 +34,6 @@ namespace Catel.Data
         /// <summary>
         /// The log.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         #endregion
 

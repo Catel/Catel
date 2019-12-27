@@ -29,7 +29,7 @@ Release date
 
 Added/fixed
 ===========
-
+(-) #1216 Remove binary serialization (due to potential security issues)
 
 Platform support changes
 ========================

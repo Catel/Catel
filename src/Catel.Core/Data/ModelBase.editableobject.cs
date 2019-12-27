@@ -22,9 +22,6 @@ namespace Catel.Data
 
     public partial class ModelBase
     {
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         internal ISerializer _editableObjectSerializer;
 
         #region Internal classes
@@ -144,14 +141,8 @@ namespace Catel.Data
         /// <summary>
         /// The backup of the current object if any backup is initiated.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private BackupData _backup;
 
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private event EventHandler<BeginEditEventArgs> _beginEditingEvent;
 
         /// <summary>
@@ -164,19 +155,10 @@ namespace Catel.Data
         /// be no need for the <see cref="EditEventArgs.EditableObject"/> as
         /// the sender of the event should be the same information.
         /// </remarks>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private event EventHandler<EventArgs> _cancelEditingCompletedEvent;
 
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private event EventHandler<CancelEditEventArgs> _cancelEditingEvent;
 
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private event EventHandler<EndEditEventArgs> _endEditingEvent;
 
         event EventHandler<BeginEditEventArgs> IAdvancedEditableObject.BeginEditing

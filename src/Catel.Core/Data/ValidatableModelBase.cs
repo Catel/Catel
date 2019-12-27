@@ -56,94 +56,45 @@ namespace Catel.Data
         /// The property names that failed to validate and should be skipped next time for NET 4.0 
         /// attribute validation.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         protected static readonly Dictionary<Type, HashSet<string>> PropertiesNotCausingValidation = new Dictionary<Type, HashSet<string>>();
 
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private bool _isValidated;
 
         /// <summary>
         /// Field that determines whether a validator has been retrieved yet.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private bool _hasRetrievedValidatorOnce;
 
         /// <summary>
         /// The backing field for the <see cref="IValidatable.Validator"/> property.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private IValidator _validator;
 
         /// <summary>
         /// The validation context, which can contain in-between validation info.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private readonly ValidationContext _validationContext = new ValidationContext();
 
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private SuspensionContext _validationSuspensionContext;
 
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private readonly HashSet<string> _propertiesCurrentlyBeingValidated = new HashSet<string>();
 
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private IObjectAdapter _objectAdapter;
 
 #if !UWP
-
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private bool _firstAnnotationValidation = true;
 
         /// <summary>
         /// A dictionary containing the annotation (attribute) validation results of properties of this class.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private readonly Dictionary<string, string> _dataAnnotationValidationResults = new Dictionary<string, string>();
 
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private readonly Dictionary<string, System.ComponentModel.DataAnnotations.ValidationContext> _dataAnnotationsValidationContext = new Dictionary<string, System.ComponentModel.DataAnnotations.ValidationContext>();
 #endif
 
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private event EventHandler<DataErrorsChangedEventArgs> _errorsChanged;
-
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private event EventHandler<DataErrorsChangedEventArgs> _warningsChanged;
-
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private event EventHandler<ValidationEventArgs> _validating;
-
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private event EventHandler<ValidationEventArgs> _validated;
         #endregion
 
@@ -318,33 +269,21 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when the object is about the validate the fields.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         protected event EventHandler ValidatingFields;
 
         /// <summary>
         /// Occurs when the object has validated the fields.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         protected event EventHandler ValidatedFields;
 
         /// <summary>
         /// Occurs when the object is about the validate the business rules.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         protected event EventHandler ValidatingBusinessRules;
 
         /// <summary>
         /// Occurs when the object has validated the business rules.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         protected event EventHandler ValidatedBusinessRules;
 
         /// <summary>

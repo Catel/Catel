@@ -26,49 +26,31 @@ namespace Catel.MVVM
         /// <summary>
         /// The throttling timer.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private readonly DispatcherTimer _throttlingTimer = new DispatcherTimer();
 
         /// <summary>
         /// The throttling rate.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private TimeSpan _throttlingRate = new TimeSpan(0);
 
         /// <summary>
         /// A value indicating whether throttling is enabled.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private bool _isThrottlingEnabled;
 
         /// <summary>
         /// A value indicating whether throttling is currently being handled.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private bool _isHandlingThrottlingNotifications;
 
         /// <summary>
         /// Lock object for throttling.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private readonly object _throttlingLockObject = new object();
 
         /// <summary>
         /// The properties queue used when throttling is enabled.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private Dictionary<string, DateTime> _throttlingQueue = new Dictionary<string, DateTime>();
         #endregion
 

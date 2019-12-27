@@ -25,9 +25,6 @@ namespace Catel.Data
         /// <summary>
         /// The change notification wrappers for all property values.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private Dictionary<string, ChangeNotificationWrapper> _propertyValueChangeNotificationWrappers;
 
         /// <summary>

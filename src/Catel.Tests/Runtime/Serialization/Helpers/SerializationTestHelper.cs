@@ -4,9 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-// Disable warning for obsolete binary serialization stuff
-#pragma warning disable CS0618
-
 namespace Catel.Tests.Runtime.Serialization
 {
     using System;

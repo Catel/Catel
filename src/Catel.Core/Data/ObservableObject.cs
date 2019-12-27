@@ -29,9 +29,6 @@ namespace Catel.Data
         /// <summary>
         /// Occurs when a property of this object has changed.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 

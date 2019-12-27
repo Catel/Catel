@@ -25,17 +25,11 @@ namespace Catel.Data
         /// <summary>
         /// Backing field for the <see cref="EqualityComparer{T}"/> property. Because it has custom logic, it needs a backing field.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private IModelEqualityComparer _equalityComparer;
 
         /// <summary>
         /// Backing field for the <see cref="GetHashCode"/> method so it only has to be calculated once to gain the best performance possible.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private int? _hashCode;
 
         /// <summary>

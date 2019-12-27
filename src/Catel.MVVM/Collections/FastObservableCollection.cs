@@ -41,9 +41,6 @@ namespace Catel.Collections
         /// <summary>
         /// The current suspension context.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private SuspensionContext<T> _suspensionContext;
         #endregion
 

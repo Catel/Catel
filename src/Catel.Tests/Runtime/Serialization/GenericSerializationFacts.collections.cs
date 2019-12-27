@@ -258,10 +258,7 @@ namespace Catel.Tests.Runtime.Serialization
                 #endregion
 
                 #region Public Events
-
-                [field: NonSerialized]
                 public event NotifyCollectionChangedEventHandler CollectionChanged;
-
                 #endregion
 
                 #region Public Properties

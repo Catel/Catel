@@ -49,7 +49,7 @@ namespace Catel.Tests
     {
         public static void ApprovePublicApi(Assembly assembly)
         {
-            var publicApi = ApiGenerator.GeneratePublicApi(assembly);
+            var publicApi = ApiGenerator.GeneratePublicApi(assembly, new ApiGeneratorOptions());
             var writer = new ApprovalTextWriter(publicApi, "cs");
             var approvalNamer = new AssemblyPathNamer(assembly.Location);
             Approvals.Verify(writer, approvalNamer, Approvals.GetReporter());

@@ -21,27 +21,15 @@ namespace Catel.Data
         /// <summary>
         /// Type of the property.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private Type _type;
 
         /// <summary>
         /// Callback to use to create the default value.
         /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private readonly Func<object> _createDefaultValue;
 
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private CachedPropertyInfo _cachedPropertyInfo;
 
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private bool _updatedCachedPropertyInfo;
         #endregion
 

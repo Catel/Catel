@@ -58,9 +58,6 @@ namespace Catel.Collections
 
         private readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() => IoCConfiguration.DefaultDependencyResolver.Resolve<IDispatcherService>());
 
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
         private readonly SerializationInfo _serializationInfo;
 
         private Dictionary<TKey, TValue> _dictionaryCache;

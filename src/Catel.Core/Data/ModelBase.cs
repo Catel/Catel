@@ -27,35 +27,19 @@ namespace Catel.Data
         /// <summary>
         /// The log.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// The property values.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         internal IPropertyBag _propertyBag;
 
         /// <summary>
         /// Lock object.
         /// </summary>
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         internal readonly object _lock = new object();
 
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         internal SuspensionContext _changeCallbacksSuspensionContext;
-
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         internal SuspensionContext _changeNotificationsSuspensionContext;
         #endregion
 

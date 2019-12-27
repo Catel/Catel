@@ -28,7 +28,7 @@ namespace Catel.Runtime.Serialization.Json
 #endif
 
     /// <summary>
-    /// The binary serializer.
+    /// The json serializer.
     /// </summary>
     public class JsonSerializer : SerializerBase<JsonSerializationContextInfo>, IJsonSerializer
     {

@@ -13,7 +13,7 @@ namespace Catel.Runtime.Serialization.Json
     using Newtonsoft.Json;
 
     /// <summary>
-    /// Interface for the binary serializer.
+    /// Interface for the json serializer.
     /// </summary>
     public interface IJsonSerializer : ISerializer
     {

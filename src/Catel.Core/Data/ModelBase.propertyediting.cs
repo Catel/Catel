@@ -16,9 +16,6 @@ namespace Catel.Data
 
     public partial class ModelBase
     {
-#if NET || NETCORE || NETSTANDARD
-        [field: NonSerialized]
-#endif
         private static readonly Dictionary<string, object> _calculatedPropertyExpressions = new Dictionary<string, object>();
 
         /// <summary>

@@ -21,7 +21,6 @@ namespace Catel.Tests.Data
     using System.ComponentModel;
     using System.IO;
     using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Formatters.Binary;
 #endif
 
     using NUnit.Framework;
@@ -453,43 +452,5 @@ namespace Catel.Tests.Data
                 Assert.AreEqual("Geert", model.Name);
             }
         }
-
-#if NET || NETCORE
-        [TestFixture]
-        public class TheBinarySerializationWithCircularReferencesIssue
-        {
-            [TestCase]
-            public void CanSerializeAndDeserializeObjects()
-            {
-                var customer = new Customer();
-                customer.Id = 1;
-                customer.Name = "John Doe";
-
-                var catelProject = new Project();
-                catelProject.Id = 1;
-                catelProject.Name = "Catel";
-                catelProject.Customer = customer;
-
-                Project restoredProject = null;
-
-                var binaryFormatter = new BinaryFormatter();
-                using (var memoryStream = new MemoryStream())
-                {
-                    binaryFormatter.Serialize(memoryStream, catelProject);
-
-                    memoryStream.Position = 0L;
-
-                    restoredProject = (Project)binaryFormatter.Deserialize(memoryStream);
-                }
-
-                var projectAsEditableObject = catelProject as IEditableObject;
-                projectAsEditableObject.BeginEdit();
-
-                projectAsEditableObject.BeginEdit();
-
-                Assert.AreEqual(catelProject, restoredProject);
-            }
-        }
-#endif
     }
 }

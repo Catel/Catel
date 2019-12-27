@@ -124,10 +124,6 @@ namespace Catel.Tests.Data
         }
     }
 
-#if NET || NETCORE
-    // Required for binary serialization
-    [Serializable]
-#endif
     [DataContract]
     public class Family
     {
@@ -143,10 +139,6 @@ namespace Catel.Tests.Data
         public List<Person> Persons { get; private set; }
     }
 
-#if NET || NETCORE
-    // Required for binary serialization
-    [Serializable]
-#endif
     [DataContract]
     public class Person
     {
@@ -160,9 +152,6 @@ namespace Catel.Tests.Data
         public string LastName { get; set; }
     }
 
-#if NET || NETCORE
-    [Serializable]
-#endif
     public class ScheduleAssistantSettings : ComparableModelBase
     {
         public ScheduleAssistantSettings()
