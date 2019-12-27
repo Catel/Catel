@@ -29,11 +29,6 @@
     <PackageReference Include="System.Runtime.Serialization.Xml" Version="4.3.0" />
   </ItemGroup>
 
-  <!-- .NET 4.5 -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
-    <Reference Include="System.Configuration" />
-  </ItemGroup>
-
   <!-- .NET 4.6 -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
     <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
@@ -42,6 +37,12 @@
 
   <!-- .NET 4.7 -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
+  </ItemGroup>
+
+  <!-- .NET 4.8 -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
     <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
   </ItemGroup>

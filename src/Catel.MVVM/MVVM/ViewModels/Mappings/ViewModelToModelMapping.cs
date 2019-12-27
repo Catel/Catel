@@ -9,7 +9,6 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
-    using Windows.Interactivity.DragDropHelpers;
     using IoC;
     using Logging;
 

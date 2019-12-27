@@ -25,18 +25,7 @@
     <PackageReference Include="Obsolete.Fody" Version="5.2.0" PrivateAssets="all" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
-  
-  <!-- .NET 4.5 -->
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
-    <UseWpf>true</UseWpf>
-    <UseWindowsForms>true</UseWindowsForms>
-    <ExtrasEnableImplicitWpfReferences>true</ExtrasEnableImplicitWpfReferences>
-    <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
-  </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
-    <PackageReference Include="Expression.Blend.Sdk.WPF" Version="1.0.1" />
-  </ItemGroup>
-  
+
   <!-- .NET 4.6 -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
     <UseWpf>true</UseWpf>
@@ -56,6 +45,17 @@
     <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
+    <PackageReference Include="Expression.Blend.Sdk.WPF" Version="1.0.1" />
+  </ItemGroup>
+  
+  <!-- .NET 4.8 -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
+    <UseWpf>true</UseWpf>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ExtrasEnableImplicitWpfReferences>true</ExtrasEnableImplicitWpfReferences>
+    <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <PackageReference Include="Expression.Blend.Sdk.WPF" Version="1.0.1" />
   </ItemGroup>
 
