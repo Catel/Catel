@@ -68,6 +68,8 @@
         }
         public FastObservableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer)
         {
+            Argument.IsNotNull(() => dictionary);
+
             _dict = new Dictionary<TKey, TValue>(dictionary.Count, comparer);
             _dictIndexMapping = new Dictionary<TKey, int>(dictionary.Count, comparer);
             _list = new List<TKey>(dictionary.Count);
@@ -122,6 +124,11 @@
         /// </summary>
         /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
         public bool AutomaticallyDispatchChangeNotifications { get; set; } = true;
+
+
+
+        /// <see cref="Dictionary{TKey,TValue}.Comparer"/>>
+        public IEqualityComparer<TKey> Comparer => _dict.Comparer;
         #endregion
 
         #region Methods
@@ -346,7 +353,7 @@
             for (var i = oldIndex; checkCondition(i); i += sign) //negative sign
             {
                 _dictIndexMapping[_list[i] = _list[i + sign]] = i;
-            }           
+            }
             _list[newIndex] = temp;
             _dictIndexMapping[temp] = newIndex;
 
@@ -766,21 +773,16 @@
         /// </summary>
         /// <param name="key">The key of the value to get.</param>
         /// <returns>The value associated with the specified key, or <see langword="null" /> if <paramref name="key"/> is not in the dictionary or <paramref name="key"/> is of a type that is not assignable to the key of type <typeparamref name="TKey"/> of the <see cref="ObservableDictionary{TKey,TValue}"/>.</returns>
-        object IDictionary.this[object key]
+        public object this[object key]
         {
             get
             {
+
                 if (key is TKey castedKey)
-                {
                     return this[castedKey];
-                }
-                return default;
+                else return null;
             }
-            set
-            {
-                if (key is TKey castedKey && value is TValue castedValue)
-                    this[castedKey] = castedValue;
-            }
+            set => this[(TKey)key] = (TValue)value;
         }
 
         /// <summary>
@@ -788,7 +790,7 @@
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        bool IDictionary.Contains(object key)
+        public bool Contains(object key)
         {
             if (key is TKey castedKey)
             {
@@ -796,11 +798,24 @@
             }
             return false;
         }
-        void IDictionary.Add(object key, object value)
+        public void Add(object key, object value)
         {
-            if (value is TValue castedValue && key is TKey castedKey)
+            Argument.IsNotNull(() => key);
+            Argument.IsNotNull(() => value);
+            if (key is TKey castedKey)
             {
-                InsertSingleValue(castedKey, castedValue, true);
+                if (value is TValue castedValue)
+                {
+                    InsertSingleValue(castedKey, castedValue, true);
+                }
+                else
+                {
+                    throw new InvalidCastException($"Value must be of type {typeof(TValue)}");
+                }
+            }
+            else
+            {
+                throw new InvalidCastException($"Key must be of type {typeof(TKey)}");
             }
         }
         IDictionaryEnumerator IDictionary.GetEnumerator()
@@ -816,7 +831,7 @@
             }
         }
 
-        void ICollection.CopyTo(Array array, int arrayIndex)
+        public void CopyTo(Array array, int arrayIndex)
         {
             if (array.Length - arrayIndex < Count) throw new IndexOutOfRangeException("Array doesn't have enough space to copy all the elements");
             for (var i = 0; i < Count; i++)
@@ -829,7 +844,7 @@
         #endregion
 
         #region IList<KeyValuePair<TKey,TValue>>
-        public KeyValuePair<TKey, TValue> this[int index]
+        KeyValuePair<TKey, TValue> IList<KeyValuePair<TKey, TValue>>.this[int index]
         {
             get
             {
@@ -900,12 +915,12 @@
         #endregion
 
         #region INotifyPropertyChanged and INotifyCollectionChanged
-        private readonly PropertyChangedEventArgs _cachedIndexerArgs = new PropertyChangedEventArgs("Item[]");
-        private readonly PropertyChangedEventArgs _cachedCountArgs = new PropertyChangedEventArgs(nameof(Count));
-        private readonly PropertyChangedEventArgs _cachedKeysArgs = new PropertyChangedEventArgs(nameof(Keys));
-        private readonly PropertyChangedEventArgs _cachedValuesArgs = new PropertyChangedEventArgs(nameof(Values));
+        protected readonly PropertyChangedEventArgs _cachedIndexerArgs = new PropertyChangedEventArgs("Item[]");
+        protected readonly PropertyChangedEventArgs _cachedCountArgs = new PropertyChangedEventArgs(nameof(Count));
+        protected readonly PropertyChangedEventArgs _cachedKeysArgs = new PropertyChangedEventArgs(nameof(Keys));
+        protected readonly PropertyChangedEventArgs _cachedValuesArgs = new PropertyChangedEventArgs(nameof(Values));
 
-        private readonly NotifyCollectionChangedEventArgs _cachedResetArgs = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+        protected readonly NotifyCollectionChangedEventArgs _cachedResetArgs = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
 
 
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs eventArgs)
