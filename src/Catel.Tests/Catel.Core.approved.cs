@@ -896,6 +896,7 @@ namespace Catel.Collections
     {
         public static void AddItemIfNotEmpty<TKey>(this System.Collections.Generic.Dictionary<TKey, string> dictionary, TKey key, string value) { }
         public static void AddRange<TKey, TValue>(this System.Collections.Generic.Dictionary<TKey, TValue> target, System.Collections.Generic.Dictionary<TKey, TValue> source, bool overwriteExisting = True) { }
+        public static void AddRange<TKey, TValue>(this System.Collections.Generic.Dictionary<TKey, TValue> target, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> source, bool overwriteExisting = True) { }
     }
     public class static HashSetExtensions
     {
