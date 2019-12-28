@@ -87,14 +87,14 @@
         #region Fields & Properties
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() => IoCConfiguration.DefaultDependencyResolver.Resolve<IDispatcherService>());
-       
+
         /// <summary>
         /// The current suspension context.
         /// </summary>
 #if NET || NETCORE
         [field: NonSerialized]
 #endif
-        private SuspensionContext<KeyValuePair<TKey,TValue>> _suspensionContext;
+        private SuspensionContext<KeyValuePair<TKey, TValue>> _suspensionContext;
 
         /// <summary>
         /// maps from TKey to TValue
@@ -140,6 +140,55 @@
             return _list.Select(x => new KeyValuePair<TKey, TValue>(x, _dict[x]));
         }
 
+        private void WriteReplaceSuspension(KeyValuePair<TKey, TValue> changedItem, int changedIndex)
+        {
+            if (_suspensionContext != null)
+            {
+                if (_suspensionContext.Mode == SuspensionMode.None || _suspensionContext.IsMixedMode() || _suspensionContext.Mode == SuspensionMode.Silent)
+                {
+                    _suspensionContext.ChangedItems.Add(changedItem);
+                    _suspensionContext.ChangedItemIndices.Add(changedIndex);
+                }
+
+                if (_suspensionContext.IsMixedMode())
+                {
+                    _suspensionContext.MixedActions.Add(NotifyCollectionChangedAction.Replace);
+                }
+            }
+        }
+        private void WriteAddSuspension(KeyValuePair<TKey, TValue> changedItem, int changedIndex)
+        {
+            if (_suspensionContext != null)
+            {
+                if (_suspensionContext.Mode == SuspensionMode.Adding || _suspensionContext.IsMixedMode())
+                {
+                    _suspensionContext.ChangedItems.Add(changedItem);
+                    _suspensionContext.ChangedItemIndices.Add(changedIndex);
+                }
+
+                if (_suspensionContext.IsMixedMode())
+                {
+                    _suspensionContext.MixedActions.Add(NotifyCollectionChangedAction.Add);
+                }
+            }
+        }
+        private void WriteRemoveSuspension(KeyValuePair<TKey, TValue> changedItem, int changedIndex)
+        {
+            if (_suspensionContext != null)
+            {
+                if (_suspensionContext.Mode == SuspensionMode.Removing || _suspensionContext.IsMixedMode())
+                {
+                    _suspensionContext.ChangedItems.Add(changedItem);
+                    _suspensionContext.ChangedItemIndices.Add(changedIndex);
+                }
+
+                if (_suspensionContext.IsMixedMode())
+                {
+                    _suspensionContext.MixedActions.Add(NotifyCollectionChangedAction.Remove);
+                }
+            }
+        }
+
         /// <summary>
         /// Inserts a single item into the ObservableDictionary using its key
         /// </summary>
@@ -148,23 +197,42 @@
         /// <param name="checkKeyDuplication"></param>
         public virtual void InsertSingleValue(TKey key, TValue newValue, bool checkKeyDuplication)
         {
+
+            var changedItem = new KeyValuePair<TKey, TValue>(key, newValue);
+            int changedIndex;
             if (checkKeyDuplication && _dictIndexMapping.TryGetValue(key, out var oldIndex) && _dict.TryGetValue(key, out var oldValue))
             {
+                // Check
+                if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
+                {
+                    throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{_suspensionContext.Mode}'");
+                }
+
                 //simply change the value
                 //raise replace event
                 //leave the indexes as is
 
                 //DON'T raise count change
                 _dict[key] = newValue;
+
                 OnPropertyChanged(_cachedIndexerArgs);
                 OnPropertyChanged(_cachedValuesArgs);
+                changedIndex = oldIndex;
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace,
-                    new KeyValuePair<TKey, TValue>(key, newValue),
+                    changedItem,
                     new KeyValuePair<TKey, TValue>(key, oldValue),
-                    oldIndex));
+                    changedIndex));
+
+                WriteReplaceSuspension(changedItem, changedIndex);
             }
             else
             {
+                // Check
+                if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
+                {
+                    throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
+                }
+
                 //append to the end of the list
                 var newIndex = Values.Count;
                 _dict[key] = newValue;
@@ -175,10 +243,12 @@
                 OnPropertyChanged(_cachedCountArgs);
                 OnPropertyChanged(_cachedKeysArgs);
                 OnPropertyChanged(_cachedValuesArgs);
+                changedIndex = newIndex;
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add,
-                    new KeyValuePair<TKey, TValue>(key, newValue),
+                    changedItem,
                     newIndex));
-                //raise add event here                
+
+                WriteAddSuspension(changedItem, changedIndex);
             }
         }
 
@@ -198,20 +268,29 @@
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
             }
+            var changedItem = new KeyValuePair<TKey, TValue>(key, newValue);
+            int changedIndex = index;
             if (checkKeyDuplication && _dict.TryGetValue(key, out var oldValue) && _dictIndexMapping.TryGetValue(key, out var oldIndex))
             {
                 //DON'T raise count change
                 if (oldIndex == index)
                 {
+                    // Check
+                    if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
+                    {
+                        throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{_suspensionContext.Mode}'");
+                    }
+
                     //raise replace event
                     //leave the indexes as is
                     _dict[key] = newValue;
                     OnPropertyChanged(_cachedIndexerArgs);
                     OnPropertyChanged(_cachedValuesArgs);
                     OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace,
-                        new KeyValuePair<TKey, TValue>(key, newValue),
+                        changedItem,
                         new KeyValuePair<TKey, TValue>(key, oldValue),
                         index));
+                    WriteReplaceSuspension(changedItem, changedIndex);
                 }
                 else
                 {
@@ -220,6 +299,12 @@
             }
             else
             {
+                // Check
+                if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
+                {
+                    throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
+                }
+
                 for (var i = index; i < Count; i++)
                 {
                     var keyAtCurrentIndex = _list[i];
@@ -235,6 +320,7 @@
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add,
                     new KeyValuePair<TKey, TValue>(key, newValue),
                     index));
+                WriteAddSuspension(changedItem, changedIndex);
             }
         }
 
@@ -246,8 +332,14 @@
                 InternalMoveItem(oldIndex, newIndex, key, oldValue);
             }
         }
-        private void InternalMoveItem(int oldIndex, int newIndex, TKey key, TValue element)
+        protected virtual void InternalMoveItem(int oldIndex, int newIndex, TKey key, TValue element)
         {
+            // Check
+            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
+            {
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{_suspensionContext.Mode}'");
+            }
+
             //raise move event from oldIndex to index
             var smallIndex = Math.Min(oldIndex, newIndex);
             var bigIndex = Math.Max(oldIndex, newIndex);
@@ -269,12 +361,17 @@
                 _list[newBetweenIndex] = _list[oldBetweenIndex];
                 _dictIndexMapping[oldBetweenKey] = newBetweenIndex;
             }
-
+            var changedItem = new KeyValuePair<TKey, TValue>(key, element);
             OnPropertyChanged(_cachedIndexerArgs);
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move,
-                new KeyValuePair<TKey, TValue>(key, element),
+                changedItem,
                 oldIndex,
                 newIndex));
+            if (_suspensionContext != null && _suspensionContext.IsMixedMode())
+            {
+                WriteRemoveSuspension(changedItem, oldIndex);
+                WriteAddSuspension(changedItem, newIndex);
+            }
         }
 
         /// <summary>
@@ -287,6 +384,12 @@
         {
             if (_dictIndexMapping.TryGetValue(keyToRemove, out var removedKeyIndex) && _dict.TryGetValue(keyToRemove, out var removedKeyValue))
             {
+                // Check
+                if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Adding)
+                {
+                    throw Log.ErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
+                }
+
                 _list.RemoveAt(removedKeyIndex);
                 _dict.Remove(keyToRemove);
 
@@ -301,9 +404,11 @@
                 OnPropertyChanged(_cachedKeysArgs);
                 OnPropertyChanged(_cachedValuesArgs);
 
+                var changedItem = new KeyValuePair<TKey, TValue>(keyToRemove, removedKeyValue);
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
-                    new KeyValuePair<TKey, TValue>(keyToRemove, removedKeyValue),
+                    changedItem,
                     removedKeyIndex));
+                WriteRemoveSuspension(changedItem, removedKeyIndex);
 
                 //raise remove event 
                 value = removedKeyValue;
@@ -321,6 +426,11 @@
         /// <exception cref="IndexOutOfRangeException">if the index is outside boundaries</exception>
         public virtual void RemoveSingleValue(int index, out TValue value)
         {
+            // Check      
+            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Adding)
+            {
+                throw Log.ErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
+            }
             var keyToRemove = _list[index];
             value = _dict[keyToRemove];
             _dict.Remove(keyToRemove);
@@ -334,10 +444,12 @@
             OnPropertyChanged(_cachedCountArgs);
             OnPropertyChanged(_cachedKeysArgs);
             OnPropertyChanged(_cachedValuesArgs);
-
+            var changedItem = new KeyValuePair<TKey, TValue>(keyToRemove, value);
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
-                    new KeyValuePair<TKey, TValue>(keyToRemove, value),
+                    changedItem,
                     index));
+            WriteRemoveSuspension(changedItem, index);
+
         }
 
 
@@ -352,9 +464,9 @@
             {
                 newValues = newValues.Where(x => !_dict.ContainsKey(x.Key));
             }
+            var startIndex = _list.Count;
             if (newValues is ICollection<KeyValuePair<TKey, TValue>> collection)
             {
-                var startIndex = _list.Count;
                 var counterIndex = startIndex;
                 _list.AddRange(newValues.Select(x => x.Key));
                 foreach (var item in collection)
@@ -369,6 +481,8 @@
                 OnPropertyChanged(_cachedValuesArgs);
 
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, collection, startIndex));
+
+                WriteMultipleAddSuspension(collection, startIndex, collection.Count);
             }
             else
             {
@@ -378,6 +492,39 @@
                     {
                         InsertSingleValue(item.Key, item.Value, checkKeyDuplication);
                     }
+                }
+            }
+        }
+
+        private void WriteMultipleAddSuspension(IEnumerable<KeyValuePair<TKey, TValue>> collection, int startIndex, int count)
+        {
+            if (_suspensionContext != null)
+            {
+                if (_suspensionContext.Mode == SuspensionMode.Adding || _suspensionContext.IsMixedMode())
+                {
+                    _suspensionContext.ChangedItems.AddRange(collection);
+                    _suspensionContext.ChangedItemIndices.AddRange(Enumerable.Range(startIndex, count));
+                }
+
+                if (_suspensionContext.IsMixedMode())
+                {
+                    _suspensionContext.MixedActions.AddRange(Enumerable.Repeat(NotifyCollectionChangedAction.Add, count));
+                }
+            }
+        }
+        private void WriteMultipleRemoveSuspension(IEnumerable<KeyValuePair<TKey, TValue>> collection, int startIndex, int count)
+        {
+            if (_suspensionContext != null)
+            {
+                if (_suspensionContext.Mode == SuspensionMode.Adding || _suspensionContext.IsMixedMode())
+                {
+                    _suspensionContext.ChangedItems.AddRange(collection);
+                    _suspensionContext.ChangedItemIndices.AddRange(Enumerable.Range(startIndex, count));
+                }
+
+                if (_suspensionContext.IsMixedMode())
+                {
+                    _suspensionContext.MixedActions.AddRange(Enumerable.Repeat(NotifyCollectionChangedAction.Remove, count));
                 }
             }
         }
@@ -411,6 +558,8 @@
                 OnPropertyChanged(_cachedValuesArgs);
 
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, collection, startIndex));
+
+                WriteMultipleAddSuspension(collection, startIndex, collection.Count);
             }
             else
             {
@@ -452,6 +601,8 @@
             OnPropertyChanged(_cachedValuesArgs);
 
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, removed, startIndex));
+
+            WriteMultipleRemoveSuspension(removed, startIndex, removed.Count);
         }
 
         /// <summary>
@@ -476,7 +627,7 @@
                     if (removedList.TryGetValue(removedKeyIndex - 1, out var toRemoveList))
                         toRemoveList.Add(new KeyValuePair<TKey, TValue>(keyToRemove, valueToRemove));
                     else
-                        removedList[removedKeyIndex] = new List<KeyValuePair<TKey, TValue>>();
+                        removedList[removedKeyIndex] = new List<KeyValuePair<TKey, TValue>>() { new KeyValuePair<TKey, TValue>(keyToRemove, valueToRemove) };
 
                     _dict.Remove(keyToRemove);
                     _dictIndexMapping.Remove(keyToRemove);
@@ -491,12 +642,23 @@
             {
                 _list.RemoveRange(range.Key, range.Value.Count);
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, range.Value, range.Key));
+                WriteMultipleRemoveSuspension(range.Value, range.Key, range.Value.Count);
             }
         }
 
 
         public virtual void RemoveAllItems()
         {
+            // Check
+            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
+            {
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{_suspensionContext.Mode}'");
+            }
+            List<KeyValuePair<TKey, TValue>> copyList = null;
+            if (_suspensionContext != null && _suspensionContext.IsMixedMode())
+            {
+                copyList = AsEnumerable().ToList();
+            }
             _list.Clear();
             _dict.Clear();
 
@@ -506,6 +668,12 @@
             OnPropertyChanged(_cachedValuesArgs);
 
             OnCollectionChanged(_cachedResetArgs);
+
+
+            if (copyList != null)
+            {
+                WriteMultipleRemoveSuspension(copyList, 0, copyList.Count);
+            }
         }
 
 
@@ -641,18 +809,10 @@
         }
         void IDictionary.Add(object key, object value)
         {
-            if (value is TValue castedValue)
+            if (value is TValue castedValue && key is TKey castedKey)
             {
-                if (key is TKey castedKey)
-                {
-
-                }
-                else if (key is int castedIndex)
-                {
-
-                }
+                InsertSingleValue(castedKey, castedValue, true);
             }
-
         }
         IDictionaryEnumerator IDictionary.GetEnumerator()
         {
@@ -771,7 +931,7 @@
                 {
                     PropertyChanged?.Invoke(this, eventArgs);
                 }
-            }          
+            }
         }
 
         protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs eventArgs)
@@ -826,14 +986,14 @@
             if (_suspensionContext is null)
             {
                 // Create new context
-                _suspensionContext = new SuspensionContext<KeyValuePair<TKey,TValue>>(mode);
+                _suspensionContext = new SuspensionContext<KeyValuePair<TKey, TValue>>(mode);
             }
             else if (_suspensionContext != null && _suspensionContext.Mode != mode)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot change mode during another active suspension.");
             }
 
-            return new DisposableToken<FastObservableDictionary<TKey,TValue>>(
+            return new DisposableToken<FastObservableDictionary<TKey, TValue>>(
                 this,
                 x =>
                 {
