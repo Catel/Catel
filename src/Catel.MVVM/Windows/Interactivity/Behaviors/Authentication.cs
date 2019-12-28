@@ -15,7 +15,6 @@ namespace Catel.Windows.Interactivity
 #else
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Interactivity;
     using UIEventArgs = System.EventArgs;
 #endif
 
@@ -50,11 +49,6 @@ namespace Catel.Windows.Interactivity
     /// <summary>
     /// Authentication behavior to show/hide UI elements based on the some authentication parameters.
     /// </summary>
-    /// <remarks>
-    /// In Silverlight, the <c>IsEnabled</c> property is declared on <see cref="Control"/> instead of <see cref="FrameworkElement"/>. If the
-    /// <see cref="Behavior{T}.AssociatedObject"/> is not a <see cref="Control"/>, but the <see cref="Action"/> is set to <see cref="AuthenticationAction.Disable"/>,
-    /// a <see cref="InvalidOperationException"/> will be thrown.
-    /// </remarks>
     public class Authentication : BehaviorBase<FrameworkElement>
     {
         #region Fields
@@ -129,10 +123,10 @@ namespace Catel.Windows.Interactivity
 
         #region Methods
         /// <summary>
-        /// Called when the <see cref="Behavior{T}.AssociatedObject"/> has been loaded.
+        /// Called when the associated object has been loaded.
         /// </summary>
         /// <exception cref="InvalidOperationException">No instance of <see cref="IAuthenticationProvider"/> is registered in the <see cref="IServiceLocator"/>.</exception>
-        /// <exception cref="InvalidOperationException">The <see cref="Action"/> is set to <see cref="AuthenticationAction.Disable"/> and the <see cref="Behavior{T}.AssociatedObject"/> is not a <see cref="Control"/>.</exception>
+        /// <exception cref="InvalidOperationException">The <see cref="Action"/> is set to <see cref="AuthenticationAction.Disable"/> and the associated object is not a <see cref="Control"/>.</exception>
         protected override void OnAssociatedObjectLoaded()
         {
             if (!_authenticationProvider.HasAccessToUIElement(AssociatedObject, AssociatedObject.Tag, AuthenticationTag))

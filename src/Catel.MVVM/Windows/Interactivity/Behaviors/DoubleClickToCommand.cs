@@ -107,24 +107,18 @@ namespace Catel.Windows.Interactivity
                 return Enumerable.Empty<UIElement>();
             }
 
-#if SILVERLIGHT
-            var mousePositionOffset = element.TransformToVisual(Application.Current.RootVisual).Transform(mousePosition);
-            return VisualTreeHelper.FindElementsInHostCoordinates(mousePositionOffset, element);
-#else
-
             var elements = new List<UIElement>();
             VisualTreeHelper.HitTest(element, null, hit =>
+                {
+                    if (hit.VisualHit is UIElement)
                     {
-                        if (hit.VisualHit is UIElement)
-                        {
-                            elements.Add((UIElement)hit.VisualHit);
-                        }
+                        elements.Add((UIElement)hit.VisualHit);
+                    }
 
-                        return HitTestResultBehavior.Continue;
-                    }, new PointHitTestParameters(mousePosition));
+                    return HitTestResultBehavior.Continue;
+                }, new PointHitTestParameters(mousePosition));
 
             return elements;
-#endif
         }
 
         /// <summary>

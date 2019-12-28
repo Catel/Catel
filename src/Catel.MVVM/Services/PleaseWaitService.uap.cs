@@ -146,9 +146,7 @@ namespace Catel.Services
         }
 
         /// <summary>
-        /// Constructors the busy indicator, which is by default the <see cref="ProgressBar"/>. However, it is wise
-        /// to create a custom implementation and use the <c>PerformanceProgressBar</c> that can be found in the
-        /// <a href="http://silverlight.codeplex.com/releases/view/75888">Windows Phone 7 toolkit</a>.
+        /// Constructors the busy indicator, which is by default the <see cref="ProgressBar"/>.
         /// <para />
         /// To create a custom implementation, create a new class based on this class and override only the
         /// <see cref="ConstructorBusyIndicator"/> method.

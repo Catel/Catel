@@ -16,8 +16,6 @@ namespace Catel.Windows.Interactivity
     
     /// <summary>
     /// Base class for the behavior because the SDK for WinRT only ships with interfaces.
-    /// <para />
-    /// This class tries to mimic the WPF, Silverlight and Windows Phone behavior class to allow reusage of the behaviors in Catel.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class Behavior<T> : DependencyObject, IXamlBehavior

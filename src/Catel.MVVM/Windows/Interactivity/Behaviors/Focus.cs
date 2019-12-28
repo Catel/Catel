@@ -12,7 +12,7 @@ namespace Catel.Windows.Interactivity
     using global::Windows.UI.Xaml;
 #else
     using System.Windows;
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
 #endif
 
     using System;

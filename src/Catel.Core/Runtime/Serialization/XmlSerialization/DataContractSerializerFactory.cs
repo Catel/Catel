@@ -172,7 +172,7 @@ namespace Catel.Runtime.Serialization.Xml
                     // Interfaces / abstract classes are not a type, and in fact a LOT of types can be added (in fact every object implementing 
                     // the interface). For serialization, this is not a problem (we know the exact type), but for deserialization this IS an 
                     // issue because we should expect EVERY type that implements the type in the whole AppDomain.
-                    // This is huge performance hit, but it's the cost for dynamic easy on-the-fly serialization in WPF and Silverlight. Luckily
+                    // This is huge performance hit, but it's the cost for dynamic easy on-the-fly serialization in WPF. Luckily
                     // we already implemented caching.
 
                     // Don't check this type again in children checks

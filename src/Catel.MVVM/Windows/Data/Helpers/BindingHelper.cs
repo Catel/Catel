@@ -45,7 +45,7 @@ namespace Catel.Windows.Data
         }
 
         /// <summary>
-        /// Clears a binding. This method implements the ClearBinding for both WPF and Silverlight.
+        /// Clears a binding. This method implements the ClearBinding for all xaml platforms.
         /// </summary>
         /// <param name="dependencyObject">The dependency object.</param>
         /// <param name="dependencyProperty">The dependency property.</param>

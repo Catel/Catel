@@ -30,7 +30,9 @@ Release date
 Added/fixed
 ===========
 (*) #1191 Change ProcessCompletedCallback to include the initial context and exit code
+(*) #1246 Use Microsoft.Xaml.Behaviors.Wpf as dependency for WPF projects
 (-) #1101 Remove Catel.Reflection.TypeInfo
+(-) #1182 Remove obsolete reflection calls that are now supported through System.Reflection
 (-) #1209 Remove IStartupInfoProvider in favor of Orc.CommandLine 
 (-) #1216 Remove binary serialization (due to potential security issues)
 (-) #1239 Move DragAdorner behavior to Orchestra instead of Catel

@@ -12,6 +12,7 @@ namespace Catel.MVVM.Properties {
     using System;
     using Catel.Reflection;
     
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -19,7 +20,7 @@ namespace Catel.MVVM.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Exceptions {
@@ -119,7 +120,7 @@ namespace Catel.MVVM.Properties {
         ///
         ///Make sure that the property is a Catel property, not a regular property.
         ///
-        ///If you are sure that you have a model with this name, make sure it&apos;s public instead of private or protected for Silverlight and WP7 because non-public reflection is not allowed in Silverlight..
+        ///If you are sure that you have a model with this name, make sure it&apos;s public instead of private or protected for UWP because non-public reflection is not allowed in UWP..
         /// </summary>
         internal static string ModelNotRegistered {
             get {

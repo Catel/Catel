@@ -283,7 +283,7 @@ namespace Catel.MVVM.Providers
                     _viewModel.SavedAsync += OnViewModelSavedAsync;
                     _viewModel.ClosedAsync += OnViewModelClosedAsync;
 
-                    // Must be in a try/catch because Silverlight sometimes throws out of range exceptions for bindings
+                    // Must be in a try/catch because some lighter platforms sometimes throws out of range exceptions for bindings
                     try
                     {
                         SetDataContext(_viewModel);

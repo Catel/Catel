@@ -30,7 +30,7 @@ namespace Catel.Windows.Interactivity
 #if UWP
     public abstract class EventTriggerBase<T> : EventTriggerBehavior
 #else
-    public abstract class EventTriggerBase<T> : System.Windows.Interactivity.EventTriggerBase<T>, ITrigger
+    public abstract class EventTriggerBase<T> : Microsoft.Xaml.Behaviors.EventTriggerBase<T>, ITrigger
 #endif
         where T : FrameworkElement
     {

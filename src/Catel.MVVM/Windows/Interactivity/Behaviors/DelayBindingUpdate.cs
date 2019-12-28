@@ -20,7 +20,7 @@ namespace Catel.Windows.Interactivity
 #else
     using System.Windows;
     using System.Windows.Data;
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
     using System.Windows.Threading;
     using UIEventArgs = System.EventArgs;
     using TimerTickEventArgs = System.EventArgs;

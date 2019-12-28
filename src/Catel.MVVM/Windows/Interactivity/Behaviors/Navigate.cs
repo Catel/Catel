@@ -9,10 +9,10 @@
 namespace Catel.Windows.Interactivity
 {
     using System.Windows.Documents;
-    using System.Windows.Interactivity;
     using IoC;
     using System.Windows.Navigation;
     using Catel.Services;
+    using Microsoft.Xaml.Behaviors;
 
     /// <summary>
     /// Navigate behavior to allow the execution of an url in non-pages for WPF.
