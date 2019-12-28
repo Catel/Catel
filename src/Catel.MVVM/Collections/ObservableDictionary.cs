@@ -63,11 +63,13 @@ namespace Catel.Collections
         /// </summary>
         /// <param name="dictionary">The <see cref="IDictionary{TKey,TValue}"/> whose elements are copied to the new <see cref="ObservableDictionary{TKey,TValue}"/>.</param>
         /// <param name="comparer">The <see cref="IEqualityComparer{T}"/> implementation to use when comparing keys, or <see langword="null" /> to use the default <see cref="IEqualityComparer{T}"/> for the type of key.</param>
-        public ObservableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer) : base(dictionary, comparer)
+        public ObservableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer)
+            : base(dictionary, comparer)
         {
         }
 
-        protected ObservableDictionary(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected ObservableDictionary(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
 

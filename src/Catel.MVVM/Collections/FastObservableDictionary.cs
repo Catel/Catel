@@ -68,7 +68,7 @@
         }
         public FastObservableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer)
         {
-            Argument.IsNotNull(() => dictionary);
+            Argument.IsNotNull(nameof(dictionary), dictionary);
 
             _dict = new Dictionary<TKey, TValue>(dictionary.Count, comparer);
             _dictIndexMapping = new Dictionary<TKey, int>(dictionary.Count, comparer);
@@ -800,8 +800,8 @@
         }
         public void Add(object key, object value)
         {
-            Argument.IsNotNull(() => key);
-            Argument.IsNotNull(() => value);
+            Argument.IsNotNull(nameof(key), key);
+            Argument.IsNotNull(nameof(value), value);
             if (key is TKey castedKey)
             {
                 if (value is TValue castedValue)
@@ -810,12 +810,12 @@
                 }
                 else
                 {
-                    throw new InvalidCastException($"Value must be of type {typeof(TValue)}");
+                    throw Log.ErrorAndCreateException<InvalidCastException>($"Value must be of type {typeof(TValue)}");
                 }
             }
             else
             {
-                throw new InvalidCastException($"Key must be of type {typeof(TKey)}");
+                throw Log.ErrorAndCreateException<InvalidCastException>($"Key must be of type {typeof(TKey)}");
             }
         }
         IDictionaryEnumerator IDictionary.GetEnumerator()
