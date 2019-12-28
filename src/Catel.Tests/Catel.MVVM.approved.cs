@@ -242,6 +242,32 @@ namespace Catel.Collections
             public void Reset() { }
         }
     }
+    public class static SuspensionContextExtensions
+    {
+        public static System.Collections.Generic.ICollection<Catel.Collections.NotifyRangedCollectionChangedEventArgs> CreateAddingEvents<T>(this Catel.Collections.SuspensionContext<T> suspensionContext) { }
+        public static System.Collections.Generic.ICollection<Catel.Collections.NotifyRangedCollectionChangedEventArgs> CreateEvents<T>(this Catel.Collections.SuspensionContext<T> suspensionContext) { }
+        public static System.Collections.Generic.ICollection<Catel.Collections.NotifyRangedCollectionChangedEventArgs> CreateMixedBashEvents<T>(this Catel.Collections.SuspensionContext<T> suspensionContext) { }
+        public static System.Collections.Generic.ICollection<Catel.Collections.NotifyRangedCollectionChangedEventArgs> CreateMixedConsolidateEvents<T>(this Catel.Collections.SuspensionContext<T> suspensionContext) { }
+        public static System.Collections.Generic.ICollection<Catel.Collections.NotifyRangedCollectionChangedEventArgs> CreateMixedEvents<T>(this Catel.Collections.SuspensionContext<T> suspensionContext) { }
+        public static System.Collections.Generic.ICollection<Catel.Collections.NotifyRangedCollectionChangedEventArgs> CreateNoneEvents<T>(this Catel.Collections.SuspensionContext<T> suspensionContext) { }
+        public static System.Collections.Generic.ICollection<Catel.Collections.NotifyRangedCollectionChangedEventArgs> CreateRemovingEvents<T>(this Catel.Collections.SuspensionContext<T> suspensionContext) { }
+        public static System.Collections.Generic.ICollection<Catel.Collections.NotifyRangedCollectionChangedEventArgs> CreateSilentEvents<T>(this Catel.Collections.SuspensionContext<T> suspensionContext) { }
+        public static bool IsMixedMode<T>(this Catel.Collections.SuspensionContext<T> suspensionContext) { }
+    }
+    public class SuspensionContext<T>
+    {
+        public SuspensionContext(Catel.Collections.SuspensionMode mode) { }
+        public System.Collections.Generic.List<int> ChangedItemIndices { get; }
+        public System.Collections.Generic.List<T> ChangedItems { get; }
+        public int Count { get; set; }
+        public static System.Lazy<System.Collections.Generic.Dictionary<Catel.Collections.SuspensionMode, System.Func<Catel.Collections.SuspensionContext<T>, System.Collections.Generic.ICollection<Catel.Collections.NotifyRangedCollectionChangedEventArgs>>>> EventsGeneratorsRegistry { get; }
+        public System.Collections.Generic.List<System.Collections.Specialized.NotifyCollectionChangedAction> MixedActions { get; }
+        public Catel.Collections.SuspensionMode Mode { get; }
+    }
+    public class static SuspensionModeExtensions
+    {
+        public static bool IsMixedMode(this Catel.Collections.SuspensionMode suspensionMode) { }
+    }
 }
 namespace Catel.Data
 {

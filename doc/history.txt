@@ -29,6 +29,7 @@ Release date
 
 Added/fixed
 ===========
+(*) #1509 Make Generic Catel.Collections.SuspensionContext Public
 (x) #1510 Fix a potential NullReferenceException in FastMemberInvoker
 
 Platform support changes
