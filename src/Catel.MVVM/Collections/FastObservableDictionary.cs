@@ -13,7 +13,7 @@
     using Catel.IoC;
     using Catel.Logging;
     using Catel.Services;
-    
+
     public class FastObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>,
         IReadOnlyDictionary<TKey, TValue>,
         IDictionary,
@@ -339,27 +339,27 @@
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{_suspensionContext.Mode}'");
             }
 
-            //raise move event from oldIndex to index
-            var smallIndex = Math.Min(oldIndex, newIndex);
-            var bigIndex = Math.Max(oldIndex, newIndex);
-            var sign = Math.Sign(oldIndex - newIndex);
 
-            for (var oldBetweenIndex = smallIndex; oldBetweenIndex <= bigIndex; oldBetweenIndex++)
+            var temp = _list[oldIndex];
+            int sign = Math.Sign(newIndex - oldIndex);
+            if (oldIndex < newIndex)
             {
-                //recalculate the index of each item here
-                var oldBetweenKey = _list[oldBetweenIndex];
-                var newBetweenIndex = oldBetweenIndex + sign;
-                if (newBetweenIndex > bigIndex)
+                for (var i = oldIndex; i < newIndex; i += sign)
                 {
-                    newBetweenIndex = smallIndex;
+                    _dictIndexMapping[_list[i] = _list[i + sign]] = i;
                 }
-                else if (newBetweenIndex < smallIndex)
-                {
-                    newBetweenIndex = bigIndex;
-                }
-                _list[newBetweenIndex] = _list[oldBetweenIndex];
-                _dictIndexMapping[oldBetweenKey] = newBetweenIndex;
             }
+            else
+            {
+                for (var i = oldIndex; i > newIndex; i += sign)
+                {
+                    _dictIndexMapping[_list[i] = _list[i + sign]] = i;
+                }
+            }
+
+            _list[newIndex] = temp;
+            _dictIndexMapping[temp] = newIndex;
+
             var changedItem = new KeyValuePair<TKey, TValue>(key, element);
             OnPropertyChanged(_cachedIndexerArgs);
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move,
