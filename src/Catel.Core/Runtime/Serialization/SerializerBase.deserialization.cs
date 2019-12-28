@@ -11,7 +11,6 @@ namespace Catel.Runtime.Serialization
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using ApiCop.Rules;
     using Collections;
     using Logging;
     using Reflection;
@@ -381,9 +380,6 @@ namespace Catel.Runtime.Serialization
 
         private List<MemberValue> DeserializeMembersOnly(ISerializationContext<TSerializationContextInfo> context)
         {
-            ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
-                x => x.SetInitializationMode(InitializationMode.Lazy, GetType().GetSafeFullName(false)));
-
             BeforeDeserialization(context);
 
             var members = DeserializeMembers(context);

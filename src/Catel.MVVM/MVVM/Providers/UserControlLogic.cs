@@ -9,8 +9,6 @@ namespace Catel.MVVM.Providers
     using System;
     using System.ComponentModel;
     using System.Threading.Tasks;
-    using ApiCop;
-    using ApiCop.Rules;
     using IoC;
     using Views;
     using Services;
@@ -40,11 +38,6 @@ namespace Catel.MVVM.Providers
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        /// The API cop.
-        /// </summary>
-        private static readonly IApiCop ApiCop = ApiCopManager.GetCurrentClassApiCop();
-
         private IViewModelContainer _parentViewModelContainer;
         private IViewModel _parentViewModel;
 
@@ -59,15 +52,6 @@ namespace Catel.MVVM.Providers
         /// </summary>
         static UserControlLogic()
         {
-            ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.InfoBarMessageControl", "The InfoBarMessageControl is not found in the visual tree. This will have a negative impact on performance. Consider setting the SkipSearchingForInfoBarMessageControl or DefaultSkipSearchingForInfoBarMessageControlValue to true.", ApiCopRuleLevel.Error,
-                "http://docs.catelproject.com/vnext/faq/performance-considerations.htm"));
-
-            ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.CreateWarningAndErrorValidator", "The InfoBarMessageControl is not found in the visual tree. Only use this feature in combination with the InfoBarMessageControl or a customized class which uses the WarningAndErrorValidator. Consider setting the CreateWarningAndErrorValidatorForViewModel or DefaultCreateWarningAndErrorValidatorForViewModelValue to false.", ApiCopRuleLevel.Error,
-                "http://docs.catelproject.com/vnext/faq/performance-considerations.htm"));
-
-            ApiCop.RegisterRule(new UnusedFeatureApiCopRule("UserControlLogic.SupportParentViewModelContainers", "No parent IViewModelContainer is found in the visual tree. Only use this feature when there are parent IViewModelContainer instances. Consider setting the SupportParentViewModelContainers to false.", ApiCopRuleLevel.Error,
-                "http://docs.catelproject.com/vnext/faq/performance-considerations.htm"));
-
             DefaultSupportParentViewModelContainersValue = true;
             DefaultUnloadBehaviorValue = UnloadBehavior.SaveAndCloseViewModel;
 
@@ -345,15 +329,6 @@ namespace Catel.MVVM.Providers
 
                 _infoBarMessageControl = TargetView.FindParentByPredicate(o => o is InfoBarMessageControl) as InfoBarMessageControl;
 
-                ApiCop.UpdateRule<UnusedFeatureApiCopRule>("UserControlLogic.InfoBarMessageControl",
-                    rule => rule.IncreaseCount(_infoBarMessageControl != null, TargetViewType.FullName));
-
-                if (CreateWarningAndErrorValidatorForViewModel)
-                {
-                    ApiCop.UpdateRule<UnusedFeatureApiCopRule>("UserControlLogic.CreateWarningAndErrorValidator",
-                        rule => rule.IncreaseCount(_infoBarMessageControl != null, TargetViewType.FullName));
-                }
-
                 Log.Debug("Finished searching for an instance of the InfoBarMessageControl");
 
                 if (_infoBarMessageControl is null)
@@ -541,9 +516,6 @@ namespace Catel.MVVM.Providers
             {
                 Log.Debug("Couldn't find parent view model container");
             }
-
-            ApiCop.UpdateRule<UnusedFeatureApiCopRule>("UserControlLogic.SupportParentViewModelContainers",
-                    rule => rule.IncreaseCount(_parentViewModelContainer != null, TargetViewType.FullName));
 
             if (_parentViewModelContainer != null)
             {

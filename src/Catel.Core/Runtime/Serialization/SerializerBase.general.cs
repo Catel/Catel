@@ -14,8 +14,6 @@ namespace Catel.Runtime.Serialization
     using System.Globalization;
     using System.IO;
     using System.Reflection;
-    using Catel.ApiCop;
-    using Catel.ApiCop.Rules;
     using Catel.Caching;
     using Catel.IoC;
     using Catel.Logging;
@@ -34,11 +32,6 @@ namespace Catel.Runtime.Serialization
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
-        /// The API cop.
-        /// </summary>
-        private static readonly IApiCop ApiCop = ApiCopManager.GetCurrentClassApiCop();
 
         /// <summary>
         /// The default serialization configuration.
@@ -76,19 +69,9 @@ namespace Catel.Runtime.Serialization
         private readonly CacheStorage<Type, MethodInfo> _toStringMethodCache = new CacheStorage<Type, MethodInfo>();
 
         private readonly CacheStorage<string, bool> _shouldSerializeEnumAsStringCache = new CacheStorage<string, bool>();
-
         #endregion
 
         #region Constructors
-        /// <summary>
-        /// Initializes static members of the <see cref="SerializerBase{TSerializationContextInfo}"/> class.
-        /// </summary>
-        static SerializerBase()
-        {
-            ApiCop.RegisterRule(new InitializationApiCopRule("SerializerBase.WarmupAtStartup", "It is recommended to warm up the serializers at application startup", ApiCopRuleLevel.Hint, InitializationMode.Eager,
-                "http://docs.catelproject.com/vnext/catel-core/serialization/introduction.htm#warming-up-serialization"));
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SerializerBase{TSerializationContextInfo}" /> class.
         /// </summary>
@@ -246,9 +229,6 @@ namespace Catel.Runtime.Serialization
         /// <param name="typesPerThread">The types per thread. If <c>-1</c>, all types will be initialized on the same thread.</param>
         public void Warmup(IEnumerable<Type> types, int typesPerThread = 1000)
         {
-            ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
-                x => x.SetInitializationMode(InitializationMode.Eager, GetType().GetSafeFullName(false)));
-
             if (types is null)
             {
                 types = TypeCache.GetTypes(x => x.IsModelBase(), false);

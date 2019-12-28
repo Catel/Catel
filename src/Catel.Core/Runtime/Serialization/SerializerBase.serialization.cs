@@ -10,7 +10,6 @@ namespace Catel.Runtime.Serialization
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
-    using Catel.ApiCop.Rules;
     using Catel.Logging;
     using Catel.Reflection;
     using Catel.Scoping;
@@ -214,9 +213,6 @@ namespace Catel.Runtime.Serialization
 
         private void SerializeMembersOnly(ISerializationContext<TSerializationContextInfo> context, Stream stream, List<MemberValue> membersToSerialize)
         {
-            ApiCop.UpdateRule<InitializationApiCopRule>("SerializerBase.WarmupAtStartup",
-                x => x.SetInitializationMode(InitializationMode.Lazy, GetType().GetSafeFullName(false)));
-
             BeforeSerialization(context);
 
             SerializeMembers(context, membersToSerialize);

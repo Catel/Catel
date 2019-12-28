@@ -36,6 +36,7 @@ Added/fixed
 (-) #1209 Remove IStartupInfoProvider in favor of Orc.CommandLine 
 (-) #1216 Remove binary serialization (due to potential security issues)
 (-) #1239 Move DragAdorner behavior to Orchestra instead of Catel
+(-) #1409 Remove ApiCop feature, we will implement this in Catel.Analyzers instead
 (-) #1492 Remove ModelBase.SetValue(string, object, bool)
 
 Platform support changes
