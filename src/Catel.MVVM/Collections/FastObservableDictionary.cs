@@ -341,22 +341,12 @@
 
 
             var temp = _list[oldIndex];
-            int sign = Math.Sign(newIndex - oldIndex);
-            if (oldIndex < newIndex)
+            var sign = Math.Sign(newIndex - oldIndex);
+            var checkCondition = sign > 0 ? (Func<int, bool>)((int i) => i < newIndex) : ((int i) => i > newIndex);
+            for (var i = oldIndex; checkCondition(i); i += sign) //negative sign
             {
-                for (var i = oldIndex; i < newIndex; i += sign)
-                {
-                    _dictIndexMapping[_list[i] = _list[i + sign]] = i;
-                }
-            }
-            else
-            {
-                for (var i = oldIndex; i > newIndex; i += sign)
-                {
-                    _dictIndexMapping[_list[i] = _list[i + sign]] = i;
-                }
-            }
-
+                _dictIndexMapping[_list[i] = _list[i + sign]] = i;
+            }           
             _list[newIndex] = temp;
             _dictIndexMapping[temp] = newIndex;
 
