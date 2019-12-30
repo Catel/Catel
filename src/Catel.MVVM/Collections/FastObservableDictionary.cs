@@ -99,12 +99,8 @@
             _dictIndexMapping = new Dictionary<TKey, int>(comparer);
             _dict = new Dictionary<TKey, TValue>(comparer);
         }
-        public FastObservableDictionary(IDictionary<TKey, TValue> dictionary)
+        public FastObservableDictionary(IDictionary<TKey, TValue> dictionary) : this((IEnumerable<KeyValuePair<TKey, TValue>>)dictionary)
         {
-            _dict = new Dictionary<TKey, TValue>(dictionary.Count);
-            _dictIndexMapping = new Dictionary<TKey, int>(dictionary.Count);
-            _list = new List<TKey>(dictionary.Count);
-            InsertMultipleValues(dictionary, false);
         }
         public FastObservableDictionary(int capacity, IEqualityComparer<TKey> comparer)
         {
