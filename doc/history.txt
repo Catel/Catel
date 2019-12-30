@@ -30,7 +30,9 @@ Release date
 Added/fixed
 ===========
 (*) #1509 Make Generic Catel.Collections.SuspensionContext Public
+(x) #1506 ObservableDictionary NotifyCollectionChanged Event Storm
 (x) #1510 Fix a potential NullReferenceException in FastMemberInvoker
+(x) #1511 ObservableDictionary Performance Issue with Large Collections
 
 Platform support changes
 ========================
