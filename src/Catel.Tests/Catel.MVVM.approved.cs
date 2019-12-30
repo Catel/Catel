@@ -152,6 +152,74 @@ namespace Catel.Collections
         public System.IDisposable SuspendChangeNotifications() { }
         public System.IDisposable SuspendChangeNotifications(Catel.Collections.SuspensionMode mode) { }
     }
+    public class FastObservableDictionary<TKey, TValue> : Catel.Collections.ISuspendChangeNotificationsCollection, System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IDictionary<TKey, TValue>, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IList<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IReadOnlyCollection<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IReadOnlyDictionary<TKey, TValue>, System.Collections.ICollection, System.Collections.IDictionary, System.Collections.IEnumerable, System.Collections.Specialized.INotifyCollectionChanged, System.ComponentModel.INotifyPropertyChanged, System.Runtime.Serialization.IDeserializationCallback, System.Runtime.Serialization.ISerializable
+    {
+        protected readonly System.ComponentModel.PropertyChangedEventArgs _cachedCountArgs;
+        protected readonly System.ComponentModel.PropertyChangedEventArgs _cachedIndexerArgs;
+        protected readonly System.ComponentModel.PropertyChangedEventArgs _cachedKeysArgs;
+        protected readonly System.Collections.Specialized.NotifyCollectionChangedEventArgs _cachedResetArgs;
+        protected readonly System.ComponentModel.PropertyChangedEventArgs _cachedValuesArgs;
+        public FastObservableDictionary() { }
+        public FastObservableDictionary(int capacity) { }
+        public FastObservableDictionary(System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> originalDict) { }
+        public FastObservableDictionary(System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
+        public FastObservableDictionary(System.Collections.Generic.IDictionary<TKey, TValue> dictionary) { }
+        public FastObservableDictionary(int capacity, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
+        public FastObservableDictionary(System.Collections.Generic.IDictionary<TKey, TValue> dictionary, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
+        protected FastObservableDictionary(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        public bool AutomaticallyDispatchChangeNotifications { get; set; }
+        public System.Collections.Generic.IEqualityComparer<TKey> Comparer { get; }
+        public int Count { get; }
+        public bool IsDirty { get; }
+        public bool IsFixedSize { get; }
+        public bool IsReadOnly { get; }
+        public bool IsSynchronized { get; }
+        public TValue this[TKey key] { get; set; }
+        public object this[object key] { get; set; }
+        public System.Collections.Generic.ICollection<TKey> Keys { get; }
+        public bool NotificationsSuspended { get; }
+        public object SyncRoot { get; }
+        public System.Collections.Generic.ICollection<TValue> Values { get; }
+        public event System.Collections.Specialized.NotifyCollectionChangedEventHandler CollectionChanged;
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        public void Add(System.Collections.Generic.KeyValuePair<TKey, TValue> item) { }
+        public void Add(TKey key, TValue value) { }
+        public void Add(object key, object value) { }
+        public System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> AsEnumerable() { }
+        public Catel.Collections.FastObservableDictionary<TKey, TValue> AsReadOnly() { }
+        public void Clear() { }
+        public bool Contains(System.Collections.Generic.KeyValuePair<TKey, TValue> item) { }
+        public bool Contains(object key) { }
+        public bool ContainsKey(TKey key) { }
+        public void CopyTo(System.Collections.Generic.KeyValuePair<, >[] array, int arrayIndex) { }
+        public void CopyTo(System.Array array, int arrayIndex) { }
+        public System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<TKey, TValue>> GetEnumerator() { }
+        public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        public int IndexOf(System.Collections.Generic.KeyValuePair<TKey, TValue> item) { }
+        public void Insert(int index, System.Collections.Generic.KeyValuePair<TKey, TValue> item) { }
+        public virtual void InsertMultipleValues(System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> newValues, bool checkKeyDuplication) { }
+        public virtual void InsertMultipleValues(int startIndex, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> newValues, bool checkKeyDuplication) { }
+        public virtual void InsertSingleValue(TKey key, TValue newValue, bool checkKeyDuplication) { }
+        public virtual void InsertSingleValue(int index, TKey key, TValue newValue, bool checkKeyDuplication) { }
+        protected virtual void InternalMoveItem(int oldIndex, int newIndex, TKey key, TValue element) { }
+        public virtual void MoveItem(int oldIndex, int newIndex) { }
+        protected void NotifyChanges() { }
+        protected virtual void OnCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs eventArgs) { }
+        public void OnDeserialization(object sender) { }
+        protected virtual void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs eventArgs) { }
+        public bool Remove(System.Collections.Generic.KeyValuePair<TKey, TValue> item) { }
+        public bool Remove(TKey keyToRemove) { }
+        public virtual void RemoveAllItems() { }
+        public void RemoveAt(int index) { }
+        public virtual void RemoveMultipleValues(int startIndex, int count) { }
+        public virtual void RemoveMultipleValues(System.Collections.Generic.IEnumerable<TKey> keysToRemove) { }
+        public virtual void RemoveSingleValue(int index, out TValue value) { }
+        public void Reset() { }
+        public System.IDisposable SuspendChangeNotifications() { }
+        public System.IDisposable SuspendChangeNotifications(Catel.Collections.SuspensionMode mode) { }
+        public bool TryGetValue(TKey key, out TValue value) { }
+        public virtual bool TryRemoveSingleValue(TKey keyToRemove, out TValue value) { }
+    }
     public class NotifyListChangedEventArgs : System.ComponentModel.ListChangedEventArgs
     {
         public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType) { }
@@ -193,44 +261,19 @@ namespace Catel.Collections
         public System.Collections.IList OldItems { get; }
         public int OldStartingIndex { get; }
     }
-    public class ObservableDictionary<TKey, TValue> : System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IDictionary<TKey, TValue>, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IReadOnlyCollection<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.Generic.IReadOnlyDictionary<TKey, TValue>, System.Collections.ICollection, System.Collections.IDictionary, System.Collections.IEnumerable, System.Collections.Specialized.INotifyCollectionChanged, System.ComponentModel.INotifyPropertyChanged, System.Runtime.Serialization.IDeserializationCallback, System.Runtime.Serialization.ISerializable
+    [System.ObsoleteAttribute("Use `FastObservableDictionary` instead. Will be removed in version 6.0.0.", true)]
+    public class ObservableDictionary<TKey, TValue> : Catel.Collections.FastObservableDictionary<TKey, TValue>
     {
         public ObservableDictionary() { }
         public ObservableDictionary(System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
         public ObservableDictionary(System.Collections.Generic.IDictionary<TKey, TValue> dictionary) { }
         public ObservableDictionary(System.Collections.Generic.IDictionary<TKey, TValue> dictionary, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
         protected ObservableDictionary(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
-        public bool AutomaticallyDispatchChangeNotifications { get; set; }
-        public System.Collections.Generic.IEqualityComparer<TKey> Comparer { get; }
-        public int Count { get; }
-        public bool IsFixedSize { get; }
-        public bool IsReadOnly { get; }
-        public bool IsSynchronized { get; }
-        public object this[object key] { get; set; }
-        public TValue this[TKey key] { get; set; }
-        public System.Collections.Generic.Dictionary<TKey, TValue>.KeyCollection Keys { get; }
-        public object SyncRoot { get; }
-        public System.Collections.Generic.Dictionary<TKey, TValue>.ValueCollection Values { get; }
-        public event System.Collections.Specialized.NotifyCollectionChangedEventHandler CollectionChanged;
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        public void Add(object key, object value) { }
-        public void Add(TKey key, TValue value) { }
-        public void Add(System.Collections.Generic.KeyValuePair<TKey, TValue> item) { }
-        public void Clear() { }
-        public bool Contains(object key) { }
-        public bool Contains(System.Collections.Generic.KeyValuePair<TKey, TValue> item) { }
-        public bool ContainsKey(TKey key) { }
-        public void CopyTo(System.Array array, int index) { }
-        public void CopyTo(System.Collections.Generic.KeyValuePair<, >[] array, int arrayIndex) { }
-        public System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<TKey, TValue>> GetEnumerator() { }
-        public virtual void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         protected virtual void OnCollectionChanged() { }
         protected virtual void OnCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedAction action, System.Collections.Generic.KeyValuePair<TKey, TValue> changedItem, int index) { }
         protected virtual void OnCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedAction action, System.Collections.Generic.KeyValuePair<TKey, TValue> newItem, System.Collections.Generic.KeyValuePair<TKey, TValue> oldItem, int index) { }
-        public void OnDeserialization(object sender) { }
         protected virtual void OnPropertyChanged(string propertyName) { }
-        public bool Remove(TKey key) { }
-        public bool TryGetValue(TKey key, out TValue value) { }
+        [System.ObsoleteAttribute("Use the normal enumerator. Will be removed in version 6.0.0.", true)]
         public struct Enumerator<TKey, TValue> : System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.IDictionaryEnumerator, System.Collections.IEnumerator, System.IDisposable
         {
             public System.Collections.Generic.KeyValuePair<TKey, TValue> Current { get; }

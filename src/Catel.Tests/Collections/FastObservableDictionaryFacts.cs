@@ -13,7 +13,7 @@ namespace Catel.Tests.Collections
     using Catel.Collections;
     using NUnit.Framework;
 
-    public class ObservableDictionaryFacts
+    public class FastObservableDictionaryFacts
     {
         [TestFixture]
         public class TheConstructor
@@ -21,7 +21,7 @@ namespace Catel.Tests.Collections
             [Test]
             public void ThrowsArgumentNullExceptionForNullCollection()
             {
-                Assert.That(() => new ObservableDictionary<object, object>(null, null), Throws.ArgumentNullException);
+                Assert.That(() => new FastObservableDictionary<object, object>(null, null), Throws.ArgumentNullException);
             }
 
             [Test]
@@ -29,7 +29,7 @@ namespace Catel.Tests.Collections
             {
                 var defaultComparer = EqualityComparer<int>.Default;
 
-                var observableDictionary = new ObservableDictionary<int, int>()
+                var observableDictionary = new FastObservableDictionary<int, int>()
                 {
                     {
                         1, 1
@@ -44,7 +44,7 @@ namespace Catel.Tests.Collections
             {
                 var customComparer = StringComparer.OrdinalIgnoreCase;
 
-                var observableDictionary = new ObservableDictionary<string, int>(customComparer)
+                var observableDictionary = new FastObservableDictionary<string, int>(customComparer)
                 {
                     {
                         "1", 1
@@ -61,7 +61,7 @@ namespace Catel.Tests.Collections
             [Test]
             public void ThrowsInvalidCastExceptionForAddObject()
             {
-                var observableDictionary = new ObservableDictionary<int, int>();
+                var observableDictionary = new FastObservableDictionary<int, int>();
 
                 Assert.That(() => observableDictionary.Add((object)"1", 1), Throws.TypeOf<InvalidCastException>());
             }
@@ -69,7 +69,7 @@ namespace Catel.Tests.Collections
             [Test]
             public void ThrowsArgumentNullExceptionForAddObject()
             {
-                var observableDictionary = new ObservableDictionary<int, int>();
+                var observableDictionary = new FastObservableDictionary<int, int>();
 
                 Assert.That(() => observableDictionary.Add(1, null), Throws.ArgumentNullException);
             }
@@ -78,7 +78,7 @@ namespace Catel.Tests.Collections
             public void RaisesEventWhileAddingKvp()
             {
                 var counter = 0;
-                var observableDictionary = new ObservableDictionary<int, int>();
+                var observableDictionary = new FastObservableDictionary<int, int>();
 
                 observableDictionary.AutomaticallyDispatchChangeNotifications = false;
                 observableDictionary.CollectionChanged += (sender, args) => counter++;
@@ -100,7 +100,7 @@ namespace Catel.Tests.Collections
             public void RaisesEventWhileAddingObject()
             {
                 var counter = 0;
-                var observableDictionary = new ObservableDictionary<int, int>();
+                var observableDictionary = new FastObservableDictionary<int, int>();
 
                 observableDictionary.AutomaticallyDispatchChangeNotifications = false;
                 observableDictionary.CollectionChanged += (sender, args) => counter++;
@@ -122,7 +122,7 @@ namespace Catel.Tests.Collections
             public void RaiseEventWhileAddingStronglyTyped()
             {
                 var counter = 0;
-                var observableDictionary = new ObservableDictionary<int, int>();
+                var observableDictionary = new FastObservableDictionary<int, int>();
 
                 observableDictionary.AutomaticallyDispatchChangeNotifications = false;
                 observableDictionary.CollectionChanged += (sender, args) => counter++;
@@ -148,7 +148,7 @@ namespace Catel.Tests.Collections
             public void RaisesEventWhileClearing()
             {
                 bool wasRaised = false;
-                var observableDictionary = new ObservableDictionary<int, int>
+                var observableDictionary = new FastObservableDictionary<int, int>
                 {
                     {
                         1, 1
@@ -170,7 +170,7 @@ namespace Catel.Tests.Collections
             [Test]
             public void ContainsKvpSuccess()
             {
-                var observableDictionary = new ObservableDictionary<int, int>()
+                var observableDictionary = new FastObservableDictionary<int, int>()
                 {
                     {
                         1, 2
@@ -185,7 +185,7 @@ namespace Catel.Tests.Collections
             [Test]
             public void ContainsObjectTrue()
             {
-                var observableDictionary = new ObservableDictionary<int, int>()
+                var observableDictionary = new FastObservableDictionary<int, int>()
                 {
                     {
                         1, 2
@@ -200,7 +200,7 @@ namespace Catel.Tests.Collections
             [Test]
             public void ContainsObjectFalse()
             {
-                var observableDictionary = new ObservableDictionary<int, int>()
+                var observableDictionary = new FastObservableDictionary<int, int>()
                 {
                     {
                         1, 2
@@ -215,7 +215,7 @@ namespace Catel.Tests.Collections
             [Test]
             public void ContainsObjectInvalidTypeFalse()
             {
-                var observableDictionary = new ObservableDictionary<int, int>()
+                var observableDictionary = new FastObservableDictionary<int, int>()
                 {
                     {
                         1, 2
@@ -234,7 +234,7 @@ namespace Catel.Tests.Collections
             [Test]
             public void ContainsKeyTrue()
             {
-                var observableDictionary = new ObservableDictionary<int, int>()
+                var observableDictionary = new FastObservableDictionary<int, int>()
                 {
                     {
                         1, 1
@@ -249,7 +249,7 @@ namespace Catel.Tests.Collections
             [Test]
             public void ContainsKeyFalse()
             {
-                var observableDictionary = new ObservableDictionary<int, int>()
+                var observableDictionary = new FastObservableDictionary<int, int>()
                 {
                     {
                         1, 1
@@ -270,7 +270,7 @@ namespace Catel.Tests.Collections
             {
                 Array arr = new KeyValuePair<int, int>[2];
 
-                var observableDictionary = new ObservableDictionary<int, int>()
+                var observableDictionary = new FastObservableDictionary<int, int>()
                 {
                     {
                         1, 1
@@ -289,7 +289,7 @@ namespace Catel.Tests.Collections
             {
                 KeyValuePair<int, int>[] arr = new KeyValuePair<int, int>[2];
 
-                var observableDictionary = new ObservableDictionary<int, int>()
+                var observableDictionary = new FastObservableDictionary<int, int>()
                 {
                     {
                         1, 1
@@ -311,7 +311,7 @@ namespace Catel.Tests.Collections
             [Test]
             public void ThrowsInvalidCastExceptionForAddingObject()
             {
-                var observableDictionary = new ObservableDictionary<int, int>();
+                var observableDictionary = new FastObservableDictionary<int, int>();
 
                 Assert.That(() => observableDictionary[(object)"1"] = 1, Throws.TypeOf<InvalidCastException>());
             }
@@ -320,7 +320,7 @@ namespace Catel.Tests.Collections
             public void RaisesEventWhileAddingObject()
             {
                 var counter = 0;
-                var observableDictionary = new ObservableDictionary<int, int>();
+                var observableDictionary = new FastObservableDictionary<int, int>();
 
                 observableDictionary.AutomaticallyDispatchChangeNotifications = false;
                 observableDictionary.CollectionChanged += (sender, args) => counter++;
@@ -342,7 +342,7 @@ namespace Catel.Tests.Collections
             public void RaisesEventWhileAddingStronglyTyped()
             {
                 var counter = 0;
-                var observableDictionary = new ObservableDictionary<int, int>();
+                var observableDictionary = new FastObservableDictionary<int, int>();
 
                 observableDictionary.AutomaticallyDispatchChangeNotifications = false;
                 observableDictionary.CollectionChanged += (sender, args) => counter++;
@@ -364,7 +364,7 @@ namespace Catel.Tests.Collections
             public void RaisesEventWhileUpdatingObject()
             {
                 var isUpdated = false;
-                var observableDictionary = new ObservableDictionary<int, int>()
+                var observableDictionary = new FastObservableDictionary<int, int>()
                 {
                     {
                         1, 1
@@ -383,7 +383,7 @@ namespace Catel.Tests.Collections
             public void RaisesEventWhileUpdatingStronglyTyped()
             {
                 var isUpdated = false;
-                var observableDictionary = new ObservableDictionary<int, int>()
+                var observableDictionary = new FastObservableDictionary<int, int>()
                 {
                     {
                         1, 1
@@ -401,7 +401,7 @@ namespace Catel.Tests.Collections
             [Test]
             public void ReturnsNullForInvalidTypedObject()
             {
-                var observableDictionary = new ObservableDictionary<int, int>()
+                var observableDictionary = new FastObservableDictionary<int, int>()
                 {
                     {
                         1, 1
@@ -421,7 +421,7 @@ namespace Catel.Tests.Collections
             public void RaiseEventWhileRemovingStronglyTyped()
             {
                 var counter = 1;
-                var observableDictionary = new ObservableDictionary<int, int>
+                var observableDictionary = new FastObservableDictionary<int, int>
                 {
                     {
                         1, 1
@@ -442,7 +442,7 @@ namespace Catel.Tests.Collections
             [Test]
             public void ReturnsValueFromValidKey()
             {
-                var observableDictionary = new ObservableDictionary<int, int>
+                var observableDictionary = new FastObservableDictionary<int, int>
                 {
                     {
                         1, 1
@@ -457,7 +457,7 @@ namespace Catel.Tests.Collections
             [Test]
             public void ReturnsDefaultFromInvalidKey()
             {
-                var observableDictionary = new ObservableDictionary<int, int>
+                var observableDictionary = new FastObservableDictionary<int, int>
                 {
                     {
                         1, 1
