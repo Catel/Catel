@@ -29,6 +29,7 @@ namespace Catel.Collections
 #if NET || NETCORE
     [Serializable]
 #endif
+    [ObsoleteEx(RemoveInVersion = "6.0", TreatAsErrorFromVersion = "5.12.1", ReplacementTypeOrMember = "FastObservableDictionary")]
     public class ObservableDictionary<TKey, TValue> : FastObservableDictionary<TKey, TValue>
     {
 

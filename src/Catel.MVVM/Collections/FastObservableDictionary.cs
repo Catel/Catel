@@ -24,6 +24,52 @@
         INotifyPropertyChanged,
         ISuspendChangeNotificationsCollection
     {
+        #region Fields & Properties
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() => IoCConfiguration.DefaultDependencyResolver.Resolve<IDispatcherService>());
+
+        /// <summary>
+        /// The current suspension context.
+        /// </summary>
+#if NET || NETCORE
+        [field: NonSerialized]
+#endif
+        private SuspensionContext<KeyValuePair<TKey, TValue>> _suspensionContext;
+
+        /// <summary>
+        /// maps from TKey to TValue
+        /// </summary>
+        private readonly Dictionary<TKey, TValue> _dict;
+
+        /// <summary>
+        /// maps from TKey to index
+        /// </summary>
+        private readonly Dictionary<TKey, int> _dictIndexMapping;
+
+        /// <summary>
+        /// maps from index to TKey (don't map to TValue here to avoid duplication of value was a ValueType)
+        /// 
+        /// this is only used to store the order in which keys were entered
+        /// </summary>
+        private readonly List<TKey> _list;
+
+#if NET || NETCORE
+        [field: NonSerialized]
+#endif
+        private readonly SerializationInfo _serializationInfo;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
+        /// </summary>
+        /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
+        public bool AutomaticallyDispatchChangeNotifications { get; set; } = true;
+
+
+
+        /// <see cref="Dictionary{TKey,TValue}.Comparer"/>>
+        public IEqualityComparer<TKey> Comparer => _dict.Comparer;
+        #endregion
+
         #region Constructors
         public FastObservableDictionary()
         {
@@ -83,52 +129,6 @@
             _list = list;
             _dictIndexMapping = dictIndexMapping;
         }
-        #endregion
-
-        #region Fields & Properties
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        private readonly Lazy<IDispatcherService> _dispatcherService = new Lazy<IDispatcherService>(() => IoCConfiguration.DefaultDependencyResolver.Resolve<IDispatcherService>());
-
-        /// <summary>
-        /// The current suspension context.
-        /// </summary>
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
-        private SuspensionContext<KeyValuePair<TKey, TValue>> _suspensionContext;
-
-        /// <summary>
-        /// maps from TKey to TValue
-        /// </summary>
-        private readonly Dictionary<TKey, TValue> _dict;
-
-        /// <summary>
-        /// maps from TKey to index
-        /// </summary>
-        private readonly Dictionary<TKey, int> _dictIndexMapping;
-
-        /// <summary>
-        /// maps from index to TKey (don't map to TValue here to avoid duplication of value was a ValueType)
-        /// 
-        /// this is only used to store the order in which keys were entered
-        /// </summary>
-        private readonly List<TKey> _list;
-
-#if NET || NETCORE
-        [field: NonSerialized]
-#endif
-        private readonly SerializationInfo _serializationInfo;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
-        /// </summary>
-        /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
-        public bool AutomaticallyDispatchChangeNotifications { get; set; } = true;
-
-
-
-        /// <see cref="Dictionary{TKey,TValue}.Comparer"/>>
-        public IEqualityComparer<TKey> Comparer => _dict.Comparer;
         #endregion
 
         #region Methods
@@ -203,7 +203,8 @@
         /// <param name="checkKeyDuplication"></param>
         public virtual void InsertSingleValue(TKey key, TValue newValue, bool checkKeyDuplication)
         {
-
+            Argument.IsNotNull(nameof(key), key);
+            Argument.IsNotNull(nameof(newValue), newValue);
             var changedItem = new KeyValuePair<TKey, TValue>(key, newValue);
             int changedIndex;
             if (checkKeyDuplication && _dictIndexMapping.TryGetValue(key, out var oldIndex) && _dict.TryGetValue(key, out var oldValue))
@@ -269,6 +270,8 @@
         /// <param name="checkKeyDuplication"></param>
         public virtual void InsertSingleValue(int index, TKey key, TValue newValue, bool checkKeyDuplication)
         {
+            Argument.IsNotNull(nameof(key), key);
+            Argument.IsNotNull(nameof(newValue), newValue);
             // Check
             if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
             {
@@ -340,6 +343,8 @@
         }
         protected virtual void InternalMoveItem(int oldIndex, int newIndex, TKey key, TValue element)
         {
+            Argument.IsNotNull(nameof(key), key);
+            Argument.IsNotNull(nameof(element), element);
             // Check
             if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
@@ -378,6 +383,7 @@
         /// <returns></returns>
         public virtual bool TryRemoveSingleValue(TKey keyToRemove, out TValue value)
         {
+            Argument.IsNotNull(nameof(keyToRemove), keyToRemove);
             if (_dictIndexMapping.TryGetValue(keyToRemove, out var removedKeyIndex) && _dict.TryGetValue(keyToRemove, out var removedKeyValue))
             {
                 // Check
@@ -456,6 +462,8 @@
         /// <param name="checkKeyDuplication"></param>
         public virtual void InsertMultipleValues(IEnumerable<KeyValuePair<TKey, TValue>> newValues, bool checkKeyDuplication)
         {
+            Argument.IsNotNull(nameof(newValues), newValues);
+
             if (checkKeyDuplication)
             {
                 newValues = newValues.Where(x => !_dict.ContainsKey(x.Key));
@@ -533,6 +541,8 @@
         /// <param name="checkKeyDuplication">only set to false if you are absolutely sure there is never going to be key duplication (e.g. during construction)</param>
         public virtual void InsertMultipleValues(int startIndex, IEnumerable<KeyValuePair<TKey, TValue>> newValues, bool checkKeyDuplication)
         {
+            Argument.IsNotNull(nameof(newValues), newValues);
+
             if (checkKeyDuplication)
             {
                 newValues = newValues.Where(x => !_dict.ContainsKey(x.Key));
@@ -607,6 +617,8 @@
         /// <param name="keysToRemove">The keys to remove</param>
         public virtual void RemoveMultipleValues(IEnumerable<TKey> keysToRemove)
         {
+            Argument.IsNotNull(nameof(keysToRemove), keysToRemove);
+
             Dictionary<int, List<KeyValuePair<TKey, TValue>>> removedList;
             if (keysToRemove is ICollection<TKey> collectionOfKeysToRemove)
             {
@@ -681,6 +693,7 @@
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
+            Argument.IsNotNull(nameof(item), item);
             InsertSingleValue(item.Key, item.Value, true);
         }
 
@@ -691,11 +704,14 @@
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
+            Argument.IsNotNull(nameof(item), item);
+
             return ContainsKey(item.Key);
         }
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
+            Argument.IsNotNull(nameof(array), array);
             if (array.Length - arrayIndex < Count) throw new IndexOutOfRangeException("Array doesn't have enough space to copy all the elements");
             for (var i = 0; i < Count; i++)
             {
@@ -707,6 +723,7 @@
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
+            Argument.IsNotNull(nameof(item), item);
             return TryRemoveSingleValue(item.Key, out _);
         }
         #endregion
@@ -777,10 +794,14 @@
         {
             get
             {
-
                 if (key is TKey castedKey)
+                {
                     return this[castedKey];
-                else return null;
+                }
+                else
+                {
+                    return null;
+                }
             }
             set => this[(TKey)key] = (TValue)value;
         }
