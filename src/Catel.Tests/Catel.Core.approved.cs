@@ -997,6 +997,7 @@ namespace Catel.Configuration
     {
         protected static readonly System.Collections.Generic.HashSet<string> DynamicProperties;
         public DynamicConfiguration() { }
+        protected override Catel.Data.IPropertyBag CreatePropertyBag() { }
         public virtual void Deserialize(System.Xml.XmlReader xmlReader) { }
         public virtual object GetConfigurationValue(string name) { }
         protected virtual Catel.Runtime.Serialization.Xml.IXmlSerializer GetXmlSerializer() { }

@@ -33,6 +33,7 @@ Added/fixed
 (x) #1506 ObservableDictionary NotifyCollectionChanged Event Storm
 (x) #1510 Fix a potential NullReferenceException in FastMemberInvoker
 (x) #1511 ObservableDictionary Performance Issue with Large Collections
+(x) #1517 DynamicConfiguration does not store unused properties correctly during sessions
 
 Platform support changes
 ========================
