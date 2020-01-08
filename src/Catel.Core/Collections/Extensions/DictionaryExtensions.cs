@@ -26,6 +26,21 @@ namespace Catel.Collections
         /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
         public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> target, Dictionary<TKey, TValue> source, bool overwriteExisting = true)
         {
+            AddRange(target, (IEnumerable<KeyValuePair<TKey, TValue>>)source, overwriteExisting);
+        }
+
+        /// <summary>
+        /// Adds all items from the source into the target dictionary.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="target">The target.</param>
+        /// <param name="source">The source.</param>
+        /// <param name="overwriteExisting">if set to <c>true</c>, existing items in the target dictionary will be overwritten.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
+        public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> target, IEnumerable<KeyValuePair<TKey, TValue>> source, bool overwriteExisting = true)
+        { 
             Argument.IsNotNull("target", target);
             Argument.IsNotNull("source", source);
 

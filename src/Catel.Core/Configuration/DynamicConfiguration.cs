@@ -9,10 +9,10 @@ namespace Catel.Configuration
     using System;
     using System.Collections.Generic;
     using System.Xml;
+    using Catel.Data;
     using Catel.IoC;
     using Catel.Reflection;
     using Catel.Runtime.Serialization.Xml;
-    using Data;
     using Runtime.Serialization;
 
     /// <summary>
@@ -27,6 +27,13 @@ namespace Catel.Configuration
         private IXmlSerializer _xmlSerializer;
 
         #region Methods
+        protected override IPropertyBag CreatePropertyBag()
+        {
+            // Fix for https://github.com/Catel/Catel/issues/1517 since values
+            // are read as string, but could be retrieved as bool, etc
+            return new PropertyBag();
+        }
+
         /// <summary>
         /// Registers the configuration key.
         /// </summary>
