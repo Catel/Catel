@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
     using Catel.Reflection;
     using Catel.Tests.Reflection.Models;
+    using Catel.Threading;
     using NUnit.Framework;
 
     public class FastMemberInvokerFacts
@@ -16,11 +17,59 @@
             public string StringField;
 
             public string StringProperty { get; set; }
+
+            public int Int01 { get; set; }
+            public int Int02 { get; set; }
+            public int Int03 { get; set; }
+            public int Int04 { get; set; }
+            public int Int05 { get; set; }
+            public int Int06 { get; set; }
+            public int Int07 { get; set; }
+            public int Int08 { get; set; }
+            public int Int09 { get; set; }
+            public int Int10 { get; set; }
+            public int Int11 { get; set; }
+            public int Int12 { get; set; }
+            public int Int13 { get; set; }
+            public int Int14 { get; set; }
+            public int Int15 { get; set; }
+            public int Int16 { get; set; }
+            public int Int17 { get; set; }
+            public int Int18 { get; set; }
+            public int Int19 { get; set; }
+            public int Int20 { get; set; }
+            public int Int21 { get; set; }
+            public int Int22 { get; set; }
+            public int Int23 { get; set; }
+            public int Int24 { get; set; }
+            public int Int25 { get; set; }
+            public int Int26 { get; set; }
+            public int Int27 { get; set; }
+            public int Int28 { get; set; }
+            public int Int29 { get; set; }
         }
 
         [TestFixture]
         public class IntegrationTests
         {
+            [TestCase]
+            public void TestThreadSafety()
+            {
+                // https://github.com/Catel/Catel/issues/1518
+
+                var fastMemberInvoker = new FastMemberInvoker<TestClassWithRegularMembers>();
+                var instance = new TestClassWithRegularMembers();
+
+                var tasks = new List<Task>();
+
+                for (int i = 0; i < 30; i++)
+                {
+                    tasks.Add(TaskHelper.Run(() => fastMemberInvoker.TryGetPropertyValue(instance, $"Int{i + 1:D2}", out int _)));
+                }
+
+                Task.WaitAll(tasks.ToArray());
+            }
+
             [TestCase]
             public void CorrectlyGetsAndSetsReferenceValues()
             {

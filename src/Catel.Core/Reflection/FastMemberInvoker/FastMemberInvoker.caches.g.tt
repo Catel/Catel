@@ -19,6 +19,7 @@
 namespace Catel.Reflection
 {
 	using System;
+    using System.Collections.Concurrent;
 	using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using Catel.Linq.Expressions;
@@ -36,8 +37,8 @@ foreach (TypeCode typeCode in typeCodes)
 	string typeCodeSetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "SettersCache";
 	string typeCodeGetterCacheName = "_" + typeCode.ToString().ToLowerInvariant() + "GettersCache";
 #>
-		private readonly Dictionary<string, Func<TEntity, <#= typeCode #>>> <#= typeCodeGetterCacheName #> = new Dictionary<string, Func<TEntity, <#= typeCode #>>>();
-		private readonly Dictionary<string, Action<TEntity, <#= typeCode #>>> <#= typeCodeSetterCacheName #> = new Dictionary<string, Action<TEntity, <#= typeCode #>>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, <#= typeCode #>>> <#= typeCodeGetterCacheName #> = new ConcurrentDictionary<string, Func<TEntity, <#= typeCode #>>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, <#= typeCode #>>> <#= typeCodeSetterCacheName #> = new ConcurrentDictionary<string, Action<TEntity, <#= typeCode #>>>();
 
         private Func<TEntity, <#= typeCode #>> Get<#= typeCode #>FieldGetter(string memberName)
         {
