@@ -233,7 +233,7 @@ namespace Catel.Runtime.Serialization.Xml
                 var referenceManager = context.ReferenceManager;
                 if (referenceManager.Count == 0)
                 {
-                    Log.Debug("Reference manager contains no objects yet, adding initial reference which is the first model in the graph");
+                    //Log.Debug("Reference manager contains no objects yet, adding initial reference which is the first model in the graph");
 
                     referenceManager.GetInfo(context.Model, true);
                 }
@@ -499,7 +499,7 @@ namespace Catel.Runtime.Serialization.Xml
                     }
                     else
                     {
-                        Log.Debug($"Ignoring member '{localName}'");
+                        //Log.Debug($"Ignoring member '{localName}'");
 
                         xmlReader.Read();
                     }
@@ -825,7 +825,7 @@ namespace Catel.Runtime.Serialization.Xml
                 var typeToDeserialize = TypeCache.GetTypeWithoutAssembly(typeAttributeValue, allowInitialization: false);
                 if (typeToDeserialize != null && propertyTypeToDeserialize != typeToDeserialize)
                 {
-                    Log.Debug($"Property type for property '{memberValue.Name}' is '{memberValue.MemberType.FullName}' but found type info that it should be deserialized as '{typeAttributeValue}'");
+                    //Log.Debug($"Property type for property '{memberValue.Name}' is '{memberValue.MemberType.FullName}' but found type info that it should be deserialized as '{typeAttributeValue}'");
 
                     propertyTypeToDeserialize = typeToDeserialize;
                 }
@@ -1225,10 +1225,10 @@ namespace Catel.Runtime.Serialization.Xml
             if (!referenceInfo.IsFirstUsage)
             {
                 // Note: we don't want to call GetSafeFullName if we don't have to
-                if (LogManager.IsDebugEnabled ?? false)
-                {
-                    Log.Debug($"Existing reference detected for element type '{memberTypeToSerialize.GetSafeFullName(false)}' with id '{referenceInfo.Id}', only storing id");
-                }
+                //if (LogManager.IsDebugEnabled ?? false)
+                //{
+                //    Log.Debug($"Existing reference detected for element type '{memberTypeToSerialize.GetSafeFullName(false)}' with id '{referenceInfo.Id}', only storing id");
+                //}
 
                 xmlWriter.WriteStartElement(elementName);
                 xmlWriter.WriteAttributeString(namespacePrefix, XmlGraphRefId, null, referenceInfo.Id.ToString());

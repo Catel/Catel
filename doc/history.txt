@@ -29,6 +29,7 @@ Release date
 
 Added/fixed
 ===========
+(*) #1521 Improve performance during serialization
 (x) #1518 FastMemberInvoker.GetObjectPropertyGetter() is not thread safe
 (x) #1519 XmlNameMapper should be thread-safe
 
