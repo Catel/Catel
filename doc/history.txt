@@ -30,6 +30,7 @@ Release date
 Added/fixed
 ===========
 (x) #1518 FastMemberInvoker.GetObjectPropertyGetter() is not thread safe
+(x) #1519 XmlNameMapper should be thread-safe
 
 Platform support changes
 ========================
