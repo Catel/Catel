@@ -7,6 +7,7 @@
 namespace Catel.Data
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Xml.Serialization;
     using Reflection;
@@ -25,12 +26,12 @@ namespace Catel.Data
         /// <summary>
         /// Dictionary to provide fast xml name to property name mappings.
         /// </summary>
-        private readonly Dictionary<Type, Dictionary<string, string>> _xmlNameToPropertyNameMappings = new Dictionary<Type, Dictionary<string, string>>();
+        private readonly ConcurrentDictionary<Type, Dictionary<string, string>> _xmlNameToPropertyNameMappings = new ConcurrentDictionary<Type, Dictionary<string, string>>();
 
         /// <summary>
         /// Dictionary to provide fast property name to xml name mappings.
         /// </summary>
-        private readonly Dictionary<Type, Dictionary<string, string>> _xmlPropertyNameToXmlNameMappings = new Dictionary<Type, Dictionary<string, string>>();
+        private readonly ConcurrentDictionary<Type, Dictionary<string, string>> _xmlPropertyNameToXmlNameMappings = new ConcurrentDictionary<Type, Dictionary<string, string>>();
 
         /// <summary>
         /// The property data manager used to retrieve the properties of a type.
@@ -147,6 +148,7 @@ namespace Catel.Data
         /// <param name="type">The type for which to initialize the xml mappings.</param>
         private void InitializeXmlPropertyMappings(Type type)
         {
+            // Check outside lock, fastest
             if (_xmlNameToPropertyNameMappings.ContainsKey(type))
             {
                 return;
@@ -154,8 +156,21 @@ namespace Catel.Data
 
             lock (_xmlMappingsLock)
             {
-                _xmlNameToPropertyNameMappings.Add(type, new Dictionary<string, string>());
-                _xmlPropertyNameToXmlNameMappings.Add(type, new Dictionary<string, string>());
+                // Double check inside lock
+                if (_xmlNameToPropertyNameMappings.ContainsKey(type))
+                {
+                    return;
+                }
+
+                if (!_xmlNameToPropertyNameMappings.TryAdd(type, new Dictionary<string, string>()))
+                {
+                    return;
+                }
+
+                if (!_xmlPropertyNameToXmlNameMappings.TryAdd(type, new Dictionary<string, string>()))
+                {
+                    return;
+                }
 
                 var catelTypeInfo = _propertyDataManager.GetCatelTypeInfo(type);
                 foreach (var propertyData in catelTypeInfo.GetCatelProperties())

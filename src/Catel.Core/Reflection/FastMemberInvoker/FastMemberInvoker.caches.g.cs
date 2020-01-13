@@ -10,14 +10,15 @@
 namespace Catel.Reflection
 {
 	using System;
+    using System.Collections.Concurrent;
 	using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using Catel.Linq.Expressions;
 
 	public partial class FastMemberInvoker<TEntity>
 	{
-		private readonly Dictionary<string, Func<TEntity, Object>> _objectGettersCache = new Dictionary<string, Func<TEntity, Object>>();
-		private readonly Dictionary<string, Action<TEntity, Object>> _objectSettersCache = new Dictionary<string, Action<TEntity, Object>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, Object>> _objectGettersCache = new ConcurrentDictionary<string, Func<TEntity, Object>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, Object>> _objectSettersCache = new ConcurrentDictionary<string, Action<TEntity, Object>>();
 
         private Func<TEntity, Object> GetObjectFieldGetter(string memberName)
         {
@@ -87,8 +88,8 @@ namespace Catel.Reflection
             return setter;
         }
 
-		private readonly Dictionary<string, Func<TEntity, Boolean>> _booleanGettersCache = new Dictionary<string, Func<TEntity, Boolean>>();
-		private readonly Dictionary<string, Action<TEntity, Boolean>> _booleanSettersCache = new Dictionary<string, Action<TEntity, Boolean>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, Boolean>> _booleanGettersCache = new ConcurrentDictionary<string, Func<TEntity, Boolean>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, Boolean>> _booleanSettersCache = new ConcurrentDictionary<string, Action<TEntity, Boolean>>();
 
         private Func<TEntity, Boolean> GetBooleanFieldGetter(string memberName)
         {
@@ -158,8 +159,8 @@ namespace Catel.Reflection
             return setter;
         }
 
-		private readonly Dictionary<string, Func<TEntity, Char>> _charGettersCache = new Dictionary<string, Func<TEntity, Char>>();
-		private readonly Dictionary<string, Action<TEntity, Char>> _charSettersCache = new Dictionary<string, Action<TEntity, Char>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, Char>> _charGettersCache = new ConcurrentDictionary<string, Func<TEntity, Char>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, Char>> _charSettersCache = new ConcurrentDictionary<string, Action<TEntity, Char>>();
 
         private Func<TEntity, Char> GetCharFieldGetter(string memberName)
         {
@@ -229,8 +230,8 @@ namespace Catel.Reflection
             return setter;
         }
 
-		private readonly Dictionary<string, Func<TEntity, SByte>> _sbyteGettersCache = new Dictionary<string, Func<TEntity, SByte>>();
-		private readonly Dictionary<string, Action<TEntity, SByte>> _sbyteSettersCache = new Dictionary<string, Action<TEntity, SByte>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, SByte>> _sbyteGettersCache = new ConcurrentDictionary<string, Func<TEntity, SByte>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, SByte>> _sbyteSettersCache = new ConcurrentDictionary<string, Action<TEntity, SByte>>();
 
         private Func<TEntity, SByte> GetSByteFieldGetter(string memberName)
         {
@@ -300,8 +301,8 @@ namespace Catel.Reflection
             return setter;
         }
 
-		private readonly Dictionary<string, Func<TEntity, Byte>> _byteGettersCache = new Dictionary<string, Func<TEntity, Byte>>();
-		private readonly Dictionary<string, Action<TEntity, Byte>> _byteSettersCache = new Dictionary<string, Action<TEntity, Byte>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, Byte>> _byteGettersCache = new ConcurrentDictionary<string, Func<TEntity, Byte>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, Byte>> _byteSettersCache = new ConcurrentDictionary<string, Action<TEntity, Byte>>();
 
         private Func<TEntity, Byte> GetByteFieldGetter(string memberName)
         {
@@ -371,8 +372,8 @@ namespace Catel.Reflection
             return setter;
         }
 
-		private readonly Dictionary<string, Func<TEntity, Int16>> _int16GettersCache = new Dictionary<string, Func<TEntity, Int16>>();
-		private readonly Dictionary<string, Action<TEntity, Int16>> _int16SettersCache = new Dictionary<string, Action<TEntity, Int16>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, Int16>> _int16GettersCache = new ConcurrentDictionary<string, Func<TEntity, Int16>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, Int16>> _int16SettersCache = new ConcurrentDictionary<string, Action<TEntity, Int16>>();
 
         private Func<TEntity, Int16> GetInt16FieldGetter(string memberName)
         {
@@ -442,8 +443,8 @@ namespace Catel.Reflection
             return setter;
         }
 
-		private readonly Dictionary<string, Func<TEntity, UInt16>> _uint16GettersCache = new Dictionary<string, Func<TEntity, UInt16>>();
-		private readonly Dictionary<string, Action<TEntity, UInt16>> _uint16SettersCache = new Dictionary<string, Action<TEntity, UInt16>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, UInt16>> _uint16GettersCache = new ConcurrentDictionary<string, Func<TEntity, UInt16>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, UInt16>> _uint16SettersCache = new ConcurrentDictionary<string, Action<TEntity, UInt16>>();
 
         private Func<TEntity, UInt16> GetUInt16FieldGetter(string memberName)
         {
@@ -513,8 +514,8 @@ namespace Catel.Reflection
             return setter;
         }
 
-		private readonly Dictionary<string, Func<TEntity, Int32>> _int32GettersCache = new Dictionary<string, Func<TEntity, Int32>>();
-		private readonly Dictionary<string, Action<TEntity, Int32>> _int32SettersCache = new Dictionary<string, Action<TEntity, Int32>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, Int32>> _int32GettersCache = new ConcurrentDictionary<string, Func<TEntity, Int32>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, Int32>> _int32SettersCache = new ConcurrentDictionary<string, Action<TEntity, Int32>>();
 
         private Func<TEntity, Int32> GetInt32FieldGetter(string memberName)
         {
@@ -584,8 +585,8 @@ namespace Catel.Reflection
             return setter;
         }
 
-		private readonly Dictionary<string, Func<TEntity, UInt32>> _uint32GettersCache = new Dictionary<string, Func<TEntity, UInt32>>();
-		private readonly Dictionary<string, Action<TEntity, UInt32>> _uint32SettersCache = new Dictionary<string, Action<TEntity, UInt32>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, UInt32>> _uint32GettersCache = new ConcurrentDictionary<string, Func<TEntity, UInt32>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, UInt32>> _uint32SettersCache = new ConcurrentDictionary<string, Action<TEntity, UInt32>>();
 
         private Func<TEntity, UInt32> GetUInt32FieldGetter(string memberName)
         {
@@ -655,8 +656,8 @@ namespace Catel.Reflection
             return setter;
         }
 
-		private readonly Dictionary<string, Func<TEntity, Int64>> _int64GettersCache = new Dictionary<string, Func<TEntity, Int64>>();
-		private readonly Dictionary<string, Action<TEntity, Int64>> _int64SettersCache = new Dictionary<string, Action<TEntity, Int64>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, Int64>> _int64GettersCache = new ConcurrentDictionary<string, Func<TEntity, Int64>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, Int64>> _int64SettersCache = new ConcurrentDictionary<string, Action<TEntity, Int64>>();
 
         private Func<TEntity, Int64> GetInt64FieldGetter(string memberName)
         {
@@ -726,8 +727,8 @@ namespace Catel.Reflection
             return setter;
         }
 
-		private readonly Dictionary<string, Func<TEntity, UInt64>> _uint64GettersCache = new Dictionary<string, Func<TEntity, UInt64>>();
-		private readonly Dictionary<string, Action<TEntity, UInt64>> _uint64SettersCache = new Dictionary<string, Action<TEntity, UInt64>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, UInt64>> _uint64GettersCache = new ConcurrentDictionary<string, Func<TEntity, UInt64>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, UInt64>> _uint64SettersCache = new ConcurrentDictionary<string, Action<TEntity, UInt64>>();
 
         private Func<TEntity, UInt64> GetUInt64FieldGetter(string memberName)
         {
@@ -797,8 +798,8 @@ namespace Catel.Reflection
             return setter;
         }
 
-		private readonly Dictionary<string, Func<TEntity, Single>> _singleGettersCache = new Dictionary<string, Func<TEntity, Single>>();
-		private readonly Dictionary<string, Action<TEntity, Single>> _singleSettersCache = new Dictionary<string, Action<TEntity, Single>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, Single>> _singleGettersCache = new ConcurrentDictionary<string, Func<TEntity, Single>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, Single>> _singleSettersCache = new ConcurrentDictionary<string, Action<TEntity, Single>>();
 
         private Func<TEntity, Single> GetSingleFieldGetter(string memberName)
         {
@@ -868,8 +869,8 @@ namespace Catel.Reflection
             return setter;
         }
 
-		private readonly Dictionary<string, Func<TEntity, Double>> _doubleGettersCache = new Dictionary<string, Func<TEntity, Double>>();
-		private readonly Dictionary<string, Action<TEntity, Double>> _doubleSettersCache = new Dictionary<string, Action<TEntity, Double>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, Double>> _doubleGettersCache = new ConcurrentDictionary<string, Func<TEntity, Double>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, Double>> _doubleSettersCache = new ConcurrentDictionary<string, Action<TEntity, Double>>();
 
         private Func<TEntity, Double> GetDoubleFieldGetter(string memberName)
         {
@@ -939,8 +940,8 @@ namespace Catel.Reflection
             return setter;
         }
 
-		private readonly Dictionary<string, Func<TEntity, Decimal>> _decimalGettersCache = new Dictionary<string, Func<TEntity, Decimal>>();
-		private readonly Dictionary<string, Action<TEntity, Decimal>> _decimalSettersCache = new Dictionary<string, Action<TEntity, Decimal>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, Decimal>> _decimalGettersCache = new ConcurrentDictionary<string, Func<TEntity, Decimal>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, Decimal>> _decimalSettersCache = new ConcurrentDictionary<string, Action<TEntity, Decimal>>();
 
         private Func<TEntity, Decimal> GetDecimalFieldGetter(string memberName)
         {
@@ -1010,8 +1011,8 @@ namespace Catel.Reflection
             return setter;
         }
 
-		private readonly Dictionary<string, Func<TEntity, DateTime>> _datetimeGettersCache = new Dictionary<string, Func<TEntity, DateTime>>();
-		private readonly Dictionary<string, Action<TEntity, DateTime>> _datetimeSettersCache = new Dictionary<string, Action<TEntity, DateTime>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, DateTime>> _datetimeGettersCache = new ConcurrentDictionary<string, Func<TEntity, DateTime>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, DateTime>> _datetimeSettersCache = new ConcurrentDictionary<string, Action<TEntity, DateTime>>();
 
         private Func<TEntity, DateTime> GetDateTimeFieldGetter(string memberName)
         {
@@ -1081,8 +1082,8 @@ namespace Catel.Reflection
             return setter;
         }
 
-		private readonly Dictionary<string, Func<TEntity, String>> _stringGettersCache = new Dictionary<string, Func<TEntity, String>>();
-		private readonly Dictionary<string, Action<TEntity, String>> _stringSettersCache = new Dictionary<string, Action<TEntity, String>>();
+		private readonly ConcurrentDictionary<string, Func<TEntity, String>> _stringGettersCache = new ConcurrentDictionary<string, Func<TEntity, String>>();
+		private readonly ConcurrentDictionary<string, Action<TEntity, String>> _stringSettersCache = new ConcurrentDictionary<string, Action<TEntity, String>>();
 
         private Func<TEntity, String> GetStringFieldGetter(string memberName)
         {
