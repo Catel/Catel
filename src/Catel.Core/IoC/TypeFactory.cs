@@ -4,6 +4,8 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+//#define EXTREME_LOGGING
+
 namespace Catel.IoC
 {
     using System;
@@ -204,14 +206,18 @@ namespace Catel.IoC
 
             var objectType = ObjectToStringHelper.ToTypeString(obj);
 
+#if EXTREME_LOGGING
             Log.Debug($"Initializing type '{objectType}' after construction");
+#endif
 
             // TODO: Consider to cache for performance
             var dependencyResolverManager = DependencyResolverManager.Default;
             var dependencyResolver = _serviceLocator.ResolveType<IDependencyResolver>();
             dependencyResolverManager.RegisterDependencyResolverForInstance(obj, dependencyResolver);
 
+#if EXTREME_LOGGING
             Log.Debug($"Injecting properties into type '{objectType}' after construction");
+#endif
 
             var type = obj.GetType();
             foreach (var injectedProperty in typeMetaData.GetInjectedProperties())
@@ -281,7 +287,9 @@ namespace Catel.IoC
                     SetConstructor(constructorCacheKey, constructorCacheValue, null);
                 }
 
+#if EXTREME_LOGGING
                 Log.Debug($"Creating instance of type '{typeToConstruct.FullName}' using specific parameters. No constructor found in the cache, so searching for the right one");
+#endif
 
                 var constructors = typeConstructorsMetadata.GetConstructors(parameters.Length, !autoCompleteDependencies).SortByParametersMatchDistance(parameters).ToList();
 
@@ -299,7 +307,9 @@ namespace Catel.IoC
                     }
                 }
 
+#if EXTREME_LOGGING
                 Log.Debug($"No constructor could be used, cannot construct type '{typeToConstruct.FullName}' with the specified parameters");
+#endif
             }
             catch (CircularDependencyException)
             {
@@ -355,8 +365,11 @@ namespace Catel.IoC
         private bool CanConstructorBeUsed(ConstructorInfo constructor, object tag, bool autoCompleteDependencies, params object[] parameters)
         {
             // Some loging like .GetSignature are expensive
+#if EXTREME_LOGGING
             var logDebug = LogManager.LogInfo.IsDebugEnabled && !LogManager.LogInfo.IgnoreCatelLogging;
-
+#else
+            var logDebug = false;
+#endif
             if (logDebug)
             {
                 Log.Debug($"Checking if constructor '{constructor.GetSignature()}' can be used");
@@ -423,7 +436,9 @@ namespace Catel.IoC
                 }
             }
 
+#if EXTREME_LOGGING
             Log.Debug("The constructor is valid and can be used");
+#endif
 
             return validConstructor;
         }
@@ -553,7 +568,7 @@ namespace Catel.IoC
 
                 var finalParametersArray = finalParameters.ToArray();
 
-                Log.Debug("Calling constructor.Invoke with the right parameters");
+                //Log.Debug("Calling constructor.Invoke with the right parameters");
 
                 var instance = constructor.Invoke(finalParametersArray);
 
@@ -690,13 +705,13 @@ namespace Catel.IoC
         {
             ClearCache();
         }
-        #endregion
+#endregion
 
         private class ConstructorCacheKey
         {
             private readonly int _hashCode;
 
-            #region Constructors
+#region Constructors
             public ConstructorCacheKey(Type type, bool autoCompleteDependecies, object[] parameters)
             {
                 string key = type.GetSafeFullName(true);
@@ -709,16 +724,16 @@ namespace Catel.IoC
                 AutoCompleteDependecies = autoCompleteDependecies;
                 _hashCode = Key.GetHashCode();
             }
-            #endregion
+#endregion
 
-            #region Properties
+#region Properties
             public string Key { get; private set; }
 
             public bool AutoCompleteDependecies { get; private set; }
 
-            #endregion
+#endregion
 
-            #region Methods
+#region Methods
             public override bool Equals(object obj)
             {
                 var cacheKey = obj as ConstructorCacheKey;
@@ -744,7 +759,7 @@ namespace Catel.IoC
             {
                 return _hashCode;
             }
-            #endregion
+#endregion
         }
 
         private class ConstructorCacheValue
@@ -783,12 +798,12 @@ namespace Catel.IoC
                 Version = version;
             }
 
-            #region Properties
+#region Properties
 
             public ConstructorInfo ConstructorInfo { get; private set; }
 
             public uint Version { get; private set; }
-            #endregion
+#endregion
 
             // TODO: Equals & GetHashCode currently are redundant
         }

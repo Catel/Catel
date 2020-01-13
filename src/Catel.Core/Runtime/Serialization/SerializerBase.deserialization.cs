@@ -159,7 +159,7 @@ namespace Catel.Runtime.Serialization
 
             var serializerModifiers = SerializationManager.GetSerializerModifiers(context.ModelType);
 
-            Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length, context.ModelTypeName);
+            //Log.Debug("Using '{0}' serializer modifiers to deserialize type '{1}'", serializerModifiers.Length, context.ModelTypeName);
 
             var serializingEventArgs = new SerializationEventArgs(context);
 

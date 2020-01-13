@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+//#define EXTREME_LOGGING
 
 namespace Catel.Scoping
 {
@@ -122,7 +123,9 @@ namespace Catel.Scoping
             {
                 _refCount += 1;
 
+#if EXTREME_LOGGING
                 Log.Debug($"Referencing type '{TypeName}' with scope name '{_scopeName}', new ref count is {_refCount}");
+#endif
             }
         }
 
@@ -132,7 +135,9 @@ namespace Catel.Scoping
             {
                 _refCount -= 1;
 
+#if EXTREME_LOGGING
                 Log.Debug($"Dereferencing type '{TypeName}' with scope name '{_scopeName}', new ref count is {_refCount}");
+#endif
 
                 if (_refCount == 0)
                 {
@@ -190,9 +195,11 @@ namespace Catel.Scoping
 
                 if (_instances.TryGetValue(scopeName, out var scopeManagerStoredInstance))
                 {
+#if EXTREME_LOGGING
                     Log.Debug($"Returning existing scope for type '{TypeName}' with name '{scopeName}'");
+#endif
 
-                    scopeManager = (ScopeManager<T>) scopeManagerStoredInstance;
+                    scopeManager = (ScopeManager<T>)scopeManagerStoredInstance;
                 }
                 else
                 {
