@@ -785,7 +785,12 @@
         /// Gets or sets the value with the specified key.
         /// </summary>
         /// <param name="key">The key of the value to get.</param>
-        /// <returns>The value associated with the specified key, or <see langword="null" /> if <paramref name="key"/> is not in the dictionary or <paramref name="key"/> is of a type that is not assignable to the key of type <typeparamref name="TKey"/> of the <see cref="ObservableDictionary{TKey,TValue}"/>.</returns>
+        /// <returns>
+        /// The value associated with the specified key, or <see langword="null" /> if 
+        /// <paramref name="key"/> is not in the dictionary or <paramref name="key"/> is of a type that 
+        /// is not assignable to the key of type <typeparamref name="TKey"/> of the 
+        /// <see cref="FastObservableDictionary{TKey,TValue}"/>.
+        /// </returns>
         public object this[object key]
         {
             get
@@ -888,7 +893,7 @@
         #endregion
 
         #region ISerializable and IDeserializationCallback
-        private const string entriesName = "entries";
+        private const string EntriesName = "entries";
         protected FastObservableDictionary(SerializationInfo info, StreamingContext context)
         {
             _serializationInfo = info;
@@ -902,7 +907,7 @@
                 entries.Add(item);
             }
 
-            info.AddValue(entriesName, entries);
+            info.AddValue(EntriesName, entries);
         }
 
         public void OnDeserialization(object sender)
@@ -913,7 +918,7 @@
             }
 
             var entries =
-                (Collection<KeyValuePair<TKey, TValue>>)_serializationInfo.GetValue(entriesName, typeof(Collection<KeyValuePair<TKey, TValue>>));
+                (Collection<KeyValuePair<TKey, TValue>>)_serializationInfo.GetValue(EntriesName, typeof(Collection<KeyValuePair<TKey, TValue>>));
 
             foreach (var keyValuePair in entries)
             {

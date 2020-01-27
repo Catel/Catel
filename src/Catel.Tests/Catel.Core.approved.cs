@@ -708,6 +708,7 @@ namespace Catel.Collections
     {
         public static void AddItemIfNotEmpty<TKey>(this System.Collections.Generic.Dictionary<TKey, string> dictionary, TKey key, string value) { }
         public static void AddRange<TKey, TValue>(this System.Collections.Generic.Dictionary<TKey, TValue> target, System.Collections.Generic.Dictionary<TKey, TValue> source, bool overwriteExisting = true) { }
+        public static void AddRange<TKey, TValue>(this System.Collections.Generic.Dictionary<TKey, TValue> target, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> source, bool overwriteExisting = true) { }
     }
     public static class HashSetExtensions
     {
@@ -808,6 +809,7 @@ namespace Catel.Configuration
     {
         protected static readonly System.Collections.Generic.HashSet<string> DynamicProperties;
         public DynamicConfiguration() { }
+        protected override Catel.Data.IPropertyBag CreatePropertyBag() { }
         public virtual void Deserialize(System.Xml.XmlReader xmlReader) { }
         public virtual object GetConfigurationValue(string name) { }
         protected virtual Catel.Runtime.Serialization.Xml.IXmlSerializer GetXmlSerializer() { }
