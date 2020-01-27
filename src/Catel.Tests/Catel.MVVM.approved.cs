@@ -695,6 +695,8 @@ namespace Catel.MVVM
         public ModelAttribute() { }
         public bool SupportIEditableObject { get; set; }
         public bool SupportValidation { get; set; }
+        public static bool SupportIEditableObjectDefaultValue { get; set; }
+        public static bool SupportValidationDefaultValue { get; set; }
     }
     public enum ModelCleanUpMode
     {

@@ -29,6 +29,8 @@ Release date
 
 Added/fixed
 ===========
+(+) #1528 Add static setting to specify the default value for SupportIEditableObject 
+    and SupportValidation for Model attributes
 (*) #1191 Change ProcessCompletedCallback to include the initial context and exit code
 (*) #1246 Use Microsoft.Xaml.Behaviors.Wpf as dependency for WPF projects
 (-) #1101 Remove Catel.Reflection.TypeInfo
