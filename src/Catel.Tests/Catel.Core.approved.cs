@@ -793,7 +793,7 @@ namespace Catel.Configuration
         protected virtual string GetConfigurationFileName(Catel.IO.ApplicationDataTarget applicationDataTarget) { }
         protected virtual string GetFinalKey(string key) { }
         protected virtual Catel.Configuration.DynamicConfiguration GetSettingsContainer(Catel.Configuration.ConfigurationContainer container) { }
-        public T GetValue<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = null) { }
+        public T GetValue<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = default) { }
         protected virtual string GetValueFromStore(Catel.Configuration.ConfigurationContainer container, string key) { }
         public void InitializeValue(Catel.Configuration.ConfigurationContainer container, string key, object defaultValue) { }
         public bool IsValueAvailable(Catel.Configuration.ConfigurationContainer container, string key) { }
@@ -831,7 +831,7 @@ namespace Catel.Configuration
     public interface IConfigurationService
     {
         event System.EventHandler<Catel.Configuration.ConfigurationChangedEventArgs> ConfigurationChanged;
-        T GetValue<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = null);
+        T GetValue<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = default);
         void InitializeValue(Catel.Configuration.ConfigurationContainer container, string key, object defaultValue);
         bool IsValueAvailable(Catel.Configuration.ConfigurationContainer container, string key);
         void SetLocalConfigFilePath(string filePath);
@@ -841,8 +841,8 @@ namespace Catel.Configuration
     }
     public static class IConfigurationServiceExtensions
     {
-        public static T GetLocalValue<T>(this Catel.Configuration.IConfigurationService configurationService, string key, T defaultValue = null) { }
-        public static T GetRoamingValue<T>(this Catel.Configuration.IConfigurationService configurationService, string key, T defaultValue = null) { }
+        public static T GetLocalValue<T>(this Catel.Configuration.IConfigurationService configurationService, string key, T defaultValue = default) { }
+        public static T GetRoamingValue<T>(this Catel.Configuration.IConfigurationService configurationService, string key, T defaultValue = default) { }
         public static void InitializeLocalValue(this Catel.Configuration.IConfigurationService configurationService, string key, object defaultValue) { }
         public static void InitializeRoamingValue(this Catel.Configuration.IConfigurationService configurationService, string key, object defaultValue) { }
         public static bool IsLocalValueAvailable(this Catel.Configuration.IConfigurationService configurationService, string key) { }
@@ -1089,7 +1089,7 @@ namespace Catel.Data
     {
         string[] GetAllNames();
         System.Collections.Generic.Dictionary<string, object> GetAllProperties();
-        TValue GetValue<TValue>(string name, TValue defaultValue = null);
+        TValue GetValue<TValue>(string name, TValue defaultValue = default);
         bool IsAvailable(string name);
         void SetValue<TValue>(string name, TValue value);
     }
@@ -1344,7 +1344,7 @@ namespace Catel.Data
         public object this[string name] { get; set; }
         public override string[] GetAllNames() { }
         public override System.Collections.Generic.Dictionary<string, object> GetAllProperties() { }
-        public override TValue GetValue<TValue>(string name, TValue defaultValue = null) { }
+        public override TValue GetValue<TValue>(string name, TValue defaultValue = default) { }
         public void Import(System.Collections.Generic.Dictionary<string, object> propertiesToImport) { }
         public override bool IsAvailable(string name) { }
         public void SetValue(string propertyName, bool value) { }
@@ -1371,7 +1371,7 @@ namespace Catel.Data
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         public abstract string[] GetAllNames();
         public abstract System.Collections.Generic.Dictionary<string, object> GetAllProperties();
-        public abstract TValue GetValue<TValue>(string name, TValue defaultValue = null);
+        public abstract TValue GetValue<TValue>(string name, TValue defaultValue = default);
         public abstract bool IsAvailable(string name);
         protected void RaisePropertyChanged(string propertyName) { }
         public abstract void SetValue<TValue>(string name, TValue value);
@@ -1490,7 +1490,7 @@ namespace Catel.Data
         protected System.Collections.Generic.Dictionary<string, ushort> GetUInt16Storage() { }
         protected System.Collections.Generic.Dictionary<string, uint> GetUInt32Storage() { }
         protected System.Collections.Generic.Dictionary<string, ulong> GetUInt64Storage() { }
-        public override TValue GetValue<TValue>(string name, TValue defaultValue = null) { }
+        public override TValue GetValue<TValue>(string name, TValue defaultValue = default) { }
         public override bool IsAvailable(string name) { }
         public override void SetValue<TValue>(string name, TValue value) { }
     }
@@ -4071,8 +4071,8 @@ namespace Catel.Threading
     {
         bool IsEmpty { get; }
         System.IDisposable CancelAll();
-        System.IDisposable Dequeue(T result = null);
-        System.IDisposable DequeueAll(T result = null);
+        System.IDisposable Dequeue(T result = default);
+        System.IDisposable DequeueAll(T result = default);
         System.Threading.Tasks.Task<T> EnqueueAsync();
         System.IDisposable TryCancel(System.Threading.Tasks.Task task);
     }
