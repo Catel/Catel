@@ -52,7 +52,7 @@ public class WebProcessor : ProcessorBase
         {
             CakeContext.Information("Updating version for web app '{0}'", webApp);
 
-            var projectFileName = GetProjectFileName(webApp);
+            var projectFileName = GetProjectFileName(BuildContext, webApp);
 
             CakeContext.TransformConfig(projectFileName, new TransformationCollection 
             {
@@ -72,7 +72,7 @@ public class WebProcessor : ProcessorBase
         {
             BuildContext.CakeContext.LogSeparator("Building web app '{0}'", webApp);
 
-            var projectFileName = GetProjectFileName(webApp);
+            var projectFileName = GetProjectFileName(BuildContext, webApp);
             
             var msBuildSettings = new MSBuildSettings 
             {
@@ -93,6 +93,7 @@ public class WebProcessor : ProcessorBase
             // are properties passed in using the command line)
             var outputDirectory = string.Format("{0}/{1}/", BuildContext.General.OutputRootDirectory, webApp);
             CakeContext.Information("Output directory: '{0}'", outputDirectory);
+            msBuildSettings.WithProperty("OverridableOutputRootPath", BuildContext.General.OutputRootDirectory);
             msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
             msBuildSettings.WithProperty("PackageOutputPath", BuildContext.General.OutputRootDirectory);
 
@@ -127,6 +128,7 @@ public class WebProcessor : ProcessorBase
             // Note: we need to set OverridableOutputPath because we need to be able to respect
             // AppendTargetFrameworkToOutputPath which isn't possible for global properties (which
             // are properties passed in using the command line)
+            msBuildSettings.WithProperty("OverridableOutputRootPath", BuildContext.General.OutputRootDirectory);
             msBuildSettings.WithProperty("OverridableOutputPath", outputDirectory);
             msBuildSettings.WithProperty("PackageOutputPath", outputDirectory);
             msBuildSettings.WithProperty("ConfigurationName", BuildContext.General.Solution.ConfigurationName);
