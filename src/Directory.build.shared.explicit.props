@@ -57,6 +57,14 @@
     <Title Condition=" '$(Title)' == '' ">$(PackageId)</Title>
   </PropertyGroup>
 
+  <PropertyGroup Condition="Exists('$(MSBuildProjectDirectory)\..\..\design\Package\icon.png')">
+    <PackageIcon>icon.png</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup Condition="Exists('$(MSBuildProjectDirectory)\..\..\design\Package\icon.png')">
+    <None Include="$(MSBuildProjectDirectory)\..\..\design\Package\icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
   <!-- This will include LICENSE.txt and VERIFICATION.txt for Chocolatey -->
   <ItemGroup>
     <None Include="$(OverridableOutputPath)\LICENSE.txt"
