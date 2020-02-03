@@ -216,7 +216,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, "Failed to warmup member '{0}.{1}'. This member might cause problems during serialization", type.GetSafeFullName(false), memberName);
+                Log.Warning(ex, $"Failed to warmup member '{type.GetSafeFullName(false)}.{memberName}'. This member might cause problems during serialization");
             }
         }
 
@@ -277,7 +277,7 @@ namespace Catel.Runtime.Serialization.Xml
                 var referenceInfo = referenceManager.GetInfoById(graphId);
                 if (referenceInfo != null)
                 {
-                    Log.Warning($"Trying to register custom object in graph with graph id '{graphId}', but it seems it is already registered");
+                    Log.Warning($"Trying to register custom object in graph with graph id '{graphId.ToString()}', but it seems it is already registered");
                     return;
                 }
 
@@ -771,7 +771,7 @@ namespace Catel.Runtime.Serialization.Xml
                 var referenceInfo = referenceManager.GetInfoById(graphId);
                 if (referenceInfo is null)
                 {
-                    Log.Error($"Expected to find graph object with id '{graphId}' in ReferenceManager, but it was not found. Defaulting value for member '{xmlName}' to null");
+                    Log.Error($"Expected to find graph object with id '{graphId.ToString()}' in ReferenceManager, but it was not found. Defaulting value for member '{xmlName}' to null");
                     return null;
                 }
 
@@ -835,14 +835,14 @@ namespace Catel.Runtime.Serialization.Xml
 
                 if (collection is null)
                 {
-                    throw Log.ErrorAndCreateException<NotSupportedException>("Cannot deserialize type '{0}', it should implement IList in order to be deserialized", propertyTypeToDeserialize.GetSafeFullName(false));
+                    throw Log.ErrorAndCreateException<NotSupportedException>($"Cannot deserialize type '{propertyTypeToDeserialize.GetSafeFullName(false)}', it should implement IList in order to be deserialized");
                 }
 
                 var realCollectionType = collection.GetType();
                 var childElementType = realCollectionType.GetCollectionElementType();
                 if (childElementType is null)
                 {
-                    throw Log.ErrorAndCreateException<NotSupportedException>("Cannot deserialize type '{0}', could not determine the element type of the collection", propertyTypeToDeserialize.GetSafeFullName(false));
+                    throw Log.ErrorAndCreateException<NotSupportedException>($"Cannot deserialize type '{propertyTypeToDeserialize.GetSafeFullName(false)}', could not determine the element type of the collection");
                 }
 
                 var serializer = GetDataContractSerializer(context, propertyTypeToDeserialize, childElementType, xmlName);
@@ -885,7 +885,7 @@ namespace Catel.Runtime.Serialization.Xml
                             var referenceInfo = referenceManager.GetInfoById(graphId);
                             if (referenceInfo is null)
                             {
-                                Log.Error("Expected to find graph object with id '{0}' in ReferenceManager, but it was not found. Defaulting value for member '{1}' to null", graphId, xmlName);
+                                Log.Error("Expected to find graph object with id '{0}' in ReferenceManager, but it was not found. Defaulting value for member '{1}' to null", graphId.ToString(), xmlName);
                             }
                             else
                             {

@@ -124,7 +124,7 @@ namespace Catel
         /// </returns>
         public override string ToString()
         {
-            return $"{base.ToString()}{System.Environment.NewLine}{_reason}";
+            return $"{base.ToString()}{System.Environment.NewLine}{_reason.ToString()}";
         }
     }
 }

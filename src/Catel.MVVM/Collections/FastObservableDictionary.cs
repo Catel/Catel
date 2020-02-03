@@ -199,8 +199,6 @@
         /// <param name="checkKeyDuplication"></param>
         public virtual void InsertSingleValue(TKey key, TValue newValue, bool checkKeyDuplication)
         {
-            Argument.IsNotNull(nameof(key), key);
-            Argument.IsNotNull(nameof(newValue), newValue);
             var changedItem = new KeyValuePair<TKey, TValue>(key, newValue);
             int changedIndex;
             if (checkKeyDuplication && _dictIndexMapping.TryGetValue(key, out var oldIndex) && _dict.TryGetValue(key, out var oldValue))
@@ -208,7 +206,7 @@
                 // Check
                 if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{_suspensionContext.Mode}'");
+                    throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{_suspensionContext.Mode.ToString()}'");
                 }
 
                 //simply change the value
@@ -266,8 +264,6 @@
         /// <param name="checkKeyDuplication"></param>
         public virtual void InsertSingleValue(int index, TKey key, TValue newValue, bool checkKeyDuplication)
         {
-            Argument.IsNotNull(nameof(key), key);
-            Argument.IsNotNull(nameof(newValue), newValue);
             // Check
             if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
             {
@@ -283,7 +279,7 @@
                     // Check
                     if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
                     {
-                        throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{_suspensionContext.Mode}'");
+                        throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{_suspensionContext.Mode.ToString()}'");
                     }
 
                     //raise replace event
@@ -339,12 +335,10 @@
         }
         protected virtual void InternalMoveItem(int oldIndex, int newIndex, TKey key, TValue element)
         {
-            Argument.IsNotNull(nameof(key), key);
-            Argument.IsNotNull(nameof(element), element);
             // Check
             if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{_suspensionContext.Mode}'");
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{_suspensionContext.Mode.ToString()}'");
             }
 
 
@@ -379,7 +373,6 @@
         /// <returns></returns>
         public virtual bool TryRemoveSingleValue(TKey keyToRemove, out TValue value)
         {
-            Argument.IsNotNull(nameof(keyToRemove), keyToRemove);
             if (_dictIndexMapping.TryGetValue(keyToRemove, out var removedKeyIndex) && _dict.TryGetValue(keyToRemove, out var removedKeyValue))
             {
                 // Check
@@ -656,7 +649,7 @@
             // Check
             if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{_suspensionContext.Mode}'");
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{_suspensionContext.Mode.ToString()}'");
             }
             List<KeyValuePair<TKey, TValue>> copyList = null;
             if (_suspensionContext != null && _suspensionContext.IsMixedMode())
@@ -689,7 +682,6 @@
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-            Argument.IsNotNull(nameof(item), item);
             InsertSingleValue(item.Key, item.Value, true);
         }
 
@@ -700,14 +692,13 @@
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            Argument.IsNotNull(nameof(item), item);
-
             return ContainsKey(item.Key);
         }
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
             Argument.IsNotNull(nameof(array), array);
+
             if (array.Length - arrayIndex < Count) throw new IndexOutOfRangeException("Array doesn't have enough space to copy all the elements");
             for (var i = 0; i < Count; i++)
             {
@@ -719,7 +710,6 @@
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            Argument.IsNotNull(nameof(item), item);
             return TryRemoveSingleValue(item.Key, out _);
         }
         #endregion

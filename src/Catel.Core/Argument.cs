@@ -177,7 +177,7 @@ namespace Catel
             where T : IComparable
         {
             IsNotOutOfRange(paramName, paramValue, minimumValue, maximumValue, 
-                (innerParamValue, innerMinimumValue, innerMaximumValue) => innerParamValue.CompareTo(innerMinimumValue) >= 0 && innerParamValue.CompareTo(innerMaximumValue) <= 0);
+                (innerParamValue, innerMinimumValue, innerMaximumValue) => ((IComparable<T>)innerParamValue).CompareTo(innerMinimumValue) >= 0 && ((IComparable<T>)innerParamValue).CompareTo(innerMaximumValue) <= 0);
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace Catel
             where T : IComparable
         {
             IsMinimal(paramName, paramValue, minimumValue, 
-                (innerParamValue, innerMinimumValue) => innerParamValue.CompareTo(innerMinimumValue) >= 0);
+                (innerParamValue, innerMinimumValue) => ((IComparable<T>)innerParamValue).CompareTo(innerMinimumValue) >= 0);
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace Catel
             where T : IComparable
         {
             IsMaximum(paramName, paramValue, maximumValue, 
-                (innerParamValue, innerMaximumValue) => innerParamValue.CompareTo(innerMaximumValue) <= 0);
+                (innerParamValue, innerMaximumValue) => ((IComparable<T>)innerParamValue).CompareTo(innerMaximumValue) <= 0);
         }
 
         /// <summary>
