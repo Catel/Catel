@@ -7,9 +7,6 @@
 
 namespace Catel.Logging
 {
-    /// <summary>
-    /// Extensions to the <see cref="ILog" /> interface.
-    /// </summary>
     public static partial class LogExtensions
     {
         private const string Heading1 = "=======================================================================";

@@ -25,6 +25,11 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         public static void LogProductInfo(this ILog log)
         {
+            if (log is null)
+            {
+                return;
+            }
+
             Write(log, LogEvent.Info, string.Empty);
             Write(log, LogEvent.Info, "**************************************************************************");
             Write(log, LogEvent.Info, string.Empty);
@@ -70,6 +75,11 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         public static void LogDeviceInfo(this ILog log)
         {
+            if (log is null)
+            {
+                return;
+            }
+
             Write(log, LogEvent.Info, string.Empty);
             Write(log, LogEvent.Info, "**************************************************************************");
             Write(log, LogEvent.Info, string.Empty);
@@ -82,10 +92,10 @@ namespace Catel.Logging
 #endif
 
 #if NET || NETCORE || NETSTANDARD
-            Write(log, LogEvent.Info, "64-bit OS:             {0}", Environment.Is64BitOperatingSystem);
-            Write(log, LogEvent.Info, "64-bit process:        {0}", Environment.Is64BitProcess);
-            Write(log, LogEvent.Info, "Processor count:       {0}", Environment.ProcessorCount);
-            Write(log, LogEvent.Info, "System page size:      {0}", Environment.SystemPageSize);
+            Write(log, LogEvent.Info, "64-bit OS:             {0}", Environment.Is64BitOperatingSystem.ToString());
+            Write(log, LogEvent.Info, "64-bit process:        {0}", Environment.Is64BitProcess.ToString());
+            Write(log, LogEvent.Info, "Processor count:       {0}", Environment.ProcessorCount.ToString());
+            Write(log, LogEvent.Info, "System page size:      {0}", Environment.SystemPageSize.ToString());
 #endif
 
 #if UWP
@@ -107,6 +117,11 @@ namespace Catel.Logging
         /// <returns><c>true</c> if the logging is Catel logging *and* can be ignored.</returns>
         public static bool IsCatelLoggingAndCanBeIgnored(this ILog log)
         {
+            if (log is null)
+            {
+                return false;
+            }
+
             if (!log.IsCatelLogging)
             {
                 return false;
@@ -130,12 +145,17 @@ namespace Catel.Logging
         /// <param name="s1">The formatting argument 1.</param>
         public static void Write(this ILog log, LogEvent logEvent, string messageFormat, object s1)
         {
+            if (log is null)
+            {
+                return;
+            }
+
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
             {
                 return;
             }
 
-            log?.WriteWithData(string.Format(messageFormat, s1), null, logEvent);
+            log.WriteWithData(string.Format(messageFormat, s1), null, logEvent);
         }
 
         /// <summary>
@@ -148,12 +168,17 @@ namespace Catel.Logging
         /// <param name="s2">The formatting argument 2.</param>
         public static void Write(this ILog log, LogEvent logEvent, string messageFormat, object s1, object s2)
         {
+            if (log is null)
+            {
+                return;
+            }
+
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
             {
                 return;
             }
 
-            log?.WriteWithData(string.Format(messageFormat, s1, s2), null, logEvent);
+            log.WriteWithData(string.Format(messageFormat, s1, s2), null, logEvent);
         }
 
         /// <summary>
@@ -167,12 +192,17 @@ namespace Catel.Logging
         /// <param name="s3">The formatting argument 3.</param>
         public static void Write(this ILog log, LogEvent logEvent, string messageFormat, object s1, object s2, object s3)
         {
+            if (log is null)
+            {
+                return;
+            }
+
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
             {
                 return;
             }
 
-            log?.WriteWithData(string.Format(messageFormat, s1, s2, s3), null, logEvent);
+            log.WriteWithData(string.Format(messageFormat, s1, s2, s3), null, logEvent);
         }
 
         /// <summary>
@@ -187,12 +217,17 @@ namespace Catel.Logging
         /// <param name="s4">The formatting argument 4.</param>
         public static void Write(this ILog log, LogEvent logEvent, string messageFormat, object s1, object s2, object s3, object s4)
         {
+            if (log is null)
+            {
+                return;
+            }
+
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
             {
                 return;
             }
 
-            log?.WriteWithData(string.Format(messageFormat, s1, s2, s3, s4), null, logEvent);
+            log.WriteWithData(string.Format(messageFormat, s1, s2, s3, s4), null, logEvent);
         }
 
         /// <summary>
@@ -209,6 +244,11 @@ namespace Catel.Logging
         /// <param name="others">The formatting arguments.</param>
         public static void Write(this ILog log, LogEvent logEvent, string messageFormat, object s1, object s2, object s3, object s4, object s5, params object[] others)
         {
+            if (log is null)
+            {
+                return;
+            }
+
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
             {
                 return;
@@ -220,11 +260,11 @@ namespace Catel.Logging
                 Array.Resize(ref args, 5 + others.Length);
                 Array.Copy(others, 0, args, 5, others.Length);
 
-                log?.WriteWithData(string.Format(messageFormat, args), null, logEvent);
+                log.WriteWithData(string.Format(messageFormat, args), null, logEvent);
             }
             else
             {
-                log?.WriteWithData(string.Format(messageFormat, s1, s2, s3, s4, s5), null, logEvent);
+                log.WriteWithData(string.Format(messageFormat, s1, s2, s3, s4, s5), null, logEvent);
             }
         }
 
@@ -237,6 +277,11 @@ namespace Catel.Logging
         /// <param name="args">The formatting arguments.</param>
         public static void Write(this ILog log, LogEvent logEvent, string messageFormat, params object[] args)
         {
+            if (log is null)
+            {
+                return;
+            }
+
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
             {
                 return;
@@ -267,17 +312,17 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
         public static void Write(this ILog log, LogEvent logEvent, Exception exception, string messageFormat, params object[] args)
         {
+            if (log is null)
+            {
+                return;
+            }
+
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
             {
                 return;
             }
 
             Argument.IsNotNull("exception", exception);
-
-            if (log is null)
-            {
-                return;
-            }
 
             var message = messageFormat ?? string.Empty;
             if (args != null && args.Length > 0)
@@ -299,6 +344,11 @@ namespace Catel.Logging
         /// <exception cref="ArgumentNullException">The <paramref name="exception" /> is <c>null</c>.</exception>
         public static void WriteWithData(this ILog log, Exception exception, string message, object extraData, LogEvent logEvent)
         {
+            if (log is null)
+            {
+                return;
+            }
+
             if (!LogManager.LogInfo.IsLogEventEnabled(logEvent))
             {
                 return;
