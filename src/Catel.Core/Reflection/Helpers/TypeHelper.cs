@@ -453,7 +453,9 @@ namespace Catel.Reflection
                     }
                     else
                     {
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                         output = (TOutput)Convert.ChangeType(value, innerType ?? outputType, CultureInfo.InvariantCulture);
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
                     }
                 }
             }
@@ -475,7 +477,9 @@ namespace Catel.Reflection
         /// <returns>The casted value.</returns>
         public static TOutput Cast<TOutput, TInput>(TInput value)
         {
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
             return Cast<TOutput>(value);
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
         }
 
         /// <summary>
@@ -491,7 +495,7 @@ namespace Catel.Reflection
                 var tI = value.GetType().GetSafeFullName(false);
                 var tO = typeof(TOutput).FullName;
                 var vl = string.Concat(value);
-                var msg = $"Failed to cast from '{0}' to '{1}'";
+                var msg = "Failed to cast from '{0}' to '{1}'";
 
                 if (!tI.Equals(vl))
                 {

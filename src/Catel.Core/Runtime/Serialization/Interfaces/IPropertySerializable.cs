@@ -19,7 +19,7 @@ namespace Catel.Runtime.Serialization
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <returns><c>true</c> if the value is retrieved successfully; otherwise, <c>false</c>.</returns>
-        bool GetPropertyValue(string propertyName, ref object value);
+        bool GetPropertyValue<T>(string propertyName, ref T value);
 
         /// <summary>
         /// Sets the property value.
@@ -27,6 +27,6 @@ namespace Catel.Runtime.Serialization
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <returns><c>true</c> if the value is set successfully; otherwise, <c>false</c>.</returns>
-        bool SetPropertyValue(string propertyName, object value);
+        bool SetPropertyValue<T>(string propertyName, T value);
     }
 }

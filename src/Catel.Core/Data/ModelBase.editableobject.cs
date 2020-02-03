@@ -89,7 +89,7 @@ namespace Catel.Data
                 }
 
                 _objectValuesBackup = new Dictionary<string, object>();
-                _objectValuesBackup.Add(nameof(IsDirty), _object.IsDirty);
+                _objectValuesBackup.Add(nameof(IsDirty), BoxingCache.GetBoxedValue(_object.IsDirty));
             }
 
             /// <summary>

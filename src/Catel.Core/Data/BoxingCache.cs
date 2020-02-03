@@ -81,7 +81,7 @@ namespace Catel.Data
         /// <returns>The boxed value.</returns>
         public object GetBoxedValue(T value)
         {
-            if (ReferenceEquals(value, null))
+            if (value is null)
             {
                 return null;
             }

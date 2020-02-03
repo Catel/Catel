@@ -631,7 +631,7 @@ namespace Catel.Runtime.Serialization
 
         private string GetCacheKey(Type type, bool additionalValue)
         {
-            var key = $"{type.AssemblyQualifiedName}_{additionalValue}";
+            var key = $"{type.AssemblyQualifiedName}_{additionalValue.ToString()}";
             return key;
         }
     }

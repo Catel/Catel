@@ -207,7 +207,9 @@ namespace Catel.Threading
                     _timer = null;
                 }
 
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                 _timer = new System.Threading.Timer(OnTimerTick, cancellationToken, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
             }
 #endif
 
