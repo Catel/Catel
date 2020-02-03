@@ -7,6 +7,7 @@
 namespace Catel.Logging
 {
     using System;
+    using Catel.Data;
     using Reflection;
 
     /// <summary>
@@ -368,7 +369,7 @@ namespace Catel.Logging
                         return;
                     }
 
-                    exception.Data.Add(AlreadyProcessedByCatelLogSystemExceptionDataKey, true);
+                    exception.Data.Add(AlreadyProcessedByCatelLogSystemExceptionDataKey, BoxingCache.GetBoxedValue(true));
                 }
             }
 

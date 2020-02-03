@@ -160,6 +160,106 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         /// <param name="exception">The exception.</param>
         /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Debug(this ILog log, Exception exception, string messageFormat, object arg1)
+        {
+            if (!LogManager.LogInfo.IsDebugEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Debug, exception, messageFormat, arg1);
+        }
+        
+        /// <summary>
+        /// Writes the specified message as debug message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Debug(this ILog log, Exception exception, string messageFormat, object arg1, object arg2)
+        {
+            if (!LogManager.LogInfo.IsDebugEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Debug, exception, messageFormat, arg1, arg2);
+        }
+                
+        /// <summary>
+        /// Writes the specified message as debug message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <param name="arg3">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Debug(this ILog log, Exception exception, string messageFormat, object arg1, object arg2, object arg3)
+        {
+            if (!LogManager.LogInfo.IsDebugEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Debug, exception, messageFormat, arg1, arg2, arg3);
+        }
+                        
+        /// <summary>
+        /// Writes the specified message as debug message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <param name="arg3">A formatting argument.</param>
+        /// <param name="arg4">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Debug(this ILog log, Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4)
+        {
+            if (!LogManager.LogInfo.IsDebugEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Debug, exception, messageFormat, arg1, arg2, arg3, arg4);
+        }
+                                
+        /// <summary>
+        /// Writes the specified message as debug message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <param name="arg3">A formatting argument.</param>
+        /// <param name="arg4">A formatting argument.</param>
+        /// <param name="arg5">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Debug(this ILog log, Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4, object arg5)
+        {
+            if (!LogManager.LogInfo.IsDebugEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Debug, exception, messageFormat, arg1, arg2, arg3, arg4, arg5);
+        }
+
+        /// <summary>
+        /// Writes the specified message as debug message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
         /// <param name="args">The formatting arguments.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         public static void Debug(this ILog log, Exception exception, string messageFormat, params object[] args)
@@ -363,6 +463,106 @@ namespace Catel.Logging
             }
 
             Write(log, LogEvent.Status, exception, string.Empty);
+        }
+
+        /// <summary>
+        /// Writes the specified message as status message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Status(this ILog log, Exception exception, string messageFormat, object arg1)
+        {
+            if (!LogManager.LogInfo.IsStatusEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Status, exception, messageFormat, arg1);
+        }
+        
+        /// <summary>
+        /// Writes the specified message as status message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Status(this ILog log, Exception exception, string messageFormat, object arg1, object arg2)
+        {
+            if (!LogManager.LogInfo.IsStatusEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Status, exception, messageFormat, arg1, arg2);
+        }
+                
+        /// <summary>
+        /// Writes the specified message as status message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <param name="arg3">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Status(this ILog log, Exception exception, string messageFormat, object arg1, object arg2, object arg3)
+        {
+            if (!LogManager.LogInfo.IsStatusEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Status, exception, messageFormat, arg1, arg2, arg3);
+        }
+                        
+        /// <summary>
+        /// Writes the specified message as status message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <param name="arg3">A formatting argument.</param>
+        /// <param name="arg4">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Status(this ILog log, Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4)
+        {
+            if (!LogManager.LogInfo.IsStatusEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Status, exception, messageFormat, arg1, arg2, arg3, arg4);
+        }
+                                
+        /// <summary>
+        /// Writes the specified message as status message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <param name="arg3">A formatting argument.</param>
+        /// <param name="arg4">A formatting argument.</param>
+        /// <param name="arg5">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Status(this ILog log, Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4, object arg5)
+        {
+            if (!LogManager.LogInfo.IsStatusEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Status, exception, messageFormat, arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
@@ -582,6 +782,106 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         /// <param name="exception">The exception.</param>
         /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Info(this ILog log, Exception exception, string messageFormat, object arg1)
+        {
+            if (!LogManager.LogInfo.IsInfoEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Info, exception, messageFormat, arg1);
+        }
+        
+        /// <summary>
+        /// Writes the specified message as info message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Info(this ILog log, Exception exception, string messageFormat, object arg1, object arg2)
+        {
+            if (!LogManager.LogInfo.IsInfoEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Info, exception, messageFormat, arg1, arg2);
+        }
+                
+        /// <summary>
+        /// Writes the specified message as info message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <param name="arg3">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Info(this ILog log, Exception exception, string messageFormat, object arg1, object arg2, object arg3)
+        {
+            if (!LogManager.LogInfo.IsInfoEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Info, exception, messageFormat, arg1, arg2, arg3);
+        }
+                        
+        /// <summary>
+        /// Writes the specified message as info message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <param name="arg3">A formatting argument.</param>
+        /// <param name="arg4">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Info(this ILog log, Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4)
+        {
+            if (!LogManager.LogInfo.IsInfoEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Info, exception, messageFormat, arg1, arg2, arg3, arg4);
+        }
+                                
+        /// <summary>
+        /// Writes the specified message as info message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <param name="arg3">A formatting argument.</param>
+        /// <param name="arg4">A formatting argument.</param>
+        /// <param name="arg5">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Info(this ILog log, Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4, object arg5)
+        {
+            if (!LogManager.LogInfo.IsInfoEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Info, exception, messageFormat, arg1, arg2, arg3, arg4, arg5);
+        }
+
+        /// <summary>
+        /// Writes the specified message as info message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
         /// <param name="args">The formatting arguments.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         public static void Info(this ILog log, Exception exception, string messageFormat, params object[] args)
@@ -793,6 +1093,106 @@ namespace Catel.Logging
         /// <param name="log">The log.</param>
         /// <param name="exception">The exception.</param>
         /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Warning(this ILog log, Exception exception, string messageFormat, object arg1)
+        {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Warning, exception, messageFormat, arg1);
+        }
+        
+        /// <summary>
+        /// Writes the specified message as warning message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Warning(this ILog log, Exception exception, string messageFormat, object arg1, object arg2)
+        {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Warning, exception, messageFormat, arg1, arg2);
+        }
+                
+        /// <summary>
+        /// Writes the specified message as warning message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <param name="arg3">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Warning(this ILog log, Exception exception, string messageFormat, object arg1, object arg2, object arg3)
+        {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Warning, exception, messageFormat, arg1, arg2, arg3);
+        }
+                        
+        /// <summary>
+        /// Writes the specified message as warning message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <param name="arg3">A formatting argument.</param>
+        /// <param name="arg4">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Warning(this ILog log, Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4)
+        {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Warning, exception, messageFormat, arg1, arg2, arg3, arg4);
+        }
+                                
+        /// <summary>
+        /// Writes the specified message as warning message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <param name="arg3">A formatting argument.</param>
+        /// <param name="arg4">A formatting argument.</param>
+        /// <param name="arg5">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Warning(this ILog log, Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4, object arg5)
+        {
+            if (!LogManager.LogInfo.IsWarningEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Warning, exception, messageFormat, arg1, arg2, arg3, arg4, arg5);
+        }
+
+        /// <summary>
+        /// Writes the specified message as warning message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
         /// <param name="args">The formatting arguments.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
         public static void Warning(this ILog log, Exception exception, string messageFormat, params object[] args)
@@ -996,6 +1396,106 @@ namespace Catel.Logging
             }
 
             Write(log, LogEvent.Error, exception, string.Empty);
+        }
+
+        /// <summary>
+        /// Writes the specified message as error message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Error(this ILog log, Exception exception, string messageFormat, object arg1)
+        {
+            if (!LogManager.LogInfo.IsErrorEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Error, exception, messageFormat, arg1);
+        }
+        
+        /// <summary>
+        /// Writes the specified message as error message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Error(this ILog log, Exception exception, string messageFormat, object arg1, object arg2)
+        {
+            if (!LogManager.LogInfo.IsErrorEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Error, exception, messageFormat, arg1, arg2);
+        }
+                
+        /// <summary>
+        /// Writes the specified message as error message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <param name="arg3">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Error(this ILog log, Exception exception, string messageFormat, object arg1, object arg2, object arg3)
+        {
+            if (!LogManager.LogInfo.IsErrorEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Error, exception, messageFormat, arg1, arg2, arg3);
+        }
+                        
+        /// <summary>
+        /// Writes the specified message as error message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <param name="arg3">A formatting argument.</param>
+        /// <param name="arg4">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Error(this ILog log, Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4)
+        {
+            if (!LogManager.LogInfo.IsErrorEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Error, exception, messageFormat, arg1, arg2, arg3, arg4);
+        }
+                                
+        /// <summary>
+        /// Writes the specified message as error message.
+        /// </summary>
+        /// <param name="log">The log.</param>
+        /// <param name="exception">The exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg1">A formatting argument.</param>
+        /// <param name="arg2">A formatting argument.</param>
+        /// <param name="arg3">A formatting argument.</param>
+        /// <param name="arg4">A formatting argument.</param>
+        /// <param name="arg5">A formatting argument.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="exception"/> is <c>null</c>.</exception>
+        public static void Error(this ILog log, Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4, object arg5)
+        {
+            if (!LogManager.LogInfo.IsErrorEnabled)
+            {
+                return;
+            }
+
+            Write(log, LogEvent.Error, exception, messageFormat, arg1, arg2, arg3, arg4, arg5);
         }
 
         /// <summary>
