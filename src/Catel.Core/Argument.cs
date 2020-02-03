@@ -50,6 +50,24 @@ namespace Catel
         }
 
         /// <summary>
+        /// Determines whether the specified argument is not <c>null</c>.
+        /// </summary>
+        /// <param name="paramName">Name of the parameter.</param>
+        /// <param name="paramValue">Value of the parameter.</param>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="paramValue" /> is <c>null</c>.</exception>
+        [DebuggerNonUserCode, DebuggerStepThrough]
+        public static void IsNotNull<T>(string paramName, T paramValue)
+        {
+            if (paramValue is null)
+            {
+                var error = $"Argument '{ObjectToStringHelper.ToString(paramName)}' cannot be null";
+                Log.Error(error);
+                throw new ArgumentNullException(paramName, error);
+            }
+        }
+
+        /// <summary>
         /// Determines whether the specified argument is not <c>null</c> or empty.
         /// </summary>
         /// <param name="paramName">Name of the parameter.</param>

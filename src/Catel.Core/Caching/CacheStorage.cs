@@ -227,7 +227,7 @@ namespace Catel.Caching
                 }
 
                 var value = code();
-                if (!ReferenceEquals(value, null) || _storeNullValues)
+                if (!(value is null) || _storeNullValues)
                 {
                     if (expirationPolicy is null && _defaultExpirationPolicyInitCode != null)
                     {
@@ -296,7 +296,7 @@ namespace Catel.Caching
 
                 var value = await code();
 
-                if (!ReferenceEquals(value, null) || _storeNullValues)
+                if (!(value is null) || _storeNullValues)
                 {
                     if (expirationPolicy is null && _defaultExpirationPolicyInitCode != null)
                     {
@@ -526,7 +526,7 @@ namespace Catel.Caching
         /// <returns>The lock object.</returns>
         private AsyncLock GetLockByKey(TKey key)
         {
-            if (ReferenceEquals(null, key))
+            if (key is null)
             {
                 return _nullKeyLock;
             }

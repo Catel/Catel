@@ -260,7 +260,7 @@ namespace Catel.Collections
                 {
                     return index;
                 }
-                else if (Equals(keyValuePair.Key, key))
+                else if (EqualityComparer<TKey>.Default.Equals(keyValuePair.Key, key))
                 {
                     return index;
                 }

@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 
 namespace Catel.Threading
 {
@@ -31,12 +32,12 @@ namespace Catel.Threading
         /// <summary>
         /// The circular buffer that holds the view.
         /// </summary>
-        private T[] buffer;
+        private T[] _buffer;
 
         /// <summary>
-        /// The offset into <see cref="buffer"/> where the view begins.
+        /// The offset into <see cref="_buffer"/> where the view begins.
         /// </summary>
-        private int offset;
+        private int _offset;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Dequeue&lt;T&gt;"/> class with the specified capacity.
@@ -49,7 +50,7 @@ namespace Catel.Threading
                 throw new ArgumentOutOfRangeException("capacity", "Capacity must be greater than 0.");
             }
 
-            buffer = new T[capacity];
+            _buffer = new T[capacity];
         }
 
         /// <summary>
@@ -61,12 +62,12 @@ namespace Catel.Threading
             int count = collection.Count();
             if (count > 0)
             {
-                buffer = new T[count];
+                _buffer = new T[count];
                 DoInsertRange(0, collection, count);
             }
             else
             {
-                buffer = new T[DefaultCapacity];
+                _buffer = new T[DefaultCapacity];
             }
         }
 
@@ -95,14 +96,14 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Gets a value indicating whether the buffer is "split" (meaning the beginning of the view is at a later index in <see cref="buffer"/> than the end).
+        /// Gets a value indicating whether the buffer is "split" (meaning the beginning of the view is at a later index in <see cref="_buffer"/> than the end).
         /// </summary>
         private bool IsSplit
         {
             get
             {
                 // Overflow-safe version of "(offset + Count) > Capacity"
-                return offset > (Capacity - Count);
+                return _offset > (Capacity - Count);
             }
         }
 
@@ -112,7 +113,7 @@ namespace Catel.Threading
         /// <exception cref="InvalidOperationException"><c>Capacity</c> cannot be set to a value less than <see cref="Count"/>.</exception>
         public int Capacity
         {
-            get { return buffer.Length; }
+            get { return _buffer.Length; }
 
             set
             {
@@ -126,7 +127,7 @@ namespace Catel.Threading
                     throw new InvalidOperationException("Capacity cannot be set to a value less than Count");
                 }
 
-                if (value == buffer.Length)
+                if (value == _buffer.Length)
                 {
                     return;
                 }
@@ -136,19 +137,19 @@ namespace Catel.Threading
                 if (IsSplit)
                 {
                     // The existing buffer is split, so we have to copy it in parts
-                    int length = Capacity - offset;
-                    Array.Copy(buffer, offset, newBuffer, 0, length);
-                    Array.Copy(buffer, 0, newBuffer, length, Count - length);
+                    int length = Capacity - _offset;
+                    Array.Copy(_buffer, _offset, newBuffer, 0, length);
+                    Array.Copy(_buffer, 0, newBuffer, length, Count - length);
                 }
                 else
                 {
                     // The existing buffer is whole
-                    Array.Copy(buffer, offset, newBuffer, 0, Count);
+                    Array.Copy(_buffer, _offset, newBuffer, 0, Count);
                 }
 
                 // Set up to use the new buffer.
-                buffer = newBuffer;
-                offset = 0;
+                _buffer = newBuffer;
+                _offset = 0;
             }
         }
 
@@ -163,8 +164,8 @@ namespace Catel.Threading
         /// </summary>
         public void Clear()
         {
-            this.offset = 0;
-            this.Count = 0;
+            _offset = 0;
+            Count = 0;
         }
 
         /// <summary>
@@ -174,7 +175,7 @@ namespace Catel.Threading
         /// <returns>The buffer index.</returns>
         private int DequeueIndexToBufferIndex(int index)
         {
-            return (index + offset)%Capacity;
+            return (index + _offset)%Capacity;
         }
 
         /// <summary>
@@ -184,7 +185,7 @@ namespace Catel.Threading
         /// <returns>The element at the specified index.</returns>
         private T DoGetItem(int index)
         {
-            return buffer[DequeueIndexToBufferIndex(index)];
+            return _buffer[DequeueIndexToBufferIndex(index)];
         }
 
         /// <summary>
@@ -194,7 +195,7 @@ namespace Catel.Threading
         /// <param name="item">The element to store in the list.</param>
         private void DoSetItem(int index, T item)
         {
-            buffer[DequeueIndexToBufferIndex(index)] = item;
+            _buffer[DequeueIndexToBufferIndex(index)] = item;
         }
 
         /// <summary>
@@ -241,31 +242,31 @@ namespace Catel.Threading
         }
 
         /// <summary>
-        /// Increments <see cref="offset"/> by <paramref name="value"/> using modulo-<see cref="Capacity"/> arithmetic.
+        /// Increments <see cref="_offset"/> by <paramref name="value"/> using modulo-<see cref="Capacity"/> arithmetic.
         /// </summary>
-        /// <param name="value">The value by which to increase <see cref="offset"/>. May not be negative.</param>
-        /// <returns>The value of <see cref="offset"/> after it was incremented.</returns>
+        /// <param name="value">The value by which to increase <see cref="_offset"/>. May not be negative.</param>
+        /// <returns>The value of <see cref="_offset"/> after it was incremented.</returns>
         private int PostIncrement(int value)
         {
-            int ret = offset;
-            offset += value;
-            offset %= Capacity;
+            int ret = _offset;
+            _offset += value;
+            _offset %= Capacity;
             return ret;
         }
 
         /// <summary>
-        /// Decrements <see cref="offset"/> by <paramref name="value"/> using modulo-<see cref="Capacity"/> arithmetic.
+        /// Decrements <see cref="_offset"/> by <paramref name="value"/> using modulo-<see cref="Capacity"/> arithmetic.
         /// </summary>
-        /// <param name="value">The value by which to reduce <see cref="offset"/>. May not be negative or greater than <see cref="Capacity"/>.</param>
-        /// <returns>The value of <see cref="offset"/> before it was decremented.</returns>
+        /// <param name="value">The value by which to reduce <see cref="_offset"/>. May not be negative or greater than <see cref="Capacity"/>.</param>
+        /// <returns>The value of <see cref="_offset"/> before it was decremented.</returns>
         private int PreDecrement(int value)
         {
-            offset -= value;
-            if (offset < 0)
+            _offset -= value;
+            if (_offset < 0)
             {
-                offset += Capacity;
+                _offset += Capacity;
             }
-            return offset;
+            return _offset;
         }
 
         /// <summary>
@@ -274,7 +275,7 @@ namespace Catel.Threading
         /// <param name="value">The element to insert.</param>
         private void DoAddToBack(T value)
         {
-            buffer[DequeueIndexToBufferIndex(Count)] = value;
+            _buffer[DequeueIndexToBufferIndex(Count)] = value;
             ++Count;
         }
 
@@ -284,7 +285,7 @@ namespace Catel.Threading
         /// <param name="value">The element to insert.</param>
         private void DoAddToFront(T value)
         {
-            buffer[PreDecrement(1)] = value;
+            _buffer[PreDecrement(1)] = value;
             ++Count;
         }
 
@@ -294,7 +295,7 @@ namespace Catel.Threading
         /// <returns>The former last element.</returns>
         private T DoRemoveFromBack()
         {
-            T ret = buffer[DequeueIndexToBufferIndex(Count - 1)];
+            T ret = _buffer[DequeueIndexToBufferIndex(Count - 1)];
             --Count;
             return ret;
         }
@@ -306,7 +307,7 @@ namespace Catel.Threading
         private T DoRemoveFromFront()
         {
             --Count;
-            return buffer[PostIncrement(1)];
+            return _buffer[PostIncrement(1)];
         }
 
         /// <summary>
@@ -329,11 +330,11 @@ namespace Catel.Threading
                 int writeIndex = Capacity - collectionCount;
                 for (int j = 0; j != copyCount; ++j)
                 {
-                    buffer[DequeueIndexToBufferIndex(writeIndex + j)] = buffer[DequeueIndexToBufferIndex(j)];
+                    _buffer[DequeueIndexToBufferIndex(writeIndex + j)] = _buffer[DequeueIndexToBufferIndex(j)];
                 }
 
                 // Rotate to the new view
-                this.PreDecrement(collectionCount);
+                PreDecrement(collectionCount);
             }
             else
             {
@@ -344,15 +345,15 @@ namespace Catel.Threading
                 int writeIndex = index + collectionCount;
                 for (int j = copyCount - 1; j != -1; --j)
                 {
-                    buffer[DequeueIndexToBufferIndex(writeIndex + j)] = buffer[DequeueIndexToBufferIndex(index + j)];
+                    _buffer[DequeueIndexToBufferIndex(writeIndex + j)] = _buffer[DequeueIndexToBufferIndex(index + j)];
                 }
             }
 
             // Copy new items into place
             int i = index;
-            foreach (T item in collection)
+            foreach (var item in collection)
             {
-                buffer[DequeueIndexToBufferIndex(i)] = item;
+                _buffer[DequeueIndexToBufferIndex(i)] = item;
                 ++i;
             }
 
@@ -370,7 +371,7 @@ namespace Catel.Threading
             if (index == 0)
             {
                 // Removing from the beginning: rotate to the new view
-                this.PostIncrement(collectionCount);
+                PostIncrement(collectionCount);
                 Count -= collectionCount;
                 return;
             }
@@ -390,11 +391,11 @@ namespace Catel.Threading
                 int writeIndex = collectionCount;
                 for (int j = copyCount - 1; j != -1; --j)
                 {
-                    buffer[DequeueIndexToBufferIndex(writeIndex + j)] = buffer[DequeueIndexToBufferIndex(j)];
+                    _buffer[DequeueIndexToBufferIndex(writeIndex + j)] = _buffer[DequeueIndexToBufferIndex(j)];
                 }
 
                 // Rotate to new view
-                this.PostIncrement(collectionCount);
+                PostIncrement(collectionCount);
             }
             else
             {
@@ -405,7 +406,7 @@ namespace Catel.Threading
                 int readIndex = index + collectionCount;
                 for (int j = 0; j != copyCount; ++j)
                 {
-                    buffer[DequeueIndexToBufferIndex(index + j)] = buffer[DequeueIndexToBufferIndex(readIndex + j)];
+                    _buffer[DequeueIndexToBufferIndex(index + j)] = _buffer[DequeueIndexToBufferIndex(readIndex + j)];
                 }
             }
 
@@ -418,9 +419,9 @@ namespace Catel.Threading
         /// </summary>
         private void EnsureCapacityForOneElement()
         {
-            if (this.IsFull)
+            if (IsFull)
             {
-                this.Capacity = this.Capacity*2;
+                Capacity = Capacity*2;
             }
         }
 
@@ -458,7 +459,7 @@ namespace Catel.Threading
             // Overflow-safe check for "this.Count + collectionCount > this.Capacity"
             if (collectionCount > Capacity - Count)
             {
-                this.Capacity = checked(Count + collectionCount);
+                Capacity = checked(Count + collectionCount);
             }
 
             if (collectionCount == 0)
@@ -466,7 +467,7 @@ namespace Catel.Threading
                 return;
             }
 
-            this.DoInsertRange(index, collection, collectionCount);
+            DoInsertRange(index, collection, collectionCount);
         }
 
         /// <summary>
@@ -485,7 +486,7 @@ namespace Catel.Threading
                 return;
             }
 
-            this.DoRemoveRange(offset, count);
+            DoRemoveRange(offset, count);
         }
 
         /// <summary>
@@ -495,12 +496,12 @@ namespace Catel.Threading
         /// <exception cref="InvalidOperationException">The Dequeue is empty.</exception>
         public T RemoveFromBack()
         {
-            if (this.IsEmpty)
+            if (IsEmpty)
             {
                 throw new InvalidOperationException("The Dequeue is empty.");
             }
 
-            return this.DoRemoveFromBack();
+            return DoRemoveFromBack();
         }
 
         /// <summary>
@@ -510,22 +511,22 @@ namespace Catel.Threading
         /// <exception cref="InvalidOperationException">The Dequeue is empty.</exception>
         public T RemoveFromFront()
         {
-            if (this.IsEmpty)
+            if (IsEmpty)
             {
                 throw new InvalidOperationException("The Dequeue is empty.");
             }
 
-            return this.DoRemoveFromFront();
+            return DoRemoveFromFront();
         }
 
         [DebuggerNonUserCode]
         private sealed class DebugView
         {
-            private readonly Dequeue<T> Dequeue;
+            private readonly Dequeue<T> _dequeue;
 
-            public DebugView(Dequeue<T> Dequeue)
+            public DebugView(Dequeue<T> dequeue)
             {
-                this.Dequeue = Dequeue;
+                _dequeue = dequeue;
             }
 
             [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
@@ -533,8 +534,8 @@ namespace Catel.Threading
             {
                 get
                 {
-                    var array = new T[Dequeue.Count];
-                    ((ICollection<T>) Dequeue).CopyTo(array, 0);
+                    var array = new T[_dequeue.Count];
+                    ((ICollection<T>) _dequeue).CopyTo(array, 0);
                     return array;
                 }
             }
@@ -560,13 +561,13 @@ namespace Catel.Threading
         {
             get
             {
-                CheckExistingIndexArgument(this.Count, index);
+                CheckExistingIndexArgument(Count, index);
                 return DoGetItem(index);
             }
 
             set
             {
-                CheckExistingIndexArgument(this.Count, index);
+                CheckExistingIndexArgument(Count, index);
                 DoSetItem(index, value);
             }
         }
@@ -672,7 +673,7 @@ namespace Catel.Threading
                 throw new ArgumentNullException("array", "Array is null");
             }
 
-            int count = this.Count;
+            int count = Count;
             CheckRangeArguments(array.Length, arrayIndex, count);
             for (int i = 0; i != count; ++i)
             {
@@ -710,7 +711,7 @@ namespace Catel.Threading
         /// </returns>
         public IEnumerator<T> GetEnumerator()
         {
-            int count = this.Count;
+            int count = Count;
             for (int i = 0; i != count; ++i)
             {
                 yield return DoGetItem(i);
@@ -725,7 +726,7 @@ namespace Catel.Threading
         /// </returns>
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return this.GetEnumerator();
+            return GetEnumerator();
         }
         #endregion
 
@@ -816,7 +817,7 @@ namespace Catel.Threading
         {
             if (index < 0 || index > sourceLength)
             {
-                throw new ArgumentOutOfRangeException("index", "Invalid new index " + index + " for source length " + sourceLength);
+                throw new ArgumentOutOfRangeException("index", "Invalid new index " + index.ToString() + " for source length " + sourceLength.ToString());
             }
         }
 
@@ -830,7 +831,7 @@ namespace Catel.Threading
         {
             if (index < 0 || index >= sourceLength)
             {
-                throw new ArgumentOutOfRangeException("index", "Invalid existing index " + index + " for source length " + sourceLength);
+                throw new ArgumentOutOfRangeException("index", "Invalid existing index " + index.ToString() + " for source length " + sourceLength.ToString());
             }
         }
 
@@ -846,17 +847,17 @@ namespace Catel.Threading
         {
             if (offset < 0)
             {
-                throw new ArgumentOutOfRangeException("offset", "Invalid offset " + offset);
+                throw new ArgumentOutOfRangeException("offset", "Invalid offset " + offset.ToString());
             }
 
             if (count < 0)
             {
-                throw new ArgumentOutOfRangeException("count", "Invalid count " + count);
+                throw new ArgumentOutOfRangeException("count", "Invalid count " + count.ToString());
             }
 
             if (sourceLength - offset < count)
             {
-                throw new ArgumentException("Invalid offset (" + offset + ") or count + (" + count + ") for source length " + sourceLength);
+                throw new ArgumentException($"Invalid offset ({offset.ToString()}) or count + ({count.ToString()}) for source length {sourceLength.ToString()}");
             }
         }
         #endregion

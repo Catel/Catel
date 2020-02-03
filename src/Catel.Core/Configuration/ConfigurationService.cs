@@ -176,7 +176,7 @@ namespace Catel.Configuration
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, $"Failed to retrieve configuration value '{container}.{key}', returning default value");
+                Log.Warning(ex, $"Failed to retrieve configuration value '{container.ToString()}.{key}', returning default value");
 
                 return defaultValue;
             }

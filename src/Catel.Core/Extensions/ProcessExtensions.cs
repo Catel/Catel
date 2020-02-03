@@ -24,7 +24,7 @@ namespace Catel
 
             for (var index = 0; index < processesByName.Length; index++)
             {
-                processIndexdName = index == 0 ? processName : processName + "#" + index;
+                processIndexdName = index == 0 ? processName : processName + "#" + index.ToString();
                 var processId = new PerformanceCounter("Process", "ID Process", processIndexdName);
                 if ((int) processId.NextValue() == pid)
                 {

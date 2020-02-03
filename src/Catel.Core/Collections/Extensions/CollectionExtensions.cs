@@ -41,8 +41,19 @@ namespace Catel.Collections
                 return asList.IndexOf(item, index);
             }
 
-            while (index < list.Count && !object.Equals(list[index], item))
+            while (index < list.Count)
             {
+                var listItem = list[index];
+                if (listItem is null && item is null)
+                {
+                    break;
+                }
+
+                if (EqualityComparer<T>.Default.Equals(listItem, item))
+                {
+                    break;
+                }
+
                 index++;
             }
 
@@ -157,7 +168,7 @@ namespace Catel.Collections
 
             if (list.Count < index - 1)
             {
-                Log.Error("Number of items in list is {0}, cannot move index {1} up", list.Count, index);
+                Log.Error("Number of items in list is {0}, cannot move index {1} up", list.Count.ToString(), index.ToString());
                 return false;
             }
 
@@ -212,7 +223,7 @@ namespace Catel.Collections
 
             if (list.Count < index - 1)
             {
-                Log.Error("Number of items in list is {0}, cannot move index {1} down", list.Count, index);
+                Log.Error("Number of items in list is {0}, cannot move index {1} down", list.Count.ToString(), index.ToString());
                 return false;
             }
 
@@ -440,7 +451,7 @@ namespace Catel.Collections
                     }
                     else
                     {
-                        reshuffle = ((IComparable) o1).CompareTo(o2) > 0;
+                        reshuffle = ((IComparable<T>)o1).CompareTo(o2) > 0;
                     }
 
                     if (reshuffle)

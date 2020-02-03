@@ -206,7 +206,7 @@ namespace Catel.IO
             }
 #endif
 
-            string path = Combine(rootDirectory, companyName, productName);
+            var path = System.IO.Path.Combine(rootDirectory, companyName, productName);
 
             if (!Directory.Exists(path))
             {
@@ -420,6 +420,7 @@ namespace Catel.IO
         /// </summary>
         /// <param name="paths">Paths to combine.</param>
         /// <returns>Combination of all the paths passed.</returns>
+        [ObsoleteEx(Message = "Use System.IO.Path instead", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "7.0")]
         public static string Combine(params string[] paths)
         {
             var result = string.Empty;
@@ -435,7 +436,7 @@ namespace Catel.IO
                 return paths[0];
             }
 
-            for (int i = 0; i < paths.Length; i++)
+            for (var i = 0; i < paths.Length; i++)
             {
                 if (!string.IsNullOrEmpty(paths[i]))
                 {
@@ -474,9 +475,9 @@ namespace Catel.IO
                 {
                     result = RemoveTrailingSlashes(result);
 
-                    string tempPath = RemoveStartAndTrailingSlashes(urls[i]);
+                    var tempPath = RemoveStartAndTrailingSlashes(urls[i]);
 
-                    result = Combine(result, tempPath);
+                    result = System.IO.Path.Combine(result, tempPath);
                 }
             }
 
