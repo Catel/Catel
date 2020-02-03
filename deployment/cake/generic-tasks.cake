@@ -113,16 +113,33 @@ Task("RestorePackages")
     .ContinueOnError()
     .Does<BuildContext>(buildContext =>
 {
-    var projects = GetFiles("./**/*.csproj");
+    // var csharpProjects = GetFiles("./**/*.csproj");
+    // var cProjects = GetFiles("./**/*.vcxproj");
     var solutions = GetFiles("./**/*.sln");
     
     var allFiles = new List<FilePath>();
-    //allFiles.AddRange(projects);
+    // //allFiles.AddRange(projects);
+    // //allFiles.AddRange(cProjects);
     allFiles.AddRange(solutions);
 
     foreach(var file in allFiles)
     {
         RestoreNuGetPackages(buildContext, file);
+    }
+
+    // C++ files need to be done manually
+    foreach (var project in buildContext.AllProjects)
+    {
+        var projectFileName = GetProjectFileName(buildContext, project);
+        if (IsCppProject(projectFileName))
+        {
+            buildContext.CakeContext.LogSeparator("'{0}' is a C++ project, restoring NuGet packages separately", project);
+
+            RestoreNuGetPackages(buildContext, projectFileName);
+
+            // For C++ projects, we must clean the project again after a package restore
+            CleanProject(buildContext, project);
+        }
     }
 });
 
@@ -133,7 +150,7 @@ Task("RestorePackages")
 // some targets files that come in via packages
 
 Task("Clean")
-    .IsDependentOn("RestorePackages")
+    //.IsDependentOn("RestorePackages")
     .ContinueOnError()
     .Does<BuildContext>(buildContext => 
 {
@@ -170,14 +187,13 @@ Task("Clean")
         }
     }
 
-    var outputDirectory = buildContext.General.OutputRootDirectory;
-    if (DirectoryExists(outputDirectory))
+    // Output directory
+    DeleteDirectoryWithLogging(buildContext, buildContext.General.OutputRootDirectory);
+
+    // obj directories
+    foreach (var project in buildContext.AllProjects)
     {
-        DeleteDirectory(outputDirectory, new DeleteDirectorySettings()
-        {
-            Force = true,
-            Recursive = true
-        });
+        CleanProject(buildContext, project);
     }
 });
 

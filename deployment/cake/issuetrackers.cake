@@ -28,7 +28,14 @@ public class IssueTrackerIntegration : IntegrationBase
 
         foreach (var issueTracker in _issueTrackers)
         {
-            await issueTracker.CreateAndReleaseVersionAsync();
+            try
+            {
+                await issueTracker.CreateAndReleaseVersionAsync();
+            }
+            catch (Exception ex)
+            {
+                BuildContext.CakeContext.Warning(ex.Message);
+            }
         }
     }
 }
