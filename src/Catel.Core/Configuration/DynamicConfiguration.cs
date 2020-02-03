@@ -163,6 +163,12 @@ namespace Catel.Configuration
 
                     // If simple property
                     var typeAttribute = xmlReader.GetAttribute("ctl:type");
+                    if (typeAttribute is null)
+                    {
+                        // Fallback mechanism for older serialization formats, see https://github.com/Catel/Catel/issues/1535
+                        typeAttribute = xmlReader.GetAttribute("type");
+                    }
+
                     if (typeAttribute != null)
                     {
                         var elementType = TypeCache.GetTypeWithoutAssembly(typeAttribute);
