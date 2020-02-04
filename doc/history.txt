@@ -31,6 +31,7 @@ Added/fixed
 ===========
 (+) #1528 Add static setting to specify the default value for SupportIEditableObject 
     and SupportValidation for Model attributes
+(+) #1537 Add ToCast<T> extension methods to cast value types to a generic without boxing
 (*) #1191 Change ProcessCompletedCallback to include the initial context and exit code
 (*) #1246 Use Microsoft.Xaml.Behaviors.Wpf as dependency for WPF projects
 (*) #1536 Create T4 template to generate logging extensions with optimized memory usage

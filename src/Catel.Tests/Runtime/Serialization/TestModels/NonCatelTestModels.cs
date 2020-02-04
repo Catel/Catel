@@ -94,14 +94,14 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             if (propertyName == "FirstName")
             {
                 _getViaInterface = true;
-                value = FirstName;
+                value = FirstName.CastTo<T>();
                 return true;
             }
 
             if (propertyName == "LastName")
             {
                 _getViaInterface = true;
-                value = LastName;
+                value = LastName.CastTo<T>();
                 return true;
             }
 

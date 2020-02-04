@@ -156,6 +156,16 @@
       <DependentUpon>LogExtensions.g.tt</DependentUpon>
     </Compile>
     
+    <None Update="Reflection\Extensions\CastExtensions.generics.g.tt">
+      <LastGenOutput>CastExtensions.generics.g.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <Compile Update="Reflection\Extensions\CastExtensions.generics.g.cs">
+      <DependentUpon>CastExtensions.generics.g.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+
     <None Update="Reflection\FastMemberInvoker\FastMemberInvoker.caches.g.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>FastMemberInvoker.caches.g.cs</LastGenOutput>

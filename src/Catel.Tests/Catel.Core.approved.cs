@@ -42,6 +42,7 @@ namespace Catel
         public static void IsNotNull(string paramName, object paramValue) { }
         public static void IsNotNull<T>(System.Linq.Expressions.Expression<System.Func<T>> expression)
             where T :  class { }
+        public static void IsNotNull<T>(string paramName, T paramValue) { }
         public static void IsNotNullOrEmpty(System.Linq.Expressions.Expression<System.Func<System.Guid?>> expression) { }
         public static void IsNotNullOrEmpty(System.Linq.Expressions.Expression<System.Func<string>> expression) { }
         public static void IsNotNullOrEmpty(string paramName, System.Guid? paramValue) { }
@@ -1852,6 +1853,7 @@ namespace Catel.IO
     {
         public static string AppendTrailingSlash(string path) { }
         public static string AppendTrailingSlash(string path, char slash) { }
+        [System.Obsolete("Use System.IO.Path instead. Will be removed in version 7.0.0.", true)]
         public static string Combine(params string[] paths) { }
         public static string CombineUrls(params string[] urls) { }
         public static string GetApplicationDataDirectory() { }
@@ -2520,13 +2522,17 @@ namespace Catel.Logging
         public static void Debug(this Catel.Logging.ILog log) { }
         public static void Debug(this Catel.Logging.ILog log, System.Exception exception) { }
         public static void Debug(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
-        public static void Debug(this Catel.Logging.ILog log, Catel.Logging.LogEvent logEvent, string messageFormat, object s1) { }
+        public static void Debug(this Catel.Logging.ILog log, string messageFormat, object s1) { }
+        public static void Debug(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1) { }
         public static void Debug(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, params object[] args) { }
         public static void Debug(this Catel.Logging.ILog log, string messageFormat, object s1, object s2) { }
+        public static void Debug(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2) { }
         public static void Debug(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3) { }
+        public static void Debug(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3) { }
         public static void Debug(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3, object s4) { }
+        public static void Debug(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4) { }
+        public static void Debug(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4, object arg5) { }
         public static void Debug(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3, object s4, object s5, params object[] others) { }
-        public static void DebugAndStatus(this Catel.Logging.ILog log) { }
         public static void DebugAndStatus(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
         public static void DebugWithData(this Catel.Logging.ILog log, string message, Catel.Logging.LogData logData) { }
         public static void DebugWithData(this Catel.Logging.ILog log, string message, object extraData = null) { }
@@ -2535,20 +2541,30 @@ namespace Catel.Logging
         public static void Error(this Catel.Logging.ILog log, System.Exception exception) { }
         public static void Error(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
         public static void Error(this Catel.Logging.ILog log, string messageFormat, object s1) { }
+        public static void Error(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1) { }
         public static void Error(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, params object[] args) { }
         public static void Error(this Catel.Logging.ILog log, string messageFormat, object s1, object s2) { }
+        public static void Error(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2) { }
         public static void Error(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3) { }
+        public static void Error(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3) { }
         public static void Error(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3, object s4) { }
+        public static void Error(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4) { }
+        public static void Error(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4, object arg5) { }
         public static void Error(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3, object s4, object s5, params object[] others) { }
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, string messageFormat, object arg1)
+            where TException : System.Exception { }
         public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, string messageFormat, params object[] args)
             where TException : System.Exception { }
         public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, string messageFormat, params object[] args)
             where TException : System.Exception { }
         public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Func<string, TException> createExceptionCallback, string messageFormat, params object[] args)
             where TException : System.Exception { }
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, string messageFormat, object arg1, object arg2)
+            where TException : System.Exception { }
         public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, System.Func<string, TException> createExceptionCallback, string messageFormat, params object[] args)
             where TException : System.Exception { }
-        public static void ErrorAndStatus(this Catel.Logging.ILog log) { }
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, string messageFormat, object arg1, object arg2, object arg3)
+            where TException : System.Exception { }
         public static void ErrorAndStatus(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
         public static void ErrorWithData(this Catel.Logging.ILog log, string message, Catel.Logging.LogData logData) { }
         public static void ErrorWithData(this Catel.Logging.ILog log, string message, object extraData = null) { }
@@ -2556,8 +2572,17 @@ namespace Catel.Logging
         public static void Info(this Catel.Logging.ILog log) { }
         public static void Info(this Catel.Logging.ILog log, System.Exception exception) { }
         public static void Info(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
+        public static void Info(this Catel.Logging.ILog log, string messageFormat, object s1) { }
+        public static void Info(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1) { }
         public static void Info(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, params object[] args) { }
-        public static void InfoAndStatus(this Catel.Logging.ILog log) { }
+        public static void Info(this Catel.Logging.ILog log, string messageFormat, object s1, object s2) { }
+        public static void Info(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2) { }
+        public static void Info(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3) { }
+        public static void Info(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3) { }
+        public static void Info(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3, object s4) { }
+        public static void Info(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4) { }
+        public static void Info(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4, object arg5) { }
+        public static void Info(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3, object s4, object s5, params object[] others) { }
         public static void InfoAndStatus(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
         public static void InfoWithData(this Catel.Logging.ILog log, string message, Catel.Logging.LogData logData) { }
         public static void InfoWithData(this Catel.Logging.ILog log, string message, object extraData = null) { }
@@ -2583,22 +2608,37 @@ namespace Catel.Logging
         public static void LogWarningHeading2(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
         public static void LogWarningHeading3(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
         public static void Status(this Catel.Logging.ILog log) { }
+        public static void Status(this Catel.Logging.ILog log, System.Exception exception) { }
         public static void Status(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
         public static void Status(this Catel.Logging.ILog log, string messageFormat, object s1) { }
+        public static void Status(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1) { }
+        public static void Status(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, params object[] args) { }
         public static void Status(this Catel.Logging.ILog log, string messageFormat, object s1, object s2) { }
+        public static void Status(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2) { }
         public static void Status(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3) { }
+        public static void Status(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3) { }
         public static void Status(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3, object s4) { }
+        public static void Status(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4) { }
+        public static void Status(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4, object arg5) { }
         public static void Status(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3, object s4, object s5, params object[] others) { }
+        public static void StatusAndStatus(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
+        public static void StatusWithData(this Catel.Logging.ILog log, string message, Catel.Logging.LogData logData) { }
+        public static void StatusWithData(this Catel.Logging.ILog log, string message, object extraData = null) { }
+        public static void StatusWithData(this Catel.Logging.ILog log, System.Exception exception, string message, object extraData = null) { }
         public static void Warning(this Catel.Logging.ILog log) { }
         public static void Warning(this Catel.Logging.ILog log, System.Exception exception) { }
         public static void Warning(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
         public static void Warning(this Catel.Logging.ILog log, string messageFormat, object s1) { }
+        public static void Warning(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1) { }
         public static void Warning(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, params object[] args) { }
         public static void Warning(this Catel.Logging.ILog log, string messageFormat, object s1, object s2) { }
+        public static void Warning(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2) { }
         public static void Warning(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3) { }
+        public static void Warning(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3) { }
         public static void Warning(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3, object s4) { }
+        public static void Warning(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4) { }
+        public static void Warning(this Catel.Logging.ILog log, System.Exception exception, string messageFormat, object arg1, object arg2, object arg3, object arg4, object arg5) { }
         public static void Warning(this Catel.Logging.ILog log, string messageFormat, object s1, object s2, object s3, object s4, object s5, params object[] others) { }
-        public static void WarningAndStatus(this Catel.Logging.ILog log) { }
         public static void WarningAndStatus(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
         public static void WarningWithData(this Catel.Logging.ILog log, string message, Catel.Logging.LogData logData) { }
         public static void WarningWithData(this Catel.Logging.ILog log, string message, object extraData = null) { }
@@ -2912,6 +2952,40 @@ namespace Catel.Reflection
     {
         public CannotSetPropertyValueException(string propertyName) { }
         public string PropertyName { get; }
+    }
+    public static class CastExtensions
+    {
+        public static TValue CastTo<TValue>(this System.DateTime value) { }
+        public static TValue CastTo<TValue>(this bool value) { }
+        public static TValue CastTo<TValue>(this byte value) { }
+        public static TValue CastTo<TValue>(this char value) { }
+        public static TValue CastTo<TValue>(this decimal value) { }
+        public static TValue CastTo<TValue>(this double value) { }
+        public static TValue CastTo<TValue>(this float value) { }
+        public static TValue CastTo<TValue>(this int value) { }
+        public static TValue CastTo<TValue>(this long value) { }
+        public static TValue CastTo<TValue>(this object value) { }
+        public static TValue CastTo<TValue>(this sbyte value) { }
+        public static TValue CastTo<TValue>(this short value) { }
+        public static TValue CastTo<TValue>(this string value) { }
+        public static TValue CastTo<TValue>(this uint value) { }
+        public static TValue CastTo<TValue>(this ulong value) { }
+        public static TValue CastTo<TValue>(this ushort value) { }
+        public static bool CastToBoolean<TValue>(this TValue value) { }
+        public static byte CastToByte<TValue>(this TValue value) { }
+        public static char CastToChar<TValue>(this TValue value) { }
+        public static System.DateTime CastToDateTime<TValue>(this TValue value) { }
+        public static decimal CastToDecimal<TValue>(this TValue value) { }
+        public static double CastToDouble<TValue>(this TValue value) { }
+        public static short CastToInt16<TValue>(this TValue value) { }
+        public static int CastToInt32<TValue>(this TValue value) { }
+        public static long CastToInt64<TValue>(this TValue value) { }
+        public static sbyte CastToSByte<TValue>(this TValue value) { }
+        public static float CastToSingle<TValue>(this TValue value) { }
+        public static string CastToString<TValue>(this TValue value) { }
+        public static ushort CastToUInt16<TValue>(this TValue value) { }
+        public static uint CastToUInt32<TValue>(this TValue value) { }
+        public static ulong CastToUInt64<TValue>(this TValue value) { }
     }
     public static class DelegateExtensions
     {
@@ -3255,8 +3329,8 @@ namespace Catel.Runtime.Serialization
     }
     public interface IFieldSerializable
     {
-        bool GetFieldValue(string fieldName, ref object value);
-        bool SetFieldValue(string fieldName, object value);
+        bool GetFieldValue<T>(string fieldName, ref T value);
+        bool SetFieldValue<T>(string fieldName, T value);
     }
     public interface IObjectAdapter
     {
@@ -3265,8 +3339,8 @@ namespace Catel.Runtime.Serialization
     }
     public interface IPropertySerializable
     {
-        bool GetPropertyValue(string propertyName, ref object value);
-        bool SetPropertyValue(string propertyName, object value);
+        bool GetPropertyValue<T>(string propertyName, ref T value);
+        bool SetPropertyValue<T>(string propertyName, T value);
     }
     public interface ISerializable
     {
