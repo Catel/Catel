@@ -47,7 +47,7 @@ namespace Catel.ExceptionHandling
 
             var exceptionHandler = new TExceptionHandler();
 
-            return exceptionService.Register(exceptionHandler);
+            return exceptionService.Register((IExceptionHandler)exceptionHandler);
         }
 
         /// <summary>

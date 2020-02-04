@@ -42,7 +42,7 @@ namespace Catel.ExceptionHandling
         /// <returns></returns>
         public override string ToString()
         {
-            return _string ?? (_string = string.Format("{0} times per {1}", NumberOfTimes, Interval));
+            return _string ?? (_string = $"{NumberOfTimes.ToString()} times per {Interval.ToString()}");
         }
         #endregion
     }

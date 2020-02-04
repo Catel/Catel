@@ -42,7 +42,7 @@ namespace Catel
 
             taskName = ObjectToStringHelper.ToString(taskName);
 
-            Log.Debug("[{0}] Executing '{1}' actions in parallel in batches of '{2}' items per batch", taskName, items.Count, itemsPerBatch);
+            Log.Debug($"[{taskName}] Executing '{items.Count.ToString()}' actions in parallel in batches of '{itemsPerBatch.ToString()}' items per batch");
 
             var batches = new List<List<T>>();
             if (itemsPerBatch > 0)
@@ -83,7 +83,7 @@ namespace Catel
                 TaskHelper.RunAndWait(actions.ToArray());
             }
 
-            Log.Debug("[{0}] Executed '{1}' actions in parallel in '{2}' batches of '{3}' items per batch", taskName, items.Count, batches.Count, itemsPerBatch);
+            Log.Debug($"[{taskName}] Executed '{items.Count.ToString()}' actions in parallel in '{batches.Count.ToString()}' batches of '{itemsPerBatch.ToString()}' items per batch");
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Catel
         {
             string finalName = string.Format("[{0} | {1}]", taskName, batchName);
 
-            Log.Debug("{0} Starting batch for '{1}' items", finalName, items.Count);
+            Log.Debug($"{finalName} Starting batch for '{items.Count.ToString()}' items");
 
             foreach (var item in items)
             {
@@ -112,7 +112,7 @@ namespace Catel
                 }
             }
 
-            Log.Debug("{0} Finished batch for '{1}' items", finalName, items.Count);
+            Log.Debug($"{finalName} Finished batch for '{items.Count.ToString()}' items");
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Catel
 
             taskName = ObjectToStringHelper.ToString(taskName);
 
-            Log.Debug("[{0}] Executing '{1}' async tasks in parallel in batches of size '{2}'", taskName, tasks.Count, batchSize);
+            Log.Debug($"[{taskName}] Executing '{tasks.Count.ToString()}' async tasks in parallel in batches of size '{batchSize.ToString()}'");
 
             for (int i = 0; i < tasks.Count; i = i + batchSize)
             {

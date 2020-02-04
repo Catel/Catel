@@ -275,7 +275,7 @@ namespace Catel.ExceptionHandling
                             if (queue.Count <= exceptionHandler.Value.BufferPolicy.NumberOfTimes)
                             {
                                 OnExceptionBuffered(exception, now);
-                                Log.Debug("[{0}] '{1}' buffered for the '{2}' times", now, exceptionType.Name, queue.Count);
+                                Log.Debug($"[{now.ToString()}] '{exceptionType.Name}' buffered for the '{queue.Count.ToString()}' times");
                                 continue;
                             }
 
@@ -285,7 +285,7 @@ namespace Catel.ExceptionHandling
                             if (duration >= exceptionHandler.Value.BufferPolicy.Interval && exceptionHandler.Value.BufferPolicy.Interval != TimeSpan.Zero)
                             {
                                 OnExceptionBuffered(exception, now);
-                                Log.Debug("[{0}] '{1}' buffered for the '{2}' times", now, exceptionType.Name, queue.Count);
+                                Log.Debug($"[{now.ToString()}] '{exceptionType.Name}' buffered for the '{queue.Count.ToString()}' times");
                                 continue;
                             }
 
@@ -427,7 +427,7 @@ namespace Catel.ExceptionHandling
 
                 OnRetryingAction(retryCount, lastError, interval);
 
-                Log.Debug("Retrying action for the '{0}' times", retryCount);
+                Log.Debug($"Retrying action for the '{retryCount.ToString()}' times");
 
                 ThreadHelper.Sleep((int)interval.TotalMilliseconds);
             }
@@ -501,7 +501,7 @@ namespace Catel.ExceptionHandling
 
                 OnRetryingAction(retryCount, lastError, interval);
 
-                Log.Debug("Retrying action for the '{0}' times", retryCount);
+                Log.Debug($"Retrying action for the '{retryCount.ToString()}' times");
 
                 ThreadHelper.Sleep((int)interval.TotalMilliseconds);
             }

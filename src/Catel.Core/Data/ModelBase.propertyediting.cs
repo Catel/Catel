@@ -136,7 +136,7 @@ namespace Catel.Data
                 if (!value.GetType().IsCOMObjectEx())
                 {
                     throw Log.ErrorAndCreateException(msg => new InvalidPropertyValueException(property.Name, property.Type, value.GetType()),
-                        "Cannot set value '{0}' to property '{1}' of type '{2}', the value is invalid", value, property.Name, GetType().FullName);
+                        "Cannot set value '{0}' to property '{1}' of type '{2}', the value is invalid", BoxingCache.GetBoxedValue(value), property.Name, GetType().FullName);
                 }
             }
 
@@ -148,7 +148,7 @@ namespace Catel.Data
                 var changeNotificationsSuspensionContext = _changeNotificationsSuspensionContext;
 
                 oldValue = GetValueFromPropertyBag<TValue>(property.Name);
-                var areOldAndNewValuesEqual = ObjectHelper.AreEqualReferences(oldValue, value);
+                var areOldAndNewValuesEqual = ObjectHelper.AreEqualReferences(BoxingCache.GetBoxedValue(oldValue), value);
 
                 if (!areOldAndNewValuesEqual)
                 {
