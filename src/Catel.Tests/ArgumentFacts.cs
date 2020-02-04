@@ -320,19 +320,19 @@ namespace Catel.Tests
             [TestCase]
             public void SucceedsForTypeInheritsFrom()
             {
-                Argument.InheritsFrom("myParam", typeof(CoverageExcludeAttribute), typeof(Attribute));
+                Argument.InheritsFrom("myParam", typeof(ViewModelToModelAttribute), typeof(Attribute));
             }
 
             [TestCase]
             public void SucceedsForInstanceInheritsFrom()
             {
-                Argument.InheritsFrom("myParam", new CoverageExcludeAttribute(ExcludeReason.TestCode), typeof(Attribute));
+                Argument.InheritsFrom("myParam", new ViewModelToModelAttribute(), typeof(Attribute));
             }
 
             [TestCase]
             public void SucceedsForGenericInheritsFrom()
             {
-                Argument.InheritsFrom<Attribute>("myParam", new CoverageExcludeAttribute(ExcludeReason.TestCode));
+                Argument.InheritsFrom<Attribute>("myParam", new ViewModelToModelAttribute());
             }
 
             [TestCase]

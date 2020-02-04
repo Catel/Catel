@@ -8,6 +8,7 @@
 namespace Catel.Tests.Runtime.Serialization.TestModels
 {
     using System;
+    using Catel.Reflection;
     using Catel.Runtime.Serialization;
 
     public class NonCatelTestModel
@@ -28,26 +29,26 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
         [IncludeInSerialization]
         public string _lastName;
 
-        bool IFieldSerializable.GetFieldValue(string fieldName, ref object value)
+        bool IFieldSerializable.GetFieldValue<T>(string fieldName, ref T value)
         {
             if (fieldName == "_firstName")
             {
                 _getViaInterface = true;
-                value = FirstName;
+                value = FirstName.CastTo<T>();
                 return true;
             }
 
             if (fieldName == "_lastName")
             {
                 _getViaInterface = true;
-                value = LastName;
+                value = LastName.CastTo<T>();
                 return true;
             }
 
             return false;
         }
 
-        bool IFieldSerializable.SetFieldValue(string fieldName, object value)
+        bool IFieldSerializable.SetFieldValue<T>(string fieldName, T value)
         {
             if (fieldName == "_firstName")
             {
@@ -88,7 +89,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
         private bool _getViaInterface;
         private bool _setViaInterface;
 
-        bool IPropertySerializable.GetPropertyValue(string propertyName, ref object value)
+        bool IPropertySerializable.GetPropertyValue<T>(string propertyName, ref T value)
         {
             if (propertyName == "FirstName")
             {
@@ -107,7 +108,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             throw new NotSupportedException();
         }
 
-        bool IPropertySerializable.SetPropertyValue(string propertyName, object value)
+        bool IPropertySerializable.SetPropertyValue<T>(string propertyName, T value)
         {
             if (propertyName == "FirstName")
             {

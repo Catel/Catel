@@ -34,7 +34,7 @@ namespace Catel.Tests.IO
         public void Initialize()
         {
             // Determine test directory
-            _testDirectory = Path.Combine(System.IO.Path.GetTempPath(), "PathTest");
+            _testDirectory = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "PathTest");
 
             // Delete directory, than create it
             if (Directory.Exists(_testDirectory))
@@ -62,7 +62,7 @@ namespace Catel.Tests.IO
         //[TestCase]
         //public void GetApplicationData_EntryAssembly()
         //{
-        //    string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+        //    string expected = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
         //                                   Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
         //    string result = Path.GetApplicationDataDirectory();
@@ -73,7 +73,7 @@ namespace Catel.Tests.IO
         [TestCase]
         public void GetApplicationDataDirectory_AppOnly()
         {
-            string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            string expected = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                                            Assembly.GetExecutingAssembly().Product());
 
             string result = Path.GetApplicationDataDirectory(Assembly.GetExecutingAssembly().Product());
@@ -84,7 +84,7 @@ namespace Catel.Tests.IO
         [TestCase]
         public void GetApplicationDataDirectory_CompanyAndApp()
         {
-            string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            string expected = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                                            Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
             string result = Path.GetApplicationDataDirectory(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
@@ -96,7 +96,7 @@ namespace Catel.Tests.IO
         public void GetApplicationDataDirectory_CompanyAndAppAndTestDirectoryCreation()
         {
             // Set up directory
-            string directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            string directory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                                             Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
             // Make sure that the directory does not exist
@@ -113,7 +113,7 @@ namespace Catel.Tests.IO
         [TestCase]
         public void GetApplicationDataDirectoryForAllUsers_AppOnly()
         {
-            string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+            string expected = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                                            Assembly.GetExecutingAssembly().Product());
 
             string result = Path.GetApplicationDataDirectoryForAllUsers(Assembly.GetExecutingAssembly().Product());
@@ -124,7 +124,7 @@ namespace Catel.Tests.IO
         [TestCase]
         public void GetApplicationDataDirectoryForAllUsers_CompanyAndApp()
         {
-            string expected = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+            string expected = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                                            Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
             string result = Path.GetApplicationDataDirectoryForAllUsers(Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
@@ -136,7 +136,7 @@ namespace Catel.Tests.IO
         public void GetApplicationDataDirectoryForAllUsers_CompanyAndAppAndTestDirectoryCreation()
         {
             // Set up directory
-            string directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+            string directory = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                                             Assembly.GetExecutingAssembly().Company(), Assembly.GetExecutingAssembly().Product());
 
             // Make sure that the directory does not exist
@@ -581,190 +581,6 @@ namespace Catel.Tests.IO
 
             // Validate
             Assert.AreEqual(@"http://www.catenalogic.com/", result);
-        }
-        #endregion
-
-        #region Combine
-        [TestCase]
-        public void CombinePath_NoValues()
-        {
-            // Call method
-            string result = Path.Combine();
-
-            // Validate
-            Assert.AreEqual(@"", result);
-        }
-
-        [TestCase]
-        public void CombinePath_EmptyValues()
-        {
-            // Declare variables
-            string path1 = @"";
-            string path2 = @"";
-            string path3 = @"";
-
-            // Call method
-            string result = Path.Combine(path1, path2, path3);
-
-            // Validate
-            Assert.AreEqual(@"", result);
-        }
-
-        [TestCase]
-        public void CombinePath_OneNullValue()
-        {
-            // Declare variables
-            string path1 = @"C:\";
-            string path2 = null;
-            string path3 = @"Program Files";
-
-            // Call method
-            string result = Path.Combine(path1, path2, path3);
-
-            // Validate
-            Assert.AreEqual(@"C:\Program Files", result);
-        }
-
-        [TestCase]
-        public void CombinePath_1Value()
-        {
-            // Declare variables
-            string path1 = @"C:\Windows";
-
-            // Call method
-            string result = Path.Combine(path1);
-
-            // Validate
-            Assert.AreEqual(@"C:\Windows", result);
-        }
-
-        [TestCase]
-        public void CombinePath_2Values()
-        {
-            // Declare variables
-            string path1 = @"C:\";
-            string path2 = @"Windows";
-
-            // Call method
-            string result = Path.Combine(path1, path2);
-
-            // Validate
-            Assert.AreEqual(@"C:\Windows", result);
-        }
-
-        [TestCase]
-        public void CombinePath_3Values()
-        {
-            // Declare variables
-            string path1 = @"C:\";
-            string path2 = @"Windows";
-            string path3 = @"System";
-
-            // Call method
-            string result = Path.Combine(path1, path2, path3);
-
-            // Validate
-            Assert.AreEqual(@"C:\Windows\System", result);
-        }
-        #endregion
-
-        #region CombineUrls
-        [TestCase]
-        public void CombineUrls_NoValues()
-        {
-            // Call method
-            string result = Path.CombineUrls();
-
-            // Validate
-            Assert.AreEqual(@"", result);
-        }
-
-        [TestCase]
-        public void CombineUrls_1Value()
-        {
-            // Declare variables
-            string path1 = @"http://www.catenalogic.com";
-
-            // Call method
-            string result = Path.CombineUrls(path1);
-
-            // Validate
-            Assert.AreEqual(@"http://www.catenalogic.com", result);
-        }
-
-        [TestCase]
-        public void CombineUrls_2Values()
-        {
-            // Declare variables
-            string path1 = @"http://www.catenalogic.com";
-            string path2 = @"products";
-
-            // Call method
-            string result = Path.CombineUrls(path1, path2);
-
-            // Validate
-            Assert.AreEqual(@"http://www.catenalogic.com/products", result);
-        }
-
-        [TestCase]
-        public void CombineUrls_3Values()
-        {
-            // Declare variables
-            string path1 = @"http://www.catenalogic.com";
-            string path2 = @"products";
-            string path3 = @"updater";
-
-            // Call method
-            string result = Path.CombineUrls(path1, path2, path3);
-
-            // Validate
-            Assert.AreEqual(@"http://www.catenalogic.com/products/updater", result);
-        }
-
-        [TestCase]
-        public void CombineUrls_3ValuesAndGarbageSlashes()
-        {
-            // Declare variables
-            string path1 = @"http://www.catenalogic.com/";
-            string path2 = @"products\";
-            string path3 = @"/updater";
-
-            // Call method
-            string result = Path.CombineUrls(path1, path2, path3);
-
-            // Validate
-            Assert.AreEqual(@"http://www.catenalogic.com/products/updater", result);
-        }
-
-        [TestCase]
-        public void CombineUrls_3ValuesAndRootedPath()
-        {
-            // Declare variables
-            string path1 = @"/products";
-            string path2 = @"updater\";
-            string path3 = @"/default.aspx";
-
-            // Call method
-            string result = Path.CombineUrls(path1, path2, path3);
-
-            // Validate
-            Assert.AreEqual(@"/products/updater/default.aspx", result);
-        }
-
-
-        [TestCase]
-        public void CombineUrls_3ValuesAnd1Empty()
-        {
-            // Declare variables
-            string path1 = @"/products";
-            string path2 = @"";
-            string path3 = @"/default.aspx";
-
-            // Call method
-            string result = Path.CombineUrls(path1, path2, path3);
-
-            // Validate
-            Assert.AreEqual(@"/products/default.aspx", result);
         }
         #endregion
 
