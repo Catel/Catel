@@ -987,7 +987,7 @@ namespace Catel.Data
 
                 lock (storage)
                 {
-                    if (!storage.TryGetValue(name, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, value))
+                    if (!storage.TryGetValue(name, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, BoxingCache.GetBoxedValue(value)))
                     {
                         storage[name] = value;
                         raisePropertyChanged = true;

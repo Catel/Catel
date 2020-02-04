@@ -16,7 +16,7 @@ namespace Catel.Data
 
     public partial class ModelBase
     {
-        private static readonly Dictionary<string, object> _calculatedPropertyExpressions = new Dictionary<string, object>();
+        private static readonly Dictionary<string, object> CalculatedPropertyExpressions = new Dictionary<string, object>();
 
         /// <summary>
         /// Gets the object value for the specified value. This method allows caching of boxed objects.
@@ -261,12 +261,12 @@ namespace Catel.Data
         {
             var key = $"{propertyName}_as_{typeof(TValue).Name}";
 
-            if (!_calculatedPropertyExpressions.TryGetValue(key, out var getter))
+            if (!CalculatedPropertyExpressions.TryGetValue(key, out var getter))
             {
                 var expression = ExpressionBuilder.CreatePropertyGetter<TValue>(GetType(), propertyName);
                 getter = expression?.Compile();
 
-                _calculatedPropertyExpressions[key] = getter;
+                CalculatedPropertyExpressions[key] = getter;
             }
 
             return (Func<object, TValue>)getter;

@@ -11,7 +11,7 @@ namespace Catel
     using System.Globalization;
     using System.Linq;
     using System.Reflection;
-
+    using Catel.Data;
     using Catel.Reflection;
 
     /// <summary>
@@ -61,7 +61,7 @@ namespace Catel
         /// <returns>The name of the value.</returns>
         public static string GetName(int value)
         {
-            return Enum.GetName(typeof(TEnum), value);
+            return Enum.GetName(typeof(TEnum), BoxingCache.GetBoxedValue(value));
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Catel
         /// <returns>The name of the value.</returns>
         public static string GetName(long value)
         {
-            return Enum.GetName(typeof(TEnum), value);
+            return Enum.GetName(typeof(TEnum), BoxingCache.GetBoxedValue(value));
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace Catel
         /// <returns>The name of the value.</returns>
         private static string GetName(TEnum value)
         {
-            return Enum.GetName(typeof(TEnum), value);
+            return Enum.GetName(typeof(TEnum), BoxingCache.GetBoxedValue(value));
         }
         #endregion
 

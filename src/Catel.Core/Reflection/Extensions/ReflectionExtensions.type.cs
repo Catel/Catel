@@ -700,6 +700,43 @@ namespace Catel.Reflection
         /// <returns>The is instance of type ex.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="objectToCheck" /> is <c>null</c>.</exception>
+        public static bool IsInstanceOfTypeEx<T>(this Type type, T objectToCheck)
+        {
+            Argument.IsNotNull("type", type);
+            Argument.IsNotNull("objectToCheck", objectToCheck);
+
+            var instanceType = objectToCheck.GetType();
+
+            if (ConvertableDictionary.TryGetValue(type, out var convertableHashSet))
+            {
+                if (convertableHashSet.Contains(instanceType))
+                {
+                    return true;
+                }
+            }
+
+            if (type.IsAssignableFromEx(instanceType))
+            {
+                return true;
+            }
+
+            var castable = (from method in type.GetMethodsEx(BindingFlags.Public | BindingFlags.Static)
+                            where method.ReturnType == instanceType &&
+                                  method.Name.Equals("op_Implicit", StringComparison.Ordinal) ||
+                                  method.Name.Equals("op_Explicit", StringComparison.Ordinal)
+                            select method).Any();
+
+            return castable;
+        }
+
+        /// <summary>
+        /// The is instance of type ex.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="objectToCheck">The object to check.</param>
+        /// <returns>The is instance of type ex.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="objectToCheck" /> is <c>null</c>.</exception>
         public static bool IsInstanceOfTypeEx(this Type type, object objectToCheck)
         {
             Argument.IsNotNull("type", type);

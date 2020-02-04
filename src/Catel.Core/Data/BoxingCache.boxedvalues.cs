@@ -19,6 +19,16 @@ namespace Catel.Data
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>An object representing the value.</returns>
+        public static object GetBoxedValue<TValue>(TValue value)
+        {
+            return BoxingCache<TValue>.Default.GetBoxedValue(value);
+        }
+
+        /// <summary>
+        /// Converts the specified Boolean value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>An object representing the value.</returns>
         public static object GetBoxedValue(Boolean value)
         {
             return BoxingCache<Boolean>.Default.GetBoxedValue(value);

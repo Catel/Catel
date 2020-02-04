@@ -134,7 +134,7 @@ namespace Catel.Data
 
             lock (_lockObject)
             {
-                if (!_properties.TryGetValue(name, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, value))
+                if (!_properties.TryGetValue(name, out var propertyValue) || !ObjectHelper.AreEqualReferences(propertyValue, BoxingCache.GetBoxedValue(value)))
                 {
                     _properties[name] = value;
                     raisePropertyChanged = true;

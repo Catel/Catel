@@ -79,7 +79,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             var serializingTypeName = serializingType.GetSafeFullName(false);
             var typeToSerializeName = typeToSerialize.GetSafeFullName(false);
-            var key = string.Format("{0}|{1}|{2}", serializingTypeName, typeToSerializeName, additionalKnownTypes?.Count ?? 0);
+            var key = $"{serializingTypeName}|{typeToSerializeName}|{(additionalKnownTypes?.Count ?? 0).ToString()}";
 
             return _knownTypesCache.GetFromCacheOrFetch(key, () =>
             {
@@ -130,7 +130,7 @@ namespace Catel.Runtime.Serialization.Xml
 
             var serializingTypeName = serializingType.GetSafeFullName(false);
             var typeToSerializeName = typeToSerialize.GetSafeFullName(false);
-            var key = string.Format("{0}|{1}|{2}|{3}", serializingTypeName, typeToSerializeName, additionalKnownTypes?.Count ?? 0, xmlName);
+            var key = $"{serializingTypeName}|{typeToSerializeName}|{(additionalKnownTypes?.Count ?? 0).ToString()}|{xmlName}";
 
             return _dataContractSerializersCache.GetFromCacheOrFetch(key, () =>
             {
