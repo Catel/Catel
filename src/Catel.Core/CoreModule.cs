@@ -7,6 +7,7 @@
 
 namespace Catel
 {
+    using System;
     using Configuration;
     using Data;
     using ExceptionHandling;
@@ -28,6 +29,9 @@ namespace Catel
         public void Initialize(IServiceLocator serviceLocator)
         {
             Argument.IsNotNull("serviceLocator", serviceLocator);
+
+            // No need to clean the small boxing caches
+            BoxingCache<bool>.Default.CleanUpInterval = TimeSpan.Zero;
 
             serviceLocator.RegisterType<ILanguageService, LanguageService>();
             serviceLocator.RegisterType<IAppDataService, AppDataService>();
