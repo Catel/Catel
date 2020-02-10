@@ -92,7 +92,9 @@ namespace Catel.Services
         /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
         public override int GetHashCode()
         {
+#pragma warning disable HAA0102 // Non-overridden virtual method call on value type
             return base.GetHashCode();
+#pragma warning restore HAA0102 // Non-overridden virtual method call on value type
         }
 
         /// <summary>
@@ -143,7 +145,7 @@ namespace Catel.Services
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
-            return _string ?? (_string =  string.Format("{0}x{1}", Width, Height));
+            return _string ?? (_string =  $"{Width.ToString()}x{Height.ToString()}");
         }
     }
 }

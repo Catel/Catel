@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="NotifyRangedCollectionChangedEventArgs.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
 // </copyright>
@@ -123,7 +123,7 @@ namespace Catel.Collections
             // Check for mixed modes except for Mixed, others fail
             if (mode == SuspensionMode.Mixed || !mode.IsMixedMode())
             {
-                throw new ArgumentException($"Wrong mode '{mode}' for constructor.");
+                throw new ArgumentException($"Wrong mode '{Enum<SuspensionMode>.ToString(mode)}' for constructor.");
             }
 
             // Check for action Add or Remove, others fail
@@ -131,7 +131,7 @@ namespace Catel.Collections
             {
                 case NotifyCollectionChangedAction.Add:
                 case NotifyCollectionChangedAction.Remove: return action;
-                default: throw new ArgumentException($"Wrong action '{action}' for constructor.");
+                default: throw new ArgumentException($"Wrong action '{Enum<NotifyCollectionChangedAction>.ToString(action)}' for constructor.");
             }
         }
 
@@ -147,7 +147,7 @@ namespace Catel.Collections
             {
                 case SuspensionMode.Adding: return NotifyCollectionChangedAction.Add;
                 case SuspensionMode.Removing: return NotifyCollectionChangedAction.Remove;
-                default: throw new ArgumentException($"Wrong mode '{mode}' for constructor.");
+                default: throw new ArgumentException($"Wrong mode '{Enum<SuspensionMode>.ToString(mode)}' for constructor.");
             }
         }
         #endregion

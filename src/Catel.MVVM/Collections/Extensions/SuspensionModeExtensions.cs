@@ -18,7 +18,7 @@ namespace Catel.Collections
         /// <summary>
         /// The mixed modes.
         /// </summary>
-        private static readonly List<SuspensionMode> MixedModes = Enum<SuspensionMode>.GetValues().Where(mode => mode.ToString().ContainsIgnoreCase("Mixed")).ToList();
+        private static readonly List<SuspensionMode> MixedModes = Enum<SuspensionMode>.GetValues().Where(mode => Enum<SuspensionMode>.ToString(mode).ToString().ContainsIgnoreCase("Mixed")).ToList();
         #endregion Fields
 
         #region Methods

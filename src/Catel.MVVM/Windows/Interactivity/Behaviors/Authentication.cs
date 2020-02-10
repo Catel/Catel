@@ -101,7 +101,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Using a DependencyProperty as the backing store for Action.  This enables animation, styling, binding, etc... 
         /// </summary>
-        public static readonly DependencyProperty ActionProperty = DependencyProperty.Register("Action", typeof(AuthenticationAction),
+        public static readonly DependencyProperty ActionProperty = DependencyProperty.Register(nameof(Action), typeof(AuthenticationAction),
             typeof(Authentication), new PropertyMetadata(AuthenticationAction.Disable));
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Catel.Windows.Interactivity
         /// Using a DependencyProperty as the backing store for AuthenticationTag.  This enables animation, styling, binding, etc... 
         /// </summary>
         public static readonly DependencyProperty AuthenticationTagProperty =
-            DependencyProperty.Register("AuthenticationTag", typeof(object), typeof(Authentication), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(AuthenticationTag), typeof(object), typeof(Authentication), new PropertyMetadata(null));
         #endregion
 
         #region Methods
