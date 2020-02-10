@@ -163,7 +163,7 @@ namespace Catel.IoC
             Argument.IsNotNull("serviceLocator", serviceLocator);
             Argument.IsNotNull("instance", instance);
 
-            serviceLocator.RegisterInstance(typeof(TService), instance, tag);
+            serviceLocator.RegisterInstance(typeof(TService), (object)instance, tag);
         }
 
         /// <summary>

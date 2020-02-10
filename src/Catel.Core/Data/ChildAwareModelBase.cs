@@ -87,7 +87,7 @@ namespace Catel.Data
         {
             base.SetValueToPropertyBag<TValue>(propertyName, value);
 
-            HandleObjectEventsSubscription(propertyName, value);
+            HandleObjectEventsSubscription(propertyName, BoxingCache.GetBoxedValue(value));
         }
 
         /// <summary>

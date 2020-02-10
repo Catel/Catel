@@ -7,6 +7,8 @@
 namespace Catel.Logging
 {
     using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     /// <summary>
     /// Log entry class.
@@ -15,7 +17,17 @@ namespace Catel.Logging
     {
         private LogData _logData;
 
+        private static readonly Dictionary<LogEvent, string> LogEventCache = new Dictionary<LogEvent, string>();
+
         #region Constructors
+        static LogEntry()
+        {
+            foreach (var value in Enum<LogEvent>.GetValues())
+            {
+                LogEventCache[value] = Enum<LogEvent>.ToString(value);
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="LogEntry" /> class.
         /// </summary>
@@ -108,7 +120,7 @@ namespace Catel.Logging
         /// <returns>String value.</returns>
         public override string ToString()
         {
-            return $"[{Time}] [{LogEvent}] {Message}";
+            return $"[{Time.ToString()}] [{LogEventCache[LogEvent]}] {Message}";
         }
         #endregion
     }

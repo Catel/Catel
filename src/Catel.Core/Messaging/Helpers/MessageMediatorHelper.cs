@@ -63,7 +63,7 @@ namespace Catel.Messaging
                             break;
 
                         case 1:
-                            actionType = typeof(Action<>).MakeGenericType(parameterInfos[0].ParameterType);
+                            actionType = typeof(Action<>).MakeGenericTypeEx(parameterInfos[0].ParameterType);
                             actionParameterType = parameterInfos[0].ParameterType;
                             break;
 
@@ -74,7 +74,9 @@ namespace Catel.Messaging
                     var tag = attribute.Tag;
                     var action = DelegateHelper.CreateDelegate(actionType, instance, methodInfo);
 
+#pragma warning disable HAA0101 // Array allocation for params parameter
                     var registerMethod = mediator.GetType().GetMethodEx("Register").MakeGenericMethod(actionParameterType);
+#pragma warning restore HAA0101 // Array allocation for params parameter
                     registerMethod.Invoke(mediator, new[] { instance, action, tag });
                 }
             }

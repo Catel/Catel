@@ -100,7 +100,7 @@ namespace Catel.Logging
             public const string WorkDir = "{WorkDir}";
         }
 
-        private readonly string AutoLogFileNameReplacement = string.Format("{0}_{1}_{2}_{3}", FilePathKeyword.AssemblyName, FilePathKeyword.Date, FilePathKeyword.Time, FilePathKeyword.ProcessId);
+        private readonly string AutoLogFileNameReplacement = $"{FilePathKeyword.AssemblyName}_{FilePathKeyword.Date}_{FilePathKeyword.Time}_{FilePathKeyword.ProcessId}";
 
         private Assembly _assembly;
         private string _filePath;
@@ -327,9 +327,9 @@ namespace Catel.Logging
 
         private void CreateCopyOfCurrentLogFile(string filePath)
         {
-            for (int i = 1; i < 999; i++)
+            for (var i = 1; i < 999; i++)
             {
-                var possibleFilePath = string.Format("{0}.{1:000}", filePath, i);
+                var possibleFilePath = string.Format("{0}.{1:000}", filePath, i.ToString());
                 if (!File.Exists(possibleFilePath))
                 {
                     File.Move(filePath, possibleFilePath);

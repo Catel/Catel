@@ -29,7 +29,7 @@ namespace Catel.Windows.Input
         /// <summary>
         /// <see cref="ToString"/> method result cache.
         /// </summary>
-        private string _string; 
+        private string _string;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InputGesture"/> class.
@@ -107,7 +107,7 @@ namespace Catel.Windows.Input
                 return false;
             }
 
-            return Equals((InputGesture) obj);
+            return Equals((InputGesture)obj);
         }
 
         /// <summary>
@@ -187,12 +187,12 @@ namespace Catel.Windows.Input
                     {
                         if (Enum<ModifierKeys>.Flags.IsFlagSet(Modifiers, modifier) && modifier != ModifierKeys.None)
                         {
-                            format += string.Format("{0} + ", modifier);
+                            format += $"{Enum<ModifierKeys>.ToString(modifier)} + ";
                         }
                     }
                 }
 
-                _string = format + Key;
+                _string = format + Enum<Key>.ToString(Key);
             }
 
             return _string;

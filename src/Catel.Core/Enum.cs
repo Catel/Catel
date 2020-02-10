@@ -21,7 +21,27 @@ namespace Catel
     public static class Enum<TEnum>
         where TEnum : struct, IComparable, IFormattable
     {
+        private static readonly Dictionary<TEnum, string> StringCache = new Dictionary<TEnum, string>();
+
         #region Static Methods
+        /// <summary>
+        /// Gets the string representation of the enum value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string ToString(TEnum value)
+        {
+            if (!StringCache.TryGetValue(value, out var stringValue))
+            {
+#pragma warning disable HAA0102 // Non-overridden virtual method call on value type
+                stringValue = value.ToString();
+#pragma warning restore HAA0102 // Non-overridden virtual method call on value type
+                StringCache[value] = stringValue; 
+            }
+
+            return stringValue;
+        }
+
         /// <summary>
         /// Converts an enumaration to a list.
         /// </summary>
@@ -331,7 +351,7 @@ namespace Catel
                 /// </exception>
                 public bool Equals(IBindableEnum<TEnum> other)
                 {
-                    return _value.Equals(other.Value);
+                    return EqualityComparer<TEnum>.Default.Equals(_value, other.Value);
                 }
         #endregion
             }
@@ -358,7 +378,7 @@ namespace Catel
 
                 foreach (var value in Enum<TEnum>.GetValues())
                 {
-                    var intValue = Convert.ToInt32(value);
+                    var intValue = Convert.ToInt32(BoxingCache.GetBoxedValue(value));
                     if (intValue == 0)
                     {
                         continue;
@@ -382,7 +402,7 @@ namespace Catel
             public static TEnum ClearFlag(TEnum flags, TEnum flagToClear)
             {
                 // all other integral types except unsigned* which are not yet supported....
-                return ClearFlag(Convert.ToInt32(flags, CultureInfo.CurrentCulture), Convert.ToInt32(flagToClear, CultureInfo.CurrentCulture));
+                return ClearFlag(Convert.ToInt32(BoxingCache.GetBoxedValue(flags), CultureInfo.CurrentCulture), Convert.ToInt32(BoxingCache.GetBoxedValue(flagToClear), CultureInfo.CurrentCulture));
             }
 
             /// <summary>
@@ -393,7 +413,7 @@ namespace Catel
             /// <returns>Flags without the flag that should be cleared.</returns>
             public static TEnum ClearFlag(int flags, TEnum flagToClear)
             {
-                return ClearFlag(flags, Convert.ToInt32(flagToClear, CultureInfo.CurrentCulture));
+                return ClearFlag(flags, Convert.ToInt32(BoxingCache.GetBoxedValue(flagToClear), CultureInfo.CurrentCulture));
             }
 
             /// <summary>
@@ -404,7 +424,7 @@ namespace Catel
             /// <returns>Flags without the flag that should be cleared.</returns>
             public static TEnum ClearFlag(long flags, TEnum flagToClear)
             {
-                return ClearFlag(flags, Convert.ToInt64(flagToClear, CultureInfo.CurrentCulture));
+                return ClearFlag(flags, Convert.ToInt64(BoxingCache.GetBoxedValue(flagToClear), CultureInfo.CurrentCulture));
             }
 
             /// <summary>
@@ -446,7 +466,7 @@ namespace Catel
             /// </returns>
             public static bool IsFlagSet(TEnum flags, TEnum flagToFind)
             {
-                return IsFlagSet(Convert.ToInt32(flags, CultureInfo.CurrentCulture), Convert.ToInt32(flagToFind, CultureInfo.CurrentCulture));
+                return IsFlagSet(Convert.ToInt32(BoxingCache.GetBoxedValue(flags), CultureInfo.CurrentCulture), Convert.ToInt32(BoxingCache.GetBoxedValue(flagToFind), CultureInfo.CurrentCulture));
             }
 
             /// <summary>
@@ -459,7 +479,7 @@ namespace Catel
             /// </returns>
             public static bool IsFlagSet(int flags, TEnum flagToFind)
             {
-                return IsFlagSet(Convert.ToInt32(flags, CultureInfo.CurrentCulture), Convert.ToInt32(flagToFind, CultureInfo.CurrentCulture));
+                return IsFlagSet(flags, Convert.ToInt32(BoxingCache.GetBoxedValue(flagToFind), CultureInfo.CurrentCulture));
             }
 
             /// <summary>
@@ -472,7 +492,7 @@ namespace Catel
             /// </returns>
             public static bool IsFlagSet(long flags, TEnum flagToFind)
             {
-                return IsFlagSet(Convert.ToInt64(flags, CultureInfo.CurrentCulture), Convert.ToInt32(flagToFind, CultureInfo.CurrentCulture));
+                return IsFlagSet(flags, Convert.ToInt64(BoxingCache.GetBoxedValue(flagToFind), CultureInfo.CurrentCulture));
             }
 
             /// <summary>
@@ -509,7 +529,7 @@ namespace Catel
             /// <returns>Flags with the flag that should be set.</returns>
             public static TEnum SetFlag(TEnum flags, TEnum flagToSet)
             {
-                return SetFlag(Convert.ToInt32(flags, CultureInfo.CurrentCulture), Convert.ToInt32(flagToSet, CultureInfo.CurrentCulture));
+                return SetFlag(Convert.ToInt32(BoxingCache.GetBoxedValue(flags), CultureInfo.CurrentCulture), Convert.ToInt32(BoxingCache.GetBoxedValue(flagToSet), CultureInfo.CurrentCulture));
             }
 
             /// <summary>
@@ -520,7 +540,7 @@ namespace Catel
             /// <returns>Flags with the flag that should be set.</returns>
             public static TEnum SetFlag(int flags, TEnum flagToSet)
             {
-                return SetFlag(flags, Convert.ToInt32(flagToSet, CultureInfo.CurrentCulture));
+                return SetFlag(flags, Convert.ToInt32(BoxingCache.GetBoxedValue(flagToSet), CultureInfo.CurrentCulture));
             }
 
             /// <summary>
@@ -531,7 +551,7 @@ namespace Catel
             /// <returns>Flags with the flag that should be set.</returns>
             public static TEnum SetFlag(long flags, TEnum flagToSet)
             {
-                return SetFlag(flags, Convert.ToInt64(flagToSet, CultureInfo.CurrentCulture));
+                return SetFlag(flags, Convert.ToInt64(BoxingCache.GetBoxedValue(flagToSet), CultureInfo.CurrentCulture));
             }
 
             /// <summary>
@@ -571,7 +591,7 @@ namespace Catel
             /// <returns>Flags with the flag swapped that should be swapped.</returns>
             public static TEnum SwapFlag(TEnum flags, TEnum flagToSwap)
             {
-                return SwapFlag(Convert.ToInt32(flags, CultureInfo.CurrentCulture), Convert.ToInt32(flagToSwap, CultureInfo.CurrentCulture));
+                return SwapFlag(Convert.ToInt32(BoxingCache.GetBoxedValue(flags), CultureInfo.CurrentCulture), Convert.ToInt32(BoxingCache.GetBoxedValue(flagToSwap), CultureInfo.CurrentCulture));
             }
 
             /// <summary>
@@ -582,7 +602,7 @@ namespace Catel
             /// <returns>Flags with the flag swapped that should be swapped.</returns>
             public static TEnum SwapFlag(int flags, TEnum flagToSwap)
             {
-                return SwapFlag(flags, Convert.ToInt32(flagToSwap, CultureInfo.CurrentCulture));
+                return SwapFlag(flags, Convert.ToInt32(BoxingCache.GetBoxedValue(flagToSwap), CultureInfo.CurrentCulture));
             }
 
             /// <summary>
@@ -593,7 +613,7 @@ namespace Catel
             /// <returns>Flags with the flag swapped that should be swapped.</returns>
             public static TEnum SwapFlag(long flags, TEnum flagToSwap)
             {
-                return SwapFlag(flags, Convert.ToInt64(flagToSwap, CultureInfo.CurrentCulture));
+                return SwapFlag(flags, Convert.ToInt64(BoxingCache.GetBoxedValue(flagToSwap), CultureInfo.CurrentCulture));
             }
 
             /// <summary>

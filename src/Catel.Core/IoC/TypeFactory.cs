@@ -232,7 +232,7 @@ namespace Catel.IoC
                 }
                 catch (Exception ex)
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>(ex, "Failed to set property '{0}.{1}' during property dependency injection", type.Name, propertyInfo.Name);
+                    throw Log.ErrorAndCreateException<InvalidOperationException>(ex, $"Failed to set property '{type.Name}.{propertyInfo.Name}' during property dependency injection");
                 }
             }
 
@@ -535,11 +535,11 @@ namespace Catel.IoC
                             {
                                 ctorParameterValueLocal = ctorParameterValueLocal.ToSystemArray(collectionElementType);
                             }
-                            else if (typeof(IReadOnlyList<>).MakeGenericType(collectionElementType).IsAssignableFromEx(parameterTypeToResolve) || typeof(IReadOnlyCollection<>).MakeGenericType(collectionElementType).IsAssignableFromEx(parameterTypeToResolve))
+                            else if (typeof(IReadOnlyList<>).MakeGenericTypeEx(collectionElementType).IsAssignableFromEx(parameterTypeToResolve) || typeof(IReadOnlyCollection<>).MakeGenericTypeEx(collectionElementType).IsAssignableFromEx(parameterTypeToResolve))
                             {
                                 ctorParameterValueLocal = ctorParameterValueLocal.AsReadOnly(collectionElementType);
                             }
-                            else if (typeof(IList<>).MakeGenericType(collectionElementType).IsAssignableFromEx(parameterTypeToResolve) || typeof(ICollection<>).MakeGenericType(collectionElementType).IsAssignableFromEx(parameterTypeToResolve))
+                            else if (typeof(IList<>).MakeGenericTypeEx(collectionElementType).IsAssignableFromEx(parameterTypeToResolve) || typeof(ICollection<>).MakeGenericTypeEx(collectionElementType).IsAssignableFromEx(parameterTypeToResolve))
                             {
                                 ctorParameterValueLocal = ctorParameterValueLocal.ToList(collectionElementType);
                             }
@@ -863,7 +863,7 @@ namespace Catel.IoC
 
             public List<ConstructorInfo> GetConstructors(int parameterCount, bool mustMatchExactCount)
             {
-                string key = string.Format("{0}_{1}", parameterCount, mustMatchExactCount);
+                var key = $"{parameterCount.ToString()}_{mustMatchExactCount.ToString()}";
 
                 return _callCache.GetFromCacheOrFetch(key, () =>
                 {

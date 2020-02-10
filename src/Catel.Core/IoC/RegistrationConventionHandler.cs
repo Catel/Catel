@@ -11,6 +11,7 @@ namespace Catel.IoC
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using Catel.Data;
     using Collections;
     using Logging;
     using Reflection;
@@ -140,9 +141,11 @@ namespace Catel.IoC
         /// Registers the convention.
         /// </summary>
         public void RegisterConvention<TRegistrationConvention>(RegistrationType registrationType = RegistrationType.Singleton)
-            where TRegistrationConvention : IRegistrationConvention
+            where TRegistrationConvention : class, IRegistrationConvention
         {
-            var registrationConvention = _typeFactory.CreateInstanceWithParameters<TRegistrationConvention>(_serviceLocator, registrationType);
+#pragma warning disable HAA0101 // Array allocation for params parameter
+            var registrationConvention = _typeFactory.CreateInstanceWithParameters<TRegistrationConvention>(_serviceLocator, BoxingCache<RegistrationType>.Default.GetBoxedValue(registrationType));
+#pragma warning restore HAA0101 // Array allocation for params parameter
 
             if (_registeredConventions.Contains(registrationConvention))
             {

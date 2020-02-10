@@ -49,7 +49,7 @@ namespace Catel.IoC
         /// <typeparam name="TRegistrationConvention">The type of the registration convention.</typeparam>
         /// <param name="registrationType">Type of the registration.</param>
         void RegisterConvention<TRegistrationConvention>(RegistrationType registrationType = RegistrationType.Singleton) 
-            where TRegistrationConvention : IRegistrationConvention;
+            where TRegistrationConvention : class, IRegistrationConvention;
 
         /// <summary>
         /// Applies the registered conventions.

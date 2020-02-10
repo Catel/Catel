@@ -98,7 +98,9 @@ namespace Catel.Logging
             textWriter.Write("{");
 
             var delim = string.Empty;
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
             WriteJsonProperty("Timestamp", time, ref delim, textWriter);
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
             WriteJsonProperty("Level", LogEventStrings[logEvent], ref delim, textWriter);
             WriteJsonProperty("MessageTemplate", message, ref delim, textWriter);
 

@@ -148,7 +148,7 @@ namespace Catel.Data
                 var changeNotificationsSuspensionContext = _changeNotificationsSuspensionContext;
 
                 oldValue = GetValueFromPropertyBag<TValue>(property.Name);
-                var areOldAndNewValuesEqual = ObjectHelper.AreEqualReferences(BoxingCache.GetBoxedValue(oldValue), value);
+                var areOldAndNewValuesEqual = ObjectHelper.AreEqualReferences(BoxingCache.GetBoxedValue(oldValue), BoxingCache.GetBoxedValue(value));
 
                 if (!areOldAndNewValuesEqual)
                 {

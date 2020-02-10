@@ -36,7 +36,7 @@ namespace Catel.Logging
             LogEventStrings = new Dictionary<LogEvent, string>();
             foreach (var enumValue in Enum<LogEvent>.GetValues())
             {
-                LogEventStrings[enumValue] = enumValue.ToString().ToUpper();
+                LogEventStrings[enumValue] = Enum<LogEvent>.ToString(enumValue).ToUpper();
             }
         }
 
@@ -324,7 +324,7 @@ namespace Catel.Logging
         /// <returns>The formatted log event.</returns>
         protected virtual string FormatLogEvent(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
-            var logMessage = string.Format("{0} => [{1}] [{2}] [{3}] {4}", time.ToString(_timeFormat), LogEventStrings[logEvent], log.Name, ThreadHelper.GetCurrentThreadId(), message);
+            var logMessage = $"{time.ToString(_timeFormat)} => [{LogEventStrings[logEvent]}] [{log.Name}] [{ThreadHelper.GetCurrentThreadId().ToString()}] {message}";
             return logMessage;
         }
 

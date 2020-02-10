@@ -29,14 +29,14 @@ namespace Catel
         {
             while (ex != null)
             {
-                if (ex is OutOfMemoryException || 
+                if (ex is OutOfMemoryException ||
                     ex is BadImageFormatException
 
 #if NET || NETCORE || NETSTANDARD || XAMARIN
-                    || ex is AppDomainUnloadedException || 
-                    ex is CannotUnloadAppDomainException || 
-                    ex is InvalidProgramException || 
-                    ex is ThreadAbortException || 
+                    || ex is AppDomainUnloadedException ||
+                    ex is CannotUnloadAppDomainException ||
+                    ex is InvalidProgramException ||
+                    ex is ThreadAbortException ||
                     ex is StackOverflowException
 #endif
                     )
@@ -176,7 +176,7 @@ namespace Catel
                 root.Add
                 (
                     new XElement("StackTrace",
-                        from frame in exception.StackTrace.Split('\n')
+                        from frame in exception.StackTrace.Split(new[] { '\n' })
                         let prettierFrame = frame.Substring(6).Trim()
                         select new XElement("Frame", prettierFrame))
                 );
@@ -187,8 +187,7 @@ namespace Catel
                 root.Add
                 (
                     new XElement("Data",
-                        from entry in
-                            exception.Data.Cast<DictionaryEntry>()
+                        from entry in exception.Data.Cast<DictionaryEntry>()
                         let key = entry.Key.ToString()
                         let value = (ObjectHelper.IsNull(entry.Value)) ? "null" : entry.Value.ToString()
                         select new XElement(key, value))

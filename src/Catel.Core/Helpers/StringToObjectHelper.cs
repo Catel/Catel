@@ -9,6 +9,7 @@ namespace Catel
     using System;
     using System.Globalization;
     using System.Text;
+    using Catel.Data;
     using Collections;
     using Logging;
     using Reflection;
@@ -502,12 +503,12 @@ namespace Catel
             if (targetType == typeof(bool) ||
                 targetType == typeof(bool?))
             {
-                return ToBool(value);
+                return BoxingCache<bool>.Default.GetBoxedValue(ToBool(value));
             }
 
             if (targetType == typeof(byte))
             {
-                return ToByte(value);
+                return BoxingCache<byte>.Default.GetBoxedValue(ToByte(value));
             }
 
             if (targetType == typeof(byte[]))
@@ -518,73 +519,73 @@ namespace Catel
             if (targetType == typeof(DateTime) ||
                 targetType == typeof(DateTime?))
             {
-                return ToDateTime(value, cultureInfo);
+                return BoxingCache<DateTime>.Default.GetBoxedValue(ToDateTime(value, cultureInfo));
             }
 
             if (targetType == typeof(TimeSpan) ||
                 targetType == typeof(TimeSpan?))
             {
-                return ToTimeSpan(value, cultureInfo);
+                return BoxingCache<TimeSpan>.Default.GetBoxedValue(ToTimeSpan(value, cultureInfo));
             }
 
             if (targetType == typeof(decimal) ||
                 targetType == typeof(decimal?))
             {
-                return ToDecimal(value, cultureInfo);
+                return BoxingCache<decimal>.Default.GetBoxedValue(ToDecimal(value, cultureInfo));
             }
 
             if (targetType == typeof(double) ||
                 targetType == typeof(double?))
             {
-                return ToDouble(value, cultureInfo);
+                return BoxingCache<double>.Default.GetBoxedValue(ToDouble(value, cultureInfo));
             }
 
             if (targetType == typeof(float) ||
                 targetType == typeof(float?))
             {
-                return ToFloat(value, cultureInfo);
+                return BoxingCache<float>.Default.GetBoxedValue(ToFloat(value, cultureInfo));
             }
 
             if (targetType == typeof(Guid) ||
                 targetType == typeof(Guid?))
             {
-                return ToGuid(value);
+                return BoxingCache<Guid>.Default.GetBoxedValue(ToGuid(value));
             }
 
             if (targetType == typeof(short) ||
                 targetType == typeof(short?))
             {
-                return ToShort(value, cultureInfo);
+                return BoxingCache<short>.Default.GetBoxedValue(ToShort(value, cultureInfo));
             }
 
             if (targetType == typeof(ushort) ||
                 targetType == typeof(ushort?))
             {
-                return ToUShort(value, cultureInfo);
+                return BoxingCache<ushort>.Default.GetBoxedValue(ToUShort(value, cultureInfo));
             }
 
             if (targetType == typeof(int) ||
                 targetType == typeof(int?))
             {
-                return ToInt(value, cultureInfo);
+                return BoxingCache<int>.Default.GetBoxedValue(ToInt(value, cultureInfo));
             }
 
             if (targetType == typeof(uint) ||
                 targetType == typeof(uint?))
             {
-                return ToUInt(value, cultureInfo);
+                return BoxingCache<uint>.Default.GetBoxedValue(ToUInt(value, cultureInfo));
             }
 
             if (targetType == typeof(long) ||
                 targetType == typeof(long?))
             {
-                return ToLong(value, cultureInfo);
+                return BoxingCache<long>.Default.GetBoxedValue(ToLong(value, cultureInfo));
             }
 
             if (targetType == typeof(ulong) ||
                 targetType == typeof(ulong?))
             {
-                return ToULong(value, cultureInfo);
+                return BoxingCache<ulong>.Default.GetBoxedValue(ToULong(value, cultureInfo));
             }
 
             if (targetType == typeof(Uri))

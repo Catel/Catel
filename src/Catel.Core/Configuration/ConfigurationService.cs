@@ -112,7 +112,7 @@ namespace Catel.Configuration
         /// <returns>Returns the full configuration filename for the specified application data target.</returns>
         protected virtual string GetConfigurationFileName(Catel.IO.ApplicationDataTarget applicationDataTarget)
         {
-            var filename = Path.Combine(_appDataService.GetApplicationDataDirectory(applicationDataTarget), "configuration.xml");
+            var filename = System.IO.Path.Combine(_appDataService.GetApplicationDataDirectory(applicationDataTarget), "configuration.xml");
             return filename;
         }
 
@@ -176,7 +176,7 @@ namespace Catel.Configuration
             }
             catch (Exception ex)
             {
-                Log.Warning(ex, $"Failed to retrieve configuration value '{container.ToString()}.{key}', returning default value");
+                Log.Warning(ex, $"Failed to retrieve configuration value '{Enum<ConfigurationContainer>.ToString(container)}.{key}', returning default value");
 
                 return defaultValue;
             }

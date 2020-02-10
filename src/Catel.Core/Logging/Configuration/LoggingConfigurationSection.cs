@@ -77,14 +77,14 @@ namespace Catel.Logging
         {
             var logListeners = new List<ILogListener>();
 
-            Log.Debug("Instantiating {0} log listener(s) from configuration", LogListenerConfigurationCollection.Count);
+            Log.Debug("Instantiating {0} log listener(s) from configuration", LogListenerConfigurationCollection.Count.ToString());
 
             foreach (LogListenerConfiguration logListenerConfiguration in LogListenerConfigurationCollection)
             {
                 logListeners.Add(logListenerConfiguration.GetLogListener(assembly));
             }
 
-            Log.Debug("Instantiated {0} log listener(s) from configuration", logListeners.Count);
+            Log.Debug("Instantiated {0} log listener(s) from configuration", logListeners.Count.ToString());
 
             return logListeners;
         }

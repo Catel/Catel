@@ -143,6 +143,22 @@ namespace Catel.Reflection
         /// The get custom attribute ex.
         /// </summary>
         /// <param name="type">The type.</param>
+        /// <param name="typeArgument">The type argument.</param>
+        /// <returns>The generic type.</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="typeArgument" /> is <c>null</c>.</exception>
+        public static Type MakeGenericTypeEx(this Type type, Type typeArgument)
+        {
+            Argument.IsNotNull("type", type);
+            Argument.IsNotNull("typeArgument", typeArgument);
+
+            return MakeGenericTypeEx(type, new [] { typeArgument });
+        }
+
+        /// <summary>
+        /// The get custom attribute ex.
+        /// </summary>
+        /// <param name="type">The type.</param>
         /// <param name="typeArguments">The type arguments.</param>
         /// <returns>The generic type.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>

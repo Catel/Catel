@@ -98,7 +98,7 @@ namespace Catel.IoC
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="registrationConventionHandler" /> is <c>null</c>.</exception>
         public static IRegistrationConventionHandler ShouldAlsoUseConvention<TRegistrationConvention>(this IRegistrationConventionHandler registrationConventionHandler, RegistrationType registrationType = RegistrationType.Singleton)
-            where TRegistrationConvention : IRegistrationConvention
+            where TRegistrationConvention : class, IRegistrationConvention
         {
             Argument.IsNotNull("registrationConventionHandler", registrationConventionHandler);
 
