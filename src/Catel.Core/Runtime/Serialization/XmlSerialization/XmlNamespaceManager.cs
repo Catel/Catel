@@ -119,7 +119,9 @@ namespace Catel.Runtime.Serialization.Xml
                         _prefixCounter[preferredPrefix] = 1;
                     }
 
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                     prefix = string.Format("{0}{1}", prefix, _prefixCounter[preferredPrefix]++);
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
                 }
 
                 // TODO: Read xml namespace from attribute

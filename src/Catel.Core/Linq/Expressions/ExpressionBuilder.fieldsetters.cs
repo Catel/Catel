@@ -105,7 +105,9 @@
             var fieldExpression = Expression.Field(targetExpression, fieldInfo);
             var body = Expression.Assign(fieldExpression, valueParameterExpression);
 
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var lambda = Expression.Lambda<Action<T, TField>>(body, target, valueParameter);
+#pragma warning restore HAA0101 // Array allocation for params parameter
             return lambda;
         }
     }

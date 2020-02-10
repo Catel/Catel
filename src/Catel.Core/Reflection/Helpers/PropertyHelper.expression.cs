@@ -10,6 +10,7 @@ namespace Catel.Reflection
     using System.Linq.Expressions;
     using System.Reflection;
     using Caching;
+    using Catel.Data;
     using Logging;
 
     /// <summary>
@@ -17,7 +18,7 @@ namespace Catel.Reflection
     /// </summary>
     public static partial class PropertyHelper
     {
-        private static readonly ICacheStorage<string, string> _expressionNameCache = new CacheStorage<string, string>(); 
+        private static readonly ICacheStorage<string, string> ExpressionNameCache = new CacheStorage<string, string>(); 
 
         /// <summary>
         /// Gets the name of the property based on the expression.
@@ -84,9 +85,9 @@ namespace Catel.Reflection
 
             const string NoMemberExpression = "The expression is not a member access expression";
 
-            string cacheKey = string.Format("{0}_{1}_{2}", propertyExpression, allowNested, nested);
+            string cacheKey = string.Format("{0}_{1}_{2}", propertyExpression, BoxingCache.GetBoxedValue(allowNested), BoxingCache.GetBoxedValue(nested));
 
-            return _expressionNameCache.GetFromCacheOrFetch(cacheKey, () =>
+            return ExpressionNameCache.GetFromCacheOrFetch(cacheKey, () =>
             {
                 MemberExpression memberExpression;
 

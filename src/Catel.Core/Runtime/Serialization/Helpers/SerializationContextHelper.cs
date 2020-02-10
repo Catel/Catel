@@ -18,7 +18,7 @@ namespace Catel.Runtime.Serialization
         /// <returns>The name of the scope.</returns>
         public static string GetSerializationScopeName()
         {
-            var scopeName = string.Format("Thread_{0}", ThreadHelper.GetCurrentThreadId());
+            var scopeName = $"Thread_{ThreadHelper.GetCurrentThreadId().ToString()}";
             return scopeName;
         }
     }

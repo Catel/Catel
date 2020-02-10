@@ -46,7 +46,9 @@ namespace Catel.Logging
             Write(log, LogEvent.Info, "Package family name:   {0}", packageId.FamilyName);
             Write(log, LogEvent.Info, "Publisher:             {0}", packageId.Publisher);
             Write(log, LogEvent.Info, "Publisher Id:          {0}", packageId.PublisherId);
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
             Write(log, LogEvent.Info, "Version:               {0}", packageId.Version);
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
 #else
             var assembly = AssemblyHelper.GetEntryAssembly();
             Write(log, LogEvent.Info, "Assembly:              {0}", assembly.Title());
@@ -105,7 +107,9 @@ namespace Catel.Logging
             var appPackage = Windows.ApplicationModel.Package.Current;
             var packageId = appPackage.Id;
 
-            Write(log, LogEvent.Info, "Architecture:          {0}", packageId.Architecture);
+#pragma warning disable HAA0102 // Non-overridden virtual method call on value type
+            Write(log, LogEvent.Info, "Architecture:          {0}", packageId.Architecture.ToString());
+#pragma warning restore HAA0102 // Non-overridden virtual method call on value type
 #endif
 
             Write(log, LogEvent.Info, string.Empty);
@@ -586,6 +590,87 @@ namespace Catel.Logging
             where TException : Exception
         {
             return ErrorAndCreateException<TException>(log, null, createExceptionCallback, messageFormat, args);
+        }
+
+        /// <summary>
+        /// Writes the specified message as error message and then throws the specified exception.
+        /// <para />
+        /// The specified exception must have a constructor that accepts a single string as message.
+        /// </summary>
+        /// <typeparam name="TException">The type of the exception.</typeparam>
+        /// <param name="log">The log.</param>
+        /// <param name="innerException">The inner exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg0">The formatting argument.</param>
+        /// <returns>Exception.</returns>
+        /// <exception cref="System.NotSupportedException"></exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
+        /// <exception cref="NotSupportedException">The <typeparamref name="TException" /> does not have a constructor accepting a string.</exception>
+        /// <example>
+        ///   <code>
+        /// This example logs an error and immediately throws the exception:<para /><![CDATA[
+        /// throw Log.ErrorAndCreateException<NotSupportedException>("This action is not supported");
+        /// ]]></code>
+        /// </example>
+        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception innerException, string messageFormat, object arg0)
+            where TException : Exception
+        {
+            return ErrorAndCreateException<TException>(log, innerException, string.Format(messageFormat, arg0));
+        }
+
+        /// <summary>
+        /// Writes the specified message as error message and then throws the specified exception.
+        /// <para />
+        /// The specified exception must have a constructor that accepts a single string as message.
+        /// </summary>
+        /// <typeparam name="TException">The type of the exception.</typeparam>
+        /// <param name="log">The log.</param>
+        /// <param name="innerException">The inner exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg0">The formatting argument.</param>
+        /// <param name="arg1">The formatting argument.</param>
+        /// <returns>Exception.</returns>
+        /// <exception cref="System.NotSupportedException"></exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
+        /// <exception cref="NotSupportedException">The <typeparamref name="TException" /> does not have a constructor accepting a string.</exception>
+        /// <example>
+        ///   <code>
+        /// This example logs an error and immediately throws the exception:<para /><![CDATA[
+        /// throw Log.ErrorAndCreateException<NotSupportedException>("This action is not supported");
+        /// ]]></code>
+        /// </example>
+        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception innerException, string messageFormat, object arg0, object arg1)
+            where TException : Exception
+        {
+            return ErrorAndCreateException<TException>(log, innerException, string.Format(messageFormat, arg0, arg1));
+        }
+
+        /// <summary>
+        /// Writes the specified message as error message and then throws the specified exception.
+        /// <para />
+        /// The specified exception must have a constructor that accepts a single string as message.
+        /// </summary>
+        /// <typeparam name="TException">The type of the exception.</typeparam>
+        /// <param name="log">The log.</param>
+        /// <param name="innerException">The inner exception.</param>
+        /// <param name="messageFormat">The message format.</param>
+        /// <param name="arg0">The formatting argument.</param>
+        /// <param name="arg1">The formatting argument.</param>
+        /// <param name="arg2">The formatting argument.</param>
+        /// <returns>Exception.</returns>
+        /// <exception cref="System.NotSupportedException"></exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="log" /> is <c>null</c>.</exception>
+        /// <exception cref="NotSupportedException">The <typeparamref name="TException" /> does not have a constructor accepting a string.</exception>
+        /// <example>
+        ///   <code>
+        /// This example logs an error and immediately throws the exception:<para /><![CDATA[
+        /// throw Log.ErrorAndCreateException<NotSupportedException>("This action is not supported");
+        /// ]]></code>
+        /// </example>
+        public static Exception ErrorAndCreateException<TException>(this ILog log, Exception innerException, string messageFormat, object arg0, object arg1, object arg2)
+            where TException : Exception
+        {
+            return ErrorAndCreateException<TException>(log, innerException, string.Format(messageFormat, arg0, arg1, arg2));
         }
 
         /// <summary>

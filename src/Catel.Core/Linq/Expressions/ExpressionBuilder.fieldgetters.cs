@@ -102,7 +102,9 @@
             var body = Expression.Field(targetExpression, fieldInfo);
 
             var finalExpression = GetCastOrConvertExpression(body, typeof(TField));
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var lambda = Expression.Lambda<Func<T, TField>>(finalExpression, target);
+#pragma warning restore HAA0101 // Array allocation for params parameter
             return lambda;
         }
     }

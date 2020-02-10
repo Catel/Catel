@@ -95,7 +95,9 @@ namespace Catel.Logging
             }
 
             var typeFactory = IoCConfiguration.DefaultTypeFactory;
+#pragma warning disable HAA0101 // Array allocation for params parameter
             logListener = typeFactory.CreateInstanceWithParametersAndAutoCompletion(type, assembly) as ILogListener;
+#pragma warning restore HAA0101 // Array allocation for params parameter
             if (logListener is null)
             {
                 logListener = typeFactory.CreateInstance(type) as ILogListener;

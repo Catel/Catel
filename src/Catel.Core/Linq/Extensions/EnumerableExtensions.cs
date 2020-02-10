@@ -47,7 +47,9 @@ namespace Catel.Linq
             Argument.IsNotNull("instance", instance);
             Argument.IsNotNull("type", type);
 
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var methodInfo = CastGenericMethodInfo.GetFromCacheOrFetch(type, () => CastMethodInfo.MakeGenericMethod(type));
+#pragma warning restore HAA0101 // Array allocation for params parameter
             return (IEnumerable)methodInfo.Invoke(null, new object[] { instance });
         }
 
@@ -62,7 +64,9 @@ namespace Catel.Linq
             Argument.IsNotNull("instance", instance);
             Argument.IsNotNull("type", type);
 
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var methodInfo = ToArrayGenericMethodInfoCache.GetFromCacheOrFetch(type, () => ToArrayMethodInfo.MakeGenericMethod(type));
+#pragma warning restore HAA0101 // Array allocation for params parameter
             return (IEnumerable)methodInfo.Invoke(null, new object[] { instance });
         }
 
@@ -77,7 +81,9 @@ namespace Catel.Linq
             Argument.IsNotNull("instance", instance);
             Argument.IsNotNull("type", type);
 
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var methodInfo = ToListGenericMethodInfoCache.GetFromCacheOrFetch(type, () => ToListMethodInfo.MakeGenericMethod(type));
+#pragma warning restore HAA0101 // Array allocation for params parameter
             return (IEnumerable)methodInfo.Invoke(null, new object[] { instance });
         }
 

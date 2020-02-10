@@ -48,7 +48,9 @@ namespace Catel.IoC
             {
                 Type = type;
                 Tag = tag;
+#pragma warning disable HAA0101 // Array allocation for params parameter
                 _hash = HashHelper.CombineHash(Type.GetHashCode(), Tag != null ? Tag.GetHashCode() : 0);
+#pragma warning restore HAA0101 // Array allocation for params parameter
             }
             #endregion
 

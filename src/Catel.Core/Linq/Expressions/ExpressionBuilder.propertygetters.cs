@@ -104,7 +104,9 @@
             var body = Expression.Call(targetExpression, methodInfo);
 
             var finalExpression = GetCastOrConvertExpression(body, typeof(TProperty));
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var lambda = Expression.Lambda<Func<T, TProperty>>(finalExpression, target);
+#pragma warning restore HAA0101 // Array allocation for params parameter
             return lambda;
         }
     }

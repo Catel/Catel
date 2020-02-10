@@ -10,6 +10,7 @@ namespace Catel.Pooling
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Catel.Data;
     using Logging;
 
     /// <summary>
@@ -118,7 +119,7 @@ namespace Catel.Pooling
 
                 if (newSize > maxSize)
                 {
-                    Log.Debug($"Pool will become larger than '{maxSize}', object will not be returned to the pool");
+                    Log.Debug($"Pool will become larger than '{BoxingCache.GetBoxedValue(maxSize)}', object will not be returned to the pool");
                 }
                 else
                 {
@@ -126,7 +127,7 @@ namespace Catel.Pooling
                     value.Reset();
                     _stack.Push(value);
 
-                    Log.Debug($"Returned object to pool, new size is '{newSize}' with '{_stack.Count}' items");
+                    Log.Debug($"Returned object to pool, new size is '{BoxingCache.GetBoxedValue(newSize)}' with '{BoxingCache.GetBoxedValue(_stack.Count)}' items");
                 }
             }
         }

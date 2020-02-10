@@ -59,6 +59,7 @@ namespace Catel
     public class WeakEventListener<TTarget, TSource, TEventArgs> : IWeakEventListener
         where TTarget : class
         where TSource : class
+        where TEventArgs : class
     {
         #region Fields
         /// <summary>
@@ -404,13 +405,17 @@ namespace Catel
             {
                 if (isAction)
                 {
+#pragma warning disable HAA0101 // Array allocation for params parameter
                     var delegateType = typeof(OpenInstanceActionHandler<>).MakeGenericType(finalTarget.GetType());
+#pragma warning restore HAA0101 // Array allocation for params parameter
                     var del = DelegateHelper.CreateDelegate(delegateType, methodInfo);
                     weakListener.OnEventAction = del;
                 }
                 else
                 {
+#pragma warning disable HAA0101 // Array allocation for params parameter
                     var delegateType = typeof(OpenInstanceEventHandler<,>).MakeGenericType(finalTarget.GetType(), typeof(TEventArgs));
+#pragma warning restore HAA0101 // Array allocation for params parameter
                     var del = DelegateHelper.CreateDelegate(delegateType, methodInfo);
                     weakListener.OnEventHandler = del;
                 }
@@ -664,13 +669,17 @@ namespace Catel
             var onEventHandler = OnEventHandler;
             if (onEventHandler != null)
             {
+#pragma warning disable HAA0101 // Array allocation for params parameter
                 onEventHandler.DynamicInvoke(target, source, eventArgs);
+#pragma warning restore HAA0101 // Array allocation for params parameter
             }
 
             var onEventAction = OnEventAction;
             if (onEventAction != null)
             {
+#pragma warning disable HAA0101 // Array allocation for params parameter
                 onEventAction.DynamicInvoke(target);
+#pragma warning restore HAA0101 // Array allocation for params parameter
             }
 
             var onStaticEventHandler = OnStaticEventHandler;
@@ -933,7 +942,9 @@ namespace Catel
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Expected to find the SubscribeToWeakEventWithExplicitSourceType on WeakEventListener<TTarget, TSource, TEventArgs>, but did not find it");
             }
 
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var genericMethodInfo = methodInfo.MakeGenericMethod(typeof(TExplicitSourceType));
+#pragma warning restore HAA0101 // Array allocation for params parameter
             return (IWeakEventListener)genericMethodInfo.Invoke(null, new object[] { target, source, eventName, handler, throwWhenSubscriptionFails });
         }
     }
@@ -1159,8 +1170,10 @@ namespace Catel
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Expected to find the SubscribeToWeakEventWithExplicitSourceType on WeakEventListener<TTarget, TSource>, but did not find it");
             }
 
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var genericMethodInfo = methodInfo.MakeGenericMethod(eventSourceType);
             return (IWeakEventListener)genericMethodInfo.Invoke(null, new[] { target, source, eventName, handler, throwWhenSubscriptionFails });
+#pragma warning restore HAA0101 // Array allocation for params parameter
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Catel
     /// cause memory leaks.
     /// </summary>
     /// <typeparam name="TParameter">The type of the parameter.</typeparam>
-    public interface IWeakAction<TParameter> : IWeakReference, IExecuteWithObject
+    public interface IWeakAction<TParameter> : IWeakReference, IExecuteWithObject<TParameter>
     {
         /// <summary>
         /// Gets the name of the method that should be executed.

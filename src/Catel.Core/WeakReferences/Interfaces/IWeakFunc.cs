@@ -33,7 +33,7 @@ namespace Catel
     /// A weak func which allows the invocation of a command in a weak manner. This way, actions will not cause
     /// memory leaks.
     /// </summary>
-    public interface IWeakFunc<TParameter, TResult> : IWeakReference, IExecuteWithObject<TResult>
+    public interface IWeakFunc<TParameter, TResult> : IWeakReference, IExecuteWithObject<TParameter, TResult>
     {
         /// <summary>
         /// Gets the name of the method that should be executed.

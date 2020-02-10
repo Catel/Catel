@@ -9,6 +9,7 @@ namespace Catel.Messaging
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Catel.Data;
     using Logging;
 
     /// <summary>
@@ -273,7 +274,7 @@ namespace Catel.Messaging
                     {
                         if (TagHelper.AreTagsEqual(tag, handler.Tag))
                         {
-                            if (handler.Action.ExecuteWithObject(message))
+                            if (((IExecuteWithObject<TMessage>)handler.Action).ExecuteWithObject(message))
                             {
                                 invokedHandlersCount++;
                             }
@@ -282,7 +283,7 @@ namespace Catel.Messaging
                 }
             }
 
-            Log.Debug("Sent message to {0} recipients", invokedHandlersCount);
+            Log.Debug($"Sent message to {BoxingCache.GetBoxedValue(invokedHandlersCount)} recipients");
 
             CleanUp();
 
@@ -362,7 +363,7 @@ namespace Catel.Messaging
                     }
                 }
 
-                Log.Debug("Unregistered '{0}' handlers for the recipient with tag '{1}'", handlerCounter, ObjectToStringHelper.ToString(tag));
+                Log.Debug("Unregistered '{0}' handlers for the recipient with tag '{1}'", BoxingCache.GetBoxedValue(handlerCounter), ObjectToStringHelper.ToString(tag));
 
                 return true;
             }

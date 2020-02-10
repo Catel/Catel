@@ -69,7 +69,7 @@ namespace Catel.Reflection
             }
 
             string version = splittedAssemblyFullName[1].Replace("Version=", string.Empty).Trim();
-            string[] versionSplit = version.Split('.');
+            string[] versionSplit = version.Split(new[] { '.' });
             version = versionSplit[0];
             for (int i = 1; i < separatorCount; i++)
             {

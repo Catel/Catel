@@ -977,7 +977,9 @@ namespace Catel.Runtime.Serialization
             if (elementType != null)
             {
                 var collectionType = typeof(List<>);
+#pragma warning disable HAA0101 // Array allocation for params parameter
                 var genericCollectionType = collectionType.MakeGenericType(elementType);
+#pragma warning restore HAA0101 // Array allocation for params parameter
 
                 type = genericCollectionType;
             }

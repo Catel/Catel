@@ -13,6 +13,7 @@ namespace Catel.Reflection
     using System.Linq;
     using System.Reflection;
     using Collections;
+    using Data;
     using IoC;
     using Logging;
 
@@ -167,7 +168,7 @@ namespace Catel.Reflection
                                       where type != null
                                       select type).ToArray();
 
-                Log.Warning("A ReflectionTypeLoadException occured, adding all {0} types that were loaded correctly", foundAssemblyTypes.Length);
+                Log.Warning($"A ReflectionTypeLoadException occured, adding all {BoxingCache.GetBoxedValue(foundAssemblyTypes.Length)} types that were loaded correctly");
 
                 if (logLoaderExceptions)
                 {
@@ -362,7 +363,9 @@ namespace Catel.Reflection
                 if (localTime > DateTime.Now.AddDays(1))
                 {
                     // Something is off here, are we running a .NET core "deterministic" app?
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                     Log.Warning($"Determined '{localTime}' as linker timestamp which is in the future. This app is probably compiled by Roslyn (.NET Core) in deterministic mode. If the linker timestamp is required, set <Deterministic>False</Deterministic> in the project file. For now falling back to DateTime.Now");
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
 
                     localTime = DateTime.Now;
                 }

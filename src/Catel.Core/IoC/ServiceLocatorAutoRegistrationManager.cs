@@ -91,7 +91,9 @@ namespace Catel.IoC
                         var interfaceType = serviceType.GetInterfaces().FirstOrDefault() ?? serviceType;
                         _serviceLocator.RegisterType(interfaceType, serviceLocatorRegistration =>
                         {
+#pragma warning disable HAA0101 // Array allocation for params parameter
                             return dependencyServiceGetMethodInfo.MakeGenericMethod(interfaceType).Invoke(dependencyServiceType, SingleNullElementArrayOfObjects);
+#pragma warning restore HAA0101 // Array allocation for params parameter
                         });
                     }
                 }

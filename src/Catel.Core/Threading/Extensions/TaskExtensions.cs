@@ -30,14 +30,16 @@ namespace Catel.Threading
             var cts = new CancellationTokenSource();
 
             // If the task is the first one to be returned, the task completed faster than the delay task
+#pragma warning disable HAA0101 // Array allocation for params parameter
             if (await Task.WhenAny(task, Task.Delay(timeout, cts.Token)) == task)
+#pragma warning restore HAA0101 // Array allocation for params parameter
             {
                 cts.Cancel();
                 return;
             }
 
             // Failed
-            throw Log.ErrorAndCreateException<TimeoutException>($"Task didn't complete within the expected timeframe of '{timeout}' ms");
+            throw Log.ErrorAndCreateException<TimeoutException>($"Task didn't complete within the expected timeframe of '{timeout.ToString()}' ms");
         }
 
         /// <summary>

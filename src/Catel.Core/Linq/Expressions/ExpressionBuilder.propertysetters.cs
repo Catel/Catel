@@ -104,9 +104,13 @@
             var valueParameter = Expression.Parameter(typeof(TProperty), "property");
             var valueParameterExpression = GetCastOrConvertExpression(valueParameter, propertyInfo.PropertyType);
 
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var body = Expression.Call(targetExpression, methodInfo, valueParameterExpression);
+#pragma warning restore HAA0101 // Array allocation for params parameter
 
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var lambda = Expression.Lambda<Action<T, TProperty>>(body, target, valueParameter);
+#pragma warning restore HAA0101 // Array allocation for params parameter
             return lambda;
         }
     }

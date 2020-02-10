@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WeakFunc.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
 // </copyright>
@@ -8,6 +8,7 @@ namespace Catel
 {
     using System;
     using System.Reflection;
+    using Catel.Data;
     using Catel.Logging;
     using Catel.Reflection;
 
@@ -54,7 +55,9 @@ namespace Catel
             }
 
             var targetType = target?.GetType() ?? typeof(object);
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var delegateType = typeof(OpenInstanceAction<>).MakeGenericType(typeof(TResult), targetType);
+#pragma warning restore HAA0101 // Array allocation for params parameter
 
             _action = DelegateHelper.CreateDelegate(delegateType, methodInfo);
         }
@@ -90,7 +93,9 @@ namespace Catel
                 {
                     try
                     {
+#pragma warning disable HAA0101 // Array allocation for params parameter
                         result = (TResult)_action.DynamicInvoke(Target);
+#pragma warning restore HAA0101 // Array allocation for params parameter
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -155,7 +160,9 @@ namespace Catel
             }
 
             var targetType = target?.GetType() ?? typeof(object);
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var delegateType = typeof(OpenInstanceGenericAction<>).MakeGenericType(typeof(TParameter), typeof(TResult), targetType);
+#pragma warning restore HAA0101 // Array allocation for params parameter
 
             _action = DelegateHelper.CreateDelegate(delegateType, methodInfo);
         }
@@ -190,7 +197,9 @@ namespace Catel
                 {
                     try
                     {
-                        result = (TResult)_action.DynamicInvoke(Target, parameter);
+#pragma warning disable HAA0101 // Array allocation for params parameter
+                        result = (TResult)_action.DynamicInvoke(Target, BoxingCache.GetBoxedValue(parameter));
+#pragma warning restore HAA0101 // Array allocation for params parameter
                     }
                     catch (TargetInvocationException ex)
                     {
@@ -222,9 +231,9 @@ namespace Catel
         /// <returns>
         /// <c>true</c> if the action is executed successfully; otherwise <c>false</c>.
         /// </returns>
-        bool IExecuteWithObject<TResult>.ExecuteWithObject(object parameter, out TResult result)
+        bool IExecuteWithObject<TParameter, TResult>.ExecuteWithObject(TParameter parameter, out TResult result)
         {
-            return Execute((TParameter)parameter, out result);
+            return Execute(parameter, out result);
         }
     }
 }

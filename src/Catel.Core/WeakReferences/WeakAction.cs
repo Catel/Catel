@@ -7,6 +7,7 @@
 namespace Catel
 {
     using System;
+    using Catel.Data;
     using Logging;
     using Reflection;
 
@@ -104,7 +105,7 @@ namespace Catel
             }
 
             var targetType = (target != null) ? target.GetType() : typeof(object);
-            var delegateType = typeof(OpenInstanceAction<>).MakeGenericType(targetType);
+            var delegateType = typeof(OpenInstanceAction<>).MakeGenericTypeEx(targetType);
 
             _action = DelegateHelper.CreateDelegate(delegateType, methodInfo);
         }
@@ -136,7 +137,9 @@ namespace Catel
             {
                 if (IsTargetAlive)
                 {
+#pragma warning disable HAA0101 // Array allocation for params parameter
                     _action.DynamicInvoke(Target);
+#pragma warning restore HAA0101 // Array allocation for params parameter
                     return true;
                 }
 
@@ -192,7 +195,9 @@ namespace Catel
             }
 
             var targetType = (target != null) ? target.GetType() : typeof(object);
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var delegateType = typeof(OpenInstanceGenericAction<>).MakeGenericType(typeof(TParameter), targetType);
+#pragma warning restore HAA0101 // Array allocation for params parameter
 
             _action = DelegateHelper.CreateDelegate(delegateType, methodInfo);
         }
@@ -222,7 +227,9 @@ namespace Catel
             {
                 if (IsTargetAlive)
                 {
-                    _action.DynamicInvoke(Target, parameter);
+#pragma warning disable HAA0101 // Array allocation for params parameter
+                    _action.DynamicInvoke(Target, BoxingCache.GetBoxedValue<TParameter>(parameter));
+#pragma warning restore HAA0101 // Array allocation for params parameter
                     return true;
                 }
 
@@ -247,6 +254,21 @@ namespace Catel
         bool IExecuteWithObject.ExecuteWithObject(object parameter)
         {
             return Execute((TParameter)parameter);
+        }
+
+        /// <summary>
+        /// Executes the object with the object parameter.
+        /// <para/>
+        /// The class implementing this interface is responsible for casting the <paramref name="parameter"/>
+        /// to the right type and to determine whether <c>null</c> is allowed as parameter.
+        /// </summary>
+        /// <param name="parameter">The parameter.</param>
+        /// <returns>
+        /// <c>true</c> if the action is executed successfully; otherwise <c>false</c>.
+        /// </returns>
+        bool IExecuteWithObject<TParameter>.ExecuteWithObject(TParameter parameter)
+        {
+            return Execute(parameter);
         }
     }
 }

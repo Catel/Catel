@@ -11,6 +11,7 @@ namespace Catel.Reflection
     using System.Reflection;
 
     using Catel.Caching;
+    using Catel.Data;
     using Collections;
     using Logging;
 
@@ -373,7 +374,7 @@ namespace Catel.Reflection
         /// <returns>PropertyInfo.</returns>
         public static PropertyInfo GetPropertyInfo(object obj, string property, bool ignoreCase = false)
         {
-            string cacheKey = $"{obj.GetType().FullName}_{property}_{ignoreCase}";
+            string cacheKey = $"{obj.GetType().FullName}_{property}_{BoxingCache.GetBoxedValue(ignoreCase)}";
             return _availableProperties.GetFromCacheOrFetch(cacheKey, () =>
             {
                 var objectType = obj.GetType();
