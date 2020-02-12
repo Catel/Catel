@@ -132,7 +132,7 @@ namespace Catel.Services
                 return;
             }
 
-            UpdateStatus(string.Format(statusFormat, currentItem, totalItems));
+            UpdateStatus(string.Format(statusFormat, currentItem.ToString(), totalItems.ToString()));
 
             ShowBusyIndicator(false);
         }

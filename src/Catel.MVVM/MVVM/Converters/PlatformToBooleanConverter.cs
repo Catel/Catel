@@ -8,6 +8,7 @@
 namespace Catel.MVVM.Converters
 {
     using System;
+    using Catel.Data;
 
     /// <summary>
     /// Returns a boolean whether the currently executing platform is available.
@@ -30,7 +31,7 @@ namespace Catel.MVVM.Converters
 
             foreach (var supportedPlatform in supportedPlatforms)
             {
-                KnownPlatforms platform = KnownPlatforms.Unknown;
+                var platform = KnownPlatforms.Unknown;
                 if (Enum<KnownPlatforms>.TryParse(supportedPlatform, out platform))
                 {
                     if (Platforms.IsPlatformSupported(platform))
@@ -46,7 +47,7 @@ namespace Catel.MVVM.Converters
                 isSupported = !isSupported;
             }
 
-            return isSupported;
+            return BoxingCache.GetBoxedValue(isSupported);
         }
     }
 }

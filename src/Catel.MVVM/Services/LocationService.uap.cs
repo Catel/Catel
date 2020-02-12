@@ -30,7 +30,7 @@ namespace Catel.Services
 
         private void OnGeolocatorStatusChanged(Geolocator sender, StatusChangedEventArgs e)
         {
-            Log.Info("Changed status to '{0}'", e.Status);
+            Log.Info($"Changed status to '{Enum<PositionStatus>.ToString(e.Status)}'");
 
             RaiseLocationChanged();
         }

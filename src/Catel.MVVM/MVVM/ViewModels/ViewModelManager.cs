@@ -10,6 +10,7 @@ namespace Catel.MVVM
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+    using Catel.Data;
     using Logging;
     using Reflection;
     using Threading;
@@ -140,7 +141,7 @@ namespace Catel.MVVM
             var viewModelTypeName = ObjectToStringHelper.ToTypeString(viewModel);
             var modelTypeName = ObjectToStringHelper.ToTypeString(model);
 
-            Log.Debug("Registering model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+            Log.Debug("Registering model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             lock (_viewModelModelsLock)
             {
@@ -153,7 +154,7 @@ namespace Catel.MVVM
                 models.Add(model);
             }
 
-            Log.Debug("Registered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+            Log.Debug("Registered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
         }
 
         /// <summary>
@@ -171,7 +172,7 @@ namespace Catel.MVVM
             var viewModelTypeName = ObjectToStringHelper.ToTypeString(viewModel);
             var modelTypeName = ObjectToStringHelper.ToTypeString(model);
 
-            Log.Debug("Unregistering model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+            Log.Debug("Unregistering model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             var modelWasRemoved = false;
 
@@ -186,11 +187,11 @@ namespace Catel.MVVM
 
             if (modelWasRemoved)
             {
-                Log.Debug("Unregistered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+                Log.Debug("Unregistered model '{0}' with view model '{1}' (id = '{2}')", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
             }
             else
             {
-                Log.Debug("Model '{0}' was not registered with view model '{1}' (id = '{2}') or has already been unregistered.", modelTypeName, viewModelTypeName, viewModel.UniqueIdentifier);
+                Log.Debug("Model '{0}' was not registered with view model '{1}' (id = '{2}') or has already been unregistered.", modelTypeName, viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
             }
         }
 
@@ -206,7 +207,7 @@ namespace Catel.MVVM
             var viewModelTypeName = ObjectToStringHelper.ToTypeString(viewModel);
             int modelCount = 0;
 
-            Log.Debug("Unregistering all models of view model '{0}' (id = '{1}')", viewModelTypeName, viewModel.UniqueIdentifier);
+            Log.Debug("Unregistering all models of view model '{0}' (id = '{1}')", viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             lock (_viewModelModelsLock)
             {
@@ -217,7 +218,7 @@ namespace Catel.MVVM
                 }
             }
 
-            Log.Debug("Unregistered all '{0}' models of view model '{1}' (id = '{2}')", modelCount, viewModelTypeName, viewModel.UniqueIdentifier);
+            Log.Debug("Unregistered all '{0}' models of view model '{1}' (id = '{2}')", BoxingCache.GetBoxedValue(modelCount), viewModelTypeName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
         }
 
         /// <summary>
@@ -255,7 +256,7 @@ namespace Catel.MVVM
                 }
             }
 
-            Log.Debug("Found '{0}' view models that are linked to model '{1}'", viewModels.Count, modelType);
+            Log.Debug("Found '{0}' view models that are linked to model '{1}'", BoxingCache.GetBoxedValue(viewModels.Count), modelType);
 
             return viewModels.ToArray();
         }
@@ -267,7 +268,9 @@ namespace Catel.MVVM
         /// <returns>The <see cref="IViewModel"/> or <c>null</c> if the view model is not registered.</returns>
         public IViewModel GetViewModel(int uniqueIdentifier)
         {
-            Log.Debug("Searching for the instance of view model with unique identifier '{0}'", uniqueIdentifier);
+            var boxedUniqueIdentifier = BoxingCache.GetBoxedValue(uniqueIdentifier);
+
+            Log.Debug("Searching for the instance of view model with unique identifier '{0}'", boxedUniqueIdentifier);
 
             return _managedViewModelsLock.PerformRead(() =>
             {
@@ -277,13 +280,13 @@ namespace Catel.MVVM
                     {
                         if (viewModel.UniqueIdentifier == uniqueIdentifier)
                         {
-                            Log.Debug("Found the instance of view model with unique identifier '{0}' as type '{1}'", uniqueIdentifier, ObjectToStringHelper.ToTypeString(viewModel));
+                            Log.Debug("Found the instance of view model with unique identifier '{0}' as type '{1}'", boxedUniqueIdentifier, ObjectToStringHelper.ToTypeString(viewModel));
 
                             return viewModel;
                         }
                     }
                 }
-                Log.Debug("Did not find the instance of view model with unique identifier '{0}'. It is either not registered or not alive.", uniqueIdentifier);
+                Log.Debug("Did not find the instance of view model with unique identifier '{0}'. It is either not registered or not alive.", boxedUniqueIdentifier);
                 return null;
             });
         }

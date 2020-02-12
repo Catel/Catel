@@ -7,6 +7,7 @@
 namespace Catel.MVVM.Converters
 {
     using System;
+    using Catel.Data;
 
     /// <summary>
     /// Implementation of class ReferenceToBooleanConverter
@@ -32,7 +33,7 @@ namespace Catel.MVVM.Converters
                 isNull = !isNull;
             }
 
-            return !isNull;
+            return BoxingCache.GetBoxedValue(!isNull);
         }
     }
 }

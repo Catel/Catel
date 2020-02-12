@@ -151,7 +151,7 @@ namespace Catel.MVVM.Providers
 
             UniqueIdentifier = UniqueIdentifierHelper.GetUniqueIdentifier<LogicBase>();
 
-            Log.Debug($"Constructing behavior '{GetType().Name}' for '{targetView.GetType().Name}' with unique id '{UniqueIdentifier}'");
+            Log.Debug($"Constructing behavior '{GetType().Name}' for '{targetView.GetType().Name}' with unique id '{BoxingCache.GetBoxedValue(UniqueIdentifier)}'");
 
             TargetView = targetView;
             ViewModelType = viewModelType;
@@ -809,7 +809,7 @@ namespace Catel.MVVM.Providers
 
             if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.FullyManual)
             {
-                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not creating view model on loaded event for '{TargetViewType?.Name}'");
+                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on loaded event for '{TargetViewType?.Name}'");
                 return;
             }
 
@@ -1204,7 +1204,7 @@ namespace Catel.MVVM.Providers
 
             if (ViewModelLifetimeManagement == ViewModelLifetimeManagement.FullyManual)
             {
-                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', preventing view model creation for '{TargetViewType?.Name}'");
+                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', preventing view model creation for '{TargetViewType?.Name}'");
                 return null;
             }
 

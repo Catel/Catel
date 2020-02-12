@@ -10,6 +10,7 @@ namespace Catel.Windows.Controls
 {
     using System;
     using System.Windows;
+    using Catel.Data;
     using MVVM.Converters;
 
     /// <summary>
@@ -46,7 +47,7 @@ namespace Catel.Windows.Controls
                 Enum<InfoBarMessageControlMode>.TryParse((string)parameter, out mode);
             }
 
-            return ((InfoBarMessageControlMode)value == mode) ? Visibility.Visible : Visibility.Collapsed;
+            return BoxingCache.GetBoxedValue(((InfoBarMessageControlMode)value == mode) ? Visibility.Visible : Visibility.Collapsed);
         }
 
         /// <summary>

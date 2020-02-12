@@ -65,7 +65,7 @@ namespace Catel.MVVM.Auditing
         /// </summary>
         /// <typeparam name="TAuditor">The type of the auditor.</typeparam>
         public static void RegisterAuditor<TAuditor>()
-            where TAuditor : IAuditor
+            where TAuditor : class, IAuditor
         {
             var typeFactory = IoCConfiguration.DefaultTypeFactory;
             var auditor = typeFactory.CreateInstance<TAuditor>();

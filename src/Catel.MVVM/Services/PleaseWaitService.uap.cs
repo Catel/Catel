@@ -6,6 +6,8 @@
 
 #if UWP
 
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
+
 namespace Catel.Services
 {
     using System;

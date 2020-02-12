@@ -352,7 +352,7 @@ namespace Catel.MVVM.Providers
                 }
                 else
                 {
-                    Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not creating view model on loaded event for '{TargetViewType?.Name}'");
+                    Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on loaded event for '{TargetViewType?.Name}'");
                 }
             }
             else
@@ -392,7 +392,7 @@ namespace Catel.MVVM.Providers
             }
             else
             {
-                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not closing view model on unloaded event for '{TargetViewType?.Name}'");
+                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not closing view model on unloaded event for '{TargetViewType?.Name}'");
             }
         }
 
@@ -888,7 +888,7 @@ namespace Catel.MVVM.Providers
                 }
                 else
                 {
-                    Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not closing view model on parent view model closing event for '{TargetViewType?.Name}'");
+                    Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not closing view model on parent view model closing event for '{TargetViewType?.Name}'");
                 }
             }
         }

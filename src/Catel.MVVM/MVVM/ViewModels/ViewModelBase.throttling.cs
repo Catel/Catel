@@ -80,7 +80,7 @@ namespace Catel.MVVM
             }
             set
             {
-                Log.Debug("Updating throttling rate of view model '{0}' to an interval of '{1}' ms", UniqueIdentifier, value.TotalMilliseconds);
+                Log.Debug("Updating throttling rate of view model '{0}' to an interval of '{1}' ms", BoxingCache.GetBoxedValue(UniqueIdentifier), BoxingCache.GetBoxedValue(value.TotalMilliseconds));
 
                 _throttlingRate = value;
                 if (_throttlingRate.TotalMilliseconds.Equals(0d))
@@ -99,7 +99,7 @@ namespace Catel.MVVM
                     _throttlingTimer.Interval = _throttlingRate;
                     _throttlingTimer.Start();
 
-                    Log.Debug("Throttling is enabled because the throttling rate is set to '{0}' ms", _throttlingRate.TotalMilliseconds);
+                    Log.Debug("Throttling is enabled because the throttling rate is set to '{0}' ms", BoxingCache.GetBoxedValue(_throttlingRate.TotalMilliseconds));
                 }
             }
         }

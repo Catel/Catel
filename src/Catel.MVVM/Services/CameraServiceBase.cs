@@ -286,7 +286,7 @@ namespace Catel.Services
 
             if (!IsCameraTypeSupported(cameraType))
             {
-                throw Log.ErrorAndCreateException<NotSupportedException>("Camera type '{0}' is not supported by this camera", cameraType);
+                throw Log.ErrorAndCreateException<NotSupportedException>($"Camera type '{Enum<CameraType>.ToString(cameraType)}' is not supported by this camera");
             }
 
             StartService(cameraType);

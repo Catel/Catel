@@ -7,6 +7,7 @@
 namespace Catel.MVVM.Converters
 {
     using System;
+    using Catel.Data;
 
     /// <summary>
     /// Converts string to integer and back.
@@ -33,7 +34,7 @@ namespace Catel.MVVM.Converters
                 result = tmp;
             }
 
-            return result;
+            return BoxingCache.GetBoxedValue(result);
         }
 
         /// <summary>

@@ -11,6 +11,7 @@ namespace Catel.MVVM
     using System.ComponentModel;
     using System.Linq;
     using System.Threading.Tasks;
+    using Catel.Data;
     using Logging;
     using Reflection;
     using Threading;
@@ -118,7 +119,7 @@ namespace Catel.MVVM
                 {
                     _viewModelInstances.Add(vmId, viewModel);
 
-                    Log.Debug("Added view model instance, currently containing '{0}' instances of type '{1}'", _viewModelInstances.Count, ViewModelType);
+                    Log.Debug("Added view model instance, currently containing '{0}' instances of type '{1}'", BoxingCache.GetBoxedValue(_viewModelInstances.Count), ViewModelType);
                 }
             }
         }
@@ -137,7 +138,7 @@ namespace Catel.MVVM
                 var vmId = viewModel.UniqueIdentifier;
                 if (_viewModelInstances.Remove(vmId))
                 {
-                    Log.Debug("Removed view model instance, currently containing '{0}' instances of type '{1}'", _viewModelInstances.Count, ViewModelType);
+                    Log.Debug("Removed view model instance, currently containing '{0}' instances of type '{1}'", BoxingCache.GetBoxedValue(_viewModelInstances.Count), ViewModelType);
                 }
             }
         }

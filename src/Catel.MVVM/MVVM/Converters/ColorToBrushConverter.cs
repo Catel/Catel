@@ -57,7 +57,9 @@ namespace Catel.MVVM.Converters
                 color = brush.Color;
             }
 
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
             return color;
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
         }
     }
 }

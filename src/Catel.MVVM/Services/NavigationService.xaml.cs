@@ -127,7 +127,7 @@ namespace Catel.Services
 #endif
             }
 #else
-            Log.Error("Closing an application is not possible in '{0}'", Platforms.CurrentPlatform);
+            Log.Error("Closing an application is not possible in '{0}'", Enum<SupportedPlatforms>.ToString(Platforms.CurrentPlatform));
             throw new NotSupportedInPlatformException("Closing an application is not possible");
 #endif
         }
@@ -151,7 +151,7 @@ namespace Catel.Services
         partial void NavigateToUri(Uri uri)
         {
 #if NETFX_CORE
-            throw Log.ErrorAndCreateException<NotSupportedInPlatformException>($"Direct navigations to urls is not supported in '{Platforms.CurrentPlatform}', cannot navigate to '{uri}'. Use Navigate(type) instead.");
+            throw Log.ErrorAndCreateException<NotSupportedInPlatformException>($"Direct navigations to urls is not supported in '{Enum<SupportedPlatforms>.ToString(Platforms.CurrentPlatform)}', cannot navigate to '{uri}'. Use Navigate(type) instead.");
 #else
             RootFrame.Navigate(uri);
 #endif

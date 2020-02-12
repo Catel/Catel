@@ -16,6 +16,7 @@ namespace Catel.MVVM
     using Threading;
     using CommandHandler = System.Action<IViewModel, string, System.Windows.Input.ICommand, object>;
     using AsyncCommandHandler = System.Func<IViewModel, string, System.Windows.Input.ICommand, object, System.Threading.Tasks.Task>;
+    using Catel.Data;
 
     /// <summary>
     /// Command manager that manages the execution state of all commands of a view model.
@@ -85,7 +86,7 @@ namespace Catel.MVVM
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-            Log.Debug("Creating a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, viewModel.UniqueIdentifier);
+            Log.Debug("Creating a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             _viewModel = viewModel;
             _viewModelType = viewModel.GetType();
@@ -105,7 +106,7 @@ namespace Catel.MVVM
 
             RegisterCommands(false);
 
-            Log.Debug("Created a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, viewModel.UniqueIdentifier);
+            Log.Debug("Created a ViewModelCommandManager for view model '{0}' with unique identifier '{1}'", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
         }
         #endregion
 
@@ -129,7 +130,7 @@ namespace Catel.MVVM
                 // in the meantime
                 if (viewModel.IsClosed)
                 {
-                    Log.Warning("View model '{0}' with unique identifier '{1}' is already closed, cannot manage commands of a closed view model", viewModel.GetType().FullName, viewModel.UniqueIdentifier);
+                    Log.Warning("View model '{0}' with unique identifier '{1}' is already closed, cannot manage commands of a closed view model", viewModel.GetType().FullName, BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
                     return null;
                 }
 
@@ -175,7 +176,7 @@ namespace Catel.MVVM
                     UnregisterCommands();
                 }
 
-                Log.Debug("Registering commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, _viewModel.UniqueIdentifier);
+                Log.Debug("Registering commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
 
                 foreach (var propertyInfo in _commandProperties)
                 {
@@ -204,7 +205,7 @@ namespace Catel.MVVM
                     }
                 }
 
-                Log.Debug("Registered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, _viewModel.UniqueIdentifier);
+                Log.Debug("Registered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
             }
         }
 
@@ -250,7 +251,7 @@ namespace Catel.MVVM
         /// </summary>
         private void UnregisterCommands()
         {
-            Log.Debug("Unregistering commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, _viewModel.UniqueIdentifier);
+            Log.Debug("Unregistering commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
 
             lock (_lock)
             {
@@ -266,7 +267,7 @@ namespace Catel.MVVM
                 _commands.Clear();
             }
 
-            Log.Debug("Unregistered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, _viewModel.UniqueIdentifier);
+            Log.Debug("Unregistered commands on view model '{0}' with unique identifier '{1}'", _viewModelType.FullName, BoxingCache.GetBoxedValue(_viewModel.UniqueIdentifier));
         }
 
 #pragma warning disable AvoidAsyncVoid // Avoid async void

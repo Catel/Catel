@@ -11,6 +11,7 @@ namespace Catel.MVVM.Converters
     using System;
     using System.Windows.Data;
     using System.Windows.Markup;
+    using Catel.Data;
 
     /// <summary>
     /// Converts a comparison of 2 bindings to a boolean whether the 
@@ -31,10 +32,10 @@ namespace Catel.MVVM.Converters
         {
             if (values.Length != 2)
             {
-                return false;
+                return BoxingCache.GetBoxedValue(false);
             }
 
-            return object.Equals(values[0], values[1]);
+            return BoxingCache.GetBoxedValue(object.Equals(values[0], values[1]));
         }
 
         /// <summary>

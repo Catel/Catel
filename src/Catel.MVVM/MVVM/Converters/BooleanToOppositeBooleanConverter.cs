@@ -7,6 +7,7 @@
 namespace Catel.MVVM.Converters
 {
     using System;
+    using Catel.Data;
 
     /// <summary>
     /// Convert a value to it's inverted value.
@@ -32,7 +33,7 @@ namespace Catel.MVVM.Converters
                 result = !result.Value;
             }
 
-            return result;
+            return BoxingCache.GetBoxedValue(result);
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace Catel.MVVM.Converters
                 result = !result.Value;
             }
 
-            return result;
+            return BoxingCache.GetBoxedValue(result);
         }
     }
 }

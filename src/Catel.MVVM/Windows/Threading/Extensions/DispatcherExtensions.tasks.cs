@@ -289,7 +289,7 @@ namespace Catel.Windows.Threading
 
             if (!tcs.TrySetResult(result))
             {
-                Log.Warning("Failed to set the task result to '{0}', task was already completed. Current status is '{1}'", result, tcs.Task.Status);
+                Log.Warning($"Failed to set the task result to '{result.ToString()}', task was already completed. Current status is '{Enum<TaskStatus>.ToString(tcs.Task.Status)}'");
                 return false;
             }
 

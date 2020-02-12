@@ -10,6 +10,7 @@ namespace Catel.MVVM.Views
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Catel.Data;
     using Logging;
 
     /// <summary>
@@ -116,7 +117,7 @@ namespace Catel.MVVM.Views
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-            Log.Debug("Getting the views of view model '{0}'", viewModel.UniqueIdentifier);
+            Log.Debug("Getting the views of view model '{0}'", BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             var views = new List<IView>();
 
@@ -127,7 +128,7 @@ namespace Catel.MVVM.Views
                                select registeredView.Key);
             }
 
-            Log.Debug("Found '{0}' views for view model '{1}'", views.Count, viewModel.UniqueIdentifier);
+            Log.Debug("Found '{0}' views for view model '{1}'", BoxingCache.GetBoxedValue(views.Count), BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier));
 
             return views.ToArray();
         }

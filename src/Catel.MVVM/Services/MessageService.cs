@@ -83,7 +83,7 @@ namespace Catel.Services
             }
             catch (Exception)
             {
-                throw new NotSupportedInPlatformException("MessageBox class does not support MessageButton '{0}'", button);
+                throw new NotSupportedInPlatformException($"MessageBox class does not support MessageButton '{Enum<MessageButton>.ToString(button)}'");
             }
         }
 #endif

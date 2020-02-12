@@ -15,6 +15,7 @@ namespace Catel.MVVM.Providers
     using Logging;
     using MVVM;
     using Reflection;
+    using Catel.Data;
 
     /// <summary>
     /// MVVM Provider behavior implementation for a window.
@@ -135,7 +136,7 @@ namespace Catel.MVVM.Providers
                 bool result;
                 try
                 {
-                    result = PropertyHelper.TrySetPropertyValue(TargetWindow, "DialogResult", _closeInitiatedByViewModelResult, true);
+                    result = PropertyHelper.TrySetPropertyValue(TargetWindow, "DialogResult", BoxingCache.GetBoxedValue(_closeInitiatedByViewModelResult), true);
                 }
                 catch (Exception ex)
                 {

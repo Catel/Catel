@@ -9,6 +9,7 @@ namespace Catel.MVVM.Converters
 {
     using System;
     using System.Collections;
+    using Catel.Data;
 
     /// <summary>
     /// Converts the items inside a collection to the number of elements contained by the collection.
@@ -27,10 +28,10 @@ namespace Catel.MVVM.Converters
             var collection = value as ICollection;
             if (collection != null)
             {
-                return collection.Count;
+                return BoxingCache.GetBoxedValue(collection.Count);
             }
 
-            return 0;
+            return BoxingCache.GetBoxedValue(0);
         }
     }
 }

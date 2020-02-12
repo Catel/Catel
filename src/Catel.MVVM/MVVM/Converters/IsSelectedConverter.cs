@@ -7,6 +7,7 @@
 namespace Catel.MVVM.Converters
 {
     using System;
+    using Catel.Data;
 
     /// <summary>
     /// Converts a selected value to either true of false.
@@ -35,7 +36,7 @@ namespace Catel.MVVM.Converters
                 bool.TryParse((string)parameter, out param);
             }
 
-            return (value is null) ? false : !((bool)value ^ param);
+            return BoxingCache.GetBoxedValue((value is null) ? false : !((bool)value ^ param));
         }
 
         /// <summary>
@@ -57,7 +58,7 @@ namespace Catel.MVVM.Converters
                 bool.TryParse((string)parameter, out param);
             }
 
-            return !((bool)value ^ param);
+            return BoxingCache.GetBoxedValue(!((bool)value ^ param));
         }
     }
 }

@@ -38,10 +38,11 @@ namespace Catel.MVVM.Converters
         /// </remarks>
         protected override object ConvertBack(object value, Type targetType, object parameter)
         {
-            DateTime dateTimeValue;
-            bool parsed = DateTime.TryParse(value as string, CurrentCulture, DateTimeStyles.None, out dateTimeValue);
+            var parsed = DateTime.TryParse(value as string, CurrentCulture, DateTimeStyles.None, out var dateTimeValue);
 
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
             return parsed ? dateTimeValue : ConverterHelper.UnsetValue;
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
         }
     }
 }

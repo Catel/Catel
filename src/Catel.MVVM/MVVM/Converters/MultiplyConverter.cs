@@ -7,6 +7,7 @@
 namespace Catel.MVVM.Converters
 {
     using System;
+    using Catel.Data;
 
     /// <summary>
     /// Calculate the product of given value and factor in parameter.
@@ -38,16 +39,16 @@ namespace Catel.MVVM.Converters
 
             if (typedValue == 0d)
             {
-                return 0d;
+                return BoxingCache.GetBoxedValue(0d);
             }
 
             double factor;
             if (!double.TryParse(parameter as string, out factor))
             {
-                return 0d;
+                return BoxingCache.GetBoxedValue(0d);
             }
 
-            return typedValue * factor;
+            return BoxingCache.GetBoxedValue(typedValue * factor);
         }
 
         /// <summary>
@@ -76,16 +77,16 @@ namespace Catel.MVVM.Converters
 
             if (typedValue == 0d)
             {
-                return 0d;
+                return BoxingCache.GetBoxedValue(0d);
             }
 
             double factor;
             if (!double.TryParse(parameter as string, out factor))
             {
-                return 0d;
+                return BoxingCache.GetBoxedValue(0d);
             }
 
-            return typedValue / factor;
+            return BoxingCache.GetBoxedValue(typedValue / factor);
         }
     }
 }

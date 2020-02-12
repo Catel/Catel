@@ -205,7 +205,7 @@ namespace Catel.MVVM
             _objectIdGenerator = serviceLocator.ResolveType<IObjectIdGenerator<int>>(type);
             UniqueIdentifier = GetObjectId(_objectIdGenerator);
 
-            Log.Debug("Creating view model of type '{0}' with unique identifier {1}", type.Name, UniqueIdentifier);
+            Log.Debug("Creating view model of type '{0}' with unique identifier {1}", type.Name, BoxingCache.GetBoxedValue(UniqueIdentifier));
 
             ValidateModelsOnInitialization = true;
 
@@ -450,7 +450,7 @@ namespace Catel.MVVM
         /// <returns>System.String.</returns>
         public override string ToString()
         {
-            return string.Format("{0} (ID = {1})", GetType().FullName, UniqueIdentifier);
+            return $"{GetType().FullName} (ID = {UniqueIdentifier.ToString()})";
         }
 
         /// <summary>
@@ -523,7 +523,7 @@ namespace Catel.MVVM
 
                         if (modelNames.Count != 1)
                         {
-                            throw Log.ErrorAndCreateException<InvalidOperationException>("It is only possible to automatically select the right model if there is 1 model. There are '{0}' models, so please specify the model name explicitly.", modelNames.Count);
+                            throw Log.ErrorAndCreateException<InvalidOperationException>($"It is only possible to automatically select the right model if there is 1 model. There are '{modelNames.Count.ToString()}' models, so please specify the model name explicitly.");
                         }
 
                         viewModelToModelAttribute.Model = modelNames[0];
@@ -642,7 +642,7 @@ namespace Catel.MVVM
                         {
                             Log.Warning("The view model {0} implements {1} models.\n\n" +
                                         "Normally, a view model only implements 1 model so make sure you are using the Model attribute correctly. If the Model attribute is used correctly (on models only), this warning can be ignored by using a constructor overload.",
-                                GetType().Name, _modelObjects.Count);
+                                GetType().Name, BoxingCache.GetBoxedValue(_modelObjects.Count));
                         }
                     }
                 }
@@ -667,7 +667,7 @@ namespace Catel.MVVM
 
                     if (value != parentVmValue)
                     {
-                        Log.Debug($"DeferValidationUntilFirstCall is '{value}', but overriding value using parent view model value '{parentVmValue}'");
+                        Log.Debug($"DeferValidationUntilFirstCall is '{BoxingCache.GetBoxedValue(value)}', but overriding value using parent view model value '{BoxingCache.GetBoxedValue(parentVmValue)}'");
 
                         DeferValidationUntilFirstSaveCall = parentVmValue;
                     }

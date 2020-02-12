@@ -206,7 +206,7 @@
                 // Check
                 if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
                 {
-                    throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{_suspensionContext.Mode.ToString()}'");
+                    throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
                 }
 
                 //simply change the value
@@ -219,10 +219,13 @@
                 OnPropertyChanged(_cachedIndexerArgs);
                 OnPropertyChanged(_cachedValuesArgs);
                 changedIndex = oldIndex;
+
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace,
                     changedItem,
                     new KeyValuePair<TKey, TValue>(key, oldValue),
                     changedIndex));
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
 
                 WriteReplaceSuspension(changedItem, changedIndex);
             }
@@ -245,9 +248,12 @@
                 OnPropertyChanged(_cachedKeysArgs);
                 OnPropertyChanged(_cachedValuesArgs);
                 changedIndex = newIndex;
+
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add,
                     changedItem,
                     newIndex));
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
 
                 WriteAddSuspension(changedItem, changedIndex);
             }
@@ -279,7 +285,7 @@
                     // Check
                     if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
                     {
-                        throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{_suspensionContext.Mode.ToString()}'");
+                        throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
                     }
 
                     //raise replace event
@@ -287,10 +293,14 @@
                     _dict[key] = newValue;
                     OnPropertyChanged(_cachedIndexerArgs);
                     OnPropertyChanged(_cachedValuesArgs);
+
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                     OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace,
                         changedItem,
                         new KeyValuePair<TKey, TValue>(key, oldValue),
                         index));
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
+
                     WriteReplaceSuspension(changedItem, changedIndex);
                 }
                 else
@@ -318,9 +328,13 @@
                 OnPropertyChanged(_cachedCountArgs);
                 OnPropertyChanged(_cachedKeysArgs);
                 OnPropertyChanged(_cachedValuesArgs);
+
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add,
                     new KeyValuePair<TKey, TValue>(key, newValue),
                     index));
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
+
                 WriteAddSuspension(changedItem, changedIndex);
             }
         }
@@ -338,7 +352,7 @@
             // Check
             if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{_suspensionContext.Mode.ToString()}'");
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
 
 
@@ -354,10 +368,14 @@
 
             var changedItem = new KeyValuePair<TKey, TValue>(key, element);
             OnPropertyChanged(_cachedIndexerArgs);
+
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move,
                 changedItem,
                 oldIndex,
                 newIndex));
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
+
             if (_suspensionContext != null && _suspensionContext.IsMixedMode())
             {
                 WriteRemoveSuspension(changedItem, oldIndex);
@@ -396,9 +414,13 @@
                 OnPropertyChanged(_cachedValuesArgs);
 
                 var changedItem = new KeyValuePair<TKey, TValue>(keyToRemove, removedKeyValue);
+
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                 OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
                     changedItem,
                     removedKeyIndex));
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
+
                 WriteRemoveSuspension(changedItem, removedKeyIndex);
 
                 //raise remove event 
@@ -436,13 +458,15 @@
             OnPropertyChanged(_cachedKeysArgs);
             OnPropertyChanged(_cachedValuesArgs);
             var changedItem = new KeyValuePair<TKey, TValue>(keyToRemove, value);
+
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
                     changedItem,
                     index));
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
+
             WriteRemoveSuspension(changedItem, index);
-
         }
-
 
         /// <summary>
         /// Append or replace multiple values
@@ -649,7 +673,7 @@
             // Check
             if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{_suspensionContext.Mode.ToString()}'");
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
             List<KeyValuePair<TKey, TValue>> copyList = null;
             if (_suspensionContext != null && _suspensionContext.IsMixedMode())
@@ -787,7 +811,9 @@
             {
                 if (key is TKey castedKey)
                 {
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                     return this[castedKey];
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
                 }
                 else
                 {
@@ -832,7 +858,9 @@
         }
         IDictionaryEnumerator IDictionary.GetEnumerator()
         {
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
             return _dict.GetEnumerator();
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
         }
 
         void IDictionary.Remove(object key)
@@ -850,7 +878,9 @@
             {
                 var key = _list[i];
                 var value = _dict[key];
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                 array.SetValue(new KeyValuePair<TKey, TValue>(key, value), arrayIndex + i);
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
             }
         }
         #endregion

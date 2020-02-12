@@ -16,6 +16,7 @@ namespace Catel.Runtime.Serialization.Json
     using System.Linq;
     using System.Runtime.Serialization;
     using System.Text;
+    using Data;
     using IoC;
     using Logging;
     using Newtonsoft.Json;
@@ -62,7 +63,7 @@ namespace Catel.Runtime.Serialization.Json
         /// <param name="typeFactory">The type factory.</param>
         /// <param name="objectAdapter">The object adapter.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="serializationManager" /> is <c>null</c>.</exception>
-        public JsonSerializer(ISerializationManager serializationManager, ITypeFactory typeFactory, IObjectAdapter objectAdapter)
+        public JsonSerializer(ISerializationManager serializationManager, ITypeFactory typeFactory, Catel.Runtime.Serialization.IObjectAdapter objectAdapter)
             : base(serializationManager, typeFactory, objectAdapter)
         {
             PreserveReferences = true;
@@ -334,7 +335,9 @@ namespace Catel.Runtime.Serialization.Json
                             var idPropertyName = string.Format("${0}_{1}", memberValue.NameForSerialization, referenceInfo.IsFirstUsage ? GraphId : GraphRefId);
 
                             jsonWriter.WritePropertyName(idPropertyName);
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                             jsonSerializer.Serialize(jsonWriter, referenceInfo.Id);
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
 
                             if (!referenceInfo.IsFirstUsage && !ReferenceEquals(value, context.Model))
                             {
@@ -506,7 +509,7 @@ namespace Catel.Runtime.Serialization.Json
                             var referenceInfo = referenceManager.GetInfoById(graphId);
                             if (referenceInfo != null)
                             {
-                                Log.Warning("Trying to register custom object in graph with graph id '{0}', but it seems it is already registered", graphId);
+                                Log.Warning($"Trying to register custom object in graph with graph id '{BoxingCache.GetBoxedValue(graphId)}', but it seems it is already registered");
                                 return;
                             }
 
@@ -542,7 +545,7 @@ namespace Catel.Runtime.Serialization.Json
                         var referenceInfo = referenceManager.GetInfoById(graphId);
                         if (referenceInfo is null)
                         {
-                            Log.Error("Expected to find graph object with id '{0}' in ReferenceManager, but it was not found. Defaulting value for member '{1}' to null", graphId, memberValue.Name);
+                            Log.Error($"Expected to find graph object with id '{BoxingCache.GetBoxedValue(graphId)}' in ReferenceManager, but it was not found. Defaulting value for member '{memberValue.Name}' to null");
                             return null;
                         }
 
@@ -658,7 +661,7 @@ namespace Catel.Runtime.Serialization.Json
                             }
                             else
                             {
-                                var enumName = Enum.GetName(valueType, (int)jsonValue);
+                                var enumName = Enum.GetName(valueType, BoxingCache.GetBoxedValue((int)jsonValue));
                                 if (!string.IsNullOrWhiteSpace(enumName))
                                 {
                                     valueToConvert = enumName;

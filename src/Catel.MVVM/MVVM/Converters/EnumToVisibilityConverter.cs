@@ -26,7 +26,7 @@ namespace Catel.MVVM.Converters
     {
         private readonly char[] SplitChars = new[] { '|', ',' };
 
-#region Constructors
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="EnumToCollapsingVisibilityConverter"/> class.
         /// </summary>
@@ -45,7 +45,7 @@ namespace Catel.MVVM.Converters
         {
             SupportInversionUsingCommandParameter = false;
         }
-#endregion
+        #endregion
 
         /// <summary>
         /// Determines what value this converter should return.
@@ -82,9 +82,11 @@ namespace Catel.MVVM.Converters
                 stringParameter = stringParameter.Substring(1);
             }
 
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var genericEnumType = typeof(Enum<>).MakeGenericType(enumType);
+#pragma warning restore HAA0101 // Array allocation for params parameter
             var bindingFlags = BindingFlags.Public | BindingFlags.Static;
-            
+
             var parseMethod = genericEnumType.GetMethodEx("Parse", TypeArray.From<string, bool>(), bindingFlags);
 
             var allowedEnumValues = stringParameter.Split(SplitChars, StringSplitOptions.RemoveEmptyEntries);

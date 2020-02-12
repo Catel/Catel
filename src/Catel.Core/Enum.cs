@@ -36,7 +36,7 @@ namespace Catel
 #pragma warning disable HAA0102 // Non-overridden virtual method call on value type
                 stringValue = value.ToString();
 #pragma warning restore HAA0102 // Non-overridden virtual method call on value type
-                StringCache[value] = stringValue; 
+                StringCache[value] = stringValue;
             }
 
             return stringValue;
@@ -49,6 +49,29 @@ namespace Catel
         public static List<TEnum> ToList()
         {
             return GetValues().ToList();
+        }
+
+        /// <summary>
+        /// Converts a specific enum value from one specific enum type to another enum type by it's name.
+        /// <para/>
+        /// For example, to convert <c>Catel.Services.CameraType</c> to <c>Microsoft.Devices.CameraType</c>, use the
+        /// following code:
+        /// <para/>
+        /// ConvertEnum&lt;Microsoft.Devices.CameraType&gt;(Catel.Services.CameraType.Primary);
+        /// </summary>
+        /// <param name="inputEnumValue">The input enum value.</param>
+        /// <returns>The converted enum value.</returns>
+        /// <exception cref="ArgumentNullException">The <paramref name="inputEnumValue"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="inputEnumValue"/> is not of type <see cref="Enum"/>.</exception>
+        /// <exception cref="ArgumentException">The value of <paramref name="inputEnumValue"/> cannot be converted to a value of <typeparamref name="TEnum"/>.</exception>
+        public static TEnum ConvertFromOtherEnumValue<TOtherEnum>(TOtherEnum inputEnumValue)
+            where TOtherEnum : struct, IComparable, IFormattable
+        {
+            Argument.IsNotNull("inputEnumValue", inputEnumValue);
+
+            var value = Enum<TOtherEnum>.ToString(inputEnumValue);
+
+            return (TEnum)Enum.Parse(typeof(TEnum), value, true);
         }
 
         /// <summary>
@@ -235,16 +258,16 @@ namespace Catel
         /// </summary>
         public static class DataBinding
         {
-        #region Delegates
+            #region Delegates
             /// <summary>
             /// Delegate used for formatting an enum name.
             /// </summary>
             /// <param name="value">The value to format.</param>
             /// <returns>String containing the enum name.</returns>
             public delegate string FormatEnumName(TEnum value);
-        #endregion
+            #endregion
 
-        #region Static Methods
+            #region Static Methods
 
             /// <summary>
             /// Creates a list based on an enum.
@@ -258,29 +281,29 @@ namespace Catel
                 return (from TEnum value in values
                         select formatName != null ? new InternalBindableEnum(value, formatName(value)) : new InternalBindableEnum(value)).Cast<IBindableEnum<TEnum>>().ToList();
             }
-        #endregion
+            #endregion
 
-        #region Nested type: InternalBindableEnum
+            #region Nested type: InternalBindableEnum
             /// <summary>
             /// Internal bindable enum.
             /// </summary>
             private class InternalBindableEnum : IBindableEnum<TEnum>
             {
-        #region Readonly & Static Fields
+                #region Readonly & Static Fields
                 /// <summary>
                 /// Name of the internal bindable enum.
                 /// </summary>
                 private readonly string _name;
-        #endregion
+                #endregion
 
-        #region Fields
+                #region Fields
                 /// <summary>
                 /// Value of the internal bindable enum.
                 /// </summary>
                 private readonly TEnum _value;
-        #endregion
+                #endregion
 
-        #region Constructors
+                #region Constructors
                 /// <summary>
                 /// Initializes a new instance of the <see cref="Enum{TEnum}.DataBinding.InternalBindableEnum"/> class.
                 /// </summary>
@@ -301,9 +324,9 @@ namespace Catel
                     _value = value;
                     _name = name;
                 }
-        #endregion
+                #endregion
 
-        #region Instance Properties
+                #region Instance Properties
                 /// <summary>
                 /// Gets the name.
                 /// </summary>
@@ -321,9 +344,9 @@ namespace Catel
                 {
                     get { return _value; }
                 }
-        #endregion
+                #endregion
 
-        #region Instance Public Methods
+                #region Instance Public Methods
                 /// <summary>
                 /// Compares the current object with another object of the same type.
                 /// </summary>
@@ -353,9 +376,9 @@ namespace Catel
                 {
                     return EqualityComparer<TEnum>.Default.Equals(_value, other.Value);
                 }
-        #endregion
+                #endregion
             }
-        #endregion
+            #endregion
         }
 #endif
         #endregion

@@ -8,6 +8,7 @@ namespace Catel.MVVM.Converters
 {
     using System;
     using System.Collections;
+    using Catel.Data;
 
     /// <summary>
     /// Converter that converts whether a collection contains items or not.
@@ -56,7 +57,7 @@ namespace Catel.MVVM.Converters
                 containsItems = !containsItems;
             }
 
-            return containsItems;
+            return BoxingCache.GetBoxedValue(containsItems);
         }
     }
 }

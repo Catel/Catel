@@ -7,6 +7,7 @@
 namespace Catel.MVVM.Converters
 {
     using System;
+    using Catel.Data;
 
     /// <summary>
     /// Converts a selected value to either true of false.
@@ -40,10 +41,10 @@ namespace Catel.MVVM.Converters
             }
             else
             {
-                return false;
+                return BoxingCache.GetBoxedValue(false);
             }
 
-            return (value is null) ? false : (int)value == param;
+            return BoxingCache.GetBoxedValue((value is null) ? false : (int)value == param);
         }
 
         /// <summary>
@@ -80,7 +81,7 @@ namespace Catel.MVVM.Converters
 
             if ((bool)value)
             {
-                return param;
+                return BoxingCache.GetBoxedValue(param);
             }
 
             return ConverterHelper.UnsetValue;

@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 #pragma warning disable 1956 // Both Command and CompositeCommand implement ICommand
 #pragma warning disable 3021 // 'type' does not need a CLSCompliant attribute because the assembly does not have a CLSCompliant attribute
 

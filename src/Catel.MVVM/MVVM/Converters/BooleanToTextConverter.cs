@@ -90,13 +90,13 @@ namespace Catel.MVVM.Converters
 
             if (string.IsNullOrEmpty(parameter))
             {
-                Log.Error("Converter parameter cannot be null, default value '{0}' will be used", mode.ToString());
+                Log.Error($"Converter parameter cannot be null, default value '{Enum<BooleanToTextConverterMode>.ToString(mode)}' will be used");
                 return mode;
             }
 
             try
             {
-                mode = (BooleanToTextConverterMode) Enum.Parse(typeof (BooleanToTextConverterMode), parameter, false);
+                mode = (BooleanToTextConverterMode)Enum.Parse(typeof(BooleanToTextConverterMode), parameter, false);
             }
             catch (ArgumentException)
             {

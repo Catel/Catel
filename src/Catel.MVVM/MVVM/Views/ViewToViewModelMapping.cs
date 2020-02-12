@@ -39,7 +39,7 @@ namespace Catel.MVVM.Views
             ViewModelPropertyName = viewModelPropertyName;
             MappingType = mapping;
 
-            Log.Debug("Created a '{0}' view to viewmodel mapping from '{1}' to '{2}'", mapping, viewPropertyName, viewModelPropertyName);
+            Log.Debug("Created a '{0}' view to viewmodel mapping from '{1}' to '{2}'", Enum<ViewToViewModelMappingType>.ToString(mapping), viewPropertyName, viewModelPropertyName);
         }
         #endregion
 

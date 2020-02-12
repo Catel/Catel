@@ -7,6 +7,7 @@
 namespace Catel.MVVM.Converters
 {
     using System;
+    using Catel.Data;
 
     /// <summary>
     /// Converts a boolean to a grayscale saturation value. If the input is <c>false</c>, this converter will
@@ -54,7 +55,7 @@ namespace Catel.MVVM.Converters
                 return ConverterHelper.UnsetValue;
             }
 
-            return ((bool)value) ? TrueResult : FalseResult;
+            return BoxingCache.GetBoxedValue(((bool)value) ? TrueResult : FalseResult);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Catel.Collections
             if (!SuspensionContext<T>.EventsGeneratorsRegistry.Value.TryGetValue(mode, out var createEvents))
             {
                 // ReSharper disable once LocalizableElement
-                throw new ArgumentOutOfRangeException(nameof(mode), $"The suspension mode '{mode}' is unhandled.");
+                throw new ArgumentOutOfRangeException(nameof(mode), $"The suspension mode '{Enum<SuspensionMode>.ToString(mode)}' is unhandled.");
             }
 
             return createEvents(suspensionContext);

@@ -10,6 +10,7 @@ namespace Catel.MVVM.Converters
 {
     using System;
     using System.Windows;
+    using Catel.Data;
 
 #if UWP
     using global::Windows.UI.Xaml;
@@ -90,10 +91,10 @@ namespace Catel.MVVM.Converters
                     isVisible = !isVisible;
                 }
 
-                return isVisible;
+                return BoxingCache.GetBoxedValue(isVisible);
             }
 
-            return false;
+            return BoxingCache.GetBoxedValue(false);
         }
     }
 

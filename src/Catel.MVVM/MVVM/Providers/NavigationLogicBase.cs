@@ -20,7 +20,7 @@ namespace Catel.MVVM.Providers
     /// </summary>
     /// <typeparam name="T">Type of the control or page.</typeparam>
     public abstract class NavigationLogicBase<T> : LogicBase
-        where T : IView
+        where T : class, IView
     {
         #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
@@ -107,7 +107,7 @@ namespace Catel.MVVM.Providers
             }
             else
             {
-                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not creating view model on loaded event for '{TargetViewType?.Name}'");
+                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on loaded event for '{TargetViewType?.Name}'");
             }
         }
 
@@ -162,7 +162,7 @@ namespace Catel.MVVM.Providers
             }
             else
             {
-                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not creating view model on navigation event for '{TargetViewType?.Name}'");
+                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not creating view model on navigation event for '{TargetViewType?.Name}'");
             }
 
             var viewModelAsViewModelBase = ViewModel as ViewModelBase;
@@ -185,7 +185,7 @@ namespace Catel.MVVM.Providers
 
             if (ViewModelLifetimeManagement != ViewModelLifetimeManagement.Automatic)
             {
-                Log.Debug($"View model lifetime management is set to '{ViewModelLifetimeManagement}', not closing view model on navigation event for '{TargetViewType?.Name}'");
+                Log.Debug($"View model lifetime management is set to '{Enum<ViewModelLifetimeManagement>.ToString(ViewModelLifetimeManagement)}', not closing view model on navigation event for '{TargetViewType?.Name}'");
                 return;
             }
 

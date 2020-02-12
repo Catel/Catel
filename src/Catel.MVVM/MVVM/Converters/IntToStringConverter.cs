@@ -7,6 +7,7 @@
 namespace Catel.MVVM.Converters
 {
     using System;
+    using Catel.Data;
 
     /// <summary>
     /// Converts integer to string and back.
@@ -25,7 +26,7 @@ namespace Catel.MVVM.Converters
         /// <returns>The value to be passed to the target dependency property.</returns>
         protected override object Convert(object value, Type targetType, object parameter)
         {
-            return value != null ? value.ToString() : String.Empty;
+            return value != null ? value.ToString() : string.Empty;
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace Catel.MVVM.Converters
                 result = tmp;
             }
 
-            return result;
+            return BoxingCache.GetBoxedValue(result);
         }
     }
 }

@@ -453,18 +453,22 @@ namespace Catel.Collections
             {
                 if (e.NewIndex >= 0 && e.OldIndex >= 0)
                 {
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                     e = new NotifyListChangedEventArgs(e.ListChangedType,
                         e.NewIndex,
                         e.NewIndex >= 0 ? this[e.NewIndex] : default(T),
                         e.OldIndex,
                         e.OldIndex >= 0 ? this[e.OldIndex] : default(T));
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
                 }
                 else
                 {
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                     e = new NotifyListChangedEventArgs(e.ListChangedType,
                         e.NewIndex,
                         e.NewIndex >= 0 ? this[e.NewIndex] : default(T),
                         e.PropertyDescriptor);
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
                 }
             }
 
@@ -499,8 +503,11 @@ namespace Catel.Collections
             {
                 var result = 0;
 
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                 var lhsValue = lhs == null ? null : _sortProperty.GetValue(lhs);
                 var rhsValue = rhs == null ? null : _sortProperty.GetValue(rhs);
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
+
                 if (lhsValue is null && rhsValue is null) // both values are null, both equal
                 {
                     result = 0;
@@ -547,7 +554,7 @@ namespace Catel.Collections
             // Check
             if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, current mode is '{_suspensionContext.Mode}'.");
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'.");
             }
 
             if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.None)
@@ -586,7 +593,9 @@ namespace Catel.Collections
             {
                 var item = list[i];
 
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                 if (object.Equals(prop.GetValue(item), key))
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
                 {
                     return i;
                 }
@@ -622,7 +631,9 @@ namespace Catel.Collections
 
                 if (suspensionContext is null)
                 {
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                     OnListChanged(new NotifyListChangedEventArgs(ListChangedType.ItemAdded, index, item));
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
                 }
             }
             finally
@@ -665,7 +676,9 @@ namespace Catel.Collections
 
                 if (!NotificationsSuspended)
                 {
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                     OnListChanged(new NotifyListChangedEventArgs(ListChangedType.ItemDeleted, index, item));
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
                 }
             }
             finally
@@ -700,7 +713,7 @@ namespace Catel.Collections
             // Check
             if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None)
             {
-                throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, current mode is '{_suspensionContext.Mode}'");
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
 
             // Get old item
@@ -715,7 +728,9 @@ namespace Catel.Collections
 
                 if (!NotificationsSuspended)
                 {
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                     OnListChanged(new NotifyListChangedEventArgs(ListChangedType.ItemChanged, index, item, -1, oldItem));
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
                 }
             }
             finally

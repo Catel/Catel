@@ -291,7 +291,9 @@ namespace Catel.Windows.Data
                 // If called with object, this is the request for the dummy value containing the mapped dependency property
                 // on which we subscribe for changess. Otherwise this is the dependency property containing the actual
                 // handlers to call when the property changes.
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
                 var dependencyPropertyMetaData = typeof(T) == typeof(object) ? new PropertyMetadata(default(T), OnDependencyPropertyChanged) : null;
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
                 dependencyProperty = DependencyProperty.RegisterAttached(key, typeof(T), viewType, dependencyPropertyMetaData);
 
                 _dependencyProperties[key] = dependencyProperty;

@@ -139,7 +139,9 @@ namespace Catel.MVVM
         {
             await ExecuteAsync(parameter);
 
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
             AuditingManager.OnCommandExecuted(null, CommandName, _command, parameter);
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
         }
 
         /// <summary>

@@ -9,6 +9,7 @@ namespace Catel.MVVM
 {
     using System;
     using System.Threading.Tasks;
+    using Catel.Data;
     using Logging;
     using Threading;
 
@@ -173,7 +174,7 @@ namespace Catel.MVVM
             }
             catch (Exception ex)
             {
-                Log.Error(ex, $"Failed to await saving of view model '{viewModel.UniqueIdentifier}'");
+                Log.Error(ex, $"Failed to await saving of view model '{BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier)}'");
                 throw;
             }
             finally
@@ -221,7 +222,7 @@ namespace Catel.MVVM
             }
             catch (Exception ex)
             {
-                Log.Error(ex, $"Failed to await canceling of view model '{viewModel.UniqueIdentifier}'");
+                Log.Error(ex, $"Failed to await canceling of view model '{BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier)}'");
                 throw;
             }
             finally
@@ -247,7 +248,7 @@ namespace Catel.MVVM
 
             var closedHandler = new AsyncEventHandler<ViewModelClosedEventArgs>(async (sender, e) =>
             {
-                tcs.TrySetResult(true);
+                tcs.TrySetResult(BoxingCache.GetBoxedValue(true));
             });
 
             viewModel.ClosedAsync += closedHandler;
@@ -258,7 +259,7 @@ namespace Catel.MVVM
             }
             catch (Exception ex)
             {
-                Log.Error(ex, $"Failed to await closing of view model '{viewModel.UniqueIdentifier}'");
+                Log.Error(ex, $"Failed to await closing of view model '{BoxingCache.GetBoxedValue(viewModel.UniqueIdentifier)}'");
                 throw;
             }
             finally
