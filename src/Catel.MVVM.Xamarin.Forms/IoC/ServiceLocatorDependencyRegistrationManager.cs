@@ -88,7 +88,9 @@
 
                 Log.Debug("Found dependency service '{0}' and will be register as '{1}'", serviceType.FullName, interfaceType.FullName);
 
+#pragma warning disable HAA0101 // Array allocation for params parameter
                 _serviceLocator.RegisterType(interfaceType, serviceLocatorRegistration => DependencyServiceGetMethodInfo.MakeGenericMethod(interfaceType).Invoke(typeof(DependencyService), ArrayOfObjectWithSingleNullElement));
+#pragma warning restore HAA0101 // Array allocation for params parameter
             }
         }
     }

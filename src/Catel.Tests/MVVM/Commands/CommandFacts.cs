@@ -9,6 +9,7 @@ namespace Catel.Tests.MVVM.Commands
 {
     using System;
     using System.Diagnostics;
+    using Catel.Data;
     using Catel.MVVM;
 
     using NUnit.Framework;
@@ -46,7 +47,7 @@ namespace Catel.Tests.MVVM.Commands
                     int localVariable = 1;
                     TestCommand = new Command(TestFunction, () =>
                     {
-                        Console.WriteLine("CanExecute called " + localVariable++);
+                        Console.WriteLine("CanExecute called " + BoxingCache.GetBoxedValue(localVariable++));
                         return false;
                     });
                 }

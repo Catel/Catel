@@ -310,7 +310,7 @@ namespace Catel.MVVM.Auditing
         public static void Clear() { }
         public static void RegisterAuditor(Catel.MVVM.Auditing.IAuditor auditor) { }
         public static void RegisterAuditor<TAuditor>()
-            where TAuditor : Catel.MVVM.Auditing.IAuditor { }
+            where TAuditor :  class, Catel.MVVM.Auditing.IAuditor { }
         public static void UnregisterAuditor(Catel.MVVM.Auditing.IAuditor auditor) { }
     }
     public abstract class AuditorBase : Catel.MVVM.Auditing.IAuditor
@@ -1530,7 +1530,7 @@ namespace Catel.MVVM.Providers
         Dynamic = 1,
     }
     public abstract class NavigationLogicBase<T> : Catel.MVVM.Providers.LogicBase
-        where T : Catel.MVVM.Views.IView
+        where T :  class, Catel.MVVM.Views.IView
     {
         protected NavigationLogicBase(T targetPage, System.Type viewModelType = null) { }
         public T TargetPage { get; }

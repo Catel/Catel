@@ -434,7 +434,7 @@ namespace Catel.Tests.Data
                 model.Name = "Geert";
                 for (int i = 0; i < 3; i++)
                 {
-                    model.Modules.Add(new JsonInnerModel { Name = "Name " + (i + 1) });
+                    model.Modules.Add(new JsonInnerModel { Name = "Name " + BoxingCache.GetBoxedValue(i + 1) });
                 }
 
                 var json = JsonConvert.SerializeObject(model);

@@ -133,7 +133,10 @@ namespace Catel.MVVM
             }
 
             var commandParameter = _commandParameterBinding.GetBindingValue();
+
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
             _enabledPropertyInfo.SetValue(_element, _command.CanExecute(commandParameter));
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
         }
         #endregion
     }

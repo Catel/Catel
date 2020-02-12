@@ -59,7 +59,9 @@ namespace Catel.MVVM
             var eventHandlerType = eventInfo.EventHandlerType;
             var eventArgsType = eventHandlerType.GetGenericArgumentsEx()[0];
 
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var genericAddEventMethod = AddEventMethodInfo.MakeGenericMethod(eventArgsType);
+#pragma warning restore HAA0101 // Array allocation for params parameter
             genericAddEventMethod.Invoke(bindingParty, new object[] {eventName});
         }
     }

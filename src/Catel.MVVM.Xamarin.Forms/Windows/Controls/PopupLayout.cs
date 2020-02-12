@@ -123,7 +123,9 @@ namespace Catel.Windows.Controls
             {
                 if (_popupView != null)
                 {
+#pragma warning disable HAA0101 // Array allocation for params parameter
                     await Task.WhenAll(_popupView.FadeTo(0), _backdrop.FadeTo(0));
+#pragma warning restore HAA0101 // Array allocation for params parameter
 
                     if (_backdrop.Children.Contains(_popupView))
                     {

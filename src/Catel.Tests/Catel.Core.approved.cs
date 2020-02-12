@@ -143,12 +143,15 @@ namespace Catel
         where TEnum :  struct, System.IComparable, System.IFormattable
     {
         public static TEnum ConvertFromOtherEnumValue(object inputEnumValue) { }
+        public static TEnum ConvertFromOtherEnumValue<TOtherEnum>(TOtherEnum inputEnumValue)
+            where TOtherEnum :  struct, System.IComparable, System.IFormattable { }
         public static string GetName(int value) { }
         public static string GetName(long value) { }
         public static string[] GetNames() { }
         public static System.Collections.Generic.List<TEnum> GetValues() { }
         public static TEnum Parse(string input, bool ignoreCase = false) { }
         public static System.Collections.Generic.List<TEnum> ToList() { }
+        public static string ToString(TEnum value) { }
         public static bool TryParse(string input, out TEnum result) { }
         public static bool TryParse(string input, out TEnum? result) { }
         public static bool TryParse(string input, bool ignoreCase, out TEnum result) { }
@@ -260,9 +263,13 @@ namespace Catel
     {
         bool ExecuteWithObject(object parameter);
     }
-    public interface IExecuteWithObject<TResult>
+    public interface IExecuteWithObject<TParameter> : Catel.IExecuteWithObject
     {
-        bool ExecuteWithObject(object parameter, out TResult result);
+        bool ExecuteWithObject(TParameter parameter);
+    }
+    public interface IExecuteWithObject<TParameter, TResult>
+    {
+        bool ExecuteWithObject(TParameter parameter, out TResult result);
     }
     public interface IExecute<TResult>
     {
@@ -284,7 +291,7 @@ namespace Catel
         System.Delegate Action { get; }
         string MethodName { get; }
     }
-    public interface IWeakAction<TParameter> : Catel.IExecuteWithObject, Catel.IWeakReference
+    public interface IWeakAction<TParameter> : Catel.IExecuteWithObject, Catel.IExecuteWithObject<TParameter>, Catel.IWeakReference
     {
         System.Delegate Action { get; }
         string MethodName { get; }
@@ -310,7 +317,7 @@ namespace Catel
         System.Delegate Action { get; }
         string MethodName { get; }
     }
-    public interface IWeakFunc<TParameter, TResult> : Catel.IExecuteWithObject<TResult>, Catel.IWeakReference
+    public interface IWeakFunc<TParameter, TResult> : Catel.IExecuteWithObject<TParameter, TResult>, Catel.IWeakReference
     {
         System.Delegate Action { get; }
         string MethodName { get; }
@@ -505,7 +512,7 @@ namespace Catel
         public bool IsTargetAlive { get; }
         public object Target { get; }
     }
-    public class WeakAction<TParameter> : Catel.WeakActionBase, Catel.IExecuteWithObject, Catel.IWeakAction<TParameter>, Catel.IWeakReference
+    public class WeakAction<TParameter> : Catel.WeakActionBase, Catel.IExecuteWithObject, Catel.IExecuteWithObject<TParameter>, Catel.IWeakAction<TParameter>, Catel.IWeakReference
     {
         public WeakAction(object target, System.Action<TParameter> action) { }
         public System.Delegate Action { get; }
@@ -536,6 +543,7 @@ namespace Catel
     public class WeakEventListener<TTarget, TSource, TEventArgs> : Catel.IWeakEventListener
         where TTarget :  class
         where TSource :  class
+        where TEventArgs :  class
     {
         public System.Type EventArgsType { get; }
         public bool IsSourceAlive { get; }
@@ -565,7 +573,7 @@ namespace Catel
         public bool Execute(out TResult result) { }
         public delegate TResult OpenInstanceAction<TResult, TTarget>(TTarget @this);
     }
-    public class WeakFunc<TParameter, TResult> : Catel.WeakActionBase, Catel.IExecuteWithObject<TResult>, Catel.IWeakFunc<TParameter, TResult>, Catel.IWeakReference
+    public class WeakFunc<TParameter, TResult> : Catel.WeakActionBase, Catel.IExecuteWithObject<TParameter, TResult>, Catel.IWeakFunc<TParameter, TResult>, Catel.IWeakReference
     {
         public WeakFunc(object target, System.Func<TParameter, TResult> func) { }
         public System.Delegate Action { get; }
@@ -900,13 +908,16 @@ namespace Catel.Data
         public static object GetBoxedValue(ushort value) { }
         public static object GetBoxedValue(uint value) { }
         public static object GetBoxedValue(ulong value) { }
+        public static object GetBoxedValue<TValue>(TValue value) { }
     }
     public class BoxingCache<T>
     {
         public BoxingCache() { }
+        public System.TimeSpan CleanUpInterval { get; set; }
         public static Catel.Data.BoxingCache<T> Default { get; }
         protected T AddBoxedValue(object boxedValue) { }
         protected object AddUnboxedValue(T value) { }
+        public void CleanUp() { }
         public object GetBoxedValue(T value) { }
         public T GetUnboxedValue(object boxedValue) { }
     }
@@ -1952,7 +1963,7 @@ namespace Catel.IoC
         void AddAssemblyToScan(System.Reflection.Assembly assembly);
         void ApplyConventions();
         void RegisterConvention<TRegistrationConvention>(Catel.IoC.RegistrationType registrationType = 0)
-            where TRegistrationConvention : Catel.IoC.IRegistrationConvention;
+            where TRegistrationConvention :  class, Catel.IoC.IRegistrationConvention;
     }
     public interface IServiceLocator : System.IDisposable, System.IServiceProvider
     {
@@ -2084,7 +2095,7 @@ namespace Catel.IoC
         public void AddAssemblyToScan(System.Reflection.Assembly assembly) { }
         public void ApplyConventions() { }
         public void RegisterConvention<TRegistrationConvention>(Catel.IoC.RegistrationType registrationType = 0)
-            where TRegistrationConvention : Catel.IoC.IRegistrationConvention { }
+            where TRegistrationConvention :  class, Catel.IoC.IRegistrationConvention { }
         protected void RemoveIfAlreadyRegistered(System.Type type) { }
     }
     public static class RegistrationConventionHandlerExtensions
@@ -2106,7 +2117,7 @@ namespace Catel.IoC
             where T :  class { }
         public static Catel.IoC.IRegistrationConventionHandler IncludeTypesWhere(this Catel.IoC.IRegistrationConventionHandler registrationConventionHandler, System.Predicate<System.Type> include) { }
         public static Catel.IoC.IRegistrationConventionHandler ShouldAlsoUseConvention<TRegistrationConvention>(this Catel.IoC.IRegistrationConventionHandler registrationConventionHandler, Catel.IoC.RegistrationType registrationType = 0)
-            where TRegistrationConvention : Catel.IoC.IRegistrationConvention { }
+            where TRegistrationConvention :  class, Catel.IoC.IRegistrationConvention { }
     }
     public class RegistrationInfo
     {
@@ -2196,7 +2207,7 @@ namespace Catel.IoC
             where TServiceImplementation : TService { }
         public static Catel.IoC.IRegistrationConventionHandler RegisterTypesUsingAllConventions(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
         public static Catel.IoC.IRegistrationConventionHandler RegisterTypesUsingConvention<TRegistrationConvention>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0)
-            where TRegistrationConvention : Catel.IoC.IRegistrationConvention { }
+            where TRegistrationConvention :  class, Catel.IoC.IRegistrationConvention { }
         public static Catel.IoC.IRegistrationConventionHandler RegisterTypesUsingDefaultFirstInterfaceConvention(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
         public static Catel.IoC.IRegistrationConventionHandler RegisterTypesUsingDefaultNamingConvention(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
         public static void RemoveType<TService>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null) { }
@@ -2555,7 +2566,11 @@ namespace Catel.Logging
             where TException : System.Exception { }
         public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, string messageFormat, params object[] args)
             where TException : System.Exception { }
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, string messageFormat, object arg0)
+            where TException : System.Exception { }
         public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, string messageFormat, params object[] args)
+            where TException : System.Exception { }
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Func<string, TException> createExceptionCallback, string messageFormat, object arg1)
             where TException : System.Exception { }
         public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Func<string, TException> createExceptionCallback, string messageFormat, params object[] args)
             where TException : System.Exception { }
@@ -2563,7 +2578,15 @@ namespace Catel.Logging
             where TException : System.Exception { }
         public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, System.Func<string, TException> createExceptionCallback, string messageFormat, params object[] args)
             where TException : System.Exception { }
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, string messageFormat, object arg0, object arg1)
+            where TException : System.Exception { }
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Func<string, TException> createExceptionCallback, string messageFormat, object arg1, object arg2)
+            where TException : System.Exception { }
         public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, string messageFormat, object arg1, object arg2, object arg3)
+            where TException : System.Exception { }
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Exception innerException, string messageFormat, object arg0, object arg1, object arg2)
+            where TException : System.Exception { }
+        public static System.Exception ErrorAndCreateException<TException>(this Catel.Logging.ILog log, System.Func<string, TException> createExceptionCallback, string messageFormat, object arg1, object arg2, object arg3)
             where TException : System.Exception { }
         public static void ErrorAndStatus(this Catel.Logging.ILog log, string messageFormat, params object[] args) { }
         public static void ErrorWithData(this Catel.Logging.ILog log, string message, Catel.Logging.LogData logData) { }
@@ -3190,12 +3213,14 @@ namespace Catel.Reflection
         public static bool IsGenericTypeDefinitionEx(this System.Type type) { }
         public static bool IsGenericTypeEx(this System.Type type) { }
         public static bool IsInstanceOfTypeEx(this System.Type type, object objectToCheck) { }
+        public static bool IsInstanceOfTypeEx<T>(this System.Type type, T objectToCheck) { }
         public static bool IsInterfaceEx(this System.Type type) { }
         public static bool IsNestedPublicEx(this System.Type type) { }
         public static bool IsPrimitiveEx(this System.Type type) { }
         public static bool IsPublicEx(this System.Type type) { }
         public static bool IsSerializableEx(this System.Type type) { }
         public static bool IsValueTypeEx(this System.Type type) { }
+        public static System.Type MakeGenericTypeEx(this System.Type type, System.Type typeArgument) { }
         public static System.Type MakeGenericTypeEx(this System.Type type, params System.Type[] typeArguments) { }
         public static bool TryGetAttribute(this System.Reflection.MemberInfo memberInfo, System.Type attributeType, out System.Attribute attribute) { }
         public static bool TryGetAttribute(this System.Type type, System.Type attributeType, out System.Attribute attribute) { }
@@ -4104,7 +4129,10 @@ namespace Catel.Text
 {
     public static class StringBuilderExtensions
     {
+        public static void AppendLine(this System.Text.StringBuilder sb, string format, object arg0) { }
         public static void AppendLine(this System.Text.StringBuilder sb, string format, params object[] args) { }
+        public static void AppendLine(this System.Text.StringBuilder sb, string format, object arg0, object arg1) { }
+        public static void AppendLine(this System.Text.StringBuilder sb, string format, object arg0, object arg1, object arg2) { }
     }
 }
 namespace Catel.Threading

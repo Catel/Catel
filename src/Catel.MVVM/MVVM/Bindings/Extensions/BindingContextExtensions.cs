@@ -79,7 +79,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="source"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="target"/> is <c>null</c>.</exception>
         public static Binding AddBindingWithConverter<TConverter>(this BindingContext bindingContext, object source, string sourcePropertyName, object target, string targetPropertyName, BindingMode mode = BindingMode.TwoWay)
-            where TConverter : IValueConverter
+            where TConverter : class, IValueConverter
         {
             var typeFactory = IoCConfiguration.DefaultTypeFactory;
             var converter = typeFactory.CreateInstance<TConverter>();
@@ -99,7 +99,7 @@ namespace Catel.MVVM
         /// <exception cref="ArgumentNullException">The <paramref name="sourcePropertyExpression"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="targetPropertyExpression"/> is <c>null</c>.</exception>
         public static Binding AddBindingWithConverter<TConverter>(this BindingContext bindingContext, Expression<Func<object>> sourcePropertyExpression, Expression<Func<object>> targetPropertyExpression, BindingMode mode = BindingMode.TwoWay)
-            where TConverter : IValueConverter
+            where TConverter : class, IValueConverter
         {
             var typeFactory = IoCConfiguration.DefaultTypeFactory;
             var converter = typeFactory.CreateInstance<TConverter>();

@@ -34,7 +34,9 @@
             var type = typeof(global::Xamarin.Forms.MessagingCenter);
             //// TODO: Use reflection API instead but reflection API requires some fixes.
             var methodInfo = type.GetRuntimeMethods().FirstOrDefault(info => info.Name == "Send" && info.GetGenericArguments().Length == 2 && info.GetParameters().Length == 3);
+#pragma warning disable HAA0101 // Array allocation for params parameter
             var makeGenericMethod = methodInfo.MakeGenericMethod(typeof(Page), typeof(AlertArguments));
+#pragma warning restore HAA0101 // Array allocation for params parameter
             makeGenericMethod.Invoke(type, new[] { sender, message, alertArguments });
 
             return alertArguments.Result;
