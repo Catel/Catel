@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net46;net47;net48;netcoreapp3.0;uap10.0.16299</TargetFrameworks>
+    <TargetFrameworks>net46;net47;net48;netcoreapp3.1;uap10.0.16299</TargetFrameworks>
     <AssemblyName>Catel.MVVM</AssemblyName>
     <RootNamespace>Catel.MVVM</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
