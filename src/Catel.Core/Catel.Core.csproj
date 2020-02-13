@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
     <!--<TargetFrameworks>net45;net46;net47;netcoreapp3.0;netstandard2.0;xamarin.ios10;monoandroid70</TargetFrameworks>-->
-    <TargetFrameworks>net46;net47;net48;netcoreapp3.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net46;net47;net48;netcoreapp3.1;netstandard2.0</TargetFrameworks>
     <AssemblyName>Catel.Core</AssemblyName>
     <RootNamespace>Catel</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -49,6 +49,12 @@
 
   <!-- .NET Core 3.0 -->
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
+    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
+  </ItemGroup>
+
+  <!-- .NET Core 3.1 -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
     <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
   </ItemGroup>
