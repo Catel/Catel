@@ -186,6 +186,8 @@ with Catel:
 
 // todo: add uwp
 
+## Tools
+ * **[Analogy.LogViewer.CatelProject](https://github.com/Analogy-LogViewer/Analogy.LogViewer.CatelProject)** - Catel Log parser for [Analogy Log Viewer](https://github.com/Analogy-LogViewer/Analogy.LogViewer).
 ## WPF components based on Catel
 
 If you are planning on using WPF, there is a huge set (60+) of free open-source components 
