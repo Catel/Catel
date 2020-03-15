@@ -195,6 +195,9 @@ maintained and being used in several commercial WPF applications.
 
 For more information, see https://github.com/wildgums
 
+## Tools for Catel
+ * **[Analogy.LogViewer.CatelProject](https://github.com/Analogy-LogViewer/Analogy.LogViewer.CatelProject)** - Catel Log parser for [Analogy Log Viewer](https://github.com/Analogy-LogViewer/Analogy.LogViewer).
+ 
 ## Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
