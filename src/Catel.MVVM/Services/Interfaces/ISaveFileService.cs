@@ -39,5 +39,19 @@ namespace Catel.Services
         /// </remarks>
         Task<bool> DetermineFileAsync();
 #endif
-	}
+
+#if UWP
+        /// <summary>
+        /// Determines the filename of the file what will be used.
+        /// </summary>
+        /// <returns>The determine save file result.</returns>
+        Task<DetermineSaveFileResult> DetermineFileAsync(DetermineSaveFileContext context);
+#else
+        /// <summary>
+        /// Determines the filename of the file what will be used.
+        /// </summary>
+        /// <returns>The determine save file result.</returns>
+        Task<DetermineSaveFileResult> DetermineFileAsync(DetermineSaveFileContext context);
+#endif
+    }
 }

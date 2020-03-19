@@ -16,15 +16,8 @@ namespace Catel.Services
     /// </summary>
     public partial class OpenFileService
     {
-        #region IFileSupport Members
-        /// <summary>
-        /// Determines the filename of the file what will be used.
-        /// </summary>
-        /// <returns><c>true</c> if a file is selected; otherwise <c>false</c>.</returns>
-        /// <remarks>
-        /// If this method returns <c>true</c>, the <c>FileName</c> property will be filled with the filename. Otherwise,
-        /// no changes will occur to the data of this object.
-        /// </remarks>
+        /// <inheritdoc/>
+        [ObsoleteEx(ReplacementTypeOrMember = "DetermineFileAsync(DetermineOpenFileContext)", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         public virtual async Task<bool> DetermineFileAsync()
         {
             var fileDialog = new OpenFileDialog();
@@ -46,7 +39,26 @@ namespace Catel.Services
 
             return result;
         }
-        #endregion
+
+        /// <inheritdoc/>
+        public virtual async Task<DetermineOpenFileResult> DetermineFileAsync(DetermineOpenFileContext context)
+        {
+            Argument.IsNotNull("context", context);
+
+            var fileDialog = new OpenFileDialog();
+            ConfigureFileDialog(fileDialog);
+
+            fileDialog.Multiselect = context.IsMultiSelect;
+
+            var result = new DetermineOpenFileResult
+            {
+                Result = fileDialog.ShowDialog() ?? false,
+                FileName = fileDialog.FileName,
+                FileNames = fileDialog.FileNames,
+            };
+
+            return result;
+        }
     }
 }
 

@@ -30,6 +30,7 @@ namespace Catel.Services
         /// If this method returns a valid <see cref="StorageFile"/> object, the <c>FileName</c> property will be filled 
         /// with the safe filename. This can be used for display purposes only.
         /// </remarks>
+        [ObsoleteEx(ReplacementTypeOrMember = "DetermineFileContext / DetermineFileResult", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         public virtual async Task<StorageFile[]> DetermineFileAsync()
         {
             var fileDialog = new global::Windows.Storage.Pickers.FileOpenPicker();
