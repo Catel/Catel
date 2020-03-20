@@ -60,7 +60,7 @@
 
                 lock (_fastMemberInvokerCache)
                 {
-                    if (!_fastMemberInvokerCache.TryGetValue(modelType, out ))
+                    if (!_fastMemberInvokerCache.TryGetValue(modelType, out fastMemberInvoker))
                     {
                         fastMemberInvoker = GetFastMemberInvoker(modelType);
                         _fastMemberInvokerCache[modelType] = fastMemberInvoker;
@@ -128,7 +128,7 @@
 
                 lock (_fastMemberInvokerCache)
                 {
-                    if (!_fastMemberInvokerCache.TryGetValue(modelType, out ))
+                    if (!_fastMemberInvokerCache.TryGetValue(modelType, out fastMemberInvoker))
                     {
                         fastMemberInvoker = GetFastMemberInvoker(modelType);
                         _fastMemberInvokerCache[modelType] = fastMemberInvoker;
