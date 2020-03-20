@@ -56,11 +56,15 @@
                 }
 
                 var modelType = instance.GetType();
+                IFastMemberInvoker fastMemberInvoker = null;
 
-                if (!_fastMemberInvokerCache.TryGetValue(modelType, out var fastMemberInvoker))
+                lock (_fastMemberInvokerCache)
                 {
-                    fastMemberInvoker = GetFastMemberInvoker(modelType);
-                    _fastMemberInvokerCache[modelType] = fastMemberInvoker;
+                    if (!_fastMemberInvokerCache.TryGetValue(modelType, out ))
+                    {
+                        fastMemberInvoker = GetFastMemberInvoker(modelType);
+                        _fastMemberInvokerCache[modelType] = fastMemberInvoker;
+                    }
                 }
 
                 if (fastMemberInvoker.TryGetPropertyValue(instance, memberName, out value))
@@ -120,11 +124,15 @@
                 }
 
                 var modelType = instance.GetType();
+                IFastMemberInvoker fastMemberInvoker = null;
 
-                if (!_fastMemberInvokerCache.TryGetValue(modelType, out var fastMemberInvoker))
+                lock (_fastMemberInvokerCache)
                 {
-                    fastMemberInvoker = GetFastMemberInvoker(modelType);
-                    _fastMemberInvokerCache[modelType] = fastMemberInvoker;
+                    if (!_fastMemberInvokerCache.TryGetValue(modelType, out ))
+                    {
+                        fastMemberInvoker = GetFastMemberInvoker(modelType);
+                        _fastMemberInvokerCache[modelType] = fastMemberInvoker;
+                    }
                 }
 
                 if (fastMemberInvoker.SetPropertyValue(instance, memberName, value))
