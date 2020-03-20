@@ -45,7 +45,7 @@ namespace Catel.Services
         /// <param name="completedProc">The completed callback.</param>
         /// <param name="isModal">True if this is a ShowDialog request.</param>
         /// <returns>The created window.</returns>    
-        protected virtual FrameworkElement CreateWindow(string name, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
+        protected virtual async Task<FrameworkElement> CreateWindowAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
         {
             Type windowType;
 
@@ -57,7 +57,7 @@ namespace Catel.Services
                 }
             }
 
-            return CreateWindow(windowType, data, completedProc, isModal);
+            return await CreateWindowAsync(windowType, data, completedProc, isModal);
         }
 
         /// <summary>
@@ -70,25 +70,40 @@ namespace Catel.Services
         /// <returns>
         /// The created window.
         /// </returns>
-        protected virtual FrameworkElement CreateWindow(Type windowType, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
+        protected virtual async Task<FrameworkElement> CreateWindowAsync(Type windowType, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
         {
-            var window = ViewHelper.ConstructViewWithViewModel(windowType, data);
+            var tcs = new TaskCompletionSource<FrameworkElement>();
 
-            if (isModal)
+            _dispatcherService.BeginInvoke(() =>
             {
-                var activeWindow = GetActiveWindow();
-                if (!ReferenceEquals(window, activeWindow))
+                try
                 {
-                    PropertyHelper.TrySetPropertyValue(window, "Owner", activeWindow);
+
+                    var window = ViewHelper.ConstructViewWithViewModel(windowType, data);
+
+                    if (isModal)
+                    {
+                        var activeWindow = GetActiveWindow();
+                        if (!ReferenceEquals(window, activeWindow))
+                        {
+                            PropertyHelper.TrySetPropertyValue(window, "Owner", activeWindow);
+                        }
+                    }
+
+                    if (window != null && completedProc != null)
+                    {
+                        HandleCloseSubscription(window, data, completedProc, isModal);
+                    }
+
+                    tcs.TrySetResult(window);
                 }
-            }
+                catch (Exception ex)
+                {
+                    tcs.TrySetException(ex);
+                }
+            });
 
-            if ((window != null) && (completedProc != null))
-            {
-                HandleCloseSubscription(window, data, completedProc, isModal);
-            }
-
-            return window;
+            return await tcs.Task;
         }
 
         /// <summary>

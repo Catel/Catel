@@ -29,10 +29,11 @@ Release date
 
 Added/fixed
 ===========
-(x) #1550 Deadlock in ExpressionTreeObjectAdapter.GetMemberValue
-(x) #1551 Potential enumeration failure when using LanguageService.GetString
+(*) #1545 UIVisualizerService attempts to create window on non-UI thread
 (*) #1554 Add Task<DetermineFileResult> IOpen/SaveFileService.DetermineFileAsync(DetermineFileContext)
 (*) #1555 Add Task<DetermineFileResult> IOpen/SaveFileService.DetermineFileAsync(DetermineFileContext)
+(x) #1550 Deadlock in ExpressionTreeObjectAdapter.GetMemberValue
+(x) #1551 Potential enumeration failure when using LanguageService.GetString
 
 Platform support changes
 ========================

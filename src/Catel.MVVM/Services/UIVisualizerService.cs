@@ -27,32 +27,28 @@ namespace Catel.Services
     public partial class UIVisualizerService : ViewModelServiceBase, IUIVisualizerService
     {
         #region Fields
-        /// <summary>
-        /// The log.
-        /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
-        /// <summary>
-        /// Dictionary of registered windows.
-        /// </summary>
         protected readonly Dictionary<string, Type> RegisteredWindows = new Dictionary<string, Type>();
 
-        /// <summary>
-        /// The view locator.
-        /// </summary>
         private readonly IViewLocator _viewLocator;
+        private readonly IDispatcherService _dispatcherService;
         #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UIVisualizerService"/> class.
         /// </summary>
         /// <param name="viewLocator">The view locator.</param>
+        /// <param name="dispatcherService">The dispatcher service.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewLocator"/> is <c>null</c>.</exception>
-        public UIVisualizerService(IViewLocator viewLocator)
+        /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>
+        public UIVisualizerService(IViewLocator viewLocator, IDispatcherService dispatcherService)
         {
             Argument.IsNotNull("viewLocator", viewLocator);
+            Argument.IsNotNull("dispatcherService", dispatcherService);
 
             _viewLocator = viewLocator;
+            _dispatcherService = dispatcherService;
         }
 
         #region Methods
@@ -162,7 +158,7 @@ namespace Catel.Services
 
             EnsureViewIsRegistered(name);
 
-            var window = CreateWindow(name, data, completedProc, false);
+            var window = await CreateWindowAsync(name, data, completedProc, false);
             if (window != null)
             {
                 return await ShowWindowAsync(window, data, false);
@@ -210,7 +206,7 @@ namespace Catel.Services
 
             EnsureViewIsRegistered(name);
 
-            var window = CreateWindow(name, data, completedProc, true);
+            var window = await CreateWindowAsync(name, data, completedProc, true);
             if (window != null)
             {
                 return await ShowWindowAsync(window, data, true);
