@@ -232,6 +232,18 @@ namespace Catel.Windows
         #endregion
 
         /// <summary>
+        /// Determines whether the <see cref="SystemWindow.DialogResult"/> property can be set.
+        /// </summary>
+        /// <param name="window">The window to check.</param>
+        /// <returns><c>true</c> if the dialog result can be set; otherwise, <c>false</c>.</returns>
+        public static bool CanSetDialogResult(this SystemWindow window)
+        {
+            Argument.IsNotNull("window", window);
+
+            return ComponentDispatcher.IsThreadModal;
+        }
+
+        /// <summary>
         /// Gets the window handle of the specified window.
         /// </summary>
         /// <param name="window">The window.</param>

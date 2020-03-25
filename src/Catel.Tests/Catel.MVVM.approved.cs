@@ -2920,6 +2920,7 @@ namespace Catel.Windows
     {
         public static void ApplyIconFromApplication(this System.Windows.Window window) { }
         public static void BringWindowToTop(this System.Windows.Window window) { }
+        public static bool CanSetDialogResult(this System.Windows.Window window) { }
         public static System.IntPtr GetWindowHandle(this System.Windows.Window window) { }
         public static void RemoveIcon(this System.Windows.Window window) { }
         public static void SetOwnerWindow(this System.Windows.Window window, bool forceNewOwner = False, bool focusFirstControl = False) { }

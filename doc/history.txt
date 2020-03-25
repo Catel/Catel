@@ -34,6 +34,7 @@ Added/fixed
 (*) #1555 Add Task<DetermineFileResult> IOpen/SaveFileService.DetermineFileAsync(DetermineFileContext)
 (x) #1550 Deadlock in ExpressionTreeObjectAdapter.GetMemberValue
 (x) #1551 Potential enumeration failure when using LanguageService.GetString
+(x) #1557 Check whether DialogResult can be set when closing a window initiated from a view model
 
 Platform support changes
 ========================
