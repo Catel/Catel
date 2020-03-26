@@ -2662,7 +2662,14 @@ namespace Catel.Services
     public class UIVisualizerService : Catel.Services.ViewModelServiceBase, Catel.Services.IUIVisualizerService
     {
         protected readonly System.Collections.Generic.Dictionary<string, System.Type> RegisteredWindows;
+        [System.ObsoleteAttribute("Use `ctor(IViewLocator viewLocator, IDispatcherService dispatcherService)` instea" +
+            "d. Will be removed in version 6.0.0.", true)]
+        public UIVisualizerService(Catel.MVVM.IViewLocator viewLocator) { }
         public UIVisualizerService(Catel.MVVM.IViewLocator viewLocator, Catel.Services.IDispatcherService dispatcherService) { }
+        [System.ObsoleteAttribute("Use `CreateWindowAsync` instead. Will be removed in version 6.0.0.", true)]
+        protected virtual System.Windows.FrameworkElement CreateWindow(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
+        [System.ObsoleteAttribute("Use `CreateWindowAsync` instead. Will be removed in version 6.0.0.", true)]
+        protected virtual System.Windows.FrameworkElement CreateWindow(System.Type windowType, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
         protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
         protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(System.Type windowType, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
         protected virtual void EnsureViewIsRegistered(string name) { }
