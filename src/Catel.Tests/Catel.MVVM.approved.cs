@@ -1103,15 +1103,18 @@ namespace Catel.MVVM
     }
     public class ViewModelToModelMapping
     {
-        public ViewModelToModelMapping(string viewModelProperty, Catel.MVVM.ViewModelToModelAttribute attribute) { }
-        public ViewModelToModelMapping(string viewModelProperty, string modelProperty, string valueProperty, Catel.MVVM.ViewModelToModelMode mode, System.Type converterType, object[] additionalConstructorArgs, string[] additionalPropertiesToWatch) { }
+        public ViewModelToModelMapping(System.Reflection.PropertyInfo viewModelPropertyInfo, System.Type modelPropertyType, Catel.MVVM.ViewModelToModelAttribute attribute) { }
+        public ViewModelToModelMapping(string viewModelProperty, System.Type viewModelPropertyType, System.Type modelPropertyType, Catel.MVVM.ViewModelToModelAttribute attribute) { }
+        public ViewModelToModelMapping(string viewModelProperty, System.Type viewModelPropertyType, string modelProperty, System.Type modelPropertyType, string valueProperty, Catel.MVVM.ViewModelToModelMode mode, System.Type converterType, object[] additionalConstructorArgs, string[] additionalPropertiesToWatch) { }
         public Catel.MVVM.IViewModelToModelConverter Converter { get; }
         public System.Type ConverterType { get; }
         public System.Collections.Generic.HashSet<string> IgnoredProperties { get; }
         public Catel.MVVM.ViewModelToModelMode Mode { get; }
         public string ModelProperty { get; }
+        public System.Type ModelPropertyType { get; }
         public string[] ValueProperties { get; }
         public string ViewModelProperty { get; }
+        public System.Type ViewModelPropertyType { get; }
     }
     public enum ViewModelToModelMode
     {
