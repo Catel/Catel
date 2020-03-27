@@ -2,21 +2,21 @@ What steps to perform when releasing:
 
 Prerelease steps:
 =================
-1) Write blog post about what's new in the latest version
-2) Update release date in history.txt
+1) Update release date in history.txt
 
 Final release steps:
 ====================
 1)   Merge to master branch in Git
 2)   Build and deploy via build server
-3)   Create release on github (https://github.com/Catel/Catel/releases)
-4)   Create release page under "Download" section on catelproject.com
-5.1) Ensure that the update guides are written at http://docs.catelproject.com/vnext/setup-deployment/update-guides/
-5.2) Copy the docs and keep vnext (http://docs.catelproject.com)
-5.3) Make sure to update the welcome page as well to include the new version
-6)   Share via Twitter
-7)   Share via LinkedIn
-8)   Share on Open Collective
+3)   Create release on github (https://github.com/Catel/Catel/releases) (done automatically via build pipeline)
+4)   Write blog post about what's new in the latest version (based on automated release notes generated via build pipeline)
+5)   Create release page under "Download" section on catelproject.com
+6.1) Ensure that the update guides are written at http://docs.catelproject.com/vnext/setup-deployment/update-guides/
+6.2) Copy the docs and keep vnext (http://docs.catelproject.com)
+6.3) Make sure to update the welcome page as well to include the new version
+7)   Share via Twitter
+8)   Share via LinkedIn
+9)   Share on Open Collective
 
 Post release steps:
 ===================
