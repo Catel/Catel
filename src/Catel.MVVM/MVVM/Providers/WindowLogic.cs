@@ -16,6 +16,7 @@ namespace Catel.MVVM.Providers
     using MVVM;
     using Reflection;
     using Catel.Data;
+    using Catel.Windows;
 
     /// <summary>
     /// MVVM Provider behavior implementation for a window.
@@ -27,7 +28,7 @@ namespace Catel.MVVM.Providers
         /// The log.
         /// </summary>
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-        
+
         private bool? _closeInitiatedByViewModel;
         private bool? _closeInitiatedByViewModelResult;
 
@@ -133,21 +134,32 @@ namespace Catel.MVVM.Providers
 
             if (_closeInitiatedByViewModelResult != null)
             {
-                bool result;
-                try
+                var result = false;
+
+                // If window is null, we are assuming it's a custom window based on FrameworkElement (similar to Silverlight). In that case,
+                // keep using the old logic
+                var window = TargetWindow as System.Windows.Window;
+                var canSetDialogResult = window?.CanSetDialogResult() ?? true;
+                if (canSetDialogResult)
                 {
-                    result = PropertyHelper.TrySetPropertyValue(TargetWindow, "DialogResult", BoxingCache.GetBoxedValue(_closeInitiatedByViewModelResult), true);
-                }
-                catch (Exception ex)
-                {
-                    Log.Warning("Failed to set the 'DialogResult' exception: {0}", ex);
-                    result = false;
+                    try
+                    {
+                        result = PropertyHelper.TrySetPropertyValue(TargetWindow, "DialogResult", BoxingCache.GetBoxedValue(_closeInitiatedByViewModelResult), true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Warning("Failed to set the 'DialogResult' exception: {0}", ex);
+                        result = false;
+                    }
                 }
 
                 // Support all windows (even those that do not derive from ChildWindow)
                 if (!result)
                 {
-                    Log.Warning("Failed to set the 'DialogResult' property of window type '{0}', closing window via method", TargetWindow.GetType().Name);
+                    if (canSetDialogResult)
+                    {
+                        Log.Warning("Failed to set the 'DialogResult' property of window type '{0}', closing window via method", TargetWindow.GetType().Name);
+                    }
 
                     InvokeCloseDynamically();
                 }

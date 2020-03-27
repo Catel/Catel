@@ -840,7 +840,7 @@ namespace Catel.IoC
                     var properties = Type.GetPropertiesEx();
                     foreach (var property in properties)
                     {
-                        var injectAttribute = property.GetCustomAttributeEx(typeof(InjectAttribute), false) as InjectAttribute;
+                        var injectAttribute = property.GetCustomAttributeEx<InjectAttribute>(false);
                         if (injectAttribute != null)
                         {
                             if (injectAttribute.Type is null)

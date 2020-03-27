@@ -16,14 +16,8 @@ namespace Catel.Services
     /// </summary>
     public partial class SaveFileService
     {
-        /// <summary>
-        /// Determines the filename of the file what will be used.
-        /// </summary>
-        /// <returns><c>true</c> if a file is selected; otherwise <c>false</c>.</returns>
-        /// <remarks>
-        /// If this method returns <c>true</c>, the <see cref="FileServiceBase.FileName"/> property will be filled with the filename. Otherwise,
-        /// no changes will occur to the data of this object.
-        /// </remarks>
+        /// <inheritdoc/>
+        [ObsoleteEx(ReplacementTypeOrMember = "DetermineFileAsync(DetermineSaveFileContext)", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         public virtual async Task<bool> DetermineFileAsync()
         {
             var fileDialog = new SaveFileDialog();
@@ -34,6 +28,23 @@ namespace Catel.Services
             {
                 FileName = fileDialog.FileName;
             }
+
+            return result;
+        }
+
+        /// <inheritdoc/>
+        public virtual async Task<DetermineSaveFileResult> DetermineFileAsync(DetermineSaveFileContext context)
+        {
+            Argument.IsNotNull("context", context);
+
+            var fileDialog = new SaveFileDialog();
+            ConfigureFileDialog(fileDialog);
+
+            var result = new DetermineSaveFileResult
+            {
+                Result = fileDialog.ShowDialog() ?? false,
+                FileName = fileDialog.FileName
+            };
 
             return result;
         }

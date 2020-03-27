@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net46;net47;net48;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net46;net47;net48;netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
     <AssemblyName>Catel.MVVM</AssemblyName>
     <RootNamespace>Catel.MVVM</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -81,6 +81,17 @@
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
   </ItemGroup>
 
+  <!-- .NET Core 3.1 -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <UseWpf>true</UseWpf>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ExtrasEnableImplicitWpfReferences>true</ExtrasEnableImplicitWpfReferences>
+    <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <PackageReference Include="Expression.Blend.Sdk.WPF" Version="1.0.1" />
+  </ItemGroup>
+
   <!-- UAP 10.0 -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
   </PropertyGroup>
@@ -131,21 +142,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Exceptions.resx</DependentUpon>
     </Compile>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   
   <ItemGroup>
     <EmbeddedResource Update="Properties\Exceptions.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Exceptions.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   

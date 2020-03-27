@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SelectDirectoryService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if UWP
+﻿#if UWP
 
 namespace Catel.Services
 {
@@ -18,16 +12,8 @@ namespace Catel.Services
     /// </summary>
     public partial class SelectDirectoryService
     {
-        /// <summary>
-        /// Determines the DirectoryName of the Directory what will be used.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if a directory is selected; otherwise <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// If this method returns <c>true</c>, the <see cref="DirectoryName"/> property will be filled with the directory name. Otherwise,
-        /// no changes will occur to the data of this object.
-        /// </remarks>
+        /// <inheritdoc />
+        [ObsoleteEx(ReplacementTypeOrMember = "DetermineDirectoryAsync(DetermineDirectoryContext)", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         public virtual async Task<StorageFolder> DetermineDirectoryAsync()
         {
             var folderPicker = new FolderPicker();
@@ -39,6 +25,27 @@ namespace Catel.Services
             DirectoryName = folder?.Path;
 
             return folder;
+        }
+
+        /// <inheritdoc /> 
+        public virtual async Task<DetermineDirectoryResult> DetermineDirectoryAsync(DetermineDirectoryContext context)
+        {
+            Argument.IsNotNull(() => context);
+
+            var folderPicker = new FolderPicker();
+
+            folderPicker.FileTypeFilter.Add(context.Filter);
+
+            var folder = await folderPicker.PickSingleFolderAsync();
+
+            var result = new DetermineDirectoryResult
+            {
+                Result = folder != null,
+                Directory = folder,
+                DirectoryName = folder?.Path
+            };
+
+            return result;
         }
     }
 }
