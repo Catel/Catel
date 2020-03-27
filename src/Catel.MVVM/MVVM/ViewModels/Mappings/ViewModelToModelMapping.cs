@@ -9,9 +9,9 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
-    using Windows.Interactivity.DragDropHelpers;
     using IoC;
     using Logging;
+    using System.Reflection;
 
     /// <summary>
     /// Model value class to store the mapping of the View Model to a Model mapping.
@@ -24,11 +24,12 @@ namespace Catel.MVVM
         /// <summary>
         /// Initializes a new instance of the <see cref="ViewModelToModelMapping"/> class.
         /// </summary>
-        /// <param name="viewModelProperty">The view model property.</param>
+        /// <param name="viewModelPropertyInfo">The view model property info.</param>
+        /// <param name="modelPropertyType">The model property type.</param>
         /// <param name="attribute">The <see cref="ViewModelToModelAttribute"/> that was used to define the mapping.</param>
-        /// <exception cref="ArgumentException">The <paramref name="viewModelProperty"/> is <c>null</c> or whitespace.</exception>
-        public ViewModelToModelMapping(string viewModelProperty, ViewModelToModelAttribute attribute)
-            : this(viewModelProperty, attribute.Model, attribute.Property, attribute.Mode, attribute.ConverterType, attribute.AdditionalConstructorArgs, attribute.AdditionalPropertiesToWatch)
+        /// <exception cref="ArgumentException">The <paramref name="viewModelPropertyInfo"/> is <c>null</c> or whitespace.</exception>
+        public ViewModelToModelMapping(PropertyInfo viewModelPropertyInfo, Type modelPropertyType, ViewModelToModelAttribute attribute)
+            : this(viewModelPropertyInfo.Name, viewModelPropertyInfo.PropertyType, modelPropertyType, attribute)
         {
         }
 
@@ -36,21 +37,42 @@ namespace Catel.MVVM
         /// Initializes a new instance of the <see cref="ViewModelToModelMapping"/> class.
         /// </summary>
         /// <param name="viewModelProperty">The view model property.</param>
+        /// <param name="viewModelPropertyType">The view model property type.</param>
+        /// <param name="modelPropertyType">The model property type.</param>
+        /// <param name="attribute">The <see cref="ViewModelToModelAttribute"/> that was used to define the mapping.</param>
+        /// <exception cref="ArgumentException">The <paramref name="viewModelProperty"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="viewModelPropertyType"/> is <c>null</c> or whitespace.</exception>
+        /// <exception cref="ArgumentException">The <paramref name="modelPropertyType"/> is <c>null</c> or whitespace.</exception>
+        public ViewModelToModelMapping(string viewModelProperty, Type viewModelPropertyType, Type modelPropertyType, ViewModelToModelAttribute attribute)
+            : this(viewModelProperty, viewModelPropertyType, attribute.Model, modelPropertyType, attribute.Property, attribute.Mode, attribute.ConverterType, attribute.AdditionalConstructorArgs, attribute.AdditionalPropertiesToWatch)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ViewModelToModelMapping"/> class.
+        /// </summary>
+        /// <param name="viewModelProperty">The view model property.</param>
+        /// <param name="viewModelPropertyType">The view model property type.</param>
         /// <param name="modelProperty">The model property.</param>
+        /// <param name="modelPropertyType">The model property type.</param>
         /// <param name="valueProperty">The value property.</param>
         /// <param name="mode">The mode.</param>
         /// <param name="converterType">Converter type</param>
         /// <param name="additionalConstructorArgs">Constructor args</param>
         /// <param name="additionalPropertiesToWatch"></param>
         /// <exception cref="ArgumentException">The <paramref name="viewModelProperty"/> is <c>null</c> or whitespace.</exception>
-        public ViewModelToModelMapping(string viewModelProperty, string modelProperty, string valueProperty, 
+        /// <exception cref="ArgumentException">The <paramref name="modelPropertyType"/> is <c>null</c> or whitespace.</exception>
+        public ViewModelToModelMapping(string viewModelProperty, Type viewModelPropertyType, string modelProperty, Type modelPropertyType, string valueProperty, 
             ViewModelToModelMode mode, Type converterType, object[] additionalConstructorArgs, string[] additionalPropertiesToWatch)
         {
             Argument.IsNotNullOrWhitespace("viewModelProperty", viewModelProperty);
+            Argument.IsNotNull("viewModelPropertyType", viewModelPropertyType);
 
             IgnoredProperties = new HashSet<string>();
             ViewModelProperty = viewModelProperty;
+            ViewModelPropertyType = viewModelPropertyType;
             ModelProperty = modelProperty;
+            ModelPropertyType = modelPropertyType;
             Mode = mode;
             ConverterType = converterType;
 
@@ -102,10 +124,22 @@ namespace Catel.MVVM
         public string ViewModelProperty { get; private set; }
 
         /// <summary>
+        /// Gets the property type of the mapping of the view model.
+        /// </summary>
+        /// <value>The model view property type.</value>
+        public Type ViewModelPropertyType { get; private set; }
+
+        /// <summary>
         /// Gets the property name of the model.
         /// </summary>
         /// <value>The model.</value>
         public string ModelProperty { get; private set; }
+
+        /// <summary>
+        /// Gets the property type of the mapping of the  model.
+        /// </summary>
+        /// <value>The model property type.</value>
+        public Type ModelPropertyType { get; private set; }
 
         /// <summary>
         /// Gets the property property name of the property in the model.

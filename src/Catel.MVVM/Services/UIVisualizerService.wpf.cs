@@ -45,6 +45,7 @@ namespace Catel.Services
         /// <param name="completedProc">The completed callback.</param>
         /// <param name="isModal">True if this is a ShowDialog request.</param>
         /// <returns>The created window.</returns>    
+        [ObsoleteEx(ReplacementTypeOrMember = "CreateWindowAsync", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         protected virtual FrameworkElement CreateWindow(string name, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
         {
             Type windowType;
@@ -70,6 +71,7 @@ namespace Catel.Services
         /// <returns>
         /// The created window.
         /// </returns>
+        [ObsoleteEx(ReplacementTypeOrMember = "CreateWindowAsync", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         protected virtual FrameworkElement CreateWindow(Type windowType, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
         {
             var window = ViewHelper.ConstructViewWithViewModel(windowType, data);
@@ -83,12 +85,81 @@ namespace Catel.Services
                 }
             }
 
-            if ((window != null) && (completedProc != null))
+            if (window != null && completedProc != null)
             {
                 HandleCloseSubscription(window, data, completedProc, isModal);
             }
 
             return window;
+        }
+
+        /// <summary>
+        /// This creates the window from a key.
+        /// </summary>
+        /// <param name="name">The name that the window is registered with.</param>
+        /// <param name="data">The data that will be set as data context.</param>
+        /// <param name="completedProc">The completed callback.</param>
+        /// <param name="isModal">True if this is a ShowDialog request.</param>
+        /// <returns>The created window.</returns>    
+        protected virtual async Task<FrameworkElement> CreateWindowAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
+        {
+            Type windowType;
+
+            lock (RegisteredWindows)
+            {
+                if (!RegisteredWindows.TryGetValue(name, out windowType))
+                {
+                    return null;
+                }
+            }
+
+            return await CreateWindowAsync(windowType, data, completedProc, isModal);
+        }
+
+        /// <summary>
+        /// This creates the window of the specified type.
+        /// </summary>
+        /// <param name="windowType">The type of the window.</param>
+        /// <param name="data">The data that will be set as data context.</param>
+        /// <param name="completedProc">The completed callback.</param>
+        /// <param name="isModal">True if this is a ShowDialog request.</param>
+        /// <returns>
+        /// The created window.
+        /// </returns>
+        protected virtual async Task<FrameworkElement> CreateWindowAsync(Type windowType, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
+        {
+            var tcs = new TaskCompletionSource<FrameworkElement>();
+
+            _dispatcherService.BeginInvoke(() =>
+            {
+                try
+                {
+
+                    var window = ViewHelper.ConstructViewWithViewModel(windowType, data);
+
+                    if (isModal)
+                    {
+                        var activeWindow = GetActiveWindow();
+                        if (!ReferenceEquals(window, activeWindow))
+                        {
+                            PropertyHelper.TrySetPropertyValue(window, "Owner", activeWindow);
+                        }
+                    }
+
+                    if (window != null && completedProc != null)
+                    {
+                        HandleCloseSubscription(window, data, completedProc, isModal);
+                    }
+
+                    tcs.TrySetResult(window);
+                }
+                catch (Exception ex)
+                {
+                    tcs.TrySetException(ex);
+                }
+            });
+
+            return await tcs.Task;
         }
 
         /// <summary>

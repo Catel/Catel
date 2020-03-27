@@ -26,19 +26,19 @@ namespace Catel.Services
     /// </summary>
     public partial class OpenFileService : FileServiceBase, IOpenFileService
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
-
         #region IFileSupport Members
         /// <summary>
         /// Gets the file names in case <see cref="IsMultiSelect"/> is <c>true</c>.
         /// </summary>
         /// <remarks></remarks>
+        [ObsoleteEx(ReplacementTypeOrMember = "DetermineFileContext / DetermineFileResult", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         public string[] FileNames { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is multi select.
         /// </summary>
         /// <value><c>true</c> if this instance is multi select; otherwise, <c>false</c>.</value>
+        [ObsoleteEx(ReplacementTypeOrMember = "DetermineFileContext / DetermineFileResult", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         public bool IsMultiSelect { get; set; }
         #endregion
     }

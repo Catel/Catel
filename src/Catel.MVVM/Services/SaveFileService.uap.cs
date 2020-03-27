@@ -28,6 +28,7 @@ namespace Catel.Services
         /// If this method returns <c>true</c>, the <see cref="FileServiceBase.FileName"/> property will be filled with the filename. Otherwise,
         /// no changes will occur to the data of this object.
         /// </remarks>
+        [ObsoleteEx(ReplacementTypeOrMember = "DetermineFileContext / DetermineFileResult", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         public virtual async Task<StorageFile> DetermineFileAsync()
         {
             var fileDialog = new FileSavePicker();

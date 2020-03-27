@@ -220,7 +220,7 @@ namespace Catel.MVVM
         /// <param name="skipViewModelAttributesInitialization">if set to <c>true</c>, the initialization will be skipped and must be done manually via <see cref="InitializeViewModelAttributes"/>.</param>
         /// <exception cref="ModelNotRegisteredException">A mapped model is not registered.</exception>
         /// <exception cref="PropertyNotFoundInModelException">A mapped model property is not found.</exception>
-        protected ViewModelBase(IServiceLocator serviceLocator,  bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
+        protected ViewModelBase(IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false)
         {
             ViewModelConstructionTime = FastDateTime.Now;
 
@@ -540,18 +540,20 @@ namespace Catel.MVVM
                               where propertyInfo.IsDecoratedWithAttribute<ModelAttribute>()
                               select propertyInfo.Name).ToList();
 
+            // Important: iterate twice, models first, they are needed to get the model type
             foreach (var propertyInfo in properties)
             {
-                #region Model attributes
-                var modelAttribute = propertyInfo.GetCustomAttributeEx(typeof(ModelAttribute), true) as ModelAttribute;
+                var modelAttribute = propertyInfo.GetCustomAttributeEx<ModelAttribute>(true);
                 if (modelAttribute != null)
                 {
-                    modelObjectsInfo.Add(propertyInfo.Name, new ModelInfo(propertyInfo.Name, modelAttribute));
+                    modelObjectsInfo.Add(propertyInfo.Name, new ModelInfo(propertyInfo, modelAttribute));
                 }
-                #endregion
+            }
 
-                #region ViewModelToModel attributes
-                var viewModelToModelAttribute = propertyInfo.GetCustomAttributeEx(typeof(ViewModelToModelAttribute), true) as ViewModelToModelAttribute;
+            // View model to model mappings
+            foreach (var propertyInfo in properties)
+            {
+                var viewModelToModelAttribute = propertyInfo.GetCustomAttributeEx<ViewModelToModelAttribute>(true);
                 if (viewModelToModelAttribute != null)
                 {
                     if (string.IsNullOrEmpty(viewModelToModelAttribute.Property))
@@ -574,37 +576,32 @@ namespace Catel.MVVM
 
                     if (!viewModelToModelMap.ContainsKey(propertyInfo.Name))
                     {
-                        viewModelToModelMap.Add(propertyInfo.Name, new ViewModelToModelMapping(propertyInfo.Name, viewModelToModelAttribute));
+                        var modelProperty = modelObjectsInfo[viewModelToModelAttribute.Model];
+
+                        viewModelToModelMap.Add(propertyInfo.Name, new ViewModelToModelMapping(propertyInfo, modelProperty.PropertyType, viewModelToModelAttribute));
                     }
                 }
-                #endregion
             }
 
-            return new ViewModelMetadata(viewModelType, modelObjectsInfo, viewModelToModelMap);
-        }
-
-        /// <summary>
-        /// Validates the view model to model mappings.
-        /// </summary>
-        /// <exception cref="ModelNotRegisteredException">A property is mapped to a model that does not exists.</exception>
-        private void ValidateViewModelToModelMappings()
-        {
-            foreach (var viewModelToModelMapping in _viewModelToModelMap)
+            // Validation (1 time for all view models of the same type)
+            foreach (var viewModelToModelMapping in viewModelToModelMap)
             {
                 var mapping = viewModelToModelMapping.Value;
-                if (!IsModelRegistered(mapping.ModelProperty))
+                if (!modelObjectsInfo.ContainsKey(mapping.ModelProperty))
                 {
                     throw Log.ErrorAndCreateException(msg => new ModelNotRegisteredException(mapping.ModelProperty, mapping.ViewModelProperty),
                         "There is no model '{0}' registered with the model attribute, so the ViewModelToModel attribute on property '{1}' is invalid",
                         mapping.ModelProperty, mapping.ViewModelProperty);
                 }
 
-                var viewModelPropertyType = GetPropertyData(mapping.ViewModelProperty).Type;
-                var modelPropertyType = GetPropertyData(mapping.ModelProperty).Type;
-                var modelPropertyPropertyTypes = new List<Type>(mapping.ValueProperties.Length);
+                var viewModelPropertyType = viewModelToModelMapping.Value.ViewModelPropertyType;
+                var modelPropertyType = viewModelToModelMapping.Value.ModelPropertyType;
+                var modelPropertyPropertyTypes = new Type[mapping.ValueProperties.Length];
 
-                foreach (var valueProperty in mapping.ValueProperties)
+                for (var i = 0; i < mapping.ValueProperties.Length; i++)
                 {
+                    var valueProperty = mapping.ValueProperties[i];
+
                     var modelPropertyPropertyInfo = modelPropertyType.GetPropertyEx(valueProperty);
                     if (modelPropertyPropertyInfo is null)
                     {
@@ -614,16 +611,18 @@ namespace Catel.MVVM
                     }
                     else
                     {
-                        modelPropertyPropertyTypes.Add(modelPropertyPropertyInfo.PropertyType);
+                        modelPropertyPropertyTypes[i] = modelPropertyPropertyInfo.PropertyType;
                     }
                 }
 
-                if (!mapping.Converter.CanConvert(modelPropertyPropertyTypes.ToArray(), viewModelPropertyType, GetType()))
+                if (!mapping.Converter.CanConvert(modelPropertyPropertyTypes, viewModelPropertyType, viewModelType))
                 {
                     Log.Warning("Property '{0}' mapped on model properties '{1}' cannot be converted via given converter '{2}'",
                         mapping.ViewModelProperty, string.Join(", ", mapping.ValueProperties), mapping.ConverterType);
                 }
             }
+
+            return new ViewModelMetadata(viewModelType, modelObjectsInfo, viewModelToModelMap);
         }
 
         /// <summary>
@@ -674,8 +673,6 @@ namespace Catel.MVVM
                         }
                     }
                 }
-
-                ValidateViewModelToModelMappings();
 
                 if (!_ignoreMultipleModelsWarning)
                 {

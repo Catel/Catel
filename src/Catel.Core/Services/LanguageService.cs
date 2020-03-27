@@ -11,6 +11,7 @@ namespace Catel.Services
     using System.Collections.Generic;
     using System.Globalization;
     using Caching;
+    using Catel.Linq;
     using Logging;
 
     /// <summary>
@@ -100,9 +101,12 @@ namespace Catel.Services
         {
             Log.Debug("Preloading language sources");
 
-            foreach (var languageSource in _languageSources)
+            lock (_languageSources)
             {
-                PreloadLanguageSource(languageSource);
+                foreach (var languageSource in _languageSources)
+                {
+                    PreloadLanguageSource(languageSource);
+                }
             }
 
             Log.Debug("Preloaded language sources");
@@ -117,7 +121,10 @@ namespace Catel.Services
         {
             Argument.IsNotNull("languageSource", languageSource);
 
-            _languageSources.Insert(0, languageSource);
+            lock (_languageSources)
+            {
+                _languageSources.Insert(0, languageSource);
+            }
         }
 
         /// <summary>
@@ -125,7 +132,10 @@ namespace Catel.Services
         /// </summary>
         public void ClearLanguageResources()
         {
-            _languageSources.Clear();
+            lock (_languageSources)
+            {
+                _languageSources.Clear();
+            }
         }
 
         /// <summary>
@@ -171,19 +181,22 @@ namespace Catel.Services
 
         private string GetStringInternal(string resourceName, CultureInfo cultureInfo)
         {
-            foreach (var resourceFile in _languageSources)
+            lock (_languageSources)
             {
-                try
+                foreach (var resourceFile in _languageSources)
                 {
-                    var value = GetString(resourceFile, resourceName, cultureInfo);
-                    if (!string.IsNullOrWhiteSpace(value))
+                    try
                     {
-                        return value;
+                        var value = GetString(resourceFile, resourceName, cultureInfo);
+                        if (!string.IsNullOrWhiteSpace(value))
+                        {
+                            return value;
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Failed to get string for resource name '{0}' from resource file '{1}'", resourceName, resourceFile);
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Failed to get string for resource name '{0}' from resource file '{1}'", resourceName, resourceFile);
+                    }
                 }
             }
 

@@ -30,8 +30,7 @@
                 var modelEditor = instance as IModelEditor;
                 if (modelEditor != null && modelEditor.IsPropertyRegistered(memberName))
                 {
-                    var modelValue = modelEditor.GetValueFastButUnsecure(memberName);
-                    value = (TValue)modelValue;
+                    value = modelEditor.GetValueFastButUnsecure<TValue>(memberName);
                     return true;
                 }
 
@@ -56,11 +55,15 @@
                 }
 
                 var modelType = instance.GetType();
+                IFastMemberInvoker fastMemberInvoker = null;
 
-                if (!_fastMemberInvokerCache.TryGetValue(modelType, out var fastMemberInvoker))
+                lock (_fastMemberInvokerCache)
                 {
-                    fastMemberInvoker = GetFastMemberInvoker(modelType);
-                    _fastMemberInvokerCache[modelType] = fastMemberInvoker;
+                    if (!_fastMemberInvokerCache.TryGetValue(modelType, out fastMemberInvoker))
+                    {
+                        fastMemberInvoker = GetFastMemberInvoker(modelType);
+                        _fastMemberInvokerCache[modelType] = fastMemberInvoker;
+                    }
                 }
 
                 if (fastMemberInvoker.TryGetPropertyValue(instance, memberName, out value))
@@ -120,11 +123,15 @@
                 }
 
                 var modelType = instance.GetType();
+                IFastMemberInvoker fastMemberInvoker = null;
 
-                if (!_fastMemberInvokerCache.TryGetValue(modelType, out var fastMemberInvoker))
+                lock (_fastMemberInvokerCache)
                 {
-                    fastMemberInvoker = GetFastMemberInvoker(modelType);
-                    _fastMemberInvokerCache[modelType] = fastMemberInvoker;
+                    if (!_fastMemberInvokerCache.TryGetValue(modelType, out fastMemberInvoker))
+                    {
+                        fastMemberInvoker = GetFastMemberInvoker(modelType);
+                        _fastMemberInvokerCache[modelType] = fastMemberInvoker;
+                    }
                 }
 
                 if (fastMemberInvoker.SetPropertyValue(instance, memberName, value))

@@ -27,8 +27,7 @@
                 var modelEditor = instance as IModelEditor;
                 if (modelEditor != null && modelEditor.IsPropertyRegistered(memberName))
                 {
-                    var modelValue = modelEditor.GetValueFastButUnsecure(memberName);
-                    value = (TValue)modelValue;
+                    value = modelEditor.GetValueFastButUnsecure<TValue>(memberName);
                     return true;
                 }
 

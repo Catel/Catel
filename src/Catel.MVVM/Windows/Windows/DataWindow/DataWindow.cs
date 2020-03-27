@@ -729,7 +729,7 @@ namespace Catel.Windows
         {
             try
             {
-                if (System.Windows.Interop.ComponentDispatcher.IsThreadModal)
+                if (this.CanSetDialogResult())
                 {
                     DialogResult = result;
                 }

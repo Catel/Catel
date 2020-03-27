@@ -18,6 +18,52 @@ Items prefixed with 'CTL' are from JIRA (old issue tracker). Items prefixed with
 **********************************************************
 
 ==================
+Version 5.12.4
+==================
+
+For an upgrade guide, visit https://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date
+============
+2020/03/27
+
+Added/fixed
+===========
+(+) #1561 Add support for .NET Core 3.1
+(*) #1545 UIVisualizerService attempts to create window on non-UI thread
+(*) #1554 Add Task<DetermineFileResult> IOpen/SaveFileService.DetermineFileAsync(DetermineFileContext)
+(*) #1555 Add Task<DetermineFileResult> IOpen/SaveFileService.DetermineFileAsync(DetermineFileContext)
+(*) #1559 Validate view model to model mappings once per view model type instead of every instance
+(x) #1550 Deadlock in ExpressionTreeObjectAdapter.GetMemberValue
+(x) #1551 Potential enumeration failure when using LanguageService.GetString
+(x) #1557 Check whether DialogResult can be set when closing a window initiated from a view model
+
+Platform support changes
+========================
+* #1103 / #1165 Convert to multi-targeted projects, PCL is no longer supported (.NET Standard is the replacement)
+* #1240 Add support for .NET Core 3.0 and .NET Core 3.1
+
+Classes / members marked as obsolete in major release (5.x)
+===========================================================
+* #1124 Mark NullableValueConverter as obsolete since converter doesn't have a target type, so this converter won't work as expected NullableValueConverter
+* #1209 Mark IStartupInfoProvider as obsolete in favor of Orc.CommandLine since that implementation takes better care of supporting different quote styles (e.g. allows ')
+* #1216 Mark binary serializers as obsolete due to potential security issues in the binary serialization engine of .NET itself (see https://github.com/Catel/Catel/issues/1216)
+* #1258 Mark SafeInvoke obsolete in favor of handler?.Invoke(this, event args);
+* #1284 Mark 'CloseViewModelOnUnloaded' and 'PreventViewModelCreation' in favor of 'ViewModelLifetimeManagement'
+* #1554 Mark 'Task<bool> IOpen/SaveFileService.DetermineFileAsync()' as obsolete in favor of 'Task<DetermineFileResult> IOpen/SaveFileService.DetermineFileAsync(DetermineFileContext)'
+
+Roadmap
+=======
+See https://www.catelproject.com/support/issue-tracker
+
+Known issues
+============
+See https://www.catelproject.com/support/issue-tracker
+
+
+**********************************************************
+
+==================
 Version 5.12.3
 ==================
 

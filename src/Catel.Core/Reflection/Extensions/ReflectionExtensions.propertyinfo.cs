@@ -26,6 +26,13 @@ namespace Catel.Reflection
             return (attributes.Length > 0) ? attributes[0] : null;
         }
 
+        public static TAttribute GetCustomAttributeEx<TAttribute>(this PropertyInfo propertyInfo, bool inherit)
+            where TAttribute : Attribute
+        {
+            var attributes = GetCustomAttributesEx(propertyInfo, typeof(TAttribute), inherit);
+            return (attributes.Length > 0) ? (TAttribute)attributes[0] : default;
+        }
+
         public static Attribute[] GetCustomAttributesEx(this PropertyInfo propertyInfo, bool inherit)
         {
             Argument.IsNotNull("propertyInfo", propertyInfo);
