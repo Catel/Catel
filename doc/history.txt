@@ -25,10 +25,11 @@ For an upgrade guide, visit https://docs.catelproject.com/vnext/setup-deployment
 
 Release date
 ============
-2020/03/xx
+2020/03/27
 
 Added/fixed
 ===========
+(+) #1561 Add support for .NET Core 3.1
 (*) #1545 UIVisualizerService attempts to create window on non-UI thread
 (*) #1554 Add Task<DetermineFileResult> IOpen/SaveFileService.DetermineFileAsync(DetermineFileContext)
 (*) #1555 Add Task<DetermineFileResult> IOpen/SaveFileService.DetermineFileAsync(DetermineFileContext)
@@ -40,7 +41,7 @@ Added/fixed
 Platform support changes
 ========================
 * #1103 / #1165 Convert to multi-targeted projects, PCL is no longer supported (.NET Standard is the replacement)
-* #1240 Add support for .NET Core 3.0
+* #1240 Add support for .NET Core 3.0 and .NET Core 3.1
 
 Classes / members marked as obsolete in major release (5.x)
 ===========================================================
