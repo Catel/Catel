@@ -5,10 +5,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-using Catel.Reflection;
-
 namespace Catel.Runtime.Serialization
 {
+    using Catel.Reflection;
     using System;
     using System.Diagnostics;
 

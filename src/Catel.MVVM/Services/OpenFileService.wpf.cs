@@ -17,36 +17,12 @@ namespace Catel.Services
     public partial class OpenFileService
     {
         /// <inheritdoc/>
-        [ObsoleteEx(ReplacementTypeOrMember = "DetermineFileAsync(DetermineOpenFileContext)", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
-        public virtual async Task<bool> DetermineFileAsync()
-        {
-            var fileDialog = new OpenFileDialog();
-            ConfigureFileDialog(fileDialog);
-
-            fileDialog.Multiselect = IsMultiSelect;
-
-            bool result = fileDialog.ShowDialog() ?? false;
-            if (result)
-            {
-                FileName = fileDialog.FileName;
-                FileNames = fileDialog.FileNames;
-            }
-            else
-            {
-                FileName = null;
-                FileNames = null;
-            }
-
-            return result;
-        }
-
-        /// <inheritdoc/>
         public virtual async Task<DetermineOpenFileResult> DetermineFileAsync(DetermineOpenFileContext context)
         {
             Argument.IsNotNull("context", context);
 
             var fileDialog = new OpenFileDialog();
-            ConfigureFileDialog(fileDialog);
+            ConfigureFileDialog(fileDialog, context);
 
             fileDialog.Multiselect = context.IsMultiSelect;
 

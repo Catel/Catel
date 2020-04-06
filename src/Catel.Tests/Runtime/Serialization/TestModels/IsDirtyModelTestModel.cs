@@ -39,12 +39,6 @@
             // Create a new object from scratch
         }
 
-        protected IsDirtyModelTestModel(SerializationInfo info, StreamingContext context) 
-            : base(info, context)
-        {
-            // TBD
-        }
-
         #endregion
 
         #region Properties

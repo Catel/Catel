@@ -17,28 +17,12 @@ namespace Catel.Services
     public partial class SaveFileService
     {
         /// <inheritdoc/>
-        [ObsoleteEx(ReplacementTypeOrMember = "DetermineFileAsync(DetermineSaveFileContext)", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
-        public virtual async Task<bool> DetermineFileAsync()
-        {
-            var fileDialog = new SaveFileDialog();
-            ConfigureFileDialog(fileDialog);
-
-            bool result = fileDialog.ShowDialog() ?? false;
-            if (result)
-            {
-                FileName = fileDialog.FileName;
-            }
-
-            return result;
-        }
-
-        /// <inheritdoc/>
         public virtual async Task<DetermineSaveFileResult> DetermineFileAsync(DetermineSaveFileContext context)
         {
             Argument.IsNotNull("context", context);
 
             var fileDialog = new SaveFileDialog();
-            ConfigureFileDialog(fileDialog);
+            ConfigureFileDialog(fileDialog, context);
 
             var result = new DetermineSaveFileResult
             {
