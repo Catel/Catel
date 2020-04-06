@@ -2216,6 +2216,8 @@ namespace Catel.Services
     }
     public interface ISaveFileService : Catel.Services.IFileSupport
     {
+        [System.ObsoleteAttribute("Use `DetermineFileAsync(DetermineSaveFileContext)` instead. Will be treated as an" +
+            " error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         System.Threading.Tasks.Task<bool> DetermineFileAsync();
         System.Threading.Tasks.Task<Catel.Services.DetermineSaveFileResult> DetermineFileAsync(Catel.Services.DetermineSaveFileContext context);
     }

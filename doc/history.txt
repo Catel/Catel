@@ -38,7 +38,6 @@ Added/fixed
 (*) #1246 Use Microsoft.Xaml.Behaviors.Wpf as dependency for WPF projects
 (*) #1536 Create T4 template to generate logging extensions with optimized memory usage
 (-) #1101 Remove Catel.Reflection.TypeInfo
-(-) #1182 Remove obsolete reflection calls that are now supported through System.Reflection
 (-) #1209 Remove IStartupInfoProvider in favor of Orc.CommandLine 
 (-) #1216 Remove binary serialization (due to potential security issues)
 (-) #1239 Move DragAdorner behavior to Orchestra instead of Catel
@@ -50,9 +49,12 @@ Platform support changes
 (+) #1505 Add support for .NET 4.8
 (-) #1285 Remove support for .NET 4.5
 
-Classes / members marked as obsolete in major release (6.x)
 ===========================================================
--
+* #1209 Mark IStartupInfoProvider as obsolete in favor of Orc.CommandLine since that implementation takes better care of supporting different quote styles (e.g. allows ')
+* #1216 Mark binary serializers as obsolete due to potential security issues in the binary serialization engine of .NET itself (see https://github.com/Catel/Catel/issues/1216)
+* #1258 Mark SafeInvoke obsolete in favor of handler?.Invoke(this, event args);
+* #1284 Mark 'CloseViewModelOnUnloaded' and 'PreventViewModelCreation' in favor of 'ViewModelLifetimeManagement'
+* #1554 Mark 'Task<bool> IOpen/SaveFileService.DetermineFileAsync()' as obsolete in favor of 'Task<DetermineFileResult> IOpen/SaveFileService.DetermineFileAsync(DetermineFileContext)'
 
 Roadmap
 =======
@@ -62,6 +64,43 @@ Known issues
 ============
 See https://www.catelproject.com/support/issue-tracker
 
+**********************************************************
+
+==================
+Version 5.12.5
+==================
+
+For an upgrade guide, visit https://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date
+============
+2020/04/06
+
+Added/fixed
+===========
+(x) #1564 Save / Open file services should respect context when setting up file dialogs
+
+Platform support changes
+========================
+* #1103 / #1165 Convert to multi-targeted projects, PCL is no longer supported (.NET Standard is the replacement)
+* #1240 Add support for .NET Core 3.0 and .NET Core 3.1
+
+Classes / members marked as obsolete in major release (5.x)
+===========================================================
+* #1124 Mark NullableValueConverter as obsolete since converter doesn't have a target type, so this converter won't work as expected NullableValueConverter
+* #1209 Mark IStartupInfoProvider as obsolete in favor of Orc.CommandLine since that implementation takes better care of supporting different quote styles (e.g. allows ')
+* #1216 Mark binary serializers as obsolete due to potential security issues in the binary serialization engine of .NET itself (see https://github.com/Catel/Catel/issues/1216)
+* #1258 Mark SafeInvoke obsolete in favor of handler?.Invoke(this, event args);
+* #1284 Mark 'CloseViewModelOnUnloaded' and 'PreventViewModelCreation' in favor of 'ViewModelLifetimeManagement'
+* #1554 Mark 'Task<bool> IOpen/SaveFileService.DetermineFileAsync()' as obsolete in favor of 'Task<DetermineFileResult> IOpen/SaveFileService.DetermineFileAsync(DetermineFileContext)'
+
+Roadmap
+=======
+See https://www.catelproject.com/support/issue-tracker
+
+Known issues
+============
+See https://www.catelproject.com/support/issue-tracker
 
 **********************************************************
 
