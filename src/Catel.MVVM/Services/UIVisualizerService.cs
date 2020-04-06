@@ -40,18 +40,6 @@ namespace Catel.Services
         /// Initializes a new instance of the <see cref="UIVisualizerService"/> class.
         /// </summary>
         /// <param name="viewLocator">The view locator.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewLocator"/> is <c>null</c>.</exception>
-        [ObsoleteEx(ReplacementTypeOrMember = "ctor(IViewLocator viewLocator, IDispatcherService dispatcherService)", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public UIVisualizerService(IViewLocator viewLocator)
-            : this(viewLocator, ServiceLocator.Default.ResolveType<IDispatcherService>())
-        {
-            // DON'T USE THIS CTOR
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UIVisualizerService"/> class.
-        /// </summary>
-        /// <param name="viewLocator">The view locator.</param>
         /// <param name="dispatcherService">The dispatcher service.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="viewLocator"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="dispatcherService"/> is <c>null</c>.</exception>

@@ -33,7 +33,7 @@ namespace Catel.Services
         /// <returns>The inital directory.</returns>
         protected virtual string GetInitialDirectory(DetermineFileContext context)
         {
-            Argument.IsNotNull(() => context);
+            Argument.IsNotNull(nameof(context), context);
 
             var initialDirectory = context.InitialDirectory;
             if (!string.IsNullOrWhiteSpace(initialDirectory))
