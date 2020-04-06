@@ -1992,40 +1992,7 @@ namespace Catel.Services
     public abstract class FileServiceBase : Catel.Services.ViewModelServiceBase, Catel.Services.IFileSupport
     {
         protected FileServiceBase() { }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public bool AddExtension { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public bool CheckFileExists { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public bool CheckPathExists { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public string FileName { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public string Filter { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public int FilterIndex { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public string InitialDirectory { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public string Title { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public bool ValidateNames { get; set; }
-        [System.ObsoleteAttribute("Use `ConfigureFileDialog(FileDialog, DetermineFileContext)` instead. Will be trea" +
-            "ted as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        protected virtual void ConfigureFileDialog(Microsoft.Win32.FileDialog fileDialog) { }
         protected virtual void ConfigureFileDialog(Microsoft.Win32.FileDialog fileDialog, Catel.Services.DetermineFileContext context) { }
-        [System.ObsoleteAttribute("Use `GetInitialDirectory(DetermineFileContext)` instead. Will be treated as an er" +
-            "ror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        protected virtual string GetInitialDirectory() { }
         protected virtual string GetInitialDirectory(Catel.Services.DetermineFileContext context) { }
     }
     [System.Flags]
@@ -2102,36 +2069,7 @@ namespace Catel.Services
         public static void InvokeIfRequired(this Catel.Services.IDispatcherService dispatcherService, System.Action action) { }
         public static void InvokeIfRequired(this Catel.Services.IDispatcherService dispatcherService, System.Delegate method, params object[] args) { }
     }
-    public interface IFileSupport
-    {
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        bool AddExtension { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        bool CheckFileExists { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        bool CheckPathExists { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        string FileName { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        string Filter { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        int FilterIndex { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        string InitialDirectory { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        string Title { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        bool ValidateNames { get; set; }
-    }
+    public interface IFileSupport { }
     public interface ILocation
     {
         double Altitude { get; }
@@ -2181,15 +2119,6 @@ namespace Catel.Services
     }
     public interface IOpenFileService : Catel.Services.IFileSupport
     {
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        string[] FileNames { get; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        bool IsMultiSelect { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileAsync(DetermineOpenFileContext)` instead. Will be treated as an" +
-            " error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        System.Threading.Tasks.Task<bool> DetermineFileAsync();
         System.Threading.Tasks.Task<Catel.Services.DetermineOpenFileResult> DetermineFileAsync(Catel.Services.DetermineOpenFileContext context);
     }
     public interface IPleaseWaitService
@@ -2216,9 +2145,6 @@ namespace Catel.Services
     }
     public interface ISaveFileService : Catel.Services.IFileSupport
     {
-        [System.ObsoleteAttribute("Use `DetermineFileAsync(DetermineSaveFileContext)` instead. Will be treated as an" +
-            " error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        System.Threading.Tasks.Task<bool> DetermineFileAsync();
         System.Threading.Tasks.Task<Catel.Services.DetermineSaveFileResult> DetermineFileAsync(Catel.Services.DetermineSaveFileContext context);
     }
     public interface ISchedulerService
@@ -2228,27 +2154,6 @@ namespace Catel.Services
     }
     public interface ISelectDirectoryService
     {
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
-            "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        string DirectoryName { get; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
-            "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        string FileName { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
-            "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        string Filter { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
-            "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        string InitialDirectory { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
-            "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        bool ShowNewFolderButton { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
-            "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        string Title { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryAsync(DetermineDirectoryContext)` instead. Will be treated" +
-            " as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        System.Threading.Tasks.Task<bool> DetermineDirectoryAsync();
         System.Threading.Tasks.Task<Catel.Services.DetermineDirectoryResult> DetermineDirectoryAsync(Catel.Services.DetermineDirectoryContext context);
     }
     public interface ISensorService<TValueInterface, TEventArgs>
@@ -2461,15 +2366,6 @@ namespace Catel.Services
     public class OpenFileService : Catel.Services.FileServiceBase, Catel.Services.IFileSupport, Catel.Services.IOpenFileService
     {
         public OpenFileService() { }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public string[] FileNames { get; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
-            "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public bool IsMultiSelect { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileAsync(DetermineOpenFileContext)` instead. Will be treated as an" +
-            " error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public virtual System.Threading.Tasks.Task<bool> DetermineFileAsync() { }
         public virtual System.Threading.Tasks.Task<Catel.Services.DetermineOpenFileResult> DetermineFileAsync(Catel.Services.DetermineOpenFileContext context) { }
     }
     public class PageNotRegisteredException : System.Exception
@@ -2515,9 +2411,6 @@ namespace Catel.Services
     public class SaveFileService : Catel.Services.FileServiceBase, Catel.Services.IFileSupport, Catel.Services.ISaveFileService
     {
         public SaveFileService() { }
-        [System.ObsoleteAttribute("Use `DetermineFileAsync(DetermineSaveFileContext)` instead. Will be treated as an" +
-            " error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public virtual System.Threading.Tasks.Task<bool> DetermineFileAsync() { }
         public virtual System.Threading.Tasks.Task<Catel.Services.DetermineSaveFileResult> DetermineFileAsync(Catel.Services.DetermineSaveFileContext context) { }
     }
     public class SchedulerService : Catel.Services.ViewModelServiceBase, Catel.Services.ISchedulerService
@@ -2529,27 +2422,6 @@ namespace Catel.Services
     public class SelectDirectoryService : Catel.Services.ViewModelServiceBase, Catel.Services.ISelectDirectoryService
     {
         public SelectDirectoryService() { }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
-            "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public string DirectoryName { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
-            "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public string FileName { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
-            "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public string Filter { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
-            "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public string InitialDirectory { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
-            "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public bool ShowNewFolderButton { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
-            "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public string Title { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryAsync(DetermineDirectoryContext)` instead. Will be treated" +
-            " as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
-        public virtual System.Threading.Tasks.Task<bool> DetermineDirectoryAsync() { }
         public virtual System.Threading.Tasks.Task<Catel.Services.DetermineDirectoryResult> DetermineDirectoryAsync(Catel.Services.DetermineDirectoryContext context) { }
     }
     public abstract class SensorServiceBase<TValueInterface, TEventArgs> : Catel.Services.ViewModelServiceBase, Catel.Services.ISensorService<TValueInterface, TEventArgs>
@@ -2593,14 +2465,7 @@ namespace Catel.Services
     public class UIVisualizerService : Catel.Services.ViewModelServiceBase, Catel.Services.IUIVisualizerService
     {
         protected readonly System.Collections.Generic.Dictionary<string, System.Type> RegisteredWindows;
-        [System.ObsoleteAttribute("Use `ctor(IViewLocator viewLocator, IDispatcherService dispatcherService)` instea" +
-            "d. Will be removed in version 6.0.0.", true)]
-        public UIVisualizerService(Catel.MVVM.IViewLocator viewLocator) { }
         public UIVisualizerService(Catel.MVVM.IViewLocator viewLocator, Catel.Services.IDispatcherService dispatcherService) { }
-        [System.ObsoleteAttribute("Use `CreateWindowAsync` instead. Will be removed in version 6.0.0.", true)]
-        protected virtual System.Windows.FrameworkElement CreateWindow(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
-        [System.ObsoleteAttribute("Use `CreateWindowAsync` instead. Will be removed in version 6.0.0.", true)]
-        protected virtual System.Windows.FrameworkElement CreateWindow(System.Type windowType, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
         protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
         protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(System.Type windowType, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
         protected virtual void EnsureViewIsRegistered(string name) { }

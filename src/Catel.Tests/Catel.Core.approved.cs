@@ -3159,9 +3159,9 @@ namespace Catel.Reflection
         public static System.Attribute GetCustomAttributeEx(this System.Reflection.Assembly assembly, System.Type attributeType) { }
         public static System.Attribute GetCustomAttributeEx(this System.Reflection.MethodInfo methodInfo, System.Type attributeType, bool inherit) { }
         public static System.Attribute GetCustomAttributeEx(this System.Reflection.PropertyInfo propertyInfo, System.Type attributeType, bool inherit) { }
+        public static System.Attribute GetCustomAttributeEx(this System.Type type, System.Type attributeType, bool inherit) { }
         public static TAttribute GetCustomAttributeEx<TAttribute>(this System.Reflection.PropertyInfo propertyInfo, bool inherit)
             where TAttribute : System.Attribute { }
-        public static System.Attribute GetCustomAttributeEx(this System.Type type, System.Type attributeType, bool inherit) { }
         public static System.Attribute[] GetCustomAttributesEx(this System.Reflection.Assembly assembly, System.Type attributeType) { }
         public static System.Attribute[] GetCustomAttributesEx(this System.Reflection.MethodInfo methodInfo, bool inherit) { }
         public static System.Attribute[] GetCustomAttributesEx(this System.Reflection.PropertyInfo propertyInfo, bool inherit) { }
