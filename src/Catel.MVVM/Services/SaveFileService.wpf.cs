@@ -38,7 +38,7 @@ namespace Catel.Services
             Argument.IsNotNull("context", context);
 
             var fileDialog = new SaveFileDialog();
-            ConfigureFileDialog(fileDialog);
+            ConfigureFileDialog(fileDialog, context);
 
             var result = new DetermineSaveFileResult
             {
