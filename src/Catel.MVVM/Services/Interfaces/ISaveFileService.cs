@@ -27,6 +27,7 @@ namespace Catel.Services
 		/// If this method returns a valid <see cref="StorageFile"/> object, the <see cref="IFileSupport.FileName"/> property will be filled 
 		/// with the safe filename. This can be used for display purposes only.
 		/// </remarks>
+        [ObsoleteEx(ReplacementTypeOrMember = "DetermineFileAsync(DetermineSaveFileContext)", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
 		Task<StorageFile> DetermineFileAsync();
 #else
         /// <summary>
@@ -37,6 +38,7 @@ namespace Catel.Services
         /// If this method returns <c>true</c>, the <see cref="IFileSupport.FileName"/> property will be filled with the filenames. Otherwise,
         /// no changes will occur to the data of this object.
         /// </remarks>
+        [ObsoleteEx(ReplacementTypeOrMember = "DetermineFileAsync(DetermineSaveFileContext)", TreatAsErrorFromVersion = "6.0", RemoveInVersion = "6.0")]
         Task<bool> DetermineFileAsync();
 #endif
 

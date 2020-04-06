@@ -46,7 +46,7 @@ namespace Catel.Services
             Argument.IsNotNull("context", context);
 
             var fileDialog = new OpenFileDialog();
-            ConfigureFileDialog(fileDialog);
+            ConfigureFileDialog(fileDialog, context);
 
             fileDialog.Multiselect = context.IsMultiSelect;
 
