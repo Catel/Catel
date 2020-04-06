@@ -141,10 +141,15 @@ namespace Catel.Services
         /// <param name="bitmap">The bitmap.</param>
         private async Task SaveToFileAsync(BitmapSource bitmap)
         {
-            _saveFileService.Filter = "PNG (*.png) |*.png";
-            if (await _saveFileService.DetermineFileAsync())
+            var context = new DetermineSaveFileContext
             {
-                var fileName = _saveFileService.FileName;
+                Filter = "PNG (*.png) |*.png"
+            };
+
+            var result = await _saveFileService.DetermineFileAsync(context);
+            if (result.Result)
+            {
+                var fileName = result.FileName;
                 using (var stream = new FileStream(fileName, FileMode.Create))
                 {
                     var encoder = new PngBitmapEncoder { Interlace = PngInterlaceOption.On };
