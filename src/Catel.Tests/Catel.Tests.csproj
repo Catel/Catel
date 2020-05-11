@@ -57,4 +57,5 @@
   </ItemGroup>
   
   <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.explicit.props')" />
+  <Import Project="$(MSBuildProjectDirectory)\..\Directory.build.shared.tests.props" Condition="Exists('$(MSBuildProjectDirectory)\..\Directory.build.shared.tests.props')" />
 </Project>
