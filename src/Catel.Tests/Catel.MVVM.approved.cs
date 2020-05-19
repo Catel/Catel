@@ -2869,9 +2869,6 @@ namespace Catel.Windows
     }
     public class static DependencyObjectExtensions
     {
-        public static void AddBehavior<TBehavior>(this System.Windows.DependencyObject dependencyObject)
-            where TBehavior : Catel.Windows.Interactivity.IBehavior, new () { }
-        public static void AddBehavior(this System.Windows.DependencyObject dependencyObject, Catel.Windows.Interactivity.IBehavior behavior) { }
         public static object FindLogicalAncestor(this System.Windows.DependencyObject startElement, System.Predicate<object> condition, int maxDepth = -1) { }
         public static T FindLogicalAncestorByType<T>(this System.Windows.DependencyObject startElement) { }
         public static T FindLogicalAncestorByType<T>(this System.Windows.DependencyObject startElement, int maxDepth) { }

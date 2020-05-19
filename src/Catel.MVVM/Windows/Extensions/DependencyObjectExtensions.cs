@@ -12,25 +12,17 @@ namespace Catel.Windows
     using System.Collections.Generic;
     using System.Linq;
     using Catel.Logging;
-    using Catel.Windows.Interactivity;
 
 #if UWP
     using global::Windows.UI;
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using global::Windows.UI.Xaml.Media;
-#elif NETCORE
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Data;
-    using System.Windows.Media;
-    using Microsoft.Xaml.Behaviors;
 #else
-    using System.Windows;
     using System.Windows.Controls;
+    using System.Windows;
     using System.Windows.Data;
     using System.Windows.Media;
-    using System.Windows.Interactivity;
 
     using Catel.Windows.Data;
 #endif
@@ -40,38 +32,6 @@ namespace Catel.Windows
     /// </summary>
     public static class DependencyObjectExtensions
     {
-        /// <summary>
-        /// Adds a behavior to the specified dependency object.
-        /// </summary>
-        /// <typeparam name="TBehavior">The behavior to type to instantiate and add.</typeparam>
-        /// <param name="dependencyObject">The object to add the behavior to.</param>
-        public static void AddBehavior<TBehavior>(this DependencyObject dependencyObject)
-            where TBehavior : IBehavior, new()
-        {
-            AddBehavior(dependencyObject, new TBehavior());
-        }
-
-        /// <summary>
-        /// Adds a behavior to the specified dependency object.
-        /// </summary>
-        /// <param name="dependencyObject">The object to add the behavior to.</param>
-        /// <param name="behavior">The behavior to add.</param>
-        public static void AddBehavior(this DependencyObject dependencyObject, IBehavior behavior)
-        {
-#if UWP
-            var behaviors = global::Windows.UI.Xaml.Interaction.GetBehaviors(dependencyObject);
-            var castBehavior = (Behavior)behavior;
-#elif NETCORE
-            var behaviors = Microsoft.Xaml.Behaviors.Interaction.GetBehaviors(dependencyObject);
-            var castBehavior = (Behavior)behavior;
-#else
-            var behaviors = System.Windows.Interactivity.Interaction.GetBehaviors(dependencyObject);
-            var castBehavior = (Behavior)behavior;
-#endif
-
-            behaviors.Add(castBehavior);
-        }
-
         /// <summary>
         /// Finds the logical or visual ancestor according to the predicate.
         /// </summary>
