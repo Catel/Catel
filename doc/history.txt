@@ -29,7 +29,8 @@ Release date
 
 Added/fixed
 ===========
-(x) #1595 Use Microsoft.Xaml.Behaviors.Wpf instead of Expression.Blend.Sdk.WPF for .NET Core
+(x) #1595 Use Microsoft.Xaml.Behaviors.Wpf instead of Expression.Blend.Sdk.WPF (could be breaking change, but we have
+    to go through this to fully support .NET Core)
 
 Platform support changes
 ========================

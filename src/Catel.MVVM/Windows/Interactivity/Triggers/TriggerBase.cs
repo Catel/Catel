@@ -16,7 +16,7 @@ namespace Catel.Windows.Interactivity
     using global::Windows.UI.Xaml;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
     using UIEventArgs = System.EventArgs;
 #endif
 
@@ -28,7 +28,7 @@ namespace Catel.Windows.Interactivity
     /// which is automatically called when the trigger is attached.
     /// </summary>
     /// <typeparam name="T">The <see cref="FrameworkElement"/> this trigger should attach to.</typeparam>
-    public abstract class TriggerBase<T> : System.Windows.Interactivity.TriggerBase<T>, ITrigger
+    public abstract class TriggerBase<T> : Microsoft.Xaml.Behaviors.TriggerBase<T>, ITrigger
         where T : FrameworkElement
     {
         #region Fields
@@ -147,7 +147,7 @@ namespace Catel.Windows.Interactivity
 
         /// <summary>
         /// Uninitializes the behavior. This method is called when <see cref="OnDetaching"/> is called, or when the
-        /// <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is unloaded.
+        /// <see cref="Microsoft.Xaml.Behaviors.TriggerBase{T}.AssociatedObject"/> is unloaded.
         /// <para />
         /// If dependency properties are used, it is very important to use <see cref="DependencyObject.ClearValue(System.Windows.DependencyProperty)"/> 
         /// to clear the value of the dependency properties in this method.
@@ -158,8 +158,8 @@ namespace Catel.Windows.Interactivity
         }
 
         /// <summary>
-        /// Called when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is loaded. This method is introduced to prevent
-        /// double initialization when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is already loaded.
+        /// Called when the <see cref="Microsoft.Xaml.Behaviors.TriggerBase{T}.AssociatedObject"/> is loaded. This method is introduced to prevent
+        /// double initialization when the <see cref="Microsoft.Xaml.Behaviors.TriggerBase{T}.AssociatedObject"/> is already loaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
@@ -190,8 +190,8 @@ namespace Catel.Windows.Interactivity
         }
 
         /// <summary>
-        /// Called when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is unloaded. This 
-        /// method is introduced to prevent double uninitialization when the <see cref="System.Windows.Interactivity.TriggerBase{T}.AssociatedObject"/> is already unloaded.
+        /// Called when the <see cref="Microsoft.Xaml.Behaviors.TriggerBase{T}.AssociatedObject"/> is unloaded. This 
+        /// method is introduced to prevent double uninitialization when the <see cref="Microsoft.Xaml.Behaviors.TriggerBase{T}.AssociatedObject"/> is already unloaded.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>

@@ -16,6 +16,7 @@ namespace Catel.Windows.Interactivity
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
     using System.Windows;
+    using Microsoft.Xaml.Behaviors;
     using UIEventArgs = System.EventArgs;
 #endif
 
@@ -30,7 +31,7 @@ namespace Catel.Windows.Interactivity
 #if UWP
     public abstract class EventTriggerBase<T> : EventTriggerBehavior
 #else
-    public abstract class EventTriggerBase<T> : System.Windows.Interactivity.EventTriggerBase<T>, ITrigger
+    public abstract class EventTriggerBase<T> : Microsoft.Xaml.Behaviors.EventTriggerBase<T>, ITrigger
 #endif
         where T : FrameworkElement
     {

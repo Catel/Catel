@@ -18,7 +18,7 @@ namespace Catel.Windows.Interactivity
 #else
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
     using UIEventArgs = System.EventArgs;
 #endif
 
