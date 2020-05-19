@@ -17,6 +17,10 @@ namespace Catel.Windows.Interactivity
     using Key = global::Windows.System.VirtualKey;
     using ModifierKeys = global::Windows.System.VirtualKeyModifiers;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
+#elif NETCORE
+    using System.Windows;
+    using Microsoft.Xaml.Behaviors;
+    using UIEventArgs = System.EventArgs;
 #else
     using System.Windows;
     using UIEventArgs = System.EventArgs;

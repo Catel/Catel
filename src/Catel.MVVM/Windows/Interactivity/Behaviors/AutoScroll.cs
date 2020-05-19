@@ -12,8 +12,15 @@ namespace Catel.Windows.Interactivity
     using System.Collections.Specialized;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Interactivity;
     using Data;
+
+#if UWP
+    using global::Windows.UI.Xaml;
+#elif NETCORE
+    using Microsoft.Xaml.Behaviors;
+#else
+    using System.Windows.Interactivity;
+#endif
 
     /// <summary>
     /// The scroll direction.
