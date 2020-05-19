@@ -14,10 +14,6 @@ namespace Catel.Windows.Interactivity
 #if UWP
     using global::Windows.UI.Xaml;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#elif NETCORE
-    using System.Windows;
-    using Microsoft.Xaml.Behaviors;
-    using UIEventArgs = System.EventArgs;
 #else
     using System.Windows;
     using UIEventArgs = System.EventArgs;
@@ -33,8 +29,6 @@ namespace Catel.Windows.Interactivity
     /// <typeparam name="T">The <see cref="FrameworkElement"/> this trigger should attach to.</typeparam>
 #if UWP
     public abstract class EventTriggerBase<T> : EventTriggerBehavior
-#elif NETCORE
-    public abstract class EventTriggerBase<T> : Microsoft.Xaml.Behaviors.EventTriggerBase<T>, ITrigger
 #else
     public abstract class EventTriggerBase<T> : System.Windows.Interactivity.EventTriggerBase<T>, ITrigger
 #endif

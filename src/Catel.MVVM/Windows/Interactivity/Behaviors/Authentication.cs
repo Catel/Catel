@@ -12,11 +12,6 @@ namespace Catel.Windows.Interactivity
     using global::Windows.UI.Xaml;
     using global::Windows.UI.Xaml.Controls;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#elif NETCORE
-    using System.Windows;
-    using System.Windows.Controls;
-    using Microsoft.Xaml.Behaviors;
-    using UIEventArgs = System.EventArgs;
 #else
     using System.Windows;
     using System.Windows.Controls;

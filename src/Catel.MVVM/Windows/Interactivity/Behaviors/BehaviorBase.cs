@@ -16,12 +16,9 @@ namespace Catel.Windows.Interactivity
 #if UWP
     using global::Windows.UI.Xaml;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#elif NETCORE
-    using Microsoft.Xaml.Behaviors;
-    using UIEventArgs = System.EventArgs;
 #else
     using System;
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
     using UIEventArgs = System.EventArgs;
 #endif
 

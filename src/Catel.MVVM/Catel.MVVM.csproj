@@ -34,7 +34,7 @@
     <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
-    <PackageReference Include="Expression.Blend.Sdk.WPF" Version="1.0.1" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
   </ItemGroup>
   
   <!-- .NET 4.6 -->
@@ -45,7 +45,7 @@
     <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
-    <PackageReference Include="Expression.Blend.Sdk.WPF" Version="1.0.1" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
   </ItemGroup>
   
   <!-- .NET 4.7 -->
@@ -56,7 +56,7 @@
     <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
-    <PackageReference Include="Expression.Blend.Sdk.WPF" Version="1.0.1" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
   </ItemGroup>
 
   <!-- .NET Core 3.0 -->

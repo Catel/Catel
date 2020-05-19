@@ -15,15 +15,6 @@ namespace Catel.Windows.Interactivity
     using Key = global::Windows.System.VirtualKey;
     using KeyEventArgs = global::Windows.UI.Xaml.Input.KeyRoutedEventArgs;
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
-#elif NETCORE
-    using System.Windows;
-    using System.Windows.Data;
-    using System.Windows.Controls;    
-    using System.Windows.Input;
-    using Microsoft.Xaml.Behaviors;
-    using System.Windows.Threading;
-    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-    using UIEventArgs = System.EventArgs;
 #else
     using System.Windows;
     using System.Windows.Input;

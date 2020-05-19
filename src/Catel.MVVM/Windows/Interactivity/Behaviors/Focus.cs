@@ -10,9 +10,6 @@ namespace Catel.Windows.Interactivity
 {
 #if UWP
     using global::Windows.UI.Xaml;
-#elif NETCORE
-    using System.Windows;
-    using Microsoft.Xaml.Behaviors;
 #else
     using System.Windows;
     using System.Windows.Interactivity;
