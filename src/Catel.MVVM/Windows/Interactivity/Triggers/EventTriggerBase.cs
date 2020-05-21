@@ -16,6 +16,7 @@ namespace Catel.Windows.Interactivity
     using UIEventArgs = global::Windows.UI.Xaml.RoutedEventArgs;
 #else
     using System.Windows;
+    using Microsoft.Xaml.Behaviors;
     using UIEventArgs = System.EventArgs;
 #endif
 
