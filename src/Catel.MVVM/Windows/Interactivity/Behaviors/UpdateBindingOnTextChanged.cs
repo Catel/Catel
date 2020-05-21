@@ -17,7 +17,7 @@ namespace Catel.Windows.Interactivity
     using TimerTickEventArgs = System.Object;
 #else
     using System.Windows.Controls;
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
     using System.Windows.Threading;
     using UIEventArgs = System.EventArgs;
     using TimerTickEventArgs = System.EventArgs;

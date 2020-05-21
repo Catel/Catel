@@ -3219,7 +3219,7 @@ namespace Catel.Windows.Interactivity
         protected override void OnAssociatedObjectLoaded() { }
         protected override void OnAssociatedObjectUnloaded() { }
     }
-    public abstract class BehaviorBase<T> : System.Windows.Interactivity.Behavior<T>, Catel.Windows.Interactivity.IBehavior
+    public abstract class BehaviorBase<T> : Microsoft.Xaml.Behaviors.Behavior<T>, Catel.Windows.Interactivity.IBehavior
         where T : System.Windows.FrameworkElement
     {
         public static readonly System.Windows.DependencyProperty IsEnabledProperty;
@@ -3371,7 +3371,7 @@ namespace Catel.Windows.Interactivity
         protected override void OnAssociatedObjectLoaded() { }
         protected override void OnCommandCanExecuteChanged() { }
     }
-    public abstract class EventTriggerBase<T> : System.Windows.Interactivity.EventTriggerBase<T>, Catel.Windows.Interactivity.ITrigger
+    public abstract class EventTriggerBase<T> : Microsoft.Xaml.Behaviors.EventTriggerBase<T>, Catel.Windows.Interactivity.ITrigger
         where T : System.Windows.FrameworkElement
     {
         public static readonly System.Windows.DependencyProperty IsEnabledProperty;
@@ -3458,7 +3458,7 @@ namespace Catel.Windows.Interactivity
         protected override void OnAssociatedObjectLoaded() { }
         protected override void OnAssociatedObjectUnloaded() { }
     }
-    public class Navigate : System.Windows.Interactivity.Behavior<System.Windows.Documents.Hyperlink>
+    public class Navigate : Microsoft.Xaml.Behaviors.Behavior<System.Windows.Documents.Hyperlink>
     {
         public Navigate() { }
         protected override void OnAttached() { }
@@ -3496,7 +3496,7 @@ namespace Catel.Windows.Interactivity
         protected override void OnAssociatedObjectLoaded() { }
         protected override void OnAssociatedObjectUnloaded() { }
     }
-    public abstract class TriggerActionBase<T> : System.Windows.Interactivity.TriggerAction<T>
+    public abstract class TriggerActionBase<T> : Microsoft.Xaml.Behaviors.TriggerAction<T>
         where T : System.Windows.FrameworkElement
     {
         protected TriggerActionBase() { }
@@ -3510,7 +3510,7 @@ namespace Catel.Windows.Interactivity
         protected virtual void Uninitialize() { }
         protected virtual void ValidateRequiredProperties() { }
     }
-    public abstract class TriggerBase<T> : System.Windows.Interactivity.TriggerBase<T>, Catel.Windows.Interactivity.ITrigger
+    public abstract class TriggerBase<T> : Microsoft.Xaml.Behaviors.TriggerBase<T>, Catel.Windows.Interactivity.ITrigger
         where T : System.Windows.FrameworkElement
     {
         public static readonly System.Windows.DependencyProperty IsEnabledProperty;
