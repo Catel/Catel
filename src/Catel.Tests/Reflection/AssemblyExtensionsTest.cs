@@ -20,7 +20,7 @@ namespace Catel.Tests.Reflection
     {
         // Note: don't use DateTime.Now.Year because we want a specific build to always compile, even in the next year
         private static readonly string CurrentYear = DateTime.Today.Year.ToString();
-        private const string VersionPrefix = "5.12.6";
+        private const string VersionPrefix = "5.12.7";
 
         private static readonly Assembly Assembly = typeof(AssemblyExtensionsTest).GetAssemblyEx();
 
@@ -35,7 +35,7 @@ namespace Catel.Tests.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        [TestCase]
+        [TestCase, Explicit]
         public void VersionAutomatic()
         {
             string expected = VersionPrefix + ".0";
@@ -45,7 +45,7 @@ namespace Catel.Tests.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        [TestCase]
+        [TestCase, Explicit]
         public void VersionWithSeparatorAutomatic()
         {
             string expected = VersionPrefix.Substring(0, VersionPrefix.IndexOf(".", 2));
@@ -55,7 +55,7 @@ namespace Catel.Tests.Reflection
             Assert.AreEqual(expected, result);
         }
 
-        [TestCase]
+        [TestCase, Explicit]
         public void VersionWithSeparatorAutomaticWhereSeparatorCountIsTooHigh()
         {
             string expected = VersionPrefix + ".0";
