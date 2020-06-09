@@ -961,6 +961,13 @@ namespace Catel.Windows
                 return true;
             }
 
+            // #1605 allow until we really need this to happen
+            if (vm.IsHidingValidationResults)
+            {
+                return true;
+            }
+
+            // Check the validation context
             var validationContext = vm.ValidationContext;
             return !validationContext.HasErrors;
         }
