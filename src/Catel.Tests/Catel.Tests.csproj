@@ -30,7 +30,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all" />
-    <PackageReference Include="PublicApiGenerator" Version="10.1.1" PrivateAssets="all" />    
+    <PackageReference Include="PublicApiGenerator" Version="10.1.2" PrivateAssets="all" />    
   </ItemGroup>
 
   <ItemGroup>
