@@ -31,6 +31,7 @@ Added/fixed
 ===========
 (+) #1613 Support serialization of collections with abstract item types
 (*) #1610 Remove class constraint on FastMemberInvoker to support structs
+(*) #1614 Optimize implementation and performance of TypeCache.GetTypeBySplittingInternals
 (x) #1605 Validation on view models is forced from the DataWindow even when validation should be deferred
 (x) #1606 KeyboardHelper.GetCurrentlyPressedModifiers should not contain None when other modifiers are active
 

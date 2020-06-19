@@ -4186,6 +4186,7 @@ namespace Catel.Runtime.Serialization.Xml
         [System.ObsoleteAttribute("Using XmlWriter / XmlReader, use the corresponding settings instead. Will be remo" +
             "ved in version 6.0.0.", true)]
         protected virtual Catel.Runtime.Serialization.Xml.XmlSerializerOptimalizationMode GetXmlOptimalizationMode(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
+        protected virtual object ReadXmlObject(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, System.Xml.XmlReader xmlReader, System.Runtime.Serialization.DataContractSerializer serializer, string namespacePrefix, string xmlName, System.Type modelType) { }
         protected override void Serialize(object model, Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
         protected override void SerializeMember(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
         protected override void SerializeMembers(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> membersToSerialize) { }
