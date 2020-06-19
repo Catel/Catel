@@ -3205,7 +3205,6 @@ namespace Catel.Reflection
         public static System.Delegate CreateDelegate(System.Type delegateType, object target, System.Reflection.MethodInfo methodInfo) { }
     }
     public class FastMemberInvoker<TEntity> : Catel.Reflection.IFastMemberInvoker
-        where TEntity :  class
     {
         public FastMemberInvoker() { }
         protected virtual System.Action<TEntity, TMemberType> Compile<TMemberType>(System.Linq.Expressions.Expression<System.Action<TEntity, TMemberType>> expression) { }
