@@ -937,19 +937,7 @@ namespace Catel.Runtime.Serialization.Xml
                         // Step 2: deserialize anyway
                         if (childValue is null)
                         {
-                            // Special case if we have an abstract item, we might have a specific type specified
-                            var collectionItemTypeName = GetSpecialAttributeValue(xmlReader, namespacePrefix, XmlType);
-                            if (!string.IsNullOrEmpty(collectionItemTypeName))
-                            {
-                                var collectionItemType = TypeCache.GetType(collectionItemTypeName);
-
-                                var tempSerializer = GetDataContractSerializer(context, modelType, collectionItemType, xmlName);
-                                childValue = tempSerializer.ReadObject(xmlReader, false);
-                            }
-                            else
-                            {
-                                childValue = serializer.ReadObject(xmlReader, false);
-                            }
+                            childValue = ReadXmlObject(context, xmlReader, serializer, namespacePrefix, xmlName, modelType);
                         }
 
                         if (childValue != null)
@@ -1002,7 +990,7 @@ namespace Catel.Runtime.Serialization.Xml
                 {
                     var serializer = GetDataContractSerializer(context, modelType, propertyTypeToDeserialize, xmlName);
 
-                    value = serializer.ReadObject(xmlReader, false);
+                    value = ReadXmlObject(context, xmlReader, serializer, namespacePrefix, xmlName, modelType);
 
                     isDeserialized = true;
                 }
@@ -1015,6 +1003,36 @@ namespace Catel.Runtime.Serialization.Xml
 
                 var referenceManager = context.ReferenceManager;
                 referenceManager.RegisterManually(graphId, value);
+            }
+
+            return value;
+        }
+
+        protected virtual object ReadXmlObject(ISerializationContext<XmlSerializationContextInfo> context, XmlReader xmlReader, 
+            DataContractSerializer serializer, string namespacePrefix, string xmlName, Type modelType)
+        {
+            object value = null;
+
+            // Special case if we have an abstract item, we might have a specific type specified
+            var typeName = GetSpecialAttributeValue(xmlReader, namespacePrefix, XmlType);
+            if (!string.IsNullOrEmpty(typeName))
+            {
+                var type = TypeCache.GetType(typeName);
+                if (type is null)
+                {
+                    Log.Warning($"Could not find type '{typeName}', deserialization will probably fail");
+                }
+                else
+                {
+                    var tempSerializer = GetDataContractSerializer(context, modelType, type, xmlName);
+                    value = tempSerializer.ReadObject(xmlReader, false);
+                }
+            }
+            
+            if (value is null)
+            { 
+                // Fallback to default deserialization, will fail for abstract types
+                value = serializer.ReadObject(xmlReader, false);
             }
 
             return value;
