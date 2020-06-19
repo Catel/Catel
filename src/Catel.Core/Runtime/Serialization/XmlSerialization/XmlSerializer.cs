@@ -937,7 +937,19 @@ namespace Catel.Runtime.Serialization.Xml
                         // Step 2: deserialize anyway
                         if (childValue is null)
                         {
-                            childValue = serializer.ReadObject(xmlReader, false);
+                            // Special case if we have an abstract item, we might have a specific type specified
+                            var collectionItemTypeName = GetSpecialAttributeValue(xmlReader, namespacePrefix, XmlType);
+                            if (!string.IsNullOrEmpty(collectionItemTypeName))
+                            {
+                                var collectionItemType = TypeCache.GetType(collectionItemTypeName);
+
+                                var tempSerializer = GetDataContractSerializer(context, modelType, collectionItemType, xmlName);
+                                childValue = tempSerializer.ReadObject(xmlReader, false);
+                            }
+                            else
+                            {
+                                childValue = serializer.ReadObject(xmlReader, false);
+                            }
                         }
 
                         if (childValue != null)
@@ -1104,23 +1116,36 @@ namespace Catel.Runtime.Serialization.Xml
                                 memberTypeToSerialize = modelType.GetElementTypeEx();
                             }
 
-                            var serializer = GetDataContractSerializer(context, modelType, memberTypeToSerialize, elementName);
+                            var collectionElementType = typeof(object);
+                            if (memberTypeToSerialize.IsGenericTypeEx())
+                            {
+                                collectionElementType = memberTypeToSerialize.GetGenericArgumentsEx().FirstOrDefault() ?? typeof(object);
+                            }
+
+                            var originalSerializer = GetDataContractSerializer(context, modelType, memberTypeToSerialize, elementName);
+                            var actualSerializer = originalSerializer;
+                            var actualSerializerElementType = collectionElementType;
 
                             foreach (var item in collection)
                             {
                                 var itemType = item.GetType();
+                                if (itemType != actualSerializerElementType)
+                                {
+                                    // Get a new serializer, and cache it as long as the item type is the same
+                                    actualSerializer = GetDataContractSerializer(context, modelType, itemType, elementName);
+                                    actualSerializerElementType = itemType;
+                                }
 
                                 var subItemElementName = GetXmlElementName(itemType, item, null);
                                 referenceInfo = referenceManager.GetInfo(item, true);
 
-                                if (!WriteXmlElementAsGraphReference(xmlWriter, referenceInfo, itemType,
-                                        subItemElementName, namespacePrefix))
+                                if (!WriteXmlElementAsGraphReference(xmlWriter, referenceInfo, itemType, subItemElementName, namespacePrefix))
                                 {
                                     xmlWriter.WriteStartElement(subItemElementName);
 
-                                    AddObjectMetadata(xmlWriter, itemType, itemType, referenceInfo, namespacePrefix);
+                                    AddObjectMetadata(xmlWriter, itemType, collectionElementType, referenceInfo, namespacePrefix);
 
-                                    serializer.WriteObjectContent(xmlWriter, item);
+                                    actualSerializer.WriteObjectContent(xmlWriter, item);
 
                                     xmlWriter.WriteEndElement();
                                 }

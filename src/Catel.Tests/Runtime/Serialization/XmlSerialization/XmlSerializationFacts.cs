@@ -13,6 +13,7 @@ namespace Catel.Tests.Runtime.Serialization
     using System.IO;
     using System.Linq;
     using System.Xml.Serialization;
+    using Catel.Collections;
     using Catel.Data;
     using Catel.IoC;
     using Catel.Logging;
@@ -314,6 +315,49 @@ namespace Catel.Tests.Runtime.Serialization
         [TestFixture]
         public class AdvancedSerializationFacts
         {
+            [TestCase]
+            public void SerializesAbstractBaseCollections()
+            {
+                var serviceLocator = ServiceLocator.Default;
+                var serializer = serviceLocator.ResolveType<IXmlSerializer>();
+
+                var collection = new ObservableCollection<AbstractBase>();
+
+                collection.Add(new Derived1
+                {
+                    Name = "1"
+                });
+
+                collection.Add(new Derived2
+                {
+                    Name = "2"
+                });
+
+                collection.Add(new Derived1
+                {
+                    Name = "3"
+                });
+
+                collection.Add(new Derived1
+                {
+                    Name = "4"
+                }); 
+                
+                collection.Add(new Derived2
+                {
+                    Name = "5"
+                });
+
+                var clonedCollection = SerializationTestHelper.SerializeAndDeserialize(collection, serializer, null);
+
+                Assert.AreEqual(collection.Count, clonedCollection.Count);
+                Assert.AreEqual(((Derived1)collection[0]).Name, ((Derived1)clonedCollection[0]).Name);
+                Assert.AreEqual(((Derived2)collection[1]).Name, ((Derived2)clonedCollection[1]).Name);
+                Assert.AreEqual(((Derived1)collection[2]).Name, ((Derived1)clonedCollection[2]).Name);
+                Assert.AreEqual(((Derived1)collection[3]).Name, ((Derived1)clonedCollection[3]).Name);
+                Assert.AreEqual(((Derived2)collection[4]).Name, ((Derived2)clonedCollection[4]).Name);
+            }
+
             [TestCase]
             public void CorrectlySerializesObjectsImplementingICustomXmlSerializable_Simple()
             {
