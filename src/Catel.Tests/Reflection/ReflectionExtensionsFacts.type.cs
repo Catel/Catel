@@ -11,6 +11,7 @@ namespace Catel.Tests.Reflection
     using System.Runtime.InteropServices;
     using Catel.IoC;
     using Catel.Reflection;
+    using Catel.Windows;
     using NUnit.Framework;
 
     public partial class ReflectionExtensionsFacts
@@ -188,6 +189,27 @@ namespace Catel.Tests.Reflection
                 var propertyInfo = typeof(Person).GetPropertyEx("FirstName", allowExplicitInterfaceProperties: true);
 
                 Assert.IsNotNull(propertyInfo);
+            }
+        }
+
+        [TestFixture]
+        public class TheGetFieldExMethod
+        {
+            [TestCase]
+            public void DoesNotReturnNonPublicBaseClassField()
+            {
+                var fieldInfo = typeof(DataWindow).GetFieldEx("_showingAsDialog");
+
+                // Note: see https://github.com/Catel/Catel/issues/1617, this should return null
+                Assert.IsNull(fieldInfo);
+            }
+
+            [TestCase]
+            public void ReturnsField()
+            {
+                var fieldInfo = typeof(System.Windows.Window).GetFieldEx("_showingAsDialog");
+
+                Assert.IsNotNull(fieldInfo);
             }
         }
     }

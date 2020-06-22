@@ -180,11 +180,30 @@ namespace Catel.Reflection
         /// <param name="propertyInfo">Property info.</param>
         public static bool IsStatic(this PropertyInfo propertyInfo)
         {
+            // Note: we decided to implement fastest path out, so as soon as we hit something non-static, exit
 #if NETFX_CORE
-            return (propertyInfo.CanRead && propertyInfo.GetMethod.IsStatic) || (propertyInfo.CanWrite && propertyInfo.SetMethod.IsStatic);
+            if (propertyInfo.CanRead && !(propertyInfo.GetMethod?.IsStatic ?? false))
+            {
+                return false;
+            }
+
+            if (propertyInfo.CanWrite && !(propertyInfo.SetMethod?.IsStatic ?? false))
+            {
+                return false;
+            }
 #else
-            return (propertyInfo.CanRead && propertyInfo.GetGetMethod().IsStatic) || (propertyInfo.CanWrite && propertyInfo.GetSetMethod().IsStatic);
+            if (propertyInfo.CanRead && !(propertyInfo.GetGetMethod()?.IsStatic ?? false))
+            {
+                return false;
+            }
+
+            if (propertyInfo.CanWrite && !(propertyInfo.GetSetMethod()?.IsStatic ?? false))
+            {
+                return false;
+            }
 #endif
+
+            return true;
         }
         #endregion
 

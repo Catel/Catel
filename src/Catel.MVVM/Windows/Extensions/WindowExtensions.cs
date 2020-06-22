@@ -247,12 +247,15 @@ namespace Catel.Windows
                 return false;
             }
 
-            var dialogFieldInfo = window.GetType().GetFieldEx("_showingAsDialog", true);
-            if (dialogFieldInfo is null == false)
+            if (window is Window)
             {
-                if (!(bool)dialogFieldInfo.GetValue(window))
+                var dialogFieldInfo = typeof(Window).GetFieldEx("_showingAsDialog", true);
+                if (dialogFieldInfo is null == false)
                 {
-                    return false;
+                    if (!(bool)dialogFieldInfo.GetValue(window))
+                    {
+                        return false;
+                    }
                 }
             }
 
