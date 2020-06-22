@@ -247,9 +247,10 @@ namespace Catel.Windows
                 return false;
             }
 
-            if (window is Window)
+            // Double check that we can use this one for reflection
+            if (window is SystemWindow)
             {
-                var dialogFieldInfo = typeof(Window).GetFieldEx("_showingAsDialog", true);
+                var dialogFieldInfo = typeof(SystemWindow).GetFieldEx("_showingAsDialog");
                 if (dialogFieldInfo is null == false)
                 {
                     if (!(bool)dialogFieldInfo.GetValue(window))
