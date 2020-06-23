@@ -1151,19 +1151,6 @@ namespace Catel.MVVM
 
             var modelInfo = _modelObjectsInfo[modelProperty];
 
-            // Fix for #1615, make sure to check validation for all mapped fields
-            //if (modelInfo.SupportValidation)
-            //{
-            //    var modelMappings = (from x in _viewModelToModelMap.Values
-            //                         where x.ModelProperty == modelProperty
-            //                         select x).ToList();
-
-            //    if (modelMappings.Count > 0)
-            //    {
-            //        modelErrorInfo.SynchronizeFieldValidation(modelMappings.SelectMany(x => x.ValueProperties));
-            //    }
-            //}
-
             _modelErrorInfo[modelProperty] = modelErrorInfo;
 
 #if NET || NETCORE

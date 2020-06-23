@@ -25,7 +25,7 @@ For an upgrade guide, visit https://docs.catelproject.com/vnext/setup-deployment
 
 Release date
 ============
-2020/05/19
+2020/06/xx
 
 Added/fixed
 ===========
@@ -35,6 +35,7 @@ Added/fixed
 (*) #1616 Improve modal window detection to prevent first chance exception
 (x) #1605 Validation on view models is forced from the DataWindow even when validation should be deferred
 (x) #1606 KeyboardHelper.GetCurrentlyPressedModifiers should not contain None when other modifiers are active
+(x) #1615 Always generate AdornerLayer for DataWindow to make sure validation results can be shown
 
 Platform support changes
 ========================

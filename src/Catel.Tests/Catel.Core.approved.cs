@@ -1555,6 +1555,7 @@ namespace Catel.Data
         protected void RaisePropertyChanged(object sender, string propertyName, object newValue) { }
         protected void RaisePropertyChanged(object sender, string propertyName, object oldValue, object newValue) { }
         protected virtual void RaisePropertyChanged(object sender, Catel.Data.AdvancedPropertyChangedEventArgs e) { }
+        protected void RaisePropertyChangedDirect(object sender, Catel.Data.AdvancedPropertyChangedEventArgs e) { }
     }
     public class static ObservableObjectExtensions
     {
