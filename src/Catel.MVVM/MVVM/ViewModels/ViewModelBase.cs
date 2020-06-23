@@ -982,9 +982,9 @@ namespace Catel.MVVM
                                 var propertiesToSet = mapping.ValueProperties;
 
 #if !XAMARIN_FORMS
-                                if (_modelErrorInfo.ContainsKey(mapping.ModelProperty))
+                                if (_modelErrorInfo.TryGetValue(mapping.ModelProperty, out var modelErrorInfo))
                                 {
-                                    mapping.ValueProperties.ForEach(_modelErrorInfo[mapping.ModelProperty].ClearDefaultErrors);
+                                    mapping.ValueProperties.ForEach(modelErrorInfo.ClearDefaultErrors);
                                 }
 #endif
 
@@ -1140,18 +1140,49 @@ namespace Catel.MVVM
                 ViewModelManager.RegisterModel(this, model);
             }
 
-            _modelErrorInfo[modelProperty] = new ModelErrorInfo(model);
-            _modelErrorInfo[modelProperty].Updated += OnModelErrorInfoUpdated;
-
             var modelAsINotifyPropertyChanged = model as INotifyPropertyChanged;
             if (modelAsINotifyPropertyChanged != null)
             {
                 modelAsINotifyPropertyChanged.PropertyChanged += OnModelPropertyChangedInternal;
             }
 
+            var modelErrorInfo = new ModelErrorInfo(model);
+            modelErrorInfo.Updated += OnModelErrorInfoUpdated;
+
+            var modelInfo = _modelObjectsInfo[modelProperty];
+
+            // Fix for #1615, make sure to check validation for all mapped fields
+            //if (modelInfo.SupportValidation)
+            //{
+            //    var modelMappings = (from x in _viewModelToModelMap.Values
+            //                         where x.ModelProperty == modelProperty
+            //                         select x).ToList();
+
+            //    if (modelMappings.Count > 0)
+            //    {
+            //        modelErrorInfo.SynchronizeFieldValidation(modelMappings.SelectMany(x => x.ValueProperties));
+            //    }
+            //}
+
+            _modelErrorInfo[modelProperty] = modelErrorInfo;
+
+#if NET || NETCORE
+            if (ValidateModelsOnInitialization)
+            {
+                if (modelInfo.SupportValidation)
+                {
+                    var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
+                    var validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(model, null, null);
+
+                    System.ComponentModel.DataAnnotations.Validator.TryValidateObject(model, validationContext, validationResults, true);
+                    modelErrorInfo.InitializeDefaultErrors(validationResults);
+                }
+            }
+#endif
+
             if (SupportIEditableObject)
             {
-                if (_modelObjectsInfo[modelProperty].SupportIEditableObject)
+                if (modelInfo.SupportIEditableObject)
                 {
                     if (model != null)
                     {
@@ -1159,17 +1190,6 @@ namespace Catel.MVVM
                     }
                 }
             }
-
-#if NET || NETCORE
-            if (ValidateModelsOnInitialization)
-            {
-                var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
-                var validationContext = new System.ComponentModel.DataAnnotations.ValidationContext(model, null, null);
-
-                System.ComponentModel.DataAnnotations.Validator.TryValidateObject(model, validationContext, validationResults, true);
-                _modelErrorInfo[modelProperty].InitializeDefaultErrors(validationResults);
-            }
-#endif
 
             InitializeModel(modelProperty, model);
         }

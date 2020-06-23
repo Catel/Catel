@@ -43,9 +43,19 @@ namespace Catel.Services
         GenerateWarningAndErrorValidatorForDataContext = 4,
 
         /// <summary>
+        /// Explicitly add the application resources to the resource dictionary.
+        /// </summary>
+        ExplicitlyAddApplicationResourcesDictionary = 8,
+
+        /// <summary>
+        /// Add adorner decorator.
+        /// </summary>
+        GenerateAdornerDecorator = 16,
+
+        /// <summary>
         /// All available options.
         /// </summary>
-        All = GenerateInlineInfoBarMessageControl | GenerateWarningAndErrorValidatorForDataContext
+        All = GenerateInlineInfoBarMessageControl | GenerateWarningAndErrorValidatorForDataContext | ExplicitlyAddApplicationResourcesDictionary | GenerateAdornerDecorator
     }
 
     /// <summary>

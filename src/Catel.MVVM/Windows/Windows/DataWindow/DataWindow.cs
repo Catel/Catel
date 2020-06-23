@@ -848,7 +848,8 @@ namespace Catel.Windows
                 _commands.Add(button.Command);
             }
 
-            var wrapOptions = WrapControlServiceWrapOptions.GenerateWarningAndErrorValidatorForDataContext;
+            var wrapOptions = WrapControlServiceWrapOptions.GenerateWarningAndErrorValidatorForDataContext | WrapControlServiceWrapOptions.GenerateAdornerDecorator | WrapControlServiceWrapOptions.ExplicitlyAddApplicationResourcesDictionary;
+
             switch (_infoBarMessageControlGenerationMode)
             {
                 case InfoBarMessageControlGenerationMode.None:

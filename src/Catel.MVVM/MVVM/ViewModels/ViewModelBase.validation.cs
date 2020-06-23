@@ -175,20 +175,28 @@ namespace Catel.MVVM
 
                     // IDataErrorInfo
                     var dataErrorInfo = model as IDataErrorInfo;
-                    if (dataErrorInfo != null && !string.IsNullOrEmpty(dataErrorInfo[modelProperty]))
+                    if (dataErrorInfo != null)
                     {
-                        validationContext.Add(FieldValidationResult.CreateError(mapping.ViewModelProperty, dataErrorInfo[modelProperty]));
+                        var error = dataErrorInfo[modelProperty];
+                        if (!string.IsNullOrWhiteSpace(error))
+                        {
+                            validationContext.Add(FieldValidationResult.CreateError(mapping.ViewModelProperty, error));
 
-                        hasSetFieldError = true;
+                            hasSetFieldError = true;
+                        }
                     }
 
                     // IDataWarningInfo
                     var dataWarningInfo = model as IDataWarningInfo;
-                    if (dataWarningInfo != null && !string.IsNullOrEmpty(dataWarningInfo[modelProperty]))
+                    if (dataWarningInfo != null)
                     {
-                        validationContext.Add(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, dataWarningInfo[modelProperty]));
+                        var warning = dataWarningInfo[modelProperty];
+                        if (!string.IsNullOrWhiteSpace(warning))
+                        {
+                            validationContext.Add(FieldValidationResult.CreateWarning(mapping.ViewModelProperty, warning));
 
-                        hasSetFieldWarning = true;
+                            hasSetFieldWarning = true;
+                        }
                     }
 
                     // INotifyDataErrorInfo & INotifyDataWarningInfo
@@ -197,7 +205,7 @@ namespace Catel.MVVM
                     {
                         if (!hasSetFieldError)
                         {
-                            foreach (string error in modelErrorInfo.GetErrors(modelProperty))
+                            foreach (var error in modelErrorInfo.GetErrors(modelProperty))
                             {
                                 if (!string.IsNullOrEmpty(error))
                                 {
@@ -209,7 +217,7 @@ namespace Catel.MVVM
 
                         if (!hasSetFieldWarning)
                         {
-                            foreach (string warning in modelErrorInfo.GetWarnings(modelProperty))
+                            foreach (var warning in modelErrorInfo.GetWarnings(modelProperty))
                             {
                                 if (!string.IsNullOrEmpty(warning))
                                 {
