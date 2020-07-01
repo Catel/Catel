@@ -1555,6 +1555,7 @@ namespace Catel.Data
         protected void RaisePropertyChanged(object sender, string propertyName, object newValue) { }
         protected void RaisePropertyChanged(object sender, string propertyName, object oldValue, object newValue) { }
         protected virtual void RaisePropertyChanged(object sender, Catel.Data.AdvancedPropertyChangedEventArgs e) { }
+        protected void RaisePropertyChangedDirect(object sender, Catel.Data.AdvancedPropertyChangedEventArgs e) { }
     }
     public class static ObservableObjectExtensions
     {
@@ -3205,7 +3206,6 @@ namespace Catel.Reflection
         public static System.Delegate CreateDelegate(System.Type delegateType, object target, System.Reflection.MethodInfo methodInfo) { }
     }
     public class FastMemberInvoker<TEntity> : Catel.Reflection.IFastMemberInvoker
-        where TEntity :  class
     {
         public FastMemberInvoker() { }
         protected virtual System.Action<TEntity, TMemberType> Compile<TMemberType>(System.Linq.Expressions.Expression<System.Action<TEntity, TMemberType>> expression) { }
@@ -4187,6 +4187,7 @@ namespace Catel.Runtime.Serialization.Xml
         [System.ObsoleteAttribute("Using XmlWriter / XmlReader, use the corresponding settings instead. Will be remo" +
             "ved in version 6.0.0.", true)]
         protected virtual Catel.Runtime.Serialization.Xml.XmlSerializerOptimalizationMode GetXmlOptimalizationMode(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
+        protected virtual object ReadXmlObject(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, System.Xml.XmlReader xmlReader, System.Runtime.Serialization.DataContractSerializer serializer, string namespacePrefix, string xmlName, System.Type modelType) { }
         protected override void Serialize(object model, Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
         protected override void SerializeMember(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
         protected override void SerializeMembers(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> membersToSerialize) { }

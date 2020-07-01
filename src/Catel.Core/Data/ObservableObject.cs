@@ -176,20 +176,33 @@ namespace Catel.Data
 
         /// <summary>
         /// Raises the <see cref="PropertyChanged"/> event.
-        /// <para />
-        /// This is the one and only method that actually raises the <see cref="PropertyChanged"/> event. All other
-        /// methods are (and should be) just overloads that eventually call this method.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void RaisePropertyChanged(object sender, AdvancedPropertyChangedEventArgs e)
         {
-            PropertyChanged?.Invoke(sender, e);
-
+            RaisePropertyChangedDirect(sender, e); 
+            
             if (ReferenceEquals(this, sender))
             {
                 OnPropertyChanged(e);
             }
+        }
+
+        /// <summary>
+        /// Raises the <see cref="PropertyChanged"/> event without allowing classes to override this behavior.
+        /// <para />
+        /// This is the one and only method that actually raises the <see cref="PropertyChanged"/> event. All other
+        /// methods are (and should be) just overloads that eventually call this method.
+        /// <para />
+        /// Note that this method does not call <see cref="OnPropertyChanged(AdvancedPropertyChangedEventArgs)"/>. Use 
+        /// <see cref="RaisePropertyChanged(object, AdvancedPropertyChangedEventArgs)"/> if that is required.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
+        protected void RaisePropertyChangedDirect(object sender, AdvancedPropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(sender, e);
         }
 
         /// <summary>

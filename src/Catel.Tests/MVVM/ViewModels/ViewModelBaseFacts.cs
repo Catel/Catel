@@ -125,7 +125,7 @@ namespace Catel.Tests.MVVM.ViewModels
         }
 
         [Test]
-        public void MultipleViewModelsCanBeCreatedConcurrently()
+        public async Task MultipleViewModelsCanBeCreatedConcurrently()
         {
             const int personsPerThread = 50;
             const int threadAmount = 10;
@@ -155,6 +155,8 @@ namespace Catel.Tests.MVVM.ViewModels
                 threads[i].Start(i);
             }
 
+            await Task.Delay(1000);
+
             for (var i = 0; i < threadAmount; i++)
             {
                 threads[i].Join();
@@ -173,7 +175,7 @@ namespace Catel.Tests.MVVM.ViewModels
         }
 
         [Test]
-        public void PropertiesCanBeSetConcurrentlyWithObjectCreation()
+        public async Task PropertiesCanBeSetConcurrentlyWithObjectCreation()
         {
             const int personsPerThread = 50;
             const int threadAmount = 10;
@@ -186,15 +188,19 @@ namespace Catel.Tests.MVVM.ViewModels
                 threads[i] = new Thread((index) =>
                 {
                     var localViewModels = new TestViewModel[personsPerThread];
+
                     for (int j = 0; j < personsPerThread; j++)
                     {
                         var viewModel = new TestViewModel
                         {
                             Age = 18
                         };
+
                         viewModel.Age = 19;
+
                         localViewModels[j] = viewModel;
                     }
+
                     allViewModels[(int)index] = localViewModels;
                 });
             }
@@ -203,6 +209,8 @@ namespace Catel.Tests.MVVM.ViewModels
             {
                 threads[i].Start(i);
             }
+
+            await Task.Delay(1000);
 
             for (int i = 0; i < threadAmount; i++)
             {
@@ -222,7 +230,7 @@ namespace Catel.Tests.MVVM.ViewModels
         }
 
         [Test]
-        public void CommandsCanBeCalledConcurrentlyWithObjectCreation()
+        public async Task CommandsCanBeCalledConcurrentlyWithObjectCreation()
         {
             const int personsPerThread = 50;
             const int threadAmount = 10;
@@ -235,12 +243,14 @@ namespace Catel.Tests.MVVM.ViewModels
                 threads[i] = new Thread((index) =>
                 {
                     var localViewModels = new TestViewModel[personsPerThread];
+
                     for (int j = 0; j < personsPerThread; j++)
                     {
                         var viewModel = new TestViewModel();
                         viewModel.GenerateData.Execute();
                         localViewModels[j] = viewModel;
                     }
+
                     allViewModels[(int)index] = localViewModels;
                 });
             }
@@ -250,21 +260,23 @@ namespace Catel.Tests.MVVM.ViewModels
                 threads[i].Start(i);
             }
 
+            await Task.Delay(1000);
+
             for (int i = 0; i < threadAmount; i++)
             {
                 threads[i].Join();
             }
 
-            var flatenSortedIdentifiers =
+            var flattenSortedIdentifiers =
                 allViewModels
                     .SelectMany(o => o)
                     .Select(o => o.UniqueIdentifier)
                     .OrderBy(o => o)
                     .ToArray();
 
-            var firstId = flatenSortedIdentifiers[0];
+            var firstId = flattenSortedIdentifiers[0];
 
-            Assert.That(flatenSortedIdentifiers, Is.EquivalentTo(Enumerable.Range(firstId, personsPerThread * threadAmount)));
+            Assert.That(flattenSortedIdentifiers, Is.EquivalentTo(Enumerable.Range(firstId, personsPerThread * threadAmount)));
         }
     }
 }

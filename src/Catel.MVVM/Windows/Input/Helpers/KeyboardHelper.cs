@@ -144,6 +144,12 @@ namespace Catel.Windows.Input
             }
 #endif
 
+            // #1606: always remove None, then we re-add it if there is nothing else
+            if (modifiers.Count > 0)
+            {
+                modifiers.Remove(ModifierKeys.None);
+            }
+
             if (modifiers.Count == 0)
             {
                 modifiers.Add(ModifierKeys.None);

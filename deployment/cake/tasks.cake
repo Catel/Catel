@@ -2,6 +2,7 @@
 #l "lib-nuget.cake"
 #l "lib-sourcelink.cake"
 #l "issuetrackers.cake"
+#l "installers.cake"
 #l "sourcecontrol.cake"
 #l "notifications.cake"
 #l "generic-tasks.cake"
@@ -21,7 +22,6 @@
 #addin "nuget:?package=Cake.Sonar&version=1.1.25"
 
 #tool "nuget:?package=MSBuild.SonarQube.Runner.Tool&version=4.8.0"
-#tool "nuget:?package=GitVersion.CommandLine&version=5.1.2-beta1.17&prerelease"
 
 //-------------------------------------------------------------
 // BACKWARDS COMPATIBILITY CODE - START
@@ -70,6 +70,7 @@ public class BuildContext : BuildContextBase
     // Integrations
     public BuildServerIntegration BuildServer { get; set; }
     public IssueTrackerIntegration IssueTracker { get; set; }
+    public InstallerIntegration Installer { get; set; }
     public NotificationsIntegration Notifications { get; set; }
     public SourceControlIntegration SourceControl { get; set; }
     public OctopusDeployIntegration OctopusDeploy { get; set; }
@@ -146,6 +147,7 @@ Setup<BuildContext>(setupContext =>
 
     // Other integrations last
     buildContext.IssueTracker = new IssueTrackerIntegration(buildContext);
+    buildContext.Installer = new InstallerIntegration(buildContext);
     buildContext.Notifications = new NotificationsIntegration(buildContext);
     buildContext.OctopusDeploy = new OctopusDeployIntegration(buildContext);
     buildContext.SourceControl = new SourceControlIntegration(buildContext);

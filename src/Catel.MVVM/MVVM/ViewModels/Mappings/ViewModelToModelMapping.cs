@@ -12,6 +12,8 @@ namespace Catel.MVVM
     using IoC;
     using Logging;
     using System.Reflection;
+    using System.Text;
+    using System.Linq;
 
     /// <summary>
     /// Model value class to store the mapping of the View Model to a Model mapping.
@@ -169,5 +171,41 @@ namespace Catel.MVVM
         /// <value>The converter.</value>
         public IViewModelToModelConverter Converter { get; private set; }
         #endregion
+
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
+
+            stringBuilder.Append($"ViewModel.{ModelProperty}.{ViewModelProperty}");
+
+            switch (Mode)
+            {
+                case ViewModelToModelMode.Explicit:
+                    stringBuilder.Append(" <= explicit => ");
+                    break;
+
+                case ViewModelToModelMode.OneWay:
+                    stringBuilder.Append(" <= ");
+                    break;
+
+                case ViewModelToModelMode.OneWayToSource:
+                    stringBuilder.Append(" => ");
+                    break;
+
+                case ViewModelToModelMode.TwoWay:
+                    stringBuilder.Append(" <=> ");
+                    break;
+            }
+
+            var property = ValueProperties.FirstOrDefault();
+            if (ValueProperties.Length > 1)
+            {
+                property += $"+ {ValueProperties.Length}";
+            }
+
+            stringBuilder.Append($"{ModelPropertyType.Name}.{property}");
+
+            return stringBuilder.ToString();
+        }
     }
 }

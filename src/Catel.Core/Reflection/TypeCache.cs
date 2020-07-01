@@ -429,36 +429,40 @@ namespace Catel.Reflection
                 return null;
             }
 
-            var innerTypes = new List<Type>();
-            var innerTypesShortNames = TypeHelper.GetInnerTypes(typeWithInnerTypes);
-            if (innerTypesShortNames.Length > 0)
+            var firstBracketIndex = typeWithInnerTypes.IndexOf('[');
+            if (firstBracketIndex < 0)
             {
-                foreach (var innerTypesShortName in innerTypesShortNames)
+                // Not a generic type, and we failed to retrieve it the first time
+                return null;
+            }
+
+            var genericTypeName = typeWithInnerTypes.Substring(0, firstBracketIndex);
+            var genericType = TypeCache.GetType(genericTypeName);
+            if (genericType is null)
+            {
+                // We couldn't resolve List`1
+                return null;
+            }
+
+            var innerTypesShortNames = TypeHelper.GetInnerTypes(typeWithInnerTypes);
+            var innerTypeCount = innerTypesShortNames.Length;
+            if (innerTypeCount > 0)
+            {
+                var innerTypes = new Type[innerTypeCount];
+
+                for (var i = 0; i < innerTypeCount; i++)
                 {
-                    var innerType = GetType(innerTypesShortName, allowInitialization: false);
+                    var innerType = GetType(innerTypesShortNames[i], allowInitialization: false);
                     if (innerType is null)
                     {
                         return null;
                     }
 
-                    innerTypes.Add(innerType);
+                    innerTypes[i] = innerType;
                 }
 
-                var innerTypesNames = new List<string>();
-                foreach (var innerType in innerTypes)
-                {
-                    innerTypesNames.Add(innerType.AssemblyQualifiedName);
-                }
-
-                var firstBracketIndex = typeWithInnerTypes.IndexOf('[');
-
-                var part1 = typeWithInnerTypes.Substring(0, firstBracketIndex);
-                var part2 = TypeHelper.FormatInnerTypes(innerTypesNames);
-
-                var typeWithImprovedInnerTypes = $"{part1}[{part2}]";
-
-                var fallbackType = Type.GetType(typeWithImprovedInnerTypes);
-                return fallbackType;
+                var finalType = genericType.MakeGenericTypeEx(innerTypes);
+                return finalType;
             }
 
             // This is not yet supported or type is really not available

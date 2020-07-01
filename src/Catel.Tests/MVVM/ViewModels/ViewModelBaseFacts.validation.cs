@@ -33,19 +33,6 @@ namespace Catel.Tests.MVVM.ViewModels
             }
         }
 
-        //[TestCase]
-        //public void DeferredValidation()
-        //{
-        //    var viewModel = new TestViewModelWithDeferredValidation();
-        //    viewModel.FirstName = null;
-
-        //    Assert.IsTrue(viewModel.HasErrors);
-        //    Assert.AreEqual(string.Empty, ((IDataErrorInfo)viewModel)["FirstName"]);
-        //    Assert.IsFalse(viewModel.SaveViewModel());
-        //    Assert.IsTrue(viewModel.HasErrors);
-        //    Assert.AreNotEqual(string.Empty, ((IDataErrorInfo)viewModel)["FirstName"]);
-        //}
-
         [TestCase]
         public void ModelValidation_NotifyDataErrorInfo_FieldErrors()
         {
