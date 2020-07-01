@@ -112,7 +112,7 @@ namespace Catel
         public bool MatchesAll(T target) { }
         public bool MatchesAny(T target) { }
         public bool MatchesNone(T target) { }
-        public static Catel.CompositePredicate<T> +(Catel.CompositePredicate<T> invokes, System.Predicate<T> filter) { }
+        public static Catel.CompositePredicate<T> operator +(Catel.CompositePredicate<T> invokes, System.Predicate<T> filter) { }
     }
     public class CoreModule : Catel.IoC.IServiceLocatorInitializer
     {
@@ -981,8 +981,8 @@ namespace Catel.Data
         protected Catel.Data.IModelEqualityComparer EqualityComparer { get; set; }
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
-        public static bool !=(Catel.Data.ComparableModelBase firstObject, Catel.Data.ComparableModelBase secondObject) { }
-        public static bool ==(Catel.Data.ComparableModelBase firstObject, Catel.Data.ComparableModelBase secondObject) { }
+        public static bool operator !=(Catel.Data.ComparableModelBase firstObject, Catel.Data.ComparableModelBase secondObject) { }
+        public static bool operator ==(Catel.Data.ComparableModelBase firstObject, Catel.Data.ComparableModelBase secondObject) { }
     }
     public sealed class CompositeValidator : Catel.Data.IValidator
     {
@@ -1252,6 +1252,7 @@ namespace Catel.Data
         public System.Type ExpectedType { get; }
         public string PropertyName { get; }
     }
+    [System.Serializable]
     public abstract class ModelBase : Catel.Data.ObservableObject, Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IModelSerialization, Catel.Runtime.Serialization.ISerializable, System.ComponentModel.IAdvancedEditableObject, System.ComponentModel.IEditableObject, System.ComponentModel.INotifyPropertyChanged, System.Xml.Serialization.IXmlSerializable
     {
         public static readonly Catel.Data.PropertyData IsDirtyProperty;
@@ -1323,6 +1324,7 @@ namespace Catel.Data
         public override bool Equals(Catel.Data.ModelBase x, Catel.Data.ModelBase y) { }
         public override int GetHashCode(Catel.Data.ModelBase obj) { }
     }
+    [System.Serializable]
     public class ObservableObject : Catel.Data.IAdvancedNotifyPropertyChanged, System.ComponentModel.INotifyPropertyChanged
     {
         public ObservableObject() { }
@@ -1338,6 +1340,7 @@ namespace Catel.Data
         protected void RaisePropertyChanged<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression) { }
         protected void RaisePropertyChanged<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression, object newValue) { }
         protected void RaisePropertyChanged<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression, object oldValue, object newValue) { }
+        protected void RaisePropertyChangedDirect(object sender, Catel.Data.AdvancedPropertyChangedEventArgs e) { }
     }
     public static class ObservableObjectExtensions
     {
@@ -1438,6 +1441,7 @@ namespace Catel.Data
         public System.Type ObjectType { get; }
         public string PropertyName { get; }
     }
+    [System.Serializable]
     public class PropertyValue : System.Runtime.Serialization.ISerializable
     {
         public PropertyValue() { }
@@ -1464,6 +1468,7 @@ namespace Catel.Data
         public virtual bool SetMemberValue<TValue>(object instance, string memberName, TValue value) { }
         protected virtual bool SetPropertyValue<TValue>(object instance, string memberName, TValue value) { }
     }
+    [System.Serializable]
     public abstract class SavableModelBase<T> : Catel.Data.ModelBase, Catel.Data.IFreezable, Catel.Data.IModel, Catel.Data.IModelEditor, Catel.Data.IModelSerialization, Catel.Data.ISavableModel, Catel.Runtime.Serialization.ISerializable, System.ComponentModel.IAdvancedEditableObject, System.ComponentModel.IEditableObject, System.ComponentModel.INotifyPropertyChanged, System.Xml.Serialization.IXmlSerializable
         where T :  class
     {
@@ -2303,8 +2308,8 @@ namespace Catel.IoC
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
-        public static bool !=(Catel.IoC.TypeRequestInfo firstObject, Catel.IoC.TypeRequestInfo secondObject) { }
-        public static bool ==(Catel.IoC.TypeRequestInfo firstObject, Catel.IoC.TypeRequestInfo secondObject) { }
+        public static bool operator !=(Catel.IoC.TypeRequestInfo firstObject, Catel.IoC.TypeRequestInfo secondObject) { }
+        public static bool operator ==(Catel.IoC.TypeRequestInfo firstObject, Catel.IoC.TypeRequestInfo secondObject) { }
     }
     public class TypeRequestPath : Catel.IoC.ITypeRequestPath
     {
@@ -3022,7 +3027,6 @@ namespace Catel.Reflection
         public static System.Delegate CreateDelegate(System.Type delegateType, System.Type targetType, string methodName) { }
     }
     public class FastMemberInvoker<TEntity> : Catel.Reflection.IFastMemberInvoker
-        where TEntity :  class
     {
         public FastMemberInvoker() { }
         protected virtual System.Action<TEntity, TMemberType> Compile<TMemberType>(System.Linq.Expressions.Expression<System.Action<TEntity, TMemberType>> expression) { }
@@ -3531,6 +3535,7 @@ namespace Catel.Runtime.Serialization
         public virtual void SetMemberValue(object model, Catel.Runtime.Serialization.MemberValue member, Catel.Runtime.Serialization.SerializationModelInfo modelInfo) { }
     }
     [System.Runtime.Serialization.DataContract]
+    [System.Serializable]
     public class SerializableKeyValuePair
     {
         public SerializableKeyValuePair() { }
@@ -3911,6 +3916,7 @@ namespace Catel.Runtime.Serialization.Xml
         protected virtual string GetNamespaceUrl() { }
         protected override Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> GetSerializationContextInfo(object model, System.Type modelType, System.IO.Stream stream, Catel.Runtime.Serialization.SerializationContextMode contextMode, Catel.Runtime.Serialization.ISerializationConfiguration configuration) { }
         protected string GetXmlElementName(System.Type modelType, object model, string memberName) { }
+        protected virtual object ReadXmlObject(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, System.Xml.XmlReader xmlReader, System.Runtime.Serialization.DataContractSerializer serializer, string namespacePrefix, string xmlName, System.Type modelType) { }
         protected override void Serialize(object model, Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context) { }
         protected override void SerializeMember(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, Catel.Runtime.Serialization.MemberValue memberValue) { }
         protected override void SerializeMembers(Catel.Runtime.Serialization.ISerializationContext<Catel.Runtime.Serialization.Xml.XmlSerializationContextInfo> context, System.Collections.Generic.List<Catel.Runtime.Serialization.MemberValue> membersToSerialize) { }

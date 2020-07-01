@@ -88,6 +88,7 @@ namespace Catel.Collections
         public bool? TryRemoveItemFromNewItems(int index, T item) { }
         public bool TryRemoveItemFromOldItems(int index, T item) { }
     }
+    [System.Serializable]
     public class FastBindingList<T> : System.ComponentModel.BindingList<T>, Catel.Collections.ISuspendChangeNotificationsCollection, System.Collections.ICollection, System.Collections.IEnumerable
     {
         public FastBindingList() { }
@@ -120,6 +121,7 @@ namespace Catel.Collections
         public System.IDisposable SuspendChangeNotifications() { }
         public System.IDisposable SuspendChangeNotifications(Catel.Collections.SuspensionMode mode) { }
     }
+    [System.Serializable]
     public class FastObservableCollection<T> : System.Collections.ObjectModel.ObservableCollection<T>, Catel.Collections.ISuspendChangeNotificationsCollection, System.Collections.ICollection, System.Collections.IEnumerable
     {
         public FastObservableCollection() { }
@@ -2448,8 +2450,8 @@ namespace Catel.Services
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
-        public static bool !=(Catel.Services.Size a, Catel.Services.Size b) { }
-        public static bool ==(Catel.Services.Size a, Catel.Services.Size b) { }
+        public static bool operator !=(Catel.Services.Size a, Catel.Services.Size b) { }
+        public static bool operator ==(Catel.Services.Size a, Catel.Services.Size b) { }
     }
     public class StateService : Catel.Services.IStateService
     {
@@ -2755,7 +2757,7 @@ namespace Catel.Windows.Controls
         Inline = 0,
         Overlay = 1,
     }
-    [System.Windows.Data.ValueConversion(typeof(Catel.Windows.Controls.InfoBarMessageControlMode), typeof(System.Windows.Visibility), ParameterType=typeof(Catel.Windows.Controls.InfoBarMessageControlMode))]
+    [System.Windows.Data.ValueConversion(typeof(Catel.Windows.Controls.InfoBarMessageControlMode), typeof(object), ParameterType=typeof(Catel.Windows.Controls.InfoBarMessageControlMode))]
     public class InfoBarMessageControlVisibilityConverter : Catel.MVVM.Converters.IValueConverter, System.Windows.Data.IValueConverter
     {
         public InfoBarMessageControlVisibilityConverter() { }
