@@ -834,7 +834,8 @@ namespace Catel.Windows
                 _commands.Add(button.Command);
             }
 
-            var wrapOptions = WrapControlServiceWrapOptions.GenerateWarningAndErrorValidatorForDataContext;
+            var wrapOptions = WrapControlServiceWrapOptions.GenerateWarningAndErrorValidatorForDataContext | WrapControlServiceWrapOptions.GenerateAdornerDecorator | WrapControlServiceWrapOptions.ExplicitlyAddApplicationResourcesDictionary;
+
             switch (_infoBarMessageControlGenerationMode)
             {
                 case InfoBarMessageControlGenerationMode.None:
@@ -947,6 +948,13 @@ namespace Catel.Windows
                 return true;
             }
 
+            // #1605 allow until we really need this to happen
+            if (vm.IsHidingValidationResults)
+            {
+                return true;
+            }
+
+            // Check the validation context
             var validationContext = vm.ValidationContext;
             return !validationContext.HasErrors;
         }

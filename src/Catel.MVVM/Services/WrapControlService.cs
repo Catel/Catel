@@ -25,6 +25,7 @@ namespace Catel.Services
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
     using System.Windows.Data;
+    using System.Windows.Documents;
 #endif
 
     /// <summary>
@@ -118,9 +119,12 @@ namespace Catel.Services
                 Name = WrapControlServiceControlNames.MainContentHolderName.GetUniqueControlName()
             };
 
-            if (Application.Current != null)
+            if (Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.ExplicitlyAddApplicationResourcesDictionary))
             {
-                outsideGrid.Resources.MergedDictionaries.Add(Application.Current.Resources);
+                if (Application.Current != null)
+                {
+                    outsideGrid.Resources.MergedDictionaries.Add(Application.Current.Resources);
+                }
             }
 
             #region Generate buttons
@@ -213,6 +217,17 @@ namespace Catel.Services
             {
                 Name = WrapControlServiceControlNames.InternalGridName
             };
+
+            if (Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.GenerateAdornerDecorator))
+            {
+                var adornerDecorator = new AdornerDecorator
+                {
+                    Child = mainContent
+                };
+
+                mainContent = adornerDecorator;
+            }
+
             internalGrid.Children.Add(mainContent);
 
             // Grid is now the main content

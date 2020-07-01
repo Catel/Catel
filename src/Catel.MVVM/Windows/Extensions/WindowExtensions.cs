@@ -20,6 +20,7 @@ namespace Catel.Windows
     using Threading;
     using Logging;
     using SystemWindow = System.Windows.Window;
+    using Catel.MVVM.Views;
 
     /// <summary>
     /// Extensions for <see cref="System.Windows.Window"/>.
@@ -240,7 +241,27 @@ namespace Catel.Windows
         {
             Argument.IsNotNull("window", window);
 
-            return ComponentDispatcher.IsThreadModal;
+            // See #1616, not fully reliable, so we can only exit if this returns *false*
+            if (!ComponentDispatcher.IsThreadModal)
+            {
+                return false;
+            }
+
+            // Double check that we can use this one for reflection
+            if (window is SystemWindow)
+            {
+                var dialogFieldInfo = typeof(SystemWindow).GetFieldEx("_showingAsDialog");
+                if (dialogFieldInfo is null == false)
+                {
+                    if (!(bool)dialogFieldInfo.GetValue(window))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            // Assume true, at this stage we are willing to take the first chance exception if we need to
+            return true;
         }
 
         /// <summary>

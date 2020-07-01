@@ -64,19 +64,19 @@ namespace Catel.MVVM
             _model = model;
 
             var modelAsINotifyPropertyChanged = _model as INotifyPropertyChanged;
-            if (modelAsINotifyPropertyChanged != null)
+            if (modelAsINotifyPropertyChanged is null == false)
             {
                 modelAsINotifyPropertyChanged.PropertyChanged += OnModelPropertyChanged;
             }
 
             var modelAsINotifyDataErrorInfo = _model as INotifyDataErrorInfo;
-            if (modelAsINotifyDataErrorInfo != null)
+            if (modelAsINotifyDataErrorInfo is null == false)
             {
                 modelAsINotifyDataErrorInfo.ErrorsChanged += OnModelErrorsChanged;
             }
 
             var modelAsINotifyDataWarningInfo = _model as INotifyDataWarningInfo;
-            if (modelAsINotifyDataWarningInfo != null)
+            if (modelAsINotifyDataWarningInfo is null == false)
             {
                 modelAsINotifyDataWarningInfo.WarningsChanged += OnModelWarningsChanged;
             }
@@ -92,6 +92,31 @@ namespace Catel.MVVM
 
         #region Methods
         /// <summary>
+        /// Synchronizes the validation state of the specified properties.
+        /// </summary>
+        /// <param name="propertyNames"></param>
+        public void SynchronizeFieldValidation(IEnumerable<string> propertyNames)
+        {
+            var modelAsINotifyDataErrorInfo = _model as INotifyDataErrorInfo;
+            var modelAsINotifyDataWarningInfo = _model as INotifyDataWarningInfo;
+
+            foreach (var propertyName in propertyNames)
+            {
+                if (modelAsINotifyDataErrorInfo is null == false)
+                {
+                    var errors = modelAsINotifyDataErrorInfo.GetErrors(propertyName);
+                    HandleFieldErrors(propertyName, errors);
+                }
+
+                if (modelAsINotifyDataWarningInfo is null == false)
+                {
+                    var warnings = modelAsINotifyDataWarningInfo.GetWarnings(propertyName);
+                    HandleFieldWarnings(propertyName, warnings);
+                }
+            }
+        }
+
+        /// <summary>
         /// Called when a property on the model has changed.
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -104,13 +129,13 @@ namespace Catel.MVVM
             }
 
             var dataWarningInfo = _model as IDataWarningInfo;
-            if (dataWarningInfo != null)
+            if (dataWarningInfo is null == false)
             {
                 HandleFieldWarnings(e.PropertyName, new[] { dataWarningInfo[e.PropertyName] });
             }
 
             var dataErrorInfo = _model as IDataErrorInfo;
-            if (dataErrorInfo != null)
+            if (dataErrorInfo is null == false)
             {
                 HandleFieldErrors(e.PropertyName, new [] { dataErrorInfo[e.PropertyName] });
             }
@@ -334,19 +359,19 @@ namespace Catel.MVVM
         public void CleanUp()
         {
             var modelAsINotifyPropertyChanged = _model as INotifyPropertyChanged;
-            if (modelAsINotifyPropertyChanged != null)
+            if (modelAsINotifyPropertyChanged is null == false)
             {
                 modelAsINotifyPropertyChanged.PropertyChanged -= OnModelPropertyChanged;
             }
 
             var modelAsINotifyDataErrorInfo = _model as INotifyDataErrorInfo;
-            if (modelAsINotifyDataErrorInfo != null)
+            if (modelAsINotifyDataErrorInfo is null == false)
             {
                 modelAsINotifyDataErrorInfo.ErrorsChanged -= OnModelErrorsChanged;
             }
 
             var modelAsINotifyDataWarningInfo = _model as INotifyDataWarningInfo;
-            if (modelAsINotifyDataWarningInfo != null)
+            if (modelAsINotifyDataWarningInfo is null == false)
             {
                 modelAsINotifyDataWarningInfo.WarningsChanged -= OnModelWarningsChanged;
             }
@@ -362,14 +387,14 @@ namespace Catel.MVVM
         private string GetValidationString(object obj)
         {
             var objAsString = obj as string;
-            if (objAsString != null)
+            if (objAsString is null == false)
             {
                 return objAsString;
             }
 
 #if !XAMARIN_FORMS
             var objAsValidationResult = obj as ValidationResult;
-            if (objAsValidationResult != null)
+            if (objAsValidationResult is null == false)
             {
                 return objAsValidationResult.ErrorMessage;
             }

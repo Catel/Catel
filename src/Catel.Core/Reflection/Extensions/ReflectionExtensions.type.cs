@@ -845,7 +845,9 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-            return type.GetTypeInfo().GetMember(name, bindingFlags);
+            // Explicitly use Catel.Reflection.TypeInfoExtensions, see https://github.com/Catel/Catel/issues/1617
+            //return Catel.Reflection.TypeInfoExtensions.GetMember(type.GetTypeInfo(), name, bindingFlags);
+            return type.GetMember(name, bindingFlags);
         }
 
         /// <summary>
@@ -877,7 +879,9 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("name", name);
 
-            return type.GetTypeInfo().GetField(name, bindingFlags);
+            // Explicitly use Catel.Reflection.TypeInfoExtensions, see https://github.com/Catel/Catel/issues/1617
+            //return Catel.Reflection.TypeInfoExtensions.GetField(type.GetTypeInfo(), name, bindingFlags);
+            return type.GetField(name, bindingFlags);
         }
 
         /// <summary>
@@ -904,7 +908,9 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-            return type.GetTypeInfo().GetFields(bindingFlags);
+            // Explicitly use Catel.Reflection.TypeInfoExtensions, see https://github.com/Catel/Catel/issues/1617
+            //return Catel.Reflection.TypeInfoExtensions.GetFields(type.GetTypeInfo(), bindingFlags);
+            return type.GetFields(bindingFlags);
         }
 
         /// <summary>
@@ -997,7 +1003,9 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-            return type.GetTypeInfo().GetProperties(bindingFlags);
+            // Explicitly use Catel.Reflection.TypeInfoExtensions, see https://github.com/Catel/Catel/issues/1617
+            //return Catel.Reflection.TypeInfoExtensions.GetProperties(type.GetTypeInfo(), bindingFlags);
+            return type.GetProperties(bindingFlags);
         }
 
         /// <summary>
@@ -1029,7 +1037,9 @@ namespace Catel.Reflection
             Argument.IsNotNullOrWhitespace("name", name);
             Argument.IsNotNull("type", type);
 
-            return type.GetTypeInfo().GetEvent(name, bindingFlags);
+            // Explicitly use Catel.Reflection.TypeInfoExtensions, see https://github.com/Catel/Catel/issues/1617
+            //return Catel.Reflection.TypeInfoExtensions.GetEvent(type.GetTypeInfo(), name, bindingFlags);
+            return type.GetEvent(name, bindingFlags);
         }
 
         /// <summary>
@@ -1043,9 +1053,12 @@ namespace Catel.Reflection
         public static EventInfo[] GetEventsEx(this Type type, bool flattenHierarchy = true, bool allowStaticMembers = false)
         {
             Argument.IsNotNull("type", type);
+
             var bindingFlags = BindingFlagsHelper.GetFinalBindingFlags(flattenHierarchy, allowStaticMembers);
 
-            return type.GetTypeInfo().GetEvents(bindingFlags);
+            // Explicitly use Catel.Reflection.TypeInfoExtensions, see https://github.com/Catel/Catel/issues/1617
+            //return Catel.Reflection.TypeInfoExtensions.GetEvents(type.GetTypeInfo(), bindingFlags);
+            return type.GetEvents(bindingFlags);
         }
 
         /// <summary>
@@ -1077,7 +1090,9 @@ namespace Catel.Reflection
             Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("name", name);
 
-            return type.GetTypeInfo().GetMethod(name, bindingFlags);
+            // Explicitly use Catel.Reflection.TypeInfoExtensions, see https://github.com/Catel/Catel/issues/1617
+            //return Catel.Reflection.TypeInfoExtensions.GetMethod(type.GetTypeInfo(), name, bindingFlags);
+            return type.GetMethod(name, bindingFlags);
         }
 
         /// <summary>
@@ -1144,7 +1159,9 @@ namespace Catel.Reflection
         {
             Argument.IsNotNull("type", type);
 
-            return type.GetTypeInfo().GetMethods(bindingFlags);
+            // Explicitly use Catel.Reflection.TypeInfoExtensions, see https://github.com/Catel/Catel/issues/1617
+            //return Catel.Reflection.TypeInfoExtensions.GetMethods(type.GetTypeInfo(), bindingFlags);
+            return type.GetMethods(bindingFlags);
         }
     }
 }

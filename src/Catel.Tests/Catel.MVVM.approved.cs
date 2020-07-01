@@ -1082,6 +1082,7 @@ namespace Catel.MVVM
         public string[] ValueProperties { get; }
         public string ViewModelProperty { get; }
         public System.Type ViewModelPropertyType { get; }
+        public override string ToString() { }
     }
     public enum ViewModelToModelMode
     {
@@ -2549,7 +2550,9 @@ namespace Catel.Services
         GenerateInlineInfoBarMessageControl = 1,
         GenerateOverlayInfoBarMessageControl = 2,
         GenerateWarningAndErrorValidatorForDataContext = 4,
-        All = 5,
+        ExplicitlyAddApplicationResourcesDictionary = 8,
+        GenerateAdornerDecorator = 16,
+        All = 29,
     }
     [System.Flags]
     public enum WrapOptions
