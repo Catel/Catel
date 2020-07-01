@@ -81,7 +81,7 @@ namespace Catel.Windows.Interactivity
         /// Using a DependencyProperty as the backing store for FocusDelay.  This enables animation, styling, binding, etc...
         /// </summary>
         public static readonly DependencyProperty FocusDelayProperty =
-            DependencyProperty.Register("FocusDelay", typeof(int), typeof(FocusBehaviorBase), new PropertyMetadata(0));
+            DependencyProperty.Register(nameof(FocusDelay), typeof(int), typeof(FocusBehaviorBase), new PropertyMetadata(0));
         #endregion
 
         /// <summary>

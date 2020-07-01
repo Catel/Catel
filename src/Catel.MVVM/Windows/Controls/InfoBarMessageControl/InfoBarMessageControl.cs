@@ -53,14 +53,14 @@ namespace Catel.Windows.Controls
     [TemplatePart(Name = ElementMessageBar, Type = typeof(FrameworkElement))]
     public class InfoBarMessageControl : ContentControl
     {
-#region Constants
+        #region Constants
         /// <summary>
         /// The bar that will show the initial message bar.
         /// </summary>
         private const string ElementMessageBar = "PART_MessageBar";
-#endregion
+        #endregion
 
-#region Fields
+        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -75,11 +75,11 @@ namespace Catel.Windows.Controls
         private readonly ObservableCollection<string> _warningMessages = new ObservableCollection<string>();
         private readonly ObservableCollection<string> _errorMessages = new ObservableCollection<string>();
 
-        private readonly Dictionary<int, WarningAndErrorValidator> _warningAndErrorValidators = new Dictionary<int, WarningAndErrorValidator>(); 
+        private readonly Dictionary<int, WarningAndErrorValidator> _warningAndErrorValidators = new Dictionary<int, WarningAndErrorValidator>();
         private bool _subscribedToEvents;
-#endregion
+        #endregion
 
-#region Constructors
+        #region Constructors
         /// <summary>
         /// Initializes static members of the <see cref="InfoBarMessageControl"/> class.
         /// </summary>
@@ -117,9 +117,9 @@ namespace Catel.Windows.Controls
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
-#endregion
+        #endregion
 
-#region Properties
+        #region Properties
         /// <summary>
         /// Gets or sets the default property value for the <see cref="Text"/> property.
         /// </summary>
@@ -140,7 +140,7 @@ namespace Catel.Windows.Controls
         /// DependencyProperty definition as the backing store for Mode.
         /// </summary>
         public static readonly DependencyProperty ModeProperty =
-            DependencyProperty.Register("Mode", typeof(InfoBarMessageControlMode), typeof(InfoBarMessageControl),
+            DependencyProperty.Register(nameof(Mode), typeof(InfoBarMessageControlMode), typeof(InfoBarMessageControl),
             new PropertyMetadata(InfoBarMessageControlMode.Inline, (sender, e) => ((InfoBarMessageControl)sender).OnModeChanged()));
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace Catel.Windows.Controls
         /// DependencyProperty definition as the backing store for Text.
         /// </summary>
         public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register("Text", typeof(string), typeof(InfoBarMessageControl), new PropertyMetadata(CatelEnvironment.DefaultMultiLingualDependencyPropertyValue));
+            DependencyProperty.Register(nameof(Text), typeof(string), typeof(InfoBarMessageControl), new PropertyMetadata(CatelEnvironment.DefaultMultiLingualDependencyPropertyValue));
 
         /// <summary>
         /// Info message for the info bar.
@@ -172,7 +172,7 @@ namespace Catel.Windows.Controls
         /// DependencyProperty definition as the backing store for InfoMessage.
         /// </summary>
         public static readonly DependencyProperty InfoMessageProperty =
-            DependencyProperty.Register("InfoMessage", typeof(string), typeof(InfoBarMessageControl), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register(nameof(InfoMessage), typeof(string), typeof(InfoBarMessageControl), new PropertyMetadata(string.Empty));
 
         /// <summary>
         /// Gets or sets MessageCount.
@@ -190,7 +190,7 @@ namespace Catel.Windows.Controls
         /// Definition of the dependency property is private.
         /// </summary>
         public static readonly DependencyProperty MessageCountProperty =
-            DependencyProperty.Register("MessageCount", typeof(int), typeof(InfoBarMessageControl), new PropertyMetadata(0));
+            DependencyProperty.Register(nameof(MessageCount), typeof(int), typeof(InfoBarMessageControl), new PropertyMetadata(0));
 
         /// <summary>
         /// Gets the warning message collection.
@@ -217,9 +217,9 @@ namespace Catel.Windows.Controls
         {
             get { return _errorMessages; }
         }
-#endregion
+        #endregion
 
-#region Methods
+        #region Methods
         /// <summary>
         /// Called when the control is loaded.
         /// </summary>
@@ -599,7 +599,7 @@ namespace Catel.Windows.Controls
                 }
             }
         }
-#endregion
+        #endregion
     }
 }
 

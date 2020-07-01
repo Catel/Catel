@@ -56,7 +56,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Using a DependencyProperty as the backing store for Modifiers.  This enables animation, styling, binding, etc... 
         /// </summary>
-        public static readonly DependencyProperty ModifiersProperty = DependencyProperty.Register("Modifiers", typeof(ModifierKeys), 
+        public static readonly DependencyProperty ModifiersProperty = DependencyProperty.Register(nameof(Modifiers), typeof(ModifierKeys), 
             typeof(FocusOnKeyPress), new PropertyMetadata(ModifierKeys.None));
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Using a DependencyProperty as the backing store for Key.  This enables animation, styling, binding, etc...
         /// </summary>
-        public static readonly DependencyProperty KeyProperty = DependencyProperty.Register("Key", typeof(Key), 
+        public static readonly DependencyProperty KeyProperty = DependencyProperty.Register(nameof(Key), typeof(Key), 
             typeof(FocusOnKeyPress), new PropertyMetadata(Key.None));
         #endregion
 

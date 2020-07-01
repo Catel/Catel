@@ -90,7 +90,7 @@ namespace Catel.Windows.Interactivity
         /// The property definition for the <see cref="AutoFixListBoxItemTemplate"/> dependency property.
         /// </summary>
         public static readonly DependencyProperty AutoFixListBoxItemTemplateProperty =
-            DependencyProperty.Register("AutoFixListBoxItemTemplate", typeof(bool), typeof(DoubleClickToCommand), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(AutoFixListBoxItemTemplate), typeof(bool), typeof(DoubleClickToCommand), new PropertyMetadata(true));
         #endregion
 
         #region Methods

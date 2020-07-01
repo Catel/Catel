@@ -57,7 +57,7 @@ namespace Catel.Windows.Interactivity
         /// The scroll on loaded property.
         /// </summary>
         public static readonly DependencyProperty ScrollOnLoadedProperty =
-            DependencyProperty.Register("ScrollOnLoaded", typeof(bool), typeof(AutoScroll), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(ScrollOnLoaded), typeof(bool), typeof(AutoScroll), new PropertyMetadata(true));
 
         /// <summary>
         /// The scoll direction.
@@ -74,7 +74,7 @@ namespace Catel.Windows.Interactivity
         /// The scroll direction property.
         /// </summary>
         public static readonly DependencyProperty ScrollDirectionProperty =
-            DependencyProperty.Register("ScrollDirection", typeof(ScrollDirection), typeof(AutoScroll), new PropertyMetadata(ScrollDirection.Bottom));
+            DependencyProperty.Register(nameof(ScrollDirection), typeof(ScrollDirection), typeof(AutoScroll), new PropertyMetadata(ScrollDirection.Bottom));
 
         /// <summary>
         /// The scoll threshold in which the behavior will scroll down even when it is not fully down.
@@ -91,7 +91,7 @@ namespace Catel.Windows.Interactivity
         /// The scroll treshold property.
         /// </summary>
         public static readonly DependencyProperty ScrollTresholdProperty =
-            DependencyProperty.Register("ScrollTreshold", typeof(int), typeof(AutoScroll), new PropertyMetadata(5));
+            DependencyProperty.Register(nameof(ScrollTreshold), typeof(int), typeof(AutoScroll), new PropertyMetadata(5));
         #endregion
 
         /// <summary>

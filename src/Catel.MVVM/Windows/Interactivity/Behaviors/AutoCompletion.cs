@@ -93,7 +93,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// The property name property.
         /// </summary>
-        public static readonly DependencyProperty PropertyNameProperty = DependencyProperty.Register("PropertyName", typeof(string),
+        public static readonly DependencyProperty PropertyNameProperty = DependencyProperty.Register(nameof(PropertyName), typeof(string),
             typeof(AutoCompletion), new PropertyMetadata(string.Empty, (sender, e) => ((AutoCompletion)sender).OnPropertyNameChanged()));
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// The items source property.
         /// </summary>
-        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(IEnumerable),
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable),
             typeof(AutoCompletion), new PropertyMetadata(null, (sender, e) => ((AutoCompletion)sender).OnItemsSourceChanged()));
 
 
@@ -132,7 +132,7 @@ namespace Catel.Windows.Interactivity
         /// The use automatic completion service property.
         /// </summary>
         public static readonly DependencyProperty UseAutoCompletionServiceProperty =
-            DependencyProperty.Register("UseAutoCompletionService", typeof(bool), typeof(AutoCompletion), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(UseAutoCompletionService), typeof(bool), typeof(AutoCompletion), new PropertyMetadata(true));
         #endregion
 
         #region Methods

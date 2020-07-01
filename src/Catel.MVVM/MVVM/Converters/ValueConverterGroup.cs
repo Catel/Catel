@@ -34,7 +34,7 @@ namespace Catel.MVVM.Converters
     /// <para />
     /// Original license: CPOL, compatible with the MIT license.
     /// </remarks>
-    [ContentProperty("Converters")]
+    [ContentProperty(nameof(Converters))]
     public class ValueConverterGroup : IValueConverter
     {
         #region Fields

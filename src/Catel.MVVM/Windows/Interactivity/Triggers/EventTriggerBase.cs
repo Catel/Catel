@@ -80,7 +80,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// The IsEnabled property registration.
         /// </summary>
-        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool),
+        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register(nameof(IsEnabled), typeof(bool),
             typeof(EventTriggerBase<T>), new PropertyMetadata(true, (sender, e) => ((EventTriggerBase<T>)sender).OnIsEnabledChanged()));
         #endregion
 

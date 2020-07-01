@@ -89,7 +89,7 @@ namespace Catel.Windows.Interactivity
         /// DependencyProperty definition as the backing store for DisableAssociatedObjectOnCannotExecute.
         /// </summary>
         public static readonly DependencyProperty DisableAssociatedObjectOnCannotExecuteProperty =
-            DependencyProperty.Register("DisableAssociatedObjectOnCannotExecute", typeof(bool), typeof(EventToCommand), new PropertyMetadata(true,
+            DependencyProperty.Register(nameof(DisableAssociatedObjectOnCannotExecute), typeof(bool), typeof(EventToCommand), new PropertyMetadata(true,
                 (sender, e) => ((EventToCommand)sender).OnDisableAssociatedObjectOnCannotExecuteChanged((bool)e.NewValue)));
         #endregion
 

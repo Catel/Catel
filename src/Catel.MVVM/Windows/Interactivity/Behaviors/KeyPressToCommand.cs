@@ -42,7 +42,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Using a DependencyProperty as the backing store for Key.  This enables animation, styling, binding, etc...
         /// </summary>
-        public static readonly DependencyProperty KeyProperty = DependencyProperty.Register("Key", typeof(Key), 
+        public static readonly DependencyProperty KeyProperty = DependencyProperty.Register(nameof(Key), typeof(Key), 
             typeof(KeyPressToCommand), new PropertyMetadata(Key.None));
         #endregion
 

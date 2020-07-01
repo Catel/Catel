@@ -40,7 +40,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// The Password Property
         /// </summary>
-        public static readonly DependencyProperty PasswordProperty = DependencyProperty.Register("Password", typeof (string), typeof(UpdateBindingOnPasswordChanged),
+        public static readonly DependencyProperty PasswordProperty = DependencyProperty.Register(nameof(Password), typeof (string), typeof(UpdateBindingOnPasswordChanged),
 #if NET || NETCORE
             new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
 #else

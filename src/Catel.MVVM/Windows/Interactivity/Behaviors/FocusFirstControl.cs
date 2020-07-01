@@ -32,7 +32,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Dependency property for the <see cref="FocusParentsFirst"/> property.
         /// </summary>
-        public static readonly DependencyProperty FocusParentsFirstProperty = DependencyProperty.Register("FocusParentsFirst",
+        public static readonly DependencyProperty FocusParentsFirstProperty = DependencyProperty.Register(nameof(FocusParentsFirst),
             typeof(bool), typeof(FocusFirstControl), new PropertyMetadata(true));
         #endregion
 

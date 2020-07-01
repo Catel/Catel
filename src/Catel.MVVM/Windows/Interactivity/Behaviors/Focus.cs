@@ -85,7 +85,7 @@ namespace Catel.Windows.Interactivity
         /// Using a DependencyProperty as the backing store for FocusMoment.  This enables animation, styling, binding, etc... 
         /// </summary>
         public static readonly DependencyProperty FocusMomentProperty =
-            DependencyProperty.Register("FocusMoment", typeof(FocusMoment), typeof(Focus), new PropertyMetadata(FocusMoment.Loaded));
+            DependencyProperty.Register(nameof(FocusMoment), typeof(FocusMoment), typeof(Focus), new PropertyMetadata(FocusMoment.Loaded));
 
         /// <summary>
         /// Gets or sets the source. This value is required when the <see cref="FocusMoment" /> property is either 
@@ -101,7 +101,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Using a DependencyProperty as the backing store for Source.  This enables animation, styling, binding, etc... 
         /// </summary>
-        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(object), typeof(Focus), 
+        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(nameof(Source), typeof(object), typeof(Focus), 
             new PropertyMetadata(null, (sender, e) => ((Focus)sender).OnSourceChanged(e)));
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Catel.Windows.Interactivity
         /// Using a DependencyProperty as the backing store for PropertyName.  This enables animation, styling, binding, etc... 
         /// </summary>
         public static readonly DependencyProperty PropertyNameProperty =
-            DependencyProperty.Register("PropertyName", typeof(string), typeof(Focus), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(PropertyName), typeof(string), typeof(Focus), new PropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets the name of the event. This value is required when the <see cref="FocusMoment" /> property is 
@@ -136,7 +136,7 @@ namespace Catel.Windows.Interactivity
         /// Using a DependencyProperty as the backing store for EventName.  This enables animation, styling, binding, etc...
         /// </summary>
         public static readonly DependencyProperty EventNameProperty =
-            DependencyProperty.Register("EventName", typeof(string), typeof(Focus), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(EventName), typeof(string), typeof(Focus), new PropertyMetadata(null));
         #endregion
 
         #region Methods

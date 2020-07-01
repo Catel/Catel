@@ -81,7 +81,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// The IsEnabled property registration.
         /// </summary>
-        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool),
+        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register(nameof(IsEnabled), typeof(bool),
             typeof(BehaviorBase<T>), new PropertyMetadata(true, (sender, e) => ((BehaviorBase<T>)sender).OnIsEnabledChanged()));
         #endregion
 

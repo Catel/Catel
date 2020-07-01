@@ -52,7 +52,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Using a DependencyProperty as the backing store for Modifiers.  This enables animation, styling, binding, etc... 
         /// </summary>
-        public static readonly DependencyProperty ModifiersProperty = DependencyProperty.Register("Modifiers", typeof(ModifierKeys), typeof(CommandTriggerBase<T>),
+        public static readonly DependencyProperty ModifiersProperty = DependencyProperty.Register(nameof(Modifiers), typeof(ModifierKeys), typeof(CommandTriggerBase<T>),
             new PropertyMetadata(ModifierKeys.None));
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Using a DependencyProperty as the backing store for Command.  This enables animation, styling, binding, etc... 
         /// </summary>
-        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register("Command", typeof(ICommand), typeof(CommandTriggerBase<T>),
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(CommandTriggerBase<T>),
             new PropertyMetadata(null, (sender, e) => ((CommandTriggerBase<T>)sender).OnCommandChangedInternal(e.NewValue as ICommand)));
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// The property definition for the <see cref="CommandParameter"/> dependency property.
         /// </summary>
-        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register("CommandParameter", typeof(object), typeof(CommandTriggerBase<T>),
+        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(nameof(CommandParameter), typeof(object), typeof(CommandTriggerBase<T>),
             new PropertyMetadata(null, (sender, e) => ((CommandTriggerBase<T>)sender).OnCommandParameterChangedInternal(e.NewValue)));
         #endregion
 

@@ -144,7 +144,7 @@ namespace Catel.Windows.Interactivity
         /// Are negative numbers allowed
         /// </summary>
         public static readonly DependencyProperty IsNegativeAllowedProperty =
-            DependencyProperty.Register("IsNegativeAllowed", typeof(bool), typeof(NumericTextBox), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(IsNegativeAllowed), typeof(bool), typeof(NumericTextBox), new PropertyMetadata(true));
 
         /// <summary>
         /// Gets or sets a value indicating whether decimal values are allowed.
@@ -162,7 +162,7 @@ namespace Catel.Windows.Interactivity
         /// Using a DependencyProperty as the backing store for IsDecimalAllowed.  This enables animation, styling, binding, etc... 
         /// </summary>
         public static readonly DependencyProperty IsDecimalAllowedProperty =
-            DependencyProperty.Register("IsDecimalAllowed", typeof(bool), typeof(NumericTextBox), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(IsDecimalAllowed), typeof(bool), typeof(NumericTextBox), new PropertyMetadata(true));
 
         /// <summary>
         /// Gets or sets a value indicating whether the binding should be updated whenever the text changes.
@@ -177,7 +177,7 @@ namespace Catel.Windows.Interactivity
         /// <summary>
         /// Using a DependencyProperty as the backing store for UpdateBindingOnTextChanged.  This enables animation, styling, binding, etc...
         /// </summary>
-        public static readonly DependencyProperty UpdateBindingOnTextChangedProperty = DependencyProperty.Register("UpdateBindingOnTextChanged",
+        public static readonly DependencyProperty UpdateBindingOnTextChangedProperty = DependencyProperty.Register(nameof(UpdateBindingOnTextChanged),
             typeof(bool), typeof(NumericTextBox), new PropertyMetadata(true));
 
         /// <summary>

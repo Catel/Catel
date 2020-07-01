@@ -18,7 +18,7 @@ namespace Catel.Windows.Controls
     /// should be visible for the current mode and
     /// </summary>
 #if NET || NETCORE
-    [System.Windows.Data.ValueConversion(typeof(InfoBarMessageControlMode), typeof(Visibility), ParameterType = typeof(InfoBarMessageControlMode))]
+    [System.Windows.Data.ValueConversion(typeof(InfoBarMessageControlMode), typeof(object), ParameterType = typeof(InfoBarMessageControlMode))]
 #endif
     public class InfoBarMessageControlVisibilityConverter : IValueConverter
     {

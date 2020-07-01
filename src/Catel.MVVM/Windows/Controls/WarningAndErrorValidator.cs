@@ -129,7 +129,7 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// DependencyProperty definition as the backing store for Source.
         /// </summary>
-        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(object), typeof(WarningAndErrorValidator),
+        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(nameof(Source), typeof(object), typeof(WarningAndErrorValidator),
             new PropertyMetadata(null, (sender, e) => ((WarningAndErrorValidator)sender).UpdateSource(e.OldValue, e.NewValue)));
 
 #if NET || NETCORE
@@ -146,7 +146,7 @@ namespace Catel.Windows.Controls
         /// <summary>
         /// DependencyProperty definition as the backing store for AutomaticallyRegisterToInfoBarMessageControl.
         /// </summary>
-        public static readonly DependencyProperty AutomaticallyRegisterToInfoBarMessageControlProperty = DependencyProperty.Register("AutomaticallyRegisterToInfoBarMessageControl",
+        public static readonly DependencyProperty AutomaticallyRegisterToInfoBarMessageControlProperty = DependencyProperty.Register(nameof(AutomaticallyRegisterToInfoBarMessageControl),
             typeof(bool), typeof(WarningAndErrorValidator), new PropertyMetadata(true));
 #endif
 

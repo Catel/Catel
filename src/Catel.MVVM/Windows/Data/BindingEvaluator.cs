@@ -40,7 +40,7 @@ namespace Catel.Windows.Data
 
         // Using a DependencyProperty as the backing store for Value.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.Register("Value", typeof(object), typeof(BindingEvaluator), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Value), typeof(object), typeof(BindingEvaluator), new PropertyMetadata(null));
     }
 }
 
