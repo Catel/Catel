@@ -133,6 +133,12 @@ public class GitHubPagesProcessor : ProcessorBase
 
         foreach (var gitHubPage in BuildContext.GitHubPages.Items)
         {
+            if (!ShouldDeployProject(BuildContext, gitHubPage))
+            {
+                CakeContext.Information("GitHub page '{0}' should not be deployed", gitHubPage);
+                continue;
+            }
+
             BuildContext.CakeContext.LogSeparator("Packaging GitHub pages '{0}'", gitHubPage);
 
             var projectFileName = string.Format("./src/{0}/{0}.csproj", gitHubPage);
@@ -203,7 +209,7 @@ public class GitHubPagesProcessor : ProcessorBase
             CakeContext.Information("2) Updating the GitHub pages branch with latest source");
 
             // Special directory we need to distribute (e.g. output\Release\Blazorc.PatternFly.Example\Blazorc.PatternFly.Example\dist)
-            var sourceDirectory = string.Format("{0}/{1}/{1}/dist", BuildContext.General.OutputRootDirectory, gitHubPage);
+            var sourceDirectory = string.Format("{0}/{1}/wwwroot", BuildContext.General.OutputRootDirectory, gitHubPage);
             var sourcePattern = string.Format("{0}/**/*", sourceDirectory);
 
             CakeContext.Debug("Copying all files from '{0}' => '{1}'", sourcePattern, temporaryDirectory);
