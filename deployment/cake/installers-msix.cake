@@ -62,7 +62,9 @@ public class MsixInstaller : IInstaller
 
         BuildContext.CakeContext.LogSeparator("Packaging app '{0}' using MSIX", projectName);
 
-        var installersOnDeploymentsShare = System.IO.Path.Combine(BuildContext.Wpf.DeploymentsShare, projectName, channel, "msix");
+        var deploymentShare = BuildContext.Wpf.GetDeploymentShareForProject(projectName);
+
+        var installersOnDeploymentsShare = System.IO.Path.Combine(deploymentShare, channel, "msix");
         BuildContext.CakeContext.CreateDirectory(installersOnDeploymentsShare);
 
         var setupSuffix = BuildContext.Installer.GetDeploymentChannelSuffix();

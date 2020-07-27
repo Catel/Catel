@@ -106,8 +106,10 @@ public class SquirrelInstaller : IInstaller
             BuildContext.CakeContext.MoveFile(sourcePackageFileName, targetPackageFileName);
         }
         
+        var deploymentShare = BuildContext.Wpf.GetDeploymentShareForProject(projectName);
+
         // Copy deployments share to the intermediate root so we can locally create the Squirrel releases
-        var releasesSourceDirectory = System.IO.Path.Combine(BuildContext.Wpf.DeploymentsShare, projectName, channel);
+        var releasesSourceDirectory = System.IO.Path.Combine(deploymentShare, channel);
         var releasesTargetDirectory = squirrelReleasesRoot;
 
         BuildContext.CakeContext.Information("Copying releases from '{0}' => '{1}'", releasesSourceDirectory, releasesTargetDirectory);
