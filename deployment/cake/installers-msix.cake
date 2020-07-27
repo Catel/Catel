@@ -45,7 +45,7 @@ public class MsixInstaller : IInstaller
         var msixTemplateDirectory = System.IO.Path.Combine(".", "deployment", "msix", projectName);
         if (!BuildContext.CakeContext.DirectoryExists(msixTemplateDirectory))
         {
-            BuildContext.CakeContext.Information("Skip packaging of app '{0}' using MSIX since no MSIX template is present");
+            BuildContext.CakeContext.Information($"Skip packaging of app '{projectName}' using MSIX since no MSIX template is present");
             return;
         }
 
@@ -60,7 +60,7 @@ public class MsixInstaller : IInstaller
             BuildContext.CakeContext.Warning("No sign tool is defined, MSIX will not be installable to (most or all) users");
         }
 
-        BuildContext.CakeContext.LogSeparator("Packaging app '{0}' using MSIX", projectName);
+        BuildContext.CakeContext.LogSeparator($"Packaging app '{projectName}' using MSIX");
 
         var deploymentShare = BuildContext.Wpf.GetDeploymentShareForProject(projectName);
 
