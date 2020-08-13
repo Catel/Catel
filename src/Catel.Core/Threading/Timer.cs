@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Timer.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#define USE_INTERNAL_TIMER
-
-namespace Catel.Threading
+﻿namespace Catel.Threading
 {
     using System;
     using System.Threading;
@@ -46,9 +38,7 @@ namespace Catel.Threading
         private readonly object _lock = new object();
         private System.Threading.CancellationTokenSource _cancellationTokenSource;
 
-#if USE_INTERNAL_TIMER
         private System.Threading.Timer _timer;
-#endif
         #endregion
 
         #region Constructors
@@ -110,10 +100,10 @@ namespace Catel.Threading
 
         #region Properties
         /// <summary>
-        /// Gets or sets the interval.
+        /// Gets the interval.
         /// </summary>
         /// <value>The interval.</value>
-        public int Interval { get; set; }
+        public int Interval { get; private set; }
         #endregion
 
         #region Events
@@ -121,7 +111,7 @@ namespace Catel.Threading
         /// Occurs when the interval changes.
         /// </summary>
         public event EventHandler<EventArgs> Changed;
- 
+
         /// <summary>
         /// Occurs when the interval elapses.
         /// </summary>
@@ -165,7 +155,6 @@ namespace Catel.Threading
             else
             {
                 // Invoke after due time
-#if USE_INTERNAL_TIMER
                 lock (_lock)
                 {
                     if (_timer != null)
@@ -173,18 +162,10 @@ namespace Catel.Threading
                         _timer.Change(dueTime, Timeout.InfiniteTimeSpan);
                     }
                 }
-#else
-                var delayTask = TaskShim.Delay(dueTime, cancellationToken);
-                delayTask.ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
-#endif
             }
 
             // Note: don't use SafeInvoke, this event could be raised a *lot*
-            var changed = Changed;
-            if (changed != null)
-            {
-                changed(this, EventArgs.Empty);
-            }
+            Changed?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -198,20 +179,19 @@ namespace Catel.Threading
 
             var cancellationToken = GetCancellationToken();
 
-#if USE_INTERNAL_TIMER
             lock (_lock)
             {
-                if (_timer != null)
+                if (_timer is null)
+                {
+#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
+                    _timer = new System.Threading.Timer(OnTimerTick, cancellationToken, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
+                }
+                else
                 {
                     _timer.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
-                    _timer = null;
                 }
-
-#pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
-                _timer = new System.Threading.Timer(OnTimerTick, cancellationToken, Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
-#pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
             }
-#endif
 
             Interval = (int)interval.TotalMilliseconds;
         }
@@ -233,18 +213,10 @@ namespace Catel.Threading
                 return;
             }
 
-#if USE_INTERNAL_TIMER
             lock (_lock)
             {
-                if (_timer != null)
-                {
-                    _timer.Change(Interval, Timeout.Infinite);
-                }
+                _timer?.Change(Interval, Timeout.Infinite);
             }
-#else
-            var delayTask = TaskShim.Delay(Interval, cancellationToken);
-            delayTask.ContinueWith(ContinueTimer, cancellationToken, cancellationToken);
-#endif
         }
 
         /// <summary>
@@ -261,16 +233,11 @@ namespace Catel.Threading
                 }
             }
 
-#if USE_INTERNAL_TIMER
             lock (_lock)
             {
-                if (_timer != null)
-                {
-                    _timer.Change(Timeout.Infinite, Timeout.Infinite);
-                    _timer = null;
-                }
+                _timer?.Change(Timeout.Infinite, Timeout.Infinite);
+                _timer = null;
             }
-#endif
         }
 
         private CancellationToken GetCancellationToken()
@@ -289,9 +256,8 @@ namespace Catel.Threading
         /// <summary>
         /// Continues the timer.
         /// </summary>
-        /// <param name="t">The task.</param>
         /// <param name="state">The state which must be the cancellation token.</param>
-        private void ContinueTimer(Task t, object state)
+        private void ContinueTimer(object state)
         {
             var cancellationToken = (CancellationToken)state;
             if (cancellationToken.IsCancellationRequested)
@@ -312,16 +278,9 @@ namespace Catel.Threading
         /// </summary>
         private void TimerElapsed()
         {
-            var elapsed = Elapsed;
-            if (elapsed != null)
-            {
-                elapsed(this, EventArgs.Empty);
-            }
+            Elapsed?.Invoke(this, EventArgs.Empty);
 
-            if (_timerCallback != null)
-            {
-                _timerCallback(_timerState);
-            }
+            _timerCallback?.Invoke(_timerState);
         }
 
         /// <summary>
@@ -332,12 +291,10 @@ namespace Catel.Threading
             Stop();
         }
 
-#if USE_INTERNAL_TIMER
         private void OnTimerTick(object state)
         {
-            ContinueTimer(null, state);
+            ContinueTimer(state);
         }
-#endif
-#endregion
+        #endregion
     }
 }
