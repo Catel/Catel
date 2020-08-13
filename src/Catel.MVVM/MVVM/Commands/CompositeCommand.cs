@@ -398,7 +398,7 @@ namespace Catel.MVVM
                 ViewModel.ClosedAsync -= OnViewModelClosedAsync;
                 ViewModel = null;
 
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
         }
         #endregion

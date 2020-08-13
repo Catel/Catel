@@ -432,7 +432,7 @@ namespace Catel.Windows.Controls
 
         protected virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         /// <summary>

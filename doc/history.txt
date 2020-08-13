@@ -43,6 +43,7 @@ Added/fixed
 (-) #1239 Move DragAdorner behavior to Orchestra instead of Catel
 (-) #1409 Remove ApiCop feature, we will implement this in Catel.Analyzers instead
 (-) #1492 Remove ModelBase.SetValue(string, object, bool)
+(-) #1638 Remove xplat shims (such as TaskShim, Timer, etc)
 
 Platform support changes
 ========================

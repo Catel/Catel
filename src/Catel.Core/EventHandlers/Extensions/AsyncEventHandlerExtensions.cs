@@ -58,7 +58,7 @@ namespace Catel
                     var tasks = (from eventListener in eventListeners
                                  select eventListener(sender, e)).ToArray();
 
-                    await TaskShim.WhenAll(tasks);
+                    await Task.WhenAll(tasks);
                 }
                 catch (Exception ex)
                 {

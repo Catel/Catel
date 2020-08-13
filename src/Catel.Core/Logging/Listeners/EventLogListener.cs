@@ -101,7 +101,7 @@ namespace Catel.Logging
                 // Swallow
             }
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         private static EventLogEntryType ChooseEventLogEntryType(LogEvent logEvent)

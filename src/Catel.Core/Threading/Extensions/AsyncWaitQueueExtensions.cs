@@ -30,7 +30,7 @@ namespace Catel.Threading
         {
             if (token.IsCancellationRequested)
             {
-                return TaskHelper<T>.Canceled;
+                return Task.FromCanceled<T>(token);
             }
 
             var ret = @this.EnqueueAsync();

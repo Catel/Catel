@@ -126,91 +126,91 @@ namespace Catel.MVVM.Auditing
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
             AuditingManager.OnCommandExecuted((IViewModel)sender, e.CommandPropertyName, e.Command, e.CommandParameter);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         private static Task OnViewModelInitializedAsync(object sender, EventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
             AuditingManager.OnViewModelInitialized((IViewModel)sender);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         private static Task OnViewModelSavingAsync(object sender, SavingEventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
             AuditingManager.OnViewModelSaving((IViewModel)sender);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         private static Task OnViewModelSavedAsync(object sender, EventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
             AuditingManager.OnViewModelSaved((IViewModel)sender);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         private static Task OnViewModelCancelingAsync(object sender, CancelingEventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
             AuditingManager.OnViewModelCanceling((IViewModel)sender);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         private static Task OnViewModelCanceledAsync(object sender, EventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
             AuditingManager.OnViewModelCanceled((IViewModel)sender);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         private static Task OnViewModelClosingAsync(object sender, EventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
             AuditingManager.OnViewModelClosing((IViewModel)sender);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         private static Task OnViewModelClosedAsync(object sender, EventArgs e)
         {
             if (!AuditingManager.IsAuditingEnabled)
             {
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
             var viewModel = (IViewModel)sender;
@@ -218,7 +218,7 @@ namespace Catel.MVVM.Auditing
 
             UnsubscribeEvents(viewModel);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
     }
 }

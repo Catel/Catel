@@ -755,7 +755,7 @@ namespace Catel.MVVM
         {
             ((IRelationalViewModel)this).UnregisterChildViewModel((IViewModel)sender);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -1243,7 +1243,7 @@ namespace Catel.MVVM
         /// </returns>
         protected virtual Task<bool> CancelAsync()
         {
-            return TaskHelper<bool>.FromResult(true);
+            return Task<bool>.FromResult(true);
         }
 
         /// <summary>
@@ -1254,7 +1254,7 @@ namespace Catel.MVVM
         /// </returns>
         protected virtual Task<bool> SaveAsync()
         {
-            return TaskHelper<bool>.FromResult(true);
+            return Task<bool>.FromResult(true);
         }
 
         /// <summary>
@@ -1272,7 +1272,7 @@ namespace Catel.MVVM
         /// </summary>
         protected virtual Task CloseAsync()
         {
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -1361,7 +1361,7 @@ namespace Catel.MVVM
         /// </remarks>
         protected virtual Task InitializeAsync()
         {
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         /// <summary>

@@ -310,7 +310,7 @@ namespace Catel.MVVM
         {
             InvalidateCommands(true);
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         private Task OnViewModelClosedAsync(object sender, EventArgs e)
@@ -331,7 +331,7 @@ namespace Catel.MVVM
                 _viewModel = null;
             }
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
         #endregion
     }

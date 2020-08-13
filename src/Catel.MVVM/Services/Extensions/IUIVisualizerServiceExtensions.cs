@@ -198,7 +198,7 @@ namespace Catel.Services
             }
 
             var activated = ActivateWindow(window);
-            return TaskHelper<bool?>.FromResult(activated);
+            return Task<bool?>.FromResult(activated);
         }
 
         /// <summary>

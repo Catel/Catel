@@ -807,7 +807,7 @@ namespace Catel.Reflection
                 {
                     var taskList = taskLists[i];
 
-                    var task = TaskHelper.Run(() =>
+                    var task = Task.Run(() =>
                     {
                         var taskResults = new List<KeyValuePair<Assembly, HashSet<Type>>>();
 
@@ -823,7 +823,7 @@ namespace Catel.Reflection
                     tasks.Add(task);
                 }
 
-                var waitTask = TaskShim.WhenAll(tasks);
+                var waitTask = Task.WhenAll(tasks);
                 waitTask.Wait();
 
                 foreach (var task in tasks)

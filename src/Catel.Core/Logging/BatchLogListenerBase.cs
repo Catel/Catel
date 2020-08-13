@@ -8,6 +8,7 @@ namespace Catel.Logging
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading;
     using System.Threading.Tasks;
     using Threading;
 
@@ -19,7 +20,8 @@ namespace Catel.Logging
         #region Fields
         private readonly object _lock = new object();
 
-        private readonly Catel.Threading.Timer _timer;
+        private readonly Timer _timer;
+        private TimeSpan _timerInterval;
         private List<LogBatchEntry> _logBatch = new List<LogBatchEntry>();
 
         private bool _isFlushing;
@@ -67,8 +69,12 @@ namespace Catel.Logging
         /// </value>
         protected TimeSpan Interval
         {
-            get { return TimeSpan.FromMilliseconds(_timer.Interval); }
-            set { _timer.Change(value, value); }
+            get { return _timerInterval; }
+            set 
+            {
+                _timerInterval = value;
+                _timer.Change(value, value);
+            }
         }
 
         /// <summary>
@@ -182,7 +188,7 @@ namespace Catel.Logging
         /// <returns>Task so this can be done asynchronously.</returns>
         protected virtual Task WriteBatchAsync(List<LogBatchEntry> batchEntries)
         {
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
         #endregion
     }

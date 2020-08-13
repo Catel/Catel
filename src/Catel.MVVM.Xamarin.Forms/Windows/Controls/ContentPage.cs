@@ -176,7 +176,7 @@ namespace Catel.Windows.Controls
         /// <param name="e">The <see cref="System.EventArgs" /> instance containing the event data.</param>
         protected virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         /// <summary>

@@ -188,7 +188,7 @@ namespace Catel.MVVM
         /// </value>
         public Task Task
         {
-            get { return _task ?? TaskHelper.Completed; }
+            get { return _task ?? Task.CompletedTask; }
         }
         #endregion
 

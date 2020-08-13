@@ -64,7 +64,7 @@
 
                 for (int i = 0; i < 30; i++)
                 {
-                    tasks.Add(TaskHelper.Run(() => fastMemberInvoker.TryGetPropertyValue(instance, $"Int{i + 1:D2}", out int _)));
+                    tasks.Add(Task.Run(() => fastMemberInvoker.TryGetPropertyValue(instance, $"Int{i + 1:D2}", out int _)));
                 }
 
                 Task.WaitAll(tasks.ToArray());

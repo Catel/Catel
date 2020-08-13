@@ -62,7 +62,7 @@ namespace Catel.Threading
         public AsyncLock(IAsyncWaitQueue<IDisposable> queue)
         {
             _queue = queue;
-            _cachedKeyTask = TaskShim.FromResult<IDisposable>(new Key(this));
+            _cachedKeyTask = Task.FromResult<IDisposable>(new Key(this));
             _mutex = new object();
         }
 

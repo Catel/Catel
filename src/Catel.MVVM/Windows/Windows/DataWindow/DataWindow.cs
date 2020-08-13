@@ -444,7 +444,7 @@ namespace Catel.Windows
                 return OnOkExecuteAsync();
             }
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -480,7 +480,7 @@ namespace Catel.Windows
                 return OnCancelExecuteAsync();
             }
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -519,7 +519,7 @@ namespace Catel.Windows
                 return OnApplyExecuteAsync();
             }
 
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -1031,7 +1031,7 @@ namespace Catel.Windows
 
         protected virtual Task OnViewModelClosedAsync(object sender, ViewModelClosedEventArgs e)
         {
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         /// <summary>

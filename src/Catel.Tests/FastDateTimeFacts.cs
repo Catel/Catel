@@ -40,7 +40,7 @@ namespace Catel.Tests
 
             Assert.IsTrue(delta1.TotalMilliseconds < 15);
 
-            await TaskShim.Delay(5000);
+            await Task.Delay(5000);
 
             var normalNow2 = normal();
             var fastNow2 = fast();

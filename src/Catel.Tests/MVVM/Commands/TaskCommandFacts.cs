@@ -130,7 +130,7 @@ namespace Catel.Tests.MVVM.Commands
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            await TaskShim.Delay(TaskDelay, cancellationToken);
+            await Task.Delay(TaskDelay, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
         }
@@ -139,7 +139,7 @@ namespace Catel.Tests.MVVM.Commands
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            await TaskShim.Delay(500, cancellationToken);
+            await Task.Delay(500, cancellationToken);
 
             throw new Exception("This is an expected exception");
         }

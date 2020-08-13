@@ -10,6 +10,7 @@ namespace Catel
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Cryptography;
     using System.Threading.Tasks;
 
     using Catel.Logging;
@@ -80,7 +81,7 @@ namespace Catel
                     actions.Add(() => ExecuteBatch(taskName, innerI.ToString(), batch, actionToInvoke));
                 }
 
-                TaskHelper.RunAndWait(actions.ToArray());
+                Parallel.Invoke(actions.ToArray());
             }
 
             Log.Debug($"[{taskName}] Executed '{items.Count.ToString()}' actions in parallel in '{batches.Count.ToString()}' batches of '{itemsPerBatch.ToString()}' items per batch");
@@ -129,9 +130,14 @@ namespace Catel
 
             Log.Debug($"[{taskName}] Executing '{tasks.Count.ToString()}' async tasks in parallel in batches of size '{batchSize.ToString()}'");
 
-            for (int i = 0; i < tasks.Count; i = i + batchSize)
+            for (var i = 0; i < tasks.Count; i = i + batchSize)
             {
-                await TaskHelper.RunAndWaitAsync(tasks.Skip(i).Take(Math.Min(batchSize, tasks.Count - i)).ToArray());
+                var batchTasks = tasks.Skip(i).Take(Math.Min(batchSize, tasks.Count - i)).ToArray();
+
+                var runningBatchTasks = (from batchTask in batchTasks
+                                         select batchTask()).ToArray();
+
+                await Task.WhenAll(runningBatchTasks);
             }
         }
     }

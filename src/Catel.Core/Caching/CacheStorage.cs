@@ -9,6 +9,7 @@ namespace Catel.Caching
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.Threading;
     using System.Threading.Tasks;
     using Policies;
     using Threading;
@@ -51,7 +52,7 @@ namespace Catel.Caching
         /// <summary>
         /// The timer that is being executed to invalidate the cache.
         /// </summary>
-        private Catel.Threading.Timer _expirationTimer;
+        private Timer _expirationTimer;
 
         /// <summary>
         /// The expiration timer interval.
@@ -161,7 +162,7 @@ namespace Catel.Caching
                     if (_expirationTimer is null)
                     {
                         // Always create timers with infinite, then update them later so we always have a populated timer field
-                        _expirationTimer = new Catel.Threading.Timer(OnTimerElapsed, null, Timeout.Infinite, Timeout.Infinite);
+                        _expirationTimer = new Timer(OnTimerElapsed, null, Timeout.Infinite, Timeout.Infinite);
                     }
 
                     _expirationTimer.Change(timeSpan, timeSpan);

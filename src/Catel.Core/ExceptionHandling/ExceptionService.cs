@@ -561,13 +561,13 @@ namespace Catel.ExceptionHandling
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">The <paramref name="action"/> is <c>null</c>.</exception>
-        public Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<TResult> ProcessAsync<TResult>(Func<TResult> action, CancellationToken cancellationToken = default)
         {
             Argument.IsNotNull("action", action);
 
             try
             {
-                return TaskHelper.Run(action, cancellationToken: cancellationToken);
+                return Task.Run(action, cancellationToken: cancellationToken);
             }
             catch (Exception exception)
             {
@@ -577,7 +577,7 @@ namespace Catel.ExceptionHandling
                 }
             }
 
-            return TaskHelper<TResult>.DefaultValue;
+            return Task.FromResult(default(TResult));
         }
 
         /// <summary>

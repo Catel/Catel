@@ -30,7 +30,7 @@ namespace Catel.ExceptionHandling
         {
             Argument.IsNotNull("exceptionService", exceptionService);
 
-            return TaskHelper.Run(() => exceptionService.HandleException(exception), cancellationToken: cancellationToken);
+            return Task.Run(() => exceptionService.HandleException(exception), cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Catel.ExceptionHandling
 
             return exceptionService.ProcessWithRetryAsync(async () => 
             {
-                await action.ConfigureAwait(TaskHelper.DefaultConfigureAwaitValue);
+                await action;
                 return default(object);
             });
         }
@@ -81,7 +81,7 @@ namespace Catel.ExceptionHandling
             Argument.IsNotNull("exceptionService", exceptionService);
             Argument.IsNotNull("action", action);
 
-            return TaskHelper.Run(() => exceptionService.ProcessWithRetry(action), cancellationToken: cancellationToken);
+            return Task.Run(() => exceptionService.ProcessWithRetry(action), cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Catel.ExceptionHandling
             Argument.IsNotNull("exceptionService", exceptionService);
             Argument.IsNotNull("action", action);
 
-            return TaskHelper.Run(() => exceptionService.ProcessWithRetry(action), cancellationToken: cancellationToken);
+            return Task.Run(() => exceptionService.ProcessWithRetry(action), cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Catel.ExceptionHandling
 
             return exceptionService.ProcessWithRetryAsync(async () =>
             {
-                await action().ConfigureAwait(TaskHelper.DefaultConfigureAwaitValue);
+                await action();
                 return default(object);
             });
         }

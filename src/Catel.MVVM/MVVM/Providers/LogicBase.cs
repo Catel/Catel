@@ -884,7 +884,7 @@ namespace Catel.MVVM.Providers
         /// <returns>Task.</returns>
         public virtual Task OnTargetViewUnloadedAsync(object sender, EventArgs e)
         {
-            return TaskHelper.Completed;
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -1040,7 +1040,7 @@ namespace Catel.MVVM.Providers
         {
             if (ViewModel is null)
             {
-                return TaskHelper<bool>.FromResult(true);
+                return Task<bool>.FromResult(true);
             }
 
             return ViewModel.CancelViewModelAsync();
@@ -1071,7 +1071,7 @@ namespace Catel.MVVM.Providers
             var vm = ViewModel;
             if (vm is null)
             {
-                return TaskHelper<bool>.FromResult(true);
+                return Task<bool>.FromResult(true);
             }
 
             return vm.SaveViewModelAsync();
@@ -1168,7 +1168,7 @@ namespace Catel.MVVM.Providers
 
                 Log.Debug($"View '{TargetViewType}' is still closing the view model, awaiting completion");
 
-                await TaskShim.Delay(5);
+                await Task.Delay(5);
             }
         }
 
