@@ -2,8 +2,6 @@
 
 public class MsixInstaller : IInstaller
 {
-    private readonly string _signToolFileName;
-
     public MsixInstaller(BuildContext buildContext)
     {
         BuildContext = buildContext;
@@ -17,8 +15,6 @@ public class MsixInstaller : IInstaller
             // In the future, check if Msix is installed. Log error if not
             IsAvailable = IsEnabled;
         }
-
-        _signToolFileName = FindSignToolFileName();
     }
 
     public BuildContext BuildContext { get; private set; }
@@ -46,10 +42,10 @@ public class MsixInstaller : IInstaller
             return;
         }
 
-        var msixTemplateDirectory = string.Format("./deployment/msix/{0}", projectName);
+        var msixTemplateDirectory = System.IO.Path.Combine(".", "deployment", "msix", projectName);
         if (!BuildContext.CakeContext.DirectoryExists(msixTemplateDirectory))
         {
-            BuildContext.CakeContext.Information("Skip packaging of app '{0}' using MSIX since no MSIX template is present");
+            BuildContext.CakeContext.Information($"Skip packaging of app '{projectName}' using MSIX since no MSIX template is present");
             return;
         }
 
@@ -64,16 +60,18 @@ public class MsixInstaller : IInstaller
             BuildContext.CakeContext.Warning("No sign tool is defined, MSIX will not be installable to (most or all) users");
         }
 
-        BuildContext.CakeContext.LogSeparator("Packaging app '{0}' using MSIX", projectName);
+        BuildContext.CakeContext.LogSeparator($"Packaging app '{projectName}' using MSIX");
 
-        var installersOnDeploymentsShare = $"{BuildContext.Wpf.DeploymentsShare}/{projectName}/{channel}/msix";
+        var deploymentShare = BuildContext.Wpf.GetDeploymentShareForProject(projectName);
+
+        var installersOnDeploymentsShare = System.IO.Path.Combine(deploymentShare, channel, "msix");
         BuildContext.CakeContext.CreateDirectory(installersOnDeploymentsShare);
 
         var setupSuffix = BuildContext.Installer.GetDeploymentChannelSuffix();
 
-        var msixOutputRoot = string.Format("{0}/msix/{1}", BuildContext.General.OutputRootDirectory, projectName);
-        var msixReleasesRoot = string.Format("{0}/releases", msixOutputRoot);
-        var msixOutputIntermediate = string.Format("{0}/intermediate", msixOutputRoot);
+        var msixOutputRoot = System.IO.Path.Combine(BuildContext.General.OutputRootDirectory, "msix", projectName);
+        var msixReleasesRoot = System.IO.Path.Combine(msixOutputRoot, "releases");
+        var msixOutputIntermediate = System.IO.Path.Combine(msixOutputRoot, "intermediate");
 
         BuildContext.CakeContext.CreateDirectory(msixReleasesRoot);
         BuildContext.CakeContext.CreateDirectory(msixOutputIntermediate);
@@ -82,7 +80,7 @@ public class MsixInstaller : IInstaller
         BuildContext.CakeContext.CopyDirectory(msixTemplateDirectory, msixOutputIntermediate);
 
         var msixInstallerName = $"{projectName}_{BuildContext.General.Version.FullSemVer}.msix";
-        var installerSourceFile = $"{msixReleasesRoot}/{msixInstallerName}";
+        var installerSourceFile = System.IO.Path.Combine(msixReleasesRoot, msixInstallerName);
 
         var variables = new Dictionary<string, string>();
         variables["[PRODUCT]"] = projectName;
@@ -102,12 +100,12 @@ public class MsixInstaller : IInstaller
         variables["[URL_MSIX]"] = $"{UpdateUrl}/{projectName}/{channel}/msix/{msixInstallerName}".ToLower();
 
         // Installer file
-        var msixScriptFileName = string.Format("{0}/AppxManifest.xml", msixOutputIntermediate);
+        var msixScriptFileName = System.IO.Path.Combine(msixOutputIntermediate, "AppxManifest.xml");
         
         ReplaceVariablesInFile(msixScriptFileName, variables);
 
         // Update file
-        var msixUpdateScriptFileName = string.Format("{0}/App.AppInstaller", msixOutputIntermediate);
+        var msixUpdateScriptFileName = System.IO.Path.Combine(msixOutputIntermediate, "App.AppInstaller");
         if (BuildContext.CakeContext.FileExists(msixUpdateScriptFileName))
         {
             ReplaceVariablesInFile(msixUpdateScriptFileName, variables);
@@ -128,10 +126,7 @@ public class MsixInstaller : IInstaller
         filesToSign.AddRange(BuildContext.CakeContext.GetFiles($"{appTargetDirectory}/**/*.dll").Select(x => x.FullPath));
         filesToSign.AddRange(BuildContext.CakeContext.GetFiles($"{appTargetDirectory}/**/*.exe").Select(x => x.FullPath));
         
-        foreach (var fileToSign in filesToSign)
-        {
-            SignFile(signToolCommand, fileToSign);
-        }
+        SignFiles(BuildContext, signToolCommand, filesToSign);
 
         BuildContext.CakeContext.Information("Generating MSIX packages using MakeAppX...");
 
@@ -161,7 +156,7 @@ public class MsixInstaller : IInstaller
 
         // As documented at https://docs.microsoft.com/en-us/windows/msix/package/sign-app-package-using-signtool, we 
         // must *always* specify the hash algorithm (/fd) for MSIX files
-        SignFile(signToolCommand, installerSourceFile, "/fd SHA256");
+        SignFile(BuildContext, signToolCommand, installerSourceFile, "/fd SHA256");
 
         // Always copy the AppInstaller if available
         if (BuildContext.CakeContext.FileExists(msixUpdateScriptFileName))
@@ -169,7 +164,7 @@ public class MsixInstaller : IInstaller
             BuildContext.CakeContext.Information("Copying update manifest to output directory");
 
             // - App.AppInstaller => [projectName].AppInstaller
-            BuildContext.CakeContext.CopyFile(msixUpdateScriptFileName, $"{msixReleasesRoot}/{projectName}.AppInstaller");
+            BuildContext.CakeContext.CopyFile(msixUpdateScriptFileName, System.IO.Path.Combine(msixReleasesRoot, $"{projectName}.AppInstaller"));
         }
 
         if (BuildContext.Wpf.UpdateDeploymentsShare)
@@ -180,13 +175,13 @@ public class MsixInstaller : IInstaller
             // - [ProjectName]_[version].msix => [projectName]_[version].msix
             // - [ProjectName]_[version].msix => [projectName]_[channel].msix
 
-            BuildContext.CakeContext.CopyFile(installerSourceFile, $"{installersOnDeploymentsShare}/{msixInstallerName}");
-            BuildContext.CakeContext.CopyFile(installerSourceFile, $"{installersOnDeploymentsShare}/{projectName}{setupSuffix}.msix");
+            BuildContext.CakeContext.CopyFile(installerSourceFile, System.IO.Path.Combine(installersOnDeploymentsShare, msixInstallerName));
+            BuildContext.CakeContext.CopyFile(installerSourceFile, System.IO.Path.Combine(installersOnDeploymentsShare, $"{projectName}{setupSuffix}.msix"));
 
             if (BuildContext.CakeContext.FileExists(msixUpdateScriptFileName))
             {
                 // - App.AppInstaller => [projectName].AppInstaller
-                BuildContext.CakeContext.CopyFile(msixUpdateScriptFileName, $"{installersOnDeploymentsShare}/{projectName}.AppInstaller");
+                BuildContext.CakeContext.CopyFile(msixUpdateScriptFileName, System.IO.Path.Combine(installersOnDeploymentsShare, $"{projectName}.AppInstaller"));
             }
         }
     }
@@ -203,94 +198,12 @@ public class MsixInstaller : IInstaller
         System.IO.File.WriteAllText(fileName, fileContents);
     }
 
-    private void SignFile(string signToolCommand, string fileName, string additionalCommandLineArguments = null)
-    {
-        if (string.IsNullOrWhiteSpace(signToolCommand))
-        {
-            return;
-        }
-        
-        // Check
-        var checkProcessSettings = new ProcessSettings
-        {
-            Arguments = $"verify /pa \"{fileName}\""
-        };
-
-        using (var checkProcess = BuildContext.CakeContext.StartAndReturnProcess(_signToolFileName, checkProcessSettings))
-        {
-            checkProcess.WaitForExit();
-            var exitCode = checkProcess.GetExitCode();
-
-            if (exitCode == 0)
-            {
-                BuildContext.CakeContext.Information($"File '{fileName}' is already signed, skipping...");
-                BuildContext.CakeContext.Information(string.Empty);
-                return;
-            }
-
-            BuildContext.CakeContext.Information(string.Empty);
-        }
-
-        // Sign
-        if (!string.IsNullOrWhiteSpace(additionalCommandLineArguments))
-        {
-            signToolCommand += $" {additionalCommandLineArguments}";
-        }
-
-        var finalCommand = $"{signToolCommand} \"{fileName}\"";
-
-        BuildContext.CakeContext.Information($"Signing '{fileName}' using '{finalCommand}'");
-
-        var signProcessSettings = new ProcessSettings
-        {
-            Arguments = finalCommand
-        };
-
-        using (var signProcess = BuildContext.CakeContext.StartAndReturnProcess(_signToolFileName, signProcessSettings))
-        {
-            signProcess.WaitForExit();
-            var exitCode = signProcess.GetExitCode();
-
-            if (exitCode != 0)
-            {
-                throw new Exception($"Signing failed, exit code is '{exitCode}'");
-            }
-        }
-    }
-
-    private string FindSignToolFileName()
-    {
-        var directory = FindLatestWindowsKitsDirectory();
-        if (directory != null)
-        {
-            return $"{directory}\\x64\\signtool.exe";
-        }
-
-        return null;
-    }
-
     private string FindLatestMakeAppxFileName()
     {
-        var directory = FindLatestWindowsKitsDirectory();
+        var directory = FindLatestWindowsKitsDirectory(BuildContext);
         if (directory != null)
         {
-            return $"{directory}\\x64\\makeappx.exe";
-        }
-
-        return null;
-    }
-
-    private string FindLatestWindowsKitsDirectory()
-    {
-        // Find highest number with 10.0, e.g. 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x64\makeappx.exe'
-        var directories = BuildContext.CakeContext.GetDirectories($@"C:/Program Files (x86)/Windows Kits/10/bin/10.0.*");
-        
-        //BuildContext.CakeContext.Information($"Found '{directories.Count}' potential directories for MakeAppX.exe");
-
-        var directory = directories.LastOrDefault();
-        if (directory != null)
-        {
-            return directory.FullPath;
+            return System.IO.Path.Combine(directory, "x64", "makeappx.exe");
         }
 
         return null;

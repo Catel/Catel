@@ -29,31 +29,41 @@ public class InnoSetupInstaller : IInstaller
             return;
         }
 
-        var innoSetupTemplateDirectory = string.Format("./deployment/innosetup/{0}", projectName);
+        var innoSetupTemplateDirectory = System.IO.Path.Combine(".", "deployment", "innosetup", projectName);
         if (!BuildContext.CakeContext.DirectoryExists(innoSetupTemplateDirectory))
         {
-            BuildContext.CakeContext.Information("Skip packaging of app '{0}' using Inno Setup since no Inno Setup template is present");
+            BuildContext.CakeContext.Information($"Skip packaging of app '{projectName}' using Inno Setup since no Inno Setup template is present");
             return;
         }
 
-        BuildContext.CakeContext.LogSeparator("Packaging app '{0}' using Inno Setup", projectName);
+        BuildContext.CakeContext.LogSeparator($"Packaging app '{projectName}' using Inno Setup");
 
-        var installersOnDeploymentsShare = string.Format("{0}/{1}/installer", BuildContext.Wpf.DeploymentsShare, projectName);
+        var deploymentShare = BuildContext.Wpf.GetDeploymentShareForProject(projectName);
+
+        var installersOnDeploymentsShare = System.IO.Path.Combine(deploymentShare, "installer");
         BuildContext.CakeContext.CreateDirectory(installersOnDeploymentsShare);
 
         var setupSuffix = BuildContext.Installer.GetDeploymentChannelSuffix();
 
-        var innoSetupOutputRoot = string.Format("{0}/innosetup/{1}", BuildContext.General.OutputRootDirectory, projectName);
-        var innoSetupReleasesRoot = string.Format("{0}/releases", innoSetupOutputRoot);
-        var innoSetupOutputIntermediate = string.Format("{0}/intermediate", innoSetupOutputRoot);
+        var innoSetupOutputRoot = System.IO.Path.Combine(BuildContext.General.OutputRootDirectory, "innosetup", projectName);
+        var innoSetupReleasesRoot = System.IO.Path.Combine(innoSetupOutputRoot, "releases");
+        var innoSetupOutputIntermediate = System.IO.Path.Combine(innoSetupOutputRoot, "intermediate");
 
         BuildContext.CakeContext.CreateDirectory(innoSetupReleasesRoot);
         BuildContext.CakeContext.CreateDirectory(innoSetupOutputIntermediate);
 
+        // Copy all files to the intermediate directory so Inno Setup knows what to do
+        var appSourceDirectory = string.Format("{0}/{1}/**/*", BuildContext.General.OutputRootDirectory, projectName);
+        var appTargetDirectory = innoSetupOutputIntermediate;
+
+        BuildContext.CakeContext.Information("Copying files from '{0}' => '{1}'", appSourceDirectory, appTargetDirectory);
+
+        BuildContext.CakeContext.CopyFiles(appSourceDirectory, appTargetDirectory, true);
+
         // Set up InnoSetup template
         BuildContext.CakeContext.CopyDirectory(innoSetupTemplateDirectory, innoSetupOutputIntermediate);
 
-        var innoSetupScriptFileName = string.Format("{0}/setup.iss", innoSetupOutputIntermediate);
+        var innoSetupScriptFileName = System.IO.Path.Combine(innoSetupOutputIntermediate, "setup.iss");
         var fileContents = System.IO.File.ReadAllText(innoSetupScriptFileName);
         fileContents = fileContents.Replace("[CHANNEL_SUFFIX]", setupSuffix);
         fileContents = fileContents.Replace("[CHANNEL]", BuildContext.Installer.GetDeploymentChannelSuffix(" (", ")"));
@@ -70,14 +80,6 @@ public class InnoSetupInstaller : IInstaller
         fileContents = fileContents.Replace("[SIGNTOOL]", signTool);
         System.IO.File.WriteAllText(innoSetupScriptFileName, fileContents);
 
-        // Copy all files to the intermediate directory so Inno Setup knows what to do
-        var appSourceDirectory = string.Format("{0}/{1}/**/*", BuildContext.General.OutputRootDirectory, projectName);
-        var appTargetDirectory = innoSetupOutputIntermediate;
-
-        BuildContext.CakeContext.Information("Copying files from '{0}' => '{1}'", appSourceDirectory, appTargetDirectory);
-
-        BuildContext.CakeContext.CopyFiles(appSourceDirectory, appTargetDirectory, true);
-
         BuildContext.CakeContext.Information("Generating Inno Setup packages, this can take a while, especially when signing is enabled...");
 
         BuildContext.CakeContext.InnoSetup(innoSetupScriptFileName, new InnoSetupSettings
@@ -93,9 +95,9 @@ public class InnoSetupInstaller : IInstaller
             // - Setup.exe => [projectName]-[version].exe
             // - Setup.exe => [projectName]-[channel].exe
 
-            var installerSourceFile = $"{innoSetupReleasesRoot}/{projectName}_{BuildContext.General.Version.FullSemVer}.exe";
-            BuildContext.CakeContext.CopyFile(installerSourceFile, string.Format("{0}/{1}_{2}.exe", installersOnDeploymentsShare, projectName, BuildContext.General.Version.FullSemVer));
-            BuildContext.CakeContext.CopyFile(installerSourceFile, string.Format("{0}/{1}{2}.exe", installersOnDeploymentsShare, projectName, setupSuffix));
+            var installerSourceFile = System.IO.Path.Combine(innoSetupReleasesRoot, $"{projectName}_{BuildContext.General.Version.FullSemVer}.exe");
+            BuildContext.CakeContext.CopyFile(installerSourceFile, System.IO.Path.Combine(installersOnDeploymentsShare, $"{projectName}_{BuildContext.General.Version.FullSemVer}.exe"));
+            BuildContext.CakeContext.CopyFile(installerSourceFile, System.IO.Path.Combine(installersOnDeploymentsShare, $"{projectName}{setupSuffix}.exe"));
         }
     }
 }
