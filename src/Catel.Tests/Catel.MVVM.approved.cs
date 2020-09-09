@@ -1,6 +1,6 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Catel.Tests")]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.7", FrameworkDisplayName=".NET Framework 4.7")]
+[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETCoreApp,Version=v3.1", FrameworkDisplayName="")]
 [assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.MVVM")]
 [assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.MVVM.Converters")]
 [assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.MVVM.Providers")]
@@ -1389,15 +1389,6 @@ namespace Catel.MVVM.Converters
         protected virtual object ConvertBack(TConvertBack value, System.Type targetType, object parameter) { }
         protected virtual bool IsConvertable<T>(object value) { }
         public override object ProvideValue(System.IServiceProvider serviceProvider) { }
-    }
-    [System.Windows.Markup.ContentPropertyAttribute("Converters")]
-    public class ValueConverterGroup : Catel.MVVM.Converters.IValueConverter, System.Windows.Data.IValueConverter
-    {
-        public ValueConverterGroup() { }
-        public System.Collections.ObjectModel.ObservableCollection<System.Windows.Data.IValueConverter> Converters { get; }
-        public object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) { }
-        public object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) { }
-        protected virtual System.Type GetTargetType(int converterIndex, System.Type finalTargetType, bool convert) { }
     }
     [System.Windows.Data.ValueConversionAttribute(typeof(object), typeof(object))]
     public class ViewModelToViewConverter : Catel.MVVM.Converters.ValueConverterBase
