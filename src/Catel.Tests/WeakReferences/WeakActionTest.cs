@@ -9,7 +9,7 @@ namespace Catel.Tests
     using System;
     using NUnit.Framework;
 
-    [TestFixture]
+    [TestFixture, Explicit]
     public class WeakActionTest
     {
         #region Test classes

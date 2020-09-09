@@ -220,7 +220,7 @@ namespace Catel.Tests
                 ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => listener.SubscribeToWeakGenericEvent<ViewModelClosedEventArgs>(null, "event", listener.OnPublicEvent));
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakWithAutomaticDetectionOfAllTypes()
             {
                 var source = new EventSource();
@@ -246,7 +246,7 @@ namespace Catel.Tests
                 source.GetType();
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakWithAutomaticDetectionOfAllTypesForPropertyChanged()
             {
                 var source = new EventSource();
@@ -272,7 +272,7 @@ namespace Catel.Tests
                 source.GetType();
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakWithAutomaticDetectionOfAllTypesForCollectionChanged()
             {
                 var source = new EventSource();
@@ -302,7 +302,7 @@ namespace Catel.Tests
         [TestFixture]
         public class TheStaticOverloadsWithoutEventArgsSpecificationMethods
         {
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakWithAutomaticEventArgsDetection()
             {
                 var source = new EventSource();
@@ -328,7 +328,7 @@ namespace Catel.Tests
                 source.GetType();
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakWithAutomaticPropertyChangedEventArgsDetection()
             {
                 var source = new EventSource();
@@ -354,7 +354,7 @@ namespace Catel.Tests
                 source.GetType();
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakWithAutomaticCollectionChangedEventArgsDetection()
             {
                 var source = new EventSource();
@@ -384,7 +384,7 @@ namespace Catel.Tests
         [TestFixture]
         public class TheSubscribeToWeakCollectionChangedEventMethod
         {
-            [TestCase]
+            [TestCase, Explicit]
             public void AutomaticallySubscribesToCollectionChangedWhenEventNameIsNotSpecified()
             {
                 var source = new EventSource();
@@ -410,7 +410,7 @@ namespace Catel.Tests
                 source.GetType();
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void SupportsCustomCollections()
             {
                 var source = new CustomObservableCollection();
@@ -453,7 +453,7 @@ namespace Catel.Tests
             }
 #endif
 
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakWithCollectionChangedEvent()
             {
                 var source = new EventSource();
@@ -483,7 +483,7 @@ namespace Catel.Tests
         [TestFixture]
         public class TheSubscribeToWeakPropertyChangedEventMethod
         {
-            [TestCase]
+            [TestCase, Explicit]
             public void AutomaticallySubscribesToPropertyChangedWhenEventNameIsNotSpecified()
             {
                 var source = new EventSource();
@@ -524,7 +524,7 @@ namespace Catel.Tests
                 Assert.AreEqual(2, listener.PropertyChangedEventCount);
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakWithPropertyChangedEvent()
             {
                 var source = new EventSource();
@@ -554,7 +554,7 @@ namespace Catel.Tests
         [TestFixture]
         public class TheWeakEventListener
         {
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakWithoutAnyInvocation()
             {
                 var source = new EventSource();
@@ -574,7 +574,7 @@ namespace Catel.Tests
                 source.GetType();
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakWithStaticEvents()
             {
                 var listener = new EventListener();
@@ -592,7 +592,7 @@ namespace Catel.Tests
                 Assert.IsFalse(weakEventListener.IsTargetAlive);
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakWithStaticEventHandlers()
             {
                 var source = new EventSource();
@@ -630,7 +630,7 @@ namespace Catel.Tests
                 Assert.AreEqual(1, count);
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakWithPublicActions()
             {
                 var source = new EventSource();
@@ -686,7 +686,7 @@ namespace Catel.Tests
                 source.GetType();
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakWithPublicEvents()
             {
                 var source = new EventSource();
@@ -729,7 +729,7 @@ namespace Catel.Tests
                 }
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakWithPublicEventHandlerSubscribedFromClassItself()
             {
                 var source = new EventSource();
@@ -756,7 +756,7 @@ namespace Catel.Tests
             }
 
 #if NET || NETCORE
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakWithPrivateEventHandlerSubscribedFromClassItself()
             {
                 var source = new EventSource();
