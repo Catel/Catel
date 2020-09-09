@@ -141,7 +141,7 @@ namespace Catel.Tests.Configuration
             }
         }
 
-        [TestCase]
+        [TestCase, Explicit]
         public void CorrectlySerializesConfiguration()
         {
             var dynamicConfiguration = new DynamicConfiguration();

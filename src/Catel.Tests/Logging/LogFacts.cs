@@ -382,7 +382,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message | {0} Parameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
 
             [Test]
@@ -420,7 +420,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message 1 | {0} Parameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
         }
 
@@ -574,7 +574,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message | {0} Parameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
 
             [Test]
@@ -612,7 +612,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message 1 | {0} Parameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
         }
 
@@ -765,7 +765,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message | {0} Parameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
 
             [Test]
@@ -803,7 +803,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message 1 | {0} Parameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
         }
 
@@ -956,7 +956,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message | {0} Parameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
 
             [Test]
@@ -994,7 +994,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message 1 | {0} Parameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
             }
 
             [Test]

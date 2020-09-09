@@ -17,7 +17,7 @@ namespace Catel.Tests.Logging.Configuration
     using Catel.Reflection;
     using NUnit.Framework;
 
-    [TestFixture]
+    [TestFixture, Explicit]
     public class IoLoggingConfigurationSectionFacts
     {
         #region Methods
