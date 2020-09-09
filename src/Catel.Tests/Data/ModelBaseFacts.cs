@@ -43,7 +43,7 @@ namespace Catel.Tests.Data
         [TestFixture]
         public class TheMemoryLeakChecks
         {
-            [TestCase]
+            [TestCase, Explicit]
             public void DoesNotLeakForModelBaseWithPropertiesThatSupportPropertyChanged()
             {
                 var model = new PersonTestModel();
