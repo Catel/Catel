@@ -257,5 +257,40 @@ namespace Catel.Tests.Data
                 return false;
             }
         }
+
+        [TestFixture]
+        public class HandlePrivatePropertyDataRegistrations
+        {
+            public class Person : ModelBase
+            {
+                public string FirstName
+                {
+                    get { return GetValue<string>(FirstNameProperty); }
+                    set { SetValue(FirstNameProperty, value); }
+                }
+
+                private static readonly PropertyData FirstNameProperty = RegisterProperty(nameof(FirstName), typeof(string), null);
+            }
+
+            public class JohnDoe : Person
+            {
+                public string LastName
+                {
+                    get { return GetValue<string>(LastNameProperty); }
+                    set { SetValue(LastNameProperty, value); }
+                }
+
+                private static readonly PropertyData LastNameProperty = RegisterProperty(nameof(LastName), typeof(string), null);
+            }
+
+            [Test]
+            public void CorrectlyRegistersProperties()
+            {
+                var catelTypeInfo = new CatelTypeInfo(typeof(JohnDoe));
+
+                Assert.IsNotNull(catelTypeInfo.GetPropertyData("FirstName"));
+                Assert.IsNotNull(catelTypeInfo.GetPropertyData("LastName"));
+            }
+        }
     }
 }
