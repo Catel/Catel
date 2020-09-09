@@ -8,6 +8,7 @@ namespace Catel.Tests.Reflection
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Runtime.InteropServices;
     using Catel.IoC;
     using Catel.Reflection;
@@ -210,6 +211,84 @@ namespace Catel.Tests.Reflection
                 var fieldInfo = typeof(System.Windows.Window).GetFieldEx("_showingAsDialog");
 
                 Assert.IsNotNull(fieldInfo);
+            }
+        }
+
+        [TestFixture]
+        public class StaticInheritedMembers
+        {
+            public class BaseClass
+            {
+#pragma warning disable CS0169, CS0414
+                private static readonly bool field1 = true;
+
+                private readonly bool field2 = true;
+
+                private static bool Property1 { get; set; }
+
+                private bool Property2 { get; set; }
+
+                private static void Method1()
+                {
+                }
+
+                private void Method2()
+                {
+                }
+#pragma warning restore CS0169, CS0414
+            }
+
+            public class DerivedClass : BaseClass
+            {
+
+            }
+
+            [Test]
+            public void ReturnsStaticFields()
+            {
+                var fields = typeof(DerivedClass).GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true), true);
+
+                Assert.IsTrue(fields.Any(x => x.Name == "field1"));
+            }
+
+            [Test]
+            public void ReturnsInstanceFields()
+            {
+                var fields = typeof(DerivedClass).GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true), true);
+
+                Assert.IsTrue(fields.Any(x => x.Name == "field2"));
+            }
+
+            [Test]
+            public void ReturnsStaticProperties()
+            {
+                var properties = typeof(DerivedClass).GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true), true);
+
+                Assert.IsTrue(properties.Any(x => x.Name == "Property1"));
+            }
+
+            [Test]
+            public void ReturnsInstanceProperties()
+            {
+                var properties = typeof(DerivedClass).GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true), true);
+
+                Assert.IsTrue(properties.Any(x => x.Name == "Property2"));
+            }
+
+            [Test]
+            public void ReturnsStaticMethods()
+            {
+                var methods = typeof(DerivedClass).GetMethodsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true), true);
+
+                Assert.IsTrue(methods.Any(x => x.Name == "Method1"));
+            }
+
+            [Test]
+            public void ReturnsInstanceMethods()
+            {
+                var methods = typeof(DerivedClass).GetMethodsEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true), true);
+
+                Assert.IsTrue(methods.Any(x => x.Name == "Method2"));
             }
         }
     }
