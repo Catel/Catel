@@ -22,7 +22,9 @@ namespace Catel.Tests.Reflection
             {
                 var allAssemblies = TypeCache.InitializedAssemblies;
 
-                Assert.IsFalse(allAssemblies.Any(x => x.ToLower().Contains(".resources.")));
+                var resourceAssemblies = allAssemblies.Where(x => x.ToLower().Contains(".resources.") && !x.ToLower().Contains("resourcemanager")).ToList();
+
+                Assert.AreEqual(0, resourceAssemblies.Count);
             }
         }
 

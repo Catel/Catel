@@ -779,7 +779,7 @@ namespace Catel.Tests.Runtime.Serialization
                 });
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void CanSerializeDictionary()
             {
                 var dictionary = new Dictionary<string, int>();

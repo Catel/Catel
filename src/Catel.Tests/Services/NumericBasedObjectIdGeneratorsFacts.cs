@@ -67,7 +67,7 @@ namespace Catel.Tests.Services
         [TestFixture]
         public class GetUniqueIdentifierForInstance_Method
         {
-            [Test]
+            [Test, Explicit]
             public void Returns_A_Released_Identifier_If_The_Instance_Is_Released_And_Reuse_Is_True()
             {
                 var generator = new IntegerObjectIdGenerator<PersonViewModel1>();
@@ -164,7 +164,7 @@ namespace Catel.Tests.Services
         [TestFixture]
         public class GetUniqueIdentifierForInstance_Method
         {
-            [Test]
+            [Test, Explicit]
             public void Returns_A_Released_Identifier_If_The_Instance_Is_Released_And_Reuse_Is_True()
             {
                 var generator = new LongObjectIdGenerator<PersonViewModel1>();
@@ -262,7 +262,7 @@ namespace Catel.Tests.Services
         [TestFixture]
         public class GetUniqueIdentifierForInstance_Method
         {
-            [Test]
+            [Test, Explicit]
             public void Returns_A_Released_Identifier_If_The_Instance_Is_Released_And_Reuse_Is_True()
             {
                 var generator = new ULongObjectIdGenerator<PersonViewModel1>();
