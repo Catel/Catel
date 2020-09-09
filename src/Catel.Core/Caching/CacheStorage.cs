@@ -7,6 +7,7 @@
 namespace Catel.Caching
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace Catel.Caching
         /// <summary>
         /// The dictionary.
         /// </summary>
-        private readonly Dictionary<TKey, CacheStorageValueInfo<TValue>> _dictionary;
+        private readonly ConcurrentDictionary<TKey, CacheStorageValueInfo<TValue>> _dictionary;
 
         /// <summary>
         /// The synchronization object.
@@ -84,7 +85,7 @@ namespace Catel.Caching
         public CacheStorage(Func<ExpirationPolicy> defaultExpirationPolicyInitCode = null, bool storeNullValues = false,
             IEqualityComparer<TKey> equalityComparer = null)
         {
-            _dictionary = new Dictionary<TKey, CacheStorageValueInfo<TValue>>(equalityComparer);
+            _dictionary = new ConcurrentDictionary<TKey, CacheStorageValueInfo<TValue>>(equalityComparer);
             _storeNullValues = storeNullValues;
             _defaultExpirationPolicyInitCode = defaultExpirationPolicyInitCode;
 
@@ -183,7 +184,7 @@ namespace Catel.Caching
             {
                 _dictionary.TryGetValue(key, out var valueInfo);
 
-                return (valueInfo != null) ? valueInfo.Value : default(TValue);
+                return (valueInfo != null) ? valueInfo.Value : default;
             });
         }
 
@@ -396,6 +397,7 @@ namespace Catel.Caching
         public void Clear()
         {
             var keysToRemove = new List<TKey>();
+
             lock (_syncObj)
             {
                 keysToRemove.AddRange(_dictionary.Keys);
@@ -598,7 +600,7 @@ namespace Catel.Caching
                 return false;
             }
 
-            _dictionary.Remove(key);
+            _dictionary.TryRemove(key, out _);
 
             var dispose = DisposeValuesOnRemoval;
             if (raiseEvents)
