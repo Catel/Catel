@@ -6,6 +6,8 @@
 
 namespace Catel.Reflection
 {
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Reflection;
 
@@ -14,6 +16,8 @@ namespace Catel.Reflection
     /// </summary>
     public static class BindingFlagsHelper
     {
+        private static readonly ConcurrentDictionary<string, BindingFlags> _cache = new ConcurrentDictionary<string, BindingFlags>();
+
 #if NET || NETCORE
         /// <summary>
         /// The default binding flags.
@@ -39,6 +43,20 @@ namespace Catel.Reflection
         /// <returns>The final binding flags.</returns>
         [DebuggerStepThrough]
         public static BindingFlags GetFinalBindingFlags(bool flattenHierarchy, bool allowStaticMembers, bool? allowNonPublicMembers = null)
+        {
+            var key = $"{flattenHierarchy}_{allowStaticMembers}_{allowNonPublicMembers}";
+            
+            if (!_cache.TryGetValue(key, out var bindingFlags))
+            {
+                bindingFlags = GetFinalBindingFlagsInternal(flattenHierarchy, allowStaticMembers, allowNonPublicMembers);
+                _cache[key] = bindingFlags;
+            }
+
+            return bindingFlags;
+        }
+
+        [DebuggerStepThrough]
+        private static BindingFlags GetFinalBindingFlagsInternal(bool flattenHierarchy, bool allowStaticMembers, bool? allowNonPublicMembers = null)
         {
             var bindingFlags = DefaultBindingFlags;
 

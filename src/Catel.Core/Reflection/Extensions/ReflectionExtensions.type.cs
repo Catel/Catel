@@ -853,11 +853,50 @@ namespace Catel.Reflection
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static FieldInfo[] GetFieldsEx(this Type type, BindingFlags bindingFlags)
         {
+            return GetFieldsEx(type, bindingFlags, false);
+        }
+
+        /// <summary>
+        /// The get fields ex.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="bindingFlags">The binding Flags.</param>
+        /// <param name="flattenStaticMembers">Flattens static members if set to <c>true</c>.</param>
+        /// <returns>FieldInfo[][].</returns>
+        /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
+        public static FieldInfo[] GetFieldsEx(this Type type, BindingFlags bindingFlags, bool flattenStaticMembers)
+        {
             Argument.IsNotNull("type", type);
 
-            // Explicitly use Catel.Reflection.TypeInfoExtensions, see https://github.com/Catel/Catel/issues/1617
-            //return Catel.Reflection.TypeInfoExtensions.GetFields(type.GetTypeInfo(), bindingFlags);
-            return type.GetFields(bindingFlags);
+            if (!flattenStaticMembers)
+            {
+                // Fast way out
+                return type.GetFields(bindingFlags);
+            }
+
+            var fields = new List<FieldInfo>(type.GetFields(bindingFlags));
+
+            // We want flattened static stuff to leak through as well
+            if (Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.Static) &&
+                Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.FlattenHierarchy))
+            {
+                var baseType = type.BaseType;
+                if ((baseType != null) && (baseType != typeof(object)))
+                {
+                    foreach (var member in GetFieldsEx(baseType, bindingFlags, true))
+                    {
+                        if (member.IsStatic)
+                        {
+                            if (!fields.Contains(member))
+                            {
+                                fields.Add(member);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return fields.ToArray();
         }
 
         /// <summary>
@@ -948,11 +987,42 @@ namespace Catel.Reflection
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static PropertyInfo[] GetPropertiesEx(this Type type, BindingFlags bindingFlags)
         {
+            return GetPropertiesEx(type, bindingFlags, false);
+        }
+
+        public static PropertyInfo[] GetPropertiesEx(this Type type, BindingFlags bindingFlags, bool flattenStaticMembers)
+        {
             Argument.IsNotNull("type", type);
 
-            // Explicitly use Catel.Reflection.TypeInfoExtensions, see https://github.com/Catel/Catel/issues/1617
-            //return Catel.Reflection.TypeInfoExtensions.GetProperties(type.GetTypeInfo(), bindingFlags);
-            return type.GetProperties(bindingFlags);
+            if (!flattenStaticMembers)
+            {
+                // Fast way out
+                return type.GetProperties(bindingFlags);
+            }
+
+            var properties = new List<PropertyInfo>(type.GetProperties(bindingFlags));
+
+            // We want flattened static stuff to leak through as well
+            if (Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.Static) &&
+                Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.FlattenHierarchy))
+            {
+                var baseType = type.BaseType;
+                if ((baseType != null) && (baseType != typeof(object)))
+                {
+                    foreach (var member in GetPropertiesEx(baseType, bindingFlags, true))
+                    {
+                        if (member.IsStatic())
+                        {
+                            if (!properties.Contains(member))
+                            {
+                                properties.Add(member);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return properties.ToArray();
         }
 
         /// <summary>
@@ -1005,6 +1075,11 @@ namespace Catel.Reflection
 
             // Explicitly use Catel.Reflection.TypeInfoExtensions, see https://github.com/Catel/Catel/issues/1617
             //return Catel.Reflection.TypeInfoExtensions.GetEvents(type.GetTypeInfo(), bindingFlags);
+            return type.GetEvents(bindingFlags);
+        }
+
+        public static EventInfo[] GetEventsEx(this Type type, BindingFlags bindingFlags)
+        {
             return type.GetEvents(bindingFlags);
         }
 
@@ -1104,11 +1179,42 @@ namespace Catel.Reflection
         /// <exception cref="System.ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
         public static MethodInfo[] GetMethodsEx(this Type type, BindingFlags bindingFlags)
         {
+            return GetMethodsEx(type, bindingFlags, false);
+        }
+
+        public static MethodInfo[] GetMethodsEx(this Type type, BindingFlags bindingFlags, bool flattenStaticMembers)
+        {
             Argument.IsNotNull("type", type);
 
-            // Explicitly use Catel.Reflection.TypeInfoExtensions, see https://github.com/Catel/Catel/issues/1617
-            //return Catel.Reflection.TypeInfoExtensions.GetMethods(type.GetTypeInfo(), bindingFlags);
-            return type.GetMethods(bindingFlags);
+            if (!flattenStaticMembers)
+            {
+                // Fast way out
+                return type.GetMethodsEx(bindingFlags);
+            }
+
+            var methods = new List<MethodInfo>(type.GetMethods(bindingFlags));
+
+            // We want flattened static stuff to leak through as well
+            if (Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.Static) &&
+                Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.FlattenHierarchy))
+            {
+                var baseType = type.BaseType;
+                if ((baseType != null) && (baseType != typeof(object)))
+                {
+                    foreach (var member in GetMethodsEx(baseType, bindingFlags, true))
+                    {
+                        if (member.IsStatic)
+                        {
+                            if (!methods.Contains(member))
+                            {
+                                methods.Add(member);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return methods.ToArray();
         }
     }
 }
