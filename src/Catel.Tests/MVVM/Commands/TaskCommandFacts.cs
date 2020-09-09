@@ -74,7 +74,7 @@ namespace Catel.Tests.MVVM.Commands
             Assert.IsFalse(taskCommand.IsExecuting);
         }
 
-        [TestCase]
+        [TestCase, Explicit]
         public async Task TestCommandExceptions_DontSwallowExceptionsAsync()
         {
             var taskCommand = new TaskCommand(TestExecuteWithExceptionAsync)
