@@ -14,15 +14,8 @@ namespace Catel.Data
     /// <summary>
     /// Class holding a property value to serialize using the <see cref="ModelBase"/>.
     /// </summary>
-#if !NET && !NETCORE && !NETSTANDARD
-    [DataContract]
-#else
     [Serializable]
-#endif
-    public class PropertyValue
-#if NET || NETCORE || NETSTANDARD
-        : ISerializable
-#endif
+    public class PropertyValue : ISerializable
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyValue"/> class.
@@ -61,18 +54,12 @@ namespace Catel.Data
         /// Gets or sets the name of the property.
         /// </summary>
         /// <value>The name of the property.</value>
-#if !NET && !NETCORE && !NETSTANDARD
-        [DataMember]
-#endif
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the value of the property.
         /// </summary>
         /// <value>The value of the property.</value>
-#if !NET && !NETCORE && !NETSTANDARD
-        [DataMember]
-#endif
         public object Value { get; set; }
 
         /// <summary>
@@ -96,14 +83,11 @@ namespace Catel.Data
         [XmlIgnore]
         public int GraphRefId { get; set; }
 
-#if NET || NETCORE || NETSTANDARD
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertyValue"/> class.
         /// </summary>
         public PropertyValue(SerializationInfo info, StreamingContext context)
         {
-            Argument.IsNotNull("info", info);
-
             Name = info.GetString("Name");
             Value = info.GetValue("Value", typeof(object));
 
@@ -128,13 +112,10 @@ namespace Catel.Data
         /// </exception>
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            Argument.IsNotNull("info", info);
-
             info.AddValue("Name", Name);
             info.AddValue("Value", Value);
             info.AddValue("GraphId", GraphId);
             info.AddValue("GraphRefId", GraphRefId);
         }
-#endif
     }
 }

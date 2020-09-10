@@ -30,6 +30,7 @@ Release date
 Added/fixed
 ===========
 (*) #1650 Use ConcurrentDictionary in CacheStorage implementation
+(x) #1642 Dictionary serialization in ModelBase failes for .NET Core
 (x) #1649 ModelBase does not detect privately declared inherited property registrations
 
 Platform support changes

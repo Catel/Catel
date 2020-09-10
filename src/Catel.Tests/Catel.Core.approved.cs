@@ -3753,20 +3753,19 @@ namespace Catel.Runtime.Serialization
         public virtual Catel.Runtime.Serialization.MemberValue GetMemberValue(object model, string memberName, Catel.Runtime.Serialization.SerializationModelInfo modelInfo) { }
         public virtual void SetMemberValue(object model, Catel.Runtime.Serialization.MemberValue member, Catel.Runtime.Serialization.SerializationModelInfo modelInfo) { }
     }
-    [System.Runtime.Serialization.DataContractAttribute()]
-    public class SerializableKeyValuePair
+    public class SerializableKeyValuePair : System.Runtime.Serialization.ISerializable
     {
         public SerializableKeyValuePair() { }
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        public SerializableKeyValuePair(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public object Key { get; set; }
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public System.Type KeyType { get; set; }
-        [System.Runtime.Serialization.DataMemberAttribute()]
         public object Value { get; set; }
         [Catel.Runtime.Serialization.ExcludeFromSerializationAttribute()]
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public System.Type ValueType { get; set; }
+        public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
     }
     public class SerializationConfiguration : Catel.Runtime.Serialization.ISerializationConfiguration
     {
