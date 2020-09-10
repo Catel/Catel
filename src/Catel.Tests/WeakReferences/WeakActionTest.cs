@@ -53,11 +53,12 @@ namespace Catel.Tests
         [TestCase]
         public void MemoryLeakFreeWithNoInvocation()
         {
-            var target = new ActionTarget();
+            var target = CreateActionTarget();
             var weakAction = new WeakAction(target, target.PublicActionToExecute);
 
             target = null;
-            GC.Collect();
+
+            GCHelper.CollectAndFreeMemory();
 
             Assert.IsFalse(weakAction.IsTargetAlive);
         }
@@ -65,7 +66,7 @@ namespace Catel.Tests
         [TestCase]
         public void NonGeneric_PublicMethod()
         {
-            var target = new ActionTarget();
+            var target = CreateActionTarget();
             var weakAction = new WeakAction(target, target.PublicActionToExecute);
 
             Assert.IsTrue(weakAction.Execute());
@@ -73,7 +74,8 @@ namespace Catel.Tests
             Assert.AreEqual(1, target.PublicActionExecutedCount);
 
             target = null;
-            GC.Collect();
+
+            GCHelper.CollectAndFreeMemory();
 
             Assert.IsFalse(weakAction.IsTargetAlive);
         }
@@ -93,7 +95,7 @@ namespace Catel.Tests
         [TestCase]
         public void Generic_PublicMethod()
         {
-            var target = new ActionTarget();
+            var target = CreateActionTarget();
             var weakAction = new WeakAction<int>(target, target.PublicActionWithParameterToExecute);
 
             Assert.IsTrue(weakAction.Execute(1));
@@ -101,7 +103,8 @@ namespace Catel.Tests
             Assert.AreEqual(1, target.PublicActionWithParameterExecutedCount);
 
             target = null;
-            GC.Collect();
+
+            GCHelper.CollectAndFreeMemory();
 
             Assert.IsFalse(weakAction.IsTargetAlive);
         }
@@ -114,6 +117,12 @@ namespace Catel.Tests
             ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => new WeakAction<int>(null, i => count = i));
 
             Assert.AreEqual(0, count);
+        }
+
+        // Require separate method to allow GC.Collect to do its magic
+        private ActionTarget CreateActionTarget()
+        {
+            return new ActionTarget();
         }
         #endregion
     }
