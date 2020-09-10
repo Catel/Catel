@@ -261,8 +261,11 @@ namespace Catel.Logging
         /// </summary>
         static LogManager()
         {
-#if NET || NETCORE
+#if NET
             AppDomain.CurrentDomain.DomainUnload += (sender, e) => FlushAll();
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) => FlushAll();
+#elif NETCORE
+            AppDomain.CurrentDomain.ProcessExit += (sender, e) => FlushAll();
             AppDomain.CurrentDomain.UnhandledException += (sender, e) => FlushAll();
 #endif
         }
