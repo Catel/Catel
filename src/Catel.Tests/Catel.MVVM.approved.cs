@@ -1,35 +1,35 @@
-﻿[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Catel.Tests")]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETCoreApp,Version=v3.1", FrameworkDisplayName="")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.MVVM")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.MVVM.Converters")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.MVVM.Providers")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.MVVM.Views")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.Windows")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.Windows.Controls")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.Windows.Data")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.Windows.Interactivity")]
-[assembly: System.Windows.Markup.XmlnsDefinitionAttribute("http://schemas.catelproject.com", "Catel.Windows.Markup")]
-[assembly: System.Windows.Markup.XmlnsPrefixAttribute("http://schemas.catelproject.com", "catel")]
-[assembly: System.Windows.ThemeInfoAttribute(System.Windows.ResourceDictionaryLocation.None, System.Windows.ResourceDictionaryLocation.SourceAssembly)]
+﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.Tests")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v3.1", FrameworkDisplayName="")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM.Converters")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM.Providers")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM.Views")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows.Controls")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows.Data")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows.Interactivity")]
+[assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.Windows.Markup")]
+[assembly: System.Windows.Markup.XmlnsPrefix("http://schemas.catelproject.com", "catel")]
+[assembly: System.Windows.ThemeInfo(System.Windows.ResourceDictionaryLocation.None, System.Windows.ResourceDictionaryLocation.SourceAssembly)]
 namespace Catel
 {
-    public class static CatelEnvironment
+    public static class CatelEnvironment
     {
         public const string DefaultMultiLingualDependencyPropertyValue = "SET IN CONSTRUCTOR TO SUPPORT RUNTIME LANGUAGE SWITCHING";
-        public static bool BypassDevEnvCheck { get; set; }
-        public static bool DisablePropertyChangeNotifications { get; set; }
         public static bool IsInDesignMode { get; }
         public static System.Windows.Window MainWindow { get; }
+        public static bool BypassDevEnvCheck { get; set; }
+        public static bool DisablePropertyChangeNotifications { get; set; }
         public static bool GetIsInDesignMode(bool initializeDesignTime) { }
         public static void RegisterDefaultViewModelServices() { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Assembly | System.AttributeTargets.All, AllowMultiple=true)]
+    [System.AttributeUsage(System.AttributeTargets.Assembly | System.AttributeTargets.All, AllowMultiple=true)]
     public class DesignTimeCodeAttribute : System.Attribute
     {
         public DesignTimeCodeAttribute(System.Type typeToConstruct) { }
     }
-    public class static DesignTimeHelper
+    public static class DesignTimeHelper
     {
         public static void InitializeDesignTime() { }
     }
@@ -39,12 +39,12 @@ namespace Catel
         public bool CanInitialize { get; }
         protected virtual void Initialize() { }
     }
-    public class static ICommandManagerExtensions
+    public static class ICommandManagerExtensions
     {
         public static void CreateCommandWithGesture(this Catel.MVVM.ICommandManager commandManager, System.Type containerType, string commandNameFieldName) { }
         public static System.Collections.Generic.Dictionary<string, System.Windows.Input.ICommand> FindCommandsByGesture(this Catel.MVVM.ICommandManager commandManager, Catel.Windows.Input.InputGesture inputGesture) { }
     }
-    public class static INotifyPropertyChangedExtensions
+    public static class INotifyPropertyChangedExtensions
     {
         public static void SubscribeToPropertyChanged(this System.ComponentModel.INotifyPropertyChanged notifyPropertyChanged, string propertyName, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> handler) { }
     }
@@ -53,11 +53,11 @@ namespace Catel
         public MVVMModule() { }
         public void Initialize(Catel.IoC.IServiceLocator serviceLocator) { }
     }
-    public class static StringExtensions
+    public static class StringExtensions
     {
         public static string GetUniqueControlName(this string controlName) { }
     }
-    public class static ThemeHelper
+    public static class ThemeHelper
     {
         public static void EnsureCatelMvvmThemeIsLoaded() { }
         public static void EnsureThemeIsLoaded(System.Uri resourceUri) { }
@@ -66,12 +66,12 @@ namespace Catel
 }
 namespace Catel.Collections
 {
-    public class static EnumerableExtensions
+    public static class EnumerableExtensions
     {
-        public static Catel.Collections.ObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TElement> elementSelector, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
-        public static Catel.Collections.ObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TElement> elementSelector) { }
-        public static Catel.Collections.ObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
         public static Catel.Collections.ObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector) { }
+        public static Catel.Collections.ObservableDictionary<TKey, TSource> ToObservableDictionary<TSource, TKey>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
+        public static Catel.Collections.ObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TElement> elementSelector) { }
+        public static Catel.Collections.ObservableDictionary<TKey, TElement> ToObservableDictionary<TSource, TKey, TElement>(this System.Collections.Generic.IEnumerable<TSource> source, System.Func<TSource, TKey> keySelector, System.Func<TSource, TElement> elementSelector, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
     }
     public class ExtendedSuspensionContext<T>
     {
@@ -85,9 +85,10 @@ namespace Catel.Collections
         public System.Collections.Generic.List<T> NewItems { get; }
         public System.Collections.Generic.List<int> OldItemIndices { get; }
         public System.Collections.Generic.List<T> OldItems { get; }
-        public System.Nullable<bool> TryRemoveItemFromNewItems(int index, T item) { }
+        public bool? TryRemoveItemFromNewItems(int index, T item) { }
         public bool TryRemoveItemFromOldItems(int index, T item) { }
     }
+    [System.Serializable]
     public class FastBindingList<T> : System.ComponentModel.BindingList<T>, Catel.Collections.ISuspendChangeNotificationsCollection, System.Collections.ICollection, System.Collections.IEnumerable
     {
         public FastBindingList() { }
@@ -120,6 +121,7 @@ namespace Catel.Collections
         public System.IDisposable SuspendChangeNotifications() { }
         public System.IDisposable SuspendChangeNotifications(Catel.Collections.SuspensionMode mode) { }
     }
+    [System.Serializable]
     public class FastObservableCollection<T> : System.Collections.ObjectModel.ObservableCollection<T>, Catel.Collections.ISuspendChangeNotificationsCollection, System.Collections.ICollection, System.Collections.IEnumerable
     {
         public FastObservableCollection() { }
@@ -129,14 +131,14 @@ namespace Catel.Collections
         public bool IsDirty { get; set; }
         public bool NotificationsSuspended { get; }
         public void AddItems(System.Collections.Generic.IEnumerable<T> collection) { }
-        public void AddItems(System.Collections.Generic.IEnumerable<T> collection, Catel.Collections.SuspensionMode mode) { }
         public void AddItems(System.Collections.IEnumerable collection) { }
+        public void AddItems(System.Collections.Generic.IEnumerable<T> collection, Catel.Collections.SuspensionMode mode) { }
         public void AddItems(System.Collections.IEnumerable collection, Catel.Collections.SuspensionMode mode) { }
         protected override void ClearItems() { }
         protected override void InsertItem(int index, T item) { }
         public virtual void InsertItems(System.Collections.Generic.IEnumerable<T> collection, int index) { }
-        public virtual void InsertItems(System.Collections.Generic.IEnumerable<T> collection, int index, Catel.Collections.SuspensionMode mode) { }
         public virtual void InsertItems(System.Collections.IEnumerable collection, int index) { }
+        public virtual void InsertItems(System.Collections.Generic.IEnumerable<T> collection, int index, Catel.Collections.SuspensionMode mode) { }
         public virtual void InsertItems(System.Collections.IEnumerable collection, int index, Catel.Collections.SuspensionMode mode) { }
         protected override void MoveItem(int oldIndex, int newIndex) { }
         protected void NotifyChanges() { }
@@ -144,8 +146,8 @@ namespace Catel.Collections
         protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
         protected override void RemoveItem(int index) { }
         public void RemoveItems(System.Collections.Generic.IEnumerable<T> collection) { }
-        public void RemoveItems(System.Collections.Generic.IEnumerable<T> collection, Catel.Collections.SuspensionMode mode) { }
         public void RemoveItems(System.Collections.IEnumerable collection) { }
+        public void RemoveItems(System.Collections.Generic.IEnumerable<T> collection, Catel.Collections.SuspensionMode mode) { }
         public void RemoveItems(System.Collections.IEnumerable collection, Catel.Collections.SuspensionMode mode) { }
         public void Reset() { }
         protected override void SetItem(int index, T item) { }
@@ -160,12 +162,12 @@ namespace Catel.Collections
         protected readonly System.Collections.Specialized.NotifyCollectionChangedEventArgs _cachedResetArgs;
         protected readonly System.ComponentModel.PropertyChangedEventArgs _cachedValuesArgs;
         public FastObservableDictionary() { }
-        public FastObservableDictionary(int capacity) { }
+        public FastObservableDictionary(System.Collections.Generic.IDictionary<TKey, TValue> dictionary) { }
         public FastObservableDictionary(System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> originalDict) { }
         public FastObservableDictionary(System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
-        public FastObservableDictionary(System.Collections.Generic.IDictionary<TKey, TValue> dictionary) { }
-        public FastObservableDictionary(int capacity, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
+        public FastObservableDictionary(int capacity) { }
         public FastObservableDictionary(System.Collections.Generic.IDictionary<TKey, TValue> dictionary, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
+        public FastObservableDictionary(int capacity, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
         protected FastObservableDictionary(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public bool AutomaticallyDispatchChangeNotifications { get; set; }
         public System.Collections.Generic.IEqualityComparer<TKey> Comparer { get; }
@@ -183,16 +185,16 @@ namespace Catel.Collections
         public event System.Collections.Specialized.NotifyCollectionChangedEventHandler CollectionChanged;
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         public void Add(System.Collections.Generic.KeyValuePair<TKey, TValue> item) { }
-        public void Add(TKey key, TValue value) { }
         public void Add(object key, object value) { }
+        public void Add(TKey key, TValue value) { }
         public System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<TKey, TValue>> AsEnumerable() { }
         public Catel.Collections.FastObservableDictionary<TKey, TValue> AsReadOnly() { }
         public void Clear() { }
         public bool Contains(System.Collections.Generic.KeyValuePair<TKey, TValue> item) { }
         public bool Contains(object key) { }
         public bool ContainsKey(TKey key) { }
-        public void CopyTo(System.Collections.Generic.KeyValuePair<, >[] array, int arrayIndex) { }
         public void CopyTo(System.Array array, int arrayIndex) { }
+        public void CopyTo(System.Collections.Generic.KeyValuePair<, >[] array, int arrayIndex) { }
         public System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<TKey, TValue>> GetEnumerator() { }
         public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public int IndexOf(System.Collections.Generic.KeyValuePair<TKey, TValue> item) { }
@@ -211,8 +213,8 @@ namespace Catel.Collections
         public bool Remove(TKey keyToRemove) { }
         public virtual void RemoveAllItems() { }
         public void RemoveAt(int index) { }
-        public virtual void RemoveMultipleValues(int startIndex, int count) { }
         public virtual void RemoveMultipleValues(System.Collections.Generic.IEnumerable<TKey> keysToRemove) { }
+        public virtual void RemoveMultipleValues(int startIndex, int count) { }
         public virtual void RemoveSingleValue(int index, out TValue value) { }
         public void Reset() { }
         public System.IDisposable SuspendChangeNotifications() { }
@@ -223,12 +225,12 @@ namespace Catel.Collections
     public class NotifyListChangedEventArgs : System.ComponentModel.ListChangedEventArgs
     {
         public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType) { }
-        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex) { }
         public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, System.ComponentModel.PropertyDescriptor propDesc) { }
-        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, object newItem) { }
+        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex) { }
         public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, System.ComponentModel.PropertyDescriptor propDesc) { }
-        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, object newItem, System.ComponentModel.PropertyDescriptor propDesc) { }
         public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, int oldIndex) { }
+        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, object newItem) { }
+        public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, object newItem, System.ComponentModel.PropertyDescriptor propDesc) { }
         public NotifyListChangedEventArgs(System.ComponentModel.ListChangedType listChangedType, int newIndex, object newItem, int oldIndex, object oldItem) { }
         public object NewItem { get; }
         public object OldItem { get; }
@@ -237,8 +239,8 @@ namespace Catel.Collections
     {
         public NotifyRangedCollectionChangedEventArgs() { }
         public NotifyRangedCollectionChangedEventArgs(System.Collections.IList changedItems, System.Collections.Generic.IList<int> indices, Catel.Collections.SuspensionMode mode) { }
-        public NotifyRangedCollectionChangedEventArgs(System.Collections.IList changedItems, System.Collections.Generic.IList<int> indices, Catel.Collections.SuspensionMode mode, System.Collections.Specialized.NotifyCollectionChangedAction action) { }
         public NotifyRangedCollectionChangedEventArgs(System.Collections.IList changedItems, System.Collections.Generic.IList<int> indices, System.Collections.Generic.IList<System.Collections.Specialized.NotifyCollectionChangedAction> mixedActions) { }
+        public NotifyRangedCollectionChangedEventArgs(System.Collections.IList changedItems, System.Collections.Generic.IList<int> indices, Catel.Collections.SuspensionMode mode, System.Collections.Specialized.NotifyCollectionChangedAction action) { }
         public System.Collections.IList ChangedItems { get; }
         public System.Collections.Generic.IList<int> Indices { get; }
         public System.Collections.Generic.IList<System.Collections.Specialized.NotifyCollectionChangedAction> MixedActions { get; }
@@ -261,20 +263,22 @@ namespace Catel.Collections
         public System.Collections.IList OldItems { get; }
         public int OldStartingIndex { get; }
     }
-    [System.ObsoleteAttribute("Use `FastObservableDictionary` instead. Will be removed in version 6.0.0.", true)]
+    [System.Obsolete("Use `FastObservableDictionary` instead. Will be removed in version 6.0.0.", true)]
+    [System.Serializable]
     public class ObservableDictionary<TKey, TValue> : Catel.Collections.FastObservableDictionary<TKey, TValue>
     {
         public ObservableDictionary() { }
-        public ObservableDictionary(System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
         public ObservableDictionary(System.Collections.Generic.IDictionary<TKey, TValue> dictionary) { }
+        public ObservableDictionary(System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
         public ObservableDictionary(System.Collections.Generic.IDictionary<TKey, TValue> dictionary, System.Collections.Generic.IEqualityComparer<TKey> comparer) { }
         protected ObservableDictionary(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         protected virtual void OnCollectionChanged() { }
         protected virtual void OnCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedAction action, System.Collections.Generic.KeyValuePair<TKey, TValue> changedItem, int index) { }
         protected virtual void OnCollectionChanged(System.Collections.Specialized.NotifyCollectionChangedAction action, System.Collections.Generic.KeyValuePair<TKey, TValue> newItem, System.Collections.Generic.KeyValuePair<TKey, TValue> oldItem, int index) { }
         protected virtual void OnPropertyChanged(string propertyName) { }
-        [System.ObsoleteAttribute("Use the normal enumerator. Will be removed in version 6.0.0.", true)]
-        public struct Enumerator<TKey, TValue> : System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.IDictionaryEnumerator, System.Collections.IEnumerator, System.IDisposable
+        [System.Obsolete("Use the normal enumerator. Will be removed in version 6.0.0.", true)]
+        [System.Serializable]
+        public struct Enumerator : System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<TKey, TValue>>, System.Collections.IDictionaryEnumerator, System.Collections.IEnumerator, System.IDisposable
         {
             public System.Collections.Generic.KeyValuePair<TKey, TValue> Current { get; }
             public System.Collections.DictionaryEntry Entry { get; }
@@ -285,7 +289,7 @@ namespace Catel.Collections
             public void Reset() { }
         }
     }
-    public class static SuspensionContextExtensions
+    public static class SuspensionContextExtensions
     {
         public static System.Collections.Generic.ICollection<Catel.Collections.NotifyRangedCollectionChangedEventArgs> CreateAddingEvents<T>(this Catel.Collections.SuspensionContext<T> suspensionContext) { }
         public static System.Collections.Generic.ICollection<Catel.Collections.NotifyRangedCollectionChangedEventArgs> CreateEvents<T>(this Catel.Collections.SuspensionContext<T> suspensionContext) { }
@@ -303,11 +307,11 @@ namespace Catel.Collections
         public System.Collections.Generic.List<int> ChangedItemIndices { get; }
         public System.Collections.Generic.List<T> ChangedItems { get; }
         public int Count { get; set; }
-        public static System.Lazy<System.Collections.Generic.Dictionary<Catel.Collections.SuspensionMode, System.Func<Catel.Collections.SuspensionContext<T>, System.Collections.Generic.ICollection<Catel.Collections.NotifyRangedCollectionChangedEventArgs>>>> EventsGeneratorsRegistry { get; }
         public System.Collections.Generic.List<System.Collections.Specialized.NotifyCollectionChangedAction> MixedActions { get; }
         public Catel.Collections.SuspensionMode Mode { get; }
+        public static System.Lazy<System.Collections.Generic.Dictionary<Catel.Collections.SuspensionMode, System.Func<Catel.Collections.SuspensionContext<T>, System.Collections.Generic.ICollection<Catel.Collections.NotifyRangedCollectionChangedEventArgs>>>> EventsGeneratorsRegistry { get; }
     }
-    public class static SuspensionModeExtensions
+    public static class SuspensionModeExtensions
     {
         public static bool IsMixedMode(this Catel.Collections.SuspensionMode suspensionMode) { }
     }
@@ -322,7 +326,7 @@ namespace Catel.Data
 }
 namespace Catel.MVVM.Auditing
 {
-    public class static AuditingHelper
+    public static class AuditingHelper
     {
         public static void RegisterViewModel(Catel.MVVM.IViewModel viewModel) { }
     }
@@ -332,9 +336,9 @@ namespace Catel.MVVM.Auditing
         public static bool IsAuditingEnabled { get; }
         public static int RegisteredAuditorsCount { get; }
         public static void Clear() { }
+        public static void RegisterAuditor(Catel.MVVM.Auditing.IAuditor auditor) { }
         public static void RegisterAuditor<TAuditor>()
             where TAuditor : Catel.MVVM.Auditing.IAuditor { }
-        public static void RegisterAuditor(Catel.MVVM.Auditing.IAuditor auditor) { }
         public static void UnregisterAuditor(Catel.MVVM.Auditing.IAuditor auditor) { }
     }
     public abstract class AuditorBase : Catel.MVVM.Auditing.IAuditor
@@ -396,7 +400,7 @@ namespace Catel.MVVM
     }
     public abstract class CommandBase
     {
-        [System.CLSCompliantAttribute(false)]
+        [System.CLSCompliant(false)]
         protected static readonly Catel.MVVM.IAuthenticationProvider AuthenticationProvider;
         protected static readonly Catel.Services.IDispatcherService DispatcherService;
         protected CommandBase() { }
@@ -446,7 +450,7 @@ namespace Catel.MVVM
         public object CommandParameter { get; }
         public string CommandPropertyName { get; }
     }
-    public class static CommandHelper
+    public static class CommandHelper
     {
         public static Catel.MVVM.Command CreateCommand(System.Action execute, System.Linq.Expressions.Expression<System.Func<Catel.Data.IValidationSummary>> validationSummaryPropertyExpression, object tag = null) { }
         public static Catel.MVVM.Command<TExecuteParameter> CreateCommand<TExecuteParameter>(System.Action<TExecuteParameter> execute, System.Linq.Expressions.Expression<System.Func<Catel.Data.IValidationSummary>> validationSummaryPropertyExpression, object tag = null) { }
@@ -458,7 +462,7 @@ namespace Catel.MVVM
         public CommandManager() { }
         public bool IsKeyboardEventsSuspended { get; set; }
         public event System.EventHandler<Catel.MVVM.CommandCreatedEventArgs> CommandCreated;
-        public void CreateCommand(string commandName, Catel.Windows.Input.InputGesture inputGesture = null, Catel.MVVM.ICompositeCommand compositeCommand = null, bool throwExceptionWhenCommandIsAlreadyCreated = True) { }
+        public void CreateCommand(string commandName, Catel.Windows.Input.InputGesture inputGesture = null, Catel.MVVM.ICompositeCommand compositeCommand = null, bool throwExceptionWhenCommandIsAlreadyCreated = true) { }
         public void ExecuteCommand(string commandName) { }
         public System.Windows.Input.ICommand GetCommand(string commandName) { }
         public System.Collections.Generic.IEnumerable<string> GetCommands() { }
@@ -500,7 +504,7 @@ namespace Catel.MVVM
         public object Tag { get; }
         public event System.EventHandler CanExecuteChanged;
         public event System.EventHandler<Catel.MVVM.CommandExecutedEventArgs> Executed;
-        [System.ObsoleteAttribute("Use `No replacement` instead. Will be removed in version 6.0.0.", true)]
+        [System.Obsolete("Use `No replacement` instead. Will be removed in version 6.0.0.", true)]
         public event Catel.AsyncEventHandler<Catel.MVVM.CommandExecutedEventArgs> ExecutedAsync;
         public bool CanExecute() { }
         public bool CanExecute(object parameter) { }
@@ -509,13 +513,13 @@ namespace Catel.MVVM
         public void Execute(object parameter) { }
         public void Execute(TExecuteParameter parameter) { }
         protected virtual void Execute(TExecuteParameter parameter, bool ignoreCanExecuteCheck) { }
-        [System.ObsoleteAttribute("Use `Execute(TExecuteParameter, bool)` instead. Will be removed in version 6.0.0." +
+        [System.Obsolete("Use `Execute(TExecuteParameter, bool)` instead. Will be removed in version 6.0.0." +
             "", true)]
         protected virtual System.Threading.Tasks.Task ExecuteAsync(TExecuteParameter parameter, bool ignoreCanExecuteCheck) { }
         protected void InitializeActions(System.Action<TExecuteParameter> executeWithParameter, System.Action executeWithoutParameter, System.Func<TCanExecuteParameter, bool> canExecuteWithParameter, System.Func<bool> canExecuteWithoutParameter) { }
         public virtual void RaiseCanExecuteChanged() { }
         protected virtual void RaiseExecuted(object parameter) { }
-        [System.ObsoleteAttribute("Use `RaiseExecuted(object)` instead. Will be removed in version 6.0.0.", true)]
+        [System.Obsolete("Use `RaiseExecuted(object)` instead. Will be removed in version 6.0.0.", true)]
         protected System.Threading.Tasks.Task RaiseExecutedAsync(object parameter) { }
     }
     public class CompositeCommand : Catel.MVVM.Command, Catel.MVVM.ICatelCommand, Catel.MVVM.ICompositeCommand, System.Windows.Input.ICommand
@@ -553,19 +557,19 @@ namespace Catel.MVVM
         public override object Convert(object[] values, Catel.MVVM.IViewModel viewModel) { }
         public override object[] ConvertBack(object value, Catel.MVVM.IViewModel viewModel) { }
     }
-    [System.CLSCompliantAttribute(false)]
+    [System.CLSCompliant(false)]
     public interface IAuthenticationProvider
     {
         bool CanCommandBeExecuted(Catel.MVVM.ICatelCommand command, object commandParameter);
-        [System.CLSCompliantAttribute(false)]
+        [System.CLSCompliant(false)]
         bool HasAccessToUIElement(System.Windows.FrameworkElement element, object tag, object authenticationTag);
     }
     public interface ICatelCommand : System.Windows.Input.ICommand
     {
         object Tag { get; }
-        public event System.EventHandler<Catel.MVVM.CommandExecutedEventArgs> Executed;
-        [System.ObsoleteAttribute("Use `No replacement` instead. Will be removed in version 6.0.0.", true)]
-        public event Catel.AsyncEventHandler<Catel.MVVM.CommandExecutedEventArgs> ExecutedAsync;
+        event System.EventHandler<Catel.MVVM.CommandExecutedEventArgs> Executed;
+        [System.Obsolete("Use `No replacement` instead. Will be removed in version 6.0.0.", true)]
+        event Catel.AsyncEventHandler<Catel.MVVM.CommandExecutedEventArgs> ExecutedAsync;
         bool CanExecute();
         void Execute();
         void RaiseCanExecuteChanged();
@@ -581,16 +585,16 @@ namespace Catel.MVVM
         Catel.MVVM.Command CancelCommand { get; }
         bool IsCancellationRequested { get; }
         bool IsExecuting { get; }
-        public event System.EventHandler<Catel.MVVM.CommandEventArgs> Canceled;
-        public event System.EventHandler<Catel.MVVM.CommandCanceledEventArgs> Executing;
-        public event System.EventHandler<Catel.MVVM.CommandProgressChangedEventArgs<TProgress>> ProgressChanged;
+        event System.EventHandler<Catel.MVVM.CommandEventArgs> Canceled;
+        event System.EventHandler<Catel.MVVM.CommandCanceledEventArgs> Executing;
+        event System.EventHandler<Catel.MVVM.CommandProgressChangedEventArgs<TProgress>> ProgressChanged;
         void Cancel();
     }
     public interface ICommandManager
     {
         bool IsKeyboardEventsSuspended { get; set; }
-        public event System.EventHandler<Catel.MVVM.CommandCreatedEventArgs> CommandCreated;
-        void CreateCommand(string commandName, Catel.Windows.Input.InputGesture inputGesture = null, Catel.MVVM.ICompositeCommand compositeCommand = null, bool throwExceptionWhenCommandIsAlreadyCreated = True);
+        event System.EventHandler<Catel.MVVM.CommandCreatedEventArgs> CommandCreated;
+        void CreateCommand(string commandName, Catel.Windows.Input.InputGesture inputGesture = null, Catel.MVVM.ICompositeCommand compositeCommand = null, bool throwExceptionWhenCommandIsAlreadyCreated = true);
         void ExecuteCommand(string commandName);
         System.Windows.Input.ICommand GetCommand(string commandName);
         System.Collections.Generic.IEnumerable<string> GetCommands();
@@ -658,7 +662,7 @@ namespace Catel.MVVM
     public interface IUrlLocator : Catel.MVVM.ILocator
     {
         void Register(System.Type viewModelType, string url);
-        string ResolveUrl(System.Type viewModelType, bool ensurePageExists = True);
+        string ResolveUrl(System.Type viewModelType, bool ensurePageExists = true);
     }
     public interface IViewLocator : Catel.MVVM.ILocator
     {
@@ -673,36 +677,36 @@ namespace Catel.MVVM
         bool IsSaved { get; }
         string Title { get; }
         int UniqueIdentifier { get; }
-        public event Catel.AsyncEventHandler<System.EventArgs> CanceledAsync;
-        public event Catel.AsyncEventHandler<Catel.MVVM.CancelingEventArgs> CancelingAsync;
-        public event Catel.AsyncEventHandler<Catel.MVVM.ViewModelClosedEventArgs> ClosedAsync;
-        public event Catel.AsyncEventHandler<System.EventArgs> ClosingAsync;
-        public event Catel.AsyncEventHandler<Catel.MVVM.CommandExecutedEventArgs> CommandExecutedAsync;
-        public event Catel.AsyncEventHandler<System.EventArgs> InitializedAsync;
-        public event Catel.AsyncEventHandler<System.EventArgs> SavedAsync;
-        public event Catel.AsyncEventHandler<Catel.MVVM.SavingEventArgs> SavingAsync;
+        event Catel.AsyncEventHandler<System.EventArgs> CanceledAsync;
+        event Catel.AsyncEventHandler<Catel.MVVM.CancelingEventArgs> CancelingAsync;
+        event Catel.AsyncEventHandler<Catel.MVVM.ViewModelClosedEventArgs> ClosedAsync;
+        event Catel.AsyncEventHandler<System.EventArgs> ClosingAsync;
+        event Catel.AsyncEventHandler<Catel.MVVM.CommandExecutedEventArgs> CommandExecutedAsync;
+        event Catel.AsyncEventHandler<System.EventArgs> InitializedAsync;
+        event Catel.AsyncEventHandler<System.EventArgs> SavedAsync;
+        event Catel.AsyncEventHandler<Catel.MVVM.SavingEventArgs> SavingAsync;
         System.Threading.Tasks.Task<bool> CancelViewModelAsync();
-        System.Threading.Tasks.Task CloseViewModelAsync(System.Nullable<bool> result);
+        System.Threading.Tasks.Task CloseViewModelAsync(bool? result);
         System.Threading.Tasks.Task InitializeViewModelAsync();
         System.Threading.Tasks.Task<bool> SaveViewModelAsync();
     }
     public interface IViewModelCommandManager
     {
         void AddHandler(System.Func<Catel.MVVM.IViewModel, string, System.Windows.Input.ICommand, object, System.Threading.Tasks.Task> handler);
-        void InvalidateCommands(bool force = False);
+        void InvalidateCommands(bool force = false);
     }
     public interface IViewModelContainer : System.ComponentModel.INotifyPropertyChanged
     {
         Catel.MVVM.IViewModel ViewModel { get; }
-        public event System.EventHandler<System.EventArgs> ViewModelChanged;
+        event System.EventHandler<System.EventArgs> ViewModelChanged;
     }
-    public class static IViewModelExtensions
+    public static class IViewModelExtensions
     {
         public static System.Threading.Tasks.Task<bool> AwaitCancelingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
         public static System.Threading.Tasks.Task AwaitClosingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
         public static System.Threading.Tasks.Task<bool> AwaitSavingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
         public static System.Threading.Tasks.Task<bool> CancelAndCloseViewModelAsync(this Catel.MVVM.IViewModel viewModel) { }
-        public static System.Nullable<bool> GetResult(this Catel.MVVM.IViewModel viewModel) { }
+        public static bool? GetResult(this Catel.MVVM.IViewModel viewModel) { }
         public static System.Threading.Tasks.Task<bool> SaveAndCloseViewModelAsync(this Catel.MVVM.IViewModel viewModel) { }
     }
     public interface IViewModelFactory
@@ -711,7 +715,7 @@ namespace Catel.MVVM
         Catel.MVVM.IViewModel CreateViewModel(System.Type viewModelType, object dataContext, object tag = null);
         bool IsViewModelWithModelInjection(System.Type viewModelType);
     }
-    public class static IViewModelFactoryExtensions
+    public static class IViewModelFactoryExtensions
     {
         public static TViewModel CreateViewModel<TViewModel>(this Catel.MVVM.IViewModelFactory viewModelFactory, object dataContext, object tag = null)
             where TViewModel : Catel.MVVM.IViewModel { }
@@ -722,7 +726,7 @@ namespace Catel.MVVM
         void Register(System.Type viewType, System.Type viewModelType);
         System.Type ResolveViewModel(System.Type viewType);
     }
-    public class static IViewModelLocatorExtensions
+    public static class IViewModelLocatorExtensions
     {
         public static void Register<TView, TViewModel>(this Catel.MVVM.IViewModelLocator viewModelLocator) { }
         public static System.Type ResolveViewModel<TView>(this Catel.MVVM.IViewModelLocator viewModelLocator) { }
@@ -732,9 +736,9 @@ namespace Catel.MVVM
         System.Collections.Generic.IEnumerable<Catel.MVVM.IViewModel> ActiveViewModels { get; }
         System.Collections.Generic.IEnumerable<Catel.MVVM.IRelationalViewModel> GetChildViewModels(Catel.MVVM.IViewModel parentViewModel);
         System.Collections.Generic.IEnumerable<Catel.MVVM.IRelationalViewModel> GetChildViewModels(int parentUniqueIdentifier);
+        Catel.MVVM.IViewModel GetFirstOrDefaultInstance(System.Type viewModelType);
         TViewModel GetFirstOrDefaultInstance<TViewModel>()
             where TViewModel : Catel.MVVM.IViewModel;
-        Catel.MVVM.IViewModel GetFirstOrDefaultInstance(System.Type viewModelType);
         Catel.MVVM.IViewModel GetViewModel(int uniqueIdentifier);
         Catel.MVVM.IViewModel[] GetViewModelsOfModel(object model);
         void RegisterModel(Catel.MVVM.IViewModel viewModel, object model);
@@ -763,12 +767,12 @@ namespace Catel.MVVM
         public void ClearCache() { }
         protected abstract System.Collections.Generic.IEnumerable<string> GetDefaultNamingConventions();
         protected string GetItemFromCache(string valueToResolve) { }
-        [System.ObsoleteAttribute("Use `TypeCache.GetType` instead. Will be removed in version 6.0.0.", true)]
-        protected static System.Type GetTypeFromString(string fullTypeName) { }
         protected void Register(string valueToResolve, string resolvedValue) { }
         protected virtual string Resolve(string valueToResolve) { }
         protected abstract string ResolveNamingConvention(string assembly, string typeToResolveName, string namingConvention);
         protected virtual System.Collections.Generic.IEnumerable<string> ResolveValues(string valueToResolve) { }
+        [System.Obsolete("Use `TypeCache.GetType` instead. Will be removed in version 6.0.0.", true)]
+        protected static System.Type GetTypeFromString(string fullTypeName) { }
     }
     public class ModelAttribute : System.Attribute
     {
@@ -787,21 +791,21 @@ namespace Catel.MVVM
         public string ModelName { get; }
         public string PropertyDeclaringViewModelToModelAttribute { get; }
     }
-    public class static ModuleInitializer
+    public static class ModuleInitializer
     {
         public static void Initialize() { }
     }
     public abstract class NavigationViewModelBase : Catel.MVVM.ViewModelBase
     {
-        protected NavigationViewModelBase(bool supportIEditableObject = True, bool ignoreMultipleModelsWarning = False, bool skipViewModelAttributesInitialization = False) { }
-        protected NavigationViewModelBase(Catel.IoC.IServiceLocator serviceLocator, bool supportIEditableObject = True, bool ignoreMultipleModelsWarning = False, bool skipViewModelAttributesInitialization = False) { }
+        protected NavigationViewModelBase(bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false) { }
+        protected NavigationViewModelBase(Catel.IoC.IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false) { }
         public Catel.MVVM.Command Back { get; }
         public Catel.MVVM.Command Forward { get; }
         public Catel.Services.INavigationService NavigationService { get; }
         protected virtual bool OnBackCanExecute() { }
         protected virtual bool OnForwardCanExecute() { }
     }
-    public class static ObjectExtensions
+    public static class ObjectExtensions
     {
         public static bool IsSentinelBindingObject(this object dataContext) { }
     }
@@ -822,18 +826,18 @@ namespace Catel.MVVM
         public static readonly Catel.Data.PropertyData TaskProperty;
         public ProgressNotifyableViewModel() { }
         public ProgressNotifyableViewModel(bool supportIEditableObject, bool ignoreMultipleModelsWarning, bool skipViewModelAttributesInitialization) { }
-        public ProgressNotifyableViewModel(Catel.IoC.IServiceLocator serviceLocator, bool supportIEditableObject = True, bool ignoreMultipleModelsWarning = False, bool skipViewModelAttributesInitialization = False) { }
+        public ProgressNotifyableViewModel(Catel.IoC.IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false) { }
         public string DetailedMessage { get; }
         public int Percentage { get; }
-        [Catel.MVVM.ModelAttribute()]
+        [Catel.MVVM.Model]
         public Catel.MVVM.Tasks.ITask Task { get; }
-        [Catel.MVVM.ViewModelToModelAttribute("Task", "IsIndeterminate")]
+        [Catel.MVVM.ViewModelToModel("Task", "IsIndeterminate")]
         public bool TaskIsIndeterminate { get; }
-        [Catel.MVVM.ViewModelToModelAttribute("Task", "Message")]
+        [Catel.MVVM.ViewModelToModel("Task", "Message")]
         public string TaskMessage { get; }
-        [Catel.MVVM.ViewModelToModelAttribute("Task", "Name")]
+        [Catel.MVVM.ViewModelToModel("Task", "Name")]
         public string TaskName { get; }
-        [Catel.MVVM.ViewModelToModelAttribute("Task", "Percentage")]
+        [Catel.MVVM.ViewModelToModel("Task", "Percentage")]
         public int TaskPercentage { get; }
         public void UpdateStatus(int currentItem, int totalItems, Catel.MVVM.Tasks.ITask task) { }
     }
@@ -878,9 +882,9 @@ namespace Catel.MVVM
     {
         public TaskCommand(System.Func<System.Threading.Tasks.Task> execute, System.Func<bool> canExecute = null, object tag = null) { }
         public TaskCommand(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> execute, System.Func<bool> canExecute = null, object tag = null) { }
-        public TaskCommand(System.Func<System.Threading.CancellationToken, System.IProgress<TProgress>, System.Threading.Tasks.Task> execute, System.Func<bool> canExecute = null, System.Action<TProgress> reportProgress = null, object tag = null) { }
         public TaskCommand(System.Func<TExecuteParameter, System.Threading.Tasks.Task> execute, System.Func<TCanExecuteParameter, bool> canExecute = null, object tag = null) { }
         public TaskCommand(System.Func<TExecuteParameter, System.Threading.CancellationToken, System.Threading.Tasks.Task> execute, System.Func<TCanExecuteParameter, bool> canExecute = null, object tag = null) { }
+        public TaskCommand(System.Func<System.Threading.CancellationToken, System.IProgress<TProgress>, System.Threading.Tasks.Task> execute, System.Func<bool> canExecute = null, System.Action<TProgress> reportProgress = null, object tag = null) { }
         public TaskCommand(System.Func<TExecuteParameter, System.Threading.CancellationToken, System.IProgress<TProgress>, System.Threading.Tasks.Task> execute, System.Func<TCanExecuteParameter, bool> canExecute = null, System.Action<TProgress> reportProgress = null, object tag = null) { }
         public Catel.MVVM.Command CancelCommand { get; }
         public bool IsCancellationRequested { get; }
@@ -901,13 +905,13 @@ namespace Catel.MVVM
         protected override System.Collections.Generic.IEnumerable<string> GetDefaultNamingConventions() { }
         public void Register(System.Type viewModelType, string url) { }
         protected override string ResolveNamingConvention(string assembly, string typeToResolveName, string namingConvention) { }
-        public virtual string ResolveUrl(System.Type viewModelType, bool ensurePageExists = True) { }
+        public virtual string ResolveUrl(System.Type viewModelType, bool ensurePageExists = true) { }
     }
-    public class static ViewHelper
+    public static class ViewHelper
     {
+        public static System.Windows.FrameworkElement ConstructViewWithViewModel(System.Type viewType, object dataContext) { }
         public static T ConstructViewWithViewModel<T>(System.Type viewType, object dataContext)
             where T : System.Windows.FrameworkElement { }
-        public static System.Windows.FrameworkElement ConstructViewWithViewModel(System.Type viewType, object dataContext) { }
     }
     public class ViewLocator : Catel.MVVM.LocatorBase, Catel.MVVM.ILocator, Catel.MVVM.IViewLocator
     {
@@ -920,51 +924,51 @@ namespace Catel.MVVM
     }
     public abstract class ViewModelBase : Catel.Data.ValidatableModelBase, Catel.Data.IValidatable, Catel.IUniqueIdentifyable, Catel.MVVM.IRelationalViewModel, Catel.MVVM.IViewModel, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged
     {
-        protected static readonly Catel.MVVM.IViewModelManager ViewModelManager;
         protected readonly Catel.Data.IObjectAdapter _objectAdapter;
+        protected static readonly Catel.MVVM.IViewModelManager ViewModelManager;
         protected ViewModelBase() { }
-        protected ViewModelBase(bool supportIEditableObject, bool ignoreMultipleModelsWarning = False, bool skipViewModelAttributesInitialization = False) { }
-        protected ViewModelBase(Catel.IoC.IServiceLocator serviceLocator, bool supportIEditableObject = True, bool ignoreMultipleModelsWarning = False, bool skipViewModelAttributesInitialization = False) { }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        protected ViewModelBase(bool supportIEditableObject, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false) { }
+        protected ViewModelBase(Catel.IoC.IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false) { }
+        [Catel.Data.ExcludeFromValidation]
         protected bool DeferValidationUntilFirstSaveCall { get; set; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         protected Catel.IoC.IDependencyResolver DependencyResolver { get; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         protected bool DispatchPropertyChangedEvent { get; set; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         public override bool HasErrors { get; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         protected bool InvalidateCommandsOnPropertyChanged { get; set; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         public bool IsCanceled { get; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         protected bool IsCanceling { get; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         public bool IsClosed { get; }
         protected bool IsClosing { get; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         protected bool IsInitialized { get; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         protected bool IsInitializing { get; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         public bool IsSaved { get; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         protected bool IsSaving { get; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         protected Catel.MVVM.Navigation.NavigationContext NavigationContext { get; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         public Catel.MVVM.IViewModel ParentViewModel { get; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         protected System.TimeSpan ThrottlingRate { get; set; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         public virtual string Title { get; set; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         public int UniqueIdentifier { get; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         protected bool ValidateModelsOnInitialization { get; set; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         protected Catel.MVVM.IViewModelCommandManager ViewModelCommandManager { get; }
-        [Catel.Data.ExcludeFromValidationAttribute()]
+        [Catel.Data.ExcludeFromValidation]
         public System.DateTime ViewModelConstructionTime { get; }
         public event Catel.AsyncEventHandler<System.EventArgs> CanceledAsync;
         public event Catel.AsyncEventHandler<Catel.MVVM.CancelingEventArgs> CancelingAsync;
@@ -978,7 +982,7 @@ namespace Catel.MVVM
         protected virtual System.Threading.Tasks.Task<bool> CancelAsync() { }
         public System.Threading.Tasks.Task<bool> CancelViewModelAsync() { }
         protected virtual System.Threading.Tasks.Task CloseAsync() { }
-        public System.Threading.Tasks.Task CloseViewModelAsync(System.Nullable<bool> result) { }
+        public System.Threading.Tasks.Task CloseViewModelAsync(bool? result) { }
         protected object[] GetAllModels() { }
         protected System.Collections.Generic.IEnumerable<Catel.MVVM.IViewModel> GetChildViewModels() { }
         protected virtual int GetObjectId(Catel.Services.IObjectIdGenerator<int> objectIdGenerator) { }
@@ -988,7 +992,7 @@ namespace Catel.MVVM
         public System.Threading.Tasks.Task InitializeViewModelAsync() { }
         protected void InitializeViewModelAttributes() { }
         protected bool IsModelRegistered(string name) { }
-        protected virtual System.Threading.Tasks.Task OnClosedAsync(System.Nullable<bool> result) { }
+        protected virtual System.Threading.Tasks.Task OnClosedAsync(bool? result) { }
         protected virtual System.Threading.Tasks.Task OnClosingAsync() { }
         protected virtual void OnModelPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
         protected virtual void OnNavigationCompleted() { }
@@ -1005,21 +1009,21 @@ namespace Catel.MVVM
         protected virtual void UninitializeModel(string modelProperty, object model, Catel.MVVM.ModelCleanUpMode modelCleanUpMode) { }
         protected void UpdateExplicitViewModelToModelMappings() { }
         public void UpdateNavigationContext(Catel.MVVM.Navigation.NavigationContext navigationContext) { }
-        public override void Validate(bool force = False) { }
+        public override void Validate(bool force = false) { }
     }
     public class ViewModelClosedEventArgs : System.EventArgs
     {
-        public ViewModelClosedEventArgs(Catel.MVVM.IViewModel viewModel, System.Nullable<bool> result) { }
-        public System.Nullable<bool> Result { get; }
+        public ViewModelClosedEventArgs(Catel.MVVM.IViewModel viewModel, bool? result) { }
+        public bool? Result { get; }
         public Catel.MVVM.IViewModel ViewModel { get; }
     }
     public class ViewModelCommandManager : Catel.MVVM.IViewModelCommandManager
     {
         public void AddHandler(System.Func<Catel.MVVM.IViewModel, string, System.Windows.Input.ICommand, object, System.Threading.Tasks.Task> handler) { }
+        public void InvalidateCommands(bool force = false) { }
         public static Catel.MVVM.IViewModelCommandManager Create(Catel.MVVM.IViewModel viewModel) { }
-        public void InvalidateCommands(bool force = False) { }
     }
-    public class static ViewModelExtensions
+    public static class ViewModelExtensions
     {
         public static Catel.Data.IValidationSummary GetValidationSummary(this Catel.MVVM.ViewModelBase viewModel, bool includeChildViewModelValidations) { }
         public static Catel.Data.IValidationSummary GetValidationSummary(this Catel.MVVM.ViewModelBase viewModel, bool includeChildViewModelValidations, object tag) { }
@@ -1055,9 +1059,9 @@ namespace Catel.MVVM
         public int ViewModelCount { get; }
         public System.Collections.Generic.IEnumerable<Catel.MVVM.IRelationalViewModel> GetChildViewModels(Catel.MVVM.IViewModel parentViewModel) { }
         public System.Collections.Generic.IEnumerable<Catel.MVVM.IRelationalViewModel> GetChildViewModels(int parentUniqueIdentifier) { }
+        public Catel.MVVM.IViewModel GetFirstOrDefaultInstance(System.Type viewModelType) { }
         public TViewModel GetFirstOrDefaultInstance<TViewModel>()
             where TViewModel : Catel.MVVM.IViewModel { }
-        public Catel.MVVM.IViewModel GetFirstOrDefaultInstance(System.Type viewModelType) { }
         public Catel.MVVM.IViewModel GetViewModel(int uniqueIdentifier) { }
         public Catel.MVVM.IViewModel[] GetViewModelsOfModel(object model) { }
         public void RegisterModel(Catel.MVVM.IViewModel viewModel, object model) { }
@@ -1066,7 +1070,7 @@ namespace Catel.MVVM
         public void UnregisterModel(Catel.MVVM.IViewModel viewModel, object model) { }
         public void UnregisterViewModelInstance(Catel.MVVM.IViewModel viewModel) { }
     }
-    public class static ViewModelManagerExtensions
+    public static class ViewModelManagerExtensions
     {
         public static System.Threading.Tasks.Task CancelAndCloseViewModelsAsync(this Catel.MVVM.IViewModelManager viewModelManager, System.Func<Catel.MVVM.IViewModel, bool> predicate) { }
         public static System.Threading.Tasks.Task SaveAndCloseViewModelsAsync(this Catel.MVVM.IViewModelManager viewModelManager, System.Func<Catel.MVVM.IViewModel, bool> predicate) { }
@@ -1076,11 +1080,11 @@ namespace Catel.MVVM
         public ViewModelNotRegisteredException(System.Type viewModelType) { }
         public System.Type ViewModelType { get; }
     }
-    public class static ViewModelServiceHelper
+    public static class ViewModelServiceHelper
     {
         public static void RegisterDefaultViewModelServices(Catel.IoC.IServiceLocator serviceLocator) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.All)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.All)]
     public class ViewModelToModelAttribute : System.Attribute
     {
         public ViewModelToModelAttribute(string model = "", string property = "") { }
@@ -1133,7 +1137,7 @@ namespace Catel.MVVM
 }
 namespace Catel.MVVM.Converters
 {
-    [System.Windows.Data.ValueConversionAttribute(typeof(object), typeof(object))]
+    [System.Windows.Data.ValueConversion(typeof(object), typeof(object))]
     public class AreEqualMultiValueConverter : System.Windows.Markup.MarkupExtension, System.Windows.Data.IMultiValueConverter
     {
         public AreEqualMultiValueConverter() { }
@@ -1141,14 +1145,14 @@ namespace Catel.MVVM.Converters
         public object[] ConvertBack(object value, System.Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture) { }
         public override object ProvideValue(System.IServiceProvider serviceProvider) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(bool), typeof(System.Windows.Visibility))]
+    [System.Windows.Data.ValueConversion(typeof(bool), typeof(System.Windows.Visibility))]
     public class BooleanToCollapsingVisibilityConverter : Catel.MVVM.Converters.VisibilityConverterBase
     {
         public BooleanToCollapsingVisibilityConverter() { }
         protected override object ConvertBack(object value, System.Type targetType, object parameter) { }
         protected override bool IsVisible(object value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(bool), typeof(double))]
+    [System.Windows.Data.ValueConversion(typeof(bool), typeof(double))]
     public class BooleanToGrayscaleConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public BooleanToGrayscaleConverter() { }
@@ -1156,19 +1160,19 @@ namespace Catel.MVVM.Converters
         public double TrueResult { get; set; }
         protected override object Convert(object value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(bool), typeof(System.Windows.Visibility))]
+    [System.Windows.Data.ValueConversion(typeof(bool), typeof(System.Windows.Visibility))]
     public class BooleanToHidingVisibilityConverter : Catel.MVVM.Converters.BooleanToCollapsingVisibilityConverter
     {
         public BooleanToHidingVisibilityConverter() { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(bool), typeof(bool))]
+    [System.Windows.Data.ValueConversion(typeof(bool), typeof(bool))]
     public class BooleanToOppositeBooleanConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public BooleanToOppositeBooleanConverter() { }
         protected override object Convert(object value, System.Type targetType, object parameter) { }
         protected override object ConvertBack(object value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(bool), typeof(string))]
+    [System.Windows.Data.ValueConversion(typeof(bool), typeof(string))]
     public class BooleanToTextConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public BooleanToTextConverter() { }
@@ -1189,25 +1193,25 @@ namespace Catel.MVVM.Converters
         public CollectionToCountConverter() { }
         protected override object Convert(object value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(bool), typeof(System.Windows.Visibility))]
+    [System.Windows.Data.ValueConversion(typeof(bool), typeof(System.Windows.Visibility))]
     public class CollectionToHidingVisibilityConverter : Catel.MVVM.Converters.CollectionToCollapsingVisibilityConverter
     {
         public CollectionToHidingVisibilityConverter() { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(System.Windows.Media.Color), typeof(System.Windows.Media.Brush))]
+    [System.Windows.Data.ValueConversion(typeof(System.Windows.Media.Color), typeof(System.Windows.Media.Brush))]
     public class ColorToBrushConverter : Catel.MVVM.Converters.ValueConverterBase<System.Windows.Media.Color, System.Windows.Media.Brush>
     {
         public ColorToBrushConverter() { }
         protected override object Convert(System.Windows.Media.Color value, System.Type targetType, object parameter) { }
         protected override object ConvertBack(System.Windows.Media.Brush value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(System.Collections.IEnumerable), typeof(bool))]
+    [System.Windows.Data.ValueConversion(typeof(System.Collections.IEnumerable), typeof(bool))]
     public class ContainsItemsConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public ContainsItemsConverter() { }
         protected override object Convert(object value, System.Type targetType, object parameter) { }
     }
-    public class static ConverterHelper
+    public static class ConverterHelper
     {
         public static readonly object UnsetValue;
         public static bool ShouldInvert(object parameter) { }
@@ -1217,13 +1221,13 @@ namespace Catel.MVVM.Converters
         public DebugConverter() { }
         protected override object Convert(object value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(string), typeof(System.Windows.Visibility))]
+    [System.Windows.Data.ValueConversion(typeof(string), typeof(System.Windows.Visibility))]
     public class EmptyStringToCollapsingVisibilityConverter : Catel.MVVM.Converters.VisibilityConverterBase
     {
         public EmptyStringToCollapsingVisibilityConverter() { }
         protected override bool IsVisible(object value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(string), typeof(System.Windows.Visibility))]
+    [System.Windows.Data.ValueConversion(typeof(string), typeof(System.Windows.Visibility))]
     public class EmptyStringToHidingVisibilityConverter : Catel.MVVM.Converters.EmptyStringToCollapsingVisibilityConverter
     {
         public EmptyStringToHidingVisibilityConverter() { }
@@ -1243,14 +1247,14 @@ namespace Catel.MVVM.Converters
         protected EventArgsConverterBase() { }
         protected abstract object Convert(object sender, TArgs args);
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(object), typeof(string))]
+    [System.Windows.Data.ValueConversion(typeof(object), typeof(string))]
     public class FormattingConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public FormattingConverter() { }
         protected FormattingConverter(string defaultFormatString) { }
         protected override object Convert(object value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(System.Collections.Generic.ICollection<System.Windows.Controls.ValidationError>), typeof(string))]
+    [System.Windows.Data.ValueConversion(typeof(System.Collections.Generic.ICollection<System.Windows.Controls.ValidationError>), typeof(string))]
     public class GetFirstValidationErrorConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public GetFirstValidationErrorConverter() { }
@@ -1265,21 +1269,21 @@ namespace Catel.MVVM.Converters
         object Convert(object sender, object args);
     }
     public interface IValueConverter : System.Windows.Data.IValueConverter { }
-    [System.Windows.Data.ValueConversionAttribute(typeof(string), typeof(System.Nullable<int>))]
+    [System.Windows.Data.ValueConversion(typeof(string), typeof(System.Nullable<int>))]
     public class IntToStringConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public IntToStringConverter() { }
         protected override object Convert(object value, System.Type targetType, object parameter) { }
         protected override object ConvertBack(object value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(System.Nullable<bool>), typeof(bool))]
+    [System.Windows.Data.ValueConversion(typeof(System.Nullable<bool>), typeof(bool))]
     public class IsSelectedConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public IsSelectedConverter() { }
         protected override object Convert(object value, System.Type targetType, object parameter) { }
         protected override object ConvertBack(object value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(System.Nullable<int>), typeof(bool))]
+    [System.Windows.Data.ValueConversion(typeof(System.Nullable<int>), typeof(bool))]
     public class IsSelectedValueConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public IsSelectedValueConverter() { }
@@ -1291,23 +1295,23 @@ namespace Catel.MVVM.Converters
         public LanguageConverter() { }
         protected override object Convert(string value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(string), typeof(object))]
+    [System.Windows.Data.ValueConversion(typeof(string), typeof(object))]
     public class MethodToValueConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public MethodToValueConverter() { }
         protected override object Convert(object value, System.Type targetType, object parameter) { }
         protected override object ConvertBack(object value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(int), typeof(int))]
+    [System.Windows.Data.ValueConversion(typeof(int), typeof(int))]
     public class MultiplyConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public MultiplyConverter() { }
         protected override object Convert(object value, System.Type targetType, object parameter) { }
         protected override object ConvertBack(object value, System.Type targetType, object parameter) { }
     }
-    [System.ObsoleteAttribute("Converter doesn\'t have a target type, so this converter won\'t work as expected. W" +
+    [System.Obsolete("Converter doesn\'t have a target type, so this converter won\'t work as expected. W" +
         "ill be removed in version 6.0.0.", true)]
-    [System.Windows.Data.ValueConversionAttribute(typeof(object), typeof(object))]
+    [System.Windows.Data.ValueConversion(typeof(object), typeof(object))]
     public class NullableValueConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public NullableValueConverter() { }
@@ -1319,30 +1323,30 @@ namespace Catel.MVVM.Converters
         public PlatformToBooleanConverter() { }
         protected override object Convert(object value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(object), typeof(bool))]
+    [System.Windows.Data.ValueConversion(typeof(object), typeof(bool))]
     public class ReferenceToBooleanConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public ReferenceToBooleanConverter() { }
         protected override object Convert(object value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(object), typeof(System.Windows.Visibility))]
+    [System.Windows.Data.ValueConversion(typeof(object), typeof(System.Windows.Visibility))]
     public class ReferenceToCollapsingVisibilityConverter : Catel.MVVM.Converters.VisibilityConverterBase
     {
         public ReferenceToCollapsingVisibilityConverter() { }
         protected override bool IsVisible(object value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(object), typeof(System.Windows.Visibility))]
+    [System.Windows.Data.ValueConversion(typeof(object), typeof(System.Windows.Visibility))]
     public class ReferenceToHidingVisibilityConverter : Catel.MVVM.Converters.ReferenceToCollapsingVisibilityConverter
     {
         public ReferenceToHidingVisibilityConverter() { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(System.DateTime), typeof(string))]
+    [System.Windows.Data.ValueConversion(typeof(System.DateTime), typeof(string))]
     public class ShortDateFormattingConverter : Catel.MVVM.Converters.FormattingConverter
     {
         public ShortDateFormattingConverter() { }
         protected override object ConvertBack(object value, System.Type targetType, object parameter) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(string), typeof(System.Nullable<int>))]
+    [System.Windows.Data.ValueConversion(typeof(string), typeof(System.Nullable<int>))]
     public class StringToIntConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public StringToIntConverter() { }
@@ -1376,21 +1380,21 @@ namespace Catel.MVVM.Converters
     public abstract class ValueConverterBase<TConvert, TConvertBack> : System.Windows.Markup.MarkupExtension, Catel.MVVM.Converters.IValueConverter, System.Windows.Data.IValueConverter
     {
         public ValueConverterBase() { }
-        [System.ComponentModel.TypeConverterAttribute(typeof(Catel.MVVM.Converters.StringToTypeConverter))]
+        [System.ComponentModel.TypeConverter(typeof(Catel.MVVM.Converters.StringToTypeConverter))]
         public System.Type BackOverrideType { get; set; }
         protected System.Globalization.CultureInfo CurrentCulture { get; }
         public Catel.MVVM.Converters.IValueConverter Link { get; set; }
-        [System.ComponentModel.TypeConverterAttribute(typeof(Catel.MVVM.Converters.StringToTypeConverter))]
+        [System.ComponentModel.TypeConverter(typeof(Catel.MVVM.Converters.StringToTypeConverter))]
         public System.Type OverrideType { get; set; }
         public bool SupportInversionUsingCommandParameter { get; set; }
-        public virtual object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) { }
         protected abstract object Convert(TConvert value, System.Type targetType, object parameter);
-        public virtual object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) { }
+        public virtual object Convert(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) { }
         protected virtual object ConvertBack(TConvertBack value, System.Type targetType, object parameter) { }
+        public virtual object ConvertBack(object value, System.Type targetType, object parameter, System.Globalization.CultureInfo culture) { }
         protected virtual bool IsConvertable<T>(object value) { }
         public override object ProvideValue(System.IServiceProvider serviceProvider) { }
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(object), typeof(object))]
+    [System.Windows.Data.ValueConversion(typeof(object), typeof(object))]
     public class ViewModelToViewConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public ViewModelToViewConverter() { }
@@ -1450,7 +1454,7 @@ namespace Catel.MVVM.Navigation
         public Catel.MVVM.Navigation.NavigationMode NavigationMode { get; }
         public string Uri { get; }
     }
-    public class static NavigationEventArgsExtensions
+    public static class NavigationEventArgsExtensions
     {
         public static string GetUriWithoutQueryInfo(this System.Windows.Navigation.NavigatingCancelEventArgs e) { }
         public static string GetUriWithoutQueryInfo(this System.Windows.Navigation.NavigationEventArgs e) { }
@@ -1469,7 +1473,7 @@ namespace Catel.MVVM.Navigation
         Refresh = 3,
         Unknown = 4,
     }
-    public class static NavigationModeExtensions
+    public static class NavigationModeExtensions
     {
         public static Catel.MVVM.Navigation.NavigationMode Convert(this System.Windows.Navigation.NavigationMode navigationMode) { }
     }
@@ -1491,8 +1495,8 @@ namespace Catel.MVVM.Providers
     }
     public abstract class LogicBase : Catel.Data.ObservableObject, Catel.IUniqueIdentifyable, Catel.MVVM.Views.IViewLoadState
     {
-        protected static readonly Catel.MVVM.Views.IViewLoadManager ViewLoadManager;
         protected readonly object _lockObject;
+        protected static readonly Catel.MVVM.Views.IViewLoadManager ViewLoadManager;
         protected LogicBase(Catel.MVVM.Views.IView targetView, System.Type viewModelType = null, Catel.MVVM.IViewModel viewModel = null) { }
         protected virtual bool CanViewBeLoaded { get; }
         public bool HasVmProperty { get; }
@@ -1502,7 +1506,7 @@ namespace Catel.MVVM.Providers
         public bool IsTargetViewLoaded { get; }
         protected bool IsUnloading { get; }
         protected System.WeakReference LastKnownDataContext { get; }
-        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be removed in version" +
+        [System.Obsolete("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be removed in version" +
             " 6.0.0.", true)]
         public bool PreventViewModelCreation { get; set; }
         protected Catel.MVVM.Views.IView TargetView { get; set; }
@@ -1525,8 +1529,8 @@ namespace Catel.MVVM.Providers
         public event Catel.AsyncEventHandler<System.EventArgs> ViewModelSavedAsync;
         public System.Threading.Tasks.Task<bool> CancelAndCloseViewModelAsync() { }
         public virtual System.Threading.Tasks.Task<bool> CancelViewModelAsync() { }
-        public virtual System.Threading.Tasks.Task CloseViewModelAsync(System.Nullable<bool> result) { }
-        public virtual System.Threading.Tasks.Task CloseViewModelAsync(System.Nullable<bool> result, bool dispose) { }
+        public virtual System.Threading.Tasks.Task CloseViewModelAsync(bool? result) { }
+        public virtual System.Threading.Tasks.Task CloseViewModelAsync(bool? result, bool dispose) { }
         protected System.Threading.Tasks.Task CompleteViewModelClosingAsync() { }
         protected Catel.MVVM.IViewModel ConstructViewModelUsingArgumentOrDefaultConstructor(object injectionObject) { }
         protected Catel.MVVM.IViewModel CreateViewModelByUsingDataContextOrConstructor() { }
@@ -1555,7 +1559,7 @@ namespace Catel.MVVM.Providers
         protected abstract void SetDataContext(object newDataContext);
         public virtual void ValidateViewModel() { }
     }
-    public class static LogicExtensions
+    public static class LogicExtensions
     {
         public static TValue GetValue<TLogic, TValue>(this Catel.MVVM.Providers.LogicBase logic, System.Func<TLogic, TValue> function)
             where TLogic : Catel.MVVM.Providers.LogicBase { }
@@ -1597,20 +1601,20 @@ namespace Catel.MVVM.Providers
     public class UserControlLogic : Catel.MVVM.Providers.LogicBase
     {
         public UserControlLogic(Catel.MVVM.Views.IView targetView, System.Type viewModelType = null, Catel.MVVM.IViewModel viewModel = null) { }
-        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement` instead. Will be removed in version 6.0.0.", true)]
+        [System.Obsolete("Use `ViewModelLifetimeManagement` instead. Will be removed in version 6.0.0.", true)]
         public bool CloseViewModelOnUnloaded { get; set; }
         public bool CreateWarningAndErrorValidatorForViewModel { get; set; }
-        public static bool DefaultCreateWarningAndErrorValidatorForViewModelValue { get; set; }
-        public static bool DefaultSkipSearchingForInfoBarMessageControlValue { get; set; }
-        public static bool DefaultSupportParentViewModelContainersValue { get; set; }
-        public static Catel.MVVM.Providers.UnloadBehavior DefaultUnloadBehaviorValue { get; set; }
         public bool DisableWhenNoViewModel { get; set; }
         protected bool HasParentViewModelContainer { get; }
         protected bool IsSubscribedToParentViewModel { get; }
         public bool SkipSearchingForInfoBarMessageControl { get; set; }
         public bool SupportParentViewModelContainers { get; set; }
         public Catel.MVVM.Providers.UnloadBehavior UnloadBehavior { get; set; }
-        public Catel.MVVM.Views.IViewModelWrapper CreateViewModelWrapper(bool force = False) { }
+        public static bool DefaultCreateWarningAndErrorValidatorForViewModelValue { get; set; }
+        public static bool DefaultSkipSearchingForInfoBarMessageControlValue { get; set; }
+        public static bool DefaultSupportParentViewModelContainersValue { get; set; }
+        public static Catel.MVVM.Providers.UnloadBehavior DefaultUnloadBehaviorValue { get; set; }
+        public Catel.MVVM.Views.IViewModelWrapper CreateViewModelWrapper(bool force = false) { }
         public object GetViewModelWrapper() { }
         public override void OnTargetViewDataContextChanged(object sender, Catel.MVVM.Views.DataContextChangedEventArgs e) { }
         public override System.Threading.Tasks.Task OnTargetViewLoadedAsync(object sender, System.EventArgs e) { }
@@ -1645,15 +1649,15 @@ namespace Catel.MVVM.Tasks
         string Message { get; }
         string Name { get; }
         int Percentage { get; }
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         void Execute();
         void Rollback();
     }
     public interface ITaskProgressTracker
     {
-        void UpdateStatus(string message, int percentage);
         void UpdateStatus(string message);
         void UpdateStatus(string message, bool indeterminate);
+        void UpdateStatus(string message, int percentage);
     }
     public abstract class TaskBase : Catel.Data.ModelBase, Catel.MVVM.Tasks.ITask
     {
@@ -1702,24 +1706,24 @@ namespace Catel.MVVM.Views
         object DataContext { get; set; }
         bool IsEnabled { get; set; }
         object Tag { get; set; }
-        public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> DataContextChanged;
-        public event System.EventHandler<System.EventArgs> Loaded;
-        public event System.EventHandler<System.EventArgs> Unloaded;
+        event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> DataContextChanged;
+        event System.EventHandler<System.EventArgs> Loaded;
+        event System.EventHandler<System.EventArgs> Unloaded;
     }
     public interface IViewLoadManager
     {
-        public event System.EventHandler<Catel.MVVM.Views.ViewLoadEventArgs> ViewLoaded;
-        public event System.EventHandler<Catel.MVVM.Views.ViewLoadEventArgs> ViewLoading;
-        public event System.EventHandler<Catel.MVVM.Views.ViewLoadEventArgs> ViewUnloaded;
-        public event System.EventHandler<Catel.MVVM.Views.ViewLoadEventArgs> ViewUnloading;
+        event System.EventHandler<Catel.MVVM.Views.ViewLoadEventArgs> ViewLoaded;
+        event System.EventHandler<Catel.MVVM.Views.ViewLoadEventArgs> ViewLoading;
+        event System.EventHandler<Catel.MVVM.Views.ViewLoadEventArgs> ViewUnloaded;
+        event System.EventHandler<Catel.MVVM.Views.ViewLoadEventArgs> ViewUnloading;
         void AddView(Catel.MVVM.Views.IViewLoadState viewLoadState);
         void CleanUp();
     }
     public interface IViewLoadState
     {
         Catel.MVVM.Views.IView View { get; }
-        public event System.EventHandler<System.EventArgs> Loaded;
-        public event System.EventHandler<System.EventArgs> Unloaded;
+        event System.EventHandler<System.EventArgs> Loaded;
+        event System.EventHandler<System.EventArgs> Unloaded;
     }
     public interface IViewManager
     {
@@ -1729,7 +1733,7 @@ namespace Catel.MVVM.Views
         void RegisterView(Catel.MVVM.Views.IView view);
         void UnregisterView(Catel.MVVM.Views.IView view);
     }
-    public class static IViewManagerExtensions
+    public static class IViewManagerExtensions
     {
         public static TView GetFirstOrDefaultInstance<TView>(this Catel.MVVM.IViewModelManager viewManager)
             where TView : Catel.MVVM.Views.IView { }
@@ -1741,7 +1745,7 @@ namespace Catel.MVVM.Views
         System.Collections.Generic.List<string> GetViewPropertiesToSubscribeTo(System.Type targetViewType);
         bool MustSubscribeToAllViewProperties(System.Type targetViewType);
     }
-    public class static ViewExtensions
+    public static class ViewExtensions
     {
         public static void AutoDetectViewPropertiesToSubscribe(this System.Type viewType) { }
         public static void Dispatch(this Catel.MVVM.Views.IView view, System.Action action) { }
@@ -1808,8 +1812,8 @@ namespace Catel.MVVM.Views
         public event System.EventHandler<Catel.MVVM.Views.ViewStackPartEventArgs> ViewStackLoaded;
         public event System.EventHandler<Catel.MVVM.Views.ViewStackPartEventArgs> ViewStackUnloaded;
         public event System.EventHandler<Catel.MVVM.Views.ViewStackPartEventArgs> ViewUnloaded;
-        public bool AddChild(Catel.MVVM.Views.ViewStack viewStack, Catel.MVVM.Views.ViewStack parentViewStack) { }
         public bool AddChild(Catel.MVVM.Views.IView view, Catel.MVVM.Views.ViewStack parentViewStack) { }
+        public bool AddChild(Catel.MVVM.Views.ViewStack viewStack, Catel.MVVM.Views.ViewStack parentViewStack) { }
         public void CheckForOutdatedChildren() { }
         public bool ContainsView(Catel.MVVM.Views.IView view) { }
         public void Dispose() { }
@@ -1822,7 +1826,7 @@ namespace Catel.MVVM.Views
         public ViewStackPartEventArgs(Catel.MVVM.Views.IView view) { }
         public Catel.MVVM.Views.IView View { get; }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false, Inherited=false)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false, Inherited=false)]
     public class ViewToViewModelAttribute : System.Attribute
     {
         public ViewToViewModelAttribute(string viewModelPropertyName = "") { }
@@ -1839,8 +1843,8 @@ namespace Catel.MVVM.Views
     }
     public class WeakViewInfo
     {
-        public WeakViewInfo(Catel.MVVM.Views.IView view, bool isViewLoaded = False) { }
-        public WeakViewInfo(Catel.MVVM.Views.IViewLoadState viewLoadState, bool isViewLoaded = False) { }
+        public WeakViewInfo(Catel.MVVM.Views.IView view, bool isViewLoaded = false) { }
+        public WeakViewInfo(Catel.MVVM.Views.IViewLoadState viewLoadState, bool isViewLoaded = false) { }
         public bool IsAlive { get; }
         public bool IsLoaded { get; }
         public Catel.MVVM.Views.IView View { get; }
@@ -1945,7 +1949,7 @@ namespace Catel.Services
         public void Stop() { }
         protected abstract void StopService();
     }
-    [System.FlagsAttribute()]
+    [System.Flags]
     public enum CameraType
     {
         Primary = 1,
@@ -2012,8 +2016,8 @@ namespace Catel.Services
     {
         public DispatcherService() { }
         protected virtual System.Windows.Threading.Dispatcher CurrentDispatcher { get; }
-        public void BeginInvoke(System.Action action, bool onlyBeginInvokeWhenNoAccess = True) { }
-        public void Invoke(System.Action action, bool onlyInvokeWhenNoAccess = True) { }
+        public void BeginInvoke(System.Action action, bool onlyBeginInvokeWhenNoAccess = true) { }
+        public void Invoke(System.Action action, bool onlyInvokeWhenNoAccess = true) { }
         public System.Threading.Tasks.Task InvokeAsync(System.Action action) { }
         public System.Threading.Tasks.Task InvokeAsync(System.Delegate method, params object[] args) { }
         public System.Threading.Tasks.Task<T> InvokeAsync<T>(System.Func<T> func) { }
@@ -2031,43 +2035,43 @@ namespace Catel.Services
     public abstract class FileServiceBase : Catel.Services.ViewModelServiceBase, Catel.Services.IFileSupport
     {
         protected FileServiceBase() { }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool AddExtension { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool CheckFileExists { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool CheckPathExists { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public string FileName { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public string Filter { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public int FilterIndex { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public string InitialDirectory { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public string Title { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool ValidateNames { get; set; }
-        [System.ObsoleteAttribute("Use `ConfigureFileDialog(FileDialog, DetermineFileContext)` instead. Will be trea" +
+        [System.Obsolete("Use `ConfigureFileDialog(FileDialog, DetermineFileContext)` instead. Will be trea" +
             "ted as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         protected virtual void ConfigureFileDialog(Microsoft.Win32.FileDialog fileDialog) { }
         protected virtual void ConfigureFileDialog(Microsoft.Win32.FileDialog fileDialog, Catel.Services.DetermineFileContext context) { }
-        [System.ObsoleteAttribute("Use `GetInitialDirectory(DetermineFileContext)` instead. Will be treated as an er" +
+        [System.Obsolete("Use `GetInitialDirectory(DetermineFileContext)` instead. Will be treated as an er" +
             "ror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         protected virtual string GetInitialDirectory() { }
         protected virtual string GetInitialDirectory(Catel.Services.DetermineFileContext context) { }
     }
-    [System.FlagsAttribute()]
+    [System.Flags]
     public enum FlashMode
     {
         On = 1,
@@ -2087,7 +2091,7 @@ namespace Catel.Services
     {
         string[] GetAutoCompleteValues(string property, string filter, System.Collections.IEnumerable source);
     }
-    [System.CLSCompliantAttribute(false)]
+    [System.CLSCompliant(false)]
     public interface ICameraService
     {
         System.Collections.Generic.IEnumerable<Catel.Services.Size> AvailableResolutions { get; }
@@ -2096,16 +2100,16 @@ namespace Catel.Services
         bool IsFocusAtPointSupported { get; }
         bool IsFocusSupported { get; }
         double Orientation { get; }
-        [System.CLSCompliantAttribute(false)]
+        [System.CLSCompliant(false)]
         Catel.Services.Size PreviewResolution { get; }
-        [System.CLSCompliantAttribute(false)]
+        [System.CLSCompliant(false)]
         Catel.Services.Size Resolution { get; set; }
-        public event System.EventHandler<Catel.Services.CameraOperationCompletedEventArgs> AutoFocusCompleted;
-        public event System.EventHandler<Catel.Services.CameraOperationCompletedEventArgs> CaptureCompleted;
-        public event System.EventHandler<Catel.Services.ContentReadyEventArgs> CaptureImageAvailable;
-        public event System.EventHandler CaptureStarted;
-        public event System.EventHandler<Catel.Services.ContentReadyEventArgs> CaptureThumbnailAvailable;
-        public event System.EventHandler<Catel.Services.CameraOperationCompletedEventArgs> Initialized;
+        event System.EventHandler<Catel.Services.CameraOperationCompletedEventArgs> AutoFocusCompleted;
+        event System.EventHandler<Catel.Services.CameraOperationCompletedEventArgs> CaptureCompleted;
+        event System.EventHandler<Catel.Services.ContentReadyEventArgs> CaptureImageAvailable;
+        event System.EventHandler CaptureStarted;
+        event System.EventHandler<Catel.Services.ContentReadyEventArgs> CaptureThumbnailAvailable;
+        event System.EventHandler<Catel.Services.CameraOperationCompletedEventArgs> Initialized;
         void CancelFocus();
         void CaptureImage();
         void Focus();
@@ -2121,8 +2125,8 @@ namespace Catel.Services
     }
     public interface IDispatcherService
     {
-        void BeginInvoke(System.Action action, bool onlyBeginInvokeWhenNoAccess = True);
-        void Invoke(System.Action action, bool onlyInvokeWhenNoAccess = True);
+        void BeginInvoke(System.Action action, bool onlyBeginInvokeWhenNoAccess = true);
+        void Invoke(System.Action action, bool onlyInvokeWhenNoAccess = true);
         System.Threading.Tasks.Task InvokeAsync(System.Action action);
         System.Threading.Tasks.Task InvokeAsync(System.Delegate method, params object[] args);
         System.Threading.Tasks.Task<T> InvokeAsync<T>(System.Func<T> func);
@@ -2131,10 +2135,10 @@ namespace Catel.Services
         System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.Tasks.Task<T>> funcAsync);
         System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken);
     }
-    public class static IDispatcherServiceExtensions
+    public static class IDispatcherServiceExtensions
     {
-        public static void BeginInvoke(this Catel.Services.IDispatcherService dispatcherService, System.Delegate method, params object[] args) { }
         public static void BeginInvoke(this Catel.Services.IDispatcherService dispatcherService, System.Action action) { }
+        public static void BeginInvoke(this Catel.Services.IDispatcherService dispatcherService, System.Delegate method, params object[] args) { }
         public static void BeginInvokeIfRequired(this Catel.Services.IDispatcherService dispatcherService, System.Action action) { }
         public static void BeginInvokeIfRequired(this Catel.Services.IDispatcherService dispatcherService, System.Delegate method, params object[] args) { }
         public static void Invoke(this Catel.Services.IDispatcherService dispatcherService, System.Delegate method, params object[] args) { }
@@ -2143,31 +2147,31 @@ namespace Catel.Services
     }
     public interface IFileSupport
     {
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         bool AddExtension { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         bool CheckFileExists { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         bool CheckPathExists { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         string FileName { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         string Filter { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         int FilterIndex { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         string InitialDirectory { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         string Title { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         bool ValidateNames { get; set; }
     }
@@ -2180,7 +2184,7 @@ namespace Catel.Services
     public interface ILocationService
     {
         Catel.Services.ILocation CurrentLocation { get; }
-        public event System.EventHandler<Catel.Services.LocationChangedEventArgs> LocationChanged;
+        event System.EventHandler<Catel.Services.LocationChangedEventArgs> LocationChanged;
         Catel.Services.ILocation GetCurrentLocation();
         bool Start();
         void Stop();
@@ -2201,32 +2205,32 @@ namespace Catel.Services
     {
         bool CanGoBack { get; }
         bool CanGoForward { get; }
-        public event System.EventHandler<System.EventArgs> ApplicationClosed;
-        public event System.EventHandler<Catel.Services.ApplicationClosingEventArgs> ApplicationClosing;
+        event System.EventHandler<System.EventArgs> ApplicationClosed;
+        event System.EventHandler<Catel.Services.ApplicationClosingEventArgs> ApplicationClosing;
         bool CloseApplication();
         int GetBackStackCount();
         void GoBack();
         void GoForward();
-        void Navigate(string uri, System.Collections.Generic.Dictionary<string, object> parameters = null);
-        void Navigate<TViewModelType>(System.Collections.Generic.Dictionary<string, object> parameters = null);
-        void Navigate(System.Type viewModelType, System.Collections.Generic.Dictionary<string, object> parameters = null);
         void Navigate(System.Uri uri);
-        void Register(System.Type viewModelType, System.Uri uri);
+        void Navigate(string uri, System.Collections.Generic.Dictionary<string, object> parameters = null);
+        void Navigate(System.Type viewModelType, System.Collections.Generic.Dictionary<string, object> parameters = null);
+        void Navigate<TViewModelType>(System.Collections.Generic.Dictionary<string, object> parameters = null);
         void Register(string name, System.Uri uri);
+        void Register(System.Type viewModelType, System.Uri uri);
         void RemoveAllBackEntries();
         void RemoveBackEntry();
-        bool Unregister(System.Type viewModelType);
         bool Unregister(string name);
+        bool Unregister(System.Type viewModelType);
     }
     public interface IOpenFileService : Catel.Services.IFileSupport
     {
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         string[] FileNames { get; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         bool IsMultiSelect { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileAsync(DetermineOpenFileContext)` instead. Will be treated as an" +
+        [System.Obsolete("Use `DetermineFileAsync(DetermineOpenFileContext)` instead. Will be treated as an" +
             " error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         System.Threading.Tasks.Task<bool> DetermineFileAsync();
         System.Threading.Tasks.Task<Catel.Services.DetermineOpenFileResult> DetermineFileAsync(Catel.Services.DetermineOpenFileContext context);
@@ -2242,7 +2246,7 @@ namespace Catel.Services
         void UpdateStatus(string status);
         void UpdateStatus(int currentItem, int totalItems, string statusFormat = "");
     }
-    public class static IPleaseWaitServiceExtensions
+    public static class IPleaseWaitServiceExtensions
     {
         public static System.IDisposable HideTemporarily(this Catel.Services.IPleaseWaitService pleaseWaitService) { }
         public static System.IDisposable PushInScope(this Catel.Services.IPleaseWaitService pleaseWaitService, string status = "") { }
@@ -2255,37 +2259,37 @@ namespace Catel.Services
     }
     public interface ISaveFileService : Catel.Services.IFileSupport
     {
-        [System.ObsoleteAttribute("Use `DetermineFileAsync(DetermineSaveFileContext)` instead. Will be treated as an" +
+        [System.Obsolete("Use `DetermineFileAsync(DetermineSaveFileContext)` instead. Will be treated as an" +
             " error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         System.Threading.Tasks.Task<bool> DetermineFileAsync();
         System.Threading.Tasks.Task<Catel.Services.DetermineSaveFileResult> DetermineFileAsync(Catel.Services.DetermineSaveFileContext context);
     }
     public interface ISchedulerService
     {
-        void Schedule(System.Action action, System.TimeSpan timeSpan);
         void Schedule(System.Action action, System.DateTime dateTime);
+        void Schedule(System.Action action, System.TimeSpan timeSpan);
     }
     public interface ISelectDirectoryService
     {
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
+        [System.Obsolete("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
             "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         string DirectoryName { get; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
+        [System.Obsolete("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
             "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         string FileName { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
+        [System.Obsolete("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
             "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         string Filter { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
+        [System.Obsolete("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
             "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         string InitialDirectory { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
+        [System.Obsolete("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
             "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         bool ShowNewFolderButton { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
+        [System.Obsolete("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
             "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         string Title { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryAsync(DetermineDirectoryContext)` instead. Will be treated" +
+        [System.Obsolete("Use `DetermineDirectoryAsync(DetermineDirectoryContext)` instead. Will be treated" +
             " as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         System.Threading.Tasks.Task<bool> DetermineDirectoryAsync();
         System.Threading.Tasks.Task<Catel.Services.DetermineDirectoryResult> DetermineDirectoryAsync(Catel.Services.DetermineDirectoryContext context);
@@ -2296,20 +2300,20 @@ namespace Catel.Services
         TValueInterface CurrentValue { get; }
         bool IsSupported { get; }
         System.TimeSpan TimeBetweenUpdates { get; set; }
-        public event System.EventHandler<TEventArgs> CurrentValueChanged;
+        event System.EventHandler<TEventArgs> CurrentValueChanged;
         TValueInterface GetCurrentValue();
         void Start();
         void Stop();
     }
-    [System.ObsoleteAttribute("Use Orc.CommandLine instead since that has better support for parsing command lin" +
+    [System.Obsolete("Use Orc.CommandLine instead since that has better support for parsing command lin" +
         "es. Will be removed in version 6.0.0.", true)]
     public interface IStartUpInfoProvider
     {
         string[] Arguments { get; }
     }
-    [System.ObsoleteAttribute("Use Orc.CommandLine instead since that has better support for parsing command lin" +
+    [System.Obsolete("Use Orc.CommandLine instead since that has better support for parsing command lin" +
         "es. Will be removed in version 6.0.0.", true)]
-    public class static IStartUpInfoProviderExtensions
+    public static class IStartUpInfoProviderExtensions
     {
         public static string GetCommandLine(this Catel.Services.IStartUpInfoProvider startUpInfoProvider) { }
     }
@@ -2319,7 +2323,7 @@ namespace Catel.Services
         Catel.Services.IState LoadState(string key);
         void StoreState(string key, Catel.Services.IState state);
     }
-    public class static IStateServiceExtensions
+    public static class IStateServiceExtensions
     {
         public static TState LoadState<TState>(this Catel.Services.IStateService stateService, string key)
             where TState :  class, Catel.Services.IState { }
@@ -2327,30 +2331,30 @@ namespace Catel.Services
     public interface IUIVisualizerService
     {
         bool IsRegistered(string name);
-        void Register(string name, System.Type windowType, bool throwExceptionIfExists = True);
-        System.Threading.Tasks.Task<System.Nullable<bool>> ShowAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
-        System.Threading.Tasks.Task<System.Nullable<bool>> ShowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
-        System.Threading.Tasks.Task<System.Nullable<bool>> ShowDialogAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
-        System.Threading.Tasks.Task<System.Nullable<bool>> ShowDialogAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
+        void Register(string name, System.Type windowType, bool throwExceptionIfExists = true);
+        System.Threading.Tasks.Task<bool?> ShowAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
+        System.Threading.Tasks.Task<bool?> ShowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
+        System.Threading.Tasks.Task<bool?> ShowDialogAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
+        System.Threading.Tasks.Task<bool?> ShowDialogAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
         bool Unregister(string name);
     }
-    public class static IUIVisualizerServiceExtensions
+    public static class IUIVisualizerServiceExtensions
     {
-        public static System.Nullable<bool> ActivateWindow(System.Windows.Window window) { }
-        public static bool IsRegistered<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService) { }
+        public static bool? ActivateWindow(System.Windows.Window window) { }
         public static bool IsRegistered(this Catel.Services.IUIVisualizerService uiVisualizerService, System.Type viewModelType) { }
-        public static void Register<TViewModel, TView>(this Catel.Services.IUIVisualizerService uiVisualizerService, bool throwExceptionIfExists = True) { }
-        public static void Register(this Catel.Services.IUIVisualizerService uiVisualizerService, System.Type viewModelType, System.Type windowType, bool throwExceptionIfExists = True) { }
-        public static System.Threading.Tasks.Task<System.Nullable<bool>> ShowAsync<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService, object model = null, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null)
+        public static bool IsRegistered<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService) { }
+        public static void Register(this Catel.Services.IUIVisualizerService uiVisualizerService, System.Type viewModelType, System.Type windowType, bool throwExceptionIfExists = true) { }
+        public static void Register<TViewModel, TView>(this Catel.Services.IUIVisualizerService uiVisualizerService, bool throwExceptionIfExists = true) { }
+        public static System.Threading.Tasks.Task<bool?> ShowAsync<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService, object model = null, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null)
             where TViewModel : Catel.MVVM.IViewModel { }
-        public static System.Threading.Tasks.Task<System.Nullable<bool>> ShowDialogAsync<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService, object model = null, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null)
-            where TViewModel : Catel.MVVM.IViewModel { }
-        public static System.Threading.Tasks.Task<System.Nullable<bool>> ShowOrActivateAsync<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService, object model = null, object scope = null, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null)
+        public static System.Threading.Tasks.Task<bool?> ShowDialogAsync<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService, object model = null, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null)
             where TViewModel : Catel.MVVM.IViewModel { }
         public static System.Threading.Tasks.Task ShowOrActivateAsync<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService, object dataContext = null, object scope = null)
             where TViewModel : Catel.MVVM.IViewModel { }
-        public static bool Unregister<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService) { }
+        public static System.Threading.Tasks.Task<bool?> ShowOrActivateAsync<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService, object model = null, object scope = null, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null)
+            where TViewModel : Catel.MVVM.IViewModel { }
         public static bool Unregister(this Catel.Services.IUIVisualizerService uiVisualizerService, System.Type viewModelType) { }
+        public static bool Unregister<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService) { }
     }
     public interface IVibrateService
     {
@@ -2363,7 +2367,7 @@ namespace Catel.Services
     }
     public interface IViewExportService
     {
-        [System.ObsoleteAttribute("Use `ExportAsync` instead. Will be removed in version 6.0.0.", true)]
+        [System.Obsolete("Use `ExportAsync` instead. Will be removed in version 6.0.0.", true)]
         void Export(Catel.MVVM.IViewModel viewModel, Catel.Services.ExportMode exportMode = 0, double dpiX = 96, double dpiY = 96);
         System.Threading.Tasks.Task ExportAsync(Catel.MVVM.IViewModel viewModel, Catel.Services.ExportMode exportMode = 0, double dpiX = 96, double dpiY = 96);
     }
@@ -2377,12 +2381,12 @@ namespace Catel.Services
     public interface IWrapControlService
     {
         bool CanBeWrapped(System.Windows.FrameworkElement frameworkElement);
+        System.Windows.FrameworkElement GetWrappedElement(System.Windows.Controls.Grid wrappedGrid, Catel.Services.WrapControlServiceWrapOptions wrapOption);
+        System.Windows.FrameworkElement GetWrappedElement(System.Windows.Controls.Grid wrappedGrid, string controlName);
         T GetWrappedElement<T>(System.Windows.Controls.Grid wrappedGrid, Catel.Services.WrapControlServiceWrapOptions wrapOption)
             where T : System.Windows.FrameworkElement;
-        System.Windows.FrameworkElement GetWrappedElement(System.Windows.Controls.Grid wrappedGrid, Catel.Services.WrapControlServiceWrapOptions wrapOption);
         T GetWrappedElement<T>(System.Windows.Controls.Grid wrappedGrid, string controlName)
             where T : System.Windows.FrameworkElement;
-        System.Windows.FrameworkElement GetWrappedElement(System.Windows.Controls.Grid wrappedGrid, string controlName);
         System.Windows.Controls.Grid Wrap(System.Windows.FrameworkElement frameworkElement, Catel.Services.WrapControlServiceWrapOptions wrapOptions, System.Windows.Controls.ContentControl parentContentControl = null);
         System.Windows.Controls.Grid Wrap(System.Windows.FrameworkElement frameworkElement, Catel.Services.WrapControlServiceWrapOptions wrapOptions, Catel.Windows.DataWindowButton[] buttons, System.Windows.Controls.ContentControl parentContentControl);
     }
@@ -2416,7 +2420,7 @@ namespace Catel.Services
         public void Stop() { }
         protected virtual void StopSensor() { }
     }
-    [System.FlagsAttribute()]
+    [System.Flags]
     public enum MessageButton
     {
         OK = 1,
@@ -2444,7 +2448,7 @@ namespace Catel.Services
     }
     public class MessageService : Catel.Services.ViewModelServiceBase, Catel.Services.IMessageService
     {
-        [System.ObsoleteAttribute("Backwards compatible constructor, use MessageService(IDispatcherService, ILanguag" +
+        [System.Obsolete("Backwards compatible constructor, use MessageService(IDispatcherService, ILanguag" +
             "eService) instead. Will be removed in version 6.0.0.", true)]
         public MessageService(Catel.Services.IDispatcherService dispatcherService) { }
         public MessageService(Catel.Services.IDispatcherService dispatcherService, Catel.Services.ILanguageService languageService) { }
@@ -2458,7 +2462,7 @@ namespace Catel.Services
         protected static System.Windows.MessageBoxButton TranslateMessageButton(Catel.Services.MessageButton button) { }
         protected static System.Windows.MessageBoxImage TranslateMessageImage(Catel.Services.MessageImage image) { }
     }
-    public class static NamingConvention
+    public static class NamingConvention
     {
         public const string Assembly = "[AS]";
         public const string Current = "[CURRENT]";
@@ -2494,15 +2498,15 @@ namespace Catel.Services
         public virtual void GoForward() { }
         public virtual void Navigate(System.Uri uri) { }
         public virtual void Navigate(string uri, System.Collections.Generic.Dictionary<string, object> parameters = null) { }
-        public virtual void Navigate<TViewModelType>(System.Collections.Generic.Dictionary<string, object> parameters = null) { }
         public virtual void Navigate(System.Type viewModelType, System.Collections.Generic.Dictionary<string, object> parameters = null) { }
-        public virtual void Register(System.Type viewModelType, System.Uri uri) { }
+        public virtual void Navigate<TViewModelType>(System.Collections.Generic.Dictionary<string, object> parameters = null) { }
         public virtual void Register(string name, System.Uri uri) { }
+        public virtual void Register(System.Type viewModelType, System.Uri uri) { }
         public override void RemoveAllBackEntries() { }
         public override void RemoveBackEntry() { }
         protected override string ResolveNavigationTarget(System.Type viewModelType) { }
-        public virtual bool Unregister(System.Type viewModelType) { }
         public virtual bool Unregister(string name) { }
+        public virtual bool Unregister(System.Type viewModelType) { }
     }
     public abstract class NavigationServiceBase : Catel.Services.ViewModelServiceBase
     {
@@ -2517,13 +2521,13 @@ namespace Catel.Services
     public class OpenFileService : Catel.Services.FileServiceBase, Catel.Services.IFileSupport, Catel.Services.IOpenFileService
     {
         public OpenFileService() { }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public string[] FileNames { get; }
-        [System.ObsoleteAttribute("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
+        [System.Obsolete("Use `DetermineFileContext / DetermineFileResult` instead. Will be treated as an e" +
             "rror from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool IsMultiSelect { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineFileAsync(DetermineOpenFileContext)` instead. Will be treated as an" +
+        [System.Obsolete("Use `DetermineFileAsync(DetermineOpenFileContext)` instead. Will be treated as an" +
             " error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public virtual System.Threading.Tasks.Task<bool> DetermineFileAsync() { }
         public virtual System.Threading.Tasks.Task<Catel.Services.DetermineOpenFileResult> DetermineFileAsync(Catel.Services.DetermineOpenFileContext context) { }
@@ -2571,7 +2575,7 @@ namespace Catel.Services
     public class SaveFileService : Catel.Services.FileServiceBase, Catel.Services.IFileSupport, Catel.Services.ISaveFileService
     {
         public SaveFileService() { }
-        [System.ObsoleteAttribute("Use `DetermineFileAsync(DetermineSaveFileContext)` instead. Will be treated as an" +
+        [System.Obsolete("Use `DetermineFileAsync(DetermineSaveFileContext)` instead. Will be treated as an" +
             " error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public virtual System.Threading.Tasks.Task<bool> DetermineFileAsync() { }
         public virtual System.Threading.Tasks.Task<Catel.Services.DetermineSaveFileResult> DetermineFileAsync(Catel.Services.DetermineSaveFileContext context) { }
@@ -2579,31 +2583,31 @@ namespace Catel.Services
     public class SchedulerService : Catel.Services.ViewModelServiceBase, Catel.Services.ISchedulerService
     {
         public SchedulerService() { }
-        public virtual void Schedule(System.Action action, System.TimeSpan timeSpan) { }
         public virtual void Schedule(System.Action action, System.DateTime dateTime) { }
+        public virtual void Schedule(System.Action action, System.TimeSpan timeSpan) { }
     }
     public class SelectDirectoryService : Catel.Services.ViewModelServiceBase, Catel.Services.ISelectDirectoryService
     {
         public SelectDirectoryService() { }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
+        [System.Obsolete("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
             "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public string DirectoryName { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
+        [System.Obsolete("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
             "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public string FileName { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
+        [System.Obsolete("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
             "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public string Filter { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
+        [System.Obsolete("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
             "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public string InitialDirectory { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
+        [System.Obsolete("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
             "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool ShowNewFolderButton { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
+        [System.Obsolete("Use `DetermineDirectoryContext / DetermineDirectoryResult` instead. Will be treat" +
             "ed as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public string Title { get; set; }
-        [System.ObsoleteAttribute("Use `DetermineDirectoryAsync(DetermineDirectoryContext)` instead. Will be treated" +
+        [System.Obsolete("Use `DetermineDirectoryAsync(DetermineDirectoryContext)` instead. Will be treated" +
             " as an error from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public virtual System.Threading.Tasks.Task<bool> DetermineDirectoryAsync() { }
         public virtual System.Threading.Tasks.Task<Catel.Services.DetermineDirectoryResult> DetermineDirectoryAsync(Catel.Services.DetermineDirectoryContext context) { }
@@ -2627,14 +2631,14 @@ namespace Catel.Services
         public Size(double width, double height) { }
         public double Height { get; set; }
         public double Width { get; set; }
-        public override bool Equals(object obj) { }
         public bool Equals(Catel.Services.Size size) { }
+        public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
-        public static bool ==(Catel.Services.Size a, Catel.Services.Size b) { }
-        public static bool !=(Catel.Services.Size a, Catel.Services.Size b) { }
+        public static bool operator !=(Catel.Services.Size a, Catel.Services.Size b) { }
+        public static bool operator ==(Catel.Services.Size a, Catel.Services.Size b) { }
     }
-    [System.ObsoleteAttribute("Use Orc.CommandLine instead since that has better support for parsing command lin" +
+    [System.Obsolete("Use Orc.CommandLine instead since that has better support for parsing command lin" +
         "es. Will be removed in version 6.0.0.", true)]
     public class StartUpInfoProvider : Catel.Services.IStartUpInfoProvider
     {
@@ -2649,20 +2653,20 @@ namespace Catel.Services
     }
     public class UICompletedEventArgs : System.EventArgs
     {
-        public UICompletedEventArgs(object dataContext, System.Nullable<bool> result) { }
+        public UICompletedEventArgs(object dataContext, bool? result) { }
         public object DataContext { get; }
-        public System.Nullable<bool> Result { get; }
+        public bool? Result { get; }
     }
     public class UIVisualizerService : Catel.Services.ViewModelServiceBase, Catel.Services.IUIVisualizerService
     {
         protected readonly System.Collections.Generic.Dictionary<string, System.Type> RegisteredWindows;
-        [System.ObsoleteAttribute("Use `ctor(IViewLocator viewLocator, IDispatcherService dispatcherService)` instea" +
+        [System.Obsolete("Use `ctor(IViewLocator viewLocator, IDispatcherService dispatcherService)` instea" +
             "d. Will be removed in version 6.0.0.", true)]
         public UIVisualizerService(Catel.MVVM.IViewLocator viewLocator) { }
         public UIVisualizerService(Catel.MVVM.IViewLocator viewLocator, Catel.Services.IDispatcherService dispatcherService) { }
-        [System.ObsoleteAttribute("Use `CreateWindowAsync` instead. Will be removed in version 6.0.0.", true)]
+        [System.Obsolete("Use `CreateWindowAsync` instead. Will be removed in version 6.0.0.", true)]
         protected virtual System.Windows.FrameworkElement CreateWindow(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
-        [System.ObsoleteAttribute("Use `CreateWindowAsync` instead. Will be removed in version 6.0.0.", true)]
+        [System.Obsolete("Use `CreateWindowAsync` instead. Will be removed in version 6.0.0.", true)]
         protected virtual System.Windows.FrameworkElement CreateWindow(System.Type windowType, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
         protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
         protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(System.Type windowType, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
@@ -2670,13 +2674,13 @@ namespace Catel.Services
         protected virtual System.Windows.FrameworkElement GetActiveWindow() { }
         protected virtual void HandleCloseSubscription(object window, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
         public virtual bool IsRegistered(string name) { }
-        public virtual void Register(string name, System.Type windowType, bool throwExceptionIfExists = True) { }
+        public virtual void Register(string name, System.Type windowType, bool throwExceptionIfExists = true) { }
         protected virtual void RegisterViewForViewModelIfRequired(System.Type viewModelType) { }
-        public virtual System.Threading.Tasks.Task<System.Nullable<bool>> ShowAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
-        public virtual System.Threading.Tasks.Task<System.Nullable<bool>> ShowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
-        public virtual System.Threading.Tasks.Task<System.Nullable<bool>> ShowDialogAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
-        public virtual System.Threading.Tasks.Task<System.Nullable<bool>> ShowDialogAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
-        protected virtual System.Threading.Tasks.Task<System.Nullable<bool>> ShowWindowAsync(System.Windows.FrameworkElement window, object data, bool showModal) { }
+        public virtual System.Threading.Tasks.Task<bool?> ShowAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
+        public virtual System.Threading.Tasks.Task<bool?> ShowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
+        public virtual System.Threading.Tasks.Task<bool?> ShowDialogAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
+        public virtual System.Threading.Tasks.Task<bool?> ShowDialogAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
+        protected virtual System.Threading.Tasks.Task<bool?> ShowWindowAsync(System.Windows.FrameworkElement window, object data, bool showModal) { }
         public virtual bool Unregister(string name) { }
     }
     public class VibrateService : Catel.Services.IVibrateService
@@ -2693,7 +2697,7 @@ namespace Catel.Services
     public class ViewExportService : Catel.Services.ServiceBase, Catel.Services.IViewExportService
     {
         public ViewExportService(Catel.MVVM.Views.IViewManager viewManager, Catel.Services.ISaveFileService saveFileService) { }
-        [System.ObsoleteAttribute("Use `ExportAsync` instead. Will be removed in version 6.0.0.", true)]
+        [System.Obsolete("Use `ExportAsync` instead. Will be removed in version 6.0.0.", true)]
         public virtual void Export(Catel.MVVM.IViewModel viewModel, Catel.Services.ExportMode exportMode = 0, double dpiX = 96, double dpiY = 96) { }
         public virtual System.Threading.Tasks.Task ExportAsync(Catel.MVVM.IViewModel viewModel, Catel.Services.ExportMode exportMode = 0, double dpiX = 96, double dpiY = 96) { }
     }
@@ -2724,16 +2728,16 @@ namespace Catel.Services
     {
         public WrapControlService() { }
         public bool CanBeWrapped(System.Windows.FrameworkElement frameworkElement) { }
+        public System.Windows.FrameworkElement GetWrappedElement(System.Windows.Controls.Grid wrappedGrid, Catel.Services.WrapControlServiceWrapOptions wrapOption) { }
+        public System.Windows.FrameworkElement GetWrappedElement(System.Windows.Controls.Grid wrappedGrid, string controlName) { }
         public T GetWrappedElement<T>(System.Windows.Controls.Grid wrappedGrid, Catel.Services.WrapControlServiceWrapOptions wrapOption)
             where T : System.Windows.FrameworkElement { }
-        public System.Windows.FrameworkElement GetWrappedElement(System.Windows.Controls.Grid wrappedGrid, Catel.Services.WrapControlServiceWrapOptions wrapOption) { }
         public T GetWrappedElement<T>(System.Windows.Controls.Grid wrappedGrid, string controlName)
             where T : System.Windows.FrameworkElement { }
-        public System.Windows.FrameworkElement GetWrappedElement(System.Windows.Controls.Grid wrappedGrid, string controlName) { }
         public System.Windows.Controls.Grid Wrap(System.Windows.FrameworkElement frameworkElement, Catel.Services.WrapControlServiceWrapOptions wrapOptions, System.Windows.Controls.ContentControl parentContentControl = null) { }
         public System.Windows.Controls.Grid Wrap(System.Windows.FrameworkElement frameworkElement, Catel.Services.WrapControlServiceWrapOptions wrapOptions, Catel.Windows.DataWindowButton[] buttons, System.Windows.Controls.ContentControl parentContentControl) { }
     }
-    public class static WrapControlServiceControlNames
+    public static class WrapControlServiceControlNames
     {
         public const string ButtonsWrapPanelName = "_ButtonsWrapPanel";
         public const string DefaultCancelButtonName = "cancelButton";
@@ -2743,7 +2747,7 @@ namespace Catel.Services
         public const string MainContentHolderName = "_MainContentHolder";
         public const string WarningAndErrorValidatorName = "_WarningAndErrorValidator";
     }
-    [System.FlagsAttribute()]
+    [System.Flags]
     public enum WrapControlServiceWrapOptions
     {
         GenerateInlineInfoBarMessageControl = 1,
@@ -2753,7 +2757,7 @@ namespace Catel.Services
         GenerateAdornerDecorator = 16,
         All = 29,
     }
-    [System.FlagsAttribute()]
+    [System.Flags]
     public enum WrapOptions
     {
         None = 0,
@@ -2763,11 +2767,11 @@ namespace Catel.Services
 }
 namespace Catel.Windows
 {
-    public class static ApplicationExtensions
+    public static class ApplicationExtensions
     {
         public static System.Windows.Window GetActiveWindow(this System.Windows.Application application) { }
     }
-    public class static DataContextChangedHelper
+    public static class DataContextChangedHelper
     {
         public static void AddDataContextChangedHandler(this System.Windows.FrameworkElement element, System.EventHandler<Catel.Windows.Data.DependencyPropertyValueChangedEventArgs> handler) { }
         public static void RemoveDataContextChangedHandler(this System.Windows.FrameworkElement element, System.EventHandler<Catel.Windows.Data.DependencyPropertyValueChangedEventArgs> handler) { }
@@ -2775,29 +2779,23 @@ namespace Catel.Windows
     public class DataWindow : System.Windows.Window, Catel.MVVM.IViewModelContainer, Catel.MVVM.Views.IDataWindow, Catel.MVVM.Views.IView, System.ComponentModel.INotifyPropertyChanged
     {
         public DataWindow() { }
-        public DataWindow(Catel.Windows.DataWindowMode mode, System.Collections.Generic.IEnumerable<Catel.Windows.DataWindowButton> additionalButtons = null, Catel.Windows.DataWindowDefaultButton defaultButton = 0, bool setOwnerAndFocus = True, Catel.Windows.InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = 1, bool focusFirstControl = True) { }
         public DataWindow(Catel.MVVM.IViewModel viewModel) { }
-        public DataWindow(Catel.MVVM.IViewModel viewModel, Catel.Windows.DataWindowMode mode, System.Collections.Generic.IEnumerable<Catel.Windows.DataWindowButton> additionalButtons = null, Catel.Windows.DataWindowDefaultButton defaultButton = 0, bool setOwnerAndFocus = True, Catel.Windows.InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = 1, bool focusFirstControl = True) { }
+        public DataWindow(Catel.Windows.DataWindowMode mode, System.Collections.Generic.IEnumerable<Catel.Windows.DataWindowButton> additionalButtons = null, Catel.Windows.DataWindowDefaultButton defaultButton = 0, bool setOwnerAndFocus = true, Catel.Windows.InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = 1, bool focusFirstControl = true) { }
+        public DataWindow(Catel.MVVM.IViewModel viewModel, Catel.Windows.DataWindowMode mode, System.Collections.Generic.IEnumerable<Catel.Windows.DataWindowButton> additionalButtons = null, Catel.Windows.DataWindowDefaultButton defaultButton = 0, bool setOwnerAndFocus = true, Catel.Windows.InfoBarMessageControlGenerationMode infoBarMessageControlGenerationMode = 1, bool focusFirstControl = true) { }
         protected bool CanClose { get; set; }
         public bool CanCloseUsingEscape { get; set; }
         protected System.Collections.ObjectModel.ReadOnlyCollection<System.Windows.Input.ICommand> Commands { get; }
         protected Catel.Windows.DataWindowDefaultButton DefaultButton { get; }
         protected Catel.Windows.DataWindowMode Mode { get; }
-        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be treated as an erro" +
+        [System.Obsolete("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be treated as an erro" +
             "r from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool PreventViewModelCreation { get; set; }
         public Catel.MVVM.IViewModel ViewModel { get; }
         public Catel.MVVM.ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
         public System.Type ViewModelType { get; }
-        public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> Catel.MVVM.Views.IView.DataContextChanged;
-        public event System.EventHandler<System.EventArgs> Catel.MVVM.Views.IView.Loaded;
-        public event System.EventHandler<System.EventArgs> Catel.MVVM.Views.IView.Unloaded;
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         public event System.EventHandler<System.EventArgs> ViewModelChanged;
         public event System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> ViewModelPropertyChanged;
-        public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
-        public event System.EventHandler<System.EventArgs> _viewLoaded;
-        public event System.EventHandler<System.EventArgs> _viewUnloaded;
         protected void AddCustomButton(Catel.Windows.DataWindowButton dataWindowButton) { }
         protected virtual System.Threading.Tasks.Task<bool> ApplyChangesAsync() { }
         protected virtual System.Threading.Tasks.Task<bool> DiscardChangesAsync() { }
@@ -2829,10 +2827,10 @@ namespace Catel.Windows
     }
     public class DataWindowButton
     {
-        public DataWindowButton(string text, System.Windows.Input.ICommand command) { }
-        public DataWindowButton(string text, System.Windows.Input.ICommand command, string contentBindingPath = null, System.Windows.Data.IValueConverter contentValueConverter = null, string visibilityBindingPath = null, System.Windows.Data.IValueConverter visibilityValueConverter = null) { }
         public DataWindowButton(string text, string commandBindingPath) { }
+        public DataWindowButton(string text, System.Windows.Input.ICommand command) { }
         public DataWindowButton(string text, string commandBindingPath, string contentBindingPath = null, System.Windows.Data.IValueConverter contentValueConverter = null, string visibilityBindingPath = null, System.Windows.Data.IValueConverter visibilityValueConverter = null) { }
+        public DataWindowButton(string text, System.Windows.Input.ICommand command, string contentBindingPath = null, System.Windows.Data.IValueConverter contentValueConverter = null, string visibilityBindingPath = null, System.Windows.Data.IValueConverter visibilityValueConverter = null) { }
         public System.Windows.Input.ICommand Command { get; }
         public string CommandBindingPath { get; }
         public string ContentBindingPath { get; }
@@ -2861,7 +2859,7 @@ namespace Catel.Windows
         Close = 2,
         Custom = 3,
     }
-    public class static DependencyObjectExtensions
+    public static class DependencyObjectExtensions
     {
         public static object FindLogicalAncestor(this System.Windows.DependencyObject startElement, System.Predicate<object> condition, int maxDepth = -1) { }
         public static T FindLogicalAncestorByType<T>(this System.Windows.DependencyObject startElement) { }
@@ -2883,7 +2881,7 @@ namespace Catel.Windows
         public static System.Windows.DependencyObject GetVisualParent(this System.Windows.DependencyObject element) { }
         public static bool IsElementWithName(this System.Windows.DependencyObject dependencyObject, string name) { }
     }
-    public class static FrameworkElementExtensions
+    public static class FrameworkElementExtensions
     {
         public static void FixBlurriness(this System.Windows.FrameworkElement element) { }
         public static void HideValidationAdorner(this System.Windows.FrameworkElement frameworkElement) { }
@@ -2897,48 +2895,48 @@ namespace Catel.Windows
         Inline = 1,
         Overlay = 2,
     }
-    public class static PopupHelper
+    public static class PopupHelper
     {
         public static System.Collections.Generic.IEnumerable<System.Windows.Controls.Primitives.Popup> Popups { get; }
         public static System.Collections.Generic.IEnumerable<System.Windows.Controls.Primitives.Popup> GetAllPopups() { }
     }
-    public class static ResourceHelper
+    public static class ResourceHelper
     {
         public static void EnsurePackUriIsAllowed() { }
         public static string GetResourceUri(string resourceUri, string shortAssemblyName = null) { }
         public static bool XamlPageExists(string uriString) { }
         public static bool XamlPageExists(System.Uri uri) { }
     }
-    public class static UIElementExtensions
+    public static class UIElementExtensions
     {
-        public static void FocusFirstControl(this System.Windows.ContentElement element, bool focusParentsFirst = True) { }
-        public static void FocusFirstControl(this System.Windows.UIElement element, bool focusParentsFirst = True) { }
+        public static void FocusFirstControl(this System.Windows.ContentElement element, bool focusParentsFirst = true) { }
+        public static void FocusFirstControl(this System.Windows.UIElement element, bool focusParentsFirst = true) { }
         public static System.Windows.UIElement GetFocusedControl(this System.Windows.UIElement element) { }
+        public static void MoveFocus(this System.Windows.ContentElement element, System.Windows.Input.FocusNavigationDirection direction, int hops) { }
         public static void MoveFocus(this System.Windows.IInputElement element, System.Windows.Input.FocusNavigationDirection direction, int hops) { }
         public static void MoveFocus(this System.Windows.UIElement element, System.Windows.Input.FocusNavigationDirection direction, int hops) { }
-        public static void MoveFocus(this System.Windows.ContentElement element, System.Windows.Input.FocusNavigationDirection direction, int hops) { }
     }
     public class Window : Catel.Windows.DataWindow
     {
         public Window() { }
     }
-    public class static WindowExtensions
+    public static class WindowExtensions
     {
         public static void ApplyIconFromApplication(this System.Windows.Window window) { }
         public static void BringWindowToTop(this System.Windows.Window window) { }
         public static bool CanSetDialogResult(this System.Windows.Window window) { }
         public static System.IntPtr GetWindowHandle(this System.Windows.Window window) { }
         public static void RemoveIcon(this System.Windows.Window window) { }
-        public static void SetOwnerWindow(this System.Windows.Window window, bool forceNewOwner = False, bool focusFirstControl = False) { }
-        public static void SetOwnerWindow(this System.Windows.Window window, System.Windows.Window owner, bool forceNewOwner = False) { }
-        public static void SetOwnerWindow(this System.Windows.Window window, System.IntPtr owner, bool forceNewOwner = False) { }
-        public static void SetOwnerWindowAndFocus(this System.Windows.Window window, bool forceNewOwner = False, bool focusFirstControl = True) { }
-        public static void SetOwnerWindowAndFocus(this System.Windows.Window window, System.Windows.Window owner, bool forceNewOwner = False) { }
-        public static void SetOwnerWindowAndFocus(this System.Windows.Window window, System.IntPtr owner, bool forceNewOwner = False) { }
+        public static void SetOwnerWindow(this System.Windows.Window window, bool forceNewOwner = false, bool focusFirstControl = false) { }
+        public static void SetOwnerWindow(this System.Windows.Window window, System.IntPtr owner, bool forceNewOwner = false) { }
+        public static void SetOwnerWindow(this System.Windows.Window window, System.Windows.Window owner, bool forceNewOwner = false) { }
+        public static void SetOwnerWindowAndFocus(this System.Windows.Window window, bool forceNewOwner = false, bool focusFirstControl = true) { }
+        public static void SetOwnerWindowAndFocus(this System.Windows.Window window, System.IntPtr owner, bool forceNewOwner = false) { }
+        public static void SetOwnerWindowAndFocus(this System.Windows.Window window, System.Windows.Window owner, bool forceNewOwner = false) { }
     }
-    [System.ObsoleteAttribute("Use `Catel.Service.WrapControlService` instead. Will be removed in version 6.0.0." +
+    [System.Obsolete("Use `Catel.Service.WrapControlService` instead. Will be removed in version 6.0.0." +
         "", true)]
-    public class static WrapControlHelper
+    public static class WrapControlHelper
     {
         public const string ButtonsWrapPanelName = "_ButtonsWrapPanel";
         public const string DefaultCancelButtonName = "cancelButton";
@@ -2948,17 +2946,17 @@ namespace Catel.Windows
         public const string MainContentHolderName = "_MainContentHolder";
         public const string WarningAndErrorValidatorName = "_WarningAndErrorValidator";
         public static bool CanBeWrapped(System.Windows.FrameworkElement frameworkElement) { }
+        public static System.Windows.FrameworkElement GetWrappedElement(System.Windows.Controls.Grid wrappedGrid, Catel.Windows.WrapOptions wrapOption) { }
+        public static System.Windows.FrameworkElement GetWrappedElement(System.Windows.Controls.Grid wrappedGrid, string controlName) { }
         public static T GetWrappedElement<T>(System.Windows.Controls.Grid wrappedGrid, Catel.Windows.WrapOptions wrapOption)
             where T : System.Windows.FrameworkElement { }
-        public static System.Windows.FrameworkElement GetWrappedElement(System.Windows.Controls.Grid wrappedGrid, Catel.Windows.WrapOptions wrapOption) { }
         public static T GetWrappedElement<T>(System.Windows.Controls.Grid wrappedGrid, string controlName)
             where T : System.Windows.FrameworkElement { }
-        public static System.Windows.FrameworkElement GetWrappedElement(System.Windows.Controls.Grid wrappedGrid, string controlName) { }
         public static System.Windows.Controls.Grid Wrap(System.Windows.FrameworkElement frameworkElement, Catel.Windows.WrapOptions wrapOptions, System.Windows.Controls.ContentControl parentContentControl = null) { }
         public static System.Windows.Controls.Grid Wrap(System.Windows.FrameworkElement frameworkElement, Catel.Windows.WrapOptions wrapOptions, Catel.Windows.DataWindowButton[] buttons, System.Windows.Controls.ContentControl parentContentControl) { }
     }
-    [System.FlagsAttribute()]
-    [System.ObsoleteAttribute("Use `Catel.Service.WrapControlServiceWrapOptions` instead. Will be removed in ver" +
+    [System.Flags]
+    [System.Obsolete("Use `Catel.Service.WrapControlServiceWrapOptions` instead. Will be removed in ver" +
         "sion 6.0.0.", true)]
     public enum WrapOptions
     {
@@ -2970,7 +2968,7 @@ namespace Catel.Windows
 }
 namespace Catel.Windows.Controls
 {
-    [System.Windows.TemplatePartAttribute(Name="PART_MessageBar", Type=typeof(System.Windows.FrameworkElement))]
+    [System.Windows.TemplatePart(Name="PART_MessageBar", Type=typeof(System.Windows.FrameworkElement))]
     public class InfoBarMessageControl : System.Windows.Controls.ContentControl
     {
         public static readonly System.Windows.DependencyProperty InfoMessageProperty;
@@ -2978,13 +2976,13 @@ namespace Catel.Windows.Controls
         public static readonly System.Windows.DependencyProperty ModeProperty;
         public static readonly System.Windows.DependencyProperty TextProperty;
         public InfoBarMessageControl() { }
-        public static string DefaultTextPropertyValue { get; set; }
         public System.Collections.ObjectModel.ObservableCollection<string> ErrorMessageCollection { get; }
         public string InfoMessage { get; set; }
         public int MessageCount { get; }
         public Catel.Windows.Controls.InfoBarMessageControlMode Mode { get; set; }
         public string Text { get; set; }
         public System.Collections.ObjectModel.ObservableCollection<string> WarningMessageCollection { get; }
+        public static string DefaultTextPropertyValue { get; set; }
         public override void OnApplyTemplate() { }
         public void SubscribeWarningAndErrorValidator(Catel.Windows.Controls.WarningAndErrorValidator validator) { }
         public void UnsubscribeWarningAndErrorValidator(Catel.Windows.Controls.WarningAndErrorValidator validator) { }
@@ -2994,7 +2992,7 @@ namespace Catel.Windows.Controls
         Inline = 0,
         Overlay = 1,
     }
-    [System.Windows.Data.ValueConversionAttribute(typeof(Catel.Windows.Controls.InfoBarMessageControlMode), typeof(System.Windows.Visibility), ParameterType=typeof(Catel.Windows.Controls.InfoBarMessageControlMode))]
+    [System.Windows.Data.ValueConversion(typeof(Catel.Windows.Controls.InfoBarMessageControlMode), typeof(System.Windows.Visibility), ParameterType=typeof(Catel.Windows.Controls.InfoBarMessageControlMode))]
     public class InfoBarMessageControlVisibilityConverter : Catel.MVVM.Converters.IValueConverter, System.Windows.Data.IValueConverter
     {
         public InfoBarMessageControlVisibilityConverter() { }
@@ -3004,21 +3002,15 @@ namespace Catel.Windows.Controls
     public class Page : System.Windows.Controls.Page, Catel.MVVM.IViewModelContainer, Catel.MVVM.Views.INavigationView, Catel.MVVM.Views.IPage, Catel.MVVM.Views.IView, System.ComponentModel.INotifyPropertyChanged
     {
         public Page() { }
-        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be treated as an erro" +
+        [System.Obsolete("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be treated as an erro" +
             "r from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool PreventViewModelCreation { get; set; }
         public Catel.MVVM.IViewModel ViewModel { get; }
         public Catel.MVVM.ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
         public System.Type ViewModelType { get; }
-        public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> Catel.MVVM.Views.IView.DataContextChanged;
-        public event System.EventHandler<System.EventArgs> Catel.MVVM.Views.IView.Loaded;
-        public event System.EventHandler<System.EventArgs> Catel.MVVM.Views.IView.Unloaded;
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         public event System.EventHandler<System.EventArgs> ViewModelChanged;
         public event System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> ViewModelPropertyChanged;
-        public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
-        public event System.EventHandler<System.EventArgs> _viewLoaded;
-        public event System.EventHandler<System.EventArgs> _viewUnloaded;
         protected virtual void OnLoaded(System.EventArgs e) { }
         protected virtual void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
         protected virtual void OnUnloaded(System.EventArgs e) { }
@@ -3030,16 +3022,12 @@ namespace Catel.Windows.Controls
     {
         public UserControl() { }
         public UserControl(Catel.MVVM.IViewModel viewModel) { }
-        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.PartlyManual` instead. Will be treated as an err" +
+        [System.Obsolete("Use `ViewModelLifetimeManagement.PartlyManual` instead. Will be treated as an err" +
             "or from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool CloseViewModelOnUnloaded { get; set; }
         public bool CreateWarningAndErrorValidatorForViewModel { get; set; }
-        public static bool DefaultCreateWarningAndErrorValidatorForViewModelValue { get; set; }
-        public static bool DefaultSkipSearchingForInfoBarMessageControlValue { get; set; }
-        public static bool DefaultSupportParentViewModelContainersValue { get; set; }
-        public static Catel.MVVM.Providers.UnloadBehavior DefaultUnloadBehaviorValue { get; set; }
         public bool DisableWhenNoViewModel { get; set; }
-        [System.ObsoleteAttribute("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be treated as an erro" +
+        [System.Obsolete("Use `ViewModelLifetimeManagement.FullyManual` instead. Will be treated as an erro" +
             "r from version 6.0.0. Will be removed in version 6.0.0.", false)]
         public bool PreventViewModelCreation { get; set; }
         public bool SkipSearchingForInfoBarMessageControl { get; set; }
@@ -3048,15 +3036,13 @@ namespace Catel.Windows.Controls
         public Catel.MVVM.IViewModel ViewModel { get; }
         public Catel.MVVM.ViewModelLifetimeManagement ViewModelLifetimeManagement { get; set; }
         public System.Type ViewModelType { get; }
-        public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> Catel.MVVM.Views.IView.DataContextChanged;
-        public event System.EventHandler<System.EventArgs> Catel.MVVM.Views.IView.Loaded;
-        public event System.EventHandler<System.EventArgs> Catel.MVVM.Views.IView.Unloaded;
+        public static bool DefaultCreateWarningAndErrorValidatorForViewModelValue { get; set; }
+        public static bool DefaultSkipSearchingForInfoBarMessageControlValue { get; set; }
+        public static bool DefaultSupportParentViewModelContainersValue { get; set; }
+        public static Catel.MVVM.Providers.UnloadBehavior DefaultUnloadBehaviorValue { get; set; }
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         public event System.EventHandler<System.EventArgs> ViewModelChanged;
         public event System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> ViewModelPropertyChanged;
-        public event System.EventHandler<Catel.MVVM.Views.DataContextChangedEventArgs> _viewDataContextChanged;
-        public event System.EventHandler<System.EventArgs> _viewLoaded;
-        public event System.EventHandler<System.EventArgs> _viewUnloaded;
         protected override void AddChild(object value) { }
         protected virtual void OnLoaded(System.EventArgs e) { }
         protected virtual void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
@@ -3098,7 +3084,7 @@ namespace Catel.Windows.Controls
 }
 namespace Catel.Windows.Data
 {
-    public class static BindingHelper
+    public static class BindingHelper
     {
         public static void ClearBinding(System.Windows.DependencyObject dependencyObject, System.Windows.DependencyProperty dependencyProperty) { }
         public static object GetBindingValue(System.Windows.FrameworkElement frameworkElement, System.Windows.Data.BindingBase binding) { }
@@ -3108,7 +3094,7 @@ namespace Catel.Windows.Data
         public BindingWithValidation() { }
         public BindingWithValidation(string path) { }
     }
-    public class static DependencyPropertyChangedHelper
+    public static class DependencyPropertyChangedHelper
     {
         public static bool IsRealDependencyProperty(this System.Windows.FrameworkElement frameworkElement, string propertyName) { }
         public static void SubscribeToAllDependencyProperties(this System.Windows.FrameworkElement frameworkElement, System.EventHandler<Catel.Windows.Data.DependencyPropertyValueChangedEventArgs> handler) { }
@@ -3118,16 +3104,16 @@ namespace Catel.Windows.Data
         public static void UnsubscribeFromDataContext(this System.Windows.FrameworkElement frameworkElement, System.EventHandler<Catel.Windows.Data.DependencyPropertyValueChangedEventArgs> handler, bool inherited) { }
         public static void UnsubscribeFromDependencyProperty(this System.Windows.FrameworkElement frameworkElement, string propertyName, System.EventHandler<Catel.Windows.Data.DependencyPropertyValueChangedEventArgs> handler) { }
     }
-    public class static DependencyPropertyHelper
+    public static class DependencyPropertyHelper
     {
-        public static System.Collections.Generic.List<Catel.Windows.Data.DependencyPropertyInfo> GetDependencyProperties(this System.Windows.FrameworkElement frameworkElement) { }
         public static System.Collections.Generic.List<Catel.Windows.Data.DependencyPropertyInfo> GetDependencyProperties(System.Type viewType) { }
+        public static System.Collections.Generic.List<Catel.Windows.Data.DependencyPropertyInfo> GetDependencyProperties(this System.Windows.FrameworkElement frameworkElement) { }
         public static System.Windows.DependencyProperty GetDependencyPropertyByName(this System.Windows.FrameworkElement frameworkElement, string propertyName) { }
         public static string GetDependencyPropertyCacheKey(System.Type viewType, string propertyName) { }
         public static string GetDependencyPropertyCacheKeyPrefix(System.Type viewType) { }
         public static string GetDependencyPropertyName(this System.Windows.FrameworkElement frameworkElement, System.Windows.DependencyProperty dependencyProperty) { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("{PropertyName}")]
+    [System.Diagnostics.DebuggerDisplay("{PropertyName}")]
     public class DependencyPropertyInfo
     {
         public DependencyPropertyInfo(System.Windows.DependencyProperty dependencyProperty, string propertyName) { }
@@ -3155,19 +3141,19 @@ namespace Catel.Windows.Input
         public InputGesture(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifiers) { }
         public System.Windows.Input.Key Key { get; set; }
         public System.Windows.Input.ModifierKeys Modifiers { get; set; }
-        public override bool Equals(object obj) { }
         protected bool Equals(Catel.Windows.Input.InputGesture other) { }
+        public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public bool Matches(System.Windows.Input.KeyEventArgs eventArgs) { }
         public override string ToString() { }
     }
-    public class static InputGestureExtensions
+    public static class InputGestureExtensions
     {
         public static bool IsEmpty(this Catel.Windows.Input.InputGesture inputGesture) { }
     }
-    public class static KeyboardHelper
+    public static class KeyboardHelper
     {
-        public static bool AreKeyboardModifiersPressed(System.Windows.Input.ModifierKeys modifier, bool checkForExactModifiers = True) { }
+        public static bool AreKeyboardModifiersPressed(System.Windows.Input.ModifierKeys modifier, bool checkForExactModifiers = true) { }
         public static System.Collections.Generic.List<System.Windows.Input.ModifierKeys> GetCurrentlyPressedModifiers() { }
     }
 }
@@ -3378,8 +3364,8 @@ namespace Catel.Windows.Interactivity
         protected virtual void Initialize() { }
         protected virtual void OnAssociatedObjectLoaded() { }
         protected virtual void OnAssociatedObjectUnloaded() { }
-        protected virtual void OnAttached() { }
-        protected virtual void OnDetaching() { }
+        protected override sealed void OnAttached() { }
+        protected override sealed void OnDetaching() { }
         protected virtual void OnIsEnabledChanged() { }
         protected virtual void Uninitialize() { }
         protected virtual void ValidateRequiredProperties() { }
@@ -3569,7 +3555,7 @@ namespace Catel.Windows.Markup
     {
         public CommandManagerBinding() { }
         public CommandManagerBinding(string commandName) { }
-        [System.Windows.Markup.ConstructorArgumentAttribute("commandName")]
+        [System.Windows.Markup.ConstructorArgument("commandName")]
         public string CommandName { get; set; }
         protected override void OnTargetObjectLoaded() { }
         protected override void OnTargetObjectUnloaded() { }
@@ -3581,7 +3567,7 @@ namespace Catel.Windows.Markup
         public LanguageBinding(string resourceName) { }
         public System.Globalization.CultureInfo Culture { get; set; }
         public bool HideDesignTimeMessages { get; set; }
-        [System.Windows.Markup.ConstructorArgumentAttribute("resourceName")]
+        [System.Windows.Markup.ConstructorArgument("resourceName")]
         public string ResourceName { get; set; }
         public void OnLanguageUpdated(object sender, System.EventArgs e) { }
         protected override void OnTargetObjectLoaded() { }
@@ -3593,7 +3579,7 @@ namespace Catel.Windows.Markup
         public ServiceDependencyExtension() { }
         public ServiceDependencyExtension(System.Type type) { }
         public object Tag { get; set; }
-        [System.Windows.Markup.ConstructorArgumentAttribute("type")]
+        [System.Windows.Markup.ConstructorArgument("type")]
         public System.Type Type { get; set; }
         public override object ProvideValue(System.IServiceProvider serviceProvider) { }
     }
@@ -3608,21 +3594,21 @@ namespace Catel.Windows.Markup
         protected virtual void OnTargetObjectLoaded() { }
         protected virtual void OnTargetObjectUnloaded() { }
         protected virtual object ProvideDynamicValue(System.IServiceProvider serviceProvider) { }
-        public virtual object ProvideValue(System.IServiceProvider serviceProvider) { }
+        public override sealed object ProvideValue(System.IServiceProvider serviceProvider) { }
         protected void RaisePropertyChanged(string propertyName) { }
         protected void UpdateValue() { }
     }
 }
 namespace Catel.Windows.Threading
 {
-    public class static DispatcherExtensions
+    public static class DispatcherExtensions
     {
         public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action) { }
+        public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, bool onlyBeginInvokeWhenNoAccess) { }
         public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority) { }
         public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
-        public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
-        public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, bool onlyBeginInvokeWhenNoAccess) { }
         public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority, bool onlyBeginInvokeWhenNoAccess) { }
+        public static System.Windows.Threading.DispatcherOperation BeginInvoke(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
         public static System.Threading.Tasks.Task BeginInvokeAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Func<System.Threading.Tasks.Task> func) { }
         public static System.Windows.Threading.DispatcherOperation BeginInvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Action action) { }
         public static System.Windows.Threading.DispatcherOperation BeginInvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority) { }
@@ -3630,25 +3616,25 @@ namespace Catel.Windows.Threading
         public static System.Windows.Threading.DispatcherOperation BeginInvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
         public static int GetThreadId(this System.Windows.Threading.Dispatcher dispatcher) { }
         public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action) { }
+        public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, bool onlyBeginInvokeWhenNoAccess) { }
         public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority) { }
         public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
-        public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
-        public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, bool onlyBeginInvokeWhenNoAccess) { }
         public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority, bool onlyInvokeWhenNoAccess) { }
-        public static System.Threading.Tasks.Task InvokeAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
-        public static System.Threading.Tasks.Task InvokeAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
-        public static System.Threading.Tasks.Task<T> InvokeAsync<T>(this System.Windows.Threading.Dispatcher dispatcher, System.Func<T> func) { }
+        public static void Invoke(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
         public static System.Threading.Tasks.Task InvokeAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Func<System.Threading.Tasks.Task> actionAsync) { }
+        public static System.Threading.Tasks.Task InvokeAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
         public static System.Threading.Tasks.Task InvokeAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Threading.CancellationToken cancellationToken) { }
+        public static System.Threading.Tasks.Task InvokeAsync(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
         public static System.Threading.Tasks.Task<T> InvokeAsync<T>(this System.Windows.Threading.Dispatcher dispatcher, System.Func<System.Threading.Tasks.Task<T>> funcAsync) { }
-        public static System.Threading.Tasks.Task<T> InvokeAsync<T>(this System.Windows.Threading.Dispatcher dispatcher, System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken) { }
+        public static System.Threading.Tasks.Task<T> InvokeAsync<T>(this System.Windows.Threading.Dispatcher dispatcher, System.Func<T> func) { }
         public static System.Threading.Tasks.Task<T> InvokeAsync<T>(this System.Windows.Threading.Dispatcher dispatcher, System.Func<T> func, System.Windows.Threading.DispatcherPriority priority) { }
+        public static System.Threading.Tasks.Task<T> InvokeAsync<T>(this System.Windows.Threading.Dispatcher dispatcher, System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken) { }
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Action action) { }
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority) { }
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
     }
-    public class static DispatcherHelper
+    public static class DispatcherHelper
     {
         public static System.Windows.Threading.Dispatcher CurrentDispatcher { get; }
         public static void DoEvents() { }
