@@ -52,7 +52,7 @@ namespace Catel.Runtime.Serialization
 
         public SerializableKeyValuePair(SerializationInfo info, StreamingContext context)
         {
-            Key = info.GetString("Key");
+            Key = info.GetValue("Key", typeof(object));
             Value = info.GetValue("Value", typeof(object));
         }
 
