@@ -85,7 +85,7 @@ namespace Catel.Caching
         public CacheStorage(Func<ExpirationPolicy> defaultExpirationPolicyInitCode = null, bool storeNullValues = false,
             IEqualityComparer<TKey> equalityComparer = null)
         {
-            _dictionary = new ConcurrentDictionary<TKey, CacheStorageValueInfo<TValue>>(equalityComparer);
+            _dictionary = new ConcurrentDictionary<TKey, CacheStorageValueInfo<TValue>>(equalityComparer ?? EqualityComparer<TKey>.Default);
             _storeNullValues = storeNullValues;
             _defaultExpirationPolicyInitCode = defaultExpirationPolicyInitCode;
 
