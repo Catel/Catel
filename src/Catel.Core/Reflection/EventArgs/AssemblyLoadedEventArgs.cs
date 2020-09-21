@@ -15,6 +15,25 @@ namespace Catel.Reflection
     /// </summary>
     public class AssemblyLoadedEventArgs : EventArgs
     {
+        private readonly Lazy<IEnumerable<Type>> _lazyLoadedTypes;
+        private readonly List<Type> _loadedTypes = new List<Type>();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AssemblyLoadedEventArgs" /> class.
+        /// </summary>
+        /// <param name="assembly">The assembly.</param>
+        /// <param name="loadedTypesLazy">The lazy loaded types.</param>
+        /// <exception cref="ArgumentNullException">The <paramref name="assembly"/> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="loadedTypesLazy"/> is <c>null</c>.</exception>
+        public AssemblyLoadedEventArgs(Assembly assembly, Lazy<IEnumerable<Type>> loadedTypesLazy)
+        {
+            Argument.IsNotNull("assembly", assembly);
+            Argument.IsNotNull("loadedTypesLazy", loadedTypesLazy);
+
+            Assembly = assembly;
+            _lazyLoadedTypes = loadedTypesLazy;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AssemblyLoadedEventArgs" /> class.
         /// </summary>
@@ -28,7 +47,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("loadedTypes", loadedTypes);
 
             Assembly = assembly;
-            LoadedTypes = loadedTypes;
+            _loadedTypes.AddRange(loadedTypes);
         }
 
         /// <summary>
@@ -41,6 +60,20 @@ namespace Catel.Reflection
         /// Gets the loaded types.
         /// </summary>
         /// <value>The loaded types.</value>
-        public IEnumerable<Type> LoadedTypes { get; private set; }
+        public IEnumerable<Type> LoadedTypes
+        {
+            get
+            {
+                if (_loadedTypes.Count == 0)
+                {
+                    if (_lazyLoadedTypes is null == false)
+                    {
+                        _loadedTypes.AddRange(_lazyLoadedTypes.Value);
+                    }
+                }
+
+                return _loadedTypes;
+            }
+        }
     }
 }

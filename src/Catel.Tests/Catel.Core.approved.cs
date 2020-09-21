@@ -3140,6 +3140,7 @@ namespace Catel.Reflection
     public class AssemblyLoadedEventArgs : System.EventArgs
     {
         public AssemblyLoadedEventArgs(System.Reflection.Assembly assembly, System.Collections.Generic.IEnumerable<System.Type> loadedTypes) { }
+        public AssemblyLoadedEventArgs(System.Reflection.Assembly assembly, System.Lazy<System.Collections.Generic.IEnumerable<System.Type>> loadedTypesLazy) { }
         public System.Reflection.Assembly Assembly { get; }
         public System.Collections.Generic.IEnumerable<System.Type> LoadedTypes { get; }
     }
