@@ -20,7 +20,7 @@ namespace Catel.Tests.Services.EventArgs
             UICompletedEventArgs completedEventArgs = new UICompletedEventArgs(new UIVisualizerResult(true, 15, null, null));
 
             Assert.AreEqual(15, completedEventArgs.DataContext);
-            Assert.AreEqual(true, completedEventArgs.Result);
+            Assert.AreEqual(true, completedEventArgs.DialogResult);
         }
         #endregion
     }
