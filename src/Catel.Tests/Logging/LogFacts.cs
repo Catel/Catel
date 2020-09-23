@@ -321,7 +321,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("{0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
             }
 
             [Test]
@@ -344,7 +344,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-                Assert.AreEqual("[AggregateException] System.AggregateException: log test ---> System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1\r\n   --- End of inner exception stack trace ---\r\n---> (Inner Exception #0) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1<---\r\n\r\n---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg2<---\r\n", eventArgs.Message);
+                Assert.AreEqual("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n", eventArgs.Message);
             }
 
             [Test]
@@ -382,7 +382,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
             }
 
             [Test]
@@ -420,7 +420,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Debug, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
             }
         }
 
@@ -512,7 +512,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("{0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
             }
 
 
@@ -536,7 +536,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual("[AggregateException] System.AggregateException: log test ---> System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1\r\n   --- End of inner exception stack trace ---\r\n---> (Inner Exception #0) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1<---\r\n\r\n---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg2<---\r\n", eventArgs.Message);
+                Assert.AreEqual("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n", eventArgs.Message);
             }
 
             [Test]
@@ -574,7 +574,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
             }
 
             [Test]
@@ -612,7 +612,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Info, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
             }
         }
 
@@ -704,7 +704,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("{0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
             }
 
             [Test]
@@ -727,7 +727,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-                Assert.AreEqual("[AggregateException] System.AggregateException: log test ---> System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1\r\n   --- End of inner exception stack trace ---\r\n---> (Inner Exception #0) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1<---\r\n\r\n---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg2<---\r\n", eventArgs.Message);
+                Assert.AreEqual("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n", eventArgs.Message);
             }
 
             [Test]
@@ -765,7 +765,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
             }
 
             [Test]
@@ -803,7 +803,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Warning, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
             }
         }
 
@@ -895,7 +895,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("{0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("{0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
             }
 
             [Test]
@@ -918,7 +918,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-                Assert.AreEqual("[AggregateException] System.AggregateException: log test ---> System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1\r\n   --- End of inner exception stack trace ---\r\n---> (Inner Exception #0) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg1<---\r\n\r\n---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null.\r\nParameter name: arg2<---\r\n", eventArgs.Message);
+                Assert.AreEqual("[AggregateException] System.AggregateException: log test (Value cannot be null. (Parameter 'arg1')) (Value cannot be null. (Parameter 'arg2'))\r\n ---> System.ArgumentNullException: Value cannot be null. (Parameter 'arg1')\r\n   --- End of inner exception stack trace ---\r\n ---> (Inner Exception #1) System.ArgumentNullException: Value cannot be null. (Parameter 'arg2')<---\r\n", eventArgs.Message);
             }
 
             [Test]
@@ -956,7 +956,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
             }
 
             [Test]
@@ -994,7 +994,7 @@ namespace Catel.Tests.Logging
                 Assert.IsNotNull(eventArgs);
                 Assert.AreEqual(log, eventArgs.Log);
                 Assert.AreEqual(LogEvent.Error, eventArgs.LogEvent);
-                Assert.AreEqual(string.Format("additional message 1 | {0}\r\nParameter name: log test", ArgumentNullExceptionText), eventArgs.Message);
+                Assert.AreEqual(string.Format("additional message 1 | {0} (Parameter 'log test')", ArgumentNullExceptionText), eventArgs.Message);
             }
 
             [Test]

@@ -14,7 +14,7 @@ namespace Catel.Tests.IoC.Configuration
 
     using NUnit.Framework;
 
-    [TestFixture]
+    [TestFixture, Explicit]
     public class IoCConfigurationSectionTests
     {
         #region Methods

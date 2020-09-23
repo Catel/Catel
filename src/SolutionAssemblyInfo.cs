@@ -6,8 +6,8 @@
 using System.Reflection;
 
 [assembly: AssemblyCompany("CatenaLogic")]
-[assembly: AssemblyVersion("5.12.7")]
-[assembly: AssemblyFileVersion("5.12.7")]
-[assembly: AssemblyInformationalVersion("5.12.7-beta.11")]
+[assembly: AssemblyVersion("5.12.9")]
+[assembly: AssemblyFileVersion("5.12.9")]
+[assembly: AssemblyInformationalVersion("5.12.9-beta.11")]
 [assembly: AssemblyCopyright("Copyright © CatenaLogic 2010 - 2020")]
 

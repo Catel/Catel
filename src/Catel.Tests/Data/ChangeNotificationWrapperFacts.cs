@@ -373,7 +373,7 @@ namespace Catel.Tests.Data
             }
         }
 
-        [TestFixture]
+        [TestFixture, Explicit]
         public class TheMemoryLeakChecks
         {
             [TestCase]

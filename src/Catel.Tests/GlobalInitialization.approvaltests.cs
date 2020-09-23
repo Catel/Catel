@@ -10,7 +10,7 @@ using ApprovalTests.Reporters;
 using ApprovalTests.Reporters.Windows;
 
 #if DEBUG
-[assembly: UseReporter(typeof(DiffReporter))]
+[assembly: UseReporter(typeof(BeyondCompareReporter))]
 #else
 [assembly: UseReporter(typeof(DiffReporter))]
 #endif

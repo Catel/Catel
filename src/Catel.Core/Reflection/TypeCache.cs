@@ -14,6 +14,7 @@ namespace Catel.Reflection
     using System.Threading.Tasks;
     using Collections;
     using Logging;
+    using MethodTimer;
     using Threading;
 
     /// <summary>
@@ -128,6 +129,9 @@ namespace Catel.Reflection
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="args">The <see cref="AssemblyLoadEventArgs" /> instance containing the event data.</param>
+#if DEBUG
+        [Time("{args}")]
+#endif
         private static void OnAssemblyLoaded(object sender, AssemblyLoadEventArgs args)
         {
             var assembly = args.LoadedAssembly;
@@ -181,15 +185,13 @@ namespace Catel.Reflection
                     }
                 }
 
-                var types = GetTypesOfAssembly(assembly);
-
                 Monitor.Exit(_lockObject);
 
                 // Important to do outside of the lock
                 var handler = AssemblyLoaded;
                 if (handler != null)
                 {
-                    var eventArgs = new AssemblyLoadedEventArgs(assembly, types);
+                    var eventArgs = new AssemblyLoadedEventArgs(assembly, new Lazy<IEnumerable<Type>>(() => GetTypesOfAssembly(assembly)));
 
                     handler(null, eventArgs);
                 }
@@ -505,6 +507,9 @@ namespace Catel.Reflection
         /// <param name="assembly">The assembly.</param>
         /// <param name="predicate">The predicate to use on the types.</param>
         /// <returns>All types of the specified assembly.</returns>
+#if DEBUG
+        [Time]
+#endif
         public static Type[] GetTypesOfAssembly(Assembly assembly, Func<Type, bool> predicate = null)
         {
             Argument.IsNotNull("assembly", assembly);
@@ -655,6 +660,9 @@ namespace Catel.Reflection
         /// <param name="assembly">The assembly to initialize the types from. If <c>null</c>, all assemblies will be checked.</param>
         /// <param name="forceFullInitialization">If <c>true</c>, the types are initialized, even when the types are already initialized.</param>
         /// <param name="allowMultithreadedInitialization">If <c>true</c>, allow multithreaded initialization. The default value is <c>false</c>.</param>
+#if DEBUG
+        [Time("{assembly}")]
+#endif
         public static void InitializeTypes(Assembly assembly = null, bool forceFullInitialization = false, bool allowMultithreadedInitialization = false)
         {
             // Important note: only allow explicit multithreaded initialization
@@ -684,11 +692,14 @@ namespace Catel.Reflection
                     _typesWithoutAssemblyIgnoreCase?.Clear();
                 }
 
-                var assembliesToInitialize = checkSingleAssemblyOnly ? new List<Assembly>(new[] { assembly }) : AssemblyHelper.GetLoadedAssemblies();
+                var assembliesToInitialize = checkSingleAssemblyOnly ? (IEnumerable<Assembly>)new [] { assembly } : AssemblyHelper.GetLoadedAssemblies();
                 InitializeAssemblies(assembliesToInitialize, forceFullInitialization, allowMultithreadedInitialization);
             }
         }
 
+#if DEBUG
+        [Time]
+#endif
         private static void InitializeAssemblies(IEnumerable<Assembly> assemblies, bool force, bool allowMultithreadedInitialization = false)
         {
             // Important note: only allow explicit multithreaded initialization
@@ -766,13 +777,28 @@ namespace Catel.Reflection
             }
         }
 
-        private static Dictionary<Assembly, HashSet<Type>> GetAssemblyTypes(List<Assembly> assemblies, bool allowMultithreadedInitialization = false)
+#if DEBUG
+        [Time]
+#endif
+        private static Dictionary<Assembly, IEnumerable<Type>> GetAssemblyTypes(List<Assembly> assemblies, bool allowMultithreadedInitialization = false)
         {
             // Important note: only allow explicit multithreaded initialization
 
-            var dictionary = new Dictionary<Assembly, HashSet<Type>>();
+            // We have 2 fast paths out, in case assembly count is either 0 or 1
+            if (assemblies.Count == 0)
+            {
+                return new Dictionary<Assembly, IEnumerable<Type>>();
+            }
+            else if (assemblies.Count == 1)
+            {
+                var dictionary = new Dictionary<Assembly, IEnumerable<Type>>();
+                var assembly = assemblies[0];
 
-            if (allowMultithreadedInitialization)
+                dictionary[assembly] = assembly.GetAllTypesSafely();
+
+                return dictionary;
+            }
+            else if (allowMultithreadedInitialization)
             {
                 // We try to use multiple threads since GetAllTypesSafely() is an expensive operation, try to multithread
                 // without causing to much expansive context switching going on. Using .AsParallel wasn't doing a lot.
@@ -826,6 +852,8 @@ namespace Catel.Reflection
                 var waitTask = TaskShim.WhenAll(tasks);
                 waitTask.Wait();
 
+                var dictionary = new Dictionary<Assembly, IEnumerable<Type>>();
+
                 foreach (var task in tasks)
                 {
                     var results = task.Result;
@@ -835,18 +863,18 @@ namespace Catel.Reflection
                         dictionary[result.Key] = result.Value;
                     }
                 }
+
+                return dictionary;
             }
             else
             {
                 var types = (from assembly in assemblies
-                             select new KeyValuePair<Assembly, HashSet<Type>>(assembly, new HashSet<Type>(assembly.GetAllTypesSafely())));
+                             select new KeyValuePair<Assembly, IEnumerable<Type>>(assembly, assembly.GetAllTypesSafely()));
 
                 var results = types.AsParallel();
 
                 return results.ToDictionary(p => p.Key, p => p.Value);
             }
-
-            return dictionary;
         }
 
         private static void InitializeType(Assembly assembly, Type type)

@@ -787,6 +787,11 @@ namespace Catel.Runtime.Serialization.Xml
 
             var propertyTypeToDeserialize = memberValue.MemberType;
 
+            // #1642: make sure to get all the known types
+            var knownTypesHashSet = context.Context.KnownTypes;
+            var knownTypes = _dataContractSerializerFactory.GetKnownTypes(modelType, propertyTypeToDeserialize, knownTypesHashSet.ToList());
+            knownTypesHashSet.AddRange(knownTypes);
+
             var isNullAttributeValue = GetSpecialAttributeValue(xmlReader, namespacePrefix, XmlIsNull);
             var isNull = !string.IsNullOrWhiteSpace(isNullAttributeValue) ? StringToObjectHelper.ToBool(isNullAttributeValue) : false;
             if (isNull)

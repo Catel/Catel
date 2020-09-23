@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ReflectionExtensions.assembly.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -8,6 +8,7 @@
 
 namespace Catel.Reflection
 {
+    using MethodTimer;
     using System;
     using System.Reflection;
 
@@ -35,6 +36,9 @@ namespace Catel.Reflection
             return results;
         }
 
+#if DEBUG
+        [Time("{assembly}")]
+#endif
         public static Type[] GetTypesEx(this Assembly assembly)
         {
             Argument.IsNotNull("assembly", assembly);
