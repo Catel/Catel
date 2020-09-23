@@ -62,6 +62,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationService, NavigationService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<INavigationRootService, NavigationRootService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewContextService, ViewContextService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
 
 #if !XAMARIN && !XAMARIN_FORMS
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
@@ -71,29 +72,9 @@ namespace Catel.MVVM
 #endif
 
                 serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IAccelerometerService, AccelerometerService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<ILocationService, LocationService>();
-                serviceLocator.RegisterTypeIfNotYetRegistered<IVibrateService, VibrateService>();
-
-#if !NET && !NETCORE && !NETCORE
-                serviceLocator.RegisterTypeIfNotYetRegistered<ICameraService, CameraService>();
-#endif
-
-#if !XAMARIN && !XAMARIN_FORMS
-                // TODO: Add support in xamarin
-                serviceLocator.RegisterTypeIfNotYetRegistered<ISchedulerService, SchedulerService>();
-#endif
 
 #if NET || NETCORE || UWP
                 serviceLocator.RegisterTypeIfNotYetRegistered<IProcessService, ProcessService>();
-#endif
-
-#if NET || NETCORE
-                serviceLocator.RegisterTypeIfNotYetRegistered<IViewExportService, ViewExportService>();
-#endif
-
-#if XAMARIN_FORMS
-                serviceLocator.RegisterTypeIfNotYetRegistered<IUIVisualizerService, UIVisualizerService>();
 #endif
 
                 Log.Debug("Registered default service implementations for IoC container");

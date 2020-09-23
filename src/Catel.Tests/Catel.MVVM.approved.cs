@@ -1809,25 +1809,6 @@ namespace Catel.MVVM.Views
 }
 namespace Catel.Services
 {
-    public class AccelerometerService : Catel.Services.SensorServiceBase<Catel.Services.IAccelerometerValue, Catel.Services.AccelerometerValueChangedEventArgs>, Catel.Services.IAccelerometerService, Catel.Services.ISensorService<Catel.Services.IAccelerometerValue, Catel.Services.AccelerometerValueChangedEventArgs>
-    {
-        public AccelerometerService(Catel.Services.IDispatcherService dispatcherService) { }
-        public override void Start() { }
-        public override void Stop() { }
-    }
-    public class AccelerometerValue : Catel.Services.IAccelerometerValue
-    {
-        public AccelerometerValue(System.DateTimeOffset timestamp, double x, double y, double z) { }
-        public System.DateTimeOffset Timestamp { get; }
-        public double X { get; }
-        public double Y { get; }
-        public double Z { get; }
-    }
-    public class AccelerometerValueChangedEventArgs : System.EventArgs
-    {
-        public AccelerometerValueChangedEventArgs(Catel.Services.IAccelerometerValue newValue) { }
-        public Catel.Services.IAccelerometerValue Value { get; }
-    }
     public class ApplicationClosingEventArgs : System.EventArgs
     {
         public ApplicationClosingEventArgs() { }
@@ -1837,74 +1818,6 @@ namespace Catel.Services
     {
         public AutoCompletionService(Catel.Data.IObjectAdapter objectAdapter) { }
         public virtual string[] GetAutoCompleteValues(string property, string filter, System.Collections.IEnumerable source) { }
-    }
-    public class CameraOperationCompletedEventArgs : System.EventArgs
-    {
-        public CameraOperationCompletedEventArgs(System.Exception ex) { }
-        public System.Exception Exception { get; }
-        public bool Succeeded { get; }
-    }
-    public abstract class CameraServiceBase : Catel.Services.ViewModelServiceBase, Catel.Services.ICameraService
-    {
-        protected CameraServiceBase() { }
-        public System.Collections.Generic.IEnumerable<Catel.Services.Size> AvailableResolutions { get; }
-        public Catel.Services.CameraType CameraType { get; }
-        public Catel.Services.FlashMode FlashMode { get; set; }
-        public bool IsFocusAtPointSupported { get; }
-        public bool IsFocusSupported { get; }
-        public double Orientation { get; }
-        public Catel.Services.Size PreviewResolution { get; }
-        public Catel.Services.Size Resolution { get; set; }
-        public event System.EventHandler<Catel.Services.CameraOperationCompletedEventArgs> AutoFocusCompleted;
-        public event System.EventHandler<Catel.Services.CameraOperationCompletedEventArgs> CaptureCompleted;
-        public event System.EventHandler<Catel.Services.ContentReadyEventArgs> CaptureImageAvailable;
-        public event System.EventHandler CaptureStarted;
-        public event System.EventHandler<Catel.Services.ContentReadyEventArgs> CaptureThumbnailAvailable;
-        public event System.EventHandler<Catel.Services.CameraOperationCompletedEventArgs> Initialized;
-        protected abstract void CancelCameraFocus();
-        public void CancelFocus() { }
-        protected abstract void CaptureCameraImage();
-        public void CaptureImage() { }
-        public void Focus() { }
-        public void FocusAtPoint(double x, double y) { }
-        protected abstract void FocusCamera();
-        protected abstract void FocusCameraAtPoint(double x, double y);
-        protected abstract System.Collections.Generic.IEnumerable<Catel.Services.Size> GetAvailableResolutions();
-        protected abstract Catel.Services.CameraType GetCameraType();
-        protected abstract Catel.Services.FlashMode GetFlashMode();
-        protected abstract bool GetIsFocusAtPointSupported();
-        protected abstract bool GetIsFocusSupported();
-        protected abstract double GetOrientation();
-        public void GetPreviewBufferArgb32(int[] pixelData) { }
-        protected abstract void GetPreviewBufferArgb32FromCamera(int[] pixelData);
-        public void GetPreviewBufferY(byte[] pixelData) { }
-        public void GetPreviewBufferYCbCr(byte[] pixelData) { }
-        protected abstract void GetPreviewBufferYCbCrFromCamera(byte[] pixelData);
-        protected abstract void GetPreviewBufferYFromCamera(byte[] pixelData);
-        protected abstract Catel.Services.Size GetPreviewResolution();
-        protected abstract Catel.Services.Size GetResolution();
-        public abstract bool IsCameraTypeSupported(Catel.Services.CameraType type);
-        public bool IsFlashModeSupported(Catel.Services.FlashMode mode) { }
-        protected abstract bool IsFlashModeSupportedByCamera(Catel.Services.FlashMode mode);
-        protected void RaiseAutoFocusCompleted(Catel.Services.CameraOperationCompletedEventArgs e) { }
-        protected void RaiseCaptureCompleted(Catel.Services.CameraOperationCompletedEventArgs e) { }
-        protected void RaiseCaptureImageAvailable(Catel.Services.ContentReadyEventArgs e) { }
-        protected void RaiseCaptureStarted(System.EventArgs e) { }
-        protected void RaiseCaptureThumbnailAvailable(Catel.Services.ContentReadyEventArgs e) { }
-        protected void RaiseInitialized(Catel.Services.CameraOperationCompletedEventArgs e) { }
-        protected abstract void SetFlashMode(Catel.Services.FlashMode flashMode);
-        protected abstract void SetResolution(Catel.Services.Size resolution);
-        public void Start() { }
-        public void Start(Catel.Services.CameraType cameraType) { }
-        protected abstract void StartService(Catel.Services.CameraType cameraType);
-        public void Stop() { }
-        protected abstract void StopService();
-    }
-    [System.Flags]
-    public enum CameraType
-    {
-        Primary = 1,
-        FrontFacing = 2,
     }
     public class ContentReadyEventArgs : System.EventArgs
     {
@@ -1977,69 +1890,15 @@ namespace Catel.Services
         public System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.Tasks.Task<T>> funcAsync) { }
         public System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken) { }
     }
-    public enum ExportMode
-    {
-        Print = 0,
-        Clipboard = 1,
-        File = 2,
-    }
     public abstract class FileServiceBase : Catel.Services.ViewModelServiceBase, Catel.Services.IFileSupport
     {
         protected FileServiceBase() { }
         protected virtual void ConfigureFileDialog(Microsoft.Win32.FileDialog fileDialog, Catel.Services.DetermineFileContext context) { }
         protected virtual string GetInitialDirectory(Catel.Services.DetermineFileContext context) { }
     }
-    [System.Flags]
-    public enum FlashMode
-    {
-        On = 1,
-        Off = 2,
-        Auto = 4,
-        RedEyeReduction = 8,
-    }
-    public interface IAccelerometerService : Catel.Services.ISensorService<Catel.Services.IAccelerometerValue, Catel.Services.AccelerometerValueChangedEventArgs> { }
-    public interface IAccelerometerValue
-    {
-        System.DateTimeOffset Timestamp { get; }
-        double X { get; }
-        double Y { get; }
-        double Z { get; }
-    }
     public interface IAutoCompletionService
     {
         string[] GetAutoCompleteValues(string property, string filter, System.Collections.IEnumerable source);
-    }
-    [System.CLSCompliant(false)]
-    public interface ICameraService
-    {
-        System.Collections.Generic.IEnumerable<Catel.Services.Size> AvailableResolutions { get; }
-        Catel.Services.CameraType CameraType { get; }
-        Catel.Services.FlashMode FlashMode { get; set; }
-        bool IsFocusAtPointSupported { get; }
-        bool IsFocusSupported { get; }
-        double Orientation { get; }
-        [System.CLSCompliant(false)]
-        Catel.Services.Size PreviewResolution { get; }
-        [System.CLSCompliant(false)]
-        Catel.Services.Size Resolution { get; set; }
-        event System.EventHandler<Catel.Services.CameraOperationCompletedEventArgs> AutoFocusCompleted;
-        event System.EventHandler<Catel.Services.CameraOperationCompletedEventArgs> CaptureCompleted;
-        event System.EventHandler<Catel.Services.ContentReadyEventArgs> CaptureImageAvailable;
-        event System.EventHandler CaptureStarted;
-        event System.EventHandler<Catel.Services.ContentReadyEventArgs> CaptureThumbnailAvailable;
-        event System.EventHandler<Catel.Services.CameraOperationCompletedEventArgs> Initialized;
-        void CancelFocus();
-        void CaptureImage();
-        void Focus();
-        void FocusAtPoint(double x, double y);
-        void GetPreviewBufferArgb32(int[] pixelData);
-        void GetPreviewBufferY(byte[] pixelData);
-        void GetPreviewBufferYCbCr(byte[] pixelData);
-        bool IsCameraTypeSupported(Catel.Services.CameraType type);
-        bool IsFlashModeSupported(Catel.Services.FlashMode mode);
-        void Start();
-        void Start(Catel.Services.CameraType cameraType);
-        void Stop();
     }
     public interface IDispatcherService
     {
@@ -2064,20 +1923,6 @@ namespace Catel.Services
         public static void InvokeIfRequired(this Catel.Services.IDispatcherService dispatcherService, System.Delegate method, params object[] args) { }
     }
     public interface IFileSupport { }
-    public interface ILocation
-    {
-        double Altitude { get; }
-        double Latitude { get; }
-        double Longitude { get; }
-    }
-    public interface ILocationService
-    {
-        Catel.Services.ILocation CurrentLocation { get; }
-        event System.EventHandler<Catel.Services.LocationChangedEventArgs> LocationChanged;
-        Catel.Services.ILocation GetCurrentLocation();
-        bool Start();
-        void Stop();
-    }
     public interface IMessageService
     {
         System.Threading.Tasks.Task<Catel.Services.MessageResult> ShowAsync(string message, string caption = "", Catel.Services.MessageButton button = 1, Catel.Services.MessageImage icon = 0);
@@ -2141,25 +1986,9 @@ namespace Catel.Services
     {
         System.Threading.Tasks.Task<Catel.Services.DetermineSaveFileResult> DetermineFileAsync(Catel.Services.DetermineSaveFileContext context);
     }
-    public interface ISchedulerService
-    {
-        void Schedule(System.Action action, System.DateTime dateTime);
-        void Schedule(System.Action action, System.TimeSpan timeSpan);
-    }
     public interface ISelectDirectoryService
     {
         System.Threading.Tasks.Task<Catel.Services.DetermineDirectoryResult> DetermineDirectoryAsync(Catel.Services.DetermineDirectoryContext context);
-    }
-    public interface ISensorService<TValueInterface, TEventArgs>
-        where TEventArgs : System.EventArgs
-    {
-        TValueInterface CurrentValue { get; }
-        bool IsSupported { get; }
-        System.TimeSpan TimeBetweenUpdates { get; set; }
-        event System.EventHandler<TEventArgs> CurrentValueChanged;
-        TValueInterface GetCurrentValue();
-        void Start();
-        void Stop();
     }
     public interface IState { }
     public interface IStateService
@@ -2200,18 +2029,9 @@ namespace Catel.Services
         public static bool Unregister(this Catel.Services.IUIVisualizerService uiVisualizerService, System.Type viewModelType) { }
         public static bool Unregister<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService) { }
     }
-    public interface IVibrateService
-    {
-        void Start(System.TimeSpan duration);
-        void Stop();
-    }
     public interface IViewContextService
     {
         object GetContext(Catel.MVVM.Views.IView view);
-    }
-    public interface IViewExportService
-    {
-        System.Threading.Tasks.Task ExportAsync(Catel.MVVM.IViewModel viewModel, Catel.Services.ExportMode exportMode = 0, double dpiX = 96, double dpiY = 96);
     }
     public interface IViewModelService : Catel.Services.IService { }
     public interface IViewModelWrapperService
@@ -2231,36 +2051,6 @@ namespace Catel.Services
             where T : System.Windows.FrameworkElement;
         System.Windows.Controls.Grid Wrap(System.Windows.FrameworkElement frameworkElement, Catel.Services.WrapControlServiceWrapOptions wrapOptions, System.Windows.Controls.ContentControl parentContentControl = null);
         System.Windows.Controls.Grid Wrap(System.Windows.FrameworkElement frameworkElement, Catel.Services.WrapControlServiceWrapOptions wrapOptions, Catel.Windows.DataWindowButton[] buttons, System.Windows.Controls.ContentControl parentContentControl);
-    }
-    public class Location : Catel.Services.ILocation
-    {
-        public Location(double latitude, double longitude) { }
-        public Location(double latitude, double longitude, double altitude) { }
-        public double Altitude { get; }
-        public double Latitude { get; }
-        public double Longitude { get; }
-    }
-    public class LocationChangedEventArgs : System.EventArgs
-    {
-        public LocationChangedEventArgs(Catel.Services.ILocation newLocation) { }
-        public Catel.Services.ILocation Location { get; }
-    }
-    public class LocationService : Catel.Services.LocationServiceBase
-    {
-        public LocationService(Catel.Services.IDispatcherService dispatcherService) { }
-    }
-    public abstract class LocationServiceBase : Catel.Services.ILocationService
-    {
-        protected LocationServiceBase(Catel.Services.IDispatcherService dispatcherService) { }
-        public Catel.Services.ILocation CurrentLocation { get; }
-        public event System.EventHandler<Catel.Services.LocationChangedEventArgs> LocationChanged;
-        public virtual Catel.Services.ILocation GetCurrentLocation() { }
-        protected virtual void Initialize() { }
-        protected void RaiseLocationChanged() { }
-        public bool Start() { }
-        protected virtual bool StartSensor() { }
-        public void Stop() { }
-        protected virtual void StopSensor() { }
     }
     [System.Flags]
     public enum MessageButton
@@ -2407,30 +2197,10 @@ namespace Catel.Services
         public SaveFileService() { }
         public virtual System.Threading.Tasks.Task<Catel.Services.DetermineSaveFileResult> DetermineFileAsync(Catel.Services.DetermineSaveFileContext context) { }
     }
-    public class SchedulerService : Catel.Services.ViewModelServiceBase, Catel.Services.ISchedulerService
-    {
-        public SchedulerService() { }
-        public virtual void Schedule(System.Action action, System.DateTime dateTime) { }
-        public virtual void Schedule(System.Action action, System.TimeSpan timeSpan) { }
-    }
     public class SelectDirectoryService : Catel.Services.ViewModelServiceBase, Catel.Services.ISelectDirectoryService
     {
         public SelectDirectoryService() { }
         public virtual System.Threading.Tasks.Task<Catel.Services.DetermineDirectoryResult> DetermineDirectoryAsync(Catel.Services.DetermineDirectoryContext context) { }
-    }
-    public abstract class SensorServiceBase<TValueInterface, TEventArgs> : Catel.Services.ViewModelServiceBase, Catel.Services.ISensorService<TValueInterface, TEventArgs>
-        where TEventArgs : System.EventArgs
-    {
-        protected SensorServiceBase(Catel.Services.IDispatcherService dispatcherService) { }
-        public TValueInterface CurrentValue { get; }
-        public virtual bool IsSupported { get; }
-        public virtual System.TimeSpan TimeBetweenUpdates { get; set; }
-        public event System.EventHandler<TEventArgs> CurrentValueChanged;
-        public virtual TValueInterface GetCurrentValue() { }
-        protected void OnCurrentValueChanged(object sender, TEventArgs e) { }
-        protected void RaiseCurrentValueChanged(TEventArgs e) { }
-        public abstract void Start();
-        public abstract void Stop();
     }
     public struct Size : System.IEquatable<Catel.Services.Size>
     {
@@ -2486,21 +2256,10 @@ namespace Catel.Services
         protected virtual System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowWindowAsync(System.Windows.FrameworkElement window, object data, bool showModal) { }
         public virtual bool Unregister(string name) { }
     }
-    public class VibrateService : Catel.Services.IVibrateService
-    {
-        public VibrateService() { }
-        public void Start(System.TimeSpan duration) { }
-        public void Stop() { }
-    }
     public class ViewContextService : Catel.Services.IViewContextService
     {
         public ViewContextService() { }
         public object GetContext(Catel.MVVM.Views.IView view) { }
-    }
-    public class ViewExportService : Catel.Services.ServiceBase, Catel.Services.IViewExportService
-    {
-        public ViewExportService(Catel.MVVM.Views.IViewManager viewManager, Catel.Services.ISaveFileService saveFileService) { }
-        public virtual System.Threading.Tasks.Task ExportAsync(Catel.MVVM.IViewModel viewModel, Catel.Services.ExportMode exportMode = 0, double dpiX = 96, double dpiY = 96) { }
     }
     public abstract class ViewModelServiceBase : Catel.Services.ServiceBase, Catel.Services.IService, Catel.Services.IViewModelService
     {
