@@ -2176,10 +2176,10 @@ namespace Catel.Services
     {
         bool IsRegistered(string name);
         void Register(string name, System.Type windowType, bool throwExceptionIfExists = true);
-        System.Threading.Tasks.Task<bool?> ShowAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
-        System.Threading.Tasks.Task<bool?> ShowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
-        System.Threading.Tasks.Task<bool?> ShowDialogAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
-        System.Threading.Tasks.Task<bool?> ShowDialogAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
+        System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
+        System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
+        System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowDialogAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
+        System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowDialogAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
         bool Unregister(string name);
     }
     public static class IUIVisualizerServiceExtensions
@@ -2189,9 +2189,9 @@ namespace Catel.Services
         public static bool IsRegistered<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService) { }
         public static void Register(this Catel.Services.IUIVisualizerService uiVisualizerService, System.Type viewModelType, System.Type windowType, bool throwExceptionIfExists = true) { }
         public static void Register<TViewModel, TView>(this Catel.Services.IUIVisualizerService uiVisualizerService, bool throwExceptionIfExists = true) { }
-        public static System.Threading.Tasks.Task<bool?> ShowAsync<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService, object model = null, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null)
+        public static System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowAsync<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService, object model = null, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null)
             where TViewModel : Catel.MVVM.IViewModel { }
-        public static System.Threading.Tasks.Task<bool?> ShowDialogAsync<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService, object model = null, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null)
+        public static System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowDialogAsync<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService, object model = null, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null)
             where TViewModel : Catel.MVVM.IViewModel { }
         public static System.Threading.Tasks.Task ShowOrActivateAsync<TViewModel>(this Catel.Services.IUIVisualizerService uiVisualizerService, object dataContext = null, object scope = null)
             where TViewModel : Catel.MVVM.IViewModel { }
@@ -2452,27 +2452,38 @@ namespace Catel.Services
     }
     public class UICompletedEventArgs : System.EventArgs
     {
-        public UICompletedEventArgs(object dataContext, bool? result) { }
+        public UICompletedEventArgs(Catel.Services.UIVisualizerResult result) { }
         public object DataContext { get; }
-        public bool? Result { get; }
+        public bool? DialogResult { get; }
+        public Catel.Services.UIVisualizerResult Result { get; }
+    }
+    public class UIVisualizerResult
+    {
+        public UIVisualizerResult(bool? result, object data, object dataContext, object window) { }
+        public object Data { get; }
+        public object DataContext { get; }
+        public bool? DialogResult { get; }
+        public object Window { get; }
+        public TViewModel GetViewModel<TViewModel>()
+            where TViewModel :  class, Catel.MVVM.IViewModel { }
     }
     public class UIVisualizerService : Catel.Services.ViewModelServiceBase, Catel.Services.IUIVisualizerService
     {
         protected readonly System.Collections.Generic.Dictionary<string, System.Type> RegisteredWindows;
         public UIVisualizerService(Catel.MVVM.IViewLocator viewLocator, Catel.Services.IDispatcherService dispatcherService) { }
-        protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
-        protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(System.Type windowType, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
+        protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(string name, object data, bool isModal, System.Action<Catel.Services.UIVisualizerResult> completedProc) { }
+        protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(System.Type windowType, object data, bool isModal, System.Action<Catel.Services.UIVisualizerResult> completedProc) { }
         protected virtual void EnsureViewIsRegistered(string name) { }
         protected virtual System.Windows.FrameworkElement GetActiveWindow() { }
-        protected virtual void HandleCloseSubscription(object window, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
+        protected virtual void HandleCloseSubscription(object window, object data, bool isModal, System.Action<Catel.Services.UIVisualizerResult> completedProc) { }
         public virtual bool IsRegistered(string name) { }
         public virtual void Register(string name, System.Type windowType, bool throwExceptionIfExists = true) { }
         protected virtual void RegisterViewForViewModelIfRequired(System.Type viewModelType) { }
-        public virtual System.Threading.Tasks.Task<bool?> ShowAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
-        public virtual System.Threading.Tasks.Task<bool?> ShowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
-        public virtual System.Threading.Tasks.Task<bool?> ShowDialogAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
-        public virtual System.Threading.Tasks.Task<bool?> ShowDialogAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
-        protected virtual System.Threading.Tasks.Task<bool?> ShowWindowAsync(System.Windows.FrameworkElement window, object data, bool showModal) { }
+        public virtual System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
+        public virtual System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
+        public virtual System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowDialogAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
+        public virtual System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowDialogAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
+        protected virtual System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowWindowAsync(System.Windows.FrameworkElement window, object data, bool showModal) { }
         public virtual bool Unregister(string name) { }
     }
     public class VibrateService : Catel.Services.IVibrateService

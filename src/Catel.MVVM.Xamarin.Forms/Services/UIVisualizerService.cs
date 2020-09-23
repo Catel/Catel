@@ -133,7 +133,7 @@
         ///     The <paramref name="viewModel" /> is not registered by the
         ///     <see cref="Register(string,System.Type,bool)" /> method first.
         /// </exception>
-        public async Task<bool?> ShowAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        public async Task<UIVisualizerResult> ShowAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNull(nameof(viewModel), viewModel);
 

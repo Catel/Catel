@@ -9,6 +9,8 @@
 namespace Catel.Services
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using System.Windows;
     using System.Windows.Threading;
@@ -42,10 +44,10 @@ namespace Catel.Services
         /// </summary>
         /// <param name="name">The name that the window is registered with.</param>
         /// <param name="data">The data that will be set as data context.</param>
-        /// <param name="completedProc">The completed callback.</param>
         /// <param name="isModal">True if this is a ShowDialog request.</param>
+        /// <param name="completedProc">The completed callback.</param>
         /// <returns>The created window.</returns>    
-        protected virtual async Task<FrameworkElement> CreateWindowAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
+        protected virtual async Task<FrameworkElement> CreateWindowAsync(string name, object data, bool isModal, Action<UIVisualizerResult> completedProc)
         {
             Type windowType;
 
@@ -57,7 +59,7 @@ namespace Catel.Services
                 }
             }
 
-            return await CreateWindowAsync(windowType, data, completedProc, isModal);
+            return await CreateWindowAsync(windowType, data, isModal, completedProc);
         }
 
         /// <summary>
@@ -65,12 +67,12 @@ namespace Catel.Services
         /// </summary>
         /// <param name="windowType">The type of the window.</param>
         /// <param name="data">The data that will be set as data context.</param>
-        /// <param name="completedProc">The completed callback.</param>
         /// <param name="isModal">True if this is a ShowDialog request.</param>
+        /// <param name="completedProc">The completed callback.</param>
         /// <returns>
         /// The created window.
         /// </returns>
-        protected virtual async Task<FrameworkElement> CreateWindowAsync(Type windowType, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
+        protected virtual async Task<FrameworkElement> CreateWindowAsync(Type windowType, object data, bool isModal, Action<UIVisualizerResult> completedProc)
         {
             var tcs = new TaskCompletionSource<FrameworkElement>();
 
@@ -92,7 +94,7 @@ namespace Catel.Services
 
                     if (window != null && completedProc != null)
                     {
-                        HandleCloseSubscription(window, data, completedProc, isModal);
+                        HandleCloseSubscription(window, data, isModal, completedProc);
                     }
 
                     tcs.TrySetResult(window);
@@ -113,9 +115,9 @@ namespace Catel.Services
         /// </summary>
         /// <param name="window">The window.</param>
         /// <param name="data">The data that will be set as data context.</param>
-        /// <param name="completedProc">The completed callback.</param>
         /// <param name="isModal">True if this is a ShowDialog request.</param>
-        protected virtual void HandleCloseSubscription(object window, object data, EventHandler<UICompletedEventArgs> completedProc, bool isModal)
+        /// <param name="completedProc">The completed callback.</param>
+        protected virtual void HandleCloseSubscription(object window, object data, bool isModal, Action<UIVisualizerResult> completedProc)
         {
             var eventInfo = window.GetType().GetEvent("Closed");
             var addMethod = eventInfo?.AddMethod;
@@ -145,7 +147,8 @@ namespace Catel.Services
 
                     try
                     {
-                        completedProc(this, new UICompletedEventArgs(data, dialogResult));
+                        // TODO: Do we need a different DataContext object here?
+                        completedProc(new UIVisualizerResult(dialogResult, data, data, window));
                     }
                     finally
                     {
@@ -169,12 +172,15 @@ namespace Catel.Services
         /// <param name="data">The data.</param>
         /// <param name="showModal">If <c>true</c>, the window should be shown as modal.</param>
         /// <returns><c>true</c> if the window is closed with success; otherwise <c>false</c> or <c>null</c>.</returns>
-        protected virtual Task<bool?> ShowWindowAsync(FrameworkElement window, object data, bool showModal)
+        protected virtual Task<UIVisualizerResult> ShowWindowAsync(FrameworkElement window, object data, bool showModal)
         {
             // Note: no async/await because we use a TaskCompletionSource
-            var tcs = new TaskCompletionSource<bool?>();
+            var tcs = new TaskCompletionSource<UIVisualizerResult>();
 
-            HandleCloseSubscription(window, data, (sender, args) => tcs.TrySetResult(args.Result), showModal);
+            HandleCloseSubscription(window, data, showModal, (result) => 
+            {
+                tcs.TrySetResult(result);
+            });
 
             var showMethodInfo = showModal ? window.GetType().GetMethodEx("ShowDialog") : window.GetType().GetMethodEx("Show");
             if (showModal && showMethodInfo is null)

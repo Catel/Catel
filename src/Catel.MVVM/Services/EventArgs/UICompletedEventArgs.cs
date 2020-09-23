@@ -13,31 +13,25 @@ namespace Catel.Services
     /// </summary>
     public class UICompletedEventArgs : EventArgs
     {
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UICompletedEventArgs"/> class.
-        /// </summary>
-        /// <param name="dataContext">The data context.</param>
-        /// <param name="result">The result.</param>
-        public UICompletedEventArgs(object dataContext, bool? result)
+        public UICompletedEventArgs(UIVisualizerResult result)
         {
-            DataContext = dataContext;
+            Argument.IsNotNull("result", result);
+
             Result = result;
         }
-        #endregion
 
-        #region Public Properties
+        public UIVisualizerResult Result { get; }
+
         /// <summary>
         /// Gets the data context.
         /// </summary>
         /// <value>The data context.</value>
-        public object DataContext { get; private set; }
+        public object DataContext { get { return Result.DataContext; } }
 
         /// <summary>
         /// Gets the result of the window.
         /// </summary>
         /// <value>The result.</value>
-        public bool? Result { get; private set; }
-        #endregion
+        public bool? DialogResult { get { return Result.DialogResult; } }
     }
 }

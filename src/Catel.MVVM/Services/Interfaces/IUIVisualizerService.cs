@@ -16,7 +16,6 @@ namespace Catel.Services
     /// </summary>
     public interface IUIVisualizerService
     {
-        #region Methods
         /// <summary>
         /// Registers the specified view model and the window type. This way, Catel knowns what
         /// window to show when a specific view model window is requested.
@@ -55,7 +54,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        Task<bool?> ShowAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
+        Task<UIVisualizerResult> ShowAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
 
         /// <summary>
         /// Shows a window that is registered with the specified view model in a non-modal state.
@@ -68,7 +67,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        Task<bool?> ShowAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
+        Task<UIVisualizerResult> ShowAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
 
         /// <summary>
         /// Shows a window that is registered with the specified view model in a modal state.
@@ -80,7 +79,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        Task<bool?> ShowDialogAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
+        Task<UIVisualizerResult> ShowDialogAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null);
 
         /// <summary>
         /// Shows a window that is registered with the specified view model in a modal state.
@@ -93,7 +92,6 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        Task<bool?> ShowDialogAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
-        #endregion
+        Task<UIVisualizerResult> ShowDialogAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
     }
 }

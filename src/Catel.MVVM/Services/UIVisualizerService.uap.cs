@@ -120,26 +120,29 @@ namespace Catel.Services
         /// <param name="data">The data.</param>
         /// <param name="showModal">If <c>true</c>, the window should be shown as modal.</param>
         /// <returns><c>true</c> if the window is closed with success; otherwise <c>false</c> or <c>null</c>.</returns>
-        protected virtual async Task<bool?> ShowWindowAsync(ContentDialog window, object data, bool showModal)
+        protected virtual async Task<UIVisualizerResult> ShowWindowAsync(ContentDialog window, object data, bool showModal)
         {
             // Note: no async/await because we use a TaskCompletionSource
 
             var result = await window.ShowAsync();
+            bool? boolResult = null;
 
             switch (result)
             {
                 case ContentDialogResult.None:
-                    return showModal ? false : (bool?)null;
+                    boolResult = showModal ? false : (bool?)null;
 
                 case ContentDialogResult.Primary:
-                    return true;
+                    boolResult = true;
 
                 case ContentDialogResult.Secondary:
-                    return false;
+                    boolResult = false;
 
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            return new UIVisualizerResult(boolResult, data, window.DataContext);
         }
         #endregion
     }

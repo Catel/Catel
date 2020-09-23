@@ -130,7 +130,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="ViewModelNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public virtual async Task<bool?> ShowAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual Task<UIVisualizerResult> ShowAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNull("viewModel", viewModel);
 
@@ -139,7 +139,7 @@ namespace Catel.Services
 
             RegisterViewForViewModelIfRequired(viewModelType);
 
-            return await ShowAsync(viewModelTypeName, viewModel, completedProc);
+            return ShowAsync(viewModelTypeName, viewModel, completedProc);
         }
 
         /// <summary>
@@ -153,19 +153,20 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type, bool)"/> method first.</exception>
-        public virtual async Task<bool?> ShowAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual async Task<UIVisualizerResult> ShowAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
             EnsureViewIsRegistered(name);
 
-            var window = await CreateWindowAsync(name, data, completedProc, false);
-            if (window != null)
+            var window = await CreateWindowAsync(name, data, false, result => completedProc?.Invoke(result.Window, new UICompletedEventArgs(result)));
+            if (window is null)
             {
-                return await ShowWindowAsync(window, data, false);
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Could not create window '{name}'");
             }
 
-            return false;
+            var result = await ShowWindowAsync(window, data, false);
+            return result;
         }
 
         /// <summary>
@@ -178,7 +179,7 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public virtual async Task<bool?> ShowDialogAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual async Task<UIVisualizerResult> ShowDialogAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNull("viewModel", viewModel);
 
@@ -187,7 +188,8 @@ namespace Catel.Services
 
             RegisterViewForViewModelIfRequired(viewModelType);
 
-            return await ShowDialogAsync(viewModelTypeName, viewModel, completedProc);
+            var result = await ShowDialogAsync(viewModelTypeName, viewModel, completedProc);
+            return result;
         }
 
         /// <summary>
@@ -201,19 +203,20 @@ namespace Catel.Services
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public virtual async Task<bool?> ShowDialogAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
+        public virtual async Task<UIVisualizerResult> ShowDialogAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
             EnsureViewIsRegistered(name);
 
-            var window = await CreateWindowAsync(name, data, completedProc, true);
-            if (window != null)
+            var window = await CreateWindowAsync(name, data, true, result => completedProc?.Invoke(result.Window, new UICompletedEventArgs(result)));
+            if (window is null)
             {
-                return await ShowWindowAsync(window, data, true);
+                throw Log.ErrorAndCreateException<InvalidOperationException>($"Could not create window '{name}'");
             }
 
-            return false;
+            var result = await ShowWindowAsync(window, data, true);
+            return result;
         }
 
         /// <summary>

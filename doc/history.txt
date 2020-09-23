@@ -29,6 +29,7 @@ Release date
 
 Added/fixed
 ===========
+(+) #1489 Add VisualizerResult for IUIVisualizerService with instance of view model / window
 (+) #1528 Add static setting to specify the default value for SupportIEditableObject 
     and SupportValidation for Model attributes
 (+) #1537 Add ToCast<T> extension methods to cast value types to a generic without boxing
