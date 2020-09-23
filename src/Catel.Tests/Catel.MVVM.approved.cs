@@ -295,7 +295,7 @@ namespace Catel.Data
     public class DispatcherObservableObject : Catel.Data.ObservableObject
     {
         public DispatcherObservableObject() { }
-        protected override void RaisePropertyChanged(object sender, Catel.Data.AdvancedPropertyChangedEventArgs e) { }
+        protected override void RaisePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
     }
 }
 namespace Catel.MVVM.Auditing
@@ -961,11 +961,11 @@ namespace Catel.MVVM
         protected virtual System.Threading.Tasks.Task OnClosingAsync() { }
         protected virtual void OnModelPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
         protected virtual void OnNavigationCompleted() { }
-        protected override void OnPropertyChanged(Catel.Data.AdvancedPropertyChangedEventArgs e) { }
+        protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
         protected override void OnValidating(Catel.Data.IValidationContext validationContext) { }
         protected override void OnValidatingBusinessRules(Catel.Data.IValidationContext validationContext) { }
         protected override void OnValidatingFields(Catel.Data.IValidationContext validationContext) { }
-        protected override void RaisePropertyChanged(object sender, Catel.Data.AdvancedPropertyChangedEventArgs e) { }
+        protected override void RaisePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
         protected void RegisterViewModelServices(Catel.IoC.IServiceLocator serviceLocator) { }
         protected void ResetModel(string modelProperty, Catel.MVVM.ModelCleanUpMode modelCleanUpMode) { }
         protected virtual System.Threading.Tasks.Task<bool> SaveAsync() { }

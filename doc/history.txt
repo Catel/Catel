@@ -45,6 +45,7 @@ Added/fixed
 (-) #1492 Remove ModelBase.SetValue(string, object, bool)
 (-) #1638 Remove xplat shims (such as TaskShim, Timer, etc)
 (-) #1653 Remove IoC configuration sections
+(-) #1654 Remove AdvancedPropertyChangedEventArgs to improve performance and decrease memory allocations
 (-) #1655 Remove ExceptionTester
 
 Platform support changes

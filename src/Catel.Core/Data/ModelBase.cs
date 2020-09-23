@@ -331,11 +331,11 @@ namespace Catel.Data
         /// <remarks>
         /// This method is overriden en does not call the base because lots of additional logic is added in this class. The
         /// <see cref="RaisePropertyChanged(object,System.ComponentModel.PropertyChangedEventArgs,bool,bool)"/> will explicitly call 
-        /// <see cref="ObservableObject.RaisePropertyChanged(object, AdvancedPropertyChangedEventArgs)"/>.
+        /// <see cref="ObservableObject.RaisePropertyChanged(object, PropertyChangedEventArgs)"/>.
         /// <para />
         /// If this method is overriden, it is very important to call the base.
         /// </remarks>
-        protected override void RaisePropertyChanged(object sender, AdvancedPropertyChangedEventArgs e)
+        protected override void RaisePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             RaisePropertyChanged(sender, e, true, false);
         }
@@ -355,7 +355,7 @@ namespace Catel.Data
                 if (!DisablePropertyChangeNotifications)
                 {
                     // Call & exit, we can't handle "update them all" property change notifications
-                    base.RaisePropertyChanged(this, new AdvancedPropertyChangedEventArgs(sender, e.PropertyName));
+                    base.RaisePropertyChanged(this, new PropertyChangedEventArgs(e.PropertyName));
                 }
 
                 return;
@@ -384,7 +384,7 @@ namespace Catel.Data
                         if (!DisablePropertyChangeNotifications)
                         {
                             // Explicitly call base because we have overridden the behavior
-                            var eventArgs = new AdvancedPropertyChangedEventArgs(sender, this, e.PropertyName);
+                            var eventArgs = new PropertyChangedEventArgs(e.PropertyName);
                             base.RaisePropertyChanged(this, eventArgs);
                         }
                     }
@@ -395,17 +395,6 @@ namespace Catel.Data
 
             if (ReferenceEquals(this, sender))
             {
-                AdvancedPropertyChangedEventArgs eventArgs;
-                var advancedEventArgs = e as AdvancedPropertyChangedEventArgs;
-                if (advancedEventArgs != null)
-                {
-                    eventArgs = new AdvancedPropertyChangedEventArgs(this, advancedEventArgs);
-                }
-                else
-                {
-                    eventArgs = new AdvancedPropertyChangedEventArgs(sender, this, e.PropertyName);
-                }
-
                 if (!isRefreshCallOnly)
                 {
                     SuspensionContext callbackSuspensionContext;
@@ -426,7 +415,7 @@ namespace Catel.Data
                         var handler = propertyData.PropertyChangedEventHandler;
                         if (handler != null)
                         {
-                            handler(this, eventArgs);
+                            handler(this, e);
                         }
                     }
                 }
@@ -434,7 +423,7 @@ namespace Catel.Data
                 if (!DisablePropertyChangeNotifications)
                 {
                     // Explicitly call base because we have overridden the behavior
-                    base.RaisePropertyChanged(this, eventArgs);
+                    base.RaisePropertyChanged(this, e);
                 }
             }
 

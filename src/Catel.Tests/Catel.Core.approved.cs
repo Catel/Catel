@@ -865,22 +865,6 @@ namespace Catel.Core
 }
 namespace Catel.Data
 {
-    public class AdvancedPropertyChangedEventArgs : System.ComponentModel.PropertyChangedEventArgs
-    {
-        public AdvancedPropertyChangedEventArgs(object sender, Catel.Data.AdvancedPropertyChangedEventArgs e) { }
-        public AdvancedPropertyChangedEventArgs(object sender, string propertyName) { }
-        public AdvancedPropertyChangedEventArgs(object originalSender, object latestSender, string propertyName) { }
-        public AdvancedPropertyChangedEventArgs(object sender, string propertyName, object newValue) { }
-        public AdvancedPropertyChangedEventArgs(object originalSender, object latestSender, string propertyName, object newValue) { }
-        public AdvancedPropertyChangedEventArgs(object sender, string propertyName, object oldValue, object newValue) { }
-        public AdvancedPropertyChangedEventArgs(object originalSender, object latestSender, string propertyName, object oldValue, object newValue) { }
-        public bool IsNewValueMeaningful { get; }
-        public bool IsOldValueMeaningful { get; }
-        public object LatestSender { get; }
-        public object NewValue { get; }
-        public object OldValue { get; }
-        public object OriginalSender { get; }
-    }
     public class AttributeValidatorProvider : Catel.Data.ValidatorProviderBase
     {
         public AttributeValidatorProvider() { }
@@ -1046,7 +1030,6 @@ namespace Catel.Data
         public static Catel.Data.FieldValidationResult CreateWarningWithTag(string propertyName, string message, object tag) { }
         public static Catel.Data.FieldValidationResult CreateWarningWithTag<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression, string message, object tag) { }
     }
-    public interface IAdvancedNotifyPropertyChanged : System.ComponentModel.INotifyPropertyChanged { }
     public interface IBusinessRuleValidationResult : Catel.Data.IValidationResult { }
     public interface IFieldValidationResult : Catel.Data.IValidationResult
     {
@@ -1284,7 +1267,7 @@ namespace Catel.Data
         protected virtual void OnEndEdit(System.ComponentModel.EditEventArgs e) { }
         protected virtual void OnSerialized() { }
         protected virtual void OnSerializing() { }
-        protected override void RaisePropertyChanged(object sender, Catel.Data.AdvancedPropertyChangedEventArgs e) { }
+        protected override void RaisePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
         protected void RaisePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e, bool updateIsDirty, bool isRefreshCallOnly) { }
         protected virtual void SetDirty(string propertyName) { }
         protected void SetValue(Catel.Data.PropertyData property, object value, bool notifyOnChange = true) { }
@@ -1298,10 +1281,10 @@ namespace Catel.Data
         public override string ToString() { }
         protected static object GetObjectValue<TValue>(TValue value) { }
         protected static bool IsPropertyRegistered(System.Type type, string name) { }
-        public static Catel.Data.PropertyData RegisterProperty(string name, System.Type type, System.Func<object> createDefaultValue = null, System.EventHandler<Catel.Data.AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
-        public static Catel.Data.PropertyData RegisterProperty<TValue>(string name, System.Type type, TValue defaultValue, System.EventHandler<Catel.Data.AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
-        public static Catel.Data.PropertyData RegisterProperty<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, System.Func<TValue> createDefaultValue = null, System.Action<TModel, Catel.Data.AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
-        public static Catel.Data.PropertyData RegisterProperty<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, TValue defaultValue, System.Action<TModel, Catel.Data.AdvancedPropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
+        public static Catel.Data.PropertyData RegisterProperty(string name, System.Type type, System.Func<object> createDefaultValue = null, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
+        public static Catel.Data.PropertyData RegisterProperty<TValue>(string name, System.Type type, TValue defaultValue, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
+        public static Catel.Data.PropertyData RegisterProperty<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, System.Func<TValue> createDefaultValue = null, System.Action<TModel, System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
+        public static Catel.Data.PropertyData RegisterProperty<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, TValue defaultValue, System.Action<TModel, System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
         protected static void UnregisterProperty(System.Type modelType, string name) { }
     }
     public static class ModelBaseExtensions
@@ -1321,22 +1304,15 @@ namespace Catel.Data
         public override int GetHashCode(Catel.Data.ModelBase obj) { }
     }
     [System.Serializable]
-    public class ObservableObject : Catel.Data.IAdvancedNotifyPropertyChanged, System.ComponentModel.INotifyPropertyChanged
+    public class ObservableObject : System.ComponentModel.INotifyPropertyChanged
     {
         public ObservableObject() { }
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(Catel.Data.AdvancedPropertyChangedEventArgs e) { }
+        protected virtual void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
         protected void RaisePropertyChanged(string propertyName) { }
-        protected virtual void RaisePropertyChanged(object sender, Catel.Data.AdvancedPropertyChangedEventArgs e) { }
-        protected void RaisePropertyChanged(object sender, string propertyName) { }
-        protected void RaisePropertyChanged(string propertyName, object newValue) { }
-        protected void RaisePropertyChanged(object sender, string propertyName, object newValue) { }
-        protected void RaisePropertyChanged(string propertyName, object oldValue, object newValue) { }
-        protected void RaisePropertyChanged(object sender, string propertyName, object oldValue, object newValue) { }
+        protected virtual void RaisePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
         protected void RaisePropertyChanged<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression) { }
-        protected void RaisePropertyChanged<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression, object newValue) { }
-        protected void RaisePropertyChanged<TProperty>(System.Linq.Expressions.Expression<System.Func<TProperty>> propertyExpression, object oldValue, object newValue) { }
-        protected void RaisePropertyChangedDirect(object sender, Catel.Data.AdvancedPropertyChangedEventArgs e) { }
+        protected void RaisePropertyChangedDirect(object sender, System.ComponentModel.PropertyChangedEventArgs e) { }
     }
     public static class ObservableObjectExtensions
     {
@@ -1538,7 +1514,7 @@ namespace Catel.Data
         protected virtual string GetFieldWarnings(string columnName) { }
         protected virtual bool IsValidationProperty(string propertyName) { }
         protected void NotifyValidationResult(Catel.Data.IValidationResult validationResult, bool notifyGlobal) { }
-        protected override void OnPropertyChanged(Catel.Data.AdvancedPropertyChangedEventArgs e) { }
+        protected override void OnPropertyChanged(System.ComponentModel.PropertyChangedEventArgs e) { }
         protected virtual void OnValidated(Catel.Data.IValidationContext validationContext) { }
         protected virtual void OnValidatedBusinessRules(Catel.Data.IValidationContext validationContext) { }
         protected virtual void OnValidatedFields(Catel.Data.IValidationContext validationContext) { }

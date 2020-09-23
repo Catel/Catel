@@ -436,8 +436,8 @@ namespace Catel.Data
         /// <summary>
         /// Raises the <see cref="E:PropertyChanged" /> event.
         /// </summary>
-        /// <param name="e">The <see cref="AdvancedPropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected override void OnPropertyChanged(AdvancedPropertyChangedEventArgs e)
+        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
+        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
 

@@ -475,16 +475,16 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     Contract.Requires(e != null);
 
-                    this.CollectionChanged?.Invoke(this, e);
+                    CollectionChanged?.Invoke(this, e);
                 }
 
                 protected override void OnPropertyObjectCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
                 {
                     base.OnPropertyObjectCollectionChanged(sender, e);
 
-                    if (sender == this.Items)
+                    if (sender == Items)
                     {
-                        this.OnCollectionChanged(e);
+                        OnCollectionChanged(e);
                     }
                 }
 
@@ -492,9 +492,9 @@ namespace Catel.Tests.Runtime.Serialization
                 {
                     base.OnPropertyObjectPropertyChanged(sender, e);
 
-                    if (sender == this.Items)
+                    if (sender == Items)
                     {
-                        this.RaisePropertyChanged(this, e.PropertyName);
+                        RaisePropertyChanged(e.PropertyName);
                     }
                 }
 

@@ -10,6 +10,7 @@ namespace Catel.MVVM
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using Catel.Data;
     using Catel.Logging;
     using Catel.Services;
@@ -153,7 +154,7 @@ namespace Catel.MVVM
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected override void RaisePropertyChanged(object sender, AdvancedPropertyChangedEventArgs e)
+        protected override void RaisePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (_isThrottlingEnabled && !_isHandlingThrottlingNotifications)
             {

@@ -167,7 +167,7 @@ namespace Catel.Data
             // Notify outside lock
             if (notify)
             {
-                RaisePropertyChanged(property.Name, BoxingCache.GetBoxedValue(oldValue), BoxingCache.GetBoxedValue(value));
+                RaisePropertyChanged(property.Name);
             }
         }
 

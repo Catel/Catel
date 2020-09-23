@@ -845,8 +845,8 @@ namespace Catel.MVVM
         /// <summary>
         /// Called when a property value has changed.
         /// </summary>
-        /// <param name="e">The <see cref="AdvancedPropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected override void OnPropertyChanged(AdvancedPropertyChangedEventArgs e)
+        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
+        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             if (IsSaving || IsCanceling || IsClosing || IsClosed)
             {

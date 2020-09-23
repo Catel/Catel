@@ -22,7 +22,7 @@ namespace Catel.Data
         {
             Argument.IsNotNull("sender", sender);
 
-            sender.RaisePropertyChanged(sender, string.Empty);
+            sender.RaisePropertyChanged(string.Empty);
         }
     }
 }

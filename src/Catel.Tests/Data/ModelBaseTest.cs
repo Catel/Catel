@@ -241,34 +241,6 @@
         }
 
         [TestCase]
-        public void NotifyPropertyChanged_OldValueSupport()
-        {
-            var obj = new IniEntry();
-
-            object oldValue = null;
-            object newValue = null;
-
-            obj.PropertyChanged += (sender, e) =>
-                                       {
-                                           var advancedE = (AdvancedPropertyChangedEventArgs)e;
-
-                                           if (advancedE.PropertyName == "Key")
-                                           {
-                                               Assert.IsTrue(advancedE.IsOldValueMeaningful);
-                                               Assert.IsTrue(advancedE.IsNewValueMeaningful);
-
-                                               oldValue = advancedE.OldValue;
-                                               newValue = advancedE.NewValue;
-                                           }
-                                       };
-
-            obj.Key = "new value";
-
-            Assert.AreEqual(IniEntry.KeyProperty.GetDefaultValue(), oldValue);
-            Assert.AreEqual("new value", newValue);
-        }
-
-        [TestCase]
         public void InvokePropertyChangedForAllRegisteredProperties()
         {
             List<string> expectedProperties = new List<string>();

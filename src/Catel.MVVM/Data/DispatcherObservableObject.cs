@@ -6,6 +6,7 @@
 
 namespace Catel.Data
 {
+    using System.ComponentModel;
     using IoC;
     using Services;
 
@@ -38,8 +39,8 @@ namespace Catel.Data
         /// methods are (and should be) just overloads that eventually call this method.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
-        protected override void RaisePropertyChanged(object sender, AdvancedPropertyChangedEventArgs e)
+        /// <param name="e">The <see cref="PropertyChangedEventArgs"/> instance containing the event data.</param>
+        protected override void RaisePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             _dispatcherService.BeginInvokeIfRequired(() => base.RaisePropertyChanged(sender, e));
         }

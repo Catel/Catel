@@ -8,6 +8,7 @@ namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Reflection;
     using System.Xml.Serialization;
     using Catel.Reflection;
@@ -48,7 +49,7 @@ namespace Catel.Data
         /// <param name="isCalculatedProperty">if set to <c>true</c>, the property is a calculated property.</param>
         /// <exception cref="ArgumentException">The <paramref name="name" /> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="type" /> is <c>null</c>.</exception>
-        internal PropertyData(string name, Type type, object defaultValue, EventHandler<AdvancedPropertyChangedEventArgs> propertyChangedEventHandler,
+        internal PropertyData(string name, Type type, object defaultValue, EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler,
             bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool isCalculatedProperty)
             : this(name, type, () => defaultValue, propertyChangedEventHandler, isSerializable,
                    includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty) { }
@@ -69,7 +70,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="createDefaultValue"/> is <c>null</c>.</exception>
-        internal PropertyData(string name, Type type, Func<object> createDefaultValue, EventHandler<AdvancedPropertyChangedEventArgs> propertyChangedEventHandler,
+        internal PropertyData(string name, Type type, Func<object> createDefaultValue, EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler,
             bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool isCalculatedProperty)
         {
             Argument.IsNotNullOrWhitespace("name", name);
@@ -119,7 +120,7 @@ namespace Catel.Data
         /// </summary>
         /// <value>The property changed event handler.</value>
         [XmlIgnore]
-        internal EventHandler<AdvancedPropertyChangedEventArgs> PropertyChangedEventHandler { get; private set; }
+        internal EventHandler<PropertyChangedEventArgs> PropertyChangedEventHandler { get; private set; }
 
         /// <summary>
         /// Gets a value indicating whether this property is serializable.
