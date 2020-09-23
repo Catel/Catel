@@ -44,6 +44,7 @@ Added/fixed
 (-) #1409 Remove ApiCop feature, we will implement this in Catel.Analyzers instead
 (-) #1492 Remove ModelBase.SetValue(string, object, bool)
 (-) #1638 Remove xplat shims (such as TaskShim, Timer, etc)
+(-) #1653 Remove IoC configuration sections
 (-) #1655 Remove ExceptionTester
 
 Platform support changes

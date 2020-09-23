@@ -2028,14 +2028,6 @@ namespace Catel.IoC
         public static Catel.IoC.ITypeFactory DefaultTypeFactory { get; }
         public static void UpdateDefaultComponents() { }
     }
-    public sealed class IoCConfigurationSection : System.Configuration.ConfigurationSection
-    {
-        public IoCConfigurationSection() { }
-        public Catel.IoC.ServiceLocatorConfiguration DefaultServiceLocatorConfiguration { get; }
-        [System.Configuration.ConfigurationProperty("serviceLocatorConfigurations", IsDefaultCollection=false)]
-        public Catel.IoC.ServiceLocatorConfigurationCollection ServiceLocatorConfigurationCollection { get; }
-        public Catel.IoC.ServiceLocatorConfiguration GetServiceLocatorConfiguration(string name = "default") { }
-    }
     public static class IoCFactory
     {
         public static System.Func<Catel.IoC.IServiceLocator, Catel.IoC.IDependencyResolver> CreateDependencyResolverFunc { get; set; }
@@ -2064,20 +2056,6 @@ namespace Catel.IoC
         public static Catel.IoC.IDependencyResolver GetDependencyResolver(this object obj) { }
         public static Catel.IoC.IServiceLocator GetServiceLocator(this object obj) { }
         public static Catel.IoC.ITypeFactory GetTypeFactory(this object obj) { }
-    }
-    public class Registration : System.Configuration.ConfigurationElement
-    {
-        public Registration() { }
-        public System.Type ImplementationType { get; }
-        [System.Configuration.ConfigurationProperty("implementationType", IsRequired=true)]
-        public string ImplementationTypeName { get; set; }
-        public System.Type InterfaceType { get; }
-        [System.Configuration.ConfigurationProperty("interfaceType", IsRequired=true)]
-        public string InterfaceTypeName { get; set; }
-        [System.Configuration.ConfigurationProperty("registrationType", DefaultValue=Catel.IoC.RegistrationType.Singleton)]
-        public Catel.IoC.RegistrationType RegistrationType { get; set; }
-        [System.Configuration.ConfigurationProperty("tag")]
-        public string Tag { get; set; }
     }
     public abstract class RegistrationConventionBase : Catel.IoC.IRegistrationConvention
     {
@@ -2164,25 +2142,6 @@ namespace Catel.IoC
         public ServiceLocatorAutoRegistrationManager(Catel.IoC.IServiceLocator serviceLocator) { }
         public bool AutoRegisterTypesViaAttributes { get; set; }
         public bool IgnoreRuntimeIncorrectUsageOfRegisterAttribute { get; set; }
-    }
-    public sealed class ServiceLocatorConfiguration : System.Configuration.ConfigurationElementCollection
-    {
-        public ServiceLocatorConfiguration(string name = "default") { }
-        public override System.Configuration.ConfigurationElementCollectionType CollectionType { get; }
-        [System.Configuration.ConfigurationProperty("name", DefaultValue="default", IsKey=true, IsRequired=true)]
-        public string Name { get; set; }
-        public void Configure(Catel.IoC.IServiceLocator serviceLocator) { }
-        protected override System.Configuration.ConfigurationElement CreateNewElement() { }
-        protected override object GetElementKey(System.Configuration.ConfigurationElement element) { }
-        protected override bool IsElementName(string elementName) { }
-    }
-    public sealed class ServiceLocatorConfigurationCollection : System.Configuration.ConfigurationElementCollection
-    {
-        public ServiceLocatorConfigurationCollection() { }
-        public override System.Configuration.ConfigurationElementCollectionType CollectionType { get; }
-        protected override System.Configuration.ConfigurationElement CreateNewElement() { }
-        protected override object GetElementKey(System.Configuration.ConfigurationElement element) { }
-        protected override bool IsElementName(string elementName) { }
     }
     public static class ServiceLocatorExtensions
     {
