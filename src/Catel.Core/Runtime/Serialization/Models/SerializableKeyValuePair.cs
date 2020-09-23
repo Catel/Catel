@@ -14,16 +14,13 @@ namespace Catel.Runtime.Serialization
     /// <summary>
     /// Serializable key value pair.
     /// </summary>
-#if NET || NETCORE || NETSTANDARD
-    [DataContract, Serializable]
-#endif
-    public class SerializableKeyValuePair
+    [Serializable]
+    public class SerializableKeyValuePair : System.Runtime.Serialization.ISerializable
     {
         /// <summary>
         /// Gets or sets the key.
         /// </summary>
         /// <value>The key.</value>
-        [DataMember]
         public object Key { get; set; }
 
         /// <summary>
@@ -38,7 +35,6 @@ namespace Catel.Runtime.Serialization
         /// Gets or sets the value.
         /// </summary>
         /// <value>The value.</value>
-        [DataMember]
         public object Value { get; set; }
 
         /// <summary>
@@ -48,5 +44,30 @@ namespace Catel.Runtime.Serialization
         [ExcludeFromSerialization]
         [XmlIgnore]
         public Type ValueType { get; set; }
+
+        public SerializableKeyValuePair()
+        {
+
+        }
+
+        public SerializableKeyValuePair(SerializationInfo info, StreamingContext context)
+        {
+            Key = info.GetValue("Key", typeof(object));
+            Value = info.GetValue("Value", typeof(object));
+        }
+
+        /// <summary>
+        /// Populates a <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with the data needed to serialize the target object.
+        /// </summary>
+        /// <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> to populate with data.</param>
+        /// <param name="context">The destination (see <see cref="T:System.Runtime.Serialization.StreamingContext"/>) for this serialization.</param>
+        /// <exception cref="T:System.Security.SecurityException">
+        /// The caller does not have the required permission.
+        /// </exception>
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("Key", Key);
+            info.AddValue("Value", Value);
+        }
     }
 }

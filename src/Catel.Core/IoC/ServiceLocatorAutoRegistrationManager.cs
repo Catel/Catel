@@ -99,13 +99,17 @@ namespace Catel.IoC
                 }
 #endif
 
-                foreach (var type in args.LoadedTypes)
-                {
-                    _pendingTypes.Enqueue(type);
-                }
-
                 if (_autoRegisterTypesViaAttributes)
                 {
+                    if (_hasInspectedTypesAtLeastOnce)
+                    {
+                        // Only required if assemblies are lazy-loaded
+                        foreach (var type in args.LoadedTypes)
+                        {
+                            _pendingTypes.Enqueue(type);
+                        }
+                    }
+
                     try
                     {
                         InspectLoadedAssemblies();

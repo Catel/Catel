@@ -232,7 +232,7 @@ namespace Catel.Data
             var foundProperties = new List<PropertyData>();
 
             var properties = new List<PropertyInfo>();
-            properties.AddRange(type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true)));
+            properties.AddRange(type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true), true));
             foreach (var property in properties)
             {
                 if (property.PropertyType == typeof(PropertyData))
@@ -281,7 +281,7 @@ namespace Catel.Data
             var foundFields = new List<PropertyData>();
 
             var fields = new List<FieldInfo>();
-            fields.AddRange(type.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true)));
+            fields.AddRange(type.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true), true));
             foreach (var field in fields)
             {
                 if (field.FieldType == typeof(PropertyData))

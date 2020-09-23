@@ -22,7 +22,7 @@ namespace Catel.Tests.Collections
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.CanMoveItemUp(null, item));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.CanMoveItemUp(null, item));
             }
 
             [TestCase]
@@ -73,7 +73,7 @@ namespace Catel.Tests.Collections
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.MoveItemUp(null, item));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUp(null, item));
             }
 
             [TestCase]
@@ -127,7 +127,7 @@ namespace Catel.Tests.Collections
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.CanMoveItemDown(null, item));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.CanMoveItemDown(null, item));
             }
 
             [TestCase]
@@ -177,21 +177,21 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.MoveItemUpByIndex(null, 2));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUpByIndex(null, 2));
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIndexSmallerThanZero()
             {
                 var list = new List<int> { 1, 2, 3 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.MoveItemUpByIndex(null, -1));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUpByIndex(null, -1));
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIndexLargerThanListCount()
             {
                 var list = new List<int> { 1, 2, 3 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.MoveItemUpByIndex(null, 3));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUpByIndex(null, 3));
             }
 
             [TestCase]
@@ -226,7 +226,7 @@ namespace Catel.Tests.Collections
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.MoveItemDown(null, item));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemDown(null, item));
             }
 
             [TestCase]
@@ -279,7 +279,7 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.MoveItemDownByIndex(null, 2));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemDownByIndex(null, 2));
             }
 
             [TestCase]
@@ -327,7 +327,7 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.RemoveFirst(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.RemoveFirst(null));
             }
 
             [TestCase]
@@ -357,7 +357,7 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.RemoveLast(null));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.RemoveLast(null));
             }
 
             [TestCase]
@@ -389,7 +389,7 @@ namespace Catel.Tests.Collections
             {
                 var newList = new List<int> { 4, 5, 6 };
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.AddRange((ICollection<int>)null, newList));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.AddRange((ICollection<int>)null, newList));
             }
 
             [TestCase]
@@ -454,7 +454,7 @@ namespace Catel.Tests.Collections
             {
                 var newList = new List<int> { 4, 5, 6 };
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => CollectionExtensions.ReplaceRange((ICollection<int>)null, newList));
+                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.ReplaceRange((ICollection<int>)null, newList));
             }
 
             [TestCase]

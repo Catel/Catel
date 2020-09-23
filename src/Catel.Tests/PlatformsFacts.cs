@@ -12,7 +12,7 @@ namespace Catel.Tests
     public class PlatformsFacts
     {
         #region Nested type: TheIsPlatformSupportedMethod
-        [TestFixture]
+        [TestFixture, Explicit]
         public class TheIsPlatformSupportedMethod
         {
             [TestCase(KnownPlatforms.NET, SupportedPlatforms.NET45)]

@@ -105,7 +105,7 @@ namespace Catel.Tests.Messaging
                 Assert.IsTrue(mediator.IsRegistered<string>(recipient, recipient.OnMessage));
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void CleanUpClearsGarbageCollectedHandlers()
             {
                 var mediator = new MessageMediator();
@@ -304,7 +304,7 @@ namespace Catel.Tests.Messaging
                 Assert.AreEqual(1, recipient.MessagesReceived);
             }
 
-            [TestCase]
+            [TestCase, Explicit]
             public void ReturnsFalseForHandlersClearedByGarbageCollector()
             {
                 var mediator = new MessageMediator();

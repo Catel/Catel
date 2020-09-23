@@ -16,6 +16,7 @@ namespace Catel.Reflection
     using Data;
     using IoC;
     using Logging;
+    using MethodTimer;
 
 #if NET || NETCORE
     using System.Runtime.InteropServices;
@@ -150,6 +151,9 @@ namespace Catel.Reflection
         /// <param name="logLoaderExceptions">If set to <c>true</c>, the loader exceptions will be logged.</param>
         /// <returns>The array of successfully loaded types.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="assembly"/> is <c>null</c>.</exception>
+#if DEBUG
+        [Time("{assembly}")]
+#endif
         public static Type[] GetAllTypesSafely(this Assembly assembly, bool logLoaderExceptions = true)
         {
             Argument.IsNotNull("assembly", assembly);
@@ -275,6 +279,9 @@ namespace Catel.Reflection
             return isDynamicAssembly;
         }
 
+#if DEBUG
+        [Time("{assembly}")]
+#endif
         private static void RegisterAssemblyWithVersionInfo(Assembly assembly)
         {
             lock (_lockObject)

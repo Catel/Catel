@@ -15,11 +15,12 @@ namespace Catel.IoC
     using System.Reflection;
     using System.Threading;
     using Caching;
-    using Logging;
-    using Reflection;
-    using Threading;
     using Catel.Collections;
     using Catel.Linq;
+    using Logging;
+    using MethodTimer;
+    using Reflection;
+    using Threading;
 
     /// <summary>
     /// Type factory which will cache constructors to ensure the best performance available.
@@ -662,6 +663,9 @@ namespace Catel.IoC
         /// This call is normally not necessary since the type factory should keep an eye on the 
         /// <see cref="IServiceLocator.TypeRegistered"/> event to invalidate the cache.
         /// </summary>
+#if DEBUG
+        [Time]
+#endif
         public void ClearCache()
         {
             // Note that we don't clear the constructor metadata cache, constructors on types normally don't change during an
@@ -705,13 +709,13 @@ namespace Catel.IoC
         {
             ClearCache();
         }
-#endregion
+        #endregion
 
         private class ConstructorCacheKey
         {
             private readonly int _hashCode;
 
-#region Constructors
+            #region Constructors
             public ConstructorCacheKey(Type type, bool autoCompleteDependecies, object[] parameters)
             {
                 string key = type.GetSafeFullName(true);
@@ -724,16 +728,16 @@ namespace Catel.IoC
                 AutoCompleteDependecies = autoCompleteDependecies;
                 _hashCode = Key.GetHashCode();
             }
-#endregion
+            #endregion
 
-#region Properties
+            #region Properties
             public string Key { get; private set; }
 
             public bool AutoCompleteDependecies { get; private set; }
 
-#endregion
+            #endregion
 
-#region Methods
+            #region Methods
             public override bool Equals(object obj)
             {
                 var cacheKey = obj as ConstructorCacheKey;
@@ -759,7 +763,7 @@ namespace Catel.IoC
             {
                 return _hashCode;
             }
-#endregion
+            #endregion
         }
 
         private class ConstructorCacheValue
@@ -798,12 +802,12 @@ namespace Catel.IoC
                 Version = version;
             }
 
-#region Properties
+            #region Properties
 
             public ConstructorInfo ConstructorInfo { get; private set; }
 
             public uint Version { get; private set; }
-#endregion
+            #endregion
 
             // TODO: Equals & GetHashCode currently are redundant
         }
