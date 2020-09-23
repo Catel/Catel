@@ -2,7 +2,7 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.MVVM")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.Serialization.Json")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.Tests")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.7", FrameworkDisplayName=".NET Framework 4.7")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v3.1", FrameworkDisplayName="")]
 namespace Catel
 {
     public static class Argument
@@ -385,10 +385,6 @@ namespace Catel
         public static Catel.SupportedPlatforms CurrentPlatform { get; }
         public static bool IsPlatformSupported(Catel.KnownPlatforms platformToCheck) { }
         public static bool IsPlatformSupported(Catel.KnownPlatforms platformToCheck, Catel.SupportedPlatforms currentPlatform) { }
-    }
-    public static class ProcessExtensions
-    {
-        public static System.Diagnostics.Process GetParent(this System.Diagnostics.Process process) { }
     }
     public class ProgressContext : Catel.Disposable
     {
@@ -2404,15 +2400,6 @@ namespace Catel.Logging
         public EtwLogListener() { }
         protected override void Write(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
     }
-    public class EventLogListener : Catel.Logging.BatchLogListenerBase
-    {
-        public EventLogListener() { }
-        public string LogName { get; }
-        public string MachineName { get; }
-        public string Source { get; set; }
-        protected override string FormatLogEvent(Catel.Logging.ILog log, string message, Catel.Logging.LogEvent logEvent, object extraData, Catel.Logging.LogData logData, System.DateTime time) { }
-        protected override System.Threading.Tasks.Task WriteBatchAsync(System.Collections.Generic.List<Catel.Logging.LogBatchEntry> batchEntries) { }
-    }
     public class FileLogListener : Catel.Logging.BatchLogListenerBase
     {
         public FileLogListener(System.Reflection.Assembly assembly = null) { }
@@ -2954,6 +2941,7 @@ namespace Catel.Reflection
     public class AssemblyLoadedEventArgs : System.EventArgs
     {
         public AssemblyLoadedEventArgs(System.Reflection.Assembly assembly, System.Collections.Generic.IEnumerable<System.Type> loadedTypes) { }
+        public AssemblyLoadedEventArgs(System.Reflection.Assembly assembly, System.Lazy<System.Collections.Generic.IEnumerable<System.Type>> loadedTypesLazy) { }
         public System.Reflection.Assembly Assembly { get; }
         public System.Collections.Generic.IEnumerable<System.Type> LoadedTypes { get; }
     }
@@ -3176,12 +3164,14 @@ namespace Catel.Reflection
         public static System.Type GetElementTypeEx(this System.Type type) { }
         public static System.Reflection.EventInfo GetEventEx(this System.Type type, string name, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.EventInfo GetEventEx(this System.Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
+        public static System.Reflection.EventInfo[] GetEventsEx(this System.Type type, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.EventInfo[] GetEventsEx(this System.Type type, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
         public static System.Type[] GetExportedTypesEx(this System.Reflection.Assembly assembly) { }
         public static System.Reflection.FieldInfo GetFieldEx(this System.Type type, string name, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.FieldInfo GetFieldEx(this System.Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
         public static System.Reflection.FieldInfo[] GetFieldsEx(this System.Type type, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.FieldInfo[] GetFieldsEx(this System.Type type, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
+        public static System.Reflection.FieldInfo[] GetFieldsEx(this System.Type type, System.Reflection.BindingFlags bindingFlags, bool flattenMembers) { }
         public static System.Type[] GetGenericArgumentsEx(this System.Type type) { }
         public static System.Type GetGenericTypeDefinitionEx(this System.Type type) { }
         public static System.Type GetInterfaceEx(this System.Type type, string name, bool ignoreCase) { }
@@ -3194,9 +3184,11 @@ namespace Catel.Reflection
         public static System.Reflection.MethodInfo GetMethodEx(this System.Type type, string name, System.Type[] types, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
         public static System.Reflection.MethodInfo[] GetMethodsEx(this System.Type type, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.MethodInfo[] GetMethodsEx(this System.Type type, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
+        public static System.Reflection.MethodInfo[] GetMethodsEx(this System.Type type, System.Reflection.BindingFlags bindingFlags, bool flattenMembers) { }
         public static System.Collections.Generic.IEnumerable<System.Type> GetParentTypes(this System.Type type) { }
         public static System.Reflection.PropertyInfo[] GetPropertiesEx(this System.Type type, System.Reflection.BindingFlags bindingFlags) { }
         public static System.Reflection.PropertyInfo[] GetPropertiesEx(this System.Type type, bool flattenHierarchy = true, bool allowStaticMembers = false) { }
+        public static System.Reflection.PropertyInfo[] GetPropertiesEx(this System.Type type, System.Reflection.BindingFlags bindingFlags, bool flattenMembers) { }
         public static System.Reflection.PropertyInfo GetPropertyEx(this System.Type type, string name, System.Reflection.BindingFlags bindingFlags, bool allowExplicitInterfaceProperties = true) { }
         public static System.Reflection.PropertyInfo GetPropertyEx(this System.Type type, string name, bool flattenHierarchy = true, bool allowStaticMembers = false, bool allowExplicitInterfaceProperties = true) { }
         public static string GetSafeFullName(this System.Type type, bool fullyQualifiedAssemblyName) { }
@@ -3297,22 +3289,6 @@ namespace Catel.Reflection
             where TTargetType :  class { }
         public static bool IsSubclassOfRawGeneric(System.Type generic, System.Type toCheck) { }
         public static bool TryCast<TOutput, TInput>(TInput value, out TOutput output) { }
-    }
-    public static class TypeInfoExtensions
-    {
-        public static System.Reflection.ConstructorInfo GetConstructor(this System.Reflection.TypeInfo typeInfo, System.Type[] types, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.ConstructorInfo[] GetConstructors(this System.Reflection.TypeInfo typeInfo, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.EventInfo GetEvent(this System.Reflection.TypeInfo typeInfo, string name, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.EventInfo[] GetEvents(this System.Reflection.TypeInfo typeInfo, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.FieldInfo GetField(this System.Reflection.TypeInfo typeInfo, string name, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.FieldInfo[] GetFields(this System.Reflection.TypeInfo typeInfo, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.MemberInfo[] GetMember(this System.Reflection.TypeInfo typeInfo, string name, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.MemberInfo[] GetMembers(this System.Reflection.TypeInfo typeInfo, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.MethodInfo GetMethod(this System.Reflection.TypeInfo typeInfo, string name, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.MethodInfo GetMethod(this System.Reflection.TypeInfo typeInfo, string name, System.Type[] types, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.MethodInfo[] GetMethods(this System.Reflection.TypeInfo typeInfo, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.PropertyInfo[] GetProperties(this System.Reflection.TypeInfo typeInfo, System.Reflection.BindingFlags bindingFlags) { }
-        public static System.Reflection.PropertyInfo GetProperty(this System.Reflection.TypeInfo typeInfo, string name, System.Reflection.BindingFlags bindingFlags) { }
     }
 }
 namespace Catel.Runtime
@@ -3534,21 +3510,20 @@ namespace Catel.Runtime.Serialization
         public virtual Catel.Runtime.Serialization.MemberValue GetMemberValue(object model, string memberName, Catel.Runtime.Serialization.SerializationModelInfo modelInfo) { }
         public virtual void SetMemberValue(object model, Catel.Runtime.Serialization.MemberValue member, Catel.Runtime.Serialization.SerializationModelInfo modelInfo) { }
     }
-    [System.Runtime.Serialization.DataContract]
     [System.Serializable]
-    public class SerializableKeyValuePair
+    public class SerializableKeyValuePair : System.Runtime.Serialization.ISerializable
     {
         public SerializableKeyValuePair() { }
-        [System.Runtime.Serialization.DataMember]
+        public SerializableKeyValuePair(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public object Key { get; set; }
         [Catel.Runtime.Serialization.ExcludeFromSerialization]
         [System.Xml.Serialization.XmlIgnore]
         public System.Type KeyType { get; set; }
-        [System.Runtime.Serialization.DataMember]
         public object Value { get; set; }
         [Catel.Runtime.Serialization.ExcludeFromSerialization]
         [System.Xml.Serialization.XmlIgnore]
         public System.Type ValueType { get; set; }
+        public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
     }
     public class SerializationConfiguration : Catel.Runtime.Serialization.ISerializationConfiguration
     {
@@ -3805,8 +3780,6 @@ namespace Catel.Runtime.Serialization.Xml
     public class DataContractSerializerFactory : Catel.Runtime.Serialization.Xml.IDataContractSerializerFactory
     {
         public DataContractSerializerFactory() { }
-        public System.Runtime.Serialization.DataContractResolver DataContractResolver { get; set; }
-        public System.Runtime.Serialization.IDataContractSurrogate DataContractSurrogate { get; set; }
         protected virtual bool AddTypeToKnownTypesIfSerializable(System.Type typeToAdd, Catel.Runtime.Serialization.Xml.DataContractSerializerFactory.XmlSerializerTypeInfo serializerTypeInfo) { }
         protected virtual bool AllowNonPublicReflection(System.Type type) { }
         public virtual System.Runtime.Serialization.DataContractSerializer GetDataContractSerializer(System.Type serializingType, System.Type typeToSerialize, string xmlName, string rootNamespace = null, System.Collections.Generic.List<System.Type> additionalKnownTypes = null) { }
@@ -3841,8 +3814,6 @@ namespace Catel.Runtime.Serialization.Xml
     }
     public interface IDataContractSerializerFactory
     {
-        System.Runtime.Serialization.DataContractResolver DataContractResolver { get; set; }
-        System.Runtime.Serialization.IDataContractSurrogate DataContractSurrogate { get; set; }
         System.Runtime.Serialization.DataContractSerializer GetDataContractSerializer(System.Type serializingType, System.Type typeToSerialize, string xmlName, string rootNamespace = null, System.Collections.Generic.List<System.Type> additionalKnownTypes = null);
         System.Collections.Generic.List<System.Type> GetKnownTypes(System.Type serializingType, System.Type typeToSerialize, System.Collections.Generic.List<System.Type> additionalKnownTypes = null);
     }
