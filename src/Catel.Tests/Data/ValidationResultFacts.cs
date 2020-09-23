@@ -20,25 +20,25 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ThrowsNullReferenceExceptionForNullProperty()
             {
-                ExceptionTester.CallMethodAndExpectException<NullReferenceException>(() => new FieldValidationResult((PropertyData)null, ValidationResultType.Error, "message"));
+                Assert.Throws<NullReferenceException>(() => new FieldValidationResult((PropertyData)null, ValidationResultType.Error, "message"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullPropertyName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new FieldValidationResult((string)null, ValidationResultType.Error, "message"));
+                Assert.Throws<ArgumentException>(() => new FieldValidationResult((string)null, ValidationResultType.Error, "message"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyPropertyName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new FieldValidationResult(string.Empty, ValidationResultType.Error, "message"));
+                Assert.Throws<ArgumentException>(() => new FieldValidationResult(string.Empty, ValidationResultType.Error, "message"));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullMessage()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new FieldValidationResult("myProperty", ValidationResultType.Error, null));
+                Assert.Throws<ArgumentNullException>(() => new FieldValidationResult("myProperty", ValidationResultType.Error, null));
             }
 
             [TestCase]
@@ -153,7 +153,7 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullMessage()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new BusinessRuleValidationResult(ValidationResultType.Error, null));
+                Assert.Throws<ArgumentNullException>(() => new BusinessRuleValidationResult(ValidationResultType.Error, null));
             }
 
             [TestCase]

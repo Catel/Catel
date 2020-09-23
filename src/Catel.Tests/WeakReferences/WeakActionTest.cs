@@ -85,7 +85,7 @@ namespace Catel.Tests
         {
             int count = 0;
 
-            ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => new WeakAction(null, () => count++));
+            Assert.Throws<NotSupportedException>(() => new WeakAction(null, () => count++));
 
             //weakAction.Execute();
 
@@ -114,7 +114,7 @@ namespace Catel.Tests
         {
             int count = 0;
 
-            ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => new WeakAction<int>(null, i => count = i));
+            Assert.Throws<NotSupportedException>(() => new WeakAction<int>(null, i => count = i));
 
             Assert.AreEqual(0, count);
         }

@@ -39,7 +39,7 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullValue()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ChangeNotificationWrapper(null));
+                Assert.Throws<ArgumentNullException>(() => new ChangeNotificationWrapper(null));
             }
         }
 

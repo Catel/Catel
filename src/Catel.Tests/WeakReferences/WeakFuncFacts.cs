@@ -87,7 +87,7 @@ namespace Catel.Tests
         [TestCase]
         public void NonGeneric_AnonymousDelegate()
         {
-            ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => new WeakFunc<bool>(null, () => true));
+            Assert.Throws<NotSupportedException>(() => new WeakFunc<bool>(null, () => true));
         }
 
         [TestCase]
@@ -112,7 +112,7 @@ namespace Catel.Tests
         {
             var count = 0;
 
-            ExceptionTester.CallMethodAndExpectException<NotSupportedException>(
+            Assert.Throws<NotSupportedException>(
                 () => new WeakFunc<int, bool>(
                     null,
                     i =>

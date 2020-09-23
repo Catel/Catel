@@ -147,8 +147,8 @@ namespace Catel.Tests.Collections
             {
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.AddItems(null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.AddItems(null, SuspensionMode.Adding));
+                Assert.Throws<ArgumentNullException>(() => fastCollection.AddItems(null));
+                Assert.Throws<ArgumentNullException>(() => fastCollection.AddItems(null, SuspensionMode.Adding));
             }
 
             [Test]
@@ -156,7 +156,7 @@ namespace Catel.Tests.Collections
             {
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Removing));
+                Assert.Throws<InvalidOperationException>(() => fastCollection.AddItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Removing));
             }
 
             [Test]
@@ -259,8 +259,8 @@ namespace Catel.Tests.Collections
             {
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.InsertItems(null, 0));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.InsertItems(null, 0, SuspensionMode.Adding));
+                Assert.Throws<ArgumentNullException>(() => fastCollection.InsertItems(null, 0));
+                Assert.Throws<ArgumentNullException>(() => fastCollection.InsertItems(null, 0, SuspensionMode.Adding));
             }
 
             [Test]
@@ -268,7 +268,7 @@ namespace Catel.Tests.Collections
             {
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0, SuspensionMode.Removing));
+                Assert.Throws<InvalidOperationException>(() => fastCollection.InsertItems(new[] { 1, 2, 3, 4, 5 }, 0, SuspensionMode.Removing));
             }
 
             [Test]
@@ -370,8 +370,8 @@ namespace Catel.Tests.Collections
             {
                 var fastCollection = new FastObservableCollection<int>();
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.RemoveItems(null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.RemoveItems(null, SuspensionMode.Removing));
+                Assert.Throws<ArgumentNullException>(() => fastCollection.RemoveItems(null));
+                Assert.Throws<ArgumentNullException>(() => fastCollection.RemoveItems(null, SuspensionMode.Removing));
             }
 
             [Test]
@@ -379,7 +379,7 @@ namespace Catel.Tests.Collections
             {
                 var fastCollection = new FastObservableCollection<int>(new[] { 1, 2, 3, 4, 5 });
                 fastCollection.AutomaticallyDispatchChangeNotifications = false;
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Adding));
+                Assert.Throws<InvalidOperationException>(() => fastCollection.RemoveItems(new[] { 1, 2, 3, 4, 5 }, SuspensionMode.Adding));
             }
 
             [Test]

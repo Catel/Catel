@@ -19,7 +19,7 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ExpressionHelper.GetPropertyName<object>(null));
+                Assert.Throws<ArgumentNullException>(() => ExpressionHelper.GetPropertyName<object>(null));
             }
 
             [TestCase]
@@ -60,7 +60,7 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ExpressionHelper.GetOwner<object>(null));
+                Assert.Throws<ArgumentNullException>(() => ExpressionHelper.GetOwner<object>(null));
             }
 
             [TestCase]

@@ -22,15 +22,14 @@ namespace Catel.Tests.MVVM.ViewModels
             public void ThrowsArgumentNullExceptionForNullViewModelType()
             {
                 var viewModelFactory = new ViewModelFactory(TypeFactory.Default, ServiceLocator.Default);
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModelFactory.CreateViewModel(null, null, null));
+                Assert.Throws<ArgumentNullException>(() => viewModelFactory.CreateViewModel(null, null, null));
             }
 
             [TestCase]
             public void ThrowsExceptionCausedByInjectionConstructor()
             {
                 var viewModelFactory = new ViewModelFactory(TypeFactory.Default, ServiceLocator.Default);
-                ExceptionTester.CallMethodAndExpectException<TargetInvocationException>(() => viewModelFactory.CreateViewModel<TestClasses.ViewModelFactoryTestViewModel>("test", null),
-                    e => string.Equals(e.InnerException.Message, "test"));
+                Assert.Throws<TargetInvocationException>(() => viewModelFactory.CreateViewModel<TestClasses.ViewModelFactoryTestViewModel>("test", null), "test");
             }
 
             [TestCase]

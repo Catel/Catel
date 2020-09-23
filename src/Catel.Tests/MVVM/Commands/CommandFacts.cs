@@ -23,14 +23,14 @@ namespace Catel.Tests.MVVM.Commands
             public void ExecuteThrowsException()
             {
                 var command = new Command(() => { throw new Exception(); }, () => true);
-                ExceptionTester.CallMethodAndExpectException<Exception>(() => command.Execute());
+                Assert.Throws<Exception>(() => command.Execute());
             }
 
             [Test]
             public void CanExecuteThrowsException()
             {
                 var command = new Command(() => { }, () => { throw new Exception(); });
-                ExceptionTester.CallMethodAndExpectException<Exception>(() => command.Execute());
+                Assert.Throws<Exception>(() => command.Execute());
             }
         }
 

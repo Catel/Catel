@@ -25,7 +25,7 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullObject()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ObservableObjectExtensions.RaiseAllPropertiesChanged(null));
+                Assert.Throws<ArgumentNullException>(() => ObservableObjectExtensions.RaiseAllPropertiesChanged(null));
             }
 
             [TestCase]

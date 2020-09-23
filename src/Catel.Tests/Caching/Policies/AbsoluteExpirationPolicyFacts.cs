@@ -88,7 +88,7 @@ namespace Catel.Tests.Caching.Policies
             [TestCase]
             public void ThrowsInvalidOperationException()
             {
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => new AbsoluteExpirationPolicy(DateTime.Now.AddDays(1)).Reset());
+                Assert.Throws<InvalidOperationException>(() => new AbsoluteExpirationPolicy(DateTime.Now.AddDays(1)).Reset());
             }
 
             #endregion

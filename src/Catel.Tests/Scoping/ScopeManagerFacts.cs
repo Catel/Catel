@@ -19,7 +19,7 @@ namespace Catel.Tests.Scoping
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullScopeName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ScopeManager<string>.ScopeExists(null));
+                Assert.Throws<ArgumentNullException>(() => ScopeManager<string>.ScopeExists(null));
             }
 
             [TestCase]

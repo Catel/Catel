@@ -21,7 +21,7 @@ namespace Catel.Tests.MVVM
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullViewModel()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ViewModelCommandManager.Create(null));
+                Assert.Throws<ArgumentNullException>(() => ViewModelCommandManager.Create(null));
             }
 
             [TestCase]
@@ -43,7 +43,7 @@ namespace Catel.Tests.MVVM
                 var viewModel = new TestViewModel();
                 var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModelCommandManager.AddHandler((Func<IViewModel, string, ICommand, object, Task>)null));
+                Assert.Throws<ArgumentNullException>(() => viewModelCommandManager.AddHandler((Func<IViewModel, string, ICommand, object, Task>)null));
             }            
 
             [TestCase]

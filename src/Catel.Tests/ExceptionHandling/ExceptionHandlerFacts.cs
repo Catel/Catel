@@ -21,13 +21,13 @@ namespace Catel.Tests.ExceptionHandling
             [TestCase]
             public void ThrowsArgumentNullExceptionForExceptionTypeNullParameter()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ExceptionHandler(null, exception => { }));
+                Assert.Throws<ArgumentNullException>(() => new ExceptionHandler(null, exception => { }));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForActionNullParameter()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ExceptionHandler(typeof (Exception), null));
+                Assert.Throws<ArgumentNullException>(() => new ExceptionHandler(typeof (Exception), null));
             }
 
             [TestCase]
@@ -50,7 +50,7 @@ namespace Catel.Tests.ExceptionHandling
             public void ThrowsArgumentNullExceptionForHandleNullParameter()
             {
                 var handler = new ExceptionHandler(typeof (Exception), exception => { });
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => handler.Handle(null));
+                Assert.Throws<ArgumentNullException>(() => handler.Handle(null));
             }
 
             [TestCase]

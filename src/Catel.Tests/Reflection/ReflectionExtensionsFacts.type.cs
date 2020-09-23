@@ -71,13 +71,13 @@ namespace Catel.Tests.Reflection
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ReflectionExtensions.IsInstanceOfTypeEx(null, new object()));
+                Assert.Throws<ArgumentNullException>(() => ReflectionExtensions.IsInstanceOfTypeEx(null, new object()));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullObjectToCheck()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ReflectionExtensions.IsInstanceOfTypeEx(typeof(object), null));
+                Assert.Throws<ArgumentNullException>(() => ReflectionExtensions.IsInstanceOfTypeEx(typeof(object), null));
             }
 
             [TestCase]

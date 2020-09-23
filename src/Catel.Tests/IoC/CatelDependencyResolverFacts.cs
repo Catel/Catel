@@ -20,7 +20,7 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ThrowsArgumentNullExceptionForNulServiceLocator()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new CatelDependencyResolver(null));
+                Assert.Throws<ArgumentNullException>(() => new CatelDependencyResolver(null));
             }
         }
 
@@ -33,7 +33,7 @@ namespace Catel.Tests.IoC
                 var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => dependencyResolver.CanResolve(null));
+                Assert.Throws<ArgumentNullException>(() => dependencyResolver.CanResolve(null));
             }
 
             [TestCase]
@@ -65,7 +65,7 @@ namespace Catel.Tests.IoC
                 var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => dependencyResolver.CanResolveMultiple(null));
+                Assert.Throws<ArgumentNullException>(() => dependencyResolver.CanResolveMultiple(null));
             }
 
             [TestCase]
@@ -111,7 +111,7 @@ namespace Catel.Tests.IoC
                 var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => dependencyResolver.Resolve(null));
+                Assert.Throws<ArgumentNullException>(() => dependencyResolver.Resolve(null));
             }
 
             [TestCase]
@@ -120,7 +120,7 @@ namespace Catel.Tests.IoC
                 var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                ExceptionTester.CallMethodAndExpectException<TypeNotRegisteredException>(() => dependencyResolver.Resolve(typeof(ITestInterface)));
+                Assert.Throws<TypeNotRegisteredException>(() => dependencyResolver.Resolve(typeof(ITestInterface)));
             }
 
             [TestCase]
@@ -143,7 +143,7 @@ namespace Catel.Tests.IoC
                 var serviceLocator = IoCFactory.CreateServiceLocator();
                 var dependencyResolver = serviceLocator.ResolveType<IDependencyResolver>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => dependencyResolver.ResolveMultiple(null));
+                Assert.Throws<ArgumentNullException>(() => dependencyResolver.ResolveMultiple(null));
             }
 
             [TestCase]

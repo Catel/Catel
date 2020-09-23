@@ -90,7 +90,7 @@ namespace Catel.Tests.Caching.Policies
             [TestCase]
             public void ThrowsInvalidOperationException()
             {
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => new DurationExpirationPolicy(new TimeSpan(0)).Reset());
+                Assert.Throws<InvalidOperationException>(() => new DurationExpirationPolicy(new TimeSpan(0)).Reset());
             }
 
             #endregion

@@ -25,7 +25,7 @@ namespace Catel.Tests.Data
             {
                 var compositeValidatorProvider = new CompositeValidatorProvider();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(
+                Assert.Throws<ArgumentNullException>(
                     () => compositeValidatorProvider.Add(null));
             }
         }
@@ -38,7 +38,7 @@ namespace Catel.Tests.Data
             {
                 var compositeValidatorProvider = new CompositeValidatorProvider();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(
+                Assert.Throws<ArgumentNullException>(
                     () => compositeValidatorProvider.Remove(null));
             }
 

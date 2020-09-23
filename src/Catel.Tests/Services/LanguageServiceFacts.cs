@@ -21,7 +21,7 @@ namespace Catel.Tests.Services
             {
                 var languageService = new LanguageService();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => languageService.RegisterLanguageSource(null));
+                Assert.Throws<ArgumentNullException>(() => languageService.RegisterLanguageSource(null));
             }
         }
 
@@ -34,7 +34,7 @@ namespace Catel.Tests.Services
             {
                 var languageService = new LanguageService();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => languageService.GetString(null));
+                Assert.Throws<ArgumentException>(() => languageService.GetString(null));
             }
 
             [TestCase]

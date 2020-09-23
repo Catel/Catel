@@ -41,7 +41,7 @@ namespace Catel.Tests.ExceptionHandling
             public void ThrowsArgumentNullExceptionForNullParameterInGeneric()
             {
                 var exceptionService = new ExceptionService();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => exceptionService.Process<int>(null));
+                Assert.Throws<ArgumentNullException>(() => exceptionService.Process<int>(null));
             }
 
             [TestCase]
@@ -92,7 +92,7 @@ namespace Catel.Tests.ExceptionHandling
                 exceptionService.Register<DivideByZeroException>(
                     exception => Assert.AreEqual("trying to divide by zero", exception.Message));
 
-                ExceptionTester.CallMethodAndExpectException<CodeException>(() => exceptionService.Process(() => { throw new CodeException(2); }));
+                Assert.Throws<CodeException>(() => exceptionService.Process(() => { throw new CodeException(2); }));
                 exceptionService.Process(() => { throw new DivideByZeroException("trying to divide by zero"); });
                 exceptionService.Process(() => { throw new CodeException(3); });
             }
@@ -107,7 +107,7 @@ namespace Catel.Tests.ExceptionHandling
                 exceptionService.Register<DivideByZeroException>(
                     exception => Assert.AreEqual("trying to divide by zero", exception.Message));
 
-                ExceptionTester.CallMethodAndExpectException<CodeException>(() => exceptionService.Process(() => { throw new CodeException(2); }));
+                Assert.Throws<CodeException>(() => exceptionService.Process(() => { throw new CodeException(2); }));
                 exceptionService.Process(() => { throw new DivideByZeroException("trying to divide by zero"); });
                 exceptionService.Process(() => { throw new CodeException(3); });
             }
@@ -213,7 +213,7 @@ namespace Catel.Tests.ExceptionHandling
             public void ThrowsArgumentNullExceptionForNullParameter()
             {
                 var exceptionService = new ExceptionService();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => exceptionService.Register((IExceptionHandler)null));
+                Assert.Throws<ArgumentNullException>(() => exceptionService.Register((IExceptionHandler)null));
             }
 
             [TestCase]
@@ -279,7 +279,7 @@ namespace Catel.Tests.ExceptionHandling
             {
                 var exceptionService = new ExceptionService();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => exceptionService.GetHandler(null));
+                Assert.Throws<ArgumentNullException>(() => exceptionService.GetHandler(null));
             }
 
             [TestCase]
@@ -342,7 +342,7 @@ namespace Catel.Tests.ExceptionHandling
             public void ThrowsArgumentNullExceptionForNullParameter()
             {
                 var exceptionService = new ExceptionService();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => exceptionService.HandleException(null));
+                Assert.Throws<ArgumentNullException>(() => exceptionService.HandleException(null));
             }
 
             [TestCase]
@@ -371,7 +371,7 @@ namespace Catel.Tests.ExceptionHandling
             {
                 var exceptionService = new ExceptionService();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => exceptionService.IsExceptionRegistered(null));
+                Assert.Throws<ArgumentNullException>(() => exceptionService.IsExceptionRegistered(null));
             }
 
             [TestCase]
@@ -428,7 +428,7 @@ namespace Catel.Tests.ExceptionHandling
             public void ThrowsArgumentNullExceptionForNullParameterInNonGeneric()
             {
                 var exceptionService = new ExceptionService();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => exceptionService.Process(null));
+                Assert.Throws<ArgumentNullException>(() => exceptionService.Process(null));
             }
 
             [TestCase]
@@ -567,7 +567,7 @@ namespace Catel.Tests.ExceptionHandling
 
                 var attemptsCount = 0;
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => exceptionService.ProcessWithRetry(() =>
+                Assert.Throws<ArgumentException>(() => exceptionService.ProcessWithRetry(() =>
                 {
                     attemptsCount++;
                     throw new ArgumentException();

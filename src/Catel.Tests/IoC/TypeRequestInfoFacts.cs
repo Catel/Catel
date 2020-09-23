@@ -17,7 +17,7 @@ namespace Catel.Tests.IoC
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new TypeRequestInfo(null));
+                Assert.Throws<ArgumentNullException>(() => new TypeRequestInfo(null));
             }
 
             [TestCase]

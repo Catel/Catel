@@ -30,7 +30,7 @@ namespace Catel.Tests.Configuration
             {
                 var configurationService = GetConfigurationService();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.GetValue<string>(container, null));
+                Assert.Throws<ArgumentException>(() => configurationService.GetValue<string>(container, null));
             }
 
             [TestCase(ConfigurationContainer.Local)]
@@ -39,7 +39,7 @@ namespace Catel.Tests.Configuration
             {
                 var configurationService = GetConfigurationService();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.GetValue<string>(container, string.Empty));
+                Assert.Throws<ArgumentException>(() => configurationService.GetValue<string>(container, string.Empty));
             }
 
             [TestCase(ConfigurationContainer.Local)]
@@ -83,7 +83,7 @@ namespace Catel.Tests.Configuration
             {
                 var configurationService = GetConfigurationService();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.SetValue(container, null, "value"));
+                Assert.Throws<ArgumentException>(() => configurationService.SetValue(container, null, "value"));
             }
 
             [TestCase(ConfigurationContainer.Local)]
@@ -92,7 +92,7 @@ namespace Catel.Tests.Configuration
             {
                 var configurationService = GetConfigurationService();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => configurationService.SetValue(container, string.Empty, "value"));
+                Assert.Throws<ArgumentException>(() => configurationService.SetValue(container, string.Empty, "value"));
             }
 
             [TestCase(ConfigurationContainer.Local)]

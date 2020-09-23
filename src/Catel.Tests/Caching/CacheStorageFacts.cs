@@ -119,7 +119,7 @@ namespace Catel.Tests.Caching
             {
                 var cache = new CacheStorage<string, int>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() =>
+                Assert.Throws<ArgumentNullException>(() =>
                 {
                     var value = cache[null];
                     Assert.IsNull(value);
@@ -145,7 +145,7 @@ namespace Catel.Tests.Caching
             {
                 var cache = new CacheStorage<string, int>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() =>
+                Assert.Throws<ArgumentNullException>(() =>
                 {
                     var value = cache.Get(null);
                     Assert.IsNull(value);
@@ -171,7 +171,7 @@ namespace Catel.Tests.Caching
             {
                 var cache = new CacheStorage<string, int>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.Contains(null));
+                Assert.Throws<ArgumentNullException>(() => cache.Contains(null));
             }
 
             [TestCase]
@@ -203,7 +203,7 @@ namespace Catel.Tests.Caching
             {
                 var cache = new CacheStorage<string, int>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.GetFromCacheOrFetch(null, () => 1));
+                Assert.Throws<ArgumentNullException>(() => cache.GetFromCacheOrFetch(null, () => 1));
             }
 
             [TestCase]
@@ -211,7 +211,7 @@ namespace Catel.Tests.Caching
             {
                 var cache = new CacheStorage<string, int>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.GetFromCacheOrFetch("1", null));
+                Assert.Throws<ArgumentNullException>(() => cache.GetFromCacheOrFetch("1", null));
             }
 
             [TestCase]
@@ -261,7 +261,7 @@ namespace Catel.Tests.Caching
             {
                 var cache = new CacheStorage<string, int>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.Add(null, 1));
+                Assert.Throws<ArgumentNullException>(() => cache.Add(null, 1));
             }
 
             [TestCase]
@@ -269,7 +269,7 @@ namespace Catel.Tests.Caching
             {
                 var cache = new CacheStorage<string, object>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.Add(null, null));
+                Assert.Throws<ArgumentNullException>(() => cache.Add(null, null));
             }
 
             [TestCase]
@@ -310,7 +310,7 @@ namespace Catel.Tests.Caching
             {
                 var cache = new CacheStorage<string, int>();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => cache.Remove(null));
+                Assert.Throws<ArgumentNullException>(() => cache.Remove(null));
             }
 
             [TestCase]

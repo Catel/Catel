@@ -25,14 +25,14 @@ namespace Catel.Tests.MVVM
             public void ThrowsArgumentNullExceptionForNullTypeToResolve()
             {
                 var viewLocator = new ViewLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewLocator.Register(null, typeof(FollowingNoNamingConventionView)));
+                Assert.Throws<ArgumentNullException>(() => viewLocator.Register(null, typeof(FollowingNoNamingConventionView)));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullResolvedType()
             {
                 var viewLocator = new ViewLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewLocator.Register(typeof(NoNamingConventionViewModel), null));
+                Assert.Throws<ArgumentNullException>(() => viewLocator.Register(typeof(NoNamingConventionViewModel), null));
             }
 
             [TestCase]
@@ -67,14 +67,14 @@ namespace Catel.Tests.MVVM
             public void ThrowsArgumentNullExceptionForNullTypeToResolve()
             {
                 var viewLocator = new ViewLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewLocator.IsCompatible(null, typeof(FollowingNoNamingConventionView)));
+                Assert.Throws<ArgumentNullException>(() => viewLocator.IsCompatible(null, typeof(FollowingNoNamingConventionView)));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullResolvedType()
             {
                 var viewLocator = new ViewLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewLocator.IsCompatible(typeof(NoNamingConventionViewModel), null));
+                Assert.Throws<ArgumentNullException>(() => viewLocator.IsCompatible(typeof(NoNamingConventionViewModel), null));
             }
 
             [TestCase(typeof(MyNameViewer), true)]
@@ -99,7 +99,7 @@ namespace Catel.Tests.MVVM
             public void ThrowsArgumentNullExceptionForNullViewType()
             {
                 var viewLocator = new ViewLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewLocator.ResolveView(null));
+                Assert.Throws<ArgumentNullException>(() => viewLocator.ResolveView(null));
             }
 
             [TestCase(typeof(PersonViewModel), typeof(PersonView), null)]

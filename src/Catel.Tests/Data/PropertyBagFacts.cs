@@ -30,8 +30,8 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ThrowsArgumentExceptionForInvalidPropertyName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => _propertyBag.IsAvailable(null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => _propertyBag.IsAvailable(string.Empty));
+                Assert.Throws<ArgumentException>(() => _propertyBag.IsAvailable(null));
+                Assert.Throws<ArgumentException>(() => _propertyBag.IsAvailable(string.Empty));
             }
 
             [TestCase]
@@ -96,8 +96,8 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ThrowsArgumentExceptionForInvalidPropertyName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => _propertyBag.GetValue<object>(null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => _propertyBag.GetValue<object>(string.Empty));
+                Assert.Throws<ArgumentException>(() => _propertyBag.GetValue<object>(null));
+                Assert.Throws<ArgumentException>(() => _propertyBag.GetValue<object>(string.Empty));
             }
 
             [TestCase]
@@ -134,8 +134,8 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ThrowsArgumentExceptionForInvalidPropertyName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => _propertyBag.SetValue<object>(null, null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => _propertyBag.SetValue<object>(string.Empty, null));
+                Assert.Throws<ArgumentException>(() => _propertyBag.SetValue<object>(null, null));
+                Assert.Throws<ArgumentException>(() => _propertyBag.SetValue<object>(string.Empty, null));
             }
 
             [TestCase]

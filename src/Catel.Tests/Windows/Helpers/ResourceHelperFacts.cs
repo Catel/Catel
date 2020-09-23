@@ -19,13 +19,13 @@ namespace Catel.Tests.Windows
             [TestCase]
             public void ThrowsArgumentExceptionForNullResourceUri()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => ResourceHelper.GetResourceUri(null, null));
+                Assert.Throws<ArgumentException>(() => ResourceHelper.GetResourceUri(null, null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyResourceUri()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => ResourceHelper.GetResourceUri(string.Empty, null));
+                Assert.Throws<ArgumentException>(() => ResourceHelper.GetResourceUri(string.Empty, null));
             }
 
             [TestCase]
@@ -95,27 +95,27 @@ namespace Catel.Tests.Windows
             [TestCase]
             public void ThrowsArgumentExceptionForNullString()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => ResourceHelper.XamlPageExists((string)null));
+                Assert.Throws<ArgumentException>(() => ResourceHelper.XamlPageExists((string)null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyString()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => ResourceHelper.XamlPageExists(string.Empty));
+                Assert.Throws<ArgumentException>(() => ResourceHelper.XamlPageExists(string.Empty));
             }
 
 #if !NETFX_CORE
             [TestCase]
             public void ThrowsUriFormatExceptionForInvalidUriString()
             {
-                ExceptionTester.CallMethodAndExpectException<UriFormatException>(() => ResourceHelper.XamlPageExists("pac://,test[]df`"));
+                Assert.Throws<UriFormatException>(() => ResourceHelper.XamlPageExists("pac://,test[]df`"));
             }
 #endif
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullUri()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ResourceHelper.XamlPageExists((Uri)null));
+                Assert.Throws<ArgumentNullException>(() => ResourceHelper.XamlPageExists((Uri)null));
             }
 
             [TestCase]

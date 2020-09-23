@@ -108,7 +108,7 @@ namespace Catel.Tests.Logging
         [TestCase]
         public void IsListenerRegistered_Null()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => LogManager.IsListenerRegistered(null));
+            Assert.Throws<ArgumentNullException>(() => LogManager.IsListenerRegistered(null));
         }
 
         [TestCase]
@@ -133,7 +133,7 @@ namespace Catel.Tests.Logging
         [TestCase]
         public void AddListener_Null()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => LogManager.AddListener(null));
+            Assert.Throws<ArgumentNullException>(() => LogManager.AddListener(null));
         }
 
         [TestCase]
@@ -165,7 +165,7 @@ namespace Catel.Tests.Logging
         [TestCase]
         public void RemoveListener_Null()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => LogManager.RemoveListener(null));
+            Assert.Throws<ArgumentNullException>(() => LogManager.RemoveListener(null));
         }
 
         [TestCase]
@@ -214,19 +214,19 @@ namespace Catel.Tests.Logging
         [TestCase]
         public void GetLogger_NullType()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => LogManager.GetLogger((Type) null));
+            Assert.Throws<ArgumentNullException>(() => LogManager.GetLogger((Type) null));
         }
 
         [TestCase]
         public void GetLogger_NullString()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => LogManager.GetLogger((string) null));
+            Assert.Throws<ArgumentException>(() => LogManager.GetLogger((string) null));
         }
 
         [TestCase]
         public void GetLogger_EmptyString()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => LogManager.GetLogger(String.Empty));
+            Assert.Throws<ArgumentException>(() => LogManager.GetLogger(String.Empty));
         }
 
         [TestCase]

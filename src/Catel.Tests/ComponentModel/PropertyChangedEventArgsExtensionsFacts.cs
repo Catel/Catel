@@ -20,7 +20,7 @@ namespace Catel.Tests.ComponentModel
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyChangedArguments()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => PropertyChangedEventArgsExtensions.AllPropertiesChanged(null));
+                Assert.Throws<ArgumentNullException>(() => PropertyChangedEventArgsExtensions.AllPropertiesChanged(null));
             }
 
             [TestCase]
@@ -56,7 +56,7 @@ namespace Catel.Tests.ComponentModel
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullPropertyChangedArguments()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => PropertyChangedEventArgsExtensions.HasPropertyChanged(null, () => TestProperty));
+                Assert.Throws<ArgumentNullException>(() => PropertyChangedEventArgsExtensions.HasPropertyChanged(null, () => TestProperty));
             }
 
             [TestCase]
@@ -64,7 +64,7 @@ namespace Catel.Tests.ComponentModel
             {
                 var propertyChangedEventArgs = new PropertyChangedEventArgs("TestProperty");
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => propertyChangedEventArgs.HasPropertyChanged((Expression<Func<string>>)null));
+                Assert.Throws<ArgumentNullException>(() => propertyChangedEventArgs.HasPropertyChanged((Expression<Func<string>>)null));
             }
 
             [TestCase]

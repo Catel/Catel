@@ -196,7 +196,7 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsInvalidOperationExceptionWhenEverythingIsStatic()
             {
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => WeakEventListener<EventListener, EventSource, EventArgs>.SubscribeToWeakGenericEvent(null, null, "StaticEvent", EventListener.OnEventStaticHandler));
+                Assert.Throws<InvalidOperationException>(() => WeakEventListener<EventListener, EventSource, EventArgs>.SubscribeToWeakGenericEvent(null, null, "StaticEvent", EventListener.OnEventStaticHandler));
             }
         }
 
@@ -209,7 +209,7 @@ namespace Catel.Tests
                 var source = new EventSource();
                 var listener = new EventListener();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => WeakEventListener.SubscribeToWeakGenericEvent<ViewModelClosedEventArgs>(null, source, "event", listener.OnPublicEvent));
+                Assert.Throws<ArgumentNullException>(() => WeakEventListener.SubscribeToWeakGenericEvent<ViewModelClosedEventArgs>(null, source, "event", listener.OnPublicEvent));
             }
 
             [TestCase]
@@ -217,7 +217,7 @@ namespace Catel.Tests
             {
                 var listener = new EventListener();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => listener.SubscribeToWeakGenericEvent<ViewModelClosedEventArgs>(null, "event", listener.OnPublicEvent));
+                Assert.Throws<ArgumentNullException>(() => listener.SubscribeToWeakGenericEvent<ViewModelClosedEventArgs>(null, "event", listener.OnPublicEvent));
             }
 
             [TestCase, Explicit]

@@ -18,7 +18,7 @@ namespace Catel.Tests.IoC.EventArgs
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullInterfaceType()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new MissingTypeEventArgs(null));
+                Assert.Throws<ArgumentNullException>(() => new MissingTypeEventArgs(null));
             }
 
             [TestCase]

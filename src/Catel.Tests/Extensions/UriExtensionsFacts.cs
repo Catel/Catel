@@ -18,7 +18,7 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullUri()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => UriExtensions.GetSafeUriString(null));
+                Assert.Throws<ArgumentNullException>(() => UriExtensions.GetSafeUriString(null));
             }
 
             [TestCase]

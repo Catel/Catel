@@ -31,7 +31,7 @@ namespace Catel.Tests.MVVM.Auditing
         [TestCase]
         public void RegisterAuditor_Null()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => AuditingManager.RegisterAuditor(null));
+            Assert.Throws<ArgumentNullException>(() => AuditingManager.RegisterAuditor(null));
         }
 
         [TestCase]
@@ -60,7 +60,7 @@ namespace Catel.Tests.MVVM.Auditing
         [TestCase]
         public void UnregisterAuditor_Null()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => AuditingManager.UnregisterAuditor(null));
+            Assert.Throws<ArgumentNullException>(() => AuditingManager.UnregisterAuditor(null));
         }
 
         [TestCase]

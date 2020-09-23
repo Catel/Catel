@@ -947,7 +947,7 @@ namespace Catel.Tests.Data
             {
                 var validationContext = new ValidationContext();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.Add((IFieldValidationResult)null));
+                Assert.Throws<ArgumentNullException>(() => validationContext.Add((IFieldValidationResult)null));
             }
 
             [TestCase]
@@ -987,7 +987,7 @@ namespace Catel.Tests.Data
             {
                 var validationContext = new ValidationContext();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.Remove((IFieldValidationResult)null));
+                Assert.Throws<ArgumentNullException>(() => validationContext.Remove((IFieldValidationResult)null));
             }
 
             [TestCase]
@@ -1027,7 +1027,7 @@ namespace Catel.Tests.Data
             {
                 var validationContext = new ValidationContext();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.Add((IBusinessRuleValidationResult)null));
+                Assert.Throws<ArgumentNullException>(() => validationContext.Add((IBusinessRuleValidationResult)null));
             }
 
             [TestCase]
@@ -1067,7 +1067,7 @@ namespace Catel.Tests.Data
             {
                 var validationContext = new ValidationContext();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => validationContext.Remove((IBusinessRuleValidationResult)null));
+                Assert.Throws<ArgumentNullException>(() => validationContext.Remove((IBusinessRuleValidationResult)null));
             }
 
             [TestCase]
@@ -1105,7 +1105,7 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidationContext()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ValidationContext().SynchronizeWithContext(null));
+                Assert.Throws<ArgumentNullException>(() => new ValidationContext().SynchronizeWithContext(null));
             }
 
             [TestCase]

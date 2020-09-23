@@ -134,7 +134,7 @@ namespace Catel.Tests.Logging
                 var log = new Log(typeof(int));
 
                 // TODO: IndentLevel should be settable
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => log.IndentLevel = -1);
+                Assert.Throws<ArgumentOutOfRangeException>(() => log.IndentLevel = -1);
             }
         }
 
@@ -166,7 +166,7 @@ namespace Catel.Tests.Logging
                 var log = new Log(typeof(int));
 
                 // TODO: IndentSize should be settable
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => log.IndentSize = -1);
+                Assert.Throws<ArgumentOutOfRangeException>(() => log.IndentSize = -1);
             }
         }
 
@@ -176,31 +176,31 @@ namespace Catel.Tests.Logging
             [Test]
             public void ThrowsArgumentNullExceptionForNullType()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log((Type) null));
+                Assert.Throws<ArgumentException>(() => new Log((Type) null));
             }
 
             [Test]
             public void ThrowsArgumentExceptionForNullString()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log((string)null));
+                Assert.Throws<ArgumentException>(() => new Log((string)null));
             }
 
             [Test]
             public void ThrowsArgumentExceptionForWhitespaceString()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log(String.Empty));
+                Assert.Throws<ArgumentException>(() => new Log(String.Empty));
             }
 
             [Test]
             public void ThrowsArgumentExceptionForNullString_WithStringAndType()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log(null, typeof(object)));
+                Assert.Throws<ArgumentException>(() => new Log(null, typeof(object)));
             }
 
             [Test]
             public void ThrowsArgumentExceptionForWhitespaceString_WithStringAndType()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => new Log(String.Empty, typeof(object)));
+                Assert.Throws<ArgumentException>(() => new Log(String.Empty, typeof(object)));
             }
 
             [Test]
@@ -303,7 +303,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug((Exception)null));
+                Assert.Throws<ArgumentNullException>(() => log.Debug((Exception)null));
             }
 
             [Test]
@@ -353,7 +353,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(null, string.Empty));
+                Assert.Throws<ArgumentNullException>(() => log.Debug(null, string.Empty));
             }
 
             [Test]
@@ -391,7 +391,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Debug(null, "additional message", 1));
+                Assert.Throws<ArgumentNullException>(() => log.Debug(null, "additional message", 1));
             }
 
             [Test]
@@ -494,7 +494,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info((Exception)null));
+                Assert.Throws<ArgumentNullException>(() => log.Info((Exception)null));
             }
 
             [Test]
@@ -545,7 +545,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(null, string.Empty));
+                Assert.Throws<ArgumentNullException>(() => log.Info(null, string.Empty));
             }
 
             [Test]
@@ -583,7 +583,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Info(null, "additional message", 1));
+                Assert.Throws<ArgumentNullException>(() => log.Info(null, "additional message", 1));
             }
 
             [Test]
@@ -686,7 +686,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning((Exception)null));
+                Assert.Throws<ArgumentNullException>(() => log.Warning((Exception)null));
             }
 
             [Test]
@@ -736,7 +736,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(null, string.Empty));
+                Assert.Throws<ArgumentNullException>(() => log.Warning(null, string.Empty));
             }
 
             [Test]
@@ -774,7 +774,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Warning(null, "additional message", 1));
+                Assert.Throws<ArgumentNullException>(() => log.Warning(null, "additional message", 1));
             }
 
             [Test]
@@ -877,7 +877,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error((Exception)null));
+                Assert.Throws<ArgumentNullException>(() => log.Error((Exception)null));
             }
 
             [Test]
@@ -927,7 +927,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(null, string.Empty));
+                Assert.Throws<ArgumentNullException>(() => log.Error(null, string.Empty));
             }
 
             [Test]
@@ -965,7 +965,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => log.Error(null, "additional message", 1));
+                Assert.Throws<ArgumentNullException>(() => log.Error(null, "additional message", 1));
             }
 
             [Test]
@@ -1003,7 +1003,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => { throw log.ErrorAndCreateException<InvalidOperationException>(null); });
+                Assert.Throws<InvalidOperationException>(() => { throw log.ErrorAndCreateException<InvalidOperationException>(null); });
             }
 
             [Test]
@@ -1012,7 +1012,7 @@ namespace Catel.Tests.Logging
                 LogManager.AddDebugListener();
                 var log = new Log(typeof(int));
 
-                ExceptionTester.CallMethodAndExpectException<ExceptionWithoutStringConstructor>(() => { throw log.ErrorAndCreateException<ExceptionWithoutStringConstructor>("exception test"); });
+                Assert.Throws<ExceptionWithoutStringConstructor>(() => { throw log.ErrorAndCreateException<ExceptionWithoutStringConstructor>("exception test"); });
             }
 
             [Test]
@@ -1022,9 +1022,9 @@ namespace Catel.Tests.Logging
                 var log = new Log(typeof(int));
 
                 // Several tests to make sure we are not testing the NotSupportedException of the class itself
-                ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => { throw log.ErrorAndCreateException<InvalidOperationException>("exception test"); });
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => { throw log.ErrorAndCreateException<ArgumentNullException>("exception test"); });
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => { throw log.ErrorAndCreateException<ArgumentException>("exception test"); });
+                Assert.Throws<InvalidOperationException>(() => { throw log.ErrorAndCreateException<InvalidOperationException>("exception test"); });
+                Assert.Throws<ArgumentNullException>(() => { throw log.ErrorAndCreateException<ArgumentNullException>("exception test"); });
+                Assert.Throws<ArgumentException>(() => { throw log.ErrorAndCreateException<ArgumentException>("exception test"); });
             }
         }
 

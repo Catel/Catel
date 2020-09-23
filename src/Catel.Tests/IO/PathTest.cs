@@ -202,8 +202,8 @@ namespace Catel.Tests.IO
         [TestCase]
         public void GetFileName_EmptyInput()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.GetFileName(null));
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.GetFileName(string.Empty));
+            Assert.Throws<ArgumentException>(() => Path.GetFileName(null));
+            Assert.Throws<ArgumentException>(() => Path.GetFileName(string.Empty));
         }
         #endregion
 
@@ -431,7 +431,7 @@ namespace Catel.Tests.IO
         [TestCase]
         public void GetRelativePath_InvalidInput()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.GetRelativePath(null, @"C:\test\"));
+            Assert.Throws<ArgumentException>(() => Path.GetRelativePath(null, @"C:\test\"));
         }
         #endregion
 
@@ -518,7 +518,7 @@ namespace Catel.Tests.IO
             string oldEnvironmentDirectory = Environment.CurrentDirectory;
             Environment.CurrentDirectory = @"C:\Program Files\";
 
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.GetFullPath(file, path));
+            Assert.Throws<ArgumentException>(() => Path.GetFullPath(file, path));
         }
 #endif
         #endregion
@@ -527,8 +527,8 @@ namespace Catel.Tests.IO
         [TestCase]
         public void AppendTrailingSlash_EmptyValue()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.AppendTrailingSlash(null));
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.AppendTrailingSlash(string.Empty));
+            Assert.Throws<ArgumentException>(() => Path.AppendTrailingSlash(null));
+            Assert.Throws<ArgumentException>(() => Path.AppendTrailingSlash(string.Empty));
         }
 
         [TestCase]
@@ -588,8 +588,8 @@ namespace Catel.Tests.IO
         [TestCase]
         public void RemoveStartSlashes_EmptyInput()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.RemoveStartSlashes(null));
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.RemoveStartSlashes(string.Empty));
+            Assert.Throws<ArgumentException>(() => Path.RemoveStartSlashes(null));
+            Assert.Throws<ArgumentException>(() => Path.RemoveStartSlashes(string.Empty));
         }
 
         [TestCase]
@@ -613,8 +613,8 @@ namespace Catel.Tests.IO
         [TestCase]
         public void RemoveTrailingSlashes_EmptyInput()
         {
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.RemoveTrailingSlashes(null));
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Path.RemoveTrailingSlashes(string.Empty));
+            Assert.Throws<ArgumentException>(() => Path.RemoveTrailingSlashes(null));
+            Assert.Throws<ArgumentException>(() => Path.RemoveTrailingSlashes(string.Empty));
         }
 
         [TestCase]

@@ -156,13 +156,13 @@ namespace Catel.Tests.Caching.Policies
 
                 new Thread(() =>
                     {
-                        ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(policy.Reset);
+                        Assert.Throws<InvalidOperationException>(policy.Reset);
                         events[0].Set();
                     }).Start();
 
                 new Thread(() =>
                     {
-                        ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(policy.Reset);
+                        Assert.Throws<InvalidOperationException>(policy.Reset);
                         events[1].Set();
                     }).Start();
 

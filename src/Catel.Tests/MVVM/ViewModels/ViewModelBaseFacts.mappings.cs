@@ -72,7 +72,7 @@ namespace Catel.Tests.MVVM.ViewModels
             person.ContactInfo.City = "Unknown city";
             person.ContactInfo.Email = "john@doe.com";
 
-            ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => new TestViewModelWithImplicitModelMappingsWithMultipleModels(person));
+            Assert.Throws<InvalidOperationException>(() => new TestViewModelWithImplicitModelMappingsWithMultipleModels(person));
         }
 
         [TestCase]

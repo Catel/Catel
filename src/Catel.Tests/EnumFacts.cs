@@ -72,19 +72,19 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullEnumValue()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Enum<Enum2>.ConvertFromOtherEnumValue(null));
+                Assert.Throws<ArgumentNullException>(() => Enum<Enum2>.ConvertFromOtherEnumValue(null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNonEnumValue()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Enum<Enum2>.ConvertFromOtherEnumValue(new object()));
+                Assert.Throws<ArgumentException>(() => Enum<Enum2>.ConvertFromOtherEnumValue(new object()));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForWrongEnumValue()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Enum<Enum2>.ConvertFromOtherEnumValue(Enum1.MySecondValue));
+                Assert.Throws<ArgumentException>(() => Enum<Enum2>.ConvertFromOtherEnumValue(Enum1.MySecondValue));
             }
 
             [TestCase]
@@ -228,7 +228,7 @@ namespace Catel.Tests
             [TestCase]
             public void ThrowsExceptionForInvalidValue()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => Enum<Enum1>.Parse("hi there"));
+                Assert.Throws<ArgumentException>(() => Enum<Enum1>.Parse("hi there"));
             }
 
             [TestCase]

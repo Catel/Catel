@@ -50,7 +50,7 @@ namespace Catel.Tests.MVVM
             {
                 var compositeCommand = new CompositeCommand();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeCommand.RegisterCommand(null));
+                Assert.Throws<ArgumentNullException>(() => compositeCommand.RegisterCommand(null));
             }
 
             [TestCase]
@@ -75,7 +75,7 @@ namespace Catel.Tests.MVVM
             {
                 var compositeCommand = new CompositeCommand();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeCommand.UnregisterCommand(null));
+                Assert.Throws<ArgumentNullException>(() => compositeCommand.UnregisterCommand(null));
             }
 
             [TestCase]
@@ -104,7 +104,7 @@ namespace Catel.Tests.MVVM
             {
                 var compositeCommand = new CompositeCommand();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeCommand.RegisterAction((Action<object>)null));
+                Assert.Throws<ArgumentNullException>(() => compositeCommand.RegisterAction((Action<object>)null));
             }
 
             [TestCase]
@@ -130,7 +130,7 @@ namespace Catel.Tests.MVVM
             {
                 var compositeCommand = new CompositeCommand();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeCommand.UnregisterAction((Action<object>)null));
+                Assert.Throws<ArgumentNullException>(() => compositeCommand.UnregisterAction((Action<object>)null));
             }
 
             [TestCase]

@@ -20,37 +20,37 @@ namespace Catel.Tests.Services
             [TestCase]
             public void ThrowsArgumentExceptionForNullAssembly()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName(null, "MyView", "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName(null, "MyView", "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyAssembly()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName(string.Empty, "MyView", "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName(string.Empty, "MyView", "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullViewName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", null, "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", null, "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyViewName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", string.Empty, "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", string.Empty, "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", "ExampleView", null));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", "ExampleView", null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", "ExampleView", string.Empty));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewModelByViewName("MyProject.MyAssembly", "ExampleView", string.Empty));
             }
 
             [TestCase]
@@ -159,37 +159,37 @@ namespace Catel.Tests.Services
             [TestCase]
             public void ThrowsArgumentExceptionForNullAssembly()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName(null, "MyViewModel", "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName(null, "MyViewModel", "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyAssembly()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName(string.Empty, "MyViewModel", "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName(string.Empty, "MyViewModel", "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullViewModelName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", null, "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", null, "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyViewModelName()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", string.Empty, "MyConvention"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", string.Empty, "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", "ExampleViewModel", null));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", "ExampleViewModel", null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", "ExampleViewModel", string.Empty));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveViewByViewModelName("MyProject.MyAssembly", "ExampleViewModel", string.Empty));
             }
 
             [TestCase]
@@ -243,19 +243,19 @@ namespace Catel.Tests.Services
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullConstantsWithValues()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => NamingConvention.ResolveNamingConvention(null, "MyConvention"));
+                Assert.Throws<ArgumentNullException>(() => NamingConvention.ResolveNamingConvention(null, "MyConvention"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullNamingConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), null));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyNamingConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), string.Empty));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), string.Empty));
             }
 
             [TestCase]
@@ -291,31 +291,31 @@ namespace Catel.Tests.Services
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullConstantsWithValues()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => NamingConvention.ResolveNamingConvention(null, "MyConvention", "MyValue"));
+                Assert.Throws<ArgumentNullException>(() => NamingConvention.ResolveNamingConvention(null, "MyConvention", "MyValue"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullNamingConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), null, "MyValue"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), null, "MyValue"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyNamingConvention()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), string.Empty, "MyValue"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), string.Empty, "MyValue"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForNullValue()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), "MyConvention", null));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), "MyConvention", null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyValue()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), "MyConvention", string.Empty));
+                Assert.Throws<ArgumentException>(() => NamingConvention.ResolveNamingConvention(new Dictionary<string, string>(), "MyConvention", string.Empty));
             }
 
             [TestCase]
@@ -361,15 +361,15 @@ namespace Catel.Tests.Services
             [TestCase]
             public void ThrowsArgumentExceptionForNullPath()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.GetParentPath(null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.GetParentPath(null, "\\"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.GetParentPath(null));
+                Assert.Throws<ArgumentException>(() => NamingConvention.GetParentPath(null, "\\"));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyPath()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.GetParentPath(string.Empty));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.GetParentPath(string.Empty, "\\"));
+                Assert.Throws<ArgumentException>(() => NamingConvention.GetParentPath(string.Empty));
+                Assert.Throws<ArgumentException>(() => NamingConvention.GetParentPath(string.Empty, "\\"));
             }
 
             [TestCase]
@@ -403,13 +403,13 @@ namespace Catel.Tests.Services
             [TestCase]
             public void ThrowsArgumentExceptionForNullPath()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.GetParentSeparator(null));
+                Assert.Throws<ArgumentException>(() => NamingConvention.GetParentSeparator(null));
             }
 
             [TestCase]
             public void ThrowsArgumentExceptionForEmptyPath()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => NamingConvention.GetParentSeparator(string.Empty));
+                Assert.Throws<ArgumentException>(() => NamingConvention.GetParentSeparator(string.Empty));
             }
 
             [TestCase]

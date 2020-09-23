@@ -46,7 +46,7 @@ namespace Catel.Tests.MVVM.Converters
         {
             var converter = new MethodToValueConverter();
 
-            ExceptionTester.CallMethodAndExpectException<Exception>(() => converter.ConvertBack("ABCD", typeof (string), "ToString", (CultureInfo)null));
+            Assert.Throws<NotSupportedException>(() => converter.ConvertBack("ABCD", typeof (string), "ToString", (CultureInfo)null));
         }
         #endregion
     }

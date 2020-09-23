@@ -4096,14 +4096,6 @@ namespace Catel.Services
         protected override ulong GenerateUniqueIdentifier() { }
     }
 }
-namespace Catel.Tests
-{
-    public static class ExceptionTester
-    {
-        public static TException CallMethodAndExpectException<TException>(System.Action action, System.Func<TException, bool> exceptionValidator = null)
-            where TException : System.Exception { }
-    }
-}
 namespace Catel.Text
 {
     public static class StringBuilderExtensions

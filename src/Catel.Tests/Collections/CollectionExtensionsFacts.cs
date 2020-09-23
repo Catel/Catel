@@ -22,7 +22,7 @@ namespace Catel.Tests.Collections
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.CanMoveItemUp(null, item));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.CanMoveItemUp(null, item));
             }
 
             [TestCase]
@@ -73,14 +73,14 @@ namespace Catel.Tests.Collections
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUp(null, item));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUp(null, item));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullItem()
             {
                 var list = new List<int> { 1, 2, 3 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => list.MoveItemUp(null));
+                Assert.Throws<ArgumentNullException>(() => list.MoveItemUp(null));
             }
 
             [TestCase]
@@ -127,7 +127,7 @@ namespace Catel.Tests.Collections
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.CanMoveItemDown(null, item));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.CanMoveItemDown(null, item));
             }
 
             [TestCase]
@@ -177,21 +177,21 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUpByIndex(null, 2));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUpByIndex(null, 2));
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIndexSmallerThanZero()
             {
                 var list = new List<int> { 1, 2, 3 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUpByIndex(null, -1));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUpByIndex(null, -1));
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIndexLargerThanListCount()
             {
                 var list = new List<int> { 1, 2, 3 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUpByIndex(null, 3));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemUpByIndex(null, 3));
             }
 
             [TestCase]
@@ -226,14 +226,14 @@ namespace Catel.Tests.Collections
             public void ThrowsArgumentNullExceptionForNullList()
             {
                 int item = 2;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemDown(null, item));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemDown(null, item));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullItem()
             {
                 var list = new List<int> { 1, 2, 3 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => list.MoveItemDown(null));
+                Assert.Throws<ArgumentNullException>(() => list.MoveItemDown(null));
             }
 
             [TestCase]
@@ -279,21 +279,21 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemDownByIndex(null, 2));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.MoveItemDownByIndex(null, 2));
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIndexSmallerThanZero()
             {
                 var list = new List<int> { 1, 2, 3 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => list.MoveItemDownByIndex(-1));
+                Assert.Throws<ArgumentOutOfRangeException>(() => list.MoveItemDownByIndex(-1));
             }
 
             [TestCase]
             public void ThrowsArgumentOutOfRangeExceptionForIndexLargerThanListCount()
             {
                 var list = new List<int> { 1, 2, 3 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentOutOfRangeException>(() => list.MoveItemDownByIndex(3));
+                Assert.Throws<ArgumentOutOfRangeException>(() => list.MoveItemDownByIndex(3));
             }
 
             [TestCase]
@@ -327,7 +327,7 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.RemoveFirst(null));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.RemoveFirst(null));
             }
 
             [TestCase]
@@ -357,7 +357,7 @@ namespace Catel.Tests.Collections
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullList()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.RemoveLast(null));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.RemoveLast(null));
             }
 
             [TestCase]
@@ -389,7 +389,7 @@ namespace Catel.Tests.Collections
             {
                 var newList = new List<int> { 4, 5, 6 };
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.AddRange((ICollection<int>)null, newList));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.AddRange((ICollection<int>)null, newList));
             }
 
             [TestCase]
@@ -397,7 +397,7 @@ namespace Catel.Tests.Collections
             {
                 var collection = new Collection<int> { 1, 2, 3 };
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => collection.AddRange(null));
+                Assert.Throws<ArgumentNullException>(() => collection.AddRange(null));
             }
 
             [TestCase]
@@ -454,7 +454,7 @@ namespace Catel.Tests.Collections
             {
                 var newList = new List<int> { 4, 5, 6 };
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.ReplaceRange((ICollection<int>)null, newList));
+                Assert.Throws<ArgumentNullException>(() => Catel.Collections.CollectionExtensions.ReplaceRange((ICollection<int>)null, newList));
             }
 
             [TestCase]
@@ -462,7 +462,7 @@ namespace Catel.Tests.Collections
             {
                 var collection = new Collection<int> { 1, 2, 3 };
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => collection.ReplaceRange(null));
+                Assert.Throws<ArgumentNullException>(() => collection.ReplaceRange(null));
             }
 
             [TestCase]

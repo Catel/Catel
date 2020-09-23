@@ -33,7 +33,7 @@ namespace Catel.Tests.MVVM.ViewModels
         {
             var viewModel = new TestViewModel();
 
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ((IRelationalViewModel)viewModel).RegisterChildViewModel(null));
+            Assert.Throws<ArgumentNullException>(() => ((IRelationalViewModel)viewModel).RegisterChildViewModel(null));
         }
 
         /// <summary>

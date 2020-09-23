@@ -325,7 +325,7 @@
         {
             var entry = new IniEntry();
 
-            ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => entry.GetValue<string>(null));
+            Assert.Throws<ArgumentException>(() => entry.GetValue<string>(null));
         }
 
         [TestCase]
@@ -333,7 +333,7 @@
         {
             var entry = new IniEntry();
 
-            ExceptionTester.CallMethodAndExpectException<PropertyNotRegisteredException>(() => entry.GetValue<string>("Non-existing property"));
+            Assert.Throws<PropertyNotRegisteredException>(() => entry.GetValue<string>("Non-existing property"));
         }
 
         [TestCase]
@@ -351,7 +351,7 @@
         public void InitializePropertyAfterConstruction_Null()
         {
             var obj = new DynamicObject();
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => obj.InitializePropertyAfterConstruction(null));
+            Assert.Throws<ArgumentNullException>(() => obj.InitializePropertyAfterConstruction(null));
         }
 
         [TestCase]

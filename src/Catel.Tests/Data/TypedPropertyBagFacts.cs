@@ -26,7 +26,7 @@
             var propertyBag = new TypedPropertyBag();
 
             propertyBag.SetValue("Int", 42);
-            ExceptionTester.CallMethodAndExpectException<InvalidOperationException>(() => propertyBag.SetValue("Int", (object)null));
+            Assert.Throws<InvalidOperationException>(() => propertyBag.SetValue("Int", (object)null));
         }
 
         [TestCase]
@@ -35,7 +35,7 @@
             var propertyBag = new TypedPropertyBag();
 
             propertyBag.SetValue("Int", 42);
-            ExceptionTester.CallMethodAndExpectException<InvalidCastException>(() => propertyBag.SetValue("Int", (object)true));
+            Assert.Throws<InvalidCastException>(() => propertyBag.SetValue("Int", (object)true));
         }
 
         [TestCase]
@@ -44,7 +44,7 @@
             var propertyBag = new TypedPropertyBag();
 
             propertyBag.SetValue("Int", 42);
-            ExceptionTester.CallMethodAndExpectException<InvalidCastException>(() => propertyBag.SetValue("Int", new object()));
+            Assert.Throws<InvalidCastException>(() => propertyBag.SetValue("Int", new object()));
         }
 
         [TestCase]

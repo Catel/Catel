@@ -23,15 +23,15 @@ namespace Catel.Tests.MVVM
             public void ThrowsArgumentNullExceptionForNullTypeToResolve()
             {
                 var urlLocator = new UrlLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => urlLocator.Register(null, "/Views/PersonView.xaml"));
+                Assert.Throws<ArgumentNullException>(() => urlLocator.Register(null, "/Views/PersonView.xaml"));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullResolvedType()
             {
                 var urlLocator = new UrlLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => urlLocator.Register(typeof(NoNamingConventionViewModel), null));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => urlLocator.Register(typeof(NoNamingConventionViewModel), string.Empty));
+                Assert.Throws<ArgumentException>(() => urlLocator.Register(typeof(NoNamingConventionViewModel), null));
+                Assert.Throws<ArgumentException>(() => urlLocator.Register(typeof(NoNamingConventionViewModel), string.Empty));
             }
 
             [TestCase]
@@ -66,7 +66,7 @@ namespace Catel.Tests.MVVM
             public void ThrowsArgumentNullExceptionForNullViewType()
             {
                 var urlLocator = new UrlLocator();
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => urlLocator.ResolveUrl(null));
+                Assert.Throws<ArgumentNullException>(() => urlLocator.ResolveUrl(null));
             }
 
             [TestCase(typeof(PersonViewModel), "/Views/Person.xaml")]

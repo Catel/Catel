@@ -32,7 +32,7 @@ namespace Catel.Tests.MVVM.ViewModels
 
             var viewModel = new ManagedViewModel(typeof (TestViewModel));
 
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModel.AddViewModelInstance(null));
+            Assert.Throws<ArgumentNullException>(() => viewModel.AddViewModelInstance(null));
         }
 
         [TestCase]
@@ -71,7 +71,7 @@ namespace Catel.Tests.MVVM.ViewModels
 
             var viewModel = new ManagedViewModel(typeof (TestViewModel));
 
-            ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => viewModel.RemoveViewModelInstance(null));
+            Assert.Throws<ArgumentNullException>(() => viewModel.RemoveViewModelInstance(null));
         }
 
         [TestCase]

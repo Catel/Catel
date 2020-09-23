@@ -104,14 +104,14 @@ namespace Catel.Tests.IoC
             public void ThrowsArgumentNullExceptionForNullParent()
             {
                 var item = new TypeRequestInfo(typeof(X));
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeRequestPath.Branch(null, item));
+                Assert.Throws<ArgumentNullException>(() => TypeRequestPath.Branch(null, item));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullTypeRequestInfo()
             {
                 var parent = TypeRequestPath.Root();
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => TypeRequestPath.Branch(parent, null));
+                Assert.Throws<ArgumentNullException>(() => TypeRequestPath.Branch(parent, null));
             }
 
             [TestCase]
@@ -166,7 +166,7 @@ namespace Catel.Tests.IoC
             public void ThrowsCircularDependencyExceptionIfThereAreRepetitions()
             {
                 var typeArray = CreateInvalidPath();
-                ExceptionTester.CallMethodAndExpectException<CircularDependencyException>(() => MapRequestInfoArrayIntoPath(typeArray));
+                Assert.Throws<CircularDependencyException>(() => MapRequestInfoArrayIntoPath(typeArray));
             }
         }
 

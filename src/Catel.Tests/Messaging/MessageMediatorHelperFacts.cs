@@ -19,7 +19,7 @@ namespace Catel.Tests.Messaging
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => MessageMediatorHelper.SubscribeRecipient(null));
+                Assert.Throws<ArgumentNullException>(() => MessageMediatorHelper.SubscribeRecipient(null));
             }
 
             [TestCase]
@@ -65,7 +65,7 @@ namespace Catel.Tests.Messaging
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullInstance()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => MessageMediatorHelper.UnsubscribeRecipient(null));
+                Assert.Throws<ArgumentNullException>(() => MessageMediatorHelper.UnsubscribeRecipient(null));
             }
 
             [TestCase]

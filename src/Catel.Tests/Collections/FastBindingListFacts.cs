@@ -87,7 +87,7 @@ namespace Catel.Tests.Collections
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.AddItems(null));
+                Assert.Throws<ArgumentNullException>(() => fastCollection.AddItems(null));
             }
 
             [TestCase]
@@ -121,7 +121,7 @@ namespace Catel.Tests.Collections
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.InsertItems(null, 0));
+                Assert.Throws<ArgumentNullException>(() => fastCollection.InsertItems(null, 0));
             }
 
             [TestCase]
@@ -155,7 +155,7 @@ namespace Catel.Tests.Collections
                 {
                     AutomaticallyDispatchChangeNotifications = false
                 };
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => fastCollection.RemoveItems(null));
+                Assert.Throws<ArgumentNullException>(() => fastCollection.RemoveItems(null));
             }
 
             [TestCase]

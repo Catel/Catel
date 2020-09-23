@@ -55,13 +55,13 @@ namespace Catel.Tests.Reflection
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => PropertyHelper.GetPropertyName<int>(null));
+                Assert.Throws<ArgumentNullException>(() => PropertyHelper.GetPropertyName<int>(null));
             }
 
             [TestCase]
             public void ThrowsNotSupportedExceptionForNoMemberAccessExpression()
             {
-                ExceptionTester.CallMethodAndExpectException<NotSupportedException>(() => PropertyHelper.GetPropertyName(() => SomeMethod()));
+                Assert.Throws<NotSupportedException>(() => PropertyHelper.GetPropertyName(() => SomeMethod()));
             }
 
             [TestCase]

@@ -71,7 +71,7 @@ namespace Catel.Tests.Reflection
             public void ThrowsArgumentNullExceptionForNullPropertyInfo()
             {
                 ObsoleteAttribute attribute;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ((MemberInfo)null).TryGetAttribute(out attribute));
+                Assert.Throws<ArgumentNullException>(() => ((MemberInfo)null).TryGetAttribute(out attribute));
             }
         }
     }

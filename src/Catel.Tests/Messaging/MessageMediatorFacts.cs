@@ -134,7 +134,7 @@ namespace Catel.Tests.Messaging
             {
                 var mediator = new MessageMediator();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => mediator.IsMessageRegistered(null));
+                Assert.Throws<ArgumentNullException>(() => mediator.IsMessageRegistered(null));
             }
 
 

@@ -25,7 +25,7 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 var serializationManager = new SerializationManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetSerializerModifiers(null));
+                Assert.Throws<ArgumentNullException>(() => serializationManager.GetSerializerModifiers(null));
             }
 
             [TestCase]
@@ -50,7 +50,7 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 var serializationManager = new SerializationManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetFieldsToSerialize(null));
+                Assert.Throws<ArgumentNullException>(() => serializationManager.GetFieldsToSerialize(null));
             }
 
             [TestCase]
@@ -73,7 +73,7 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 var serializationManager = new SerializationManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetRegularPropertiesToSerialize(null));
+                Assert.Throws<ArgumentNullException>(() => serializationManager.GetRegularPropertiesToSerialize(null));
             }
 
             [TestCase]
@@ -96,7 +96,7 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 var serializationManager = new SerializationManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetCatelPropertiesToSerialize(null));
+                Assert.Throws<ArgumentNullException>(() => serializationManager.GetCatelPropertiesToSerialize(null));
             }
 
             [TestCase]
@@ -120,7 +120,7 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 var serializationManager = new SerializationManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetCatelPropertyNames(null));
+                Assert.Throws<ArgumentNullException>(() => serializationManager.GetCatelPropertyNames(null));
             }
 
             [TestCase]
@@ -147,7 +147,7 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 var serializationManager = new SerializationManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetCatelProperties(null));
+                Assert.Throws<ArgumentNullException>(() => serializationManager.GetCatelProperties(null));
             }
 
             [TestCase]
@@ -181,7 +181,7 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 var serializationManager = new SerializationManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetRegularPropertyNames(null));
+                Assert.Throws<ArgumentNullException>(() => serializationManager.GetRegularPropertyNames(null));
             }
 
             [TestCase]
@@ -205,7 +205,7 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 var serializationManager = new SerializationManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetRegularProperties(null));
+                Assert.Throws<ArgumentNullException>(() => serializationManager.GetRegularProperties(null));
             }
 
             [TestCase]
@@ -231,7 +231,7 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 var serializationManager = new SerializationManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetFieldNames(null));
+                Assert.Throws<ArgumentNullException>(() => serializationManager.GetFieldNames(null));
             }
 
 
@@ -256,7 +256,7 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 var serializationManager = new SerializationManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.GetFields(null));
+                Assert.Throws<ArgumentNullException>(() => serializationManager.GetFields(null));
             }
 
             [TestCase]
@@ -282,8 +282,8 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 var serializationManager = new SerializationManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.AddSerializerModifier(null, typeof(DynamicSerializerModifier)));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.AddSerializerModifier(typeof(DynamicSerializerModifierModel), null));
+                Assert.Throws<ArgumentNullException>(() => serializationManager.AddSerializerModifier(null, typeof(DynamicSerializerModifier)));
+                Assert.Throws<ArgumentNullException>(() => serializationManager.AddSerializerModifier(typeof(DynamicSerializerModifierModel), null));
             }
 
             [TestCase]
@@ -312,8 +312,8 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 var serializationManager = new SerializationManager();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.RemoveSerializerModifier(null, typeof(DynamicSerializerModifier)));
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => serializationManager.RemoveSerializerModifier(typeof(DynamicSerializerModifierModel), null));
+                Assert.Throws<ArgumentNullException>(() => serializationManager.RemoveSerializerModifier(null, typeof(DynamicSerializerModifier)));
+                Assert.Throws<ArgumentNullException>(() => serializationManager.RemoveSerializerModifier(typeof(DynamicSerializerModifierModel), null));
             }
 
             [TestCase]

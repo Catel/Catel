@@ -19,13 +19,13 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidationContextWithoutTag()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ValidationSummary(null));
+                Assert.Throws<ArgumentNullException>(() => new ValidationSummary(null));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidationContextWithTag()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ValidationSummary(null, "tag"));
+                Assert.Throws<ArgumentNullException>(() => new ValidationSummary(null, "tag"));
             }
 
             [TestCase]

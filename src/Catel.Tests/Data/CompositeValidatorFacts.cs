@@ -106,7 +106,7 @@ namespace Catel.Tests.Data
             {
                 var compositeValidator = new CompositeValidator();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeValidator.Add(null));
+                Assert.Throws<ArgumentNullException>(() => compositeValidator.Add(null));
             }
 
             [TestCase]
@@ -152,7 +152,7 @@ namespace Catel.Tests.Data
             {
                 var compositeValidator = new CompositeValidator();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeValidator.Remove(null));
+                Assert.Throws<ArgumentNullException>(() => compositeValidator.Remove(null));
             }
 
             [TestCase]
@@ -196,7 +196,7 @@ namespace Catel.Tests.Data
             {
                 var compositeValidator = new CompositeValidator();
 
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => compositeValidator.Contains(null));
+                Assert.Throws<ArgumentNullException>(() => compositeValidator.Contains(null));
             }
 
             [TestCase]
@@ -425,7 +425,7 @@ namespace Catel.Tests.Data
             compositeValidator.Add(validator1);
             compositeValidator.Add(validator2);
 
-            ExceptionTester.CallMethodAndExpectException<TException>(actionToExecute);
+            Assert.Throws<TException>(() => actionToExecute());
 
             validator1Mock.Verify(expression, Times.Once());
             validator2Mock.Verify(expression, Times.Once());

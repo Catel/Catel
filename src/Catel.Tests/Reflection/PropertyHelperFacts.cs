@@ -60,7 +60,7 @@ namespace Catel.Tests.Reflection
             [TestCase]
             public void IsPropertyAvailable_NullInput()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => PropertyHelper.IsPropertyAvailable(null, "PublicProperty"));
+                Assert.Throws<ArgumentNullException>(() => PropertyHelper.IsPropertyAvailable(null, "PublicProperty"));
             }
 
             [TestCase]
@@ -94,7 +94,7 @@ namespace Catel.Tests.Reflection
             public void TryGetPropertyValue_ObjectNull()
             {
                 object value;
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => PropertyHelper.TryGetPropertyValue(null, "property", out value));
+                Assert.Throws<ArgumentNullException>(() => PropertyHelper.TryGetPropertyValue(null, "property", out value));
             }
 
             [TestCase]
@@ -102,7 +102,7 @@ namespace Catel.Tests.Reflection
             {
                 object value;
                 var obj = new MyPropertyHelperClass();
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => PropertyHelper.TryGetPropertyValue(obj, null, out value));
+                Assert.Throws<ArgumentException>(() => PropertyHelper.TryGetPropertyValue(obj, null, out value));
             }
 
             [TestCase]
@@ -153,21 +153,21 @@ namespace Catel.Tests.Reflection
             [TestCase]
             public void GetPropertyValue_NullInput()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => PropertyHelper.GetPropertyValue(null, "PublicProperty"));
+                Assert.Throws<ArgumentNullException>(() => PropertyHelper.GetPropertyValue(null, "PublicProperty"));
             }
 
             [TestCase]
             public void GetPropertyValue_NotExistingProperty()
             {
                 var myPropertyHelperClass = new MyPropertyHelperClass();
-                ExceptionTester.CallMethodAndExpectException<PropertyNotFoundException>(() => PropertyHelper.GetPropertyValue(myPropertyHelperClass, "NotExistingProperty"));
+                Assert.Throws<PropertyNotFoundException>(() => PropertyHelper.GetPropertyValue(myPropertyHelperClass, "NotExistingProperty"));
             }
 
             [TestCase]
             public void GetPropertyValue_PrivateReadProperty()
             {
                 var myPropertyHelperClass = new MyPropertyHelperClass();
-                ExceptionTester.CallMethodAndExpectException<CannotGetPropertyValueException>(() => PropertyHelper.GetPropertyValue(myPropertyHelperClass, "PrivateReadProperty"));
+                Assert.Throws<CannotGetPropertyValueException>(() => PropertyHelper.GetPropertyValue(myPropertyHelperClass, "PrivateReadProperty"));
             }
 
             [TestCase]
@@ -202,7 +202,7 @@ namespace Catel.Tests.Reflection
 
                 if (expectedResult == "exception")
                 {
-                    ExceptionTester.CallMethodAndExpectException<PropertyNotFoundException>(() => PropertyHelper.GetPropertyValue<string>(myPropertyHelperClass, property, ignoreCase));
+                    Assert.Throws<PropertyNotFoundException>(() => PropertyHelper.GetPropertyValue<string>(myPropertyHelperClass, property, ignoreCase));
                 }
                 else
                 {
@@ -218,14 +218,14 @@ namespace Catel.Tests.Reflection
             [TestCase]
             public void TrySetPropertyValue_ObjectNull()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => PropertyHelper.TrySetPropertyValue(null, "property", null));
+                Assert.Throws<ArgumentNullException>(() => PropertyHelper.TrySetPropertyValue(null, "property", null));
             }
 
             [TestCase]
             public void TrySetPropertyValue_PropertyNameNull()
             {
                 var obj = new MyPropertyHelperClass();
-                ExceptionTester.CallMethodAndExpectException<ArgumentException>(() => PropertyHelper.TrySetPropertyValue(obj, null, null));
+                Assert.Throws<ArgumentException>(() => PropertyHelper.TrySetPropertyValue(obj, null, null));
             }
 
             [TestCase]
@@ -271,14 +271,14 @@ namespace Catel.Tests.Reflection
             [TestCase]
             public void SetPropertyValue_NullInput()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => PropertyHelper.SetPropertyValue(null, "PublicProperty", 42));
+                Assert.Throws<ArgumentNullException>(() => PropertyHelper.SetPropertyValue(null, "PublicProperty", 42));
             }
 
             [TestCase]
             public void SetPropertyValue_NotExistingProperty()
             {
                 var myPropertyHelperClass = new MyPropertyHelperClass();
-                ExceptionTester.CallMethodAndExpectException<PropertyNotFoundException>(() => PropertyHelper.SetPropertyValue(myPropertyHelperClass, "NotExistingProperty", 42));
+                Assert.Throws<PropertyNotFoundException>(() => PropertyHelper.SetPropertyValue(myPropertyHelperClass, "NotExistingProperty", 42));
             }
 
             [TestCase]
@@ -293,7 +293,7 @@ namespace Catel.Tests.Reflection
             public void SetPropertyValue_PrivateWriteProperty()
             {
                 var myPropertyHelperClass = new MyPropertyHelperClass();
-                ExceptionTester.CallMethodAndExpectException<CannotSetPropertyValueException>(() => PropertyHelper.SetPropertyValue(myPropertyHelperClass, "PrivateWriteProperty", 42));
+                Assert.Throws<CannotSetPropertyValueException>(() => PropertyHelper.SetPropertyValue(myPropertyHelperClass, "PrivateWriteProperty", 42));
             }
 
             [TestCase]
@@ -320,7 +320,7 @@ namespace Catel.Tests.Reflection
                 
                 if (!expectedResult)
                 {
-                    ExceptionTester.CallMethodAndExpectException<PropertyNotFoundException>(() => PropertyHelper.SetPropertyValue(myPropertyHelperClass, property, "FourtyTwo", ignoreCase));
+                    Assert.Throws<PropertyNotFoundException>(() => PropertyHelper.SetPropertyValue(myPropertyHelperClass, property, "FourtyTwo", ignoreCase));
                 }
                 else
                 {

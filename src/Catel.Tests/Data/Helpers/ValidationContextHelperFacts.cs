@@ -20,7 +20,7 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullValidationResult()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => new ValidationContextChange(null, ValidationContextChangeType.Added));
+                Assert.Throws<ArgumentNullException>(() => new ValidationContextChange(null, ValidationContextChangeType.Added));
             }
 
             [TestCase]
@@ -53,13 +53,13 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullFirstArgument()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ValidationContextHelper.GetChanges(null, new ValidationContext()));
+                Assert.Throws<ArgumentNullException>(() => ValidationContextHelper.GetChanges(null, new ValidationContext()));
             }
 
             [TestCase]
             public void ThrowsArgumentNullExceptionForNullSecondArgument()
             {
-                ExceptionTester.CallMethodAndExpectException<ArgumentNullException>(() => ValidationContextHelper.GetChanges(new ValidationContext(), null));
+                Assert.Throws<ArgumentNullException>(() => ValidationContextHelper.GetChanges(new ValidationContext(), null));
             }
 
             [TestCase]
