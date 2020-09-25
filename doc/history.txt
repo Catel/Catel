@@ -36,6 +36,7 @@ Added/fixed
 (+) #1538 Clean up BoxingCache every 5 minutes
 (*) #691  Rename IPleaseWaitService to IBusyIndicatorService
 (*) #940  Investigate memory usage and try to minimize allocations
+(*) #1145 Change navigation methods in INavigationService to async
 (*) #1191 Change ProcessCompletedCallback to include the initial context and exit code
 (*) #1246 Use Microsoft.Xaml.Behaviors.Wpf as dependency for WPF projects
 (*) #1491 Use TypedPropertyBag instead of PropertyBag by default in ModelBase

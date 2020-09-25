@@ -19,7 +19,7 @@ namespace Catel.Services
     /// </summary>
     public partial class NavigationService
     {
-#region Properties
+        #region Properties
         /// <summary>
         /// Gets the can go back.
         /// </summary>
@@ -37,9 +37,9 @@ namespace Catel.Services
         {
             get { throw new MustBeImplementedException(); }
         }
-#endregion
+        #endregion
 
-#region Methods
+        #region Methods
         /// <summary>
         /// Resolves the navigation target.
         /// </summary>
@@ -83,22 +83,23 @@ namespace Catel.Services
         {
         }
 
-        partial void CloseMainWindow()
+        private Task CloseMainWindowAsync()
         {
             // no implementation needed
+            return TaskHelper.Completed;
         }
 
-        partial void NavigateBack()
+        private Task NavigateBackAsync()
         {
             throw new MustBeImplementedException();
         }
 
-        partial void NavigateForward()
+        private Task NavigateForwardAsync()
         {
             throw new MustBeImplementedException();
         }
 
-        partial void NavigateWithParameters(string uri, Dictionary<string, object> parameters)
+        private async Task NavigateWithParameters(string uri, Dictionary<string, object> parameters)
         {
             throw new MustBeImplementedException();
             //var context = Catel.Android.ContextHelper.CurrentContext;
@@ -116,11 +117,11 @@ namespace Catel.Services
             //context.StartActivity(intent);
         }
 
-        partial void NavigateToUri(Uri uri)
+        private Task NavigateToUriAsync(Uri uri)
         {
-            NavigateWithParameters(uri.ToString(), new Dictionary<string, object>());
+            return NavigateWithParametersAsync(uri.ToString(), new Dictionary<string, object>());
         }
-#endregion
+        #endregion
     }
 }
 

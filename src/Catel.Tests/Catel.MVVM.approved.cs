@@ -753,8 +753,8 @@ namespace Catel.MVVM
     {
         protected NavigationViewModelBase(bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false) { }
         protected NavigationViewModelBase(Catel.IoC.IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false) { }
-        public Catel.MVVM.Command Back { get; }
-        public Catel.MVVM.Command Forward { get; }
+        public System.Windows.Input.ICommand Back { get; }
+        public System.Windows.Input.ICommand Forward { get; }
         public Catel.Services.INavigationService NavigationService { get; }
         protected virtual bool OnBackCanExecute() { }
         protected virtual bool OnForwardCanExecute() { }
@@ -1896,20 +1896,23 @@ namespace Catel.Services
         bool CanGoForward { get; }
         event System.EventHandler<System.EventArgs> ApplicationClosed;
         event System.EventHandler<Catel.Services.ApplicationClosingEventArgs> ApplicationClosing;
-        bool CloseApplication();
+        System.Threading.Tasks.Task<bool> CloseApplicationAsync();
         int GetBackStackCount();
-        void GoBack();
-        void GoForward();
-        void Navigate(System.Uri uri);
-        void Navigate(string uri, System.Collections.Generic.Dictionary<string, object> parameters = null);
-        void Navigate(System.Type viewModelType, System.Collections.Generic.Dictionary<string, object> parameters = null);
-        void Navigate<TViewModelType>(System.Collections.Generic.Dictionary<string, object> parameters = null);
+        System.Threading.Tasks.Task GoBackAsync();
+        System.Threading.Tasks.Task GoForwardAsync();
+        System.Threading.Tasks.Task NavigateAsync(System.Uri uri);
+        System.Threading.Tasks.Task NavigateAsync(string uri, System.Collections.Generic.Dictionary<string, object> parameters = null);
+        System.Threading.Tasks.Task NavigateAsync(System.Type viewModelType, System.Collections.Generic.Dictionary<string, object> parameters = null);
         void Register(string name, System.Uri uri);
         void Register(System.Type viewModelType, System.Uri uri);
         void RemoveAllBackEntries();
         void RemoveBackEntry();
         bool Unregister(string name);
         bool Unregister(System.Type viewModelType);
+    }
+    public static class INavigationServiceExtensions
+    {
+        public static System.Threading.Tasks.Task NavigateAsync<TViewModel>(Catel.Services.INavigationService navigationService, System.Collections.Generic.Dictionary<string, object> parameters = null) { }
     }
     public interface IOpenFileService : Catel.Services.IFileSupport
     {
@@ -2060,14 +2063,13 @@ namespace Catel.Services
         protected System.Windows.Controls.Frame RootFrame { get; }
         public event System.EventHandler<System.EventArgs> ApplicationClosed;
         public event System.EventHandler<Catel.Services.ApplicationClosingEventArgs> ApplicationClosing;
-        public bool CloseApplication() { }
+        public System.Threading.Tasks.Task<bool> CloseApplicationAsync() { }
         public override int GetBackStackCount() { }
-        public virtual void GoBack() { }
-        public virtual void GoForward() { }
-        public virtual void Navigate(System.Uri uri) { }
-        public virtual void Navigate(string uri, System.Collections.Generic.Dictionary<string, object> parameters = null) { }
-        public virtual void Navigate(System.Type viewModelType, System.Collections.Generic.Dictionary<string, object> parameters = null) { }
-        public virtual void Navigate<TViewModelType>(System.Collections.Generic.Dictionary<string, object> parameters = null) { }
+        public virtual System.Threading.Tasks.Task GoBackAsync() { }
+        public virtual System.Threading.Tasks.Task GoForwardAsync() { }
+        public virtual System.Threading.Tasks.Task NavigateAsync(System.Uri uri) { }
+        public virtual System.Threading.Tasks.Task NavigateAsync(string uri, System.Collections.Generic.Dictionary<string, object> parameters = null) { }
+        public virtual System.Threading.Tasks.Task NavigateAsync(System.Type viewModelType, System.Collections.Generic.Dictionary<string, object> parameters = null) { }
         public virtual void Register(string name, System.Uri uri) { }
         public virtual void Register(System.Type viewModelType, System.Uri uri) { }
         public override void RemoveAllBackEntries() { }

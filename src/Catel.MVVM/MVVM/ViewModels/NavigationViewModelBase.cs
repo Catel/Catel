@@ -7,7 +7,8 @@
 namespace Catel.MVVM
 {
     using System.ComponentModel;
-
+    using System.Threading.Tasks;
+    using System.Windows.Input;
     using Catel.Services;
 
     using IoC;
@@ -56,8 +57,8 @@ namespace Catel.MVVM
                                           bool skipViewModelAttributesInitialization = false)
             : base(serviceLocator, supportIEditableObject, ignoreMultipleModelsWarning, skipViewModelAttributesInitialization)
         {
-            Back = new Command(OnBackExecute, OnBackCanExecute);
-            Forward = new Command(OnForwardExecute, OnForwardCanExecute);
+            Back = new TaskCommand(OnBackExecuteAsync, OnBackCanExecute);
+            Forward = new TaskCommand(OnForwardExecuteAsync, OnForwardCanExecute);
 
             _navigationService = DependencyResolver.Resolve<INavigationService>();
         }
@@ -72,18 +73,16 @@ namespace Catel.MVVM
         {
             get { return _navigationService; }
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Gets the Back command.
         /// </summary>
-        public Command Back { get; private set; }
+        public ICommand Back { get; private set; }
 
         /// <summary>
         /// Gets the Forward command.
         /// </summary>
-        public Command Forward { get; private set; }
+        public ICommand Forward { get; private set; }
         #endregion
 
         #region Methods
@@ -99,14 +98,14 @@ namespace Catel.MVVM
         /// <summary>
         /// Method to invoke when the Back command is executed.
         /// </summary>
-        private void OnBackExecute()
+        private async Task OnBackExecuteAsync()
         {
             if (!_navigationService.CanGoBack)
             {
                 return;
             }
 
-            _navigationService.GoBack();
+            await _navigationService.GoBackAsync();
         }
 
         /// <summary>
@@ -121,14 +120,14 @@ namespace Catel.MVVM
         /// <summary>
         /// Method to invoke when the Forward command is executed.
         /// </summary>
-        private void OnForwardExecute()
+        private async Task OnForwardExecuteAsync()
         {
             if (!_navigationService.CanGoForward)
             {
                 return;
             }
 
-            _navigationService.GoForward();
+            await _navigationService.GoForwardAsync();
         }
         #endregion
     }

@@ -1,16 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NavigationService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE || UWP
+﻿#if NET || NETCORE || UWP
 
 namespace Catel.Services
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Windows;
     using Catel.IoC;
     using Catel.MVVM;
@@ -83,13 +78,15 @@ namespace Catel.Services
             var mainWindow = CatelEnvironment.MainWindow;
             if (mainWindow != null)
             {
-                mainWindow.Closing += (sender, e) =>
+                mainWindow.Closing += async (sender, e) =>
                 {
+                    // TODO: Always cancel and await somehow
+
                     if (!_appClosedFromService)
                     {
                         _appClosingByMainWindow = true;
 
-                        if (!CloseApplication())
+                        if (!await CloseApplicationAsync())
                         {
                             Log.Debug("INavigationService.CloseApplication has canceled the closing of the main window");
                             e.Cancel = true;
@@ -106,7 +103,7 @@ namespace Catel.Services
 #endif
         }
 
-        partial void CloseMainWindow()
+        private async Task CloseMainWindowAsync()
         {
 #if NET || NETCORE
             _appClosedFromService = true;
@@ -132,7 +129,7 @@ namespace Catel.Services
 #endif
         }
 
-        partial void NavigateBack()
+        private async Task NavigateBackAsync()
         {
             if (CanGoBack)
             {
@@ -140,7 +137,7 @@ namespace Catel.Services
             }
         }
 
-        partial void NavigateForward()
+        private async Task NavigateForwardAsync()
         {
             if (CanGoForward)
             {
@@ -148,7 +145,7 @@ namespace Catel.Services
             }
         }
 
-        partial void NavigateToUri(Uri uri)
+        private async Task NavigateToUriAsync(Uri uri)
         {
 #if NETFX_CORE
             throw Log.ErrorAndCreateException<NotSupportedInPlatformException>($"Direct navigations to urls is not supported in '{Enum<SupportedPlatforms>.ToString(Platforms.CurrentPlatform)}', cannot navigate to '{uri}'. Use Navigate(type) instead.");
@@ -157,7 +154,7 @@ namespace Catel.Services
 #endif
         }
 
-        partial void NavigateWithParameters(string uri, Dictionary<string, object> parameters)
+        private async Task NavigateWithParametersAsync(string uri, Dictionary<string, object> parameters)
         {
             Log.Debug($"Navigating to '{uri}'");
 

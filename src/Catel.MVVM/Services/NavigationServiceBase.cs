@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NavigationService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
 
@@ -13,7 +7,6 @@ namespace Catel.Services
     /// </summary>
     public abstract class NavigationServiceBase : ViewModelServiceBase
     {
-        #region Properties
         /// <summary>
         /// Gets a value indicating whether it is possible to navigate back.
         /// </summary>
@@ -29,7 +22,6 @@ namespace Catel.Services
         /// <c>true</c> if it is possible to navigate backforward otherwise, <c>false</c>.
         /// </value>
         public abstract bool CanGoForward { get; }
-        #endregion
 
         #region Methods
         /// <summary>
