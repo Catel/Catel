@@ -62,45 +62,12 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Sets the value of a specific property.
-        /// </summary>
-        /// <param name="name">Name of the property.</param>
-        /// <param name="value">Value of the property.</param>
-        /// <param name="notifyOnChange">If <c>true</c>, the <see cref="INotifyPropertyChanged.PropertyChanged"/> event will be invoked.</param>
-        /// <exception cref="PropertyNotNullableException">The property is not nullable, but <paramref name="value"/> is <c>null</c>.</exception>
-        /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
-        protected internal void SetValue(string name, object value, bool notifyOnChange = true)
-        {
-            var property = GetPropertyData(name);
-            if ((value is null) && !property.Type.IsNullableType())
-            {
-                throw Log.ErrorAndCreateException(msg => new PropertyNotNullableException(name, GetType()),
-                    "Property '{0}' on type '{1}' is not nullable, cannot set value to null", name, GetType().FullName);
-            }
-
-            SetValue(property, value, notifyOnChange);
-        }
-
-        /// <summary>
-        /// Sets the value of a specific property.
-        /// </summary>
-        /// <param name="property">The property to set.</param>
-        /// <param name="value">Value of the property.</param>
-        /// <param name="notifyOnChange">If <c>true</c>, the <see cref="INotifyPropertyChanged.PropertyChanged"/> event will be invoked.</param>
-        /// <exception cref="PropertyNotNullableException">The property is not nullable, but <paramref name="value"/> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
-        protected internal void SetValue(IPropertyData property, object value, bool notifyOnChange = true)
-        {
-            SetValue<object>(property, value, notifyOnChange);
-        }
-
-        /// <summary>
         /// Creates the property bag implementation that will be used by this model.
         /// </summary>
         /// <returns>The <see cref="IPropertyBag"/> to be used by this object.</returns>
         protected virtual IPropertyBag CreatePropertyBag()
         {
-            return new PropertyBag();
+            return new TypedPropertyBag();
         }
 
         /// <summary>

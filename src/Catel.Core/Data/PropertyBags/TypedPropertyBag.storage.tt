@@ -93,7 +93,9 @@ foreach (TypeCode typeCode in typeCodes)
 		continue;
 	}
 #>
-            if (targetType == typeof(<#= typeCode.ToString() #>))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(<#= typeCode.ToString() #>))
             {
                 var storage = Get<#= typeCode.ToString() #>Storage();
 
@@ -101,9 +103,17 @@ foreach (TypeCode typeCode in typeCodes)
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }

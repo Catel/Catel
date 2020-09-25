@@ -37,6 +37,7 @@ Added/fixed
 (*) #940  Investigate memory usage and try to minimize allocations
 (*) #1191 Change ProcessCompletedCallback to include the initial context and exit code
 (*) #1246 Use Microsoft.Xaml.Behaviors.Wpf as dependency for WPF projects
+(*) #1491 Use TypedPropertyBag instead of PropertyBag by default in ModelBase
 (*) #1493 Replace PropertyData by IPropertyData interface to allow generic implementations for improved 
     memory management
 (*) #1494 Improve non-generic ModelBase.RegisterProperty methods

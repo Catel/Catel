@@ -1285,8 +1285,6 @@ namespace Catel.Data
         protected void RaisePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e, bool updateIsDirty, bool isRefreshCallOnly) { }
         protected void SetDefaultValueToPropertyBag(Catel.Data.IPropertyData propertyData) { }
         protected virtual void SetDirty(string propertyName) { }
-        protected void SetValue(Catel.Data.IPropertyData property, object value, bool notifyOnChange = true) { }
-        protected void SetValue(string name, object value, bool notifyOnChange = true) { }
         protected void SetValue<TValue>(Catel.Data.IPropertyData property, TValue value, bool notifyOnChange = true) { }
         protected void SetValue<TValue>(string name, TValue value, bool notifyOnChange = true) { }
         protected virtual void SetValueToPropertyBag<TValue>(string propertyName, TValue value) { }

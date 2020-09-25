@@ -211,7 +211,9 @@ namespace Catel.Data
 
             var targetType = typeof(TValue);
 
-            if (targetType == typeof(Boolean))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(Boolean))
             {
                 var storage = GetBooleanStorage();
 
@@ -219,9 +221,17 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }
@@ -229,7 +239,9 @@ namespace Catel.Data
                 return default;
             }
 
-            if (targetType == typeof(Char))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(Char))
             {
                 var storage = GetCharStorage();
 
@@ -237,9 +249,17 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }
@@ -247,7 +267,9 @@ namespace Catel.Data
                 return default;
             }
 
-            if (targetType == typeof(SByte))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(SByte))
             {
                 var storage = GetSByteStorage();
 
@@ -255,9 +277,17 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }
@@ -265,7 +295,9 @@ namespace Catel.Data
                 return default;
             }
 
-            if (targetType == typeof(Byte))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(Byte))
             {
                 var storage = GetByteStorage();
 
@@ -273,9 +305,17 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }
@@ -283,7 +323,9 @@ namespace Catel.Data
                 return default;
             }
 
-            if (targetType == typeof(Int16))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(Int16))
             {
                 var storage = GetInt16Storage();
 
@@ -291,9 +333,17 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }
@@ -301,7 +351,9 @@ namespace Catel.Data
                 return default;
             }
 
-            if (targetType == typeof(UInt16))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(UInt16))
             {
                 var storage = GetUInt16Storage();
 
@@ -309,9 +361,17 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }
@@ -319,7 +379,9 @@ namespace Catel.Data
                 return default;
             }
 
-            if (targetType == typeof(Int32))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(Int32))
             {
                 var storage = GetInt32Storage();
 
@@ -327,9 +389,17 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }
@@ -337,7 +407,9 @@ namespace Catel.Data
                 return default;
             }
 
-            if (targetType == typeof(UInt32))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(UInt32))
             {
                 var storage = GetUInt32Storage();
 
@@ -345,9 +417,17 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }
@@ -355,7 +435,9 @@ namespace Catel.Data
                 return default;
             }
 
-            if (targetType == typeof(Int64))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(Int64))
             {
                 var storage = GetInt64Storage();
 
@@ -363,9 +445,17 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }
@@ -373,7 +463,9 @@ namespace Catel.Data
                 return default;
             }
 
-            if (targetType == typeof(UInt64))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(UInt64))
             {
                 var storage = GetUInt64Storage();
 
@@ -381,9 +473,17 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }
@@ -391,7 +491,9 @@ namespace Catel.Data
                 return default;
             }
 
-            if (targetType == typeof(Single))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(Single))
             {
                 var storage = GetSingleStorage();
 
@@ -399,9 +501,17 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }
@@ -409,7 +519,9 @@ namespace Catel.Data
                 return default;
             }
 
-            if (targetType == typeof(Double))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(Double))
             {
                 var storage = GetDoubleStorage();
 
@@ -417,9 +529,17 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }
@@ -427,7 +547,9 @@ namespace Catel.Data
                 return default;
             }
 
-            if (targetType == typeof(Decimal))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(Decimal))
             {
                 var storage = GetDecimalStorage();
 
@@ -435,9 +557,17 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }
@@ -445,7 +575,9 @@ namespace Catel.Data
                 return default;
             }
 
-            if (targetType == typeof(DateTime))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(DateTime))
             {
                 var storage = GetDateTimeStorage();
 
@@ -453,9 +585,17 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }
@@ -463,7 +603,9 @@ namespace Catel.Data
                 return default;
             }
 
-            if (targetType == typeof(String))
+            // Important: compare against the *actual* property type so we use the correct property bag
+            // to retrieve the value
+            if (propertyType == typeof(String))
             {
                 var storage = GetStringStorage();
 
@@ -471,9 +613,17 @@ namespace Catel.Data
                 {
                     if (storage.TryGetValue(name, out var bagValue))
                     {
-                        // Simply cast
+                        // Special case when GetValue<object> is used to retrieve this value type
+                        if (targetType == typeof(object))
+                        {
+                            // Get boxed value (prevent single boxing) and return as object
+                            return (TValue)(object)BoxingCache.GetBoxedValue(bagValue);
+                        }
+
+                        // Simply cast to the requested type
                         var tr = __makeref(bagValue);
                         var value = __refvalue(tr, TValue);
+
                         return value;
                     }
                 }
