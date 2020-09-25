@@ -20,20 +20,20 @@ namespace Catel.MVVM.Tasks
     {
         #region Constants
         /// <summary>Register the Message property so it is known in the class.</summary>
-        public static readonly PropertyData MessageProperty = RegisterProperty("Message", typeof(string));
+        public static readonly IPropertyData MessageProperty = RegisterProperty("Message", typeof(string));
 
         /// <summary>Register the Percentage property so it is known in the class.</summary>
-        public static readonly PropertyData PercentageProperty = RegisterProperty("Percentage", typeof(int), default(int), (sender, args) => ((TaskBase)sender).PercentagePropertyChanged());
+        public static readonly IPropertyData PercentageProperty = RegisterProperty("Percentage", typeof(int), default(int), (sender, args) => ((TaskBase)sender).PercentagePropertyChanged());
 
         /// <summary>
         /// Register the Name property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string));
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string));
 
         /// <summary>
         /// Register the IsIndeterminate property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData IsIndeterminatedProperty = RegisterProperty("IsIndeterminate", typeof(bool), true);
+        public static readonly IPropertyData IsIndeterminatedProperty = RegisterProperty("IsIndeterminate", typeof(bool), true);
         #endregion
 
         #region Constructors
@@ -63,7 +63,7 @@ namespace Catel.MVVM.Tasks
         /// <summary>
         /// Register the AutomaticallyDispatch property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData AutomaticallyDispatchProperty = RegisterProperty("AutomaticallyDispatch", typeof(bool), false);
+        public static readonly IPropertyData AutomaticallyDispatchProperty = RegisterProperty("AutomaticallyDispatch", typeof(bool), false);
 
         /// <summary>
         /// Gets the name.

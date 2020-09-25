@@ -48,7 +48,7 @@ namespace Catel.Configuration
                 return;
             }
 
-            var propertyData = RegisterProperty(name, typeof(object));
+            var propertyData = RegisterProperty<object>(name);
 
             InitializePropertyAfterConstruction(propertyData);
         }

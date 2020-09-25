@@ -30,7 +30,7 @@ namespace Catel.Data
         #region Fields
         private readonly object _lockObject = new object();
 
-        private readonly IDictionary<string, PropertyData> _catelProperties = new ListDictionary<string, PropertyData>();
+        private readonly IDictionary<string, IPropertyData> _catelProperties = new ListDictionary<string, IPropertyData>();
         private readonly IDictionary<string, CachedPropertyInfo> _nonCatelProperties = new ListDictionary<string, CachedPropertyInfo>();
         #endregion
 
@@ -69,7 +69,7 @@ namespace Catel.Data
         /// Gets the Catel properties.
         /// </summary>
         /// <returns>Dictionary containing the Catel properties.</returns>
-        public IDictionary<string, PropertyData> GetCatelProperties()
+        public IDictionary<string, IPropertyData> GetCatelProperties()
         {
             // Clone or not to clone? For performance reasons decided not to
             return _catelProperties;
@@ -89,10 +89,10 @@ namespace Catel.Data
         /// Gets the property data.
         /// </summary>
         /// <param name="name">The name of the property.</param>
-        /// <returns>The <see cref="PropertyData"/> of the requested property.</returns>
+        /// <returns>The <see cref="IPropertyData"/> of the requested property.</returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
-        public PropertyData GetPropertyData(string name)
+        public IPropertyData GetPropertyData(string name)
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
@@ -142,18 +142,25 @@ namespace Catel.Data
                     return;
                 }
 
-                var catelProperties = new List<PropertyData>();
+                var catelProperties = new List<IPropertyData>();
+
                 catelProperties.AddRange(FindCatelFields(Type));
                 catelProperties.AddRange(FindCatelProperties(Type));
+
                 foreach (var propertyData in catelProperties)
                 {
                     _catelProperties[propertyData.Name] = propertyData;
                 }
 
                 var nonCatelProperties = FindNonCatelProperties(Type);
+
                 foreach (var property in nonCatelProperties)
                 {
-                    _nonCatelProperties[property.Name] = new CachedPropertyInfo(property);
+                    var propertyName = property.Name;
+                    if (!_catelProperties.ContainsKey(propertyName))
+                    {
+                        _nonCatelProperties[propertyName] = new CachedPropertyInfo(property);
+                    }
                 }
 
                 IsRegisterPropertiesCalled = true;
@@ -168,7 +175,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="propertyData"/> is <c>null</c>.</exception>
         /// <exception cref="PropertyAlreadyRegisteredException">A property with the same name is already registered.</exception>
-        public void RegisterProperty(string name, PropertyData propertyData)
+        public void RegisterProperty(string name, IPropertyData propertyData)
         {
             Argument.IsNotNullOrWhitespace("name", name);
             Argument.IsNotNull("propertyData", propertyData);
@@ -208,36 +215,36 @@ namespace Catel.Data
         private static IEnumerable<PropertyInfo> FindNonCatelProperties(Type type)
         {
             return (from property in type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true))
-                    where property.PropertyType != typeof(PropertyData)
+                    where !property.PropertyType.ImplementsInterfaceEx<IPropertyData>()
                     select property).ToList();
         }
 
         /// <summary>
-        /// Finds the properties that represent a <see cref="PropertyData"/>.
+        /// Finds the properties that represent a <see cref="IPropertyData"/>.
         /// </summary>
         /// <param name="type">The type.</param>
-        /// <returns>The list of <see cref="PropertyData"/> elements found as properties.</returns>
+        /// <returns>The list of <see cref="IPropertyData"/> elements found as properties.</returns>
         /// <exception cref="InvalidOperationException">One ore more properties are not declared correctly.</exception>
-        private IEnumerable<PropertyData> FindCatelProperties(Type type)
+        private IEnumerable<IPropertyData> FindCatelProperties(Type type)
         {
             // CTL-212: Generic types are not supported for FieldInfo.GetValue
             if (type.ContainsGenericParametersEx())
             {
-                return ArrayShim.Empty<PropertyData>();
+                return ArrayShim.Empty<IPropertyData>();
             }
 
             PreventWrongDeclaredProperties(type);
 
             // Properties - actual addition
-            var foundProperties = new List<PropertyData>();
+            var foundProperties = new List<IPropertyData>();
 
             var properties = new List<PropertyInfo>();
             properties.AddRange(type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true), true));
             foreach (var property in properties)
             {
-                if (property.PropertyType == typeof(PropertyData))
+                if (property.PropertyType.ImplementsInterfaceEx<IPropertyData>())
                 {
-                    var propertyValue = property.GetValue(null, null) as PropertyData;
+                    var propertyValue = property.GetValue(null, null) as IPropertyData;
                     if (propertyValue != null)
                     {
                         foundProperties.Add(propertyValue);
@@ -252,7 +259,7 @@ namespace Catel.Data
         {
             // Properties - safety checks for non-static properties
             var nonStaticProperties = (from property in type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true))
-                                       where property.PropertyType == typeof(PropertyData)
+                                       where property.PropertyType.ImplementsInterfaceEx<IPropertyData>()
                                        select property).ToList();
             if (nonStaticProperties.Count > 0)
             {
@@ -262,46 +269,51 @@ namespace Catel.Data
         }
 
         /// <summary>
-        /// Finds the fields that represent a <see cref="PropertyData"/>.
+        /// Finds the fields that represent a <see cref="IPropertyData"/>.
         /// </summary>
         /// <param name="type">The type.</param>
-        /// <returns>The list of <see cref="PropertyData"/> elements found as fields.</returns>
+        /// <returns>The list of <see cref="IPropertyData"/> elements found as fields.</returns>
         /// <exception cref="InvalidOperationException">One ore more fields are not declared correctly.</exception>
-        private IEnumerable<PropertyData> FindCatelFields(Type type)
+        private IEnumerable<IPropertyData> FindCatelFields(Type type)
         {
             // CTL-212: Generic types are not supported for FieldInfo.GetValue
             if (type.ContainsGenericParametersEx())
             {
-                return ArrayShim.Empty<PropertyData>();
+                return ArrayShim.Empty<IPropertyData>();
             }
 
             PreventWrongDeclaredFields(type);
 
-            // Fields - actual addition
-            var foundFields = new List<PropertyData>();
+            var foundFields = new Dictionary<string, IPropertyData>();
 
+            // Fields - actual addition
             var fields = new List<FieldInfo>();
             fields.AddRange(type.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, true, true), true));
             foreach (var field in fields)
             {
-                if (field.FieldType == typeof(PropertyData))
+                if (foundFields.ContainsKey(field.Name))
                 {
-                    var propertyValue = (field.IsStatic ? field.GetValue(null) : field.GetValue(this)) as PropertyData;
+                    continue;
+                }
+
+                if (field.FieldType.ImplementsInterfaceEx<IPropertyData>())
+                {
+                    var propertyValue = (field.IsStatic ? field.GetValue(null) : field.GetValue(this)) as IPropertyData;
                     if (propertyValue != null)
                     {
-                        foundFields.Add(propertyValue);
+                        foundFields[field.Name] = propertyValue;
                     }
                 }
             }
 
-            return foundFields;
+            return foundFields.Values;
         }
 
         private void PreventWrongDeclaredFields(Type type)
         {
             // Fields - safety checks for non-static fields
             var nonStaticFields = (from field in type.GetFieldsEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true))
-                                   where field.FieldType == typeof(PropertyData)
+                                   where field.FieldType.ImplementsInterfaceEx<IPropertyData>()
                                    select field).ToList();
             if (nonStaticFields.Count > 0)
             {

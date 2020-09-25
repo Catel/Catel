@@ -22,7 +22,7 @@ namespace Catel.Tests.Data.TestClasses
             set => SetValue(NameProperty, value);
         }
 
-        public static readonly PropertyData NameProperty = RegisterProperty<ValidatableChild, string>(model => model.Name, "Geert");
+        public static readonly IPropertyData NameProperty = RegisterProperty<ValidatableChild, string>(model => model.Name, "Geert");
 
 
         protected override void ValidateBusinessRules(List<IBusinessRuleValidationResult> validationResults)

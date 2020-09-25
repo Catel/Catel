@@ -15,7 +15,7 @@
                 set { SetValue(FooProperty, value); }
             }
 
-            public static readonly PropertyData FooProperty = RegisterProperty(nameof(Foo), typeof(string), null);
+            public static readonly IPropertyData FooProperty = RegisterProperty(nameof(Foo), typeof(string), null);
         }
 
         public class Plugin : ChildAwareModelBase
@@ -26,7 +26,7 @@
                 set { SetValue(NameProperty, value); }
             }
 
-            public static readonly PropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), null);
+            public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), null);
 
             public FastObservableCollection<Preset> Presets
             {
@@ -34,7 +34,7 @@
                 set { SetValue(PresetsProperty, value); }
             }
 
-            public static readonly PropertyData PresetsProperty = RegisterProperty(nameof(Presets), typeof(FastObservableCollection<Preset>),
+            public static readonly IPropertyData PresetsProperty = RegisterProperty(nameof(Presets), typeof(FastObservableCollection<Preset>),
                 () => new FastObservableCollection<Preset>());
 
             public void ClearDirty()
@@ -51,7 +51,7 @@
                 set { SetValue(NameProperty, value); }
             }
 
-            public static readonly PropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), null);
+            public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), null);
 
             public FastObservableCollection<Plugin> Plugins
             {
@@ -59,7 +59,7 @@
                 set { SetValue(PluginsProperty, value); }
             }
 
-            public static readonly PropertyData PluginsProperty = RegisterProperty(nameof(Plugins), typeof(FastObservableCollection<Plugin>),
+            public static readonly IPropertyData PluginsProperty = RegisterProperty(nameof(Plugins), typeof(FastObservableCollection<Plugin>),
                 () => new FastObservableCollection<Plugin>());
 
         }

@@ -43,7 +43,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// Register the Items property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ItemsProperty = RegisterProperty("Items", typeof(ObservableCollection<ObservableCollection<CollectionModel>>));
+        public static readonly IPropertyData ItemsProperty = RegisterProperty<ObservableCollection<ObservableCollection<CollectionModel>>>("Items");
 
 
         /// <summary>
@@ -58,6 +58,6 @@ namespace Catel.Tests.Data
         /// <summary>
         /// Register the Name property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty<string>("Name");
     }
 }

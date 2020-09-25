@@ -21,7 +21,7 @@ namespace Catel.Data
         /// <param name="expectedType">Expected type for the property.</param>
         /// <param name="actualType">Actual object value type.</param>
         public InvalidPropertyValueException(string propertyName, Type expectedType, Type actualType)
-            : base(string.Format(CultureInfo.InvariantCulture, "Expected a value of type '{0} instead of '{1}' for property '{2}'", expectedType, actualType, propertyName))
+            : base(string.Format(CultureInfo.InvariantCulture, "Expected a value of type '{0}' instead of '{1}' for property '{2}'", expectedType, actualType, propertyName))
         {
             PropertyName = propertyName;
             ExpectedType = expectedType;

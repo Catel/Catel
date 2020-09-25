@@ -17,7 +17,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(FirstNameProperty, value); }
         }
 
-        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+        public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
 
         public bool IsCustomSerialized { get; protected set; }
 

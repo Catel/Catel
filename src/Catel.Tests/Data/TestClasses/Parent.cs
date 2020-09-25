@@ -41,7 +41,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), string.Empty);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), string.Empty);
 
         /// <summary>
         ///   Gets or sets the child collection.
@@ -55,7 +55,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ChildrenProperty = RegisterProperty("Children", typeof(Collection<Child>), new Collection<Child>());
+        public static readonly IPropertyData ChildrenProperty = RegisterProperty("Children", typeof(Collection<Child>), new Collection<Child>());
         #endregion
 
         #region Methods

@@ -476,7 +476,7 @@ namespace Catel.Tests.Data
                 /// <summary>
                 /// Register the FirstName property so it is known in the class.
                 /// </summary>
-                public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
+                public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
 
                 /// <summary>
                 /// Gets or sets the property value.
@@ -490,7 +490,7 @@ namespace Catel.Tests.Data
                 /// <summary>
                 /// Register the LastName property so it is known in the class.
                 /// </summary>
-                public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), string.Empty);
+                public static readonly IPropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), string.Empty);
             }
 
             public class TestValidator : ValidatorBase<TestValidatorModel>
@@ -607,7 +607,7 @@ namespace Catel.Tests.Data
                     set { SetValue(FirstNameProperty, value); }
                 }
 
-                public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
+                public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
             }
 
             [TestCase]
@@ -832,7 +832,7 @@ namespace Catel.Tests.Data
         {
             public class ModelWithoutAnnotation : ValidatableModelBase
             {
-                public static readonly PropertyData CounterProperty = RegisterProperty<ModelWithoutAnnotation, int>(model => model.Counter);
+                public static readonly IPropertyData CounterProperty = RegisterProperty<ModelWithoutAnnotation, int>(model => model.Counter);
 
                 public int Counter
                 {

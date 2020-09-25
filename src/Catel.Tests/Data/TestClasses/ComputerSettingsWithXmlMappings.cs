@@ -41,7 +41,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ComputerNameProperty = RegisterProperty("ComputerName", typeof(string), string.Empty);
+        public static readonly IPropertyData ComputerNameProperty = RegisterProperty("ComputerName", typeof(string), string.Empty);
 
         /// <summary>
         ///   Gets or sets the collection of ini files.
@@ -56,7 +56,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData IniFileCollectionProperty = RegisterProperty("IniFileCollection", typeof(ObservableCollection<IniFile>),
+        public static readonly IPropertyData IniFileCollectionProperty = RegisterProperty("IniFileCollection", typeof(ObservableCollection<IniFile>),
             () => new ObservableCollection<IniFile>());
         #endregion
     }

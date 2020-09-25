@@ -38,7 +38,7 @@ namespace Catel.Tests.Runtime.Serialization
                 set { SetValue(FirstNameProperty, value); }
             }
 
-            public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+            public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
         }
 
 #if NET || NETCORE
@@ -58,7 +58,7 @@ namespace Catel.Tests.Runtime.Serialization
                 set { SetValue(LastNameProperty, value); }
             }
 
-            public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), null);
+            public static readonly IPropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), null);
 
 
             public ObservableCollection<XmlPerson> Persons
@@ -67,7 +67,7 @@ namespace Catel.Tests.Runtime.Serialization
                 private set { SetValue(PersonsProperty, value); }
             }
 
-            public static readonly PropertyData PersonsProperty = RegisterProperty("Persons", typeof(ObservableCollection<XmlPerson>), null);
+            public static readonly IPropertyData PersonsProperty = RegisterProperty("Persons", typeof(ObservableCollection<XmlPerson>), null);
 
 
             public ObservableCollection<XmlModelWithAttributesOnly> ModelsWithAttributesOnly
@@ -76,7 +76,7 @@ namespace Catel.Tests.Runtime.Serialization
                 set { SetValue(ModelsWithAttributesOnlyProperty, value); }
             }
 
-            public static readonly PropertyData ModelsWithAttributesOnlyProperty = RegisterProperty("ModelsWithAttributesOnly", typeof(ObservableCollection<XmlModelWithAttributesOnly>), null);
+            public static readonly IPropertyData ModelsWithAttributesOnlyProperty = RegisterProperty("ModelsWithAttributesOnly", typeof(ObservableCollection<XmlModelWithAttributesOnly>), null);
         }
 
 #if NET || NETCORE
@@ -90,7 +90,7 @@ namespace Catel.Tests.Runtime.Serialization
                 set { SetValue(GenderProperty, value); }
             }
 
-            public static readonly PropertyData GenderProperty = RegisterProperty("Gender", typeof(Gender), Data.Gender.Female);
+            public static readonly IPropertyData GenderProperty = RegisterProperty("Gender", typeof(Gender), Data.Gender.Female);
 
 
             [XmlAttribute]
@@ -100,7 +100,7 @@ namespace Catel.Tests.Runtime.Serialization
                 set { SetValue(FirstNameProperty, value); }
             }
 
-            public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+            public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
 
 
             [XmlAttribute]
@@ -110,7 +110,7 @@ namespace Catel.Tests.Runtime.Serialization
                 set { SetValue(LastNameProperty, value); }
             }
 
-            public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), null);
+            public static readonly IPropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), null);
         }
 
         [TestFixture]

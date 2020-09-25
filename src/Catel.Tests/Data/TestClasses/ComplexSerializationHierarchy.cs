@@ -173,7 +173,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// SelectedResource property data.
         /// </summary>
-        public static readonly PropertyData SelectedResourceProperty = RegisterProperty("SelectedResource", typeof(string));
+        public static readonly IPropertyData SelectedResourceProperty = RegisterProperty<string>("SelectedResource");
 
         #endregion
 
@@ -191,7 +191,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// GridSettings property data.
         /// </summary>
-        public static readonly PropertyData GridSettingsProperty = RegisterProperty("GridSettings", typeof(GridSettings), new GridSettings());
+        public static readonly IPropertyData GridSettingsProperty = RegisterProperty("GridSettings", typeof(GridSettings), new GridSettings());
 
         #endregion
 
@@ -209,7 +209,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// PendingGridSettings property data.
         /// </summary>
-        public static readonly PropertyData PendingGridSettingsProperty = RegisterProperty("PendingGridSettings", typeof(GridSettings), new GridSettings());
+        public static readonly IPropertyData PendingGridSettingsProperty = RegisterProperty("PendingGridSettings", typeof(GridSettings), new GridSettings());
 
         #endregion
 
@@ -227,7 +227,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// ScheduledGridSettings property data.
         /// </summary>
-        public static readonly PropertyData ScheduledGridSettingsProperty = RegisterProperty("ScheduledGridSettings", typeof(GridSettings), new GridSettings());
+        public static readonly IPropertyData ScheduledGridSettingsProperty = RegisterProperty("ScheduledGridSettings", typeof(GridSettings), new GridSettings());
 
         #endregion
     }
@@ -256,7 +256,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// SortSettings property data.
         /// </summary>
-        public static readonly PropertyData SortSettingsProperty = RegisterProperty("SortSettings", typeof(List<SortSetting>), new List<SortSetting>());
+        public static readonly IPropertyData SortSettingsProperty = RegisterProperty("SortSettings", typeof(List<SortSetting>), new List<SortSetting>());
 
         #endregion
 
@@ -274,7 +274,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// GroupingOrder property data.
         /// </summary>
-        public static readonly PropertyData GroupingOrderProperty = RegisterProperty("GroupingOrder", typeof(List<string>), new List<string>());
+        public static readonly IPropertyData GroupingOrderProperty = RegisterProperty("GroupingOrder", typeof(List<string>), new List<string>());
 
         #endregion
 
@@ -292,7 +292,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// ColumnPositions property data.
         /// </summary>
-        public static readonly PropertyData ColumnSettingsProperty = RegisterProperty("ColumnSettings", typeof(List<ColumnSettings>), new List<ColumnSettings>());
+        public static readonly IPropertyData ColumnSettingsProperty = RegisterProperty("ColumnSettings", typeof(List<ColumnSettings>), new List<ColumnSettings>());
 
         #endregion
     }

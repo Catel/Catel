@@ -140,7 +140,7 @@ namespace Catel.Data
         /// <summary>
         /// Register the IsDirty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData IsDirtyProperty = RegisterProperty("IsDirty", typeof(bool), false, null, false, true, true);
+        public static readonly IPropertyData IsDirtyProperty = RegisterProperty("IsDirty", typeof(bool), false, null, false, true, true);
 
         /// <summary>
         /// Gets or sets a value indicating whether this object is currently read-only. When the object is read-only, values can only be read, not set.
@@ -159,7 +159,7 @@ namespace Catel.Data
         /// <summary>
         /// Register the IsReadOnly property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData IsReadOnlyProperty = RegisterProperty("IsReadOnly", typeof(bool), false,
+        public static readonly IPropertyData IsReadOnlyProperty = RegisterProperty("IsReadOnly", typeof(bool), false,
             (sender, e) => ((ModelBase)sender).RaisePropertyChanged("IsEditable"), false, true, true);
         #endregion
 

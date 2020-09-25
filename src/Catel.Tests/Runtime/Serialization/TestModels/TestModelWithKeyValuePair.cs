@@ -26,7 +26,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
 
 
         public KeyValuePair<string, string> KeyValuePair
@@ -35,7 +35,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(SpecialValueProperty, value); }
         }
 
-        public static readonly PropertyData SpecialValueProperty = RegisterProperty("KeyValuePair", typeof(KeyValuePair<string, string>), null);
+        public static readonly IPropertyData SpecialValueProperty = RegisterProperty("KeyValuePair", typeof(KeyValuePair<string, string>), null);
 
 
         public object KeyValuePairAsObject
@@ -44,6 +44,6 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(KeyValuePairAsObjectProperty, value); }
         }
 
-        public static readonly PropertyData KeyValuePairAsObjectProperty = RegisterProperty("KeyValuePairAsObject", typeof(object), null);
+        public static readonly IPropertyData KeyValuePairAsObjectProperty = RegisterProperty("KeyValuePairAsObject", typeof(object), null);
     }
 }

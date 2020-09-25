@@ -12,7 +12,6 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.IO;
-    using System.Linq;
     using System.Runtime.Serialization;
     using Catel.Collections;
     using Catel.Data;
@@ -51,7 +50,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
                 set { SetValue(SettingAProperty, value); }
             }
 
-            public static readonly PropertyData SettingAProperty = RegisterProperty("SettingA", typeof(String));
+            public static readonly IPropertyData SettingAProperty = RegisterProperty<String>("SettingA");
             #endregion
         }
     }
@@ -67,7 +66,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
                 set { SetValue(SettingBProperty, value); }
             }
 
-            public static readonly PropertyData SettingBProperty = RegisterProperty("SettingB", typeof(String));
+            public static readonly IPropertyData SettingBProperty = RegisterProperty<string>("SettingB");
             #endregion
         }
     }
@@ -81,7 +80,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
             set { SetValue(ParametersProperty, value); }
         }
 
-        public static readonly PropertyData ParametersProperty = RegisterProperty("Parameters", typeof(ObservableCollection<IParams>), new ObservableCollection<IParams>());
+        public static readonly IPropertyData ParametersProperty = RegisterProperty("Parameters", typeof(ObservableCollection<IParams>), new ObservableCollection<IParams>());
         #endregion
     }
 
@@ -94,7 +93,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
             set { SetValue(ParametersProperty, value); }
         }
 
-        public static readonly PropertyData ParametersProperty = RegisterProperty("Parameters", typeof(ObservableCollection<ParamsBase>), new ObservableCollection<ParamsBase>());
+        public static readonly IPropertyData ParametersProperty = RegisterProperty("Parameters", typeof(ObservableCollection<ParamsBase>), new ObservableCollection<ParamsBase>());
         #endregion
     }
 
@@ -119,7 +118,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
         /// <summary>
         /// Register the Values property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ValuesProperty = RegisterProperty("Values", typeof(Dictionary<string, object>), new Dictionary<string, object>());
+        public static readonly IPropertyData ValuesProperty = RegisterProperty("Values", typeof(Dictionary<string, object>), new Dictionary<string, object>());
     }
 
     [TestFixture]

@@ -20,7 +20,7 @@ namespace Catel.Tests.Data
             [TestCase]
             public void ThrowsNullReferenceExceptionForNullProperty()
             {
-                Assert.Throws<NullReferenceException>(() => new FieldValidationResult((PropertyData)null, ValidationResultType.Error, "message"));
+                Assert.Throws<NullReferenceException>(() => new FieldValidationResult((IPropertyData)null, ValidationResultType.Error, "message"));
             }
 
             [TestCase]

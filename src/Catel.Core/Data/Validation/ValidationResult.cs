@@ -70,7 +70,7 @@ namespace Catel.Data
         /// <param name="args">The args.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="messageFormat"/> is <c>null</c> or whitespace.</exception>
-        public FieldValidationResult(PropertyData property, ValidationResultType validationResultType, string messageFormat, params object[] args)
+        public FieldValidationResult(IPropertyData property, ValidationResultType validationResultType, string messageFormat, params object[] args)
             : this(property.Name, validationResultType, messageFormat, args) { }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Catel.Data
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="propertyData"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="messageFormat"/> is <c>null</c> or whitespace.</exception>
-        public static FieldValidationResult CreateWarning(PropertyData propertyData, string messageFormat, params object[] args)
+        public static FieldValidationResult CreateWarning(IPropertyData propertyData, string messageFormat, params object[] args)
         {
             Argument.IsNotNull("propertyData", propertyData);
             Argument.IsNotNullOrWhitespace("messageFormat", messageFormat);
@@ -175,7 +175,7 @@ namespace Catel.Data
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="propertyData"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="message"/> is <c>null</c>.</exception>
-        public static FieldValidationResult CreateWarningWithTag(PropertyData propertyData, string message, object tag)
+        public static FieldValidationResult CreateWarningWithTag(IPropertyData propertyData, string message, object tag)
         {
             var warning = CreateWarning(propertyData, message);
             warning.Tag = tag;
@@ -231,7 +231,7 @@ namespace Catel.Data
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="propertyData"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="messageFormat"/> is <c>null</c> or whitespace.</exception>
-        public static FieldValidationResult CreateError(PropertyData propertyData, string messageFormat, params object[] args)
+        public static FieldValidationResult CreateError(IPropertyData propertyData, string messageFormat, params object[] args)
         {
             Argument.IsNotNull("propertyData", propertyData);
             Argument.IsNotNullOrWhitespace("messageFormat", messageFormat);
@@ -288,7 +288,7 @@ namespace Catel.Data
         /// </returns>
         /// <exception cref="ArgumentNullException">The <paramref name="propertyData"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="message"/> is <c>null</c>.</exception>
-        public static FieldValidationResult CreateErrorWithTag(PropertyData propertyData, string message, object tag)
+        public static FieldValidationResult CreateErrorWithTag(IPropertyData propertyData, string message, object tag)
         {
             var error = CreateError(propertyData, message);
             error.Tag = tag;

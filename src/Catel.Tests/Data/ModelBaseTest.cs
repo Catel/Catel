@@ -419,7 +419,7 @@
                 set { SetValue(ValueTypeProperty, value); }
             }
 
-            public static readonly PropertyData ValueTypeProperty = RegisterProperty<TestModelWithGenericPropertyRegistrations, bool>(o => o.ValueType);
+            public static readonly IPropertyData ValueTypeProperty = RegisterProperty<TestModelWithGenericPropertyRegistrations, bool>(o => o.ValueType);
 
             public bool ValueTypeWithDefaultValue
             {
@@ -427,7 +427,7 @@
                 set { SetValue(ValueTypeWithDefaultValueProperty, value); }
             }
 
-            public static readonly PropertyData ValueTypeWithDefaultValueProperty = RegisterProperty<TestModelWithGenericPropertyRegistrations, bool>(o => o.ValueTypeWithDefaultValue, () => true);
+            public static readonly IPropertyData ValueTypeWithDefaultValueProperty = RegisterProperty<TestModelWithGenericPropertyRegistrations, bool>(o => o.ValueTypeWithDefaultValue, () => true);
 
             public object ReferenceType
             {
@@ -435,7 +435,7 @@
                 set { SetValue(ReferenceTypeProperty, value); }
             }
 
-            public static readonly PropertyData ReferenceTypeProperty = RegisterProperty<TestModelWithGenericPropertyRegistrations, object>(o => o.ReferenceType);
+            public static readonly IPropertyData ReferenceTypeProperty = RegisterProperty<TestModelWithGenericPropertyRegistrations, object>(o => o.ReferenceType);
 
             public object ReferenceTypeWithDefaultValue
             {
@@ -443,7 +443,7 @@
                 set { SetValue(ReferenceTypeWithDefaultValueProperty, value); }
             }
 
-            public static readonly PropertyData ReferenceTypeWithDefaultValueProperty = RegisterProperty<TestModelWithGenericPropertyRegistrations, object>(o => o.ReferenceTypeWithDefaultValue, () => new object());
+            public static readonly IPropertyData ReferenceTypeWithDefaultValueProperty = RegisterProperty<TestModelWithGenericPropertyRegistrations, object>(o => o.ReferenceTypeWithDefaultValue, () => new object());
         }
 
         [TestCase]

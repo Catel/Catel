@@ -29,7 +29,7 @@ namespace Catel.Data
         /// <param name="keyValuePair">The key value pair.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="propertyData"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <c>Key</c> of <paramref name="keyValuePair"/> is <c>null</c> or whitespace.</exception>
-        public PropertyValue(PropertyData propertyData, KeyValuePair<string, object> keyValuePair)
+        public PropertyValue(IPropertyData propertyData, KeyValuePair<string, object> keyValuePair)
             : this(propertyData, keyValuePair.Key, keyValuePair.Value) { }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Catel.Data
         /// <param name="value">The value of the property.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="propertyData"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public PropertyValue(PropertyData propertyData, string name, object value)
+        public PropertyValue(IPropertyData propertyData, string name, object value)
         {
             Argument.IsNotNull("propertyData", propertyData);
             Argument.IsNotNullOrWhitespace("name", name);
@@ -67,7 +67,7 @@ namespace Catel.Data
         /// </summary>
         /// <value>The property data.</value>
         [XmlIgnore]
-        public PropertyData PropertyData { get; internal set; }
+        public IPropertyData PropertyData { get; internal set; }
 
         /// <summary>
         /// Gets or sets the graph identifier.

@@ -46,7 +46,7 @@ namespace Catel.Tests.Data
                 /// <summary>
                 /// Register the FirstName property so it is known in the class.
                 /// </summary>
-                public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof (string), null);
+                public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof (string), null);
                 #endregion
 
                 #region Properties
@@ -76,7 +76,7 @@ namespace Catel.Tests.Data
         private static void RegisterProperty<T>(PropertyDataManager propertyDataManager, string name, T defaultValue)
         {
             propertyDataManager.RegisterProperty(typeof (PropertyDataManagerFacts), name,
-                new PropertyData(name, typeof (T), defaultValue, null, false, false, false, false, false));
+                new PropertyData<T>(name, defaultValue, null, false, false, false, false, false));
         }
         #endregion
 

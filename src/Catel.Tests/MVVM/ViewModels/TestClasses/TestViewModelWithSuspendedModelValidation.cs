@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TestViewModelWithSuspendedModelValidation.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
 // </copyright>
@@ -14,22 +14,22 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the FirstName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string));
+        public static readonly IPropertyData FirstNameProperty = RegisterProperty<string>("FirstName");
 
         /// <summary>
         /// Register the MiddleName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof(string));
+        public static readonly IPropertyData MiddleNameProperty = RegisterProperty<string>("MiddleName");
 
         /// <summary>
         /// Register the LastName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string));
+        public static readonly IPropertyData LastNameProperty = RegisterProperty<string>("LastName");
 
         /// <summary>
         /// Register the Person property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData PersonProperty = RegisterProperty("Person", typeof(IPerson));
+        public static readonly IPropertyData PersonProperty = RegisterProperty<IPerson>("Person");
 
         public TestViewModelWithSuspendedModelValidation(Person person)
         {

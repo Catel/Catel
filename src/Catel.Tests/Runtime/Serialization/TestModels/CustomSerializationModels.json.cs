@@ -45,7 +45,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
 
 
         public CustomJsonSerializationModel NestedModel
@@ -53,8 +53,8 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             get { return GetValue<CustomJsonSerializationModel>(NestedModelProperty); }
             set { SetValue(NestedModelProperty, value); }
         }
-        
-        public static readonly PropertyData NestedModelProperty = RegisterProperty("NestedModel", typeof(CustomJsonSerializationModel), null);
+
+        public static readonly IPropertyData NestedModelProperty = RegisterProperty("NestedModel", typeof(CustomJsonSerializationModel), null);
     }
 
     public class CustomJsonSerializationModelWithEnum : ModelBase
@@ -65,7 +65,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
 
         [SerializeEnumAsString]
         public CustomSerializationEnum EnumWithAttribute
@@ -74,8 +74,8 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(EnumWithAttributeProperty, value); }
         }
 
-        public static readonly PropertyData EnumWithAttributeProperty = RegisterProperty(nameof(EnumWithAttribute), typeof(CustomSerializationEnum));
-        
+        public static readonly IPropertyData EnumWithAttributeProperty = RegisterProperty<CustomSerializationEnum>(nameof(EnumWithAttribute));
+
 
 
         public CustomSerializationEnum EnumWithoutAttribute
@@ -84,7 +84,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(EnumWithoutAttributeProperty, value); }
         }
 
-        public static readonly PropertyData EnumWithoutAttributeProperty = RegisterProperty(nameof(EnumWithoutAttribute), typeof(CustomSerializationEnum));
+        public static readonly IPropertyData EnumWithoutAttributeProperty = RegisterProperty<CustomSerializationEnum>(nameof(EnumWithoutAttribute));
 
     }
 

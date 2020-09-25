@@ -119,7 +119,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="propertyData"/> is <c>null</c>.</exception>
         /// <exception cref="PropertyAlreadyRegisteredException">A property with the same name is already registered.</exception>
-        public void RegisterProperty(Type type, string name, PropertyData propertyData)
+        public void RegisterProperty(Type type, string name, IPropertyData propertyData)
         {
             Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("name", name);
@@ -195,7 +195,7 @@ namespace Catel.Data
         /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="PropertyNotRegisteredException">Thrown when the property is not registered.</exception>
-        public PropertyData GetPropertyData(Type type, string name)
+        public IPropertyData GetPropertyData(Type type, string name)
         {
             Argument.IsNotNull("type", type);
             Argument.IsNotNullOrWhitespace("name", name);

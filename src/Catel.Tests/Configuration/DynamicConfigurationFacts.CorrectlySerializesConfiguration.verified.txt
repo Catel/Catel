@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DynamicConfiguration xmlns:ctl="http://schemas.catelproject.com" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <KeyX ctl:type="System.String">Value X</KeyX>
+  <KeyY ctl:type="System.String">Value Y</KeyY>
+  <KeyZ.SomeAddition ctl:type="System.String">Value Z</KeyZ.SomeAddition>
+</DynamicConfiguration>

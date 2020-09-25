@@ -45,7 +45,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
 
 
         public CustomXmlSerializationModel NestedModel
@@ -54,6 +54,6 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(NestedModelProperty, value); }
         }
         
-        public static readonly PropertyData NestedModelProperty = RegisterProperty("NestedModel", typeof(CustomXmlSerializationModel), null);
+        public static readonly IPropertyData NestedModelProperty = RegisterProperty("NestedModel", typeof(CustomXmlSerializationModel), null);
     }
 }

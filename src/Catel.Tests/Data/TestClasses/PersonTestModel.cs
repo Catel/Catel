@@ -17,7 +17,7 @@ namespace Catel.Tests.Data
             set { SetValue(FirstNameProperty, value); }
         }
 
-        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+        public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
 
 
         public string LastName
@@ -26,7 +26,7 @@ namespace Catel.Tests.Data
             set { SetValue(LastNameProperty, value); }
         }
 
-        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), null);
+        public static readonly IPropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), null);
 
 
         public bool IsEnabled
@@ -35,6 +35,6 @@ namespace Catel.Tests.Data
             set { SetValue(IsEnabledProperty, value); }
         }
 
-        public static readonly PropertyData IsEnabledProperty = RegisterProperty("IsEnabled", typeof(bool), null);
+        public static readonly IPropertyData IsEnabledProperty = RegisterProperty("IsEnabled", typeof(bool), null);
     }
 }

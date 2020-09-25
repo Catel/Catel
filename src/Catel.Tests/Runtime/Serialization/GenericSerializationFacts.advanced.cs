@@ -55,7 +55,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { SetValue(NameProperty, value); }
                 }
 
-                public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+                public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
             }
 
             [Serializable]
@@ -81,7 +81,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { SetValue(ItemsProperty, value); }
                 }
 
-                public static readonly PropertyData ItemsProperty = RegisterProperty("Items", typeof(ObservableCollection<AbstractBase>), null);
+                public static readonly IPropertyData ItemsProperty = RegisterProperty("Items", typeof(ObservableCollection<AbstractBase>), null);
             }
 
             [TestCase]

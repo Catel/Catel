@@ -9,15 +9,12 @@ namespace Catel.Tests.Data
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using Catel.Data;
 
     using NUnit.Framework;
 
 #if !UWP
-    using Catel.MVVM;
-    using System.Windows.Data;
 #endif
 
     public partial class ModelBaseFacts
@@ -29,12 +26,12 @@ namespace Catel.Tests.Data
             public void CanUnregisterRuntimeProperty()
             {
                 var model = new ModelWithRuntimeProperties();
-                var property = ModelBase.RegisterProperty("RuntimePropertyBeingUnregistered", typeof (string));
+                var property = ModelBase.RegisterProperty<string>("RuntimePropertyBeingUnregistered");
                 model.InitializePropertyAfterConstruction(property);
 
                 Assert.IsTrue(PropertyDataManager.Default.IsPropertyRegistered(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered"));
 
-                ModelBase.UnregisterProperty(typeof (ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered");
+                ModelBase.UnregisterProperty(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered");
 
                 Assert.IsFalse(PropertyDataManager.Default.IsPropertyRegistered(typeof(ModelWithRuntimeProperties), "RuntimePropertyBeingUnregistered"));
             }
@@ -98,7 +95,7 @@ namespace Catel.Tests.Data
             {
                 protected override void InitializeCustomProperties()
                 {
-                    var propertyData = RegisterProperty(nameof(ComputedProperty), typeof(bool));
+                    var propertyData = RegisterProperty<bool>(nameof(ComputedProperty));
 
                     InitializePropertyAfterConstruction(propertyData);
                 }
@@ -116,7 +113,7 @@ namespace Catel.Tests.Data
             {
                 protected override void InitializeCustomProperties()
                 {
-                    var propertyData = RegisterProperty(nameof(CanSave), typeof(bool));
+                    var propertyData = RegisterProperty<bool>(nameof(CanSave));
 
                     InitializePropertyAfterConstruction(propertyData);
                 }
@@ -269,7 +266,7 @@ namespace Catel.Tests.Data
                     set { SetValue(FirstNameProperty, value); }
                 }
 
-                private static readonly PropertyData FirstNameProperty = RegisterProperty(nameof(FirstName), typeof(string), null);
+                private static readonly IPropertyData FirstNameProperty = RegisterProperty(nameof(FirstName), typeof(string), null);
             }
 
             public class JohnDoe : Person
@@ -280,7 +277,7 @@ namespace Catel.Tests.Data
                     set { SetValue(LastNameProperty, value); }
                 }
 
-                private static readonly PropertyData LastNameProperty = RegisterProperty(nameof(LastName), typeof(string), null);
+                private static readonly IPropertyData LastNameProperty = RegisterProperty(nameof(LastName), typeof(string), null);
             }
 
             [Test]

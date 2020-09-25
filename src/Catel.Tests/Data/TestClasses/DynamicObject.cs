@@ -30,12 +30,12 @@
         #endregion
 
         #region Methods
-        public static PropertyData RegisterProperty(string name, Type type)
+        public static IPropertyData RegisterProperty(string name, Type type)
         {
-            return ModelBase.RegisterProperty(name, type);
+            return ModelBase.RegisterProperty(name, type, null);
         }
 
-        public new void InitializePropertyAfterConstruction(PropertyData propertyData)
+        public new void InitializePropertyAfterConstruction(IPropertyData propertyData)
         {
             base.InitializePropertyAfterConstruction(propertyData);
         }

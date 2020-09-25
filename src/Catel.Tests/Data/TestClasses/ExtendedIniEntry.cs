@@ -52,7 +52,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData DefaultValueProperty = RegisterProperty("DefaultValue", typeof(string), string.Empty);
+        public static readonly IPropertyData DefaultValueProperty = RegisterProperty("DefaultValue", typeof(string), string.Empty);
 
         /// <summary>
         ///   Gets or sets the property value.
@@ -66,7 +66,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData TypeProperty = RegisterProperty("Type", typeof(IniEntryType), IniEntryType.Old);
+        public static readonly IPropertyData TypeProperty = RegisterProperty("Type", typeof(IniEntryType), IniEntryType.Old);
         #endregion
     }
 }

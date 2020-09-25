@@ -35,6 +35,6 @@
         /// <summary>
         /// Register the B property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData BProperty = RegisterProperty("B", typeof(string), string.Empty);
+        public static readonly IPropertyData BProperty = RegisterProperty("B", typeof(string), string.Empty);
     }
 }

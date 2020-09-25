@@ -26,7 +26,7 @@ namespace Catel.Tests.Runtime.Serialization
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), "Test name");
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), "Test name");
 
         public CircularTestModel CircularModel
         {
@@ -34,6 +34,6 @@ namespace Catel.Tests.Runtime.Serialization
             set { SetValue(CircularModelProperty, value); }
         }
 
-        public static readonly PropertyData CircularModelProperty = RegisterProperty("CircularModel", typeof(CircularTestModel), null);
+        public static readonly IPropertyData CircularModelProperty = RegisterProperty("CircularModel", typeof(CircularTestModel), null);
     }
 }

@@ -19,8 +19,8 @@
             }
 
             /// <summary>Register the Id property so it is known in the class.</summary>
-            public static readonly PropertyData IdProperty = RegisterProperty<Dummy, int>(model => model.Id);
-            public static readonly PropertyData CommentProperty = RegisterProperty<Dummy, string>(model => model.Comment);
+            public static readonly IPropertyData IdProperty = RegisterProperty<Dummy, int>(model => model.Id);
+            public static readonly IPropertyData CommentProperty = RegisterProperty<Dummy, string>(model => model.Comment);
 
             public Dummy(int I)
             {
@@ -95,7 +95,7 @@
             public override string Title { get { return "View model title"; } }
 
             /// <summary>Register the CurrentDummy property so it is known in the class.</summary>
-            public static readonly PropertyData CurrentDummyProperty = RegisterProperty<MainWindowViewModel, Dummy>(model => model.CurrentDummy);
+            public static readonly IPropertyData CurrentDummyProperty = RegisterProperty<MainWindowViewModel, Dummy>(model => model.CurrentDummy);
 
             [Model]
             public Dummy CurrentDummy
@@ -111,8 +111,8 @@
             }
 
             /// <summary>Register the Id property so it is known in the class.</summary>
-            public static readonly PropertyData IdentifierProperty = RegisterProperty<MainWindowViewModel, int>(model => model.Identifier, 123);
-            public static readonly PropertyData CommentProperty = RegisterProperty<MainWindowViewModel, string>(model => model.Comment, "asd");
+            public static readonly IPropertyData IdentifierProperty = RegisterProperty<MainWindowViewModel, int>(model => model.Identifier, 123);
+            public static readonly IPropertyData CommentProperty = RegisterProperty<MainWindowViewModel, string>(model => model.Comment, "asd");
 
             [ViewModelToModel("CurrentDummy", "Id")]
             public int Identifier
@@ -140,7 +140,7 @@
             }
 
             ///// <summary>Register the Id property so it is known in the class.</summary>
-            //public static readonly PropertyData IdProperty = RegisterProperty<MainWindowViewModel, int>(model => model.Id, default(int));
+            //public static readonly IPropertyData IdProperty = RegisterProperty<MainWindowViewModel, int>(model => model.Id, default(int));
             //
             //[ViewModelToModel("CurrentDummy")]
             //public int Id

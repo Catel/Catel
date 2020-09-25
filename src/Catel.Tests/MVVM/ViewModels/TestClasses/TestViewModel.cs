@@ -94,12 +94,12 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the Person property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData PersonProperty = RegisterProperty("Person", typeof(IPerson));
+        public static readonly IPropertyData PersonProperty = RegisterProperty<IPerson>("Person");
 
         /// <summary>
         /// Register the SpecialValidationModel property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData SpecialValidationModelProperty = RegisterProperty("SpecialValidationModel", typeof(SpecialValidationModel));
+        public static readonly IPropertyData SpecialValidationModelProperty = RegisterProperty<SpecialValidationModel>("SpecialValidationModel");
         #endregion
 
         #region Properties
@@ -132,40 +132,40 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the FirstName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string));
+        public static readonly IPropertyData FirstNameProperty = RegisterProperty<string>("FirstName");
 
         /// <summary>
         /// Register the MiddleName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof(string));
+        public static readonly IPropertyData MiddleNameProperty = RegisterProperty<string>("MiddleName");
 
         /// <summary>
         /// Register the LastName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string));
+        public static readonly IPropertyData LastNameProperty = RegisterProperty<string>("LastName");
 
         /// <summary>
         /// Register the FieldErrorWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FieldErrorWhenEmptyProperty = RegisterProperty("FieldErrorWhenEmpty", typeof(string));
+        public static readonly IPropertyData FieldErrorWhenEmptyProperty = RegisterProperty<string>("FieldErrorWhenEmpty");
 
         /// <summary>
         /// Register the FieldWarningWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FieldWarningWhenEmptyProperty = RegisterProperty("FieldWarningWhenEmpty", typeof(string));
+        public static readonly IPropertyData FieldWarningWhenEmptyProperty = RegisterProperty<string>("FieldWarningWhenEmpty");
 
         /// <summary>
         /// Register the BusinessRuleErrorWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData BusinessRuleErrorWhenEmptyProperty = RegisterProperty("BusinessRuleErrorWhenEmpty", typeof(string));
+        public static readonly IPropertyData BusinessRuleErrorWhenEmptyProperty = RegisterProperty<string>("BusinessRuleErrorWhenEmpty");
 
         /// <summary>
         /// Register the BusinessRuleWarningWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData BusinessRuleWarningWhenEmptyProperty = RegisterProperty("BusinessRuleWarningWhenEmpty", typeof(string));
+        public static readonly IPropertyData BusinessRuleWarningWhenEmptyProperty = RegisterProperty<string>("BusinessRuleWarningWhenEmpty");
 
         /// <summary>Register the Age property so it is known in the class.</summary>
-        public static readonly PropertyData AgeProperty = RegisterProperty<TestViewModel, uint>(model => model.Age);
+        public static readonly IPropertyData AgeProperty = RegisterProperty<TestViewModel, uint>(model => model.Age);
         #endregion
 
         #region Properties

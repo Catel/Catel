@@ -26,7 +26,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
         /// <summary>
         /// Register the Vector property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData VectorProperty = RegisterProperty("Vector", typeof(Vector), null);
+        public static readonly IPropertyData VectorProperty = RegisterProperty("Vector", typeof(Vector), null);
     }
 
     public class TestModelWithParsableMembersWithAttributes : ModelBase
@@ -44,7 +44,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
         /// <summary>
         /// Register the Vector property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData VectorProperty = RegisterProperty("Vector", typeof(Vector), null);
+        public static readonly IPropertyData VectorProperty = RegisterProperty("Vector", typeof(Vector), null);
     }
 
     [Serializable, StructLayout(LayoutKind.Sequential, Pack = 1)]

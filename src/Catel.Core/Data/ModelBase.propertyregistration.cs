@@ -29,7 +29,7 @@ namespace Catel.Data
         /// <returns><see cref="PropertyData" /> containing the property information.</returns>
         /// <exception cref="System.ArgumentException">The member type of the body of the <paramref name="propertyExpression" /> of should be <c>MemberTypes.Property</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
-        public static PropertyData RegisterProperty<TModel, TValue>(Expression<Func<TModel, TValue>> propertyExpression, TValue defaultValue,
+        public static IPropertyData RegisterProperty<TModel, TValue>(Expression<Func<TModel, TValue>> propertyExpression, TValue defaultValue,
             Action<TModel, PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true,
             bool includeInBackup = true)
         {
@@ -46,7 +46,7 @@ namespace Catel.Data
 #endif
 
             var propertyName = memberExpression.Member.Name;
-            return RegisterProperty(propertyName, typeof(TValue), defaultValue, (sender, args) =>
+            return RegisterProperty<TValue>(propertyName, defaultValue, (sender, args) =>
             {
                 if (propertyChangedEventHandler != null)
                 {
@@ -69,7 +69,7 @@ namespace Catel.Data
         /// <returns><see cref="PropertyData" /> containing the property information.</returns>
         /// <exception cref="System.ArgumentException">The member type of the body of the <paramref name="propertyExpression" /> of should be <c>MemberTypes.Property</c>.</exception>
         /// <exception cref="System.ArgumentNullException">The <paramref name="propertyExpression" /> is <c>null</c>.</exception>
-        public static PropertyData RegisterProperty<TModel, TValue>(Expression<Func<TModel, TValue>> propertyExpression, Func<TValue> createDefaultValue = null,
+        public static IPropertyData RegisterProperty<TModel, TValue>(Expression<Func<TModel, TValue>> propertyExpression, Func<TValue> createDefaultValue = null,
             Action<TModel, PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true,
             bool includeInBackup = true)
         {
@@ -85,19 +85,15 @@ namespace Catel.Data
             }
 #endif
 
-            object realDefaultValue = createDefaultValue;
             if (createDefaultValue is null)
             {
-                realDefaultValue = default(TValue);
+                createDefaultValue = () => default;
             }
 
             var propertyName = memberExpression.Member.Name;
-            return RegisterProperty(propertyName, typeof(TValue), realDefaultValue, (sender, args) =>
+            return RegisterProperty<TValue>(propertyName, createDefaultValue, (sender, args) =>
             {
-                if (propertyChangedEventHandler != null)
-                {
-                    propertyChangedEventHandler.Invoke((TModel)sender, args);
-                }
+                propertyChangedEventHandler?.Invoke((TModel)sender, args);
             }, includeInSerialization, includeInBackup);
         }
 
@@ -106,7 +102,6 @@ namespace Catel.Data
         /// </summary>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="name">Name of the property.</param>
-        /// <param name="type">Type of the property.</param>
         /// <param name="defaultValue">Default value of the property.</param>
         /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
         /// <param name="includeInSerialization">if set to <c>true</c>, the property should be included in the serialization.</param>
@@ -115,19 +110,11 @@ namespace Catel.Data
         /// <see cref="PropertyData"/> containing the property information.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        public static PropertyData RegisterProperty<TValue>(string name, Type type, TValue defaultValue,
+        public static IPropertyData RegisterProperty<TValue>(string name, TValue defaultValue,
             EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true,
             bool includeInBackup = true)
         {
-            var value = defaultValue as Delegate;
-            if (value != null)
-            {
-                return RegisterProperty(name, type, () => GetObjectValue(value.DynamicInvoke()), propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, false);
-            }
-
-            return RegisterProperty(name, type, () => GetObjectValue(defaultValue), propertyChangedEventHandler,
+            return RegisterProperty<TValue>(name, defaultValue, propertyChangedEventHandler,
                 includeInSerialization, includeInBackup, false);
         }
 
@@ -135,7 +122,6 @@ namespace Catel.Data
         /// Registers a property that will be automatically handled by this object.
         /// </summary>
         /// <param name="name">Name of the property.</param>
-        /// <param name="type">Type of the property.</param>
         /// <param name="createDefaultValue">The delegate that creates the default value. If <c>null</c>, a delegate returning the default 
         /// value (<c>null</c> for reference types, <c>Activator.CreateInstance(type)</c> for value types).</param>
         /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
@@ -145,13 +131,12 @@ namespace Catel.Data
         /// <see cref="PropertyData"/> containing the property information.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        public static PropertyData RegisterProperty(string name, Type type, Func<object> createDefaultValue = null,
+        public static IPropertyData RegisterProperty<TValue>(string name, Func<TValue> createDefaultValue = null,
             EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true,
             bool includeInBackup = true)
         {
-            return RegisterProperty(name, type, createDefaultValue, propertyChangedEventHandler, includeInSerialization,
-                includeInBackup, false);
+            return RegisterProperty<TValue>(name, createDefaultValue, propertyChangedEventHandler, 
+                includeInSerialization, includeInBackup, false);
         }
 
         /// <summary>
@@ -159,7 +144,6 @@ namespace Catel.Data
         /// </summary>
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="name">Name of the property.</param>
-        /// <param name="type">Type of the property.</param>
         /// <param name="defaultValue">Default value of the property.</param>
         /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
         /// <param name="includeInSerialization">if set to <c>true</c>, the property should be included in the serialization.</param>
@@ -169,19 +153,11 @@ namespace Catel.Data
         /// <see cref="PropertyData"/> containing the property information.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        private static PropertyData RegisterProperty<TValue>(string name, Type type, TValue defaultValue, 
+        private static IPropertyData RegisterProperty<TValue>(string name, TValue defaultValue,
             EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true,
             bool includeInBackup = true, bool isModelBaseProperty = false)
         {
-            var value = defaultValue as Delegate;
-            if (value != null)
-            {
-                return RegisterProperty(name, type, () => GetObjectValue<TValue>((TValue)value.DynamicInvoke()), propertyChangedEventHandler,
-                    includeInSerialization, includeInBackup, isModelBaseProperty);
-            }
-
-            return RegisterProperty(name, type, () => GetObjectValue<TValue>(defaultValue), propertyChangedEventHandler,
+            return RegisterProperty<TValue>(name, () => defaultValue, propertyChangedEventHandler,
                 includeInSerialization, includeInBackup, isModelBaseProperty);
         }
 
@@ -189,7 +165,6 @@ namespace Catel.Data
         /// Registers a property that will be automatically handled by this object.
         /// </summary>
         /// <param name="name">Name of the property.</param>
-        /// <param name="type">Type of the property.</param>
         /// <param name="createDefaultValue">The delegate that creates the default value. If <c>null</c>, a delegate returning the default 
         /// value (<c>null</c> for reference types, <c>Activator.CreateInstance(type)</c> for value types).</param>
         /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
@@ -200,26 +175,73 @@ namespace Catel.Data
         /// <see cref="PropertyData"/> containing the property information.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="ArgumentNullException">The <paramref name="type"/> is <c>null</c>.</exception>
-        private static PropertyData RegisterProperty(string name, Type type, Func<object> createDefaultValue = null,
+        private static IPropertyData RegisterProperty<TValue>(string name, Func<object> createDefaultValue = null,
             EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true,
             bool includeInBackup = true, bool isModelBaseProperty = false)
         {
-            Argument.IsNotNullOrWhitespace("name", name);
-            Argument.IsNotNull("type", type);
+            // Note: this overload is required for non-generic-to-generic conversion
+
+            Func<TValue> typedDefaultValueCallback = null;
 
             if (createDefaultValue is null)
             {
-                createDefaultValue = () => type.IsValueTypeEx() ? Activator.CreateInstance(type) : null;
+                typedDefaultValueCallback = () => default;
+            }
+            else
+            {
+                typedDefaultValueCallback = () =>
+                {
+                    var defaultValue = createDefaultValue();
+                    if (defaultValue is TValue value)
+                    {
+                        return value;
+                    }
+
+                    return default(TValue);
+                };
             }
 
             var isSerializable = true;
 
 #if NET || NETCORE || NETSTANDARD
-            isSerializable = type.IsInterfaceEx() || type.IsSerializableEx();
+            isSerializable = typeof(TValue).IsInterfaceEx() || typeof(TValue).IsSerializableEx();
 #endif
 
-            var property = new PropertyData(name, type, createDefaultValue, propertyChangedEventHandler, isSerializable,
+            var property = new PropertyData<TValue>(name, typedDefaultValueCallback, propertyChangedEventHandler, isSerializable,
+                includeInSerialization, includeInBackup, isModelBaseProperty, false);
+            return property;
+        }
+
+        /// <summary>
+        /// Registers a property that will be automatically handled by this object.
+        /// </summary>
+        /// <param name="name">Name of the property.</param>
+        /// <param name="createDefaultValue">The delegate that creates the default value. If <c>null</c>, a delegate returning the default 
+        /// value (<c>null</c> for reference types, <c>Activator.CreateInstance(type)</c> for value types).</param>
+        /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
+        /// <param name="includeInSerialization">if set to <c>true</c>, the property should be included in the serialization.</param>
+        /// <param name="includeInBackup">if set to <c>true</c>, the property should be included in the backup when handling IEditableObject.</param>
+        /// <param name="isModelBaseProperty">if set to <c>true</c>, the property is declared by the <see cref="ModelBase"/>.</param>
+        /// <returns>
+        /// <see cref="PropertyData"/> containing the property information.
+        /// </returns>
+        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
+        private static IPropertyData RegisterProperty<TValue>(string name, Func<TValue> createDefaultValue = null,
+            EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true,
+            bool includeInBackup = true, bool isModelBaseProperty = false)
+        {
+            if (createDefaultValue is null)
+            {
+                createDefaultValue = () => default;
+            }
+
+            var isSerializable = true;
+
+#if NET || NETCORE || NETSTANDARD
+            isSerializable = typeof(TValue).IsInterfaceEx() || typeof(TValue).IsSerializableEx();
+#endif
+
+            var property = new PropertyData<TValue>(name, createDefaultValue, propertyChangedEventHandler, isSerializable,
                 includeInSerialization, includeInBackup, isModelBaseProperty, false);
             return property;
         }
@@ -248,6 +270,7 @@ namespace Catel.Data
             var type = GetType();
 
             var catelTypeInfo = PropertyDataManager.RegisterProperties(type);
+
             foreach (var propertyDataKeyValuePair in catelTypeInfo.GetCatelProperties())
             {
                 var propertyData = propertyDataKeyValuePair.Value;
@@ -262,11 +285,11 @@ namespace Catel.Data
         /// Normally, properties are automatically registered in the constructor. If properties should be registered
         /// via runtime behavior, this method must be used.
         /// </summary>
-        /// <param name="property"><see cref="PropertyData"/> of the property.</param>
+        /// <param name="property"><see cref="IPropertyData"/> of the property.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
         /// <exception cref="InvalidPropertyException">The name of the property is invalid.</exception>
         /// <exception cref="PropertyAlreadyRegisteredException">The property is already registered.</exception>
-        protected internal void InitializePropertyAfterConstruction(PropertyData property)
+        protected internal void InitializePropertyAfterConstruction(IPropertyData property)
         {
             Argument.IsNotNull("property", property);
 
@@ -284,61 +307,34 @@ namespace Catel.Data
                 isCalculatedProperty = !reflectedProperty.CanWrite;
             }
 
-            InitializeProperty(property, true, isCalculatedProperty);
+            InitializeProperty(property, isCalculatedProperty);
         }
 
         /// <summary>
         /// Initializes a specific property for this object.
         /// </summary>
-        /// <param name="property">The property.</param>
-        /// <param name="lateRegistration">If set to <c>true</c>, the property is assumed to be registered after the official initialization.</param>
+        /// <param name="propertyData">The property.</param>
         /// <param name="isCalculatedProperty">if set to <c>true</c>, the property is a calculated property.</param>
-        /// <exception cref="ArgumentNullException">The <paramref name="property" /> is <c>null</c>.</exception>
+        /// <exception cref="ArgumentNullException">The <paramref name="propertyData" /> is <c>null</c>.</exception>
         /// <exception cref="InvalidPropertyException">The name of the property is invalid.</exception>
         /// <exception cref="PropertyAlreadyRegisteredException">The property is already registered.</exception>
-        private void InitializeProperty(PropertyData property, bool lateRegistration = false, bool isCalculatedProperty = false)
-        {
-            InitializeProperty(property.Name, property.Type, property.GetDefaultValue(), property.PropertyChangedEventHandler,
-                property.IsSerializable, property.IncludeInSerialization, property.IncludeInBackup, property.IsModelBaseProperty, lateRegistration, isCalculatedProperty);
-        }
-
-        /// <summary>
-        /// Initializes a specific property for this object.
-        /// </summary>
-        /// <param name="name">Name of the property.</param>
-        /// <param name="type">Type of the property.</param>
-        /// <param name="defaultValue">Default value of the property.</param>
-        /// <param name="propertyChangedEventHandler">The property changed event handler.</param>
-        /// <param name="isSerializable">if set to <c>true</c>, the property is serializable.</param>
-        /// <param name="includeInSerialization">if set to <c>true</c>, the property should be included in the serialization.</param>
-        /// <param name="includeInBackup">if set to <c>true</c>, the property should be included in the backup when handling IEditableObject.</param>
-        /// <param name="isModelBaseProperty">if set to <c>true</c>, the property is declared by the <see cref="ModelBase"/>.</param>
-        /// <param name="lateRegistration">if set to <c>true</c>, the property is assumed to be registered after the official initialization.</param>
-        /// <param name="isCalculatedProperty">if set to <c>true</c>, the property is a calculated property.</param>
-        /// <exception cref="InvalidPropertyException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="PropertyAlreadyRegisteredException">The property is already registered.</exception>
-        private void InitializeProperty(string name, Type type, object defaultValue, EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler,
-            bool isSerializable, bool includeInSerialization, bool includeInBackup, bool isModelBaseProperty, bool lateRegistration, bool isCalculatedProperty)
+        private void InitializeProperty(IPropertyData propertyData, bool isCalculatedProperty = false)
         {
             var objectType = GetType();
-            if ((defaultValue is null) && !type.IsNullableType())
-            {
-                throw Log.ErrorAndCreateException(msg => new PropertyNotNullableException(name, objectType),
-                    "Property '{0}' is not nullable, please provide a valid (not null) default value", name);
-            }
+            var propertyName = propertyData.Name;
 
-            if (!IsPropertyRegistered(name))
+            if (!IsPropertyRegistered(propertyName))
             {
-                var propertyData = new PropertyData(name, type, defaultValue, propertyChangedEventHandler,
-                    isSerializable, includeInSerialization, includeInBackup, isModelBaseProperty, isCalculatedProperty);
-                PropertyDataManager.RegisterProperty(objectType, name, propertyData);
+                propertyData.IsCalculatedProperty = isCalculatedProperty;
+
+                PropertyDataManager.RegisterProperty(objectType, propertyName, propertyData);
             }
 
             lock (_lock)
             {
-                if (!_propertyBag.IsAvailable(name))
+                if (!_propertyBag.IsAvailable(propertyName))
                 {
-                    SetValueToPropertyBag(name, defaultValue);
+                    SetDefaultValueToPropertyBag(propertyData);
                 }
             }
         }
@@ -391,7 +387,7 @@ namespace Catel.Data
         /// <param name="name">The name of the property.</param>
         /// <returns>The <see cref="PropertyData"/>.</returns>
         /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
-        protected PropertyData GetPropertyData(string name)
+        protected IPropertyData GetPropertyData(string name)
         {
             return PropertyDataManager.GetPropertyData(GetType(), name);
         }

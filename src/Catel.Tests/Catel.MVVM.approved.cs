@@ -2651,8 +2651,8 @@ namespace Catel.Windows.Input
 {
     public class InputGesture : Catel.Data.ModelBase
     {
-        public static readonly Catel.Data.PropertyData KeyProperty;
-        public static readonly Catel.Data.PropertyData ModifiersProperty;
+        public static readonly Catel.Data.IPropertyData KeyProperty;
+        public static readonly Catel.Data.IPropertyData ModifiersProperty;
         public InputGesture() { }
         public InputGesture(System.Windows.Input.Key key) { }
         public InputGesture(System.Windows.Input.Key key, System.Windows.Input.ModifierKeys modifiers) { }

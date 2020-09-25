@@ -89,7 +89,7 @@ namespace Catel.Data
         /// <param name="notifyOnChange">If <c>true</c>, the <see cref="INotifyPropertyChanged.PropertyChanged"/> event will be invoked.</param>
         /// <exception cref="PropertyNotNullableException">The property is not nullable, but <paramref name="value"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
-        protected internal void SetValue(PropertyData property, object value, bool notifyOnChange = true)
+        protected internal void SetValue(IPropertyData property, object value, bool notifyOnChange = true)
         {
             SetValue<object>(property, value, notifyOnChange);
         }
@@ -111,7 +111,7 @@ namespace Catel.Data
         /// <param name="notifyOnChange">If <c>true</c>, the <see cref="INotifyPropertyChanged.PropertyChanged"/> event will be invoked.</param>
         /// <exception cref="PropertyNotNullableException">The property is not nullable, but <paramref name="value"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
-        protected internal void SetValue<TValue>(PropertyData property, TValue value, bool notifyOnChange = true)
+        protected internal void SetValue<TValue>(IPropertyData property, TValue value, bool notifyOnChange = true)
         {
             Argument.IsNotNull("property", property);
 
@@ -228,7 +228,7 @@ namespace Catel.Data
         /// <returns>Object value of the property.</returns>
         /// <exception cref="ArgumentNullException">The <paramref name="property"/> is <c>null</c>.</exception>
         /// <exception cref="PropertyNotRegisteredException">The property is not registered.</exception>
-        protected TValue GetValue<TValue>(PropertyData property)
+        protected TValue GetValue<TValue>(IPropertyData property)
         {
             Argument.IsNotNull("property", property);
 

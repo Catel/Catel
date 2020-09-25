@@ -43,7 +43,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData NameProperty = RegisterProperty("Name", typeof(string), string.Empty);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), string.Empty);
         #endregion
     }
 }

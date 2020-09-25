@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Catel.Tests.Data.TestClasses
+﻿namespace Catel.Tests.Data.TestClasses
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
     using System.Collections.ObjectModel;
     using Catel.Data;
+
     class GrandParent : ChildAwareModelBase
     {
         public void ResetDirtyFlag()
@@ -19,7 +19,7 @@ namespace Catel.Tests.Data.TestClasses
             set => SetValue(ParentsProperty, value);
         }
 
-        public static readonly PropertyData ParentsProperty = RegisterProperty(nameof(Parents), typeof(ObservableCollection<Parent>), () => new ObservableCollection<Parent>());
+        public static readonly IPropertyData ParentsProperty = RegisterProperty(nameof(Parents), typeof(ObservableCollection<Parent>), () => new ObservableCollection<Parent>());
     }
 
     class Parent : ChildAwareModelBase
@@ -36,7 +36,7 @@ namespace Catel.Tests.Data.TestClasses
             set => SetValue(ChildrenProperty, value);
         }
 
-        public static readonly PropertyData ChildrenProperty = RegisterProperty(nameof(Children), typeof(ObservableCollection<Child>), () => new ObservableCollection<Child>());
+        public static readonly IPropertyData ChildrenProperty = RegisterProperty(nameof(Children), typeof(ObservableCollection<Child>), () => new ObservableCollection<Child>());
 
     }
 
@@ -53,6 +53,6 @@ namespace Catel.Tests.Data.TestClasses
             set => SetValue(NameProperty, value);
         }
 
-        public static readonly PropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), string.Empty);
+        public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), string.Empty);
     }
 }

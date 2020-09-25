@@ -146,7 +146,7 @@ foreach (TypeCode typeCode in typeCodes)
             {
                 // If users use SetValue<object>(), we might need to convert
                 var propertyType = GetRegisteredPropertyType(name);
-                if (propertyType != null)
+                if (propertyType is null == false)
                 {
                     if (propertyType.IsValueTypeEx() && value is null)
                     {
@@ -254,7 +254,7 @@ foreach (TypeCode typeCode in typeCodes)
     var storageName = typeCode.ToString().ToLowerInvariant() + "Storage";
 #>
             var <#= storageName #> = _<#= storageName #>;
-            if (<#= storageName #> != null)
+            if (<#= storageName #> is null == false)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in <#= storageName #>)
@@ -268,7 +268,7 @@ foreach (TypeCode typeCode in typeCodes)
 #>
 
             var objectStorage = _objectStorage;
-            if (objectStorage != null)
+            if (objectStorage is null == false)
             {
                 foreach (var propertyPair in objectStorage)
                 {

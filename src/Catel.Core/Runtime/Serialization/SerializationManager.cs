@@ -180,7 +180,7 @@ namespace Catel.Runtime.Serialization
                 foreach (var modelProperty in properties)
                 {
                     var memberMetadata = modelProperty.Value;
-                    var propertyData = (PropertyData)memberMetadata.Tag;
+                    var propertyData = (IPropertyData)memberMetadata.Tag;
 
                     bool isSerializable = propertyData.IsSerializable || propertyData.Type.IsModelBase();
                     if (!isSerializable)

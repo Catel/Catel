@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TestViewModelWithMultipleModelMappings.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2017 Catel development team. All rights reserved.
 // </copyright>
@@ -23,17 +23,17 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the Person property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData PersonProperty = RegisterProperty("Person", typeof(IPerson));
+        public static readonly IPropertyData PersonProperty = RegisterProperty<IPerson>("Person");
 
         /// <summary>
         /// Register the ContactInfo property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ContactInfoProperty = RegisterProperty("ContactInfo", typeof(IContactInfo));
+        public static readonly IPropertyData ContactInfoProperty = RegisterProperty<IContactInfo>("ContactInfo");
 
         /// <summary>
         /// Register the Email property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData EmailProperty = RegisterProperty("Email", typeof(string));
+        public static readonly IPropertyData EmailProperty = RegisterProperty<string>("Email");
         #endregion
 
         #region Properties

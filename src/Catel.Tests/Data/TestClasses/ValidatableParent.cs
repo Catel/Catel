@@ -20,7 +20,7 @@ namespace Catel.Tests.Data.TestClasses
             set => SetValue(ChildProperty, value);
         }
 
-        public static readonly PropertyData ChildProperty = RegisterProperty<ValidatableParent, ValidatableChild>(model => model.Child);
+        public static readonly IPropertyData ChildProperty = RegisterProperty<ValidatableParent, ValidatableChild>(model => model.Child);
 
         public ObservableCollection<ValidatableChild> Collection
         {
@@ -28,7 +28,7 @@ namespace Catel.Tests.Data.TestClasses
             set => SetValue(CollectionProperty, value);
         }
 
-        public static readonly PropertyData CollectionProperty = RegisterProperty<ValidatableParent, ObservableCollection<ValidatableChild>>(model => model.Collection);
+        public static readonly IPropertyData CollectionProperty = RegisterProperty<ValidatableParent, ObservableCollection<ValidatableChild>>(model => model.Collection);
 
         protected override void ValidateBusinessRules(List<IBusinessRuleValidationResult> validationResults)
         {

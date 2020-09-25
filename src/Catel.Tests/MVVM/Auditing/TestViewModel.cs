@@ -18,7 +18,7 @@ namespace Catel.Tests.MVVM.Auditing
         /// <summary>
         /// Register the TestProperty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData TestPropertyProperty = RegisterProperty("TestProperty", typeof (string), "defaultvalue");
+        public static readonly IPropertyData TestPropertyProperty = RegisterProperty("TestProperty", typeof (string), "defaultvalue");
         #endregion
 
         #region Commands

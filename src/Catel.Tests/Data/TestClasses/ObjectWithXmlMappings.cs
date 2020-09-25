@@ -35,7 +35,7 @@
         /// <summary>
         ///   Register the PropertyWithoutMapping property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData PropertyWithoutMappingProperty = RegisterProperty("PropertyWithoutMapping", typeof(string), "withoutMapping");
+        public static readonly IPropertyData PropertyWithoutMappingProperty = RegisterProperty("PropertyWithoutMapping", typeof(string), "withoutMapping");
 
         /// <summary>
         /// Gets or sets a value that should be ignored.
@@ -50,7 +50,7 @@
         /// <summary>
         /// Register the IgnoredProperty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData IgnoredPropertyProperty = RegisterProperty("IgnoredProperty", typeof(string), "ignored");
+        public static readonly IPropertyData IgnoredPropertyProperty = RegisterProperty("IgnoredProperty", typeof(string), "ignored");
 
         /// <summary>
         ///   Gets or sets the property with an xml mapping.
@@ -65,7 +65,7 @@
         /// <summary>
         ///   Register the PropertyWithMapping property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData PropertyWithMappingProperty = RegisterProperty("PropertyWithMapping", typeof(string), "withMapping");
+        public static readonly IPropertyData PropertyWithMappingProperty = RegisterProperty("PropertyWithMapping", typeof(string), "withMapping");
         #endregion
     }
 }

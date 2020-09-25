@@ -1,4 +1,4 @@
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using System.Collections.ObjectModel;
     using Catel.Data;
@@ -28,7 +28,7 @@ namespace Catel.Tests.Data
         /// <summary>
         ///   Register the ValueType_NoDefaultValue property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ValueType_NoDefaultValueProperty = RegisterProperty("ValueType_NoDefaultValue", typeof(int));
+        public static readonly IPropertyData ValueType_NoDefaultValueProperty = RegisterProperty<int>("ValueType_NoDefaultValue");
 
         /// <summary>
         ///   ValueType_DefaultValueViaValue.
@@ -42,7 +42,7 @@ namespace Catel.Tests.Data
         /// <summary>
         ///   Register the ValueType_DefaultValueViaValue property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ValueType_DefaultValueViaValueProperty = RegisterProperty("ValueType_DefaultValueViaValue", typeof(int), 5);
+        public static readonly IPropertyData ValueType_DefaultValueViaValueProperty = RegisterProperty<int>("ValueType_DefaultValueViaValue", 5);
 
         /// <summary>
         ///   ValueType_DefaultValueViaCallback.
@@ -56,7 +56,7 @@ namespace Catel.Tests.Data
         /// <summary>
         ///   Register the ValueType_DefaultValueViaCallback property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ValueType_DefaultValueViaCallbackProperty = RegisterProperty("ValueType_DefaultValueViaCallback", typeof(int), () => 10);
+        public static readonly IPropertyData ValueType_DefaultValueViaCallbackProperty = RegisterProperty<int>("ValueType_DefaultValueViaCallback", () => 10);
 
         /// <summary>
         ///   ReferenceType_NoDefaultValue.
@@ -70,7 +70,7 @@ namespace Catel.Tests.Data
         /// <summary>
         ///   Register the ReferenceType_NoDefaultValue property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ReferenceType_NoDefaultValueProperty = RegisterProperty("ReferenceType_NoDefaultValue", typeof(Collection<int>));
+        public static readonly IPropertyData ReferenceType_NoDefaultValueProperty = RegisterProperty<Collection<int>>("ReferenceType_NoDefaultValue");
 
         /// <summary>
         ///   ReferenceType_DefaultValueViaValue.
@@ -84,7 +84,7 @@ namespace Catel.Tests.Data
         /// <summary>
         ///   Register the ReferenceType_DefaultValueViaValue property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ReferenceType_DefaultValueViaValueProperty = RegisterProperty("ReferenceType_DefaultValueViaValue", typeof(Collection<int>), new Collection<int>());
+        public static readonly IPropertyData ReferenceType_DefaultValueViaValueProperty = RegisterProperty("ReferenceType_DefaultValueViaValue", typeof(Collection<int>), new Collection<int>());
 
         /// <summary>
         ///   ReferenceType_DefaultValueViaCallback.
@@ -98,7 +98,7 @@ namespace Catel.Tests.Data
         /// <summary>
         ///   Register the ReferenceType_DefaultValueViaCallback property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ReferenceType_DefaultValueViaCallbackProperty = RegisterProperty("ReferenceType_DefaultValueViaCallback", typeof(Collection<int>), () => new Collection<int>());
+        public static readonly IPropertyData ReferenceType_DefaultValueViaCallbackProperty = RegisterProperty("ReferenceType_DefaultValueViaCallback", typeof(Collection<int>), () => new Collection<int>());
         #endregion
 
         #region Methods

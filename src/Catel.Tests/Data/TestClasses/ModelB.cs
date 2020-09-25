@@ -35,6 +35,6 @@
         /// <summary>
         /// Register the C property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData CProperty = RegisterProperty("C", typeof(string), string.Empty);
+        public static readonly IPropertyData CProperty = RegisterProperty("C", typeof(string), string.Empty);
     }
 }

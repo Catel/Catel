@@ -37,6 +37,8 @@ Added/fixed
 (*) #940  Investigate memory usage and try to minimize allocations
 (*) #1191 Change ProcessCompletedCallback to include the initial context and exit code
 (*) #1246 Use Microsoft.Xaml.Behaviors.Wpf as dependency for WPF projects
+(*) #1493 Replace PropertyData by IPropertyData interface to allow generic implementations for improved 
+    memory management
 (*) #1536 Create T4 template to generate logging extensions with optimized memory usage
 (-) #1035 Remove services that are used less-frequently (AccelerometerService, CameraService, 
     LocationService, SchedulerService, VibrateService, ViewExportService)

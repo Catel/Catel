@@ -88,7 +88,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FileNameProperty = RegisterProperty("FileName", typeof(string), string.Empty);
+        public static readonly IPropertyData FileNameProperty = RegisterProperty("FileName", typeof(string), string.Empty);
 
         /// <summary>
         ///   Gets or sets the collection of ini entries..
@@ -105,7 +105,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData IniEntryCollectionProperty = RegisterProperty("IniEntryCollection", typeof(List<IniEntry>), null);
+        public static readonly IPropertyData IniEntryCollectionProperty = RegisterProperty("IniEntryCollection", typeof(List<IniEntry>), null);
         #endregion
     }
 }

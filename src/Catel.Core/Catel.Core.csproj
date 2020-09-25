@@ -117,6 +117,16 @@
       <DependentUpon>BoxingCache.boxedvalues.tt</DependentUpon>
     </Compile>
     
+    <None Update="Data\ModelBase.non-generic-to-generic.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ModelBase.non-generic-to-generic.cs</LastGenOutput>
+    </None>
+    <Compile Update="Data\ModelBase.non-generic-to-generic.cs">
+      <DependentUpon>ModelBase.non-generic-to-generic.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+      
     <None Update="Data\PropertyBags\PropertyBag.boxing.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>PropertyBag.boxing.cs</LastGenOutput>

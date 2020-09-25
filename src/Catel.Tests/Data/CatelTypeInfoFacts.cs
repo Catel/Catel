@@ -32,7 +32,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the CatelProperty property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData CatelPropertyProperty = RegisterProperty("CatelProperty", typeof(string), null);
+            public static readonly IPropertyData CatelPropertyProperty = RegisterProperty("CatelProperty", typeof(string), null);
         }
 
         [TestCase]

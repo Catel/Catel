@@ -17,15 +17,18 @@ namespace Catel.Tests.Configuration
     using Catel.IO;
     using NUnit.Framework;
 
+    using static VerifyNUnit.Verifier;
+    using System.Threading.Tasks;
+
     [TestFixture, Explicit]
     public class DynamicConfigurationFacts
     {
-        private const string ExpectedXml = "﻿﻿<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n" +
-"<DynamicConfiguration xmlns:ctl=\"http://schemas.catelproject.com\" xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\">\r\n" +
-"  <KeyX ctl:type=\"System.String\">Value X</KeyX>\r\n" +
-"  <KeyY ctl:type=\"System.String\">Value Y</KeyY>\r\n" +
-"  <KeyZ.SomeAddition ctl:type=\"System.String\">Value Z</KeyZ.SomeAddition>\r\n" +
-"</DynamicConfiguration>";
+        private const string ExpectedXml = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<DynamicConfiguration xmlns:ctl=""http://schemas.catelproject.com"" xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"">
+  <KeyX ctl:type=""System.String"">Value X</KeyX>
+  <KeyY ctl:type=""System.String"">Value Y</KeyY>
+  <KeyZ.SomeAddition ctl:type=""System.String"">Value Z</KeyZ.SomeAddition>
+</DynamicConfiguration>";
 
         public class ComplexSetting : ModelBase
         {
@@ -47,7 +50,7 @@ namespace Catel.Tests.Configuration
             /// <summary>
             /// Register the FirstName property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
+            public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
 
             /// <summary>
             /// Gets or sets the property value.
@@ -61,7 +64,7 @@ namespace Catel.Tests.Configuration
             /// <summary>
             /// Register the MiddleName property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof(string), string.Empty);
+            public static readonly IPropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof(string), string.Empty);
 
             /// <summary>
             /// Gets or sets the property value.
@@ -75,7 +78,7 @@ namespace Catel.Tests.Configuration
             /// <summary>
             /// Register the LastName property so it is known in the class.
             /// </summary>
-            public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), string.Empty);
+            public static readonly IPropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), string.Empty);
         }
 
         [TestCase]
@@ -117,7 +120,7 @@ namespace Catel.Tests.Configuration
         {
             using (var memoryStream = new MemoryStream())
             {
-                using (var streamWriter = new StreamWriter(memoryStream))
+                using (var streamWriter = new StreamWriter(memoryStream, Encoding.UTF8))
                 {
                     streamWriter.Write(ExpectedXml);
                     streamWriter.Flush();
@@ -135,8 +138,8 @@ namespace Catel.Tests.Configuration
             }
         }
 
-        [TestCase, Explicit]
-        public void CorrectlySerializesConfiguration()
+        [Test, Explicit]
+        public async Task CorrectlySerializesConfiguration()
         {
             var dynamicConfiguration = new DynamicConfiguration();
             dynamicConfiguration.SetConfigurationValue("KeyX", "Value X");
@@ -149,7 +152,7 @@ namespace Catel.Tests.Configuration
 
                 var outputXml = memoryStream.GetUtf8String();
 
-                Assert.AreEqual(ExpectedXml, outputXml);
+                await Verify(outputXml);
             }
         }
 

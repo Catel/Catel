@@ -20,7 +20,7 @@
         /// <summary>
         /// Register the WarningProperty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData WarningPropertyProperty = RegisterProperty("WarningProperty", typeof(string), string.Empty);
+        public static readonly IPropertyData WarningPropertyProperty = RegisterProperty("WarningProperty", typeof(string), string.Empty);
 
         /// <summary>
         /// Gets or sets the error property.
@@ -34,7 +34,7 @@
         /// <summary>
         /// Register the ErrorProperty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ErrorPropertyProperty = RegisterProperty("ErrorProperty", typeof(string), string.Empty);
+        public static readonly IPropertyData ErrorPropertyProperty = RegisterProperty("ErrorProperty", typeof(string), string.Empty);
 
         /// <summary>
         /// Gets or sets the business rule error.
@@ -48,6 +48,6 @@
         /// <summary>
         /// Register the BusinessRuleError property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData BusinessRuleErrorProperty = RegisterProperty("BusinessRuleError", typeof(string), string.Empty);
+        public static readonly IPropertyData BusinessRuleErrorProperty = RegisterProperty("BusinessRuleError", typeof(string), string.Empty);
     }
 }

@@ -69,7 +69,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the FirstName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof (string), string.Empty);
+        public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof (string), string.Empty);
 
         /// <summary>
         /// Gets or sets the middle name.
@@ -83,7 +83,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the MiddleName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof (string), string.Empty);
+        public static readonly IPropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof (string), string.Empty);
 
         /// <summary>
         /// Gets or sets the last name.
@@ -97,7 +97,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the LastName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof (string), string.Empty);
+        public static readonly IPropertyData LastNameProperty = RegisterProperty("LastName", typeof (string), string.Empty);
 
         /// <summary>
         /// Gets a readonly property.
@@ -111,7 +111,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the MyReadOnlyProperty property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData MyReadOnlyPropertyProperty = RegisterProperty("MyReadOnlyProperty", typeof (object));
+        public static readonly IPropertyData MyReadOnlyPropertyProperty = RegisterProperty<object>("MyReadOnlyProperty");
 
         /// <summary>
         /// Gets or sets the contact info.
@@ -123,7 +123,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         }
 
         /// <summary>Register the Age property so it is known in the class.</summary>
-        public static readonly PropertyData AgeProperty = RegisterProperty<Person, uint>(model => model.Age);
+        public static readonly IPropertyData AgeProperty = RegisterProperty<Person, uint>(model => model.Age);
 
         public uint Age
         {
@@ -134,7 +134,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the ContactInfo property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ContactInfoProperty = RegisterProperty("ContactInfo", typeof (IContactInfo), () => new ContactInfo());
+        public static readonly IPropertyData ContactInfoProperty = RegisterProperty("ContactInfo", typeof (IContactInfo), () => new ContactInfo());
         #endregion
 
         #region Methods
@@ -208,7 +208,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the FirstName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData FirstNameProperty = RegisterProperty("FirstName", typeof (string), string.Empty);
+        public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof (string), string.Empty);
 
         /// <summary>
         /// Gets or sets the middle name.
@@ -222,7 +222,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the MiddleName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof (string), string.Empty);
+        public static readonly IPropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof (string), string.Empty);
 
         /// <summary>
         /// Gets or sets the last name.
@@ -235,7 +235,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         }
 
         /// <summary>Register the Age property so it is known in the class.</summary>
-        public static readonly PropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), string.Empty);
+        public static readonly IPropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), string.Empty);
 
         public uint Age
         {
@@ -246,7 +246,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the LastName property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData AgeProperty = RegisterProperty<PersonWithDataAnnotations, uint>(model => model.Age);
+        public static readonly IPropertyData AgeProperty = RegisterProperty<PersonWithDataAnnotations, uint>(model => model.Age);
 
         /// <summary>
         /// Gets or sets the contact info.
@@ -260,7 +260,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the ContactInfo property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ContactInfoProperty = RegisterProperty("ContactInfo", typeof (IContactInfo), () => new ContactInfo());
+        public static readonly IPropertyData ContactInfoProperty = RegisterProperty("ContactInfo", typeof (IContactInfo), () => new ContactInfo());
         #endregion
     }
 
@@ -298,7 +298,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the Street property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData StreetProperty = RegisterProperty("Street", typeof (string), string.Empty);
+        public static readonly IPropertyData StreetProperty = RegisterProperty("Street", typeof (string), string.Empty);
 
         /// <summary>
         /// Gets or sets the city.
@@ -312,7 +312,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the City property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData CityProperty = RegisterProperty("City", typeof (string), string.Empty);
+        public static readonly IPropertyData CityProperty = RegisterProperty("City", typeof (string), string.Empty);
 
         /// <summary>
         /// Gets or sets the email.
@@ -326,7 +326,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
         /// <summary>
         /// Register the Email property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData EmailProperty = RegisterProperty("Email", typeof (string), string.Empty);
+        public static readonly IPropertyData EmailProperty = RegisterProperty("Email", typeof (string), string.Empty);
         #endregion
 
         #region Methods

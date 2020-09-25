@@ -45,7 +45,7 @@
         /// <summary>
         ///   Register the ValueToValidate property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ValueToValidateProperty = RegisterProperty("ValueToValidate", typeof(string), ValueThatHasNoWarningsOrErrors);
+        public static readonly IPropertyData ValueToValidateProperty = RegisterProperty("ValueToValidate", typeof(string), ValueThatHasNoWarningsOrErrors);
 
         [Required(ErrorMessage = "Non-catel is required")]
         public string NonCatelPropertyWithAnnotations { get; set; }
@@ -66,7 +66,7 @@
         /// <summary>
         /// Register the ValueWithAnnotations property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ValueWithAnnotationsProperty = RegisterProperty("ValueWithAnnotations", typeof(string), "value");
+        public static readonly IPropertyData ValueWithAnnotationsProperty = RegisterProperty("ValueWithAnnotations", typeof(string), "value");
         #endregion
 
         #region Methods

@@ -70,7 +70,7 @@ namespace Catel.Windows.Input
         /// <summary>
         /// Register the Key property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData KeyProperty = RegisterProperty<InputGesture, Key>(o => o.Key, propertyChangedEventHandler: (o, e) => o.OnInputGesturePropertyChanged());
+        public static readonly IPropertyData KeyProperty = RegisterProperty<InputGesture, Key>(o => o.Key, propertyChangedEventHandler: (o, e) => o.OnInputGesturePropertyChanged());
 
         /// <summary>
         /// Gets the modifiers.
@@ -84,7 +84,7 @@ namespace Catel.Windows.Input
         /// <summary>
         /// Register the Modifiers property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ModifiersProperty = RegisterProperty<InputGesture, ModifierKeys>(o => o.Modifiers, propertyChangedEventHandler: (o, e) => o.OnInputGesturePropertyChanged());
+        public static readonly IPropertyData ModifiersProperty = RegisterProperty<InputGesture, ModifierKeys>(o => o.Modifiers, propertyChangedEventHandler: (o, e) => o.OnInputGesturePropertyChanged());
 
         /// <summary>
         /// Called whether <see cref="Modifiers"/> or <see cref="Key"/> properties changed.

@@ -57,7 +57,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(IdProperty, value); }
                 }
 
-                public static readonly PropertyData IdProperty = RegisterProperty<Country, Guid>(o => o.Id, Guid.NewGuid);
+                public static readonly IPropertyData IdProperty = RegisterProperty<Country, Guid>(o => o.Id, Guid.NewGuid);
 
                 [StringLength(256)]
                 public string IsoCode
@@ -66,7 +66,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(IsoCodeProperty, value); }
                 }
 
-                public static readonly PropertyData IsoCodeProperty = RegisterProperty<Country, string>(o => o.IsoCode);
+                public static readonly IPropertyData IsoCodeProperty = RegisterProperty<Country, string>(o => o.IsoCode);
 
                 [StringLength(400)]
                 public string Description
@@ -75,7 +75,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(DescriptionProperty, value); }
                 }
 
-                public static readonly PropertyData DescriptionProperty = RegisterProperty<Country, string>(o => o.Description);
+                public static readonly IPropertyData DescriptionProperty = RegisterProperty<Country, string>(o => o.Description);
 
                 public DateTime CreateDate
                 {
@@ -83,7 +83,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(CreateDateProperty, value); }
                 }
 
-                public static readonly PropertyData CreateDateProperty = RegisterProperty<Country, DateTime>(o => o.CreateDate);
+                public static readonly IPropertyData CreateDateProperty = RegisterProperty<Country, DateTime>(o => o.CreateDate);
 
                 public Guid CreateUserId
                 {
@@ -91,7 +91,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(CreateUserIdProperty, value); }
                 }
 
-                public static readonly PropertyData CreateUserIdProperty = RegisterProperty<Country, Guid>(o => o.CreateUserId);
+                public static readonly IPropertyData CreateUserIdProperty = RegisterProperty<Country, Guid>(o => o.CreateUserId);
 
                 public DateTime? DeleteDate
                 {
@@ -99,7 +99,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(DeleteDateProperty, value); }
                 }
 
-                public static readonly PropertyData DeleteDateProperty = RegisterProperty<Country, DateTime?>(o => o.DeleteDate);
+                public static readonly IPropertyData DeleteDateProperty = RegisterProperty<Country, DateTime?>(o => o.DeleteDate);
 
                 public Guid? DeleteUserId
                 {
@@ -107,7 +107,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(DeleteUserIdProperty, value); }
                 }
 
-                public static readonly PropertyData DeleteUserIdProperty = RegisterProperty<Country, Guid?>(o => o.DeleteUserId);
+                public static readonly IPropertyData DeleteUserIdProperty = RegisterProperty<Country, Guid?>(o => o.DeleteUserId);
 
                 public bool IsDeleted
                 {
@@ -115,7 +115,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(IsDeletedProperty, value); }
                 }
 
-                public static readonly PropertyData IsDeletedProperty = RegisterProperty<Country, bool>(o => o.IsDeleted);
+                public static readonly IPropertyData IsDeletedProperty = RegisterProperty<Country, bool>(o => o.IsDeleted);
 
                 public byte[] TimeStamp
                 {
@@ -123,7 +123,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(TimeStampProperty, value); }
                 }
 
-                public static readonly PropertyData TimeStampProperty = RegisterProperty<Country, byte[]>(o => o.TimeStamp);
+                public static readonly IPropertyData TimeStampProperty = RegisterProperty<Country, byte[]>(o => o.TimeStamp);
 
                 public DateTime UpdateDate
                 {
@@ -131,7 +131,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(UpdateDateProperty, value); }
                 }
 
-                public static readonly PropertyData UpdateDateProperty = RegisterProperty<Country, DateTime>(o => o.UpdateDate);
+                public static readonly IPropertyData UpdateDateProperty = RegisterProperty<Country, DateTime>(o => o.UpdateDate);
 
                 public Guid UpdateUserId
                 {
@@ -139,7 +139,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(UpdateUserIdProperty, value); }
                 }
 
-                public static readonly PropertyData UpdateUserIdProperty = RegisterProperty<Country, Guid>(o => o.UpdateUserId);
+                public static readonly IPropertyData UpdateUserIdProperty = RegisterProperty<Country, Guid>(o => o.UpdateUserId);
 
                 private static IEnumerable<Type> countryTypes;
 
@@ -238,7 +238,7 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 #region Constants and Fields
 
-                public static readonly PropertyData ItemsProperty = RegisterProperty
+                public static readonly IPropertyData ItemsProperty = RegisterProperty
                     <ModelObservableCollectionBase<T>, FastObservableCollection<T>>(
                         // ReSharper restore StaticFieldInGenericType
                         o => o.Items, () => new FastObservableCollection<T>());
@@ -519,7 +519,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(NameProperty, value); }
                 }
 
-                public static readonly PropertyData NameProperty = RegisterProperty<Floor, string>(o => o.Name);
+                public static readonly IPropertyData NameProperty = RegisterProperty<Floor, string>(o => o.Name);
             }
 
             public interface IFloorCollection : IObservableCollection<Floor>
@@ -557,7 +557,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(NameProperty, value); }
                 }
 
-                public static readonly PropertyData NameProperty = RegisterProperty<Building, string>(o => o.Name);
+                public static readonly IPropertyData NameProperty = RegisterProperty<Building, string>(o => o.Name);
 
 
                 public IFloorCollection Floors
@@ -566,7 +566,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(FloorsProperty, value); }
                 }
 
-                public static readonly PropertyData FloorsProperty = RegisterProperty<Building, IFloorCollection>(o => o.Floors, () => (IFloorCollection)new FloorCollection());
+                public static readonly IPropertyData FloorsProperty = RegisterProperty<Building, IFloorCollection>(o => o.Floors, () => (IFloorCollection)new FloorCollection());
             }
 
             [Serializable]
@@ -582,7 +582,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(NameProperty, value); }
                 }
 
-                public static readonly PropertyData NameProperty = RegisterProperty<BuildingAsCollection, string>(o => o.Name);
+                public static readonly IPropertyData NameProperty = RegisterProperty<BuildingAsCollection, string>(o => o.Name);
 
 
                 public IFloorCollection Floors
@@ -591,7 +591,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { this.SetValue(FloorsProperty, value); }
                 }
 
-                public static readonly PropertyData FloorsProperty = RegisterProperty<BuildingAsCollection, IFloorCollection>(o => o.Floors, () => (IFloorCollection)new FloorCollectionAsCollection());
+                public static readonly IPropertyData FloorsProperty = RegisterProperty<BuildingAsCollection, IFloorCollection>(o => o.Floors, () => (IFloorCollection)new FloorCollectionAsCollection());
             }
 
             [Serializable]

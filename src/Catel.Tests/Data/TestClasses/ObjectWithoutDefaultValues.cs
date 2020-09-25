@@ -1,4 +1,4 @@
-namespace Catel.Tests.Data
+﻿namespace Catel.Tests.Data
 {
     using Catel.Data;
 
@@ -16,7 +16,7 @@ namespace Catel.Tests.Data
         /// <summary>
         ///   Register the ValueType property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ValueTypeProperty = RegisterProperty("ValueType", typeof(int), 1);
+        public static readonly IPropertyData ValueTypeProperty = RegisterProperty("ValueType", typeof(int), 1);
 
         /// <summary>
         ///   Gets or sets a value type without default value.
@@ -30,7 +30,7 @@ namespace Catel.Tests.Data
         /// <summary>
         ///   Register the ValueTypeWithoutDefaultValue property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ValueTypeWithoutDefaultValueProperty = RegisterProperty("ValueTypeWithoutDefaultValue", typeof(int));
+        public static readonly IPropertyData ValueTypeWithoutDefaultValueProperty = RegisterProperty<int>("ValueTypeWithoutDefaultValue");
 
         /// <summary>
         ///   Gets or sets a reference type.
@@ -44,7 +44,7 @@ namespace Catel.Tests.Data
         /// <summary>
         ///   Register the ReferenceType property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ReferenceTypeProperty = RegisterProperty("ReferenceType", typeof(object), new object());
+        public static readonly IPropertyData ReferenceTypeProperty = RegisterProperty<object>("ReferenceType", new object());
 
         /// <summary>
         ///   Gets or sets a reference type without default value.
@@ -58,6 +58,6 @@ namespace Catel.Tests.Data
         /// <summary>
         ///   Register the ReferenceTypeWithoutDefaultValue property so it is known in the class.
         /// </summary>
-        public static readonly PropertyData ReferenceTypeWithoutDefaultValueProperty = RegisterProperty("ReferenceTypeWithoutDefaultValue", typeof(object));
+        public static readonly IPropertyData ReferenceTypeWithoutDefaultValueProperty = RegisterProperty<object>("ReferenceTypeWithoutDefaultValue");
     }
 }

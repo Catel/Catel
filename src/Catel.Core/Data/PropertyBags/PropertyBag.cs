@@ -8,9 +8,7 @@ namespace Catel.Data
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Linq;
-    using Catel.Reflection;
 
     /// <summary>
     /// Class that is able to manage all properties of a specific object in a thread-safe manner.
