@@ -71,7 +71,7 @@ namespace Catel.MVVM
                 serviceLocator.RegisterTypeIfNotYetRegistered<ISelectDirectoryService, SelectDirectoryService>();
 #endif
 
-                serviceLocator.RegisterTypeIfNotYetRegistered<IPleaseWaitService, PleaseWaitService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IBusyIndicatorService, BusyIndicatorService>();
 
 #if NET || NETCORE || UWP
                 serviceLocator.RegisterTypeIfNotYetRegistered<IProcessService, ProcessService>();

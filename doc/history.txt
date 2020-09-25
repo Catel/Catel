@@ -34,6 +34,7 @@ Added/fixed
     and SupportValidation for Model attributes
 (+) #1537 Add ToCast<T> extension methods to cast value types to a generic without boxing
 (+) #1538 Clean up BoxingCache every 5 minutes
+(*) #691  Rename IPleaseWaitService to IBusyIndicatorService
 (*) #940  Investigate memory usage and try to minimize allocations
 (*) #1191 Change ProcessCompletedCallback to include the initial context and exit code
 (*) #1246 Use Microsoft.Xaml.Behaviors.Wpf as dependency for WPF projects

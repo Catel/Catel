@@ -1,14 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PleaseWaitService.android.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if IOS
+﻿#if ANDROID
 
 namespace Catel.Services
 {
-    public partial class PleaseWaitService
+    public partial class BusyIndicatorService
     {
         partial void SetStatus(string status)
         {

@@ -1,45 +1,61 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IPleaseWaitService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
+    using System.Threading.Tasks;
 
     /// <summary>
-    /// Please wait work delegate.
+    /// Busy indicator work delegate.
     /// </summary>
-    public delegate void PleaseWaitWorkDelegate();
+    public delegate void BusyIndicatorWorkDelegate();
 
     /// <summary>
-    /// Interface for the Please Wait service.
+    /// Busy indicator async work delegate.
     /// </summary>
-    public interface IPleaseWaitService
+    public delegate Task BusyIndicatorWorkAsyncDelegate();
+
+    /// <summary>
+    /// Interface for the busy indicator service.
+    /// </summary>
+    public interface IBusyIndicatorService
     {
+        /// <summary>
+        /// Gets the show counter.
+        /// <para />
+        /// This property can be used to get the current show counter if the busy indicator window should be hidden for a moment.
+        /// </summary>
+        /// <value>The show counter.</value>
+        int ShowCounter { get; }
+        
         #region Methods
         /// <summary>
-        /// Shows the please wait window with the specified status text.
+        /// Shows the busy indicator window with the specified status text.
         /// </summary>
-        /// <param name="status">The status. When the string is <c>null</c> or empty, the default please wait text will be used.</param>
+        /// <param name="status">The status. When the string is <c>null</c> or empty, the default busy indicator text will be used.</param>
         /// <remarks>
         /// When this method is used, the <see cref="Hide"/> method must be called to hide the window again.
         /// </remarks>
         void Show(string status = "");
 
         /// <summary>
-        /// Shows the please wait window with the specified status text and executes the work delegate (in a background thread). When the work 
-        /// is finished, the please wait window will be automatically closed.
+        /// Shows the busy indicator window with the specified status text and executes the work delegate (in a background thread). When the work 
+        /// is finished, the busy indicator window will be automatically closed.
         /// </summary>
         /// <param name="workDelegate">The work delegate.</param>
-        /// <param name="status">The status. When the string is <c>null</c> or empty, the default please wait text will be used.</param>
-        void Show(PleaseWaitWorkDelegate workDelegate, string status = "");
+        /// <param name="status">The status. When the string is <c>null</c> or empty, the default busy indicator text will be used.</param>
+        void Show(BusyIndicatorWorkDelegate workDelegate, string status = "");
+
+        /// <summary>
+        /// Shows the busy indicator window with the specified status text and executes the work delegate (in a background thread). When the work 
+        /// is finished, the busy indicator window will be automatically closed.
+        /// </summary>
+        /// <param name="workDelegate">The work delegate.</param>
+        /// <param name="status">The status. When the string is <c>null</c> or empty, the default busy indicator text will be used.</param>
+        void Show(BusyIndicatorWorkAsyncDelegate workDelegate, string status = "");
 
         /// <summary>
         /// Updates the status text.
         /// </summary>
-        /// <param name="status">The status. When the string is <c>null</c> or empty, the default please wait text will be used.</param>
+        /// <param name="status">The status. When the string is <c>null</c> or empty, the default busy indicator text will be used.</param>
         void UpdateStatus(string status);
 
         /// <summary>
@@ -58,15 +74,15 @@ namespace Catel.Services
         void UpdateStatus(int currentItem, int totalItems, string statusFormat = "");
 
         /// <summary>
-        /// Hides this please wait window.
+        /// Hides this busy indicator window.
         /// </summary>
         void Hide();
 
         /// <summary>
-        /// Increases the number of clients that show the please wait window. The implementing class
+        /// Increases the number of clients that show the busy indicator window. The implementing class
         /// is responsible for holding a counter internally which a call to this method will increase.
         /// <para/>
-        /// As long as the internal counter is not zero (0), the please wait window will stay visible. To
+        /// As long as the internal counter is not zero (0), the busy indicator window will stay visible. To
         /// decrease the counter, make a call to <see cref="Pop"/>.
         /// <para/>
         /// A call to <see cref="Show(string)"/> or one of its overloads will not increase the internal counter. A
@@ -76,10 +92,10 @@ namespace Catel.Services
         void Push(string status = "");
 
         /// <summary>
-        /// Decreases the number of clients that show the please wait window. The implementing class 
+        /// Decreases the number of clients that show the busy indicator window. The implementing class 
         /// is responsible for holding a counter internally which a call to this method will decrease.
         /// <para />
-        /// As long as the internal counter is not zero (0), the please wait window will stay visible. To
+        /// As long as the internal counter is not zero (0), the busy indicator window will stay visible. To
         /// increase the counter, make a call to <see cref="Pop"/>.
         /// <para />
         /// A call to <see cref="Show(string)"/> or one of its overloads will not increase the internal counter. A
@@ -87,13 +103,5 @@ namespace Catel.Services
         /// </summary>
         void Pop();
         #endregion
-
-        /// <summary>
-        /// Gets the show counter.
-        /// <para />
-        /// This property can be used to get the current show counter if the please wait window should be hidden for a moment.
-        /// </summary>
-        /// <value>The show counter.</value>
-        int ShowCounter { get; }
     }
 }

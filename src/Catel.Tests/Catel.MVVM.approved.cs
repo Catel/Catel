@@ -1742,6 +1742,21 @@ namespace Catel.Services
         public AutoCompletionService(Catel.Data.IObjectAdapter objectAdapter) { }
         public virtual string[] GetAutoCompleteValues(string property, string filter, System.Collections.IEnumerable source) { }
     }
+    public class BusyIndicatorService : Catel.Services.IBusyIndicatorService
+    {
+        public BusyIndicatorService(Catel.Services.ILanguageService languageService, Catel.Services.IDispatcherService dispatcherService) { }
+        public int ShowCounter { get; }
+        public void Hide() { }
+        public void Pop() { }
+        public void Push(string status = "") { }
+        public void Show(string status = "") { }
+        public void Show(Catel.Services.BusyIndicatorWorkAsyncDelegate workDelegate, string status = "") { }
+        public void Show(Catel.Services.BusyIndicatorWorkDelegate workDelegate, string status = "") { }
+        public void UpdateStatus(string status) { }
+        public void UpdateStatus(int currentItem, int totalItems, string statusFormat = "") { }
+    }
+    public delegate System.Threading.Tasks.Task BusyIndicatorWorkAsyncDelegate();
+    public delegate void BusyIndicatorWorkDelegate();
     public class ContentReadyEventArgs : System.EventArgs
     {
         public ContentReadyEventArgs(System.IO.Stream imageStream) { }
@@ -1823,6 +1838,23 @@ namespace Catel.Services
     {
         string[] GetAutoCompleteValues(string property, string filter, System.Collections.IEnumerable source);
     }
+    public interface IBusyIndicatorService
+    {
+        int ShowCounter { get; }
+        void Hide();
+        void Pop();
+        void Push(string status = "");
+        void Show(string status = "");
+        void Show(Catel.Services.BusyIndicatorWorkAsyncDelegate workDelegate, string status = "");
+        void Show(Catel.Services.BusyIndicatorWorkDelegate workDelegate, string status = "");
+        void UpdateStatus(string status);
+        void UpdateStatus(int currentItem, int totalItems, string statusFormat = "");
+    }
+    public static class IBusyIndicatorServiceExtensions
+    {
+        public static System.IDisposable HideTemporarily(this Catel.Services.IBusyIndicatorService busyIndicatorService) { }
+        public static System.IDisposable PushInScope(this Catel.Services.IBusyIndicatorService busyIndicatorService, string status = "") { }
+    }
     public interface IDispatcherService
     {
         void BeginInvoke(System.Action action, bool onlyBeginInvokeWhenNoAccess = true);
@@ -1882,22 +1914,6 @@ namespace Catel.Services
     public interface IOpenFileService : Catel.Services.IFileSupport
     {
         System.Threading.Tasks.Task<Catel.Services.DetermineOpenFileResult> DetermineFileAsync(Catel.Services.DetermineOpenFileContext context);
-    }
-    public interface IPleaseWaitService
-    {
-        int ShowCounter { get; }
-        void Hide();
-        void Pop();
-        void Push(string status = "");
-        void Show(string status = "");
-        void Show(Catel.Services.PleaseWaitWorkDelegate workDelegate, string status = "");
-        void UpdateStatus(string status);
-        void UpdateStatus(int currentItem, int totalItems, string statusFormat = "");
-    }
-    public static class IPleaseWaitServiceExtensions
-    {
-        public static System.IDisposable HideTemporarily(this Catel.Services.IPleaseWaitService pleaseWaitService) { }
-        public static System.IDisposable PushInScope(this Catel.Services.IPleaseWaitService pleaseWaitService, string status = "") { }
     }
     public interface IProcessService
     {
@@ -2080,19 +2096,6 @@ namespace Catel.Services
         public PageNotRegisteredException(string name) { }
         public string Name { get; }
     }
-    public class PleaseWaitService : Catel.Services.IPleaseWaitService
-    {
-        public PleaseWaitService(Catel.Services.ILanguageService languageService, Catel.Services.IDispatcherService dispatcherService) { }
-        public int ShowCounter { get; }
-        public void Hide() { }
-        public void Pop() { }
-        public void Push(string status = "") { }
-        public void Show(string status = "") { }
-        public void Show(Catel.Services.PleaseWaitWorkDelegate workDelegate, string status = "") { }
-        public void UpdateStatus(string status) { }
-        public void UpdateStatus(int currentItem, int totalItems, string statusFormat = "") { }
-    }
-    public delegate void PleaseWaitWorkDelegate();
     public delegate void ProcessCompletedDelegate(Catel.Services.ProcessContext processorContext, int exitCode);
     public class ProcessContext
     {

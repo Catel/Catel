@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PleaseWaitService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
+﻿#if NET || NETCORE
 
 namespace Catel.Services
 {
@@ -12,7 +6,7 @@ namespace Catel.Services
     using Catel.Windows;
     using Logging;
 
-    public partial class PleaseWaitService
+    public partial class BusyIndicatorService
     {
         private Cursor _previousCursor;
 

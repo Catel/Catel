@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PleaseWaitService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if UWP
+﻿#if UWP
 
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
 
@@ -20,16 +14,16 @@ namespace Catel.Services
     using global::Windows.UI.Xaml.Controls.Primitives;
     using global::Windows.UI.Xaml.Media;
 
-    public partial class PleaseWaitService
+    public partial class BusyIndicatorService
     {
-        #region Fields
+#region Fields
         private FrameworkElement _busyIndicator;
         private Popup _containerPopup;
         private Grid _grid;
         private TextBlock _statusTextBlock;
-        #endregion
+#endregion
 
-        #region IPleaseWaitService Members
+#region IPleaseWaitService Members
         partial void SetStatus(string status)
         {
 #pragma warning disable 4014
@@ -158,7 +152,7 @@ namespace Catel.Services
         {
             return new ProgressBar();
         }
-        #endregion
+#endregion
     }
 }
 
