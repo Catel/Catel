@@ -9,7 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{E0737FB3-1C6
 	ProjectSection(SolutionItems) = preProject
 		..\doc\catel rules.txt = ..\doc\catel rules.txt
 		..\doc\easy deployment.txt = ..\doc\easy deployment.txt
-		..\doc\faq.txt = ..\doc\faq.txt
 		..\doc\history.txt = ..\doc\history.txt
 		..\doc\readme.txt = ..\doc\readme.txt
 		..\doc\release steps.txt = ..\doc\release steps.txt
@@ -189,8 +188,8 @@ Global
 		{C8B3FAB1-53C1-468F-A42D-B1442045017C} = {8C3710FE-B6C7-4261-81B6-897F4B286B2B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35
 		SolutionGuid = {B4C37A2D-FBE4-48F0-9452-85EB01593F6C}
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.0\lib\NET35;..\lib\Unity.2.1.505.2\lib\NET35
 	EndGlobalSection
 	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
 		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}

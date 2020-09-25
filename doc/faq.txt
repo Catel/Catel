@@ -1,4 +1,0 @@
-Catel FAQ
-=========
-
-The FAQ can be found at http://www.catelproject.com
