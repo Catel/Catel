@@ -52,6 +52,7 @@ Added/fixed
 (-) #1653 Remove IoC configuration sections
 (-) #1654 Remove AdvancedPropertyChangedEventArgs to improve performance and decrease memory allocations
 (-) #1655 Remove ExceptionTester
+(-) #1661 Remove ActionTask, TaskBase, ProgressNotifyableViewModel
 
 Platform support changes
 ========================

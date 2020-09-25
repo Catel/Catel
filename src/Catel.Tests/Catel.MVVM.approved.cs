@@ -602,17 +602,6 @@ namespace Catel.MVVM
         System.Collections.Generic.List<string> NamingConventions { get; }
         void ClearCache();
     }
-    public interface IProgressNotifyableViewModel : Catel.Data.IValidatable, Catel.MVVM.IViewModel, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged
-    {
-        string DetailedMessage { get; }
-        int Percentage { get; }
-        Catel.MVVM.Tasks.ITask Task { get; }
-        bool TaskIsIndeterminate { get; }
-        string TaskMessage { get; }
-        string TaskName { get; }
-        int TaskPercentage { get; }
-        void UpdateStatus(int currentItem, int totalItems, Catel.MVVM.Tasks.ITask task);
-    }
     public interface IRelationalViewModel : Catel.Data.IValidatable, Catel.MVVM.IViewModel, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged
     {
         Catel.MVVM.IViewModel ParentViewModel { get; }
@@ -780,31 +769,6 @@ namespace Catel.MVVM
         public Catel.Services.ILanguageService LanguageService { get; set; }
         protected override object Convert(object value, System.Type targetType, object parameter) { }
         protected string GetDisplayName(Catel.ComponentModel.DisplayNameAttribute attribute) { }
-    }
-    public class ProgressNotifyableViewModel : Catel.MVVM.ViewModelBase, Catel.Data.IValidatable, Catel.MVVM.IProgressNotifyableViewModel, Catel.MVVM.IViewModel, System.ComponentModel.IDataErrorInfo, System.ComponentModel.IDataWarningInfo, System.ComponentModel.INotifyDataErrorInfo, System.ComponentModel.INotifyDataWarningInfo, System.ComponentModel.INotifyPropertyChanged
-    {
-        public static readonly Catel.Data.PropertyData DetailedMessageProperty;
-        public static readonly Catel.Data.PropertyData TaskIsIndeterminateProperty;
-        public static readonly Catel.Data.PropertyData TaskMessageProperty;
-        public static readonly Catel.Data.PropertyData TaskNameProperty;
-        public static readonly Catel.Data.PropertyData TaskPercentageProperty;
-        public static readonly Catel.Data.PropertyData TaskProperty;
-        public ProgressNotifyableViewModel() { }
-        public ProgressNotifyableViewModel(bool supportIEditableObject, bool ignoreMultipleModelsWarning, bool skipViewModelAttributesInitialization) { }
-        public ProgressNotifyableViewModel(Catel.IoC.IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false) { }
-        public string DetailedMessage { get; }
-        public int Percentage { get; }
-        [Catel.MVVM.Model]
-        public Catel.MVVM.Tasks.ITask Task { get; }
-        [Catel.MVVM.ViewModelToModel("Task", "IsIndeterminate")]
-        public bool TaskIsIndeterminate { get; }
-        [Catel.MVVM.ViewModelToModel("Task", "Message")]
-        public string TaskMessage { get; }
-        [Catel.MVVM.ViewModelToModel("Task", "Name")]
-        public string TaskName { get; }
-        [Catel.MVVM.ViewModelToModel("Task", "Percentage")]
-        public int TaskPercentage { get; }
-        public void UpdateStatus(int currentItem, int totalItems, Catel.MVVM.Tasks.ITask task) { }
     }
     public class ProgressiveTaskCommand<TProgress> : Catel.MVVM.TaskCommand<object, object, TProgress>
         where TProgress : Catel.MVVM.ITaskProgressReport
@@ -1584,47 +1548,6 @@ namespace Catel.MVVM.Providers
         public void OnTargetWindowClosed(object sender, System.EventArgs e) { }
         public override System.Threading.Tasks.Task OnViewModelClosedAsync(object sender, Catel.MVVM.ViewModelClosedEventArgs e) { }
         protected override void SetDataContext(object newDataContext) { }
-    }
-}
-namespace Catel.MVVM.Tasks
-{
-    public class ActionTask : Catel.MVVM.Tasks.TaskBase
-    {
-        public ActionTask(string name, System.Action<Catel.MVVM.Tasks.ITaskProgressTracker> action) { }
-        public override void Execute() { }
-    }
-    public interface ITask
-    {
-        bool AutomaticallyDispatch { get; set; }
-        bool IsIndeterminate { get; }
-        string Message { get; }
-        string Name { get; }
-        int Percentage { get; }
-        event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        void Execute();
-        void Rollback();
-    }
-    public interface ITaskProgressTracker
-    {
-        void UpdateStatus(string message);
-        void UpdateStatus(string message, bool indeterminate);
-        void UpdateStatus(string message, int percentage);
-    }
-    public abstract class TaskBase : Catel.Data.ModelBase, Catel.MVVM.Tasks.ITask
-    {
-        public static readonly Catel.Data.PropertyData AutomaticallyDispatchProperty;
-        public static readonly Catel.Data.PropertyData IsIndeterminatedProperty;
-        public static readonly Catel.Data.PropertyData MessageProperty;
-        public static readonly Catel.Data.PropertyData NameProperty;
-        public static readonly Catel.Data.PropertyData PercentageProperty;
-        protected TaskBase(string name) { }
-        public bool AutomaticallyDispatch { get; set; }
-        public bool IsIndeterminate { get; set; }
-        public string Message { get; set; }
-        public string Name { get; }
-        public int Percentage { get; set; }
-        public abstract void Execute();
-        public virtual void Rollback() { }
     }
 }
 namespace Catel.MVVM.Views
