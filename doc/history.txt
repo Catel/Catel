@@ -57,6 +57,7 @@ Added/fixed
 (-) #1654 Remove AdvancedPropertyChangedEventArgs to improve performance and decrease memory allocations
 (-) #1655 Remove ExceptionTester
 (-) #1661 Remove ActionTask, TaskBase, ProgressNotifyableViewModel
+(-) #1662 Remove NavigationViewModelBase
 
 Platform support changes
 ========================

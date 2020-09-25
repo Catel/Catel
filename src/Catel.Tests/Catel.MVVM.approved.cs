@@ -749,16 +749,6 @@ namespace Catel.MVVM
     {
         public static void Initialize() { }
     }
-    public abstract class NavigationViewModelBase : Catel.MVVM.ViewModelBase
-    {
-        protected NavigationViewModelBase(bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false) { }
-        protected NavigationViewModelBase(Catel.IoC.IServiceLocator serviceLocator, bool supportIEditableObject = true, bool ignoreMultipleModelsWarning = false, bool skipViewModelAttributesInitialization = false) { }
-        public System.Windows.Input.ICommand Back { get; }
-        public System.Windows.Input.ICommand Forward { get; }
-        public Catel.Services.INavigationService NavigationService { get; }
-        protected virtual bool OnBackCanExecute() { }
-        protected virtual bool OnForwardCanExecute() { }
-    }
     public static class ObjectExtensions
     {
         public static bool IsSentinelBindingObject(this object dataContext) { }
