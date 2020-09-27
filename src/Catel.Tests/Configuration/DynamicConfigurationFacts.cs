@@ -35,7 +35,7 @@ namespace Catel.Tests.Configuration
             public ComplexSetting()
                 : base()
             {
-                
+
             }
 
             /// <summary>
@@ -146,14 +146,11 @@ namespace Catel.Tests.Configuration
             dynamicConfiguration.SetConfigurationValue("KeyY", "Value Y");
             dynamicConfiguration.SetConfigurationValue("KeyZ.SomeAddition", "Value Z");
 
-            using (var memoryStream = new MemoryStream())
-            {
-                dynamicConfiguration.SaveAsXml(memoryStream);
-
-                var outputXml = memoryStream.GetUtf8String();
-
-                await Verify(outputXml);
-            }
+            await using var memoryStream = new MemoryStream();
+            dynamicConfiguration.SaveAsXml(memoryStream);
+            memoryStream.Position = 0;
+            using var reader = new StreamReader(memoryStream);
+            await Verify(reader.ReadToEndAsync());
         }
 
         [TestCase]
