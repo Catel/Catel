@@ -152,7 +152,7 @@ namespace Catel.Tests.Configuration
 
                 var outputXml = memoryStream.GetUtf8String();
 
-                await Verify(outputXml);
+                await Verify(outputXml.Substring(1));
             }
         }
 
