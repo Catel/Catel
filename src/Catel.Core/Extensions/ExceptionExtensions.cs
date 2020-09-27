@@ -57,28 +57,14 @@ namespace Catel
         /// <param name="exception">The exception.</param>
         /// <returns>Lowest inner exception.</returns>
         ///<exception cref="ArgumentNullException">The <param ref="exception" /> is <c>null</c>.</exception>
+        [ObsoleteEx(
+            ReplacementTypeOrMember = nameof(Exception.GetBaseException),
+            RemoveInVersion = "6.0")]
         public static Exception GetLowestInnerException(this Exception exception)
         {
             Argument.IsNotNull("exception", exception);
 
-            if (ObjectHelper.IsNull(exception.InnerException))
-            {
-                return exception;
-            }
-
-            var innerException = exception.InnerException;
-
-            do
-            {
-                if (!ObjectHelper.IsNull(innerException.InnerException))
-                {
-                    innerException = innerException.InnerException;
-                }
-                else
-                {
-                    return innerException;
-                }
-            } while (true);
+            return exception.GetBaseException();
         }
 
         /// <summary>
