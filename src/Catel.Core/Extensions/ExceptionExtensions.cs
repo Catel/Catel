@@ -52,36 +52,6 @@ namespace Catel
 
         #region Methods
         /// <summary>
-        /// Gets the lowest inner exception of specified exception.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        /// <returns>Lowest inner exception.</returns>
-        ///<exception cref="ArgumentNullException">The <param ref="exception" /> is <c>null</c>.</exception>
-        public static Exception GetLowestInnerException(this Exception exception)
-        {
-            Argument.IsNotNull("exception", exception);
-
-            if (ObjectHelper.IsNull(exception.InnerException))
-            {
-                return exception;
-            }
-
-            var innerException = exception.InnerException;
-
-            do
-            {
-                if (!ObjectHelper.IsNull(innerException.InnerException))
-                {
-                    innerException = innerException.InnerException;
-                }
-                else
-                {
-                    return innerException;
-                }
-            } while (true);
-        }
-
-        /// <summary>
         /// Flattens the specified exception and inner exception data.
         /// </summary>
         /// <param name="exception">The exception.</param>
