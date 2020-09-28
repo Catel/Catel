@@ -1,18 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IDispatcherServiceExtensions.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Threading.Tasks;
-
-#if NET || NETCORE
-    using Catel.Windows.Threading;
-#endif
 
     /// <summary>
     /// Extension methods for the <see cref="IDispatcherService"/>.

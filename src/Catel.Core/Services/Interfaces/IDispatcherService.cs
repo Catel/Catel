@@ -1,29 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IDispatcherService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Threading;
     using System.Threading.Tasks;
-
-#if !XAMARIN && !XAMARIN_FORMS
-#if UWP
-    using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
-#else
-    using System.Windows.Threading;
-#endif
-#endif
 
     /// <summary>
     /// Service that allows the retrieval of the UI dispatcher.
     /// </summary>
     public interface IDispatcherService
     {
-#if NET || NETCORE || UWP
         /// <summary>
         /// Executes the specified delegate asynchronously with the specified arguments on the thread that the Dispatcher was created on.
         /// </summary>
@@ -78,7 +63,6 @@ namespace Catel.Services
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The task representing the asynchronous operation with the returning value.</returns>
         Task<T> InvokeTaskAsync<T>(Func<CancellationToken, Task<T>> funcAsync, CancellationToken cancellationToken);
-#endif
 
         /// <summary>
         /// Executes the specified action with the specified arguments synchronously on the thread the Dispatcher is associated with.

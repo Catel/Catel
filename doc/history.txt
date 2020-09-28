@@ -43,6 +43,7 @@ Added/fixed
 (*) #1493 Replace PropertyData by IPropertyData interface to allow generic implementations for improved 
     memory management
 (*) #1494 Improve non-generic ModelBase.RegisterProperty methods
+(*) #1507 Move Catel.MVVM collections to Catel.Core collections
 (*) #1536 Create T4 template to generate logging extensions with optimized memory usage
 (-) #1035 Remove services that are used less-frequently (AccelerometerService, CameraService, 
     LocationService, SchedulerService, VibrateService, ViewExportService)

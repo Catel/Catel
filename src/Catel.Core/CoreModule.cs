@@ -37,6 +37,7 @@ namespace Catel
             serviceLocator.RegisterType<IAppDataService, AppDataService>();
             serviceLocator.RegisterInstance<IExceptionService>(ExceptionService.Default);
             serviceLocator.RegisterInstance<IMessageMediator>(MessageMediator.Default);
+            serviceLocator.RegisterType<IDispatcherService, ShimDispatcherService>();
 
             serviceLocator.RegisterType<IValidatorProvider, AttributeValidatorProvider>();
             serviceLocator.RegisterType<IRegistrationConventionHandler, RegistrationConventionHandler>();
