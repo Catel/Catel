@@ -208,7 +208,6 @@ namespace Catel
             where TException : System.Exception { }
         public static string Flatten(this System.Exception exception, string message = "", bool includeStackTrace = false) { }
         public static System.Collections.Generic.IEnumerable<System.Exception> GetAllInnerExceptions(this System.Exception exception) { }
-        public static System.Exception GetLowestInnerException(this System.Exception exception) { }
         public static bool IsCritical(this System.Exception ex) { }
         public static System.Xml.Linq.XDocument ToXml(this System.Exception exception) { }
     }
