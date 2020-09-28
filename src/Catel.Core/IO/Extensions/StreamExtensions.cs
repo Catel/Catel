@@ -9,6 +9,7 @@ namespace Catel.IO
     using System;
     using System.IO;
     using System.Text;
+    using System.Threading.Tasks;
     using Collections;
 
     /// <summary>
@@ -62,8 +63,10 @@ namespace Catel.IO
             Argument.IsNotNull("stream", stream);
             Argument.IsNotNull("encoding", encoding);
 
-            var data = stream.ToByteArray();
-            return encoding.GetString(data, 0, data.Length);
+            stream.Position = 0;
+
+            using var reader = new StreamReader(stream, encoding);
+            return reader.ReadToEnd();
         }
     }
 }

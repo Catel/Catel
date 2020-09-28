@@ -208,7 +208,6 @@ namespace Catel
             where TException : System.Exception { }
         public static string Flatten(this System.Exception exception, string message = "", bool includeStackTrace = false) { }
         public static System.Collections.Generic.IEnumerable<System.Exception> GetAllInnerExceptions(this System.Exception exception) { }
-        public static System.Exception GetLowestInnerException(this System.Exception exception) { }
         public static bool IsCritical(this System.Exception ex) { }
         public static System.Xml.Linq.XDocument ToXml(this System.Exception exception) { }
     }
@@ -1295,7 +1294,7 @@ namespace Catel.Data
         protected static object GetObjectValue<TValue>(TValue value) { }
         protected static bool IsPropertyRegistered(System.Type type, string name) { }
         public static Catel.Data.IPropertyData RegisterProperty(string name, System.Type type, System.Func<object> createDefaultValue, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true, bool isModelBaseProperty = false) { }
-        public static Catel.Data.IPropertyData RegisterProperty(string name, System.Type type, object defaultValue, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true, bool isModelBaseProperty = false) { }
+        public static Catel.Data.IPropertyData RegisterProperty(string name, System.Type type, object defaultValue = null, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true, bool isModelBaseProperty = false) { }
         public static Catel.Data.IPropertyData RegisterProperty<TValue>(string name, System.Func<TValue> createDefaultValue = null, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
         public static Catel.Data.IPropertyData RegisterProperty<TValue>(string name, TValue defaultValue, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
         public static Catel.Data.IPropertyData RegisterProperty<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, System.Func<TValue> createDefaultValue = null, System.Action<TModel, System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }

@@ -145,7 +145,7 @@ namespace Catel.Tests.ExceptionHandling
                 var argumentNullException = new ArgumentNullException("", formatException);
                 var exception = new Exception("", argumentNullException);
 
-                var lowsetException = exception.GetLowestInnerException();
+                var lowsetException = exception.GetBaseException();
 
                 Assert.IsNotNull(lowsetException);
                 Assert.IsInstanceOf(typeof(FormatException), lowsetException);
@@ -159,7 +159,7 @@ namespace Catel.Tests.ExceptionHandling
             {
                 var exception = new Exception();
 
-                var lowsetException = exception.GetLowestInnerException();
+                var lowsetException = exception.GetBaseException();
 
                 Assert.IsNotNull(lowsetException);
 

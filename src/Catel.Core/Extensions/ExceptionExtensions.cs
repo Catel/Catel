@@ -52,22 +52,6 @@ namespace Catel
 
         #region Methods
         /// <summary>
-        /// Gets the lowest inner exception of specified exception.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        /// <returns>Lowest inner exception.</returns>
-        ///<exception cref="ArgumentNullException">The <param ref="exception" /> is <c>null</c>.</exception>
-        [ObsoleteEx(
-            ReplacementTypeOrMember = nameof(Exception.GetBaseException),
-            RemoveInVersion = "6.0")]
-        public static Exception GetLowestInnerException(this Exception exception)
-        {
-            Argument.IsNotNull("exception", exception);
-
-            return exception.GetBaseException();
-        }
-
-        /// <summary>
         /// Flattens the specified exception and inner exception data.
         /// </summary>
         /// <param name="exception">The exception.</param>
