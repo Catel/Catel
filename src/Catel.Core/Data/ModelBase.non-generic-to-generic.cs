@@ -34,7 +34,7 @@ namespace Catel.Data
         /// <see cref="PropertyData"/> containing the property information.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static IPropertyData RegisterProperty(string name, Type type, object defaultValue,
+        public static IPropertyData RegisterProperty(string name, Type type, object defaultValue = null,
             EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true,
             bool includeInBackup = true, bool isModelBaseProperty = false)
         {
