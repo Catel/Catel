@@ -59,18 +59,17 @@ namespace Catel.Services
                     UseShellExecute = processContext.UseShellExecute
                 };
 
+                // Note for debuggers: whenever you *inspect* processStartInfo *and* use UseShellExecute = true,
+                // the debugger will evaluate the Environment and EnvironmentVariables properties and instantiate them. 
+                // This will result in Process.Start to throw exceptions. The solution is *not* to inspect processStartInfo
+                // when UseShellExecute is true
+
                 if (!string.IsNullOrWhiteSpace(processContext.Verb) &&
                     !processStartInfo.UseShellExecute)
                 {
                     Log.Warning($"Verb is specified, this requires UseShellExecute to be set to true");
 
                     processStartInfo.UseShellExecute = true;
-                }
-
-                if (processStartInfo.UseShellExecute)
-                {
-                    // We must clear environment varialbes
-                    processStartInfo.EnvironmentVariables.Clear();
                 }
 
                 if (!string.IsNullOrWhiteSpace(processContext.WorkingDirectory))
@@ -86,7 +85,7 @@ namespace Catel.Services
                     tcs.SetResult(0);
                 }
                 else
-                { 
+                {
                     process.EnableRaisingEvents = true;
                     process.Exited += (sender, e) => tcs.SetResult(process.ExitCode);
                 }
