@@ -55,8 +55,23 @@ namespace Catel.Services
 #else
                 var processStartInfo = new ProcessStartInfo(fileName, arguments)
                 {
-                    Verb = processContext.Verb
+                    Verb = processContext.Verb,
+                    UseShellExecute = processContext.UseShellExecute
                 };
+
+                if (!string.IsNullOrWhiteSpace(processContext.Verb) &&
+                    !processStartInfo.UseShellExecute)
+                {
+                    Log.Warning($"Verb is specified, this requires UseShellExecute to be set to true");
+
+                    processStartInfo.UseShellExecute = true;
+                }
+
+                if (processStartInfo.UseShellExecute)
+                {
+                    // We must clear environment varialbes
+                    processStartInfo.EnvironmentVariables.Clear();
+                }
 
                 if (!string.IsNullOrWhiteSpace(processContext.WorkingDirectory))
                 {

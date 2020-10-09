@@ -9,5 +9,7 @@
         public string WorkingDirectory { get; set; }
 
         public string Verb { get; set; }
+
+        public bool UseShellExecute { get; set; }
     }
 }
