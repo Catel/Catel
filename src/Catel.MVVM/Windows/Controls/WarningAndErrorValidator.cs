@@ -15,6 +15,7 @@ namespace Catel.Windows.Controls
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Globalization;
+    using System.Linq;
     using System.Windows;
     using Catel.Data;
     using Collections;
@@ -86,6 +87,8 @@ namespace Catel.Windows.Controls
         /// </summary>
         private readonly Dictionary<object, ValidationData> _objectValidation = new Dictionary<object, ValidationData>();
         private readonly object _objectValidationLock = new object();
+
+        private bool _isLoaded;
 
 #if NET || NETCORE
         private InfoBarMessageControl _infoBarMessageControl;
@@ -172,6 +175,13 @@ namespace Catel.Windows.Controls
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnLoaded(object sender, UIEventArgs e)
         {
+            if (_isLoaded)
+            {
+                return;
+            }
+
+            _isLoaded = true;
+
             Initialize();
 
 #if !NET && !NETCORE
@@ -186,6 +196,8 @@ namespace Catel.Windows.Controls
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnUnloaded(object sender, UIEventArgs e)
         {
+            _isLoaded = false;
+
             CleanUp();
         }
 
@@ -210,6 +222,9 @@ namespace Catel.Windows.Controls
             if (source != null)
             {
                 UpdateSource(null, source);
+
+                // Since we are initializing, we *must* force raising changes, fixes https://github.com/Catel/Catel/issues/1670
+                RaiseEventsForDifferences(source, null, CreateValidationData(source, null, null));
             }
         }
 
@@ -293,7 +308,7 @@ namespace Catel.Windows.Controls
         {
             Argument.IsNotNull("values", values);
 
-            foreach (object value in values)
+            foreach (var value in values)
             {
                 AddObjectToWatchList(value, parentEnumerable);
             }
@@ -393,31 +408,44 @@ namespace Catel.Windows.Controls
         /// </remarks>
         private void CheckObjectValidation(object value, string propertyChanged, IEnumerable parentEnumerable)
         {
-            ValidationData currentValidationData;
-            ValidationData oldValidationData;
-
             if (value is null)
             {
                 return;
             }
 
+            ValidationData oldValidationData = null;
+            ValidationData newValidationData;
+
             lock (_objectValidationLock)
             {
-                if (!_objectValidation.TryGetValue(value, out currentValidationData))
+                if (!_objectValidation.TryGetValue(value, out oldValidationData))
                 {
-                    currentValidationData = new ValidationData(parentEnumerable);
-                    _objectValidation[value] = currentValidationData;
+                    // We'll just use null
                 }
 
-                oldValidationData = (ValidationData)currentValidationData.Clone();
+                newValidationData = CreateValidationData(value, propertyChanged, parentEnumerable);
+
+                _objectValidation[value] = newValidationData;
+            }
+
+            RaiseEventsForDifferences(value, oldValidationData, newValidationData);
+        }
+
+        private ValidationData CreateValidationData(object value, string propertyChanged, IEnumerable parentEnumerable)
+        {
+            var validationData = new ValidationData(parentEnumerable);
+
+            if (value is null)
+            {
+                return validationData;
             }
 
             var validatable = value as IValidatable;
 
-            CheckObjectValidationForFields(value, propertyChanged, currentValidationData.FieldWarnings, ValidationType.Warning);
+            CheckObjectValidationForFields(value, propertyChanged, validationData.FieldWarnings, ValidationType.Warning);
 
             #region Warnings - business
-            currentValidationData.BusinessWarnings.Clear();
+            validationData.BusinessWarnings.Clear();
 
             if (validatable != null)
             {
@@ -425,24 +453,24 @@ namespace Catel.Windows.Controls
                 {
                     foreach (var warning in validatable.ValidationContext.GetBusinessRuleWarnings())
                     {
-                        currentValidationData.BusinessWarnings.Add(new BusinessWarningOrErrorInfo(warning.Message));
+                        validationData.BusinessWarnings.Add(new BusinessWarningOrErrorInfo(warning.Message));
                     }
                 }
             }
             else
             {
-                string businessWarning = GetWarningOrError(value, ValidationType.Warning);
+                var businessWarning = GetWarningOrError(value, ValidationType.Warning);
                 if (!string.IsNullOrEmpty(businessWarning))
                 {
-                    currentValidationData.BusinessWarnings.Add(new BusinessWarningOrErrorInfo(businessWarning));
+                    validationData.BusinessWarnings.Add(new BusinessWarningOrErrorInfo(businessWarning));
                 }
             }
             #endregion
 
-            CheckObjectValidationForFields(value, propertyChanged, currentValidationData.FieldErrors, ValidationType.Error);
+            CheckObjectValidationForFields(value, propertyChanged, validationData.FieldErrors, ValidationType.Error);
 
             #region Errors - business
-            currentValidationData.BusinessErrors.Clear();
+            validationData.BusinessErrors.Clear();
 
             if (validatable != null)
             {
@@ -450,21 +478,21 @@ namespace Catel.Windows.Controls
                 {
                     foreach (var error in validatable.ValidationContext.GetBusinessRuleErrors())
                     {
-                        currentValidationData.BusinessErrors.Add(new BusinessWarningOrErrorInfo(error.Message));
+                        validationData.BusinessErrors.Add(new BusinessWarningOrErrorInfo(error.Message));
                     }
                 }
             }
             else
             {
-                string businessError = GetWarningOrError(value, ValidationType.Error);
+                var businessError = GetWarningOrError(value, ValidationType.Error);
                 if (!string.IsNullOrEmpty(businessError))
                 {
-                    currentValidationData.BusinessErrors.Add(new BusinessWarningOrErrorInfo(businessError));
+                    validationData.BusinessErrors.Add(new BusinessWarningOrErrorInfo(businessError));
                 }
             }
             #endregion
 
-            RaiseEventsForDifferences(value, oldValidationData, currentValidationData);
+            return validationData;
         }
 
         /// <summary>
@@ -474,7 +502,7 @@ namespace Catel.Windows.Controls
         /// <param name="propertyChanged">The property changed.</param>
         /// <param name="infoList">The info list containing the warning or error info.</param>
         /// <param name="validationType">Type of the validation.</param>
-        private static void CheckObjectValidationForFields(object value, string propertyChanged, ObservableCollection<FieldWarningOrErrorInfo> infoList,
+        private static void CheckObjectValidationForFields(object value, string propertyChanged, IList<FieldWarningOrErrorInfo> infoList,
             ValidationType validationType)
         {
             if (string.IsNullOrEmpty(propertyChanged))
@@ -492,7 +520,7 @@ namespace Catel.Windows.Controls
                 }
             }
 
-            Dictionary<string, string> fieldWarningsOrErrors = CheckFieldWarningsOrErrors(value, propertyChanged, validationType);
+            var fieldWarningsOrErrors = CheckFieldWarningsOrErrors(value, propertyChanged, validationType);
             foreach (var fieldWarningOrError in fieldWarningsOrErrors)
             {
                 var fieldWarningOrErrorInfo = new FieldWarningOrErrorInfo(fieldWarningOrError.Key, fieldWarningOrError.Value);
@@ -682,16 +710,16 @@ namespace Catel.Windows.Controls
         private void RaiseEventsForDifferences(object value, ValidationData oldValidationData, ValidationData newValidationData)
         {
             // Warnings - fields
-            RaiseEventsForDifferencesInFields(value, oldValidationData.FieldWarnings, newValidationData.FieldWarnings, ValidationType.Warning);
+            RaiseEventsForDifferencesInFields(value, oldValidationData?.FieldWarnings ?? (IEnumerable<FieldWarningOrErrorInfo>)ArrayShim.Empty<FieldWarningOrErrorInfo>(), newValidationData.FieldWarnings, ValidationType.Warning);
 
             // Warnings - business
-            RaiseEventsForDifferencesInBusiness(value, oldValidationData.BusinessWarnings, newValidationData.BusinessWarnings, ValidationType.Warning);
+            RaiseEventsForDifferencesInBusiness(value, oldValidationData?.BusinessWarnings ?? (IEnumerable<BusinessWarningOrErrorInfo>)ArrayShim.Empty<BusinessWarningOrErrorInfo>(), newValidationData.BusinessWarnings, ValidationType.Warning);
 
             // Errors - fields
-            RaiseEventsForDifferencesInFields(value, oldValidationData.FieldErrors, newValidationData.FieldErrors, ValidationType.Error);
+            RaiseEventsForDifferencesInFields(value, oldValidationData?.FieldErrors ?? (IEnumerable<FieldWarningOrErrorInfo>)ArrayShim.Empty<FieldWarningOrErrorInfo>(), newValidationData.FieldErrors, ValidationType.Error);
 
             // Errors - business
-            RaiseEventsForDifferencesInBusiness(value, oldValidationData.BusinessErrors, newValidationData.BusinessErrors, ValidationType.Error);
+            RaiseEventsForDifferencesInBusiness(value, oldValidationData?.BusinessErrors ?? (IEnumerable<BusinessWarningOrErrorInfo>)ArrayShim.Empty<BusinessWarningOrErrorInfo>(), newValidationData.BusinessErrors, ValidationType.Error);
         }
 
         /// <summary>
@@ -701,7 +729,7 @@ namespace Catel.Windows.Controls
         /// <param name="oldFieldData">The old field data.</param>
         /// <param name="newFieldData">The new field data.</param>
         /// <param name="validationType">Type of the validation.</param>
-        private void RaiseEventsForDifferencesInFields(object value, ICollection<FieldWarningOrErrorInfo> oldFieldData,
+        private void RaiseEventsForDifferencesInFields(object value, IEnumerable<FieldWarningOrErrorInfo> oldFieldData,
             ICollection<FieldWarningOrErrorInfo> newFieldData, ValidationType validationType)
         {
             foreach (var info in oldFieldData)
@@ -728,8 +756,8 @@ namespace Catel.Windows.Controls
         /// <param name="oldBusinessData">The old business data.</param>
         /// <param name="newBusinessData">The new business data.</param>
         /// <param name="validationType">Type of the validation.</param>
-        private void RaiseEventsForDifferencesInBusiness(object value, ICollection<BusinessWarningOrErrorInfo> oldBusinessData,
-            ICollection<BusinessWarningOrErrorInfo> newBusinessData, ValidationType validationType)
+        private void RaiseEventsForDifferencesInBusiness(object value, IEnumerable<BusinessWarningOrErrorInfo> oldBusinessData,
+            IEnumerable<BusinessWarningOrErrorInfo> newBusinessData, ValidationType validationType)
         {
             foreach (var info in oldBusinessData)
             {
@@ -830,10 +858,10 @@ namespace Catel.Windows.Controls
         /// <param name="parentEnumerable">The parent ParentEnumerable. <c>Null</c> if the object does not belong to an enumerable.</param>
         public ValidationData(IEnumerable parentEnumerable)
         {
-            FieldWarnings = new ObservableCollection<FieldWarningOrErrorInfo>();
-            BusinessWarnings = new ObservableCollection<BusinessWarningOrErrorInfo>();
-            FieldErrors = new ObservableCollection<FieldWarningOrErrorInfo>();
-            BusinessErrors = new ObservableCollection<BusinessWarningOrErrorInfo>();
+            FieldWarnings = new List<FieldWarningOrErrorInfo>();
+            BusinessWarnings = new List<BusinessWarningOrErrorInfo>();
+            FieldErrors = new List<FieldWarningOrErrorInfo>();
+            BusinessErrors = new List<BusinessWarningOrErrorInfo>();
 
             ParentEnumerable = parentEnumerable;
         }
@@ -850,25 +878,25 @@ namespace Catel.Windows.Controls
         /// Gets the field warnings.
         /// </summary>
         /// <value>The field warnings.</value>
-        public ObservableCollection<FieldWarningOrErrorInfo> FieldWarnings { get; private set; }
+        public List<FieldWarningOrErrorInfo> FieldWarnings { get; private set; }
 
         /// <summary>
         /// Gets the business warnings.
         /// </summary>
         /// <value>The business warnings.</value>
-        public ObservableCollection<BusinessWarningOrErrorInfo> BusinessWarnings { get; private set; }
+        public List<BusinessWarningOrErrorInfo> BusinessWarnings { get; private set; }
 
         /// <summary>
         /// Gets the field errors.
         /// </summary>
         /// <value>The field errors.</value>
-        public ObservableCollection<FieldWarningOrErrorInfo> FieldErrors { get; private set; }
+        public List<FieldWarningOrErrorInfo> FieldErrors { get; private set; }
 
         /// <summary>
         /// Gets the business errors.
         /// </summary>
         /// <value>The business errors.</value>
-        public ObservableCollection<BusinessWarningOrErrorInfo> BusinessErrors { get; private set; }
+        public List<BusinessWarningOrErrorInfo> BusinessErrors { get; private set; }
         #endregion
 
         #region Methods
@@ -893,16 +921,16 @@ namespace Catel.Windows.Controls
         {
             var validationData = new ValidationData(ParentEnumerable);
 
-            validationData.FieldWarnings = new ObservableCollection<FieldWarningOrErrorInfo>();
+            validationData.FieldWarnings = new List<FieldWarningOrErrorInfo>();
             ((ICollection<FieldWarningOrErrorInfo>)validationData.FieldWarnings).AddRange(FieldWarnings);
 
-            validationData.BusinessWarnings = new ObservableCollection<BusinessWarningOrErrorInfo>();
+            validationData.BusinessWarnings = new List<BusinessWarningOrErrorInfo>();
             ((ICollection<BusinessWarningOrErrorInfo>)validationData.BusinessWarnings).AddRange(BusinessWarnings);
 
-            validationData.FieldErrors = new ObservableCollection<FieldWarningOrErrorInfo>();
+            validationData.FieldErrors = new List<FieldWarningOrErrorInfo>();
             ((ICollection<FieldWarningOrErrorInfo>)validationData.FieldErrors).AddRange(FieldErrors);
 
-            validationData.BusinessErrors = new ObservableCollection<BusinessWarningOrErrorInfo>();
+            validationData.BusinessErrors = new List<BusinessWarningOrErrorInfo>();
             ((ICollection<BusinessWarningOrErrorInfo>)validationData.BusinessErrors).AddRange(BusinessErrors);
 
             return validationData;

@@ -39,7 +39,7 @@ namespace Catel.Windows.Controls
             Argument.IsNotNull("value", value);
             Argument.IsOfType("value", value, typeof(InfoBarMessageControlMode));
 
-            InfoBarMessageControlMode mode = (parameter is InfoBarMessageControlMode) ? (InfoBarMessageControlMode) parameter : InfoBarMessageControlMode.Inline;
+            var mode = (parameter is InfoBarMessageControlMode) ? (InfoBarMessageControlMode) parameter : InfoBarMessageControlMode.Inline;
 
             if (parameter is string)
             {
