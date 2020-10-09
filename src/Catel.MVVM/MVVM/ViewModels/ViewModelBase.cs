@@ -608,6 +608,8 @@ namespace Catel.MVVM
                         Log.Warning("Mapped viewmodel property '{0}' to model property '{1}' is invalid because property '{1}' is not found on the model '{2}'.\n\n" +
                                 "If the property is defined in a sub-interface, reflection does not return it as a valid property. If this is the case, you can safely ignore this warning",
                             mapping.ViewModelProperty, valueProperty, mapping.ModelProperty);
+
+                        modelPropertyPropertyTypes[i] = typeof(object);
                     }
                     else
                     {

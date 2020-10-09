@@ -30,6 +30,7 @@ Release date
 Added/fixed
 ===========
 (*) #1676 ProcessService verb is not working on .NET Core
+(x) #1669 ArgumentNullException when using ViewModelToModelMapping on property of concrete model that does not have this property
 
 Platform support changes
 ========================
