@@ -1846,6 +1846,7 @@ namespace Catel.Services
         public ProcessContext() { }
         public string Arguments { get; set; }
         public string FileName { get; set; }
+        public bool UseShellExecute { get; set; }
         public string Verb { get; set; }
         public string WorkingDirectory { get; set; }
     }
