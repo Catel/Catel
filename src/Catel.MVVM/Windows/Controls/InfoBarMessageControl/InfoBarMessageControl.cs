@@ -53,14 +53,14 @@ namespace Catel.Windows.Controls
     [TemplatePart(Name = ElementMessageBar, Type = typeof(FrameworkElement))]
     public class InfoBarMessageControl : ContentControl
     {
-#region Constants
+        #region Constants
         /// <summary>
         /// The bar that will show the initial message bar.
         /// </summary>
         private const string ElementMessageBar = "PART_MessageBar";
-#endregion
+        #endregion
 
-#region Fields
+        #region Fields
         /// <summary>
         /// The log.
         /// </summary>
@@ -75,11 +75,11 @@ namespace Catel.Windows.Controls
         private readonly ObservableCollection<string> _warningMessages = new ObservableCollection<string>();
         private readonly ObservableCollection<string> _errorMessages = new ObservableCollection<string>();
 
-        private readonly Dictionary<int, WarningAndErrorValidator> _warningAndErrorValidators = new Dictionary<int, WarningAndErrorValidator>(); 
+        private readonly Dictionary<int, WarningAndErrorValidator> _warningAndErrorValidators = new Dictionary<int, WarningAndErrorValidator>();
         private bool _subscribedToEvents;
-#endregion
+        #endregion
 
-#region Constructors
+        #region Constructors
         /// <summary>
         /// Initializes static members of the <see cref="InfoBarMessageControl"/> class.
         /// </summary>
@@ -117,9 +117,9 @@ namespace Catel.Windows.Controls
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;
         }
-#endregion
+        #endregion
 
-#region Properties
+        #region Properties
         /// <summary>
         /// Gets or sets the default property value for the <see cref="Text"/> property.
         /// </summary>
@@ -217,9 +217,9 @@ namespace Catel.Windows.Controls
         {
             get { return _errorMessages; }
         }
-#endregion
+        #endregion
 
-#region Methods
+        #region Methods
         /// <summary>
         /// Called when the control is loaded.
         /// </summary>
@@ -228,6 +228,8 @@ namespace Catel.Windows.Controls
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             SubscribeToEvents();
+
+            UpdateMessages();
         }
 
         /// <summary>
@@ -504,7 +506,7 @@ namespace Catel.Windows.Controls
                 return;
             }
 
-            Dictionary<object, List<string>> messages = (type == ValidationType.Warning) ? _warnings : _errors;
+            var messages = (type == ValidationType.Warning) ? _warnings : _errors;
 
             lock (_lock)
             {
@@ -557,7 +559,6 @@ namespace Catel.Windows.Controls
             }
 
             MessageCount = _warningMessages.Count + _errorMessages.Count;
-
             InfoMessage = (MessageCount > 0) ? Text : string.Empty;
         }
 
@@ -568,9 +569,9 @@ namespace Catel.Windows.Controls
         /// <param name="messageSource">The message source.</param>
         private static void UpdatesMessageCollection(ObservableCollection<string> messageCollection, Dictionary<object, List<string>> messageSource)
         {
-            foreach (List<string> sourceMessageCollection in messageSource.Values)
+            foreach (var sourceMessageCollection in messageSource.Values)
             {
-                foreach (string message in sourceMessageCollection)
+                foreach (var message in sourceMessageCollection)
                 {
                     if (!messageCollection.Contains(message))
                     {
@@ -579,12 +580,13 @@ namespace Catel.Windows.Controls
                 }
             }
 
-            for (int i = messageCollection.Count - 1; i >= 0; i--)
+            for (var i = messageCollection.Count - 1; i >= 0; i--)
             {
-                string message = messageCollection[i];
+                var message = messageCollection[i];
 
-                bool isValid = false;
-                foreach (List<string> sourceMessageCollection in messageSource.Values)
+                var isValid = false;
+
+                foreach (var sourceMessageCollection in messageSource.Values)
                 {
                     if (sourceMessageCollection.Contains(message))
                     {
@@ -599,7 +601,7 @@ namespace Catel.Windows.Controls
                 }
             }
         }
-#endregion
+        #endregion
     }
 }
 
