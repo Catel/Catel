@@ -153,6 +153,8 @@ private static void RunMsBuild(BuildContext buildContext, string projectName, st
     var action = "build";
     //var logPath = System.IO.Path.Combine(buildContext.General.OutputRootDirectory, string.Format(@"MsBuild_{0}_{1}_log.binlog", projectName, action));
 
+    buildContext.CakeContext.CreateDirectory(buildContext.General.OutputRootDirectory);
+
     var logPath = System.IO.Path.Combine(buildContext.General.OutputRootDirectory, string.Format(@"MsBuild_{0}_{1}_log.xml", projectName, action));
     msBuildSettings.WithLogger(buildContext.CakeContext.Tools.Resolve("MSBuild.ExtensionPack.Loggers.dll").FullPath, 
         "XmlFileLogger", $"logfile=\"{logPath}\";verbosity=Detailed;encoding=UTF-8");
@@ -181,7 +183,7 @@ private static void RunMsBuild(BuildContext buildContext, string projectName, st
     var issues = buildContext.CakeContext.ReadIssues(issuesContext, buildContext.General.RootDirectory);
 
     buildContext.CakeContext.Debug($"Found '{issues.Count()}' potential issues");
-    
+
     buildContext.CakeContext.Information(string.Empty);
 
     var loggedIssues = new HashSet<string>();
