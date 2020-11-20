@@ -25,7 +25,7 @@ For an upgrade guide, visit https://docs.catelproject.com/vnext/setup-deployment
 
 Release date
 ============
-2020/11/20
+2020/11/xx
 
 Added/fixed
 ===========
@@ -33,6 +33,7 @@ Added/fixed
 (*) #1691 FastObservableDictionary should allow null-values and not throw ArgumentNullException
 (*) #1714 Update all system packages to 5.0
 (x) #1693 CatelTypeInfo contains Catel properties in _nonCatelProperties fields
+(x) #1712 ViewModelBase constructor memory leak
 
 Platform support changes
 ========================

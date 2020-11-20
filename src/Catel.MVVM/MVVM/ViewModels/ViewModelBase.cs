@@ -8,6 +8,7 @@
 namespace Catel.MVVM
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
@@ -21,7 +22,6 @@ namespace Catel.MVVM
     using Reflection;
     using Services;
     using Threading;
-    using System.Collections.Concurrent;
 
     #region Enums
     /// <summary>
@@ -244,7 +244,13 @@ namespace Catel.MVVM
 #endif
             var type = GetType();
 
-            serviceLocator.RegisterType(typeof(IObjectIdGenerator<int>), x => GetObjectIdGeneratorType(), type, RegistrationType.Singleton, false);
+            if (!serviceLocator.IsTypeRegistered<IObjectIdGenerator<int>>(type))
+            {
+                var objectGeneratorType = GetObjectIdGeneratorType();
+
+                serviceLocator.RegisterType(typeof(IObjectIdGenerator<int>), objectGeneratorType, tag: type, registerIfAlreadyRegistered: false);
+            }
+
             _objectIdGenerator = serviceLocator.ResolveType<IObjectIdGenerator<int>>(type);
             UniqueIdentifier = GetObjectId(_objectIdGenerator);
 
