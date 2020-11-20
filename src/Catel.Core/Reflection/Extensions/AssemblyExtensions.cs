@@ -43,7 +43,7 @@ namespace Catel.Reflection
             }
 
 #if NET || NETCORE || NETSTANDARD
-            return System.IO.Path.GetFileNameWithoutExtension(assembly.CodeBase);
+            return System.IO.Path.GetFileNameWithoutExtension(assembly.Location);
 #else
             throw new NotSupportedInPlatformException();
 #endif

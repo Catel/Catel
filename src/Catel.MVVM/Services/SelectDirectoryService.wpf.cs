@@ -45,7 +45,7 @@ namespace Catel.Services
         /// <inheritdoc />
         public virtual async Task<DetermineDirectoryResult> DetermineDirectoryAsync(DetermineDirectoryContext context)
         {
-            Argument.IsNotNull(() => context);
+            Argument.IsNotNull(nameof(context), context);
 
             var browserDialog = new FolderBrowserDialog();
             browserDialog.Description = context.Title;

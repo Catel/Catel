@@ -30,6 +30,7 @@ Release date
 Added/fixed
 ===========
 (+) #1713 Add support for .NET 5.0
+(*) #1714 Update all system packages to 5.0
 
 
 Platform support changes
