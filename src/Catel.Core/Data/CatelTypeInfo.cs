@@ -153,7 +153,10 @@ namespace Catel.Data
                 var nonCatelProperties = FindNonCatelProperties(Type);
                 foreach (var property in nonCatelProperties)
                 {
-                    _nonCatelProperties[property.Name] = new CachedPropertyInfo(property);
+                    if (!_catelProperties.ContainsKey(property.Name))
+                    {
+                        _nonCatelProperties[property.Name] = new CachedPropertyInfo(property);
+                    }
                 }
 
                 IsRegisterPropertiesCalled = true;
@@ -207,9 +210,11 @@ namespace Catel.Data
         /// <returns>The list of <see cref="PropertyInfo"/> elements found as properties.</returns>
         private static IEnumerable<PropertyInfo> FindNonCatelProperties(Type type)
         {
-            return (from property in type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true))
-                    where property.PropertyType != typeof(PropertyData)
-                    select property).ToList();
+            var properties = (from property in type.GetPropertiesEx(BindingFlagsHelper.GetFinalBindingFlags(true, false, true))
+                              where property.PropertyType != typeof(PropertyData)
+                              select property).ToList();
+
+            return properties;
         }
 
         /// <summary>

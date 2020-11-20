@@ -32,7 +32,7 @@ Added/fixed
 (+) #1713 Add support for .NET 5.0
 (*) #1691 FastObservableDictionary should allow null-values and not throw ArgumentNullException
 (*) #1714 Update all system packages to 5.0
-
+(x) #1693 CatelTypeInfo contains Catel properties in _nonCatelProperties fields
 
 Platform support changes
 ========================

@@ -1624,6 +1624,7 @@ namespace Catel.Data
         public object GetDefaultValue() { }
         public TValue GetDefaultValue<TValue>() { }
         public Catel.Reflection.CachedPropertyInfo GetPropertyInfo(System.Type containingType) { }
+        public override string ToString() { }
     }
     public class PropertyDataManager
     {
