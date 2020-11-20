@@ -244,12 +244,11 @@ namespace Catel.MVVM
 #endif
             var type = GetType();
 
-            if (!serviceLocator.IsTypeRegistered<IObjectIdGenerator<int>>(type))
-            {
-                var objectGeneratorType = GetObjectIdGeneratorType();
-
-                serviceLocator.RegisterType(typeof(IObjectIdGenerator<int>), objectGeneratorType, tag: type, registerIfAlreadyRegistered: false);
-            }
+            // Note: we get the type *every time*, but it should be cheaper than checking the existance of the type in the 
+            // service locator. Note that we should *not* use a callback since that will create a memory leak because the 
+            // service locator will hold a reference to the first vm *per type*
+            var objectGeneratorType = GetObjectIdGeneratorType();
+            serviceLocator.RegisterType(typeof(IObjectIdGenerator<int>), objectGeneratorType, tag: type, registerIfAlreadyRegistered: false);
 
             _objectIdGenerator = serviceLocator.ResolveType<IObjectIdGenerator<int>>(type);
             UniqueIdentifier = GetObjectId(_objectIdGenerator);
