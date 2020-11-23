@@ -67,11 +67,21 @@ namespace Catel.Tests.Collections
             }
 
             [Test]
-            public void ThrowsArgumentNullExceptionForAddObject()
+            public void ThrowsArgumentNullExceptionForNullKey()
             {
-                var observableDictionary = new FastObservableDictionary<int, int>();
+                var observableDictionary = new FastObservableDictionary<object, int>();
 
-                Assert.That(() => observableDictionary.Add(1, null), Throws.ArgumentNullException);
+                Assert.That(() => observableDictionary.Add(null, 1), Throws.ArgumentNullException);
+            }
+
+            [Test]
+            public void AllowsNullValues()
+            {
+                var observableDictionary = new FastObservableDictionary<int, object>();
+
+                observableDictionary.Add(1, null);
+
+                Assert.IsNull(observableDictionary[1]);
             }
 
             [Test]

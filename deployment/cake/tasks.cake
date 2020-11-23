@@ -1,4 +1,5 @@
 #l "lib-generic.cake"
+#l "lib-msbuild.cake"
 #l "lib-nuget.cake"
 #l "lib-signing.cake"
 #l "lib-sourcelink.cake"
@@ -22,7 +23,10 @@
 #addin "nuget:?package=Newtonsoft.Json&version=11.0.2"
 #addin "nuget:?package=Cake.Sonar&version=1.1.25"
 
-#tool "nuget:?package=MSBuild.SonarQube.Runner.Tool&version=4.8.0"
+// Note: the SonarQube tool must be installed as a global .NET tool:
+// `dotnet tool install --global dotnet-sonarscanner --ignore-failed-sources`
+//#tool "nuget:?package=MSBuild.SonarQube.Runner.Tool&version=4.8.0"
+#tool "nuget:?package=dotnet-sonarscanner&version=5.0.4"
 
 //-------------------------------------------------------------
 // BACKWARDS COMPATIBILITY CODE - START
@@ -258,15 +262,12 @@ Task("Build")
         {
             // SonarQube info
             Url = sonarUrl,
-            Login = buildContext.General.SonarQube.Username,
-            Password = buildContext.General.SonarQube.Password,
 
             // Project info
             Key = buildContext.General.SonarQube.Project,
             Version = buildContext.General.Version.FullSemVer,
-            
-            // TODO: How to determine if this is a .NET Core project / solution? We cannot
-            // use IsDotNetCoreProject() because it's project based, not solution based
+
+            // Use core clr version of SonarQube
             UseCoreClr = true,
 
             // Minimize extreme logging
@@ -277,6 +278,21 @@ Task("Build")
             ArgumentCustomization = args => args
                 .Append("/d:sonar.qualitygate.wait=true")
         };
+
+        if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Organization))
+        {
+            sonarSettings.Organization = buildContext.General.SonarQube.Organization;
+        }
+
+        if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Username))
+        {
+            sonarSettings.Login = buildContext.General.SonarQube.Username;
+        }
+
+        if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Password))
+        {
+            sonarSettings.Password = buildContext.General.SonarQube.Password;
+        }
 
         // see https://cakebuild.net/api/Cake.Sonar/SonarBeginSettings/ for more information on
         // what to set for SonarCloud
@@ -290,6 +306,8 @@ Task("Build")
             // TODO: How to support PR?
             sonarSettings.Branch = buildContext.General.Repository.BranchName;
         }
+
+        Information("Beginning SonarQube");
 
         SonarBegin(sonarSettings);
     }
@@ -318,11 +336,25 @@ Task("Build")
             {
                 await buildContext.SourceControl.MarkBuildAsPendingAsync("SonarQube");
 
-                SonarEnd(new SonarEndSettings 
+                var sonarEndSettings = new SonarEndSettings
                 {
-                    Login = buildContext.General.SonarQube.Username,
-                    Password = buildContext.General.SonarQube.Password,
-                });
+                    // Use core clr version of SonarQube
+                    UseCoreClr = true
+                };
+
+                if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Username))
+                {
+                    sonarEndSettings.Login = buildContext.General.SonarQube.Username;
+                }
+
+                if (!string.IsNullOrWhiteSpace(buildContext.General.SonarQube.Password))
+                {
+                    sonarEndSettings.Password = buildContext.General.SonarQube.Password;
+                }
+
+                Information("Ending SonarQube");
+
+                SonarEnd(sonarEndSettings);
 
                 await buildContext.SourceControl.MarkBuildAsSucceededAsync("SonarQube");
             }

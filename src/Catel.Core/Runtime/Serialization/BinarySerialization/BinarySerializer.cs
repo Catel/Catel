@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if NET || NETCORE
+#if (NET || NETCORE) && !NET5
 
 namespace Catel.Runtime.Serialization.Binary
 {

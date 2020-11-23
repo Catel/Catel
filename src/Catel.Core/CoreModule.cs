@@ -42,7 +42,7 @@ namespace Catel
             serviceLocator.RegisterType<IValidatorProvider, AttributeValidatorProvider>();
             serviceLocator.RegisterType<IRegistrationConventionHandler, RegistrationConventionHandler>();
 
-#if NET || NETCORE
+#if (NET || NETCORE) && !NET5
             serviceLocator.RegisterType<IBinarySerializer, BinarySerializer>();
             serviceLocator.RegisterTypeWithTag<ISerializationContextInfoFactory, BinarySerializationContextInfoFactory>(typeof(BinarySerializer));
 #endif

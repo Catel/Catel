@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net45;net46;net47;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net45;net46;net47;net48;netcoreapp3.1;net5.0-windows</TargetFrameworks>
     <AssemblyName>Catel.MVVM</AssemblyName>
     <RootNamespace>Catel.MVVM</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -16,14 +16,14 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Catel.Fody" Version="4.3.0" PrivateAssets="all" />
-    <PackageReference Include="Fody" Version="6.1.1" PrivateAssets="all">
+    <PackageReference Include="Catel.Fody" Version="4.5.0" PrivateAssets="all" />
+    <PackageReference Include="Fody" Version="6.3.0" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="MethodTimer.Fody" Version="3.1.2" PrivateAssets="all" />
-    <PackageReference Include="ModuleInit.Fody" Version="2.1.0" PrivateAssets="all" />
-    <PackageReference Include="Obsolete.Fody" Version="5.2.0" PrivateAssets="all" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="4.6.0" />
+    <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
+    <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
   
   <!-- .NET 4.5 -->
@@ -59,6 +59,17 @@
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
   </ItemGroup>
 
+  <!-- .NET 4.8 -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
+    <UseWpf>true</UseWpf>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ExtrasEnableImplicitWpfReferences>true</ExtrasEnableImplicitWpfReferences>
+    <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
+  </ItemGroup>
+  
   <!-- .NET Core 3.0 -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
     <UseWpf>true</UseWpf>
@@ -81,6 +92,17 @@
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
   </ItemGroup>
 
+  <!-- .NET 5.0 -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net5.0' Or '$(TargetFramework)' == 'net5.0-windows'">
+    <UseWpf>true</UseWpf>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ExtrasEnableImplicitWpfReferences>true</ExtrasEnableImplicitWpfReferences>
+    <ExtrasEnableImplicitWinFormsReferences>true</ExtrasEnableImplicitWinFormsReferences>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0' Or '$(TargetFramework)' == 'net5.0-windows'">
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
+  </ItemGroup>
+  
   <!-- UAP 10.0 -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'uap10.0'">
   </PropertyGroup>

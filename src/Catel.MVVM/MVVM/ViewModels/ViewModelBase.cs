@@ -8,6 +8,7 @@
 namespace Catel.MVVM
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
@@ -21,7 +22,6 @@ namespace Catel.MVVM
     using Reflection;
     using Services;
     using Threading;
-    using System.Collections.Concurrent;
 
     #region Enums
     /// <summary>
@@ -244,7 +244,12 @@ namespace Catel.MVVM
 #endif
             var type = GetType();
 
-            serviceLocator.RegisterType(typeof(IObjectIdGenerator<int>), x => GetObjectIdGeneratorType(), type, RegistrationType.Singleton, false);
+            // Note: we get the type *every time*, but it should be cheaper than checking the existance of the type in the 
+            // service locator. Note that we should *not* use a callback since that will create a memory leak because the 
+            // service locator will hold a reference to the first vm *per type*
+            var objectGeneratorType = GetObjectIdGeneratorType();
+            serviceLocator.RegisterType(typeof(IObjectIdGenerator<int>), objectGeneratorType, tag: type, registerIfAlreadyRegistered: false);
+
             _objectIdGenerator = serviceLocator.ResolveType<IObjectIdGenerator<int>>(type);
             UniqueIdentifier = GetObjectId(_objectIdGenerator);
 

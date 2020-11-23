@@ -789,27 +789,6 @@ namespace Catel.IoC
         {
             Argument.IsNotNull("serviceType", serviceType);
 
-            if (serviceImplementationType is null)
-            {
-                // Dynamic late-bound type
-                serviceImplementationType = typeof(LateBoundImplementation);
-            }
-
-            if (serviceImplementationType.IsInterfaceEx())
-            {
-                throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot register interface type '{0}' as implementation, make sure to specify an actual class", serviceImplementationType.GetSafeFullName(false));
-            }
-
-            /* TODO: This code have to be here to ensure the right usage of non-generic overloads of register methods.
-             * TODO: If it is finally accepted then remove it from ServiceLocatorAutoRegistrationManager
-            if (serviceImplementationType.IsAbstractEx() || !serviceType.IsAssignableFromEx(serviceImplementationType))
-            {
-                string message = string.Format("The type '{0}' is abstract or can't be registered as '{1}'", serviceImplementationType, serviceType);
-                Log.Error(message);
-                throw new InvalidOperationException(message);
-            }
-            */
-
             // Outside lock scope for event
             ServiceLocatorRegistration registeredTypeInfo = null;
 
@@ -820,6 +799,27 @@ namespace Catel.IoC
                     //Log.Debug("Type '{0}' already registered, will not overwrite registration", serviceType.FullName);
                     return;
                 }
+
+                if (serviceImplementationType is null)
+                {
+                    // Dynamic late-bound type
+                    serviceImplementationType = typeof(LateBoundImplementation);
+                }
+
+                if (serviceImplementationType.IsInterfaceEx())
+                {
+                    throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot register interface type '{0}' as implementation, make sure to specify an actual class", serviceImplementationType.GetSafeFullName(false));
+                }
+
+                /* TODO: This code have to be here to ensure the right usage of non-generic overloads of register methods.
+                 * TODO: If it is finally accepted then remove it from ServiceLocatorAutoRegistrationManager
+                if (serviceImplementationType.IsAbstractEx() || !serviceType.IsAssignableFromEx(serviceImplementationType))
+                {
+                    string message = string.Format("The type '{0}' is abstract or can't be registered as '{1}'", serviceImplementationType, serviceType);
+                    Log.Error(message);
+                    throw new InvalidOperationException(message);
+                }
+                */
 
                 var serviceInfo = new ServiceInfo(serviceType, tag);
                 _registeredInstances.Remove(serviceInfo);

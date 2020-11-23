@@ -267,10 +267,12 @@ namespace Catel.Reflection
                 (assembly is System.Reflection.Emit.AssemblyBuilder) &&
 #endif
                 string.Equals(assembly.GetType().FullName, "System.Reflection.Emit.InternalAssemblyBuilder", StringComparison.Ordinal)
-#if NET || NETCORE
+#if NET
                 && !assembly.GlobalAssemblyCache
+#endif
+#if NET || NETCORE
                 && ((Assembly.GetExecutingAssembly() != null)
-                && !string.Equals(assembly.CodeBase, Assembly.GetExecutingAssembly().CodeBase, StringComparison.OrdinalIgnoreCase))
+                && !string.Equals(assembly.Location, Assembly.GetExecutingAssembly().Location, StringComparison.OrdinalIgnoreCase))
 #endif
                 // Note: to make it the same for all platforms
                 && true;

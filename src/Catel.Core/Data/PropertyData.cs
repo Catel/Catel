@@ -216,6 +216,11 @@ namespace Catel.Data
 
             return _cachedPropertyInfo;
         }
+
+        public override string ToString()
+        {
+            return $"[{Type.Name}] {Name}";
+        }
         #endregion
     }
 }
