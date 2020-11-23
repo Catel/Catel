@@ -64,8 +64,6 @@
         /// <value><c>true</c> if events should automatically be dispatched to the UI thread; otherwise, <c>false</c>.</value>
         public bool AutomaticallyDispatchChangeNotifications { get; set; } = true;
 
-
-
         /// <see cref="Dictionary{TKey,TValue}.Comparer"/>>
         public IEqualityComparer<TKey> Comparer => _dict.Comparer;
         #endregion
@@ -77,12 +75,14 @@
             _dictIndexMapping = new Dictionary<TKey, int>();
             _list = new List<TKey>();
         }
+
         public FastObservableDictionary(int capacity)
         {
             _dict = new Dictionary<TKey, TValue>(capacity);
             _dictIndexMapping = new Dictionary<TKey, int>(capacity);
             _list = new List<TKey>(capacity);
         }
+
         public FastObservableDictionary(IEnumerable<KeyValuePair<TKey, TValue>> originalDict)
         {
             if (originalDict is ICollection<KeyValuePair<TKey, TValue>> collection)
@@ -93,21 +93,25 @@
             }
             InsertMultipleValues(0, originalDict, false);
         }
+
         public FastObservableDictionary(IEqualityComparer<TKey> comparer)
         {
             _list = new List<TKey>();
             _dictIndexMapping = new Dictionary<TKey, int>(comparer);
             _dict = new Dictionary<TKey, TValue>(comparer);
         }
+
         public FastObservableDictionary(IDictionary<TKey, TValue> dictionary) : this((IEnumerable<KeyValuePair<TKey, TValue>>)dictionary)
         {
         }
+
         public FastObservableDictionary(int capacity, IEqualityComparer<TKey> comparer)
         {
             _list = new List<TKey>(capacity);
             _dictIndexMapping = new Dictionary<TKey, int>(capacity, comparer);
             _dict = new Dictionary<TKey, TValue>(capacity, comparer);
         }
+
         public FastObservableDictionary(IDictionary<TKey, TValue> dictionary, IEqualityComparer<TKey> comparer)
         {
             Argument.IsNotNull(nameof(dictionary), dictionary);
@@ -199,6 +203,7 @@
         /// <param name="checkKeyDuplication"></param>
         public virtual void InsertSingleValue(TKey key, TValue newValue, bool checkKeyDuplication)
         {
+
             var changedItem = new KeyValuePair<TKey, TValue>(key, newValue);
             int changedIndex;
             if (checkKeyDuplication && _dictIndexMapping.TryGetValue(key, out var oldIndex) && _dict.TryGetValue(key, out var oldValue))
@@ -270,11 +275,14 @@
         /// <param name="checkKeyDuplication"></param>
         public virtual void InsertSingleValue(int index, TKey key, TValue newValue, bool checkKeyDuplication)
         {
+            Argument.IsNotNull(nameof(key), key);
+
             // Check
             if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
             }
+
             var changedItem = new KeyValuePair<TKey, TValue>(key, newValue);
             int changedIndex = index;
             if (checkKeyDuplication && _dict.TryGetValue(key, out var oldValue) && _dictIndexMapping.TryGetValue(key, out var oldIndex))
@@ -349,12 +357,13 @@
         }
         protected virtual void InternalMoveItem(int oldIndex, int newIndex, TKey key, TValue element)
         {
+            Argument.IsNotNull(nameof(key), key);
+
             // Check
             if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
-
 
             var temp = _list[oldIndex];
             var sign = Math.Sign(newIndex - oldIndex);
@@ -363,6 +372,7 @@
             {
                 _dictIndexMapping[_list[i] = _list[i + sign]] = i;
             }
+
             _list[newIndex] = temp;
             _dictIndexMapping[temp] = newIndex;
 
@@ -391,6 +401,8 @@
         /// <returns></returns>
         public virtual bool TryRemoveSingleValue(TKey keyToRemove, out TValue value)
         {
+            Argument.IsNotNull(nameof(keyToRemove), keyToRemove);
+
             if (_dictIndexMapping.TryGetValue(keyToRemove, out var removedKeyIndex) && _dict.TryGetValue(keyToRemove, out var removedKeyValue))
             {
                 // Check
@@ -481,6 +493,7 @@
             {
                 newValues = newValues.Where(x => !_dict.ContainsKey(x.Key));
             }
+
             var startIndex = _list.Count;
             if (newValues is ICollection<KeyValuePair<TKey, TValue>> collection)
             {
@@ -560,6 +573,7 @@
             {
                 newValues = newValues.Where(x => !_dict.ContainsKey(x.Key));
             }
+
             var counterIndex = startIndex;
             if (newValues is ICollection<KeyValuePair<TKey, TValue>> collection)
             {
@@ -633,6 +647,7 @@
             Argument.IsNotNull(nameof(keysToRemove), keysToRemove);
 
             Dictionary<int, List<KeyValuePair<TKey, TValue>>> removedList;
+
             if (keysToRemove is ICollection<TKey> collectionOfKeysToRemove)
             {
                 removedList = new Dictionary<int, List<KeyValuePair<TKey, TValue>>>(collectionOfKeysToRemove.Count);
@@ -646,9 +661,13 @@
                 if (_dictIndexMapping.TryGetValue(keyToRemove, out var removedKeyIndex) && _dict.TryGetValue(keyToRemove, out var valueToRemove))
                 {
                     if (removedList.TryGetValue(removedKeyIndex - 1, out var toRemoveList))
+                    {
                         toRemoveList.Add(new KeyValuePair<TKey, TValue>(keyToRemove, valueToRemove));
+                    }
                     else
+                    {
                         removedList[removedKeyIndex] = new List<KeyValuePair<TKey, TValue>>() { new KeyValuePair<TKey, TValue>(keyToRemove, valueToRemove) };
+                    }
 
                     _dict.Remove(keyToRemove);
                     _dictIndexMapping.Remove(keyToRemove);
@@ -659,6 +678,7 @@
             OnPropertyChanged(_cachedCountArgs);
             OnPropertyChanged(_cachedKeysArgs);
             OnPropertyChanged(_cachedValuesArgs);
+
             foreach (var range in removedList)
             {
                 _list.RemoveRange(range.Key, range.Value.Count);
@@ -706,6 +726,7 @@
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
+
             InsertSingleValue(item.Key, item.Value, true);
         }
 
@@ -734,6 +755,7 @@
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
+
             return TryRemoveSingleValue(item.Key, out _);
         }
         #endregion
@@ -839,7 +861,7 @@
         public void Add(object key, object value)
         {
             Argument.IsNotNull(nameof(key), key);
-            Argument.IsNotNull(nameof(value), value);
+
             if (key is TKey castedKey)
             {
                 if (value is TValue castedValue)
