@@ -21,6 +21,12 @@ public static bool IsSourceLinkSupported(BuildContext buildContext, string proje
         return false;
     }
 
+    // Only support when running a real build, e.g. ot for 'Package' only
+    if (!buildContext.General.Target.ToLower().Contains("build"))
+    {
+        return false;
+    }
+
     return true;
 }
 
