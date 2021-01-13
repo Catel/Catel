@@ -76,7 +76,6 @@ public class BuildContext : BuildContextBase
     public Dictionary<string, object> Parameters { get; set; }
     public Dictionary<string, string> Variables { get; private set; }
     
-
     // Integrations
     public BuildServerIntegration BuildServer { get; set; }
     public IssueTrackerIntegration IssueTracker { get; set; }
