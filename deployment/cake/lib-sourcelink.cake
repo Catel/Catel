@@ -1,5 +1,20 @@
 public static bool IsSourceLinkSupported(BuildContext buildContext, string projectFileName)
 {
+    if (buildContext.General.SourceLink.IsDisabled)
+    {
+        return false;
+    }
+    
+    if (buildContext.General.IsLocalBuild)
+    {
+        return false;
+    }
+
+    if (string.IsNullOrWhiteSpace(buildContext.General.Repository.Url))
+    {
+        return false;
+    }
+
     // Only support C# projects
     if (!projectFileName.EndsWith(".csproj"))
     {
@@ -69,7 +84,4 @@ public static void InjectSourceLinkInProjectFile(BuildContext buildContext, stri
     projectElement.Add(sourceRootItemGroup);
 
     xmlDocument.Save(projectFileName);
-
-    // Restore packages again for the dynamic package
-    RestoreNuGetPackages(buildContext, projectFileName);
 }
