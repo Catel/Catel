@@ -23,14 +23,15 @@
             if (dispatcher is null)
             {
                 var app = System.Windows.Application.Current;
-                _appDispatcher = app?.Dispatcher;
+                dispatcher = _appDispatcher = app?.Dispatcher;
 
-                if (_appDispatcher is null)
+                if (dispatcher is null)
                 {
                     Log.Warning($"No application dispatcher found, creating temporary dispatcher");
 
-                    // Dispatcher.CurrentDispatcher is not useful, but we use it as fallback value, see https://github.com/Catel/Catel/issues/1762
-                    return Dispatcher.CurrentDispatcher;
+                    // Dispatcher.CurrentDispatcher is not useful, but we use it as fallback value, 
+                    // see https://github.com/Catel/Catel/issues/1762, but never store it in the field
+                    dispatcher = Dispatcher.CurrentDispatcher;
                 }
             }
 
