@@ -547,6 +547,7 @@ namespace Catel.Tests.IoC
                     Value = "tag"
                 };
 
+                serviceLocator.RegisterType<IDispatcherProviderService, DispatcherProviderService>();
                 serviceLocator.RegisterType<IDispatcherService, DispatcherService>();
                 serviceLocator.RegisterType<IMessageService, MessageService>();
                 serviceLocator.RegisterType<INavigationService, NavigationService>();

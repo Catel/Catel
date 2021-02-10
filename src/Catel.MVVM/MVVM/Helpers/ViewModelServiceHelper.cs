@@ -53,6 +53,7 @@ namespace Catel.MVVM
 
                 serviceLocator.RegisterTypeIfNotYetRegistered<IViewPropertySelector, FastViewPropertySelector>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IStateService, StateService>();
+                serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherProviderService, DispatcherProviderService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IDispatcherService, DispatcherService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IMessageService, MessageService>();
                 serviceLocator.RegisterTypeIfNotYetRegistered<IUrlLocator, UrlLocator>();

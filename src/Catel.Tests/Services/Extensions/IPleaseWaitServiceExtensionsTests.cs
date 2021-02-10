@@ -13,12 +13,12 @@ namespace Catel.Tests.Services
     using NUnit.Framework;
 
     [TestFixture, Apartment(ApartmentState.STA), Explicit]
-    class IPleaseWaitServiceExtensionsTests
+    public class IPleaseWaitServiceExtensionsTests
     {
         private IPleaseWaitService _target;
         private IPleaseWaitService Target
         {
-            get { return _target ?? (_target = new PleaseWaitService(FakeLanguageService, new DispatcherService())); }
+            get { return _target ?? (_target = new PleaseWaitService(FakeLanguageService, new DispatcherService(new DispatcherProviderService()))); }
             set { _target = value; }
         }
 
