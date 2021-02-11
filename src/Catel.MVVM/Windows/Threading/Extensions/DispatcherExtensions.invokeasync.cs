@@ -12,6 +12,7 @@ namespace Catel.Windows.Threading
     using System.Threading;
     using System.Threading.Tasks;
     using Logging;
+    using Catel.Threading;
 
 #if UWP
     using Dispatcher = global::Windows.UI.Core.CoreDispatcher;
@@ -145,13 +146,16 @@ namespace Catel.Windows.Threading
         private static Task RunAsync(this Dispatcher dispatcher, Action action, DispatcherPriority priority)
         {
 #if UWP
-            var task = dispatcher.RunAsync(priority.ToCoreDispatcherPriority(), () =>
+            throw Log.ErrorAndCreateException<PlatformNotSupportedException>();
+#endif
+
+            // Only invoke if we really have to
+            if (dispatcher.CheckAccess())
             {
                 action();
-            });
+                return TaskHelper.Completed;
+            }
 
-            return task.AsTask();
-#else
             var tcs = new TaskCompletionSource<bool>();
 
             var dispatcherOperation = dispatcher.BeginInvoke(new Action(() =>
@@ -168,10 +172,12 @@ namespace Catel.Windows.Threading
                 }
             }), priority, null);
 
+            // IMPORTANT: don't handle 'dispatcherOperation.Completed' event.
+            // We should only signal to awaiter when the operation is really done
+
             dispatcherOperation.Aborted += (sender, e) => SetCanceled(tcs);
 
             return tcs.Task;
-#endif
         }
 
         private static async Task RunAsync(this Dispatcher dispatcher, Func<Task> actionAsync, DispatcherPriority priority)
@@ -198,11 +204,16 @@ namespace Catel.Windows.Threading
             var result = default(T);
 
 #if UWP
-            await dispatcher.RunAsync(priority.ToCoreDispatcherPriority(), () =>
+            throw Log.ErrorAndCreateException<PlatformNotSupportedException>();
+#endif
+
+            // Only invoke if we really have to
+            if (dispatcher.CheckAccess())
             {
                 result = function();
-            });
-#else
+                return result;
+            }
+
             var tcs = new TaskCompletionSource<T>();
 
             var dispatcherOperation = dispatcher.BeginInvoke(new Action(() =>
@@ -210,6 +221,8 @@ namespace Catel.Windows.Threading
                 try
                 {
                     result = function();
+
+                    SetResult(tcs, result);
                 }
                 catch (Exception ex)
                 {
@@ -217,11 +230,12 @@ namespace Catel.Windows.Threading
                 }
             }), priority, null);
 
-            dispatcherOperation.Completed += (sender, e) => SetResult(tcs, result);
+            // IMPORTANT: don't handle 'dispatcherOperation.Completed' event.
+            // We should only signal to awaiter when the operation is really done
+
             dispatcherOperation.Aborted += (sender, e) => SetCanceled(tcs);
 
             await tcs.Task;
-#endif
 
             return result;
         }
@@ -235,12 +249,19 @@ namespace Catel.Windows.Threading
             CancellationToken cancellationToken, DispatcherPriority priority)
         {
             var tcs = new TaskCompletionSource<T>();
-#if UWP
-            await dispatcher.RunAsync(priority.ToCoreDispatcherPriority(), async () =>
 
-#else
-            var dispatcherOperation = dispatcher.BeginInvoke(new Action(async () =>
+#if UWP
+            throw Log.ErrorAndCreateException<PlatformNotSupportedException>();
 #endif
+
+            // Only invoke if we really have to
+            if (dispatcher.CheckAccess())
+            {
+                var result = await functionAsync(cancellationToken);
+                return result;
+            }
+
+            var dispatcherOperation = dispatcher.BeginInvoke(new Action(async () =>
             {
                 try
                 {
@@ -267,16 +288,13 @@ namespace Catel.Windows.Threading
                     // NOTE: in theory, it could have been already set before
                     tcs.TrySetException(ex);
                 }
-#if !UWP
             }), priority, null);
 
             // IMPORTANT: don't handle 'dispatcherOperation.Completed' event.
             // We should only signal to awaiter when the operation is really done
 
             dispatcherOperation.Aborted += (sender, e) => SetCanceled(tcs);
-#else
-            });
-#endif
+
             return await tcs.Task;
         }
 
