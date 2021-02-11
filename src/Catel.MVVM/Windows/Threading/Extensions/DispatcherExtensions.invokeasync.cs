@@ -235,49 +235,55 @@ namespace Catel.Windows.Threading
             CancellationToken cancellationToken, DispatcherPriority priority)
         {
             var tcs = new TaskCompletionSource<T>();
+
 #if UWP
-            await dispatcher.RunAsync(priority.ToCoreDispatcherPriority(), async () =>
-
-#else
-            var dispatcherOperation = dispatcher.BeginInvoke(new Action(async () =>
+            throw Log.ErrorAndCreateException<PlatformNotSupportedException>();
 #endif
+
+            // Only invoke if we really have to
+            if (dispatcher.CheckAccess())
             {
-                try
+                var result = await functionAsync(cancellationToken);
+                return result;
+            }
+            else
+            {
+                var dispatcherOperation = dispatcher.BeginInvoke(new Action(async () =>
                 {
-                    var task = functionAsync(cancellationToken);
-
-                    await task;
-
-                    if (task.IsFaulted)
+                    try
                     {
-                        tcs.TrySetException(task.Exception ?? new Exception("Unknown error"));
-                        return;
-                    }
+                        var task = functionAsync(cancellationToken);
 
-                    if (task.IsCanceled)
+                        await task;
+
+                        if (task.IsFaulted)
+                        {
+                            tcs.TrySetException(task.Exception ?? new Exception("Unknown error"));
+                            return;
+                        }
+
+                        if (task.IsCanceled)
+                        {
+                            SetCanceled(tcs);
+                            return;
+                        }
+
+                        SetResult(tcs, task.Result);
+                    }
+                    catch (Exception ex)
                     {
-                        SetCanceled(tcs);
-                        return;
+                        // NOTE: in theory, it could have been already set before
+                        tcs.TrySetException(ex);
                     }
+                }), priority, null);
 
-                    SetResult(tcs, task.Result);
-                }
-                catch (Exception ex)
-                {
-                    // NOTE: in theory, it could have been already set before
-                    tcs.TrySetException(ex);
-                }
-#if !UWP
-            }), priority, null);
+                // IMPORTANT: don't handle 'dispatcherOperation.Completed' event.
+                // We should only signal to awaiter when the operation is really done
 
-            // IMPORTANT: don't handle 'dispatcherOperation.Completed' event.
-            // We should only signal to awaiter when the operation is really done
+                dispatcherOperation.Aborted += (sender, e) => SetCanceled(tcs);
 
-            dispatcherOperation.Aborted += (sender, e) => SetCanceled(tcs);
-#else
-            });
-#endif
-            return await tcs.Task;
+                return await tcs.Task;
+            }
         }
 
         private static bool SetResult<T>(TaskCompletionSource<T> tcs, T result)
