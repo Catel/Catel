@@ -1,7 +1,5 @@
 #l "dependencies-variables.cake"
 
-#addin "nuget:?package=Cake.FileHelpers&version=3.0.0"
-
 using System.Xml.Linq;
 
 //-------------------------------------------------------------
@@ -30,10 +28,11 @@ public class DependenciesProcessor : ProcessorBase
         // is required to prevent issues with foreach
         foreach (var dependency in BuildContext.Dependencies.Items.ToList())
         {
-            if (!ShouldProcessProject(BuildContext, dependency))
-            {
-                BuildContext.Dependencies.Items.Remove(dependency);
-            }
+            // Note: dependencies should always be built
+            // if (!ShouldProcessProject(BuildContext, dependency))
+            // {
+            //     BuildContext.Dependencies.Items.Remove(dependency);
+            // }
         }
     }
 
@@ -104,24 +103,20 @@ public class DependenciesProcessor : ProcessorBase
             {
                 var repositoryUrl = BuildContext.General.Repository.Url;
                 var repositoryCommitId = BuildContext.General.Repository.CommitId;
-                if (!BuildContext.General.SourceLink.IsDisabled && 
-                    !BuildContext.General.IsLocalBuild && 
-                    !string.IsNullOrWhiteSpace(repositoryUrl))
-                {       
-                    CakeContext.Information("Repository url is specified, enabling SourceLink to commit '{0}/commit/{1}'", 
-                        repositoryUrl, repositoryCommitId);
+  
+                CakeContext.Information("Repository url is specified, enabling SourceLink to commit '{0}/commit/{1}'", 
+                    repositoryUrl, repositoryCommitId);
 
-                    // TODO: For now we are assuming everything is git, we might need to change that in the future
-                    // See why we set the values at https://github.com/dotnet/sourcelink/issues/159#issuecomment-427639278
-                    msBuildSettings.WithProperty("EnableSourceLink", "true");
-                    msBuildSettings.WithProperty("EnableSourceControlManagerQueries", "false");
-                    msBuildSettings.WithProperty("PublishRepositoryUrl", "true");
-                    msBuildSettings.WithProperty("RepositoryType", "git");
-                    msBuildSettings.WithProperty("RepositoryUrl", repositoryUrl);
-                    msBuildSettings.WithProperty("RevisionId", repositoryCommitId);
+                // TODO: For now we are assuming everything is git, we might need to change that in the future
+                // See why we set the values at https://github.com/dotnet/sourcelink/issues/159#issuecomment-427639278
+                msBuildSettings.WithProperty("EnableSourceLink", "true");
+                msBuildSettings.WithProperty("EnableSourceControlManagerQueries", "false");
+                msBuildSettings.WithProperty("PublishRepositoryUrl", "true");
+                msBuildSettings.WithProperty("RepositoryType", "git");
+                msBuildSettings.WithProperty("RepositoryUrl", repositoryUrl);
+                msBuildSettings.WithProperty("RevisionId", repositoryCommitId);
 
-                    InjectSourceLinkInProjectFile(BuildContext, projectFileName);
-                }
+                InjectSourceLinkInProjectFile(BuildContext, projectFileName);
             }
 
             RunMsBuild(BuildContext, dependency, projectFileName, msBuildSettings);

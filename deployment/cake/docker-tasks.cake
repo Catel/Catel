@@ -1,10 +1,7 @@
-#pragma warning disable 1998
-
 #l "docker-variables.cake"
 #l "lib-octopusdeploy.cake"
 
-#addin "nuget:?package=Cake.FileHelpers&version=3.0.0"
-#addin "nuget:?package=Cake.Docker&version=0.9.9"
+#addin "nuget:?package=Cake.Docker&version=0.11.1"
 
 //-------------------------------------------------------------
 
@@ -233,7 +230,7 @@ public class DockerImagesProcessor : ProcessorBase
             {
                 NoCache = true, // Don't use cache, always make sure to fetch the right images
                 File = dockerImageSpecificationFileName,
-                Platform = "linux",
+                //Platform = "linux",
                 Tag = new string[] { GetDockerImageTag(dockerImage, BuildContext.General.Version.NuGet) }
             };
 

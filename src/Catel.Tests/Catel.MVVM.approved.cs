@@ -2012,19 +2012,25 @@ namespace Catel.Services
     {
         public DetermineSaveFileResult() { }
     }
+    public class DispatcherProviderService : Catel.Services.IDispatcherProviderService
+    {
+        public DispatcherProviderService() { }
+        public virtual object GetApplicationDispatcher() { }
+        public virtual object GetCurrentDispatcher() { }
+    }
     public class DispatcherService : Catel.Services.IDispatcherService
     {
-        public DispatcherService() { }
+        public DispatcherService(Catel.Services.IDispatcherProviderService dispatcherProviderService) { }
         protected virtual System.Windows.Threading.Dispatcher CurrentDispatcher { get; }
-        public void BeginInvoke(System.Action action, bool onlyBeginInvokeWhenNoAccess = true) { }
-        public void Invoke(System.Action action, bool onlyInvokeWhenNoAccess = true) { }
-        public System.Threading.Tasks.Task InvokeAsync(System.Action action) { }
-        public System.Threading.Tasks.Task InvokeAsync(System.Delegate method, params object[] args) { }
-        public System.Threading.Tasks.Task<T> InvokeAsync<T>(System.Func<T> func) { }
-        public System.Threading.Tasks.Task InvokeTaskAsync(System.Func<System.Threading.Tasks.Task> actionAsync) { }
-        public System.Threading.Tasks.Task InvokeTaskAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Threading.CancellationToken cancellationToken) { }
-        public System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.Tasks.Task<T>> funcAsync) { }
-        public System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken) { }
+        public virtual void BeginInvoke(System.Action action, bool onlyBeginInvokeWhenNoAccess = true) { }
+        public virtual void Invoke(System.Action action, bool onlyInvokeWhenNoAccess = true) { }
+        public virtual System.Threading.Tasks.Task InvokeAsync(System.Action action) { }
+        public virtual System.Threading.Tasks.Task InvokeAsync(System.Delegate method, params object[] args) { }
+        public virtual System.Threading.Tasks.Task<T> InvokeAsync<T>(System.Func<T> func) { }
+        public virtual System.Threading.Tasks.Task InvokeTaskAsync(System.Func<System.Threading.Tasks.Task> actionAsync) { }
+        public virtual System.Threading.Tasks.Task InvokeTaskAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Threading.CancellationToken cancellationToken) { }
+        public virtual System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.Tasks.Task<T>> funcAsync) { }
+        public virtual System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken) { }
     }
     public enum ExportMode
     {
@@ -2122,6 +2128,11 @@ namespace Catel.Services
         void Start();
         void Start(Catel.Services.CameraType cameraType);
         void Stop();
+    }
+    public interface IDispatcherProviderService
+    {
+        object GetApplicationDispatcher();
+        object GetCurrentDispatcher();
     }
     public interface IDispatcherService
     {
@@ -2705,6 +2716,8 @@ namespace Catel.Services
     public abstract class ViewModelServiceBase : Catel.Services.ServiceBase, Catel.Services.IService, Catel.Services.IViewModelService
     {
         protected ViewModelServiceBase() { }
+        [System.Obsolete("Use IDispatcherProviderService via Dependency Injection instead. Will be removed " +
+            "in version 6.0.0.", true)]
         protected virtual System.Windows.Threading.Dispatcher Dispatcher { get; }
     }
     public class ViewModelWrapperService : Catel.Services.ViewModelWrapperServiceBase, Catel.Services.IViewModelWrapperService
@@ -3635,6 +3648,7 @@ namespace Catel.Windows.Threading
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
     }
+    [System.Obsolete("Use `DispatcherProviderService` instead. Will be removed in version 6.0.0.", true)]
     public static class DispatcherHelper
     {
         public static System.Windows.Threading.Dispatcher CurrentDispatcher { get; }

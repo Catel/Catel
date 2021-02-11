@@ -17,15 +17,16 @@ namespace Catel.Windows.Threading
     using System.Linq;
 #else
     using System.Windows.Threading;
+    using Catel.IoC;
+    using Catel.Services;
 #endif
 
     /// <summary>
     /// Dispatcher helper class.
     /// </summary>
+    [ObsoleteEx(ReplacementTypeOrMember = "DispatcherProviderService", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
     public static class DispatcherHelper
     {
-        private static Dispatcher _dispatcher;
-
 #if UWP
         /// <summary>
         /// Checks the access of the dispatcher.
@@ -72,7 +73,7 @@ namespace Catel.Windows.Threading
             // Dispatch a callback to the current message queue, when getting called,
             // this callback will end the nested message loop.
             // note that the priority of this callback should be lower than that of UI event messages.
-            DispatcherOperation exitOperation = Dispatcher.CurrentDispatcher.BeginInvoke(
+            var exitOperation = Dispatcher.CurrentDispatcher.BeginInvoke(
                 DispatcherPriority.Background, ExitFrameCallback, nestedFrame);
 
             // pump the nested message loop, the nested message loop will immediately
@@ -106,12 +107,8 @@ namespace Catel.Windows.Threading
         {
             get
             {
-                if (_dispatcher is null)
-                {
-                    _dispatcher = GetCurrentDispatcher();
-                }
-
-                return _dispatcher;
+                var providerService = ServiceLocator.Default.ResolveType<IDispatcherProviderService>();
+                return providerService.GetApplicationDispatcher() as Dispatcher;
             }
         }
 
@@ -127,8 +124,10 @@ namespace Catel.Windows.Threading
             {
                 return currentApplication.Dispatcher;
             }
-            
-            return Dispatcher.CurrentDispatcher;
+
+            // Dispatcher.CurrentDispatcher is not useful, ignore, see https://github.com/Catel/Catel/issues/1762
+            //return Dispatcher.CurrentDispatcher;
+            return null;
 #elif UWP
             var firstView = global::Windows.ApplicationModel.Core.CoreApplication.Views.FirstOrDefault();
             if (firstView != null)

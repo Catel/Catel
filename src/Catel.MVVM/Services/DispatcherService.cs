@@ -36,35 +36,31 @@ namespace Catel.Services
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
 #if !XAMARIN && !XAMARIN_FORMS
+        private readonly IDispatcherProviderService _dispatcherProviderService;
+#endif
+
+#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Initializes a new instance of the <see cref="DispatcherService"/> class.
         /// </summary>
-        public DispatcherService()
+        public DispatcherService(IDispatcherProviderService dispatcherProviderService)
         {
-            // Get current dispatcher to make sure we have one
-            var currentDispatcher = DispatcherHelper.CurrentDispatcher;
-            if (currentDispatcher != null)
-            {
-                Log.Debug("Successfully initialized current dispatcher");
-            }
-            else
-            {
-                Log.Warning("Failed to retrieve the current dispatcher at this point, will try again later");
-            }
+            Argument.IsNotNull(nameof(dispatcherProviderService), dispatcherProviderService);
+
+            _dispatcherProviderService = dispatcherProviderService;
         }
 #endif
 
-#if ANDROID
-        private readonly Handler _handler = new Handler(Looper.MainLooper);
-#elif !XAMARIN && !XAMARIN_FORMS
+#if !XAMARIN && !XAMARIN_FORMS
         /// <summary>
         /// Gets the current dispatcher.
-        /// <para />
-        /// Internally, this property uses the <see cref="DispatcherHelper"/>, but can be overriden if required.
         /// </summary>
         protected virtual Dispatcher CurrentDispatcher
         {
-            get { return DispatcherHelper.CurrentDispatcher; }
+            get
+            {
+                return _dispatcherProviderService.GetApplicationDispatcher() as Dispatcher;
+            }
         }
 #endif
 
@@ -74,12 +70,10 @@ namespace Catel.Services
         /// </summary>
         /// <param name="action">The action.</param>
         /// <returns>The task representing the action.</returns>
-        public Task InvokeAsync(Action action)
+        public virtual Task InvokeAsync(Action action)
         {
-            var dispatcher = CurrentDispatcher;
-
 #if NET || NETCORE
-            return dispatcher.InvokeAsync(action).Task;
+            return CurrentDispatcher.InvokeAsync(action).Task;
 #else
             return dispatcher.InvokeAsync(action);
 #endif
@@ -91,7 +85,7 @@ namespace Catel.Services
         /// <param name="method">The method.</param>
         /// <param name="args">The arguments to pass into the method.</param>
         /// <returns>The task representing the action.</returns>
-        public Task InvokeAsync(Delegate method, params object[] args)
+        public virtual Task InvokeAsync(Delegate method, params object[] args)
         {
             var dispatcher = CurrentDispatcher;
 
@@ -104,7 +98,7 @@ namespace Catel.Services
         /// <typeparam name="T">The type of the result.</typeparam>
         /// <param name="func">The function.</param>
         /// <returns>The task representing the action.</returns>
-        public Task<T> InvokeAsync<T>(Func<T> func)
+        public virtual Task<T> InvokeAsync<T>(Func<T> func)
         {
             var dispatcher = CurrentDispatcher;
 
@@ -116,7 +110,7 @@ namespace Catel.Services
         /// </summary>
         /// <param name="actionAsync">The asynchronous operation without returning a value</param>
         /// <returns>The task representing the asynchronous operation</returns>
-        public Task InvokeTaskAsync(Func<Task> actionAsync)
+        public virtual Task InvokeTaskAsync(Func<Task> actionAsync)
         {
             var dispatcher = CurrentDispatcher;
 
@@ -129,7 +123,7 @@ namespace Catel.Services
         /// <param name="actionAsync">The asynchronous operation without returning a value</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns>The task representing the asynchronous operation</returns>
-        public Task InvokeTaskAsync(Func<CancellationToken, Task> actionAsync, CancellationToken cancellationToken)
+        public virtual Task InvokeTaskAsync(Func<CancellationToken, Task> actionAsync, CancellationToken cancellationToken)
         {
             var dispatcher = CurrentDispatcher;
 
@@ -141,7 +135,7 @@ namespace Catel.Services
         /// <typeparam name="T">The type of the result of the asynchronous operation</typeparam>
         /// <param name="funcAsync">The asynchronous operation which returns a value</param>
         /// <returns>The task representing the asynchronous operation with the returning value</returns>
-        public Task<T> InvokeTaskAsync<T>(Func<Task<T>> funcAsync)
+        public virtual Task<T> InvokeTaskAsync<T>(Func<Task<T>> funcAsync)
         {
             var dispatcher = CurrentDispatcher;
 
@@ -155,7 +149,7 @@ namespace Catel.Services
         /// <param name="funcAsync">The asynchronous operation which returns a value and supports cancelling</param>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns>The task representing the asynchronous operation with the returning value</returns>
-        public Task<T> InvokeTaskAsync<T>(Func<CancellationToken, Task<T>> funcAsync, CancellationToken cancellationToken)
+        public virtual Task<T> InvokeTaskAsync<T>(Func<CancellationToken, Task<T>> funcAsync, CancellationToken cancellationToken)
         {
             var dispatcher = CurrentDispatcher;
 
@@ -170,7 +164,7 @@ namespace Catel.Services
         /// <param name="onlyInvokeWhenNoAccess">If set to <c>true</c>, the action will be executed directly if possible. Otherwise, 
         /// <c>Dispatcher.BeginInvoke</c> will be used.</param>
         /// <exception cref="ArgumentNullException">The <paramref name="action" /> is <c>null</c>.</exception>
-        public void Invoke(Action action, bool onlyInvokeWhenNoAccess = true)
+        public virtual void Invoke(Action action, bool onlyInvokeWhenNoAccess = true)
         {
             Argument.IsNotNull("action", action);
 #if XAMARIN_FORMS
@@ -199,7 +193,7 @@ namespace Catel.Services
         /// <param name="action">The action.</param>
         /// <param name="onlyBeginInvokeWhenNoAccess">If set to <c>true</c>, the action will be executed directly if possible. Otherwise, 
         /// <c>Dispatcher.BeginInvoke</c> will be used.</param>
-        public void BeginInvoke(Action action, bool onlyBeginInvokeWhenNoAccess = true)
+        public virtual void BeginInvoke(Action action, bool onlyBeginInvokeWhenNoAccess = true)
         {
             Argument.IsNotNull("action", action);
 #if XAMARIN_FORMS
