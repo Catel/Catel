@@ -153,7 +153,7 @@ namespace Catel.Windows.Threading
             if (dispatcher.CheckAccess())
             {
                 action();
-                return TaskHelper.Completed;
+                return Task.CompletedTask;
             }
 
             var tcs = new TaskCompletionSource<bool>();
