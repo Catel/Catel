@@ -17,7 +17,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// Register the Collection property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData CollectionProperty = RegisterProperty("Collection", typeof(CollectionView), () => new CollectionView(new List<int>() {1, 2, 3}));
+        public static readonly IPropertyData CollectionProperty = RegisterProperty("Collection", () => new CollectionView(new List<int>() { 1, 2, 3 }));
 
         /// <summary>
         /// Gets or sets the property value.

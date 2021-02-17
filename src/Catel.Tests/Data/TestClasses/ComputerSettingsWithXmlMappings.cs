@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.ObjectModel;
-    using System.Runtime.Serialization;
     using System.Xml.Serialization;
     using Catel.Data;
 
@@ -41,7 +40,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData ComputerNameProperty = RegisterProperty("ComputerName", typeof(string), string.Empty);
+        public static readonly IPropertyData ComputerNameProperty = RegisterProperty("ComputerName", string.Empty);
 
         /// <summary>
         ///   Gets or sets the collection of ini files.
@@ -56,8 +55,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData IniFileCollectionProperty = RegisterProperty("IniFileCollection", typeof(ObservableCollection<IniFile>),
-            () => new ObservableCollection<IniFile>());
+        public static readonly IPropertyData IniFileCollectionProperty = RegisterProperty<ObservableCollection<IniFile>>("IniFileCollection", () => new ObservableCollection<IniFile>());
         #endregion
     }
 }

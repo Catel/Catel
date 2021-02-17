@@ -38,7 +38,7 @@ namespace Catel.Tests.ViewModels
         /// <summary>
         /// Register the Name property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
     }
 }
 
@@ -61,7 +61,7 @@ namespace Catel.Tests
         /// <summary>
         /// Register the Name property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
     }
 
     public class SameNamespacePersonView

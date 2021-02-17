@@ -26,9 +26,9 @@ namespace Catel.Tests.Runtime.Serialization
             {
                 var modelC = new TestModels.ModelC();
 
-                Assert.IsNull(modelC.ModelAProperty);
-                Assert.IsNull(modelC.ModelBProperty);
-                Assert.IsNull(modelC.ModelCProperty);
+                Assert.AreEqual(string.Empty, modelC.ModelAProperty);
+                Assert.AreEqual(string.Empty, modelC.ModelBProperty);
+                Assert.AreEqual(string.Empty, modelC.ModelCProperty);
 
                 var clonedModelC = SerializationTestHelper.SerializeAndDeserialize(modelC, SerializationFactory.GetXmlSerializer());
 
@@ -45,7 +45,7 @@ namespace Catel.Tests.Runtime.Serialization
 
                 var clonedModelC = SerializationTestHelper.SerializeAndDeserialize(modelC, SerializationFactory.GetXmlSerializer());
 
-                Assert.AreEqual(null, clonedModelC.IgnoredMember);
+                Assert.AreEqual(string.Empty, clonedModelC.IgnoredMember);
             }
 
             [TestCase]

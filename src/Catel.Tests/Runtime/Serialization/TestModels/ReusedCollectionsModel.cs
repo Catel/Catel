@@ -36,7 +36,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
         /// <summary>
         /// Register the Collection1 property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData Collection1Property = RegisterProperty("Collection1", typeof(List<int>), null);
+        public static readonly IPropertyData Collection1Property = RegisterProperty("Collection1", () => new List<int>());
 
         /// <summary>
         /// Gets or sets the property value.
@@ -50,6 +50,6 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
         /// <summary>
         /// Register the Collection1 property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData Collection2Property = RegisterProperty("Collection2", typeof(List<int>), null);
+        public static readonly IPropertyData Collection2Property = RegisterProperty("Collection2", () => new List<int>());
     }
 }

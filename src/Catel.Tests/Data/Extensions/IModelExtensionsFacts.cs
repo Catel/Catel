@@ -15,7 +15,7 @@
                 set { SetValue(FooProperty, value); }
             }
 
-            public static readonly IPropertyData FooProperty = RegisterProperty(nameof(Foo), typeof(string), null);
+            public static readonly IPropertyData FooProperty = RegisterProperty<string>(nameof(Foo));
         }
 
         public class Plugin : ChildAwareModelBase
@@ -26,7 +26,7 @@
                 set { SetValue(NameProperty, value); }
             }
 
-            public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), null);
+            public static readonly IPropertyData NameProperty = RegisterProperty<string>(nameof(Name));
 
             public FastObservableCollection<Preset> Presets
             {
@@ -34,8 +34,7 @@
                 set { SetValue(PresetsProperty, value); }
             }
 
-            public static readonly IPropertyData PresetsProperty = RegisterProperty(nameof(Presets), typeof(FastObservableCollection<Preset>),
-                () => new FastObservableCollection<Preset>());
+            public static readonly IPropertyData PresetsProperty = RegisterProperty< FastObservableCollection<Preset>>(nameof(Presets), () => new FastObservableCollection<Preset>());
 
             public void ClearDirty()
             {
@@ -51,7 +50,7 @@
                 set { SetValue(NameProperty, value); }
             }
 
-            public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), null);
+            public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), string.Empty);
 
             public FastObservableCollection<Plugin> Plugins
             {
@@ -59,8 +58,7 @@
                 set { SetValue(PluginsProperty, value); }
             }
 
-            public static readonly IPropertyData PluginsProperty = RegisterProperty(nameof(Plugins), typeof(FastObservableCollection<Plugin>),
-                () => new FastObservableCollection<Plugin>());
+            public static readonly IPropertyData PluginsProperty = RegisterProperty(nameof(Plugins), () => new FastObservableCollection<Plugin>());
 
         }
 

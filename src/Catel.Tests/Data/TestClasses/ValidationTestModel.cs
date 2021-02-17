@@ -49,7 +49,7 @@
         /// <summary>
         ///   Register the ErrorWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData ErrorWhenEmptyProperty = RegisterProperty("ErrorWhenEmpty", typeof(string), string.Empty);
+        public static readonly IPropertyData ErrorWhenEmptyProperty = RegisterProperty("ErrorWhenEmpty", string.Empty);
 
         /// <summary>
         ///   Gets or sets field that returns a warning when empty.
@@ -63,7 +63,7 @@
         /// <summary>
         ///   Register the WarningWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData WarningWhenEmptyProperty = RegisterProperty("WarningWhenEmpty", typeof(string), string.Empty);
+        public static readonly IPropertyData WarningWhenEmptyProperty = RegisterProperty("WarningWhenEmpty", string.Empty);
 
         /// <summary>
         ///   Gets or sets field that returns a business rule error when empty.
@@ -77,7 +77,7 @@
         /// <summary>
         ///   Register the BusinessRuleErrorWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData BusinessRuleErrorWhenEmptyProperty = RegisterProperty("BusinessRuleErrorWhenEmpty", typeof(string), string.Empty);
+        public static readonly IPropertyData BusinessRuleErrorWhenEmptyProperty = RegisterProperty("BusinessRuleErrorWhenEmpty", string.Empty);
 
         /// <summary>
         ///   Gets or sets field that returns a business rule warning when empty.
@@ -91,7 +91,7 @@
         /// <summary>
         ///   Register the BusinessRuleWarningWhenEmpty property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData BusinessRuleWarningWhenEmptyProperty = RegisterProperty("BusinessRuleWarningWhenEmpty", typeof(string), string.Empty);
+        public static readonly IPropertyData BusinessRuleWarningWhenEmptyProperty = RegisterProperty("BusinessRuleWarningWhenEmpty", string.Empty);
 
         public new bool HideValidationResults
         {

@@ -120,7 +120,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
             set { SetValue(LastNameProperty, value); }
         }
 
-        public static readonly IPropertyData LastNameProperty = RegisterProperty(nameof(LastName), typeof(string), null);
+        public static readonly IPropertyData LastNameProperty = RegisterProperty(nameof(LastName), string.Empty);
         #endregion
     }
 }

@@ -55,7 +55,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { SetValue(NameProperty, value); }
                 }
 
-                public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+                public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
             }
 
             [Serializable]
@@ -81,7 +81,7 @@ namespace Catel.Tests.Runtime.Serialization
                     set { SetValue(ItemsProperty, value); }
                 }
 
-                public static readonly IPropertyData ItemsProperty = RegisterProperty("Items", typeof(ObservableCollection<AbstractBase>), null);
+                public static readonly IPropertyData ItemsProperty = RegisterProperty("Items", () => new ObservableCollection<AbstractBase>());
             }
 
             [TestCase]
@@ -110,10 +110,10 @@ namespace Catel.Tests.Runtime.Serialization
                     Assert.AreEqual(null, clonedModel.ExcludedRegularProperty, description);
                     Assert.AreEqual("included", clonedModel.IncludedRegularProperty, description);
 
-                    Assert.AreEqual(null, clonedModel.ExcludedCatelProperty, description);
+                    Assert.AreEqual(string.Empty, clonedModel.ExcludedCatelProperty, description);
                     Assert.AreEqual("included", clonedModel.IncludedCatelProperty, description);
 
-                    Assert.AreEqual(null, ((IModelEditor)clonedModel).GetValue<object>(TestModel.ExcludedProtectedCatelPropertyProperty.Name), description);
+                    Assert.AreEqual(string.Empty, ((IModelEditor)clonedModel).GetValue<object>(TestModel.ExcludedProtectedCatelPropertyProperty.Name), description);
                 });
             }
 

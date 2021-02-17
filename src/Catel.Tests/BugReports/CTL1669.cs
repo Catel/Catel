@@ -36,7 +36,7 @@
             set => SetValue(NameProperty, value);
         }
 
-        public static readonly PropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string));
+        public static readonly IPropertyData NameProperty = RegisterProperty<string>(nameof(Name));
     }
 
     public abstract class AnimalViewModelBase : ViewModelBase
@@ -53,7 +53,7 @@
             set => SetValue(AnimalProperty, value);
         }
 
-        public static readonly PropertyData AnimalProperty = RegisterProperty(nameof(Animal), typeof(AnimalModelBase));
+        public static readonly IPropertyData AnimalProperty = RegisterProperty<AnimalModelBase>(nameof(Animal));
     }
 
     public class DogViewModel : AnimalViewModelBase
@@ -70,6 +70,6 @@
             set => SetValue(NameProperty, value);
         }
 
-        public static readonly PropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string));
+        public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), string.Empty);
     }
 }

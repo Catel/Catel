@@ -8,10 +8,9 @@
 
 namespace Catel.Tests.Runtime.Serialization.TestModels
 {
-    using Catel.Data;
-    using System.Xml.Linq;
-    using Catel.Runtime.Serialization.Xml;
     using System.Xml;
+    using Catel.Data;
+    using Catel.Runtime.Serialization.Xml;
 
     public class CustomXmlSerializationModel : CustomSerializationModelBase, ICustomXmlSerializable
     {
@@ -45,7 +44,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
 
 
         public CustomXmlSerializationModel NestedModel
@@ -53,7 +52,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             get { return GetValue<CustomXmlSerializationModel>(NestedModelProperty); }
             set { SetValue(NestedModelProperty, value); }
         }
-        
-        public static readonly IPropertyData NestedModelProperty = RegisterProperty("NestedModel", typeof(CustomXmlSerializationModel), null);
+
+        public static readonly IPropertyData NestedModelProperty = RegisterProperty<CustomXmlSerializationModel>("NestedModel");
     }
 }

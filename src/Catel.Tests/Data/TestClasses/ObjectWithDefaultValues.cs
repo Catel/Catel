@@ -84,7 +84,7 @@
         /// <summary>
         ///   Register the ReferenceType_DefaultValueViaValue property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData ReferenceType_DefaultValueViaValueProperty = RegisterProperty("ReferenceType_DefaultValueViaValue", typeof(Collection<int>), new Collection<int>());
+        public static readonly IPropertyData ReferenceType_DefaultValueViaValueProperty = RegisterProperty<Collection<int>>("ReferenceType_DefaultValueViaValue", new Collection<int>());
 
         /// <summary>
         ///   ReferenceType_DefaultValueViaCallback.
@@ -98,7 +98,7 @@
         /// <summary>
         ///   Register the ReferenceType_DefaultValueViaCallback property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData ReferenceType_DefaultValueViaCallbackProperty = RegisterProperty("ReferenceType_DefaultValueViaCallback", typeof(Collection<int>), () => new Collection<int>());
+        public static readonly IPropertyData ReferenceType_DefaultValueViaCallbackProperty = RegisterProperty("ReferenceType_DefaultValueViaCallback", () => new Collection<int>());
         #endregion
 
         #region Methods

@@ -43,11 +43,11 @@ namespace Catel.Data
         /// <see cref="PropertyData"/> containing the property information.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static IPropertyData RegisterProperty(string name, Type type, object defaultValue,
+        public static IPropertyData RegisterPropertyNonGeneric(string name, Type type, object defaultValue = null,
             EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true,
             bool includeInBackup = true, bool isModelBaseProperty = false)
         {
-            return RegisterProperty(name, type, () => defaultValue, propertyChangedEventHandler, includeInSerialization, includeInBackup, isModelBaseProperty);
+            return RegisterPropertyNonGeneric(name, type, () => defaultValue, propertyChangedEventHandler, includeInSerialization, includeInBackup, isModelBaseProperty);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Catel.Data
         /// <see cref="PropertyData"/> containing the property information.
         /// </returns>
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        public static IPropertyData RegisterProperty(string name, Type type, Func<object> createDefaultValue,
+        public static IPropertyData RegisterPropertyNonGeneric(string name, Type type, Func<object> createDefaultValue,
             EventHandler<PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true,
             bool includeInBackup = true, bool isModelBaseProperty = false)
         {

@@ -1,7 +1,6 @@
 ﻿namespace Catel.Tests.Data
 {
     using System;
-    using System.Runtime.Serialization;
     using Catel.Data;
 
     /// <summary>
@@ -52,7 +51,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData DefaultValueProperty = RegisterProperty("DefaultValue", typeof(string), string.Empty);
+        public static readonly IPropertyData DefaultValueProperty = RegisterProperty("DefaultValue", string.Empty);
 
         /// <summary>
         ///   Gets or sets the property value.
@@ -66,7 +65,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData TypeProperty = RegisterProperty("Type", typeof(IniEntryType), IniEntryType.Old);
+        public static readonly IPropertyData TypeProperty = RegisterProperty("Type", IniEntryType.Old);
         #endregion
     }
 }

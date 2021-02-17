@@ -16,7 +16,7 @@
         /// <summary>
         ///   Register the ValueType property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData ValueTypeProperty = RegisterProperty("ValueType", typeof(int), 1);
+        public static readonly IPropertyData ValueTypeProperty = RegisterProperty("ValueType", 1);
 
         /// <summary>
         ///   Gets or sets a value type without default value.

@@ -23,7 +23,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(ModelAPropertyProperty, value); }
         }
 
-        public static readonly IPropertyData ModelAPropertyProperty = RegisterProperty("ModelAProperty", typeof(string), null);
+        public static readonly IPropertyData ModelAPropertyProperty = RegisterProperty("ModelAProperty", string.Empty);
     }
 
     [SerializerModifier(typeof(ModelBSerializerModifier))]
@@ -35,7 +35,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(ModelBPropertyProperty, value); }
         }
 
-        public static readonly IPropertyData ModelBPropertyProperty = RegisterProperty("ModelBProperty", typeof(string), null);
+        public static readonly IPropertyData ModelBPropertyProperty = RegisterProperty("ModelBProperty", string.Empty);
     }
 
     [SerializerModifier(typeof(ModelCSerializerModifier))]
@@ -47,7 +47,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(ModelCPropertyProperty, value); }
         }
 
-        public static readonly IPropertyData ModelCPropertyProperty = RegisterProperty("ModelCProperty", typeof(string), null);
+        public static readonly IPropertyData ModelCPropertyProperty = RegisterProperty("ModelCProperty", string.Empty);
 
         public string IgnoredMember
         {
@@ -55,7 +55,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(IgnoredMemberProperty, value); }
         }
 
-        public static readonly IPropertyData IgnoredMemberProperty = RegisterProperty("IgnoredMember", typeof(string), null);
+        public static readonly IPropertyData IgnoredMemberProperty = RegisterProperty("IgnoredMember", string.Empty);
     }
 
     [SerializerModifier(typeof(CTL550ModelSerializerModifier))]
@@ -80,7 +80,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
         /// <summary>
         /// Register the CustomizedCollection property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData CustomizedCollectionProperty = RegisterProperty("CustomizedCollection", typeof(ObservableCollection<int>), () => new ObservableCollection<int>());
+        public static readonly IPropertyData CustomizedCollectionProperty = RegisterProperty("CustomizedCollection", () => new ObservableCollection<int>());
     }
 
     public class DynamicSerializerModifierModel : ModelBase
@@ -97,7 +97,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
         /// <summary>
         /// Register the Name property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
     }
 
     public class DynamicSerializerModifier : SerializerModifierBase<DynamicSerializerModifierModel>

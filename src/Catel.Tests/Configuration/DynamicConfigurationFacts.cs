@@ -50,7 +50,7 @@ namespace Catel.Tests.Configuration
             /// <summary>
             /// Register the FirstName property so it is known in the class.
             /// </summary>
-            public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
+            public static readonly IPropertyData FirstNameProperty = RegisterProperty<string>("FirstName", string.Empty);
 
             /// <summary>
             /// Gets or sets the property value.
@@ -64,7 +64,7 @@ namespace Catel.Tests.Configuration
             /// <summary>
             /// Register the MiddleName property so it is known in the class.
             /// </summary>
-            public static readonly IPropertyData MiddleNameProperty = RegisterProperty("MiddleName", typeof(string), string.Empty);
+            public static readonly IPropertyData MiddleNameProperty = RegisterProperty<string>("MiddleName", string.Empty);
 
             /// <summary>
             /// Gets or sets the property value.
@@ -78,7 +78,7 @@ namespace Catel.Tests.Configuration
             /// <summary>
             /// Register the LastName property so it is known in the class.
             /// </summary>
-            public static readonly IPropertyData LastNameProperty = RegisterProperty("LastName", typeof(string), string.Empty);
+            public static readonly IPropertyData LastNameProperty = RegisterProperty<string>("LastName", string.Empty);
         }
 
         [TestCase]

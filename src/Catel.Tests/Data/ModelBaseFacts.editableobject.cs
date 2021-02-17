@@ -32,7 +32,7 @@ namespace Catel.Tests.Data
                 set { SetValue(FirstNameProperty, value); }
             }
 
-            public static readonly IPropertyData FirstNameProperty = RegisterProperty(nameof(FirstName), typeof(string), null);
+            public static readonly IPropertyData FirstNameProperty = RegisterProperty(nameof(FirstName), string.Empty);
             
         }
 
@@ -133,8 +133,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the IgnoredPropertyInBackup property so it is known in the class.
             /// </summary>
-            public static readonly IPropertyData IgnoredPropertyInBackupProperty = RegisterProperty("IgnoredPropertyInBackup", typeof(int), 42,
-                null, true, false);
+            public static readonly IPropertyData IgnoredPropertyInBackupProperty = RegisterProperty<int>("IgnoredPropertyInBackup", 42, null, true, false);
 
             private bool _onBeginEditCalled;
             private bool _beginEditingCalled;
@@ -152,7 +151,7 @@ namespace Catel.Tests.Data
                 set { SetValue(NameProperty, value); }
             }
 
-            public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), default(string));
+            public static readonly IPropertyData NameProperty = RegisterProperty<string>("Name", default(string));
 
             public ClearIsDirtyModel()
             {

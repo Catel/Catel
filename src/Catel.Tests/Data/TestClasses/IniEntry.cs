@@ -87,7 +87,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData GroupProperty = RegisterProperty("Group", typeof(string), string.Empty);
+        public static readonly IPropertyData GroupProperty = RegisterProperty("Group", string.Empty);
 
         /// <summary>
         ///   Gets or sets the key.
@@ -101,7 +101,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData KeyProperty = RegisterProperty("Key", typeof(string), string.Empty);
+        public static readonly IPropertyData KeyProperty = RegisterProperty("Key", string.Empty);
 
         /// <summary>
         ///   Gets or sets the value.
@@ -115,7 +115,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData ValueProperty = RegisterProperty("Value", typeof(string), string.Empty);
+        public static readonly IPropertyData ValueProperty = RegisterProperty("Value", string.Empty);
 
         /// <summary>
         /// Gets or sets the ini entry type.
@@ -129,7 +129,7 @@
         /// <summary>
         /// Register the IniEntryType property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData IniEntryTypeProperty = RegisterProperty("IniEntryType", typeof(IniEntryType), IniEntryType.Public);
+        public static readonly IPropertyData IniEntryTypeProperty = RegisterProperty("IniEntryType", IniEntryType.Public);
         #endregion
 
         #region Methods

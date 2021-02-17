@@ -45,7 +45,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
 
 
         public CustomJsonSerializationModel NestedModel
@@ -54,7 +54,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(NestedModelProperty, value); }
         }
 
-        public static readonly IPropertyData NestedModelProperty = RegisterProperty("NestedModel", typeof(CustomJsonSerializationModel), null);
+        public static readonly IPropertyData NestedModelProperty = RegisterProperty<CustomJsonSerializationModel>("NestedModel");
     }
 
     public class CustomJsonSerializationModelWithEnum : ModelBase
@@ -65,7 +65,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
 
         [SerializeEnumAsString]
         public CustomSerializationEnum EnumWithAttribute

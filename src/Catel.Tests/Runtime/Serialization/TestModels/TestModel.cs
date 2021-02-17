@@ -33,7 +33,7 @@ namespace Catel.Tests.Runtime.Serialization
         /// <summary>
         /// Register the DateTimeProperty property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData DateTimePropertyProperty = RegisterProperty("DateTimeProperty", typeof(DateTime), DateTime.Now);
+        public static readonly IPropertyData DateTimePropertyProperty = RegisterProperty("DateTimeProperty", DateTime.Now);
 
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Catel.Tests.Runtime.Serialization
         /// <summary>
         /// Register the IncludedCatelProperty property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData IncludedCatelPropertyProperty = RegisterProperty("IncludedCatelProperty", typeof(string), null);
+        public static readonly IPropertyData IncludedCatelPropertyProperty = RegisterProperty("IncludedCatelProperty", string.Empty);
 
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Catel.Tests.Runtime.Serialization
         /// <summary>
         /// Register the ExcludedCatelProperty property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData ExcludedCatelPropertyProperty = RegisterProperty("ExcludedCatelProperty", typeof(string), null);
+        public static readonly IPropertyData ExcludedCatelPropertyProperty = RegisterProperty("ExcludedCatelProperty", string.Empty);
 
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Catel.Tests.Runtime.Serialization
         /// <summary>
         /// Register the ExcludedProtectedCatelProperty property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData ExcludedProtectedCatelPropertyProperty = RegisterProperty("ExcludedProtectedCatelProperty", typeof(string), null);
+        public static readonly IPropertyData ExcludedProtectedCatelPropertyProperty = RegisterProperty("ExcludedProtectedCatelProperty", string.Empty);
 
 
         public string ExcludedRegularProperty { get; set; }

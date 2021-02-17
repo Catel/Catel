@@ -323,6 +323,19 @@ namespace Catel.Data
             var objectType = GetType();
             var propertyName = propertyData.Name;
 
+            if (propertyData.Type == typeof(Type))
+            {
+                // If default value is a type, something smells (could be the result of a bad migration)
+                var propertyInfo = PropertyHelper.GetPropertyInfo(this, propertyName);
+                if (propertyInfo is not null)
+                {
+                    if (propertyInfo.PropertyType != typeof(Type))
+                    {
+                        throw Log.ErrorAndCreateException<CatelException>($"Default property value for property '{objectType.Name}.{propertyName}' is of type 'Type', but actual type is '{propertyInfo.PropertyType.Name}'. This appears to be an upgrade issue to Catel 6.x");
+                    }
+                }
+            }
+
             if (!IsPropertyRegistered(propertyName))
             {
                 propertyData.IsCalculatedProperty = isCalculatedProperty;

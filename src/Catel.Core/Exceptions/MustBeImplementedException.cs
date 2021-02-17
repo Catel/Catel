@@ -17,7 +17,6 @@ namespace Catel
     /// </summary>
     public class MustBeImplementedException : Exception
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="NotSupportedInPlatformException"/> class.
         /// </summary>
@@ -25,6 +24,5 @@ namespace Catel
             : base("Unfortunately, the team has limited resources and must focus on the most requested features. Feel free to create a pull request or notify the team that you are missing this feature.")
         {
         }
-        #endregion
     }
 }

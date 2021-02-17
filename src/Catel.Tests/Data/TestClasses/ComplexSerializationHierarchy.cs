@@ -8,9 +8,7 @@ namespace Catel.Tests.Data
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Runtime.Serialization;
-    using System.Xml.Serialization;
     using Catel.Data;
 
     public enum SortDirection
@@ -116,9 +114,9 @@ namespace Catel.Tests.Data
             {
                 LastName = "Family last name"
             };
-            
+
             family.Persons.Add(new Person { FirstName = "Mrs.", LastName = "Doe", Gender = Gender.Female });
-            family.Persons.Add(new Person { FirstName = "Mr.", LastName = "Bla", Gender = Gender.Male});
+            family.Persons.Add(new Person { FirstName = "Mr.", LastName = "Bla", Gender = Gender.Male });
 
             return family;
         }
@@ -191,7 +189,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// GridSettings property data.
         /// </summary>
-        public static readonly IPropertyData GridSettingsProperty = RegisterProperty("GridSettings", typeof(GridSettings), new GridSettings());
+        public static readonly IPropertyData GridSettingsProperty = RegisterProperty<GridSettings>("GridSettings", new GridSettings());
 
         #endregion
 
@@ -209,7 +207,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// PendingGridSettings property data.
         /// </summary>
-        public static readonly IPropertyData PendingGridSettingsProperty = RegisterProperty("PendingGridSettings", typeof(GridSettings), new GridSettings());
+        public static readonly IPropertyData PendingGridSettingsProperty = RegisterProperty<GridSettings>("PendingGridSettings", new GridSettings());
 
         #endregion
 
@@ -227,7 +225,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// ScheduledGridSettings property data.
         /// </summary>
-        public static readonly IPropertyData ScheduledGridSettingsProperty = RegisterProperty("ScheduledGridSettings", typeof(GridSettings), new GridSettings());
+        public static readonly IPropertyData ScheduledGridSettingsProperty = RegisterProperty<GridSettings>("ScheduledGridSettings", new GridSettings());
 
         #endregion
     }
@@ -256,7 +254,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// SortSettings property data.
         /// </summary>
-        public static readonly IPropertyData SortSettingsProperty = RegisterProperty("SortSettings", typeof(List<SortSetting>), new List<SortSetting>());
+        public static readonly IPropertyData SortSettingsProperty = RegisterProperty<List<SortSetting>>("SortSettings", () => new List<SortSetting>());
 
         #endregion
 
@@ -274,7 +272,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// GroupingOrder property data.
         /// </summary>
-        public static readonly IPropertyData GroupingOrderProperty = RegisterProperty("GroupingOrder", typeof(List<string>), new List<string>());
+        public static readonly IPropertyData GroupingOrderProperty = RegisterProperty< List<string>>("GroupingOrder", () => new List<string>());
 
         #endregion
 
@@ -292,7 +290,7 @@ namespace Catel.Tests.Data
         /// <summary>
         /// ColumnPositions property data.
         /// </summary>
-        public static readonly IPropertyData ColumnSettingsProperty = RegisterProperty("ColumnSettings", typeof(List<ColumnSettings>), new List<ColumnSettings>());
+        public static readonly IPropertyData ColumnSettingsProperty = RegisterProperty<List<ColumnSettings>>("ColumnSettings", () => new List<ColumnSettings>());
 
         #endregion
     }

@@ -16,7 +16,7 @@
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), string.Empty);
 
         public List<TestModelWithNestedListMembers_Level1> Children
         {
@@ -24,7 +24,7 @@
             set { SetValue(ChildrenProperty, value); }
         }
 
-        public static readonly IPropertyData ChildrenProperty = RegisterProperty(nameof(Children), typeof(List<TestModelWithNestedListMembers_Level1>), null);
+        public static readonly IPropertyData ChildrenProperty = RegisterProperty(nameof(Children), () => new List<TestModelWithNestedListMembers_Level1>());
     }
 
     public class TestModelWithNestedListMembers_Level1 : ModelBase
@@ -40,7 +40,7 @@
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), string.Empty);
 
         public List<TestModelWithNestedListMembers_Level2> Children
         {
@@ -48,7 +48,7 @@
             set { SetValue(ChildrenProperty, value); }
         }
 
-        public static readonly IPropertyData ChildrenProperty = RegisterProperty(nameof(Children), typeof(List<TestModelWithNestedListMembers_Level2>), null);
+        public static readonly IPropertyData ChildrenProperty = RegisterProperty(nameof(Children), () => new List<TestModelWithNestedListMembers_Level2>());
     }
 
     public class TestModelWithNestedListMembers_Level2 : ModelBase
@@ -59,6 +59,6 @@
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), string.Empty);
     }
 }

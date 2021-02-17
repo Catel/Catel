@@ -18,7 +18,7 @@
             set { SetValue(NameProperty, value); }
         }
 
-        public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), null);
+        public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), string.Empty);
 
 
         public bool BoolValue
@@ -27,7 +27,7 @@
             set { SetValue(BoolValueProperty, value); }
         }
 
-        public static readonly IPropertyData BoolValueProperty = RegisterProperty(nameof(BoolValue), typeof(bool), null);
+        public static readonly IPropertyData BoolValueProperty = RegisterProperty(nameof(BoolValue), false);
 
 
         public int IntValue
@@ -36,7 +36,7 @@
             set { SetValue(IntValueProperty, value); }
         }
 
-        public static readonly IPropertyData IntValueProperty = RegisterProperty(nameof(IntValue), typeof(int), null);
+        public static readonly IPropertyData IntValueProperty = RegisterProperty(nameof(IntValue), 0);
 
 
         public Type Type
@@ -45,7 +45,7 @@
             set { SetValue(TypeProperty, value); }
         }
 
-        public static readonly IPropertyData TypeProperty = RegisterProperty(nameof(Type), typeof(Type), null);
+        public static readonly IPropertyData TypeProperty = RegisterProperty<Type>(nameof(Type));
 
 
         public object Value
@@ -54,7 +54,7 @@
             set { SetValue(ValueProperty, value); }
         }
 
-        public static readonly IPropertyData ValueProperty = RegisterProperty(nameof(Value), typeof(object), null);
+        public static readonly IPropertyData ValueProperty = RegisterProperty<object>(nameof(Value));
 
 
         public RecordDetailItemValue ComparedValue1
@@ -63,7 +63,7 @@
             set { SetValue(ComparedValue1Property, value); }
         }
 
-        public static readonly IPropertyData ComparedValue1Property = RegisterProperty(nameof(ComparedValue1), typeof(RecordDetailItemValue), null);
+        public static readonly IPropertyData ComparedValue1Property = RegisterProperty<RecordDetailItemValue>(nameof(ComparedValue1));
 
 
         public RecordDetailItemValue ComparedValue2
@@ -72,7 +72,7 @@
             set { SetValue(ComparedValue2Property, value); }
         }
 
-        public static readonly IPropertyData ComparedValue2Property = RegisterProperty(nameof(ComparedValue2), typeof(RecordDetailItemValue), null);
+        public static readonly IPropertyData ComparedValue2Property = RegisterProperty<RecordDetailItemValue>(nameof(ComparedValue2));
 
 
         public List<RecordDetailItem> Children
@@ -81,7 +81,7 @@
             set { SetValue(ChildrenProperty, value); }
         }
 
-        public static readonly IPropertyData ChildrenProperty = RegisterProperty(nameof(Children), typeof(List<RecordDetailItem>), null);
+        public static readonly IPropertyData ChildrenProperty = RegisterProperty(nameof(Children), () => new List<RecordDetailItem>());
 
         public override string ToString()
         {

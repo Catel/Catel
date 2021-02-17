@@ -34,7 +34,7 @@
         /// <summary>
         ///   Register the FirstName property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), string.Empty);
+        public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty);
 
         /// <summary>
         ///   Gets or sets the gender.
@@ -48,7 +48,7 @@
         /// <summary>
         ///   Register the Gender property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData GenderProperty = RegisterProperty("Gender", typeof(Gender), Gender.Male);
+        public static readonly IPropertyData GenderProperty = RegisterProperty("Gender", Gender.Male);
         #endregion
 
         #region Methods

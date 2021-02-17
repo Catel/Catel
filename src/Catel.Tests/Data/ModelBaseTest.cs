@@ -330,7 +330,7 @@
         public void InitializePropertyAfterConstruction_SingleInstanceConstruction()
         {
             var obj = new DynamicObject();
-            var dynamicProperty = DynamicObject.RegisterProperty("DynamicProperty", typeof(int));
+            var dynamicProperty = DynamicObject.RegisterProperty<int>("DynamicProperty");
             obj.InitializePropertyAfterConstruction(dynamicProperty);
 
             obj.SetValue(dynamicProperty.Name, 5);
@@ -343,14 +343,14 @@
             // Added because of a bug where double instantiation would not initialize the properties correctly
             // the 2nd time
             var obj = new DynamicObject();
-            var dynamicProperty = DynamicObject.RegisterProperty("DynamicProperty", typeof(int));
+            var dynamicProperty = DynamicObject.RegisterProperty<int>("DynamicProperty");
             obj.InitializePropertyAfterConstruction(dynamicProperty);
 
             obj.SetValue(dynamicProperty.Name, 5);
             Assert.AreEqual(5, obj.GetValue<int>(dynamicProperty.Name));
 
             obj = new DynamicObject();
-            dynamicProperty = DynamicObject.RegisterProperty("DynamicProperty", typeof(int));
+            dynamicProperty = DynamicObject.RegisterProperty<int>("DynamicProperty");
             obj.InitializePropertyAfterConstruction(dynamicProperty);
 
             obj.SetValue(dynamicProperty.Name, 5);

@@ -30,7 +30,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the FirstName property so it is known in the class.
             /// </summary>
-            public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+            public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty);
         }
 
         [TestFixture]

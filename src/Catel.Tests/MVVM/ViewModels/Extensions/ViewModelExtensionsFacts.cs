@@ -27,7 +27,7 @@ namespace Catel.Tests.MVVM.ViewModels
                     set { SetValue(FirstNameProperty, value); }
                 }
 
-                public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", typeof(string), null);
+                public static readonly IPropertyData FirstNameProperty = RegisterProperty("FirstName", string.Empty);
             }
 
             [TestCase]

@@ -27,7 +27,6 @@ namespace Catel.MVVM.Auditing
             PropertiesToIgnore = new HashSet<string>();
 
             PropertiesToIgnore.Add("IsDirty");
-            PropertiesToIgnore.Add("IsEditable");
             PropertiesToIgnore.Add("IsReadOnly");
             PropertiesToIgnore.Add("ParentViewModel");
             PropertiesToIgnore.Add("Title");

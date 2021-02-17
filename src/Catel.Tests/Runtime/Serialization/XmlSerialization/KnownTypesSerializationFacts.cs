@@ -33,7 +33,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
     public class ParamsBase : ComparableModelBase, IParams
     {
         // This method returns the array of known types.
-        static Type[] KnownTypes()
+        public static Type[] KnownTypes()
         {
             return new[] { typeof(PluginA.Params), typeof(PluginB.Params) };
         }
@@ -80,7 +80,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
             set { SetValue(ParametersProperty, value); }
         }
 
-        public static readonly IPropertyData ParametersProperty = RegisterProperty("Parameters", typeof(ObservableCollection<IParams>), new ObservableCollection<IParams>());
+        public static readonly IPropertyData ParametersProperty = RegisterProperty("Parameters", () => new ObservableCollection<IParams>());
         #endregion
     }
 
@@ -93,7 +93,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
             set { SetValue(ParametersProperty, value); }
         }
 
-        public static readonly IPropertyData ParametersProperty = RegisterProperty("Parameters", typeof(ObservableCollection<ParamsBase>), new ObservableCollection<ParamsBase>());
+        public static readonly IPropertyData ParametersProperty = RegisterProperty("Parameters", () => new ObservableCollection<ParamsBase>());
         #endregion
     }
 
@@ -101,7 +101,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
     public class DictionaryTestClass : ComparableModelBase
     {
         // This method returns the array of known types.
-        static Type[] GetKnownTypes()
+        private static Type[] GetKnownTypes()
         {
             return new[] { typeof(ModelBaseFacts.Person) };
         }
@@ -118,7 +118,7 @@ namespace Catel.Tests.Runtime.Serialization.XmlSerialization
         /// <summary>
         /// Register the Values property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData ValuesProperty = RegisterProperty("Values", typeof(Dictionary<string, object>), new Dictionary<string, object>());
+        public static readonly IPropertyData ValuesProperty = RegisterProperty("Values", () => new Dictionary<string, object>());
     }
 
     [TestFixture]

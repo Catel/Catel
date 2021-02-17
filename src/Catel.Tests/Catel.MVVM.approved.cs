@@ -1,6 +1,6 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.Tests")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v3.1", FrameworkDisplayName="")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v5.0", FrameworkDisplayName="")]
 [assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM")]
 [assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM.Converters")]
 [assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM.Providers")]
@@ -1578,19 +1578,25 @@ namespace Catel.Services
     {
         public DetermineSaveFileResult() { }
     }
+    public class DispatcherProviderService : Catel.Services.IDispatcherProviderService
+    {
+        public DispatcherProviderService() { }
+        public virtual object GetApplicationDispatcher() { }
+        public virtual object GetCurrentDispatcher() { }
+    }
     public class DispatcherService : Catel.Services.IDispatcherService
     {
-        public DispatcherService() { }
+        public DispatcherService(Catel.Services.IDispatcherProviderService dispatcherProviderService) { }
         protected virtual System.Windows.Threading.Dispatcher CurrentDispatcher { get; }
-        public void BeginInvoke(System.Action action, bool onlyBeginInvokeWhenNoAccess = true) { }
-        public void Invoke(System.Action action, bool onlyInvokeWhenNoAccess = true) { }
-        public System.Threading.Tasks.Task InvokeAsync(System.Action action) { }
-        public System.Threading.Tasks.Task InvokeAsync(System.Delegate method, params object[] args) { }
-        public System.Threading.Tasks.Task<T> InvokeAsync<T>(System.Func<T> func) { }
-        public System.Threading.Tasks.Task InvokeTaskAsync(System.Func<System.Threading.Tasks.Task> actionAsync) { }
-        public System.Threading.Tasks.Task InvokeTaskAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Threading.CancellationToken cancellationToken) { }
-        public System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.Tasks.Task<T>> funcAsync) { }
-        public System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken) { }
+        public virtual void BeginInvoke(System.Action action, bool onlyBeginInvokeWhenNoAccess = true) { }
+        public virtual void Invoke(System.Action action, bool onlyInvokeWhenNoAccess = true) { }
+        public virtual System.Threading.Tasks.Task InvokeAsync(System.Action action) { }
+        public virtual System.Threading.Tasks.Task InvokeAsync(System.Delegate method, params object[] args) { }
+        public virtual System.Threading.Tasks.Task<T> InvokeAsync<T>(System.Func<T> func) { }
+        public virtual System.Threading.Tasks.Task InvokeTaskAsync(System.Func<System.Threading.Tasks.Task> actionAsync) { }
+        public virtual System.Threading.Tasks.Task InvokeTaskAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task> actionAsync, System.Threading.CancellationToken cancellationToken) { }
+        public virtual System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.Tasks.Task<T>> funcAsync) { }
+        public virtual System.Threading.Tasks.Task<T> InvokeTaskAsync<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> funcAsync, System.Threading.CancellationToken cancellationToken) { }
     }
     public abstract class FileServiceBase : Catel.Services.ViewModelServiceBase, Catel.Services.IFileSupport
     {
@@ -1618,6 +1624,11 @@ namespace Catel.Services
     {
         public static System.IDisposable HideTemporarily(this Catel.Services.IBusyIndicatorService busyIndicatorService) { }
         public static System.IDisposable PushInScope(this Catel.Services.IBusyIndicatorService busyIndicatorService, string status = "") { }
+    }
+    public interface IDispatcherProviderService
+    {
+        object GetApplicationDispatcher();
+        object GetCurrentDispatcher();
     }
     public interface IFileSupport { }
     public interface IMessageService
@@ -1935,7 +1946,6 @@ namespace Catel.Services
     public abstract class ViewModelServiceBase : Catel.Services.ServiceBase, Catel.Services.IService, Catel.Services.IViewModelService
     {
         protected ViewModelServiceBase() { }
-        protected virtual System.Windows.Threading.Dispatcher Dispatcher { get; }
     }
     public class ViewModelWrapperService : Catel.Services.ViewModelWrapperServiceBase, Catel.Services.IViewModelWrapperService
     {
@@ -2806,10 +2816,5 @@ namespace Catel.Windows.Threading
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Action action, System.Windows.Threading.DispatcherPriority priority) { }
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, params object[] args) { }
         public static void InvokeIfRequired(this System.Windows.Threading.Dispatcher dispatcher, System.Delegate method, System.Windows.Threading.DispatcherPriority priority, params object[] args) { }
-    }
-    public static class DispatcherHelper
-    {
-        public static System.Windows.Threading.Dispatcher CurrentDispatcher { get; }
-        public static void DoEvents() { }
     }
 }

@@ -1,7 +1,6 @@
 ﻿namespace Catel.Tests.Data
 {
     using System;
-    using System.Runtime.Serialization;
     using Catel.Data;
 
 #if NET || NETCORE
@@ -43,7 +42,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), string.Empty);
+        public static readonly IPropertyData NameProperty = RegisterProperty<string>("Name", string.Empty);
         #endregion
     }
 }

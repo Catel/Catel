@@ -43,7 +43,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData PublicMemberProperty = RegisterProperty("PublicMember", typeof(string), "Public member");
+        public static readonly IPropertyData PublicMemberProperty = RegisterProperty("PublicMember", "Public member");
 
         /// <summary>
         ///   Gets or sets the private member.
@@ -57,7 +57,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData PrivateMemberProperty = RegisterProperty("PrivateMember", typeof(string), "Private member");
+        public static readonly IPropertyData PrivateMemberProperty = RegisterProperty("PrivateMember", "Private member");
         #endregion
     }
 }

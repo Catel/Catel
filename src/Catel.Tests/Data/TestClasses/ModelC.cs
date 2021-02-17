@@ -36,7 +36,7 @@
         /// <summary>
         /// Register the D property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData DProperty = RegisterProperty("D", typeof(string), string.Empty);
+        public static readonly IPropertyData DProperty = RegisterProperty("D", string.Empty);
 
         /// <summary>
         /// Gets or sets the E property.
@@ -50,6 +50,6 @@
         /// <summary>
         /// Register the E property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData EProperty = RegisterProperty("E", typeof(Model), null);
+        public static readonly IPropertyData EProperty = RegisterProperty<Model>("E");
     }
 }

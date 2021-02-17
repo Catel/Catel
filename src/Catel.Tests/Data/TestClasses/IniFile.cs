@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Runtime.Serialization;
     using Catel.Data;
     using Catel.Runtime.Serialization;
 
@@ -88,7 +87,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData FileNameProperty = RegisterProperty("FileName", typeof(string), string.Empty);
+        public static readonly IPropertyData FileNameProperty = RegisterProperty("FileName", string.Empty);
 
         /// <summary>
         ///   Gets or sets the collection of ini entries..
@@ -105,7 +104,7 @@
         /// <summary>
         ///   Register the property so it is known in the class.
         /// </summary>
-        public static readonly IPropertyData IniEntryCollectionProperty = RegisterProperty("IniEntryCollection", typeof(List<IniEntry>), null);
+        public static readonly IPropertyData IniEntryCollectionProperty = RegisterProperty<List<IniEntry>>("IniEntryCollection");
         #endregion
     }
 }

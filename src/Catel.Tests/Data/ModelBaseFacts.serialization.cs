@@ -49,7 +49,7 @@ namespace Catel.Tests.Data
             /// <summary> 
             /// Register the Name property so it is known in the class.
             /// </summary> 
-            public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), "MyName");
+            public static readonly IPropertyData NameProperty = RegisterProperty<string>("Name", "MyName");
             #endregion
 
             #region Methods
@@ -82,7 +82,7 @@ namespace Catel.Tests.Data
             /// <summary> 
             /// Register the Name property so it is known in the class.
             /// </summary> 
-            public static readonly IPropertyData ItemsProperty = RegisterProperty("Items", typeof(ObservableCollection<Item>), null);
+            public static readonly IPropertyData ItemsProperty = RegisterProperty<ObservableCollection<Item>>("Items");
             #endregion
 
             #region Methods
@@ -206,7 +206,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the ID property so it is known in the class.
             /// </summary>
-            public static readonly IPropertyData IdProperty = RegisterProperty("Id", typeof(int), null);
+            public static readonly IPropertyData IdProperty = RegisterProperty<int>("Id");
 
             /// <summary>
             /// Gets or sets the name.
@@ -223,7 +223,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the Name property so it is known in the class.
             /// </summary>
-            public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+            public static readonly IPropertyData NameProperty = RegisterProperty<string>("Name");
 
             /// <summary>
             /// Gets or sets the projects.
@@ -240,8 +240,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the Projects property so it is known in the class.
             /// </summary>
-            public static readonly IPropertyData ProjectsProperty = RegisterProperty("Projects", typeof(ObservableCollection<Project>),
-                () => new ObservableCollection<Project>());
+            public static readonly IPropertyData ProjectsProperty = RegisterProperty<ObservableCollection<Project>>("Projects", () => new ObservableCollection<Project>());
             #endregion
         }
         #endregion
@@ -280,7 +279,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the ID property so it is known in the class.
             /// </summary>
-            public static readonly IPropertyData IdProperty = RegisterProperty("Id", typeof(int), null);
+            public static readonly IPropertyData IdProperty = RegisterProperty("Id", 0);
 
             /// <summary>
             /// Gets or sets the name.
@@ -297,7 +296,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the Name property so it is known in the class.
             /// </summary>
-            public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+            public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
 
             /// <summary>
             /// Gets or sets the CustomerId.
@@ -314,7 +313,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the CustomerId property so it is known in the class.
             /// </summary>
-            public static readonly IPropertyData CustomerIdProperty = RegisterProperty("CustomerId", typeof(int), null);
+            public static readonly IPropertyData CustomerIdProperty = RegisterProperty("CustomerId", 0);
 
             /// <summary>
             /// Gets or sets the customer.
@@ -332,7 +331,7 @@ namespace Catel.Tests.Data
             /// <summary>
             /// Register the Customer property so it is known in the class.
             /// </summary>
-            public static readonly IPropertyData CustomerProperty = RegisterProperty("Customer", typeof(Customer), null);
+            public static readonly IPropertyData CustomerProperty = RegisterProperty<Customer>("Customer");
             #endregion
         }
         #endregion
@@ -368,7 +367,7 @@ namespace Catel.Tests.Data
                 /// <summary>
                 /// Register the Place property so it is known in the class.
                 /// </summary>
-                public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+                public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
                 #endregion
             }
 
@@ -399,7 +398,7 @@ namespace Catel.Tests.Data
                 /// <summary>
                 /// Register the Place property so it is known in the class.
                 /// </summary>
-                public static readonly IPropertyData NameProperty = RegisterProperty("Name", typeof(string), null);
+                public static readonly IPropertyData NameProperty = RegisterProperty("Name", string.Empty);
 
                 /// <summary>
                 /// Gets or sets the modules.
@@ -414,7 +413,7 @@ namespace Catel.Tests.Data
                 /// <summary>
                 /// Register the Modules property so it is known in the class.
                 /// </summary>
-                public static readonly IPropertyData ModulesProperty = RegisterProperty("Modules", typeof(ObservableCollection<JsonInnerModel>), () => new ObservableCollection<JsonInnerModel>());
+                public static readonly IPropertyData ModulesProperty = RegisterProperty<ObservableCollection<JsonInnerModel>>("Modules", () => new ObservableCollection<JsonInnerModel>());
                 #endregion
             }
 

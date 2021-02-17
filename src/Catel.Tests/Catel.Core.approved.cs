@@ -2,7 +2,7 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.MVVM")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.Serialization.Json")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.Tests")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v3.1", FrameworkDisplayName="")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v5.0", FrameworkDisplayName="")]
 namespace Catel
 {
     public static class Argument
@@ -94,6 +94,12 @@ namespace Catel
     {
         public static string GetString(this byte[] data, System.Text.Encoding encoding) { }
         public static string GetUtf8String(this byte[] data) { }
+    }
+    public class CatelException : System.Exception
+    {
+        public CatelException() { }
+        public CatelException(string message) { }
+        public CatelException(string message, System.Exception innerException) { }
     }
     public class CompositeFilter<T> : Catel.ICompositeFilter<T>
         where T :  class
@@ -1516,12 +1522,12 @@ namespace Catel.Data
         public override string ToString() { }
         protected static object GetObjectValue<TValue>(TValue value) { }
         protected static bool IsPropertyRegistered(System.Type type, string name) { }
-        public static Catel.Data.IPropertyData RegisterProperty(string name, System.Type type, System.Func<object> createDefaultValue, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true, bool isModelBaseProperty = false) { }
-        public static Catel.Data.IPropertyData RegisterProperty(string name, System.Type type, object defaultValue = null, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true, bool isModelBaseProperty = false) { }
         public static Catel.Data.IPropertyData RegisterProperty<TValue>(string name, System.Func<TValue> createDefaultValue = null, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
         public static Catel.Data.IPropertyData RegisterProperty<TValue>(string name, TValue defaultValue, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
         public static Catel.Data.IPropertyData RegisterProperty<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, System.Func<TValue> createDefaultValue = null, System.Action<TModel, System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
         public static Catel.Data.IPropertyData RegisterProperty<TModel, TValue>(System.Linq.Expressions.Expression<System.Func<TModel, TValue>> propertyExpression, TValue defaultValue, System.Action<TModel, System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true) { }
+        public static Catel.Data.IPropertyData RegisterPropertyNonGeneric(string name, System.Type type, System.Func<object> createDefaultValue, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true, bool isModelBaseProperty = false) { }
+        public static Catel.Data.IPropertyData RegisterPropertyNonGeneric(string name, System.Type type, object defaultValue = null, System.EventHandler<System.ComponentModel.PropertyChangedEventArgs> propertyChangedEventHandler = null, bool includeInSerialization = true, bool includeInBackup = true, bool isModelBaseProperty = false) { }
         protected static void UnregisterProperty(System.Type modelType, string name) { }
     }
     public static class ModelBaseExtensions

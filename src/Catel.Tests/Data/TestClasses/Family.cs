@@ -6,7 +6,7 @@
     using System.Collections.ObjectModel;
     using Catel.Data;
 
-    class GrandParent : ChildAwareModelBase
+    internal class GrandParent : ChildAwareModelBase
     {
         public void ResetDirtyFlag()
         {
@@ -19,10 +19,10 @@
             set => SetValue(ParentsProperty, value);
         }
 
-        public static readonly IPropertyData ParentsProperty = RegisterProperty(nameof(Parents), typeof(ObservableCollection<Parent>), () => new ObservableCollection<Parent>());
+        public static readonly IPropertyData ParentsProperty = RegisterProperty(nameof(Parents), () => new ObservableCollection<Parent>());
     }
 
-    class Parent : ChildAwareModelBase
+    internal class Parent : ChildAwareModelBase
     {
         public void ResetDirtyFlag()
         {
@@ -36,11 +36,11 @@
             set => SetValue(ChildrenProperty, value);
         }
 
-        public static readonly IPropertyData ChildrenProperty = RegisterProperty(nameof(Children), typeof(ObservableCollection<Child>), () => new ObservableCollection<Child>());
+        public static readonly IPropertyData ChildrenProperty = RegisterProperty(nameof(Children), () => new ObservableCollection<Child>());
 
     }
 
-    class Child : ModelBase
+    internal class Child : ModelBase
     {
         public void ResetDirtyFlag()
         {
@@ -53,6 +53,6 @@
             set => SetValue(NameProperty, value);
         }
 
-        public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), typeof(string), string.Empty);
+        public static readonly IPropertyData NameProperty = RegisterProperty(nameof(Name), string.Empty);
     }
 }
