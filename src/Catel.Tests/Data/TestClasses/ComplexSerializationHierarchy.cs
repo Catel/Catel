@@ -309,7 +309,7 @@ namespace Catel.Tests.Data
         {
             unchecked
             {
-                return ((ColumnName != null ? ColumnName.GetHashCode() : 0) * 397) ^ (int)SortDirection;
+                return ((ColumnName is not null ? ColumnName.GetHashCode() : 0) * 397) ^ (int)SortDirection;
             }
         }
 
@@ -348,7 +348,7 @@ namespace Catel.Tests.Data
         {
             unchecked
             {
-                int hashCode = (ColumnName != null ? ColumnName.GetHashCode() : 0);
+                int hashCode = (ColumnName is not null ? ColumnName.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ Width.GetHashCode();
                 hashCode = (hashCode * 397) ^ IsHidden.GetHashCode();
                 return hashCode;

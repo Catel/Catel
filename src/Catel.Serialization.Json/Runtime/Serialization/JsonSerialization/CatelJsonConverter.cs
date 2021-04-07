@@ -50,7 +50,7 @@ namespace Catel.Runtime.Serialization.Json
                     var referenceManager = scopeManager.ScopeObject.ReferenceManager;
 
                     var referenceInfo = referenceManager.GetInfo(value);
-                    if (referenceInfo != null && !referenceInfo.IsFirstUsage)
+                    if (referenceInfo is not null && !referenceInfo.IsFirstUsage)
                     {
                         writer.WriteStartObject();
                         writer.WritePropertyName(Json.JsonSerializer.GraphRefId);

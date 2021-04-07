@@ -55,14 +55,14 @@ namespace Catel.IoC
                 {
                     var implementationType = typesToHandle.FirstOrDefault(row => TagHelper.AreTagsEqual(row.Name, type.Name.Substring(1).Trim()) && row.IsClassEx() && type.IsAssignableFromEx(row));
 
-                    if (implementationType != null)
+                    if (implementationType is not null)
                     {
                         return new {InterfaceType = type, ImplementationType = implementationType};
                     }
                 }
 
                 return null;
-            }).Where(type => type != null);
+            }).Where(type => type is not null);
 
             interfaceTypes.ForEach(type =>
             {

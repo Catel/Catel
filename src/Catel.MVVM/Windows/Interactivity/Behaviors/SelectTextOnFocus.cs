@@ -111,13 +111,13 @@ namespace Catel.Windows.Interactivity
             }
 
             var textBox = AssociatedObject as TextBox;
-            if (textBox != null)
+            if (textBox is not null)
             {
                 textBox.SelectAll();
             }
 
             var passwordBox = AssociatedObject as PasswordBox;
-            if (passwordBox != null)
+            if (passwordBox is not null)
             {
                 passwordBox.SelectAll();
             }

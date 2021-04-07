@@ -113,7 +113,7 @@ namespace Catel.Reflection
             var getMethod = propertyInfo.GetGetMethod(false);
 #endif
 
-            return getMethod != null && getMethod.IsPublic;
+            return getMethod is not null && getMethod.IsPublic;
         }
 
         private bool GetPublicSetter()
@@ -126,7 +126,7 @@ namespace Catel.Reflection
             var setMethod = propertyInfo.GetSetMethod(false);
 #endif
 
-            return setMethod != null && setMethod.IsPublic;
+            return setMethod is not null && setMethod.IsPublic;
         }
     }
 }

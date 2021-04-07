@@ -545,7 +545,7 @@ namespace Catel.Tests
             {
                 Assert.Throws<ArgumentException>(() => Argument.IsValid("myParam", "value", () => false));
                 Assert.Throws<ArgumentException>(() => Argument.IsValid("myParam", "value", s => s.Length > 10));
-                Assert.Throws<ArgumentException>(() => Argument.IsValid("myParam", (string)null, s => s != null));
+                Assert.Throws<ArgumentException>(() => Argument.IsValid("myParam", (string)null, s => s is not null));
             }
             
             [TestCase]

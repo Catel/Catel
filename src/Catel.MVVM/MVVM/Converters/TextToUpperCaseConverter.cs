@@ -32,7 +32,7 @@ namespace Catel.MVVM.Converters
         protected override object Convert(object value, Type targetType, object parameter)
         {
             var stringValue = value as string;
-            if (stringValue != null)
+            if (stringValue is not null)
             {
                 return _cacheStorage.GetFromCacheOrFetch(stringValue, () =>
                 {

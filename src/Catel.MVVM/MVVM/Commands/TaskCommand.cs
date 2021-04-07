@@ -134,7 +134,7 @@ namespace Catel.MVVM
 
             CancelCommand = new Command(() =>
             {
-                if (_cancellationTokenSource != null)
+                if (_cancellationTokenSource is not null)
                 {
                     _cancellationTokenSource.Cancel();
                 }
@@ -162,7 +162,7 @@ namespace Catel.MVVM
         /// <value><c>true</c> if this instance is executing; otherwise, <c>false</c>.</value>
         public bool IsExecuting
         {
-            get { return _cancellationTokenSource != null; }
+            get { return _cancellationTokenSource is not null; }
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace Catel.MVVM
         /// <value><c>true</c> if this instance is cancellation requested; otherwise, <c>false</c>.</value>
         public bool IsCancellationRequested
         {
-            get { return _cancellationTokenSource != null && _cancellationTokenSource.IsCancellationRequested; }
+            get { return _cancellationTokenSource is not null && _cancellationTokenSource.IsCancellationRequested; }
         }
 
         /// <summary>
@@ -239,7 +239,7 @@ namespace Catel.MVVM
                 return;
             }
 
-            if (_cancellationTokenSource != null)
+            if (_cancellationTokenSource is not null)
             {
                 _cancellationTokenSource.Dispose();
             }
@@ -320,7 +320,7 @@ namespace Catel.MVVM
         public void Cancel()
         {
             var cancelCommand = CancelCommand;
-            if (cancelCommand != null)
+            if (cancelCommand is not null)
             {
                 if (cancelCommand.CanExecute())
                 {
@@ -342,7 +342,7 @@ namespace Catel.MVVM
 
         private void OnProgressChanged(TProgress progress)
         {
-            if (_reportProgress != null)
+            if (_reportProgress is not null)
             {
                 _reportProgress(progress);
             }

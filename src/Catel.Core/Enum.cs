@@ -279,7 +279,7 @@ namespace Catel
                 Array values = Enum.GetValues(typeof(TEnum));
 
                 return (from TEnum value in values
-                        select formatName != null ? new InternalBindableEnum(value, formatName(value)) : new InternalBindableEnum(value)).Cast<IBindableEnum<TEnum>>().ToList();
+                        select formatName is not null ? new InternalBindableEnum(value, formatName(value)) : new InternalBindableEnum(value)).Cast<IBindableEnum<TEnum>>().ToList();
             }
             #endregion
 

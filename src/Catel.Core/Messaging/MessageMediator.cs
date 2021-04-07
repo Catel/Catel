@@ -402,7 +402,7 @@ namespace Catel.Messaging
                         }
 
                         var target = weakAction.Target;
-                        if (target != null)
+                        if (target is not null)
                         {
                             if (!ReferenceEquals(recipient, target))
                             {

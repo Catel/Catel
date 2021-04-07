@@ -36,7 +36,7 @@ namespace Catel.Collections
             Argument.IsNotNull("list", list);
 
             var asList = list as List<T>;
-            if (asList != null)
+            if (asList is not null)
             {
                 return asList.IndexOf(item, index);
             }
@@ -361,7 +361,7 @@ namespace Catel.Collections
         {
             Argument.IsNotNull("elementType", elementType);
 
-            var internalList = new List<object>(collection != null ? collection.Cast<object>() : ArrayShim.Empty<object>());
+            var internalList = new List<object>(collection is not null ? collection.Cast<object>() : ArrayShim.Empty<object>());
             var array = Array.CreateInstance(elementType, internalList.Count);
 
             var index = 0;
@@ -445,7 +445,7 @@ namespace Catel.Collections
 
                     bool reshuffle;
 
-                    if (comparer != null)
+                    if (comparer is not null)
                     {
                         reshuffle = comparer(o1, o2) > 0;
                     }

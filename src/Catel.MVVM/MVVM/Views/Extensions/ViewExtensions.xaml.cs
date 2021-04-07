@@ -53,7 +53,7 @@ namespace Catel.MVVM.Views
                 foreach (var dependencyProperty in dependencyProperties)
                 {
                     var propertyInfo = viewType.GetPropertyEx(dependencyProperty.PropertyName);
-                    if (propertyInfo != null)
+                    if (propertyInfo is not null)
                     {
                         if (propertyInfo.IsDecoratedWithAttribute<ViewToViewModelAttribute>())
                         {
@@ -90,21 +90,21 @@ namespace Catel.MVVM.Views
             var parents = new List<FrameworkElement>();
 
             var elementParent = element.Parent as FrameworkElement;
-            if (elementParent != null)
+            if (elementParent is not null)
             {
                 parents.Add(elementParent);
             }
 
 #if NET || NETCORE
             var templatedParent = element.TemplatedParent as FrameworkElement;
-            if (templatedParent != null)
+            if (templatedParent is not null)
             {
                 parents.Add(templatedParent);
             }
 #endif
 
             var visualTreeParent = VisualTreeHelper.GetParent(element) as FrameworkElement;
-            if (visualTreeParent != null)
+            if (visualTreeParent is not null)
             {
                 parents.Add(visualTreeParent);
             }
@@ -147,7 +147,7 @@ namespace Catel.MVVM.Views
             foreach (var parent in parents)
             {
                 foundParent = parent.FindLogicalOrVisualAncestor(predicate, maxDepth);
-                if (foundParent != null)
+                if (foundParent is not null)
                 {
                     break;
                 }

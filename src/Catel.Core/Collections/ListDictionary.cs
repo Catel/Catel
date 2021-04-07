@@ -256,7 +256,7 @@ namespace Catel.Collections
             {
                 var keyValuePair = _list[index];
 
-                if (_comparer != null && _comparer.Equals(keyValuePair.Key, key))
+                if (_comparer is not null && _comparer.Equals(keyValuePair.Key, key))
                 {
                     return index;
                 }

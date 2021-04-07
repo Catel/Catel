@@ -53,7 +53,7 @@ namespace Catel.MVVM.Converters
             var isVisible = false;
 
             var collection = value as ICollection;
-            if (collection != null)
+            if (collection is not null)
             {
                 isVisible = collection.Count > 0;
             }

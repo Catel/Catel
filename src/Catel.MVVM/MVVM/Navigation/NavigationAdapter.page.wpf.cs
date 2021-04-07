@@ -25,7 +25,7 @@ namespace Catel.MVVM.Navigation
             HandleNavigatedOnLoaded = false;
 
             var navigationFrame = NavigationRoot as Frame;
-            if (navigationFrame != null)
+            if (navigationFrame is not null)
             {
                 Log.Debug("Initializing navigation adapter using frame");
 
@@ -46,7 +46,7 @@ namespace Catel.MVVM.Navigation
         partial void Uninitialize()
         {
             var navigationFrame = NavigationRoot as Frame;
-            if (navigationFrame != null)
+            if (navigationFrame is not null)
             {
                 Log.Debug("Uninitializing navigation adapter using frame");
 
@@ -70,7 +70,7 @@ namespace Catel.MVVM.Navigation
             {
                 _lastNavigationContext = new Dictionary<string, object>();
 
-                if (_lastGlobalNavigationContext != null)
+                if (_lastGlobalNavigationContext is not null)
                 {
                     foreach (var value in _lastGlobalNavigationContext)
                     {
@@ -94,7 +94,7 @@ namespace Catel.MVVM.Navigation
             object content = null;
 
             var navigationFrame = NavigationRoot as Frame;
-            if (navigationFrame != null)
+            if (navigationFrame is not null)
             {
                 content = navigationFrame.Content;
             }

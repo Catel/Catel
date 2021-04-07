@@ -192,7 +192,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             if (string.Equals(memberValue.Name, "CustomizedCollection"))
             {
                 var originalCollection = memberValue.Value as ObservableCollection<int>;
-                if (originalCollection != null)
+                if (originalCollection is not null)
                 {
                     var customizedCollection = new List<string>();
                     foreach (var item in originalCollection)
@@ -210,7 +210,7 @@ namespace Catel.Tests.Runtime.Serialization.TestModels
             if (string.Equals(memberValue.Name, "CustomizedCollection"))
             {
                 var customizedCollection = memberValue.Value as List<string>;
-                if (customizedCollection != null)
+                if (customizedCollection is not null)
                 {
                     var originalCollection = new ObservableCollection<int>();
                     foreach (var item in customizedCollection)

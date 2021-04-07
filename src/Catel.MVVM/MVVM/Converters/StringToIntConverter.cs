@@ -50,7 +50,7 @@ namespace Catel.MVVM.Converters
         /// </remarks>
         protected override object ConvertBack(object value, Type targetType, object parameter)
         {
-            return value != null ? value.ToString() : String.Empty;
+            return value is not null ? value.ToString() : String.Empty;
         }
     }
 }

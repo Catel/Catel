@@ -163,7 +163,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
 
         private void RaiseErrorsChanged(string propertyName)
         {
-            if (ErrorsChanged != null)
+            if (ErrorsChanged is not null)
             {
                 ErrorsChanged(this, new DataErrorsChangedEventArgs(propertyName));
             }
@@ -171,7 +171,7 @@ namespace Catel.Tests.MVVM.ViewModels.TestClasses
 
         private void RaiseWarningsChanged(string propertyName)
         {
-            if (WarningsChanged != null)
+            if (WarningsChanged is not null)
             {
                 WarningsChanged(this, new DataErrorsChangedEventArgs(propertyName));
             }

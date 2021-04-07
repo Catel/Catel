@@ -38,13 +38,13 @@ namespace Catel.Core
                 var configurations = new List<Configuration>();
 
                 var exeConfig = GetExeConfiguration();
-                if (exeConfig != null)
+                if (exeConfig is not null)
                 {
                     configurations.Add(exeConfig);
                 }
 
                 var dllConfig = GetDllConfiguration();
-                if (dllConfig != null)
+                if (dllConfig is not null)
                 {
                     configurations.Add(dllConfig);
                 }

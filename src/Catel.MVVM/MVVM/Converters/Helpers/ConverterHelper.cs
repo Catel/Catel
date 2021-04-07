@@ -41,7 +41,7 @@ namespace Catel.MVVM.Converters
         {
             var invert = false;
 
-            if (parameter != null)
+            if (parameter is not null)
             {
                 if (TypeHelper.TryCast<bool, object>(parameter, out var shouldInvert))
                 {

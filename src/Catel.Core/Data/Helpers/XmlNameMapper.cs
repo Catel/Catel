@@ -227,10 +227,10 @@ namespace Catel.Data
             {
                 // If attribute has a value, we simply do not support it,  but we return true because
                 // it should be seen as handled
-                return attribute != null;
+                return attribute is not null;
             }
 
-            if (attribute != null)
+            if (attribute is not null)
             {
                 var mappedName = attribute.AttributeName;
                 if (string.IsNullOrWhiteSpace(mappedName))
@@ -263,11 +263,11 @@ namespace Catel.Data
             {
                 // If attribute has a value, we simply do not support it,  but we return true because
                 // it should be seen as handled
-                return attribute != null;
+                return attribute is not null;
             }
 
             var mappedName = propertyName;
-            if (attribute != null && !string.IsNullOrWhiteSpace(attribute.ElementName))
+            if (attribute is not null && !string.IsNullOrWhiteSpace(attribute.ElementName))
             {
                 mappedName = attribute.ElementName;
             }

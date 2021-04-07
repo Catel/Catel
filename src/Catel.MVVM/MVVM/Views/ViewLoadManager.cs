@@ -209,7 +209,7 @@ namespace Catel.MVVM.Views
                     throw new ArgumentOutOfRangeException("viewLoadStateEvent");
             }
 
-            if (handler != null)
+            if (handler is not null)
             {
                 handler(this, new ViewLoadEventArgs(view));
             }

@@ -444,7 +444,7 @@ namespace Catel.Tests
             public void ThrowsArgumentExceptionForIsValidInvokation2()
             {
                 Assert.Throws<ArgumentException>(() => this.IsValidInvokation("myValue", s => s.Length > 10));
-                Assert.Throws<ArgumentException>(() => this.IsValidInvokation((string)null, s => s != null));
+                Assert.Throws<ArgumentException>(() => this.IsValidInvokation((string)null, s => s is not null));
             }
 
             [TestCase]

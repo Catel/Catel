@@ -117,7 +117,7 @@ namespace Catel.Services
         {
             var task = RunAsync(processContext);
 
-            if (processCompletedCallback != null)
+            if (processCompletedCallback is not null)
             {
                 task.ContinueWith(x => processCompletedCallback(processContext, task.Result.ExitCode));
             }

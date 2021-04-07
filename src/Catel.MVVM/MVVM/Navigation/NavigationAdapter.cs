@@ -171,7 +171,7 @@ namespace Catel.MVVM.Navigation
                 return;
             }
 
-            if (e.Uri != null && e.Uri.IsNavigationToExternal())
+            if (e.Uri is not null && e.Uri.IsNavigationToExternal())
             {
                 Log.Debug("Navigating away from the application, ignoring navigation");
                 return;

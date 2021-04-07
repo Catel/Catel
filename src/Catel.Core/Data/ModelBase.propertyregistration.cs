@@ -48,7 +48,7 @@ namespace Catel.Data
             var propertyName = memberExpression.Member.Name;
             return RegisterProperty<TValue>(propertyName, defaultValue, (sender, args) =>
             {
-                if (propertyChangedEventHandler != null)
+                if (propertyChangedEventHandler is not null)
                 {
                     propertyChangedEventHandler.Invoke((TModel)sender, args);
                 }

@@ -102,7 +102,7 @@ namespace Catel.Windows.Interactivity
             Unsubscribe();
 
             _layoutRoot = AssociatedObject.FindLogicalRoot() as FrameworkElement;
-            if (_layoutRoot != null)
+            if (_layoutRoot is not null)
             {
                 Log.Debug("Found layout root '{0}', subscribing to KeyDown event", _layoutRoot.GetType().GetSafeFullName(false));
 
@@ -112,7 +112,7 @@ namespace Catel.Windows.Interactivity
 
         private void Unsubscribe()
         {
-            if (_layoutRoot != null)
+            if (_layoutRoot is not null)
             {
                 _layoutRoot.KeyDown -= OnKeyDown;
                 _layoutRoot = null;

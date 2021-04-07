@@ -55,12 +55,12 @@ namespace Catel.Data
             {
                 var propertyValue = model.GetValue<object>(property.Key);
                 var enumerable = propertyValue as IEnumerable;
-                if (enumerable != null && !(propertyValue is string))
+                if (enumerable is not null && !(propertyValue is string))
                 {
                     foreach (var item in enumerable)
                     {
                         var modelItem = item as IValidatableModel;
-                        if (modelItem != null)
+                        if (modelItem is not null)
                         {
                             validationContext.AddModelValidation(modelItem, handledModels);
                         }
@@ -68,7 +68,7 @@ namespace Catel.Data
                 }
 
                 var propertyModel = propertyValue as IValidatableModel;
-                if (propertyModel != null)
+                if (propertyModel is not null)
                 {
                     validationContext.AddModelValidation(propertyModel, handledModels);
                 }

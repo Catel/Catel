@@ -59,7 +59,7 @@ namespace Catel.MVVM
                 // Note: also check for dispatcher, see https://github.com/Catel/Catel/issues/1205
                 var app = Application.Current;
                 var dispatcher = Dispatcher.CurrentDispatcher;
-                if (app != null && ReferenceEquals(app.Dispatcher, dispatcher))
+                if (app is not null && ReferenceEquals(app.Dispatcher, dispatcher))
                 {
                     _subscribedViews.Add(view, new CommandManagerWrapper(view, this));
 
@@ -75,7 +75,7 @@ namespace Catel.MVVM
         private void OnWindowLoaded(object sender, RoutedEventArgs e)
         {
             var view = sender as FrameworkElement;
-            if (view != null)
+            if (view is not null)
             {
                 SubscribeToKeyboardEvents(view);
             }

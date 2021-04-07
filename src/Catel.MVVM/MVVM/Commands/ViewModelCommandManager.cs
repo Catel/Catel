@@ -183,14 +183,14 @@ namespace Catel.MVVM
                     try
                     {
                         var command = propertyInfo.GetValue(_viewModel, null) as ICommand;
-                        if (command != null)
+                        if (command is not null)
                         {
                             if (!_commands.ContainsKey(command))
                             {
                                 Log.Debug("Found command '{0}' on view model '{1}'", propertyInfo.Name, _viewModelType.Name);
 
                                 var commandAsICatelCommand = command as ICatelCommand;
-                                if (commandAsICatelCommand != null)
+                                if (commandAsICatelCommand is not null)
                                 {
                                     commandAsICatelCommand.Executed += OnViewModelCommandExecuted;
                                 }
@@ -238,7 +238,7 @@ namespace Catel.MVVM
                 foreach (var command in _commands.Keys)
                 {
                     var commandAsICatelCommand = command as ICatelCommand;
-                    if (commandAsICatelCommand != null)
+                    if (commandAsICatelCommand is not null)
                     {
                         commandAsICatelCommand.RaiseCanExecuteChanged();
                     }
@@ -258,7 +258,7 @@ namespace Catel.MVVM
                 foreach (var command in _commands.Keys)
                 {
                     var commandAsICatelCommand = command as ICatelCommand;
-                    if (commandAsICatelCommand != null)
+                    if (commandAsICatelCommand is not null)
                     {
                         commandAsICatelCommand.Executed -= OnViewModelCommandExecuted;
                     }
@@ -291,7 +291,7 @@ namespace Catel.MVVM
 
             foreach (var handler in syncHandlers)
             {
-                if (handler != null)
+                if (handler is not null)
                 {
                     handler(_viewModel, commandName, e.Command, e.CommandParameter);
                 }
@@ -299,7 +299,7 @@ namespace Catel.MVVM
 
             foreach (var handler in asyncHandlers)
             {
-                if (handler != null)
+                if (handler is not null)
                 {
                     await handler(_viewModel, commandName, e.Command, e.CommandParameter);
                 }

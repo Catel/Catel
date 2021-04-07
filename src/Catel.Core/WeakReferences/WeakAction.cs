@@ -32,7 +32,7 @@ namespace Catel
         /// <exception cref="ArgumentException">The <paramref name="target"/> is <c>null</c> or whitespace.</exception>
         protected WeakActionBase(object target)
         {
-            if (target != null)
+            if (target is not null)
             {
                 _weakTarget = new WeakReference(target);
             }
@@ -44,7 +44,7 @@ namespace Catel
         /// Gets the target or <c>null</c> if the target is garbage collected.
         /// </summary>
         /// <value>The target.</value>
-        public object Target { get { return (_weakTarget != null) ? _weakTarget.Target : null; } }
+        public object Target { get { return (_weakTarget is not null) ? _weakTarget.Target : null; } }
 
         /// <summary>
         /// Gets a value indicating whether the event target has not yet been garbage collected.
@@ -55,7 +55,7 @@ namespace Catel
         /// <remarks>
         /// In case of static event handlers, this property always returns <c>false</c>.
         /// </remarks>
-        public bool IsTargetAlive { get { return (_weakTarget != null) && _weakTarget.IsAlive; } }
+        public bool IsTargetAlive { get { return (_weakTarget is not null) && _weakTarget.IsAlive; } }
         #endregion
 
         #region Methods
@@ -104,7 +104,7 @@ namespace Catel
                 throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
             }
 
-            var targetType = (target != null) ? target.GetType() : typeof(object);
+            var targetType = (target is not null) ? target.GetType() : typeof(object);
             var delegateType = typeof(OpenInstanceAction<>).MakeGenericTypeEx(targetType);
 
             _action = DelegateHelper.CreateDelegate(delegateType, methodInfo);
@@ -133,7 +133,7 @@ namespace Catel
         /// </returns>
         public bool Execute()
         {
-            if (_action != null)
+            if (_action is not null)
             {
                 if (IsTargetAlive)
                 {
@@ -194,7 +194,7 @@ namespace Catel
                 throw Log.ErrorAndCreateException<NotSupportedException>("Anonymous delegates are not supported because they are located in a private class");
             }
 
-            var targetType = (target != null) ? target.GetType() : typeof(object);
+            var targetType = (target is not null) ? target.GetType() : typeof(object);
 #pragma warning disable HAA0101 // Array allocation for params parameter
             var delegateType = typeof(OpenInstanceGenericAction<>).MakeGenericType(typeof(TParameter), targetType);
 #pragma warning restore HAA0101 // Array allocation for params parameter
@@ -223,7 +223,7 @@ namespace Catel
         /// <param name="parameter">The parameter.</param>
         public bool Execute(TParameter parameter)
         {
-            if (_action != null)
+            if (_action is not null)
             {
                 if (IsTargetAlive)
                 {

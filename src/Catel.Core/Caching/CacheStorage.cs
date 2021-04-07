@@ -150,7 +150,7 @@ namespace Catel.Caching
             {
                 if (!_checkForExpiredItems)
                 {
-                    if (_expirationTimer != null)
+                    if (_expirationTimer is not null)
                     {
                         _expirationTimer.Dispose();
                         _expirationTimer = null;
@@ -185,7 +185,7 @@ namespace Catel.Caching
             {
                 _dictionary.TryGetValue(key, out var valueInfo);
 
-                return (valueInfo != null) ? valueInfo.Value : default;
+                return (valueInfo is not null) ? valueInfo.Value : default;
             });
         }
 
@@ -231,7 +231,7 @@ namespace Catel.Caching
                 var value = code();
                 if (!(value is null) || _storeNullValues)
                 {
-                    if (expirationPolicy is null && _defaultExpirationPolicyInitCode != null)
+                    if (expirationPolicy is null && _defaultExpirationPolicyInitCode is not null)
                     {
                         expirationPolicy = _defaultExpirationPolicyInitCode();
                     }
@@ -247,7 +247,7 @@ namespace Catel.Caching
                         _checkForExpiredItems = true;
                     }
 
-                    if (expirationPolicy != null && _expirationTimer is null)
+                    if (expirationPolicy is not null && _expirationTimer is null)
                     {
                         UpdateTimer();
                     }
@@ -300,7 +300,7 @@ namespace Catel.Caching
 
                 if (!(value is null) || _storeNullValues)
                 {
-                    if (expirationPolicy is null && _defaultExpirationPolicyInitCode != null)
+                    if (expirationPolicy is null && _defaultExpirationPolicyInitCode is not null)
                     {
                         expirationPolicy = _defaultExpirationPolicyInitCode();
                     }
@@ -316,7 +316,7 @@ namespace Catel.Caching
                         _checkForExpiredItems = true;
                     }
 
-                    if (expirationPolicy != null && _expirationTimer is null)
+                    if (expirationPolicy is not null && _expirationTimer is null)
                     {
                         UpdateTimer();
                     }
@@ -591,7 +591,7 @@ namespace Catel.Caching
 
             if (cancel)
             {
-                if (expirationPolicy is null && _defaultExpirationPolicyInitCode != null)
+                if (expirationPolicy is null && _defaultExpirationPolicyInitCode is not null)
                 {
                     expirationPolicy = _defaultExpirationPolicyInitCode.Invoke();
                 }

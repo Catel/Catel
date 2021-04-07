@@ -31,7 +31,7 @@ namespace Catel.MVVM.Views
             // However, as a solution the documentation says you need to manually call ApplyTemplate, so let's do that.
             // For more info, see http://msdn.microsoft.com/en-us/library/ms596558(vs.95)
             var targetControl = view as Control;
-            if (targetControl != null)
+            if (targetControl is not null)
             {
                 (targetControl).ApplyTemplate();
             }

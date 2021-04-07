@@ -29,16 +29,16 @@ namespace Catel.MVVM.Converters
         {
             var containsItems = false;
 
-            if (value != null)
+            if (value is not null)
             {
                 var collection = value as ICollection;
-                if (collection != null && collection.Count > 0)
+                if (collection is not null && collection.Count > 0)
                 {
                     containsItems = true;
                 }
 
                 var enumerable = value as IEnumerable;
-                if (!containsItems && enumerable != null)
+                if (!containsItems && enumerable is not null)
                 {
                     // TODO: Would MoveNext + reset be better?
                     //var item = enumerable.GetEnumerator();

@@ -46,7 +46,7 @@ namespace Catel.Windows
 #if NET || NETCORE
             // Try to find logical ancestor one level up
             var logicalAncestor = FindLogicalAncestor(startElement, condition, 1);
-            if (logicalAncestor != null)
+            if (logicalAncestor is not null)
             {
                 return logicalAncestor;
             }
@@ -54,7 +54,7 @@ namespace Catel.Windows
 
             // Try to find visual ancestor one level up
             var visualAncestor = FindVisualAncestor(startElement, condition, 1);
-            if (visualAncestor != null)
+            if (visualAncestor is not null)
             {
                 return visualAncestor;
             }
@@ -64,7 +64,7 @@ namespace Catel.Windows
 #if NET || NETCORE
             // Try to find logical ancestor at any level
             logicalAncestor = FindLogicalAncestor(startElement, condition, maxDepth);
-            if (logicalAncestor != null)
+            if (logicalAncestor is not null)
             {
                 return logicalAncestor;
             }
@@ -72,17 +72,17 @@ namespace Catel.Windows
 
             // Try to find visual ancestor at any level
             visualAncestor = FindVisualAncestor(startElement, condition, maxDepth);
-            if (visualAncestor != null)
+            if (visualAncestor is not null)
             {
                 return visualAncestor;
             }
 
             // If we didn't find anything, try visual parent and call this method (recursive)
             var visualParent = startElement.GetVisualParent();
-            if (visualParent != null)
+            if (visualParent is not null)
             {
                 var lastResortVisualAncestor = FindLogicalOrVisualAncestor(visualParent, condition, maxDepth > 0 ? maxDepth - 1 : -1);
-                if (lastResortVisualAncestor != null)
+                if (lastResortVisualAncestor is not null)
                 {
                     return lastResortVisualAncestor;
                 }
@@ -124,7 +124,7 @@ namespace Catel.Windows
         public static object FindLogicalAncestor(this DependencyObject startElement, Predicate<object> condition, int maxDepth = -1)
         {
             var obj = startElement;
-            while ((obj != null) && !condition(obj))
+            while ((obj is not null) && !condition(obj))
             {
                 if (maxDepth == 0)
                 {
@@ -152,7 +152,7 @@ namespace Catel.Windows
         public static object FindVisualAncestor(this DependencyObject startElement, Predicate<object> condition, int maxDepth = -1)
         {
             var obj = startElement;
-            while ((obj != null) && !condition(obj))
+            while ((obj is not null) && !condition(obj))
             {
                 if (maxDepth == 0)
                 {
@@ -223,7 +223,7 @@ namespace Catel.Windows
         public static DependencyObject FindLogicalRoot(this DependencyObject startElement)
         {
             var obj = startElement;
-            while (startElement != null)
+            while (startElement is not null)
             {
                 obj = startElement;
                 startElement = startElement.GetLogicalParent();
@@ -303,7 +303,7 @@ namespace Catel.Windows
         /// <returns>object or <c>null</c> if the ancestor is not found.</returns>
         public static DependencyObject FindVisualDescendant(this DependencyObject startElement, Predicate<object> condition)
         {
-            if (startElement != null)
+            if (startElement is not null)
             {
                 if (condition(startElement))
                 {
@@ -311,26 +311,26 @@ namespace Catel.Windows
                 }
 
                 var startElementAsUserControl = startElement as UserControl;
-                if (startElementAsUserControl != null)
+                if (startElementAsUserControl is not null)
                 {
                     return FindVisualDescendant(startElementAsUserControl.Content as DependencyObject, condition);
                 }
 
                 var startElementAsContentControl = startElement as ContentControl;
-                if (startElementAsContentControl != null)
+                if (startElementAsContentControl is not null)
                 {
                     return FindVisualDescendant(startElementAsContentControl.Content as DependencyObject, condition);
                 }
 
                 var startElementAsBorder = startElement as Border;
-                if (startElementAsBorder != null)
+                if (startElementAsBorder is not null)
                 {
                     return FindVisualDescendant(startElementAsBorder.Child, condition);
                 }
 
 #if NET || NETCORE
                 var startElementAsDecorator = startElement as Decorator;
-                if (startElementAsDecorator != null)
+                if (startElementAsDecorator is not null)
                 {
                     return FindVisualDescendant(startElementAsDecorator.Child, condition);
                 }
@@ -357,7 +357,7 @@ namespace Catel.Windows
                 foreach (var child in children)
                 {
                     var obj = FindVisualDescendant(child, condition);
-                    if (obj != null)
+                    if (obj is not null)
                     {
                         return obj;
                     }
@@ -422,7 +422,7 @@ namespace Catel.Windows
             Argument.IsNotNullOrWhitespace("name", name);
 
             var frameworkElement = dependencyObject as FrameworkElement;
-            if (frameworkElement != null)
+            if (frameworkElement is not null)
             {
                 return string.Equals(frameworkElement.Name, name);
             }

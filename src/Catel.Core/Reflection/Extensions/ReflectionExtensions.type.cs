@@ -74,7 +74,7 @@ namespace Catel.Reflection
 
             // return all inherited types
             var currentBaseType = type.GetBaseTypeEx();
-            while (currentBaseType != null)
+            while (currentBaseType is not null)
             {
                 yield return currentBaseType;
                 currentBaseType = currentBaseType.GetBaseTypeEx();
@@ -96,7 +96,7 @@ namespace Catel.Reflection
 
             var fullName = string.Empty;
 
-            if (type.FullName != null)
+            if (type.FullName is not null)
             {
                 fullName = type.FullName;
             }
@@ -110,7 +110,7 @@ namespace Catel.Reflection
                 var assemblyName = "unknown_assembly";
 
                 var assembly = type.GetAssemblyEx();
-                if (assembly != null)
+                if (assembly is not null)
                 {
                     assemblyName = assembly.FullName;
                 }
@@ -933,7 +933,7 @@ namespace Catel.Reflection
             if (Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.FlattenHierarchy))
             {
                 var baseType = type.BaseType;
-                if ((baseType != null) && (baseType != typeof(object)))
+                if ((baseType is not null) && (baseType != typeof(object)))
                 {
                     foreach (var member in GetFieldsEx(baseType, bindingFlags, true))
                     {
@@ -1003,7 +1003,7 @@ namespace Catel.Reflection
                     foreach (var iface in type.GetInterfacesEx())
                     {
                         propertyInfo = iface.GetPropertyEx(name, bindingFlags, false);
-                        if (propertyInfo != null)
+                        if (propertyInfo is not null)
                         {
                             break;
                         }
@@ -1055,7 +1055,7 @@ namespace Catel.Reflection
             if (Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.FlattenHierarchy))
             {
                 var baseType = type.BaseType;
-                if ((baseType != null) && (baseType != typeof(object)))
+                if ((baseType is not null) && (baseType != typeof(object)))
                 {
                     foreach (var member in GetPropertiesEx(baseType, bindingFlags, true))
                     {
@@ -1243,7 +1243,7 @@ namespace Catel.Reflection
             if (Enum<BindingFlags>.Flags.IsFlagSet(bindingFlags, BindingFlags.FlattenHierarchy))
             {
                 var baseType = type.BaseType;
-                if ((baseType != null) && (baseType != typeof(object)))
+                if ((baseType is not null) && (baseType != typeof(object)))
                 {
                     foreach (var member in GetMethodsEx(baseType, bindingFlags, true))
                     {

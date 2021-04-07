@@ -201,7 +201,7 @@ namespace Catel.Logging
         private void WriteMessage(string message, object extraData, LogData logData, LogEvent logEvent)
         {
             var logMessage = LogMessage;
-            if (logMessage != null)
+            if (logMessage is not null)
             {
                 var now = FastDateTime.Now;
                 var eventArgs = new LogMessageEventArgs(this, string.Format("{0}{1}", new string(' ', IndentLevel * IndentSize), message ?? string.Empty), extraData, logData, logEvent, now);

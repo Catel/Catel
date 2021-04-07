@@ -101,7 +101,7 @@ namespace Catel
         {
             // Note: don't use cache service, it forces the initialization of the AppDomain which
             // might be too early
-            if (Type.GetType("Xamarin.Forms.Device") != null)
+            if (Type.GetType("Xamarin.Forms.Device") is not null)
             {
                 return SupportedPlatforms.XamarinForms;
             }

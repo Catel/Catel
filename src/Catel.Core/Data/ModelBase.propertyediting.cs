@@ -98,7 +98,7 @@ namespace Catel.Data
                 return;
             }
 
-            if ((value != null) && !property.Type.IsInstanceOfTypeEx(value))
+            if ((value is not null) && !property.Type.IsInstanceOfTypeEx(value))
             {
                 if (!value.GetType().IsCOMObjectEx())
                 {
@@ -124,7 +124,7 @@ namespace Catel.Data
 
                 notify = (notifyOnChange && (AlwaysInvokeNotifyChanged || !areOldAndNewValuesEqual));
 
-                if (changeNotificationsSuspensionContext != null)
+                if (changeNotificationsSuspensionContext is not null)
                 {
                     changeNotificationsSuspensionContext.Add(property.Name);
                     notify = false;

@@ -90,7 +90,7 @@ namespace Catel.Collections
         /// Gets a value indicating whether change notifications are suspended.
         /// </summary>
         /// <value><c>True</c> if notifications are suspended, otherwise, <c>false</c>.</value>
-        public bool NotificationsSuspended => _suspensionContext != null;
+        public bool NotificationsSuspended => _suspensionContext is not null;
 
         /// <summary>
         /// Gets or sets a value indicating whether events should automatically be dispatched to the UI thread.
@@ -383,7 +383,7 @@ namespace Catel.Collections
                 // Create new context
                 _suspensionContext = new SuspensionContext<T>(mode);
             }
-            else if (_suspensionContext != null && _suspensionContext.Mode != mode)
+            else if (_suspensionContext is not null && _suspensionContext.Mode != mode)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot change mode during another active suspension.");
             }
@@ -494,12 +494,12 @@ namespace Catel.Collections
         protected override void ClearItems()
         {
             // Check
-            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
+            if (_suspensionContext is not null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
 
-            if (_suspensionContext != null && _suspensionContext.IsMixedMode())
+            if (_suspensionContext is not null && _suspensionContext.IsMixedMode())
             {
                 while (Count > 0)
                 {
@@ -520,7 +520,7 @@ namespace Catel.Collections
         protected override void InsertItem(int index, T item)
         {
             // Check
-            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
+            if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Removing)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
             }
@@ -528,7 +528,7 @@ namespace Catel.Collections
             // Call base
             base.InsertItem(index, item);
 
-            if (_suspensionContext != null)
+            if (_suspensionContext is not null)
             {
                 if (_suspensionContext.Mode == SuspensionMode.Adding || _suspensionContext.IsMixedMode())
                 {
@@ -550,12 +550,12 @@ namespace Catel.Collections
         protected override void MoveItem(int oldIndex, int newIndex)
         {
             // Check
-            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
+            if (_suspensionContext is not null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
 
-            if (_suspensionContext != null && _suspensionContext.IsMixedMode())
+            if (_suspensionContext is not null && _suspensionContext.IsMixedMode())
             {
                 // Split up
                 var item = this[oldIndex];
@@ -576,7 +576,7 @@ namespace Catel.Collections
         protected override void RemoveItem(int index)
         {
             // Check
-            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Adding)
+            if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Adding)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
             }
@@ -587,7 +587,7 @@ namespace Catel.Collections
             // Call base
             base.RemoveItem(index);
 
-            if (_suspensionContext != null)
+            if (_suspensionContext is not null)
             {
                 if (_suspensionContext.Mode == SuspensionMode.Removing || _suspensionContext.IsMixedMode())
                 {
@@ -609,12 +609,12 @@ namespace Catel.Collections
         protected override void SetItem(int index, T item)
         {
             // Check
-            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
+            if (_suspensionContext is not null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
 
-            if (_suspensionContext != null && _suspensionContext.IsMixedMode())
+            if (_suspensionContext is not null && _suspensionContext.IsMixedMode())
             {
                 // Split up
                 RemoveItem(index);

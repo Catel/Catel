@@ -62,7 +62,7 @@ namespace Catel.MVVM
                 foreach (var constructor in constructors)
                 {
                     var firstParameter = constructor.GetParameters().FirstOrDefault();
-                    if (firstParameter != null)
+                    if (firstParameter is not null)
                     {
                         if (!_serviceLocator.IsTypeRegistered(firstParameter.ParameterType))
                         {
@@ -120,7 +120,7 @@ namespace Catel.MVVM
             // view model can be constructed with a nullable object. If a user wants a view model to be constructed
             // without any datacontext or injection, he/she should use an empty default constructor which will only
             // be used when injection is not possible
-            if (dataContext != null)
+            if (dataContext is not null)
             {
                 var parameters = dataContext as object[];
                 if (parameters is null)
@@ -131,7 +131,7 @@ namespace Catel.MVVM
                 viewModel = _typeFactory.CreateInstanceWithParametersAndAutoCompletionWithTag(viewModelType, tag,
                     parameters) as IViewModel;
 
-                if (viewModel != null)
+                if (viewModel is not null)
                 {
                     Log.Debug("Constructed view model '{0}' using injection of data context '{1}'", viewModelType.FullName, ObjectToStringHelper.ToTypeString(dataContext));
                     return viewModel;
@@ -140,7 +140,7 @@ namespace Catel.MVVM
 
             // Try to construct view model using dependency injection
             viewModel = _typeFactory.CreateInstanceWithTag(viewModelType, tag) as IViewModel;
-            if (viewModel != null)
+            if (viewModel is not null)
             {
                 Log.Debug("Constructed view model '{0}' using dependency injection or empty constructor", viewModelType.FullName);
                 return viewModel;

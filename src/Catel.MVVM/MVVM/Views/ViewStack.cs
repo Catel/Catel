@@ -51,7 +51,7 @@ namespace Catel.MVVM.Views
             _viewInfo.Unloaded += OnViewUnloaded;
 
             _parentViewStack = parentViewStack;
-            if (parentViewStack != null)
+            if (parentViewStack is not null)
             {
                 _parentViewStack.ViewStackLoaded += OnParentViewStackLoaded;
             }
@@ -196,7 +196,7 @@ namespace Catel.MVVM.Views
         /// </summary>
         public void Dispose()
         {
-            if (_parentViewStack != null)
+            if (_parentViewStack is not null)
             {
                 _parentViewStack.ViewStackLoaded -= OnParentViewStackLoaded;
             }
@@ -212,7 +212,7 @@ namespace Catel.MVVM.Views
                 return;
             }
 
-            if (_parentViewStack != null && !_parentViewStack.IsViewStackLoaded)
+            if (_parentViewStack is not null && !_parentViewStack.IsViewStackLoaded)
             {
                 return;
             }

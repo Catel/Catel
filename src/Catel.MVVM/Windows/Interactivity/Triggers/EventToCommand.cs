@@ -135,7 +135,7 @@ namespace Catel.Windows.Interactivity
             var commandParameter = CommandParameter;
             if ((commandParameter is null) && PassEventArgsToCommand)
             {
-                commandParameter = EventArgsConverter != null ? EventArgsConverter.Convert(AssociatedObject, parameter) : parameter;
+                commandParameter = EventArgsConverter is not null ? EventArgsConverter.Convert(AssociatedObject, parameter) : parameter;
             }
 
             ExecuteCommand(commandParameter);
@@ -147,7 +147,7 @@ namespace Catel.Windows.Interactivity
         /// <returns><c>true</c> if the associated object is disabled; otherwise <c>false</c>.</returns>
         private bool IsAssociatedObjectDisabled()
         {
-            return ((AssociatedObject != null) && !AssociatedObject.IsEnabled);
+            return ((AssociatedObject is not null) && !AssociatedObject.IsEnabled);
         }
 
         /// <summary>

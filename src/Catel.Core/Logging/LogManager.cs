@@ -456,7 +456,7 @@ namespace Catel.Logging
             try
             {
                 var configurationSection = configuration.GetSection<LoggingConfigurationSection>("logging", "catel");
-                if (configurationSection != null)
+                if (configurationSection is not null)
                 {
                     var logListeners = configurationSection.GetLogListeners(assembly);
                     foreach (var logListener in logListeners)
@@ -642,7 +642,7 @@ namespace Catel.Logging
             foreach (var listener in logListeners)
             {
                 var batchListener = listener as IBatchLogListener;
-                if (batchListener != null)
+                if (batchListener is not null)
                 {
                     logListenersToFlush.Add(batchListener);
                 }

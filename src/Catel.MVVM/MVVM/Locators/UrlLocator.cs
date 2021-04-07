@@ -70,7 +70,7 @@ namespace Catel.MVVM
             var viewModelTypeNameWithAssembly = TypeHelper.GetTypeNameWithAssembly(viewModelType.AssemblyQualifiedName);
 
             var itemInCache = GetItemFromCache(viewModelTypeNameWithAssembly);
-            if (itemInCache != null)
+            if (itemInCache is not null)
             {
                 return itemInCache;
             }

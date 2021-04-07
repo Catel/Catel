@@ -126,7 +126,7 @@ namespace Catel.Configuration
 
         public virtual void Serialize(XmlWriter xmlWriter)
         {
-            if (xmlWriter != null)
+            if (xmlWriter is not null)
             {
                 var xmlSerializer = GetXmlSerializer();
                 xmlSerializer.Serialize(this, new XmlSerializationContextInfo(xmlWriter, this)
@@ -141,7 +141,7 @@ namespace Catel.Configuration
             var propertyDataManager = PropertyDataManager.Default;
             var type = GetType();
 
-            if (xmlReader != null)
+            if (xmlReader is not null)
             {
                 if (xmlReader.ReadState == ReadState.Initial)
                 {
@@ -169,10 +169,10 @@ namespace Catel.Configuration
                         typeAttribute = xmlReader.GetAttribute("type");
                     }
 
-                    if (typeAttribute != null)
+                    if (typeAttribute is not null)
                     {
                         var elementType = TypeCache.GetTypeWithoutAssembly(typeAttribute);
-                        if (elementType != null)
+                        if (elementType is not null)
                         {
                             if (elementType != typeof(string) && !elementType.IsValueTypeEx())
                             {

@@ -92,7 +92,7 @@ namespace Catel.Reflection
                 MemberExpression memberExpression;
 
                 var unaryExpression = propertyExpression as UnaryExpression;
-                if (unaryExpression != null)
+                if (unaryExpression is not null)
                 {
                     memberExpression = unaryExpression.Operand as MemberExpression;
                 }
@@ -124,7 +124,7 @@ namespace Catel.Reflection
                     throw new NotSupportedException(NoMemberExpression);
                 }
 
-                if (allowNested && (memberExpression.Expression != null) && (memberExpression.Expression.NodeType == ExpressionType.MemberAccess))
+                if (allowNested && (memberExpression.Expression is not null) && (memberExpression.Expression.NodeType == ExpressionType.MemberAccess))
                 {
                     var propertyName = GetPropertyName(memberExpression.Expression, true, true);
 

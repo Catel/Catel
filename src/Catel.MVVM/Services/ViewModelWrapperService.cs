@@ -68,7 +68,7 @@ namespace Catel.Services
                     _wrappers.Remove(view);
                 }
 
-                if (wrapper != null)
+                if (wrapper is not null)
                 {
                     _wrappers.Add(view, wrapper);
                 }

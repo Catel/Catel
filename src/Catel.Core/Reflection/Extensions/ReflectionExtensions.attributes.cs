@@ -118,7 +118,7 @@ namespace Catel.Reflection
             attribute = null;
             var attributes = memberInfo.GetCustomAttributes(attributeType, false) as Attribute[];
 
-            if ((attributes != null) && (attributes.Length > 0))
+            if ((attributes is not null) && (attributes.Length > 0))
             {
                 attribute = attributes[0];
                 return true;
@@ -162,7 +162,7 @@ namespace Catel.Reflection
             attribute = null;
             var attributes = type.GetCustomAttributesEx(attributeType, false) as Attribute[];
 
-            if ((attributes != null) && (attributes.Length > 0))
+            if ((attributes is not null) && (attributes.Length > 0))
             {
                 attribute = attributes[0];
                 return true;

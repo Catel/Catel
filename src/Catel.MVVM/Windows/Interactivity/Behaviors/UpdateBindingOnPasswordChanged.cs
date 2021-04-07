@@ -54,7 +54,7 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnPasswordChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (AssociatedObject != null)
+            if (AssociatedObject is not null)
             {
                 if (AssociatedObject.Password != Password)
                 {

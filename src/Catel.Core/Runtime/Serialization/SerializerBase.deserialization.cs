@@ -408,7 +408,7 @@ namespace Catel.Runtime.Serialization
                 var serializationObject = DeserializeMember(context, member);
 
                 var finalMemberValue = EndMemberDeserialization(context, member, serializationObject, serializerModifiers);
-                if (finalMemberValue != null)
+                if (finalMemberValue is not null)
                 {
                     deserializedMemberValues.Add(finalMemberValue);
                 }
@@ -459,7 +459,7 @@ namespace Catel.Runtime.Serialization
                 }
 
                 var enumerable = memberValue.Value as List<SerializableKeyValuePair>;
-                if (enumerable != null)
+                if (enumerable is not null)
                 {
                     foreach (var item in enumerable)
                     {
@@ -469,7 +469,7 @@ namespace Catel.Runtime.Serialization
                 else
                 {
                     var sourceDictionary = memberValue.Value as IDictionary;
-                    if (sourceDictionary != null)
+                    if (sourceDictionary is not null)
                     {
                         foreach (var key in sourceDictionary.Keys)
                         {
@@ -498,7 +498,7 @@ namespace Catel.Runtime.Serialization
                             context.ModelTypeName);
                     }
 
-                    if (sourceCollection != null)
+                    if (sourceCollection is not null)
                     {
                         foreach (var item in sourceCollection)
                         {

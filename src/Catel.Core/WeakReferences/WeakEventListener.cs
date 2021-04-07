@@ -116,13 +116,13 @@ namespace Catel
             _typeForEventSubscriptions = typeForEventSubscriptions;
 
             IsStaticEventHandler = (target is null);
-            if (target != null)
+            if (target is not null)
             {
                 _weakTarget = new WeakReference(target);
             }
 
             IsStaticEvent = (source is null);
-            if (source != null)
+            if (source is not null)
             {
                 _weakSource = new WeakReference(source);
             }
@@ -156,7 +156,7 @@ namespace Catel
         /// Gets the target or <c>null</c> if there is no target.
         /// </summary>
         /// <value>The target.</value>
-        public object Target { get { return (_weakTarget != null) ? _weakTarget.Target : null; } }
+        public object Target { get { return (_weakTarget is not null) ? _weakTarget.Target : null; } }
 
         /// <summary>
         /// Gets the target weak reference.
@@ -168,7 +168,7 @@ namespace Catel
         /// Gets the source or <c>null</c> if there is no source.
         /// </summary>
         /// <value>The target.</value>
-        public object Source { get { return (_weakSource != null) ? _weakSource.Target : null; } }
+        public object Source { get { return (_weakSource is not null) ? _weakSource.Target : null; } }
 
         /// <summary>
         /// Gets the source weak reference.
@@ -203,7 +203,7 @@ namespace Catel
         /// <remarks>
         /// In case of static events, this property always returns <c>false</c>.
         /// </remarks>
-        public bool IsSourceAlive { get { return (_weakSource != null) && _weakSource.IsAlive; } }
+        public bool IsSourceAlive { get { return (_weakSource is not null) && _weakSource.IsAlive; } }
 
         /// <summary>
         /// Gets a value indicating whether the event target has not yet been garbage collected.
@@ -214,7 +214,7 @@ namespace Catel
         /// <remarks>
         /// In case of static event handlers, this property always returns <c>false</c>.
         /// </remarks>
-        public bool IsTargetAlive { get { return (_weakTarget != null) && _weakTarget.IsAlive; } }
+        public bool IsTargetAlive { get { return (_weakTarget is not null) && _weakTarget.IsAlive; } }
 
         /// <summary>
         /// Gets a value indicating whether this instance represents a static event.
@@ -469,7 +469,7 @@ namespace Catel
             var eventInfo = _typeForEventSubscriptions.GetEventEx(eventName, true, true);
             if (eventInfo is null)
             {
-                if (source != null)
+                if (source is not null)
                 {
                     var sourceObjectType = source.GetType();
                     eventInfo = sourceObjectType.GetEventEx(eventName, true, true);
@@ -580,7 +580,7 @@ namespace Catel
             var eventInfo = _typeForEventSubscriptions.GetEventEx(eventName, true, true);
             if (eventInfo is null)
             {
-                if (source != null)
+                if (source is not null)
                 {
                     var sourceObjectType = source.GetType();
                     eventInfo = sourceObjectType.GetEventEx(eventName, true, true);
@@ -667,7 +667,7 @@ namespace Catel
             var target = Target;
 
             var onEventHandler = OnEventHandler;
-            if (onEventHandler != null)
+            if (onEventHandler is not null)
             {
 #pragma warning disable HAA0101 // Array allocation for params parameter
                 onEventHandler.DynamicInvoke(target, source, eventArgs);
@@ -675,7 +675,7 @@ namespace Catel
             }
 
             var onEventAction = OnEventAction;
-            if (onEventAction != null)
+            if (onEventAction is not null)
             {
 #pragma warning disable HAA0101 // Array allocation for params parameter
                 onEventAction.DynamicInvoke(target);
@@ -683,13 +683,13 @@ namespace Catel
             }
 
             var onStaticEventHandler = OnStaticEventHandler;
-            if (onStaticEventHandler != null)
+            if (onStaticEventHandler is not null)
             {
                 onStaticEventHandler(source, eventArgs);
             }
 
             var onStaticEventAction = OnStaticEventAction;
-            if (onStaticEventAction != null)
+            if (onStaticEventAction is not null)
             {
                 onStaticEventAction();
             }
@@ -706,7 +706,7 @@ namespace Catel
                 return;
             }
 
-            if (_automaticallySubscribedEventName != null)
+            if (_automaticallySubscribedEventName is not null)
             {
                 UnsubscribeFromEvent(Source, _automaticallySubscribedEventName);
             }
@@ -892,7 +892,7 @@ namespace Catel
                 {
                     // We must have the right event args, so get the right ones using reflection (cached anyway)
                     var eventHandlerType = typeof(TSource).GetEventEx(eventName)?.EventHandlerType;
-                    if (eventHandlerType != null)
+                    if (eventHandlerType is not null)
                     {
                         if (eventHandlerType.ContainsGenericParametersEx())
                         {

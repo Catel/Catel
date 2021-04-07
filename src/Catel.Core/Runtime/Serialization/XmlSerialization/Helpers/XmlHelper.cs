@@ -67,12 +67,12 @@ namespace Catel.Runtime.Serialization.Xml
             var dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), objectType, xmlName, null, null);
 
             var attribute = element.Attribute(XName.Get("type", "http://schemas.catelproject.com"));
-            if (attribute != null)
+            if (attribute is not null)
             {
                 var actualTypeToDeserialize = (from t in dataContractSerializer.KnownTypes
                                                where string.Equals(t.FullName, attribute.Value)
                                                select t).FirstOrDefault();
-                if (actualTypeToDeserialize != null)
+                if (actualTypeToDeserialize is not null)
                 {
                     dataContractSerializer = dataContractSerializerFactory.GetDataContractSerializer(typeof(object), actualTypeToDeserialize, xmlName, null, null);
                 }
@@ -91,7 +91,7 @@ namespace Catel.Runtime.Serialization.Xml
             {
                 Log.Warning(ex, "Failed to deserialize '{0}', falling back to default value", xmlName);
 
-                return (createDefaultValue != null) ? createDefaultValue() : null;
+                return (createDefaultValue is not null) ? createDefaultValue() : null;
             }
         }
     }

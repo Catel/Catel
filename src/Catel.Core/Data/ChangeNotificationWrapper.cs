@@ -73,13 +73,13 @@ namespace Catel.Data
             // Note that we either support collections OR property changed, not both because ObservableCollection implements
             // the PropertyChanged as protected.
             var valueAsNotifyCollectionChanged = value as INotifyCollectionChanged;
-            if (valueAsNotifyCollectionChanged != null)
+            if (valueAsNotifyCollectionChanged is not null)
             {
                 SupportsNotifyCollectionChanged = true;
             }
 
             var valueAsNotifyPropertyChanged = value as INotifyPropertyChanged;
-            if (valueAsNotifyPropertyChanged != null)
+            if (valueAsNotifyPropertyChanged is not null)
             {
                 SupportsNotifyPropertyChanged = true;
             }
@@ -166,7 +166,7 @@ namespace Catel.Data
 
             lock (_lockObject)
             {
-                if (e.OldItems != null)
+                if (e.OldItems is not null)
                 {
                     foreach (var item in e.OldItems)
                     {
@@ -177,7 +177,7 @@ namespace Catel.Data
                 // Reset requires our own logic
                 if (e.Action == NotifyCollectionChangedAction.Reset)
                 {
-                    if (collection != null)
+                    if (collection is not null)
                     {
                         UpdateCollectionSubscriptions(collection);
                     }
@@ -186,7 +186,7 @@ namespace Catel.Data
                         Log.Warning("Received NotifyCollectionChangedAction.Reset for '{0}', but the type does not implement ICollection", sender.GetType().GetSafeFullName(false));
                     }
                 }
-                else if (e.NewItems != null)
+                else if (e.NewItems is not null)
                 {
                     foreach (var item in e.NewItems)
                     {
@@ -219,7 +219,7 @@ namespace Catel.Data
         {
             lock (_lockObject)
             {
-                if (_weakPropertyChangedListeners != null)
+                if (_weakPropertyChangedListeners is not null)
                 {
                     foreach (var weakListener in _weakPropertyChangedListeners)
                     {
@@ -229,7 +229,7 @@ namespace Catel.Data
                     _weakPropertyChangedListeners.Clear();
                 }
 
-                if (_weakCollectionChangedListeners != null)
+                if (_weakCollectionChangedListeners is not null)
                 {
                     foreach (var weakListener in _weakCollectionChangedListeners)
                     {
@@ -296,13 +296,13 @@ namespace Catel.Data
             lock (_lockObject)
             {
                 var propertyChangedValue = value as INotifyPropertyChanged;
-                if (propertyChangedValue != null)
+                if (propertyChangedValue is not null)
                 {
                     UnsubscribeNotifyChangedEvent(propertyChangedValue, EventChangeType.Property, parentCollection);
                 }
 
                 var collectionChangedValue = value as INotifyCollectionChanged;
-                if (collectionChangedValue != null)
+                if (collectionChangedValue is not null)
                 {
                     UnsubscribeNotifyChangedEvent(collectionChangedValue, EventChangeType.Collection, parentCollection);
 
@@ -329,12 +329,12 @@ namespace Catel.Data
             lock (_lockObject)
             {
                 var collectionChangedValue = value as INotifyCollectionChanged;
-                if (collectionChangedValue != null)
+                if (collectionChangedValue is not null)
                 {
                     SubscribeNotifyChangedEvent(collectionChangedValue, EventChangeType.Collection, parentCollection);
 
                     var collection = value as ICollection;
-                    if (collection != null)
+                    if (collection is not null)
                     {
                         foreach (var child in collection)
                         {
@@ -344,7 +344,7 @@ namespace Catel.Data
                 }
 
                 var propertyChangedValue = value as INotifyPropertyChanged;
-                if (propertyChangedValue != null)
+                if (propertyChangedValue is not null)
                 {
                     // ObservableObject implements PropertyChanged as protected, make sure we accept that in all platforms
                     try
@@ -412,7 +412,7 @@ namespace Catel.Data
                         throw new ArgumentOutOfRangeException("eventChangeType");
                 }
 
-                if (eventsTable != null && eventsTable.TryGetValue(value, out var oldSubscription))
+                if (eventsTable is not null && eventsTable.TryGetValue(value, out var oldSubscription))
                 {
                     oldSubscription.Detach();
 
@@ -424,7 +424,7 @@ namespace Catel.Data
                 switch (eventChangeType)
                 {
                     case EventChangeType.Property:
-                        if (parentCollection != null)
+                        if (parentCollection is not null)
                         {
                             weakListener = this.SubscribeToWeakPropertyChangedEvent(value, OnObjectCollectionItemPropertyChanged, false);
                             if (weakListener is null)
@@ -435,7 +435,7 @@ namespace Catel.Data
                             }
 
                             var collectionItems = _collectionItems.GetOrCreateValue(parentCollection);
-                            collectionItems.Add(weakListener != null ? weakListener.SourceWeakReference : new WeakReference(value));
+                            collectionItems.Add(weakListener is not null ? weakListener.SourceWeakReference : new WeakReference(value));
                         }
                         else
                         {
@@ -463,12 +463,12 @@ namespace Catel.Data
                         throw new ArgumentOutOfRangeException("eventChangeType");
                 }
 
-                if (eventsTable != null)
+                if (eventsTable is not null)
                 {
                     eventsTable.Add(value, weakListener);
                 }
 
-                if (eventsList != null)
+                if (eventsList is not null)
                 {
                     eventsList.Add(weakListener);
                 }
@@ -493,7 +493,7 @@ namespace Catel.Data
                         eventsTable = _weakPropertyChangedListenersTable;
                         eventsList = _weakPropertyChangedListeners;
 
-                        if (parentCollection != null)
+                        if (parentCollection is not null)
                         {
                             if (_collectionItems.TryGetValue(parentCollection, out var collectionItems))
                             {
@@ -518,9 +518,9 @@ namespace Catel.Data
                         throw new ArgumentOutOfRangeException("eventChangeType");
                 }
 
-                if (eventsTable != null && eventsTable.TryGetValue(value, out var oldSubscription))
+                if (eventsTable is not null && eventsTable.TryGetValue(value, out var oldSubscription))
                 {
-                    if (oldSubscription != null)
+                    if (oldSubscription is not null)
                     {
                         oldSubscription.Detach();
 

@@ -171,7 +171,7 @@ namespace Catel.MVVM.Views
             lock (_syncObj)
             {
                 var activeViewModel = view.ViewModel;
-                _registeredViews[view] = (activeViewModel != null) ? activeViewModel.UniqueIdentifier : (int?) null;
+                _registeredViews[view] = (activeViewModel is not null) ? activeViewModel.UniqueIdentifier : (int?) null;
             }
         }
         #endregion

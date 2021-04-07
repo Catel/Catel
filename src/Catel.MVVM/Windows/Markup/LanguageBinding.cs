@@ -114,7 +114,7 @@ namespace Catel.Windows.Markup
             var resource = string.Empty;
 
             var culture = Culture;
-            if (culture != null)
+            if (culture is not null)
             {
                 resource = _languageService.GetString(ResourceName, culture);
             }
@@ -144,7 +144,7 @@ namespace Catel.Windows.Markup
             // CTL-925 Use weak events so unloaded elements (like a ComboBoxItem) can also update. The usage of 
             // weak events should prevent memory leaks
             var listener = _onLanguageUpdatedWeakListener;
-            if (listener != null)
+            if (listener is not null)
             {
                 if (!ReferenceEquals(listener.Source, TargetObject))
                 {

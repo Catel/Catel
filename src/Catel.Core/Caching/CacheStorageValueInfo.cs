@@ -75,7 +75,7 @@ namespace Catel.Caching
         {
             get
             {
-                return _expirationPolicy != null;
+                return _expirationPolicy is not null;
             }
         }
 
@@ -111,7 +111,7 @@ namespace Catel.Caching
         public void DisposeValue()
         {
             var disposable = _value as IDisposable;
-            if (disposable != null)
+            if (disposable is not null)
             {
                 disposable.Dispose();
             }

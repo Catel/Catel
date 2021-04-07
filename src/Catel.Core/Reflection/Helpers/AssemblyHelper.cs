@@ -56,7 +56,21 @@ namespace Catel.Reflection
                 {
                     var entryAssemblyResolver = serviceLocator.ResolveType<IEntryAssemblyResolver>();
                     assembly = entryAssemblyResolver.Resolve();
+
+/* Unmerged change from project 'Catel.Core (netcoreapp3.1)'
+Before:
                     if (assembly != null)
+After:
+                    if (assembly is not null)
+*/
+
+/* Unmerged change from project 'Catel.Core (net5.0)'
+Before:
+                    if (assembly != null)
+After:
+                    if (assembly is not null)
+*/
+                    if (assembly is not null)
                     {
                         return assembly;
                     }
@@ -65,16 +79,16 @@ namespace Catel.Reflection
                 // Note: web should only be checked in .NET
 #if NET
                 var httpApplication = HttpContextHelper.GetHttpApplicationInstance();
-                if (httpApplication != null)
+                if (httpApplication is not null)
                 {
                     // Special treatment for ASP.NET
                     var type = httpApplication.GetType();
-                    while ((type != null) && (type != typeof(object)) && (string.Equals(type.Namespace, "ASP", StringComparison.Ordinal)))
+                    while ((type is not null) && (type != typeof(object)) && (string.Equals(type.Namespace, "ASP", StringComparison.Ordinal)))
                     {
                         type = type.BaseType;
                     }
 
-                    if (type != null)
+                    if (type is not null)
                     {
                         assembly = type.Assembly;
                     }
@@ -169,7 +183,7 @@ namespace Catel.Reflection
             catch (ReflectionTypeLoadException typeLoadException)
             {
                 foundAssemblyTypes = (from type in typeLoadException.Types
-                                      where type != null
+                                      where type is not null
                                       select type).ToArray();
 
                 Log.Warning($"A ReflectionTypeLoadException occured, adding all {BoxingCache.GetBoxedValue(foundAssemblyTypes.Length)} types that were loaded correctly");
@@ -181,7 +195,7 @@ namespace Catel.Reflection
                     foreach (var error in typeLoadException.LoaderExceptions)
                     {
                         // Fix mono issue https://github.com/Catel/Catel/issues/1071 
-                        if (error != null)
+                        if (error is not null)
                         {
                             Log.Warning("  " + error.Message);
                         }
@@ -272,7 +286,7 @@ namespace Catel.Reflection
                 && !assembly.GlobalAssemblyCache
 #endif
 #if NET || NETCORE
-                && ((Assembly.GetExecutingAssembly() != null)
+                && ((Assembly.GetExecutingAssembly() is not null)
                 && !string.Equals(assembly.Location, Assembly.GetExecutingAssembly().Location, StringComparison.OrdinalIgnoreCase))
 #endif
                 // Note: to make it the same for all platforms

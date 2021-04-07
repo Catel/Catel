@@ -56,10 +56,10 @@ namespace Catel.Services
             if (_rootFrame is null)
             {
                 var application = Application.Current;
-                if (application != null)
+                if (application is not null)
                 {
                     var mainWindow = application.MainWindow;
-                    if (mainWindow != null)
+                    if (mainWindow is not null)
                     {
                         _rootFrame = mainWindow.FindVisualDescendant(e => e is Frame) as Frame;
                     }

@@ -238,7 +238,7 @@ namespace Catel.IoC
             }
 
             var objAsINeedCustomInitialization = obj as INeedCustomInitialization;
-            if (objAsINeedCustomInitialization != null)
+            if (objAsINeedCustomInitialization is not null)
             {
                 objAsINeedCustomInitialization.Initialize();
             }
@@ -274,11 +274,11 @@ namespace Catel.IoC
 
                 var constructorCacheValue = GetConstructor(constructorCacheKey);
 
-                if (constructorCacheValue.ConstructorInfo != null)
+                if (constructorCacheValue.ConstructorInfo is not null)
                 {
                     var cachedConstructor = constructorCacheValue.ConstructorInfo;
                     var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, cachedConstructor, tag, parameters, false, false, typeConstructorsMetadata);
-                    if (instanceCreatedWithInjection != null)
+                    if (instanceCreatedWithInjection is not null)
                     {
                         return instanceCreatedWithInjection;
                     }
@@ -299,7 +299,7 @@ namespace Catel.IoC
                     var constructor = constructors[i];
 
                     var instanceCreatedWithInjection = TryCreateToConstruct(typeToConstruct, constructor, tag, parameters, true, i < constructors.Count - 1, typeConstructorsMetadata);
-                    if (instanceCreatedWithInjection != null)
+                    if (instanceCreatedWithInjection is not null)
                     {
                         // We found a constructor that works, cache it
                         SetConstructor(constructorCacheKey, constructorCacheValue, constructor);
@@ -416,7 +416,7 @@ namespace Catel.IoC
                             typeof(IEnumerable).IsAssignableFromEx(parameterTypeToResolve))
                         {
                             var collectionElementType = parameterTypeToResolve.GetCollectionElementType();
-                            if (collectionElementType != null && _serviceLocator.IsTypeRegisteredWithOrWithoutTag(collectionElementType))
+                            if (collectionElementType is not null && _serviceLocator.IsTypeRegisteredWithOrWithoutTag(collectionElementType))
                             {
                                 continue;
                             }
@@ -528,7 +528,7 @@ namespace Catel.IoC
                     if (!typeof(string).IsAssignableFromEx(parameterTypeToResolve) && typeof(IEnumerable).IsAssignableFromEx(parameterTypeToResolve))
                     {
                         var collectionElementType = parameterTypeToResolve.GetCollectionElementType();
-                        if (collectionElementType != null && _serviceLocator.IsTypeRegisteredWithOrWithoutTag(collectionElementType))
+                        if (collectionElementType is not null && _serviceLocator.IsTypeRegisteredWithOrWithoutTag(collectionElementType))
                         {
                             var ctorParameterValueLocal = _serviceLocator.ResolveTypes(collectionElementType).Cast(collectionElementType);
 
@@ -827,14 +827,14 @@ namespace Catel.IoC
 
             public Dictionary<PropertyInfo, InjectAttribute> GetInjectedProperties()
             {
-                if (_injectedProperties != null)
+                if (_injectedProperties is not null)
                 {
                     return _injectedProperties;
                 }
 
                 lock (_lockObject)
                 {
-                    if (_injectedProperties != null)
+                    if (_injectedProperties is not null)
                     {
                         return _injectedProperties;
                     }
@@ -845,7 +845,7 @@ namespace Catel.IoC
                     foreach (var property in properties)
                     {
                         var injectAttribute = property.GetCustomAttributeEx<InjectAttribute>(false);
-                        if (injectAttribute != null)
+                        if (injectAttribute is not null)
                         {
                             if (injectAttribute.Type is null)
                             {

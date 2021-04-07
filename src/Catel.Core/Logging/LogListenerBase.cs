@@ -306,7 +306,7 @@ namespace Catel.Logging
         protected void RaiseLogMessage(ILog log, string message, LogEvent logEvent, object extraData, LogData logData, DateTime time)
         {
             var handler = LogMessage;
-            if (handler != null)
+            if (handler is not null)
             {
                 handler(this, new LogMessageEventArgs(log, message, extraData, logData, logEvent, time));
             }

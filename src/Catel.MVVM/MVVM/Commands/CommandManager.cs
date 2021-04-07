@@ -193,7 +193,7 @@ namespace Catel.MVVM
                 foreach (var commandName in _commands.Keys)
                 {
                     var command = _commands[commandName];
-                    if (command != null)
+                    if (command is not null)
                     {
                         command.RaiseCanExecuteChanged();
                     }

@@ -32,7 +32,7 @@ namespace Catel.Configuration
             if (!string.IsNullOrEmpty(sectionGroupName))
             {
                 var configurationSectionGroup = @this.GetSectionGroup(sectionGroupName);
-                if (configurationSectionGroup != null)
+                if (configurationSectionGroup is not null)
                 {
                     section = (TSection) configurationSectionGroup.Sections[sectionName];
                 }

@@ -58,7 +58,7 @@ namespace Catel.MVVM
         {
             lock (_navigationContext)
             {
-                if (navigationContext != null)
+                if (navigationContext is not null)
                 {
                     foreach (string key in navigationContext.Values.Keys)
                     {

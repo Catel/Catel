@@ -36,7 +36,7 @@ namespace Catel.MVVM
         protected override object Convert(object value, Type targetType, object parameter)
         {
             var type = value as Type;
-            if (type != null)
+            if (type is not null)
             {
                 DisplayNameAttribute displayAttribute = null;
                 if (type.TryGetAttribute(out displayAttribute))
@@ -48,7 +48,7 @@ namespace Catel.MVVM
             }
 
             var memberInfo = value as MemberInfo;
-            if (memberInfo != null)
+            if (memberInfo is not null)
             {
                 DisplayNameAttribute displayAttribute = null;
                 if (memberInfo.TryGetAttribute(out displayAttribute))
@@ -60,13 +60,13 @@ namespace Catel.MVVM
             }
 
             // Support enum values
-            if (value != null)
+            if (value is not null)
             {
                 var valueType = value.GetType();
                 if (valueType.IsEnumEx())
                 {
                     memberInfo = valueType.GetMemberEx(value.ToString(), allowStaticMembers: true).FirstOrDefault();
-                    if (memberInfo != null)
+                    if (memberInfo is not null)
                     {
                         DisplayNameAttribute displayAttribute = null;
                         if (memberInfo.TryGetAttribute(out displayAttribute))
@@ -90,7 +90,7 @@ namespace Catel.MVVM
         protected string GetDisplayName(DisplayNameAttribute attribute)
         {
             var languageService = LanguageService;
-            if (languageService != null)
+            if (languageService is not null)
             {
                 attribute.LanguageService = languageService;
             }

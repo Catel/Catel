@@ -76,7 +76,7 @@ namespace Catel.Services
         {
 #if NET || NETCORE
             var mainWindow = CatelEnvironment.MainWindow;
-            if (mainWindow != null)
+            if (mainWindow is not null)
             {
                 mainWindow.Closing += async (sender, e) =>
                 {
@@ -236,7 +236,7 @@ namespace Catel.Services
 #if NETFX_CORE
             RootFrame.BackStack.Clear();
 #else
-            while (RootFrame.RemoveBackEntry() != null)
+            while (RootFrame.RemoveBackEntry() is not null)
             {
             }
 #endif

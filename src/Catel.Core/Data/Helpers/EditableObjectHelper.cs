@@ -27,7 +27,7 @@ namespace Catel.Data
             }
 
             var objAsIEditableObject = obj as IEditableObject;
-            if (objAsIEditableObject != null)
+            if (objAsIEditableObject is not null)
             {
                 objAsIEditableObject.BeginEdit();
             }
@@ -47,7 +47,7 @@ namespace Catel.Data
             }
 
             var objAsIEditableObject = obj as IEditableObject;
-            if (objAsIEditableObject != null)
+            if (objAsIEditableObject is not null)
             {
                 objAsIEditableObject.EndEdit();
             }
@@ -70,7 +70,7 @@ namespace Catel.Data
             }
 
             var objAsIEditableObject = obj as IEditableObject;
-            if (objAsIEditableObject != null)
+            if (objAsIEditableObject is not null)
             {
                 objAsIEditableObject.CancelEdit();
             }

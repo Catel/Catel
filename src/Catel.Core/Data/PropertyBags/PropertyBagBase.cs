@@ -34,7 +34,7 @@
         protected void RaisePropertyChanged(string propertyName)
         {
             var handler = PropertyChanged;
-            if (handler != null)
+            if (handler is not null)
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }

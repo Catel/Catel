@@ -97,7 +97,7 @@ namespace Catel.Runtime.Serialization.Xml
                     GetKnownTypes(knownTypeViaAttribute, serializerTypeInfo);
                 }
 
-                if (additionalKnownTypes != null)
+                if (additionalKnownTypes is not null)
                 {
                     foreach (var additionalKnownType in additionalKnownTypes)
                     {
@@ -249,13 +249,13 @@ namespace Catel.Runtime.Serialization.Xml
 
             // If this isn't the base type, check that as well
             var baseType = type.GetBaseTypeEx();
-            if (baseType != null)
+            if (baseType is not null)
             {
 #if ENABLE_DETAILED_LOGGING
                 Log.Debug("Checking base type of '{0}' for known types", type.GetSafeFullName(false));
 #endif
 
-                if (baseType.FullName != null)
+                if (baseType.FullName is not null)
                 {
                     GetKnownTypes(baseType, serializerTypeInfo);
                 }
@@ -277,7 +277,7 @@ namespace Catel.Runtime.Serialization.Xml
                 {
                     var attributeType = knownTypeByAttribute;
                     var attributeTypeFullName = attributeType.GetSafeFullName(false);
-                    if (attributeTypeFullName != null)
+                    if (attributeTypeFullName is not null)
                     {
                         GetKnownTypes(knownTypeByAttribute, serializerTypeInfo);
                     }
@@ -477,19 +477,19 @@ namespace Catel.Runtime.Serialization.Xml
                 foreach (var attr in knownTypeAttributes)
                 {
                     var ktattr = attr as KnownTypeAttribute;
-                    if (ktattr != null)
+                    if (ktattr is not null)
                     {
-                        if (ktattr.MethodName != null)
+                        if (ktattr.MethodName is not null)
                         {
                             var mi = type.GetMethodEx(ktattr.MethodName, BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
 
                             // this can be null because we are also getting here through the recursive behaviour
                             // of GetCustomAttributesEx. We are getting at this point once per class derived from a
                             // base class having a KnownType() with a method. This can be ignored
-                            if (mi != null)
+                            if (mi is not null)
                             {
                                 var types = mi.Invoke(null, null) as IEnumerable<Type>;
-                                if (types != null)
+                                if (types is not null)
                                 {
                                     additionalTypes.AddRange(types);
                                 }
@@ -586,7 +586,7 @@ namespace Catel.Runtime.Serialization.Xml
                 SerializingType = serializingType;
                 TypeToSerialize = typeToSerialize;
 
-                if (additionalKnownTypes != null)
+                if (additionalKnownTypes is not null)
                 {
                     _knownTypes.AddRange(additionalKnownTypes);
                 }
@@ -739,7 +739,7 @@ namespace Catel.Runtime.Serialization.Xml
 
                 // Check all sub types as well (a type might be deriving from IEnumerable)
                 var baseType = type;
-                while (baseType != null)
+                while (baseType is not null)
                 {
                     if (IsSpecificTypeSpecialCollection(baseType))
                     {

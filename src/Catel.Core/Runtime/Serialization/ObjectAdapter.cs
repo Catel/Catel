@@ -45,7 +45,7 @@ namespace Catel.Runtime.Serialization
                 object value = null;
 
                 var modelEditor = model as IModelEditor;
-                if (modelEditor != null && modelInfo.CatelPropertyNames.Contains(memberName))
+                if (modelEditor is not null && modelInfo.CatelPropertyNames.Contains(memberName))
                 {
                     var memberMetadata = modelInfo.CatelPropertiesByName[memberName];
                     if (_objectAdapter.GetMemberValue(model, memberName, out value))
@@ -104,7 +104,7 @@ namespace Catel.Runtime.Serialization
                 // In this very special occasion, we will not use ObjectAdapter since it 
                 // will cause property change notifications (which we don't want during deserialization)
                 var modelEditor = model as IModelEditor;
-                if (modelEditor != null && modelInfo.CatelPropertyNames.Contains(member.Name))
+                if (modelEditor is not null && modelInfo.CatelPropertyNames.Contains(member.Name))
                 {
                     modelEditor.SetValueFastButUnsecure(member.Name, finalValue);
                     return;

@@ -70,7 +70,7 @@ namespace Catel.Runtime.Serialization.Xml
             var existingType = (from x in schema.Items.Cast<object>()
                                 where x is XmlSchemaComplexType && ((XmlSchemaComplexType)x).Name == typeName
                                 select (XmlSchemaComplexType)x).FirstOrDefault();
-            if (existingType != null)
+            if (existingType is not null)
             {
                 return new XmlQualifiedName(existingType.Name, typeNs);
             }
@@ -213,7 +213,7 @@ namespace Catel.Runtime.Serialization.Xml
                 foreach (var item in xmlSchema.Items)
                 {
                     var simpleType = item as XmlSchemaSimpleType;
-                    if (simpleType != null)
+                    if (simpleType is not null)
                     {
                         if (string.Equals(simpleType.Name, memberType.Name) || string.Equals(simpleType.Name, schemaTypeName.Name))
                         {
@@ -222,7 +222,7 @@ namespace Catel.Runtime.Serialization.Xml
                     }
 
                     var complexType = item as XmlSchemaComplexType;
-                    if (complexType != null)
+                    if (complexType is not null)
                     {
                         if (string.Equals(complexType.Name, memberType.Name) || string.Equals(complexType.Name, schemaTypeName.Name))
                         {
@@ -231,7 +231,7 @@ namespace Catel.Runtime.Serialization.Xml
                     }
 
                     var xmlSchemaElement = item as XmlSchemaElement;
-                    if (xmlSchemaElement != null)
+                    if (xmlSchemaElement is not null)
                     {
                         if (string.Equals(xmlSchemaElement.Name, memberType.Name) || string.Equals(xmlSchemaElement.Name, schemaTypeName.Name))
                         {
@@ -313,7 +313,7 @@ namespace Catel.Runtime.Serialization.Xml
             }
 
             var baseTypeQualifiedName = AddTypeToSchemaSet(type.BaseType, schemaSet, serializationManager, exportedTypes);
-            if (baseTypeQualifiedName != null)
+            if (baseTypeQualifiedName is not null)
             {
                 // <xs:extensions base="address">
                 var complexContentExtension = new XmlSchemaComplexContentExtension();

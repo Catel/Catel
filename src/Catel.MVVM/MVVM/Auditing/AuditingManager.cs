@@ -168,7 +168,7 @@ namespace Catel.MVVM.Auditing
             {
                 foreach (var auditor in _instance._auditors)
                 {
-                    if (auditor.PropertiesToIgnore != null)
+                    if (auditor.PropertiesToIgnore is not null)
                     {
                         if (auditor.PropertiesToIgnore.Contains(propertyName))
                         {

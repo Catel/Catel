@@ -393,7 +393,7 @@ namespace Catel.Windows.Controls
             if (!CatelEnvironment.IsInDesignMode)
             {
                 var wrapper = _logic.CreateViewModelWrapper(true);
-                if (wrapper != null)
+                if (wrapper is not null)
                 {
                     // Pass on to the grid
                     ((IAddChild)Content).AddChild(value);

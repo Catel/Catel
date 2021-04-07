@@ -65,7 +65,7 @@ namespace Catel.Windows
             Argument.IsNotNull("element", element);
 
             var container = GetRelevantParent<FrameworkElement>(element);
-            if (container != null)
+            if (container is not null)
             {
                 var visible = element.IsVisibleToUser(container);
                 if (!visible)
@@ -125,18 +125,18 @@ namespace Catel.Windows
             var container = VisualTreeHelper.GetParent(obj) as FrameworkElement;
 
             var contentPresenter = container as ContentPresenter;
-            if (contentPresenter != null)
+            if (contentPresenter is not null)
             {
                 container = GetRelevantParent<T>(contentPresenter);
             }
 
             var panel = container as Panel;
-            if (panel != null)
+            if (panel is not null)
             {
                 container = GetRelevantParent<ScrollViewer>(panel);
             }
 
-            if (!(container is T) && (container != null))
+            if (!(container is T) && (container is not null))
             {
                 container = GetRelevantParent<T>(container);
             }

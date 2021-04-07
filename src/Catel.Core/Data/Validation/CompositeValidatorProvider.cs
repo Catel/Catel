@@ -78,7 +78,7 @@ namespace Catel.Data
 
             lock (_syncObj)
             {
-                IList<IValidator> discoveredValidators = _validatorProviders.Select(validatorProvider => validatorProvider.GetValidator(targetType)).Where(discoveredValidator => discoveredValidator != null).ToList();
+                IList<IValidator> discoveredValidators = _validatorProviders.Select(validatorProvider => validatorProvider.GetValidator(targetType)).Where(discoveredValidator => discoveredValidator is not null).ToList();
                 if (discoveredValidators.Count > 1)
                 {
                     var composite = new CompositeValidator();

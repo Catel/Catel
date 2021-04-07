@@ -160,7 +160,7 @@ namespace Catel.MVVM.Converters
 
             var returnValue = value;
 
-            if (Link != null)
+            if (Link is not null)
             {
 #if NETFX_CORE
                 var cultureToUse = culture.Name;
@@ -211,7 +211,7 @@ namespace Catel.MVVM.Converters
             // Call ConvertBack first because we are doing this in reverse order
             returnValue = ConvertBack((TConvertBack)returnValue, targetType, parameter);
 
-            if (Link != null)
+            if (Link is not null)
             {
 #if NETFX_CORE
                 var cultureToUse = culture.Name;

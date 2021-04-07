@@ -106,7 +106,7 @@ namespace Catel.Services
                 }
             }
 
-            if (parentContentControl != null)
+            if (parentContentControl is not null)
             {
                 SetControlContent(parentContentControl, null);
             }
@@ -121,7 +121,7 @@ namespace Catel.Services
 
             if (Enum<WrapControlServiceWrapOptions>.Flags.IsFlagSet(wrapOptions, WrapControlServiceWrapOptions.ExplicitlyAddApplicationResourcesDictionary))
             {
-                if (Application.Current != null)
+                if (Application.Current is not null)
                 {
                     outsideGrid.Resources.MergedDictionaries.Add(Application.Current.Resources);
                 }
@@ -142,7 +142,7 @@ namespace Catel.Services
                 foreach (var dataWindowButton in buttons)
                 {
                     var button = new Button();
-                    if (dataWindowButton.CommandBindingPath != null)
+                    if (dataWindowButton.CommandBindingPath is not null)
                     {
                         button.SetBinding(ButtonBase.CommandProperty, new Binding(dataWindowButton.CommandBindingPath));
                     }
@@ -151,10 +151,10 @@ namespace Catel.Services
                         button.Command = dataWindowButton.Command;
                     }
 
-                    if (dataWindowButton.ContentBindingPath != null)
+                    if (dataWindowButton.ContentBindingPath is not null)
                     {
                         var contentBinding = new Binding(dataWindowButton.ContentBindingPath);
-                        if (dataWindowButton.ContentValueConverter != null)
+                        if (dataWindowButton.ContentValueConverter is not null)
                         {
                             contentBinding.Converter = dataWindowButton.ContentValueConverter;
                         }
@@ -165,10 +165,10 @@ namespace Catel.Services
                         button.Content = dataWindowButton.Text;
                     }
 
-                    if (dataWindowButton.VisibilityBindingPath != null)
+                    if (dataWindowButton.VisibilityBindingPath is not null)
                     {
                         var visibilityBinding = new Binding(dataWindowButton.VisibilityBindingPath);
-                        if (dataWindowButton.VisibilityValueConverter != null)
+                        if (dataWindowButton.VisibilityValueConverter is not null)
                         {
                             visibilityBinding.Converter = dataWindowButton.VisibilityValueConverter;
                         }
@@ -275,7 +275,7 @@ namespace Catel.Services
             // Set content of the outside grid
             outsideGrid.Children.Add(mainContent);
 
-            if (parentContentControl != null)
+            if (parentContentControl is not null)
             {
                 SetControlContent(parentContentControl, outsideGrid);
             }

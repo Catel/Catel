@@ -105,7 +105,7 @@ namespace Catel.Data
                     {
                         var properties = new List<MemberValue>();
 
-                        if (_serializer != null)
+                        if (_serializer is not null)
                         {
                             properties = _serializer.DeserializeMembers(_object, stream, null);
                         }
@@ -239,7 +239,7 @@ namespace Catel.Data
         /// </summary>
         void IEditableObject.BeginEdit()
         {
-            if (_backup != null)
+            if (_backup is not null)
             {
                 Log.Debug("IEditableObject is already in edit state");
                 return;

@@ -55,7 +55,7 @@ namespace Catel.Windows.Interactivity
         private void AssociatedObjectRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             var uri = AssociatedObject.NavigateUri;
-            if (uri != null)
+            if (uri is not null)
             {
                 _processService.StartProcess(uri.ToString());
             }

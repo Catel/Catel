@@ -249,7 +249,7 @@ namespace Catel.Windows
 
             SetBinding(TitleProperty, new Binding("Title"));
 
-            if (additionalButtons != null)
+            if (additionalButtons is not null)
             {
                 foreach (var button in additionalButtons)
                 {
@@ -659,7 +659,7 @@ namespace Catel.Windows
 
             if (e.Key == Key.Enter)
             {
-                if (_defaultOkElement != null)
+                if (_defaultOkElement is not null)
                 {
                     _defaultOkElement.GotFocus += OnButtonReceivedFocus;
                     if (!_defaultOkElement.Focus())
@@ -669,7 +669,7 @@ namespace Catel.Windows
 
                     e.Handled = true;
                 }
-                else if (_defaultOkCommand != null)
+                else if (_defaultOkCommand is not null)
                 {
                     HandleDefaultButton();
                     e.Handled = true;
@@ -680,7 +680,7 @@ namespace Catel.Windows
 
             if (e.Key == Key.Escape && CanCloseUsingEscape)
             {
-                if (_defaultCancelCommand != null)
+                if (_defaultCancelCommand is not null)
                 {
                     Log.Info("User pressed 'Escape', executing cancel command");
 
@@ -756,7 +756,7 @@ namespace Catel.Windows
         /// </summary>
         private void HandleDefaultButton()
         {
-            if (_defaultOkCommand != null)
+            if (_defaultOkCommand is not null)
             {
                 Log.Info("User pressed 'Enter', executing default command");
 
@@ -775,7 +775,7 @@ namespace Catel.Windows
         /// <exception cref="InvalidOperationException">The <paramref name="dataWindowButton"/> is added when the window is already loaded.</exception>
         protected void AddCustomButton(DataWindowButton dataWindowButton)
         {
-            if (InternalGrid != null)
+            if (InternalGrid is not null)
             {
                 throw new InvalidOperationException(Exceptions.DataWindowButtonCanOnlyBeAddedWhenWindowIsNotLoaded);
             }
@@ -855,7 +855,7 @@ namespace Catel.Windows
             var contentGrid = WrapControlService.Wrap(newContentAsFrameworkElement, wrapOptions, _buttons.ToArray(), this);
 
             var internalGrid = contentGrid.FindVisualDescendant(obj => (obj is FrameworkElement) && string.Equals(((FrameworkElement)obj).Name, WrapControlServiceControlNames.InternalGridName)) as Grid;
-            if (internalGrid != null)
+            if (internalGrid is not null)
             {
                 internalGrid.SetResourceReference(StyleProperty, "WindowGridStyle");
 
@@ -904,7 +904,7 @@ namespace Catel.Windows
             if (!_forceClose && !ClosedByButton)
             {
                 var vm = ViewModel;
-                if (vm != null && vm.IsClosed)
+                if (vm is not null && vm.IsClosed)
                 {
                     // Being closed from the vm
                     return;
@@ -976,7 +976,7 @@ namespace Catel.Windows
         {
             // CTL-735 We might be handling the ViewModel.Closed event
             var vm = _logic.ViewModel;
-            if (vm != null)
+            if (vm is not null)
             {
                 if (vm.IsClosed)
                 {
@@ -996,7 +996,7 @@ namespace Catel.Windows
             foreach (var command in Commands)
             {
                 var commandAsICatelCommand = command as ICatelCommand;
-                if (commandAsICatelCommand != null)
+                if (commandAsICatelCommand is not null)
                 {
                     commandAsICatelCommand.RaiseCanExecuteChanged();
                 }

@@ -67,7 +67,7 @@ namespace Catel.IoC
             Argument.IsNotNull("registrationConventionHandler", registrationConventionHandler);
             Argument.IsNotNullOrWhitespace("@namespace", @namespace);
 
-            registrationConventionHandler.ExcludeTypesWhere(type => type.Namespace != null && type.Namespace.StartsWith(@namespace));
+            registrationConventionHandler.ExcludeTypesWhere(type => type.Namespace is not null && type.Namespace.StartsWith(@namespace));
 
             return registrationConventionHandler;
         }
@@ -217,7 +217,7 @@ namespace Catel.IoC
             Argument.IsNotNull("registrationConventionHandler", registrationConventionHandler);
             Argument.IsNotNullOrWhitespace("@namespace", @namespace);
 
-            registrationConventionHandler.TypeFilter.Includes += type => type.Namespace != null && type.Namespace.StartsWith(@namespace);
+            registrationConventionHandler.TypeFilter.Includes += type => type.Namespace is not null && type.Namespace.StartsWith(@namespace);
             registrationConventionHandler.ApplyConventions();
 
             return registrationConventionHandler;

@@ -159,7 +159,7 @@ namespace Catel.Runtime.Serialization
 
                 // Search max 2 levels deep, if not found, then we failed
                 var parentDictionary = context.FindParentType(x => x.IsDictionary(), 2);
-                if (parentDictionary != null)
+                if (parentDictionary is not null)
                 {
                     var genericTypeDefinition = parentDictionary.GetGenericArgumentsEx();
 
@@ -197,7 +197,7 @@ namespace Catel.Runtime.Serialization
                 }
 
                 var memberValue = ObjectAdapter.GetMemberValue(model, memberName, modelInfo);
-                if (memberValue != null)
+                if (memberValue is not null)
                 {
                     listToSerialize.Add(memberValue);
                 }
@@ -275,7 +275,7 @@ namespace Catel.Runtime.Serialization
             {
                 var scopeObject = scopeManager.ScopeObject;
 
-                if (configuration != null)
+                if (configuration is not null)
                 {
                     scopeObject.Configuration = configuration;
                 }
@@ -429,7 +429,7 @@ namespace Catel.Runtime.Serialization
                     targetDictionary.Clear();
 
                     var sourceDictionary = firstMember.Value as IDictionary;
-                    if (sourceDictionary != null)
+                    if (sourceDictionary is not null)
                     {
                         foreach (var key in sourceDictionary.Keys)
                         {
@@ -455,7 +455,7 @@ namespace Catel.Runtime.Serialization
                         targetCollection.Clear();
 
                         var sourceCollection = firstMember.Value as IEnumerable;
-                        if (sourceCollection != null)
+                        if (sourceCollection is not null)
                         {
                             foreach (var item in sourceCollection)
                             {
@@ -590,7 +590,7 @@ namespace Catel.Runtime.Serialization
             return _shouldSerializeAsCollectionCache.GetFromCacheOrFetch(memberType, () =>
             {
                 var serializerModifiers = SerializationManager.GetSerializerModifiers(memberType);
-                if (serializerModifiers != null)
+                if (serializerModifiers is not null)
                 {
                     foreach (var serializerModifier in serializerModifiers)
                     {
@@ -662,7 +662,7 @@ namespace Catel.Runtime.Serialization
             return _shouldSerializeAsDictionaryCache.GetFromCacheOrFetch(memberType, () =>
             {
                 var serializerModifiers = SerializationManager.GetSerializerModifiers(memberType);
-                if (serializerModifiers != null)
+                if (serializerModifiers is not null)
                 {
                     foreach (var serializerModifier in serializerModifiers)
                     {
@@ -702,7 +702,7 @@ namespace Catel.Runtime.Serialization
                 var useParseAndToString = false;
 
                 var fieldInfo = memberValue.ModelType.GetFieldEx(memberValue.Name);
-                if (fieldInfo != null)
+                if (fieldInfo is not null)
                 {
                     useParseAndToString = fieldInfo.IsDecoratedWithAttribute<SerializeUsingParseAndToStringAttribute>();
                 }
@@ -710,7 +710,7 @@ namespace Catel.Runtime.Serialization
                 if (!useParseAndToString)
                 {
                     var propertyInfo = memberValue.ModelType.GetPropertyEx(memberValue.Name);
-                    if (propertyInfo != null)
+                    if (propertyInfo is not null)
                     {
                         useParseAndToString = propertyInfo.IsDecoratedWithAttribute<SerializeUsingParseAndToStringAttribute>();
                     }
@@ -775,7 +775,7 @@ namespace Catel.Runtime.Serialization
                 var serializerModifiers = SerializationManager.GetSerializerModifiers(memberValue.ModelType);
 
                 var fieldInfo = memberValue.ModelType.GetFieldEx(memberValue.Name);
-                if (fieldInfo != null)
+                if (fieldInfo is not null)
                 {
                     if (fieldInfo.IsDecoratedWithAttribute<SerializeEnumAsStringAttribute>())
                     {
@@ -784,7 +784,7 @@ namespace Catel.Runtime.Serialization
                 }
 
                 var propertyInfo = memberValue.ModelType.GetPropertyEx(memberValue.Name);
-                if (propertyInfo != null)
+                if (propertyInfo is not null)
                 {
                     if (propertyInfo.IsDecoratedWithAttribute<SerializeEnumAsStringAttribute>())
                     {
@@ -849,7 +849,7 @@ namespace Catel.Runtime.Serialization
             var collection = new List<SerializableKeyValuePair>();
 
             var dictionary = memberValue as IDictionary;
-            if (dictionary != null)
+            if (dictionary is not null)
             {
                 var genericArguments = memberValue.GetType().GetGenericArgumentsEx();
                 var keyType = genericArguments[0];
@@ -974,7 +974,7 @@ namespace Catel.Runtime.Serialization
                 elementType = type.GetGenericArgumentsEx()[0];
             }
 
-            if (elementType != null)
+            if (elementType is not null)
             {
                 var collectionType = typeof(List<>);
 #pragma warning disable HAA0101 // Array allocation for params parameter

@@ -43,7 +43,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override void OnAssociatedObjectLoaded()
         {
-            if (RoutedEvent != null)
+            if (RoutedEvent is not null)
             {
                 AssociatedObject.AddHandler(RoutedEvent, new RoutedEventHandler(OnRoutedEvent));
             }
@@ -54,7 +54,7 @@ namespace Catel.Windows.Interactivity
         /// </summary>
         protected override void OnAssociatedObjectUnloaded()
         {
-            if (RoutedEvent != null)
+            if (RoutedEvent is not null)
             {
                 AssociatedObject.RemoveHandler(RoutedEvent, new RoutedEventHandler(OnRoutedEvent));
             }

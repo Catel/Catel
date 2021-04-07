@@ -57,7 +57,7 @@ namespace Catel.Reflection
         /// </returns>
         public static IEnumerable<ConstructorInfo> SortByParametersMatchDistance(this List<ConstructorInfo> constructors, object[] parameters)
         {
-            if (constructors != null && constructors.Count > 1)
+            if (constructors is not null && constructors.Count > 1)
             {
                 var constructorDistances = new List<ConstructorDistance>();
 
@@ -98,12 +98,12 @@ namespace Catel.Reflection
                     return false;
                 }
 
-                if (parameter != null && !constructorParameterType.IsAssignableFromEx(parameter.GetType()))
+                if (parameter is not null && !constructorParameterType.IsAssignableFromEx(parameter.GetType()))
                 {
                     return false;
                 }
 
-                if (parameter != null)
+                if (parameter is not null)
                 {
                     var parameterType = parameter.GetType();
                     int typeDistance = parameterType.GetTypeDistance(constructorParameterType);

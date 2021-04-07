@@ -25,7 +25,7 @@
             try
             {
                 var modelEditor = instance as IModelEditor;
-                if (modelEditor != null && modelEditor.IsPropertyRegistered(memberName))
+                if (modelEditor is not null && modelEditor.IsPropertyRegistered(memberName))
                 {
                     value = modelEditor.GetValueFastButUnsecure<TValue>(memberName);
                     return true;
@@ -71,7 +71,7 @@
             }
 
             var propertyInfo = instance.GetType().GetPropertyEx(memberName);
-            if (propertyInfo != null)
+            if (propertyInfo is not null)
             {
                 value = (TValue)propertyInfo.GetValue(instance, null);
                 return true;
@@ -102,7 +102,7 @@
             }
 
             var fieldInfo = instance.GetType().GetFieldEx(memberName);
-            if (fieldInfo != null)
+            if (fieldInfo is not null)
             {
                 value = (TValue)fieldInfo.GetValue(instance);
                 return true;
@@ -124,7 +124,7 @@
             try
             {
                 var modelEditor = instance as IModelEditor;
-                if (modelEditor != null && modelEditor.IsPropertyRegistered(memberName))
+                if (modelEditor is not null && modelEditor.IsPropertyRegistered(memberName))
                 {
                     modelEditor.SetValue(memberName, value);
                     return true;
@@ -171,7 +171,7 @@
             }
 
             var propertyInfo = instance.GetType().GetPropertyEx(memberName);
-            if (propertyInfo != null)
+            if (propertyInfo is not null)
             {
                 propertyInfo.SetValue(instance, objectValue, null);
                 return true;
@@ -201,7 +201,7 @@
             }
 
             var fieldInfo = instance.GetType().GetFieldEx(memberName);
-            if (fieldInfo != null)
+            if (fieldInfo is not null)
             {
                 fieldInfo.SetValue(instance, objectValue);
                 return true;

@@ -45,13 +45,13 @@ namespace Catel.Windows
 
             foreach (var hwndSource in sources)
             {
-                if (hwndSource != null)
+                if (hwndSource is not null)
                 {
                     var popupRoot = hwndSource.RootVisual as FrameworkElement;
-                    if (popupRoot != null)
+                    if (popupRoot is not null)
                     {
                         var popup = popupRoot.Parent as Popup;
-                        if (popup != null)
+                        if (popup is not null)
                         {
                             popups.Add(popup);
                         }

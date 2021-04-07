@@ -34,7 +34,7 @@ namespace Catel.Windows.Threading
         {
             Argument.IsNotNull("action", action);
 
-            if (dispatcher != null && !dispatcher.CheckAccess())
+            if (dispatcher is not null && !dispatcher.CheckAccess())
             {
 #if NET || NETCORE
                 dispatcher.Invoke(action, null);
@@ -64,7 +64,7 @@ namespace Catel.Windows.Threading
         {
             Argument.IsNotNull("action", action);
 
-            if (dispatcher != null && !dispatcher.CheckAccess())
+            if (dispatcher is not null && !dispatcher.CheckAccess())
             {
                 dispatcher.Invoke(action, priority, null);
             }
@@ -88,7 +88,7 @@ namespace Catel.Windows.Threading
         {
             Argument.IsNotNull("method", method);
 
-            if (dispatcher != null && !dispatcher.CheckAccess())
+            if (dispatcher is not null && !dispatcher.CheckAccess())
             {
 #if NET || NETCORE
                 dispatcher.Invoke(method, args);
@@ -119,7 +119,7 @@ namespace Catel.Windows.Threading
         {
             Argument.IsNotNull("method", method);
 
-            if (dispatcher != null && !dispatcher.CheckAccess())
+            if (dispatcher is not null && !dispatcher.CheckAccess())
             {
                 dispatcher.Invoke(method, priority, args);
             }
@@ -209,7 +209,7 @@ namespace Catel.Windows.Threading
         {
             Argument.IsNotNull("action", action);
 
-            if (dispatcher != null)
+            if (dispatcher is not null)
             {
                 if (!onlyBeginInvokeWhenNoAccess || !dispatcher.CheckAccess())
                 {
@@ -239,7 +239,7 @@ namespace Catel.Windows.Threading
         {
             Argument.IsNotNull("action", action);
 
-            if (dispatcher != null)
+            if (dispatcher is not null)
             {
                 if (!onlyInvokeWhenNoAccess || !dispatcher.CheckAccess())
                 {

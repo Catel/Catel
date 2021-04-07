@@ -60,7 +60,7 @@ namespace Catel.Runtime
                 var possibleAssembly = (from assembly in _appDomain.GetLoadedAssemblies()
                                         where assembly.FullName.StartsWith(simpleAssemblyName)
                                         select assembly).FirstOrDefault();
-                if (possibleAssembly != null)
+                if (possibleAssembly is not null)
                 {
                     Log.Debug("Found assembly '{0}'", possibleAssembly.FullName);
                     return possibleAssembly;

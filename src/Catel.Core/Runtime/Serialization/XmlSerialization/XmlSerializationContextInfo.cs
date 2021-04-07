@@ -104,7 +104,7 @@ namespace Catel.Runtime.Serialization.Xml
             Debug.Assert(!ReferenceEquals(context, parentContext));
 
             var parentKnownTypes = parentContext?.Context?.KnownTypes;
-            if (parentKnownTypes != null)
+            if (parentKnownTypes is not null)
             {
                 // Note: sometimes Catel re-uses the types, but in that case the types won't be added
                 // as duplicates anyway

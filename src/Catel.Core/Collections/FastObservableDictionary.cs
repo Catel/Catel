@@ -148,7 +148,7 @@
 
         private void WriteReplaceSuspension(KeyValuePair<TKey, TValue> changedItem, int changedIndex)
         {
-            if (_suspensionContext != null)
+            if (_suspensionContext is not null)
             {
                 if (_suspensionContext.Mode == SuspensionMode.None || _suspensionContext.IsMixedMode() || _suspensionContext.Mode == SuspensionMode.Silent)
                 {
@@ -164,7 +164,7 @@
         }
         private void WriteAddSuspension(KeyValuePair<TKey, TValue> changedItem, int changedIndex)
         {
-            if (_suspensionContext != null)
+            if (_suspensionContext is not null)
             {
                 if (_suspensionContext.Mode == SuspensionMode.Adding || _suspensionContext.IsMixedMode())
                 {
@@ -180,7 +180,7 @@
         }
         private void WriteRemoveSuspension(KeyValuePair<TKey, TValue> changedItem, int changedIndex)
         {
-            if (_suspensionContext != null)
+            if (_suspensionContext is not null)
             {
                 if (_suspensionContext.Mode == SuspensionMode.Removing || _suspensionContext.IsMixedMode())
                 {
@@ -209,7 +209,7 @@
             if (checkKeyDuplication && _dictIndexMapping.TryGetValue(key, out var oldIndex) && _dict.TryGetValue(key, out var oldValue))
             {
                 // Check
-                if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
+                if (_suspensionContext is not null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
                 {
                     throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
                 }
@@ -237,7 +237,7 @@
             else
             {
                 // Check
-                if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
+                if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Removing)
                 {
                     throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
                 }
@@ -278,7 +278,7 @@
             Argument.IsNotNull(nameof(key), key);
 
             // Check
-            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
+            if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Removing)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
             }
@@ -291,7 +291,7 @@
                 if (oldIndex == index)
                 {
                     // Check
-                    if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
+                    if (_suspensionContext is not null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
                     {
                         throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or a mixed mode, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
                     }
@@ -319,7 +319,7 @@
             else
             {
                 // Check
-                if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Removing)
+                if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Removing)
                 {
                     throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
                 }
@@ -360,7 +360,7 @@
             Argument.IsNotNull(nameof(key), key);
 
             // Check
-            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
+            if (_suspensionContext is not null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Moving items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
@@ -386,7 +386,7 @@
                 newIndex));
 #pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
 
-            if (_suspensionContext != null && _suspensionContext.IsMixedMode())
+            if (_suspensionContext is not null && _suspensionContext.IsMixedMode())
             {
                 WriteRemoveSuspension(changedItem, oldIndex);
                 WriteAddSuspension(changedItem, newIndex);
@@ -406,7 +406,7 @@
             if (_dictIndexMapping.TryGetValue(keyToRemove, out var removedKeyIndex) && _dict.TryGetValue(keyToRemove, out var removedKeyValue))
             {
                 // Check
-                if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Adding)
+                if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Adding)
                 {
                     throw Log.ErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
                 }
@@ -452,7 +452,7 @@
         public virtual void RemoveSingleValue(int index, out TValue value)
         {
             // Check      
-            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Adding)
+            if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Adding)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
             }
@@ -528,7 +528,7 @@
 
         private void WriteMultipleAddSuspension(IEnumerable<KeyValuePair<TKey, TValue>> collection, int startIndex, int count)
         {
-            if (_suspensionContext != null)
+            if (_suspensionContext is not null)
             {
                 if (_suspensionContext.Mode == SuspensionMode.Adding || _suspensionContext.IsMixedMode())
                 {
@@ -544,7 +544,7 @@
         }
         private void WriteMultipleRemoveSuspension(IEnumerable<KeyValuePair<TKey, TValue>> collection, int startIndex, int count)
         {
-            if (_suspensionContext != null)
+            if (_suspensionContext is not null)
             {
                 if (_suspensionContext.Mode == SuspensionMode.Adding || _suspensionContext.IsMixedMode())
                 {
@@ -691,12 +691,12 @@
         public virtual void RemoveAllItems()
         {
             // Check
-            if (_suspensionContext != null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
+            if (_suspensionContext is not null && (_suspensionContext.Mode != SuspensionMode.None && _suspensionContext.Mode != SuspensionMode.Silent && !_suspensionContext.IsMixedMode()))
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, SuspensionMode.Silent or mixed modes, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }
             List<KeyValuePair<TKey, TValue>> copyList = null;
-            if (_suspensionContext != null && _suspensionContext.IsMixedMode())
+            if (_suspensionContext is not null && _suspensionContext.IsMixedMode())
             {
                 copyList = AsEnumerable().ToList();
             }
@@ -711,7 +711,7 @@
             OnCollectionChanged(_cachedResetArgs);
 
 
-            if (copyList != null)
+            if (copyList is not null)
             {
                 WriteMultipleRemoveSuspension(copyList, 0, copyList.Count);
             }
@@ -1056,7 +1056,7 @@
                 // Create new context
                 _suspensionContext = new SuspensionContext<KeyValuePair<TKey, TValue>>(mode);
             }
-            else if (_suspensionContext != null && _suspensionContext.Mode != mode)
+            else if (_suspensionContext is not null && _suspensionContext.Mode != mode)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Cannot change mode during another active suspension.");
             }

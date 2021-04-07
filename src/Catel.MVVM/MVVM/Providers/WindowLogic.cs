@@ -50,7 +50,7 @@ namespace Catel.MVVM.Providers
             var targetWindowType = targetWindow.GetType();
 
             var closedEvent = targetWindowType.GetEventEx("Closed");
-            var eventName = closedEvent != null ? "Closed" : "Unloaded";
+            var eventName = closedEvent is not null ? "Closed" : "Unloaded";
 
             _targetWindowClosedWeakEventListener = this.SubscribeToWeakGenericEvent<EventArgs>(targetWindow, eventName, OnTargetWindowClosed);
 
@@ -109,7 +109,7 @@ namespace Catel.MVVM.Providers
 
             // This should only happen when the window only exposes an Unloaded event
             var vm = ViewModel;
-            if (vm != null && !vm.IsClosed)
+            if (vm is not null && !vm.IsClosed)
             {
                 await CloseViewModelAsync(null, true);
             }
@@ -132,7 +132,7 @@ namespace Catel.MVVM.Providers
 
             await base.OnViewModelClosedAsync(sender, e);
 
-            if (_closeInitiatedByViewModelResult != null)
+            if (_closeInitiatedByViewModelResult is not null)
             {
                 var result = false;
 
@@ -201,7 +201,7 @@ namespace Catel.MVVM.Providers
                     // See https://github.com/Catel/Catel/issues/1503, even though there is no real DialogResult,
                     // we will get the result from the VM instead
                     var vm = ViewModel;
-                    if (vm != null)
+                    if (vm is not null)
                     {
                         dialogResult = vm.GetResult();
                     }

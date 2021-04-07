@@ -309,7 +309,7 @@ namespace Catel
                 }
 
                 runtimeBaseType = type.GetBaseTypeEx();
-            } while (runtimeBaseType != null);
+            } while (runtimeBaseType is not null);
 
             var error = $"Type '{type.Name}' should have type '{baseType.Name}' as base class, but does not";
             Log.Error(error);

@@ -64,7 +64,7 @@ namespace Catel.Runtime.Serialization
             }
 
             var serializationContextInfoParentSetter = context as ISerializationContextContainer;
-            if (serializationContextInfoParentSetter != null)
+            if (serializationContextInfoParentSetter is not null)
             {
                 serializationContextInfoParentSetter.SetSerializationContext(this);
             }
@@ -179,7 +179,7 @@ namespace Catel.Runtime.Serialization
         {
             base.DisposeManaged();
 
-            if (_scopeManager != null)
+            if (_scopeManager is not null)
             {
                 _scopeManager.Dispose();
                 _scopeManager = null;
@@ -194,7 +194,7 @@ namespace Catel.Runtime.Serialization
             TypeStack.Push(ModelType);
 
             var serializable = Model as ISerializable;
-            if (serializable != null)
+            if (serializable is not null)
             {
                 var registrationInfo = ReferenceManager.GetInfo(serializable, Context.ShouldAutoGenerateGraphIds(this));
 
@@ -227,7 +227,7 @@ namespace Catel.Runtime.Serialization
         private void Uninitialize()
         {
             var serializable = Model as ISerializable;
-            if (serializable != null)
+            if (serializable is not null)
             {
                 var registrationInfo = ReferenceManager.GetInfo(serializable, Context.ShouldAutoGenerateGraphIds(this));
 

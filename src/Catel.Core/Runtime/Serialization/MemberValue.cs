@@ -140,7 +140,7 @@ namespace Catel.Runtime.Serialization
             {
                 _value = value;
 
-                ActualMemberType = (value != null) ? value.GetType() : null;
+                ActualMemberType = (value is not null) ? value.GetType() : null;
             }
         }
 

@@ -151,7 +151,7 @@ namespace Catel.Windows.Interactivity
                 Log.Debug("Focused '{0}'", AssociatedObject.GetType().GetSafeFullName(false));
 
                 var textBox = AssociatedObject as TextBox;
-                if (textBox != null)
+                if (textBox is not null)
                 {
                     textBox.SelectionStart = textBox.Text.Length;
                 }

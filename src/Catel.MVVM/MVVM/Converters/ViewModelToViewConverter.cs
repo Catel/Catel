@@ -48,7 +48,7 @@ namespace Catel.MVVM.Converters
             }
 
             var viewType = _viewLocator.ResolveView(value.GetType());
-            return (viewType != null) ? ViewHelper.ConstructViewWithViewModel(viewType, value) : ConverterHelper.UnsetValue;
+            return (viewType is not null) ? ViewHelper.ConstructViewWithViewModel(viewType, value) : ConverterHelper.UnsetValue;
         }
     }
 }

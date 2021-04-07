@@ -48,7 +48,7 @@ namespace Catel.Windows
             frameworkElement.ApplyTemplate();
 
             var adornerLayer = AdornerLayer.GetAdornerLayer(frameworkElement);
-            if (adornerLayer != null)
+            if (adornerLayer is not null)
             {
                 adornerLayer.Visibility = Visibility.Collapsed;
             }

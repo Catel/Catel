@@ -77,7 +77,7 @@ namespace Catel.Pooling
 
                     valueToReturn = _stack.Pop() as TPoolable;
 
-                    if (valueToReturn != null)
+                    if (valueToReturn is not null)
                     {
                         CurrentSize -= valueToReturn.Size;
                     }

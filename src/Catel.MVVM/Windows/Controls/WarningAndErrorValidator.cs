@@ -211,7 +211,7 @@ namespace Catel.Windows.Controls
             {
                 //_infoBarMessageControl = this.FindLogicalAncestorByType<InfoBarMessageControl>();
                 _infoBarMessageControl = this.FindLogicalOrVisualAncestorByType<InfoBarMessageControl>();
-                if (_infoBarMessageControl != null)
+                if (_infoBarMessageControl is not null)
                 {
                     _infoBarMessageControl.SubscribeWarningAndErrorValidator(this);
                 }
@@ -219,7 +219,7 @@ namespace Catel.Windows.Controls
 #endif
 
             var source = Source;
-            if (source != null)
+            if (source is not null)
             {
                 UpdateSource(null, source);
 
@@ -255,7 +255,7 @@ namespace Catel.Windows.Controls
             _objectValidation.Clear();
 
 #if NET || NETCORE
-            if (_infoBarMessageControl != null)
+            if (_infoBarMessageControl is not null)
             {
                 _infoBarMessageControl.UnsubscribeWarningAndErrorValidator(this);
                 _infoBarMessageControl = null;
@@ -271,7 +271,7 @@ namespace Catel.Windows.Controls
         private void UpdateSource(object oldValue, object newValue)
         {
             var oldValueAsIEnumerable = oldValue as IEnumerable;
-            if (oldValueAsIEnumerable != null)
+            if (oldValueAsIEnumerable is not null)
             {
                 RemoveObjectsFromWatchList(oldValueAsIEnumerable);
             }
@@ -288,7 +288,7 @@ namespace Catel.Windows.Controls
 #endif
 
             var newValueAsIEnumerable = newValue as IEnumerable;
-            if (newValueAsIEnumerable != null)
+            if (newValueAsIEnumerable is not null)
             {
                 AddObjectsToWatchList(newValueAsIEnumerable, newValueAsIEnumerable);
             }
@@ -315,7 +315,7 @@ namespace Catel.Windows.Controls
 
             // Supports IObservableCollection through INotifyCollectionChanged and support IEntityCollectionCore 
             var iNotifyCollectionChanged = values as INotifyCollectionChanged;
-            if (iNotifyCollectionChanged != null)
+            if (iNotifyCollectionChanged is not null)
             {
                 iNotifyCollectionChanged.CollectionChanged += iNotifyCollectionChanged_CollectionChanged;
 
@@ -340,7 +340,7 @@ namespace Catel.Windows.Controls
                 if (!_objectValidation.ContainsKey(value))
                 {
                     var iNotifyPropertyChanged = value as INotifyPropertyChanged;
-                    if (iNotifyPropertyChanged != null)
+                    if (iNotifyPropertyChanged is not null)
                     {
                         iNotifyPropertyChanged.PropertyChanged += iNotifyPropertyChanged_PropertyChanged;
                     }
@@ -363,7 +363,7 @@ namespace Catel.Windows.Controls
 
             // Supports IObservableCollection through INotifyCollectionChanged and support IEntityCollectionCore 
             var iNotifyCollectionChanged = values as INotifyCollectionChanged;
-            if (iNotifyCollectionChanged != null)
+            if (iNotifyCollectionChanged is not null)
             {
                 iNotifyCollectionChanged.CollectionChanged -= iNotifyCollectionChanged_CollectionChanged;
 
@@ -383,7 +383,7 @@ namespace Catel.Windows.Controls
             }
 
             var iNotifyPropertyChanged = value as INotifyPropertyChanged;
-            if (iNotifyPropertyChanged != null)
+            if (iNotifyPropertyChanged is not null)
             {
                 iNotifyPropertyChanged.PropertyChanged -= iNotifyPropertyChanged_PropertyChanged;
             }
@@ -447,7 +447,7 @@ namespace Catel.Windows.Controls
             #region Warnings - business
             validationData.BusinessWarnings.Clear();
 
-            if (validatable != null)
+            if (validatable is not null)
             {
                 if (!validatable.IsHidingValidationResults)
                 {
@@ -472,7 +472,7 @@ namespace Catel.Windows.Controls
             #region Errors - business
             validationData.BusinessErrors.Clear();
 
-            if (validatable != null)
+            if (validatable is not null)
             {
                 if (!validatable.IsHidingValidationResults)
                 {
@@ -545,7 +545,7 @@ namespace Catel.Windows.Controls
             var warningsOrErrors = new Dictionary<string, string>();
 
             var validatable = value as IValidatable;
-            if (validatable != null)
+            if (validatable is not null)
             {
                 // Respect IsHidingValidationResults
                 if (validatable.IsHidingValidationResults)
@@ -646,7 +646,7 @@ namespace Catel.Windows.Controls
             {
                 case ValidationType.Warning:
                     var valueAsIDataWarningInfo = value as IDataWarningInfo;
-                    if (valueAsIDataWarningInfo != null)
+                    if (valueAsIDataWarningInfo is not null)
                     {
                         message = valueAsIDataWarningInfo.Warning;
                     }
@@ -654,7 +654,7 @@ namespace Catel.Windows.Controls
 
                 case ValidationType.Error:
                     var valueAsIDataErrorInfo = value as IDataErrorInfo;
-                    if (valueAsIDataErrorInfo != null)
+                    if (valueAsIDataErrorInfo is not null)
                     {
                         message = valueAsIDataErrorInfo.Error;
                     }
@@ -832,12 +832,12 @@ namespace Catel.Windows.Controls
             IEnumerable newItems = e.NewItems;
             IEnumerable oldItems = e.OldItems;
 
-            if (oldItems != null)
+            if (oldItems is not null)
             {
                 RemoveObjectsFromWatchList(oldItems);
             }
 
-            if (newItems != null)
+            if (newItems is not null)
             {
                 AddObjectsToWatchList(newItems, sender as IEnumerable);
             }

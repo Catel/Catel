@@ -91,7 +91,7 @@ namespace Catel.MVVM
                 {
                     try
                     {
-                        if (command != null)
+                        if (command is not null)
                         {
                             if (command.CanExecute(parameter))
                             {
@@ -110,7 +110,7 @@ namespace Catel.MVVM
                 {
                     try
                     {
-                        if (action != null)
+                        if (action is not null)
                         {
                             action();
                         }
@@ -126,7 +126,7 @@ namespace Catel.MVVM
                 {
                     try
                     {
-                        if (actionWithParameter != null)
+                        if (actionWithParameter is not null)
                         {
                             actionWithParameter(parameter);
                         }
@@ -150,7 +150,7 @@ namespace Catel.MVVM
 
                     foreach (var command in commands)
                     {
-                        if (command != null)
+                        if (command is not null)
                         {
                             if (!command.CanExecute(parameter))
                             {
@@ -172,7 +172,7 @@ namespace Catel.MVVM
 
                     foreach (var command in commands)
                     {
-                        if (command != null)
+                        if (command is not null)
                         {
                             if (command.CanExecute(parameter))
                             {
@@ -377,7 +377,7 @@ namespace Catel.MVVM
                 Command = command;
                 ViewModel = viewModel;
 
-                if (viewModel != null)
+                if (viewModel is not null)
                 {
                     viewModel.ClosedAsync += OnViewModelClosedAsync;
                 }

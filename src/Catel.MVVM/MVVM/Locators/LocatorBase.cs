@@ -104,7 +104,7 @@ namespace Catel.MVVM
 
                     // First try to retrieve the type without assembly (this allows types in other assemblies)
                     resolvedType = TypeCache.GetTypeWithoutAssembly(resolvedTypeName, allowInitialization: false);
-                    if (resolvedType != null)
+                    if (resolvedType is not null)
                     {
                         break;
                     }
@@ -112,13 +112,13 @@ namespace Catel.MVVM
                     // Let's try with the assembly
                     resolvedTypeName = TypeHelper.FormatType(assembly, resolvedTypeName);
                     resolvedType = TypeCache.GetType(resolvedTypeName, allowInitialization: false);
-                    if (resolvedType != null)
+                    if (resolvedType is not null)
                     {
                         break;
                     }
                 }
 
-                var fullResolvedTypeName = (resolvedType != null) ? TypeHelper.GetTypeNameWithAssembly(resolvedType.AssemblyQualifiedName) : null;
+                var fullResolvedTypeName = (resolvedType is not null) ? TypeHelper.GetTypeNameWithAssembly(resolvedType.AssemblyQualifiedName) : null;
 
                 Log.Debug("Resolved type '{0}' for type '{1}'", fullResolvedTypeName, valueToResolve);
 

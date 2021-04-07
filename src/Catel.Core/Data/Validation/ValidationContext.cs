@@ -76,14 +76,14 @@ namespace Catel.Data
         public ValidationContext(IEnumerable<IFieldValidationResult> fieldValidationResults, IEnumerable<IBusinessRuleValidationResult> businessRuleValidationResults, DateTime lastModified)
         {
             bool fieldValidationsIsNull = true;
-            if (fieldValidationResults != null)
+            if (fieldValidationResults is not null)
             {
                 fieldValidationsIsNull = false;
                 _fieldValidations.AddRange(fieldValidationResults);
             }
 
             bool businessRuleValidationsIsNull = true;
-            if (businessRuleValidationResults != null)
+            if (businessRuleValidationResults is not null)
             {
                 businessRuleValidationsIsNull = false;
                 _businessRuleValidations.AddRange(businessRuleValidationResults);

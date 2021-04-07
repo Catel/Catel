@@ -54,7 +54,7 @@ namespace Catel.MVVM
                 foreach (var childViewModel in viewModel.ChildViewModels)
                 {
                     var childAsViewModelBase = childViewModel as ViewModelBase;
-                    if (childAsViewModelBase != null)
+                    if (childAsViewModelBase is not null)
                     {
                         if (IsValidationSummaryOutdated(childAsViewModelBase, lastUpdated, true))
                         {
@@ -128,7 +128,7 @@ namespace Catel.MVVM
                 foreach (var childViewModel in viewModel.ChildViewModels)
                 {
                     var childAsViewModelBase = childViewModel as ViewModelBase;
-                    if (childAsViewModelBase != null)
+                    if (childAsViewModelBase is not null)
                     {
                         validationContext.SynchronizeWithContext(GetNestedValidationContext(childAsViewModelBase, true), true);
                     }

@@ -77,7 +77,7 @@ namespace Catel
 
             // Check if there is a culture specific version
             var toStringMethod = instanceType.GetMethodEx("ToString", TypeArray.From<IFormatProvider>());
-            if (toStringMethod != null)
+            if (toStringMethod is not null)
             {
                 return (string)toStringMethod.Invoke(instance, new object[] { cultureInfo });
             }
@@ -102,7 +102,7 @@ namespace Catel
             }
 
             var instanceAsType = instance as Type;
-            if (instanceAsType != null)
+            if (instanceAsType is not null)
             {
                 return instanceAsType.Name;
             }

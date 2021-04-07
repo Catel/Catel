@@ -59,7 +59,7 @@ namespace Catel.IoC
                     foreach (var implementingType in enumerable)
                     {
                         var firstInterface = implementingType.GetInterfacesEx().FirstOrDefault();
-                        if (firstInterface != null)
+                        if (firstInterface is not null)
                         {
                             Container.RegisterTypeIfNotYetRegistered(firstInterface, implementingType, RegistrationType);
                         }

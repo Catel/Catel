@@ -29,7 +29,7 @@ namespace Catel.Runtime.Serialization
             base.SerializeMember(context, memberValue);
 
             var value = memberValue.Value;
-            if (value != null)
+            if (value is not null)
             {
                 var valueType = value.GetType();
                 if (valueType.IsGenericTypeEx())

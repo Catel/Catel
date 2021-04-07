@@ -169,7 +169,7 @@ namespace Catel.Windows.Threading
         {
             Argument.IsNotNull("action", action);
 
-            if (dispatcher != null)
+            if (dispatcher is not null)
             {
                 if (!onlyBeginInvokeWhenNoAccess || !dispatcher.CheckAccess())
                 {
@@ -200,7 +200,7 @@ namespace Catel.Windows.Threading
         {
             Argument.IsNotNull("action", action);
 
-            if (dispatcher != null)
+            if (dispatcher is not null)
             {
                 if (!onlyBeginInvokeWhenNoAccess || !dispatcher.CheckAccess())
                 {

@@ -77,7 +77,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("obj", obj);
             Argument.IsNotNullOrWhitespace("property", property);
 
-            return GetPropertyInfo(obj, property, ignoreCase) != null;
+            return GetPropertyInfo(obj, property, ignoreCase) is not null;
         }
 
         /// <summary>

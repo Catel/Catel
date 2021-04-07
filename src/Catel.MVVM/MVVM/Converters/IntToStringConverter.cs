@@ -26,7 +26,7 @@ namespace Catel.MVVM.Converters
         /// <returns>The value to be passed to the target dependency property.</returns>
         protected override object Convert(object value, Type targetType, object parameter)
         {
-            return value != null ? value.ToString() : string.Empty;
+            return value is not null ? value.ToString() : string.Empty;
         }
 
         /// <summary>

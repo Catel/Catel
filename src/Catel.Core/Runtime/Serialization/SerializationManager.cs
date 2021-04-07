@@ -206,7 +206,7 @@ namespace Catel.Runtime.Serialization
                     }
 
                     var propertyInfo = propertyData.GetPropertyInfo(type);
-                    if (propertyInfo != null)
+                    if (propertyInfo is not null)
                     {
                         if (!propertyInfo.IsDecoratedWithAttribute<ExcludeFromSerializationAttribute>())
                         {
@@ -340,7 +340,7 @@ namespace Catel.Runtime.Serialization
                     };
 
                     var propertyInfo = property.GetPropertyInfo(type);
-                    if (propertyInfo != null && propertyInfo.PropertyInfo != null)
+                    if (propertyInfo is not null && propertyInfo.PropertyInfo is not null)
                     {
                         var nameOverride = GetNameOverrideForSerialization(propertyInfo.PropertyInfo);
                         if (!string.IsNullOrWhiteSpace(nameOverride))

@@ -78,7 +78,7 @@ namespace Catel.MVVM.Providers
 
         private void DestroyNavigationAdapter()
         {
-            if (_navigationAdapter != null)
+            if (_navigationAdapter is not null)
             {
                 _navigationAdapter.UninitializeNavigationService();
                 _navigationAdapter.NavigatedTo -= OnNavigatedTo;
@@ -166,7 +166,7 @@ namespace Catel.MVVM.Providers
             }
 
             var viewModelAsViewModelBase = ViewModel as ViewModelBase;
-            if (viewModelAsViewModelBase != null)
+            if (viewModelAsViewModelBase is not null)
             {
                 var navigationContext = _navigationAdapter.NavigationContext;
                 viewModelAsViewModelBase.UpdateNavigationContext(navigationContext);
@@ -191,7 +191,7 @@ namespace Catel.MVVM.Providers
 
             result = await SaveAndCloseViewModelAsync();
 
-            if (e.Uri != null && e.Uri.IsNavigationToExternal())
+            if (e.Uri is not null && e.Uri.IsNavigationToExternal())
             {
                 return;
             }

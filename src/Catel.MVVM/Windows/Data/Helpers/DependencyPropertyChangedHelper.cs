@@ -219,12 +219,12 @@ namespace Catel.Windows.Data
             var handlerDependencyPropertyName = GetHandlerDependencyPropertyName(propertyName);
             var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, handlerDependencyPropertyName);
             var internalHandler = (EventHandler<DependencyPropertyValueChangedEventArgs>)frameworkElement.GetValue(handlerDependencyProperty);
-            if (internalHandler != null)
+            if (internalHandler is not null)
             {
                 internalHandler -= handler;
             }
 
-            if (internalHandler != null)
+            if (internalHandler is not null)
             {
                 frameworkElement.SetValue(handlerDependencyProperty, internalHandler);
             }
@@ -260,7 +260,7 @@ namespace Catel.Windows.Data
             var handlerDependencyProperty = GetDependencyProperty<EventHandler<DependencyPropertyValueChangedEventArgs>>(frameworkElement, handlerDependencyPropertyName);
 
             var handler = (EventHandler<DependencyPropertyValueChangedEventArgs>)frameworkElement.GetValue(handlerDependencyProperty);
-            if (handler != null)
+            if (handler is not null)
             {
                 if (string.Equals(propertyName, InheritedDataContextName))
                 {

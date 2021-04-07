@@ -178,7 +178,7 @@ namespace Catel.Windows.Interactivity
         /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private void OnSourceChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (e.OldValue != null)
+            if (e.OldValue is not null)
             {
                 switch (FocusMoment)
                 {
@@ -189,7 +189,7 @@ namespace Catel.Windows.Interactivity
 
                     case FocusMoment.PropertyChanged:
                         var sourceAsPropertyChanged = e.OldValue as INotifyPropertyChanged;
-                        if (sourceAsPropertyChanged != null)
+                        if (sourceAsPropertyChanged is not null)
                         {
                             sourceAsPropertyChanged.PropertyChanged -= OnSourcePropertyChanged;
                         }
@@ -201,7 +201,7 @@ namespace Catel.Windows.Interactivity
                 }
             }
 
-            if (e.NewValue != null)
+            if (e.NewValue is not null)
             {
                 switch (FocusMoment)
                 {

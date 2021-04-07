@@ -69,7 +69,7 @@ namespace Catel.Windows.Interactivity
             }
 
             var binding = AssociatedObject.GetBindingExpression(DependencyProperty);
-            if (binding != null)
+            if (binding is not null)
             {
                 binding.UpdateSource();
             }

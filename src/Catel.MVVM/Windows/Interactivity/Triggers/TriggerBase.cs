@@ -119,7 +119,7 @@ namespace Catel.Windows.Interactivity
 
             CleanUp();
 
-            if (AssociatedObject != null)
+            if (AssociatedObject is not null)
             {
                 AssociatedObject.Loaded -= OnAssociatedObjectLoadedInternal;
                 _isSubscribedToLoadedEvent = false;
@@ -234,7 +234,7 @@ namespace Catel.Windows.Interactivity
 
             _isClean = true;
 
-            if (AssociatedObject != null)
+            if (AssociatedObject is not null)
             {
                 AssociatedObject.Unloaded -= OnAssociatedObjectUnloadedInternal;
                 _isSubscribedToUnloadedEvent = false;

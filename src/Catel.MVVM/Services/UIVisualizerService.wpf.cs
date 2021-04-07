@@ -92,7 +92,7 @@ namespace Catel.Services
                         }
                     }
 
-                    if (window != null && completedProc != null)
+                    if (window is not null && completedProc is not null)
                     {
                         HandleCloseSubscription(window, data, isModal, completedProc);
                     }
@@ -121,7 +121,7 @@ namespace Catel.Services
         {
             var eventInfo = window.GetType().GetEvent("Closed");
             var addMethod = eventInfo?.AddMethod;
-            if (addMethod != null)
+            if (addMethod is not null)
             {
                 EventHandler eventHandler = null;
                 void Closed(object s, EventArgs e)
@@ -139,7 +139,7 @@ namespace Catel.Services
                         // See https://github.com/Catel/Catel/issues/1503, even though there is no real DialogResult,
                         // we will get the result from the VM instead
                         var vm = data as IViewModel;
-                        if (vm != null)
+                        if (vm is not null)
                         {
                             dialogResult = vm.GetResult();
                         }
@@ -153,7 +153,7 @@ namespace Catel.Services
                     finally
                     {
                         var removeMethod = eventInfo.RemoveMethod;
-                        if (removeMethod != null)
+                        if (removeMethod is not null)
                         {
                             removeMethod.Invoke(window, new object[] { eventHandler });
                         }

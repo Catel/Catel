@@ -107,7 +107,7 @@ namespace Catel.Reflection
                 return true;
             }
 
-            if (Nullable.GetUnderlyingType(type) != null)
+            if (Nullable.GetUnderlyingType(type) is not null)
             {
                 return true;
             }
@@ -134,7 +134,7 @@ namespace Catel.Reflection
             if (IsNullableType(type))
             {
                 var underlyingNullableType = Nullable.GetUnderlyingType(type);
-                if (underlyingNullableType != null)
+                if (underlyingNullableType is not null)
                 {
                     return IsBasicType(underlyingNullableType);
                 }

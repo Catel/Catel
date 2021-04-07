@@ -246,7 +246,7 @@ namespace Catel.Services
                 if (!RegisteredWindows.ContainsKey(viewModelType.FullName))
                 {
                     var viewType = _viewLocator.ResolveView(viewModelType);
-                    if (viewType != null)
+                    if (viewType is not null)
                     {
                         Register(viewModelType.FullName, viewType);
                     }

@@ -54,7 +54,7 @@ namespace Catel.Windows.Interactivity
         protected override void Uninitialize()
         {
             var viewModelContainer = AssociatedObject as IViewModelContainer;
-            if (viewModelContainer != null)
+            if (viewModelContainer is not null)
             {
                 viewModelContainer.ViewModelChanged -= OnViewModelChanged;
             }
@@ -75,7 +75,7 @@ namespace Catel.Windows.Interactivity
             }
 
             var viewModelContainer = AssociatedObject as IViewModelContainer;
-            if (viewModelContainer != null)
+            if (viewModelContainer is not null)
             {
                 AssociatedObject.Visibility = (viewModelContainer.ViewModel is null) ? Visibility.Collapsed : Visibility.Visible;
             }

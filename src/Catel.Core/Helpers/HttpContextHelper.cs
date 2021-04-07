@@ -18,16 +18,16 @@ namespace Catel
     {
         public static bool HasHttpContext()
         {
-            return GetHttpContext() != null;
+            return GetHttpContext() is not null;
         }
 
         public static object GetHttpContext()
         {
             var httpContextType = TypeCache.GetTypeWithoutAssembly("System.Web.HttpContext", allowInitialization: false);
-            if (httpContextType != null)
+            if (httpContextType is not null)
             {
                 var currentPropertyInfo = httpContextType.GetProperty("Current", BindingFlags.Public | BindingFlags.Static);
-                if (currentPropertyInfo != null)
+                if (currentPropertyInfo is not null)
                 {
                     return currentPropertyInfo.GetValue(null, null);
                 }
@@ -39,13 +39,13 @@ namespace Catel
         public static object GetHttpApplicationInstance()
         {
             var httpContext = GetHttpContext();
-            if (httpContext != null)
+            if (httpContext is not null)
             {
                 var applicationInstanceProperty = httpContext.GetType().GetProperty("ApplicationInstance");
-                if (applicationInstanceProperty != null)
+                if (applicationInstanceProperty is not null)
                 {
                     var applicationInstance = applicationInstanceProperty.GetValue(httpContext, null);
-                    if (applicationInstance != null)
+                    if (applicationInstance is not null)
                     {
                         return applicationInstance;
                     }

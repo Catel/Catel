@@ -93,7 +93,7 @@ namespace Catel.Caching.Policies
         /// <exception cref="System.ArgumentNullException">The <paramref name="isExpiredFunc" /> is <c>null</c>.</exception>
         public static ExpirationPolicy Custom(Func<bool> isExpiredFunc, Action resetAction = null, bool force = false)
         {
-            return force || (isExpiredFunc != null && !isExpiredFunc.Invoke()) ? new CustomExpirationPolicy(isExpiredFunc, resetAction) : null;
+            return force || (isExpiredFunc is not null && !isExpiredFunc.Invoke()) ? new CustomExpirationPolicy(isExpiredFunc, resetAction) : null;
         }
 
         /// <summary>

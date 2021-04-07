@@ -121,14 +121,14 @@ namespace Catel.Windows
         {
             // Check active window first
             var activeWindow = Application.Current.GetActiveWindow();
-            if (activeWindow != null)
+            if (activeWindow is not null)
             {
                 SetOwnerWindowByWindow(window, activeWindow, forceNewOwner, focusFirstControl);
                 return;
             }
 
             var mainWindow = CatelEnvironment.MainWindow;
-            if (mainWindow != null)
+            if (mainWindow is not null)
             {
                 SetOwnerWindowByWindow(window, mainWindow, forceNewOwner, focusFirstControl);
                 return;
@@ -315,7 +315,7 @@ namespace Catel.Windows
 
             try
             {
-                if (ownerWindow != null)
+                if (ownerWindow is not null)
                 {
                     if (ReferenceEquals(ownerWindow, window))
                     {
@@ -399,7 +399,7 @@ namespace Catel.Windows
         /// </returns>
         private static bool HasOwner(SystemWindow window)
         {
-            return ((window.Owner != null) || (new WindowInteropHelper(window).Owner != IntPtr.Zero));
+            return ((window.Owner is not null) || (new WindowInteropHelper(window).Owner != IntPtr.Zero));
         }
 
         /// <summary>
@@ -434,19 +434,19 @@ namespace Catel.Windows
 
             try
             {
-                if (window.Icon != null)
+                if (window.Icon is not null)
                 {
                     return;
                 }
 
                 var currentApplication = Application.Current;
-                if (currentApplication != null)
+                if (currentApplication is not null)
                 {
                     var entryAssembly = AssemblyHelper.GetEntryAssembly();
-                    if (entryAssembly != null)
+                    if (entryAssembly is not null)
                     {
                         var icon = Icon.ExtractAssociatedIcon(entryAssembly.Location);
-                        if (icon != null)
+                        if (icon is not null)
                         {
                             window.Icon = Imaging.CreateBitmapSourceFromHIcon(icon.Handle,
                                 new Int32Rect(0, 0, icon.Width, icon.Height), BitmapSizeOptions.FromEmptyOptions());

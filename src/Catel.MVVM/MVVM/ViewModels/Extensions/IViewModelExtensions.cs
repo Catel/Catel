@@ -27,7 +27,7 @@ namespace Catel.MVVM
         /// <returns><c>true</c> if the view model is saved; <c>false</c> if the view model is canceled; otherwise <c>null</c>.</returns>
         public static bool? GetResult(this IViewModel viewModel)
         {
-            if (viewModel != null)
+            if (viewModel is not null)
             {
                 if (viewModel.IsSaved)
                 {
@@ -51,7 +51,7 @@ namespace Catel.MVVM
             Argument.IsNotNull("viewModel", viewModel);
 
             var viewModelBase = viewModel as ViewModelBase;
-            if (viewModelBase != null)
+            if (viewModelBase is not null)
             {
                 var exitAfterBlock = false;
 
@@ -96,7 +96,7 @@ namespace Catel.MVVM
             Argument.IsNotNull("viewModel", viewModel);
 
             var viewModelBase = viewModel as ViewModelBase;
-            if (viewModelBase != null)
+            if (viewModelBase is not null)
             {
                 var exitAfterBlock = false;
 

@@ -72,7 +72,7 @@ namespace Catel.Data
                     modelEditor.SetValue(nameof(ModelBase.IsDirty), false);
                 }
             }
-            else if (objAsIEnumerable != null)
+            else if (objAsIEnumerable is not null)
             {
                 foreach (var childItem in objAsIEnumerable)
                 {

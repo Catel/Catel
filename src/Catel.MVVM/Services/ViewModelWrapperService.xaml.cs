@@ -50,7 +50,7 @@ namespace Catel.Services
             if (content.Name.StartsWith(InnerWrapperName))
             {
                 var binding = content.GetBindingExpression(FrameworkElement.DataContextProperty);
-                if (binding != null)
+                if (binding is not null)
                 {
                     return true;
                 }
@@ -72,7 +72,7 @@ namespace Catel.Services
             Grid vmGrid = null;
 
             var existingGrid = GetContent(view) as Grid;
-            if (existingGrid != null)
+            if (existingGrid is not null)
             {
                 if (existingGrid.Name.StartsWith(InnerWrapperName))
                 {
@@ -101,7 +101,7 @@ namespace Catel.Services
 
                 SetContent(view, null);
 
-                if (content != null)
+                if (content is not null)
                 {
                     vmGrid.Children.Add(content);
                 }
@@ -127,21 +127,21 @@ namespace Catel.Services
         private object GetContent(IView view)
         {
             var userControl = view as UserControl;
-            if (userControl != null)
+            if (userControl is not null)
             {
                 var content = userControl.Content as FrameworkElement;
                 return content;
             }
 
             var contentControl = view as ContentControl;
-            if (contentControl != null)
+            if (contentControl is not null)
             {
                 var content = contentControl.Content as FrameworkElement;
                 return content;
             }
 
             var page = view as Page;
-            if (page != null)
+            if (page is not null)
             {
                 var content = page.Content as FrameworkElement;
                 return content;
@@ -154,21 +154,21 @@ namespace Catel.Services
         private void SetContent(IView view, object content)
         {
             var userControl = view as UserControl;
-            if (userControl != null)
+            if (userControl is not null)
             {
                 userControl.Content = (UIElement)content;
                 return;
             }
 
             var contentControl = view as ContentControl;
-            if (contentControl != null)
+            if (contentControl is not null)
             {
                 contentControl.Content = content;
                 return;
             }
 
             var page = view as Page;
-            if (page != null)
+            if (page is not null)
             {
                 // Note: cast required or SL
                 page.Content = (UIElement)content;

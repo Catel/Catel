@@ -72,7 +72,7 @@ namespace Catel.Reflection
             where TTargetType : class
         {
             var typedInstance = instance as TTargetType;
-            if ((typedInstance is null) && (instance != null))
+            if ((typedInstance is null) && (instance is not null))
             {
                 throw Log.ErrorAndCreateException<NotSupportedException>("Expected an instance of '{0}', but retrieved an instance of '{1}', cannot return the typed instance", typeof (TTargetType).Name, instance.GetType().Name);
             }
@@ -101,7 +101,7 @@ namespace Catel.Reflection
             Argument.IsNotNull("generic", generic);
             Argument.IsNotNull("toCheck", toCheck);
 
-            while ((toCheck != null) && (toCheck != typeof(object)))
+            while ((toCheck is not null) && (toCheck != typeof(object)))
             {
                 var cur = toCheck.IsGenericTypeEx() ? toCheck.GetGenericTypeDefinition() : toCheck;
                 if (generic == cur)
@@ -429,7 +429,7 @@ namespace Catel.Reflection
                 var innerType = Nullable.GetUnderlyingType(outputType);
 
                 // Database support...
-                if (value == null)
+                if (value is null)
                 {
                     output = default;
 
@@ -518,7 +518,7 @@ namespace Catel.Reflection
         /// <returns>The casted value or when uncastable the <paramref name = "whenNullValue" /> is returned.</returns>
         public static TOutput Cast<TOutput, TInput>(TInput value, TOutput whenNullValue)
         {
-            if (!TryCast(value, out TOutput output) || output == null)
+            if (!TryCast(value, out TOutput output) || output is null)
             {
                 output = whenNullValue;
             }

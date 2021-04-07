@@ -157,7 +157,7 @@ namespace Catel.Logging
                 }
             }
 
-            if (batchToSubmit != null)
+            if (batchToSubmit is not null)
             {
                 try
                 {

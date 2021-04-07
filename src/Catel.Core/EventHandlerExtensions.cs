@@ -23,7 +23,7 @@ namespace Catel
         public static void UnsubscribeAllHandlers<TEventArgs>(this EventHandler<TEventArgs> handler)
             where TEventArgs: EventArgs
         {
-            if (handler != null)
+            if (handler is not null)
             {
                 var invocationList = handler.GetInvocationList();
 

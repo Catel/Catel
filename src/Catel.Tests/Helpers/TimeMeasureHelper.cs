@@ -18,7 +18,7 @@ namespace Catel.Tests
             Argument.IsNotNullOrWhitespace(() => description);
             Argument.IsNotNull(() => action);
 
-            if (initializationAction != null)
+            if (initializationAction is not null)
             {
                 initializationAction();
             }

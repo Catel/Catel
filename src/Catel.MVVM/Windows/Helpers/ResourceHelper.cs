@@ -117,7 +117,7 @@ namespace Catel.Windows
 #else
             try
             {
-                return Application.GetResourceStream(uri) != null;
+                return Application.GetResourceStream(uri) is not null;
             }
             catch (Exception)
             {

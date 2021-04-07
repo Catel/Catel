@@ -245,7 +245,7 @@ namespace Catel.Data
                 if (property.PropertyType.ImplementsInterfaceEx<IPropertyData>())
                 {
                     var propertyValue = property.GetValue(null, null) as IPropertyData;
-                    if (propertyValue != null)
+                    if (propertyValue is not null)
                     {
                         foundProperties.Add(propertyValue);
                     }
@@ -299,7 +299,7 @@ namespace Catel.Data
                 if (field.FieldType.ImplementsInterfaceEx<IPropertyData>())
                 {
                     var propertyValue = (field.IsStatic ? field.GetValue(null) : field.GetValue(this)) as IPropertyData;
-                    if (propertyValue != null)
+                    if (propertyValue is not null)
                     {
                         foundFields[field.Name] = propertyValue;
                     }

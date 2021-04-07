@@ -180,7 +180,7 @@ namespace Catel.MVVM.Views
 
             _previousViewModel = viewModel;
 
-            if (viewModel != null)
+            if (viewModel is not null)
             {
                 // If there are mappings, sync them in the right way
                 var viewModelContainerType = ViewModelContainerType;

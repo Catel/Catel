@@ -120,7 +120,7 @@ namespace Catel.Data
 
                 if (!ChangeNotificationWrapper.IsUsefulForObject(propertyValue))
                 {
-                    if (oldWrapper != null)
+                    if (oldWrapper is not null)
                     {
                         _propertyValueChangeNotificationWrappers.Remove(propertyName);
                     }

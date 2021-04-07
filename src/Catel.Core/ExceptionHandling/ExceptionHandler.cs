@@ -74,7 +74,7 @@ namespace Catel.ExceptionHandling
         {
             Argument.IsNotNull("exception", exception);
 
-            if (Filter != null && Filter.Invoke(exception))
+            if (Filter is not null && Filter.Invoke(exception))
             {
                 _action(exception);
                 return;
@@ -166,7 +166,7 @@ namespace Catel.ExceptionHandling
 
             _action = ex => OnException((TException)exception);
 
-            if (Filter != null && Filter.Invoke(exception))
+            if (Filter is not null && Filter.Invoke(exception))
             {
                 _action(exception);
                 return;
@@ -187,7 +187,7 @@ namespace Catel.ExceptionHandling
 
             ExceptionPredicate filter = null;
 
-            if (exceptionPredicate != null)
+            if (exceptionPredicate is not null)
             {
                 filter = exception => exception is TException && exceptionPredicate((TException)exception);
             }

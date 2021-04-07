@@ -78,7 +78,7 @@ namespace Catel.IoC
         {
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
 
-            if (obj != null)
+            if (obj is not null)
             {
                 var dependencyResolverManager = DependencyResolverManager.Default;
                 dependencyResolver = dependencyResolverManager.GetDependencyResolverForInstance(obj);

@@ -32,7 +32,7 @@
         [TearDown]
         public void CleanUp()
         {
-            if (_filesHelper != null)
+            if (_filesHelper is not null)
             {
                 _filesHelper.CleanUp();
                 _filesHelper = null;

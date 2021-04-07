@@ -51,7 +51,7 @@ namespace Catel.Reflection
             if (flattenHierarchy)
             {
                 var baseType = typeInfo.BaseType;
-                if ((baseType != null) && (baseType != typeof(object)))
+                if ((baseType is not null) && (baseType != typeof(object)))
                 {
                     source.AddRange(from member in GetMembers(baseType.GetTypeInfo(), bindingFlags)
                                     select member);
@@ -101,7 +101,7 @@ namespace Catel.Reflection
             if (flattenHierarchy)
             {
                 var baseType = typeInfo.BaseType;
-                if ((baseType != null) && (baseType != typeof(object)))
+                if ((baseType is not null) && (baseType != typeof(object)))
                 {
                     source.AddRange(from member in GetFields(baseType.GetTypeInfo(), bindingFlags)
                                     where member.IsStatic
@@ -200,7 +200,7 @@ namespace Catel.Reflection
             if (flattenHierarchy)
             {
                 var baseType = typeInfo.BaseType;
-                if ((baseType != null) && (baseType != typeof(object)))
+                if ((baseType is not null) && (baseType != typeof(object)))
                 {
                     source.AddRange(from member in GetProperties(baseType.GetTypeInfo(), bindingFlags)
                                     where member.IsStatic()
@@ -289,7 +289,7 @@ namespace Catel.Reflection
             if (flattenHierarchy)
             {
                 var baseType = typeInfo.BaseType;
-                if ((baseType != null) && (baseType != typeof(object)))
+                if ((baseType is not null) && (baseType != typeof(object)))
                 {
                     source.AddRange(from member in GetMethods(baseType.GetTypeInfo(), bindingFlags)
                                     where member.IsStatic

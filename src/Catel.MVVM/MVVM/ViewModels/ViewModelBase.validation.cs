@@ -43,7 +43,7 @@ namespace Catel.MVVM
                 foreach (var childViewModel in ChildViewModels.ToList())
                 {
                     var childVm = childViewModel as ViewModelBase;
-                    if (childVm != null)
+                    if (childVm is not null)
                     {
                         childVm.DeferValidationUntilFirstSaveCall = DeferValidationUntilFirstSaveCall;
                     }
@@ -113,7 +113,7 @@ namespace Catel.MVVM
                     }
 
                     var validatable = model.Value as IValidatable;
-                    if (validatable != null)
+                    if (validatable is not null)
                     {
                         validatable.Validate();
                     }
@@ -175,7 +175,7 @@ namespace Catel.MVVM
 
                     // IDataErrorInfo
                     var dataErrorInfo = model as IDataErrorInfo;
-                    if (dataErrorInfo != null)
+                    if (dataErrorInfo is not null)
                     {
                         var error = dataErrorInfo[modelProperty];
                         if (!string.IsNullOrWhiteSpace(error))
@@ -188,7 +188,7 @@ namespace Catel.MVVM
 
                     // IDataWarningInfo
                     var dataWarningInfo = model as IDataWarningInfo;
-                    if (dataWarningInfo != null)
+                    if (dataWarningInfo is not null)
                     {
                         var warning = dataWarningInfo[modelProperty];
                         if (!string.IsNullOrWhiteSpace(warning))
@@ -250,14 +250,14 @@ namespace Catel.MVVM
 
                     // IDataErrorInfo
                     var dataErrorInfo = modelObject.Value as IDataErrorInfo;
-                    if (dataErrorInfo != null && !string.IsNullOrEmpty(dataErrorInfo.Error))
+                    if (dataErrorInfo is not null && !string.IsNullOrEmpty(dataErrorInfo.Error))
                     {
                         validationContext.Add(BusinessRuleValidationResult.CreateError(dataErrorInfo.Error));
                     }
 
                     // IDataWarningInfo
                     var dataWarningInfo = modelObject.Value as IDataWarningInfo;
-                    if (dataWarningInfo != null && !string.IsNullOrEmpty(dataWarningInfo.Warning))
+                    if (dataWarningInfo is not null && !string.IsNullOrEmpty(dataWarningInfo.Warning))
                     {
                         validationContext.Add(BusinessRuleValidationResult.CreateWarning(dataWarningInfo.Warning));
                     }

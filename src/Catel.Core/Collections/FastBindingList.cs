@@ -97,7 +97,7 @@ namespace Catel.Collections
         {
             get
             {
-                return _suspensionContext != null;
+                return _suspensionContext is not null;
             }
         }
 
@@ -408,7 +408,7 @@ namespace Catel.Collections
                 var eventArgsList = new List<ListChangedEventArgs>();
 
                 var suspensionContext = _suspensionContext;
-                if (suspensionContext != null)
+                if (suspensionContext is not null)
                 {
                     if (suspensionContext.NewItems.Count != 0)
                     {
@@ -504,8 +504,8 @@ namespace Catel.Collections
                 var result = 0;
 
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
-                var lhsValue = lhs == null ? null : _sortProperty.GetValue(lhs);
-                var rhsValue = rhs == null ? null : _sortProperty.GetValue(rhs);
+                var lhsValue = lhs is null ? null : _sortProperty.GetValue(lhs);
+                var rhsValue = rhs is null ? null : _sortProperty.GetValue(rhs);
 #pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
 
                 if (lhsValue is null && rhsValue is null) // both values are null, both equal
@@ -552,12 +552,12 @@ namespace Catel.Collections
         protected override void ClearItems()
         {
             // Check
-            if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None)
+            if (_suspensionContext is not null && _suspensionContext.Mode != SuspensionMode.None)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Clearing items is only allowed in SuspensionMode.None, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'.");
             }
 
-            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.None)
+            if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.None)
             {
                 while (Count > 0)
                 {
@@ -613,7 +613,7 @@ namespace Catel.Collections
         {
             // Check
             var suspensionContext = _suspensionContext;
-            if (suspensionContext != null && suspensionContext.Mode == SuspensionMode.Removing)
+            if (suspensionContext is not null && suspensionContext.Mode == SuspensionMode.Removing)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Adding items is not allowed in mode SuspensionMode.Removing.");
             }
@@ -641,7 +641,7 @@ namespace Catel.Collections
                 RaiseListChangedEvents = oldValue;
             }
 
-            if (removed != null && !removed.Value)
+            if (removed is not null && !removed.Value)
             {
                 // Remember
                 suspensionContext?.NewItems.Add(item);
@@ -656,7 +656,7 @@ namespace Catel.Collections
         protected override void RemoveItem(int index)
         {
             // Check
-            if (_suspensionContext != null && _suspensionContext.Mode == SuspensionMode.Adding)
+            if (_suspensionContext is not null && _suspensionContext.Mode == SuspensionMode.Adding)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Removing items is not allowed in mode SuspensionMode.Adding.");
             }
@@ -686,7 +686,7 @@ namespace Catel.Collections
                 RaiseListChangedEvents = oldValue;
             }
 
-            if (removed != null && !removed.Value)
+            if (removed is not null && !removed.Value)
             {
                 // Remember
                 _suspensionContext?.OldItems.Add(item);
@@ -711,7 +711,7 @@ namespace Catel.Collections
         protected override void SetItem(int index, T item)
         {
             // Check
-            if (_suspensionContext != null && _suspensionContext.Mode != SuspensionMode.None)
+            if (_suspensionContext is not null && _suspensionContext.Mode != SuspensionMode.None)
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>($"Replacing items is only allowed in SuspensionMode.None, current mode is '{Enum<SuspensionMode>.ToString(_suspensionContext.Mode)}'");
             }

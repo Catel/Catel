@@ -26,7 +26,7 @@ namespace Catel.MVVM.Converters
         protected override object Convert(object value, Type targetType, object parameter)
         {
             var collection = value as ICollection;
-            if (collection != null)
+            if (collection is not null)
             {
                 return BoxingCache.GetBoxedValue(collection.Count);
             }

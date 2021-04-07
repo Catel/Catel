@@ -81,7 +81,7 @@ namespace Catel.MVVM.Views
                 if (_isViewLoadState)
                 {
                     var viewLoadState = _view.Target as IViewLoadState;
-                    if (viewLoadState != null)
+                    if (viewLoadState is not null)
                     {
                         return viewLoadState.View;
                     }
@@ -186,7 +186,7 @@ namespace Catel.MVVM.Views
             IsLoaded = true;
 
             var loaded = Loaded;
-            if (loaded != null)
+            if (loaded is not null)
             {
                 loaded(this, EventArgs.Empty);
             }
@@ -202,7 +202,7 @@ namespace Catel.MVVM.Views
             IsLoaded = false;
 
             var unloaded = Unloaded;
-            if (unloaded != null)
+            if (unloaded is not null)
             {
                 unloaded(this, EventArgs.Empty);
             }

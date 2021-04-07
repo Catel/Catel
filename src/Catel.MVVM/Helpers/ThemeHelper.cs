@@ -78,7 +78,7 @@ namespace Catel
             try
             {
                 var application = Application.Current;
-                if (application != null)
+                if (application is not null)
                 {
                     var resources = application.Resources;
 
@@ -102,7 +102,7 @@ namespace Catel
         private static bool ContainsDictionary(ResourceDictionary resourceDictionary, Uri resourceUri)
         {
             var source = resourceDictionary.Source;
-            if (source != null && source.ToString().EqualsIgnoreCase(resourceUri.ToString()))
+            if (source is not null && source.ToString().EqualsIgnoreCase(resourceUri.ToString()))
             {
                 return true;
             }

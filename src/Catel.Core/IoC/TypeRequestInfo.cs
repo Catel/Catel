@@ -120,7 +120,7 @@ namespace Catel.IoC
             if (!_hash.HasValue)
             {
 #pragma warning disable HAA0101 // Array allocation for params parameter
-                _hash = HashHelper.CombineHash(Type.GetHashCode(), (Tag != null) ? Tag.GetHashCode() : 0);
+                _hash = HashHelper.CombineHash(Type.GetHashCode(), (Tag is not null) ? Tag.GetHashCode() : 0);
 #pragma warning restore HAA0101 // Array allocation for params parameter
             }
 

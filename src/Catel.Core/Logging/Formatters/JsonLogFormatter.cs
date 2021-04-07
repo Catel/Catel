@@ -167,7 +167,7 @@ namespace Catel.Logging
             }
 
             var formattable = number as IFormattable;
-            textWriter.Write(formattable != null ? formattable.ToString(null, CultureInfo.InvariantCulture) : number.ToString());
+            textWriter.Write(formattable is not null ? formattable.ToString(null, CultureInfo.InvariantCulture) : number.ToString());
 
             if (quote)
             {

@@ -180,7 +180,7 @@ namespace Catel.Threading
                     finish = _queue.Dequeue(_cachedKeyTask.Result);
                 }
             }
-            if (finish != null)
+            if (finish is not null)
             {
                 finish.Dispose();
             }

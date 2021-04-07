@@ -121,7 +121,7 @@ namespace Catel.Data
 
                             // Is this an IEnumerable (but not a string)?
                             var valueAAsIEnumerable = valueA as IEnumerable;
-                            if ((valueAAsIEnumerable != null) && !(valueA is string))
+                            if ((valueAAsIEnumerable is not null) && !(valueA is string))
                             {
                                 // Yes, loop all sub items and check them
                                 if (CompareCollections)

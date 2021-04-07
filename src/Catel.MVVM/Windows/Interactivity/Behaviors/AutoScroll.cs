@@ -104,7 +104,7 @@ namespace Catel.Windows.Interactivity
             SubscribeToCollection();
 
             _scrollViewer = AssociatedObject.FindVisualDescendantByType<ScrollViewer>();
-            if (_scrollViewer != null)
+            if (_scrollViewer is not null)
             {
                 _scrollViewer.ScrollChanged += OnScrollChanged;
             }
@@ -132,7 +132,7 @@ namespace Catel.Windows.Interactivity
 
         private void UnsubscribeFromCollection()
         {
-            if (_collection != null)
+            if (_collection is not null)
             {
                 _collection.CollectionChanged -= OnCollectionChanged;
                 _collection = null;
@@ -144,7 +144,7 @@ namespace Catel.Windows.Interactivity
             if (IsAssociatedObjectLoaded)
             {
                 _collection = AssociatedObject.ItemsSource as INotifyCollectionChanged;
-                if (_collection != null)
+                if (_collection is not null)
                 {
                     _collection.CollectionChanged += OnCollectionChanged;
 

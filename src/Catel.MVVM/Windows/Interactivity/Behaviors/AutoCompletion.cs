@@ -164,7 +164,7 @@ namespace Catel.Windows.Interactivity
             }
 
             var associatedObject = AssociatedObject;
-            if (associatedObject != null)
+            if (associatedObject is not null)
             {
                 _subscribed = true;
 
@@ -196,7 +196,7 @@ namespace Catel.Windows.Interactivity
             }
 
             var associatedObject = AssociatedObject;
-            if (associatedObject != null)
+            if (associatedObject is not null)
             {
                 associatedObject.TextChanged -= OnTextChanged;
 
@@ -278,7 +278,7 @@ namespace Catel.Windows.Interactivity
             var text = AssociatedObject.Text;
             string[] availableSuggestions = null;
 
-            if (ItemsSource != null)
+            if (ItemsSource is not null)
             {
                 if (UseAutoCompletionService)
                 {
@@ -383,7 +383,7 @@ namespace Catel.Windows.Interactivity
                 e.Handled = (e.Key == Key.Enter);
 
                 var binding = AssociatedObject.GetBindingExpression(TextBox.TextProperty);
-                if (binding != null)
+                if (binding is not null)
                 {
                     binding.UpdateSource();
                 }
@@ -420,7 +420,7 @@ namespace Catel.Windows.Interactivity
         {
             var textBox = AssociatedObject;
 
-            if (_suggestionListBox.ItemsSource != null)
+            if (_suggestionListBox.ItemsSource is not null)
             {
                 textBox.TextChanged -= OnTextChanged;
 

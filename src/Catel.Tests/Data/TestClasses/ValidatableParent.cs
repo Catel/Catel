@@ -32,7 +32,7 @@ namespace Catel.Tests.Data.TestClasses
 
         protected override void ValidateBusinessRules(List<IBusinessRuleValidationResult> validationResults)
         {
-            if (this.Child != null)
+            if (this.Child is not null)
             {
                 var errors = this.Child.GetErrorMessage();
                 if (errors.Length != 0)
@@ -41,7 +41,7 @@ namespace Catel.Tests.Data.TestClasses
                 }
             }
 
-            if (this.Collection != null && this.Collection.Count != 0)
+            if (this.Collection is not null && this.Collection.Count != 0)
             {
                 var errors = this.Collection[0].GetErrorMessage();
                 if (errors.Length != 0)

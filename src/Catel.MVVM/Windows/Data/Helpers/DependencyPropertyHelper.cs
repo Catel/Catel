@@ -185,14 +185,14 @@ namespace Catel.Windows.Data
                     var fieldInfo = member as FieldInfo;
                     var propertyInfo = member as PropertyInfo;
 
-                    if (fieldInfo != null)
+                    if (fieldInfo is not null)
                     {
                         if (!typeof(DependencyProperty).IsAssignableFromEx(fieldInfo.FieldType))
                         {
                             continue;
                         }
                     }
-                    else if (propertyInfo != null)
+                    else if (propertyInfo is not null)
                     {
                         if (!typeof(DependencyProperty).IsAssignableFromEx(propertyInfo.PropertyType))
                         {
@@ -214,12 +214,12 @@ namespace Catel.Windows.Data
                     }
 
                     DependencyProperty dependencyProperty;
-                    if (fieldInfo != null)
+                    if (fieldInfo is not null)
                     {
                         var fieldValue = fieldInfo.GetValue(null);
                         dependencyProperty = fieldValue as DependencyProperty;
                     }
-                    else if (propertyInfo != null)
+                    else if (propertyInfo is not null)
                     {
 #if UWP
                         var propertyValue = propertyInfo.GetValue(null);

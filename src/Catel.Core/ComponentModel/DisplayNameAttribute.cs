@@ -48,7 +48,7 @@ namespace Catel.ComponentModel
         {
             get
             {
-                if (_languageService != null)
+                if (_languageService is not null)
                 {
                     return _languageService;
                 }

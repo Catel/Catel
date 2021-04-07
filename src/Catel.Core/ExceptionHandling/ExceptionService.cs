@@ -175,7 +175,7 @@ namespace Catel.ExceptionHandling
 
             ExceptionPredicate predicate = null;
 
-            if (exceptionPredicate != null)
+            if (exceptionPredicate is not null)
             {
                 predicate = exception => exception is TException && exceptionPredicate((TException) exception);
             }
@@ -260,7 +260,7 @@ namespace Catel.ExceptionHandling
                 {
                     if (exceptionHandler.Key.IsAssignableFromEx(exceptionType))
                     {
-                        if (exceptionHandler.Value.BufferPolicy != null)
+                        if (exceptionHandler.Value.BufferPolicy is not null)
                         {
                             if (!_exceptionCounter.TryGetValue(exceptionHandler.Key, out var queue))
                             {
@@ -388,7 +388,7 @@ namespace Catel.ExceptionHandling
 
                         var exceptionHandler = ExceptionHandlers.FirstOrDefault(handler => handler.ExceptionType.IsAssignableFromEx(lastError.GetType()));
 
-                        if (exceptionHandler != null && exceptionHandler.RetryPolicy != null)
+                        if (exceptionHandler is not null && exceptionHandler.RetryPolicy is not null)
                         {
                             var retryPolicy = exceptionHandler.RetryPolicy;
 
@@ -462,7 +462,7 @@ namespace Catel.ExceptionHandling
                         lastError = exception;
 
                         var exceptionHandler = ExceptionHandlers.FirstOrDefault(handler => handler.ExceptionType.IsAssignableFromEx(lastError.GetType()));
-                        if (exceptionHandler != null && exceptionHandler.RetryPolicy != null)
+                        if (exceptionHandler is not null && exceptionHandler.RetryPolicy is not null)
                         {
                             var retryPolicy = exceptionHandler.RetryPolicy;
 

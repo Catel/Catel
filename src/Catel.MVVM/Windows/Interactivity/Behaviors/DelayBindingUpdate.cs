@@ -124,7 +124,7 @@ namespace Catel.Windows.Interactivity
                 if (!string.IsNullOrEmpty(DependencyPropertyName))
                 {
                     property = GetDependencyProperty(DependencyPropertyName);
-                    if (property != null)
+                    if (property is not null)
                     {
                         return DependencyPropertyName;
                     }
@@ -132,7 +132,7 @@ namespace Catel.Windows.Interactivity
 
                 var propertyName = string.Format("{0}Property", PropertyName);
                 property = GetDependencyProperty(propertyName);
-                if (property != null)
+                if (property is not null)
                 {
                     return propertyName;
                 }
@@ -201,7 +201,7 @@ namespace Catel.Windows.Interactivity
         protected override void OnAssociatedObjectUnloaded()
         {
             var dependencyProperty = GetDependencyProperty();
-            if (dependencyProperty != null)
+            if (dependencyProperty is not null)
             {
                 var associatedObject = AssociatedObject;
                 associatedObject.ClearValue(dependencyProperty);
@@ -291,7 +291,7 @@ namespace Catel.Windows.Interactivity
         /// <returns>The <see cref="DependencyProperty"/> of <c>null</c> if the dependency property is not found.</returns>
         private DependencyProperty GetDependencyProperty()
         {
-            if (_dependencyPropertyCache != null)
+            if (_dependencyPropertyCache is not null)
             {
                 return _dependencyPropertyCache;
             }
@@ -302,7 +302,7 @@ namespace Catel.Windows.Interactivity
             if (!string.IsNullOrEmpty(DependencyPropertyName))
             {
                 property = GetDependencyProperty(DependencyPropertyName);
-                if (property != null)
+                if (property is not null)
                 {
                     _dependencyPropertyCache = property;
                     return property;
@@ -310,7 +310,7 @@ namespace Catel.Windows.Interactivity
             }
 
             property = GetDependencyProperty(string.Format("{0}Property", PropertyName));
-            if (property != null)
+            if (property is not null)
             {
                 _dependencyPropertyCache = property;
                 return property;
@@ -369,7 +369,7 @@ namespace Catel.Windows.Interactivity
                     }
 
                     var propertyValue = property.GetValue(binding, null);
-                    if (propertyValue != null)
+                    if (propertyValue is not null)
                     {
                         property.SetValue(newBinding, propertyValue, null);
                     }

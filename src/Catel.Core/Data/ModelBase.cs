@@ -119,7 +119,7 @@ namespace Catel.Data
         /// </value>
         bool IModel.IsInEditSession
         {
-            get { return _backup != null; }
+            get { return _backup is not null; }
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace Catel.Data
                 lock (_lock)
                 {
                     var suspensionContext = _changeCallbacksSuspensionContext;
-                    if (suspensionContext != null)
+                    if (suspensionContext is not null)
                     {
                         suspensionContext.Decrement();
 
@@ -274,7 +274,7 @@ namespace Catel.Data
                 lock (_lock)
                 {
                     suspensionContext = _changeNotificationsSuspensionContext;
-                    if (suspensionContext != null)
+                    if (suspensionContext is not null)
                     {
                         suspensionContext.Decrement();
 
@@ -287,7 +287,7 @@ namespace Catel.Data
 
                 if (raiseOnResume)
                 {
-                    if (suspensionContext != null && suspensionContext.Counter == 0)
+                    if (suspensionContext is not null && suspensionContext.Counter == 0)
                     {
                         var properties = suspensionContext.Properties;
 
@@ -364,7 +364,7 @@ namespace Catel.Data
             if (IsModelBaseProperty(e.PropertyName))
             {
                 var senderAsModelBase = sender as ModelBase;
-                if ((senderAsModelBase != null) && (string.Equals(e.PropertyName, IsDirtyProperty.Name, StringComparison.Ordinal)))
+                if ((senderAsModelBase is not null) && (string.Equals(e.PropertyName, IsDirtyProperty.Name, StringComparison.Ordinal)))
                 {
                     // Maybe this is a child object informing us that it's not dirty any longer
                     if (!senderAsModelBase.GetValue<bool>(e.PropertyName) && !ReferenceEquals(this, sender))
@@ -403,7 +403,7 @@ namespace Catel.Data
                         callbackSuspensionContext = _changeCallbacksSuspensionContext;
                     }
 
-                    if (callbackSuspensionContext != null)
+                    if (callbackSuspensionContext is not null)
                     {
                         callbackSuspensionContext.Add(e.PropertyName);
                     }
@@ -412,7 +412,7 @@ namespace Catel.Data
                         var propertyData = GetPropertyData(e.PropertyName);
 
                         var handler = propertyData.PropertyChangedEventHandler;
-                        if (handler != null)
+                        if (handler is not null)
                         {
                             handler(this, e);
                         }

@@ -134,7 +134,7 @@ namespace Catel.MVVM.Providers
 
             if (!_hasVmPropertyCache.TryGetValue(targetViewType, out var hasVmProperty))
             {
-                hasVmProperty = targetViewType.GetPropertyEx("VM") != null;
+                hasVmProperty = targetViewType.GetPropertyEx("VM") is not null;
                 _hasVmPropertyCache[targetViewType] = hasVmProperty;
             }
 
@@ -142,7 +142,7 @@ namespace Catel.MVVM.Providers
 
             if (viewModelType is null)
             {
-                viewModelType = (viewModel != null) ? viewModel.GetType() : _viewModelLocator.ResolveViewModel(targetViewType);
+                viewModelType = (viewModel is not null) ? viewModel.GetType() : _viewModelLocator.ResolveViewModel(targetViewType);
                 if (viewModelType is null)
                 {
                     throw Log.ErrorAndCreateException<NotSupportedException>($"The view model of the view '{targetViewType.Name}' could not be resolved. Make sure to customize the IViewModelLocator or register the view and view model manually");
@@ -157,10 +157,10 @@ namespace Catel.MVVM.Providers
             ViewModelType = viewModelType;
             ViewModel = viewModel;
 
-            ViewModelBehavior = (viewModel != null) ? LogicViewModelBehavior.Injected : LogicViewModelBehavior.Dynamic;
+            ViewModelBehavior = (viewModel is not null) ? LogicViewModelBehavior.Injected : LogicViewModelBehavior.Dynamic;
             ViewModelLifetimeManagement = ViewModelLifetimeManagement.Automatic;
 
-            if (ViewModel != null)
+            if (ViewModel is not null)
             {
                 SetDataContext(ViewModel);
             }
@@ -266,7 +266,7 @@ namespace Catel.MVVM.Providers
 
                 OnViewModelChanging();
 
-                if (_viewModel != null)
+                if (_viewModel is not null)
                 {
                     _viewModel.PropertyChanged -= OnViewModelPropertyChanged;
                     _viewModel.CanceledAsync -= OnViewModelCanceledAsync;
@@ -276,7 +276,7 @@ namespace Catel.MVVM.Providers
 
                 _viewModel = value;
 
-                if (_viewModel != null)
+                if (_viewModel is not null)
                 {
                     _viewModel.PropertyChanged += OnViewModelPropertyChanged;
                     _viewModel.CanceledAsync += OnViewModelCanceledAsync;
@@ -300,7 +300,7 @@ namespace Catel.MVVM.Providers
 
                 RaisePropertyChanged("ViewModel");
 
-                if ((_viewModel != null) && IsTargetViewLoaded)
+                if ((_viewModel is not null) && IsTargetViewLoaded)
                 {
                     _viewModel.InitializeViewModelAsync();
                 }
@@ -578,7 +578,7 @@ namespace Catel.MVVM.Providers
 
             // It might be possible that a view model is already set, so use it if the datacontext is a view model
             var dataContextAsIViewModel = dataContext as IViewModel;
-            if ((dataContextAsIViewModel != null) && (dataContextAsIViewModel.GetType() == ViewModelType))
+            if ((dataContextAsIViewModel is not null) && (dataContextAsIViewModel.GetType() == ViewModelType))
             {
                 return dataContextAsIViewModel;
             }
@@ -738,7 +738,7 @@ namespace Catel.MVVM.Providers
             Log.Debug($"Target view '{TargetViewType?.Name}' has been loaded");
 
             var view = TargetView;
-            if (view != null)
+            if (view is not null)
             {
                 _viewManager.RegisterView(view);
             }
@@ -746,14 +746,14 @@ namespace Catel.MVVM.Providers
             IsTargetViewLoaded = true;
 
             var dataContext = GetDataContext(view);
-            LastKnownDataContext = (dataContext != null) ? new WeakReference(dataContext) : null;
+            LastKnownDataContext = (dataContext is not null) ? new WeakReference(dataContext) : null;
 
             await OnTargetViewLoadedAsync(sender, e);
 
             TargetView.EnsureVisualTree();
 
             var targetViewAsViewModelContainer = TargetView as IViewModelContainer;
-            if (targetViewAsViewModelContainer != null)
+            if (targetViewAsViewModelContainer is not null)
             {
                 ViewToViewModelMappingHelper.InitializeViewToViewModelMappings(targetViewAsViewModelContainer, _objectAdapter);
             }
@@ -772,7 +772,7 @@ namespace Catel.MVVM.Providers
         private async Task InitializeViewModelAsync()
         {
             var viewModel = ViewModel;
-            if (ViewModel != null)
+            if (ViewModel is not null)
             {
                 // Initialize the view model. The view model itself is responsible to prevent double initialization
                 await viewModel.InitializeViewModelAsync();
@@ -780,7 +780,7 @@ namespace Catel.MVVM.Providers
                 // Revalidate since the control already initialized the view model before the control
                 // was visible, therefore the WPF engine does not show warnings and errors
                 var viewModelAsViewModelBase = viewModel as ViewModelBase;
-                if (viewModelAsViewModelBase != null)
+                if (viewModelAsViewModelBase is not null)
                 {
                     viewModelAsViewModelBase.Validate(true, false);
                 }
@@ -857,7 +857,7 @@ namespace Catel.MVVM.Providers
             Log.Debug($"Target view '{TargetViewType?.Name}' has been unloaded");
 
             var view = TargetView;
-            if (view != null)
+            if (view is not null)
             {
                 _viewManager.UnregisterView(view);
             }
@@ -868,7 +868,7 @@ namespace Catel.MVVM.Providers
             await OnTargetViewUnloadedAsync(sender, e);
 
             var targetViewAsViewModelContainer = TargetView as IViewModelContainer;
-            if (targetViewAsViewModelContainer != null)
+            if (targetViewAsViewModelContainer is not null)
             {
                 ViewToViewModelMappingHelper.UninitializeViewToViewModelMappings(targetViewAsViewModelContainer);
             }
@@ -901,7 +901,7 @@ namespace Catel.MVVM.Providers
 
             // CTL-891 Additional check for data context change
             var lastKnownDataContext = LastKnownDataContext;
-            if (lastKnownDataContext != null && lastKnownDataContext.IsAlive)
+            if (lastKnownDataContext is not null && lastKnownDataContext.IsAlive)
             {
                 if (ReferenceEquals(lastKnownDataContext.Target, e.NewContext))
                 {
@@ -1107,7 +1107,7 @@ namespace Catel.MVVM.Providers
         public async virtual Task CloseViewModelAsync(bool? result, bool dispose)
         {
             var vm = ViewModel;
-            if (vm != null)
+            if (vm is not null)
             {
                 try
                 {
@@ -1119,7 +1119,7 @@ namespace Catel.MVVM.Providers
                     var isClosing = false;
 
                     var viewModelBase = vm as ViewModelBase;
-                    if (viewModelBase != null)
+                    if (viewModelBase is not null)
                     {
                         isClosing = viewModelBase.IsClosing;
                     }
@@ -1131,7 +1131,7 @@ namespace Catel.MVVM.Providers
                         if (dispose)
                         {
                             var disposable = vm as IDisposable;
-                            if (disposable != null)
+                            if (disposable is not null)
                             {
                                 disposable.Dispose();
                             }
@@ -1215,11 +1215,11 @@ namespace Catel.MVVM.Providers
             }
 
             var determineViewModelInstanceHandler = DetermineViewModelInstance;
-            if (determineViewModelInstanceHandler != null)
+            if (determineViewModelInstanceHandler is not null)
             {
                 var determineViewModelInstanceEventArgs = new DetermineViewModelInstanceEventArgs(injectionObject);
                 determineViewModelInstanceHandler(this, determineViewModelInstanceEventArgs);
-                if (determineViewModelInstanceEventArgs.ViewModel != null)
+                if (determineViewModelInstanceEventArgs.ViewModel is not null)
                 {
                     var viewModel = determineViewModelInstanceEventArgs.ViewModel;
                     Log.Info("ViewModel instance is overriden by the DetermineViewModelInstance event, using view model of type '{0}'", viewModel.GetType().Name);
@@ -1235,11 +1235,11 @@ namespace Catel.MVVM.Providers
             }
 
             var determineViewModelTypeHandler = DetermineViewModelType;
-            if (determineViewModelTypeHandler != null)
+            if (determineViewModelTypeHandler is not null)
             {
                 var determineViewModelTypeEventArgs = new DetermineViewModelTypeEventArgs(injectionObject);
                 determineViewModelTypeHandler(this, determineViewModelTypeEventArgs);
-                if (determineViewModelTypeEventArgs.ViewModelType != null)
+                if (determineViewModelTypeEventArgs.ViewModelType is not null)
                 {
                     Log.Info("ViewModelType is overriden by the DetermineViewModelType event, using '{0}' instead of '{1}'",
                         determineViewModelTypeEventArgs.ViewModelType.FullName, viewModelType.FullName);
@@ -1249,7 +1249,7 @@ namespace Catel.MVVM.Providers
             }
 
             var injectionObjectAsViewModel = injectionObject as IViewModel;
-            if (injectionObjectAsViewModel != null)
+            if (injectionObjectAsViewModel is not null)
             {
                 var injectionObjectViewModelType = injectionObject.GetType();
 
@@ -1267,7 +1267,7 @@ namespace Catel.MVVM.Providers
             var viewModelInstance = ViewModelFactory.CreateViewModel(viewModelType, injectionObject);
 
             Log.Debug("Used IViewModelFactory to instantiate view model, the factory did{0} return a valid view model",
-                (viewModelInstance != null) ? string.Empty : " NOT");
+                (viewModelInstance is not null) ? string.Empty : " NOT");
 
             return viewModelInstance;
         }

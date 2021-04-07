@@ -151,7 +151,7 @@ namespace Catel.Windows.Interactivity
         /// <param name="window">The window instance the eventhandler has to be unregistered from.</param>
         protected void UnregisterEventHandler(Window window)
         {
-            if (_weakEventListener != null)
+            if (_weakEventListener is not null)
             {
                 _weakEventListener.Detach();
                 _weakEventListener = null;
@@ -175,7 +175,7 @@ namespace Catel.Windows.Interactivity
         protected override void ExecuteCommand(object parameter)
         {
             var window = parameter as Window;
-            if (_action != null)
+            if (_action is not null)
             {
                 _action(window);
             }

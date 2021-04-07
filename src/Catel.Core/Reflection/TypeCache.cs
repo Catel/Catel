@@ -189,7 +189,7 @@ namespace Catel.Reflection
 
                 // Important to do outside of the lock
                 var handler = AssemblyLoaded;
-                if (handler != null)
+                if (handler is not null)
                 {
                     var eventArgs = new AssemblyLoadedEventArgs(assembly, new Lazy<IEnumerable<Type>>(() => GetTypesOfAssembly(assembly)));
 
@@ -338,7 +338,7 @@ namespace Catel.Reflection
                     }
 
                     var fallbackType = GetTypeBySplittingInternals(typeName);
-                    if (fallbackType != null)
+                    if (fallbackType is not null)
                     {
                         // Though it was not initially found, we still have found a new type, register it
                         typesWithAssembly[typeName] = fallbackType;
@@ -369,7 +369,7 @@ namespace Catel.Reflection
 #else
                     var type = Type.GetType(typeNameWithAssembly, false, ignoreCase);
 #endif
-                    if (type != null)
+                    if (type is not null)
                     {
                         typesWithAssembly[typeNameWithAssembly] = type;
                         return type;
@@ -413,7 +413,7 @@ namespace Catel.Reflection
         {
             // Try fast method first
             var fastType = Type.GetType(typeWithInnerTypes);
-            if (fastType != null)
+            if (fastType is not null)
             {
                 return fastType;
             }
@@ -423,7 +423,7 @@ namespace Catel.Reflection
                 // Array type
                 var arrayTypeElementString = typeWithInnerTypes.Replace("[]", string.Empty);
                 var arrayTypeElement = GetType(arrayTypeElementString, allowInitialization: false);
-                if (arrayTypeElement != null)
+                if (arrayTypeElement is not null)
                 {
                     return arrayTypeElement.MakeArrayType();
                 }
@@ -543,7 +543,7 @@ namespace Catel.Reflection
                 InitializeTypes(assembly);
             }
 
-            var assemblyName = (assembly != null) ? TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName) : string.Empty;
+            var assemblyName = (assembly is not null) ? TypeHelper.GetAssemblyNameWithoutOverhead(assembly.FullName) : string.Empty;
 
             // IMPORTANT NOTE!!!! DON'T USE LOGGING IN THE CODE BELOW BECAUSE IT MIGHT CAUSE DEADLOCK (BatchLogListener will load
             // async stuff which can deadlock). Keep it simple without calls to other code. Do any type initialization *outside* 
@@ -580,7 +580,7 @@ namespace Catel.Reflection
                     // against the latest possible state
                     lock (_lockObject)
                     {
-                        if (predicate != null)
+                        if (predicate is not null)
                         {
                             return typeSource.Values.Where(predicate).ToArray();
                         }
@@ -667,7 +667,7 @@ namespace Catel.Reflection
         {
             // Important note: only allow explicit multithreaded initialization
 
-            var checkSingleAssemblyOnly = assembly != null;
+            var checkSingleAssemblyOnly = assembly is not null;
 
             lock (_lockObject)
             {
@@ -764,7 +764,7 @@ namespace Catel.Reflection
 
             // Calling out of lock statement, but still may happens that would be called inside of it 
             var handler = AssemblyLoaded;
-            if (handler != null)
+            if (handler is not null)
             {
                 foreach (var tuple in listForLoadedEvent)
                 {

@@ -132,7 +132,7 @@ namespace Catel.MVVM
             foreach (var commandName in commandNames)
             {
                 var inputGesture = _commandManager.GetInputGesture(commandName);
-                if (inputGesture != null)
+                if (inputGesture is not null)
                 {
                     if (inputGesture.Matches(e))
                     {

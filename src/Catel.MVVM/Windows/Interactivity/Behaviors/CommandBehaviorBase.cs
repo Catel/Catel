@@ -160,7 +160,7 @@ namespace Catel.Windows.Interactivity
             }
 
             var command = _command;
-            if (command != null)
+            if (command is not null)
             {
                 command.CanExecuteChanged -= OnCommandCanExecuteChangedInternal;
             }

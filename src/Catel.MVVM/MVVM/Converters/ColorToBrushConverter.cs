@@ -52,7 +52,7 @@ namespace Catel.MVVM.Converters
         {
             var color = Colors.Black;
             var brush = value as SolidColorBrush;
-            if (brush != null)
+            if (brush is not null)
             {
                 color = brush.Color;
             }

@@ -61,7 +61,7 @@ namespace Catel.Services
             var source = languageSource.GetSource();
             var resourceLoader = GetResourceManager(source);
 
-            if (resourceLoader != null)
+            if (resourceLoader is not null)
             {
 #if UWP
                 var resourceContainer = GetResourceContainer(source);

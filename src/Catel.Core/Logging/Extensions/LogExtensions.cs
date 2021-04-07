@@ -135,7 +135,7 @@ namespace Catel.Logging
             }
 
             var catelLog = log as CatelLog;
-            if (catelLog != null && catelLog.AlwaysLog)
+            if (catelLog is not null && catelLog.AlwaysLog)
             {
                 return false;
             }
@@ -263,7 +263,7 @@ namespace Catel.Logging
                 return;
             }
 
-            if (others != null && others.Length > 0)
+            if (others is not null && others.Length > 0)
             {
                 object[] args = { s1, s2, s3, s4, s5 };
                 Array.Resize(ref args, 5 + others.Length);
@@ -304,7 +304,7 @@ namespace Catel.Logging
             }
 
             var message = messageFormat ?? string.Empty;
-            if (args != null && args.Length > 0)
+            if (args is not null && args.Length > 0)
             {
                 message = string.Format(message, args);
             }
@@ -336,7 +336,7 @@ namespace Catel.Logging
             Argument.IsNotNull("exception", exception);
 
             var message = messageFormat ?? string.Empty;
-            if (args != null && args.Length > 0)
+            if (args is not null && args.Length > 0)
             {
                 message = string.Format(message, args);
             }
@@ -370,7 +370,7 @@ namespace Catel.Logging
                 return;
             }
 
-            if (exception != null && LogManager.LogInfo.IgnoreDuplicateExceptionLogging)
+            if (exception is not null && LogManager.LogInfo.IgnoreDuplicateExceptionLogging)
             {
                 lock (exception)
                 {
@@ -703,7 +703,7 @@ namespace Catel.Logging
                 {
                     var error = $"Exception type '{typeof(TException).Name}' does not have a constructor accepting a string";
 
-                    if (log != null)
+                    if (log is not null)
                     {
                         log.Error(error);
                     }
@@ -740,14 +740,14 @@ namespace Catel.Logging
             where TException : Exception
         {
             var message = messageFormat ?? string.Empty;
-            if (args != null && args.Length > 0)
+            if (args is not null && args.Length > 0)
             {
                 message = string.Format(message, args);
             }
 
-            if (log != null)
+            if (log is not null)
             {
-                if (innerException != null)
+                if (innerException is not null)
                 {
                     log.ErrorWithData(innerException, message);
                 }
@@ -762,7 +762,7 @@ namespace Catel.Logging
             {
                 var error = $"Exception type '{typeof(TException).Name}' does not have a constructor accepting a string";
 
-                if (log != null)
+                if (log is not null)
                 {
                     log.Error(error);
                 }

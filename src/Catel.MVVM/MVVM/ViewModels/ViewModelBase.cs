@@ -506,7 +506,7 @@ namespace Catel.MVVM
             foreach (var propertyInfo in properties)
             {
                 var modelAttribute = propertyInfo.GetCustomAttributeEx<ModelAttribute>(true);
-                if (modelAttribute != null)
+                if (modelAttribute is not null)
                 {
                     modelObjectsInfo.Add(propertyInfo.Name, new ModelInfo(propertyInfo, modelAttribute));
                 }
@@ -516,7 +516,7 @@ namespace Catel.MVVM
             foreach (var propertyInfo in properties)
             {
                 var viewModelToModelAttribute = propertyInfo.GetCustomAttributeEx<ViewModelToModelAttribute>(true);
-                if (viewModelToModelAttribute != null)
+                if (viewModelToModelAttribute is not null)
                 {
                     if (string.IsNullOrEmpty(viewModelToModelAttribute.Property))
                     {
@@ -664,7 +664,7 @@ namespace Catel.MVVM
                 ParentViewModel = parentViewModel;
 
                 var parentVm = parentViewModel as ViewModelBase;
-                if (parentVm != null)
+                if (parentVm is not null)
                 {
                     var value = DeferValidationUntilFirstSaveCall;
                     var parentVmValue = parentVm.DeferValidationUntilFirstSaveCall;
@@ -712,14 +712,14 @@ namespace Catel.MVVM
                 // The ViewModelBase.HasErrors has a diff implementation than IModelValidation, this might (or should) be changed
                 // but this is the easiest and most reliable way to make it work now
                 var viewModelBase = childViewModel as ViewModelBase;
-                if (viewModelBase != null && viewModelBase.HasErrors)
+                if (viewModelBase is not null && viewModelBase.HasErrors)
                 {
                     validate = true;
                 }
                 else
                 {
                     var validationContext = ((IValidatableModel)childViewModel).ValidationContext;
-                    if (validationContext != null)
+                    if (validationContext is not null)
                     {
                         if (validationContext.HasErrors || validationContext.HasWarnings)
                         {
@@ -828,7 +828,7 @@ namespace Catel.MVVM
             foreach (var mapping in explicitMappings)
             {
                 var model = _modelObjects[mapping.ModelProperty];
-                if (model != null)
+                if (model is not null)
                 {
                     var value = GetValue<object>(mapping.ViewModelProperty);
                     var modelValues = mapping.Converter.ConvertBack(value, this);
@@ -873,7 +873,7 @@ namespace Catel.MVVM
                 {
                     // Clean up old model
                     var oldModelValue = _modelObjects[e.PropertyName];
-                    if (oldModelValue != null)
+                    if (oldModelValue is not null)
                     {
                         UninitializeModelInternal(e.PropertyName, oldModelValue, ModelCleanUpMode.CancelEdit);
                     }
@@ -881,7 +881,7 @@ namespace Catel.MVVM
                     var newModelValue = GetValue<object>(e.PropertyName);
                     _modelObjects[e.PropertyName] = newModelValue;
 
-                    if (newModelValue != null)
+                    if (newModelValue is not null)
                     {
                         InitializeModelInternal(e.PropertyName, newModelValue);
                     }
@@ -894,7 +894,7 @@ namespace Catel.MVVM
                         if (string.CompareOrdinal(mapping.ModelProperty, e.PropertyName) == 0)
                         {
                             var values = new object[mapping.ValueProperties.Length];
-                            if (newModelValue != null)
+                            if (newModelValue is not null)
                             {
                                 // We have a new model, ignore OneWayToSource
                                 if (mapping.Mode == ViewModelToModelMode.OneWayToSource)
@@ -937,7 +937,7 @@ namespace Catel.MVVM
                     lock (_modelLock)
                     {
                         var model = _modelObjects[mapping.ModelProperty];
-                        if (model != null)
+                        if (model is not null)
                         {
                             var modelInfo = _modelObjectsInfo[mapping.ModelProperty];
                             if (!modelInfo.IsCanceling)
@@ -1099,13 +1099,13 @@ namespace Catel.MVVM
         /// <param name="model">The model.</param>
         private void InitializeModelInternal(string modelProperty, object model)
         {
-            if (model != null)
+            if (model is not null)
             {
                 ViewModelManager.RegisterModel(this, model);
             }
 
             var modelAsINotifyPropertyChanged = model as INotifyPropertyChanged;
-            if (modelAsINotifyPropertyChanged != null)
+            if (modelAsINotifyPropertyChanged is not null)
             {
                 modelAsINotifyPropertyChanged.PropertyChanged += OnModelPropertyChangedInternal;
             }
@@ -1135,7 +1135,7 @@ namespace Catel.MVVM
             {
                 if (modelInfo.SupportIEditableObject)
                 {
-                    if (model != null)
+                    if (model is not null)
                     {
                         EditableObjectHelper.BeginEditObject(model);
                     }
@@ -1162,7 +1162,7 @@ namespace Catel.MVVM
         /// <param name="modelCleanUpMode">The model clean up mode.</param>
         private void UninitializeModelInternal(string modelProperty, object model, ModelCleanUpMode modelCleanUpMode)
         {
-            if (model != null)
+            if (model is not null)
             {
                 ViewModelManager.UnregisterModel(this, model);
             }
@@ -1214,7 +1214,7 @@ namespace Catel.MVVM
             }
 
             var modelAsINotifyPropertyChanged = model as INotifyPropertyChanged;
-            if (modelAsINotifyPropertyChanged != null)
+            if (modelAsINotifyPropertyChanged is not null)
             {
                 modelAsINotifyPropertyChanged.PropertyChanged -= OnModelPropertyChangedInternal;
             }

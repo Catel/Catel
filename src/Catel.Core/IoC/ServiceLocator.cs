@@ -49,7 +49,7 @@ namespace Catel.IoC
                 Type = type;
                 Tag = tag;
 #pragma warning disable HAA0101 // Array allocation for params parameter
-                _hash = HashHelper.CombineHash(Type.GetHashCode(), Tag != null ? Tag.GetHashCode() : 0);
+                _hash = HashHelper.CombineHash(Type.GetHashCode(), Tag is not null ? Tag.GetHashCode() : 0);
 #pragma warning restore HAA0101 // Array allocation for params parameter
             }
             #endregion
@@ -672,12 +672,12 @@ namespace Catel.IoC
         private bool IsTypeRegisteredByMissingTypeHandler(Type serviceType, object tag)
         {
             var missingTypeHandler = MissingType;
-            if (missingTypeHandler != null)
+            if (missingTypeHandler is not null)
             {
                 var eventArgs = new MissingTypeEventArgs(serviceType, tag);
                 missingTypeHandler(this, eventArgs);
 
-                if (eventArgs.ImplementingInstance != null)
+                if (eventArgs.ImplementingInstance is not null)
                 {
                     Log.Debug("Late registering type '{0}' to instance of type '{1}' via MissingTypeEventArgs.ImplementingInstance", serviceType.FullName, eventArgs.ImplementingInstance.GetType().FullName);
 
@@ -685,7 +685,7 @@ namespace Catel.IoC
                     return true;
                 }
 
-                if (eventArgs.ImplementingType != null)
+                if (eventArgs.ImplementingType is not null)
                 {
                     Log.Debug("Late registering type '{0}' to type '{1}' via MissingTypeEventArgs.ImplementingType", serviceType.FullName, eventArgs.ImplementingType.FullName);
 
@@ -829,7 +829,7 @@ namespace Catel.IoC
 
                     var instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
 
-                    if (instance != null && instance is Type)
+                    if (instance is not null && instance is Type)
                     {
                         instance = _typeFactory.CreateInstanceWithTag((Type)instance, serviceInfo.Tag);
                     }
@@ -879,7 +879,7 @@ namespace Catel.IoC
             }
 
             var handler = TypeInstantiated;
-            if (handler != null)
+            if (handler is not null)
             {
                 handler(this, new TypeInstantiatedEventArgs(registration.DeclaringType, registration.ImplementingType,
                     registration.Tag, registration.RegistrationType, instance));
@@ -929,7 +929,7 @@ namespace Catel.IoC
                     }
 
                     var disposable = instance as IDisposable;
-                    if (disposable != null)
+                    if (disposable is not null)
                     {
                         disposable.Dispose();
                     }

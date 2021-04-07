@@ -37,7 +37,7 @@ namespace Catel.Caching.Policies
         /// The action that will be executed if the item is read before expiration.
         /// </param>
         public CustomExpirationPolicy(Func<bool> isExpiredFunc = null, Action resetAction = null)
-            : base(resetAction != null)
+            : base(resetAction is not null)
         {
             _isExpiredFunc = isExpiredFunc;
             _resetAction = resetAction;

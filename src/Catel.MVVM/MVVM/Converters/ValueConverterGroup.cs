@@ -159,7 +159,7 @@ namespace Catel.MVVM.Converters
                 }
             }
 
-            if (nextConverter != null)
+            if (nextConverter is not null)
             {
                 ValueConversionAttribute conversionAttribute = _cachedAttributes[nextConverter];
 
@@ -200,7 +200,7 @@ namespace Catel.MVVM.Converters
                 convertersToProcess = _converters;
             }
 
-            if (convertersToProcess != null && convertersToProcess.Count > 0)
+            if (convertersToProcess is not null && convertersToProcess.Count > 0)
             {
                 foreach (IValueConverter converter in convertersToProcess)
                 {

@@ -52,7 +52,7 @@ namespace Catel
             _dispose = dispose;
             _tag = tag;
 
-            if (initialize != null)
+            if (initialize is not null)
             {
                 initialize(this);
             }
@@ -74,7 +74,7 @@ namespace Catel
         #region IDisposable Members
         protected override void DisposeManaged()
         {
-            if (_dispose != null)
+            if (_dispose is not null)
             {
                 _dispose(this);
             }

@@ -100,7 +100,7 @@ namespace Catel.MVVM
                     var count = 0;
                     foreach (var managedViewModel in _managedViewModels)
                     {
-                        if (managedViewModel.Value != null)
+                        if (managedViewModel.Value is not null)
                         {
                             count += managedViewModel.Value.ViewModelCount;
                         }
@@ -248,7 +248,7 @@ namespace Catel.MVVM
                     foreach (var viewModelIdentifier in viewModelIdentifiers)
                     {
                         var vm = GetViewModel(viewModelIdentifier);
-                        if (vm != null)
+                        if (vm is not null)
                         {
                             viewModels.Add(vm);
                         }
@@ -351,7 +351,7 @@ namespace Catel.MVVM
             {
                 var relationalViewModels = GetAllViewModels(_managedViewModels).OfType<IRelationalViewModel>();
 
-                var childViewModels = relationalViewModels.Where(viewModel => viewModel.ParentViewModel != null && viewModel.ParentViewModel.UniqueIdentifier == parentUniqueIdentifier);
+                var childViewModels = relationalViewModels.Where(viewModel => viewModel.ParentViewModel is not null && viewModel.ParentViewModel.UniqueIdentifier == parentUniqueIdentifier);
 
                 return childViewModels.ToList();
             });

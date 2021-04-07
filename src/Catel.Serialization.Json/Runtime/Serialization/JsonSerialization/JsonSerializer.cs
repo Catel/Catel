@@ -96,7 +96,7 @@ namespace Catel.Runtime.Serialization.Json
         protected override void Serialize(object model, ISerializationContext<JsonSerializationContextInfo> context)
         {
             var customJsonSerializable = model as ICustomJsonSerializable;
-            if (customJsonSerializable != null)
+            if (customJsonSerializable is not null)
             {
                 customJsonSerializable.Serialize(context.Context.JsonWriter);
                 return;
@@ -114,7 +114,7 @@ namespace Catel.Runtime.Serialization.Json
         protected override object Deserialize(object model, ISerializationContext<JsonSerializationContextInfo> context)
         {
             var customJsonSerializable = model as ICustomJsonSerializable;
-            if (customJsonSerializable != null)
+            if (customJsonSerializable is not null)
             {
                 customJsonSerializable.Deserialize(context.Context.JsonReader);
                 return customJsonSerializable;
@@ -199,7 +199,7 @@ namespace Catel.Runtime.Serialization.Json
                             var referenceManager = scopeManager.ScopeObject.ReferenceManager;
 
                             var referenceInfo = referenceManager.GetInfoById(graphId);
-                            if (referenceInfo != null)
+                            if (referenceInfo is not null)
                             {
                                 return referenceInfo.Instance;
                             }
@@ -323,7 +323,7 @@ namespace Catel.Runtime.Serialization.Json
                 if (PreserveReferences)
                 {
                     var value = memberValue.Value;
-                    if (value != null)
+                    if (value is not null)
                     {
                         // Ignore basic types (value types, strings, etc) and ModelBase (already gets the graph id written)
                         var memberType = memberValue.ActualMemberType;
@@ -398,7 +398,7 @@ namespace Catel.Runtime.Serialization.Json
             {
                 // Serialize as an object with properties
                 var sourceDictionary = memberValue.Value as IDictionary;
-                if (sourceDictionary != null)
+                if (sourceDictionary is not null)
                 {
                     jsonWriter.WriteStartObject();
 
@@ -413,7 +413,7 @@ namespace Catel.Runtime.Serialization.Json
                         jsonWriter.WritePropertyName(stringKey);
 
                         var item = sourceDictionary[key];
-                        if (item != null)
+                        if (item is not null)
                         {
                             var itemType = item.GetType();
                             if (ShouldExternalSerializerHandleMember(itemType))
@@ -437,7 +437,7 @@ namespace Catel.Runtime.Serialization.Json
                 foreach (var item in (IList)memberValue.Value)
                 {
                     // Note: we don't support null values for now
-                    if (item != null)
+                    if (item is not null)
                     {
                         var itemType = item.GetType();
                         if (ShouldExternalSerializerHandleMember(itemType))
@@ -501,13 +501,13 @@ namespace Catel.Runtime.Serialization.Json
                     var properties = serializationContext.JsonProperties;
                     if (properties.TryGetValue(GraphId, out var graphIdProperty))
                     {
-                        if (graphIdProperty != null)
+                        if (graphIdProperty is not null)
                         {
                             var graphId = (int)graphIdProperty.Value;
 
                             var referenceManager = context.ReferenceManager;
                             var referenceInfo = referenceManager.GetInfoById(graphId);
-                            if (referenceInfo != null)
+                            if (referenceInfo is not null)
                             {
                                 Log.Warning($"Trying to register custom object in graph with graph id '{BoxingCache.GetBoxedValue(graphId)}', but it seems it is already registered");
                                 return;
@@ -533,7 +533,7 @@ namespace Catel.Runtime.Serialization.Json
             var serializationContext = context.Context;
 
             var jsonProperties = serializationContext.JsonProperties;
-            if (jsonProperties != null)
+            if (jsonProperties is not null)
             {
                 if (PreserveReferences)
                 {
@@ -583,7 +583,7 @@ namespace Catel.Runtime.Serialization.Json
                         }
 
                         var typeToDeserialize = valueType;
-                        if (jsonProperty.Value != null)
+                        if (jsonProperty.Value is not null)
                         {
                             if (jsonProperty.Value.Type != JTokenType.Object)
                             {
@@ -646,7 +646,7 @@ namespace Catel.Runtime.Serialization.Json
                 if (jsonProperties.TryGetValue(memberValue.NameForSerialization, out var jsonMemberProperty))
                 {
                     var jsonValue = jsonMemberProperty.Value;
-                    if (jsonValue != null)
+                    if (jsonValue is not null)
                     {
                         object finalMemberValue = null;
                         var valueType = memberValue.GetBestMemberType();
@@ -681,7 +681,7 @@ namespace Catel.Runtime.Serialization.Json
                                     memberValue.Value = (string)jsonValue;
 
                                     var parsedValue = DeserializeUsingObjectParse(context, memberValue);
-                                    if (parsedValue != null)
+                                    if (parsedValue is not null)
                                     {
                                         finalMemberValue = parsedValue;
 
@@ -737,7 +737,7 @@ namespace Catel.Runtime.Serialization.Json
                             }
                         }
 
-                        if (finalMemberValue != null)
+                        if (finalMemberValue is not null)
                         {
                             if (PreserveReferences && finalMemberValue.GetType().IsClassType())
                             {
@@ -763,7 +763,7 @@ namespace Catel.Runtime.Serialization.Json
                 var collection = new List<object>();
 
                 var jArray = context.Context.JsonArray;
-                if (jArray != null)
+                if (jArray is not null)
                 {
                     var memberType = memberValue.GetBestMemberType();
                     var collectionItemType = memberType.GetCollectionElementType();
@@ -820,7 +820,7 @@ namespace Catel.Runtime.Serialization.Json
             var formatting = Formatting.None;
 
             var jsonConfiguration = configuration as JsonSerializationConfiguration;
-            if (jsonConfiguration != null)
+            if (jsonConfiguration is not null)
             {
                 useBson = jsonConfiguration.UseBson;
                 dateTimeKind = jsonConfiguration.DateTimeKind;
@@ -888,14 +888,14 @@ namespace Catel.Runtime.Serialization.Json
                     throw new ArgumentOutOfRangeException("contextMode");
             }
 
-            if (jsonReader != null)
+            if (jsonReader is not null)
             {
                 jsonReader.Culture = configuration.Culture;
                 jsonReader.DateParseHandling = dateParseHandling;
                 jsonReader.DateTimeZoneHandling = dateTimeZoneHandling;
             }
 
-            if (jsonWriter != null)
+            if (jsonWriter is not null)
             {
                 jsonWriter.Culture = configuration.Culture;
                 jsonWriter.DateTimeZoneHandling = dateTimeZoneHandling;
@@ -927,12 +927,12 @@ namespace Catel.Runtime.Serialization.Json
             jsonSerializer.Converters.Add(new CatelJsonConverter(this, configuration));
 
             var contextInfo = new JsonSerializationContextInfo(jsonSerializer, jsonReader, jsonWriter);
-            if (jsonProperties != null)
+            if (jsonProperties is not null)
             {
                 contextInfo.JsonProperties = jsonProperties;
             }
 
-            if (jsonArray != null)
+            if (jsonArray is not null)
             {
                 contextInfo.JsonArray = jsonArray;
             }
@@ -949,7 +949,7 @@ namespace Catel.Runtime.Serialization.Json
         protected override void AppendContextToStream(ISerializationContext<JsonSerializationContextInfo> context, Stream stream)
         {
             var jsonWriter = context.Context.JsonWriter;
-            if (jsonWriter != null)
+            if (jsonWriter is not null)
             {
                 jsonWriter.Flush();
             }

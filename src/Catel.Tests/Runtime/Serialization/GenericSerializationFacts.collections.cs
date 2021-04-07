@@ -145,7 +145,7 @@ namespace Catel.Tests.Runtime.Serialization
 
                 private static IEnumerable<Type> GetKnownTypes()
                 {
-                    Contract.Ensures(Contract.Result<IEnumerable<Type>>() != null);
+                    Contract.Ensures(Contract.Result<IEnumerable<Type>>() is not null);
 
                     if (countryTypes is null)
                     {
@@ -249,7 +249,7 @@ namespace Catel.Tests.Runtime.Serialization
 
                 protected ModelObservableCollectionBase(IEnumerable<T> enumeration = null)
                 {
-                    if (enumeration != null)
+                    if (enumeration is not null)
                     {
                         ((ICollection<T>)this.Items).AddRange(enumeration);
                     }
@@ -473,7 +473,7 @@ namespace Catel.Tests.Runtime.Serialization
                 #region Methods
                 protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
                 {
-                    Contract.Requires(e != null);
+                    Contract.Requires(e is not null);
 
                     CollectionChanged?.Invoke(this, e);
                 }
@@ -865,7 +865,7 @@ namespace Catel.Tests.Runtime.Serialization
 
                             jsonReader.Read();
 
-                            if ((parameterName != null) && parameterNames.TryGetValue(parameterName, out var parameterIndex))
+                            if ((parameterName is not null) && parameterNames.TryGetValue(parameterName, out var parameterIndex))
                             {
                                 parameters[parameterIndex] = serializer.Deserialize(parameterTypes[parameterIndex], jsonReader, null);
                             }

@@ -40,11 +40,11 @@ namespace Catel
         public static Exception CreateException(Type exceptionType, string message, Exception innerException = null)
         {
             // Try 1: with inner exception
-            if (innerException != null)
+            if (innerException is not null)
             {
                 var argsWithInnerException = new object[] { message, innerException };
                 var exceptionWithInnerException = CreateException(exceptionType, argsWithInnerException);
-                if (exceptionWithInnerException != null)
+                if (exceptionWithInnerException is not null)
                 {
                     return exceptionWithInnerException;
                 }
@@ -53,14 +53,14 @@ namespace Catel
             // try 2: without inner exception
             var args = new object[] { message };
             var exception = CreateException(exceptionType, args);
-            if (exception != null)
+            if (exception is not null)
             {
                 return exception;
             }
 
             // try 3: without anything
             exception = CreateException(exceptionType, ArrayShim.Empty<object>());
-            if (exception != null)
+            if (exception is not null)
             {
                 return exception;
             }

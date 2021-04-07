@@ -79,7 +79,7 @@ namespace Catel.IoC
 
 #if NETSTANDARD
                 var dependencyServiceType = Type.GetType("Xamarin.Forms.DependencyService, Xamarin.Forms.Core");
-                if (dependencyServiceType != null)
+                if (dependencyServiceType is not null)
                 {
                     var dependencyServiceGetMethodInfo = dependencyServiceType.GetMethodEx("Get", BindingFlags.Static | BindingFlags.Public);
                     var dependencyAttributeType = Type.GetType("Xamarin.Forms.DependencyAttribute, Xamarin.Forms.Core");

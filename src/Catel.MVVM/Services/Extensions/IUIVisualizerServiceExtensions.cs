@@ -240,7 +240,7 @@ namespace Catel.Services
             var viewModelFactory = dependencyResolver.Resolve<IViewModelFactory>();
 
             var existingViewModel = viewModelManager.GetFirstOrDefaultInstance<TViewModel>();
-            if (existingViewModel != null)
+            if (existingViewModel is not null)
             {
                 await uiVisualizerService.ShowOrActivateAsync<TViewModel>(dataContext, scope);
             }

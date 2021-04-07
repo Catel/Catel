@@ -70,7 +70,7 @@ namespace Catel.Tests.MVVM.Converters
             }
 
             var propertyInfo = type.GetPropertyEx(memberName);
-            if (propertyInfo != null)
+            if (propertyInfo is not null)
             {
                 actualValue = ConvertValue(propertyInfo);
                 Assert.AreEqual(expectedValue, actualValue);
@@ -78,7 +78,7 @@ namespace Catel.Tests.MVVM.Converters
             }
 
             var fieldInfo = type.GetFieldEx(memberName);
-            if (fieldInfo != null)
+            if (fieldInfo is not null)
             {
                 actualValue = ConvertValue(fieldInfo);
                 Assert.AreEqual(expectedValue, actualValue);

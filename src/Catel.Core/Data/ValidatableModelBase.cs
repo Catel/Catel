@@ -243,7 +243,7 @@ namespace Catel.Data
             get
             {
                 var context = _validationSuspensionContext;
-                if (context != null)
+                if (context is not null)
                 {
                     if (context.Counter > 0)
                     {
@@ -359,7 +359,7 @@ namespace Catel.Data
                     lock (_lock)
                     {
                         suspensionContext = _validationSuspensionContext;
-                        if (suspensionContext != null)
+                        if (suspensionContext is not null)
                         {
                             suspensionContext.Decrement();
 
@@ -370,7 +370,7 @@ namespace Catel.Data
                         }
                     }
 
-                    if (suspensionContext != null && suspensionContext.Counter == 0)
+                    if (suspensionContext is not null && suspensionContext.Counter == 0)
                     {
                         if (!validateOnResume)
                         {
@@ -417,10 +417,10 @@ namespace Catel.Data
                 {
                     var dependencyResolver = this.GetDependencyResolver();
                     var validatorProvider = dependencyResolver.TryResolve<IValidatorProvider>();
-                    if (validatorProvider != null)
+                    if (validatorProvider is not null)
                     {
                         _validator = validatorProvider.GetValidator(GetType());
-                        if (_validator != null)
+                        if (_validator is not null)
                         {
                             Log.Debug("Found validator '{0}' for view model '{1}' via the registered IValidatorProvider", _validator.GetType().FullName, GetType().FullName);
                         }
@@ -527,7 +527,7 @@ namespace Catel.Data
             }
 
             var validationSuspensionContext = _validationSuspensionContext;
-            if (validationSuspensionContext != null)
+            if (validationSuspensionContext is not null)
             {
                 validationSuspensionContext.Add(propertyName);
                 return true;
@@ -547,7 +547,7 @@ namespace Catel.Data
                     if (propertyDataManager.IsPropertyRegistered(type, propertyName))
                     {
                         var catelPropertyData = PropertyDataManager.GetPropertyData(type, propertyName);
-                        if (catelPropertyData != null)
+                        if (catelPropertyData is not null)
                         {
                             var propertyInfo = catelPropertyData.GetPropertyInfo(type);
                             if (propertyInfo is null || !propertyInfo.HasPublicGetter)
@@ -646,7 +646,7 @@ namespace Catel.Data
         protected virtual void OnValidating(IValidationContext validationContext)
         {
             var handler = _validating;
-            if (handler != null)
+            if (handler is not null)
             {
                 handler(this, new ValidationEventArgs(validationContext));
             }
@@ -747,7 +747,7 @@ namespace Catel.Data
             var changes = new List<ValidationContextChange>();
 
             var validator = GetValidator();
-            if (validator != null)
+            if (validator is not null)
             {
                 validator.BeforeValidation(this, existingValidationContext.GetFieldValidations(), existingValidationContext.GetBusinessRuleValidations());
             }
@@ -828,14 +828,14 @@ namespace Catel.Data
                     var businessRuleValidationResults = new List<IBusinessRuleValidationResult>();
 
                     #region Fields
-                    if (validator != null)
+                    if (validator is not null)
                     {
                         validator.BeforeValidateFields(this, validationContext.GetFieldValidations());
                     }
 
                     OnValidatingFields(validationContext);
 
-                    if (validator != null)
+                    if (validator is not null)
                     {
                         validator.ValidateFields(this, fieldValidationResults);
                     }
@@ -851,7 +851,7 @@ namespace Catel.Data
 
                     OnValidatedFields(validationContext);
 
-                    if (validator != null)
+                    if (validator is not null)
                     {
                         validator.AfterValidateFields(this, fieldValidationResults);
                     }
@@ -864,14 +864,14 @@ namespace Catel.Data
                     #endregion
 
                     #region Business rules
-                    if (validator != null)
+                    if (validator is not null)
                     {
                         validator.BeforeValidateBusinessRules(this, validationContext.GetBusinessRuleValidations());
                     }
 
                     OnValidatingBusinessRules(validationContext);
 
-                    if (validator != null)
+                    if (validator is not null)
                     {
                         validator.ValidateBusinessRules(this, businessRuleValidationResults);
                     }
@@ -880,7 +880,7 @@ namespace Catel.Data
 
                     OnValidatedBusinessRules(validationContext);
 
-                    if (validator != null)
+                    if (validator is not null)
                     {
                         validator.AfterValidateBusinessRules(this, businessRuleValidationResults);
                     }
@@ -892,7 +892,7 @@ namespace Catel.Data
                     }
                     #endregion
 
-                    if (validator != null)
+                    if (validator is not null)
                     {
                         validator.Validate(this, validationContext);
                     }
@@ -906,7 +906,7 @@ namespace Catel.Data
 
             OnValidated(validationContext);
 
-            if (validator != null)
+            if (validator is not null)
             {
                 validator.AfterValidation(this, validationContext.GetFieldValidations(), validationContext.GetBusinessRuleValidations());
             }
@@ -919,7 +919,7 @@ namespace Catel.Data
                 var changeAsFieldValidationResult = change.ValidationResult as IFieldValidationResult;
                 var changeAsBusinessRuleValidationResult = change.ValidationResult as IBusinessRuleValidationResult;
 
-                if (changeAsFieldValidationResult != null)
+                if (changeAsFieldValidationResult is not null)
                 {
                     switch (change.ValidationResult.ValidationResultType)
                     {
@@ -935,7 +935,7 @@ namespace Catel.Data
                             throw new ArgumentOutOfRangeException();
                     }
                 }
-                else if (changeAsBusinessRuleValidationResult != null)
+                else if (changeAsBusinessRuleValidationResult is not null)
                 {
                     switch (change.ValidationResult.ValidationResultType)
                     {
@@ -1362,7 +1362,7 @@ namespace Catel.Data
             var propertyName = string.Empty;
 
             var fieldValidationResult = validationResult as IFieldValidationResult;
-            if (fieldValidationResult != null)
+            if (fieldValidationResult is not null)
             {
                 propertyName = fieldValidationResult.PropertyName;
             }

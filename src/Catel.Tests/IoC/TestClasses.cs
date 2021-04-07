@@ -27,7 +27,7 @@
         public TestClass1()
         {
             Name = "created via injection";
-            if (PropertyChanged != null)
+            if (PropertyChanged is not null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs("Name"));
             }

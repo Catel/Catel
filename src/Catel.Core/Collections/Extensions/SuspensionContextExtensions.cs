@@ -216,7 +216,7 @@ namespace Catel.Collections
             }
 
             // Create event args for last item(s)
-            if (changedItems.Count != 0 && previousAction != null)
+            if (changedItems.Count != 0 && previousAction is not null)
             {
                 eventArgsList.Add(new NotifyRangedCollectionChangedEventArgs(changedItems, changedItemIndices, suspensionMode, previousAction.Value));
             }

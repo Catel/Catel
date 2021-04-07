@@ -265,7 +265,7 @@ namespace Catel.Windows.Controls
         private void OnModeChanged()
         {
             var messageBar = GetTemplateChild(ElementMessageBar) as FrameworkElement;
-            if (messageBar != null)
+            if (messageBar is not null)
             {
                 int gridRow = 0;
 
@@ -417,15 +417,15 @@ namespace Catel.Windows.Controls
             }
 
             object bindingObject = GetBindingObject(e.Error.BindingInError);
-            string message = (e.Error != null) ? e.Error.ErrorContent.ToString() : string.Empty;
+            string message = (e.Error is not null) ? e.Error.ErrorContent.ToString() : string.Empty;
 
             // There seems to be an issue where validations are removed, even when 
             // ((IDataErrorInfo)bindingObject)["property"] has a value, so check for that
 
             var bindingObjectAsIDataErrorInfo = bindingObject as IDataErrorInfo;
             var bindingInErrorAsBindingExpression = e.Error.BindingInError as BindingExpression;
-            if ((validationEventAction == ValidationEventAction.Removed) && (bindingObjectAsIDataErrorInfo != null) &&
-                (bindingInErrorAsBindingExpression != null))
+            if ((validationEventAction == ValidationEventAction.Removed) && (bindingObjectAsIDataErrorInfo is not null) &&
+                (bindingInErrorAsBindingExpression is not null))
             {
                 if (!string.IsNullOrEmpty(bindingObjectAsIDataErrorInfo[bindingInErrorAsBindingExpression.ParentBinding.Path.Path]))
                 {
@@ -463,12 +463,12 @@ namespace Catel.Windows.Controls
             object result;
 
             // Check whether the data error is throwed on an single binding or a bindinggroup and process the error message
-            if (bindingObject as BindingExpression != null)
+            if (bindingObject as BindingExpression is not null)
             {
                 // Use data item of binding
                 result = ((BindingExpression)bindingObject).DataItem;
             }
-            else if (bindingObject as BindingGroup != null)
+            else if (bindingObject as BindingGroup is not null)
             {
                 // Use data group (object itself)
                 // ReSharper disable RedundantCast
@@ -534,7 +534,7 @@ namespace Catel.Windows.Controls
                         break;
 
                     case ValidationEventAction.ClearAll:
-                        if (bindingObject != null)
+                        if (bindingObject is not null)
                         {
                             messages.Remove(bindingObject);
                         }

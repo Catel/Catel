@@ -186,7 +186,7 @@ namespace Catel.MVVM
         /// </returns>
         public virtual bool CanExecute(TCanExecuteParameter parameter)
         {
-            if (AuthenticationProvider != null)
+            if (AuthenticationProvider is not null)
             {
                 if (!AuthenticationProvider.CanCommandBeExecuted(this, parameter))
                 {
@@ -196,11 +196,11 @@ namespace Catel.MVVM
 
             var result = true;
 
-            if (_canExecuteWithParameter != null)
+            if (_canExecuteWithParameter is not null)
             {
                 result = _canExecuteWithParameter(parameter);
             }
-            else if (_canExecuteWithoutParameter != null)
+            else if (_canExecuteWithoutParameter is not null)
             {
                 result = _canExecuteWithoutParameter();
             }
@@ -255,12 +255,12 @@ namespace Catel.MVVM
                 return;
             }
 
-            if (_executeWithParameter != null)
+            if (_executeWithParameter is not null)
             {
                 _executeWithParameter(parameter);
                 RaiseExecuted(parameter);
             }
-            else if (_executeWithoutParameter != null)
+            else if (_executeWithoutParameter is not null)
             {
                 _executeWithoutParameter();
                 RaiseExecuted(parameter);

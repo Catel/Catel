@@ -197,12 +197,12 @@ namespace Catel.Tests.Data
 
                 wrapper.CollectionChanged += (sender, e) =>
                 {
-                    if (e.OldItems != null)
+                    if (e.OldItems is not null)
                     {
                         itemsRemoved = true;
                     }
 
-                    if (e.NewItems != null)
+                    if (e.NewItems is not null)
                     {
                         itemsAdded = true;
                     }
@@ -236,7 +236,7 @@ namespace Catel.Tests.Data
 
                 wrapper.CollectionChanged += (sender, e) =>
                 {
-                    if (e.OldItems != null)
+                    if (e.OldItems is not null)
                     {
                         itemsRemoved = true;
                     }
@@ -246,7 +246,7 @@ namespace Catel.Tests.Data
                         itemsReset = true;
                     }
 
-                    if (e.NewItems != null)
+                    if (e.NewItems is not null)
                     {
                         itemsAdded = true;
                     }

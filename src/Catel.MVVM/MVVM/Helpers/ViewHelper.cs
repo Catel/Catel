@@ -69,10 +69,10 @@ namespace Catel.MVVM
             FrameworkElement view;
 
             // First, try to constructor directly with the data context
-            if (dataContext != null)
+            if (dataContext is not null)
             {
                 var injectionConstructor = viewType.GetConstructorEx(new[] { dataContext.GetType() });
-                if (injectionConstructor != null)
+                if (injectionConstructor is not null)
                 {
                     view = (FrameworkElement)injectionConstructor.Invoke(new[] { dataContext });
 

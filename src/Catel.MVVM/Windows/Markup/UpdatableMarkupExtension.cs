@@ -122,10 +122,10 @@ namespace Catel.Windows.Markup
             _serviceProvider = serviceProvider;
 
             var target = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
-            if (target != null)
+            if (target is not null)
             {
                 var targetObject = target.TargetObject;
-                if (targetObject != null)
+                if (targetObject is not null)
                 {
                     // CTL-636
                     // In a template the TargetObject is a SharedDp (internal WPF class)
@@ -314,7 +314,7 @@ namespace Catel.Windows.Markup
         protected void RaisePropertyChanged(string propertyName)
         {
             var handler = PropertyChanged;
-            if (handler != null)
+            if (handler is not null)
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }

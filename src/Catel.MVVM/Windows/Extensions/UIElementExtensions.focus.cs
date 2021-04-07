@@ -32,7 +32,7 @@ namespace Catel.Windows
             return element.FindVisualDescendant(obj =>
             {
                 var objAsUIElement = obj as UIElement;
-                if (objAsUIElement != null)
+                if (objAsUIElement is not null)
                 {
                     return objAsUIElement.IsFocused;
                 }
@@ -69,7 +69,7 @@ namespace Catel.Windows
         private static void FocusFirstControl(object element, bool focusParentsFirst)
         {
             var elementAsFrameworkElement = element as FrameworkElement;
-            if (elementAsFrameworkElement != null)
+            if (elementAsFrameworkElement is not null)
             {
                 if (elementAsFrameworkElement.IsLoaded)
                 {
@@ -102,13 +102,13 @@ namespace Catel.Windows
         private static void FocusNextControl(object element, bool focusParentsFirst)
         {
             var elementAsFrameworkElement = element as FrameworkElement;
-            if (elementAsFrameworkElement != null)
+            if (elementAsFrameworkElement is not null)
             {
                 if (focusParentsFirst)
                 {
                     var parentsToFocus = new Stack<FrameworkElement>();
                     var parent = elementAsFrameworkElement.Parent as FrameworkElement;
-                    while (parent != null)
+                    while (parent is not null)
                     {
                         if (parent.Focusable)
                         {
@@ -129,7 +129,7 @@ namespace Catel.Windows
             var uiElement = element as UIElement;
             var contentElement = element as ContentElement;
 
-            if (uiElement != null)
+            if (uiElement is not null)
             {
                 // Focus element itself
                 if (uiElement.Focusable)
@@ -137,7 +137,7 @@ namespace Catel.Windows
                     uiElement.Focus();
                 }
             }
-            else if (contentElement != null)
+            else if (contentElement is not null)
             {
                 // Focus content element
                 if (contentElement.Focusable)
@@ -196,7 +196,7 @@ namespace Catel.Windows
             }
 
             var frameworkElement = element as FrameworkElement;
-            bool delayMove = ((frameworkElement != null) && !frameworkElement.IsLoaded);
+            bool delayMove = ((frameworkElement is not null) && !frameworkElement.IsLoaded);
 
             if (delayMove)
             {
@@ -214,12 +214,12 @@ namespace Catel.Windows
                 var uiElement = element as UIElement;
                 var contentElement = element as ContentElement;
 
-                if (uiElement != null)
+                if (uiElement is not null)
                 {
                     // Focus next
                     uiElement.MoveFocus(new TraversalRequest(direction));
                 }
-                else if (contentElement != null)
+                else if (contentElement is not null)
                 {
                     // Focus next
                     contentElement.MoveFocus(new TraversalRequest(direction));

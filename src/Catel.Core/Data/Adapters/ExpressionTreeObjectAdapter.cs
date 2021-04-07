@@ -28,7 +28,7 @@
             try
             {
                 var modelEditor = instance as IModelEditor;
-                if (modelEditor != null && modelEditor.IsPropertyRegistered(memberName))
+                if (modelEditor is not null && modelEditor.IsPropertyRegistered(memberName))
                 {
                     value = modelEditor.GetValueFastButUnsecure<TValue>(memberName);
                     return true;
@@ -99,7 +99,7 @@
             try
             {
                 var modelEditor = instance as IModelEditor;
-                if (modelEditor != null && modelEditor.IsPropertyRegistered(memberName))
+                if (modelEditor is not null && modelEditor.IsPropertyRegistered(memberName))
                 {
                     // Don't use SetValueFastbutUnsecure, change notifications must be possible
                     modelEditor.SetValue(memberName, value);

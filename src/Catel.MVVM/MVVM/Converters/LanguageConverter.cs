@@ -39,7 +39,7 @@ namespace Catel.MVVM.Converters
             var translatedValue = string.Empty;
 
             var culture = parameter as CultureInfo;
-            if (culture != null)
+            if (culture is not null)
             {
                 translatedValue = _languageService.GetString(value, culture);
             }

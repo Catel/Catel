@@ -46,7 +46,7 @@ namespace Catel
         {
             var value = string.Empty;
 
-            if (culture != null)
+            if (culture is not null)
             {
                 value = LanguageService.GetString(resourceName, culture);
             }

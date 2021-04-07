@@ -87,7 +87,7 @@ namespace Catel
         public bool Execute(out TResult result)
         {
             result = default(TResult);
-            if (_action != null)
+            if (_action is not null)
             {
                 if (IsTargetAlive)
                 {
@@ -99,7 +99,7 @@ namespace Catel
                     }
                     catch (TargetInvocationException ex)
                     {
-                        if (ex.InnerException != null)
+                        if (ex.InnerException is not null)
                         {
                             throw ex.InnerException;
                         }
@@ -191,7 +191,7 @@ namespace Catel
         {
             result = default(TResult);
 
-            if (_action != null)
+            if (_action is not null)
             {
                 if (IsTargetAlive)
                 {
@@ -203,7 +203,7 @@ namespace Catel
                     }
                     catch (TargetInvocationException ex)
                     {
-                        if (ex.InnerException != null)
+                        if (ex.InnerException is not null)
                         {
                             throw ex.InnerException;
                         }

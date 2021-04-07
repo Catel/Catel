@@ -130,7 +130,7 @@ namespace Catel.Windows.Interactivity
         {
             if (AssociatedObject is DataGrid)
             {
-                return GetHitElements(mousePosition).OfType<DataGridRow>().FirstOrDefault() != null;
+                return GetHitElements(mousePosition).OfType<DataGridRow>().FirstOrDefault() is not null;
             }
 
             return true;
@@ -158,7 +158,7 @@ namespace Catel.Windows.Interactivity
                 }
 
                 var contentPresenter = VisualTreeHelper.GetParent(associatedObjectAsGrid) as ContentPresenter;
-                if (contentPresenter != null)
+                if (contentPresenter is not null)
                 {
                     Log.Debug("AutoFixListBoxItemTemplate is set to true, setting the HorizontalAlignment of the parent to Stretch");
                     contentPresenter.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -201,7 +201,7 @@ namespace Catel.Windows.Interactivity
 
             if (IsElementHit(e.GetPosition(AssociatedObject)))
             {
-                if (_action != null)
+                if (_action is not null)
                 {
                     Log.Debug("Executing action");
 

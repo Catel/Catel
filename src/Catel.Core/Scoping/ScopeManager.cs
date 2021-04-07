@@ -54,7 +54,7 @@ namespace Catel.Scoping
         {
             _scopeName = scopeName;
 
-            if (createScopeFunction != null)
+            if (createScopeFunction is not null)
             {
                 Log.Debug($"Custom function to create the scope is provided, creating custom scope for type '{TypeName}' with name '{_scopeName}'");
 
@@ -144,7 +144,7 @@ namespace Catel.Scoping
                     Log.Debug($"Type '{TypeName}' with scope name '{_scopeName}' has reached a ref count of 0, scope is closed now");
 
                     var scopeObjectAsDisposable = _scopeObject as IDisposable;
-                    if (scopeObjectAsDisposable != null)
+                    if (scopeObjectAsDisposable is not null)
                     {
                         scopeObjectAsDisposable.Dispose();
                     }
@@ -154,7 +154,7 @@ namespace Catel.Scoping
                     _instances.Remove(_scopeName);
 
                     var scopeClosed = ScopeClosed;
-                    if (scopeClosed != null)
+                    if (scopeClosed is not null)
                     {
                         scopeClosed.Invoke(this, new ScopeClosedEventArgs(ScopeObject, _scopeName));
                     }

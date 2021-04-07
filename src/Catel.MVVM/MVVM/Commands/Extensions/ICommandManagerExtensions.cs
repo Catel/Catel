@@ -89,7 +89,7 @@ namespace Catel
 
             InputGesture commandInputGesture = null;
             var inputGestureField = containerType.GetFieldEx(string.Format("{0}InputGesture", commandNameFieldName), bindingFlags);
-            if (inputGestureField != null)
+            if (inputGestureField is not null)
             {
                 commandInputGesture = inputGestureField.GetValue(null) as InputGesture;
             }
@@ -115,7 +115,7 @@ namespace Catel
             {
                 var typeFactory = serviceLocator.ResolveType<ITypeFactory>();
                 var commandContainer = typeFactory.CreateInstance(commandContainerType);
-                if (commandContainer != null)
+                if (commandContainer is not null)
                 {
                     serviceLocator.RegisterInstance(commandContainerType, commandContainer);
                 }

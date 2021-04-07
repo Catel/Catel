@@ -704,7 +704,7 @@ namespace Catel.Tests.IoC
 
                 serviceLocator.TypeUnregistered += (sender, e) =>
                 {
-                    if (e.Instance != null)
+                    if (e.Instance is not null)
                     {
                         instanceCounter++;
                     }

@@ -35,7 +35,7 @@ namespace Catel.Collections
         /// <param name="mode">The suspension mode.</param>
         /// <remarks>This only for use of <see cref="Catel.Collections.SuspensionMode.Adding"/> and <see cref="Catel.Collections.SuspensionMode.Removing"/>.</remarks>
         public NotifyRangedCollectionChangedEventArgs(IList changedItems, IList<int> indices, SuspensionMode mode)
-            : base(ModeToAction(mode), changedItems, (indices != null && indices.Count != 0) ? indices[0] : -1)
+            : base(ModeToAction(mode), changedItems, (indices is not null && indices.Count != 0) ? indices[0] : -1)
         {
             Argument.IsNotNull(nameof(changedItems), changedItems);
             Argument.IsNotNull(nameof(indices), indices);
@@ -56,7 +56,7 @@ namespace Catel.Collections
         /// <param name="action">The action.</param>
         /// <remarks>This is only for use of <see cref="Catel.Collections.SuspensionMode.MixedBash"/>.</remarks>
         public NotifyRangedCollectionChangedEventArgs(IList changedItems, IList<int> indices, SuspensionMode mode, NotifyCollectionChangedAction action)
-            : base(EnsureModeAndAction(mode, action), changedItems, (indices != null && indices.Count != 0) ? indices[0] : -1)
+            : base(EnsureModeAndAction(mode, action), changedItems, (indices is not null && indices.Count != 0) ? indices[0] : -1)
         {
             Argument.IsNotNull(nameof(changedItems), changedItems);
             Argument.IsNotNull(nameof(indices), indices);

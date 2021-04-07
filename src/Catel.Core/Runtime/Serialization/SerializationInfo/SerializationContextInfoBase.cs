@@ -21,7 +21,7 @@
         void ISerializationContextContainer.SetSerializationContext<T>(ISerializationContext<T> serializationContext)
         {
             var context = (ISerializationContext<TSerializationContextInfo>)serializationContext;
-            if (context != null)
+            if (context is not null)
             {
                 Context = context;
                 OnContextUpdated(context);

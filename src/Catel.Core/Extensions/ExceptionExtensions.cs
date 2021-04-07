@@ -27,7 +27,7 @@ namespace Catel
         /// <returns><c>true</c> if the specified exception is critical; otherwise, <c>false</c>.</returns>
         public static bool IsCritical(this Exception ex)
         {
-            while (ex != null)
+            while (ex is not null)
             {
                 if (ex is OutOfMemoryException ||
                     ex is BadImageFormatException

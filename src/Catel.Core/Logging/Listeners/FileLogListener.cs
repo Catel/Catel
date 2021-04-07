@@ -175,7 +175,7 @@ namespace Catel.Logging
 
             string dataDirectory;
 
-            if (_assembly != null)
+            if (_assembly is not null)
             {
                 dataDirectory = isWebApp ? IO.Path.GetApplicationDataDirectoryForAllUsers(_assembly.Company(), _assembly.Product())
                                          : IO.Path.GetApplicationDataDirectory(_assembly.Company(), _assembly.Product());
@@ -186,17 +186,17 @@ namespace Catel.Logging
                                          : IO.Path.GetApplicationDataDirectory();
             }
 
-            if (_assembly != null && filePath.Contains(FilePathKeyword.AssemblyName))
+            if (_assembly is not null && filePath.Contains(FilePathKeyword.AssemblyName))
             {
                 filePath = filePath.Replace(FilePathKeyword.AssemblyName, _assembly.GetName().Name);
             }
 
-            if (_assembly != null && filePath.Contains(FilePathKeyword.AssemblyProduct))
+            if (_assembly is not null && filePath.Contains(FilePathKeyword.AssemblyProduct))
             {
                 filePath = filePath.Replace(FilePathKeyword.AssemblyProduct, _assembly.Product());
             }
 
-            if (_assembly != null && filePath.Contains(FilePathKeyword.AssemblyCompany))
+            if (_assembly is not null && filePath.Contains(FilePathKeyword.AssemblyCompany))
             {
                 filePath = filePath.Replace(FilePathKeyword.AssemblyCompany, _assembly.Company());
             }
@@ -223,7 +223,7 @@ namespace Catel.Logging
 
             if (filePath.Contains(FilePathKeyword.AppDataLocal))
             {
-                var dataDirectoryLocal = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserLocal,
+                var dataDirectoryLocal = _assembly is not null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserLocal,
                                                                                                  _assembly.Company(),
                                                                                                  _assembly.Product())
                                                             : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserLocal);
@@ -234,7 +234,7 @@ namespace Catel.Logging
 
             if (filePath.Contains(FilePathKeyword.AppDataRoaming))
             {
-                var dataDirectoryRoaming = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming,
+                var dataDirectoryRoaming = _assembly is not null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming,
                                                                                                    _assembly.Company(),
                                                                                                    _assembly.Product())
                                                              : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.UserRoaming);
@@ -245,7 +245,7 @@ namespace Catel.Logging
 
             if (filePath.Contains(FilePathKeyword.AppDataMachine))
             {
-                var dataDirectoryMachine = _assembly != null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.Machine,
+                var dataDirectoryMachine = _assembly is not null ? IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.Machine,
                                                                                                    _assembly.Company(),
                                                                                                    _assembly.Product())
                                                              : IO.Path.GetApplicationDataDirectory(ApplicationDataTarget.Machine);

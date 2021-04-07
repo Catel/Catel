@@ -41,7 +41,7 @@ namespace Catel.Collections
         {
             Action = action;
 
-            var startingIndex = indices != null && indices.Count != 0 ? indices[0] : -1;
+            var startingIndex = indices is not null && indices.Count != 0 ? indices[0] : -1;
             if (action == NotifyRangedListChangedAction.Add)
             {
                 NewItems = changedItems;
