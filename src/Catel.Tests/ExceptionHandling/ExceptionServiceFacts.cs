@@ -145,7 +145,7 @@ namespace Catel.Tests.ExceptionHandling
             #region Methods
 
             [TestCase]
-            public async Task ProceedActionToSucceed()
+            public async Task ProceedActionToSucceedAsync()
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
@@ -160,7 +160,7 @@ namespace Catel.Tests.ExceptionHandling
             }
 
             [TestCase]
-            public async Task ProceedTaskToSucceed()
+            public async Task ProceedTaskToSucceedAsync()
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
@@ -175,7 +175,7 @@ namespace Catel.Tests.ExceptionHandling
             }
 
             [TestCase]
-            public async Task ProceedActionToFail()
+            public async Task ProceedActionToFailAsync()
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
@@ -188,7 +188,7 @@ namespace Catel.Tests.ExceptionHandling
             }
 
             [TestCase]
-            public async Task ProceedTaskToFail()
+            public async Task ProceedTaskToFailAsync()
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
@@ -465,7 +465,7 @@ namespace Catel.Tests.ExceptionHandling
             #region Methods
 
             [TestCase]
-            public async Task ProceedActionToSucceed()
+            public async Task ProceedActionToSucceedAsync()
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
@@ -477,7 +477,7 @@ namespace Catel.Tests.ExceptionHandling
             }
 
             [TestCase]
-            public async Task ProceedTaskToSucceed()
+            public async Task ProceedTaskToSucceedAsync()
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
@@ -489,7 +489,7 @@ namespace Catel.Tests.ExceptionHandling
             }
 
             [TestCase]
-            public async Task ProceedActionToFail()
+            public async Task ProceedActionToFailAsync()
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;
@@ -501,7 +501,7 @@ namespace Catel.Tests.ExceptionHandling
             }
 
             [TestCase]
-            public async Task ProceedTaskToFail()
+            public async Task ProceedTaskToFailAsync()
             {
                 var exceptionService = new ExceptionService();
                 var value = string.Empty;

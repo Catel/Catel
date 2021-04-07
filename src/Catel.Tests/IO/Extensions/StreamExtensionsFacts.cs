@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Tests.IO.Extensions
+namespace Catel.Tests.IO
 {
     using Catel.IO;
     using System.IO;

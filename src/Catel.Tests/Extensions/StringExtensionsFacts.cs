@@ -5,7 +5,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-namespace Catel.Tests.Extensions
+namespace Catel.Tests
 {
     using NUnit.Framework;
 

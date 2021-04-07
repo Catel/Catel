@@ -54,7 +54,7 @@ namespace Catel.Tests.MVVM.ViewModels
         }
 
         [TestCase]
-        public async Task CancelAfterCloseProtection()
+        public async Task CancelAfterCloseProtectionAsync()
         {
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
@@ -79,7 +79,7 @@ namespace Catel.Tests.MVVM.ViewModels
         }
 
         [TestCase]
-        public async Task SaveAfterCloseProtection()
+        public async Task SaveAfterCloseProtectionAsync()
         {
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
@@ -104,7 +104,7 @@ namespace Catel.Tests.MVVM.ViewModels
         }
 
         [TestCase]
-        public async Task CloseAfterCloseProtection()
+        public async Task CloseAfterCloseProtectionAsync()
         {
             var auditor = new TestAuditor();
             AuditingManager.RegisterAuditor(auditor);
@@ -125,7 +125,7 @@ namespace Catel.Tests.MVVM.ViewModels
         }
 
         [Test]
-        public async Task MultipleViewModelsCanBeCreatedConcurrently()
+        public async Task MultipleViewModelsCanBeCreatedConcurrentlyAsync()
         {
             const int personsPerThread = 50;
             const int threadAmount = 10;
@@ -175,7 +175,7 @@ namespace Catel.Tests.MVVM.ViewModels
         }
 
         [Test]
-        public async Task PropertiesCanBeSetConcurrentlyWithObjectCreation()
+        public async Task PropertiesCanBeSetConcurrentlyWithObjectCreationAsync()
         {
             const int personsPerThread = 50;
             const int threadAmount = 10;
@@ -230,7 +230,7 @@ namespace Catel.Tests.MVVM.ViewModels
         }
 
         [Test]
-        public async Task CommandsCanBeCalledConcurrentlyWithObjectCreation()
+        public async Task CommandsCanBeCalledConcurrentlyWithObjectCreationAsync()
         {
             const int personsPerThread = 50;
             const int threadAmount = 10;

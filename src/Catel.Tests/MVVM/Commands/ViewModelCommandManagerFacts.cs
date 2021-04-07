@@ -47,7 +47,7 @@ namespace Catel.Tests.MVVM
             }            
 
             [TestCase]
-            public async Task RegisteredHandlerGetsCalled()
+            public async Task RegisteredHandlerGetsCalledAsync()
             {
                 var viewModel = new TestViewModel();
                 var viewModelCommandManager = ViewModelCommandManager.Create(viewModel);

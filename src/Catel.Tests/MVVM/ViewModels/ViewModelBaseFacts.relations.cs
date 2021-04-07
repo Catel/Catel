@@ -41,7 +41,7 @@ namespace Catel.Tests.MVVM.ViewModels
         /// being validated. Then, it unsubscribes the child view model by closing it.
         /// </summary>
         [TestCase]
-        public async Task RegisterChildViewModel_RemovedViaClosingChildViewModel()
+        public async Task RegisterChildViewModel_RemovedViaClosingChildViewModelAsync()
         {
             bool validationTriggered = false;
             var validatedEvent = new ManualResetEvent(false);

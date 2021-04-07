@@ -110,7 +110,7 @@ namespace Catel.Tests.MVVM.Auditing
         }
 
         [TestCase]
-        public async Task OnViewModelSaving()
+        public async Task OnViewModelSavingAsync()
         {
             AuditingManager.Clear();
 
@@ -125,7 +125,7 @@ namespace Catel.Tests.MVVM.Auditing
         }
 
         [TestCase]
-        public async Task OnViewModelSaved()
+        public async Task OnViewModelSavedAsync()
         {
             AuditingManager.Clear();
 
@@ -140,7 +140,7 @@ namespace Catel.Tests.MVVM.Auditing
         }
 
         [TestCase]
-        public async Task OnViewModelCanceling()
+        public async Task OnViewModelCancelingAsync()
         {
             AuditingManager.Clear();
 
@@ -155,7 +155,7 @@ namespace Catel.Tests.MVVM.Auditing
         }
 
         [TestCase]
-        public async Task OnViewModelCanceled()
+        public async Task OnViewModelCanceledAsync()
         {
             AuditingManager.Clear();
 
@@ -170,7 +170,7 @@ namespace Catel.Tests.MVVM.Auditing
         }
 
         [TestCase]
-        public async Task OnViewModelClosing()
+        public async Task OnViewModelClosingAsync()
         {
             AuditingManager.Clear();
 
@@ -185,7 +185,7 @@ namespace Catel.Tests.MVVM.Auditing
         }
 
         [TestCase]
-        public async Task OnViewModelClosed()
+        public async Task OnViewModelClosedAsync()
         {
             AuditingManager.Clear();
 

@@ -209,7 +209,7 @@ namespace Catel.Tests.MVVM
         public class TheAutoUnsubscribeFunctionality
         {
             [TestCase]
-            public async Task AutomaticallyUnsubscribesCommandOnViewModelClosed()
+            public async Task AutomaticallyUnsubscribesCommandOnViewModelClosedAsync()
             {
                 var vm = new CompositeCommandViewModel();
                 var compositeCommand = new CompositeCommand();

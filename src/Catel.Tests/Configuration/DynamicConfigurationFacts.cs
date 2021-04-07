@@ -139,7 +139,7 @@ namespace Catel.Tests.Configuration
         }
 
         [Test, Explicit]
-        public async Task CorrectlySerializesConfiguration()
+        public async Task CorrectlySerializesConfigurationAsync()
         {
             var dynamicConfiguration = new DynamicConfiguration();
             dynamicConfiguration.SetConfigurationValue("KeyX", "Value X");

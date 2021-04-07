@@ -16,18 +16,18 @@ namespace Catel.Tests
     public class FastDateTimeFacts
     {
         [Test]
-        public async Task ReturnsCorrectDateTime_Now()
+        public async Task ReturnsCorrectDateTime_NowAsync()
         {
-            await ValidateDateTimeRetrieval(() => DateTime.Now, () => FastDateTime.Now);
+            await ValidateDateTimeRetrievalAsync(() => DateTime.Now, () => FastDateTime.Now);
         }
 
         [Test]
-        public async Task ReturnsCorrectDateTime_UtcNow()
+        public async Task ReturnsCorrectDateTime_UtcNowAsync()
         {
-            await ValidateDateTimeRetrieval(() => DateTime.UtcNow, () => FastDateTime.UtcNow);
+            await ValidateDateTimeRetrievalAsync(() => DateTime.UtcNow, () => FastDateTime.UtcNow);
         }
 
-        private async Task ValidateDateTimeRetrieval(Func<DateTime> normal, Func<DateTime> fast)
+        private async Task ValidateDateTimeRetrievalAsync(Func<DateTime> normal, Func<DateTime> fast)
         {
             var normalNow1 = normal();
             var fastNow1 = fast();

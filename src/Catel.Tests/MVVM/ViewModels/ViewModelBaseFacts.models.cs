@@ -31,7 +31,7 @@ namespace Catel.Tests.MVVM.ViewModels
         }
 
         [TestCase]
-        public async Task ModelsSavedBySave()
+        public async Task ModelsSavedBySaveAsync()
         {
             var person = new Person();
             person.FirstName = "first name";
@@ -50,7 +50,7 @@ namespace Catel.Tests.MVVM.ViewModels
         }
 
         [TestCase]
-        public async Task ModelsCanceledByCancel()
+        public async Task ModelsCanceledByCancelAsync()
         {
             var person = new Person();
             person.FirstName = "first name";

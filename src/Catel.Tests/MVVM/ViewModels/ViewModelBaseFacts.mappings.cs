@@ -287,7 +287,7 @@ namespace Catel.Tests.MVVM.ViewModels
         }
 
         [TestCase]
-        public async Task ViewModelWithViewModelToModelMappings_DoNotMapWhenViewModelIsClosed()
+        public async Task ViewModelWithViewModelToModelMappings_DoNotMapWhenViewModelIsClosedAsync()
         {
             var person = new Person();
             var viewModel = new TestViewModel(person, true);
