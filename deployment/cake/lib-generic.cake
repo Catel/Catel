@@ -516,6 +516,12 @@ private static bool ShouldProcessProject(BuildContext buildContext, string proje
         return true;
     }
 
+    if (ShouldBuildProject(buildContext, projectName))
+    {
+        // Always build
+        return true;
+    }
+
     // Experimental mode where we ignore projects that are not on the deploy list when not in CI mode, but
     // it can only work if they are not part of unit tests (but that should never happen)
     // if (buildContext.Tests.Items.Count == 0)
@@ -528,6 +534,23 @@ private static bool ShouldProcessProject(BuildContext buildContext, string proje
     //}
 
     return true;
+}
+
+//-------------------------------------------------------------
+
+private static bool ShouldBuildProject(BuildContext buildContext, string projectName)
+{
+    // Allow the build server to configure this via "Build[ProjectName]"
+    var slug = GetProjectSlug(projectName);
+    var keyToCheck = string.Format("Build{0}", slug);
+
+    // Note: we return false by default. This method is only used to explicitly
+    // force a build even when a project is not deployable
+    var shouldBuild = buildContext.BuildServer.GetVariableAsBool(keyToCheck, false);
+
+    buildContext.CakeContext.Information($"Value for '{keyToCheck}': {shouldBuild}");
+
+    return shouldBuild;
 }
 
 //-------------------------------------------------------------

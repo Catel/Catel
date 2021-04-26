@@ -2688,6 +2688,7 @@ namespace Catel.Services
         public virtual bool IsRegistered(string name) { }
         public virtual void Register(string name, System.Type windowType, bool throwExceptionIfExists = true) { }
         protected virtual void RegisterViewForViewModelIfRequired(System.Type viewModelType) { }
+        protected virtual void SetOwnerWindow(System.Windows.FrameworkElement window, System.Windows.Window ownerWindow) { }
         public virtual System.Threading.Tasks.Task<bool?> ShowAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
         public virtual System.Threading.Tasks.Task<bool?> ShowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
         public virtual System.Threading.Tasks.Task<bool?> ShowDialogAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
@@ -2940,6 +2941,7 @@ namespace Catel.Windows
         public static void BringWindowToTop(this System.Windows.Window window) { }
         public static bool CanSetDialogResult(this System.Windows.Window window) { }
         public static System.IntPtr GetWindowHandle(this System.Windows.Window window) { }
+        public static bool IsValidAsOwnerWindow(this System.Windows.Window window) { }
         public static void RemoveIcon(this System.Windows.Window window) { }
         public static void SetOwnerWindow(this System.Windows.Window window, bool forceNewOwner = false, bool focusFirstControl = false) { }
         public static void SetOwnerWindow(this System.Windows.Window window, System.IntPtr owner, bool forceNewOwner = false) { }
