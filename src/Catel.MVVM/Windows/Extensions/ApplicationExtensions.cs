@@ -29,7 +29,18 @@ namespace Catel.Windows
             System.Windows.Window activeWindow = null;
 
             // CTL-687: Only allow windows that have an actual size (been shown at least once)
-            Func<System.Windows.Window, bool> predicate = x => x.ActualWidth > 0d && x.ActualHeight > 0d;
+            Func<System.Windows.Window, bool> predicate = x =>
+            {
+                if (x.ActualWidth > 0d && x.ActualHeight > 0d)
+                {
+                    if (x.IsLoaded)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            };
 
             if (application != null && application.Windows.Count > 0)
             {
