@@ -39,6 +39,14 @@ namespace Catel.Services
             return Application.Current.GetActiveWindow();
         }
 
+        protected virtual void SetOwnerWindow(FrameworkElement window, System.Windows.Window ownerWindow)
+        {
+            if (!ReferenceEquals(window, ownerWindow))
+            {
+                PropertyHelper.TrySetPropertyValue(window, "Owner", ownerWindow);
+            }
+        }
+
         /// <summary>
         /// This creates the window from a key.
         /// </summary>
@@ -80,17 +88,20 @@ namespace Catel.Services
             {
                 try
                 {
-
                     var window = ViewHelper.ConstructViewWithViewModel(windowType, data);
 
-                    if (isModal)
-                    {
-                        var activeWindow = GetActiveWindow();
-                        if (!ReferenceEquals(window, activeWindow))
-                        {
-                            PropertyHelper.TrySetPropertyValue(window, "Owner", activeWindow);
-                        }
-                    }
+                    // Important: don't set owner window here. Whenever this owner gets closed between this moment and the actual
+                    // showing, this window will be diposed automatically too. For more information, see https://github.com/Catel/Catel/issues/1794
+                    //
+                    // Keeping this code so it's easier to understand why things are done this way
+                    //
+                    //if (isModal)
+                    //{
+                    //    SetOwnerWindow(window);
+                    //}
+
+                    // Explicitly clear since creating a data window automatically sets the owner window
+                    SetOwnerWindow(window, null);
 
                     if (window is not null && completedProc is not null)
                     {
@@ -200,6 +211,12 @@ namespace Catel.Services
                 // ORCOMP-337: Always invoke with priority Input.
                 window.Dispatcher.BeginInvoke(() =>
                 {
+                    if (showModal)
+                    {
+                        var activeWindow = GetActiveWindow() as System.Windows.Window;
+                        SetOwnerWindow(window, activeWindow);
+                    }
+
                     // Safety net to prevent crashes when this is the main window
                     try
                     {

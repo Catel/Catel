@@ -264,6 +264,26 @@ namespace Catel.Windows
             return true;
         }
 
+        public static bool IsValidAsOwnerWindow(this SystemWindow window)
+        {
+            if (window == null)
+            {
+                return false;
+            }
+
+            if (!window.IsLoaded)
+            {
+                return false;
+            }
+
+            if (window.ActualWidth > 0d && window.ActualHeight > 0d)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Gets the window handle of the specified window.
         /// </summary>
