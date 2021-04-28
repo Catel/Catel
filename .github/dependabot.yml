@@ -1,0 +1,13 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "09:00"
+    timezone: Europe/Amsterdam
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: "*Analyzers"
+    versions:
+    - ">= 0"
