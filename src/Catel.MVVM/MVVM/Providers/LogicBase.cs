@@ -254,7 +254,7 @@ namespace Catel.MVVM.Providers
             }
             protected set
             {
-                if (_viewModel == value)
+                if (ReferenceEquals(_viewModel, value))
                 {
                     return;
                 }
@@ -302,6 +302,14 @@ namespace Catel.MVVM.Providers
 
                 if ((_viewModel != null) && IsTargetViewLoaded)
                 {
+                    // Target view is loaded, but it *could* be possible the container has not yet been registered. To
+                    // make sure that the 
+                    var targetViewAsViewModelContainer = TargetView as IViewModelContainer;
+                    if (targetViewAsViewModelContainer != null)
+                    {
+                        ViewToViewModelMappingHelper.InitializeViewToViewModelMappings(targetViewAsViewModelContainer, _objectAdapter);
+                    }
+
                     _viewModel.InitializeViewModelAsync();
                 }
             }
