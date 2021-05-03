@@ -185,6 +185,8 @@ namespace Catel.Reflection
                     }
                 }
 
+                Clear();
+
                 Monitor.Exit(_lockObject);
 
                 // Important to do outside of the lock
@@ -241,6 +243,18 @@ namespace Catel.Reflection
         public static event EventHandler<AssemblyLoadedEventArgs> AssemblyLoaded;
 #pragma warning restore 67
         #endregion
+
+        /// <summary>
+        /// Clears the cache causing automatic re-initialization.
+        /// </summary>
+        public static void Clear()
+        {
+            // Only clear things that really have an impact
+            lock (_lockObject)
+            {
+                _typesByInterface.Clear();
+            }
+        }
 
         /// <summary>
         /// Gets the specified type from the loaded assemblies.
@@ -684,6 +698,8 @@ namespace Catel.Reflection
                 // CTL-877 Only clear when assembly != null
                 if (forceFullInitialization && assembly is null)
                 {
+                    Clear();
+
                     _loadedAssemblies.Clear();
                     _typesByAssembly?.Clear();
                     _typesWithAssembly?.Clear();

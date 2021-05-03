@@ -3427,6 +3427,7 @@ namespace Catel.Reflection
         public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, bool>> ShouldIgnoreAssemblyEvaluators { get; }
         public static System.Collections.Generic.List<System.Func<System.Reflection.Assembly, System.Type, bool>> ShouldIgnoreTypeEvaluators { get; }
         public  static  event System.EventHandler<Catel.Reflection.AssemblyLoadedEventArgs> AssemblyLoaded;
+        public static void Clear() { }
         public static System.Type GetType(string typeNameWithAssembly, bool ignoreCase = false, bool allowInitialization = true) { }
         public static System.Type GetTypeWithAssembly(string typeName, string assemblyName, bool ignoreCase = false, bool allowInitialization = true) { }
         public static System.Type GetTypeWithoutAssembly(string typeNameWithoutAssembly, bool ignoreCase = false, bool allowInitialization = true) { }
@@ -4212,6 +4213,7 @@ namespace Catel.Services
         public bool Equals(Catel.Services.LanguageResourceKey other) { }
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
+        public override string ToString() { }
     }
     [System.Diagnostics.DebuggerDisplay("{GetSource()}")]
     public class LanguageResourceSource : Catel.Services.ILanguageSource

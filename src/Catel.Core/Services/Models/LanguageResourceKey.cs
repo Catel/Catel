@@ -94,5 +94,10 @@ namespace Catel.Services
                 return (ResourceName.GetHashCode() * 397) ^ CultureInfo.GetHashCode();
             }
         }
+
+        public override string ToString()
+        {
+            return $"{ResourceName}_{CultureInfo}";
+        }
     }
 }
