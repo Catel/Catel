@@ -19,6 +19,8 @@ namespace Catel.MVVM
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
+        public static int ViewModelActionAwaitTimeoutInMilliseconds { get; set; } = 50;
+
         /// <summary>
         /// Gets the result of the view model by checking the <see cref="IViewModel.IsSaved"/> and <see cref="IViewModel.IsCanceled"/> properties.
         /// </summary>
@@ -41,11 +43,35 @@ namespace Catel.MVVM
             return null;
         }
 
+        private static int GetViewModelActionAwaitTimeout(this IViewModel viewModel)
+        {
+            var timeout = ViewModelActionAwaitTimeoutInMilliseconds;
+
+            if (viewModel is ViewModelBase viewModelBase)
+            {
+                timeout = viewModelBase.ViewModelActionAwaitTimeoutInMilliseconds;
+            }
+
+            return timeout;
+        }
+
         /// <summary>
         /// Saves the data, but also closes the view model in the same call if the save succeeds.
         /// </summary>
+        /// <param name="viewModel">The view model.</param>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public static async Task<bool> SaveAndCloseViewModelAsync(this IViewModel viewModel)
+        public static Task<bool> SaveAndCloseViewModelAsync(this IViewModel viewModel)
+        {
+            return SaveAndCloseViewModelAsync(viewModel, GetViewModelActionAwaitTimeout(viewModel));
+        }
+
+        /// <summary>
+        /// Saves the data, but also closes the view model in the same call if the save succeeds.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
+        public static async Task<bool> SaveAndCloseViewModelAsync(this IViewModel viewModel, int timeout)
         {
             Argument.IsNotNull("viewModel", viewModel);
 
@@ -58,7 +84,7 @@ namespace Catel.MVVM
                 {
                     exitAfterBlock = true;
 
-                    if (!await viewModelBase.AwaitSavingAsync())
+                    if (!await viewModelBase.AwaitSavingAsync(timeout))
                     {
                         return false;
                     }
@@ -68,7 +94,7 @@ namespace Catel.MVVM
                 {
                     exitAfterBlock = true;
 
-                    await viewModelBase.AwaitClosingAsync();
+                    await viewModelBase.AwaitClosingAsync(timeout);
                 }
 
                 if (exitAfterBlock)
@@ -89,8 +115,20 @@ namespace Catel.MVVM
         /// <summary>
         /// Cancels the editing of the data, but also closes the view model in the same call.
         /// </summary>
+        /// <param name="viewModel">The view model.</param>
         /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
-        public static async Task<bool> CancelAndCloseViewModelAsync(this IViewModel viewModel)
+        public static Task<bool> CancelAndCloseViewModelAsync(this IViewModel viewModel)
+        {
+            return CancelAndCloseViewModelAsync(viewModel, GetViewModelActionAwaitTimeout(viewModel));
+        }
+
+        /// <summary>
+        /// Cancels the editing of the data, but also closes the view model in the same call.
+        /// </summary>
+        /// <param name="viewModel">The view model.</param>
+        /// <param name="timeout">The timeout.</param>
+        /// <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
+        public static async Task<bool> CancelAndCloseViewModelAsync(this IViewModel viewModel, int timeout)
         {
             Argument.IsNotNull("viewModel", viewModel);
 
@@ -103,7 +141,7 @@ namespace Catel.MVVM
                 {
                     exitAfterBlock = true;
 
-                    if (!await viewModelBase.AwaitCancelingAsync())
+                    if (!await viewModelBase.AwaitCancelingAsync(timeout))
                     {
                         return false;
                     }
@@ -113,7 +151,7 @@ namespace Catel.MVVM
                 {
                     exitAfterBlock = true;
 
-                    await viewModelBase.AwaitClosingAsync();
+                    await viewModelBase.AwaitClosingAsync(timeout);
                 }
 
                 if (exitAfterBlock)
@@ -173,7 +211,7 @@ namespace Catel.MVVM
             }
             catch (Exception ex)
             {
-                Log.Error(ex, $"Failed to await saving of view model '{viewModel.UniqueIdentifier}'");
+                Log.Warning(ex, $"Failed to await saving of view model '{viewModel.GetType().Name}', ID = '{viewModel.UniqueIdentifier}'");
                 throw;
             }
             finally
@@ -221,7 +259,7 @@ namespace Catel.MVVM
             }
             catch (Exception ex)
             {
-                Log.Error(ex, $"Failed to await canceling of view model '{viewModel.UniqueIdentifier}'");
+                Log.Error(ex, $"Failed to await canceling of view model '{viewModel.GetType().Name}', ID = '{viewModel.UniqueIdentifier}'");
                 throw;
             }
             finally
@@ -258,7 +296,7 @@ namespace Catel.MVVM
             }
             catch (Exception ex)
             {
-                Log.Error(ex, $"Failed to await closing of view model '{viewModel.UniqueIdentifier}'");
+                Log.Error(ex, $"Failed to await closing of view model '{viewModel.GetType().Name}', ID = '{viewModel.UniqueIdentifier}'");
                 throw;
             }
             finally
