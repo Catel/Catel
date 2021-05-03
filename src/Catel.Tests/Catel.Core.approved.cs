@@ -4268,6 +4268,7 @@ namespace Catel.Services
         public bool Equals(Catel.Services.LanguageResourceKey other) { }
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
+        public override string ToString() { }
     }
     [System.Diagnostics.DebuggerDisplay("{GetSource()}")]
     public class LanguageResourceSource : Catel.Services.ILanguageSource
