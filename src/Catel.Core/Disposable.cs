@@ -15,15 +15,12 @@ namespace Catel
     /// </summary>
     public abstract class Disposable : IDisposable
     {
-        #region Fields
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private readonly object _syncRoot = new object();
 
         private bool _disposing;
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Finalizes an instance of the <see cref="Disposable"/> class.
         /// </summary>
@@ -31,13 +28,9 @@ namespace Catel
         {
             Dispose(false);
         }
-        #endregion
 
-        #region Properties
-        private bool IsDisposed { get; set; }
-        #endregion
+        public bool IsDisposed { get; private set; }
 
-        #region Methods
         /// <summary>
         /// Disposes this instance.
         /// </summary>
@@ -125,6 +118,5 @@ namespace Catel
                 }
             }
         }
-        #endregion
     }
 }

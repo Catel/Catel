@@ -30,6 +30,7 @@ Release date
 Added/fixed
 ===========
 (*) #1801 Allow customization of awaitable timeout of Save / Cancel / Close view models in synchronization blocks
+(*) #1804 Change Disposable.IsDisposed getter from private to public
 
 Platform support changes
 ========================
