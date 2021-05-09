@@ -128,6 +128,7 @@ namespace Catel
     public abstract class Disposable : System.IDisposable
     {
         protected Disposable() { }
+        public bool IsDisposed { get; }
         protected void CheckDisposed() { }
         public void Dispose() { }
         protected virtual void DisposeManaged() { }

@@ -337,6 +337,14 @@ namespace Catel.MVVM
         private bool SupportIEditableObject { get; set; }
 
         /// <summary>
+        /// Defines the maximum allowed time used by the save, cancel and close actions of the view model.
+        /// <para/>
+        /// The default value is <see cref="IViewModelExtensions.ViewModelActionAwaitTimeoutInMilliseconds"/>
+        /// </summary>
+        [ExcludeFromValidation]
+        protected internal int ViewModelActionAwaitTimeoutInMilliseconds { get; set; } = IViewModelExtensions.ViewModelActionAwaitTimeoutInMilliseconds;
+
+        /// <summary>
         /// Gets a value indicating whether this object is currently initializing.
         /// </summary>
         /// <value>
