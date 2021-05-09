@@ -702,12 +702,15 @@ namespace Catel.MVVM
     }
     public static class IViewModelExtensions
     {
+        public static int ViewModelActionAwaitTimeoutInMilliseconds { get; set; }
         public static System.Threading.Tasks.Task<bool> AwaitCancelingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
         public static System.Threading.Tasks.Task AwaitClosingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
         public static System.Threading.Tasks.Task<bool> AwaitSavingAsync(this Catel.MVVM.ViewModelBase viewModel, int timeout = 50) { }
         public static System.Threading.Tasks.Task<bool> CancelAndCloseViewModelAsync(this Catel.MVVM.IViewModel viewModel) { }
+        public static System.Threading.Tasks.Task<bool> CancelAndCloseViewModelAsync(this Catel.MVVM.IViewModel viewModel, int timeout) { }
         public static bool? GetResult(this Catel.MVVM.IViewModel viewModel) { }
         public static System.Threading.Tasks.Task<bool> SaveAndCloseViewModelAsync(this Catel.MVVM.IViewModel viewModel) { }
+        public static System.Threading.Tasks.Task<bool> SaveAndCloseViewModelAsync(this Catel.MVVM.IViewModel viewModel, int timeout) { }
     }
     public interface IViewModelFactory
     {
@@ -966,6 +969,8 @@ namespace Catel.MVVM
         public int UniqueIdentifier { get; }
         [Catel.Data.ExcludeFromValidation]
         protected bool ValidateModelsOnInitialization { get; set; }
+        [Catel.Data.ExcludeFromValidation]
+        protected int ViewModelActionAwaitTimeoutInMilliseconds { get; set; }
         [Catel.Data.ExcludeFromValidation]
         protected Catel.MVVM.IViewModelCommandManager ViewModelCommandManager { get; }
         [Catel.Data.ExcludeFromValidation]
