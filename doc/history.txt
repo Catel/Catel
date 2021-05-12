@@ -83,6 +83,45 @@ See https://www.catelproject.com/support/issue-tracker
 **********************************************************
 
 ==================
+Version 5.12.16
+==================
+
+For an upgrade guide, visit https://docs.catelproject.com/vnext/setup-deployment/update-guides/
+
+Release date
+============
+2021/05/12
+
+Added/fixed
+===========
+(x) #1808 Non-modal windows are no longer having a valid parent
+
+Platform support changes
+========================
+* #1103 / #1165 Convert to multi-targeted projects, PCL is no longer supported (.NET Standard is the replacement)
+* #1240 Add support for .NET Core 3.0 and .NET Core 3.1
+* #1713 Add support for .NET 5.0
+
+Classes / members marked as obsolete in major release (5.x)
+===========================================================
+* #1124 Mark NullableValueConverter as obsolete since converter doesn't have a target type, so this converter won't work as expected NullableValueConverter
+* #1209 Mark IStartupInfoProvider as obsolete in favor of Orc.CommandLine since that implementation takes better care of supporting different quote styles (e.g. allows ')
+* #1216 Mark binary serializers as obsolete due to potential security issues in the binary serialization engine of .NET itself (see https://github.com/Catel/Catel/issues/1216)
+* #1258 Mark SafeInvoke obsolete in favor of handler?.Invoke(this, event args);
+* #1284 Mark 'CloseViewModelOnUnloaded' and 'PreventViewModelCreation' in favor of 'ViewModelLifetimeManagement'
+* #1554 Mark 'Task<bool> IOpen/SaveFileService.DetermineFileAsync()' as obsolete in favor of 'Task<DetermineFileResult> IOpen/SaveFileService.DetermineFileAsync(DetermineFileContext)'
+
+Roadmap
+=======
+See https://www.catelproject.com/support/issue-tracker
+
+Known issues
+============
+See https://www.catelproject.com/support/issue-tracker
+
+**********************************************************
+
+==================
 Version 5.12.15
 ==================
 

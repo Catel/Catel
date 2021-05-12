@@ -29,7 +29,7 @@ namespace Catel.Services
     {
         #region Methods
         /// <summary>
-        /// Gets the active window to use as parent window of new windows.
+        /// Gets the active window to use as parent window of new modal windows.
         /// <para />
         /// The default implementation returns the active window of the application.
         /// </summary>
@@ -37,6 +37,15 @@ namespace Catel.Services
         protected virtual FrameworkElement GetActiveWindow()
         {
             return Application.Current.GetActiveWindow();
+        }
+
+        /// <summary>
+        /// Gets the main window to use as parent window for new non-modal windows.
+        /// </summary>
+        /// <returns>The main window.</returns>
+        protected virtual FrameworkElement GetMainWindow()
+        {
+            return Application.Current.MainWindow;
         }
 
         protected virtual void SetOwnerWindow(FrameworkElement window, System.Windows.Window ownerWindow)
@@ -211,11 +220,8 @@ namespace Catel.Services
                 // ORCOMP-337: Always invoke with priority Input.
                 window.Dispatcher.BeginInvoke(() =>
                 {
-                    if (showModal)
-                    {
-                        var activeWindow = GetActiveWindow() as System.Windows.Window;
-                        SetOwnerWindow(window, activeWindow);
-                    }
+                    var parentWindow = (showModal ? GetActiveWindow() : GetMainWindow()) as System.Windows.Window;
+                    SetOwnerWindow(window, parentWindow);
 
                     // Safety net to prevent crashes when this is the main window
                     try
