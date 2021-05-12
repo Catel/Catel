@@ -2689,6 +2689,7 @@ namespace Catel.Services
         protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(System.Type windowType, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
         protected virtual void EnsureViewIsRegistered(string name) { }
         protected virtual System.Windows.FrameworkElement GetActiveWindow() { }
+        protected virtual System.Windows.FrameworkElement GetMainWindow() { }
         protected virtual void HandleCloseSubscription(object window, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
         public virtual bool IsRegistered(string name) { }
         public virtual void Register(string name, System.Type windowType, bool throwExceptionIfExists = true) { }
