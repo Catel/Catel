@@ -23,7 +23,7 @@ namespace Catel.Android.App
         public Application(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
-            if (Default != null)
+            if (Default is not null)
             {
                 Default = this;
             }

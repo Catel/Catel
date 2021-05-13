@@ -355,7 +355,7 @@ namespace Catel.Windows.Interactivity
             Argument.IsNotNull("binding", binding);
 
             // Copy all properties with a setter via reflection
-            // only copy when value != null, otherwise exceptions will be thrown
+            // only copy when value is not null, otherwise exceptions will be thrown
 
             var newBinding = new Binding();
 

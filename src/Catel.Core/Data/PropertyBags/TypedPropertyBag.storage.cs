@@ -663,7 +663,7 @@ namespace Catel.Data
             {
                 // If users use SetValue<object>(), we might need to convert
                 var propertyType = GetRegisteredPropertyType(name);
-                if (propertyType is null == false)
+                if (propertyType is not null)
                 {
                     if (propertyType.IsValueTypeEx() && value is null)
                     {
@@ -1159,7 +1159,7 @@ namespace Catel.Data
 
             // Note: don't use methods, we don't want to lazy-instantiate the storage
             var booleanStorage = _booleanStorage;
-            if (booleanStorage is null == false)
+            if (booleanStorage is not null)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in booleanStorage)
@@ -1169,7 +1169,7 @@ namespace Catel.Data
             }
 
             var charStorage = _charStorage;
-            if (charStorage is null == false)
+            if (charStorage is not null)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in charStorage)
@@ -1179,7 +1179,7 @@ namespace Catel.Data
             }
 
             var sbyteStorage = _sbyteStorage;
-            if (sbyteStorage is null == false)
+            if (sbyteStorage is not null)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in sbyteStorage)
@@ -1189,7 +1189,7 @@ namespace Catel.Data
             }
 
             var byteStorage = _byteStorage;
-            if (byteStorage is null == false)
+            if (byteStorage is not null)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in byteStorage)
@@ -1199,7 +1199,7 @@ namespace Catel.Data
             }
 
             var int16Storage = _int16Storage;
-            if (int16Storage is null == false)
+            if (int16Storage is not null)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in int16Storage)
@@ -1209,7 +1209,7 @@ namespace Catel.Data
             }
 
             var uint16Storage = _uint16Storage;
-            if (uint16Storage is null == false)
+            if (uint16Storage is not null)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in uint16Storage)
@@ -1219,7 +1219,7 @@ namespace Catel.Data
             }
 
             var int32Storage = _int32Storage;
-            if (int32Storage is null == false)
+            if (int32Storage is not null)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in int32Storage)
@@ -1229,7 +1229,7 @@ namespace Catel.Data
             }
 
             var uint32Storage = _uint32Storage;
-            if (uint32Storage is null == false)
+            if (uint32Storage is not null)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in uint32Storage)
@@ -1239,7 +1239,7 @@ namespace Catel.Data
             }
 
             var int64Storage = _int64Storage;
-            if (int64Storage is null == false)
+            if (int64Storage is not null)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in int64Storage)
@@ -1249,7 +1249,7 @@ namespace Catel.Data
             }
 
             var uint64Storage = _uint64Storage;
-            if (uint64Storage is null == false)
+            if (uint64Storage is not null)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in uint64Storage)
@@ -1259,7 +1259,7 @@ namespace Catel.Data
             }
 
             var singleStorage = _singleStorage;
-            if (singleStorage is null == false)
+            if (singleStorage is not null)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in singleStorage)
@@ -1269,7 +1269,7 @@ namespace Catel.Data
             }
 
             var doubleStorage = _doubleStorage;
-            if (doubleStorage is null == false)
+            if (doubleStorage is not null)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in doubleStorage)
@@ -1279,7 +1279,7 @@ namespace Catel.Data
             }
 
             var decimalStorage = _decimalStorage;
-            if (decimalStorage is null == false)
+            if (decimalStorage is not null)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in decimalStorage)
@@ -1289,7 +1289,7 @@ namespace Catel.Data
             }
 
             var datetimeStorage = _datetimeStorage;
-            if (datetimeStorage is null == false)
+            if (datetimeStorage is not null)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in datetimeStorage)
@@ -1299,7 +1299,7 @@ namespace Catel.Data
             }
 
             var stringStorage = _stringStorage;
-            if (stringStorage is null == false)
+            if (stringStorage is not null)
             {
                  // Unfortunately we have to box to object here...
                  foreach (var propertyPair in stringStorage)
@@ -1310,7 +1310,7 @@ namespace Catel.Data
 
 
             var objectStorage = _objectStorage;
-            if (objectStorage is null == false)
+            if (objectStorage is not null)
             {
                 foreach (var propertyPair in objectStorage)
                 {

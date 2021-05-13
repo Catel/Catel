@@ -173,7 +173,7 @@ namespace Catel.MVVM
         public void DetermineIfBindingsAreRequired(IViewModel viewModel)
         {
             int? currentViewModelId = null;
-            if (viewModel != null)
+            if (viewModel is not null)
             {
                 currentViewModelId = viewModel.UniqueIdentifier;
             }
@@ -185,7 +185,7 @@ namespace Catel.MVVM
                     Clear();
                 }
 
-                if (viewModel != null)
+                if (viewModel is not null)
                 {
                     BindingUpdateRequired?.Invoke(this, EventArgs.Empty);
                 }

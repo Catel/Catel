@@ -695,7 +695,7 @@ namespace Catel.Reflection
                     _hasInitializedOnce = true;
                 }
 
-                // CTL-877 Only clear when assembly != null
+                // CTL-877 Only clear when assembly is not null
                 if (forceFullInitialization && assembly is null)
                 {
                     Clear();

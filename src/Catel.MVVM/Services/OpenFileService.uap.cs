@@ -36,7 +36,7 @@ namespace Catel.Services
             var fileDialog = new global::Windows.Storage.Pickers.FileOpenPicker();
 
             var filters = Filter?.Split(';');
-            if (filters != null)
+            if (filters is not null)
             {
                 foreach (var filter in filters)
                 {
@@ -78,7 +78,7 @@ namespace Catel.Services
             if (IsMultiSelect)
             {
                 var foundFiles = await fileDialog.PickMultipleFilesAsync();
-                if (foundFiles != null)
+                if (foundFiles is not null)
                 {
                     files.AddRange(foundFiles);
                 }
@@ -86,7 +86,7 @@ namespace Catel.Services
             else
             {
                 var foundFile = await fileDialog.PickSingleFileAsync();
-                if (foundFile != null)
+                if (foundFile is not null)
                 {
                     files.Add(foundFile);
                 }

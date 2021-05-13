@@ -72,7 +72,7 @@ namespace Catel.MVVM
             _canExecuteChangedHandler = (sender, e) => UpdateEnabledState();
             command.CanExecuteChanged += _canExecuteChangedHandler;
 
-            if (commandParameterBinding != null)
+            if (commandParameterBinding is not null)
             {
                 _commandBindingParameterValueChangedHandler = (sender, e) => UpdateEnabledState();
                 commandParameterBinding.ValueChanged += _commandBindingParameterValueChangedHandler;
@@ -98,19 +98,19 @@ namespace Catel.MVVM
         /// </summary>
         protected override void Uninitialize()
         {
-            if (_eventHandler != null)
+            if (_eventHandler is not null)
             {
                 _eventInfo.RemoveEventHandler(_element, _eventHandler);
                 _eventHandler = null;
             }
 
-            if (_canExecuteChangedHandler != null)
+            if (_canExecuteChangedHandler is not null)
             {
                 _command.CanExecuteChanged -= _canExecuteChangedHandler;
                 _canExecuteChangedHandler = null;
             }
 
-            if (_commandBindingParameterValueChangedHandler != null)
+            if (_commandBindingParameterValueChangedHandler is not null)
             {
                 _commandParameterBinding.ValueChanged -= _commandBindingParameterValueChangedHandler;
                 _commandBindingParameterValueChangedHandler = null;

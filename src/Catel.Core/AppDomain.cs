@@ -116,7 +116,7 @@ namespace System
                             }
 
                             var assembly = LoadAssemblyFromFile(file);
-                            if (assembly != null)
+                            if (assembly is not null)
                             {
                                 loadedAssemblies.Add(assembly);
                             }

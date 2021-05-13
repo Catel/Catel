@@ -117,7 +117,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, Object value)
         {
             var setter = GetObjectFieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -129,7 +129,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, Boolean value)
         {
             var setter = GetBooleanFieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -141,7 +141,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, Char value)
         {
             var setter = GetCharFieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -153,7 +153,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, SByte value)
         {
             var setter = GetSByteFieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -165,7 +165,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, Byte value)
         {
             var setter = GetByteFieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -177,7 +177,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, Int16 value)
         {
             var setter = GetInt16FieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -189,7 +189,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, UInt16 value)
         {
             var setter = GetUInt16FieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -201,7 +201,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, Int32 value)
         {
             var setter = GetInt32FieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -213,7 +213,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, UInt32 value)
         {
             var setter = GetUInt32FieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -225,7 +225,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, Int64 value)
         {
             var setter = GetInt64FieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -237,7 +237,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, UInt64 value)
         {
             var setter = GetUInt64FieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -249,7 +249,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, Single value)
         {
             var setter = GetSingleFieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -261,7 +261,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, Double value)
         {
             var setter = GetDoubleFieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -273,7 +273,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, Decimal value)
         {
             var setter = GetDecimalFieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -285,7 +285,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, DateTime value)
         {
             var setter = GetDateTimeFieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -297,7 +297,7 @@ namespace Catel.Reflection
         public bool SetFieldValue(TEntity entity, string fieldName, String value)
         {
             var setter = GetStringFieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;

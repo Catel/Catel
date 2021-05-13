@@ -117,7 +117,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, Object value)
         {
             var setter = GetObjectPropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -129,7 +129,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, Boolean value)
         {
             var setter = GetBooleanPropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -141,7 +141,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, Char value)
         {
             var setter = GetCharPropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -153,7 +153,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, SByte value)
         {
             var setter = GetSBytePropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -165,7 +165,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, Byte value)
         {
             var setter = GetBytePropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -177,7 +177,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, Int16 value)
         {
             var setter = GetInt16PropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -189,7 +189,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, UInt16 value)
         {
             var setter = GetUInt16PropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -201,7 +201,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, Int32 value)
         {
             var setter = GetInt32PropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -213,7 +213,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, UInt32 value)
         {
             var setter = GetUInt32PropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -225,7 +225,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, Int64 value)
         {
             var setter = GetInt64PropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -237,7 +237,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, UInt64 value)
         {
             var setter = GetUInt64PropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -249,7 +249,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, Single value)
         {
             var setter = GetSinglePropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -261,7 +261,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, Double value)
         {
             var setter = GetDoublePropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -273,7 +273,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, Decimal value)
         {
             var setter = GetDecimalPropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -285,7 +285,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, DateTime value)
         {
             var setter = GetDateTimePropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
@@ -297,7 +297,7 @@ namespace Catel.Reflection
         public bool SetPropertyValue(TEntity entity, string propertyName, String value)
         {
             var setter = GetStringPropertySetter(propertyName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;

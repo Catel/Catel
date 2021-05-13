@@ -236,7 +236,7 @@ namespace Catel.MVVM.Navigation
 
         partial void Uninitialize()
         {
-            if (_activityLifecycleCallbacksListener != null)
+            if (_activityLifecycleCallbacksListener is not null)
             {
                 var activity = GetNavigationTarget<Activity>();
                 var application = activity.Application;
@@ -253,7 +253,7 @@ namespace Catel.MVVM.Navigation
         {
             var activity = GetNavigationTarget<Activity>();
             var intentExtras = activity.Intent.Extras;
-            if (intentExtras != null)
+            if (intentExtras is not null)
             {
                 foreach (var item in intentExtras.KeySet())
                 {

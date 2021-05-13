@@ -75,7 +75,7 @@ namespace Catel.Services
 
                 var finalResourceMap = (from resourceMap in currentResourceManager.AllResourceMaps
                                         let rm = resourceMap.Value.GetSubtree(languageSpecificSource)
-                                        where rm != null
+                                        where rm is not null
                                         select rm).FirstOrDefault();
 
                 if ((finalResourceMap is null) && !cultureInfo.IsNeutralCulture)
@@ -85,7 +85,7 @@ namespace Catel.Services
 
                     finalResourceMap = (from resourceMap in currentResourceManager.AllResourceMaps
                                         let rm = resourceMap.Value.GetSubtree(languageSpecificSource)
-                                        where rm != null
+                                        where rm is not null
                                         select rm).FirstOrDefault();
                 }
 
@@ -93,17 +93,17 @@ namespace Catel.Services
                 {
                     finalResourceMap = (from resourceMap in currentResourceManager.AllResourceMaps
                                         let rm = resourceMap.Value.GetSubtree(neutralSource)
-                                        where rm != null
+                                        where rm is not null
                                         select rm).FirstOrDefault();
                 }
 
-                if (finalResourceMap != null)
+                if (finalResourceMap is not null)
                 {
                     var resourceContext = ResourceContext.GetForViewIndependentUse();
                     resourceContext.Languages = new[] { cultureName };
 
                     var resourceCandidate = finalResourceMap.GetValue(resourceName, resourceContext);
-                    if (resourceCandidate != null)
+                    if (resourceCandidate is not null)
                     {
                         value = resourceCandidate.ValueAsString;
                     }

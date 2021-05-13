@@ -39,7 +39,7 @@ namespace Catel.Services
         {
             if (_rootFrame is null)
             {
-                if (Window.Current != null)
+                if (Window.Current is not null)
                 {
                     _rootFrame = Window.Current.Content as Frame;
                 }

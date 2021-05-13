@@ -59,14 +59,14 @@ namespace Catel.Reflection
 
 /* Unmerged change from project 'Catel.Core (netcoreapp3.1)'
 Before:
-                    if (assembly != null)
+                    if (assembly is not null)
 After:
                     if (assembly is not null)
 */
 
 /* Unmerged change from project 'Catel.Core (net5.0)'
 Before:
-                    if (assembly != null)
+                    if (assembly is not null)
 After:
                     if (assembly is not null)
 */

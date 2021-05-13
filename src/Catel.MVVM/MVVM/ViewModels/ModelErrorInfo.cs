@@ -64,19 +64,19 @@ namespace Catel.MVVM
             _model = model;
 
             var modelAsINotifyPropertyChanged = _model as INotifyPropertyChanged;
-            if (modelAsINotifyPropertyChanged is null == false)
+            if (modelAsINotifyPropertyChanged is not null)
             {
                 modelAsINotifyPropertyChanged.PropertyChanged += OnModelPropertyChanged;
             }
 
             var modelAsINotifyDataErrorInfo = _model as INotifyDataErrorInfo;
-            if (modelAsINotifyDataErrorInfo is null == false)
+            if (modelAsINotifyDataErrorInfo is not null)
             {
                 modelAsINotifyDataErrorInfo.ErrorsChanged += OnModelErrorsChanged;
             }
 
             var modelAsINotifyDataWarningInfo = _model as INotifyDataWarningInfo;
-            if (modelAsINotifyDataWarningInfo is null == false)
+            if (modelAsINotifyDataWarningInfo is not null)
             {
                 modelAsINotifyDataWarningInfo.WarningsChanged += OnModelWarningsChanged;
             }
@@ -102,13 +102,13 @@ namespace Catel.MVVM
 
             foreach (var propertyName in propertyNames)
             {
-                if (modelAsINotifyDataErrorInfo is null == false)
+                if (modelAsINotifyDataErrorInfo is not null)
                 {
                     var errors = modelAsINotifyDataErrorInfo.GetErrors(propertyName);
                     HandleFieldErrors(propertyName, errors);
                 }
 
-                if (modelAsINotifyDataWarningInfo is null == false)
+                if (modelAsINotifyDataWarningInfo is not null)
                 {
                     var warnings = modelAsINotifyDataWarningInfo.GetWarnings(propertyName);
                     HandleFieldWarnings(propertyName, warnings);
@@ -129,13 +129,13 @@ namespace Catel.MVVM
             }
 
             var dataWarningInfo = _model as IDataWarningInfo;
-            if (dataWarningInfo is null == false)
+            if (dataWarningInfo is not null)
             {
                 HandleFieldWarnings(e.PropertyName, new[] { dataWarningInfo[e.PropertyName] });
             }
 
             var dataErrorInfo = _model as IDataErrorInfo;
-            if (dataErrorInfo is null == false)
+            if (dataErrorInfo is not null)
             {
                 HandleFieldErrors(e.PropertyName, new [] { dataErrorInfo[e.PropertyName] });
             }
@@ -359,19 +359,19 @@ namespace Catel.MVVM
         public void CleanUp()
         {
             var modelAsINotifyPropertyChanged = _model as INotifyPropertyChanged;
-            if (modelAsINotifyPropertyChanged is null == false)
+            if (modelAsINotifyPropertyChanged is not null)
             {
                 modelAsINotifyPropertyChanged.PropertyChanged -= OnModelPropertyChanged;
             }
 
             var modelAsINotifyDataErrorInfo = _model as INotifyDataErrorInfo;
-            if (modelAsINotifyDataErrorInfo is null == false)
+            if (modelAsINotifyDataErrorInfo is not null)
             {
                 modelAsINotifyDataErrorInfo.ErrorsChanged -= OnModelErrorsChanged;
             }
 
             var modelAsINotifyDataWarningInfo = _model as INotifyDataWarningInfo;
-            if (modelAsINotifyDataWarningInfo is null == false)
+            if (modelAsINotifyDataWarningInfo is not null)
             {
                 modelAsINotifyDataWarningInfo.WarningsChanged -= OnModelWarningsChanged;
             }
@@ -387,14 +387,14 @@ namespace Catel.MVVM
         private string GetValidationString(object obj)
         {
             var objAsString = obj as string;
-            if (objAsString is null == false)
+            if (objAsString is not null)
             {
                 return objAsString;
             }
 
 #if !XAMARIN_FORMS
             var objAsValidationResult = obj as ValidationResult;
-            if (objAsValidationResult is null == false)
+            if (objAsValidationResult is not null)
             {
                 return objAsValidationResult.ErrorMessage;
             }

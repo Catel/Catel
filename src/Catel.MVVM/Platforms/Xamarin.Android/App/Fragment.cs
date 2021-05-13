@@ -241,7 +241,7 @@ namespace Catel.Android.App
                 RaisePropertyChanged("VM");
             }
 
-            if (_bindingContext != null)
+            if (_bindingContext is not null)
             {
                 _bindingContext.DetermineIfBindingsAreRequired(ViewModel);
             }
@@ -305,7 +305,7 @@ namespace Catel.Android.App
 
         private void InitializeBindingContext()
         {
-            if (_bindingContext != null)
+            if (_bindingContext is not null)
             {
                 UninitializeBindingContext();
             }

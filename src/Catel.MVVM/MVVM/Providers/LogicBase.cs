@@ -305,7 +305,7 @@ namespace Catel.MVVM.Providers
                     // Target view is loaded, but it *could* be possible the container has not yet been registered. To
                     // make sure that the 
                     var targetViewAsViewModelContainer = TargetView as IViewModelContainer;
-                    if (targetViewAsViewModelContainer != null)
+                    if (targetViewAsViewModelContainer is not null)
                     {
                         ViewToViewModelMappingHelper.InitializeViewToViewModelMappings(targetViewAsViewModelContainer, _objectAdapter);
                     }

@@ -59,7 +59,7 @@ namespace Catel.Windows.Interactivity
                 return;
             }
 
-            if (associatedObject != null && typeof(T).IsInstanceOfTypeEx(associatedObject.GetType()))
+            if (associatedObject is not null && typeof(T).IsInstanceOfTypeEx(associatedObject.GetType()))
             {
                 throw Log.ErrorAndCreateException<InvalidOperationException>("Invalid target type '{0}', expected '{1}'", associatedObject.GetType().GetSafeFullName(false), typeof (T).GetSafeFullName(false));
             }

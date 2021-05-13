@@ -251,7 +251,7 @@ namespace Catel.Windows
             if (window is SystemWindow)
             {
                 var dialogFieldInfo = typeof(SystemWindow).GetFieldEx("_showingAsDialog");
-                if (dialogFieldInfo is null == false)
+                if (dialogFieldInfo is not null)
                 {
                     if (!(bool)dialogFieldInfo.GetValue(window))
                     {
@@ -266,7 +266,7 @@ namespace Catel.Windows
 
         public static bool IsValidAsOwnerWindow(this SystemWindow window)
         {
-            if (window == null)
+            if (window is null)
             {
                 return false;
             }

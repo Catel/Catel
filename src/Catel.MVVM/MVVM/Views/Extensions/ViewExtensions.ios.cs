@@ -50,10 +50,10 @@ namespace Catel.MVVM.Views
             //object foundParent = null;
 
             //var parents = new List<UIView>();
-            //if (view.Parent != null)
+            //if (view.Parent is not null)
             //{
             //    var parentView = view.Parent as UIView;
-            //    if (parentView != null)
+            //    if (parentView is not null)
             //    {
             //        parents.Add(parentView);
             //    }
@@ -62,7 +62,7 @@ namespace Catel.MVVM.Views
             //foreach (var parent in parents)
             //{
             //    foundParent = parent.FindLogicalOrVisualAncestor(predicate, maxDepth);
-            //    if (foundParent != null)
+            //    if (foundParent is not null)
             //    {
             //        break;
             //    }
@@ -82,17 +82,17 @@ namespace Catel.MVVM.Views
         {
             // Try to find visual ancestor one level up
             object visualAncestor = FindVisualAncestor(startElement, condition, 1);
-            if (visualAncestor != null)
+            if (visualAncestor is not null)
             {
                 return visualAncestor;
             }
 
             // If we didn't find anything, try visual parent and call this method (recursive)
             var visualParent = startElement.GetVisualParent();
-            if (visualParent != null)
+            if (visualParent is not null)
             {
                 object lastResortVisualAncestor = FindLogicalOrVisualAncestor(visualParent, condition);
-                if (lastResortVisualAncestor != null)
+                if (lastResortVisualAncestor is not null)
                 {
                     return lastResortVisualAncestor;
                 }
@@ -111,7 +111,7 @@ namespace Catel.MVVM.Views
         public static object FindVisualAncestor(this UIView startElement, Predicate<object> condition, int maxDepth = -1)
         {
             var obj = startElement;
-            while ((obj != null) && !condition(obj))
+            while ((obj is not null) && !condition(obj))
             {
                 if (maxDepth == 0)
                 {

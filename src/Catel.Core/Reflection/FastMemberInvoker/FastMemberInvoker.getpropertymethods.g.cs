@@ -310,7 +310,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out Object item)
         {
             var getter = GetObjectPropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -323,7 +323,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out Boolean item)
         {
             var getter = GetBooleanPropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -336,7 +336,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out Char item)
         {
             var getter = GetCharPropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -349,7 +349,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out SByte item)
         {
             var getter = GetSBytePropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -362,7 +362,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out Byte item)
         {
             var getter = GetBytePropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -375,7 +375,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int16 item)
         {
             var getter = GetInt16PropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -388,7 +388,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt16 item)
         {
             var getter = GetUInt16PropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -401,7 +401,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int32 item)
         {
             var getter = GetInt32PropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -414,7 +414,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt32 item)
         {
             var getter = GetUInt32PropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -427,7 +427,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out Int64 item)
         {
             var getter = GetInt64PropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -440,7 +440,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out UInt64 item)
         {
             var getter = GetUInt64PropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -453,7 +453,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out Single item)
         {
             var getter = GetSinglePropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -466,7 +466,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out Double item)
         {
             var getter = GetDoublePropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -479,7 +479,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out Decimal item)
         {
             var getter = GetDecimalPropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -492,7 +492,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out DateTime item)
         {
             var getter = GetDateTimePropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -505,7 +505,7 @@ namespace Catel.Reflection
         public bool TryGetPropertyValue(TEntity entity, string propertyName, out String item)
         {
             var getter = GetStringPropertyGetter(propertyName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;

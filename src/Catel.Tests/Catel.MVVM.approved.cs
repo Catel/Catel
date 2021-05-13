@@ -1932,10 +1932,12 @@ namespace Catel.Services
         protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(System.Type windowType, object data, bool isModal, System.Action<Catel.Services.UIVisualizerResult> completedProc) { }
         protected virtual void EnsureViewIsRegistered(string name) { }
         protected virtual System.Windows.FrameworkElement GetActiveWindow() { }
+        protected virtual System.Windows.FrameworkElement GetMainWindow() { }
         protected virtual void HandleCloseSubscription(object window, object data, bool isModal, System.Action<Catel.Services.UIVisualizerResult> completedProc) { }
         public virtual bool IsRegistered(string name) { }
         public virtual void Register(string name, System.Type windowType, bool throwExceptionIfExists = true) { }
         protected virtual void RegisterViewForViewModelIfRequired(System.Type viewModelType) { }
+        protected virtual void SetOwnerWindow(System.Windows.FrameworkElement window, System.Windows.Window ownerWindow) { }
         public virtual System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
         public virtual System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
         public virtual System.Threading.Tasks.Task<Catel.Services.UIVisualizerResult> ShowDialogAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
@@ -2169,6 +2171,7 @@ namespace Catel.Windows
         public static void BringWindowToTop(this System.Windows.Window window) { }
         public static bool CanSetDialogResult(this System.Windows.Window window) { }
         public static System.IntPtr GetWindowHandle(this System.Windows.Window window) { }
+        public static bool IsValidAsOwnerWindow(this System.Windows.Window window) { }
         public static void RemoveIcon(this System.Windows.Window window) { }
         public static void SetOwnerWindow(this System.Windows.Window window, bool forceNewOwner = false, bool focusFirstControl = false) { }
         public static void SetOwnerWindow(this System.Windows.Window window, System.IntPtr owner, bool forceNewOwner = false) { }

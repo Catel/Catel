@@ -66,7 +66,7 @@ namespace Catel.Reflection
             {
                 if (_loadedTypes.Count == 0)
                 {
-                    if (_lazyLoadedTypes is null == false)
+                    if (_lazyLoadedTypes is not null)
                     {
                         _loadedTypes.AddRange(_lazyLoadedTypes.Value);
                     }

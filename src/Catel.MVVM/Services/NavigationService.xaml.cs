@@ -217,7 +217,7 @@ namespace Catel.Services
 
 #if NETFX_CORE
             var lastItem = RootFrame.BackStack.LastOrDefault();
-            if (lastItem != null)
+            if (lastItem is not null)
             {
                 RootFrame.BackStack.Remove(lastItem);
             }

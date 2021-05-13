@@ -39,7 +39,9 @@ namespace Catel.Threading
         /// Returns the underlying task.
         /// </summary>
 #pragma warning disable UseAsyncSuffix // Use Async suffix
+#pragma warning disable CL0002
         public Task<T> AsTask()
+#pragma warning restore CL0002
 #pragma warning restore UseAsyncSuffix // Use Async suffix
         {
             return _task;
@@ -50,7 +52,9 @@ namespace Catel.Threading
         /// </summary>
         /// <param name="source">The awaitable wrapper.</param>
 #pragma warning disable UseAsyncSuffix // Use Async suffix
+#pragma warning disable CL0002
         public static implicit operator Task<T>(AwaitableDisposable<T> source)
+#pragma warning restore CL0002
 #pragma warning restore UseAsyncSuffix // Use Async suffix
         {
             return source.AsTask();

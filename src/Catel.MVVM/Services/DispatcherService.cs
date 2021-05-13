@@ -169,7 +169,7 @@ namespace Catel.Services
             Argument.IsNotNull("action", action);
 #if XAMARIN_FORMS
             var synchronizationContext = SynchronizationContext.Current;
-            if (synchronizationContext != null)
+            if (synchronizationContext is not null)
             {
                 synchronizationContext.Post(state => action(), null);
             }
@@ -198,7 +198,7 @@ namespace Catel.Services
             Argument.IsNotNull("action", action);
 #if XAMARIN_FORMS
             var synchronizationContext = SynchronizationContext.Current;
-            if (synchronizationContext != null)
+            if (synchronizationContext is not null)
             {
                 synchronizationContext.Post(state => action(), null);
             }

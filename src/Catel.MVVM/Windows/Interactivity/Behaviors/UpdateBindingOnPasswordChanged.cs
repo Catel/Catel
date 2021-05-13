@@ -95,7 +95,7 @@ namespace Catel.Windows.Interactivity
             Password = AssociatedObject.Password;
 #else
             var binding = AssociatedObject.GetBindingExpression(PasswordBox.PasswordProperty);
-            if (binding != null)
+            if (binding is not null)
             {
                 binding.UpdateSource();
             }

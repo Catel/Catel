@@ -50,7 +50,7 @@ namespace Catel.Services
 
             var messageResult = MessageResult.None;
             var currentPage = Application.Current.GetActivePage();
-            if (currentPage != null)
+            if (currentPage is not null)
             {
                 var configuration = _configurationResultMap[button];
                 messageResult = await Xamarin.Forms.MessagingCenter.SendAlertAsync(currentPage, caption, message, configuration.PositiveButton, configuration.NegativeButton) ? configuration.PositiveResult: configuration.NegativeResult;

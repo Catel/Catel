@@ -65,7 +65,7 @@ namespace Catel.Services
             //    }
             //}
 
-            if ((window != null) && (completedProc != null))
+            if ((window is not null) && (completedProc is not null))
             {
                 HandleCloseSubscription(window, data, completedProc, isModal);
             }

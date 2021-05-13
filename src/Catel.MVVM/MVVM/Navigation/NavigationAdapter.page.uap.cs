@@ -34,7 +34,7 @@ namespace Catel.MVVM.Navigation
         partial void Uninitialize()
         {
             var rootFrame = NavigationRoot as Frame;
-            if (rootFrame != null)
+            if (rootFrame is not null)
             {
                 rootFrame.Navigating -= OnNavigatingEvent;
                 rootFrame.Navigated -= OnNavigatedEvent;
@@ -47,7 +47,7 @@ namespace Catel.MVVM.Navigation
             {
                 _lastNavigationContext = new Dictionary<string, object>();
 
-                if (_lastGlobalNavigationContext != null)
+                if (_lastGlobalNavigationContext is not null)
                 {
                     foreach (var value in _lastGlobalNavigationContext)
                     {
@@ -96,7 +96,7 @@ namespace Catel.MVVM.Navigation
         private void OnNavigatingEvent(object sender, NavigatingCancelEventArgs e)
         {
             var sourcePage = string.Empty;
-            if (e.SourcePageType != null)
+            if (e.SourcePageType is not null)
             {
                 sourcePage = e.SourcePageType.ToString();
             }
@@ -111,7 +111,7 @@ namespace Catel.MVVM.Navigation
         private void OnNavigatedEvent(object sender, NavigationEventArgs e)
         {
             var uriString = string.Empty;
-            if (e.SourcePageType != null)
+            if (e.SourcePageType is not null)
             {
                 uriString = e.SourcePageType.ToString();
             }

@@ -34,7 +34,7 @@ namespace Catel.Services
                     status = string.Empty;
                 }
 
-                if (_statusTextBlock != null)
+                if (_statusTextBlock is not null)
                 {
                     _statusTextBlock.Text = status;
                 }
@@ -44,7 +44,7 @@ namespace Catel.Services
 
         partial void InitializeBusyIndicator()
         {
-            if (_busyIndicator != null)
+            if (_busyIndicator is not null)
             {
                 return;
             }
@@ -101,10 +101,10 @@ namespace Catel.Services
             _busyIndicator.Visibility = Visibility.Visible;
 
             var currentWindow = Window.Current;
-            if (currentWindow != null)
+            if (currentWindow is not null)
             {
                 var windowContent = currentWindow.Content as FrameworkElement;
-                if (windowContent != null)
+                if (windowContent is not null)
                 {
                     windowContent.UpdateLayout();
                     windowContent.IsHitTestVisible = false;
@@ -129,10 +129,10 @@ namespace Catel.Services
             _containerPopup.IsOpen = false;
 
             var currentWindow = Window.Current;
-            if (currentWindow != null)
+            if (currentWindow is not null)
             {
                 var windowContent = currentWindow.Content as FrameworkElement;
-                if (windowContent != null)
+                if (windowContent is not null)
                 {
                     windowContent.Opacity = 0;
                     //EffectsHelper.Undimm(windowContent);

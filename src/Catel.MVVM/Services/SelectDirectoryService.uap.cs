@@ -40,7 +40,7 @@ namespace Catel.Services
 
             var result = new DetermineDirectoryResult
             {
-                Result = folder != null,
+                Result = folder is not null,
                 Directory = folder,
                 DirectoryName = folder?.Path
             };

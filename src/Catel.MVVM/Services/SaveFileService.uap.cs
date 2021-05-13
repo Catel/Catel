@@ -34,7 +34,7 @@ namespace Catel.Services
             var fileDialog = new FileSavePicker();
 
             var filters = Filter?.Split(';');
-            if (filters != null)
+            if (filters is not null)
             {
                 foreach (var filter in filters)
                 {
@@ -79,7 +79,7 @@ namespace Catel.Services
             fileDialog.SuggestedFileName = FileName;
 
             var file = await fileDialog.PickSaveFileAsync();
-            if (file != null)
+            if (file is not null)
             {
                 FileName = file.Path;
             }

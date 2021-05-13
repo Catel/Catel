@@ -72,7 +72,7 @@ namespace Catel.MVVM
         /// <value>The instance.</value>
         public object Instance
         {
-            get { return (_instance != null && _instance.IsAlive) ? _instance.Target : null; }
+            get { return (_instance is not null && _instance.IsAlive) ? _instance.Target : null; }
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Catel.MVVM
         {
             if (disposing)
             {
-                if (_changeNotificationWrapper != null)
+                if (_changeNotificationWrapper is not null)
                 {
                     _changeNotificationWrapper.PropertyChanged -= OnInstancePropertyChanged;
                     _changeNotificationWrapper.UnsubscribeFromAllEvents();

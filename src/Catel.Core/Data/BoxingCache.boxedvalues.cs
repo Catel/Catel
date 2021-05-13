@@ -183,7 +183,7 @@ namespace Catel.Data
         {
             object objectValue = value;
 
-            if (value != null)
+            if (value is not null)
             {
                 var valueType = value.GetType();
                 if (valueType.IsValueType)

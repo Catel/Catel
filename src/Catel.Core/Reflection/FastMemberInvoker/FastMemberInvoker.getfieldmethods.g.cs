@@ -310,7 +310,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Object item)
         {
             var getter = GetObjectFieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -323,7 +323,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Boolean item)
         {
             var getter = GetBooleanFieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -336,7 +336,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Char item)
         {
             var getter = GetCharFieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -349,7 +349,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out SByte item)
         {
             var getter = GetSByteFieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -362,7 +362,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Byte item)
         {
             var getter = GetByteFieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -375,7 +375,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Int16 item)
         {
             var getter = GetInt16FieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -388,7 +388,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt16 item)
         {
             var getter = GetUInt16FieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -401,7 +401,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Int32 item)
         {
             var getter = GetInt32FieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -414,7 +414,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt32 item)
         {
             var getter = GetUInt32FieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -427,7 +427,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Int64 item)
         {
             var getter = GetInt64FieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -440,7 +440,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out UInt64 item)
         {
             var getter = GetUInt64FieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -453,7 +453,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Single item)
         {
             var getter = GetSingleFieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -466,7 +466,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Double item)
         {
             var getter = GetDoubleFieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -479,7 +479,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out Decimal item)
         {
             var getter = GetDecimalFieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -492,7 +492,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out DateTime item)
         {
             var getter = GetDateTimeFieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
@@ -505,7 +505,7 @@ namespace Catel.Reflection
         public bool TryGetFieldValue(TEntity entity, string fieldName, out String item)
         {
             var getter = GetStringFieldGetter(fieldName);
-            if (getter != null)
+            if (getter is not null)
             {
                 item = getter(entity);
                 return true;
