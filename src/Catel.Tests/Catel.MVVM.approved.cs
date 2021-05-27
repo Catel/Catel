@@ -2742,20 +2742,20 @@ namespace Catel.Windows.Interactivity
 }
 namespace Catel.Windows.Markup
 {
-    public class CommandManagerBinding : Catel.Windows.Markup.UpdatableMarkupExtension
+    public class CommandManagerBindingExtension : Catel.Windows.Markup.UpdatableMarkupExtension
     {
-        public CommandManagerBinding() { }
-        public CommandManagerBinding(string commandName) { }
+        public CommandManagerBindingExtension() { }
+        public CommandManagerBindingExtension(string commandName) { }
         [System.Windows.Markup.ConstructorArgument("commandName")]
         public string CommandName { get; set; }
         protected override void OnTargetObjectLoaded() { }
         protected override void OnTargetObjectUnloaded() { }
         protected override object ProvideDynamicValue(System.IServiceProvider serviceProvider) { }
     }
-    public class LanguageBinding : Catel.Windows.Markup.UpdatableMarkupExtension
+    public class LanguageBindingExtension : Catel.Windows.Markup.UpdatableMarkupExtension
     {
-        public LanguageBinding() { }
-        public LanguageBinding(string resourceName) { }
+        public LanguageBindingExtension() { }
+        public LanguageBindingExtension(string resourceName) { }
         public System.Globalization.CultureInfo Culture { get; set; }
         public bool HideDesignTimeMessages { get; set; }
         [System.Windows.Markup.ConstructorArgument("resourceName")]

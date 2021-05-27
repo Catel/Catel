@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LanguageBinding.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if NET || NETCORE
+﻿#if NET || NETCORE
 
 namespace Catel.Windows.Markup
 {
@@ -22,26 +16,26 @@ namespace Catel.Windows.Markup
     /// <summary>
     /// Binding that uses the <see cref="ILanguageService" /> to retrieve the binding values.
     /// </summary>
-    public class LanguageBinding : UpdatableMarkupExtension
+    public class LanguageBindingExtension : UpdatableMarkupExtension
     {
         private readonly ILanguageService _languageService;
         private Catel.IWeakEventListener _onLanguageUpdatedWeakListener;
 
         #region Constructors
         /// <summary>
-        /// Initializes a new instance of the <see cref="LanguageBinding"/> class.
+        /// Initializes a new instance of the <see cref="LanguageBindingExtension"/> class.
         /// </summary>
-        public LanguageBinding()
+        public LanguageBindingExtension()
         {
             var dependencyResolver = this.GetDependencyResolver();
             _languageService = dependencyResolver.Resolve<ILanguageService>();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LanguageBinding" /> class.
+        /// Initializes a new instance of the <see cref="LanguageBindingExtension" /> class.
         /// </summary>
         /// <param name="resourceName">Name of the resource.</param>
-        public LanguageBinding(string resourceName)
+        public LanguageBindingExtension(string resourceName)
             : this()
         {
             ResourceName = resourceName;

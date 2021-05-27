@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CommandManagerBinding.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-#if !XAMARIN && !XAMARIN_FORMS
+﻿#if !XAMARIN && !XAMARIN_FORMS
 
 namespace Catel.Windows.Markup
 {
@@ -20,24 +14,24 @@ namespace Catel.Windows.Markup
     /// <summary>
     /// Binds commands to the command manager.
     /// </summary>
-    public class CommandManagerBinding : UpdatableMarkupExtension
+    public class CommandManagerBindingExtension : UpdatableMarkupExtension
     {
         private readonly ICommandManager _commandManager;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommandManagerBinding"/> class.
+        /// Initializes a new instance of the <see cref="CommandManagerBindingExtension"/> class.
         /// </summary>
-        public CommandManagerBinding()
+        public CommandManagerBindingExtension()
         {
             var dependencyResolver = this.GetDependencyResolver();
             _commandManager = dependencyResolver.Resolve<ICommandManager>();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommandManagerBinding"/> class.
+        /// Initializes a new instance of the <see cref="CommandManagerBindingExtension"/> class.
         /// </summary>
         /// <param name="commandName">Name of the command.</param>
-        public CommandManagerBinding(string commandName)
+        public CommandManagerBindingExtension(string commandName)
             : this()
         {
             CommandName = commandName;
