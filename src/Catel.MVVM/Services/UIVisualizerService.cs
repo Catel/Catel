@@ -146,12 +146,14 @@ namespace Catel.Services
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-            var viewModelType = viewModel.GetType();
-            var viewModelTypeName = viewModelType.FullName;
+            var result = await ShowContextAsync(new UIVisualizerContext
+            {
+                Data = viewModel,
+                CompletedCallback = completedProc,
+                IsModal = false,
+            });
 
-            RegisterViewForViewModelIfRequired(viewModelType);
-
-            return await ShowAsync(viewModelTypeName, viewModel, completedProc);
+            return result;
         }
 
         /// <summary>
@@ -169,15 +171,15 @@ namespace Catel.Services
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
-            EnsureViewIsRegistered(name);
-
-            var window = await CreateWindowAsync(name, data, completedProc, false);
-            if (window != null)
+            var result = await ShowContextAsync(new UIVisualizerContext
             {
-                return await ShowWindowAsync(window, data, false);
-            }
+                Name = name,
+                Data = data,
+                CompletedCallback = completedProc,
+                IsModal = false,
+            });
 
-            return false;
+            return result;
         }
 
         /// <summary>
@@ -194,12 +196,14 @@ namespace Catel.Services
         {
             Argument.IsNotNull("viewModel", viewModel);
 
-            var viewModelType = viewModel.GetType();
-            var viewModelTypeName = viewModelType.FullName;
+            var result = await ShowContextAsync(new UIVisualizerContext
+            {
+                Data = viewModel,
+                CompletedCallback = completedProc,
+                IsModal = true,
+            });
 
-            RegisterViewForViewModelIfRequired(viewModelType);
-
-            return await ShowDialogAsync(viewModelTypeName, viewModel, completedProc);
+            return result;
         }
 
         /// <summary>
@@ -217,12 +221,49 @@ namespace Catel.Services
         {
             Argument.IsNotNullOrWhitespace("name", name);
 
-            EnsureViewIsRegistered(name);
+            var result = await ShowContextAsync(new UIVisualizerContext
+            {
+                Name = name,
+                Data = data,
+                CompletedCallback = completedProc,
+                IsModal = true,
+            });
 
-            var window = await CreateWindowAsync(name, data, completedProc, true);
+            return result;
+        }
+
+        /// <summary>
+        /// Shows a window with the specified context.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>The dialog result.</returns>
+        public virtual async Task<bool?> ShowContextAsync(UIVisualizerContext context)
+        {
+            Argument.IsNotNull("context", context);
+
+            var viewModel = context.Data as IViewModel;
+            if (viewModel is not null)
+            {
+                var viewModelType = viewModel.GetType();
+
+                RegisterViewForViewModelIfRequired(viewModelType);
+
+                if (string.IsNullOrWhiteSpace(context.Name))
+                {
+                    context.Name = viewModelType.FullName;
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(context.Name))
+            {
+                EnsureViewIsRegistered(context.Name);
+            }
+
+            var window = await CreateWindowAsync(context);
             if (window != null)
             {
-                return await ShowWindowAsync(window, data, true);
+                var result = await ShowWindowAsync(window, context);
+                return result;
             }
 
             return false;

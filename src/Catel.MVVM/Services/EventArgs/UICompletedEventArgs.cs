@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UICompletedEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
 
@@ -13,20 +7,25 @@ namespace Catel.Services
     /// </summary>
     public class UICompletedEventArgs : EventArgs
     {
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="UICompletedEventArgs"/> class.
         /// </summary>
-        /// <param name="dataContext">The data context.</param>
+        /// <param name="context">The context.</param>
         /// <param name="result">The result.</param>
-        public UICompletedEventArgs(object dataContext, bool? result)
+        public UICompletedEventArgs(UIVisualizerContext context, bool? result)
         {
-            DataContext = dataContext;
+            Argument.IsNotNull(nameof(context), context);
+
+            Context = context;
+            DataContext = context.Data;
             Result = result;
         }
-        #endregion
 
-        #region Public Properties
+        /// <summary>
+        /// The ui visualizer context.
+        /// </summary>
+        public UIVisualizerContext Context { get; private set; }
+
         /// <summary>
         /// Gets the data context.
         /// </summary>
@@ -38,6 +37,5 @@ namespace Catel.Services
         /// </summary>
         /// <value>The result.</value>
         public bool? Result { get; private set; }
-        #endregion
     }
 }

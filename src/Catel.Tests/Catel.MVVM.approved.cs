@@ -2350,6 +2350,7 @@ namespace Catel.Services
         void Register(string name, System.Type windowType, bool throwExceptionIfExists = true);
         System.Threading.Tasks.Task<bool?> ShowAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
         System.Threading.Tasks.Task<bool?> ShowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
+        System.Threading.Tasks.Task<bool?> ShowContextAsync(Catel.Services.UIVisualizerContext context);
         System.Threading.Tasks.Task<bool?> ShowDialogAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
         System.Threading.Tasks.Task<bool?> ShowDialogAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null);
         bool Unregister(string name);
@@ -2670,9 +2671,20 @@ namespace Catel.Services
     }
     public class UICompletedEventArgs : System.EventArgs
     {
-        public UICompletedEventArgs(object dataContext, bool? result) { }
+        public UICompletedEventArgs(Catel.Services.UIVisualizerContext context, bool? result) { }
+        public Catel.Services.UIVisualizerContext Context { get; }
         public object DataContext { get; }
         public bool? Result { get; }
+    }
+    public class UIVisualizerContext
+    {
+        public UIVisualizerContext() { }
+        public System.EventHandler<Catel.Services.UICompletedEventArgs> CompletedCallback { get; set; }
+        public object Data { get; set; }
+        public bool IsModal { get; set; }
+        public string Name { get; set; }
+        public bool SetParentWindow { get; set; }
+        public System.Func<Catel.Services.UIVisualizerContext, object, System.Threading.Tasks.Task> SetParentWindowCallback { get; set; }
     }
     public class UIVisualizerService : Catel.Services.ViewModelServiceBase, Catel.Services.IUIVisualizerService
     {
@@ -2685,11 +2697,20 @@ namespace Catel.Services
         protected virtual System.Windows.FrameworkElement CreateWindow(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
         [System.Obsolete("Use `CreateWindowAsync` instead. Will be removed in version 6.0.0.", true)]
         protected virtual System.Windows.FrameworkElement CreateWindow(System.Type windowType, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
+        protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(Catel.Services.UIVisualizerContext context) { }
+        protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(System.Type windowType, Catel.Services.UIVisualizerContext context) { }
+        [System.Obsolete("Use `CreateWindowAsync(UIVisualizerContext)` instead. Will be removed in version " +
+            "6.0.0.", true)]
         protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
+        [System.Obsolete("Use `CreateWindowAsync(UIVisualizerContext)` instead. Will be removed in version " +
+            "6.0.0.", true)]
         protected virtual System.Threading.Tasks.Task<System.Windows.FrameworkElement> CreateWindowAsync(System.Type windowType, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
         protected virtual void EnsureViewIsRegistered(string name) { }
         protected virtual System.Windows.FrameworkElement GetActiveWindow() { }
         protected virtual System.Windows.FrameworkElement GetMainWindow() { }
+        protected virtual void HandleCloseSubscription(object window, Catel.Services.UIVisualizerContext context) { }
+        [System.Obsolete("Use `HandleCloseSubscription(UIVisualizerContext, bool)` instead. Will be removed" +
+            " in version 6.0.0.", true)]
         protected virtual void HandleCloseSubscription(object window, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc, bool isModal) { }
         public virtual bool IsRegistered(string name) { }
         public virtual void Register(string name, System.Type windowType, bool throwExceptionIfExists = true) { }
@@ -2697,8 +2718,12 @@ namespace Catel.Services
         protected virtual void SetOwnerWindow(System.Windows.FrameworkElement window, System.Windows.Window ownerWindow) { }
         public virtual System.Threading.Tasks.Task<bool?> ShowAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
         public virtual System.Threading.Tasks.Task<bool?> ShowAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
+        public virtual System.Threading.Tasks.Task<bool?> ShowContextAsync(Catel.Services.UIVisualizerContext context) { }
         public virtual System.Threading.Tasks.Task<bool?> ShowDialogAsync(Catel.MVVM.IViewModel viewModel, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
         public virtual System.Threading.Tasks.Task<bool?> ShowDialogAsync(string name, object data, System.EventHandler<Catel.Services.UICompletedEventArgs> completedProc = null) { }
+        public virtual System.Threading.Tasks.Task<bool?> ShowWindowAsync(System.Windows.FrameworkElement window, Catel.Services.UIVisualizerContext context) { }
+        [System.Obsolete("Use `ShowWindowAsync(UIVisualizerContext, bool)` instead. Will be removed in vers" +
+            "ion 6.0.0.", true)]
         protected virtual System.Threading.Tasks.Task<bool?> ShowWindowAsync(System.Windows.FrameworkElement window, object data, bool showModal) { }
         public virtual bool Unregister(string name) { }
     }

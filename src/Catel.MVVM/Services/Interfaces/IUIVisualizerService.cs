@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IUIVisualizerService.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
     using System.Threading.Tasks;
@@ -16,7 +10,6 @@ namespace Catel.Services
     /// </summary>
     public interface IUIVisualizerService
     {
-        #region Methods
         /// <summary>
         /// Registers the specified view model and the window type. This way, Catel knowns what
         /// window to show when a specific view model window is requested.
@@ -94,6 +87,15 @@ namespace Catel.Services
         /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
         /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
         Task<bool?> ShowDialogAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null);
-        #endregion
+
+        /// <summary>
+        /// Shows a window that is registered with the specified view model, respecting the specified context.
+        /// </summary>
+        /// <param name="context">The context to use to show the window.</param>
+        /// <returns>
+        /// Nullable boolean representing the dialog result.
+        /// </returns>
+        /// <exception cref="ArgumentException">The <paramref name="context"/> is <c>null</c> or whitespace.</exception>
+        Task<bool?> ShowContextAsync(UIVisualizerContext context);
     }
 }
