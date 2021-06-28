@@ -42,7 +42,19 @@ namespace Catel.Services
         /// <returns>The main window.</returns>
         protected virtual FrameworkElement GetMainWindow()
         {
-            return Application.Current.MainWindow;
+            var mainWindow = Application.Current.MainWindow;
+
+            if (PropertyHelper.TryGetPropertyValue(mainWindow, "NeverMeasured", out bool neverMeasured))
+            {
+                if (!neverMeasured)
+                {
+                    // Window should be valid
+                    return mainWindow;
+                }
+            }
+
+            // In case the window is not initialized, return active window as main window
+            return GetActiveWindow();
         }
 
         protected virtual void SetOwnerWindow(FrameworkElement window, System.Windows.Window ownerWindow)
