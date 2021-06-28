@@ -260,7 +260,10 @@
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             await viewModel.SaveAndCloseViewModelAsync();
-            completedProc?.Invoke(this, new UICompletedEventArgs(viewModel, true));
+            completedProc?.Invoke(this, new UICompletedEventArgs(new UIVisualizerContext
+            {
+                Data = viewModel
+            }, true));
             await CloseModalAsync();
         }
 
@@ -293,7 +296,10 @@
 #pragma warning restore AvoidAsyncVoid // Avoid async void
         {
             await viewModel.CancelAndCloseViewModelAsync();
-            completedProc?.Invoke(this, new UICompletedEventArgs(viewModel, false));
+            completedProc?.Invoke(this, new UICompletedEventArgs(new UIVisualizerContext
+            {
+                Data = viewModel
+            }, false));
             await CloseModalAsync();
         }
 
@@ -438,18 +444,29 @@
                 var popupLayout = contentPage.Content as PopupLayout;
                 if (popupLayout != null && popupLayout.IsPopupActive)
                 {
-                    _callbacks[contentPage]?.Item2?.Invoke(this, new UICompletedEventArgs(_callbacks[contentPage].Item1, null));
+                    _callbacks[contentPage]?.Item2?.Invoke(this, new UICompletedEventArgs(new UIVisualizerContext
+                    {
+                        Data = _callbacks[contentPage].Item1
+                    }, null));
                     await popupLayout.DismissPopupAsync();
                 }
 
                 if (popupLayout is null)
                 {
-                    _callbacks[contentPage]?.Item2?.Invoke(this, new UICompletedEventArgs(_callbacks[contentPage].Item1, null));
+                    _callbacks[contentPage]?.Item2?.Invoke(this, new UICompletedEventArgs(new UIVisualizerContext
+                    {
+                        Data = _callbacks[contentPage].Item1
+                    }, null));
                     await NavigationHelper.PopModalAsync();
                 }
 
                 contentPage.BackButtonPressed -= OnBackButtonPressed;
             }
+        }
+
+        public Task<bool?> ShowContextAsync(UIVisualizerContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 }
