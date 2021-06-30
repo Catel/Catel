@@ -17,13 +17,13 @@ namespace Catel.Tests.Services.EventArgs
         [TestCase]
         public void UICompletedEventArgs_Constructor()
         {
-            var completedEventArgs = new UICompletedEventArgs(new UIVisualizerContext
+            var completedEventArgs = new UICompletedEventArgs(new UIVisualizerResult(true, new UIVisualizerContext
             {
                 Data = 15
-            }, true);
+            }, null));
 
-            Assert.AreEqual(15, completedEventArgs.DataContext);
-            Assert.AreEqual(true, completedEventArgs.DialogResult);
+            Assert.AreEqual(15, completedEventArgs.Context.Data);
+            Assert.AreEqual(true, completedEventArgs.Result.DialogResult);
         }
         #endregion
     }

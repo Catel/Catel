@@ -125,7 +125,7 @@ namespace Catel.Services
                     if (window is not null &&
                         completedCallback is not null)
                     {
-                        HandleCloseSubscription(window, context);
+                        HandleCloseSubscription(window, context, null);
                     }
 
                     tcs.TrySetResult(window);
@@ -146,7 +146,8 @@ namespace Catel.Services
         /// </summary>
         /// <param name="window">The window.</param>
         /// <param name="context">The context.</param>
-        protected virtual void HandleCloseSubscription(object window, UIVisualizerContext context)
+        /// <param name="additionalCompletedCallback">An additional completed callback, which allows internal handling of the completed callback.</param>
+        protected virtual void HandleCloseSubscription(object window, UIVisualizerContext context, EventHandler<UICompletedEventArgs> additionalCompletedCallback)
         {
             var eventInfo = window.GetType().GetEvent("Closed");
             var addMethod = eventInfo?.AddMethod;
@@ -174,21 +175,28 @@ namespace Catel.Services
                         }
                     }
 
+                    var uiCompletedEventArgs = new UICompletedEventArgs(new UIVisualizerResult(dialogResult, context, window));
+
                     var completedProc = context.CompletedCallback;
                     if (completedProc is not null)
                     {
                         try
                         {
-                            completedProc(this, new UIVisualizerResult(dialogResult, data, data, window));
+                            completedProc(this, uiCompletedEventArgs);
                         }
                         finally
                         {
                             var removeMethod = eventInfo.RemoveMethod;
-                            if (removeMethod != null)
+                            if (removeMethod is not null)
                             {
                                 removeMethod.Invoke(window, new object[] { eventHandler });
                             }
                         }
+                    }
+
+                    if (additionalCompletedCallback is not null)
+                    {
+                        additionalCompletedCallback(this, uiCompletedEventArgs);
                     }
                 }
 
@@ -208,10 +216,7 @@ namespace Catel.Services
             // Note: no async/await because we use a TaskCompletionSource
             var tcs = new TaskCompletionSource<UIVisualizerResult>();
 
-            HandleCloseSubscription(window, context, (sender, args) => tcs.TrySetResult(args.Result), context.IsModal);
-            {
-                tcs.TrySetResult(result);
-            });
+            HandleCloseSubscription(window, context, (sender, args) => tcs.TrySetResult(args.Result));
 
             var showMethodInfo = context.IsModal ? window.GetType().GetMethodEx("ShowDialog") : window.GetType().GetMethodEx("Show");
             if (context.IsModal && showMethodInfo is null)

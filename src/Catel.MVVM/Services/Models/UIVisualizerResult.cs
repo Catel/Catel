@@ -4,26 +4,23 @@
 
     public class UIVisualizerResult
     {
-        public UIVisualizerResult(bool? result, object data, object dataContext, object window)
+        public UIVisualizerResult(bool? result, UIVisualizerContext context, object window)
         {
             DialogResult = result;
-            Data = data;
-            DataContext = dataContext ?? data;
+            Context = context;
             Window = window;
         }
 
         public bool? DialogResult { get; }
 
-        public object Data { get; }
-
-        public object DataContext { get; }
+        public UIVisualizerContext Context { get; }
 
         public object Window { get; }
 
         public TViewModel GetViewModel<TViewModel>()
             where TViewModel : class, IViewModel
         {
-            return DataContext as TViewModel;
+            return Context.Data as TViewModel;
         }
     }
 }

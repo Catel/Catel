@@ -23,6 +23,16 @@ namespace Catel.Data
 
 	public static partial class BoxingCache
 	{
+        /// <summary>
+        /// Converts the specified Boolean value into a cached boxed value in case of value type to decrease memory pressure after serialization.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>An object representing the value.</returns>
+        public static object GetBoxedValue<TValue>(TValue value)
+        {
+            return BoxingCache<TValue>.Default.GetBoxedValue(value);
+        }
+
 <# 
 foreach (TypeCode typeCode in typeCodes) 
 {
@@ -53,7 +63,7 @@ foreach (TypeCode typeCode in typeCodes)
         {
             object objectValue = value;
 
-            if (value != null)
+            if (value is not null)
             {
                 var valueType = value.GetType();
                 if (valueType.IsValueType)

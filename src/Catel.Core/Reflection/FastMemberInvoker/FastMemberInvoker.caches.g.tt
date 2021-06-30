@@ -47,7 +47,7 @@ foreach (TypeCode typeCode in typeCodes)
             if (!<#= typeCodeGetterCacheName #>.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreateFieldGetter<TEntity, <#= typeCode #>>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     <#= typeCodeGetterCacheName #>[key] = getter;
@@ -64,7 +64,7 @@ foreach (TypeCode typeCode in typeCodes)
             if (!<#= typeCodeGetterCacheName #>.TryGetValue(key, out var getter))
             {
                 var getterExpression = ExpressionBuilder.CreatePropertyGetter<TEntity, <#= typeCode #>>(memberName);
-                if (getterExpression != null)
+                if (getterExpression is not null)
                 {
                     getter = Compile(getterExpression);
                     <#= typeCodeGetterCacheName #>[key] = getter;
@@ -81,7 +81,7 @@ foreach (TypeCode typeCode in typeCodes)
             if (!<#= typeCodeSetterCacheName #>.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreateFieldSetter<TEntity, <#= typeCode #>>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     <#= typeCodeSetterCacheName #>[key] = setter;
@@ -98,7 +98,7 @@ foreach (TypeCode typeCode in typeCodes)
             if (!<#= typeCodeSetterCacheName #>.TryGetValue(key, out var setter))
             {
                 var setterExpression = ExpressionBuilder.CreatePropertySetter<TEntity, <#= typeCode #>>(memberName);
-                if (setterExpression != null)
+                if (setterExpression is not null)
                 {
                     setter = Compile(setterExpression);
                     <#= typeCodeSetterCacheName #>[key] = setter;

@@ -121,106 +121,6 @@ namespace Catel.Services
         }
 
         /// <summary>
-        /// Shows a window that is registered with the specified view model in a non-modal state.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
-        /// <returns>
-        /// <c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        /// <exception cref="ViewModelNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public virtual Task<UIVisualizerResult> ShowAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
-        {
-            Argument.IsNotNull("viewModel", viewModel);
-
-            var result = await ShowContextAsync(new UIVisualizerContext
-            {
-                Data = viewModel,
-                CompletedCallback = completedProc,
-                IsModal = false,
-            });
-
-            return result;
-        }
-
-        /// <summary>
-        /// Shows a window that is registered with the specified view model in a non-modal state.
-        /// </summary>
-        /// <param name="name">The name that the window is registered with.</param>
-        /// <param name="data">The data to set as data context. If <c>null</c>, the data context will be untouched.</param>
-        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
-        /// <returns>
-        /// <c>true</c> if the popup window is successfully opened; otherwise <c>false</c>.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type, bool)"/> method first.</exception>
-        public virtual async Task<UIVisualizerResult> ShowAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
-        {
-            Argument.IsNotNullOrWhitespace("name", name);
-
-            var result = await ShowContextAsync(new UIVisualizerContext
-            {
-                Name = name,
-                Data = data,
-                CompletedCallback = completedProc,
-                IsModal = false,
-            });
-
-            return result;
-        }
-
-        /// <summary>
-        /// Shows a window that is registered with the specified view model in a modal state.
-        /// </summary>
-        /// <param name="viewModel">The view model.</param>
-        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
-        /// <returns>
-        /// Nullable boolean representing the dialog result.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="viewModel"/> is <c>null</c>.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="viewModel"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public virtual async Task<UIVisualizerResult> ShowDialogAsync(IViewModel viewModel, EventHandler<UICompletedEventArgs> completedProc = null)
-        {
-            Argument.IsNotNull("viewModel", viewModel);
-
-            var result = await ShowContextAsync(new UIVisualizerContext
-            {
-                Data = viewModel,
-                CompletedCallback = completedProc,
-                IsModal = true,
-            });
-
-            return result;
-        }
-
-        /// <summary>
-        /// Shows a window that is registered with the specified view model in a modal state.
-        /// </summary>
-        /// <param name="name">The name that the window is registered with.</param>
-        /// <param name="data">The data to set as data context. If <c>null</c>, the data context will be untouched.</param>
-        /// <param name="completedProc">The callback procedure that will be invoked as soon as the window is closed. This value can be <c>null</c>.</param>
-        /// <returns>
-        /// Nullable boolean representing the dialog result.
-        /// </returns>
-        /// <exception cref="ArgumentException">The <paramref name="name"/> is <c>null</c> or whitespace.</exception>
-        /// <exception cref="WindowNotRegisteredException">The <paramref name="name"/> is not registered by the <see cref="Register(string,System.Type,bool)"/> method first.</exception>
-        public virtual async Task<UIVisualizerResult> ShowDialogAsync(string name, object data, EventHandler<UICompletedEventArgs> completedProc = null)
-        {
-            Argument.IsNotNullOrWhitespace("name", name);
-
-            var result = await ShowContextAsync(new UIVisualizerContext
-            {
-                Name = name,
-                Data = data,
-                CompletedCallback = completedProc,
-                IsModal = true,
-            });
-
-            return result;
-        }
-
-        /// <summary>
         /// Shows a window with the specified context.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -248,14 +148,13 @@ namespace Catel.Services
             }
 
             var window = await CreateWindowAsync(context);
-            if (window != null)
+            if (window is not null)
             {
                 var result = await ShowWindowAsync(window, context);
                 return result;
             }
 
-            var result = await ShowWindowAsync(window, data, true);
-            return result;
+            return new UIVisualizerResult(null, context, null);
         }
 
         /// <summary>

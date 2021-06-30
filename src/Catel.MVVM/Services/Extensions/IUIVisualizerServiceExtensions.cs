@@ -22,7 +22,7 @@ namespace Catel.Services
     /// <summary>
     /// Extension methods for the <see cref="IUIVisualizerService" />.
     /// </summary>
-    public static class IUIVisualizerServiceExtensions
+    public static partial class IUIVisualizerServiceExtensions
     {
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 

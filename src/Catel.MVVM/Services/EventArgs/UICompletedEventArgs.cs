@@ -10,14 +10,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="UICompletedEventArgs"/> class.
         /// </summary>
-        /// <param name="context">The context.</param>
         /// <param name="result">The result.</param>
-        public UICompletedEventArgs(UIVisualizerContext context, bool? result)
+        public UICompletedEventArgs(UIVisualizerResult result)
         {
-            Argument.IsNotNull(nameof(context), context);
+            Argument.IsNotNull(nameof(result), result);
 
-            Context = context;
-            DataContext = context.Data;
+            Context = result.Context;
             Result = result;
         }
 
@@ -27,15 +25,8 @@
         public UIVisualizerContext Context { get; private set; }
 
         /// <summary>
-        /// Gets the data context.
+        /// The result.
         /// </summary>
-        /// <value>The data context.</value>
-        public object DataContext { get { return Result.DataContext; } }
-
-        /// <summary>
-        /// Gets the result of the window.
-        /// </summary>
-        /// <value>The result.</value>
-        public bool? DialogResult { get { return Result.DialogResult; } }
+        public UIVisualizerResult Result { get; private set; }
     }
 }

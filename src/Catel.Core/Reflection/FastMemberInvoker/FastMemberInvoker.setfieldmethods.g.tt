@@ -64,7 +64,7 @@ foreach (TypeCode typeCode in typeCodes)
         public bool SetFieldValue(TEntity entity, string fieldName, <#= typeCode #> value)
         {
             var setter = Get<#= typeCode #>FieldSetter(fieldName);
-            if (setter != null)
+            if (setter is not null)
             {
                 setter(entity, value);
                 return true;
