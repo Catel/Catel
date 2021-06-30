@@ -17,7 +17,10 @@ namespace Catel.Tests.Services.EventArgs
         [TestCase]
         public void UICompletedEventArgs_Constructor()
         {
-            UICompletedEventArgs completedEventArgs = new UICompletedEventArgs(15, true);
+            var completedEventArgs = new UICompletedEventArgs(new UIVisualizerContext
+            {
+                Data = 15
+            }, true);
 
             Assert.AreEqual(15, completedEventArgs.DataContext);
             Assert.AreEqual(true, completedEventArgs.Result);
