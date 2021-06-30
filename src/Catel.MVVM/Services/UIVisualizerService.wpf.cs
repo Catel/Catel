@@ -27,7 +27,6 @@ namespace Catel.Services
     /// </summary>
     public partial class UIVisualizerService
     {
-        #region Methods
         /// <summary>
         /// Gets the active window to use as parent window of new modal windows.
         /// <para />
@@ -45,7 +44,19 @@ namespace Catel.Services
         /// <returns>The main window.</returns>
         protected virtual FrameworkElement GetMainWindow()
         {
-            return Application.Current.MainWindow;
+            var mainWindow = Application.Current.MainWindow;
+
+            if (PropertyHelper.TryGetPropertyValue(mainWindow, "NeverMeasured", out bool neverMeasured))
+            {
+                if (!neverMeasured)
+                {
+                    // Window should be valid
+                    return mainWindow;
+                }
+            }
+
+            // In case the window is not initialized, return active window as main window
+            return GetActiveWindow();
         }
 
         protected virtual void SetOwnerWindow(FrameworkElement window, System.Windows.Window ownerWindow)
@@ -56,40 +67,37 @@ namespace Catel.Services
             }
         }
 
+
         /// <summary>
-        /// This creates the window from a key.
+        /// This creates the window of the specified type.
         /// </summary>
-        /// <param name="name">The name that the window is registered with.</param>
-        /// <param name="data">The data that will be set as data context.</param>
-        /// <param name="isModal">True if this is a ShowDialog request.</param>
-        /// <param name="completedProc">The completed callback.</param>
-        /// <returns>The created window.</returns>    
-        protected virtual async Task<FrameworkElement> CreateWindowAsync(string name, object data, bool isModal, Action<UIVisualizerResult> completedProc)
+        /// <param name="context">The context.</param>
+        /// <returns>The created window.</returns>
+        protected virtual async Task<FrameworkElement> CreateWindowAsync(UIVisualizerContext context)
         {
             Type windowType;
 
             lock (RegisteredWindows)
             {
-                if (!RegisteredWindows.TryGetValue(name, out windowType))
+                if (!RegisteredWindows.TryGetValue(context.Name, out windowType))
                 {
                     return null;
                 }
             }
 
-            return await CreateWindowAsync(windowType, data, isModal, completedProc);
+            var result = await CreateWindowAsync(windowType, context);
+            return result;
         }
 
         /// <summary>
         /// This creates the window of the specified type.
         /// </summary>
         /// <param name="windowType">The type of the window.</param>
-        /// <param name="data">The data that will be set as data context.</param>
-        /// <param name="isModal">True if this is a ShowDialog request.</param>
-        /// <param name="completedProc">The completed callback.</param>
+        /// <param name="context">The context.</param>
         /// <returns>
         /// The created window.
         /// </returns>
-        protected virtual async Task<FrameworkElement> CreateWindowAsync(Type windowType, object data, bool isModal, Action<UIVisualizerResult> completedProc)
+        protected virtual async Task<FrameworkElement> CreateWindowAsync(Type windowType, UIVisualizerContext context)
         {
             var tcs = new TaskCompletionSource<FrameworkElement>();
 
@@ -97,7 +105,7 @@ namespace Catel.Services
             {
                 try
                 {
-                    var window = ViewHelper.ConstructViewWithViewModel(windowType, data);
+                    var window = ViewHelper.ConstructViewWithViewModel(windowType, context.Data);
 
                     // Important: don't set owner window here. Whenever this owner gets closed between this moment and the actual
                     // showing, this window will be diposed automatically too. For more information, see https://github.com/Catel/Catel/issues/1794
@@ -112,9 +120,12 @@ namespace Catel.Services
                     // Explicitly clear since creating a data window automatically sets the owner window
                     SetOwnerWindow(window, null);
 
-                    if (window is not null && completedProc is not null)
+                    var completedCallback = context.CompletedCallback;
+
+                    if (window is not null &&
+                        completedCallback is not null)
                     {
-                        HandleCloseSubscription(window, data, isModal, completedProc);
+                        HandleCloseSubscription(window, context);
                     }
 
                     tcs.TrySetResult(window);
@@ -134,10 +145,8 @@ namespace Catel.Services
         /// The default implementation uses the <see cref="WeakEventListener"/>.
         /// </summary>
         /// <param name="window">The window.</param>
-        /// <param name="data">The data that will be set as data context.</param>
-        /// <param name="isModal">True if this is a ShowDialog request.</param>
-        /// <param name="completedProc">The completed callback.</param>
-        protected virtual void HandleCloseSubscription(object window, object data, bool isModal, Action<UIVisualizerResult> completedProc)
+        /// <param name="context">The context.</param>
+        protected virtual void HandleCloseSubscription(object window, UIVisualizerContext context)
         {
             var eventInfo = window.GetType().GetEvent("Closed");
             var addMethod = eventInfo?.AddMethod;
@@ -158,24 +167,27 @@ namespace Catel.Services
                     {
                         // See https://github.com/Catel/Catel/issues/1503, even though there is no real DialogResult,
                         // we will get the result from the VM instead
-                        var vm = data as IViewModel;
+                        var vm = context.Data as IViewModel;
                         if (vm is not null)
                         {
                             dialogResult = vm.GetResult();
                         }
                     }
 
-                    try
+                    var completedProc = context.CompletedCallback;
+                    if (completedProc is not null)
                     {
-                        // TODO: Do we need a different DataContext object here?
-                        completedProc(new UIVisualizerResult(dialogResult, data, data, window));
-                    }
-                    finally
-                    {
-                        var removeMethod = eventInfo.RemoveMethod;
-                        if (removeMethod is not null)
+                        try
                         {
-                            removeMethod.Invoke(window, new object[] { eventHandler });
+                            completedProc(this, new UIVisualizerResult(dialogResult, data, data, window));
+                        }
+                        finally
+                        {
+                            var removeMethod = eventInfo.RemoveMethod;
+                            if (removeMethod != null)
+                            {
+                                removeMethod.Invoke(window, new object[] { eventHandler });
+                            }
                         }
                     }
                 }
@@ -186,24 +198,23 @@ namespace Catel.Services
         }
 
         /// <summary>
-        /// Shows the window.
+        /// Shows the window, respecting the specified context.
         /// </summary>
         /// <param name="window">The window.</param>
-        /// <param name="data">The data.</param>
-        /// <param name="showModal">If <c>true</c>, the window should be shown as modal.</param>
+        /// <param name="context">The context.</param>
         /// <returns><c>true</c> if the window is closed with success; otherwise <c>false</c> or <c>null</c>.</returns>
-        protected virtual Task<UIVisualizerResult> ShowWindowAsync(FrameworkElement window, object data, bool showModal)
+        public virtual Task<UIVisualizerResult> ShowWindowAsync(FrameworkElement window, UIVisualizerContext context)
         {
             // Note: no async/await because we use a TaskCompletionSource
             var tcs = new TaskCompletionSource<UIVisualizerResult>();
 
-            HandleCloseSubscription(window, data, showModal, (result) => 
+            HandleCloseSubscription(window, context, (sender, args) => tcs.TrySetResult(args.Result), context.IsModal);
             {
                 tcs.TrySetResult(result);
             });
 
-            var showMethodInfo = showModal ? window.GetType().GetMethodEx("ShowDialog") : window.GetType().GetMethodEx("Show");
-            if (showModal && showMethodInfo is null)
+            var showMethodInfo = context.IsModal ? window.GetType().GetMethodEx("ShowDialog") : window.GetType().GetMethodEx("Show");
+            if (context.IsModal && showMethodInfo is null)
             {
                 Log.Warning("Method 'ShowDialog' not found on '{0}', falling back to 'Show'", window.GetType().Name);
 
@@ -218,10 +229,21 @@ namespace Catel.Services
             else
             {
                 // ORCOMP-337: Always invoke with priority Input.
-                window.Dispatcher.BeginInvoke(() =>
+                window.Dispatcher.BeginInvoke(async () =>
                 {
-                    var parentWindow = (showModal ? GetActiveWindow() : GetMainWindow()) as System.Windows.Window;
-                    SetOwnerWindow(window, parentWindow);
+                    if (context.SetParentWindow)
+                    {
+                        var parentWindowCallback = context.SetParentWindowCallback;
+                        if (parentWindowCallback is not null)
+                        {
+                            await parentWindowCallback(context, window);
+                        }
+                        else
+                        {
+                            var parentWindow = (context.IsModal ? GetActiveWindow() : GetMainWindow()) as System.Windows.Window;
+                            SetOwnerWindow(window, parentWindow);
+                        }
+                    }
 
                     // Safety net to prevent crashes when this is the main window
                     try
@@ -238,7 +260,6 @@ namespace Catel.Services
 
             return tcs.Task;
         }
-        #endregion
     }
 }
 

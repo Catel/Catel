@@ -1,10 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UICompletedEventArgs.cs" company="Catel development team">
-//   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Catel.Services
+﻿namespace Catel.Services
 {
     using System;
 
@@ -13,14 +7,24 @@ namespace Catel.Services
     /// </summary>
     public class UICompletedEventArgs : EventArgs
     {
-        public UICompletedEventArgs(UIVisualizerResult result)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UICompletedEventArgs"/> class.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="result">The result.</param>
+        public UICompletedEventArgs(UIVisualizerContext context, bool? result)
         {
-            Argument.IsNotNull("result", result);
+            Argument.IsNotNull(nameof(context), context);
 
+            Context = context;
+            DataContext = context.Data;
             Result = result;
         }
 
-        public UIVisualizerResult Result { get; }
+        /// <summary>
+        /// The ui visualizer context.
+        /// </summary>
+        public UIVisualizerContext Context { get; private set; }
 
         /// <summary>
         /// Gets the data context.

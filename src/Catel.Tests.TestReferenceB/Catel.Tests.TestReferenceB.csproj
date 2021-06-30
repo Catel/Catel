@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net46</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <AssemblyName>B</AssemblyName>
     <RootNamespace>B</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
