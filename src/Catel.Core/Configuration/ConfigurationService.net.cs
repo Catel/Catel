@@ -37,8 +37,31 @@ namespace Catel.Configuration
                     throw new ArgumentOutOfRangeException("container");
             }
 
+            //if (settings is null)
+            //{
+            //    settings = InitializeSettingsContainer(container);
+            //}
+
             return settings;
         }
+
+        //protected virtual DynamicConfiguration InitializeSettingsContainer(ConfigurationContainer container)
+        //{
+        //    var fileName = string.Empty;
+
+        //    switch (container)
+        //    {
+        //        case ConfigurationContainer.Local:
+        //            fileName = GetConfigurationFileName(IO.ApplicationDataTarget.UserLocal);
+        //            SetLocalConfigFilePath(defaultLocalConfigFilePath);
+        //            break;
+
+        //        case ConfigurationContainer.Roaming:
+        //            fileName = GetConfigurationFileName(IO.ApplicationDataTarget.UserRoaming);
+        //            SetRoamingConfigFilePath(defaultRoamingConfigFilePath);
+        //            break;
+        //    }
+        //}
 
         private void OnLocalSaveConfigurationTimerElapsed(object sender, ElapsedEventArgs e)
         {

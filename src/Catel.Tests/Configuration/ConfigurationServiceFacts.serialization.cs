@@ -58,6 +58,35 @@
             }
 
             [Test]
+            public async Task DuplicateProcessesDoNotResetConfigurationAsync()
+            {
+                // See https://github.com/Catel/Catel/issues/1840 for details:
+                // 
+                // 1. Process A and B are launched at the same time, process A is allowed to run and loads the correct config, but process B resets the config and writes to disk
+                // 2. If process A makes no changes, it will happily close
+                // 3. Process C is launched, but B reset the configuration and configuration has been reset to default values
+                var configServiceA = GetConfigurationService("GH1840");
+                configServiceA.CreateDelayDuringSave = true;
+                configServiceA.SetRoamingValue("NAME", "A");
+
+                // The save should be ready, but the additional delay will lock the file and mimic process A from locking the file
+                // and thus not allowing process B to correctly load the config
+                await Task.Delay(150);
+
+                // This code must be called *while service A is writing* so we added a delay of 50 ms
+                var configServiceB = GetConfigurationService("GH1840");
+                configServiceB.SetRoamingValue("NAME", "B");
+
+                // Close both files
+                await Task.Delay(250);
+
+                var configServiceC = GetConfigurationService("GH1840");
+                var value = configServiceC.GetRoamingValue<string>("NAME", string.Empty);
+
+                Assert.AreEqual("A", value);
+            }
+
+            [Test]
             public async Task DoesNotCallSaveMultipleTimesAsync()
             {
                 var configurationService = new SerializationConfigurationService();

@@ -292,7 +292,7 @@ namespace Catel.Configuration
                 {
                     if (File.Exists(_roamingConfigFilePath))
                     {
-                        using (var fileStream = new FileStream(_roamingConfigFilePath, FileMode.Open))
+                        using (var fileStream = new FileStream(_roamingConfigFilePath, FileMode.Open, FileAccess.Read, FileShare.None))
                         {
                             _roamingConfiguration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _serializer);
                         }
@@ -320,7 +320,7 @@ namespace Catel.Configuration
         {
             Argument.IsNotNullOrEmpty(nameof(filePath), filePath);
 
-            Log.Debug($"Setting roaming config file path to '{filePath}'");
+            Log.Debug($"Setting local config file path to '{filePath}'");
 
             lock (GetLockObject(ConfigurationContainer.Local))
             {
@@ -330,7 +330,7 @@ namespace Catel.Configuration
                 {
                     if (File.Exists(_localConfigFilePath))
                     {
-                        using (var fileStream = new FileStream(_localConfigFilePath, FileMode.Open))
+                        using (var fileStream = new FileStream(_localConfigFilePath, FileMode.Open, FileAccess.Read, FileShare.None))
                         {
                             _localConfiguration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _serializer);
                         }
