@@ -29,6 +29,7 @@ Release date
 
 Added/fixed
 ===========
+(*) #1813 Optimize ConfigurationService.SetValueToStore to decrease number of saves
 (x) #1840 ConfigurationService sometimes overwrites the configuration with an empty one & decrease the number of 
     saves by scheduling batches into a single save operation
 
