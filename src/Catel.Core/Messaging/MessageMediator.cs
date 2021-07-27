@@ -82,7 +82,7 @@ namespace Catel.Messaging
         /// </returns>
         public bool IsMessageRegistered<TMessage>(object tag = null)
         {
-            var messageType = typeof (TMessage);
+            var messageType = typeof(TMessage);
 
             return IsMessageRegistered(messageType, tag);
         }
@@ -130,7 +130,7 @@ namespace Catel.Messaging
 
             lock (_lockObject)
             {
-                var messageType = typeof (TMessage);
+                var messageType = typeof(TMessage);
 
                 if (IsRegistered(recipient, handler, tag))
                 {
@@ -178,20 +178,20 @@ namespace Catel.Messaging
 
             lock (_lockObject)
             {
-                var messageType = typeof (TMessage);
+                var messageType = typeof(TMessage);
 
                 if (_registeredHandlers.TryGetValue(messageType, out var messageHandlers))
                 {
                     for (var i = 0; i < messageHandlers.Count; i++)
                     {
                         var handlerInfo = messageHandlers[i];
-                        var weakAction = (IWeakAction<TMessage>) handlerInfo.Action;
-                        
-                        if (!ReferenceEquals(recipient, weakAction.Target)) 
+                        var weakAction = (IWeakAction<TMessage>)handlerInfo.Action;
+
+                        if (!ReferenceEquals(recipient, weakAction.Target))
                         {
                             continue;
                         }
-                        
+
                         if (TagHelper.AreTagsEqual(tag, handlerInfo.Tag) && AreEqualHandlers(handler, weakAction))
                         {
                             messageHandlers.RemoveAt(i--);
@@ -262,7 +262,7 @@ namespace Catel.Messaging
 
             lock (_lockObject)
             {
-                var messageType = typeof (TMessage);
+                var messageType = typeof(TMessage);
 
                 if (_registeredHandlers.TryGetValue(messageType, out var messageHandlerList))
                 {
@@ -308,7 +308,7 @@ namespace Catel.Messaging
                     for (var i = 0; i < handlers.Count; i++)
                     {
                         var handler = handlers[i];
-                        if (!((IWeakReference) handler.Action).IsTargetAlive)
+                        if (!((IWeakReference)handler.Action).IsTargetAlive)
                         {
                             handlers.RemoveAt(i--);
 
@@ -348,7 +348,7 @@ namespace Catel.Messaging
                     for (var i = 0; i < messageHandlers.Count; i++)
                     {
                         var handlerInfo = messageHandlers[i];
-                        var weakReference = (IWeakReference) handlerInfo.Action;
+                        var weakReference = (IWeakReference)handlerInfo.Action;
                         if (ignoreTag || TagHelper.AreTagsEqual(tag, handlerInfo.Tag))
                         {
                             if (ReferenceEquals(recipient, weakReference.Target))
@@ -385,14 +385,14 @@ namespace Catel.Messaging
 
             lock (_lockObject)
             {
-                var messageType = typeof (TMessage);
+                var messageType = typeof(TMessage);
 
                 if (_registeredHandlers.TryGetValue(messageType, out var messageHandlers))
                 {
                     for (var i = messageHandlers.Count - 1; i >= 0; i--)
                     {
                         var handlerInfo = messageHandlers[i];
-                        var weakAction = (IWeakAction<TMessage>) handlerInfo.Action;
+                        var weakAction = (IWeakAction<TMessage>)handlerInfo.Action;
 
                         if (!weakAction.IsTargetAlive)
                         {
@@ -453,13 +453,13 @@ namespace Catel.Messaging
             {
                 var registeredHandlers = new List<IWeakAction<TMessage>>();
 
-                var messageType = typeof (TMessage);
+                var messageType = typeof(TMessage);
 
                 if (_registeredHandlers.TryGetValue(messageType, out var messageHandlers))
-                { 
+                {
                     for (var i = 0; i < messageHandlers.Count; i++)
                     {
-                        registeredHandlers.Add((IWeakAction<TMessage>) messageHandlers[i].Action);
+                        registeredHandlers.Add((IWeakAction<TMessage>)messageHandlers[i].Action);
                     }
                 }
 

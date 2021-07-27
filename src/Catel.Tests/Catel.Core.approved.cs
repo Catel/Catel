@@ -3019,6 +3019,10 @@ namespace Catel.Messaging
         bool UnregisterRecipient(object recipient, object tag = null);
         bool UnregisterRecipientAndIgnoreTags(object recipient);
     }
+    public abstract class MessageBase
+    {
+        protected MessageBase() { }
+    }
     public abstract class MessageBase<TMessage, TData>
         where TMessage : Catel.Messaging.MessageBase<TMessage, TData>, new ()
     {
