@@ -14,7 +14,7 @@ namespace Catel.Tests.Configuration
     using Catel.Runtime.Serialization;
     using Catel.Services;
 
-    public class ConfigurationServiceFacts
+    public partial class ConfigurationServiceFacts
     {
         private static ConfigurationService GetConfigurationService()
         {

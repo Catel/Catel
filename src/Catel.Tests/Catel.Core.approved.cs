@@ -975,14 +975,21 @@ namespace Catel.Configuration
         public event System.EventHandler<Catel.Configuration.ConfigurationChangedEventArgs> ConfigurationChanged;
         protected virtual string GetConfigurationFileName(Catel.IO.ApplicationDataTarget applicationDataTarget) { }
         protected virtual string GetFinalKey(string key) { }
+        protected object GetLockObject(Catel.Configuration.ConfigurationContainer container) { }
+        protected virtual double GetSaveSettingsSchedulerIntervalInMilliseconds() { }
         protected virtual Catel.Configuration.DynamicConfiguration GetSettingsContainer(Catel.Configuration.ConfigurationContainer container) { }
-        public T GetValue<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = default) { }
+        public virtual T GetValue<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = default) { }
         protected virtual string GetValueFromStore(Catel.Configuration.ConfigurationContainer container, string key) { }
-        public void InitializeValue(Catel.Configuration.ConfigurationContainer container, string key, object defaultValue) { }
-        public bool IsValueAvailable(Catel.Configuration.ConfigurationContainer container, string key) { }
-        public void SetLocalConfigFilePath(string filePath) { }
-        public void SetRoamingConfigFilePath(string filePath) { }
-        public void SetValue(Catel.Configuration.ConfigurationContainer container, string key, object value) { }
+        public virtual void InitializeValue(Catel.Configuration.ConfigurationContainer container, string key, object defaultValue) { }
+        public virtual bool IsValueAvailable(Catel.Configuration.ConfigurationContainer container, string key) { }
+        protected void RaiseConfigurationChanged(Catel.Configuration.ConfigurationContainer container, string key, object value) { }
+        protected virtual void SaveSettings(Catel.Configuration.ConfigurationContainer container, Catel.Configuration.DynamicConfiguration configuration, string fileName) { }
+        protected void ScheduleLocalConfigurationSave() { }
+        protected void ScheduleRoamingConfigurationSave() { }
+        protected virtual void ScheduleSaveSettings(Catel.Configuration.ConfigurationContainer container) { }
+        public virtual void SetLocalConfigFilePath(string filePath) { }
+        public virtual void SetRoamingConfigFilePath(string filePath) { }
+        public virtual void SetValue(Catel.Configuration.ConfigurationContainer container, string key, object value) { }
         protected virtual void SetValueToStore(Catel.Configuration.ConfigurationContainer container, string key, string value) { }
         public System.IDisposable SuspendNotifications() { }
         protected virtual bool ValueExists(Catel.Configuration.ConfigurationContainer container, string key) { }
