@@ -9,8 +9,10 @@
 namespace Catel.Configuration
 {
     using System;
+using System.IO;
     using System.Timers;
     using Catel.Data;
+    using Catel.Runtime.Serialization;
 
     public partial class ConfigurationService
     {
@@ -37,31 +39,27 @@ namespace Catel.Configuration
                     throw new ArgumentOutOfRangeException("container");
             }
 
-            //if (settings is null)
-            //{
-            //    settings = InitializeSettingsContainer(container);
-            //}
+            if (settings is null)
+            {
+                switch (container)
+                {
+                    case ConfigurationContainer.Local:
+                        var defaultLocalConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserLocal);
+                        SetLocalConfigFilePath(defaultLocalConfigFilePath);
+                        break;
+
+                    case ConfigurationContainer.Roaming:
+                        var defaultRoamingConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserRoaming);
+                        SetRoamingConfigFilePath(defaultRoamingConfigFilePath);
+                        break;
+                }
+
+                // Let's try again
+                settings = GetSettingsContainer(container);
+            }
 
             return settings;
         }
-
-        //protected virtual DynamicConfiguration InitializeSettingsContainer(ConfigurationContainer container)
-        //{
-        //    var fileName = string.Empty;
-
-        //    switch (container)
-        //    {
-        //        case ConfigurationContainer.Local:
-        //            fileName = GetConfigurationFileName(IO.ApplicationDataTarget.UserLocal);
-        //            SetLocalConfigFilePath(defaultLocalConfigFilePath);
-        //            break;
-
-        //        case ConfigurationContainer.Roaming:
-        //            fileName = GetConfigurationFileName(IO.ApplicationDataTarget.UserRoaming);
-        //            SetRoamingConfigFilePath(defaultRoamingConfigFilePath);
-        //            break;
-        //    }
-        //}
 
         private void OnLocalSaveConfigurationTimerElapsed(object sender, ElapsedEventArgs e)
         {
@@ -72,24 +70,24 @@ namespace Catel.Configuration
                 var settings = GetSettingsContainer(ConfigurationContainer.Local);
                 var fileName = _localConfigFilePath;
 
-                SaveSettings(ConfigurationContainer.Local, settings, fileName);
+                SaveConfiguration(ConfigurationContainer.Local, settings, fileName);
             }
         }
 
         private void OnRoamingSaveConfigurationTimerElapsed(object sender, ElapsedEventArgs e)
         {
+            _roamingSaveConfigurationTimer.Stop();
+
             lock (GetLockObject(ConfigurationContainer.Roaming))
             {
-                _roamingSaveConfigurationTimer.Stop();
-
                 var settings = GetSettingsContainer(ConfigurationContainer.Roaming);
                 var fileName = _roamingConfigFilePath;
 
-                SaveSettings(ConfigurationContainer.Roaming, settings, fileName);
+                SaveConfiguration(ConfigurationContainer.Roaming, settings, fileName);
             }
         }
 
-        protected virtual void ScheduleSaveSettings(ConfigurationContainer container)
+        protected virtual void ScheduleSaveConfiguration(ConfigurationContainer container)
         {
             switch (container)
             {
@@ -115,9 +113,12 @@ namespace Catel.Configuration
             _roamingSaveConfigurationTimer.Start();
         }
 
-        protected virtual void SaveSettings(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
+        protected virtual void SaveConfiguration(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
         {
-            configuration.SaveAsXml(fileName);
+            using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                configuration.SaveAsXml(fileStream);
+            }
         }
     }
 }

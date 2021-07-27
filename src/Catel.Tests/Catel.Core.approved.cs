@@ -982,11 +982,12 @@ namespace Catel.Configuration
         protected virtual string GetValueFromStore(Catel.Configuration.ConfigurationContainer container, string key) { }
         public virtual void InitializeValue(Catel.Configuration.ConfigurationContainer container, string key, object defaultValue) { }
         public virtual bool IsValueAvailable(Catel.Configuration.ConfigurationContainer container, string key) { }
+        protected virtual Catel.Configuration.DynamicConfiguration LoadConfiguration(string fileName) { }
         protected void RaiseConfigurationChanged(Catel.Configuration.ConfigurationContainer container, string key, object value) { }
-        protected virtual void SaveSettings(Catel.Configuration.ConfigurationContainer container, Catel.Configuration.DynamicConfiguration configuration, string fileName) { }
+        protected virtual void SaveConfiguration(Catel.Configuration.ConfigurationContainer container, Catel.Configuration.DynamicConfiguration configuration, string fileName) { }
         protected void ScheduleLocalConfigurationSave() { }
         protected void ScheduleRoamingConfigurationSave() { }
-        protected virtual void ScheduleSaveSettings(Catel.Configuration.ConfigurationContainer container) { }
+        protected virtual void ScheduleSaveConfiguration(Catel.Configuration.ConfigurationContainer container) { }
         public virtual void SetLocalConfigFilePath(string filePath) { }
         public virtual void SetRoamingConfigFilePath(string filePath) { }
         public virtual void SetValue(Catel.Configuration.ConfigurationContainer container, string key, object value) { }

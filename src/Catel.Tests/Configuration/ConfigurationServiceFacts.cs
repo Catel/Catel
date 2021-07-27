@@ -44,9 +44,9 @@ namespace Catel.Tests.Configuration
                 return configFileName;
             }
 
-            protected override async void SaveSettings(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
+            protected override async void SaveConfiguration(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
             {
-                base.SaveSettings(container, configuration, fileName);
+                base.SaveConfiguration(container, configuration, fileName);
 
                 if (CreateDelayDuringSave)
                 {

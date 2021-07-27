@@ -34,7 +34,7 @@
                     }
                 }
 
-                protected override void SaveSettings(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
+                protected override void SaveConfiguration(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
                 {
                     switch (container)
                     {
@@ -73,12 +73,13 @@
                 // and thus not allowing process B to correctly load the config
                 await Task.Delay(150);
 
-                // This code must be called *while service A is writing* so we added a delay of 50 ms
+                // This code must be called *while service A is writing* so we added a delay. It should have waited until
+                // the config value of A was released, then set value and overwrite the file instead of resetting it
                 var configServiceB = GetConfigurationService("GH1840");
-                configServiceB.SetRoamingValue("NAME", "B");
+                configServiceB.SetRoamingValue("ANOTHER VALUE", "B");
 
-                // Close both files
-                await Task.Delay(250);
+                // Close both files, wait long enough (longer than 5 seconds)
+                await Task.Delay(7000);
 
                 var configServiceC = GetConfigurationService("GH1840");
                 var value = configServiceC.GetRoamingValue<string>("NAME", string.Empty);

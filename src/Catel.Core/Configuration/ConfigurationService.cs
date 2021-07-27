@@ -24,6 +24,7 @@ namespace Catel.Configuration
     using System.Linq;
     using Path = IO.Path;
     using System.Timers;
+    using System.Diagnostics;
 #endif
 
     /// <summary>
@@ -96,12 +97,6 @@ namespace Catel.Configuration
             _appDataService = appDataService;
 
 #if NET || NETCORE || NETSTANDARD
-            var defaultLocalConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserLocal);
-            var defaultRoamingConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserRoaming);
-
-            SetLocalConfigFilePath(defaultLocalConfigFilePath);
-            SetRoamingConfigFilePath(defaultRoamingConfigFilePath);
-
             _localSaveConfigurationTimer.Interval = GetSaveSettingsSchedulerIntervalInMilliseconds();
             _localSaveConfigurationTimer.Elapsed += OnLocalSaveConfigurationTimerElapsed;
 
@@ -287,28 +282,7 @@ namespace Catel.Configuration
             lock (GetLockObject(ConfigurationContainer.Roaming))
             {
                 _roamingConfigFilePath = filePath;
-
-                try
-                {
-                    if (File.Exists(_roamingConfigFilePath))
-                    {
-                        using (var fileStream = new FileStream(_roamingConfigFilePath, FileMode.Open, FileAccess.Read, FileShare.None))
-                        {
-                            _roamingConfiguration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _serializer);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex, "Failed to load roaming configuration, using default settings");
-
-                    _roamingConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserRoaming);
-                }
-
-                if (_roamingConfiguration is null)
-                {
-                    _roamingConfiguration = new DynamicConfiguration();
-                }
+                _roamingConfiguration = LoadConfiguration(filePath);
             }
         }
 
@@ -325,29 +299,43 @@ namespace Catel.Configuration
             lock (GetLockObject(ConfigurationContainer.Local))
             {
                 _localConfigFilePath = filePath;
+                _localConfiguration = LoadConfiguration(filePath);
+            }
+        }
 
+        protected virtual DynamicConfiguration LoadConfiguration(string fileName)
+        {
+            var stopwatch = new Stopwatch();
+
+            if (!File.Exists(fileName))
+            {
+                // No file, we can really start from scratch
+                return new DynamicConfiguration();
+            }
+
+            // Try for 5 seconds
+            while (stopwatch.ElapsedMilliseconds < 5000)
+            {
                 try
                 {
-                    if (File.Exists(_localConfigFilePath))
+                    using (var fileStream = File.Open(fileName, FileMode.Open))
                     {
-                        using (var fileStream = new FileStream(_localConfigFilePath, FileMode.Open, FileAccess.Read, FileShare.None))
+                        if (!fileStream.CanRead)
                         {
-                            _localConfiguration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _serializer);
+                            continue;
                         }
+
+                        var configuration = SavableModelBase<DynamicConfiguration>.Load(fileStream, _serializer);
+                        return configuration;
                     }
                 }
-                catch (Exception ex)
+                catch (IOException)
                 {
-                    Log.Error(ex, "Failed to load local configuration, using default settings");
-
-                    _localConfigFilePath = GetConfigurationFileName(IO.ApplicationDataTarget.UserLocal);
-                }
-
-                if (_localConfiguration is null)
-                {
-                    _localConfiguration = new DynamicConfiguration();
+                    // allow
                 }
             }
+
+            throw Log.ErrorAndCreateException<InvalidOperationException>($"File '{fileName}' could not be used to load the configuration, it was locked for too long");
         }
 #endif
 
@@ -428,7 +416,7 @@ namespace Catel.Configuration
 
                 settings.SetConfigurationValue(key, value);
 
-                ScheduleSaveSettings(container);
+                ScheduleSaveConfiguration(container);
 #endif
             }
         }
