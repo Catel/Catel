@@ -54,6 +54,9 @@ using System.IO;
                         break;
                 }
 
+                // As soon as we initialized the config, make sure we have access to the serializer (instantiate it at least once)
+                _xmlSerializer ??= SerializationFactory.GetXmlSerializer();
+
                 // Let's try again
                 settings = GetSettingsContainer(container);
             }
@@ -117,7 +120,7 @@ using System.IO;
         {
             using (var fileStream = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                configuration.SaveAsXml(fileStream);
+                configuration.Save(fileStream, _xmlSerializer);
             }
         }
     }

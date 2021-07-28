@@ -52,6 +52,8 @@ namespace Catel.Configuration
         private readonly Timer _localSaveConfigurationTimer = new Timer();
         private readonly Timer _roamingSaveConfigurationTimer = new Timer();
 
+        private IXmlSerializer _xmlSerializer;
+
         private string _localConfigFilePath;
         private string _roamingConfigFilePath;
 #elif ANDROID
