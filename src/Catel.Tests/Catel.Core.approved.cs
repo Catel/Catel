@@ -3008,6 +3008,7 @@ namespace Catel.Messaging
         public System.Exception Exception { get; }
         public static void SendWith(bool data, System.Exception exception, object tag = null) { }
     }
+    public interface IMessage { }
     public interface IMessageMediator
     {
         void CleanUp();
@@ -3019,11 +3020,11 @@ namespace Catel.Messaging
         bool UnregisterRecipient(object recipient, object tag = null);
         bool UnregisterRecipientAndIgnoreTags(object recipient);
     }
-    public abstract class MessageBase
+    public abstract class MessageBase : Catel.Messaging.IMessage
     {
         protected MessageBase() { }
     }
-    public abstract class MessageBase<TMessage, TData>
+    public abstract class MessageBase<TMessage, TData> : Catel.Messaging.MessageBase
         where TMessage : Catel.Messaging.MessageBase<TMessage, TData>, new ()
     {
         protected MessageBase() { }
@@ -3032,6 +3033,7 @@ namespace Catel.Messaging
         public static void Register(object recipient, System.Action<TMessage> handler, object tag = null) { }
         protected static void Send(TMessage message, object tag = null) { }
         public static void SendWith(TData data, object tag = null) { }
+        public static void SendWith(TData data, System.Action<TMessage> initializer, object tag = null) { }
         public static void Unregister(object recipient, System.Action<TMessage> handler, object tag = null) { }
         public static TMessage With(TData data) { }
     }

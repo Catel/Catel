@@ -17,15 +17,15 @@ namespace Catel.Messaging
     /// <para/>
     /// For the payload data you can choose betweeen the following options:
     /// <list type="bullet">
-    /// 		<item><description>The Data property provided within this base class of type TData using simple types like int or string.</description></item>
-    /// 		<item><description>The Data property provided within this base class of type TData using userdefined data types.</description></item>
-    /// 		<item><description>Define properties on the derived message class itself.</description></item>
-    /// 		<item><description>A combination of the previous options.</description></item>
+    ///   <item><description>The Data property provided within this base class of type TData using simple types like int or string.</description></item>
+    ///   <item><description>The Data property provided within this base class of type TData using userdefined data types.</description></item>
+    ///   <item><description>Define properties on the derived message class itself.</description></item>
+    ///   <item><description>A combination of the previous options.</description></item>
     /// </list>
     /// </summary>
     /// <typeparam name="TMessage">The actual type of the message.</typeparam>
     /// <typeparam name="TData">The type of payload data to be carried with the message.</typeparam>
-    public abstract class MessageBase<TMessage, TData>
+    public abstract class MessageBase<TMessage, TData> : MessageBase
         where TMessage : MessageBase<TMessage, TData>, new()
     {
         // stores a reference to the Catels MessageMediator
@@ -73,13 +73,30 @@ namespace Catel.Messaging
         public TData Data { get; protected set; }
 
         /// <summary>
-        /// Use <see cref="SendWith">MessageClass.SendWith(data)</see> to send a new message via the mediator service.
+        /// Use <see cref="SendWith(TData, object)">MessageClass.SendWith(data)</see> to send a new message via the mediator service.
         /// </summary>
         /// <param name="data">The payload data.</param>
         /// <param name="tag">The optional Catel mediator tag to be used.</param>
         public static void SendWith(TData data, object tag = null)
         {
+            SendWith(data, null, tag);
+        }
+
+        /// <summary>
+        /// Use <see cref="SendWith(TData, object)">MessageClass.SendWith(data)</see> to send a new message via the mediator service.
+        /// </summary>
+        /// <param name="data">The payload data.</param>
+        /// <param name="initializer">The optional Catel mediator tag to be used.</param>
+        /// <param name="tag">The optional Catel mediator tag to be used.</param>
+        public static void SendWith(TData data, Action<TMessage> initializer, object tag = null)
+        {
             var message = With(data);
+
+            if (initializer is not null)
+            {
+                initializer(message);
+            }
+
             Send(message, tag);
         }
 
@@ -139,7 +156,7 @@ namespace Catel.Messaging
         /// <summary>
         /// Returns an instance of the MessageClass populated with payload Data.<br/>
         /// <para />
-        /// Most times used internally by the <see cref="SendWith"/> method.
+        /// Most times used internally by the <see cref="SendWith(TData, object)"/> method.
         /// </summary>
         /// <param name="data">The payload data.</param>
         /// <returns>An instance of the MessageClass populated with the given payload data.</returns>
