@@ -46,11 +46,11 @@ namespace Catel.Configuration
         private DynamicConfiguration _localConfiguration;
         private DynamicConfiguration _roamingConfiguration;
 
-        private readonly object _localConfigurationLock = new object();
-        private readonly object _roamingConfigurationLock = new object();
+        private readonly object _localConfigurationLock = new ();
+        private readonly object _roamingConfigurationLock = new ();
 
-        private readonly Timer _localSaveConfigurationTimer = new Timer();
-        private readonly Timer _roamingSaveConfigurationTimer = new Timer();
+        private readonly Timer _localSaveConfigurationTimer = new ();
+        private readonly Timer _roamingSaveConfigurationTimer = new ();
 
         private IXmlSerializer _xmlSerializer;
 
@@ -307,7 +307,7 @@ namespace Catel.Configuration
 
         protected virtual DynamicConfiguration LoadConfiguration(string fileName)
         {
-            var stopwatch = new Stopwatch();
+            var stopwatch = Stopwatch.StartNew();
 
             if (!File.Exists(fileName))
             {
