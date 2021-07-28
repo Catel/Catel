@@ -9,7 +9,7 @@
 namespace Catel.Configuration
 {
     using System;
-using System.IO;
+    using System.IO;
     using System.Timers;
     using Catel.Data;
     using Catel.Runtime.Serialization;
@@ -54,11 +54,26 @@ using System.IO;
                         break;
                 }
 
-                // As soon as we initialized the config, make sure we have access to the serializer (instantiate it at least once)
-                _xmlSerializer ??= SerializationFactory.GetXmlSerializer();
-
                 // Let's try again
                 settings = GetSettingsContainer(container);
+
+                if (settings is not null)
+                {
+                    // As soon as we initialized the config, make sure we do a 1-time write so we have the serializer and all required objects
+                    // to prevent any deadlocks when resolving required services when doing a delayed save of the settings
+                    _xmlSerializer ??= SerializationFactory.GetXmlSerializer();
+
+                    switch (container)
+                    {
+                        case ConfigurationContainer.Local:
+                            SaveLocalConfiguration();
+                            break;
+
+                        case ConfigurationContainer.Roaming:
+                            SaveRoamingConfiguration();
+                            break;
+                    }
+                }
             }
 
             return settings;
@@ -68,26 +83,14 @@ using System.IO;
         {
             _localSaveConfigurationTimer.Stop();
 
-            lock (GetLockObject(ConfigurationContainer.Local))
-            {
-                var settings = GetSettingsContainer(ConfigurationContainer.Local);
-                var fileName = _localConfigFilePath;
-
-                SaveConfiguration(ConfigurationContainer.Local, settings, fileName);
-            }
+            SaveLocalConfiguration();
         }
 
         private void OnRoamingSaveConfigurationTimerElapsed(object sender, ElapsedEventArgs e)
         {
             _roamingSaveConfigurationTimer.Stop();
 
-            lock (GetLockObject(ConfigurationContainer.Roaming))
-            {
-                var settings = GetSettingsContainer(ConfigurationContainer.Roaming);
-                var fileName = _roamingConfigFilePath;
-
-                SaveConfiguration(ConfigurationContainer.Roaming, settings, fileName);
-            }
+            SaveRoamingConfiguration();
         }
 
         protected virtual void ScheduleSaveConfiguration(ConfigurationContainer container)
@@ -107,13 +110,55 @@ using System.IO;
         protected void ScheduleLocalConfigurationSave()
         {
             _localSaveConfigurationTimer.Stop();
-            _localSaveConfigurationTimer.Start();
+
+            if (_localSaveConfigurationTimer.Interval > 0)
+            {
+                _localSaveConfigurationTimer.Start();
+            }
+            else
+            {
+                SaveLocalConfiguration();
+            }
         }
 
         protected void ScheduleRoamingConfigurationSave()
         {
             _roamingSaveConfigurationTimer.Stop();
-            _roamingSaveConfigurationTimer.Start();
+
+            if (_roamingSaveConfigurationTimer.Interval > 0)
+            {
+                _roamingSaveConfigurationTimer.Start();
+            }
+            else
+            {
+                SaveRoamingConfiguration();
+            }
+        }
+
+        private void SaveLocalConfiguration()
+        {
+            var container = ConfigurationContainer.Local;
+
+            lock (GetLockObject(container))
+            {
+                var settings = GetSettingsContainer(container);
+                var fileName = _localConfigFilePath;
+
+                SaveConfiguration(container, settings, fileName);
+            }
+        }
+
+        private void SaveRoamingConfiguration()
+        {
+            var container = ConfigurationContainer.Roaming;
+
+            lock (GetLockObject(container))
+            {
+                var settings = GetSettingsContainer(container);
+                var fileName = _roamingConfigFilePath;
+
+                SaveConfiguration(container, settings, fileName);
+            }
         }
 
         protected virtual void SaveConfiguration(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
