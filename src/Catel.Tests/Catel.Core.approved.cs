@@ -975,14 +975,22 @@ namespace Catel.Configuration
         public event System.EventHandler<Catel.Configuration.ConfigurationChangedEventArgs> ConfigurationChanged;
         protected virtual string GetConfigurationFileName(Catel.IO.ApplicationDataTarget applicationDataTarget) { }
         protected virtual string GetFinalKey(string key) { }
+        protected object GetLockObject(Catel.Configuration.ConfigurationContainer container) { }
+        protected virtual double GetSaveSettingsSchedulerIntervalInMilliseconds() { }
         protected virtual Catel.Configuration.DynamicConfiguration GetSettingsContainer(Catel.Configuration.ConfigurationContainer container) { }
-        public T GetValue<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = default) { }
+        public virtual T GetValue<T>(Catel.Configuration.ConfigurationContainer container, string key, T defaultValue = default) { }
         protected virtual string GetValueFromStore(Catel.Configuration.ConfigurationContainer container, string key) { }
-        public void InitializeValue(Catel.Configuration.ConfigurationContainer container, string key, object defaultValue) { }
-        public bool IsValueAvailable(Catel.Configuration.ConfigurationContainer container, string key) { }
-        public void SetLocalConfigFilePath(string filePath) { }
-        public void SetRoamingConfigFilePath(string filePath) { }
-        public void SetValue(Catel.Configuration.ConfigurationContainer container, string key, object value) { }
+        public virtual void InitializeValue(Catel.Configuration.ConfigurationContainer container, string key, object defaultValue) { }
+        public virtual bool IsValueAvailable(Catel.Configuration.ConfigurationContainer container, string key) { }
+        protected virtual Catel.Configuration.DynamicConfiguration LoadConfiguration(string fileName) { }
+        protected void RaiseConfigurationChanged(Catel.Configuration.ConfigurationContainer container, string key, object value) { }
+        protected virtual void SaveConfiguration(Catel.Configuration.ConfigurationContainer container, Catel.Configuration.DynamicConfiguration configuration, string fileName) { }
+        protected void ScheduleLocalConfigurationSave() { }
+        protected void ScheduleRoamingConfigurationSave() { }
+        protected virtual void ScheduleSaveConfiguration(Catel.Configuration.ConfigurationContainer container) { }
+        public virtual void SetLocalConfigFilePath(string filePath) { }
+        public virtual void SetRoamingConfigFilePath(string filePath) { }
+        public virtual void SetValue(Catel.Configuration.ConfigurationContainer container, string key, object value) { }
         protected virtual void SetValueToStore(Catel.Configuration.ConfigurationContainer container, string key, string value) { }
         public System.IDisposable SuspendNotifications() { }
         protected virtual bool ValueExists(Catel.Configuration.ConfigurationContainer container, string key) { }
@@ -3000,6 +3008,7 @@ namespace Catel.Messaging
         public System.Exception Exception { get; }
         public static void SendWith(bool data, System.Exception exception, object tag = null) { }
     }
+    public interface IMessage { }
     public interface IMessageMediator
     {
         void CleanUp();
@@ -3011,7 +3020,11 @@ namespace Catel.Messaging
         bool UnregisterRecipient(object recipient, object tag = null);
         bool UnregisterRecipientAndIgnoreTags(object recipient);
     }
-    public abstract class MessageBase<TMessage, TData>
+    public abstract class MessageBase : Catel.Messaging.IMessage
+    {
+        protected MessageBase() { }
+    }
+    public abstract class MessageBase<TMessage, TData> : Catel.Messaging.MessageBase
         where TMessage : Catel.Messaging.MessageBase<TMessage, TData>, new ()
     {
         protected MessageBase() { }
@@ -3020,6 +3033,7 @@ namespace Catel.Messaging
         public static void Register(object recipient, System.Action<TMessage> handler, object tag = null) { }
         protected static void Send(TMessage message, object tag = null) { }
         public static void SendWith(TData data, object tag = null) { }
+        public static void SendWith(TData data, System.Action<TMessage> initializer, object tag = null) { }
         public static void Unregister(object recipient, System.Action<TMessage> handler, object tag = null) { }
         public static TMessage With(TData data) { }
     }

@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IMessageMediator.cs" company="Catel development team">
 //   Copyright (c) 2008 - 2015 Catel development team. All rights reserved.
 // </copyright>
@@ -16,7 +16,6 @@ namespace Catel.Messaging
     ///</summary>
     public interface IMessageMediator
     {
-        #region Methods
         /// <summary>
         /// Determines whether the specified message type is registered.
         /// </summary>
@@ -115,6 +114,5 @@ namespace Catel.Messaging
         /// can also be invoked manually.
         /// </summary>
         void CleanUp();
-        #endregion
     }
 }

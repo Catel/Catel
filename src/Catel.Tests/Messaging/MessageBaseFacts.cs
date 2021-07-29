@@ -40,6 +40,29 @@ namespace Catel.Tests.Messaging
             private string _messageData;
 
             [TestCase]
+            public void RunsInitializerIfSpecified()
+            {
+                var messageMediator = MessageMediator.Default;
+                messageMediator.Register<TestMessage>(this, OnTestMessage);
+
+                _messageSent = false;
+                _messageData = null;
+
+                var ranInitializer = false;
+
+                TestMessage.SendWith("test", x =>
+                {
+                    ranInitializer = true;
+                });
+
+                messageMediator.Unregister<TestMessage>(this, OnTestMessage);
+
+                Assert.IsTrue(ranInitializer);
+                Assert.IsTrue(_messageSent);
+                Assert.AreEqual("test", _messageData);
+            }
+
+            [TestCase]
             public void SendsMessageWithDataWithoutTag()
             {
                 var messageMediator = MessageMediator.Default;
