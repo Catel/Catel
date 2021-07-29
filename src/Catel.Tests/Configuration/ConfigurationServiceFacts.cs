@@ -13,12 +13,54 @@ namespace Catel.Tests.Configuration
     using NUnit.Framework;
     using Catel.Runtime.Serialization;
     using Catel.Services;
+    using Catel.Runtime.Serialization.Xml;
+    using Catel.IO;
+    using System.IO;
+    using System.Threading.Tasks;
 
-    public class ConfigurationServiceFacts
+    public partial class ConfigurationServiceFacts
     {
-        private static ConfigurationService GetConfigurationService()
+        private class TestConfigurationService : ConfigurationService
         {
-            return new ConfigurationService(new SerializationManager(), new ObjectConverterService(), SerializationFactory.GetXmlSerializer(), new AppDataService());
+            private readonly string _name;
+
+            public TestConfigurationService(string name, ISerializationManager serializationManager, IObjectConverterService objectConverterService, IXmlSerializer serializer, IAppDataService appDataService) 
+                : base(serializationManager, objectConverterService, serializer, appDataService)
+            {
+                _name = name;
+            }
+
+            public bool CreateDelayDuringSave { get; set; }
+
+            protected override string GetConfigurationFileName(ApplicationDataTarget applicationDataTarget)
+            {
+                var configFileName = base.GetConfigurationFileName(applicationDataTarget);
+
+                if (!string.IsNullOrWhiteSpace(_name))
+                {
+                    configFileName = $"{System.IO.Path.GetFileNameWithoutExtension(configFileName)}.{_name}.xml";
+                }
+
+                return configFileName;
+            }
+
+            protected override async void SaveConfiguration(ConfigurationContainer container, DynamicConfiguration configuration, string fileName)
+            {
+                base.SaveConfiguration(container, configuration, fileName);
+
+                if (CreateDelayDuringSave)
+                {
+                    using (File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.None))
+                    {
+                        await Task.Delay(1000);
+                    }
+                }
+            }
+        }
+
+        private static TestConfigurationService GetConfigurationService(string name = null)
+        {
+            return new TestConfigurationService(name, new SerializationManager(), new ObjectConverterService(), SerializationFactory.GetXmlSerializer(), new AppDataService());
         }
 
         [TestFixture]
