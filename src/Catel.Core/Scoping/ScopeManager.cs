@@ -91,8 +91,7 @@ namespace Catel.Scoping
         }
 
         /// <summary>
-        /// Gets the current reference count for this
-        /// object.
+        /// Gets the current reference count for this object.
         /// </summary>
         public int RefCount
         {
@@ -108,7 +107,7 @@ namespace Catel.Scoping
 
         #region IDisposable Members
         /// <summary>
-        /// Dispose object, dereferencing or disposing the context it is managing.
+        /// Dispose object, dereferencing or disposing the object it is managing.
         /// </summary>
         public void Dispose()
         {
@@ -179,7 +178,7 @@ namespace Catel.Scoping
         }
 
         /// <summary>
-        /// Gets the ContextManager object for the specified database.
+        /// Gets the ScopeManager for the specified scope name.
         /// </summary>
         /// <param name="scopeName">Name of the scope.</param>
         /// <param name="createScopeFunction">The create scope function. Can be <c>null</c>.</param>
