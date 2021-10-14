@@ -12,14 +12,113 @@ namespace Catel.Tests.IoC
     using System.ComponentModel;
     using System.Linq;
     using Catel.Caching;
+    using Catel.Configuration;
     using Catel.IoC;
     using Catel.MVVM;
+    using Catel.Runtime.Serialization;
+    using Catel.Runtime.Serialization.Xml;
     using Catel.Services;
     using Catel.Tests.Data;
+    using Moq;
     using NUnit.Framework;
 
     public partial class ServiceLocatorFacts
     {
+        [TestFixture]
+        public class ParentServiceLocatorFacts
+        {
+            private class CustomAppDataService : AppDataService
+            {
+
+            }
+
+            public interface IService1
+            {
+
+            }
+
+            public class Service1 : IService1
+            {
+
+            }
+
+            public interface IService2
+            {
+
+            }
+
+            public class Service2 : IService2
+            {
+                public Service2(IService1 dependency)
+                {
+
+                }
+            }
+
+            public interface IService3
+            {
+
+            }
+
+            public class Service3 : IService3
+            {
+                public Service3(IService2 dependency)
+                {
+
+                }
+            }
+
+            private static ServiceLocator CreateLocator()
+            {
+                var parentServiceLocator = new ServiceLocator();
+
+                // Default registered service locator
+                var coreModule = new CoreModule();
+                coreModule.Initialize(parentServiceLocator);
+
+                // Override in child
+                var childServiceLocator = new ServiceLocator(parentServiceLocator);
+                childServiceLocator.RegisterType<IAppDataService, CustomAppDataService>();
+
+                // Set up nested hierarchy for type construction, so for construction the types should go into
+                // child => parent => child
+                childServiceLocator.RegisterType<IService1, Service1>();
+                parentServiceLocator.RegisterType<IService2, Service2>();
+                childServiceLocator.RegisterType<IService3, Service3>();
+
+                return childServiceLocator;
+            }
+
+            [TestCase]
+            public void UsesCorrectTypeFactoryToConstructTypes()
+            {
+                var serviceLocator = CreateLocator();
+
+                var service3 = serviceLocator.ResolveType<IService3>();
+
+                Assert.IsNotNull(service3);
+            }
+
+            [TestCase]
+            public void ResolvesTypeFromItself()
+            {
+                var serviceLocator = CreateLocator();
+                var selfService = serviceLocator.ResolveType<IAppDataService>();
+
+                Assert.IsNotNull(selfService);
+                Assert.IsInstanceOf<CustomAppDataService>(selfService);
+            }
+
+            [TestCase]
+            public void ResolvesTypeFromParent()
+            {
+                var serviceLocator = CreateLocator();
+                var parentService = serviceLocator.ResolveType<ISerializationManager>();
+
+                Assert.IsNotNull(parentService);
+            }
+        }
+
         [TestFixture]
         public class IDisposableImplementation
         {
@@ -559,7 +658,7 @@ namespace Catel.Tests.IoC
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
 
-                serviceLocator.RegisterType<ITestInterface>(x => new TestClass2());
+                serviceLocator.RegisterType<ITestInterface>((tf, reg) => new TestClass2());
 
                 var resolvedClass = serviceLocator.ResolveType<ITestInterface>();
 
@@ -571,7 +670,7 @@ namespace Catel.Tests.IoC
             {
                 var serviceLocator = IoCFactory.CreateServiceLocator();
 
-                serviceLocator.RegisterType<ITestInterface>(x => new TestClass2());
+                serviceLocator.RegisterType<ITestInterface>((tf, reg) => new TestClass2());
 
                 var registeredTypeInfo = serviceLocator.GetRegistrationInfo(typeof(ITestInterface));
 
@@ -1405,12 +1504,12 @@ namespace Catel.Tests.IoC
         {
             private interface IDummy
             {
-                 
+
             }
 
             public class Dummy : IDummy
             {
-                 
+
             }
 
             [TestCase]

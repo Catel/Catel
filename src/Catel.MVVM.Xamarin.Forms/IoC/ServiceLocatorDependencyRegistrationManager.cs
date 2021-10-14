@@ -88,7 +88,7 @@
 
                 Log.Debug("Found dependency service '{0}' and will be register as '{1}'", serviceType.FullName, interfaceType.FullName);
 
-                _serviceLocator.RegisterType(interfaceType, serviceLocatorRegistration => DependencyServiceGetMethodInfo.MakeGenericMethod(interfaceType).Invoke(typeof(DependencyService), ArrayOfObjectWithSingleNullElement));
+                _serviceLocator.RegisterType(interfaceType, (tf, reg) => DependencyServiceGetMethodInfo.MakeGenericMethod(interfaceType).Invoke(typeof(DependencyService), ArrayOfObjectWithSingleNullElement));
             }
         }
     }

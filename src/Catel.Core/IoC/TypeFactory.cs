@@ -225,7 +225,7 @@ namespace Catel.IoC
 
             // TODO: Consider to cache for performance
             var dependencyResolverManager = DependencyResolverManager.Default;
-            var dependencyResolver = _serviceLocator.ResolveType<IDependencyResolver>();
+            var dependencyResolver = _serviceLocator.ResolveTypeUsingFactory<IDependencyResolver>(this);
             dependencyResolverManager.RegisterDependencyResolverForInstance(obj, dependencyResolver);
 
 #if EXTREME_LOGGING
@@ -240,7 +240,7 @@ namespace Catel.IoC
 
                 try
                 {
-                    var dependency = _serviceLocator.ResolveType(injectAttribute.Type, injectAttribute.Tag);
+                    var dependency = _serviceLocator.ResolveTypeUsingFactory(this, injectAttribute.Type, injectAttribute.Tag);
                     propertyInfo.SetValue(obj, dependency, null);
                 }
                 catch (Exception ex)
@@ -545,7 +545,7 @@ namespace Catel.IoC
                         var collectionElementType = parameterTypeToResolve.GetCollectionElementType();
                         if (collectionElementType != null && _serviceLocator.IsTypeRegisteredWithOrWithoutTag(collectionElementType))
                         {
-                            var ctorParameterValueLocal = _serviceLocator.ResolveTypes(collectionElementType).Cast(collectionElementType);
+                            var ctorParameterValueLocal = _serviceLocator.ResolveTypesUsingFactory(this, collectionElementType).Cast(collectionElementType);
 
                             if (parameterTypeToResolve.IsArray)
                             {
@@ -569,12 +569,12 @@ namespace Catel.IoC
                         if (!(tag is null) && _serviceLocator.IsTypeRegistered(parameterTypeToResolve, tag))
                         {
                             // Use preferred tag
-                            ctorParameterValue = _serviceLocator.ResolveType(parameterTypeToResolve, tag);
+                            ctorParameterValue = _serviceLocator.ResolveTypeUsingFactory(this, parameterTypeToResolve, tag);
                         }
                         else
                         {
                             // No tag or fallback to default without tag
-                            ctorParameterValue = _serviceLocator.ResolveType(parameterTypeToResolve);
+                            ctorParameterValue = _serviceLocator.ResolveTypeUsingFactory(this, parameterTypeToResolve);
                         }
                     }
 

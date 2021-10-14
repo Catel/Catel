@@ -2231,15 +2231,20 @@ namespace Catel.IoC
         bool IsTypeRegisteredAsSingleton(System.Type serviceType, object tag = null);
         bool IsTypeRegisteredWithOrWithoutTag(System.Type serviceType);
         void RegisterInstance(System.Type serviceType, object instance, object tag = null);
+        [System.Obsolete("Use `Method with TypeFactory overload` instead. Will be removed in version 6.0.0." +
+            "", true)]
         void RegisterType(System.Type serviceType, System.Func<Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true);
+        void RegisterType(System.Type serviceType, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true);
         void RegisterType(System.Type serviceType, System.Type serviceImplementationType, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true);
-        void RemoveAllTypes(System.Type serviceType);
-        void RemoveType(System.Type serviceType, object tag = null);
+        bool RemoveAllTypes(System.Type serviceType);
+        bool RemoveType(System.Type serviceType, object tag = null);
         [System.Obsolete("Use `ResolveMultipleTypes` instead. Will be removed in version 6.0.0.", true)]
         object[] ResolveAllTypes(params System.Type[] types);
         object[] ResolveMultipleTypes(params System.Type[] types);
         object ResolveType(System.Type serviceType, object tag = null);
+        object ResolveTypeUsingFactory(Catel.IoC.ITypeFactory typeFactory, System.Type serviceType, object tag = null);
         System.Collections.Generic.IEnumerable<object> ResolveTypes(System.Type serviceType);
+        System.Collections.Generic.IEnumerable<object> ResolveTypesUsingFactory(Catel.IoC.ITypeFactory typeFactory, System.Type serviceType);
     }
     public interface IServiceLocatorInitializer
     {
@@ -2388,6 +2393,7 @@ namespace Catel.IoC
     public class ServiceLocator : Catel.IoC.IServiceLocator, System.IDisposable, System.IServiceProvider
     {
         public ServiceLocator() { }
+        public ServiceLocator(Catel.IoC.IServiceLocator serviceLocator) { }
         public bool AutoRegisterTypesViaAttributes { get; set; }
         public bool CanResolveNonAbstractTypesWithoutRegistration { get; set; }
         public bool IgnoreRuntimeIncorrectUsageOfRegisterAttribute { get; set; }
@@ -2405,15 +2411,20 @@ namespace Catel.IoC
         public bool IsTypeRegisteredAsSingleton(System.Type serviceType, object tag = null) { }
         public bool IsTypeRegisteredWithOrWithoutTag(System.Type serviceType) { }
         public void RegisterInstance(System.Type serviceType, object instance, object tag = null) { }
+        [System.Obsolete("Use `Method with TypeFactory overload` instead. Will be removed in version 6.0.0." +
+            "", true)]
         public void RegisterType(System.Type serviceType, System.Func<Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true) { }
+        public void RegisterType(System.Type serviceType, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true) { }
         public void RegisterType(System.Type serviceType, System.Type serviceImplementationType, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true) { }
-        public void RemoveAllTypes(System.Type serviceType) { }
-        public void RemoveType(System.Type serviceType, object tag = null) { }
+        public bool RemoveAllTypes(System.Type serviceType) { }
+        public bool RemoveType(System.Type serviceType, object tag = null) { }
         [System.Obsolete("Use `ResolveMultipleTypes` instead. Will be removed in version 6.0.0.", true)]
         public object[] ResolveAllTypes(params System.Type[] types) { }
         public object[] ResolveMultipleTypes(params System.Type[] types) { }
-        public object ResolveType(System.Type serviceType, object tag = null) { }
+        public virtual object ResolveType(System.Type serviceType, object tag = null) { }
+        public virtual object ResolveTypeUsingFactory(Catel.IoC.ITypeFactory typeFactory, System.Type serviceType, object tag = null) { }
         public System.Collections.Generic.IEnumerable<object> ResolveTypes(System.Type serviceType) { }
+        public System.Collections.Generic.IEnumerable<object> ResolveTypesUsingFactory(Catel.IoC.ITypeFactory typeFactory, System.Type serviceType) { }
     }
     public class ServiceLocatorAutoRegistrationManager
     {
@@ -2446,7 +2457,10 @@ namespace Catel.IoC
         public static bool IsTypeRegisteredAsSingleton<TService>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null) { }
         public static void RegisterInstance<TService>(this Catel.IoC.IServiceLocator serviceLocator, TService instance, object tag = null) { }
         public static void RegisterType<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
+        [System.Obsolete("Use `Method with TypeFactory overload` instead. Will be removed in version 6.0.0." +
+            "", true)]
         public static void RegisterType<TService>(this Catel.IoC.IServiceLocator serviceLocator, System.Func<Catel.IoC.ServiceLocatorRegistration, TService> createServiceFunc, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true) { }
+        public static void RegisterType<TService>(this Catel.IoC.IServiceLocator serviceLocator, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, TService> createServiceFunc, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true) { }
         public static void RegisterType<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true)
             where TServiceImplementation : TService { }
         public static TServiceImplementation RegisterTypeAndInstantiate<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator) { }
@@ -2459,7 +2473,10 @@ namespace Catel.IoC
         public static void RegisterTypeIfNotYetRegisteredWithTag<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null, Catel.IoC.RegistrationType registrationType = 0)
             where TServiceImplementation : TService { }
         public static void RegisterTypeWithTag<TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null, Catel.IoC.RegistrationType registrationType = 0) { }
+        [System.Obsolete("Use `Method with TypeFactory overload` instead. Will be removed in version 6.0.0." +
+            "", true)]
         public static void RegisterTypeWithTag<TService>(this Catel.IoC.IServiceLocator serviceLocator, System.Func<Catel.IoC.ServiceLocatorRegistration, TService> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true) { }
+        public static void RegisterTypeWithTag<TService>(this Catel.IoC.IServiceLocator serviceLocator, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, TService> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true) { }
         public static void RegisterTypeWithTag<TService, TServiceImplementation>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true)
             where TServiceImplementation : TService { }
         public static Catel.IoC.IRegistrationConventionHandler RegisterTypesUsingAllConventions(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.RegistrationType registrationType = 0) { }
@@ -2471,6 +2488,7 @@ namespace Catel.IoC
         public static TService ResolveType<TService>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null) { }
         public static object ResolveTypeAndReturnNullIfNotRegistered(this Catel.IoC.IServiceLocator serviceLocator, System.Type serviceType, object tag = null) { }
         public static T ResolveTypeAndReturnNullIfNotRegistered<T>(this Catel.IoC.IServiceLocator serviceLocator, object tag = null) { }
+        public static TService ResolveTypeUsingFactory<TService>(this Catel.IoC.IServiceLocator serviceLocator, Catel.IoC.ITypeFactory typeFactory, object tag = null) { }
         public static object ResolveTypeUsingParameters(this Catel.IoC.IServiceLocator serviceLocator, System.Type serviceType, object[] parameters, object tag = null) { }
         public static T ResolveTypeUsingParameters<T>(this Catel.IoC.IServiceLocator serviceLocator, object[] parameters, object tag = null) { }
         public static System.Collections.Generic.IEnumerable<TService> ResolveTypes<TService>(this Catel.IoC.IServiceLocator serviceLocator) { }
@@ -2479,8 +2497,8 @@ namespace Catel.IoC
     [System.Diagnostics.DebuggerDisplay("{DeclaringType} => {ImplementingType} ({RegistrationType})")]
     public class ServiceLocatorRegistration
     {
-        public ServiceLocatorRegistration(System.Type declaringType, System.Type implementingType, object tag, Catel.IoC.RegistrationType registrationType, System.Func<Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc) { }
-        public System.Func<Catel.IoC.ServiceLocatorRegistration, object> CreateServiceFunc { get; }
+        public ServiceLocatorRegistration(System.Type declaringType, System.Type implementingType, object tag, Catel.IoC.RegistrationType registrationType, System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc) { }
+        public System.Func<Catel.IoC.ITypeFactory, Catel.IoC.ServiceLocatorRegistration, object> CreateServiceFunc { get; }
         public System.Type DeclaringType { get; }
         public string DeclaringTypeName { get; }
         public System.Type ImplementingType { get; }

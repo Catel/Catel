@@ -35,7 +35,7 @@ namespace Catel.Tests.IoC.EventArgs
                 var serviceLocator = new ServiceLocator();
                 serviceLocator.TypeInstantiated += (s, e) => typeInstantiatedCalled = true;
 
-                IInterfaceA createServiceFunc(ServiceLocatorRegistration reg)
+                IInterfaceA createServiceFunc(ITypeFactory tf, ServiceLocatorRegistration reg)
                 {
                     numCalls++;
                     return new ClassA();
@@ -58,7 +58,7 @@ namespace Catel.Tests.IoC.EventArgs
                 var serviceLocator = new ServiceLocator();
                 serviceLocator.TypeInstantiated += (s, e) => typeInstantiatedCalled = true;
 
-                IInterfaceA createServiceFunc(ServiceLocatorRegistration reg)
+                IInterfaceA createServiceFunc(ITypeFactory tf, ServiceLocatorRegistration reg)
                 {
                     numCalls++;
                     return new ClassA();
