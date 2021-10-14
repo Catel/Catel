@@ -24,7 +24,7 @@ namespace Catel.IoC
         /// <param name="tag">The tag.</param>
         /// <param name="registrationType">Type of the registration.</param>
         /// <param name="createServiceFunc">The create service function.</param>
-        public ServiceLocatorRegistration(Type declaringType, Type implementingType, object tag, RegistrationType registrationType, Func<ServiceLocatorRegistration, object> createServiceFunc)
+        public ServiceLocatorRegistration(Type declaringType, Type implementingType, object tag, RegistrationType registrationType, Func<ITypeFactory, ServiceLocatorRegistration, object> createServiceFunc)
         {
             Argument.IsNotNull("createServiceFunc", createServiceFunc);
 
@@ -43,7 +43,7 @@ namespace Catel.IoC
         /// Gets the create service function.
         /// </summary>
         /// <value>The create service function.</value>
-        public Func<ServiceLocatorRegistration, object> CreateServiceFunc { get; private set; }
+        public Func<ITypeFactory, ServiceLocatorRegistration, object> CreateServiceFunc { get; private set; }
 
         /// <summary>
         /// Gets the declaring type.

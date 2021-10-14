@@ -26,7 +26,7 @@ namespace Catel.Scoping
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private static readonly string TypeName;
 
-        private static Dictionary<string, object> _instances = new Dictionary<string, object>();
+        private static readonly Dictionary<string, object> _instances = new Dictionary<string, object>();
         #endregion
 
         #region Fields
