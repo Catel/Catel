@@ -429,12 +429,12 @@ namespace Catel.IoC
                 {
                     if (CanResolveNonAbstractTypesWithoutRegistration && serviceType.IsClassEx() && !serviceType.IsAbstractEx())
                     {
-                        return _typeFactory.CreateInstanceWithTag(serviceType, tag);
+                        return typeFactory.CreateInstanceWithTag(serviceType, tag);
                     }
 
                     if (_parentServiceLocator is not null)
                     {
-                        return _parentServiceLocator.ResolveTypeUsingFactory(_typeFactory, serviceType, tag);
+                        return _parentServiceLocator.ResolveTypeUsingFactory(typeFactory, serviceType, tag);
                     }
 
                     ThrowTypeNotRegisteredException(serviceType);
@@ -884,7 +884,7 @@ namespace Catel.IoC
                     var instance = registeredTypeInfo.CreateServiceFunc(typeFactory, registeredTypeInfo);
                     if (instance != null && instance is Type)
                     {
-                        instance = _typeFactory.CreateInstanceWithTag((Type)instance, serviceInfo.Tag);
+                        instance = typeFactory.CreateInstanceWithTag((Type)instance, serviceInfo.Tag);
                     }
 
                     if (instance is null)
