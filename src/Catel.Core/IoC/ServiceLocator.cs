@@ -23,17 +23,13 @@ namespace Catel.IoC
         #region Nested type: RegisteredInstanceInfo
         private class RegisteredInstanceInfo : ServiceLocatorRegistration
         {
-            #region Constructors
             public RegisteredInstanceInfo(ServiceLocatorRegistration registration, object instance)
                 : base(registration.DeclaringType, registration.ImplementingType, registration.Tag, registration.RegistrationType, registration.CreateServiceFunc)
             {
                 ImplementingInstance = instance;
             }
-            #endregion
 
-            #region Properties
             public object ImplementingInstance { get; private set; }
-            #endregion
         }
         #endregion
 
@@ -43,23 +39,17 @@ namespace Catel.IoC
         {
             private readonly int _hash;
 
-            #region Constructors
             public ServiceInfo(Type type, object tag)
             {
                 Type = type;
                 Tag = tag;
                 _hash = HashHelper.CombineHash(Type.GetHashCode(), Tag != null ? Tag.GetHashCode() : 0);
             }
-            #endregion
 
-            #region Properties
             public Type Type { get; private set; }
 
             public object Tag { get; private set; }
 
-            #endregion
-
-            #region Methods
             public override int GetHashCode()
             {
                 return _hash;
@@ -84,10 +74,8 @@ namespace Catel.IoC
 
                 return Equals(objAsServiceInfo.Tag, Tag);
             }
-            #endregion
         }
         #endregion
-
         #endregion
 
         #region Constants
@@ -409,35 +397,29 @@ namespace Catel.IoC
                 this, null);
         }
 
-        /// <summary>
-        /// Registers an implementation of a service using a create type callback, but only if the type is not yet registered.
-        /// </summary>
-        /// <param name="serviceType">The type of the service.</param>
-        /// <param name="createServiceFunc">The create service function.</param>
-        /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
-        /// <param name="registrationType">The registration type. The default value is <see cref="RegistrationType.Singleton" />.</param>
-        /// <param name="registerIfAlreadyRegistered">If set to <c>true</c>, an older type registration is overwritten by this new one.</param>
-        /// <exception cref="ArgumentNullException">If <paramref name="serviceType" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentNullException">If <paramref name="createServiceFunc" /> is <c>null</c>.</exception>
-        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
+        [ObsoleteEx(ReplacementTypeOrMember = "Method with TypeFactory overload", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
         public void RegisterType(Type serviceType, Func<ServiceLocatorRegistration, object> createServiceFunc, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
+        {
+            Argument.IsNotNull("createServiceFunc", createServiceFunc);
+
+            RegisterType(serviceType, null, tag, registrationType, registerIfAlreadyRegistered, this, (tf, reg) => createServiceFunc(reg));
+        }
+
+        public void RegisterType(Type serviceType, Func<ITypeFactory, ServiceLocatorRegistration, object> createServiceFunc, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
         {
             Argument.IsNotNull("createServiceFunc", createServiceFunc);
 
             RegisterType(serviceType, null, tag, registrationType, registerIfAlreadyRegistered, this, createServiceFunc);
         }
 
-        /// <summary>
-        /// Resolves an instance of the type registered on the service.
-        /// </summary>
-        /// <param name="serviceType">The type of the service.</param>
-        /// <param name="tag">The tag to register the service with. The default value is <c>null</c>.</param>
-        /// <returns>An instance of the type registered on the service.</returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
-        /// <exception cref="TypeNotRegisteredException">The type is not found in any container.</exception>
-        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        public object ResolveType(Type serviceType, object tag = null)
+        public virtual object ResolveType(Type serviceType, object tag = null)
         {
+            return ResolveTypeUsingFactory(_typeFactory, serviceType, tag);
+        }
+
+        public virtual object ResolveTypeUsingFactory(ITypeFactory typeFactory, Type serviceType, object tag = null)
+        {
+            Argument.IsNotNull("typeFactory", typeFactory);
             Argument.IsNotNull("serviceType", serviceType);
 
             lock (_lockObject)
@@ -452,7 +434,7 @@ namespace Catel.IoC
 
                     if (_parentServiceLocator is not null)
                     {
-                        return _parentServiceLocator.ResolveType(serviceType, tag);
+                        return _parentServiceLocator.ResolveTypeUsingFactory(_typeFactory, serviceType, tag);
                     }
 
                     ThrowTypeNotRegisteredException(serviceType);
@@ -466,33 +448,32 @@ namespace Catel.IoC
                 }
 
                 // If a type is registered, the original container is always known
-                return ResolveTypeFromKnownContainer(serviceInfo);
+                return ResolveTypeFromKnownContainer(typeFactory, serviceInfo);
             }
         }
 
-        /// <summary>
-        /// Resolves all instances of the type registered on the service.
-        /// </summary>
-        /// <param name="serviceType">The type of the service.</param>
-        /// <returns>All instance of the type registered on the service.</returns>
-        /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
         public IEnumerable<object> ResolveTypes(Type serviceType)
         {
+            return ResolveTypesUsingFactory(_typeFactory, serviceType);
+        }
+
+        public IEnumerable<object> ResolveTypesUsingFactory(ITypeFactory typeFactory, Type serviceType)
+        {
+            Argument.IsNotNull("typeFactory", typeFactory);
             Argument.IsNotNull("serviceType", serviceType);
 
             var resolvedInstances = new List<object>();
 
             lock (_lockObject)
             {
-                for (int i = 0; i < _registeredTypes.Keys.Count; i++)
+                for (var i = 0; i < _registeredTypes.Keys.Count; i++)
                 {
                     var serviceInfo = _registeredTypes.Keys.ElementAt(i);
                     if (serviceInfo.Type == serviceType)
                     {
                         try
                         {
-                            resolvedInstances.Add(ResolveType(serviceInfo.Type, serviceInfo.Tag));
+                            resolvedInstances.Add(ResolveTypeUsingFactory(typeFactory, serviceInfo.Type, serviceInfo.Tag));
                         }
                         catch (TypeNotRegisteredException ex)
                         {
@@ -503,7 +484,7 @@ namespace Catel.IoC
 
                 if (_parentServiceLocator is not null)
                 {
-                    resolvedInstances.AddRange(_parentServiceLocator.ResolveTypes(serviceType));
+                    resolvedInstances.AddRange(_parentServiceLocator.ResolveTypesUsingFactory(typeFactory, serviceType));
                 }
             }
 
@@ -795,7 +776,7 @@ namespace Catel.IoC
 
             Log.Debug("Registering type '{0}' to instance of type '{1}'", serviceType.FullName, instance.GetType().FullName);
 
-            var registeredTypeInfo = new ServiceLocatorRegistration(serviceType, instance.GetType(), tag, RegistrationType.Singleton, x => instance);
+            var registeredTypeInfo = new ServiceLocatorRegistration(serviceType, instance.GetType(), tag, RegistrationType.Singleton, (tf, r) => instance);
 
             lock (_lockObject)
             {
@@ -831,7 +812,7 @@ namespace Catel.IoC
         /// <param name="createServiceFunc">The create service function.</param>
         /// <exception cref="System.InvalidOperationException"></exception>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType" /> is <c>null</c>.</exception>
-        private void RegisterType(Type serviceType, Type serviceImplementationType, object tag, RegistrationType registrationType, bool registerIfAlreadyRegistered, object originalContainer, Func<ServiceLocatorRegistration, object> createServiceFunc)
+        private void RegisterType(Type serviceType, Type serviceImplementationType, object tag, RegistrationType registrationType, bool registerIfAlreadyRegistered, object originalContainer, Func<ITypeFactory, ServiceLocatorRegistration, object> createServiceFunc)
         {
             Argument.IsNotNull("serviceType", serviceType);
 
@@ -873,7 +854,7 @@ namespace Catel.IoC
                 Log.Debug("Registering type '{0}' to type '{1}'", serviceType.FullName, serviceImplementationType.FullName);
 
                 registeredTypeInfo = new ServiceLocatorRegistration(serviceType, serviceImplementationType, tag, registrationType,
-                    x => CreateServiceInstanceWrapper(createServiceFunc ?? DefaultCreateServiceFunc, x));
+                    (tf, reg) => CreateServiceInstanceWrapper(tf, createServiceFunc ?? DefaultCreateServiceFunc, reg));
 
                 _registeredTypes[serviceInfo] = registeredTypeInfo;
             }
@@ -883,16 +864,7 @@ namespace Catel.IoC
             Log.Debug("Registered type '{0}' to type '{1}'", serviceType.FullName, serviceImplementationType.FullName);
         }
 
-        /// <summary>
-        /// Resolves the type from a known container.
-        /// </summary>
-        /// <param name="serviceInfo">The service information.</param>
-        /// <returns>
-        /// An instance of the type registered on the service.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">The <paramref name="serviceInfo" /> is <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">The type is not found in any container.</exception>
-        private object ResolveTypeFromKnownContainer(ServiceInfo serviceInfo)
+        private object ResolveTypeFromKnownContainer(ITypeFactory typeFactory, ServiceInfo serviceInfo)
         {
             Argument.IsNotNull("serviceInfo", serviceInfo);
 
@@ -909,8 +881,7 @@ namespace Catel.IoC
                     var serviceType = serviceInfo.Type;
                     var tag = serviceInfo.Tag;
 
-                    var instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
-
+                    var instance = registeredTypeInfo.CreateServiceFunc(typeFactory, registeredTypeInfo);
                     if (instance != null && instance is Type)
                     {
                         instance = _typeFactory.CreateInstanceWithTag((Type)instance, serviceInfo.Tag);
@@ -935,26 +906,15 @@ namespace Catel.IoC
             }
         }
 
-        /// <summary>
-        /// Default create service function, uses <see cref="_typeFactory"/> to create a service instance.
-        /// </summary>
-        /// <param name="registration">The registration.</param>
-        /// <returns>The service instance.</returns>
-        private object DefaultCreateServiceFunc(ServiceLocatorRegistration registration)
+        private object DefaultCreateServiceFunc(ITypeFactory typeFactory, ServiceLocatorRegistration registration)
         {
-            var instance = _typeFactory.CreateInstanceWithTag(registration.ImplementingType, registration.Tag);
+            var instance = typeFactory.CreateInstanceWithTag(registration.ImplementingType, registration.Tag);
             return instance;
         }
 
-        /// <summary>
-        /// Wraps the provided <paramref name="createServiceFunc"/> and raises the TypeInstantiated event with the created service instance.
-        /// </summary>
-        /// <param name="createServiceFunc">A function which creates a service instance.</param>
-        /// <param name="registration">The registration.</param>
-        /// <returns>The service instance.</returns>
-        private object CreateServiceInstanceWrapper(Func<ServiceLocatorRegistration, object> createServiceFunc, ServiceLocatorRegistration registration)
+        private object CreateServiceInstanceWrapper(ITypeFactory typeFactory, Func<ITypeFactory, ServiceLocatorRegistration, object> createServiceFunc, ServiceLocatorRegistration registration)
         {
-            var instance = createServiceFunc(registration);
+            var instance = createServiceFunc(typeFactory, registration);
             if (instance is null)
             {
                 ThrowTypeNotRegisteredException(registration.DeclaringType, "Failed to instantiate the type using the TypeFactory. Check if the required dependencies are registered as well or that the type has a valid constructor that can be used.");

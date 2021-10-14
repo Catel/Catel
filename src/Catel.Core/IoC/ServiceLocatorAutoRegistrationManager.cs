@@ -89,7 +89,7 @@ namespace Catel.IoC
                     {
                         var serviceType = (Type)propertyInfo.GetValue(dependencyAttribute);
                         var interfaceType = serviceType.GetInterfaces().FirstOrDefault() ?? serviceType;
-                        _serviceLocator.RegisterType(interfaceType, serviceLocatorRegistration =>
+                        _serviceLocator.RegisterType(interfaceType, (tf, reg) =>
                         {
                             return dependencyServiceGetMethodInfo.MakeGenericMethod(interfaceType).Invoke(dependencyServiceType, SingleNullElementArrayOfObjects);
                         });
