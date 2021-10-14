@@ -256,14 +256,16 @@ namespace Catel.IoC
         /// </summary>
         /// <param name="serviceType">The type of the service.</param>
         /// <param name="tag">The tag of the registered the service. The default value is <c>null</c>.</param>
+        /// <returns><c>true</c> if the type was removed; otherwise <c>false</c>.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
-        void RemoveType(Type serviceType, object tag = null);
+        bool RemoveType(Type serviceType, object tag = null);
 
         /// <summary>
         /// Removes all registered types of a certain service type.
         /// </summary>
         /// <param name="serviceType">The type of the service.</param>
+        /// <returns><c>true</c> if the type was removed; otherwise <c>false</c>.</returns>
         /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
-        void RemoveAllTypes(Type serviceType);
+        bool RemoveAllTypes(Type serviceType);
     }
 }

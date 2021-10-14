@@ -2233,8 +2233,8 @@ namespace Catel.IoC
         void RegisterInstance(System.Type serviceType, object instance, object tag = null);
         void RegisterType(System.Type serviceType, System.Func<Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true);
         void RegisterType(System.Type serviceType, System.Type serviceImplementationType, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true);
-        void RemoveAllTypes(System.Type serviceType);
-        void RemoveType(System.Type serviceType, object tag = null);
+        bool RemoveAllTypes(System.Type serviceType);
+        bool RemoveType(System.Type serviceType, object tag = null);
         [System.Obsolete("Use `ResolveMultipleTypes` instead. Will be removed in version 6.0.0.", true)]
         object[] ResolveAllTypes(params System.Type[] types);
         object[] ResolveMultipleTypes(params System.Type[] types);
@@ -2388,6 +2388,7 @@ namespace Catel.IoC
     public class ServiceLocator : Catel.IoC.IServiceLocator, System.IDisposable, System.IServiceProvider
     {
         public ServiceLocator() { }
+        public ServiceLocator(Catel.IoC.IServiceLocator serviceLocator) { }
         public bool AutoRegisterTypesViaAttributes { get; set; }
         public bool CanResolveNonAbstractTypesWithoutRegistration { get; set; }
         public bool IgnoreRuntimeIncorrectUsageOfRegisterAttribute { get; set; }
@@ -2407,8 +2408,8 @@ namespace Catel.IoC
         public void RegisterInstance(System.Type serviceType, object instance, object tag = null) { }
         public void RegisterType(System.Type serviceType, System.Func<Catel.IoC.ServiceLocatorRegistration, object> createServiceFunc, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true) { }
         public void RegisterType(System.Type serviceType, System.Type serviceImplementationType, object tag = null, Catel.IoC.RegistrationType registrationType = 0, bool registerIfAlreadyRegistered = true) { }
-        public void RemoveAllTypes(System.Type serviceType) { }
-        public void RemoveType(System.Type serviceType, object tag = null) { }
+        public bool RemoveAllTypes(System.Type serviceType) { }
+        public bool RemoveType(System.Type serviceType, object tag = null) { }
         [System.Obsolete("Use `ResolveMultipleTypes` instead. Will be removed in version 6.0.0.", true)]
         public object[] ResolveAllTypes(params System.Type[] types) { }
         public object[] ResolveMultipleTypes(params System.Type[] types) { }

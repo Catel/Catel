@@ -12,14 +12,49 @@ namespace Catel.Tests.IoC
     using System.ComponentModel;
     using System.Linq;
     using Catel.Caching;
+    using Catel.Configuration;
     using Catel.IoC;
     using Catel.MVVM;
+    using Catel.Runtime.Serialization;
     using Catel.Services;
     using Catel.Tests.Data;
     using NUnit.Framework;
 
     public partial class ServiceLocatorFacts
     {
+        [TestFixture]
+        public class ParentServiceLocatorFacts
+        {
+            private static ServiceLocator CreateLocator()
+            {
+                var parentServiceLocator = new ServiceLocator();
+                parentServiceLocator.RegisterType<ISerializationManager, SerializationManager>();
+
+                var childServiceLocator = new ServiceLocator(parentServiceLocator);
+                childServiceLocator.RegisterType<IAppDataService, AppDataService>();
+
+                return childServiceLocator;
+            }
+
+            [TestCase]
+            public void ResolvesTypeFromItself()
+            {
+                var serviceLocator = CreateLocator();
+                var selfService = serviceLocator.ResolveType<IAppDataService>();
+
+                Assert.IsNotNull(selfService);
+            }
+
+            [TestCase]
+            public void ResolvesTypeFromParent()
+            {
+                var serviceLocator = CreateLocator();
+                var parentService = serviceLocator.ResolveType<ISerializationManager>();
+
+                Assert.IsNotNull(parentService);
+            }
+        }
+
         [TestFixture]
         public class IDisposableImplementation
         {

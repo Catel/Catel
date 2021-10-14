@@ -124,6 +124,11 @@ namespace Catel.IoC
         private readonly ITypeFactory _typeFactory;
 
         /// <summary>
+        /// The parent service locator.
+        /// </summary>
+        private readonly IServiceLocator _parentServiceLocator;
+
+        /// <summary>
         /// The lock object.
         /// </summary>
         private readonly object _lockObject = new object();
@@ -155,6 +160,18 @@ namespace Catel.IoC
             //RegisterType(typeof(IEnumerable<>), typeof(List<>));
             //RegisterType(typeof(IList<>), typeof(List<>));
         }
+
+        /// <summary>
+        /// Creates a cloned instance of this service locator with registered (non-instance) types.
+        /// </summary>
+        /// <param name="serviceLocator">The service locator to clone.</param>
+        public ServiceLocator(IServiceLocator serviceLocator)
+            : this()
+        {
+            Argument.IsNotNull(nameof(serviceLocator), serviceLocator);
+
+            _parentServiceLocator = serviceLocator;
+        }
         #endregion
 
         #region Properties
@@ -166,7 +183,6 @@ namespace Catel.IoC
         {
             get { return IoCConfiguration.DefaultServiceLocator; }
         }
-
         #endregion
 
         #region IServiceLocator Members
@@ -214,9 +230,9 @@ namespace Catel.IoC
             lock (_lockObject)
             {
                 // Always check via IsTypeRegistered, allow late-time registration
-                if (!IsTypeRegistered(serviceType, tag))
+                if (!IsTypeRegisteredInCurrentLocator(serviceType, tag))
                 {
-                    return null;
+                    return _parentServiceLocator?.GetRegistrationInfo(serviceType, tag);
                 }
 
                 var serviceInfo = new ServiceInfo(serviceType, tag);
@@ -263,7 +279,7 @@ namespace Catel.IoC
                 }
             }
 
-            return false;
+            return _parentServiceLocator?.IsTypeRegisteredWithOrWithoutTag(serviceType) ?? false;
         }
 
         /// <summary>
@@ -275,6 +291,19 @@ namespace Catel.IoC
         /// <remarks>Note that the actual implementation lays in the hands of the IoC technique being used.</remarks>
         /// <exception cref="ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
         public bool IsTypeRegistered(Type serviceType, object tag = null)
+        {
+            Argument.IsNotNull("serviceType", serviceType);
+
+            var isRegistered = IsTypeRegisteredInCurrentLocator(serviceType, tag);
+            if (!isRegistered && _parentServiceLocator is not null)
+            {
+                isRegistered = _parentServiceLocator.IsTypeRegistered(serviceType, tag);
+            }
+
+            return isRegistered;
+        }
+
+        private bool IsTypeRegisteredInCurrentLocator(Type serviceType, object tag = null)
         {
             Argument.IsNotNull("serviceType", serviceType);
 
@@ -322,9 +351,9 @@ namespace Catel.IoC
             lock (_lockObject)
             {
                 // Required to support the MissingTypeEventArgs
-                if (!IsTypeRegistered(serviceType, tag))
+                if (!IsTypeRegisteredInCurrentLocator(serviceType, tag))
                 {
-                    return false;
+                    return _parentServiceLocator?.IsTypeRegisteredAsSingleton(serviceType, tag) ?? false;
                 }
 
                 var serviceInfo = new ServiceInfo(serviceType, tag);
@@ -340,7 +369,7 @@ namespace Catel.IoC
                 }
             }
 
-            return false;
+            return _parentServiceLocator?.IsTypeRegisteredAsSingleton(serviceType, tag) ?? false;
         }
 
         /// <summary>
@@ -413,13 +442,17 @@ namespace Catel.IoC
 
             lock (_lockObject)
             {
-                var isTypeRegistered = IsTypeRegistered(serviceType, tag);
-
+                var isTypeRegistered = IsTypeRegisteredInCurrentLocator(serviceType, tag);
                 if (!isTypeRegistered)
                 {
                     if (CanResolveNonAbstractTypesWithoutRegistration && serviceType.IsClassEx() && !serviceType.IsAbstractEx())
                     {
                         return _typeFactory.CreateInstanceWithTag(serviceType, tag);
+                    }
+
+                    if (_parentServiceLocator is not null)
+                    {
+                        return _parentServiceLocator.ResolveType(serviceType, tag);
                     }
 
                     ThrowTypeNotRegisteredException(serviceType);
@@ -466,6 +499,11 @@ namespace Catel.IoC
                             Log.Debug(ex, "Failed to resolve type '{0}', returning null", ex.RequestedType.GetSafeFullName(false));
                         }
                     }
+                }
+
+                if (_parentServiceLocator is not null)
+                {
+                    resolvedInstances.AddRange(_parentServiceLocator.ResolveTypes(serviceType));
                 }
             }
 
@@ -577,20 +615,14 @@ namespace Catel.IoC
             }
         }
 
-        /// <summary>
-        /// Removes the registered type with the specific tag.
-        /// </summary>
-        /// <param name="serviceType">The type of the service.</param>
-        /// <param name="tag">The tag of the registered the service. The default value is <c>null</c>.</param>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
-        public void RemoveType(Type serviceType, object tag = null)
+        public bool RemoveType(Type serviceType, object tag = null)
         {
             Argument.IsNotNull("serviceType", serviceType);
 
+            var wasRemoved = false;
+
             lock (_lockObject)
             {
-                var wasRemoved = false;
-
                 var serviceInfo = new ServiceInfo(serviceType, tag);
 
                 if (_registeredInstances.TryGetValue(serviceInfo, out var existingInstance))
@@ -611,16 +643,21 @@ namespace Catel.IoC
                         tag, existingRegistration.RegistrationType, existingInstance?.ImplementingInstance));
                 }
             }
+
+            if (_parentServiceLocator is not null)
+            {
+                // Important: || wasRemoved must be at the end
+                wasRemoved = _parentServiceLocator.RemoveType(serviceType, tag) || wasRemoved;
+            }
+
+            return wasRemoved;
         }
 
-        /// <summary>
-        /// Removes all registered types of a certain service type.
-        /// </summary>
-        /// <param name="serviceType">The type of the service.</param>
-        /// <exception cref="System.ArgumentNullException">The <paramref name="serviceType"/> is <c>null</c>.</exception>
-        public void RemoveAllTypes(Type serviceType)
+        public bool RemoveAllTypes(Type serviceType)
         {
             Argument.IsNotNull("serviceType", serviceType);
+
+            var hasRemoved = false;
 
             lock (_lockObject)
             {
@@ -629,10 +666,19 @@ namespace Catel.IoC
                     var serviceInfo = _registeredTypes.Keys.ElementAt(i);
                     if (serviceInfo.Type == serviceType)
                     {
-                        RemoveType(serviceType, serviceInfo.Tag);
+                        // Important: || hasRemoved must be at the end
+                        hasRemoved = RemoveType(serviceType, serviceInfo.Tag) || hasRemoved;
                     }
                 }
             }
+
+            if (_parentServiceLocator is not null)
+            {
+                // Important: || hasRemoved must be at the end
+                hasRemoved = _parentServiceLocator.RemoveAllTypes(serviceType) || hasRemoved;
+            }
+
+            return hasRemoved;
         }
         #endregion
 
