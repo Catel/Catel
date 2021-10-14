@@ -96,7 +96,7 @@ namespace Catel.Tests.IoC
 
                 var service3 = serviceLocator.ResolveType<IService3>();
 
-                Assert.IsNotNull(() => service3);
+                Assert.IsNotNull(service3);
             }
 
             [TestCase]
