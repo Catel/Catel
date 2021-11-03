@@ -32,7 +32,7 @@
     </PackageReference>
     <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all" />
     <PackageReference Include="PublicApiGenerator" Version="10.2.0" PrivateAssets="all" />
-    <PackageReference Include="Verify.NUnit" Version="14.0.1" />
+    <PackageReference Include="Verify.NUnit" Version="14.1.0" />
   </ItemGroup>
 
   <ItemGroup>
