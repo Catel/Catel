@@ -1,6 +1,6 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
   <PropertyGroup>
-    <TargetFrameworks>net45;net46;net47;net48;netcoreapp3.1;net5.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net47;net48;netcoreapp3.1;net5.0;net6.0;netstandard2.0</TargetFrameworks>
     <AssemblyName>Catel.Serialization.Json</AssemblyName>
     <RootNamespace>Catel</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
@@ -17,12 +17,12 @@
   
   <ItemGroup>
     <PackageReference Include="Catel.Fody" Version="4.7.0" PrivateAssets="all" />
-    <PackageReference Include="Fody" Version="6.5.3" PrivateAssets="all">
+    <PackageReference Include="Fody" Version="6.6.0" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="MethodTimer.Fody" Version="3.2.0" PrivateAssets="all" />
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
-    <PackageReference Include="NewtonSoft.Json" Version="12.0.3" />
+    <PackageReference Include="NewtonSoft.Json" Version="13.0.1" />
     <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all" />
   </ItemGroup>
   

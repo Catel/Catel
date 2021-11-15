@@ -120,7 +120,9 @@ namespace Catel.Runtime.Serialization.Binary
                     }
 
                     var binaryFormatter = CreateBinaryFormatter(SerializationContextMode.Deserialization);
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                     var propertyValues = (List<PropertyValue>) binaryFormatter.Deserialize(stream);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                     var memberValues = ConvertPropertyValuesToMemberValues(context, model.GetType(), propertyValues);
                     context.Context.MemberValues.AddRange(memberValues);
 
@@ -379,7 +381,9 @@ namespace Catel.Runtime.Serialization.Binary
             // NOTE: We have to keep backwards compatibility and serialize as PropertyValues list
             var propertyValues = serializationContext.PropertyValues;
 
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
             binaryFormatter.Serialize(stream, propertyValues);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
         }
 
         /// <summary>

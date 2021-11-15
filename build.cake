@@ -26,7 +26,6 @@ Parameters["UseVisualStudioPrerelease"] = "false";
 
 Components.Add("Catel.Core");
 Components.Add("Catel.MVVM");
-Components.Add("Catel.MVVM.Xamarin.Forms");
 Components.Add("Catel.Serialization.Json");
 
 TestProjects.Add(string.Format("{0}.Tests", GetBuildServerVariable("SolutionName")));

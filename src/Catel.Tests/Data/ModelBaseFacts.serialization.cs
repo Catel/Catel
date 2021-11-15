@@ -521,11 +521,15 @@ namespace Catel.Tests.Data
                 var binaryFormatter = new BinaryFormatter();
                 using (var memoryStream = new MemoryStream())
                 {
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                     binaryFormatter.Serialize(memoryStream, catelProject);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
 
                     memoryStream.Position = 0L;
 
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                     restoredProject = (Project)binaryFormatter.Deserialize(memoryStream);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                 }
 
                 var projectAsEditableObject = catelProject as IEditableObject;

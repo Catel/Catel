@@ -131,7 +131,12 @@ namespace Catel.Logging
             {
                 if (_webClient is null)
                 {
-                    _webClient = new WebClient { Encoding = Encoding.UTF8 };
+#pragma warning disable SYSLIB0014 // Type or member is obsolete
+                    _webClient = new WebClient 
+                    { 
+                        Encoding = Encoding.UTF8 
+                    };
+#pragma warning restore SYSLIB0014 // Type or member is obsolete
 
                     _webClient.Headers[HttpRequestHeader.ContentType] = "application/json";
 
