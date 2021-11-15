@@ -1,5 +1,5 @@
-#addin "nuget:?package=Cake.Issues&version=0.9.1"
-#addin "nuget:?package=Cake.Issues.MsBuild&version=0.9.1"
+#addin "nuget:?package=Cake.Issues&version=1.0.0"
+#addin "nuget:?package=Cake.Issues.MsBuild&version=1.0.0"
 
 #tool "nuget:?package=MSBuild.Extension.Pack&version=1.9.1"
 
@@ -262,11 +262,15 @@ private static string GetVisualStudioDirectory(BuildContext buildContext, bool? 
 
     var prereleasePaths = new List<KeyValuePair<string, string>>(new [] 
     { 
-        new KeyValuePair<string, string>("Visual Studio 2019 Preview", $@"{Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)}\Microsoft Visual Studio\2019\Preview\")
+        new KeyValuePair<string, string>("Visual Studio 2022 Preview", $@"{Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)}\Microsoft Visual Studio\2022\Preview\"),
+        new KeyValuePair<string, string>("Visual Studio 2019 Preview", $@"{Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)}\Microsoft Visual Studio\2019\Preview\"),
     });
 
     var normalPaths = new List<KeyValuePair<string, string>> (new []
     {
+        new KeyValuePair<string, string>("Visual Studio 2022 Enterprise", $@"{Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)}\Microsoft Visual Studio\2022\Enterprise\"),
+        new KeyValuePair<string, string>("Visual Studio 2022 Professional", $@"{Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)}\Microsoft Visual Studio\2022\Professional\"),
+        new KeyValuePair<string, string>("Visual Studio 2022 Community", $@"{Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)}\Microsoft Visual Studio\2022\Community\"),
         new KeyValuePair<string, string>("Visual Studio 2019 Enterprise", $@"{Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)}\Microsoft Visual Studio\2019\Enterprise\"),
         new KeyValuePair<string, string>("Visual Studio 2019 Professional", $@"{Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)}\Microsoft Visual Studio\2019\Professional\"),
         new KeyValuePair<string, string>("Visual Studio 2019 Community", $@"{Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86)}\Microsoft Visual Studio\2019\Community\"),
