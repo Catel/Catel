@@ -401,14 +401,6 @@ namespace Catel.IoC
                 this, null);
         }
 
-        [ObsoleteEx(ReplacementTypeOrMember = "Method with TypeFactory overload", TreatAsErrorFromVersion = "5.0", RemoveInVersion = "6.0")]
-        public void RegisterType(Type serviceType, Func<ServiceLocatorRegistration, object> createServiceFunc, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
-        {
-            Argument.IsNotNull("createServiceFunc", createServiceFunc);
-
-            RegisterType(serviceType, null, tag, registrationType, registerIfAlreadyRegistered, this, (tf, reg) => createServiceFunc(reg));
-        }
-
         public void RegisterType(Type serviceType, Func<ITypeFactory, ServiceLocatorRegistration, object> createServiceFunc, object tag = null, RegistrationType registrationType = RegistrationType.Singleton, bool registerIfAlreadyRegistered = true)
         {
             Argument.IsNotNull("createServiceFunc", createServiceFunc);
@@ -847,8 +839,7 @@ namespace Catel.IoC
                     var serviceType = serviceInfo.Type;
                     var tag = serviceInfo.Tag;
 
-                    var instance = registeredTypeInfo.CreateServiceFunc(registeredTypeInfo);
-
+                    var instance = registeredTypeInfo.CreateServiceFunc(typeFactory, registeredTypeInfo);
                     if (instance is not null && instance is Type)
                     {
                         instance = _typeFactory.CreateInstanceWithTag((Type)instance, serviceInfo.Tag);

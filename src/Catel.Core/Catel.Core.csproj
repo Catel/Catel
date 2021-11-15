@@ -24,6 +24,8 @@
     <PackageReference Include="ModuleInit.Fody" Version="2.1.1" PrivateAssets="all" />
     <PackageReference Include="Obsolete.Fody" Version="5.2.1" PrivateAssets="all" />
     <PackageReference Include="System.Runtime.Serialization.Xml" Version="4.3.0" />
+  </ItemGroup>
+  
   <!-- .NET 4.7 -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
