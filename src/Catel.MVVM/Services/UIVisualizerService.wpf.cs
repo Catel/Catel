@@ -234,7 +234,7 @@ namespace Catel.Services
             else
             {
                 // ORCOMP-337: Always invoke with priority Input.
-                window.Dispatcher.BeginInvoke(async () =>
+                window.Dispatcher.BeginInvokeIfRequired(async () =>
                 {
                     if (context.SetParentWindow)
                     {
@@ -260,7 +260,7 @@ namespace Catel.Services
                         Log.Error(ex, $"An error occurred while showing window '{window.GetType().GetSafeFullName(true)}'");
                         tcs.TrySetResult(null);
                     }
-                }, DispatcherPriority.Input, false);
+                }, DispatcherPriority.Input);
             }
 
             return tcs.Task;

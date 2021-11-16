@@ -60,7 +60,7 @@ namespace Catel.Windows.Threading
                 {
                     tcs.TrySetException(ex);
                 }
-            }, false);
+            });
 
             await tcs.Task;
         }
