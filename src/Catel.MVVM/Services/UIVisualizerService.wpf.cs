@@ -361,7 +361,7 @@ namespace Catel.Services
             else
             {
                 // ORCOMP-337: Always invoke with priority Input.
-                window.Dispatcher.BeginInvokeIfRequired(async () =>
+                window.Dispatcher.BeginInvoke(async () =>
                 {
                     if (context.SetParentWindow)
                     {
