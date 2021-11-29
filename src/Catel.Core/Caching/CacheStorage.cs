@@ -53,7 +53,9 @@ namespace Catel.Caching
         /// <summary>
         /// The timer that is being executed to invalidate the cache.
         /// </summary>
+#pragma warning disable IDISP006 // Implement IDisposable.
         private Timer _expirationTimer;
+#pragma warning restore IDISP006 // Implement IDisposable.
 
         /// <summary>
         /// The expiration timer interval.
@@ -499,7 +501,9 @@ namespace Catel.Caching
                 }
                 finally
                 {
+#pragma warning disable IDISP007 // Don't dispose injected.
                     unlockDisposable?.Dispose();
+#pragma warning restore IDISP007 // Don't dispose injected.
                 }
             }
         }

@@ -21,7 +21,9 @@ namespace Catel.Configuration
     [SerializerModifier(typeof(DynamicConfigurationSerializerModifier))]
     public class DynamicConfiguration : ModelBase, ICustomXmlSerializable
     {
+#pragma warning disable IDE1006 // Naming Styles
         protected static readonly HashSet<string> DynamicProperties = new HashSet<string>();
+#pragma warning restore IDE1006 // Naming Styles
 
         private readonly HashSet<string> _propertiesSetAtLeastOnce = new HashSet<string>();
         private IXmlSerializer _xmlSerializer;

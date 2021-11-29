@@ -11,7 +11,7 @@ namespace Catel.IoC
     /// <summary>
     /// Type factory which will cache constructors to ensure the best performance available.
     /// </summary>
-    public interface ITypeFactory
+    public interface ITypeFactory : IDisposable
     {
         /// <summary>
         /// Creates an instance of the specified type using dependency injection.

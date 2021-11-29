@@ -76,6 +76,7 @@ namespace Catel
         /// <param name="isDisposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         private void Dispose(bool isDisposing)
         {
+#pragma warning disable IDISP023 // Don't use reference types in finalizer context.
             lock (_syncRoot)
             {
                 if (!IsDisposed && !_disposing)
@@ -117,6 +118,7 @@ namespace Catel
                     _disposing = false;
                 }
             }
+#pragma warning restore IDISP023 // Don't use reference types in finalizer context.
         }
     }
 }

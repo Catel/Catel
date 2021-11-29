@@ -881,7 +881,9 @@
         IDictionaryEnumerator IDictionary.GetEnumerator()
         {
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
+#pragma warning disable IDISP005 // Return type should indicate that the value should be disposed.
             return _dict.GetEnumerator();
+#pragma warning restore IDISP005 // Return type should indicate that the value should be disposed.
 #pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
         }
 

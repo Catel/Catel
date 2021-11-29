@@ -32,7 +32,10 @@ namespace Catel.Data
         //private readonly Dictionary<object, T> _unboxedValues = new Dictionary<object, T>();
 
         private TimeSpan _cleanUpInterval = TimeSpan.FromMinutes(5);
+
+#pragma warning disable IDISP006 // Implement IDisposable.
         private readonly Timer _cleanUpTimer;
+#pragma warning restore IDISP006 // Implement IDisposable.
 
         /// <summary>
         /// Gets the default instance of the boxing cache.

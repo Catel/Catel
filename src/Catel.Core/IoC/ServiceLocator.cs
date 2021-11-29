@@ -124,6 +124,7 @@ namespace Catel.IoC
         /// The lock object.
         /// </summary>
         private readonly object _lockObject = new object();
+        private bool _disposedValue;
         #endregion
 
         #region Constructors
@@ -900,7 +901,6 @@ namespace Catel.IoC
         }
         #endregion
 
-        #region IServiceProvider interface
         /// <summary>
         /// Gets the service object of the specified type.
         /// </summary>
@@ -910,35 +910,46 @@ namespace Catel.IoC
         {
             return ResolveType(serviceType);
         }
-        #endregion
 
-        #region IDisposable interface
-        /// <summary>
-        /// Disposes this instance and all registered instances.
-        /// </summary>
-        public void Dispose()
+        protected virtual void Dispose(bool disposing)
         {
-            lock (_lockObject)
+            if (!_disposedValue)
             {
-                foreach (var registeredInstance in _registeredInstances)
+                if (disposing)
                 {
-                    var instance = registeredInstance.Value.ImplementingInstance;
-                    if (ReferenceEquals(this, instance))
+                    lock (_lockObject)
                     {
-                        continue;
+                        foreach (var registeredInstance in _registeredInstances)
+                        {
+                            var instance = registeredInstance.Value.ImplementingInstance;
+                            if (ReferenceEquals(this, instance))
+                            {
+                                continue;
+                            }
+
+                            var disposable = instance as IDisposable;
+                            if (disposable is not null)
+                            {
+                                disposable.Dispose();
+                            }
+                        }
+
+                        _registeredInstances.Clear();
+                        _registeredTypes.Clear();
                     }
 
-                    var disposable = instance as IDisposable;
-                    if (disposable is not null)
-                    {
-                        disposable.Dispose();
-                    }
+                    _currentTypeRequestPath.Dispose();
                 }
 
-                _registeredInstances.Clear();
-                _registeredTypes.Clear();
+                _disposedValue = true;
             }
         }
-        #endregion
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
     }
 }

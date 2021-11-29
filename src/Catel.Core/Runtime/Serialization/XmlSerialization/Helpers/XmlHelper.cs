@@ -60,7 +60,7 @@ namespace Catel.Runtime.Serialization.Xml
             Argument.IsNotNull("element", element);
             Argument.IsNotNull("objectType", objectType);
 
-            string xmlName = element.Name.LocalName;
+            var xmlName = element.Name.LocalName;
 
             var dependencyResolver = IoCConfiguration.DefaultDependencyResolver;
             var dataContractSerializerFactory = dependencyResolver.Resolve<IDataContractSerializerFactory>();
@@ -84,8 +84,11 @@ namespace Catel.Runtime.Serialization.Xml
 
             try
             {
-                object value = dataContractSerializer.ReadObject(element.CreateReader(), false);
-                return value;
+                using (var reader = element.CreateReader())
+                {
+                    var value = dataContractSerializer.ReadObject(reader, false);
+                    return value;
+                }
             }
             catch (Exception ex)
             {

@@ -19,7 +19,7 @@ namespace Catel.MVVM.Views
     /// <summary>
     /// Class containing a view stack and whether the stack is currently loaded.
     /// </summary>
-    public class ViewStack
+    public class ViewStack : IDisposable
     {
         private readonly ViewStack _parentViewStack;
         private readonly WeakViewInfo _viewInfo;
@@ -194,7 +194,7 @@ namespace Catel.MVVM.Views
         /// <para />
         /// Not using <see cref="IDisposable"/> to prevent other auto systems from kicking in.
         /// </summary>
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (_parentViewStack is not null)
             {

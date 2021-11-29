@@ -25,10 +25,13 @@ namespace Catel
             for (var index = 0; index < processesByName.Length; index++)
             {
                 processIndexdName = index == 0 ? processName : processName + "#" + index.ToString();
-                var processId = new PerformanceCounter("Process", "ID Process", processIndexdName);
-                if ((int) processId.NextValue() == pid)
+
+                using (var processId = new PerformanceCounter("Process", "ID Process", processIndexdName))
                 {
-                    return processIndexdName;
+                    if ((int)processId.NextValue() == pid)
+                    {
+                        return processIndexdName;
+                    }
                 }
             }
 
@@ -37,8 +40,10 @@ namespace Catel
 
         private static Process FindPidFromIndexedProcessName(string indexedProcessName)
         {
-            var parentId = new PerformanceCounter("Process", "Creating Process ID", indexedProcessName);
-            return Process.GetProcessById((int) parentId.NextValue());
+            using (var parentId = new PerformanceCounter("Process", "Creating Process ID", indexedProcessName))
+            {
+                return Process.GetProcessById((int)parentId.NextValue());
+            }
         }
 
         /// <summary>

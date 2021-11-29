@@ -21,12 +21,12 @@ namespace Catel.Logging
     /// </summary>
     public class SeqLogListener : BatchLogListenerBase, IDisposable
     {
-#region Constants
+        #region Constants
         private const string ApiKeyHeaderName = "X-Seq-ApiKey";
         private const string BulkUploadResource = "api/events/raw";
-#endregion
+        #endregion
 
-#region Fields
+        #region Fields
         private readonly IJsonLogFormatter _jsonLogFormatter;
 
         private WebClient _webClient;
@@ -34,7 +34,7 @@ namespace Catel.Logging
         private readonly object _syncObj = new object();
         #endregion
 
-#region Constructors
+        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="SeqLogListener"/> class.
         /// </summary>
@@ -42,9 +42,9 @@ namespace Catel.Logging
         {
             _jsonLogFormatter = new JsonLogFormatter();
         }
-#endregion
+        #endregion
 
-#region Properties
+        #region Properties
         /// <summary>
         /// Gets or sets the seq server url.
         /// </summary>
@@ -54,9 +54,9 @@ namespace Catel.Logging
         /// Gets or sets the seq server api key.
         /// </summary>
         public string ApiKey { get; set; }
-#endregion
+        #endregion
 
-#region Methods
+        #region Methods
         /// <summary>
         /// Formats the log event to a message which can be written to a log persistence storage.
         /// </summary>
@@ -86,19 +86,21 @@ namespace Catel.Logging
 
             try
             {
-                var textWriter = new StringWriter();
-                await textWriter.WriteAsync("{\"events\":[");
+                using (var textWriter = new StringWriter())
+                {
+                    await textWriter.WriteAsync("{\"events\":[");
 
-                var logEntries = batchEntries.Select(batchEntry => FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Data, FastDateTime.Now)).Aggregate((log1, log2) => string.Format("{0},{1}", log1, log2));
+                    var logEntries = batchEntries.Select(batchEntry => FormatLogEvent(batchEntry.Log, batchEntry.Message, batchEntry.LogEvent, batchEntry.ExtraData, batchEntry.Data, FastDateTime.Now)).Aggregate((log1, log2) => string.Format("{0},{1}", log1, log2));
 
-                await textWriter.WriteAsync(logEntries);
-                await textWriter.WriteAsync("]}");
+                    await textWriter.WriteAsync(logEntries);
+                    await textWriter.WriteAsync("]}");
 
-                var message = textWriter.ToString();
+                    var message = textWriter.ToString();
 
-                InitializeWebClient();
+                    InitializeWebClient();
 
-                _webClient.UploadStringAsync(new Uri(WebApiUrl), message);
+                    _webClient.UploadStringAsync(new Uri(WebApiUrl), message);
+                }
             }
             catch (Exception)
             {
@@ -132,9 +134,9 @@ namespace Catel.Logging
                 if (_webClient is null)
                 {
 #pragma warning disable SYSLIB0014 // Type or member is obsolete
-                    _webClient = new WebClient 
-                    { 
-                        Encoding = Encoding.UTF8 
+                    _webClient = new WebClient
+                    {
+                        Encoding = Encoding.UTF8
                     };
 #pragma warning restore SYSLIB0014 // Type or member is obsolete
 
@@ -149,7 +151,7 @@ namespace Catel.Logging
         }
 
         /// <inheritdoc />
-        public void Dispose()
+        public virtual void Dispose()
         {
             _webClient?.Dispose();
         }

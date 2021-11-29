@@ -72,6 +72,8 @@ namespace Catel.IoC
         /// The current type request path.
         /// </summary>
         private readonly ThreadLocal<TypeRequestPath> _currentTypeRequestPath;
+
+        private bool _disposedValue;
         #endregion
 
         #region Constructors
@@ -948,6 +950,30 @@ namespace Catel.IoC
             }
 
             return counter;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    _constructorCacheLock?.Dispose();
+                    _typeConstructorsMetadataLock?.Dispose();
+                    _currentTypeRequestPath?.Dispose();
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                _disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

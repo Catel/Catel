@@ -20,7 +20,9 @@ namespace Catel.Logging
         #region Fields
         private readonly object _lock = new object();
 
+#pragma warning disable IDISP006 // Implement IDisposable.
         private readonly Timer _timer;
+#pragma warning restore IDISP006 // Implement IDisposable.
         private TimeSpan _timerInterval;
         private List<LogBatchEntry> _logBatch = new List<LogBatchEntry>();
 
@@ -70,7 +72,7 @@ namespace Catel.Logging
         protected TimeSpan Interval
         {
             get { return _timerInterval; }
-            set 
+            set
             {
                 _timerInterval = value;
                 _timer.Change(value, value);

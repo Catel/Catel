@@ -27,19 +27,21 @@ namespace Catel.Threading
         /// <returns></returns>
         public static async Task AwaitWithTimeoutAsync(this Task task, int timeout)
         {
-            var cts = new CancellationTokenSource();
-
-            // If the task is the first one to be returned, the task completed faster than the delay task
-#pragma warning disable HAA0101 // Array allocation for params parameter
-            if (await Task.WhenAny(task, Task.Delay(timeout, cts.Token)) == task)
-#pragma warning restore HAA0101 // Array allocation for params parameter
+            using (var cts = new CancellationTokenSource())
             {
-                cts.Cancel();
-                return;
-            }
 
-            // Failed
-            throw Log.ErrorAndCreateException<TimeoutException>($"Task didn't complete within the expected timeframe of '{timeout.ToString()}' ms");
+                // If the task is the first one to be returned, the task completed faster than the delay task
+#pragma warning disable HAA0101 // Array allocation for params parameter
+                if (await Task.WhenAny(task, Task.Delay(timeout, cts.Token)) == task)
+#pragma warning restore HAA0101 // Array allocation for params parameter
+                {
+                    cts.Cancel();
+                    return;
+                }
+
+                // Failed
+                throw Log.ErrorAndCreateException<TimeoutException>($"Task didn't complete within the expected timeframe of '{timeout.ToString()}' ms");
+            }
         }
 
         /// <summary>

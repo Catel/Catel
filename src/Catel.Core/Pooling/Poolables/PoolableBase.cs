@@ -14,10 +14,8 @@ namespace Catel.Pooling
     /// </summary>
     public abstract class PoolableBase : IPoolable, IUniqueIdentifyable
     {
-        /// <summary>
-        /// The pool manager.
-        /// </summary>
         protected IPoolManager _poolManager;
+        private bool _disposedValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PoolableBase"/> class.
@@ -55,12 +53,24 @@ namespace Catel.Pooling
             _poolManager = poolManager;
         }
 
-        /// <summary>
-        /// Disposes the object and returns the object to the pool manager.
-        /// </summary>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    _poolManager.ReturnObject(this);
+                }
+
+                _disposedValue = true;
+            }
+        }
+
         public void Dispose()
         {
-            _poolManager.ReturnObject(this);
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

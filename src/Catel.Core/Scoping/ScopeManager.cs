@@ -21,21 +21,15 @@ namespace Catel.Scoping
     public class ScopeManager<T> : IDisposable
         where T : class
     {
-        #region Constants
         private static readonly object _lock = new object();
         private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private static readonly string TypeName;
 
         private static readonly Dictionary<string, object> _instances = new Dictionary<string, object>();
-        #endregion
 
-        #region Fields
         private readonly string _scopeName;
         private T _scopeObject;
         private int _refCount;
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Initializes static members of the <see cref="ScopeManager{T}"/> class.
@@ -68,9 +62,7 @@ namespace Catel.Scoping
                 _scopeObject = typeFactory.CreateInstance<T>();
             }
         }
-        #endregion
 
-        #region Properties
         /// <summary>
         /// Occurs when the scope reference count reaches zero.
         /// </summary>
@@ -103,17 +95,14 @@ namespace Catel.Scoping
                 }
             }
         }
-        #endregion
 
-        #region IDisposable Members
         /// <summary>
         /// Dispose object, dereferencing or disposing the object it is managing.
         /// </summary>
-        public void Dispose()
+        public virtual void Dispose()
         {
             DeRef();
         }
-        #endregion
 
         #region Methods
         private void AddRef()
@@ -204,7 +193,10 @@ namespace Catel.Scoping
                 {
                     Log.Debug($"Creating new scope for type '{TypeName}' with name '{scopeName}'");
 
+#pragma warning disable IDISP001 // Dispose created.
                     scopeManager = new ScopeManager<T>(scopeName, createScopeFunction);
+#pragma warning restore IDISP001 // Dispose created.
+
                     _instances[scopeName] = scopeManager;
                 }
 

@@ -99,7 +99,9 @@ namespace Catel.Services
 
             ~InstanceWrapper()
             {
+#pragma warning disable IDISP023 // Don't use reference types in finalizer context.
                 ObjectIdGenerator?.ReleaseIdentifier(UniqueIdentifier);
+#pragma warning restore IDISP023 // Don't use reference types in finalizer context.
             }
         }
     }

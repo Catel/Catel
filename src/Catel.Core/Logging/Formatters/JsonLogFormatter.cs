@@ -90,32 +90,33 @@ namespace Catel.Logging
             Argument.IsNotNullOrWhitespace("message", message);
             Argument.IsNotNull("logEvent", logEvent);
 
-            var textWriter = new StringWriter();
+            using (var textWriter = new StringWriter())
+            {
+                var delimStart = string.Empty;
+                textWriter.Write(delimStart);
 
-            const string delimStart = "";
-            textWriter.Write(delimStart);
+                textWriter.Write("{");
 
-            textWriter.Write("{");
-
-            var delim = string.Empty;
+                var delim = string.Empty;
 #pragma warning disable HAA0601 // Value type to reference type conversion causing boxing allocation
-            WriteJsonProperty("Timestamp", time, ref delim, textWriter);
+                WriteJsonProperty("Timestamp", time, ref delim, textWriter);
 #pragma warning restore HAA0601 // Value type to reference type conversion causing boxing allocation
-            WriteJsonProperty("Level", LogEventStrings[logEvent], ref delim, textWriter);
-            WriteJsonProperty("MessageTemplate", message, ref delim, textWriter);
+                WriteJsonProperty("Level", LogEventStrings[logEvent], ref delim, textWriter);
+                WriteJsonProperty("MessageTemplate", message, ref delim, textWriter);
 
-            textWriter.Write(",\"Properties\":{");
-            var pdelim = string.Empty;
-            WriteJsonProperty("ApplicationName", ApplicationName, ref pdelim, textWriter);
-            WriteJsonProperty("ApplicationVersion", ApplicationVersion, ref pdelim, textWriter);
-            WriteJsonProperty("Name", log.Name, ref pdelim, textWriter);
-            WriteJsonProperty("TargetType", log.TargetType?.FullName ?? string.Empty, ref pdelim, textWriter);
+                textWriter.Write(",\"Properties\":{");
+                var pdelim = string.Empty;
+                WriteJsonProperty("ApplicationName", ApplicationName, ref pdelim, textWriter);
+                WriteJsonProperty("ApplicationVersion", ApplicationVersion, ref pdelim, textWriter);
+                WriteJsonProperty("Name", log.Name, ref pdelim, textWriter);
+                WriteJsonProperty("TargetType", log.TargetType?.FullName ?? string.Empty, ref pdelim, textWriter);
 
-            textWriter.Write("}");
+                textWriter.Write("}");
 
-            textWriter.Write("}");
+                textWriter.Write("}");
 
-            return textWriter.ToString();
+                return textWriter.ToString();
+            }
         }
         #endregion
 

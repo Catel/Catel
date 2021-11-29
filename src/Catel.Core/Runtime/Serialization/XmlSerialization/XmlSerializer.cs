@@ -700,9 +700,11 @@ namespace Catel.Runtime.Serialization.Xml
                         IgnoreComments = true,
                     };
 
+#pragma warning disable IDISP001 // Dispose created.
                     var xmlReader = XmlReader.Create(stream, xmlReaderSettings);
 
                     contextInfo = new XmlSerializationContextInfo(xmlReader, model);
+#pragma warning restore IDISP001 // Dispose created.
                 }
             }
             catch (Exception ex)
@@ -722,9 +724,13 @@ namespace Catel.Runtime.Serialization.Xml
                     Indent = true
                 };
 
+#pragma warning disable IDISP001 // Dispose created.
                 var xmlWriter = XmlWriter.Create(stream, xmlWriterSettings);
 
+#pragma warning disable IDISP003 // Dispose previous before re-assigning.
                 contextInfo = new XmlSerializationContextInfo(xmlWriter, model);
+#pragma warning restore IDISP003 // Dispose previous before re-assigning.
+#pragma warning restore IDISP001 // Dispose created.
             }
 
             var context = new SerializationContext<XmlSerializationContextInfo>(model, modelType, contextInfo, contextMode, configuration);
