@@ -1,6 +1,6 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.Tests")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v5.0", FrameworkDisplayName="")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v6.0", FrameworkDisplayName="")]
 [assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM")]
 [assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM.Converters")]
 [assembly: System.Windows.Markup.XmlnsDefinition("http://schemas.catelproject.com", "Catel.MVVM.Providers")]
@@ -462,7 +462,7 @@ namespace Catel.MVVM
         public static void Register<TView, TViewModel>(this Catel.MVVM.IViewModelLocator viewModelLocator) { }
         public static System.Type ResolveViewModel<TView>(this Catel.MVVM.IViewModelLocator viewModelLocator) { }
     }
-    public interface IViewModelManager
+    public interface IViewModelManager : System.IDisposable
     {
         System.Collections.Generic.IEnumerable<Catel.MVVM.IViewModel> ActiveViewModels { get; }
         System.Collections.Generic.IEnumerable<Catel.MVVM.IRelationalViewModel> GetChildViewModels(Catel.MVVM.IViewModel parentViewModel);
@@ -750,11 +750,13 @@ namespace Catel.MVVM
         protected override string ResolveNamingConvention(string assembly, string typeToResolveName, string namingConvention) { }
         public virtual System.Type ResolveViewModel(System.Type viewType) { }
     }
-    public class ViewModelManager : Catel.MVVM.IViewModelManager
+    public class ViewModelManager : Catel.MVVM.IViewModelManager, System.IDisposable
     {
         public ViewModelManager() { }
         public System.Collections.Generic.IEnumerable<Catel.MVVM.IViewModel> ActiveViewModels { get; }
         public int ViewModelCount { get; }
+        public void Dispose() { }
+        protected virtual void Dispose(bool disposing) { }
         public System.Collections.Generic.IEnumerable<Catel.MVVM.IRelationalViewModel> GetChildViewModels(Catel.MVVM.IViewModel parentViewModel) { }
         public System.Collections.Generic.IEnumerable<Catel.MVVM.IRelationalViewModel> GetChildViewModels(int parentUniqueIdentifier) { }
         public Catel.MVVM.IViewModel GetFirstOrDefaultInstance(System.Type viewModelType) { }
@@ -1446,7 +1448,7 @@ namespace Catel.MVVM.Views
         public virtual System.Collections.Generic.List<string> GetViewPropertiesToSubscribeTo(System.Type targetViewType) { }
         public virtual bool MustSubscribeToAllViewProperties(System.Type targetViewType) { }
     }
-    public class ViewStack
+    public class ViewStack : System.IDisposable
     {
         public ViewStack(Catel.MVVM.Views.IView view, bool isViewLoaded) { }
         public bool IsOutdated { get; }
@@ -1459,7 +1461,7 @@ namespace Catel.MVVM.Views
         public bool AddChild(Catel.MVVM.Views.ViewStack viewStack, Catel.MVVM.Views.ViewStack parentViewStack) { }
         public void CheckForOutdatedChildren() { }
         public bool ContainsView(Catel.MVVM.Views.IView view) { }
-        public void Dispose() { }
+        public virtual void Dispose() { }
         public void MarkAsLoaded() { }
         public void MarkAsUnloaded() { }
         public void NotifyThatParentIsReadyToAcceptLoadedMessages() { }

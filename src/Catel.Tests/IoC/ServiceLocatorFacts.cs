@@ -70,25 +70,25 @@ namespace Catel.Tests.IoC
 
             private static ServiceLocator CreateLocator()
             {
-                using (var parentServiceLocator = new ServiceLocator())
-                {
+#pragma warning disable IDISP001 // Dispose created.
+                var parentServiceLocator = new ServiceLocator();
+#pragma warning restore IDISP001 // Dispose created.
 
-                    // Default registered service locator
-                    var coreModule = new CoreModule();
-                    coreModule.Initialize(parentServiceLocator);
+                // Default registered service locator
+                var coreModule = new CoreModule();
+                coreModule.Initialize(parentServiceLocator);
 
-                    // Override in child
-                    var childServiceLocator = new ServiceLocator(parentServiceLocator);
-                    childServiceLocator.RegisterType<IAppDataService, CustomAppDataService>();
+                // Override in child
+                var childServiceLocator = new ServiceLocator(parentServiceLocator);
+                childServiceLocator.RegisterType<IAppDataService, CustomAppDataService>();
 
-                    // Set up nested hierarchy for type construction, so for construction the types should go into
-                    // child => parent => child
-                    childServiceLocator.RegisterType<IService1, Service1>();
-                    parentServiceLocator.RegisterType<IService2, Service2>();
-                    childServiceLocator.RegisterType<IService3, Service3>();
+                // Set up nested hierarchy for type construction, so for construction the types should go into
+                // child => parent => child
+                childServiceLocator.RegisterType<IService1, Service1>();
+                parentServiceLocator.RegisterType<IService2, Service2>();
+                childServiceLocator.RegisterType<IService3, Service3>();
 
-                    return childServiceLocator;
-                }
+                return childServiceLocator;
             }
 
             [TestCase]
