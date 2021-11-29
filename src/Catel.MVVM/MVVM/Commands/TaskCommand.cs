@@ -34,7 +34,10 @@ namespace Catel.MVVM
 
         private readonly Progress<TProgress> _progress;
 
+#pragma warning disable IDISP006 // Implement IDisposable.
         private CancellationTokenSource _cancellationTokenSource;
+#pragma warning restore IDISP006 // Implement IDisposable.
+        
         private Task _task;
 
         #endregion

@@ -12,7 +12,7 @@ namespace Catel.MVVM
     /// <summary>
     /// Interface for the view model manager which allows the retrieval of currently alive view models.
     /// </summary>
-    public interface IViewModelManager
+    public interface IViewModelManager : IDisposable
     {
         #region Properties
         /// <summary>

@@ -60,7 +60,10 @@ namespace Catel.MVVM.Providers
         {
             if (_navigationAdapter is null)
             {
+#pragma warning disable IDISP001 // Dispose created.
                 var serviceLocator = this.GetServiceLocator();
+#pragma warning restore IDISP001 // Dispose created.
+
                 var navigationService = serviceLocator.ResolveType<INavigationRootService>();
                 var navigationRoot = navigationService.GetNavigationRoot();
 

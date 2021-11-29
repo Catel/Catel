@@ -23,12 +23,16 @@ namespace Catel.Logging
         /// <summary>
         /// The literal writes.
         /// </summary>
+#pragma warning disable IDE1006 // Naming Styles
         protected static readonly IDictionary<Type, Action<object, bool, TextWriter>> LiteralWriters;
+#pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
         /// The log event strings.
         /// </summary>
+#pragma warning disable IDE1006 // Naming Styles
         protected static readonly Dictionary<LogEvent, string> LogEventStrings;
+#pragma warning restore IDE1006 // Naming Styles
 
         private static readonly string ApplicationName;
         private static readonly string ApplicationVersion;

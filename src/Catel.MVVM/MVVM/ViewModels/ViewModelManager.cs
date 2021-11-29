@@ -30,12 +30,16 @@ namespace Catel.MVVM
         /// <summary>
         /// The lock for _instances
         /// </summary>
+#pragma warning disable IDE1006 // Naming Styles
         private static readonly ReaderWriterLockSlim _instancesLock;
+#pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
         /// List of all live instances of the view model managers.
         /// </summary>
+#pragma warning disable IDE1006 // Naming Styles
         private static readonly List<ViewModelManager> _instances;
+#pragma warning restore IDE1006 // Naming Styles
 
         /// <summary>
         /// The lock for the _managedViewModels dictionary.
@@ -56,6 +60,8 @@ namespace Catel.MVVM
         /// Dictionary containing the unique identifiers of a all view models and their registered models.
         /// </summary>
         private readonly Dictionary<int, List<object>> _viewModelModels = new Dictionary<int, List<object>>();
+
+        private bool _disposedValue;
         #endregion
 
         #region Constructors
@@ -472,6 +478,26 @@ namespace Catel.MVVM
 
                 return result;
             });
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    _managedViewModelsLock?.Dispose();
+                }
+
+                _disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
         #endregion
     }

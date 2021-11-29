@@ -96,7 +96,10 @@ namespace Catel.MVVM
                 additionalConstructorArgs?.CopyTo(args, 1);
             }
 
+#pragma warning disable IDISP001 // Dispose created.
             var typeFactory = this.GetTypeFactory();
+#pragma warning restore IDISP001 // Dispose created.
+
             var converter = (IViewModelToModelConverter)typeFactory.CreateInstanceWithParameters(ConverterType, args);
             if (converter is null)
             {

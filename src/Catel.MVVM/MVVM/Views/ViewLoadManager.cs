@@ -71,7 +71,9 @@ namespace Catel.MVVM.Views
 
         private ViewLoadStateEvent _lastInvokedViewLoadStateEvent;
 
+#pragma warning disable IDISP006 // Implement IDisposable.
         private readonly Timer _cleanUpTimer;
+#pragma warning restore IDISP006 // Implement IDisposable.
         #endregion
 
         #region Constructors

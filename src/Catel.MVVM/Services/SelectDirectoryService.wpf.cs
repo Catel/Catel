@@ -15,28 +15,30 @@ namespace Catel.Services
         {
             Argument.IsNotNull(nameof(context), context);
 
-            var browserDialog = new FolderBrowserDialog();
-            browserDialog.Description = context.Title;
-            browserDialog.ShowNewFolderButton = context.ShowNewFolderButton;
-
-            var initialDirectory = context.InitialDirectory;
-
-            if (!string.IsNullOrEmpty(initialDirectory))
+            using (var browserDialog = new FolderBrowserDialog())
             {
-                browserDialog.SelectedPath = IO.Path.AppendTrailingSlash(initialDirectory);
+                browserDialog.Description = context.Title;
+                browserDialog.ShowNewFolderButton = context.ShowNewFolderButton;
+
+                var initialDirectory = context.InitialDirectory;
+
+                if (!string.IsNullOrEmpty(initialDirectory))
+                {
+                    browserDialog.SelectedPath = IO.Path.AppendTrailingSlash(initialDirectory);
+                }
+                else
+                {
+                    browserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
+                }
+
+                var result = new DetermineDirectoryResult
+                {
+                    Result = browserDialog.ShowDialog() == DialogResult.OK,
+                    DirectoryName = browserDialog.SelectedPath
+                };
+
+                return result;
             }
-            else
-            {
-                browserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
-            }
-
-            var result = new DetermineDirectoryResult
-            {
-                Result = browserDialog.ShowDialog() == DialogResult.OK,
-                DirectoryName = browserDialog.SelectedPath
-            };
-
-            return result;
         }
     }
 }

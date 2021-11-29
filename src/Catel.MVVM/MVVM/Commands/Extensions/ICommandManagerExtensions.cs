@@ -110,7 +110,10 @@ namespace Catel
 
             Log.Debug("Found command container '{0}', registering it in the ServiceLocator now", commandContainerType.GetSafeFullName(false));
 
+#pragma warning disable IDISP001 // Dispose created.
             var serviceLocator = commandManager.GetServiceLocator();
+#pragma warning restore IDISP001 // Dispose created.
+
             if (!serviceLocator.IsTypeRegistered(commandContainerType))
             {
                 var typeFactory = serviceLocator.ResolveType<ITypeFactory>();

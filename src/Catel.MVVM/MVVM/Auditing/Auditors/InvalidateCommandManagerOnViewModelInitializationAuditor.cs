@@ -14,7 +14,9 @@ namespace Catel.MVVM.Auditing
         private readonly ICommandManager _commandManager;
         private readonly IDispatcherService _dispatcherService;
 
+#pragma warning disable IDISP006 // Implement IDisposable.
         private readonly Timer _timer;
+#pragma warning restore IDISP006 // Implement IDisposable.
 
         public InvalidateCommandManagerOnViewModelInitializationAuditor(ICommandManager commandManager,
             IDispatcherService dispatcherService)
