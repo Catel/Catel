@@ -631,10 +631,12 @@ namespace Catel.Runtime.Serialization.Json
                         }
                         else
                         {
-                            var reader = jsonProperty.Value.CreateReader(context.Configuration);
-                            reader.Culture = context.Configuration.Culture;
+                            using (var reader = jsonProperty.Value.CreateReader(context.Configuration))
+                            {
+                                reader.Culture = context.Configuration.Culture;
 
-                            deserializedItem = Deserialize(valueType, reader, context.Configuration);
+                                deserializedItem = Deserialize(valueType, reader, context.Configuration);
+                            }
                         }
 
                         dictionary[key] = deserializedItem;
@@ -717,8 +719,10 @@ namespace Catel.Runtime.Serialization.Json
                                             }
 
                                             // Serialize ourselves
-                                            var reader = jsonValue.CreateReader(context.Configuration);
-                                            finalMemberValue = Deserialize(finalValueType, reader, context.Configuration);
+                                            using (var reader = jsonValue.CreateReader(context.Configuration))
+                                            {
+                                                finalMemberValue = Deserialize(finalValueType, reader, context.Configuration);
+                                            }
                                         }
                                         else
                                         {
@@ -836,15 +840,19 @@ namespace Catel.Runtime.Serialization.Json
                     {
 #if SUPPORT_BSON
 #pragma warning disable 618
+#pragma warning disable IDISP001 // Dispose created.
                         jsonWriter = new BsonWriter(stream);
+#pragma warning restore IDISP001 // Dispose created.
 #pragma warning restore 618
 #endif
                     }
 
                     if (jsonWriter is null)
                     {
+#pragma warning disable IDISP001 // Dispose created.
                         var streamWriter = new StreamWriter(stream, Encoding.UTF8);
                         jsonWriter = new JsonTextWriter(streamWriter);
+#pragma warning restore IDISP001 // Dispose created.
                     }
                     break;
 
@@ -861,7 +869,9 @@ namespace Catel.Runtime.Serialization.Json
                         }
 
 #pragma warning disable 618
+#pragma warning disable IDISP001 // Dispose created.
                         jsonReader = new BsonReader(stream, shouldSerializeAsCollection, dateTimeKind);
+#pragma warning restore IDISP001 // Dispose created.
 #pragma warning restore 618
 #endif
                     }
@@ -871,16 +881,20 @@ namespace Catel.Runtime.Serialization.Json
 #if DEBUG
                         var streamPosition = stream.Position;
 
+#pragma warning disable IDISP001 // Dispose created.
                         var debugStreamReader = new StreamReader(stream, Encoding.UTF8);
                         var content = debugStreamReader.ReadToEnd();
+#pragma warning restore IDISP001 // Dispose created.
 
                         Log.Debug(content);
 
                         stream.Position = streamPosition;
 #endif
 
+#pragma warning disable IDISP001 // Dispose created.
                         var streamReader = new StreamReader(stream, Encoding.UTF8);
                         jsonReader = new JsonTextReader(streamReader);
+#pragma warning restore IDISP001 // Dispose created.
                     }
                     break;
 
